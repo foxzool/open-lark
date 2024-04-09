@@ -1,3 +1,5 @@
+use serde::Serialize;
+
 use crate::bot::LarkBot;
 use crate::message::{Message, MessageType};
 
@@ -23,6 +25,14 @@ impl CustomBot {
 }
 
 impl LarkBot for CustomBot {
+    fn send_raw_message(&self, body: impl Serialize) {
+        self.client
+            .post(&self.webhook_url)
+            .json(&body)
+            .send()
+            .unwrap();
+    }
+
     fn send_text_message(&self, content: &str) {
         let message = Message {
             msg_type: MessageType::Text,
