@@ -1,21 +1,19 @@
-use std::thread::sleep;
+use std::env;
+
+use dotenvy::dotenv;
+use tokio::time::sleep;
 
 use open_lark::message::{
-    CustomRichTextMessage, InteractiveMessage, MessageCard, RichTextParagraph
-    , TextMessage,
+    CustomRichTextMessage, InteractiveMessage, MessageCard, RichTextParagraph, TextMessage,
 };
 use open_lark::prelude::*;
 
-fn main() {
-    // 获取命令行参数
-    let args: Vec<String> = std::env::args().collect();
-    if args.len() < 2 {
-        eprintln!("Usage: {} <webhook_url> [secret]", args[0]);
-        std::process::exit(1);
-    }
+#[tokio::main]
+async fn main() {
+    dotenv().expect(".env file not found");
 
     // 创建 CustomBot 实例
-    let bot = CustomBot::new(&args[1], args.get(2).map(|s| s.as_str()));
+    let bot = CustomBot::new(env::var("URL").unwrap(), None);
     // bot.send_raw_message(json!({
     //     "msg_type": "text",
     //     "content": {
@@ -26,8 +24,8 @@ fn main() {
     // 发送文本消息
     let message = TextMessage::new("新更新提醒");
 
-    bot.send_message(message);
-    sleep(std::time::Duration::from_secs(1));
+    bot.send_message(message).await;
+    sleep(std::time::Duration::from_secs(1)).await;
 
     // 发送富文本消息
     let content = vec![
@@ -41,7 +39,7 @@ fn main() {
         }],
     ];
     let message = CustomRichTextMessage::new("富文本标题", content);
-    bot.send_message(message);
+    bot.send_message(message).await;
 
     // 发送消息卡片
     let message = InteractiveMessage::JsonCard(MessageCard {
@@ -49,5 +47,5 @@ fn main() {
         elements: Default::default(),
         ..Default::default()
     });
-    bot.send_message(message);
+    bot.send_message(message).await;
 }

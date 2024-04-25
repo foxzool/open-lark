@@ -1,6 +1,6 @@
 [package]
 name = "open-lark"
-version = "0.0.1"
+version = "0.0.2"
 edition = "2021"
 authors = [
     "ZoOL <zhooul@gmail.com>"
@@ -14,7 +14,18 @@ license = "MIT OR Apache-2.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+
+
 [dependencies]
-reqwest = { version = "0.12.3", features = ["blocking", "json", "rustls-tls"] }
+reqwest = { version = "0.12.3", features = ["json", "rustls-tls"] }
 serde = { version = "1.0.197", features = ["derive"] }
 serde_json = "1.0.115"
+log = "0.4.21"
+
+[dev-dependencies]
+dotenvy = "0.15.7"
+tokio = { version = "1.37.0", features = ["full"] }
+
+[[example]]
+name = "custom_bot"
+path = "examples/custom_bot.rs"

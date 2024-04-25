@@ -1,4 +1,5 @@
 use serde::Serialize;
+use log::debug;
 
 use crate::bot::LarkBot;
 use crate::message::MessageTrait;
@@ -11,40 +12,42 @@ pub struct CustomBot {
     webhook_url: String,
     /// 密钥
     secret: Option<String>,
-    client: reqwest::blocking::Client,
+    client: reqwest::Client,
 }
 
 impl CustomBot {
-    pub fn new(webhook_url: impl ToString, secret: Option<impl ToString>) -> Self {
+    pub fn new(webhook_url: String, secret: Option<String>) -> Self {
         CustomBot {
-            webhook_url: webhook_url.to_string(),
-            secret: secret.map(|s| s.to_string()),
-            client: reqwest::blocking::Client::new(),
+            webhook_url,
+            secret,
+            client: reqwest::Client::new(),
         }
     }
 }
 
 impl LarkBot for CustomBot {
-    fn send_raw_message(&self, body: impl Serialize) {
+    async fn send_raw_message(&self, body: impl Serialize + Send) {
         self.client
             .post(&self.webhook_url)
             .json(&body)
             .send()
+            .await
             .unwrap();
     }
 
-    fn send_message(&self, message: impl MessageTrait) {
+    async fn send_message(&self, message: impl MessageTrait + Send) {
         let body = serde_json::json!({
            "msg_type": message.message_type(),
             "content": message
         });
 
-        println!("{}", serde_json::to_string_pretty(&body).unwrap());
+        debug!("{}", serde_json::to_string_pretty(&body).unwrap());
 
         self.client
             .post(&self.webhook_url)
             .json(&body)
             .send()
+            .await
             .unwrap();
     }
 }
