@@ -1,7 +1,14 @@
 use std::fmt::Debug;
 
 use serde::{Deserialize, Serialize};
+use serde::de::DeserializeOwned;
 use serde_json::Value;
+
+pub trait MessageTrait: Serialize + DeserializeOwned {
+    const MESSAGE_TYPE: &'static str;
+
+    fn message_type(&self) -> &'static str;
+}
 
 /// 消息类型枚举
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -37,11 +44,13 @@ impl MessageBuilder {
         }
     }
 
-    pub fn new_rich_text() -> Self {
+    pub fn new_rich_text(title: impl ToString) -> Self {
         Self {
             content: LarkMessage::RichText(RichTextMessage {
-                language: Default::default(),
-                content: Value::Null,
+                post: LanguageContent::ZhCn(RichTextContent {
+                    title: title.to_string(),
+                    content: vec![],
+                }),
             }),
         }
     }
@@ -84,23 +93,87 @@ impl MessageBuilder {
     }
 }
 
+/// 文本消息
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct TextMessage {
     text: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-#[serde(rename_all = "snake_case")]
-pub enum Language {
-    #[default]
-    ZhCn,
-    EnUs,
+impl TextMessage {
+    pub fn new(text: impl ToString) -> Self {
+        Self {
+            text: text.to_string(),
+        }
+    }
+}
+
+impl MessageTrait for TextMessage {
+    const MESSAGE_TYPE: &'static str = "text";
+
+    fn message_type(&self) -> &'static str {
+        Self::MESSAGE_TYPE
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "snake_case")]
+pub enum LanguageContent {
+    #[serde(rename = "zh_cn")]
+    ZhCn(RichTextContent),
+    #[serde(rename = "en_us")]
+    EnUs(Value),
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+
 pub struct RichTextMessage {
-    language: Language,
-    content: Value,
+    post: LanguageContent,
+}
+
+impl MessageTrait for RichTextMessage {
+    const MESSAGE_TYPE: &'static str = "post";
+
+    fn message_type(&self) -> &'static str {
+        Self::MESSAGE_TYPE
+    }
+}
+
+impl RichTextMessage {
+    pub fn new(title: impl ToString, content: Vec<Vec<RichTextParagraph>>) -> Self {
+        Self {
+            post: LanguageContent::ZhCn(RichTextContent {
+                title: title.to_string(),
+                content,
+            }),
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct RichTextContent {
+    title: String,
+    content: Vec<Vec<RichTextParagraph>>,
+}
+
+/// 富文本支持的标签和参数
+#[derive(Debug, Serialize, Deserialize, Clone)]
+// #[serde(transparent)]
+#[serde(tag = "tag")]
+pub enum RichTextParagraph {
+    #[serde(rename = "text")]
+    Text {
+        text: String,
+        un_escape: Option<bool>,
+    },
+    #[serde(rename = "a")]
+    A { text: String, href: String },
+    #[serde(rename = "at")]
+    At {
+        user_id: String,
+        user_name: Option<String>,
+    },
+    #[serde(rename = "img")]
+    Img { image_key: String },
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -116,4 +189,16 @@ pub struct ShareChatMessage {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct InteractiveMessage {
     card: Value,
+}
+
+#[cfg(test)]
+mod test {
+    use crate::message::RichTextMessage;
+
+    #[test]
+    fn test_serialize() {
+        let rich_text = RichTextMessage::new("a", vec![]);
+
+        println!("{:?}", serde_json::to_string(&rich_text))
+    }
 }

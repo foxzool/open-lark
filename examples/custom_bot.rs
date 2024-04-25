@@ -1,6 +1,6 @@
 use std::thread::sleep;
 
-use open_lark::message::MessageBuilder;
+use open_lark::message::{RichTextMessage, RichTextParagraph, TextMessage};
 use open_lark::prelude::*;
 
 fn main() {
@@ -21,13 +21,22 @@ fn main() {
     // }));
 
     // 发送文本消息
-    // let message = MessageBuilder::new_text().add_text("纯文本消息").build();
-    // println!("{:?}", serde_json::to_string(&message).unwrap());
-    // bot.send_message(&message);
+    let message = TextMessage::new("新更新提醒");
 
+    bot.send_message(message);
     sleep(std::time::Duration::from_secs(1));
-    // 发送富文本消息
-    let message = MessageBuilder::new_rich_text().build();
 
-    println!("{:?}", serde_json::to_string(&message).unwrap());
+    // 发送富文本消息
+    let content = vec![
+        vec![RichTextParagraph::Text {
+            text: "项目有更新: ".to_string(),
+            un_escape: None,
+        }],
+        vec![RichTextParagraph::A {
+            text: "请查看".to_string(),
+            href: "http://www.example.com/".to_string(),
+        }],
+    ];
+    let message = RichTextMessage::new("富文本标题", content);
+    bot.send_message(message);
 }

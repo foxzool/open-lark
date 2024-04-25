@@ -1,7 +1,7 @@
 use serde::Serialize;
 
 use crate::bot::LarkBot;
-use crate::message::LarkMessage;
+use crate::message::MessageTrait;
 
 /// 自定义机器人
 ///
@@ -33,10 +33,17 @@ impl LarkBot for CustomBot {
             .unwrap();
     }
 
-    fn send_message(&self, message: &LarkMessage) {
+    fn send_message(&self, message: impl MessageTrait) {
+        let body = serde_json::json!({
+           "msg_type": message.message_type(),
+            "content": message
+        });
+
+        println!("{}", serde_json::to_string_pretty(&body).unwrap());
+
         self.client
             .post(&self.webhook_url)
-            .json(message)
+            .json(&body)
             .send()
             .unwrap();
     }
