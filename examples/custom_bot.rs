@@ -1,6 +1,9 @@
 use std::thread::sleep;
 
-use open_lark::message::{RichTextMessage, RichTextParagraph, TextMessage};
+use open_lark::message::{
+    CustomRichTextMessage, InteractiveMessage, MessageCard, RichTextParagraph
+    , TextMessage,
+};
 use open_lark::prelude::*;
 
 fn main() {
@@ -37,6 +40,14 @@ fn main() {
             href: "http://www.example.com/".to_string(),
         }],
     ];
-    let message = RichTextMessage::new("富文本标题", content);
+    let message = CustomRichTextMessage::new("富文本标题", content);
+    bot.send_message(message);
+
+    // 发送消息卡片
+    let message = InteractiveMessage::JsonCard(MessageCard {
+        header: Default::default(),
+        elements: Default::default(),
+        ..Default::default()
+    });
     bot.send_message(message);
 }
