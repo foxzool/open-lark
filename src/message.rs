@@ -240,7 +240,7 @@ pub enum Elements {
 
 impl Default for Elements {
     fn default() -> Self {
-        Self::ColumnSet(Box::new(ColumnComponent::default()))
+        Self::ColumnSet(Box::default())
     }
 }
 
@@ -467,8 +467,8 @@ pub struct DatePickerComponent {
     /// 示例值:
     ///
     /// "placeholder": {
-    /// 	"tag": "plain_text",
-    /// 	"content": "请选择日期"
+    ///     "tag": "plain_text",
+    ///     "content": "请选择日期"
     /// },
     pub placeholder: Option<TextComponent>,
     /// 该字段用于交互组件的回传交互方式，当用户点击交互组件的选项后，会将 value 的值返回给接收回调数据的服务器。后续你可以通过服务器接收的 value 值进行业务处理。
@@ -593,7 +593,7 @@ pub enum ColumnElements {
 
 impl Default for ColumnElements {
     fn default() -> Self {
-        Self::Elements(Box::new(Elements::default()))
+        Self::Elements(Box::default())
     }
 }
 
