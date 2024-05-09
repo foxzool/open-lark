@@ -1,3 +1,6 @@
+pub const PROJECT: &str = "open-lark";
+pub const VERSION: &str = "0.0.1";
+
 /// Domain
 pub const FEISHU_DOMAIN: &str = "https://open.feishu.cn";
 pub const LARK_DOMAIN: &str = "https://open.larksuite.com";

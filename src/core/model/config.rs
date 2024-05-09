@@ -1,19 +1,19 @@
 use crate::core::constants::FEISHU_DOMAIN;
 use crate::core::enum_type::AppType;
 
-pub(crate) struct Config {
-    pub(crate) app_id: Option<String>,
-    pub(crate) app_secret: Option<String>,
+pub struct Config {
+    pub app_id: Option<String>,
+    pub app_secret: Option<String>,
     /// 域名, 默认为 https://open.feishu.cn
-    pub(crate) domain: String,
+    pub domain: String,
     /// 客户端超时时间, 单位秒, 默认永不超时
-    pub(crate) timeout: Option<f32>,
+    pub timeout: Option<f32>,
     /// 应用类型, 默认为自建应用; 若设为 ISV 需在 request_option 中配置 tenant_key
-    pub(crate) app_type: AppType,
+    pub app_type: AppType,
     /// 获取 app_access_token 凭证, app_type = ISV 时需配置
-    pub(crate) app_ticket: Option<String>,
+    pub app_ticket: Option<String>,
     /// 是否允许手动设置 token, 默认不开启; 开启后需在 request_option 中配置 token
-    pub(crate) enable_set_token: bool,
+    pub enable_set_token: bool,
 }
 
 impl Default for Config {
