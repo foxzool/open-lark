@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use std::time::Duration;
 
 pub trait Cache {
+    fn new() -> Self;
     fn set(&mut self, key: &str, value: &str, expire_time: Duration);
     fn get(&self, key: &str) -> Option<String>;
 }
@@ -11,6 +12,12 @@ pub struct LocalCache {
 }
 
 impl Cache for LocalCache {
+    fn new() -> Self {
+        Self {
+            cache: HashMap::new(),
+        }
+    }
+
     fn set(&mut self, key: &str, value: &str, expire_time: Duration) {
         self.cache
             .insert(key.to_string(), (value.to_string(), expire_time));

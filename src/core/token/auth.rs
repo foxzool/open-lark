@@ -39,7 +39,7 @@ pub fn verify(
     }
 
     // 未开启token配置，根据app_id/app_secret获取token
-    if config.app_id.is_none() || config.app_secret.is_none() {
+    if config.app_id.is_empty() || config.app_secret.is_empty() {
         return Err(LarkAPIError::NoAuthorization(
             "app_id or app_secret is None".to_string(),
         ));

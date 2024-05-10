@@ -1,8 +1,13 @@
 use reqwest::Method;
+use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 use crate::client::LarkClient;
 use crate::core::api_req::ApiReq;
+use crate::core::api_resp::ApiResp;
 use crate::core::constants::AccessTokenType;
+use crate::core::error::LarkAPIError;
+use crate::core::http::Transport;
 
 pub struct CreateMessageReqBuilder {
     api_req: ApiReq,
@@ -30,7 +35,12 @@ impl CreateMessageReqBuilder {
         self
     }
 
-    pub fn build(self) -> CreateMessageReq {
+    pub fn build(mut self) -> CreateMessageReq {
+        // let json_string = self.body.clone().unwrap().content.clone();
+        // let json_value: Value = serde_json::from_str(&json_string).unwrap();
+        self.api_req.body = serde_json::to_vec(&self.body.clone().unwrap())
+            .unwrap()
+            .into();
         CreateMessageReq {
             api_req: self.api_req,
             body: self.body.unwrap(),
@@ -45,7 +55,7 @@ pub struct CreateMessageReq {
 }
 
 /// 请求体
-#[derive(Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateMessageReqBody {
     /// 消息接收者的ID，ID类型应与查询参数receive_id_type 对应；推荐使用 OpenID，获取方式可参考文档如何获取 Open ID？
     ///
@@ -62,7 +72,7 @@ pub struct CreateMessageReqBody {
     /// 文本消息请求体最大不能超过150KB
     /// 卡片及富文本消息请求体最大不能超过30KB
     /// 示例值："{\"text\":\"test content\"}"
-    pub content: String,
+    pub content: Value,
     /// 由开发者生成的唯一字符串序列，用于发送消息请求去重；持有相同uuid的请求1小时内至多成功发送一条消息
     ///
     /// 示例值："选填，每次调用前请更换，如a0d69e20-1dd1-458b-k525-dfeca4015204"
@@ -76,10 +86,15 @@ pub struct CreateMessageReqBody {
 /// 发送消息
 ///
 /// 给指定用户或者会话发送消息，支持文本、富文本、可交互的消息卡片、群名片、个人名片、图片、视频、音频、文件、表情包。
-pub fn create(client: &LarkClient, req: CreateMessageReq) {
+pub fn create(client: &LarkClient, req: CreateMessageReq) -> Result<ApiResp, LarkAPIError> {
     let mut api_req = req.api_req;
     api_req.http_method = Method::POST;
     api_req.api_path = "/open-apis/im/v1/messages".to_string();
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
-    println!("{:?}", api_req);
+
+    let resp = Transport::request(api_req, &client.config.clone(), vec![])?;
+
+    println!("{:?}", resp);
+
+    Ok(resp)
 }

@@ -7,9 +7,9 @@ pub struct RequestOption {
     pub(crate) app_access_token: String,
     pub(crate) tenant_access_token: String,
     need_helpdesk_auth: bool,
-    request_id: String,
-    app_ticket: String,
-    file_upload: bool,
+    pub(crate) request_id: String,
+    pub(crate) app_ticket: String,
+    pub(crate) file_upload: bool,
     file_download: bool,
     pub(crate) header: HashMap<String, String>,
 }

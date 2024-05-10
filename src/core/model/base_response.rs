@@ -5,7 +5,7 @@ use reqwest::blocking::Response;
 use serde::{Deserialize, Serialize};
 use serde::de::DeserializeOwned;
 
-use crate::core::constants::{APPLICATION_JSON, CONTENT_TYPE};
+use crate::core::constants::{CONTENT_TYPE_JSON, CONTENT_TYPE_HEADER};
 use crate::core::error::LarkAPIError;
 
 pub trait BaseResponseTrait: Serialize + DeserializeOwned {
@@ -39,8 +39,8 @@ impl<T: BaseResponseTrait> BaseResponse<T> {
             .collect();
 
 
-        return if let Some(content_type) = headers.get(CONTENT_TYPE.to_lowercase().as_str()) {
-            if content_type.starts_with(APPLICATION_JSON) {
+        return if let Some(content_type) = headers.get(CONTENT_TYPE_HEADER.to_lowercase().as_str()) {
+            if content_type.starts_with(CONTENT_TYPE_JSON) {
                 let raw = response.bytes()?;
                 let raw_clone = raw.clone().to_vec();
                 let c: T = serde_json::from_slice(&raw_clone)?;

@@ -1,6 +1,8 @@
 use std::env;
 
 use dotenvy::dotenv;
+use serde_json::json;
+use uuid::Uuid;
 
 use open_lark::client::LarkClient;
 use open_lark::service::im;
@@ -13,15 +15,16 @@ fn main() {
     let app_secret = env::var("APP_SECRET").unwrap();
     // 创建 Client
     let client = LarkClient::new(&app_id, &app_secret);
+    let uuid = Uuid::new_v4();
     let req = CreateMessageReqBuilder::new()
-        .receive_id_type("open_id")
+        .receive_id_type("chat_id")
         .body(CreateMessageReqBody {
-            receive_id: "ou_7d8a6e6df7621556ce0d21922b676706ccs".to_string(),
+            receive_id: "oc_84d53efe245072c16ba4b4ff597f52f3".to_string(),
             msg_type: "text".to_string(),
-            content: r#"{"text":"test content"}"#.to_string(),
-            uuid: Some("uuid".to_string()),
+            content: json!("{\"text\":\"test content!\"}"),
+            uuid: Some(uuid.to_string()),
         })
         .build();
 
-    im::v1::message::create(&client, req)
+    im::v1::message::create(&client, req).unwrap();
 }

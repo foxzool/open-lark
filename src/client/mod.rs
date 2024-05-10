@@ -8,14 +8,14 @@ use crate::core::model::*;
 use crate::core::token::verify;
 
 pub struct LarkClient {
-    config: Config,
+   pub config: Config,
 }
 
 impl LarkClient {
     pub fn new(app_id: &str, app_secret: &str) -> Self {
         let config = Config {
-            app_id: Some(app_id.to_string()),
-            app_secret: Some(app_secret.to_string()),
+            app_id: app_id.to_string(),
+            app_secret: app_secret.to_string(),
             ..Default::default()
         };
 
@@ -72,12 +72,12 @@ pub struct LarkClientBuilder {
 
 impl LarkClientBuilder {
     pub fn app_id(mut self, app_id: String) -> Self {
-        self.config.app_id = Some(app_id);
+        self.config.app_id = app_id;
         self
     }
 
     pub fn app_secret(mut self, app_secret: String) -> Self {
-        self.config.app_secret = Some(app_secret);
+        self.config.app_secret = app_secret;
         self
     }
 

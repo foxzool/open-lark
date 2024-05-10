@@ -1,7 +1,8 @@
 use std::fmt::Display;
+use std::time::Duration;
 
 /// 应用类型
-#[derive(Default, Hash, Eq, PartialEq, Debug, Clone)]
+#[derive(Default, Hash, Eq, PartialEq, Debug, Copy, Clone)]
 pub enum AppType {
     /// 自建应用
     #[default]
@@ -39,26 +40,29 @@ impl Display for AccessTokenType {
 }
 
 pub const PROJECT: &str = "open-lark";
-pub const VERSION: &str = "0.0.1";
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// Domain
 pub const FEISHU_BASE_URL: &str = "https://open.feishu.cn";
 pub const LARK_BASE_URL: &str = "https://open.larksuite.com";
 
-/// HEADER
-pub const USER_AGENT: &str = "User-Agent";
+pub const DEFAULT_CONTENT_TYPE: &str = "application/json; charset=utf-8";
+pub const USER_AGENT_HEADER: &str = "User-Agent";
 pub const AUTHORIZATION: &str = "Authorization";
-pub const X_TT_LOGID: &str = "X-Tt-Logid";
+
 pub const HTTP_HEADER_KEY_REQUEST_ID: &str = "X-Request-Id";
 pub const HTTP_HEADER_REQUEST_ID: &str = "Request-Id";
-pub const CONTENT_TYPE: &str = "Content-Type";
-pub const Content_Disposition: &str = "Content-Disposition";
-pub const LARK_REQUEST_TIMESTAMP: &str = "X-Lark-Request-Timestamp";
-pub const LARK_REQUEST_NONCE: &str = "X-Lark-Request-Nonce";
-pub const LARK_REQUEST_SIGNATURE: &str = "X-Lark-Signature";
 
-/// Content-Type
-pub const APPLICATION_JSON: &str = "application/json";
+pub const HTTP_HEADER_KEY_LOG_ID: &str = "X-Tt-Logid";
+pub const CONTENT_TYPE_HEADER: &str = "Content-Type";
+pub const CONTENT_TYPE_JSON: &str = "application/json";
+pub const CUSTOM_REQUEST_ID: &str = "Open-Lark-Request-Id";
+pub const APP_TICKET_KEY_PREFIX: &str = "app_ticket";
+pub const APP_ACCESS_TOKEN_KEY_PREFIX: &str = "app_access_token";
+pub const TENANT_ACCESS_TOKEN_KEY_PREFIX: &str = "tenant_access_token";
+pub const EXPIRY_DELTA: Duration = Duration::from_secs(60 * 3);
 
-/// Event
-pub const URL_VERIFICATION: &str = "url_verification";
+pub const ERR_CODE_APP_TICKET_INVALID: i32 = 10012;
+pub const ERR_CODE_ACCESS_TOKEN_INVALID: i32 = 99991671;
+pub const ERR_CODE_APP_ACCESS_TOKEN_INVALID: i32 = 99991664;
+pub const ERR_CODE_TENANT_ACCESS_TOKEN_INVALID: i32 = 99991663;

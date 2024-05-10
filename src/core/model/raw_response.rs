@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use bytes::Bytes;
 use serde::Deserialize;
 
-use crate::core::constants::CONTENT_TYPE;
+use crate::core::constants::CONTENT_TYPE_HEADER;
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RawResponse {
@@ -16,6 +16,6 @@ pub struct RawResponse {
 impl RawResponse {
     pub fn set_content_type(&mut self, content_type: String) {
         self.headers
-            .insert(CONTENT_TYPE.to_string(), content_type.into());
+            .insert(CONTENT_TYPE_HEADER.to_string(), content_type.into());
     }
 }

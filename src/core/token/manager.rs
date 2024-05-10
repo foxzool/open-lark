@@ -47,7 +47,7 @@ impl TokenManager {
 
     ///
     pub fn get_self_app_token(&self, config: &Config) -> Result<String, LarkAPIError> {
-        let cache_key = format!("self_app_token:{}", config.app_id.as_ref().unwrap());
+        let cache_key = format!("self_app_token:{}", config.app_id);
         return match self.cache.get(&cache_key) {
             Some(token) => Ok(token.1),
             // 缓存不存在则发起请求获取token
@@ -55,8 +55,8 @@ impl TokenManager {
                 let req = CreateSelfAppTokenRequest::builder()
                     .request_body(
                         CreateTokenRequestBody::builder()
-                            .app_id(config.app_id.as_ref().unwrap().to_string())
-                            .app_secret(config.app_secret.as_ref().unwrap().to_string())
+                            .app_id(config.app_id.clone())
+                            .app_secret(config.app_secret.clone())
                             .build(),
                     )
                     .build();
@@ -83,7 +83,7 @@ impl TokenManager {
 
     /// 获取自建应用的租户级访问令牌
     pub fn get_self_tenant_token(&self, config: &Config) -> Result<String, LarkAPIError> {
-        let cache_key = format!("self_tenant_token:{}", config.app_id.as_ref().unwrap());
+        let cache_key = format!("self_tenant_token:{}", config.app_id);
         return match self.cache.get(&cache_key) {
             Some(token) => Ok(token.1),
             // 缓存不存在则发起请求获取token
@@ -91,8 +91,8 @@ impl TokenManager {
                 let req = CreateSelfTenantTokenRequest::builder()
                     .request_body(
                         CreateTokenRequestBody::builder()
-                            .app_id(config.app_id.as_ref().unwrap().to_string())
-                            .app_secret(config.app_secret.as_ref().unwrap().to_string())
+                            .app_id(config.app_id.clone())
+                            .app_secret(config.app_secret.clone())
                             .build(),
                     )
                     .build();
@@ -119,7 +119,7 @@ impl TokenManager {
     }
 
     pub fn get_isv_app_token(&self, config: &Config) -> Result<String, LarkAPIError> {
-        let cache_key = format!("isv_app_token:{}", config.app_id.as_ref().unwrap(),);
+        let cache_key = format!("isv_app_token:{}", config.app_id,);
         return match self.cache.get(&cache_key) {
             Some(token) => Ok(token.1),
             // 缓存不存在则发起请求获取token
@@ -127,8 +127,8 @@ impl TokenManager {
                 let req = CreateIsvAppTokenRequest::builder()
                     .request_body(
                         CreateTokenRequestBody::builder()
-                            .app_id(config.app_id.as_ref().unwrap().to_string())
-                            .app_secret(config.app_secret.as_ref().unwrap().to_string())
+                            .app_id(config.app_id.clone())
+                            .app_secret(config.app_secret.clone())
                             .build(),
                     )
                     .build();
@@ -158,7 +158,7 @@ impl TokenManager {
     ) -> Result<String, LarkAPIError> {
         let cache_key = format!(
             "isv_tenant_token:{}:{}",
-            config.app_id.as_ref().unwrap(),
+            config.app_id,
             tenant_key
         );
         return match self.cache.get(&cache_key) {
@@ -168,7 +168,7 @@ impl TokenManager {
                 let req = CreateIsvTenantTokenRequest::builder()
                     .request_body(
                         CreateTokenRequestBody::builder()
-                            .app_access_token(config.app_id.as_ref().unwrap().to_string())
+                            .app_access_token(config.app_id.clone())
                             .tenant_key(tenant_key.to_string())
                             .build(),
                     )

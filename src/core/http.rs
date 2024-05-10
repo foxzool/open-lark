@@ -1,29 +1,31 @@
 use std::collections::{HashMap, HashSet};
 
 use log::debug;
-use reqwest::blocking::Response;
+use reqwest::blocking::{Request, Response};
 use reqwest::header::HeaderMap;
+use reqwest::StatusCode;
 
 use crate::core::api_req::ApiReq;
+use crate::core::api_resp::{ApiResp, CodeError};
+use crate::core::app_ticket_manager::{APP_TICKET_MANAGER, apply_app_ticket, AppTicketManager};
 use crate::core::config::Config;
-use crate::core::constants::{
-    AccessTokenType, AppType, AUTHORIZATION, HTTP_HEADER_KEY_REQUEST_ID, HTTP_HEADER_REQUEST_ID,
-    PROJECT, USER_AGENT, VERSION,
-};
+use crate::core::constants::{AccessTokenType, AppType, AUTHORIZATION, CONTENT_TYPE_HEADER, CONTENT_TYPE_JSON, ERR_CODE_ACCESS_TOKEN_INVALID, ERR_CODE_APP_ACCESS_TOKEN_INVALID, ERR_CODE_APP_TICKET_INVALID, ERR_CODE_TENANT_ACCESS_TOKEN_INVALID, HTTP_HEADER_KEY_REQUEST_ID, HTTP_HEADER_REQUEST_ID, PROJECT, USER_AGENT_HEADER, VERSION};
 use crate::core::error::LarkAPIError;
 use crate::core::model::{
     BaseRequest, BaseResponse, BaseResponseTrait, RawResponse, RequestOption as OpOld,
 };
 use crate::core::req_option::{RequestOption, RequestOptionFunc};
+use crate::core::req_translator::ReqTranslator;
+use crate::core::SDKResult;
 
 pub struct Transport;
 
 impl Transport {
     pub fn request(
         mut req: ApiReq,
-        config: Config,
+        config: &Config,
         options: Vec<RequestOptionFunc>,
-    ) -> Result<(), LarkAPIError> {
+    ) -> Result<ApiResp, LarkAPIError> {
         let mut option = RequestOption::default();
 
         for option_func in options {
@@ -42,8 +44,56 @@ impl Transport {
         );
         validate(&config, &option, access_token_type)?;
 
-        Ok(())
+        Self::do_request(&req, access_token_type, &config, option)
     }
+
+    fn do_request(http_req: &ApiReq, access_token_type: AccessTokenType, config: &Config, option: RequestOption) -> SDKResult<ApiResp> {
+        let mut raw_resp = ApiResp::default();
+        for i in 0..2 {
+            let req = ReqTranslator::translate(http_req, access_token_type, config, &option)?;
+            debug!("Req:{:?}", req.body());
+
+            raw_resp = Self::do_send(req, &config.http_client)?;
+            debug!("Res:{:?}", raw_resp);
+
+            let file_download_success = option.file_upload && raw_resp.status_code ==  StatusCode::OK;
+            if file_download_success || raw_resp.header.get(CONTENT_TYPE_HEADER).is_some_and(|v| v.to_str().unwrap().contains(CONTENT_TYPE_JSON)) {
+                break;
+            }
+
+            let code_error: CodeError = serde_json::from_slice(&raw_resp.raw_body.clone())?;
+            let code = code_error.code;
+            if code == ERR_CODE_APP_TICKET_INVALID {
+                apply_app_ticket(config)?;
+            }
+            if access_token_type == AccessTokenType::None {
+                break;
+            }
+            if !config.enable_token_cache {
+                break;
+            }
+
+            if code != ERR_CODE_ACCESS_TOKEN_INVALID && code != ERR_CODE_APP_ACCESS_TOKEN_INVALID && code != ERR_CODE_TENANT_ACCESS_TOKEN_INVALID {
+                break;
+            }
+
+
+
+        }
+
+
+        Ok(raw_resp)
+    }
+
+    fn do_send(raw_request: Request, client: &reqwest::blocking::Client) -> SDKResult<ApiResp> {
+        let response = client.execute(raw_request)?;
+        Ok(ApiResp {
+            status_code: response.status().as_u16(),
+            header: response.headers().clone(),
+            raw_body: response.bytes()?,
+        })
+    }
+
     pub fn execute(
         config: &Config,
         req: &BaseRequest,
@@ -101,7 +151,7 @@ fn build_header(request: &BaseRequest, option: &OpOld) -> HeaderMap {
 
     // 添加ua
     headers.insert(
-        USER_AGENT,
+        USER_AGENT_HEADER,
         format!("{}/v{}", PROJECT, VERSION).parse().unwrap(),
     );
 
@@ -223,13 +273,13 @@ fn validate(
     option: &RequestOption,
     access_token_type: AccessTokenType,
 ) -> Result<(), LarkAPIError> {
-    if config.app_id.is_none() {
+    if config.app_id.is_empty() {
         return Err(LarkAPIError::IllegalParamError(
             "AppId is empty".to_string(),
         ));
     }
 
-    if config.app_secret.is_none() {
+    if config.app_secret.is_empty() {
         return Err(LarkAPIError::IllegalParamError(
             "AppSecret is empty".to_string(),
         ));
