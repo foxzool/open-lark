@@ -1,8 +1,10 @@
 use std::collections::HashSet;
+use crate::core::config::Config;
+use crate::core::constants::{AccessTokenType, AppType};
 
-use crate::core::enum_type::{AccessTokenType, AppType};
+
 use crate::core::error::LarkAPIError;
-use crate::core::model::{BaseRequest, Config, RequestOption};
+use crate::core::model::{BaseRequest,  RequestOption};
 use crate::core::token::TOKEN_MANAGER;
 
 pub fn verify(
@@ -18,20 +20,20 @@ pub fn verify(
     // 如开启token配置，需手动传入token
     if config.enable_set_token {
         if option.tenant_access_token.is_some()
-            && request.token_types.contains(&AccessTokenType::TENANT)
+            && request.token_types.contains(&AccessTokenType::Tenant)
         {
-            request.token_types = HashSet::from([AccessTokenType::TENANT]);
+            request.token_types = HashSet::from([AccessTokenType::Tenant]);
             return Ok(());
         }
-        if option.app_access_token.is_some() && request.token_types.contains(&AccessTokenType::APP)
+        if option.app_access_token.is_some() && request.token_types.contains(&AccessTokenType::App)
         {
-            request.token_types = HashSet::from([AccessTokenType::APP]);
+            request.token_types = HashSet::from([AccessTokenType::App]);
             return Ok(());
         }
         if option.user_access_token.is_some()
-            && request.token_types.contains(&AccessTokenType::USER)
+            && request.token_types.contains(&AccessTokenType::User)
         {
-            request.token_types = HashSet::from([AccessTokenType::USER]);
+            request.token_types = HashSet::from([AccessTokenType::User]);
             return Ok(());
         }
     }
@@ -43,9 +45,9 @@ pub fn verify(
         ));
     }
 
-    if request.token_types.contains(&AccessTokenType::TENANT) {
+    if request.token_types.contains(&AccessTokenType::Tenant) {
         let mut tenant_access_token = "".to_string();
-        if AppType::SELF == config.app_type {
+        if AppType::SelfBuild == config.app_type {
             tenant_access_token = TOKEN_MANAGER.get_self_tenant_token(&config)?;
         } else {
             if option.tenant_key.is_none() {
@@ -58,19 +60,19 @@ pub fn verify(
         }
 
         option.tenant_access_token = Some(tenant_access_token.clone());
-        request.token_types = HashSet::from([AccessTokenType::TENANT]);
+        request.token_types = HashSet::from([AccessTokenType::Tenant]);
         return Ok(());
     }
 
-    if request.token_types.contains(&AccessTokenType::APP) {
+    if request.token_types.contains(&AccessTokenType::App) {
         let mut app_access_token = "".to_string();
-        if AppType::SELF == config.app_type {
+        if AppType::SelfBuild == config.app_type {
             app_access_token = TOKEN_MANAGER.get_self_app_token(&config)?;
         } else {
             app_access_token = TOKEN_MANAGER.get_isv_app_token(&config)?;
         }
         option.app_access_token = Some(app_access_token.clone());
-        request.token_types = HashSet::from([AccessTokenType::APP]);
+        request.token_types = HashSet::from([AccessTokenType::App]);
         return Ok(());
     }
 

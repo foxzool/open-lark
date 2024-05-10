@@ -1,16 +1,37 @@
 use reqwest::blocking::Response;
+use crate::core::config::Config;
 
-use crate::core::enum_type::AppType;
+use crate::core::constants::AppType;
 use crate::core::error::LarkAPIError;
 use crate::core::http::Transport;
 use crate::core::model::*;
-use crate::core::token::{AccessTokenResponse, verify};
+use crate::core::token::verify;
 
 pub struct LarkClient {
     config: Config,
 }
 
 impl LarkClient {
+    pub fn new(app_id: &str, app_secret: &str) -> Self {
+        let config = Config {
+            app_id: Some(app_id.to_string()),
+            app_secret: Some(app_secret.to_string()),
+            ..Default::default()
+        };
+
+        Self { config }
+    }
+
+    pub fn with_app_type(mut self, app_type: AppType) -> Self {
+        self.config.app_type = app_type;
+        self
+    }
+
+    pub fn with_marketplace_app(mut self) -> Self {
+        self.config.app_type = AppType::Marketplace;
+        self
+    }
+
     pub fn builder() -> LarkClientBuilder {
         LarkClientBuilder::default()
     }
@@ -61,7 +82,7 @@ impl LarkClientBuilder {
     }
 
     pub fn domain(mut self, domain: String) -> Self {
-        self.config.domain = domain;
+        self.config.base_url = domain;
         self
     }
 

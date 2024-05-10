@@ -41,3 +41,6 @@ path = "examples/custom_bot.rs"
 name = "api_raw"
 path = "examples/api/raw.rs"
 
+[[example]]
+name = "create_message"
+path = "examples/api/im/v2/create_message.rs"

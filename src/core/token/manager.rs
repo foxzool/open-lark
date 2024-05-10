@@ -3,10 +3,11 @@ use std::time::{Duration, Instant};
 use lazy_static::lazy_static;
 use moka::Expiry;
 use moka::sync::Cache;
+use crate::core::config::Config;
 
 use crate::core::error::LarkAPIError;
 use crate::core::http::Transport;
-use crate::core::model::{BaseResponse, Config};
+use crate::core::model::{BaseResponse};
 use crate::core::token::{
     AccessTokenResponse, CreateIsvAppTokenRequest, CreateSelfAppTokenRequest,
     CreateTokenRequestBody,

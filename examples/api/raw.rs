@@ -2,7 +2,6 @@ use std::collections::HashSet;
 use std::env;
 
 use dotenvy::dotenv;
-use log::{error, info};
 use reqwest::Method;
 use serde_json::json;
 

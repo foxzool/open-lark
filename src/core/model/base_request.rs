@@ -3,8 +3,8 @@ use std::collections::{HashMap, HashSet};
 use reqwest::Method;
 use serde::Serialize;
 use serde_json::Value;
+use crate::core::constants::AccessTokenType;
 
-use crate::core::enum_type::AccessTokenType;
 
 #[derive(Default, Debug, Clone)]
 pub struct BaseRequest {
