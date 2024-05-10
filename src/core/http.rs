@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use log::debug;
 use reqwest::blocking::Response;
@@ -6,7 +6,10 @@ use reqwest::header::HeaderMap;
 
 use crate::core::api_req::ApiReq;
 use crate::core::config::Config;
-use crate::core::constants::{AccessTokenType, AUTHORIZATION, PROJECT, USER_AGENT, VERSION};
+use crate::core::constants::{
+    AccessTokenType, AppType, AUTHORIZATION, HTTP_HEADER_KEY_REQUEST_ID, HTTP_HEADER_REQUEST_ID,
+    PROJECT, USER_AGENT, VERSION,
+};
 use crate::core::error::LarkAPIError;
 use crate::core::model::{
     BaseRequest, BaseResponse, BaseResponseTrait, RawResponse, RequestOption as OpOld,
@@ -31,7 +34,13 @@ impl Transport {
             req.supported_access_token_types = vec![AccessTokenType::None];
         }
 
-        validate_token_type(&req.supported_access_token_types, option)?;
+        validate_token_type(&req.supported_access_token_types, &option)?;
+        let access_token_type = determine_token_type(
+            &req.supported_access_token_types,
+            &option,
+            config.enable_token_cache,
+        );
+        validate(&config, &option, access_token_type)?;
 
         Ok(())
     }
@@ -139,7 +148,7 @@ fn build_header(request: &BaseRequest, option: &OpOld) -> HeaderMap {
 
 fn validate_token_type(
     access_token_types: &[AccessTokenType],
-    option: RequestOption,
+    option: &RequestOption,
 ) -> Result<(), LarkAPIError> {
     if !access_token_types.is_empty() {
         return Ok(());
@@ -149,7 +158,7 @@ fn validate_token_type(
 
     if access_token_type == AccessTokenType::Tenant {
         if !option.user_access_token.is_empty() {
-            return Err(LarkAPIError::Custom(
+            return Err(LarkAPIError::IllegalParamError(
                 "tenant token type not match user access token".to_string(),
             ));
         }
@@ -157,10 +166,115 @@ fn validate_token_type(
 
     if access_token_type == AccessTokenType::App {
         if !option.tenant_access_token.is_empty() {
-            return Err(LarkAPIError::Custom(
+            return Err(LarkAPIError::IllegalParamError(
                 "user token type not match tenant access token".to_string(),
             ));
         }
+    }
+
+    Ok(())
+}
+
+fn determine_token_type(
+    access_token_types: &[AccessTokenType],
+    option: &RequestOption,
+    enable_token_cache: bool,
+) -> AccessTokenType {
+    if !enable_token_cache {
+        if !option.user_access_token.is_empty() {
+            return AccessTokenType::User;
+        }
+        if !option.tenant_access_token.is_empty() {
+            return AccessTokenType::Tenant;
+        }
+        if !option.app_access_token.is_empty() {
+            return AccessTokenType::App;
+        }
+
+        return AccessTokenType::None;
+    }
+    let mut accessible_token_type_set: HashSet<AccessTokenType> = HashSet::new();
+    let mut access_token_type = access_token_types[0];
+
+    for t in access_token_types {
+        if *t == AccessTokenType::Tenant {
+            access_token_type = *t; // 默认值
+        }
+        accessible_token_type_set.insert(*t);
+    }
+
+    if !option.tenant_key.is_empty() {
+        if accessible_token_type_set.contains(&AccessTokenType::Tenant) {
+            access_token_type = AccessTokenType::Tenant;
+        }
+    }
+
+    if !option.user_access_token.is_empty() {
+        if accessible_token_type_set.contains(&AccessTokenType::User) {
+            access_token_type = AccessTokenType::User;
+        }
+    }
+
+    access_token_type
+}
+
+fn validate(
+    config: &Config,
+    option: &RequestOption,
+    access_token_type: AccessTokenType,
+) -> Result<(), LarkAPIError> {
+    if config.app_id.is_none() {
+        return Err(LarkAPIError::IllegalParamError(
+            "AppId is empty".to_string(),
+        ));
+    }
+
+    if config.app_secret.is_none() {
+        return Err(LarkAPIError::IllegalParamError(
+            "AppSecret is empty".to_string(),
+        ));
+    }
+
+    if !config.enable_token_cache {
+        if access_token_type == AccessTokenType::None {
+            return Ok(());
+        }
+        if option.user_access_token.is_empty()
+            && option.tenant_access_token.is_empty()
+            && option.app_access_token.is_empty()
+        {
+            return Err(LarkAPIError::IllegalParamError(
+                "accessToken is empty".to_string(),
+            ));
+        }
+    }
+
+    if config.app_type == AppType::Marketplace
+        && access_token_type == AccessTokenType::Tenant
+        && option.tenant_key.is_empty()
+    {
+        return Err(LarkAPIError::IllegalParamError(
+            "accessToken is empty".to_string(),
+        ));
+    }
+
+    if access_token_type == AccessTokenType::User && option.user_access_token.is_empty() {
+        return Err(LarkAPIError::IllegalParamError(
+            "user access token is empty".to_string(),
+        ));
+    }
+
+    if option.header.get(HTTP_HEADER_KEY_REQUEST_ID).is_some() {
+        return Err(LarkAPIError::IllegalParamError(format!(
+            "use {} as header key is not allowed",
+            HTTP_HEADER_KEY_REQUEST_ID
+        )));
+    }
+    if option.header.get(HTTP_HEADER_REQUEST_ID).is_some() {
+        return Err(LarkAPIError::IllegalParamError(format!(
+            "use {} as header key is not allowed",
+            HTTP_HEADER_REQUEST_ID
+        )));
     }
 
     Ok(())

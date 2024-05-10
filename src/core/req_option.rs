@@ -2,16 +2,16 @@ use std::collections::HashMap;
 
 #[derive(Debug, Default)]
 pub struct RequestOption {
-    tenant_key: String,
+    pub(crate) tenant_key: String,
     pub(crate) user_access_token: String,
-    app_access_token: String,
+    pub(crate) app_access_token: String,
     pub(crate) tenant_access_token: String,
     need_helpdesk_auth: bool,
     request_id: String,
     app_ticket: String,
     file_upload: bool,
     file_download: bool,
-    header: HashMap<String, String>,
+    pub(crate) header: HashMap<String, String>,
 }
 
 pub type RequestOptionFunc = Box<dyn FnOnce(&mut RequestOption)>;

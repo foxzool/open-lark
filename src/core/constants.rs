@@ -17,8 +17,7 @@ pub const TENANT_ACCESS_TOKEN_INTERNAL_URL_PATH: &str =
 pub const TENANT_ACCESS_TOKEN_URL_PATH: &str = "/open-apis/auth/v3/tenant_access_token";
 pub const APPLY_APP_TICKET_PATH: &str = "/open-apis/auth/v3/app_ticket/resend";
 
-
-#[derive(Default, Hash, Eq, PartialEq, Debug, Clone)]
+#[derive(Default, Hash, Eq, PartialEq, Debug, Copy, Clone)]
 pub enum AccessTokenType {
     #[default]
     None,
@@ -50,7 +49,8 @@ pub const LARK_BASE_URL: &str = "https://open.larksuite.com";
 pub const USER_AGENT: &str = "User-Agent";
 pub const AUTHORIZATION: &str = "Authorization";
 pub const X_TT_LOGID: &str = "X-Tt-Logid";
-pub const X_REQUEST_ID: &str = "X-Request-Id";
+pub const HTTP_HEADER_KEY_REQUEST_ID: &str = "X-Request-Id";
+pub const HTTP_HEADER_REQUEST_ID: &str = "Request-Id";
 pub const CONTENT_TYPE: &str = "Content-Type";
 pub const Content_Disposition: &str = "Content-Disposition";
 pub const LARK_REQUEST_TIMESTAMP: &str = "X-Lark-Request-Timestamp";
