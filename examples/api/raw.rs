@@ -2,13 +2,13 @@ use std::collections::HashSet;
 use std::env;
 
 use dotenvy::dotenv;
+use log::{error, info};
 use reqwest::Method;
 use serde_json::json;
 
 use open_lark::client::LarkClient;
 use open_lark::core::enum_type::AccessTokenType;
 use open_lark::core::model::BaseRequest;
-
 
 fn main() {
     dotenv().expect(".env file not found");
@@ -28,9 +28,7 @@ fn main() {
         .body(json!({"emails": ["xxxx@bytedance.com"], "mobiles": ["15000000000"]}))
         .build();
 
+    let raw = client.request_raw(request, None).unwrap();
 
-
-    let response = client.request(request , None).unwrap();
-
-    println!("{:?}", response);
+    println!("{:?}", raw);
 }

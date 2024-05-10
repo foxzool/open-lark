@@ -6,8 +6,11 @@ use moka::sync::Cache;
 
 use crate::core::error::LarkAPIError;
 use crate::core::http::Transport;
-use crate::core::model::{BaseResponseTrait, Config};
-use crate::core::token::{AccessTokenResponse, CreateIsvAppTokenRequest, CreateSelfAppTokenRequest, CreateTokenRequestBody};
+use crate::core::model::{BaseResponse, Config};
+use crate::core::token::{
+    AccessTokenResponse, CreateIsvAppTokenRequest, CreateSelfAppTokenRequest,
+    CreateTokenRequestBody,
+};
 use crate::core::token::create_isv_tenant_token_request::CreateIsvTenantTokenRequest;
 use crate::core::token::create_self_tenant_token_request::CreateSelfTenantTokenRequest;
 
@@ -41,7 +44,6 @@ impl TokenManager {
         Self { cache }
     }
 
-
     ///
     pub fn get_self_app_token(&self, config: &Config) -> Result<String, LarkAPIError> {
         let cache_key = format!("self_app_token:{}", config.app_id.as_ref().unwrap());
@@ -58,28 +60,22 @@ impl TokenManager {
                     )
                     .build();
 
-                let raw = Transport::execute(config, &req.base_request, None);
-                match serde_json::from_slice::<AccessTokenResponse>(raw.content.unwrap().as_ref()) {
-                    Ok(resp) => {
-                        if !resp.success() {
-                            return Err(LarkAPIError::ObtainAccessTokenException(
-                                "obtain self app access token failed".to_string(),
-                                resp.code,
-                                resp.msg,
-                            ));
-                        }
-
-                        // 写缓存
-
-                        let token = resp.tenant_access_token;
-                        // 提前10分钟过期
-                        let expire = Duration::from_secs((resp.expire - 10 * 60) as u64);
-
-                        self.cache.get_with(cache_key, || (expire, token.clone()));
-                        Ok(token)
-                    }
-                    Err(e) => Err(LarkAPIError::DeserializeError(e)),
+                let raw = Transport::execute(config, &req.base_request, None)?;
+                let resp = BaseResponse::<AccessTokenResponse>::from_response(raw)?;
+                if !resp.success() {
+                    return Err(LarkAPIError::ObtainAccessTokenException(
+                        "obtain self app access token failed".to_string(),
+                        resp.code,
+                        resp.msg,
+                    ));
                 }
+                let access_token_resp = resp.content.unwrap();
+                // 写缓存
+                let token = access_token_resp.tenant_access_token;
+                // 提前10分钟过期
+                let expire = Duration::from_secs((access_token_resp.expire - 10 * 60) as u64);
+                self.cache.get_with(cache_key, || (expire, token.clone()));
+                Ok(token)
             }
         };
     }
@@ -100,41 +96,29 @@ impl TokenManager {
                     )
                     .build();
 
-                let raw = Transport::execute(config, &req.base_request, None);
-                match serde_json::from_slice::<AccessTokenResponse>(raw.content.unwrap().as_ref()) {
-                    Ok(resp) => {
-                        if !resp.success() {
-                            return Err(LarkAPIError::ObtainAccessTokenException(
-                                "obtain self tenant access token failed".to_string(),
-                                resp.code,
-                                resp.msg,
-                            ));
-                        }
-
-                        // 写缓存
-
-                        let token = resp.tenant_access_token;
-                        // 提前10分钟过期
-                        let expire = Duration::from_secs((resp.expire - 10 * 60) as u64);
-
-                        self.cache.get_with(cache_key, || (expire, token.clone()));
-                        Ok(token)
-                    }
-                    Err(e) => Err(LarkAPIError::DeserializeError(e)),
+                let raw = Transport::execute(config, &req.base_request, None)?;
+                let resp = BaseResponse::<AccessTokenResponse>::from_response(raw)?;
+                if !resp.success() {
+                    return Err(LarkAPIError::ObtainAccessTokenException(
+                        "obtain self tenant access token failed".to_string(),
+                        resp.code,
+                        resp.msg,
+                    ));
                 }
+                let access_token_resp = resp.content.unwrap();
+                // 写缓存
+                let token = access_token_resp.tenant_access_token;
+                // 提前10分钟过期
+                let expire = Duration::from_secs((access_token_resp.expire - 10 * 60) as u64);
+                self.cache.get_with(cache_key, || (expire, token.clone()));
+
+                Ok(token)
             }
         };
     }
 
-
-    pub fn get_isv_app_token(
-        &self,
-        config: &Config
-    ) -> Result<String, LarkAPIError> {
-        let cache_key = format!(
-            "isv_app_token:{}",
-            config.app_id.as_ref().unwrap(),
-        );
+    pub fn get_isv_app_token(&self, config: &Config) -> Result<String, LarkAPIError> {
+        let cache_key = format!("isv_app_token:{}", config.app_id.as_ref().unwrap(),);
         return match self.cache.get(&cache_key) {
             Some(token) => Ok(token.1),
             // 缓存不存在则发起请求获取token
@@ -147,31 +131,26 @@ impl TokenManager {
                             .build(),
                     )
                     .build();
-
-                let raw = Transport::execute(config, &req.base_request, None);
-                match serde_json::from_slice::<AccessTokenResponse>(raw.content.unwrap().as_ref()) {
-                    Ok(resp) => {
-                        if !resp.success() {
-                            return Err(LarkAPIError::ObtainAccessTokenException(
-                                "obtain isv app access token failed".to_string(),
-                                resp.code,
-                                resp.msg,
-                            ));
-                        }
-
-                        // 写缓存
-                        let token = resp.tenant_access_token;
-                        // 提前10分钟过期
-                        let expire = Duration::from_secs((resp.expire - 10 * 60) as u64);
-
-                        self.cache.get_with(cache_key, || (expire, token.clone()));
-                        Ok(token)
-                    }
-                    Err(e) => Err(LarkAPIError::DeserializeError(e)),
+                let raw = Transport::execute(config, &req.base_request, None)?;
+                let resp = BaseResponse::<AccessTokenResponse>::from_response(raw)?;
+                if !resp.success() {
+                    return Err(LarkAPIError::ObtainAccessTokenException(
+                        "obtain isv app access token failed".to_string(),
+                        resp.code,
+                        resp.msg,
+                    ));
                 }
+                let access_token_resp = resp.content.unwrap();
+                // 写缓存
+                let token = access_token_resp.tenant_access_token;
+                // 提前10分钟过期
+                let expire = Duration::from_secs((access_token_resp.expire - 10 * 60) as u64);
+                self.cache.get_with(cache_key, || (expire, token.clone()));
+                Ok(token)
             }
         };
-    }pub fn get_isv_tenants_token(
+    }
+    pub fn get_isv_tenants_token(
         &self,
         config: &Config,
         tenant_key: &str,
@@ -193,28 +172,22 @@ impl TokenManager {
                             .build(),
                     )
                     .build();
-
-                let raw = Transport::execute(config, &req.base_request, None);
-                match serde_json::from_slice::<AccessTokenResponse>(raw.content.unwrap().as_ref()) {
-                    Ok(resp) => {
-                        if !resp.success() {
-                            return Err(LarkAPIError::ObtainAccessTokenException(
-                                "obtain isv tenant access token failed".to_string(),
-                                resp.code,
-                                resp.msg,
-                            ));
-                        }
-
-                        // 写缓存
-                        let token = resp.tenant_access_token;
-                        // 提前10分钟过期
-                        let expire = Duration::from_secs((resp.expire - 10 * 60) as u64);
-
-                        self.cache.get_with(cache_key, || (expire, token.clone()));
-                        Ok(token)
-                    }
-                    Err(e) => Err(LarkAPIError::DeserializeError(e)),
+                let raw = Transport::execute(config, &req.base_request, None)?;
+                let resp = BaseResponse::<AccessTokenResponse>::from_response(raw)?;
+                if !resp.success() {
+                    return Err(LarkAPIError::ObtainAccessTokenException(
+                        "obtain  isv tenant access token failed".to_string(),
+                        resp.code,
+                        resp.msg,
+                    ));
                 }
+                let access_token_resp = resp.content.unwrap();
+                // 写缓存
+                let token = access_token_resp.tenant_access_token;
+                // 提前10分钟过期
+                let expire = Duration::from_secs((access_token_resp.expire - 10 * 60) as u64);
+                self.cache.get_with(cache_key, || (expire, token.clone()));
+                Ok(token)
             }
         };
     }

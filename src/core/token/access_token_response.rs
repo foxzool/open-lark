@@ -1,8 +1,9 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
+
 use crate::core::model::BaseResponseTrait;
 
 /// access_token 响应体
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AccessTokenResponse {
     /// 错误码，非 0 取值表示失败
     pub code: i32,
@@ -15,9 +16,11 @@ pub struct AccessTokenResponse {
 }
 
 impl BaseResponseTrait for AccessTokenResponse {
-    fn success(&self) -> bool {
-        self.code == 0
+    fn code(&self) -> u16 {
+        self.code as u16
     }
 
-   
+    fn msg(&self) -> &str {
+        self.msg.as_str()
+    }
 }

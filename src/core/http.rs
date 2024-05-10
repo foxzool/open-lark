@@ -1,11 +1,15 @@
 use std::collections::HashMap;
-use log::debug;
 
+use log::debug;
+use reqwest::blocking::Response;
 use reqwest::header::HeaderMap;
 
 use crate::core::constants::{AUTHORIZATION, PROJECT, USER_AGENT, VERSION};
 use crate::core::enum_type::AccessTokenType;
-use crate::core::model::{BaseRequest, Config, RawResponse, RequestOption};
+use crate::core::error::LarkAPIError;
+use crate::core::model::{
+    BaseRequest, BaseResponse, BaseResponseTrait, Config, RawResponse, RequestOption,
+};
 
 pub struct Transport;
 
@@ -14,7 +18,7 @@ impl Transport {
         config: &Config,
         req: &BaseRequest,
         option: Option<RequestOption>,
-    ) -> RawResponse {
+    ) -> Result<Response, LarkAPIError> {
         let option = option.unwrap_or_default();
 
         // 拼接url
@@ -34,11 +38,9 @@ impl Transport {
             .headers(headers.clone())
             .body(data.to_string())
             .send()
-            .unwrap();
+            ?;
 
-
-
-        let queries_json = serde_json::to_string(&req.queries).unwrap();
+        let queries_json = serde_json::to_string(&req.queries)?;
 
         debug!(
             "{} {} {}, headers: {:?}, queries: {:?}, body: {:?} ",
@@ -50,16 +52,9 @@ impl Transport {
             data
         );
 
+        println!("{:?}", response);
 
-
-        let mut resp = RawResponse::default();
-        resp.status_code = response.status().as_u16();
-
-        resp.headers = response.headers().iter().map(|(k,v)| {
-            (k.as_str().to_string(), v.to_str().unwrap().to_string())
-        }).collect::<HashMap<String, String>>();
-        resp.content = Some(response.bytes().unwrap());
-        resp
+        Ok(response)
     }
 }
 
