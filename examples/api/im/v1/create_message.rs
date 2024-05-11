@@ -1,12 +1,14 @@
 use std::env;
 
 use dotenvy::dotenv;
+use log::{error, info};
 use serde_json::json;
 use uuid::Uuid;
 
 use open_lark::client::LarkClient;
 use open_lark::service::im::v1::message::{CreateMessageReqBody, CreateMessageReqBuilder};
 
+// POST /open-apis/im/v1/messages
 fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
@@ -25,11 +27,13 @@ fn main() {
         })
         .build();
 
+    // 发起请求
     let resp = client.im.v1.message.create(req).unwrap();
 
     if resp.success() {
-        println!("response: {:?}", resp);
+        // 业务处理
+        info!("response: {:?}", resp.data);
     } else {
-        println!("send message failed: {} {} {}", resp.code_error.code, resp.code_error.msg,resp.api_resp.request_id());
+        error!("send message failed: {} {} {}", resp.code_error.code, resp.code_error.msg,resp.api_resp.request_id());
     }
 }

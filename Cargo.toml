@@ -34,3 +34,7 @@ uuid = { version = "1.8.0", features = ["v4"] }
 [[example]]
 name = "create_message"
 path = "examples/api/im/v1/create_message.rs"
+
+[[example]]
+name = "list_chat"
+path = "examples/api/im/v1/list_chat.rs"

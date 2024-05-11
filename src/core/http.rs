@@ -57,7 +57,7 @@ impl Transport {
         let mut raw_resp = ApiResp::default();
         for _i in 0..2 {
             let req = ReqTranslator::translate(http_req, access_token_type, config, &option)?;
-            debug!("Req:{:?}", req.body());
+            debug!("Req:{:?}", req);
 
             raw_resp = Self::do_send(req, &config.http_client)?;
             debug!("Res:{:?}", raw_resp);

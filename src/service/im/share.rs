@@ -48,3 +48,26 @@ pub struct Mention {
     /// 合并转发消息中，上一层级的消息id message_id
     pub upper_message_id: String
 }
+
+/// chat 列表
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ListChat {
+    /// 群组 ID
+    pub chat_id: String,
+    /// 群头像 URL
+    pub avatar: String,
+    /// 群名称
+    pub name: String,
+    /// 群描述
+    pub description: String,
+    /// 群主 ID
+    pub owner_id: String,
+    /// 群主 ID 类型
+    pub owner_id_type: String,
+    /// 是否是外部群
+    pub external: bool,
+    /// 租户Key，为租户在飞书上的唯一标识，用来换取对应的tenant_access_token，也可以用作租户在应用中的唯一标识
+    pub tenant_key: String,
+    /// 群状态
+    pub chat_status: String
+}

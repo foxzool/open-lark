@@ -25,7 +25,8 @@ impl Message {
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, vec![])?;
-        let resp = serde_json::from_slice(&api_resp.raw_body)?;
+        let mut resp: CreateMessageResp = serde_json::from_slice(&api_resp.raw_body)?;
+        resp.api_resp = api_resp;
 
         Ok(resp)
     }
