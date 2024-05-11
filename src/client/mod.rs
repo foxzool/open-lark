@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use crate::core::config::Config;
 use crate::core::constants::AppType;
 
@@ -7,7 +9,7 @@ pub struct LarkClient {
 
 impl LarkClient {
     pub fn new(app_id: &str, app_secret: &str) -> Self {
-        let config = Config {
+        let mut config = Config {
             app_id: app_id.to_string(),
             app_secret: app_secret.to_string(),
             ..Default::default()
@@ -26,55 +28,22 @@ impl LarkClient {
         self
     }
 
-    pub fn builder() -> LarkClientBuilder {
-        LarkClientBuilder::default()
-    }
-}
-
-#[derive(Default)]
-pub struct LarkClientBuilder {
-    config: Config,
-}
-
-impl LarkClientBuilder {
-    pub fn app_id(mut self, app_id: String) -> Self {
-        self.config.app_id = app_id;
+    pub fn with_open_base_url(mut self, base_url: String) -> Self {
+        self.config.base_url = base_url;
         self
     }
 
-    pub fn app_secret(mut self, app_secret: String) -> Self {
-        self.config.app_secret = app_secret;
+    pub fn with_enable_token_cache(mut self, enable: bool) -> Self {
+        self.config.enable_token_cache = enable;
         self
     }
 
-    pub fn domain(mut self, domain: String) -> Self {
-        self.config.base_url = domain;
+    pub fn with_req_timeout(mut self, timeout: Option<f32>) -> Self {
+        self.config.req_timeout = timeout.map(|t| Duration::from_secs_f32(t));
+        self.config.http_client = reqwest::blocking::Client::builder()
+            .timeout(self.config.req_timeout)
+            .build()
+            .unwrap();
         self
-    }
-
-    pub fn timeout(mut self, timeout: f32) -> Self {
-        self.config.timeout = Some(timeout);
-        self
-    }
-
-    pub fn app_type(mut self, app_type: AppType) -> Self {
-        self.config.app_type = app_type;
-        self
-    }
-
-    pub fn app_ticket(mut self, app_ticket: String) -> Self {
-        self.config.app_ticket = Some(app_ticket);
-        self
-    }
-
-    pub fn enable_set_token(mut self, enable_set_token: bool) -> Self {
-        self.config.enable_set_token = enable_set_token;
-        self
-    }
-
-    pub fn build(self) -> LarkClient {
-        LarkClient {
-            config: self.config,
-        }
     }
 }

@@ -1,6 +1,8 @@
 use std::collections::HashMap;
-use crate::core::constants::FEISHU_BASE_URL;
+use std::time::Duration;
+
 use crate::core::constants::AppType;
+use crate::core::constants::FEISHU_BASE_URL;
 
 #[derive(Debug, Clone)]
 pub struct Config {
@@ -11,14 +13,11 @@ pub struct Config {
     pub enable_token_cache: bool,
     /// 客户端超时时间, 单位秒, 默认永不超时
     pub timeout: Option<f32>,
-    /// 应用类型, 默认为自建应用; 若设为 ISV 需在 request_option 中配置 tenant_key
+    /// 应用类型, 默认为自建应用
     pub app_type: AppType,
-    /// 获取 app_access_token 凭证, app_type = ISV 时需配置
-    pub app_ticket: Option<String>,
-    /// 是否允许手动设置 token, 默认不开启; 开启后需在 request_option 中配置 token
-    pub enable_set_token: bool,
     pub http_client: reqwest::blocking::Client,
-    pub header: HashMap<String, String>
+    pub req_timeout: Option<Duration>,
+    pub header: HashMap<String, String>,
 }
 
 impl Default for Config {
@@ -30,9 +29,8 @@ impl Default for Config {
             enable_token_cache: true,
             timeout: None,
             app_type: AppType::SelfBuild,
-            app_ticket: None,
-            enable_set_token: false,
             http_client: Default::default(),
+            req_timeout: None,
             header: Default::default(),
         }
     }

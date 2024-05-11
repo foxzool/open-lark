@@ -9,7 +9,12 @@ use crate::core::api_req::ApiReq;
 use crate::core::api_resp::{ApiResp, CodeError};
 use crate::core::app_ticket_manager::{APP_TICKET_MANAGER, apply_app_ticket, AppTicketManager};
 use crate::core::config::Config;
-use crate::core::constants::{AccessTokenType, AppType, AUTHORIZATION, CONTENT_TYPE_HEADER, CONTENT_TYPE_JSON, ERR_CODE_ACCESS_TOKEN_INVALID, ERR_CODE_APP_ACCESS_TOKEN_INVALID, ERR_CODE_APP_TICKET_INVALID, ERR_CODE_TENANT_ACCESS_TOKEN_INVALID, HTTP_HEADER_KEY_REQUEST_ID, HTTP_HEADER_REQUEST_ID, PROJECT, USER_AGENT_HEADER, VERSION};
+use crate::core::constants::{
+    AccessTokenType, AppType, AUTHORIZATION, CONTENT_TYPE_HEADER, CONTENT_TYPE_JSON,
+    ERR_CODE_ACCESS_TOKEN_INVALID, ERR_CODE_APP_ACCESS_TOKEN_INVALID, ERR_CODE_APP_TICKET_INVALID,
+    ERR_CODE_TENANT_ACCESS_TOKEN_INVALID, HTTP_HEADER_KEY_REQUEST_ID, HTTP_HEADER_REQUEST_ID,
+    PROJECT, USER_AGENT_HEADER, VERSION,
+};
 use crate::core::error::LarkAPIError;
 use crate::core::req_option::{RequestOption, RequestOptionFunc};
 use crate::core::req_translator::ReqTranslator;
@@ -44,7 +49,12 @@ impl Transport {
         Self::do_request(&req, access_token_type, &config, option)
     }
 
-    fn do_request(http_req: &ApiReq, access_token_type: AccessTokenType, config: &Config, option: RequestOption) -> SDKResult<ApiResp> {
+    fn do_request(
+        http_req: &ApiReq,
+        access_token_type: AccessTokenType,
+        config: &Config,
+        option: RequestOption,
+    ) -> SDKResult<ApiResp> {
         let mut raw_resp = ApiResp::default();
         for i in 0..2 {
             let req = ReqTranslator::translate(http_req, access_token_type, config, &option)?;
@@ -53,8 +63,14 @@ impl Transport {
             raw_resp = Self::do_send(req, &config.http_client)?;
             debug!("Res:{:?}", raw_resp);
 
-            let file_download_success = option.file_upload && raw_resp.status_code == StatusCode::OK;
-            if file_download_success || raw_resp.header.get(CONTENT_TYPE_HEADER).is_some_and(|v| v.to_str().unwrap().contains(CONTENT_TYPE_JSON)) {
+            let file_download_success =
+                option.file_upload && raw_resp.status_code == StatusCode::OK;
+            if file_download_success
+                || raw_resp
+                    .header
+                    .get(CONTENT_TYPE_HEADER)
+                    .is_some_and(|v| v.to_str().unwrap().contains(CONTENT_TYPE_JSON))
+            {
                 break;
             }
 
@@ -70,11 +86,13 @@ impl Transport {
                 break;
             }
 
-            if code != ERR_CODE_ACCESS_TOKEN_INVALID && code != ERR_CODE_APP_ACCESS_TOKEN_INVALID && code != ERR_CODE_TENANT_ACCESS_TOKEN_INVALID {
+            if code != ERR_CODE_ACCESS_TOKEN_INVALID
+                && code != ERR_CODE_APP_ACCESS_TOKEN_INVALID
+                && code != ERR_CODE_TENANT_ACCESS_TOKEN_INVALID
+            {
                 break;
             }
         }
-
 
         Ok(raw_resp)
     }
