@@ -1,3 +1,4 @@
+use log::error;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
@@ -6,8 +7,8 @@ use crate::core::api_resp::BaseResp;
 use crate::core::config::Config;
 use crate::core::constants::AccessTokenType;
 use crate::core::http::Transport;
+use crate::core::req_option::RequestOptionFunc;
 use crate::core::SDKResult;
-
 
 pub struct ChatsService {
     pub config: Config,
@@ -15,35 +16,83 @@ pub struct ChatsService {
 
 impl ChatsService {
     /// 获取用户或机器人所在的群列表
-    pub fn list(&self, req: ListChatReq) -> SDKResult<BaseResp<ListChatRespData>> {
-        let mut api_req = req.api_req;
+    pub fn list(
+        &self,
+        req: &mut ListChatReq,
+        options: &[RequestOptionFunc],
+    ) -> SDKResult<BaseResp<ListChatRespData>> {
+        let mut api_req = &mut req.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/im/v1/chats".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(&mut api_req, &self.config, &[])?;
+        let api_resp = Transport::request(&mut api_req, &self.config, options)?;
 
         Ok(api_resp.try_into()?)
+    }
+
+    pub fn list_iter(&self, req: ListChatReq, options: Vec<RequestOptionFunc>) -> ListChatIterator {
+        ListChatIterator {
+            service: self,
+            req,
+            options,
+            has_more: true,
+        }
+    }
+}
+
+pub struct ListChatIterator<'a> {
+    service: &'a ChatsService,
+    req: ListChatReq,
+    options: Vec<RequestOptionFunc>,
+    has_more: bool,
+}
+
+impl<'a> Iterator for ListChatIterator<'a> {
+    type Item = Vec<ListChat>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if !self.has_more {
+            return None;
+        }
+        match self.service.list(&mut self.req, &self.options) {
+            Ok(resp) => {
+                if resp.success() {
+                    self.has_more = resp.data.has_more;
+                    if resp.data.has_more {
+                        self.req
+                            .api_req
+                            .query_params
+                            .insert("page_token".to_string(), resp.data.page_token.to_string());
+                        Some(resp.data.items)
+                    } else if resp.data.items.is_empty() {
+                        None
+                    } else {
+                        Some(resp.data.items)
+                    }
+                } else {
+                    error!("Error: {}", resp.error_msg());
+                    None
+                }
+            }
+            Err(e) => {
+                error!("Error: {:?}", e);
+                None
+            }
+        }
     }
 }
 
 pub struct ListChatReqBuilder {
     api_req: ApiReq,
-    limit: Option<i32>,
 }
 
 impl ListChatReqBuilder {
     pub fn new() -> ListChatReqBuilder {
         let builder = ListChatReqBuilder {
             api_req: ApiReq::default(),
-            limit: None,
         };
         builder
-    }
-
-    pub fn limit(mut self, limit: i32) -> Self {
-        self.limit = Some(limit);
-        self
     }
 
     /// 用户 ID 类型
@@ -83,14 +132,12 @@ impl ListChatReqBuilder {
     pub fn build(self) -> ListChatReq {
         ListChatReq {
             api_req: self.api_req,
-            limit: self.limit,
         }
     }
 }
 
 pub struct ListChatReq {
     pub api_req: ApiReq,
-    pub limit: Option<i32>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -102,8 +149,6 @@ pub struct ListChatRespData {
     /// 是否还有更多项
     pub has_more: bool,
 }
-
-
 
 /// chat 列表
 #[derive(Debug, Serialize, Deserialize)]
@@ -125,5 +170,5 @@ pub struct ListChat {
     /// 租户Key，为租户在飞书上的唯一标识，用来换取对应的tenant_access_token，也可以用作租户在应用中的唯一标识
     pub tenant_key: String,
     /// 群状态
-    pub chat_status: String
+    pub chat_status: String,
 }

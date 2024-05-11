@@ -61,7 +61,8 @@ impl MessageService {
         ListMessageIterator {
             service: self,
             req,
-            options
+            options,
+            has_more: true,
         }
     }
 }
@@ -70,33 +71,40 @@ pub struct ListMessageIterator<'a> {
     service: &'a MessageService,
     req: ListMessageReq,
     options: Vec<RequestOptionFunc>,
+    has_more: bool
 }
 
 impl<'a> Iterator for ListMessageIterator<'a> {
     type Item = Vec<Message>;
 
     fn next(&mut self) -> Option<Self::Item> {
+        if !self.has_more {
+            return None;
+        }
         match self.service.list(&mut self.req, &self.options) {
             Ok(resp) => {
                 if resp.success() {
+                    self.has_more = resp.data.has_more;
                     if resp.data.has_more {
                         self.req.api_req.query_params.insert(
                             "page_token".to_string(),
                             resp.data.page_token.unwrap(),
                         );
                         Some(resp.data.items)
-                    } else {
+                    } else if resp.data.items.is_empty() {
                         return None;
+                    } else {
+                        Some(resp.data.items)
                     }
 
                 } else {
                     error!("Error: {:?}", resp.error_msg());
-                    return None;
+                    None
                 }
             }
             Err(e) => {
                 error!("Error: {:?}", e);
-                return None;
+                None
             }
         }
     }

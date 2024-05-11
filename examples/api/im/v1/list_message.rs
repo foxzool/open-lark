@@ -6,7 +6,8 @@ use log::{error, info};
 use open_lark::client::LarkClient;
 use open_lark::service::im::v1::message::ListMessageReqBuilder;
 
-// GET /open-apis/im/v1/messages
+/// 获取会话历史消息
+/// GET /open-apis/im/v1/messages
 fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
