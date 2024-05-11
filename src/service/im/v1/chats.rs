@@ -2,7 +2,7 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::core::api_req::ApiReq;
-use crate::core::api_resp::{ApiResp, CodeError};
+use crate::core::api_resp::BaseResp;
 use crate::core::config::Config;
 use crate::core::constants::AccessTokenType;
 use crate::core::http::Transport;
@@ -15,17 +15,15 @@ pub struct Chats {
 
 impl Chats {
     /// 获取用户或机器人所在的群列表
-    pub fn list(&self, req: ListChatReq) -> SDKResult<ListChatResp> {
+    pub fn list(&self, req: ListChatReq) -> SDKResult<BaseResp<ListChatRespData>> {
         let mut api_req = req.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/im/v1/chats".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, vec![])?;
-        let mut resp: ListChatResp = serde_json::from_slice(&api_resp.raw_body)?;
-        resp.api_resp = api_resp;
 
-        Ok(resp)
+        Ok(api_resp.try_into()?)
     }
 }
 
@@ -93,21 +91,6 @@ impl ListChatReqBuilder {
 pub struct ListChatReq {
     pub api_req: ApiReq,
     pub limit: Option<i32>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ListChatResp {
-    #[serde(skip)]
-    pub api_resp: ApiResp,
-    #[serde(flatten)]
-    pub code_error: CodeError,
-    pub data: ListChatRespData,
-}
-
-impl ListChatResp {
-    pub fn success(&self) -> bool {
-        self.code_error.code == 0
-    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]

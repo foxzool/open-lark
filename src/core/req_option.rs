@@ -16,7 +16,6 @@ pub struct RequestOption {
 
 pub type RequestOptionFunc = Box<dyn FnOnce(&mut RequestOption)>;
 
-
 fn with_need_helpdesk_auth() -> RequestOptionFunc {
     Box::new(|option: &mut RequestOption| {
         option.need_helpdesk_auth = true;

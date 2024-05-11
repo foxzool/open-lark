@@ -7,7 +7,7 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::core::api_req::ApiReq;
-use crate::core::api_resp::{ApiResp, CodeError};
+use crate::core::api_resp::{ApiResp, CodeMsg};
 use crate::core::app_ticket_manager::APP_TICKET_MANAGER;
 use crate::core::cache::{Cache, LocalCache};
 use crate::core::config::Config;
@@ -256,7 +256,7 @@ struct AppAccessTokenResp {
     #[serde(skip)]
     api_resp: ApiResp,
     #[serde(flatten)]
-    code_error: CodeError,
+    code_error: CodeMsg,
     expire: i32,
     app_access_token: String,
 }
@@ -279,7 +279,7 @@ struct TenantAccessTokenResp {
     #[serde(skip)]
     api_resp: ApiResp,
     #[serde(flatten)]
-    code_error: CodeError,
+    code_error: CodeMsg,
     expire: i32,
     tenant_access_token: String,
 }

@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 use crate::core::api_req::ApiReq;
-use crate::core::api_resp::{ApiResp, CodeError};
+use crate::core::api_resp::{ApiResp, BaseResp, CodeMsg};
 use crate::core::config::Config;
 use crate::core::constants::AccessTokenType;
 use crate::core::error::LarkAPIError;
@@ -18,17 +18,15 @@ impl Message {
     /// 发送消息
     ///
     /// 给指定用户或者会话发送消息，支持文本、富文本、可交互的消息卡片、群名片、个人名片、图片、视频、音频、文件、表情包。
-    pub fn create(&self, req: CreateMessageReq) -> Result<CreateMessageResp, LarkAPIError> {
+    pub fn create(&self, req: CreateMessageReq) -> Result<BaseResp<CreateMessageRespData>, LarkAPIError> {
         let mut api_req = req.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, vec![])?;
-        let mut resp: CreateMessageResp = serde_json::from_slice(&api_resp.raw_body)?;
-        resp.api_resp = api_resp;
 
-        Ok(resp)
+        Ok(api_resp.try_into()?)
     }
 }
 
@@ -111,7 +109,7 @@ pub struct CreateMessageResp {
     #[serde(skip)]
     pub api_resp: ApiResp,
     #[serde(flatten)]
-    pub code_error: CodeError,
+    pub code_error: CodeMsg,
     pub data: CreateMessageRespData,
 }
 

@@ -5,12 +5,47 @@ use reqwest::header::HeaderMap;
 use serde::{Deserialize, Serialize};
 
 use crate::core::constants::{HTTP_HEADER_KEY_LOG_ID, HTTP_HEADER_KEY_REQUEST_ID};
+use crate::core::error::LarkAPIError;
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct BaseResp<T> {
+    #[serde(skip)]
+    pub api_resp: ApiResp,
+    #[serde(flatten)]
+    pub code_msg: CodeMsg,
+    pub data: T,
+}
+
+impl<T> BaseResp<T> {
+    pub fn success(&self) -> bool {
+        self.code_msg.code == 0
+    }
+
+    pub fn error_msg(&self) -> String {
+        format!(
+            "code: {}, msg: {}, request_id: {}",
+            self.code_msg.code,
+            self.code_msg.msg,
+            self.api_resp.request_id()
+        )
+    }
+}
 
 #[derive(Default, Debug)]
 pub struct ApiResp {
     pub status_code: u16,
     pub header: HeaderMap,
     pub raw_body: Bytes,
+}
+
+impl<T: for<'a> Deserialize<'a>> TryInto<BaseResp<T>> for ApiResp {
+    type Error = serde_json::Error;
+
+    fn try_into(self) -> Result<BaseResp<T>, Self::Error> {
+        let mut resp = serde_json::from_slice::<BaseResp<T>>(&self.raw_body)?;
+        resp.api_resp = self;
+        Ok(resp)
+    }
 }
 
 impl ApiResp {
@@ -32,14 +67,14 @@ impl ApiResp {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct CodeError {
+pub struct CodeMsg {
     pub code: i32,
     pub msg: String,
     #[serde(rename = "error", default, skip_serializing_if = "Option::is_none")]
     pub err: Option<ErrorInfo>,
 }
 
-impl Display for CodeError {
+impl Display for CodeMsg {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         write!(f, "code: {}, msg: {}", self.code, self.msg)
     }

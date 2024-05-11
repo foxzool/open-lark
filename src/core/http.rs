@@ -6,7 +6,7 @@ use reqwest::header::HeaderMap;
 use reqwest::StatusCode;
 
 use crate::core::api_req::ApiReq;
-use crate::core::api_resp::{ApiResp, CodeError};
+use crate::core::api_resp::{ApiResp, CodeMsg};
 use crate::core::app_ticket_manager::apply_app_ticket;
 use crate::core::config::Config;
 use crate::core::constants::{
@@ -73,7 +73,7 @@ impl Transport {
                 break;
             }
 
-            let code_error: CodeError = serde_json::from_slice(&raw_resp.raw_body.clone())?;
+            let code_error: CodeMsg = serde_json::from_slice(&raw_resp.raw_body.clone())?;
             let code = code_error.code;
             if code == ERR_CODE_APP_TICKET_INVALID {
                 apply_app_ticket(config)?;

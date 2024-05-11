@@ -1,5 +1,5 @@
 use thiserror::Error;
-use crate::core::api_resp::CodeError;
+use crate::core::api_resp::CodeMsg;
 
 
 
@@ -20,7 +20,7 @@ pub enum LarkAPIError {
     #[error("Url parse error: {0}")]
     UrlParseError(#[from] url::ParseError),
     #[error("Code: {0}")]
-    CodeError(CodeError),
+    CodeError(CodeMsg),
     #[error("App ticket is empty")]
     AppTicketEmpty
 }

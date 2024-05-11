@@ -3,7 +3,7 @@ use lazy_static::lazy_static;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use crate::core::api_req::ApiReq;
-use crate::core::api_resp::{ApiResp, CodeError};
+use crate::core::api_resp::{ApiResp, CodeMsg};
 use crate::core::cache::{Cache, LocalCache};
 use crate::core::config::Config;
 use crate::core::constants::{AccessTokenType, APP_TICKET_KEY_PREFIX, APPLY_APP_TICKET_PATH};
@@ -84,5 +84,5 @@ struct ResendAppTicketResp {
     #[serde(skip)]
     api_resp: ApiResp,
     #[serde(flatten)]
-    code_error: CodeError
+    code_error: CodeMsg
 }

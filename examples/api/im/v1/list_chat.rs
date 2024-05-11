@@ -23,11 +23,6 @@ fn main() {
         // 业务处理
         info!("response: {:?}", resp.data);
     } else {
-        error!(
-            "send message failed: {} {} {}",
-            resp.code_error.code,
-            resp.code_error.msg,
-            resp.api_resp.request_id()
-        );
+        error!("list chat failed: {} ", resp.error_msg());
     }
 }
