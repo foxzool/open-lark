@@ -9,11 +9,7 @@ pub struct LarkClient {
     pub im: ImService,
 }
 
-impl LarkClient {
-    pub fn new(app_id: &str, app_secret: &str) -> LarkClientBuilder {
-        LarkClientBuilder::new(app_id, app_secret)
-    }
-}
+
 
 pub struct LarkClientBuilder {
     pub config: Config,

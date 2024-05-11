@@ -60,7 +60,7 @@ fn app_ticket_key(app_id: &str) -> String {
 
 pub fn apply_app_ticket(config: &Config) -> SDKResult<()> {
     let resp = Transport::request(
-        &mut ApiReq {
+         ApiReq {
             http_method: Method::POST,
             api_path: APPLY_APP_TICKET_PATH.to_string(),
             body: Default::default(),

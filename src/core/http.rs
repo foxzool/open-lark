@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 
 use log::debug;
-use reqwest::blocking::{Request};
+use reqwest::blocking::Request;
 use reqwest::StatusCode;
 
 use crate::core::api_req::ApiReq;
@@ -22,7 +22,7 @@ pub struct Transport;
 
 impl Transport {
     pub fn request(
-        mut req: &mut ApiReq,
+        mut req: ApiReq,
         config: &Config,
         options: &[RequestOptionFunc],
     ) -> Result<ApiResp, LarkAPIError> {
@@ -162,16 +162,15 @@ fn determine_token_type(
         accessible_token_type_set.insert(*t);
     }
 
-    if !option.tenant_key.is_empty() {
-        if accessible_token_type_set.contains(&AccessTokenType::Tenant) {
-            access_token_type = AccessTokenType::Tenant;
-        }
+    if !option.tenant_key.is_empty() && accessible_token_type_set.contains(&AccessTokenType::Tenant)
+    {
+        access_token_type = AccessTokenType::Tenant;
     }
 
-    if !option.user_access_token.is_empty() {
-        if accessible_token_type_set.contains(&AccessTokenType::User) {
-            access_token_type = AccessTokenType::User;
-        }
+    if !option.user_access_token.is_empty()
+        && accessible_token_type_set.contains(&AccessTokenType::User)
+    {
+        access_token_type = AccessTokenType::User;
     }
 
     access_token_type

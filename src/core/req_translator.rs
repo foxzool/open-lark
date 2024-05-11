@@ -9,7 +9,10 @@ use url::Url;
 
 use crate::core::api_req::ApiReq;
 use crate::core::config::Config;
-use crate::core::constants::{AccessTokenType, CONTENT_TYPE_HEADER, CUSTOM_REQUEST_ID, DEFAULT_CONTENT_TYPE, USER_AGENT_HEADER};
+use crate::core::constants::{
+    AccessTokenType, CONTENT_TYPE_HEADER, CUSTOM_REQUEST_ID, DEFAULT_CONTENT_TYPE,
+    USER_AGENT_HEADER,
+};
 use crate::core::error::LarkAPIError;
 use crate::core::req_option::RequestOption;
 use crate::core::token_manager::TOKEN_MANAGER;
@@ -34,7 +37,9 @@ impl ReqTranslator {
             .collect::<Vec<_>>();
         let url = Url::parse_with_params(&path, query_params)?;
 
-        let mut req_builder = client.request(req.http_method.clone(), url).body(req.body.clone());
+        let mut req_builder = client
+            .request(req.http_method.clone(), url)
+            .body(req.body.clone());
         if !option.request_id.is_empty() {
             req_builder = req_builder.header(CUSTOM_REQUEST_ID, option.request_id.clone());
         }
@@ -46,7 +51,6 @@ impl ReqTranslator {
             req_builder = req_builder.header(k, v)
         }
         req_builder = req_builder.header(USER_AGENT_HEADER, user_agent());
-
 
         match access_token_type {
             AccessTokenType::None => {}
@@ -80,10 +84,8 @@ impl ReqTranslator {
         let body = req.body.clone();
         if serde_json::from_slice::<FormData>(&body).is_ok() {
             file_upload = true;
-        } else {
-            if option.file_upload {
-                file_upload = true;
-            }
+        } else if option.file_upload {
+            file_upload = true;
         }
 
         if file_upload {

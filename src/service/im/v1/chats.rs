@@ -18,15 +18,15 @@ impl ChatsService {
     /// 获取用户或机器人所在的群列表
     pub fn list(
         &self,
-        req: &mut ListChatReq,
+        req: &ListChatReq,
         options: &[RequestOptionFunc],
     ) -> SDKResult<BaseResp<ListChatRespData>> {
-        let mut api_req = &mut req.api_req;
+        let mut api_req = req.api_req.clone();
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/im/v1/chats".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(&mut api_req, &self.config, options)?;
+        let api_resp = Transport::request(api_req, &self.config, &options)?;
 
         Ok(api_resp.try_into()?)
     }

@@ -22,14 +22,14 @@ impl MessageService {
     pub fn create(
         &self,
         req: CreateMessageReq,
-        options: &[RequestOptionFunc],
+        options: Vec<RequestOptionFunc>,
     ) -> Result<BaseResp<Message>, LarkAPIError> {
         let mut api_req = req.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(&mut api_req, &self.config, options)?;
+        let api_resp = Transport::request(api_req, &self.config, &options)?;
 
         Ok(api_resp.try_into()?)
     }
@@ -40,10 +40,10 @@ impl MessageService {
     /// https://open.feishu.cn/document/server-docs/im-v1/message/list
     pub fn list(
         &self,
-        req: &mut ListMessageReq,
+        req: &ListMessageReq,
         options: &[RequestOptionFunc],
     ) -> Result<BaseResp<ListMessageRespData>, LarkAPIError> {
-        let mut api_req = &mut req.api_req;
+        let mut api_req = req.api_req.clone();
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
