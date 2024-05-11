@@ -1,8 +1,7 @@
 use std::collections::HashSet;
 
 use log::debug;
-use reqwest::blocking::{Request, Response};
-use reqwest::header::HeaderMap;
+use reqwest::blocking::{Request};
 use reqwest::StatusCode;
 
 use crate::core::api_req::ApiReq;

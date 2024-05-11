@@ -7,13 +7,13 @@ use crate::core::config::Config;
 use crate::core::constants::AccessTokenType;
 use crate::core::http::Transport;
 use crate::core::SDKResult;
-use crate::service::im::share::ListChat;
 
-pub struct Chats {
+
+pub struct ChatsService {
     pub config: Config,
 }
 
-impl Chats {
+impl ChatsService {
     /// 获取用户或机器人所在的群列表
     pub fn list(&self, req: ListChatReq) -> SDKResult<BaseResp<ListChatRespData>> {
         let mut api_req = req.api_req;
@@ -101,4 +101,29 @@ pub struct ListChatRespData {
     pub page_token: String,
     /// 是否还有更多项
     pub has_more: bool,
+}
+
+
+
+/// chat 列表
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ListChat {
+    /// 群组 ID
+    pub chat_id: String,
+    /// 群头像 URL
+    pub avatar: String,
+    /// 群名称
+    pub name: String,
+    /// 群描述
+    pub description: String,
+    /// 群主 ID
+    pub owner_id: String,
+    /// 群主 ID 类型
+    pub owner_id_type: String,
+    /// 是否是外部群
+    pub external: bool,
+    /// 租户Key，为租户在飞书上的唯一标识，用来换取对应的tenant_access_token，也可以用作租户在应用中的唯一标识
+    pub tenant_key: String,
+    /// 群状态
+    pub chat_status: String
 }

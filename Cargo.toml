@@ -36,5 +36,9 @@ name = "create_message"
 path = "examples/api/im/v1/create_message.rs"
 
 [[example]]
+name = "list_message"
+path = "examples/api/im/v1/list_message.rs"
+
+[[example]]
 name = "list_chat"
 path = "examples/api/im/v1/list_chat.rs"

@@ -5,7 +5,6 @@ use reqwest::header::HeaderMap;
 use serde::{Deserialize, Serialize};
 
 use crate::core::constants::{HTTP_HEADER_KEY_LOG_ID, HTTP_HEADER_KEY_REQUEST_ID};
-use crate::core::error::LarkAPIError;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct BaseResp<T> {

@@ -20,7 +20,7 @@ pub struct LarkClientBuilder {
 }
 impl LarkClientBuilder {
     pub fn new(app_id: &str, app_secret: &str) -> Self {
-        let mut config = Config {
+        let config = Config {
             app_id: app_id.to_string(),
             app_secret: app_secret.to_string(),
             ..Default::default()
