@@ -54,7 +54,7 @@ pub struct CreateMessageReq {
     pub body: CreateMessageReqBody,
 }
 
-/// 请求体
+/// 发送消息 请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateMessageReqBody {
     /// 消息接收者的ID，ID类型应与查询参数receive_id_type 对应；推荐使用 OpenID，获取方式可参考文档如何获取 Open ID？

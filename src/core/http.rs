@@ -11,9 +11,6 @@ use crate::core::app_ticket_manager::{APP_TICKET_MANAGER, apply_app_ticket, AppT
 use crate::core::config::Config;
 use crate::core::constants::{AccessTokenType, AppType, AUTHORIZATION, CONTENT_TYPE_HEADER, CONTENT_TYPE_JSON, ERR_CODE_ACCESS_TOKEN_INVALID, ERR_CODE_APP_ACCESS_TOKEN_INVALID, ERR_CODE_APP_TICKET_INVALID, ERR_CODE_TENANT_ACCESS_TOKEN_INVALID, HTTP_HEADER_KEY_REQUEST_ID, HTTP_HEADER_REQUEST_ID, PROJECT, USER_AGENT_HEADER, VERSION};
 use crate::core::error::LarkAPIError;
-use crate::core::model::{
-    BaseRequest, BaseResponse, BaseResponseTrait, RawResponse, RequestOption as OpOld,
-};
 use crate::core::req_option::{RequestOption, RequestOptionFunc};
 use crate::core::req_translator::ReqTranslator;
 use crate::core::SDKResult;
@@ -56,7 +53,7 @@ impl Transport {
             raw_resp = Self::do_send(req, &config.http_client)?;
             debug!("Res:{:?}", raw_resp);
 
-            let file_download_success = option.file_upload && raw_resp.status_code ==  StatusCode::OK;
+            let file_download_success = option.file_upload && raw_resp.status_code == StatusCode::OK;
             if file_download_success || raw_resp.header.get(CONTENT_TYPE_HEADER).is_some_and(|v| v.to_str().unwrap().contains(CONTENT_TYPE_JSON)) {
                 break;
             }
@@ -76,9 +73,6 @@ impl Transport {
             if code != ERR_CODE_ACCESS_TOKEN_INVALID && code != ERR_CODE_APP_ACCESS_TOKEN_INVALID && code != ERR_CODE_TENANT_ACCESS_TOKEN_INVALID {
                 break;
             }
-
-
-
         }
 
 
@@ -93,107 +87,6 @@ impl Transport {
             raw_body: response.bytes()?,
         })
     }
-
-    pub fn execute(
-        config: &Config,
-        req: &BaseRequest,
-        option: Option<OpOld>,
-    ) -> Result<Response, LarkAPIError> {
-        let option = option.unwrap_or_default();
-
-        // 拼接url
-        let url = build_url(
-            &config.base_url,
-            &req.uri.clone().unwrap_or_default(),
-            &req.paths,
-        );
-
-        // 组装header
-        let headers = build_header(&req.clone(), &option);
-        let data = req.body.clone().unwrap();
-
-        let client = reqwest::blocking::Client::new();
-        let response = client
-            .request(req.http_method.clone().unwrap_or_default(), &url)
-            .headers(headers.clone())
-            .body(data.to_string())
-            .send()?;
-
-        let queries_json = serde_json::to_string(&req.queries)?;
-
-        debug!(
-            "{} {} {}, headers: {:?}, queries: {:?}, body: {:?} ",
-            req.http_method.clone().unwrap_or_default(),
-            url,
-            response.status(),
-            headers,
-            queries_json,
-            data
-        );
-
-        println!("{:?}", response);
-
-        Ok(response)
-    }
-}
-
-fn build_url(domain: &str, uri: &str, paths: &HashMap<String, String>) -> String {
-    let mut uri = uri.to_string();
-    for (key, value) in paths {
-        uri = uri.replace(&(":".to_string() + key), value);
-    }
-
-    domain.to_string() + &uri
-}
-
-fn build_header(request: &BaseRequest, option: &OpOld) -> HeaderMap {
-    let mut headers = HeaderMap::try_from(&request.headers).unwrap_or_default();
-
-    // 添加ua
-    headers.insert(
-        USER_AGENT_HEADER,
-        format!("{}/v{}", PROJECT, VERSION).parse().unwrap(),
-    );
-
-    let opt_headers: HeaderMap<String> = HeaderMap::try_from(&option.headers).unwrap_or_default();
-
-    // 附加header
-    for (key, value) in opt_headers {
-        headers.insert(key.unwrap(), value.parse().unwrap());
-    }
-
-    // 添加token
-    for token_type in &request.token_types {
-        match token_type {
-            AccessTokenType::Tenant => {
-                headers.insert(
-                    AUTHORIZATION,
-                    format!("Bearer {}", option.tenant_access_token.as_ref().unwrap())
-                        .parse()
-                        .unwrap(),
-                );
-            }
-            AccessTokenType::App => {
-                headers.insert(
-                    AUTHORIZATION,
-                    format!("Bearer {}", option.app_access_token.as_ref().unwrap())
-                        .parse()
-                        .unwrap(),
-                );
-            }
-            AccessTokenType::User => {
-                headers.insert(
-                    AUTHORIZATION,
-                    format!("Bearer {}", option.user_access_token.as_ref().unwrap())
-                        .parse()
-                        .unwrap(),
-                );
-            }
-            _ => {}
-        }
-    }
-
-    headers
 }
 
 fn validate_token_type(

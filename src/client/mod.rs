@@ -1,14 +1,8 @@
-use reqwest::blocking::Response;
 use crate::core::config::Config;
-
 use crate::core::constants::AppType;
-use crate::core::error::LarkAPIError;
-use crate::core::http::Transport;
-use crate::core::model::*;
-use crate::core::token::verify;
 
 pub struct LarkClient {
-   pub config: Config,
+    pub config: Config,
 }
 
 impl LarkClient {
@@ -34,34 +28,6 @@ impl LarkClient {
 
     pub fn builder() -> LarkClientBuilder {
         LarkClientBuilder::default()
-    }
-
-    pub fn request<T: BaseResponseTrait>(
-        &self,
-        mut request: BaseRequest,
-        option: Option<RequestOption>,
-    ) -> Result<BaseResponse<T>, LarkAPIError> {
-        let mut option = option.unwrap_or_default();
-
-        verify(&self.config, &mut request, &mut option)?;
-
-        // 发起请求
-        let raw = Transport::execute(&self.config, &request, Some(option))?;
-
-        BaseResponse::from_response(raw)
-    }
-
-    pub fn request_raw(
-        &self,
-        mut request: BaseRequest,
-        option: Option<RequestOption>,
-    ) -> Result<Response, LarkAPIError> {
-        let mut option = option.unwrap_or_default();
-
-        verify(&self.config, &mut request, &mut option)?;
-
-        // 发起请求
-        Transport::execute(&self.config, &request, Some(option))
     }
 }
 

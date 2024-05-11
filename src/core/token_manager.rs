@@ -11,7 +11,10 @@ use crate::core::api_resp::{ApiResp, CodeError};
 use crate::core::app_ticket_manager::APP_TICKET_MANAGER;
 use crate::core::cache::{Cache, LocalCache};
 use crate::core::config::Config;
-use crate::core::constants::{AccessTokenType, APP_ACCESS_TOKEN_INTERNAL_URL_PATH, APP_ACCESS_TOKEN_KEY_PREFIX, AppType, EXPIRY_DELTA, TENANT_ACCESS_TOKEN_URL_PATH};
+use crate::core::constants::{
+    AccessTokenType, APP_ACCESS_TOKEN_INTERNAL_URL_PATH, APP_ACCESS_TOKEN_KEY_PREFIX, AppType,
+    EXPIRY_DELTA, TENANT_ACCESS_TOKEN_URL_PATH,
+};
 use crate::core::error::LarkAPIError;
 use crate::core::http::Transport;
 use crate::core::SDKResult;
@@ -47,7 +50,7 @@ impl TokenManager {
         if app_type == AppType::SelfBuild {
             token = self.get_custom_app_access_token_then_cache(config)?;
         } else {
-            token = self.get_custom_app_access_token_then_cache(config)?;
+            token = self.get_marketplace_app_access_token_then_cache(config, app_ticket)?;
         }
 
         Ok(token)
@@ -135,16 +138,15 @@ impl TokenManager {
         app_ticket: &str,
     ) -> SDKResult<String> {
         let mut token = self
-            .get(
-                &tenant_access_token_key(&config.app_id, tenant_key),
-
-            )
+            .get(&tenant_access_token_key(&config.app_id, tenant_key))
             .unwrap_or_default();
         if token.is_empty() {
             if config.app_type == AppType::SelfBuild {
                 token = self.get_custom_tenant_access_token_then_cache(config, tenant_key)?;
             } else {
-                token = self.get_marketplace_tenant_access_token_then_cache(config, tenant_key, app_ticket)?;
+                token = self.get_marketplace_tenant_access_token_then_cache(
+                    config, tenant_key, app_ticket,
+                )?;
             }
         }
 
@@ -192,9 +194,8 @@ impl TokenManager {
         tenant_key: &str,
         app_ticket: &str,
     ) -> SDKResult<String> {
-        let app_access_token = self.get_marketplace_app_access_token_then_cache(config, app_ticket)?;
-
-
+        let app_access_token =
+            self.get_marketplace_app_access_token_then_cache(config, app_ticket)?;
 
         let body = serde_json::to_vec(&MarketplaceTenantAccessTokenReq {
             app_access_token,
@@ -271,7 +272,6 @@ struct MarketplaceAppAccessTokenReq {
 struct MarketplaceTenantAccessTokenReq {
     app_access_token: String,
     tenant_key: String,
-
 }
 
 #[derive(Serialize, Deserialize)]
@@ -283,4 +283,3 @@ struct TenantAccessTokenResp {
     expire: i32,
     tenant_access_token: String,
 }
-

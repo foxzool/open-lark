@@ -19,6 +19,13 @@ pub struct AppTicketManager {
 
 }
 
+impl Default for AppTicketManager {
+    fn default() -> Self {
+        Self::new()
+    }
+
+}
+
 impl AppTicketManager {
     pub fn new() -> Self {
         Self {
@@ -40,7 +47,7 @@ impl AppTicketManager {
                     apply_app_ticket(config).ok();
                 }
 
-                return Some(ticket)
+                Some(ticket)
             }
         }
     }
