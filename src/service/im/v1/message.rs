@@ -2,12 +2,34 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::client::LarkClient;
 use crate::core::api_req::ApiReq;
-use crate::core::api_resp::ApiResp;
+use crate::core::api_resp::{ApiResp, CodeError};
+use crate::core::config::Config;
 use crate::core::constants::AccessTokenType;
 use crate::core::error::LarkAPIError;
 use crate::core::http::Transport;
+use crate::service::im::share::{Mention, MessageBody, Sender};
+
+pub struct Message {
+    pub config: Config,
+}
+
+impl Message {
+    /// 发送消息
+    ///
+    /// 给指定用户或者会话发送消息，支持文本、富文本、可交互的消息卡片、群名片、个人名片、图片、视频、音频、文件、表情包。
+    pub fn create(&self, req: CreateMessageReq) -> Result<CreateMessageResp, LarkAPIError> {
+        let mut api_req = req.api_req;
+        api_req.http_method = Method::POST;
+        api_req.api_path = "/open-apis/im/v1/messages".to_string();
+        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+
+        let api_resp = Transport::request(api_req, &self.config, vec![])?;
+        let resp = serde_json::from_slice(&api_resp.raw_body)?;
+
+        Ok(resp)
+    }
+}
 
 pub struct CreateMessageReqBuilder {
     api_req: ApiReq,
@@ -83,18 +105,48 @@ pub struct CreateMessageReqBody {
     pub uuid: Option<String>,
 }
 
-/// 发送消息
-///
-/// 给指定用户或者会话发送消息，支持文本、富文本、可交互的消息卡片、群名片、个人名片、图片、视频、音频、文件、表情包。
-pub fn create(client: &LarkClient, req: CreateMessageReq) -> Result<ApiResp, LarkAPIError> {
-    let mut api_req = req.api_req;
-    api_req.http_method = Method::POST;
-    api_req.api_path = "/open-apis/im/v1/messages".to_string();
-    api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CreateMessageResp {
+    #[serde(skip)]
+    pub api_resp: ApiResp,
+    #[serde(flatten)]
+    pub code_error: CodeError,
+    pub data: CreateMessageRespData,
+}
 
-    let resp = Transport::request(api_req, &client.config.clone(), vec![])?;
+impl CreateMessageResp {
+    pub fn success(&self) -> bool {
+        self.code_error.code == 0
+    }
+}
 
-    println!("{:?}", resp);
-
-    Ok(resp)
+/// 发送消息 响应体
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CreateMessageRespData {
+    /// 消息id
+    pub message_id: String,
+    /// 根消息id，用于回复消息场景
+    pub root_id: Option<String>,
+    /// 父消息的id，用于回复消息场景
+    pub parent_id: Option<String>,
+    /// 消息所属的话题 ID（不返回说明该消息非话题消息）
+    pub thread_id: Option<String>,
+    /// 消息类型 包括：text、post、image、file、audio、media、sticker、interactive、share_chat、share_user等
+    pub msg_type: String,
+    /// 消息生成的时间戳（毫秒）
+    pub create_time: String,
+    /// 消息更新的时间戳（毫秒）
+    pub update_time: String,
+    /// 消息是否被撤回
+    pub deleted: bool,
+    /// 消息是否被更新
+    pub updated: bool,
+    /// 所属的群
+    pub chat_id: String,
+    /// 发送者，可以是用户或应用
+    pub sender: Sender,
+    /// 消息内容
+    pub body: MessageBody,
+    /// 被@的用户或机器人的id列表
+    pub mentions: Option<Vec<Mention>>,
 }

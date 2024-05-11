@@ -5,7 +5,6 @@ use serde_json::json;
 use uuid::Uuid;
 
 use open_lark::client::LarkClient;
-use open_lark::service::im;
 use open_lark::service::im::v1::message::{CreateMessageReqBody, CreateMessageReqBuilder};
 
 fn main() {
@@ -14,7 +13,7 @@ fn main() {
     let app_id = env::var("APP_ID").unwrap();
     let app_secret = env::var("APP_SECRET").unwrap();
     // 创建 Client
-    let client = LarkClient::new(&app_id, &app_secret);
+    let client = LarkClient::new(&app_id, &app_secret).build();
     let uuid = Uuid::new_v4();
     let req = CreateMessageReqBuilder::new()
         .receive_id_type("chat_id")
@@ -26,5 +25,11 @@ fn main() {
         })
         .build();
 
-    im::v1::message::create(&client, req).unwrap();
+    let resp = client.im.v1.message.create(req).unwrap();
+
+    if resp.success() {
+        println!("response: {:?}", resp);
+    } else {
+        println!("send message failed: {} {} {}", resp.code_error.code, resp.code_error.msg,resp.api_resp.request_id());
+    }
 }

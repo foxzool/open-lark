@@ -116,7 +116,7 @@ struct Data {
 }
 
 fn to_form_data(body: Bytes) -> Result<Form, LarkAPIError> {
-    let mut data = serde_json::from_slice::<Value>(&body)?;
+    let data = serde_json::from_slice::<Value>(&body)?;
 
     let mut form = Form::new();
 

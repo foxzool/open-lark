@@ -14,6 +14,9 @@ pub struct ApiResp {
 }
 
 impl ApiResp {
+    pub fn success(&self) -> bool {
+        200 <= self.status_code && self.status_code < 300
+    }
     pub fn request_id(&self) -> String {
         match self.header.get(HTTP_HEADER_KEY_LOG_ID) {
             None => self

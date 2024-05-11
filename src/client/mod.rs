@@ -2,12 +2,23 @@ use std::time::Duration;
 
 use crate::core::config::Config;
 use crate::core::constants::AppType;
+use crate::service::im::ImService;
 
 pub struct LarkClient {
     pub config: Config,
+    pub im: ImService,
 }
 
 impl LarkClient {
+    pub fn new(app_id: &str, app_secret: &str) -> LarkClientBuilder {
+        LarkClientBuilder::new(app_id, app_secret)
+    }
+}
+
+pub struct LarkClientBuilder {
+    pub config: Config,
+}
+impl LarkClientBuilder {
     pub fn new(app_id: &str, app_secret: &str) -> Self {
         let mut config = Config {
             app_id: app_id.to_string(),
@@ -40,10 +51,19 @@ impl LarkClient {
 
     pub fn with_req_timeout(mut self, timeout: Option<f32>) -> Self {
         self.config.req_timeout = timeout.map(|t| Duration::from_secs_f32(t));
+        self
+
+    }
+
+    pub fn build(mut self) -> LarkClient {
         self.config.http_client = reqwest::blocking::Client::builder()
             .timeout(self.config.req_timeout)
             .build()
             .unwrap();
-        self
+
+        LarkClient {
+            config: self.config.clone(),
+            im: ImService::new(self.config.clone()),
+        }
     }
 }
