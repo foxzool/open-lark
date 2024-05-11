@@ -46,7 +46,7 @@ impl LarkClientBuilder {
     }
 
     pub fn with_req_timeout(mut self, timeout: Option<f32>) -> Self {
-        self.config.req_timeout = timeout.map(|t| Duration::from_secs_f32(t));
+        self.config.req_timeout = timeout.map(Duration::from_secs_f32);
         self
 
     }

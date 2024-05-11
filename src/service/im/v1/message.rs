@@ -81,7 +81,7 @@ impl<'a> Iterator for ListMessageIterator<'a> {
         if !self.has_more {
             return None;
         }
-        match self.service.list(&mut self.req, &self.options) {
+        match self.service.list(&self.req, &self.options) {
             Ok(resp) => {
                 if resp.success() {
                     self.has_more = resp.data.has_more;
@@ -115,13 +115,18 @@ pub struct CreateMessageReqBuilder {
     body: Option<CreateMessageReqBody>,
 }
 
+impl Default for CreateMessageReqBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl CreateMessageReqBuilder {
     pub fn new() -> CreateMessageReqBuilder {
-        let builder = CreateMessageReqBuilder {
+        CreateMessageReqBuilder {
             api_req: ApiReq::default(),
             body: None,
-        };
-        builder
+        }
     }
 
     pub fn receive_id_type(mut self, receive_id_type: impl ToString) -> Self {
@@ -284,13 +289,19 @@ pub struct ListMessageReqBuilder {
     limit: Option<i32>,
 }
 
+impl Default for ListMessageReqBuilder {
+    fn default() -> Self {
+        ListMessageReqBuilder::new()
+    }
+
+}
+
 impl ListMessageReqBuilder {
     pub fn new() -> ListMessageReqBuilder {
-        let builder = ListMessageReqBuilder {
+        ListMessageReqBuilder {
             api_req: ApiReq::default(),
             limit: None,
-        };
-        builder
+        }
     }
 
     /// 最大返回多少记录

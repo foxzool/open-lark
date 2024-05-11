@@ -26,7 +26,7 @@ impl Cache for LocalCache {
     fn get(&self, key: &str) -> Option<String> {
         if let Some((value, expire_time)) = self.cache.get(key) {
             if expire_time.as_secs() > 0 {
-                return Some(value.to_string());
+                Some(value.to_string())
             } else {
                 None
             }

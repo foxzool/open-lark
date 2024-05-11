@@ -82,9 +82,7 @@ impl ReqTranslator {
 
         let mut file_upload = false;
         let body = req.body.clone();
-        if serde_json::from_slice::<FormData>(&body).is_ok() {
-            file_upload = true;
-        } else if option.file_upload {
+        if serde_json::from_slice::<FormData>(&body).is_ok() || option.file_upload {
             file_upload = true;
         }
 

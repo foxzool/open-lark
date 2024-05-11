@@ -42,9 +42,9 @@ impl Transport {
             &option,
             config.enable_token_cache,
         );
-        validate(&config, &option, access_token_type)?;
+        validate(config, &option, access_token_type)?;
 
-        Self::do_request(&req, access_token_type, &config, option)
+        Self::do_request(&req, access_token_type, config, option)
     }
 
     fn do_request(
@@ -113,22 +113,18 @@ fn validate_token_type(
         return Ok(());
     }
 
-    let access_token_type = access_token_types[0].clone();
+    let access_token_type = access_token_types[0];
 
-    if access_token_type == AccessTokenType::Tenant {
-        if !option.user_access_token.is_empty() {
-            return Err(LarkAPIError::IllegalParamError(
-                "tenant token type not match user access token".to_string(),
-            ));
-        }
+    if access_token_type == AccessTokenType::Tenant && !option.user_access_token.is_empty() {
+        return Err(LarkAPIError::IllegalParamError(
+            "tenant token type not match user access token".to_string(),
+        ));
     }
 
-    if access_token_type == AccessTokenType::App {
-        if !option.tenant_access_token.is_empty() {
-            return Err(LarkAPIError::IllegalParamError(
-                "user token type not match tenant access token".to_string(),
-            ));
-        }
+    if access_token_type == AccessTokenType::App && !option.tenant_access_token.is_empty() {
+        return Err(LarkAPIError::IllegalParamError(
+            "user token type not match tenant access token".to_string(),
+        ));
     }
 
     Ok(())
@@ -222,13 +218,13 @@ fn validate(
         ));
     }
 
-    if option.header.get(HTTP_HEADER_KEY_REQUEST_ID).is_some() {
+    if option.header.contains_key(HTTP_HEADER_KEY_REQUEST_ID) {
         return Err(LarkAPIError::IllegalParamError(format!(
             "use {} as header key is not allowed",
             HTTP_HEADER_KEY_REQUEST_ID
         )));
     }
-    if option.header.get(HTTP_HEADER_REQUEST_ID).is_some() {
+    if option.header.contains_key(HTTP_HEADER_REQUEST_ID) {
         return Err(LarkAPIError::IllegalParamError(format!(
             "use {} as header key is not allowed",
             HTTP_HEADER_REQUEST_ID

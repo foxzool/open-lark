@@ -26,7 +26,7 @@ impl ChatsService {
         api_req.api_path = "/open-apis/im/v1/chats".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, &options)?;
+        let api_resp = Transport::request(api_req, &self.config, options)?;
 
         Ok(api_resp.try_into()?)
     }
@@ -55,7 +55,7 @@ impl<'a> Iterator for ListChatIterator<'a> {
         if !self.has_more {
             return None;
         }
-        match self.service.list(&mut self.req, &self.options) {
+        match self.service.list(&self.req, &self.options) {
             Ok(resp) => {
                 if resp.success() {
                     self.has_more = resp.data.has_more;
@@ -87,12 +87,17 @@ pub struct ListChatReqBuilder {
     api_req: ApiReq,
 }
 
+impl Default for ListChatReqBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ListChatReqBuilder {
     pub fn new() -> ListChatReqBuilder {
-        let builder = ListChatReqBuilder {
+        ListChatReqBuilder {
             api_req: ApiReq::default(),
-        };
-        builder
+        }
     }
 
     /// 用户 ID 类型

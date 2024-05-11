@@ -60,7 +60,7 @@ fn with_file_download() -> RequestOptionFunc {
 
 fn with_headers(header: HashMap<String, String>) -> RequestOptionFunc {
     Box::new(move |option: &mut RequestOption| {
-        option.header = header.clone();
+        option.header.clone_from(&header);
     })
 }
 
