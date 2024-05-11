@@ -60,7 +60,7 @@ fn app_ticket_key(app_id: &str) -> String {
 
 pub fn apply_app_ticket(config: &Config) -> SDKResult<()> {
     let resp = Transport::request(
-        ApiReq {
+        &mut ApiReq {
             http_method: Method::POST,
             api_path: APPLY_APP_TICKET_PATH.to_string(),
             body: Default::default(),
@@ -69,7 +69,7 @@ pub fn apply_app_ticket(config: &Config) -> SDKResult<()> {
             supported_access_token_types: vec![AccessTokenType::App],
         },
         config,
-        vec![],
+        &[],
     )?;
 
     let code_error: CodeMsg = serde_json::from_slice(&resp.raw_body)?;

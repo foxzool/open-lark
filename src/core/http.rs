@@ -22,9 +22,9 @@ pub struct Transport;
 
 impl Transport {
     pub fn request(
-        mut req: ApiReq,
+        mut req: &mut ApiReq,
         config: &Config,
-        options: Vec<RequestOptionFunc>,
+        options: &[RequestOptionFunc],
     ) -> Result<ApiResp, LarkAPIError> {
         let mut option = RequestOption::default();
 

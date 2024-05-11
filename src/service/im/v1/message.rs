@@ -1,3 +1,4 @@
+use log::error;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -8,6 +9,7 @@ use crate::core::config::Config;
 use crate::core::constants::AccessTokenType;
 use crate::core::error::LarkAPIError;
 use crate::core::http::Transport;
+use crate::core::req_option::RequestOptionFunc;
 
 pub struct MessageService {
     pub config: Config,
@@ -20,29 +22,83 @@ impl MessageService {
     pub fn create(
         &self,
         req: CreateMessageReq,
+        options: &[RequestOptionFunc],
     ) -> Result<BaseResp<Message>, LarkAPIError> {
         let mut api_req = req.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, vec![])?;
+        let api_resp = Transport::request(&mut api_req, &self.config, options)?;
 
         Ok(api_resp.try_into()?)
     }
 
+    /// 获取会话历史消息
+    ///
+    /// 获取会话（包括单聊、群组）的历史消息（聊天记录）
+    /// https://open.feishu.cn/document/server-docs/im-v1/message/list
     pub fn list(
         &self,
-        req: ListMessageReq,
+        req: &mut ListMessageReq,
+        options: &[RequestOptionFunc],
     ) -> Result<BaseResp<ListMessageRespData>, LarkAPIError> {
-        let mut api_req = req.api_req;
+        let mut api_req = &mut req.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, vec![])?;
+        let api_resp = Transport::request(api_req, &self.config, options)?;
 
         Ok(api_resp.try_into()?)
+    }
+
+    pub fn list_iter(
+        &self,
+        req: ListMessageReq,
+        options: Vec<RequestOptionFunc>,
+    ) -> ListMessageIterator {
+        ListMessageIterator {
+            service: self,
+            req,
+            options
+        }
+    }
+}
+
+pub struct ListMessageIterator<'a> {
+    service: &'a MessageService,
+    req: ListMessageReq,
+    options: Vec<RequestOptionFunc>,
+}
+
+impl<'a> Iterator for ListMessageIterator<'a> {
+    type Item = Vec<Message>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        match self.service.list(&mut self.req, &self.options) {
+            Ok(resp) => {
+                if resp.success() {
+                    if resp.data.has_more {
+                        self.req.api_req.query_params.insert(
+                            "page_token".to_string(),
+                            resp.data.page_token.unwrap(),
+                        );
+                        Some(resp.data.items)
+                    } else {
+                        return None;
+                    }
+
+                } else {
+                    error!("Error: {:?}", resp.error_msg());
+                    return None;
+                }
+            }
+            Err(e) => {
+                error!("Error: {:?}", e);
+                return None;
+            }
+        }
     }
 }
 
@@ -315,13 +371,11 @@ pub struct ListMessageReq {
     pub api_req: ApiReq,
 }
 
-
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ListMessageRespData {
     /// 是否还有更多项
     pub has_more: bool,
     /// 分页标记，当 has_more 为 true 时，会同时返回新的 page_token，否则不返回 page_token
     pub page_token: Option<String>,
-    pub items: Vec<Message>
+    pub items: Vec<Message>,
 }
-

@@ -14,18 +14,29 @@ fn main() {
     let app_secret = env::var("APP_SECRET").unwrap();
     // 创建 Client
     let client = LarkClient::new(&app_id, &app_secret).build();
-    let req = ListMessageReqBuilder::new()
+    let mut req = ListMessageReqBuilder::new()
         .container_id_type("chat")
         .container_id("oc_84d53efe245072c16ba4b4ff597f52f3")
         .build();
 
     // 发起请求
-    let resp = client.im.v1.message.list(req).unwrap();
-
+    let resp = client.im.v1.message.list(&mut req, &[]).unwrap();
     if resp.success() {
         // 业务处理
         info!("response: {:?}", resp.data);
     } else {
         error!("list chat failed: {} ", resp.error_msg());
     }
+
+    // 使用迭代器
+    client
+        .im
+        .v1
+        .message
+        .list_iter(req, vec![])
+        .for_each(|messages| {
+            for message in messages {
+                info!("message {:?}", message);
+            }
+        })
 }

@@ -21,7 +21,7 @@ impl ChatsService {
         api_req.api_path = "/open-apis/im/v1/chats".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, vec![])?;
+        let api_resp = Transport::request(&mut api_req, &self.config, &[])?;
 
         Ok(api_resp.try_into()?)
     }

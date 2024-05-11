@@ -5,7 +5,7 @@ use reqwest::Method;
 
 use crate::core::constants::AccessTokenType;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct ApiReq {
     pub http_method: Method,
     pub api_path: String,
