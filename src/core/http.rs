@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 
 use log::debug;
-use reqwest::blocking::Request;
+use reqwest::Request;
 use reqwest::StatusCode;
 
 use crate::core::api_req::ApiReq;
@@ -21,7 +21,7 @@ use crate::core::SDKResult;
 pub struct Transport;
 
 impl Transport {
-    pub fn request(
+    pub async fn request(
         mut req: ApiReq,
         config: &Config,
         options: &[RequestOptionFunc],
@@ -44,10 +44,10 @@ impl Transport {
         );
         validate(config, &option, access_token_type)?;
 
-        Self::do_request(&req, access_token_type, config, option)
+        Self::do_request(&req, access_token_type, config, option).await
     }
 
-    fn do_request(
+    async fn do_request(
         http_req: &ApiReq,
         access_token_type: AccessTokenType,
         config: &Config,
@@ -55,10 +55,10 @@ impl Transport {
     ) -> SDKResult<ApiResp> {
         let mut raw_resp = ApiResp::default();
         for _i in 0..2 {
-            let req = ReqTranslator::translate(http_req, access_token_type, config, &option)?;
+            let req = ReqTranslator::translate(http_req, access_token_type, config, &option).await?;
             debug!("Req:{:?}", req);
 
-            raw_resp = Self::do_send(req, &config.http_client)?;
+            raw_resp = Self::do_send(req, &config.http_client).await?;
             debug!("Res:{:?}", raw_resp);
 
             let file_download_success =
@@ -95,12 +95,12 @@ impl Transport {
         Ok(raw_resp)
     }
 
-    fn do_send(raw_request: Request, client: &reqwest::blocking::Client) -> SDKResult<ApiResp> {
-        let response = client.execute(raw_request)?;
+    async fn do_send(raw_request: Request, client: &reqwest::Client) -> SDKResult<ApiResp> {
+        let response = client.execute(raw_request).await?;
         Ok(ApiResp {
             status_code: response.status().as_u16(),
             header: response.headers().clone(),
-            raw_body: response.bytes()?,
+            raw_body: response.bytes().await?,
         })
     }
 }

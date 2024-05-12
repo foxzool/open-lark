@@ -9,7 +9,8 @@ use open_lark::client::LarkClientBuilder;
 use open_lark::service::im::v1::message::{CreateMessageReqBody, CreateMessageReqBuilder};
 
 // POST /open-apis/im/v1/messages
-fn main() {
+#[tokio::main]
+async fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
     let app_id = env::var("APP_ID").unwrap();
@@ -28,7 +29,7 @@ fn main() {
         .build();
 
     // 发起请求
-    let resp = client.im.v1.message.create(req, vec![]).unwrap();
+    let resp = client.im.v1.message.create(req, vec![]).await.unwrap();
 
     if resp.success() {
         // 业务处理

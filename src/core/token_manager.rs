@@ -1,5 +1,6 @@
 use std::sync::Mutex;
 use std::time::Duration;
+use futures::executor::block_on;
 
 use lazy_static::lazy_static;
 use log::warn;
@@ -71,7 +72,7 @@ impl TokenManager {
             path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
         };
-        let raw_resp = Transport::request(req, config, &[])?;
+        let raw_resp = block_on(Transport::request(req, config, &[]))?;
         let resp: AppAccessTokenResp = serde_json::from_slice(&raw_resp.raw_body)?;
         if resp.code_error.code != 0 {
             warn!("custom app appAccessToken cache {:#?}", resp.code_error);
@@ -94,7 +95,7 @@ impl TokenManager {
     ) -> SDKResult<String> {
         let mut app_ticket = app_ticket.to_string();
         if app_ticket.is_empty() {
-            match APP_TICKET_MANAGER.get(config) {
+            match block_on(APP_TICKET_MANAGER.get(config)) {
                 None => return Err(LarkAPIError::AppTicketEmpty),
                 Some(ticket) => {
                     app_ticket = ticket;
@@ -117,7 +118,7 @@ impl TokenManager {
             path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
         };
-        let raw_resp = Transport::request(req, config, &[])?;
+        let raw_resp = block_on(Transport::request(req, config, &[]))?;
         let resp: AppAccessTokenResp = serde_json::from_slice(&raw_resp.raw_body)?;
         if resp.code_error.code != 0 {
             warn!(
@@ -177,7 +178,7 @@ impl TokenManager {
             path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
         };
-        let raw_resp = Transport::request( req, config, &[])?;
+        let raw_resp = block_on(Transport::request( req, config, &[]))?;
         let resp: TenantAccessTokenResp = serde_json::from_slice(&raw_resp.raw_body)?;
         if resp.code_error.code != 0 {
             warn!("custom app tenantAccessToken cache {:#?}", resp.code_error);
@@ -216,7 +217,7 @@ impl TokenManager {
             path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
         };
-        let raw_resp = Transport::request(req, config, &[])?;
+        let raw_resp = block_on(Transport::request(req, config, &[]))?;
         let resp: TenantAccessTokenResp = serde_json::from_slice(&raw_resp.raw_body)?;
         if resp.code_error.code != 0 {
             warn!(

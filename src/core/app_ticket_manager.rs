@@ -1,4 +1,5 @@
 use std::time::Duration;
+use futures::executor::block_on;
 
 use lazy_static::lazy_static;
 use log::error;
@@ -39,7 +40,7 @@ impl AppTicketManager {
         self.cache.set(&key, value, expire_time);
     }
 
-    pub fn get(&self, config: &Config) -> Option<String> {
+    pub async fn get(&self, config: &Config) -> Option<String> {
         let key = app_ticket_key(&config.app_id);
         match self.cache.get(&key) {
             None => None,
@@ -59,7 +60,7 @@ fn app_ticket_key(app_id: &str) -> String {
 }
 
 pub fn apply_app_ticket(config: &Config) -> SDKResult<()> {
-    let resp = Transport::request(
+    let resp = block_on(Transport::request(
          ApiReq {
             http_method: Method::POST,
             api_path: APPLY_APP_TICKET_PATH.to_string(),
@@ -70,7 +71,7 @@ pub fn apply_app_ticket(config: &Config) -> SDKResult<()> {
         },
         config,
         &[],
-    )?;
+    ))?;
 
     let code_error: CodeMsg = serde_json::from_slice(&resp.raw_body)?;
     if code_error.code != 0 {

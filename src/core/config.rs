@@ -15,7 +15,7 @@ pub struct Config {
     pub timeout: Option<f32>,
     /// 应用类型, 默认为自建应用
     pub app_type: AppType,
-    pub http_client: reqwest::blocking::Client,
+    pub http_client: reqwest::Client,
     pub req_timeout: Option<Duration>,
     pub header: HashMap<String, String>,
 }

@@ -10,10 +10,10 @@ pub struct LarkClient {
 }
 
 
-
 pub struct LarkClientBuilder {
     pub config: Config,
 }
+
 impl LarkClientBuilder {
     pub fn new(app_id: &str, app_secret: &str) -> Self {
         let config = Config {
@@ -48,14 +48,16 @@ impl LarkClientBuilder {
     pub fn with_req_timeout(mut self, timeout: Option<f32>) -> Self {
         self.config.req_timeout = timeout.map(Duration::from_secs_f32);
         self
-
     }
 
     pub fn build(mut self) -> LarkClient {
-        self.config.http_client = reqwest::blocking::Client::builder()
-            .timeout(self.config.req_timeout)
-            .build()
-            .unwrap();
+        if let Some(req_timeout) = self.config.req_timeout {
+            self.config.http_client = reqwest::Client::builder()
+                .timeout(req_timeout)
+                .build()
+                .unwrap();
+        }
+
 
         LarkClient {
             config: self.config.clone(),

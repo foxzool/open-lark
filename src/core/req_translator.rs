@@ -1,10 +1,12 @@
 use std::collections::HashMap;
 
 use bytes::Bytes;
-use reqwest::blocking::{Request, RequestBuilder};
-use reqwest::blocking::multipart::Form;
+use reqwest::{Body, multipart, Request, RequestBuilder};
+use reqwest::multipart::Form;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use tokio::fs::File;
+use tokio_util::codec::{BytesCodec, FramedRead};
 use url::Url;
 
 use crate::core::api_req::ApiReq;
@@ -21,13 +23,13 @@ use crate::core::utils::user_agent;
 pub struct ReqTranslator;
 
 impl ReqTranslator {
-    pub fn translate(
+    pub async fn translate(
         req: &ApiReq,
         access_token_type: AccessTokenType,
         config: &Config,
         option: &RequestOption,
     ) -> Result<Request, LarkAPIError> {
-        let client = reqwest::blocking::Client::new();
+        let client = reqwest::Client::new();
 
         let path = format!("{}/{}", config.base_url, req.api_path);
         let query_params = req
@@ -87,7 +89,7 @@ impl ReqTranslator {
         }
 
         if file_upload {
-            req_builder = req_builder.multipart(to_form_data(body)?);
+            req_builder = req_builder.multipart(to_form_data(body).await?);
         } else {
             req_builder = req_builder.header(CONTENT_TYPE_HEADER, DEFAULT_CONTENT_TYPE);
             req_builder = req_builder.body(req.body.clone())
@@ -115,7 +117,7 @@ struct Data {
     content_type: String,
 }
 
-fn to_form_data(body: Bytes) -> Result<Form, LarkAPIError> {
+async fn to_form_data(body: Bytes) -> Result<Form, LarkAPIError> {
     let data = serde_json::from_slice::<Value>(&body)?;
 
     let mut form = Form::new();
@@ -123,7 +125,18 @@ fn to_form_data(body: Bytes) -> Result<Form, LarkAPIError> {
     if let Value::Object(map) = data {
         for (key, val) in map {
             if key == "file" {
-                form = form.file("file", val.as_str().unwrap())?;
+                let file_name = val.as_str().unwrap().to_string().clone();
+                let file = File::open(file_name.clone()).await?;
+                let stream = FramedRead::new(file, BytesCodec::new());
+                let file_body = Body::wrap_stream(stream);
+
+                //make form part of file
+                let some_file = multipart::Part::stream(file_body)
+                    .file_name(file_name)
+                    .mime_str("application/octet-stream")?;
+                form =
+                    form
+                    .part("file", some_file);
                 continue;
             }
             match val {

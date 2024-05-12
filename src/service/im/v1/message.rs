@@ -1,3 +1,4 @@
+use futures::executor::block_on;
 use log::error;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
@@ -19,7 +20,7 @@ impl MessageService {
     /// 发送消息
     ///
     /// 给指定用户或者会话发送消息，支持文本、富文本、可交互的消息卡片、群名片、个人名片、图片、视频、音频、文件、表情包。
-    pub fn create(
+    pub async fn create(
         &self,
         req: CreateMessageReq,
         options: Vec<RequestOptionFunc>,
@@ -29,7 +30,7 @@ impl MessageService {
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, &options)?;
+        let api_resp = Transport::request(api_req, &self.config, &options).await?;
 
         Ok(api_resp.try_into()?)
     }
@@ -38,7 +39,7 @@ impl MessageService {
     ///
     /// 获取会话（包括单聊、群组）的历史消息（聊天记录）
     /// https://open.feishu.cn/document/server-docs/im-v1/message/list
-    pub fn list(
+    pub async fn list(
         &self,
         req: &ListMessageReq,
         options: &[RequestOptionFunc],
@@ -48,7 +49,7 @@ impl MessageService {
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, options)?;
+        let api_resp = Transport::request(api_req, &self.config, options).await?;
 
         Ok(api_resp.try_into()?)
     }
@@ -81,7 +82,7 @@ impl<'a> Iterator for ListMessageIterator<'a> {
         if !self.has_more {
             return None;
         }
-        match self.service.list(&self.req, &self.options) {
+        match block_on(self.service.list(&self.req, &self.options)) {
             Ok(resp) => {
                 if resp.success() {
                     self.has_more = resp.data.has_more;
