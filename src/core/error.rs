@@ -16,7 +16,7 @@ pub enum LarkAPIError {
     #[error("Deserialize error: {0}")]
     DeserializeError(#[from] serde_json::Error),
     #[error("Request error: {0}")]
-    RequestError(#[from] reqwest::Error),
+    RequestError(#[from] ureq::Error),
     #[error("Url parse error: {0}")]
     UrlParseError(#[from] url::ParseError),
     #[error("Code: {0}")]

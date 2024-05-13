@@ -1,9 +1,7 @@
 use std::time::Duration;
-use futures::executor::block_on;
 
 use lazy_static::lazy_static;
 use log::error;
-use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::core::api_req::ApiReq;
@@ -40,7 +38,7 @@ impl AppTicketManager {
         self.cache.set(&key, value, expire_time);
     }
 
-    pub async fn get(&self, config: &Config) -> Option<String> {
+    pub fn get(&self, config: &Config) -> Option<String> {
         let key = app_ticket_key(&config.app_id);
         match self.cache.get(&key) {
             None => None,
@@ -60,9 +58,9 @@ fn app_ticket_key(app_id: &str) -> String {
 }
 
 pub fn apply_app_ticket(config: &Config) -> SDKResult<()> {
-    let resp = block_on(Transport::request(
-         ApiReq {
-            http_method: Method::POST,
+    let resp = Transport::request(
+        ApiReq {
+            http_method: "POST".to_string(),
             api_path: APPLY_APP_TICKET_PATH.to_string(),
             body: Default::default(),
             query_params: Default::default(),
@@ -70,8 +68,7 @@ pub fn apply_app_ticket(config: &Config) -> SDKResult<()> {
             supported_access_token_types: vec![AccessTokenType::App],
         },
         config,
-        &[],
-    ))?;
+    )?;
 
     let code_error: CodeMsg = serde_json::from_slice(&resp.raw_body)?;
     if code_error.code != 0 {

@@ -1,6 +1,5 @@
-use futures::executor::block_on;
 use log::error;
-use reqwest::Method;
+
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -20,17 +19,16 @@ impl MessageService {
     /// 发送消息
     ///
     /// 给指定用户或者会话发送消息，支持文本、富文本、可交互的消息卡片、群名片、个人名片、图片、视频、音频、文件、表情包。
-    pub async fn create(
+    pub fn create(
         &self,
         req: CreateMessageReq,
-        options: Vec<RequestOptionFunc>,
     ) -> Result<BaseResp<Message>, LarkAPIError> {
         let mut api_req = req.api_req;
-        api_req.http_method = Method::POST;
+        api_req.http_method = "POST".to_string();
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, &options).await?;
+        let api_resp = Transport::request(api_req, &self.config)?;
 
         Ok(api_resp.try_into()?)
     }
@@ -39,17 +37,16 @@ impl MessageService {
     ///
     /// 获取会话（包括单聊、群组）的历史消息（聊天记录）
     /// https://open.feishu.cn/document/server-docs/im-v1/message/list
-    pub async fn list(
+    pub fn list(
         &self,
         req: &ListMessageReq,
-        options: &[RequestOptionFunc],
     ) -> Result<BaseResp<ListMessageRespData>, LarkAPIError> {
         let mut api_req = req.api_req.clone();
-        api_req.http_method = Method::GET;
+        api_req.http_method = "GET".to_string();
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, options).await?;
+        let api_resp = Transport::request(api_req, &self.config)?;
 
         Ok(api_resp.try_into()?)
     }
@@ -82,7 +79,7 @@ impl<'a> Iterator for ListMessageIterator<'a> {
         if !self.has_more {
             return None;
         }
-        match block_on(self.service.list(&self.req, &self.options)) {
+        match self.service.list(&self.req) {
             Ok(resp) => {
                 if resp.success() {
                     self.has_more = resp.data.has_more;

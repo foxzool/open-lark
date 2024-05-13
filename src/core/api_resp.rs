@@ -1,7 +1,6 @@
 use std::fmt::{Display, Formatter};
 
 use bytes::Bytes;
-use reqwest::header::HeaderMap;
 use serde::{Deserialize, Serialize};
 
 use crate::core::constants::{HTTP_HEADER_KEY_LOG_ID, HTTP_HEADER_KEY_REQUEST_ID};
@@ -33,7 +32,7 @@ impl<T> BaseResp<T> {
 #[derive(Default, Debug)]
 pub struct ApiResp {
     pub status_code: u16,
-    pub header: HeaderMap,
+    pub header: Vec<String>,
     pub raw_body: Bytes,
 }
 
@@ -52,15 +51,14 @@ impl ApiResp {
         200 <= self.status_code && self.status_code < 300
     }
     pub fn request_id(&self) -> String {
-        match self.header.get(HTTP_HEADER_KEY_LOG_ID) {
+        match self.header.iter().find(|v| *v == HTTP_HEADER_KEY_LOG_ID) {
             None => self
                 .header
-                .get(HTTP_HEADER_KEY_REQUEST_ID)
+                .iter().find(|v| HTTP_HEADER_KEY_REQUEST_ID == *v)
                 .unwrap()
-                .to_str()
-                .unwrap()
-                .to_string(),
-            Some(log_id) => log_id.to_str().unwrap().to_string(),
+                .to_string()
+                ,
+            Some(log_id) => log_id.to_string(),
         }
     }
 }

@@ -8,8 +8,7 @@ use open_lark::service::im::v1::message::ListMessageReqBuilder;
 
 /// 获取会话历史消息
 /// GET /open-apis/im/v1/messages
-#[tokio::main]
-async fn main() {
+fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
     let app_id = env::var("APP_ID").unwrap();
@@ -22,7 +21,7 @@ async fn main() {
         .build();
 
     // 发起请求
-    let resp = client.im.v1.message.list(&req, &[]).await.unwrap();
+    let resp = client.im.v1.message.list(&req).unwrap();
     if resp.success() {
         // 业务处理
         info!("response: {:?}", resp.data);

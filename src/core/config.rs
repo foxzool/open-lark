@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use std::time::Duration;
+use ureq::Agent;
 
 use crate::core::constants::AppType;
 use crate::core::constants::FEISHU_BASE_URL;
@@ -15,7 +16,7 @@ pub struct Config {
     pub timeout: Option<f32>,
     /// 应用类型, 默认为自建应用
     pub app_type: AppType,
-    pub http_client: reqwest::Client,
+    pub http_client: ureq::Agent,
     pub req_timeout: Option<Duration>,
     pub header: HashMap<String, String>,
 }
@@ -29,7 +30,7 @@ impl Default for Config {
             enable_token_cache: true,
             timeout: None,
             app_type: AppType::SelfBuild,
-            http_client: Default::default(),
+            http_client: Agent::new(),
             req_timeout: None,
             header: Default::default(),
         }

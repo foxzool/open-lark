@@ -9,7 +9,6 @@ pub struct LarkClient {
     pub im: ImService,
 }
 
-
 pub struct LarkClientBuilder {
     pub config: Config,
 }
@@ -52,12 +51,8 @@ impl LarkClientBuilder {
 
     pub fn build(mut self) -> LarkClient {
         if let Some(req_timeout) = self.config.req_timeout {
-            self.config.http_client = reqwest::Client::builder()
-                .timeout(req_timeout)
-                .build()
-                .unwrap();
+            self.config.http_client = ureq::AgentBuilder::new().timeout(req_timeout).build();
         }
-
 
         LarkClient {
             config: self.config.clone(),

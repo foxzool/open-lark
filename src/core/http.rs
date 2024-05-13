@@ -1,36 +1,26 @@
 use std::collections::HashSet;
+use std::io::Read;
 
+use bytes::Bytes;
 use log::debug;
-use reqwest::Request;
-use reqwest::StatusCode;
+use ureq::Error::Status;
+use ureq::Request;
 
 use crate::core::api_req::ApiReq;
 use crate::core::api_resp::{ApiResp, CodeMsg};
 use crate::core::app_ticket_manager::apply_app_ticket;
 use crate::core::config::Config;
-use crate::core::constants::{
-    AccessTokenType, AppType, CONTENT_TYPE_HEADER, CONTENT_TYPE_JSON,
-    ERR_CODE_ACCESS_TOKEN_INVALID, ERR_CODE_APP_ACCESS_TOKEN_INVALID, ERR_CODE_APP_TICKET_INVALID,
-    ERR_CODE_TENANT_ACCESS_TOKEN_INVALID, HTTP_HEADER_KEY_REQUEST_ID, HTTP_HEADER_REQUEST_ID,
-};
+use crate::core::constants::*;
 use crate::core::error::LarkAPIError;
-use crate::core::req_option::{RequestOption, RequestOptionFunc};
+use crate::core::req_option::RequestOption;
 use crate::core::req_translator::ReqTranslator;
 use crate::core::SDKResult;
 
 pub struct Transport;
 
 impl Transport {
-    pub async fn request(
-        mut req: ApiReq,
-        config: &Config,
-        options: &[RequestOptionFunc],
-    ) -> Result<ApiResp, LarkAPIError> {
-        let mut option = RequestOption::default();
-
-        for option_func in options {
-            option_func(&mut option);
-        }
+    pub fn request(mut req: ApiReq, config: &Config) -> Result<ApiResp, LarkAPIError> {
+        let option = RequestOption::default();
 
         if req.supported_access_token_types.is_empty() {
             req.supported_access_token_types = vec![AccessTokenType::None];
@@ -44,10 +34,10 @@ impl Transport {
         );
         validate(config, &option, access_token_type)?;
 
-        Self::do_request(&req, access_token_type, config, option).await
+        Self::do_request(&req, access_token_type, config, option)
     }
 
-    async fn do_request(
+    fn do_request(
         http_req: &ApiReq,
         access_token_type: AccessTokenType,
         config: &Config,
@@ -55,19 +45,20 @@ impl Transport {
     ) -> SDKResult<ApiResp> {
         let mut raw_resp = ApiResp::default();
         for _i in 0..2 {
-            let req = ReqTranslator::translate(http_req, access_token_type, config, &option).await?;
+            let req = ReqTranslator::translate(http_req, access_token_type, config, &option)?;
             debug!("Req:{:?}", req);
 
-            raw_resp = Self::do_send(req, &config.http_client).await?;
+            raw_resp = Self::do_send(req, &http_req.body)?;
+
             debug!("Res:{:?}", raw_resp);
 
-            let file_download_success =
-                option.file_upload && raw_resp.status_code == StatusCode::OK;
+            let file_download_success = option.file_upload && raw_resp.status_code == 200;
             if file_download_success
                 || raw_resp
                     .header
-                    .get(CONTENT_TYPE_HEADER)
-                    .is_some_and(|v| v.to_str().unwrap().contains(CONTENT_TYPE_JSON))
+                    .iter()
+                    .find(|v| *v == CONTENT_TYPE_HEADER)
+                    .is_some_and(|v| v.contains(CONTENT_TYPE_JSON))
             {
                 break;
             }
@@ -95,12 +86,23 @@ impl Transport {
         Ok(raw_resp)
     }
 
-    async fn do_send(raw_request: Request, client: &reqwest::Client) -> SDKResult<ApiResp> {
-        let response = client.execute(raw_request).await?;
+    fn do_send(raw_request: Request, body: &[u8]) -> SDKResult<ApiResp> {
+        let response = raw_request.send_bytes(body)?;
+        let status_code = response.status();
+        let header = response.headers_names();
+        // let len: usize = response.header("Content-Length").unwrap().parse().unwrap();
+        let mut bytes: Vec<u8> = Vec::new();
+
+        response
+            .into_reader()
+            .take(10_000_000)
+            .read_to_end(&mut bytes)?;
+        let raw_body: Bytes = Bytes::copy_from_slice(&bytes);
+
         Ok(ApiResp {
-            status_code: response.status().as_u16(),
-            header: response.headers().clone(),
-            raw_body: response.bytes().await?,
+            status_code,
+            header,
+            raw_body,
         })
     }
 }

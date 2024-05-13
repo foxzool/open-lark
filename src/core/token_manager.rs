@@ -1,10 +1,8 @@
 use std::sync::Mutex;
 use std::time::Duration;
-use futures::executor::block_on;
 
 use lazy_static::lazy_static;
 use log::warn;
-use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::core::api_req::ApiReq;
@@ -65,14 +63,14 @@ impl TokenManager {
 
     fn get_custom_app_access_token_then_cache(&mut self, config: &Config) -> SDKResult<String> {
         let req = ApiReq {
-            http_method: Method::POST,
+            http_method: "POST".to_string(),
             api_path: APP_ACCESS_TOKEN_INTERNAL_URL_PATH.to_string(),
             body: Default::default(),
             query_params: Default::default(),
             path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
         };
-        let raw_resp = block_on(Transport::request(req, config, &[]))?;
+        let raw_resp = Transport::request(req, config)?;
         let resp: AppAccessTokenResp = serde_json::from_slice(&raw_resp.raw_body)?;
         if resp.code_error.code != 0 {
             warn!("custom app appAccessToken cache {:#?}", resp.code_error);
@@ -95,7 +93,7 @@ impl TokenManager {
     ) -> SDKResult<String> {
         let mut app_ticket = app_ticket.to_string();
         if app_ticket.is_empty() {
-            match block_on(APP_TICKET_MANAGER.get(config)) {
+            match APP_TICKET_MANAGER.get(config) {
                 None => return Err(LarkAPIError::AppTicketEmpty),
                 Some(ticket) => {
                     app_ticket = ticket;
@@ -111,14 +109,14 @@ impl TokenManager {
         let body = body.into();
 
         let req = ApiReq {
-            http_method: Method::POST,
+            http_method: "POST".to_string(),
             api_path: APP_ACCESS_TOKEN_INTERNAL_URL_PATH.to_string(),
             body,
             query_params: Default::default(),
             path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
         };
-        let raw_resp = block_on(Transport::request(req, config, &[]))?;
+        let raw_resp = Transport::request(req, config)?;
         let resp: AppAccessTokenResp = serde_json::from_slice(&raw_resp.raw_body)?;
         if resp.code_error.code != 0 {
             warn!(
@@ -170,15 +168,15 @@ impl TokenManager {
             app_secret: config.app_secret.clone(),
         })?;
         let body = body.into();
-        let mut req = ApiReq {
-            http_method: Method::POST,
+        let req = ApiReq {
+            http_method: "POST".to_string(),
             api_path: APP_ACCESS_TOKEN_INTERNAL_URL_PATH.to_string(),
             body,
             query_params: Default::default(),
             path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
         };
-        let raw_resp = block_on(Transport::request( req, config, &[]))?;
+        let raw_resp = Transport::request(req, config)?;
         let resp: TenantAccessTokenResp = serde_json::from_slice(&raw_resp.raw_body)?;
         if resp.code_error.code != 0 {
             warn!("custom app tenantAccessToken cache {:#?}", resp.code_error);
@@ -210,14 +208,14 @@ impl TokenManager {
         })?;
         let body = body.into();
         let mut req = ApiReq {
-            http_method: Method::POST,
+            http_method: "POST".to_string(),
             api_path: TENANT_ACCESS_TOKEN_URL_PATH.to_string(),
             body,
             query_params: Default::default(),
             path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
         };
-        let raw_resp = block_on(Transport::request(req, config, &[]))?;
+        let raw_resp = Transport::request(req, config)?;
         let resp: TenantAccessTokenResp = serde_json::from_slice(&raw_resp.raw_body)?;
         if resp.code_error.code != 0 {
             warn!(

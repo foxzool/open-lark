@@ -8,8 +8,7 @@ use open_lark::service::im::v1::chats::ListChatReqBuilder;
 
 /// 获取用户或机器人所在的群列表
 /// GET /open-apis/im/v1/messages
-#[tokio::main]
-async fn main() {
+fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
     let app_id = env::var("APP_ID").unwrap();
@@ -19,7 +18,7 @@ async fn main() {
     let req = ListChatReqBuilder::new().build();
 
     // 发起请求
-    let resp = client.im.v1.chats.list(&req, &[]).await.unwrap();
+    let resp = client.im.v1.chats.list(&req).unwrap();
     if resp.success() {
         // 业务处理
         info!("response: {:?}", resp.data);

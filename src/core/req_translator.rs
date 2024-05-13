@@ -1,12 +1,9 @@
 use std::collections::HashMap;
 
 use bytes::Bytes;
-use reqwest::{Body, multipart, Request, RequestBuilder};
-use reqwest::multipart::Form;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use tokio::fs::File;
-use tokio_util::codec::{BytesCodec, FramedRead};
+use ureq::Request;
 use url::Url;
 
 use crate::core::api_req::ApiReq;
@@ -23,13 +20,13 @@ use crate::core::utils::user_agent;
 pub struct ReqTranslator;
 
 impl ReqTranslator {
-    pub async fn translate(
+    pub fn translate(
         req: &ApiReq,
         access_token_type: AccessTokenType,
         config: &Config,
         option: &RequestOption,
     ) -> Result<Request, LarkAPIError> {
-        let client = reqwest::Client::new();
+        let client = ureq::Agent::new();
 
         let path = format!("{}/{}", config.base_url, req.api_path);
         let query_params = req
@@ -40,19 +37,19 @@ impl ReqTranslator {
         let url = Url::parse_with_params(&path, query_params)?;
 
         let mut req_builder = client
-            .request(req.http_method.clone(), url)
-            .body(req.body.clone());
+            .request(&req.http_method, url.as_ref());
+            // .send_bytes(&req.body);
         if !option.request_id.is_empty() {
-            req_builder = req_builder.header(CUSTOM_REQUEST_ID, option.request_id.clone());
+            req_builder = req_builder.set(CUSTOM_REQUEST_ID, &option.request_id.clone());
         }
         for (k, v) in &option.header {
-            req_builder = req_builder.header(k, v)
+            req_builder = req_builder.set(k, v)
         }
 
         for (k, v) in &config.header {
-            req_builder = req_builder.header(k, v)
+            req_builder = req_builder.set(k, v)
         }
-        req_builder = req_builder.header(USER_AGENT_HEADER, user_agent());
+        req_builder = req_builder.set(USER_AGENT_HEADER, &user_agent());
 
         match access_token_type {
             AccessTokenType::None => {}
@@ -75,6 +72,7 @@ impl ReqTranslator {
                         &option.app_ticket,
                     )?;
                 }
+
                 req_builder = authorization_to_header(req_builder, &tenant_access_token);
             }
             AccessTokenType::User => {
@@ -89,18 +87,18 @@ impl ReqTranslator {
         }
 
         if file_upload {
-            req_builder = req_builder.multipart(to_form_data(body).await?);
+            // req_builder = req_builder.multipart(to_form_data(body).await?);
         } else {
-            req_builder = req_builder.header(CONTENT_TYPE_HEADER, DEFAULT_CONTENT_TYPE);
-            req_builder = req_builder.body(req.body.clone())
+            req_builder = req_builder.set(CONTENT_TYPE_HEADER, DEFAULT_CONTENT_TYPE);
+            // req_builder = req_builder.body(req.body.clone())
         }
 
-        Ok(req_builder.build()?)
+        Ok(req_builder)
     }
 }
 
-fn authorization_to_header(req: RequestBuilder, token: &str) -> RequestBuilder {
-    req.header("Authorization", format!("Bearer {token}"))
+fn authorization_to_header(req: Request, token: &str) -> Request {
+    req.set("Authorization", &format!("Bearer {token}"))
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -117,42 +115,40 @@ struct Data {
     content_type: String,
 }
 
-async fn to_form_data(body: Bytes) -> Result<Form, LarkAPIError> {
-    let data = serde_json::from_slice::<Value>(&body)?;
-
-    let mut form = Form::new();
-
-    if let Value::Object(map) = data {
-        for (key, val) in map {
-            if key == "file" {
-                let file_name = val.as_str().unwrap().to_string().clone();
-                let file = File::open(file_name.clone()).await?;
-                let stream = FramedRead::new(file, BytesCodec::new());
-                let file_body = Body::wrap_stream(stream);
-
-                //make form part of file
-                let some_file = multipart::Part::stream(file_body)
-                    .file_name(file_name)
-                    .mime_str("application/octet-stream")?;
-                form =
-                    form
-                    .part("file", some_file);
-                continue;
-            }
-            match val {
-                Value::String(s) => {
-                    form = form.text(key, s.clone());
-                }
-                Value::Number(n) => {
-                    form = form.text(key, n.to_string());
-                }
-                Value::Bool(b) => {
-                    form = form.text(key, b.to_string());
-                }
-                _ => {}
-            }
-        }
-    }
-
-    Ok(form)
-}
+// async fn to_form_data(body: Bytes) -> Result<Form, LarkAPIError> {
+//     let data = serde_json::from_slice::<Value>(&body)?;
+//
+//     let mut form = Form::new();
+//
+//     if let Value::Object(map) = data {
+//         for (key, val) in map {
+//             if key == "file" {
+//                 let file_name = val.as_str().unwrap().to_string().clone();
+//                 let file = File::open(file_name.clone()).await?;
+//                 let stream = FramedRead::new(file, BytesCodec::new());
+//                 let file_body = Body::wrap_stream(stream);
+//
+//                 //make form part of file
+//                 let some_file = multipart::Part::stream(file_body)
+//                     .file_name(file_name)
+//                     .mime_str("application/octet-stream")?;
+//                 form = form.part("file", some_file);
+//                 continue;
+//             }
+//             match val {
+//                 Value::String(s) => {
+//                     form = form.text(key, s.clone());
+//                 }
+//                 Value::Number(n) => {
+//                     form = form.text(key, n.to_string());
+//                 }
+//                 Value::Bool(b) => {
+//                     form = form.text(key, b.to_string());
+//                 }
+//                 _ => {}
+//             }
+//         }
+//     }
+//
+//     Ok(form)
+// }

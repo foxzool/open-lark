@@ -1,6 +1,4 @@
-use futures::executor::block_on;
 use log::error;
-use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::core::api_req::ApiReq;
@@ -17,17 +15,16 @@ pub struct ChatsService {
 
 impl ChatsService {
     /// 获取用户或机器人所在的群列表
-    pub async fn list(
+    pub fn list(
         &self,
         req: &ListChatReq,
-        options: &[RequestOptionFunc],
     ) -> SDKResult<BaseResp<ListChatRespData>> {
         let mut api_req = req.api_req.clone();
-        api_req.http_method = Method::GET;
+        api_req.http_method = "GET".to_string();
         api_req.api_path = "/open-apis/im/v1/chats".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, options).await?;
+        let api_resp = Transport::request(api_req, &self.config)?;
 
         Ok(api_resp.try_into()?)
     }
@@ -56,7 +53,7 @@ impl<'a> Iterator for ListChatIterator<'a> {
         if !self.has_more {
             return None;
         }
-        match block_on(self.service.list(&self.req, &self.options)) {
+        match self.service.list(&self.req) {
             Ok(resp) => {
                 if resp.success() {
                     self.has_more = resp.data.has_more;

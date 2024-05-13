@@ -1,15 +1,16 @@
 use std::env;
+use std::thread::sleep;
 
 use dotenvy::dotenv;
-use tokio::time::sleep;
+
 
 use open_lark::message::{
     CustomRichTextMessage, InteractiveMessage, MessageCard, RichTextParagraph, TextMessage,
 };
 use open_lark::prelude::*;
 
-#[tokio::main]
-async fn main() {
+
+fn main() {
     dotenv().expect(".env file not found");
 
     // 创建 CustomBot 实例
@@ -24,8 +25,8 @@ async fn main() {
     // 发送文本消息
     let message = TextMessage::new("新更新提醒");
 
-    bot.send_message(message).await;
-    sleep(std::time::Duration::from_secs(1)).await;
+    bot.send_message(message);
+    sleep(std::time::Duration::from_secs(1));
 
     // 发送富文本消息
     let content = vec![
@@ -39,7 +40,7 @@ async fn main() {
         }],
     ];
     let message = CustomRichTextMessage::new("富文本标题", content);
-    bot.send_message(message).await;
+    bot.send_message(message);
 
     // 发送消息卡片
     let message = InteractiveMessage::JsonCard(MessageCard {
@@ -47,5 +48,5 @@ async fn main() {
         elements: Default::default(),
         ..Default::default()
     });
-    bot.send_message(message).await;
+    bot.send_message(message);
 }
