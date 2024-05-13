@@ -1,9 +1,8 @@
 use std::env;
 
 use dotenvy::dotenv;
-use log::{error, info};
 
-use open_lark::client::{LarkClientBuilder};
+use open_lark::client::LarkClientBuilder;
 use open_lark::service::im::v1::message::ListMessageReqBuilder;
 
 /// 获取会话历史消息
@@ -21,12 +20,12 @@ fn main() {
         .build();
 
     // 发起请求
-    let resp = client.im.v1.message.list(&req).unwrap();
+    let resp = client.im.v1.message.list(&req, None).unwrap();
     if resp.success() {
         // 业务处理
-        info!("response: {:?}", resp.data);
+        println!("response: {:?}", resp.data);
     } else {
-        error!("list chat failed: {} ", resp.error_msg());
+        println!("list chat failed: {} ", resp.error_msg());
     }
 
     // 使用迭代器
@@ -34,10 +33,10 @@ fn main() {
         .im
         .v1
         .message
-        .list_iter(req, vec![])
+        .list_iter(req, None)
         .for_each(|messages| {
             for message in messages {
-                info!("message {:?}", message);
+                println!("message {:?}", message);
             }
         })
 }

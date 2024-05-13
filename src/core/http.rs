@@ -3,7 +3,6 @@ use std::io::Read;
 
 use bytes::Bytes;
 use log::debug;
-use ureq::Error::Status;
 use ureq::Request;
 
 use crate::core::api_req::ApiReq;
@@ -19,8 +18,12 @@ use crate::core::SDKResult;
 pub struct Transport;
 
 impl Transport {
-    pub fn request(mut req: ApiReq, config: &Config) -> Result<ApiResp, LarkAPIError> {
-        let option = RequestOption::default();
+    pub fn request(
+        mut req: ApiReq,
+        config: &Config,
+        option: Option<RequestOption>,
+    ) -> Result<ApiResp, LarkAPIError> {
+        let option = option.unwrap_or_default();
 
         if req.supported_access_token_types.is_empty() {
             req.supported_access_token_types = vec![AccessTokenType::None];
@@ -87,23 +90,27 @@ impl Transport {
     }
 
     fn do_send(raw_request: Request, body: &[u8]) -> SDKResult<ApiResp> {
-        let response = raw_request.send_bytes(body)?;
-        let status_code = response.status();
-        let header = response.headers_names();
-        // let len: usize = response.header("Content-Length").unwrap().parse().unwrap();
-        let mut bytes: Vec<u8> = Vec::new();
+        match raw_request.send_bytes(body) {
+            Ok(response) => {
+                let status_code = response.status();
+                let header = response.headers_names();
+                // let len: usize = response.header("Content-Length").unwrap().parse().unwrap();
+                let mut bytes: Vec<u8> = Vec::new();
 
-        response
-            .into_reader()
-            .take(10_000_000)
-            .read_to_end(&mut bytes)?;
-        let raw_body: Bytes = Bytes::copy_from_slice(&bytes);
+                response
+                    .into_reader()
+                    .take(10_000_000)
+                    .read_to_end(&mut bytes)?;
+                let raw_body: Bytes = Bytes::copy_from_slice(&bytes);
 
-        Ok(ApiResp {
-            status_code,
-            header,
-            raw_body,
-        })
+                Ok(ApiResp {
+                    status_code,
+                    header,
+                    raw_body,
+                })
+            }
+            Err(err) => Err(LarkAPIError::RequestError(err.to_string())),
+        }
     }
 }
 

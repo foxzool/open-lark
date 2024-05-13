@@ -70,7 +70,7 @@ impl TokenManager {
             path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
         };
-        let raw_resp = Transport::request(req, config)?;
+        let raw_resp = Transport::request(req, config, None)?;
         let resp: AppAccessTokenResp = serde_json::from_slice(&raw_resp.raw_body)?;
         if resp.code_error.code != 0 {
             warn!("custom app appAccessToken cache {:#?}", resp.code_error);
@@ -116,7 +116,7 @@ impl TokenManager {
             path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
         };
-        let raw_resp = Transport::request(req, config)?;
+        let raw_resp = Transport::request(req, config, None)?;
         let resp: AppAccessTokenResp = serde_json::from_slice(&raw_resp.raw_body)?;
         if resp.code_error.code != 0 {
             warn!(
@@ -176,7 +176,7 @@ impl TokenManager {
             path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
         };
-        let raw_resp = Transport::request(req, config)?;
+        let raw_resp = Transport::request(req, config, None)?;
         let resp: TenantAccessTokenResp = serde_json::from_slice(&raw_resp.raw_body)?;
         if resp.code_error.code != 0 {
             warn!("custom app tenantAccessToken cache {:#?}", resp.code_error);
@@ -215,7 +215,7 @@ impl TokenManager {
             path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
         };
-        let raw_resp = Transport::request(req, config)?;
+        let raw_resp = Transport::request(req, config, None)?;
         let resp: TenantAccessTokenResp = serde_json::from_slice(&raw_resp.raw_body)?;
         if resp.code_error.code != 0 {
             warn!(

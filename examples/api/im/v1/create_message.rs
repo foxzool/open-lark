@@ -1,7 +1,6 @@
 use std::env;
 
 use dotenvy::dotenv;
-use log::{error, info};
 use serde_json::json;
 use uuid::Uuid;
 
@@ -29,12 +28,12 @@ fn main() {
         .build();
 
     // 发起请求
-    let resp = client.im.v1.message.create(req).unwrap();
+    let resp = client.im.v1.message.create(req, None).unwrap();
 
     if resp.success() {
         // 业务处理
-        info!("response: {:?}", resp.data);
+        println!("response: {:?}", resp.data);
     } else {
-        error!("send message failed: {} ", resp.error_msg());
+        println!("send message failed: {} ", resp.error_msg());
     }
 }

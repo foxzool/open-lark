@@ -1,5 +1,4 @@
 use log::error;
-
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -9,7 +8,7 @@ use crate::core::config::Config;
 use crate::core::constants::AccessTokenType;
 use crate::core::error::LarkAPIError;
 use crate::core::http::Transport;
-use crate::core::req_option::RequestOptionFunc;
+use crate::core::req_option::RequestOption;
 
 pub struct MessageService {
     pub config: Config,
@@ -22,13 +21,14 @@ impl MessageService {
     pub fn create(
         &self,
         req: CreateMessageReq,
+        option: Option<RequestOption>,
     ) -> Result<BaseResp<Message>, LarkAPIError> {
         let mut api_req = req.api_req;
         api_req.http_method = "POST".to_string();
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config)?;
+        let api_resp = Transport::request(api_req, &self.config, option)?;
 
         Ok(api_resp.try_into()?)
     }
@@ -40,13 +40,14 @@ impl MessageService {
     pub fn list(
         &self,
         req: &ListMessageReq,
+        option: Option<RequestOption>
     ) -> Result<BaseResp<ListMessageRespData>, LarkAPIError> {
         let mut api_req = req.api_req.clone();
         api_req.http_method = "GET".to_string();
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config)?;
+        let api_resp = Transport::request(api_req, &self.config, option)?;
 
         Ok(api_resp.try_into()?)
     }
@@ -54,12 +55,12 @@ impl MessageService {
     pub fn list_iter(
         &self,
         req: ListMessageReq,
-        options: Vec<RequestOptionFunc>,
+        option: Option<RequestOption>
     ) -> ListMessageIterator {
         ListMessageIterator {
             service: self,
             req,
-            options,
+            option,
             has_more: true,
         }
     }
@@ -68,8 +69,8 @@ impl MessageService {
 pub struct ListMessageIterator<'a> {
     service: &'a MessageService,
     req: ListMessageReq,
-    options: Vec<RequestOptionFunc>,
-    has_more: bool
+    option: Option<RequestOption>,
+    has_more: bool,
 }
 
 impl<'a> Iterator for ListMessageIterator<'a> {
@@ -79,22 +80,21 @@ impl<'a> Iterator for ListMessageIterator<'a> {
         if !self.has_more {
             return None;
         }
-        match self.service.list(&self.req) {
+        match self.service.list(&self.req, self.option.clone()) {
             Ok(resp) => {
                 if resp.success() {
                     self.has_more = resp.data.has_more;
                     if resp.data.has_more {
-                        self.req.api_req.query_params.insert(
-                            "page_token".to_string(),
-                            resp.data.page_token.unwrap(),
-                        );
+                        self.req
+                            .api_req
+                            .query_params
+                            .insert("page_token".to_string(), resp.data.page_token.unwrap());
                         Some(resp.data.items)
                     } else if resp.data.items.is_empty() {
                         return None;
                     } else {
                         Some(resp.data.items)
                     }
-
                 } else {
                     error!("Error: {:?}", resp.error_msg());
                     None
@@ -291,7 +291,6 @@ impl Default for ListMessageReqBuilder {
     fn default() -> Self {
         ListMessageReqBuilder::new()
     }
-
 }
 
 impl ListMessageReqBuilder {

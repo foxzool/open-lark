@@ -68,6 +68,7 @@ pub fn apply_app_ticket(config: &Config) -> SDKResult<()> {
             supported_access_token_types: vec![AccessTokenType::App],
         },
         config,
+        None,
     )?;
 
     let code_error: CodeMsg = serde_json::from_slice(&resp.raw_body)?;

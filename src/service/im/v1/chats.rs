@@ -6,7 +6,8 @@ use crate::core::api_resp::BaseResp;
 use crate::core::config::Config;
 use crate::core::constants::AccessTokenType;
 use crate::core::http::Transport;
-use crate::core::req_option::RequestOptionFunc;
+use crate::core::req_option::RequestOption;
+
 use crate::core::SDKResult;
 
 pub struct ChatsService {
@@ -18,22 +19,23 @@ impl ChatsService {
     pub fn list(
         &self,
         req: &ListChatReq,
+        option: Option<RequestOption>
     ) -> SDKResult<BaseResp<ListChatRespData>> {
         let mut api_req = req.api_req.clone();
         api_req.http_method = "GET".to_string();
         api_req.api_path = "/open-apis/im/v1/chats".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config)?;
+        let api_resp = Transport::request(api_req, &self.config, option)?;
 
         Ok(api_resp.try_into()?)
     }
 
-    pub fn list_iter(&self, req: ListChatReq, options: Vec<RequestOptionFunc>) -> ListChatIterator {
+    pub fn list_iter(&self, req: ListChatReq, option: Option<RequestOption>) -> ListChatIterator {
         ListChatIterator {
             service: self,
             req,
-            options,
+            option,
             has_more: true,
         }
     }
@@ -42,7 +44,7 @@ impl ChatsService {
 pub struct ListChatIterator<'a> {
     service: &'a ChatsService,
     req: ListChatReq,
-    options: Vec<RequestOptionFunc>,
+    option: Option<RequestOption>,
     has_more: bool,
 }
 
@@ -53,7 +55,7 @@ impl<'a> Iterator for ListChatIterator<'a> {
         if !self.has_more {
             return None;
         }
-        match self.service.list(&self.req) {
+        match self.service.list(&self.req, self.option.clone()) {
             Ok(resp) => {
                 if resp.success() {
                     self.has_more = resp.data.has_more;

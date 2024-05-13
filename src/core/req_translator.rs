@@ -1,6 +1,5 @@
 use std::collections::HashMap;
 
-use bytes::Bytes;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use ureq::Request;
@@ -36,9 +35,8 @@ impl ReqTranslator {
             .collect::<Vec<_>>();
         let url = Url::parse_with_params(&path, query_params)?;
 
-        let mut req_builder = client
-            .request(&req.http_method, url.as_ref());
-            // .send_bytes(&req.body);
+        let mut req_builder = client.request(&req.http_method, url.as_ref());
+        // .send_bytes(&req.body);
         if !option.request_id.is_empty() {
             req_builder = req_builder.set(CUSTOM_REQUEST_ID, &option.request_id.clone());
         }

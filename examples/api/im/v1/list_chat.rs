@@ -21,15 +21,15 @@ fn main() {
     let resp = client.im.v1.chats.list(&req).unwrap();
     if resp.success() {
         // 业务处理
-        info!("response: {:?}", resp.data);
+        println!("response: {:?}", resp.data);
     } else {
-        error!("list chat failed: {} ", resp.error_msg());
+        println!("list chat failed: {} ", resp.error_msg());
     }
 
     // 使用迭代器
-    client.im.v1.chats.list_iter(req, vec![]).for_each(|chats| {
+    client.im.v1.chats.list_iter(req, None).for_each(|chats| {
         for chat in chats {
-            info!("chat {:?}", chat);
+            println!("chat {:?}", chat);
         }
     })
 }

@@ -1,5 +1,6 @@
 use log::debug;
 use serde::Serialize;
+use ureq::Response;
 
 use crate::bot::LarkBot;
 use crate::message::MessageTrait;
@@ -26,14 +27,14 @@ impl CustomBot {
 }
 
 impl LarkBot for CustomBot {
-    fn send_raw_message(&self, body: impl Serialize + Send) {
+    fn send_raw_message(&self, body: impl Serialize + Send) -> Response  {
         self.client
             .post(&self.webhook_url)
             .send_json(&body)
-            .unwrap();
+            .unwrap()
     }
 
-    fn send_message(&self, message: impl MessageTrait + Send) {
+    fn send_message(&self, message: impl MessageTrait + Send) -> Response  {
         let body = serde_json::json!({
            "msg_type": message.message_type(),
             "content": message
@@ -44,6 +45,6 @@ impl LarkBot for CustomBot {
         self.client
             .post(&self.webhook_url)
             .send_json(&body)
-            .unwrap();
+            .unwrap()
     }
 }
