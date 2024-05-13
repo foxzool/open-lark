@@ -50,7 +50,7 @@ impl Transport {
         for _i in 0..2 {
             let req = ReqTranslator::translate(http_req, access_token_type, config, &option)?;
             debug!("Req:{:?}", req);
-
+            println!("body {}",  String::from_utf8(http_req.body.clone().to_vec()).unwrap());
             raw_resp = Self::do_send(req, &http_req.body)?;
 
             debug!("Res:{:?}", raw_resp);

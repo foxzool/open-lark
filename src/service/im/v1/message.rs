@@ -1,6 +1,7 @@
+use bytes::Bytes;
 use log::error;
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
+use serde_json::{json, Value};
 
 use crate::core::api_req::ApiReq;
 use crate::core::api_resp::{ApiResp, BaseResp, CodeMsg};
@@ -40,7 +41,7 @@ impl MessageService {
     pub fn list(
         &self,
         req: &ListMessageReq,
-        option: Option<RequestOption>
+        option: Option<RequestOption>,
     ) -> Result<BaseResp<ListMessageRespData>, LarkAPIError> {
         let mut api_req = req.api_req.clone();
         api_req.http_method = "GET".to_string();
@@ -55,7 +56,7 @@ impl MessageService {
     pub fn list_iter(
         &self,
         req: ListMessageReq,
-        option: Option<RequestOption>
+        option: Option<RequestOption>,
     ) -> ListMessageIterator {
         ListMessageIterator {
             service: self,
@@ -140,8 +141,6 @@ impl CreateMessageReqBuilder {
     }
 
     pub fn build(mut self) -> CreateMessageReq {
-        // let json_string = self.body.clone().unwrap().content.clone();
-        // let json_value: Value = serde_json::from_str(&json_string).unwrap();
         self.api_req.body = serde_json::to_vec(&self.body.clone().unwrap())
             .unwrap()
             .into();
@@ -176,7 +175,7 @@ pub struct CreateMessageReqBody {
     /// 文本消息请求体最大不能超过150KB
     /// 卡片及富文本消息请求体最大不能超过30KB
     /// 示例值："{\"text\":\"test content\"}"
-    pub content: Value,
+    pub content: String,
     /// 由开发者生成的唯一字符串序列，用于发送消息请求去重；持有相同uuid的请求1小时内至多成功发送一条消息
     ///
     /// 示例值："选填，每次调用前请更换，如a0d69e20-1dd1-458b-k525-dfeca4015204"
@@ -394,4 +393,67 @@ pub struct ListMessageRespData {
     /// 分页标记，当 has_more 为 true 时，会同时返回新的 page_token，否则不返回 page_token
     pub page_token: Option<String>,
     pub items: Vec<Message>,
+}
+
+pub trait SendMessageTrait {
+    fn msg_type(&self) -> String;
+    fn content(&self) -> String;
+}
+
+pub struct MessageText {
+    text: String,
+}
+
+pub struct MessageTextBuilder {
+    text: String,
+}
+
+impl MessageTextBuilder {
+    pub fn new() -> MessageTextBuilder {
+        MessageTextBuilder {
+            text: "".to_string(),
+        }
+    }
+
+    pub fn text(mut self, text: &str) -> Self {
+        self.text = self.text + text;
+        self
+    }
+
+    pub fn text_line(mut self, text: &str) -> Self {
+        self.text = self.text + text + "\n";
+        self
+    }
+
+    pub fn line(mut self) -> Self {
+        self.text = self.text + "\n";
+        self
+    }
+
+    pub fn at_user(mut self, user_id: &str, name: &str) -> Self {
+        self.text =
+            self.text + &format!("<at user_id=\"{}\"  >name=\"{}\"</at>", user_id, name);
+        self
+    }
+
+    pub fn at_all(mut self) -> Self {
+        self.text = self.text + "<at user_id=\"all\"  >name=\"全体成员\"</at>";
+        self
+    }
+
+    pub fn build(self) -> MessageText {
+        MessageText {
+            text: self.text,
+        }
+    }
+}
+
+impl SendMessageTrait for MessageText {
+    fn msg_type(&self) -> String {
+        "text".to_string()
+    }
+
+    fn content(&self) -> String {
+        json!({"text": self.text}).to_string()
+    }
 }
