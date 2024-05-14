@@ -9,6 +9,8 @@ pub struct CustomColorMode {
 /// 飞书卡片颜色枚举值
 #[derive(Debug)]
 pub enum FeishuCardColor {
+    Default,
+
     Custom(String),
 
     BgWhite,
@@ -529,6 +531,7 @@ impl Serialize for FeishuCardColor {
             FeishuCardColor::Yellow700 => serializer.serialize_str("yellow-700"),
             FeishuCardColor::Yellow800 => serializer.serialize_str("yellow-800"),
             FeishuCardColor::Yellow900 => serializer.serialize_str("yellow-900"),
+            FeishuCardColor::Default => serializer.serialize_str("default"),
         }
     }
 }
@@ -710,6 +713,7 @@ impl<'de> Deserialize<'de> for FeishuCardColor {
             "yellow-700" => Ok(FeishuCardColor::Yellow700),
             "yellow-800" => Ok(FeishuCardColor::Yellow800),
             "yellow-900" => Ok(FeishuCardColor::Yellow900),
+            "default" => Ok(FeishuCardColor::Default),
             _ => Ok(FeishuCardColor::Custom(s)),
         }
     }

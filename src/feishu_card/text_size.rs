@@ -1,5 +1,16 @@
 use serde::{Deserialize, Serialize};
 
+/// 自定义字号
+#[derive(Debug, Serialize, Deserialize, Default)]
+pub struct CustomTextSize {
+    ///  在无法差异化配置字号的旧版飞书客户端上，生效的字号属性。选填。
+    pub default: FeishuCardTextSize,
+    /// 桌面端的字号。
+    pub pc: FeishuCardTextSize,
+    /// 移动端的字号。
+    pub mobile: FeishuCardTextSize,
+}
+
 /// 文本大小
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub enum FeishuCardTextSize {

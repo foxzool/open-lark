@@ -2,12 +2,14 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-use crate::feishu_card::card_components::content_components::CardPlainText;
+use crate::feishu_card::card_components::content_components::plain_text::CardPlainText;
 use crate::feishu_card::card_components::FeishuCardColumnSet;
 use crate::feishu_card::color::FeishuCardColor;
+use crate::feishu_card::text_size::FeishuCardTextSize;
 
 pub mod card_components;
 pub mod color;
+pub mod icon;
 pub mod text_size;
 
 /// 飞书卡片
@@ -35,7 +37,7 @@ pub struct FeishuCardConfig {
     /// - false：不允许
     /// 默认值为 true，该字段要求飞书客户端的版本为 V3.31.0 及以上。
     #[serde(skip_serializing_if = "Option::is_none")]
-    enable_forward: Option<bool>,
+    pub enable_forward: Option<bool>,
     /// 是否为共享卡片。取值：
     ///
     /// - true：是共享卡片，更新卡片的内容对所有收到这张卡片的人员可见。
@@ -43,19 +45,21 @@ pub struct FeishuCardConfig {
     ///
     /// 默认值为 false。
     #[serde(skip_serializing_if = "Option::is_none")]
-    update_multi: Option<bool>,
+    pub update_multi: Option<bool>,
     /// 卡片宽度模式。取值：
     ///
     /// - default：默认宽度。PC 端宽版、iPad 端上的宽度上限为 600px。
     /// - fill：自适应屏幕宽度
-    width_mode: Option<FeishuCardWidthMode>,
+    pub width_mode: Option<FeishuCardWidthMode>,
     /// 是否使用自定义翻译数据。取值：
     ///
     /// - true：在用户点击消息翻译后，使用 i18n 对应的目标语种作为翻译结果。若 i18n 取不到，则使用当前内容请求飞书的机器翻译。
     /// - false：不使用自定义翻译数据，直接请求飞书的机器翻译。
-    use_custom_translation: Option<bool>,
+    pub use_custom_translation: Option<bool>,
     /// 转发的卡片是否仍然支持回传交互。
-    enable_forward_interaction: Option<bool>,
+    pub enable_forward_interaction: Option<bool>,
+    ///  添加自定义字号和颜色。可应用于组件的 JSON 数据中，设置字号和颜色属性。
+    pub style: Option<FeishuCardStyle>,
 }
 
 /// 卡片宽度模式
@@ -69,11 +73,15 @@ pub enum FeishuCardWidthMode {
     Fill,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
 pub struct FeishuCardStyle {
-    text_size: Option<FeishuCardTextSize>,
-    color: Option<FeishuCardColor>,
+    /// 分别为移动端和桌面端添加自定义字号。用于在普通文本组件和富文本组件 JSON 中设置字号属性。支持添加多个自定义字号对象。
+    #[serde(skip_serializing_if = "Option::is_none")]
+    text_size: Option<HashMap<String,FeishuCardTextSize>>,
+    /// 分别为飞书客户端浅色主题和深色主题添加 RGBA 语法。用于在组件 JSON 中设置颜色属性。支持添加多个自定义颜色对象。
+    #[serde(skip_serializing_if = "Option::is_none")]
+    color: Option<HashMap<String, FeishuCardColor>>,
 }
-
 
 /// 标题组件
 #[derive(Debug, Serialize, Deserialize, Default)]
