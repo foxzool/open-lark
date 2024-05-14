@@ -1,9 +1,8 @@
 use std::env;
 
 use dotenvy::dotenv;
-use log::{error, info};
 
-use open_lark::client::{LarkClientBuilder};
+use open_lark::client::LarkClientBuilder;
 use open_lark::service::im::v1::chats::ListChatReqBuilder;
 
 /// 获取用户或机器人所在的群列表
@@ -18,7 +17,7 @@ fn main() {
     let req = ListChatReqBuilder::new().build();
 
     // 发起请求
-    let resp = client.im.v1.chats.list(&req).unwrap();
+    let resp = client.im.v1.chats.list(&req, None).unwrap();
     if resp.success() {
         // 业务处理
         println!("response: {:?}", resp.data);

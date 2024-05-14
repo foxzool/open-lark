@@ -400,6 +400,7 @@ pub trait SendMessageTrait {
     fn content(&self) -> String;
 }
 
+/// 文本 text
 pub struct MessageText {
     text: String,
 }
@@ -431,8 +432,7 @@ impl MessageTextBuilder {
     }
 
     pub fn at_user(mut self, user_id: &str, name: &str) -> Self {
-        self.text =
-            self.text + &format!("<at user_id=\"{}\"  >name=\"{}\"</at>", user_id, name);
+        self.text = self.text + &format!("<at user_id=\"{}\"  >name=\"{}\"</at>", user_id, name);
         self
     }
 
@@ -442,9 +442,7 @@ impl MessageTextBuilder {
     }
 
     pub fn build(self) -> MessageText {
-        MessageText {
-            text: self.text,
-        }
+        MessageText { text: self.text }
     }
 }
 
@@ -456,4 +454,118 @@ impl SendMessageTrait for MessageText {
     fn content(&self) -> String {
         json!({"text": self.text}).to_string()
     }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub enum MessagePost {
+    #[serde(rename = "zh_cn")]
+    ZhCN(MessagePostContent),
+    #[serde(rename = "zh_cn")]
+    EnUS(MessagePostContent),
+}
+
+impl SendMessageTrait for MessagePost {
+    fn msg_type(&self) -> String {
+        "post".to_string()
+    }
+
+    fn content(&self) -> String {
+        json!(self).to_string()
+    }
+}
+
+impl MessagePost {
+    pub fn zh_cn() -> Self {
+        Self::ZhCN(MessagePostContent {
+            title: "".to_string(),
+            content: vec![],
+        })
+    }
+
+    pub fn en_us() -> Self {
+        Self::EnUS(MessagePostContent {
+            title: "".to_string(),
+            content: vec![],
+        })
+    }
+
+    pub fn title(mut self, title: impl ToString) -> Self {
+        match self {
+            Self::ZhCN(mut content) => {
+                content.title = title.to_string();
+                Self::ZhCN(content)
+            }
+            Self::EnUS(mut content) => {
+                content.title = title.to_string();
+                Self::EnUS(content)
+            }
+        }
+    }
+
+    pub fn append_content(mut self, contents: Vec<MessagePostElement>) -> Self {
+        match self {
+            Self::ZhCN(mut content) => {
+                content.content.push(contents);
+                Self::ZhCN(content)
+            }
+            Self::EnUS(mut content) => {
+                content.content.push(contents);
+                Self::EnUS(content)
+            }
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MessagePostContent {
+    title: String,
+    content: Vec<Vec<MessagePostElement>>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(tag = "tag")]
+pub enum MessagePostElement {
+    /// 文本内容。
+    #[serde(rename = "text")]
+    Text {
+        text: String,
+        /// 表示是不是 unescape 解码，默认为 false ，不用可以不填。
+        un_escape: Option<bool>,
+        /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、lineThrough与italic，非可选值将被忽略。
+        style: Option<Vec<String>>,
+    },
+    #[serde(rename = "a")]
+    A {
+        /// 文本内容
+        text: String,
+        /// 默认的链接地址，请确保链接地址的合法性，否则消息会发送失败。
+        href: String,
+        /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、lineThrough与italic，非可选值将被忽略。
+        style: Option<Vec<String>>,
+    },
+    #[serde(rename = "at")]
+    At {
+        /// 用户的open_id，union_id 或 user_id，请参考如何获取 User ID、Open ID 和 Union ID？
+        /// 注意: @单个用户时，user_id字段必须是有效值；@所有人填"all"。
+        user_id: String,
+        /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、lineThrough与italic，非可选值将被忽略。
+        style: Option<Vec<String>>,
+    },
+    #[serde(rename = "img")]
+    Img {
+        /// 图片的唯一标识，可通过 上传图片 接口获取image_key。
+        image_key: String,
+    },
+    #[serde(rename = "media")]
+    Media {
+        /// 视频文件的唯一标识，可通过 上传文件 接口获取file_key
+        file_key: String,
+        /// 视频封面图片的唯一标识，可通过 上传图片 接口获取image_key。
+        image_key: Option<String>,
+    },
+    #[serde(rename = "emotion")]
+    Emotion {
+        /// 表情类型，部分可选值请参见表情文案。
+        emoji_type: String,
+    },
 }

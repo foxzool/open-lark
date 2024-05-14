@@ -3,6 +3,7 @@ use std::io::Read;
 
 use bytes::Bytes;
 use log::debug;
+use serde_json::Value;
 use ureq::Request;
 
 use crate::core::api_req::ApiReq;
@@ -50,7 +51,10 @@ impl Transport {
         for _i in 0..2 {
             let req = ReqTranslator::translate(http_req, access_token_type, config, &option)?;
             debug!("Req:{:?}", req);
-            println!("body {}",  String::from_utf8(http_req.body.clone().to_vec()).unwrap());
+            println!(
+                "body {}",
+                String::from_utf8(http_req.body.clone().to_vec()).unwrap()
+            );
             raw_resp = Self::do_send(req, &http_req.body)?;
 
             debug!("Res:{:?}", raw_resp);
@@ -109,7 +113,13 @@ impl Transport {
                     raw_body,
                 })
             }
-            Err(err) => Err(LarkAPIError::RequestError(err.to_string())),
+            Err(err) => {
+                let resp = err.into_response().unwrap();
+                return match resp.into_json::<CodeMsg>() {
+                    Ok(code_msg) => Err(LarkAPIError::CodeError(code_msg)),
+                    Err(err) => Err(LarkAPIError::IOErr(err)),
+                };
+            }
         }
     }
 }
