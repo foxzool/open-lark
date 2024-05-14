@@ -3,7 +3,6 @@ use std::io::Read;
 
 use bytes::Bytes;
 use log::debug;
-use serde_json::Value;
 use ureq::Request;
 
 use crate::core::api_req::ApiReq;

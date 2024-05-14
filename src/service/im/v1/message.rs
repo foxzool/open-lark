@@ -593,6 +593,15 @@ impl SendMessageTrait for MessageImage {
     }
 }
 
+/// 消息卡片
+pub enum MessageInteractive {
+    Card,
+    Template
+}
+
+
+
+
 #[cfg(test)]
 mod test {
     use serde_json::json;
