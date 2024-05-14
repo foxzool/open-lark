@@ -1,7 +1,6 @@
-use bytes::Bytes;
 use log::error;
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Value};
+use serde_json::{json};
 
 use crate::core::api_req::ApiReq;
 use crate::core::api_resp::{ApiResp, BaseResp, CodeMsg};
@@ -431,13 +430,13 @@ impl MessageTextBuilder {
         self
     }
 
-    pub fn at_user(mut self, user_id: &str, name: &str) -> Self {
-        self.text = self.text + &format!("<at user_id=\"{}\"  >name=\"{}\"</at>", user_id, name);
+    pub fn at_user(mut self, user_id: &str) -> Self {
+        self.text = self.text + &format!("<at user_id=\"{}\"></at>", user_id);
         self
     }
 
     pub fn at_all(mut self) -> Self {
-        self.text = self.text + "<at user_id=\"all\"  >name=\"全体成员\"</at>";
+        self.text = self.text + "<at user_id=\"all\">name=\"全体成员\"</at>";
         self
     }
 
@@ -456,6 +455,7 @@ impl SendMessageTrait for MessageText {
     }
 }
 
+/// 富文本参数
 #[derive(Debug, Serialize, Deserialize)]
 pub enum MessagePost {
     #[serde(rename = "zh_cn")]
@@ -489,7 +489,7 @@ impl MessagePost {
         })
     }
 
-    pub fn title(mut self, title: impl ToString) -> Self {
+    pub fn title(self, title: impl ToString) -> Self {
         match self {
             Self::ZhCN(mut content) => {
                 content.title = title.to_string();
@@ -502,7 +502,7 @@ impl MessagePost {
         }
     }
 
-    pub fn append_content(mut self, contents: Vec<MessagePostElement>) -> Self {
+    pub fn append_content(mut self, contents: Vec<MessagePostNode>) -> Self {
         match self {
             Self::ZhCN(mut content) => {
                 content.content.push(contents);
@@ -518,20 +518,25 @@ impl MessagePost {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct MessagePostContent {
+    /// 富文本消息的标题。
     title: String,
-    content: Vec<Vec<MessagePostElement>>,
+    /// 富文本消息内容，由多个段落组成，每个段落为一个 node 列表。支持的 node 标签类型及对应参数
+    content: Vec<Vec<MessagePostNode>>,
 }
 
+//// 富文本消息内容
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(tag = "tag")]
-pub enum MessagePostElement {
+pub enum MessagePostNode {
     /// 文本内容。
     #[serde(rename = "text")]
     Text {
         text: String,
         /// 表示是不是 unescape 解码，默认为 false ，不用可以不填。
+        #[serde(skip_serializing_if = "Option::is_none")]
         un_escape: Option<bool>,
         /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、lineThrough与italic，非可选值将被忽略。
+        #[serde(skip_serializing_if = "Option::is_none")]
         style: Option<Vec<String>>,
     },
     #[serde(rename = "a")]
@@ -541,6 +546,7 @@ pub enum MessagePostElement {
         /// 默认的链接地址，请确保链接地址的合法性，否则消息会发送失败。
         href: String,
         /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、lineThrough与italic，非可选值将被忽略。
+        #[serde(skip_serializing_if = "Option::is_none")]
         style: Option<Vec<String>>,
     },
     #[serde(rename = "at")]
@@ -549,6 +555,7 @@ pub enum MessagePostElement {
         /// 注意: @单个用户时，user_id字段必须是有效值；@所有人填"all"。
         user_id: String,
         /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、lineThrough与italic，非可选值将被忽略。
+        #[serde(skip_serializing_if = "Option::is_none")]
         style: Option<Vec<String>>,
     },
     #[serde(rename = "img")]
@@ -561,6 +568,7 @@ pub enum MessagePostElement {
         /// 视频文件的唯一标识，可通过 上传文件 接口获取file_key
         file_key: String,
         /// 视频封面图片的唯一标识，可通过 上传图片 接口获取image_key。
+        #[serde(skip_serializing_if = "Option::is_none")]
         image_key: Option<String>,
     },
     #[serde(rename = "emotion")]
@@ -568,4 +576,72 @@ pub enum MessagePostElement {
         /// 表情类型，部分可选值请参见表情文案。
         emoji_type: String,
     },
+}
+
+#[cfg(test)]
+mod test {
+    use serde_json::json;
+
+    use crate::service::im::v1::message::{MessageTextBuilder, SendMessageTrait};
+
+    #[test]
+    fn test_message_text() {
+        let t1 = MessageTextBuilder::new().text(" test content").build();
+        assert_eq!(t1.text, " test content");
+        let t2 = MessageTextBuilder::new().text_line(" test content").build();
+        assert_eq!(t2.text, " test content\n");
+        let t3 = MessageTextBuilder::new()
+            .text(" test content")
+            .line()
+            .build();
+        assert_eq!(t3.text, " test content\n");
+        let t4 = MessageTextBuilder::new()
+            .text(" test content")
+            .at_user("user_id")
+            .build();
+        assert_eq!(t4.text, " test content<at user_id=\"user_id\"></at>");
+        let t5 = MessageTextBuilder::new().at_all().build();
+        assert_eq!(t5.text, "<at user_id=\"all\">name=\"全体成员\"</at>");
+    }
+
+    #[test]
+    fn test_message_post() {
+        use crate::service::im::v1::message::{MessagePost, MessagePostNode};
+        let post = MessagePost::zh_cn().title("title").append_content(vec![
+            MessagePostNode::Text {
+                text: "text".to_string(),
+                un_escape: None,
+                style: None,
+            },
+            MessagePostNode::A {
+                text: "text".to_string(),
+                href: "https://www.feishu.cn".to_string(),
+                style: None,
+            },
+            MessagePostNode::At {
+                user_id: "user_id".to_string(),
+                style: None,
+            },
+            MessagePostNode::Img {
+                image_key: "image_key".to_string(),
+            },
+            MessagePostNode::Media {
+                file_key: "file_key".to_string(),
+                image_key: Some("image_key".to_string()),
+            },
+            MessagePostNode::Emotion {
+                emoji_type: "SMILE".to_string(),
+            },
+        ]);
+        assert_eq!(post.msg_type(), "post");
+        assert_eq!(
+            post.content(),
+            json!({
+                "zh_cn": {
+                    "title":"title",
+                    "content": [[{"tag":"text","text":"text"},{"tag":"a","text":"text","href":"https://www.feishu.cn"},{"tag":"at","user_id":"user_id"},{"tag":"img","image_key":"image_key"},{"tag":"media","file_key":"file_key","image_key":"image_key"},{"tag":"emotion","emoji_type":"SMILE"}
+                    ]]
+                }}).to_string()
+        );
+    }
 }

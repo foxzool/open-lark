@@ -5,7 +5,7 @@ use uuid::Uuid;
 
 use open_lark::client::LarkClientBuilder;
 use open_lark::service::im::v1::message::{
-    CreateMessageReqBody, CreateMessageReqBuilder, MessagePost, MessagePostElement,
+    CreateMessageReqBody, CreateMessageReqBuilder, MessagePost, MessagePostNode,
     MessageTextBuilder, SendMessageTrait,
 };
 
@@ -29,29 +29,29 @@ fn main() {
     let rich_text_message = MessagePost::zh_cn()
         .title("我是一个标题")
         .append_content(vec![
-            MessagePostElement::Text {
+            MessagePostNode::Text {
                 text: "我是一个文本".to_string(),
                 un_escape: None,
                 style: Some(vec!["bold".to_string(), "underline".to_string()]),
             },
-            MessagePostElement::A {
+            MessagePostNode::A {
                 text: "超链接".to_string(),
                 href: "https://www.feishu.cn".to_string(),
                 style: Some(vec!["bold".to_string(), "italic".to_string()]),
             },
-            MessagePostElement::At {
+            MessagePostNode::At {
                 user_id: "ou_1avnmsbv3k45jnk34j5".to_string(),
                 style: Some(vec!["lineThrough".to_string()]),
             },
         ])
-        .append_content(vec![MessagePostElement::Img {
+        .append_content(vec![MessagePostNode::Img {
             image_key: "img_7ea74629-9191-4176-998c-2e603c9c5e8g".to_string(),
         }])
         // .append_content(vec![MessagePostElement::Media {
         //     file_key: "75235e0c-4f92-430a-a99b-8446610223cg".to_string(),
         //     image_key: Some("img_7ea74629-9191-4176-998c-2e603c9c5e8g".to_string()),
         // }])
-        .append_content(vec![MessagePostElement::Emotion {
+        .append_content(vec![MessagePostNode::Emotion {
             emoji_type: "SMILE".to_string(),
         }])
         ;
