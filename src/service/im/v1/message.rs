@@ -1,6 +1,6 @@
 use log::error;
 use serde::{Deserialize, Serialize};
-use serde_json::{json};
+use serde_json::json;
 
 use crate::core::api_req::ApiReq;
 use crate::core::api_resp::{ApiResp, BaseResp, CodeMsg};
@@ -401,7 +401,7 @@ pub trait SendMessageTrait {
 
 /// 文本 text
 pub struct MessageText {
-    text: String,
+    pub text: String,
 }
 
 pub struct MessageTextBuilder {
@@ -519,9 +519,9 @@ impl MessagePost {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct MessagePostContent {
     /// 富文本消息的标题。
-    title: String,
+    pub title: String,
     /// 富文本消息内容，由多个段落组成，每个段落为一个 node 列表。支持的 node 标签类型及对应参数
-    content: Vec<Vec<MessagePostNode>>,
+    pub content: Vec<Vec<MessagePostNode>>,
 }
 
 //// 富文本消息内容
@@ -576,6 +576,21 @@ pub enum MessagePostNode {
         /// 表情类型，部分可选值请参见表情文案。
         emoji_type: String,
     },
+}
+
+/// 图片消息
+pub struct MessageImage {
+    pub image_key: String,
+}
+
+impl SendMessageTrait for MessageImage {
+    fn msg_type(&self) -> String {
+        "image".to_string()
+    }
+
+    fn content(&self) -> String {
+        json!({"image_key": self.image_key}).to_string()
+    }
 }
 
 #[cfg(test)]
@@ -642,6 +657,19 @@ mod test {
                     "content": [[{"tag":"text","text":"text"},{"tag":"a","text":"text","href":"https://www.feishu.cn"},{"tag":"at","user_id":"user_id"},{"tag":"img","image_key":"image_key"},{"tag":"media","file_key":"file_key","image_key":"image_key"},{"tag":"emotion","emoji_type":"SMILE"}
                     ]]
                 }}).to_string()
+        );
+    }
+
+    #[test]
+    fn test_message_image() {
+        use crate::service::im::v1::message::MessageImage;
+        let image = MessageImage {
+            image_key: "image_key".to_string(),
+        };
+        assert_eq!(image.msg_type(), "image");
+        assert_eq!(
+            image.content(),
+            json!({"image_key": "image_key"}).to_string()
         );
     }
 }
