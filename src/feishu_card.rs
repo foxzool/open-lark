@@ -2,12 +2,13 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-pub use color::*;
+use crate::feishu_card::card_components::content_components::CardPlainText;
+use crate::feishu_card::card_components::FeishuCardColumnSet;
+use crate::feishu_card::color::FeishuCardColor;
 
-use crate::feishu_card::content::{FeishuCardColumnSet, FeishuCardPlainText};
-
-mod color;
-pub mod content;
+pub mod card_components;
+pub mod color;
+pub mod text_size;
 
 /// 飞书卡片
 #[derive(Debug, Serialize, Deserialize, Default)]
@@ -73,7 +74,6 @@ pub struct FeishuCardStyle {
     color: Option<FeishuCardColor>,
 }
 
-pub enum FeishuCardTextSize {}
 
 /// 标题组件
 #[derive(Debug, Serialize, Deserialize, Default)]
@@ -151,7 +151,7 @@ pub struct TextTagList {
     /// 标题标签的标识。固定取值：text_tag
     pub tag: Option<String>,
     /// 标题标签的内容。基于文本组件的 plain_text 模式定义内容。
-    pub text: Option<FeishuCardPlainText>,
+    pub text: Option<CardPlainText>,
     /// 标题标签的颜色，默认为蓝色（blue）
     pub color: Option<FeishuCardColor>,
 }
