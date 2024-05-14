@@ -11,7 +11,7 @@ use crate::core::app_ticket_manager::APP_TICKET_MANAGER;
 use crate::core::cache::{Cache, LocalCache};
 use crate::core::config::Config;
 use crate::core::constants::{
-    AccessTokenType, APP_ACCESS_TOKEN_INTERNAL_URL_PATH, APP_ACCESS_TOKEN_KEY_PREFIX, AppType,
+    AccessTokenType, AppType, APP_ACCESS_TOKEN_INTERNAL_URL_PATH, APP_ACCESS_TOKEN_KEY_PREFIX,
     EXPIRY_DELTA, TENANT_ACCESS_TOKEN_URL_PATH,
 };
 use crate::core::error::LarkAPIError;

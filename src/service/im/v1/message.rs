@@ -596,11 +596,8 @@ impl SendMessageTrait for MessageImage {
 /// 消息卡片
 pub enum MessageInteractive {
     Card,
-    Template
+    Template,
 }
-
-
-
 
 #[cfg(test)]
 mod test {

@@ -2,59 +2,108 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-pub struct MessageCard {
-    config: Option<MessageCardConfig>,
-    header: Option<MessageCardHeader>,
+pub use color::*;
+
+use crate::feishu_card::content::{FeishuCardColumnSet, FeishuCardPlainText};
+
+mod color;
+pub mod content;
+
+/// 飞书卡片
+#[derive(Debug, Serialize, Deserialize, Default)]
+pub struct FeishuCard {
+    /// config 用于配置卡片的全局行为，包括是否允许被转发、是否为共享卡片等。
+    config: Option<FeishuCardConfig>,
+    /// 用于配置卡片的标题
+    #[serde(skip_serializing_if = "Option::is_none")]
+    header: Option<FeishuCardHeader>,
+    /// 卡片的正文内容，支持配置多语言
+    #[serde(skip_serializing_if = "Option::is_none")]
+    elements: Option<Vec<FeishuCardElement>>,
+    /// 卡片的多语言正文内容
+    #[serde(skip_serializing_if = "Option::is_none")]
+    i18n_element: Option<HashMap<FeishuCardLanguage, Vec<FeishuCardElement>>>,
 }
 
-/// 配置卡片属性
+/// 卡片全局行为设置
 #[derive(Debug, Serialize, Deserialize, Default)]
-pub struct MessageCardConfig {
+pub struct FeishuCardConfig {
     /// 是否允许转发卡片。取值：
     ///
-    /// true：允许
-    /// false：不允许
+    /// - true：允许
+    /// - false：不允许
     /// 默认值为 true，该字段要求飞书客户端的版本为 V3.31.0 及以上。
     #[serde(skip_serializing_if = "Option::is_none")]
     enable_forward: Option<bool>,
     /// 是否为共享卡片。取值：
     ///
-    /// true：是共享卡片，更新卡片的内容对所有收到这张卡片的人员可见。
-    /// false：非共享卡片，即独享卡片，仅操作用户可见卡片的更新内容。
+    /// - true：是共享卡片，更新卡片的内容对所有收到这张卡片的人员可见。
+    /// - false：非共享卡片，即独享卡片，仅操作用户可见卡片的更新内容。
+    ///
     /// 默认值为 false。
     #[serde(skip_serializing_if = "Option::is_none")]
     update_multi: Option<bool>,
+    /// 卡片宽度模式。取值：
+    ///
+    /// - default：默认宽度。PC 端宽版、iPad 端上的宽度上限为 600px。
+    /// - fill：自适应屏幕宽度
+    width_mode: Option<FeishuCardWidthMode>,
+    /// 是否使用自定义翻译数据。取值：
+    ///
+    /// - true：在用户点击消息翻译后，使用 i18n 对应的目标语种作为翻译结果。若 i18n 取不到，则使用当前内容请求飞书的机器翻译。
+    /// - false：不使用自定义翻译数据，直接请求飞书的机器翻译。
+    use_custom_translation: Option<bool>,
+    /// 转发的卡片是否仍然支持回传交互。
+    enable_forward_interaction: Option<bool>,
 }
+
+/// 卡片宽度模式
+#[derive(Debug, Serialize, Deserialize, Default)]
+#[serde(rename_all = "lowercase")]
+pub enum FeishuCardWidthMode {
+    /// 默认宽度。PC 端宽版、iPad 端上的宽度上限为 600px。
+    #[default]
+    Default,
+    /// 自适应屏幕宽度
+    Fill,
+}
+
+pub struct FeishuCardStyle {
+    text_size: Option<FeishuCardTextSize>,
+    color: Option<FeishuCardColor>,
+}
+
+pub enum FeishuCardTextSize {}
 
 /// 标题组件
 #[derive(Debug, Serialize, Deserialize, Default)]
-pub struct MessageCardHeader {
+pub struct FeishuCardHeader {
     /// 配置卡片的主标题信息。
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub title: Option<MessageCardTitle>,
+    pub title: Option<FeishuCardTitle>,
     /// 配置卡片的副标题信息。
     ///
     /// 不允许只配置副标题内容。如果只配置副标题，则实际展示为主标题效果。
     /// 副标题内容最多 1 行，超长文案末尾使用 ... 进行省略。
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub subtitle: Option<MessageCardTitle>,
+    pub subtitle: Option<FeishuCardTitle>,
     /// 该对象用于设置标题的前缀图标。一个卡片仅可配置一个标题图标。
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub icon: Option<MessageCardImage>,
+    pub icon: Option<FeishuCardImage>,
     /// 标题主题颜色
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub template: Option<MessageCardHeaderTemplate>,
+    pub template: Option<FeishuCardHeaderTemplate>,
     /// 标题的标签属性。最多可配置 3 个标签内容，如果配置的标签数量超过 3 个，则取前 3 个标签进行展示。标签展示顺序与数组顺序一致。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text_tag_list: Option<TextTagList>,
     /// 标题标签的国际化属性
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub i18n_text_tag_list: HashMap<MessageCardLanguage, Vec<TextTagList>>,
+    pub i18n_text_tag_list: Option<HashMap<FeishuCardLanguage, Vec<TextTagList>>>,
 }
 
 /// 标题信息
 #[derive(Debug, Serialize, Deserialize, Default)]
-pub struct MessageCardTitle {
+pub struct FeishuCardTitle {
     /// 文本标识。固定取值：plain_text
     pub tag: Option<String>,
     /// 卡片主标题内容。
@@ -70,11 +119,11 @@ pub struct MessageCardTitle {
     /// zh_hk：繁体中文（中国香港）
     /// zh_tw：繁体中文（中国台湾）
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub i18n: Option<HashMap<MessageCardLanguage, String>>,
+    pub i18n: Option<HashMap<FeishuCardLanguage, String>>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq, Hash)]
-pub enum MessageCardLanguage {
+pub enum FeishuCardLanguage {
     #[serde(rename = "zh_cn")]
     #[default]
     ZhCN,
@@ -90,7 +139,7 @@ pub enum MessageCardLanguage {
 
 /// 图标
 #[derive(Debug, Serialize, Deserialize, Default)]
-pub struct MessageCardImage {
+pub struct FeishuCardImage {
     /// 图标 key 的获取方式：调用上传图片接口，上传用于发送消息的图片，并在返回值中获取图片的 image_key。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub img_key: Option<String>,
@@ -102,29 +151,15 @@ pub struct TextTagList {
     /// 标题标签的标识。固定取值：text_tag
     pub tag: Option<String>,
     /// 标题标签的内容。基于文本组件的 plain_text 模式定义内容。
-    pub text: Option<MessageCardPlainText>,
+    pub text: Option<FeishuCardPlainText>,
     /// 标题标签的颜色，默认为蓝色（blue）
-    pub color: Option<MessageCardColor>,
-}
-
-/// 文本组件
-#[derive(Debug, Serialize, Deserialize, Default)]
-pub struct MessageCardPlainText {
-    /// 文本元素的标签。两种模式的固定取值：
-    ///
-    /// plain_text：普通文本内容。
-    /// lark_md：支持部分 Markdown 语法的文本内容。关于 Markdown 语法的详细介绍，可参见
-    pub tag: String,
-    /// 文本内容。
-    pub content: String,
-    /// 内容显示行数。该字段仅支持 text 的 plain_text 模式，不支持 lark_md 模式。
-    pub lines: Option<i32>,
+    pub color: Option<FeishuCardColor>,
 }
 
 /// 标题样式表
 #[derive(Debug, Serialize, Deserialize, Default)]
 #[serde(rename_all = "lowercase")]
-pub enum MessageCardHeaderTemplate {
+pub enum FeishuCardHeaderTemplate {
     Blue,
     Wathet,
     Turquoise,
@@ -158,4 +193,15 @@ pub enum MessageCardColor {
     Red,
     Purple,
     Carmine,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub enum FeishuCardElement {
+    ColumnSet(FeishuCardColumnSet),
+    Div,
+    Markdown,
+    Hr,
+    Img,
+    Note,
+    Actions,
 }

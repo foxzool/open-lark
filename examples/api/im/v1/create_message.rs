@@ -53,8 +53,7 @@ fn main() {
         // }])
         .append_content(vec![MessagePostNode::Emotion {
             emoji_type: "SMILE".to_string(),
-        }])
-        ;
+        }]);
 
     let req = CreateMessageReqBuilder::new()
         .receive_id_type("chat_id")

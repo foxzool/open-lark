@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 use std::fmt::Debug;
 
-use serde::{Deserialize, Serialize};
 use serde::de::DeserializeOwned;
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 pub trait MessageTrait: Serialize + DeserializeOwned {
@@ -136,7 +136,7 @@ pub struct ShareChatMessage {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum InteractiveMessage {
     TemplateCard(TemplateCard),
-    JsonCard(MessageCard),
+    JsonCard(FeishuCard),
 }
 
 impl Default for InteractiveMessage {
@@ -162,7 +162,7 @@ impl MessageTrait for InteractiveMessage {
 
 /// 消息卡片
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct MessageCard {
+pub struct FeishuCard {
     pub header: Header,
     /// 卡片的正文内容，支持配置多语言。如果需要配置多语言环境时，需要将 elements 替换为 i18n_elements，并且还需要同时对卡片标题进行多语言配置。详情可参见配置多语言内容。
     ///

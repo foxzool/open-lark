@@ -19,7 +19,7 @@ impl ChatsService {
     pub fn list(
         &self,
         req: &ListChatReq,
-        option: Option<RequestOption>
+        option: Option<RequestOption>,
     ) -> SDKResult<BaseResp<ListChatRespData>> {
         let mut api_req = req.api_req.clone();
         api_req.http_method = "GET".to_string();

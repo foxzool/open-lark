@@ -1,18 +1,12 @@
-use ureq::Response;
 use crate::message::MessageTrait;
+use ureq::Response;
 
 pub trait LarkBot {
     /// 发送原始消息
-    fn send_raw_message(
-        &self,
-        body: impl serde::Serialize + Send,
-    ) -> Response;
+    fn send_raw_message(&self, body: impl serde::Serialize + Send) -> Response;
 
     /// 发送消息结构体
-    fn send_message(
-        &self,
-        message: impl MessageTrait + Send,
-    ) -> Response;
+    fn send_message(&self, message: impl MessageTrait + Send) -> Response;
 }
 
 pub mod custom_bot;

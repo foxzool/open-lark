@@ -54,10 +54,10 @@ impl ApiResp {
         match self.header.iter().find(|v| *v == HTTP_HEADER_KEY_LOG_ID) {
             None => self
                 .header
-                .iter().find(|v| HTTP_HEADER_KEY_REQUEST_ID == *v)
+                .iter()
+                .find(|v| HTTP_HEADER_KEY_REQUEST_ID == *v)
                 .unwrap()
-                .to_string()
-                ,
+                .to_string(),
             Some(log_id) => log_id.to_string(),
         }
     }

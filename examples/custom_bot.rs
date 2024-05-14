@@ -3,12 +3,10 @@ use std::thread::sleep;
 
 use dotenvy::dotenv;
 
-
 use open_lark::message::{
-    CustomRichTextMessage, InteractiveMessage, MessageCard, RichTextParagraph, TextMessage,
+    CustomRichTextMessage, FeishuCard, InteractiveMessage, RichTextParagraph, TextMessage,
 };
 use open_lark::prelude::*;
-
 
 fn main() {
     dotenv().expect(".env file not found");
@@ -43,7 +41,7 @@ fn main() {
     bot.send_message(message);
 
     // 发送消息卡片
-    let message = InteractiveMessage::JsonCard(MessageCard {
+    let message = InteractiveMessage::JsonCard(FeishuCard {
         header: Default::default(),
         elements: Default::default(),
         ..Default::default()

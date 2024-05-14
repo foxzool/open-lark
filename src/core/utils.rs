@@ -1,8 +1,5 @@
 use crate::core::constants::VERSION;
 
 pub fn user_agent() -> String {
-    format!(
-        "open-lark/{}",
-       VERSION
-    )
+    format!("open-lark/{}", VERSION)
 }

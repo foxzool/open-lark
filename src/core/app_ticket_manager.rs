@@ -8,7 +8,7 @@ use crate::core::api_req::ApiReq;
 use crate::core::api_resp::{ApiResp, CodeMsg};
 use crate::core::cache::{Cache, LocalCache};
 use crate::core::config::Config;
-use crate::core::constants::{AccessTokenType, APP_TICKET_KEY_PREFIX, APPLY_APP_TICKET_PATH};
+use crate::core::constants::{AccessTokenType, APPLY_APP_TICKET_PATH, APP_TICKET_KEY_PREFIX};
 use crate::core::http::Transport;
 use crate::core::SDKResult;
 

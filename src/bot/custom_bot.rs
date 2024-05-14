@@ -27,14 +27,14 @@ impl CustomBot {
 }
 
 impl LarkBot for CustomBot {
-    fn send_raw_message(&self, body: impl Serialize + Send) -> Response  {
+    fn send_raw_message(&self, body: impl Serialize + Send) -> Response {
         self.client
             .post(&self.webhook_url)
             .send_json(&body)
             .unwrap()
     }
 
-    fn send_message(&self, message: impl MessageTrait + Send) -> Response  {
+    fn send_message(&self, message: impl MessageTrait + Send) -> Response {
         let body = serde_json::json!({
            "msg_type": message.message_type(),
             "content": message

@@ -1,7 +1,5 @@
-use thiserror::Error;
 use crate::core::api_resp::CodeMsg;
-
-
+use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum LarkAPIError {
@@ -22,5 +20,5 @@ pub enum LarkAPIError {
     #[error("Code: {0}")]
     CodeError(CodeMsg),
     #[error("App ticket is empty")]
-    AppTicketEmpty
+    AppTicketEmpty,
 }
