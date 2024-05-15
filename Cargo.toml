@@ -23,11 +23,17 @@ thiserror = "1.0.60"
 log = "0.4.21"
 url = { version = "2.5.0", features = ["serde"] }
 ureq = { version = "2.9.7", features = ["json", "socks-proxy"] }
+strum = "0.26.2"
+strum_macros = "0.26.2"
 
 [dev-dependencies]
 dotenvy = "0.15.7"
 env_logger = "0.11.3"
 uuid = { version = "1.8.0", features = ["v4"] }
+
+[[example]]
+name = "feishu_card"
+path = "examples/feishu_card.rs"
 
 
 [[example]]

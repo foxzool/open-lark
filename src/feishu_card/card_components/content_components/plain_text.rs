@@ -1,8 +1,9 @@
 use serde::{Deserialize, Serialize};
+use crate::feishu_card::color::Color;
 
-use crate::feishu_card::color::FeishuCardColor;
-use crate::feishu_card::icon::FeishuCardIcon;
-use crate::feishu_card::text_size::FeishuCardTextSize;
+use crate::feishu_card::icon::FeishuCardTextIcon;
+use crate::feishu_card::text::FeishuCardTextSize;
+use crate::feishu_card::text::TextAlign;
 
 /// 文本组件
 #[derive(Debug, Serialize, Deserialize)]
@@ -10,9 +11,11 @@ pub struct CardPlainText {
     /// 组件的标签。普通文本组件的标签为 div。
     pub tag: String,
     /// 配置卡片的普通文本信息。
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub text: Option<PlainTextContent>,
     /// 添加图标作为文本前缀图标。支持自定义或使用图标库中的图标。
-    pub icon: Option<PlantTextIcon>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub icon: Option<FeishuCardTextIcon>,
 }
 
 impl Default for CardPlainText {
@@ -42,7 +45,7 @@ pub struct PlainTextContent {
     /// default：客户端浅色主题模式下为黑色；客户端深色主题模式下为白色
     /// 颜色的枚举值。详情参考颜色枚举值
     #[serde(skip_serializing_if = "Option::is_none")]
-    text_color: Option<FeishuCardColor>,
+    text_color: Option<Color>,
     /// 文本对齐方式。可取值：
     ///
     /// - left：左对齐
@@ -55,31 +58,6 @@ pub struct PlainTextContent {
     lines: Option<i32>,
 }
 
-/// 添加图标作为文本前缀图标。支持自定义或使用图标库中的图标。
-#[derive(Debug, Serialize, Deserialize)]
-pub struct PlantTextIcon {
-    /// 图标类型的标签
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tag: Option<PlaneTextIconType>,
-    /// 图标库中图标的 token。当 tag 为 standard_icon 时生效
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub token: Option<FeishuCardIcon>,
-    /// 图标的颜色。支持设置线性和面性图标（即 token 末尾为 outlined 或 filled 的图标）的颜色。当 tag 为 standard_icon 时生效。
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub color: Option<FeishuCardColor>,
-    /// 自定义前缀图标的图片 key。当 tag 为 custom_icon 时生效。
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub img_key: Option<String>,
-}
-
-/// 图标类型的标签
-#[derive(Debug, Serialize, Deserialize)]
-pub enum PlaneTextIconType {
-    #[serde(rename = "standard_icon")]
-    Standard,
-    #[serde(rename = "custom_icon")]
-    Custom,
-}
 
 /// 文本元素的标签
 #[derive(Debug, Serialize, Deserialize, Default)]
@@ -93,22 +71,10 @@ pub enum TextTag {
     LarkMd,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub enum TextAlign {
-    /// 左对齐
-    #[serde(rename = "left")]
-    Left,
-    /// 居中对齐
-    #[serde(rename = "center")]
-    Center,
-    /// 右对齐
-    #[serde(rename = "right")]
-    Right,
-}
-
 #[cfg(test)]
 mod test {
     use serde_json::json;
+    use crate::feishu_card::icon::TextIconType;
 
     #[test]
     fn test_message_card_text() {
@@ -119,14 +85,14 @@ mod test {
                 tag: TextTag::PlainText,
                 content: "这是一段普通文本示例。".to_string(),
                 text_size: Some(FeishuCardTextSize::Normal),
-                text_color: Some(FeishuCardColor::Default),
+                text_color: Some("default".to_string()),
                 text_align: Some(TextAlign::Center),
                 lines: None,
             }),
-            icon: Some(PlantTextIcon {
-                tag: Some(PlaneTextIconType::Standard),
-                token: Some(FeishuCardIcon::AppDefaultFilled),
-                color: Some(FeishuCardColor::Blue),
+            icon: Some(FeishuCardTextIcon {
+                tag: Some(TextIconType::StandardIcon),
+                token: Some("app-default_filled".to_string()),
+                color: Some("blue".to_string()),
                 img_key: None,
             }),
         };
