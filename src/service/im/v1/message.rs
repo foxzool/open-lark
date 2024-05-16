@@ -30,7 +30,6 @@ impl MessageService {
 
         let api_resp = Transport::request(api_req, &self.config, option)?;
 
-
         Ok(api_resp.try_into()?)
     }
 
@@ -417,7 +416,7 @@ impl MessageTextBuilder {
     }
 
     pub fn text(mut self, text: &str) -> Self {
-        self.text = self.text + text;
+        self.text += text;
         self
     }
 
@@ -427,7 +426,7 @@ impl MessageTextBuilder {
     }
 
     pub fn line(mut self) -> Self {
-        self.text = self.text + "\n";
+        self.text += "\n";
         self
     }
 
@@ -437,7 +436,7 @@ impl MessageTextBuilder {
     }
 
     pub fn at_all(mut self) -> Self {
-        self.text = self.text + "<at user_id=\"all\">name=\"全体成员\"</at>";
+        self.text += "<at user_id=\"all\">name=\"全体成员\"</at>";
         self
     }
 
@@ -525,7 +524,7 @@ pub struct MessagePostContent {
     pub content: Vec<Vec<MessagePostNode>>,
 }
 
-//// 富文本消息内容
+/// 富文本消息内容
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(tag = "tag")]
 pub enum MessagePostNode {
