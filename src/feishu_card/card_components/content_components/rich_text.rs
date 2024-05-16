@@ -1,35 +1,33 @@
 use std::collections::HashMap;
-use std::str::FromStr;
 
 use serde::{Deserialize, Serialize};
 
 use crate::feishu_card::href::FeishuCardHrefVal;
 use crate::feishu_card::icon::FeishuCardTextIcon;
-use crate::feishu_card::text::{FeishuCardTextSize, TextAlign};
 
 /// Markdown 组件
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FeishuCardMarkdown {
     /// 组件的标签。富文本组件固定取值为 markdown。
-    pub tag: String,
+    tag: String,
     /// 设置文本内容的对齐方式。可取值有：
     ///
     /// left：左对齐
     /// center：居中对齐
     /// right：右对齐
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub text_align: Option<TextAlign>,
+    text_align: Option<String>,
     /// 文本大小。
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub text_size: Option<FeishuCardTextSize>,
+    text_size: Option<String>,
     /// 添加图标作为文本前缀图标。支持自定义或使用图标库中的图标。
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub icon: Option<FeishuCardTextIcon>,
+    icon: Option<FeishuCardTextIcon>,
     /// 配置差异化跳转链接，实现“不同设备跳转链接不同”的效果。
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub href: Option<HashMap<String, FeishuCardHrefVal>>,
+    href: Option<HashMap<String, FeishuCardHrefVal>>,
     /// Markdown 文本内容
-    pub content: String,
+    content: String,
 }
 
 impl Default for FeishuCardMarkdown {
@@ -57,14 +55,12 @@ impl FeishuCardMarkdownBuilder {
     }
 
     pub fn text_align(mut self, text_align: &str) -> Self {
-        let text_align = TextAlign::from_str(text_align).unwrap();
-        self.markdown.text_align = Some(text_align);
+        self.markdown.text_align = Some(text_align.to_string());
         self
     }
 
     pub fn text_size(mut self, text_size: &str) -> Self {
-        let text_size =  FeishuCardTextSize::from_str(text_size).unwrap();
-        self.markdown.text_size = Some(text_size);
+        self.markdown.text_size = Some(text_size.to_string());
         self
     }
 
@@ -102,7 +98,7 @@ impl FeishuCardMarkdownBuilder {
 #[cfg(test)]
 mod test {
     use crate::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdownBuilder;
-    use crate::feishu_card::href::{ FeishuCardHrefValBuilder};
+    use crate::feishu_card::href::FeishuCardHrefValBuilder;
 
     #[test]
     fn test_markdown() {

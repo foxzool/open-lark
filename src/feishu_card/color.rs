@@ -1,1 +1,1 @@
-pub type Color = String;
+

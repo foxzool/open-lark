@@ -1,20 +1,20 @@
-use std::str::FromStr;
 use serde::{Deserialize, Serialize};
-use strum_macros::EnumString;
-use crate::feishu_card::color::Color;
 
 /// 添加图标作为文本前缀图标。支持自定义或使用图标库中的图标。
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FeishuCardTextIcon {
-    /// 图标类型的标签
+    /// 图标类型的标签。可取值：
+    ///
+    /// standard_icon：使用图标库中的图标。
+    /// custom_icon：使用用自定义图片作为图标。
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tag: Option<TextIconType>,
+    pub tag: Option<String>,
     /// 图标库中图标的 token。当 tag 为 standard_icon 时生效
     #[serde(skip_serializing_if = "Option::is_none")]
     pub token: Option<String>,
     /// 图标的颜色。支持设置线性和面性图标（即 token 末尾为 outlined 或 filled 的图标）的颜色。当 tag 为 standard_icon 时生效。
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub color: Option<Color>,
+    pub color: Option<String>,
     /// 自定义前缀图标的图片 key。当 tag 为 custom_icon 时生效。
     #[serde(skip_serializing_if = "Option::is_none")]
     pub img_key: Option<String>,
@@ -28,7 +28,7 @@ impl FeishuCardTextIconBuilder {
     pub fn new() -> Self {
         FeishuCardTextIconBuilder {
             icon: FeishuCardTextIcon {
-                tag: None,
+                tag: Some("standard_icon".to_string()),
                 token: None,
                 color: None,
                 img_key: None,
@@ -37,8 +37,7 @@ impl FeishuCardTextIconBuilder {
     }
 
     pub fn tag(mut self, tag: &str) -> Self {
-        let tag = TextIconType::from_str(tag).unwrap();
-        self.icon.tag = Some(tag);
+        self.icon.tag = Some(tag.to_string());
         self
     }
 
@@ -60,14 +59,4 @@ impl FeishuCardTextIconBuilder {
     pub fn build(self) -> FeishuCardTextIcon {
         self.icon
     }
-}
-
-/// 图标类型的标签
-#[derive(Debug, Serialize, Deserialize, EnumString)]
-#[strum(serialize_all = "snake_case")]
-pub enum TextIconType {
-    #[serde(rename = "standard_icon")]
-    StandardIcon,
-    #[serde(rename = "custom_icon")]
-    CustomIcon,
 }

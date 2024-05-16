@@ -6,11 +6,10 @@ use serde_json::json;
 use strum_macros::EnumString;
 
 use crate::feishu_card::card_components::column_set::FeishuCardColumnSet;
-use crate::feishu_card::card_components::content_components::plain_text::{CardPlainText, CardPlainTextBuilder, PlainTextContent};
+use crate::feishu_card::card_components::content_components::plain_text::PlainTextContent;
 use crate::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdown;
 use crate::feishu_card::card_components::content_components::title::FeishuCardTitle;
-use crate::feishu_card::color::Color;
-use crate::feishu_card::text::FeishuCardTextSize;
+use crate::feishu_card::text::CustomTextSize;
 use crate::service::im::v1::message::SendMessageTrait;
 
 pub mod card_components;
@@ -231,10 +230,10 @@ pub enum FeishuCardWidthMode {
 pub struct FeishuCardStyle {
     /// 分别为移动端和桌面端添加自定义字号。用于在普通文本组件和富文本组件 JSON 中设置字号属性。支持添加多个自定义字号对象。
     #[serde(skip_serializing_if = "Option::is_none")]
-    text_size: Option<HashMap<String, FeishuCardTextSize>>,
+    text_size: Option<HashMap<String, CustomTextSize>>,
     /// 分别为飞书客户端浅色主题和深色主题添加 RGBA 语法。用于在组件 JSON 中设置颜色属性。支持添加多个自定义颜色对象。
     #[serde(skip_serializing_if = "Option::is_none")]
-    color: Option<HashMap<String, Color>>,
+    color: Option<HashMap<String, String>>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq, Hash, Clone, Copy)]
@@ -275,7 +274,7 @@ pub struct TextTag {
     /// 标题标签的内容。基于文本组件的 plain_text 模式定义内容。
     text: Option<PlainTextContent>,
     /// 标题标签的颜色，默认为蓝色（blue）
-    color: Option<Color>,
+    color: Option<String>,
 }
 
 impl Default for TextTag {

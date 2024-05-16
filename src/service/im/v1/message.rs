@@ -503,7 +503,7 @@ impl MessagePost {
         }
     }
 
-    pub fn append_content(mut self, contents: Vec<MessagePostNode>) -> Self {
+    pub fn append_content(self, contents: Vec<MessagePostNode>) -> Self {
         match self {
             Self::ZhCN(mut content) => {
                 content.content.push(contents);

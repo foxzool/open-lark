@@ -171,7 +171,6 @@ impl Default for FeishuCardIcon {
             img_key: None,
         }
     }
-
 }
 
 pub struct FeishuCardIconBuilder {
@@ -242,9 +241,7 @@ impl FeishuCardUdIconBuilder {
 mod test {
     use serde_json::json;
 
-    use crate::feishu_card::card_components::content_components::plain_text::{
-        CardPlainTextBuilder, PlainTextContentBuilder,
-    };
+    use crate::feishu_card::card_components::content_components::plain_text::PlainTextContentBuilder;
     use crate::feishu_card::TextTagBuilder;
 
     use super::*;

@@ -1,10 +1,9 @@
 use std::collections::HashMap;
 use std::fmt::Debug;
 
-use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
+use serde::de::DeserializeOwned;
 use serde_json::Value;
-use crate::feishu_card::color::Color;
 
 pub trait MessageTrait: Serialize + DeserializeOwned {
     const MESSAGE_TYPE: &'static str;
@@ -222,7 +221,7 @@ pub struct HeaderIcon {
 pub struct TextTagList {
     tag: Option<String>,
     text: Option<String>,
-    color: Option<Color>,
+    color: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
