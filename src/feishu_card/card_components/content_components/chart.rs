@@ -11,6 +11,7 @@ pub struct FeishuCardChart {
     /// - 2:1
     /// - 4:3
     /// - 16:9
+    #[serde(skip_serializing_if = "Option::is_none")]
     aspect_ratio: Option<String>,
     /// 图表的主题样式。当图表内存在多个颜色时，可使用该字段调整颜色样式。若你在 chart_spec 字段中声明了样式类属性，该字段无效。
     ///
@@ -19,6 +20,7 @@ pub struct FeishuCardChart {
     /// - complementary：互补色。
     /// - converse：反差色。
     /// - primary：主色。
+    #[serde(skip_serializing_if = "Option::is_none")]
     color_theme: Option<String>,
     /// 基于 VChart 的图表定义
     chart_spec: Value,
@@ -30,11 +32,13 @@ pub struct FeishuCardChart {
     /// false：
     /// PC 端：图表不支持在独立飞书窗口查看
     /// 移动端：图表不支持在点击后全屏查看
+    #[serde(skip_serializing_if = "Option::is_none")]
     preview: Option<bool>,
     /// 图表组件的高度，可取值：
     ///
     /// auto：默认值，高度将根据宽高比自动计算。
     /// [1,999]px：自定义固定图表高度，此时宽高比属性 aspect_ratio 失效。
+    #[serde(skip_serializing_if = "Option::is_none")]
     height: Option<String>,
 }
 
@@ -95,7 +99,7 @@ impl FeishuCardChartBuilder {
 #[cfg(test)]
 mod test {
     use serde_json::json;
-    use crate::feishu_card::card_components::content_components::chart::{FeishuCardChartBuilder, FeishuCardChart};
+    use crate::feishu_card::card_components::content_components::chart::{FeishuCardChartBuilder};
 
     #[test]
     fn test_chart() {

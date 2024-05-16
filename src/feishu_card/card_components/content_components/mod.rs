@@ -7,3 +7,4 @@ pub mod divider;
 pub mod user_profile;
 pub mod user_list;
 pub mod chart;
+pub mod table;
