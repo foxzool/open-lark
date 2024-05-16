@@ -22,8 +22,8 @@ pub mod card_components;
 pub mod color;
 pub mod href;
 pub mod icon;
-pub mod text;
 pub mod interactions;
+pub mod text;
 
 /// 飞书卡片
 #[derive(Debug, Serialize, Deserialize, Default)]
@@ -376,7 +376,7 @@ pub enum FeishuCardElement {
 #[cfg(test)]
 mod test {
     use crate::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdownBuilder;
-    use crate::feishu_card::href::FeishuCardHrefValBuilder;
+    use crate::feishu_card::href::FeishuCardHrefVal;
     use crate::feishu_card::icon::FeishuCardTextIcon;
 
     #[test]
@@ -397,11 +397,11 @@ mod test {
                             ,
                     )
                     .href(
-                        FeishuCardHrefValBuilder::new("xxx")
+                        FeishuCardHrefVal::new("xxx")
                             .pc_url("xxx1")
                             .ios_url("xxx2")
                             .android_url("xxx3")
-                            .build(),
+                            
                     )
                     .content("notation字号\n标准emoji 😁😢🌞💼🏆❌✅\n*斜体*\n**粗体**\n~~删除线~~\n[差异化跳转]($urlVal)\n<at id=all></at>")
                     .build(),

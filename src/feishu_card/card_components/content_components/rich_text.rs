@@ -98,16 +98,16 @@ impl FeishuCardMarkdownBuilder {
 #[cfg(test)]
 mod test {
     use crate::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdownBuilder;
-    use crate::feishu_card::href::FeishuCardHrefValBuilder;
+    use crate::feishu_card::href::FeishuCardHrefVal;
 
     #[test]
     fn test_markdown() {
         let markdown = FeishuCardMarkdownBuilder::new()
             .href(
-                FeishuCardHrefValBuilder::new("xxx1")
+                FeishuCardHrefVal::new("xxx1")
                     .pc_url("xxx2")
                     .ios_url("xxx3")
-                    .android_url("xxx4").build(),
+                    .android_url("xxx4"),
             )
             .content("普通文本\n标准emoji😁😢🌞💼🏆❌✅\n*斜体*\n**粗体**\n~~删除线~~\n文字链接\n差异化跳转\n<at id=all></at>")
            .build();
