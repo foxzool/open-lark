@@ -23,6 +23,7 @@ pub mod color;
 pub mod href;
 pub mod icon;
 pub mod text;
+pub mod interactions;
 
 /// 飞书卡片
 #[derive(Debug, Serialize, Deserialize, Default)]
