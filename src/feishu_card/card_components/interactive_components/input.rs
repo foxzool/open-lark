@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::feishu_card::card_components::content_components::plain_text::PlainTextContent;
+use crate::feishu_card::card_components::content_components::plain_text::PlainText;
 
 /// 输入框组件
 #[derive(Debug, Serialize, Deserialize)]
@@ -27,7 +27,7 @@ pub struct FeishuCardInput {
     disabled: Option<bool>,
     /// 输入框中的占位文本。
     #[serde(skip_serializing_if = "Option::is_none")]
-    placeholder: Option<PlainTextContent>,
+    placeholder: Option<PlainText>,
     /// 输入框中为用户预填写的内容。展示为用户在输入框中输入文本后待提交的样式。
     #[serde(skip_serializing_if = "Option::is_none")]
     default_value: Option<String>,
@@ -43,7 +43,7 @@ pub struct FeishuCardInput {
     max_length: Option<u32>,
     /// 文本标签，即对输入框的描述，用于提示用户要填写的内容。多用于表单容器中内嵌的输入框组件。
     #[serde(skip_serializing_if = "Option::is_none")]
-    label: Option<PlainTextContent>,
+    label: Option<PlainText>,
     /// 文本标签的位置。可取值：
     ///
     /// - top：文本标签位于输入框上方
@@ -90,8 +90,8 @@ impl Default for FeishuCardInput {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct InputConfirm {
-    title: PlainTextContent,
-    text: PlainTextContent,
+    title: PlainText,
+    text: PlainText,
 }
 
 pub struct InputConfirmBuilder {
@@ -102,18 +102,18 @@ impl InputConfirmBuilder {
     pub fn new() -> Self {
         InputConfirmBuilder {
             confirm: InputConfirm {
-                title: PlainTextContent::default(),
-                text: PlainTextContent::default(),
+                title: PlainText::default(),
+                text: PlainText::default(),
             },
         }
     }
 
-    pub fn title(mut self, title: PlainTextContent) -> Self {
+    pub fn title(mut self, title: PlainText) -> Self {
         self.confirm.title = title;
         self
     }
 
-    pub fn text(mut self, text: PlainTextContent) -> Self {
+    pub fn text(mut self, text: PlainText) -> Self {
         self.confirm.text = text;
         self
     }
@@ -128,14 +128,14 @@ pub struct InputFallback {
     /// 降级文案的标签，固定取值为 fallback_text。
     tag: String,
     /// 降级文案的内容。
-    text: PlainTextContent,
+    text: PlainText,
 }
 
 impl Default for InputFallback {
     fn default() -> Self {
         InputFallback {
             tag: "fallback_text".to_string(),
-            text: PlainTextContent::default(),
+            text: PlainText::default(),
         }
     }
 }
@@ -151,7 +151,7 @@ impl InputFallbackBuilder {
         }
     }
 
-    pub fn text(mut self, text: PlainTextContent) -> Self {
+    pub fn text(mut self, text: PlainText) -> Self {
         self.fallback.text = text;
         self
     }
@@ -187,7 +187,7 @@ impl FeishuCardInputBuilder {
         self
     }
 
-    pub fn placeholder(mut self, placeholder: PlainTextContent) -> Self {
+    pub fn placeholder(mut self, placeholder: PlainText) -> Self {
         self.input.placeholder = Some(placeholder);
         self
     }
@@ -207,7 +207,7 @@ impl FeishuCardInputBuilder {
         self
     }
 
-    pub fn label(mut self, label: PlainTextContent) -> Self {
+    pub fn label(mut self, label: PlainText) -> Self {
         self.input.label = Some(label);
         self
     }
@@ -241,7 +241,7 @@ impl FeishuCardInputBuilder {
 mod tests {
     use serde_json::json;
 
-    use crate::feishu_card::card_components::content_components::plain_text::PlainTextContentBuilder;
+    use crate::feishu_card::card_components::content_components::plain_text::PlainText;
 
     use super::*;
 
@@ -251,22 +251,22 @@ mod tests {
             .name("input1")
             .required(false)
             .disabled(false)
-            .placeholder(PlainTextContentBuilder::new().content("请输入").build())
+            .placeholder(PlainText::new("请输入"))
             .default_value("demo")
             .width("default")
             .max_length(5)
-            .label(PlainTextContentBuilder::new().content("left").build())
-            .label_position("top")
+            .label(PlainText::new("请输入文本："))
+            .label_position("left")
             .value(json!({"k": "v"}))
             .confirm(
                 InputConfirmBuilder::new()
-                    .title(PlainTextContentBuilder::new().content("title").build())
-                    .text(PlainTextContentBuilder::new().content("content").build())
+                    .title(PlainText::new("title"))
+                    .text(PlainText::new("content"))
                     .build(),
             )
             .fallback(
                 InputFallbackBuilder::new()
-                    .text(PlainTextContentBuilder::new().content("自定义声明").build())
+                    .text(PlainText::new("自定义声明"))
                     .build(),
             )
             .build();

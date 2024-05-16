@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::feishu_card::card_components::content_components::image::FeishuCardImage;
-use crate::feishu_card::card_components::content_components::plain_text::PlainTextContent;
+use crate::feishu_card::card_components::content_components::plain_text::PlainText;
 use crate::feishu_card::icon::FeishuCardTextIcon;
 
 /// 备注
@@ -28,7 +28,7 @@ impl Default for FeishuCardNote {
 pub enum FeishuCardNoteElement {
     Icon(FeishuCardTextIcon),
     Image(FeishuCardImage),
-    Text(PlainTextContent),
+    Text(PlainText),
 }
 
 /// Note 构建器
@@ -53,7 +53,7 @@ impl FeishuCardNoteBuilder {
         self
     }
 
-    pub fn text(mut self, text: PlainTextContent) -> Self {
+    pub fn text(mut self, text: PlainText) -> Self {
         self.note.elements.push(FeishuCardNoteElement::Text(text));
         self
     }
@@ -66,7 +66,6 @@ impl FeishuCardNoteBuilder {
 #[cfg(test)]
 mod test {
     use crate::feishu_card::card_components::content_components::image::FeishuCardImageBuilder;
-    use crate::feishu_card::card_components::content_components::plain_text::PlainTextContentBuilder;
     use crate::feishu_card::icon::FeishuCardTextIconBuilder;
 
     #[test]
@@ -82,18 +81,14 @@ mod test {
                     .img_key("img_v2_041b28e3-5680-48c2-9af2-497ace79333g")
                     .build(),
             )
-            .text(PlainTextContentBuilder::new().content("备注信息1").build())
+            .text(PlainText::new("备注信息1"))
             .image(
                 FeishuCardImageBuilder::new()
                     .img_key("img_v2_041b28e3-5680-48c2-9af2-497ace79333g")
-                    .alt(
-                        PlainTextContentBuilder::new()
-                            .content("这是备注图片")
-                            .build(),
-                    )
+                    .alt(PlainText::new("这是备注图片"))
                     .build(),
             )
-            .text(PlainTextContentBuilder::new().content("备注信息2").build())
+            .text(PlainText::new("备注信息2"))
             .build();
         let json = json!({
           "tag": "note",

@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::feishu_card::card_components::content_components::plain_text::PlainTextContent;
+use crate::feishu_card::card_components::content_components::plain_text::PlainText;
 
 /// 图片组件
 #[derive(Debug, Serialize, Deserialize)]
@@ -11,10 +11,10 @@ pub struct FeishuCardImage {
     img_key: String,
     /// 悬浮（hover）在图片上时展示的说明文案
     #[serde(skip_serializing_if = "Option::is_none")]
-    alt: Option<PlainTextContent>,
+    alt: Option<PlainText>,
     /// 图片标题
     #[serde(skip_serializing_if = "Option::is_none")]
-    title: Option<PlainTextContent>,
+    title: Option<PlainText>,
     /// 图片的圆角半径，单位是像素（px）。取值遵循以下格式：
     ///
     /// [0,∞]px
@@ -83,12 +83,12 @@ impl FeishuCardImageBuilder {
         self
     }
 
-    pub fn alt(mut self, alt: PlainTextContent) -> Self {
+    pub fn alt(mut self, alt: PlainText) -> Self {
         self.image.alt = Some(alt);
         self
     }
 
-    pub fn title(mut self, title: PlainTextContent) -> Self {
+    pub fn title(mut self, title: PlainText) -> Self {
         self.image.title = Some(title);
         self
     }

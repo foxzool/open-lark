@@ -241,7 +241,7 @@ impl FeishuCardUdIconBuilder {
 mod test {
     use serde_json::json;
 
-    use crate::feishu_card::card_components::content_components::plain_text::PlainTextContentBuilder;
+    use crate::feishu_card::card_components::content_components::plain_text::PlainText;
     use crate::feishu_card::TextTagBuilder;
 
     use super::*;
@@ -259,12 +259,9 @@ mod test {
                 .collect(),
             )
             .build();
-        let json = serde_json::to_string(&title).unwrap();
+        let json = json!({"tag":"plain_text","content":"content","i18n":{"zh_cn":"中文","en_us":"english"}});
 
-        assert_eq!(
-            json,
-            r#"{"tag":"plain_text","content":"content","i18n":{"zh_cn":"中文","en_us":"english"}}"#
-        );
+        assert_eq!(serde_json::to_value(&title).unwrap(), json);
     }
 
     #[test]
@@ -275,11 +272,11 @@ mod test {
             .template("blue")
             .text_tag_list(vec![
                 TextTagBuilder::new()
-                    .text(PlainTextContentBuilder::new().content("标签 1").build())
+                    .text(PlainText::new("标签 1"))
                     .color("neutral")
                     .build(),
                 TextTagBuilder::new()
-                    .text(PlainTextContentBuilder::new().content("标签 2").build())
+                    .text(PlainText::new("标签 2"))
                     .color("neutral")
                     .build(),
             ])

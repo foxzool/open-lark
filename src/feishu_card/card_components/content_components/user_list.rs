@@ -143,13 +143,43 @@ mod test {
         assert_eq!(serde_json::to_value(&user_list).unwrap(), json);
 
         let user_list = FeishuCardUserListBuilder::new()
-            .size("medium")
-            .show_avatar(true)
+            .lines(1)
             .show_name(true)
+            .show_avatar(true)
+            .size("large")
             .persons(vec![
-                "ou_449b53ad6aee526f7ed311b216aabcef",
-                "ou_449b53ad6aee526f7ed311b216aabcef",
+                "ou_0fdb0e7663af7128e7d9f8adeb2b689e",
+                "ou_47a09ae5a1353f3276924161dc63a2be",
             ])
+            .icon(
+                FeishuCardTextIconBuilder::new()
+                    .token("chat-forbidden_outlined")
+                    .color("orange")
+                    .img_key("img_v2_38811724")
+                    .build(),
+            )
             .build();
+
+        let json = json!({
+          "tag": "person_list",
+          "lines": 1, // 最大显示行数，默认关闭不限制最大显示行数。
+          "show_name": true, // 是否展示人员对应的用户名。
+          "show_avatar": true, // 是否展示人员对应的头像。
+          "size": "large", // 人员头像的尺寸。
+          "persons": [
+            // 人员列表。人员的 ID 支持 open_id , user_id, union_id
+            { "id": "ou_0fdb0e7663af7128e7d9f8adeb2b689e" },
+            { "id": "ou_47a09ae5a1353f3276924161dc63a2be" }
+          ],
+          "icon": {
+            // 前缀图标。
+            "tag": "standard_icon", // 图标类型。
+            "token": "chat-forbidden_outlined", // 图标的 token。仅在 tag 为 standard_icon 时生效。
+            "color": "orange", // 图标颜色。仅在 tag 为 standard_icon 时生效。
+            "img_key": "img_v2_38811724" // 图片的 key。仅在 tag 为 custom_icon 时生效。
+          }
+        });
+
+        assert_eq!(serde_json::to_value(&user_list).unwrap(), json)
     }
 }

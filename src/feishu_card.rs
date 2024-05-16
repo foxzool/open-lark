@@ -10,7 +10,7 @@ use crate::{
         card_components::{
             containers::column_set::FeishuCardColumnSet,
             content_components::{
-                plain_text::PlainTextContent, rich_text::FeishuCardMarkdown, title::FeishuCardTitle,
+                plain_text::PlainText, rich_text::FeishuCardMarkdown, title::FeishuCardTitle,
             },
         },
         text::CustomTextSize,
@@ -278,7 +278,7 @@ pub struct TextTag {
     /// 标题标签的标识。固定取值：text_tag
     tag: String,
     /// 标题标签的内容。基于文本组件的 plain_text 模式定义内容。
-    text: Option<PlainTextContent>,
+    text: Option<PlainText>,
     /// 标题标签的颜色，默认为蓝色（blue）
     color: Option<String>,
 }
@@ -305,7 +305,7 @@ impl TextTagBuilder {
         }
     }
 
-    pub fn text(mut self, text: PlainTextContent) -> Self {
+    pub fn text(mut self, text: PlainText) -> Self {
         self.text_tag.text = Some(text);
         self
     }

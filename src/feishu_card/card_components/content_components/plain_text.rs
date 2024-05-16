@@ -9,7 +9,7 @@ pub struct CardPlainText {
     tag: String,
     /// 配置卡片的普通文本信息。
     #[serde(skip_serializing_if = "Option::is_none")]
-    text: Option<PlainTextContent>,
+    text: Option<PlainText>,
     /// 添加图标作为文本前缀图标。支持自定义或使用图标库中的图标。
     #[serde(skip_serializing_if = "Option::is_none")]
     icon: Option<FeishuCardTextIcon>,
@@ -36,7 +36,7 @@ impl CardPlainTextBuilder {
         }
     }
 
-    pub fn text(mut self, text: PlainTextContent) -> Self {
+    pub fn text(mut self, text: PlainText) -> Self {
         self.text.text = Some(text);
         self
     }
@@ -51,8 +51,9 @@ impl CardPlainTextBuilder {
     }
 }
 
+/// text 结构体
 #[derive(Debug, Serialize, Deserialize)]
-pub struct PlainTextContent {
+pub struct PlainText {
     /// 文本类型的标签。可取值：
     ///
     /// plain_text：普通文本内容
@@ -81,9 +82,9 @@ pub struct PlainTextContent {
     lines: Option<i32>,
 }
 
-impl Default for PlainTextContent {
+impl Default for PlainText {
     fn default() -> Self {
-        PlainTextContent {
+        PlainText {
             tag: "plain_text".to_string(),
             content: "".to_string(),
             text_size: None,
@@ -94,14 +95,11 @@ impl Default for PlainTextContent {
     }
 }
 
-pub struct PlainTextContentBuilder {
-    text: PlainTextContent,
-}
-
-impl PlainTextContentBuilder {
-    pub fn new() -> Self {
-        PlainTextContentBuilder {
-            text: PlainTextContent::default(),
+impl PlainText {
+    pub fn new(content: &str) -> Self {
+        Self {
+            content: content.to_string(),
+            ..Default::default()
         }
     }
 
@@ -110,38 +108,34 @@ impl PlainTextContentBuilder {
     /// plain_text：普通文本内容
     /// lark_md：支持部分 Markdown 语法的文本内容
     pub fn tag(mut self, tag: &str) -> Self {
-        self.text.tag = tag.to_string();
+        self.tag = tag.to_string();
         self
     }
 
     /// 文本内容
     pub fn content(mut self, content: &str) -> Self {
-        self.text.content = content.to_string();
+        self.content = content.to_string();
         self
     }
 
     pub fn text_size(mut self, text_size: &str) -> Self {
-        self.text.text_size = Some(text_size.to_string());
+        self.text_size = Some(text_size.to_string());
         self
     }
 
     pub fn text_color(mut self, text_color: &str) -> Self {
-        self.text.text_color = Some(text_color.to_string());
+        self.text_color = Some(text_color.to_string());
         self
     }
 
     pub fn text_align(mut self, text_align: &str) -> Self {
-        self.text.text_align = Some(text_align.to_string());
+        self.text_align = Some(text_align.to_string());
         self
     }
 
     pub fn lines(mut self, lines: i32) -> Self {
-        self.text.lines = Some(lines);
+        self.lines = Some(lines);
         self
-    }
-
-    pub fn build(self) -> PlainTextContent {
-        self.text
     }
 }
 
@@ -156,12 +150,10 @@ mod test {
         use super::*;
         let text = CardPlainTextBuilder::new()
             .text(
-                PlainTextContentBuilder::new()
-                    .content("这是一段普通文本示例。")
+                PlainText::new("这是一段普通文本示例。")
                     .text_size("cus-0")
                     .text_align("center")
-                    .text_color("default")
-                    .build(),
+                    .text_color("default"),
             )
             .icon(
                 FeishuCardTextIconBuilder::new()
