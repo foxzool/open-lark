@@ -5,12 +5,18 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use strum_macros::EnumString;
 
-use crate::feishu_card::card_components::column_set::FeishuCardColumnSet;
-use crate::feishu_card::card_components::content_components::plain_text::PlainTextContent;
-use crate::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdown;
-use crate::feishu_card::card_components::content_components::title::FeishuCardTitle;
-use crate::feishu_card::text::CustomTextSize;
-use crate::service::im::v1::message::SendMessageTrait;
+use crate::{
+    feishu_card::{
+        card_components::{
+            containers::column_set::FeishuCardColumnSet,
+            content_components::{
+                plain_text::PlainTextContent, rich_text::FeishuCardMarkdown, title::FeishuCardTitle,
+            },
+        },
+        text::CustomTextSize,
+    },
+    service::im::v1::message::SendMessageTrait,
+};
 
 pub mod card_components;
 pub mod color;
