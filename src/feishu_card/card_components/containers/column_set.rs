@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use crate::feishu_card::card_components::interactive_components::button::FeishuCardButton;
 
 /// 多列布局的参数
 #[derive(Debug, Serialize, Deserialize)]
@@ -101,6 +102,7 @@ pub struct FeishuCardColumSetColumn {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(untagged)]
 pub enum FeishuCardColumnSetElement {
-
+    Button(FeishuCardButton)
 }

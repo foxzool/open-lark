@@ -94,32 +94,22 @@ pub struct InputConfirm {
     text: PlainText,
 }
 
-pub struct InputConfirmBuilder {
-    confirm: InputConfirm,
-}
-
-impl InputConfirmBuilder {
-    pub fn new() -> Self {
-        InputConfirmBuilder {
-            confirm: InputConfirm {
-                title: PlainText::default(),
-                text: PlainText::default(),
-            },
+impl InputConfirm {
+    pub fn new(title: &str, text: &str) -> Self {
+        InputConfirm {
+            title: PlainText::new(title),
+            text: PlainText::new(text),
         }
     }
 
     pub fn title(mut self, title: PlainText) -> Self {
-        self.confirm.title = title;
+        self.title = title;
         self
     }
 
     pub fn text(mut self, text: PlainText) -> Self {
-        self.confirm.text = text;
+        self.text = text;
         self
-    }
-
-    pub fn build(self) -> InputConfirm {
-        self.confirm
     }
 }
 
@@ -131,33 +121,17 @@ pub struct InputFallback {
     text: PlainText,
 }
 
-impl Default for InputFallback {
-    fn default() -> Self {
-        InputFallback {
-            tag: "fallback_text".to_string(),
-            text: PlainText::default(),
-        }
-    }
-}
-
-pub struct InputFallbackBuilder {
-    fallback: InputFallback,
-}
-
-impl InputFallbackBuilder {
+impl InputFallback {
     pub fn new() -> Self {
-        InputFallbackBuilder {
-            fallback: InputFallback::default(),
+        Self {
+            tag: "fallback_text".to_string(),
+            text: PlainText::new(""),
         }
     }
 
     pub fn text(mut self, text: PlainText) -> Self {
-        self.fallback.text = text;
+        self.text = text;
         self
-    }
-
-    pub fn build(self) -> InputFallback {
-        self.fallback
     }
 }
 
@@ -258,18 +232,10 @@ mod tests {
             .label(PlainText::new("请输入文本："))
             .label_position("left")
             .value(json!({"k": "v"}))
-            .confirm(
-                InputConfirmBuilder::new()
-                    .title(PlainText::new("title"))
-                    .text(PlainText::new("content"))
-                    .build(),
-            )
-            .fallback(
-                InputFallbackBuilder::new()
-                    .text(PlainText::new("自定义声明"))
-                    .build(),
-            )
-            .build();
+            .confirm(InputConfirm::new("title", "content"))
+            .fallback(InputFallback::new().text(PlainText::new("自定义声明")))
+            .build()
+            ;
 
         let json = json!({
           "tag": "input", // 输入框的标签。

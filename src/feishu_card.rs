@@ -377,7 +377,7 @@ pub enum FeishuCardElement {
 mod test {
     use crate::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdownBuilder;
     use crate::feishu_card::href::FeishuCardHrefValBuilder;
-    use crate::feishu_card::icon::FeishuCardTextIconBuilder;
+    use crate::feishu_card::icon::FeishuCardTextIcon;
 
     #[test]
     fn test_build() {
@@ -389,12 +389,12 @@ mod test {
                     .text_size("heading")
                     .text_align("center")
                     .icon(
-                        FeishuCardTextIconBuilder::new()
+                        FeishuCardTextIcon::new()
                             .tag("standard_icon")
                             .token("chat-forbidden_outlined")
                             .color("orange")
                             .img_key("img_v2_38811724")
-                            .build(),
+                            ,
                     )
                     .href(
                         FeishuCardHrefValBuilder::new("xxx")

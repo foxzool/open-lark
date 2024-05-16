@@ -109,7 +109,7 @@ mod test {
     use serde_json::json;
 
     use crate::feishu_card::card_components::content_components::user_list::FeishuCardUserListBuilder;
-    use crate::feishu_card::icon::FeishuCardTextIconBuilder;
+    use crate::feishu_card::icon::FeishuCardTextIcon;
 
     #[test]
     fn test_user_list() {
@@ -120,11 +120,10 @@ mod test {
             .size("small")
             .persons(vec!["user_id"])
             .icon(
-                FeishuCardTextIconBuilder::new()
+                FeishuCardTextIcon::new()
                     .tag("standard_icon")
                     .token("token")
-                    .color("red")
-                    .build(),
+                    .color("red"),
             )
             .build();
         let json = json!({
@@ -152,11 +151,10 @@ mod test {
                 "ou_47a09ae5a1353f3276924161dc63a2be",
             ])
             .icon(
-                FeishuCardTextIconBuilder::new()
+                FeishuCardTextIcon::new()
                     .token("chat-forbidden_outlined")
                     .color("orange")
-                    .img_key("img_v2_38811724")
-                    .build(),
+                    .img_key("img_v2_38811724"),
             )
             .build();
 

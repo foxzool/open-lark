@@ -4,14 +4,14 @@ use serde_json::Value;
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum Behaviors {
-    Jump(JumpBehavior),
+    OpenUrl(OpenUrlBehavior),
     Callback(CallbackBehavior),
     Form(FormBehavior),
 }
 
 /// 跳转链接交互
 #[derive(Debug, Serialize, Deserialize)]
-pub struct JumpBehavior {
+pub struct OpenUrlBehavior {
     /// 声明交互类型。要配置跳转链接交互，取固定值 open_url。
     r#type: String,
     /// 兜底跳转地址。
@@ -27,7 +27,7 @@ pub struct JumpBehavior {
     pc_url: Option<String>,
 }
 
-impl JumpBehavior {
+impl OpenUrlBehavior {
     pub fn new(default_url: &str) -> Self {
         Self {
             r#type: "open_url".to_string(),
@@ -107,12 +107,12 @@ mod test {
     use serde_json::json;
 
     use crate::feishu_card::interactions::{
-        Behaviors, CallbackBehavior, FormBehavior, JumpBehavior,
+        Behaviors, CallbackBehavior, FormBehavior, OpenUrlBehavior,
     };
 
     #[test]
-    fn test_jump() {
-        let jump_behavior = Behaviors::Jump(JumpBehavior::new("xxx"));
+    fn test_open_url() {
+        let jump_behavior = Behaviors::OpenUrl(OpenUrlBehavior::new("xxx"));
         let json = json!({
             "type": "open_url",
             "default_url": "xxx",

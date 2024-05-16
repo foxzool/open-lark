@@ -82,24 +82,15 @@ pub struct PlainText {
     lines: Option<i32>,
 }
 
-impl Default for PlainText {
-    fn default() -> Self {
-        PlainText {
+impl PlainText {
+    pub fn new(content: &str) -> Self {
+        Self {
             tag: "plain_text".to_string(),
-            content: "".to_string(),
+            content: content.to_string(),
             text_size: None,
             text_color: None,
             text_align: None,
             lines: None,
-        }
-    }
-}
-
-impl PlainText {
-    pub fn new(content: &str) -> Self {
-        Self {
-            content: content.to_string(),
-            ..Default::default()
         }
     }
 
@@ -143,8 +134,6 @@ impl PlainText {
 mod test {
     use serde_json::json;
 
-    use crate::feishu_card::icon::FeishuCardTextIconBuilder;
-
     #[test]
     fn test_message_card_text() {
         use super::*;
@@ -156,10 +145,9 @@ mod test {
                     .text_color("default"),
             )
             .icon(
-                FeishuCardTextIconBuilder::new()
+                FeishuCardTextIcon::new()
                     .token("app-default_filled")
-                    .color("blue")
-                    .build(),
+                    .color("blue"),
             )
             .build();
         let json = serde_json::to_value(&text).unwrap();

@@ -66,7 +66,7 @@ impl FeishuCardNoteBuilder {
 #[cfg(test)]
 mod test {
     use crate::feishu_card::card_components::content_components::image::FeishuCardImageBuilder;
-    use crate::feishu_card::icon::FeishuCardTextIconBuilder;
+    use crate::feishu_card::icon::FeishuCardTextIcon;
 
     #[test]
     fn test_note() {
@@ -75,11 +75,11 @@ mod test {
 
         let note = FeishuCardNoteBuilder::new()
             .icon(
-                FeishuCardTextIconBuilder::new()
+                FeishuCardTextIcon::new()
                     .tag("custom_icon")
                     .token("chat-forbidden_outlined")
                     .img_key("img_v2_041b28e3-5680-48c2-9af2-497ace79333g")
-                    .build(),
+                   ,
             )
             .text(PlainText::new("备注信息1"))
             .image(
