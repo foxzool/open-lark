@@ -125,7 +125,6 @@ mod test {
     use serde_json::json;
 
     use crate::feishu_card::card_components::content_components::plain_text::PlainText;
-    use crate::feishu_card::card_components::interactive_components::input::InputConfirm;
     use crate::feishu_card::card_components::interactive_components::multi_select_static::MultiSelectStatic;
     use crate::feishu_card::card_components::interactive_components::select_static::SelectStaticOption;
     use crate::feishu_card::icon::FeishuCardTextIcon;
