@@ -5,3 +5,4 @@ pub mod rich_text;
 pub mod multi_image_layout;
 pub mod divider;
 pub mod user_profile;
+pub mod user_list;
