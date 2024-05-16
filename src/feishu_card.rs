@@ -2,12 +2,16 @@ use std::collections::HashMap;
 use std::str::FromStr;
 
 use serde::{Deserialize, Serialize};
+use serde_json::json;
+use strum_macros::EnumString;
 
 use crate::feishu_card::card_components::column_set::FeishuCardColumnSet;
-use crate::feishu_card::card_components::content_components::plain_text::CardPlainText;
+use crate::feishu_card::card_components::content_components::plain_text::{CardPlainText, CardPlainTextBuilder, PlainTextContent};
 use crate::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdown;
+use crate::feishu_card::card_components::content_components::title::FeishuCardTitle;
 use crate::feishu_card::color::Color;
 use crate::feishu_card::text::FeishuCardTextSize;
+use crate::service::im::v1::message::SendMessageTrait;
 
 pub mod card_components;
 pub mod color;
@@ -23,16 +27,26 @@ pub struct FeishuCard {
     pub config: Option<FeishuCardConfig>,
     /// 用于配置卡片的标题
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub i18n_header: Option<HashMap<FeishuCardLanguage, FeishuCardHeader>>,
+    pub i18n_header: Option<HashMap<FeishuCardLanguage, FeishuCardTitle>>,
     /// 卡片的多语言正文内容
     #[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_elements: Option<HashMap<FeishuCardLanguage, Vec<FeishuCardElement>>>,
 }
 
+impl SendMessageTrait for FeishuCard {
+    fn msg_type(&self) -> String {
+        "interactive".to_string()
+    }
+
+    fn content(&self) -> String {
+        json!(self).to_string()
+    }
+}
+
 pub struct FeishuCardBuilder {
     current_language: FeishuCardLanguage,
     config: Option<FeishuCardConfig>,
-    i18n_header: Option<HashMap<FeishuCardLanguage, FeishuCardHeader>>,
+    i18n_header: Option<HashMap<FeishuCardLanguage, FeishuCardTitle>>,
     i18n_elements: Option<HashMap<FeishuCardLanguage, Vec<FeishuCardElement>>>,
 }
 
@@ -40,7 +54,7 @@ impl FeishuCardBuilder {
     pub fn new() -> Self {
         let lng = FeishuCardLanguage::ZhCN;
         let mut header = HashMap::new();
-        header.insert(lng, FeishuCardHeader::default());
+        header.insert(lng, FeishuCardTitle::default());
         let mut elements = HashMap::new();
         elements.insert(lng, vec![]);
         FeishuCardBuilder {
@@ -59,7 +73,7 @@ impl FeishuCardBuilder {
     pub fn add_language(mut self, language: &str) -> Self {
         let lng: FeishuCardLanguage = language.parse().unwrap();
         let mut header = HashMap::new();
-        header.insert(lng, FeishuCardHeader::default());
+        header.insert(lng, FeishuCardTitle::default());
         let mut elements = HashMap::<FeishuCardLanguage, Vec<FeishuCardElement>>::new();
         elements.insert(lng, vec![]);
         self
@@ -70,7 +84,15 @@ impl FeishuCardBuilder {
         self
     }
 
-    pub fn header(mut self, header: FeishuCardHeader) -> Self {
+    pub fn header(mut self, header: FeishuCardTitle) -> Self {
+        let mut i18n_header = self.i18n_header.unwrap_or_default();
+        let mut origin_header = i18n_header.entry(self.current_language).or_default();
+        *origin_header = header;
+        self.i18n_header = Some(i18n_header);
+        self
+    }
+
+    pub fn push_header(mut self, header: FeishuCardTitle) -> Self {
         let mut i18n_header = self.i18n_header.unwrap_or_default();
         let mut origin_header = i18n_header.entry(self.current_language).or_default();
         *origin_header = header;
@@ -215,53 +237,6 @@ pub struct FeishuCardStyle {
     color: Option<HashMap<String, Color>>,
 }
 
-/// 标题组件
-#[derive(Debug, Serialize, Deserialize, Default)]
-pub struct FeishuCardHeader {
-    /// 配置卡片的主标题信息。
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub title: Option<FeishuCardTitle>,
-    /// 配置卡片的副标题信息。
-    ///
-    /// 不允许只配置副标题内容。如果只配置副标题，则实际展示为主标题效果。
-    /// 副标题内容最多 1 行，超长文案末尾使用 ... 进行省略。
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub subtitle: Option<FeishuCardTitle>,
-    /// 该对象用于设置标题的前缀图标。一个卡片仅可配置一个标题图标。
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub icon: Option<FeishuCardImage>,
-    /// 标题主题颜色
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template: Option<FeishuCardHeaderTemplate>,
-    /// 标题的标签属性。最多可配置 3 个标签内容，如果配置的标签数量超过 3 个，则取前 3 个标签进行展示。标签展示顺序与数组顺序一致。
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub text_tag_list: Option<TextTagList>,
-    /// 标题标签的国际化属性
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub i18n_text_tag_list: Option<HashMap<FeishuCardLanguage, Vec<TextTagList>>>,
-}
-
-/// 标题信息
-#[derive(Debug, Serialize, Deserialize, Default)]
-pub struct FeishuCardTitle {
-    /// 文本标识。固定取值：plain_text
-    pub tag: Option<String>,
-    /// 卡片主标题内容。
-    ///
-    /// 必须配置 content 或 i18n 两个属性的其中一个。如果同时配置仅生效 i18n。
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub content: Option<String>,
-    /// 国际化文本内容，其中：
-    ///
-    /// zh_cn：简体中文
-    /// en_us：英文
-    /// ja_jp：日文
-    /// zh_hk：繁体中文（中国香港）
-    /// zh_tw：繁体中文（中国台湾）
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub i18n: Option<HashMap<FeishuCardLanguage, String>>,
-}
-
 #[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq, Hash, Clone, Copy)]
 pub enum FeishuCardLanguage {
     #[serde(rename = "zh_cn")]
@@ -292,28 +267,58 @@ impl FromStr for FeishuCardLanguage {
     }
 }
 
-/// 图标
-#[derive(Debug, Serialize, Deserialize, Default)]
-pub struct FeishuCardImage {
-    /// 图标 key 的获取方式：调用上传图片接口，上传用于发送消息的图片，并在返回值中获取图片的 image_key。
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub img_key: Option<String>,
+/// 标题的标签属性。最多可配置 3 个标签内容，如果配置的标签数量超过 3 个，则取前 3 个标签进行展示。标签展示顺序与数组顺序一致。
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TextTag {
+    /// 标题标签的标识。固定取值：text_tag
+    tag: String,
+    /// 标题标签的内容。基于文本组件的 plain_text 模式定义内容。
+    text: Option<PlainTextContent>,
+    /// 标题标签的颜色，默认为蓝色（blue）
+    color: Option<Color>,
 }
 
-/// 标题的标签属性。最多可配置 3 个标签内容，如果配置的标签数量超过 3 个，则取前 3 个标签进行展示。标签展示顺序与数组顺序一致。
-#[derive(Debug, Serialize, Deserialize, Default)]
-pub struct TextTagList {
-    /// 标题标签的标识。固定取值：text_tag
-    pub tag: Option<String>,
-    /// 标题标签的内容。基于文本组件的 plain_text 模式定义内容。
-    pub text: Option<CardPlainText>,
-    /// 标题标签的颜色，默认为蓝色（blue）
-    pub color: Option<Color>,
+impl Default for TextTag {
+    fn default() -> Self {
+        TextTag {
+            tag: "text_tag".to_string(),
+            text: None,
+            color: None,
+        }
+    }
+}
+
+/// 标题标签构建器
+pub struct TextTagBuilder {
+    text_tag: TextTag,
+}
+
+impl TextTagBuilder {
+    pub fn new() -> Self {
+        TextTagBuilder {
+            text_tag: TextTag::default(),
+        }
+    }
+
+    pub fn text(mut self, text: PlainTextContent) -> Self {
+        self.text_tag.text = Some(text);
+        self
+    }
+
+    pub fn color(mut self, color: &str) -> Self {
+        self.text_tag.color = Some(color.to_string());
+        self
+    }
+
+    pub fn build(self) -> TextTag {
+        self.text_tag
+    }
 }
 
 /// 标题样式表
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Serialize, Deserialize, Default, EnumString)]
 #[serde(rename_all = "lowercase")]
+#[strum(serialize_all = "lowercase")]
 pub enum FeishuCardHeaderTemplate {
     Blue,
     Wathet,
@@ -351,11 +356,12 @@ pub enum MessageCardColor {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(untagged)]
 pub enum FeishuCardElement {
     ColumnSet(FeishuCardColumnSet),
+    Hr,
     Div,
     Markdown(FeishuCardMarkdown),
-    Hr,
     Img,
     Note,
     Actions,

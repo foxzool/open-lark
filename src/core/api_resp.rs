@@ -79,6 +79,8 @@ impl Display for CodeMsg {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ErrorInfo {
+    #[serde(rename = "key", default, skip_serializing_if = "Option::is_none")]
+    pub log_id: Option<String>,
     #[serde(rename = "details", default, skip_serializing_if = "Vec::is_empty")]
     pub details: Vec<CodeErrorDetail>,
     #[serde(

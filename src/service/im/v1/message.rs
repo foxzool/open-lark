@@ -30,6 +30,7 @@ impl MessageService {
 
         let api_resp = Transport::request(api_req, &self.config, option)?;
 
+
         Ok(api_resp.try_into()?)
     }
 

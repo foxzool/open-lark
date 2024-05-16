@@ -3,6 +3,7 @@ use std::io::Read;
 
 use bytes::Bytes;
 use log::debug;
+use serde_json::Value;
 use ureq::Request;
 
 use crate::core::api_req::ApiReq;
@@ -50,12 +51,11 @@ impl Transport {
         for _i in 0..2 {
             let req = ReqTranslator::translate(http_req, access_token_type, config, &option)?;
             debug!("Req:{:?}", req);
-            println!(
-                "body {}",
-                String::from_utf8(http_req.body.clone().to_vec()).unwrap()
-            );
-            raw_resp = Self::do_send(req, &http_req.body)?;
+            if let Ok(some_json) = serde_json::from_slice::<Value>(&http_req.body) {
+                debug!("body json {}", some_json.to_string());
+            }
 
+            raw_resp = Self::do_send(req, &http_req.body)?;
             debug!("Res:{:?}", raw_resp);
 
             let file_download_success = option.file_upload && raw_resp.status_code == 200;
@@ -114,6 +114,7 @@ impl Transport {
             }
             Err(err) => {
                 let resp = err.into_response().unwrap();
+                // 返回4xx或5xx状态码， 但可以读取响应体
                 return match resp.into_json::<CodeMsg>() {
                     Ok(code_msg) => Err(LarkAPIError::CodeError(code_msg)),
                     Err(err) => Err(LarkAPIError::IOErr(err)),

@@ -9,13 +9,13 @@ use crate::feishu_card::text::TextAlign;
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CardPlainText {
     /// 组件的标签。普通文本组件的标签为 div。
-    pub tag: String,
+    tag: String,
     /// 配置卡片的普通文本信息。
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub text: Option<PlainTextContent>,
+    text: Option<PlainTextContent>,
     /// 添加图标作为文本前缀图标。支持自定义或使用图标库中的图标。
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub icon: Option<FeishuCardTextIcon>,
+    icon: Option<FeishuCardTextIcon>,
 }
 
 impl Default for CardPlainText {
@@ -27,6 +27,33 @@ impl Default for CardPlainText {
         }
     }
 }
+
+pub struct CardPlainTextBuilder {
+    text: CardPlainText,
+}
+
+impl CardPlainTextBuilder {
+    pub fn new() -> Self {
+        CardPlainTextBuilder {
+            text: CardPlainText::default(),
+        }
+    }
+
+    pub fn text(mut self, text: PlainTextContent) -> Self {
+        self.text.text = Some(text);
+        self
+    }
+
+    pub fn icon(mut self, icon: FeishuCardTextIcon) -> Self {
+        self.text.icon = Some(icon);
+        self
+    }
+
+    pub fn build(self) -> CardPlainText {
+        self.text
+    }
+}
+
 
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct PlainTextContent {
@@ -56,6 +83,48 @@ pub struct PlainTextContent {
     /// 内容最大显示行数，超出设置行的内容用 ... 省略。
     #[serde(skip_serializing_if = "Option::is_none")]
     lines: Option<i32>,
+}
+
+
+pub struct PlainTextContentBuilder {
+    text: PlainTextContent,
+}
+
+impl PlainTextContentBuilder {
+    pub fn new() -> Self {
+        PlainTextContentBuilder {
+            text: PlainTextContent::default(),
+        }
+    }
+
+    pub fn content(mut self, content: &str) -> Self {
+        self.text.content = content.to_string();
+        self
+    }
+
+    pub fn text_size(mut self, text_size: FeishuCardTextSize) -> Self {
+        self.text.text_size = Some(text_size);
+        self
+    }
+
+    pub fn text_color(mut self, text_color: Color) -> Self {
+        self.text.text_color = Some(text_color);
+        self
+    }
+
+    pub fn text_align(mut self, text_align: TextAlign) -> Self {
+        self.text.text_align = Some(text_align);
+        self
+    }
+
+    pub fn lines(mut self, lines: i32) -> Self {
+        self.text.lines = Some(lines);
+        self
+    }
+
+    pub fn build(self) -> PlainTextContent {
+        self.text
+    }
 }
 
 
