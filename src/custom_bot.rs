@@ -5,7 +5,7 @@ use base64::prelude::BASE64_STANDARD;
 use bytes::Bytes;
 use hmac::{Hmac, Mac};
 use log::debug;
-use serde_json::json;
+use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
 use ureq::Response;
 
@@ -38,10 +38,12 @@ impl CustomBot {
 
 impl CustomBot {
     pub fn send_message(&self, message: impl SendMessageTrait) -> SDKResult<ApiResp> {
-        let json = json!({
+        let mut json = json!({
             "msg_type": message.msg_type(),
             "content": message.content()
         });
+
+        self.check_sign(&mut json);
 
         Transport::do_send(
             self.client.post(&self.webhook_url),
@@ -56,14 +58,7 @@ impl CustomBot {
             "card": message.content()
         });
 
-        if let Some(secret) = self.secret.as_ref() {
-            let now = chrono::Local::now().timestamp();
-            json["timestamp"] = serde_json::to_value(now).unwrap();
-            let sign = CustomBot::sign(now, secret);
-            json["sign"] = serde_json::to_value(sign).unwrap();
-        }
-
-        println!("{}", json);
+        self.check_sign(&mut json);
 
         Transport::do_send(
             self.client.post(&self.webhook_url),
@@ -71,6 +66,16 @@ impl CustomBot {
         )
     }
 
+    fn check_sign(&self, json: &mut Value) {
+        if let Some(secret) = self.secret.as_ref() {
+            let now = chrono::Local::now().timestamp();
+            json["timestamp"] = serde_json::to_value(now).unwrap();
+            let sign = CustomBot::sign(now, secret);
+            json["sign"] = serde_json::to_value(sign).unwrap();
+        }
+    }
+
+    /// 计算签名
     fn sign(timestamp: i64, secret: &str) -> String {
         let string_to_sign = format!("{}\n{}", timestamp, secret);
         let mut hmac: Hmac<Sha256> = Hmac::new_from_slice(string_to_sign.as_bytes()).unwrap();
