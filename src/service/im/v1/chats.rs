@@ -57,18 +57,18 @@ impl<'a> Iterator for ListChatIterator<'a> {
         }
         match self.service.list(&self.req, self.option.clone()) {
             Ok(resp) => {
-                if resp.success() {
-                    self.has_more = resp.data.has_more;
-                    if resp.data.has_more {
+                if let Some(data) = resp.data {
+                    self.has_more = data.has_more;
+                    if data.has_more {
                         self.req
                             .api_req
                             .query_params
-                            .insert("page_token".to_string(), resp.data.page_token.to_string());
-                        Some(resp.data.items)
-                    } else if resp.data.items.is_empty() {
+                            .insert("page_token".to_string(), data.page_token.to_string());
+                        Some(data.items)
+                    } else if data.items.is_empty() {
                         None
                     } else {
-                        Some(resp.data.items)
+                        Some(data.items)
                     }
                 } else {
                     error!("Error: {}", resp.error_msg());

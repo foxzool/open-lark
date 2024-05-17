@@ -5,13 +5,16 @@ use serde::{Deserialize, Serialize};
 
 use crate::core::constants::{HTTP_HEADER_KEY_LOG_ID, HTTP_HEADER_KEY_REQUEST_ID};
 
+/// 业务返回值
 #[derive(Debug, Serialize, Deserialize)]
 pub struct BaseResp<T> {
+    /// 返回值的原始值
     #[serde(skip)]
     pub api_resp: ApiResp,
     #[serde(flatten)]
     pub code_msg: CodeMsg,
-    pub data: T,
+    /// 具体数据
+    pub data: Option<T>,
 }
 
 impl<T> BaseResp<T> {
@@ -40,9 +43,20 @@ impl<T: for<'a> Deserialize<'a>> TryInto<BaseResp<T>> for ApiResp {
     type Error = serde_json::Error;
 
     fn try_into(self) -> Result<BaseResp<T>, Self::Error> {
-        let mut resp = serde_json::from_slice::<BaseResp<T>>(&self.raw_body)?;
-        resp.api_resp = self;
-        Ok(resp)
+        match serde_json::from_slice::<BaseResp<T>>(&self.raw_body) {
+            Ok(mut resp) => {
+                resp.api_resp = self;
+                Ok(resp)
+            }
+            Err(_) => {
+                let code_msg = serde_json::from_slice::<CodeMsg>(&self.raw_body)?;
+                Ok(BaseResp {
+                    api_resp: self,
+                    code_msg,
+                    data: None,
+                })
+            }
+        }
     }
 }
 
