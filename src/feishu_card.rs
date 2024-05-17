@@ -317,39 +317,3 @@ pub enum FeishuCardElement {
     Note,
     Actions,
 }
-
-#[cfg(test)]
-mod test {
-    use crate::feishu_card::href::FeishuCardHrefVal;
-    use crate::feishu_card::icon::FeishuCardTextIcon;
-
-    #[test]
-    fn test_build() {
-        use super::*;
-        let card = FeishuCard::new()
-            .push_element(FeishuCardElement::Hr)
-            .push_element(FeishuCardElement::Markdown(
-                FeishuCardMarkdown::new()
-                    .text_size("heading")
-                    .text_align("center")
-                    .icon(
-                        FeishuCardTextIcon::new()
-                            .tag("standard_icon")
-                            .token("chat-forbidden_outlined")
-                            .color("orange")
-                            .img_key("img_v2_38811724")
-                            ,
-                    )
-                    .href(
-                        FeishuCardHrefVal::new().url("xxx")
-                            .pc_url("xxx1")
-                            .ios_url("xxx2")
-                            .android_url("xxx3")
-                            
-                    )
-                    .content("notation字号\n标准emoji 😁😢🌞💼🏆❌✅\n*斜体*\n**粗体**\n~~删除线~~\n[差异化跳转]($urlVal)\n<at id=all></at>"),
-            ))
-            .build();
-        let json = serde_json::to_value(&card).unwrap();
-    }
-}

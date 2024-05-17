@@ -1,25 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::feishu_card::card_components::containers::repeat::RepeatContainer;
-use crate::feishu_card::card_components::content_components::chart::FeishuCardChart;
-use crate::feishu_card::card_components::content_components::divider::FeishuCardDivider;
-use crate::feishu_card::card_components::content_components::image::FeishuCardImage;
-use crate::feishu_card::card_components::content_components::multi_image_layout::FeishuCardMultiImageLayout;
-use crate::feishu_card::card_components::content_components::note::FeishuCardNote;
-use crate::feishu_card::card_components::content_components::plain_text::FeishuCardText;
-use crate::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdown;
-use crate::feishu_card::card_components::content_components::user_list::FeishuCardUserList;
-use crate::feishu_card::card_components::content_components::user_profile::FeishuCardUserProfile;
-use crate::feishu_card::card_components::interactive_components::button::FeishuCardButton;
-use crate::feishu_card::card_components::interactive_components::checker::Checker;
-use crate::feishu_card::card_components::interactive_components::date_picker::DatePicker;
-use crate::feishu_card::card_components::interactive_components::date_time_picker::DateTimePicker;
-use crate::feishu_card::card_components::interactive_components::input::FeishuCardInput;
-use crate::feishu_card::card_components::interactive_components::multi_select_person::MultiSelectPerson;
-use crate::feishu_card::card_components::interactive_components::multi_select_static::MultiSelectStatic;
-use crate::feishu_card::card_components::interactive_components::picker_time::PickerTime;
-use crate::feishu_card::card_components::interactive_components::select_person::SelectPerson;
-use crate::feishu_card::card_components::interactive_components::select_static::SelectStatic;
+use crate::feishu_card::card_components::Element;
 use crate::feishu_card::href::FeishuCardHrefVal;
 
 /// 多列布局的参数
@@ -172,7 +153,7 @@ pub struct Column {
     #[serde(skip_serializing_if = "Option::is_none")]
     padding: Option<String>,
     /// 列容器中内嵌的组件。可内嵌组件参考上文嵌套关系
-    elements: Vec<ColumnSetAllowElement>,
+    elements: Vec<Element>,
     /// 设置点击列时的交互配置。当前仅支持跳转交互。如果布局容器内有交互组件，则优先响应交互组件定义的交互。
     #[serde(skip_serializing_if = "Option::is_none")]
     action: Option<ColumnAction>,
@@ -223,7 +204,7 @@ impl Column {
         self
     }
 
-    pub fn elements(mut self, elements: Vec<ColumnSetAllowElement>) -> Self {
+    pub fn elements(mut self, elements: Vec<Element>) -> Self {
         self.elements = elements;
         self
     }
@@ -253,32 +234,6 @@ impl ColumnAction {
         self.multi_url = Some(multi_url);
         self
     }
-}
-
-/// 分栏组件支持内嵌的组件
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum ColumnSetAllowElement {
-    ColumnSet(ColumnSetContainer),
-    PlainText(FeishuCardText),
-    Markdown(FeishuCardMarkdown),
-    Image(FeishuCardImage),
-    InputForm(FeishuCardInput),
-    MultiImage(FeishuCardMultiImageLayout),
-    Divider(FeishuCardDivider),
-    UserProfile(FeishuCardUserProfile),
-    UserList(FeishuCardUserList),
-    Chart(FeishuCardChart),
-    Note(FeishuCardNote),
-    Button(FeishuCardButton),
-    SelectStatic(SelectStatic),
-    MultiSelect(MultiSelectStatic),
-    SelectPerson(SelectPerson),
-    MultiSelectPerson(MultiSelectPerson),
-    DatePicker(DatePicker),
-    TimeSelector(PickerTime),
-    DateTimePicker(DateTimePicker),
-    Checker(Checker),
 }
 
 #[cfg(test)]

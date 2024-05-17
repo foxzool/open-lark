@@ -86,8 +86,15 @@ impl Default for PlainText {
 }
 
 impl PlainText {
-    pub fn new() -> Self {
-        Self::default()
+    pub fn new(content: &str) -> Self {
+        Self {
+            tag: "plain_text".to_string(),
+            content: content.to_string(),
+            text_size: None,
+            text_color: None,
+            text_align: None,
+            lines: None,
+        }
     }
 
     /// 文本类型的标签。可取值：

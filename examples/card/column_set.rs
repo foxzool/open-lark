@@ -6,13 +6,14 @@ use uuid::Uuid;
 use open_lark::client::LarkClientBuilder;
 use open_lark::feishu_card::{FeishuCard, FeishuCardElement};
 use open_lark::feishu_card::card_components::containers::column_set::{
-    Column, ColumnAction, ColumnSetAllowElement, ColumnSetContainer,
+    Column, ColumnAction, ColumnSetContainer,
 };
 use open_lark::feishu_card::card_components::content_components::divider::FeishuCardDivider;
 use open_lark::feishu_card::card_components::content_components::image::FeishuCardImage;
 use open_lark::feishu_card::card_components::content_components::plain_text::PlainText;
 use open_lark::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdown;
 use open_lark::feishu_card::card_components::content_components::title::{FeishuCardTitle, Title};
+use open_lark::feishu_card::card_components::Element;
 use open_lark::feishu_card::href::FeishuCardHrefVal;
 use open_lark::service::im::v1::message::{
     CreateMessageReqBody, CreateMessageReqBuilder, SendMessageTrait,
@@ -60,14 +61,14 @@ fn main() {
                                 .width("weighted")
                                 .weight(1)
                                 .vertical_align("center")
-                                .elements(vec![ColumnSetAllowElement::Image(
+                                .elements(vec![Element::Image(
                                     FeishuCardImage::new()
                                         .img_key("img_v2_120b03c8-27e3-456f-89c0-90ede1aa59ag").scale_type("fit_horizontal").alt(PlainText::new().content("")),
                                 )]),
                             Column::new()
                                 .width("weighted")
                                 .weight(3)
-                                .elements(vec![ColumnSetAllowElement::Markdown(
+                                .elements(vec![Element::Markdown(
                                     FeishuCardMarkdown::new()
                                         .content("**高级双床房**\n<font color='grey'>双早|40-47㎡|有窗户|双床</font>\n<font color='red'>¥699</font> 起")
                                         .text_align("left"),
@@ -94,7 +95,7 @@ fn main() {
                                 .width("weighted")
                                 .weight(1)
                                 .vertical_align("center")
-                                .elements(vec![ColumnSetAllowElement::Image(
+                                .elements(vec![Element::Image(
                                     FeishuCardImage::new()
                                         .img_key("img_v2_120b03c8-27e3-456f-89c0-90ede1aa59ag").scale_type("fit_horizontal").alt(PlainText::new().content("")),
                                 )]),
@@ -102,7 +103,7 @@ fn main() {
                                 .width("weighted")
                                 .weight(3)
                                 .vertical_align("top")
-                                .elements(vec![ColumnSetAllowElement::Markdown(
+                                .elements(vec![Element::Markdown(
                                     FeishuCardMarkdown::new()
                                         .content("**精品大床房**\n<font color='grey'>双早|40-47㎡|有窗户|大床</font>\n<font color='red'>¥666</font> 起")
                                         .text_align("left"),

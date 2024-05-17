@@ -118,7 +118,7 @@ impl SelectStatic {
 }
 
 /// 选项的配置。
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct SelectStaticOption {
     /// 选项的名称。
     text: PlainText,
@@ -132,12 +132,17 @@ pub struct SelectStaticOption {
 }
 
 impl SelectStaticOption {
-    pub fn new(text: PlainText, value: &str) -> Self {
+    pub fn new(text: &str, value: &str) -> Self {
         Self {
-            text,
+            text: PlainText::new(text),
             icon: None,
             value: value.to_string(),
         }
+    }
+
+    pub fn text(mut self, text: PlainText) -> Self {
+        self.text = text;
+        self
     }
 
     pub fn icon(mut self, icon: FeishuCardTextIcon) -> Self {
@@ -172,16 +177,13 @@ mod test {
             .initial_index(1)
             .placeholder(PlainText::new("默认提示文本"))
             .width("default")
-            .options(vec![SelectStaticOption::new(
-                PlainText::new("我是交互组件"),
-                "selectDemo1",
-            )
-            .icon(
-                FeishuCardTextIcon::new()
-                    .token("chat-forbidden_outlined")
-                    .color("orange")
-                    .img_key("img_v2_38811724"),
-            )])
+            .options(vec![SelectStaticOption::new("我是交互组件", "selectDemo1")
+                .icon(
+                    FeishuCardTextIcon::new()
+                        .token("chat-forbidden_outlined")
+                        .color("orange")
+                        .img_key("img_v2_38811724"),
+                )])
             .confirm(InputConfirm::new("弹窗标题", "弹窗正文文案"));
 
         let json = json!({

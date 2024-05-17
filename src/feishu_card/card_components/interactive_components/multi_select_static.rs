@@ -140,7 +140,7 @@ mod test {
             .width("default")
             .values(vec![])
             .options(vec![SelectStaticOption::new(
-                PlainText::new("我是交互组件"),
+                "我是交互组件",
                 "selectDemo1",
             )
             .icon(

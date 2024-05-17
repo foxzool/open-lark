@@ -63,6 +63,27 @@ pub struct FeishuCardButton {
     /// 配置交互类型和具体交互行为。支持同时生效跳转链接和回传交互。
     #[serde(skip_serializing_if = "Option::is_none")]
     behaviors: Option<Vec<Behaviors>>,
+    /// 表单容器内组件的唯一标识。用于识别用户提交的数据属于哪个组件。
+    ///
+    /// 注意：该字段必填且需在卡片全局内唯一。
+    #[serde(skip_serializing_if = "Option::is_none")]
+    name: Option<String>,
+    /// 组件的内容是否必填。当组件内嵌在表单容器中时，该属性生效。可取值：
+    ///
+    /// - true：必填。当用户点击表单容器的“提交”时，未填写该组件，则前端提示“有必填项未填写”，不会向开发者的服务端发起回传请求。
+    ///
+    /// - false：选填。当用户点击表单容器的“提交”时，未填写该组件，仍提交表单容器中的数据。
+    #[serde(skip_serializing_if = "Option::is_none")]
+    required: Option<bool>,
+    /// 内嵌在表单容器中的按钮的交互类型。枚举值包括：
+    ///
+    /// - link：当前按钮仅支持链接跳转
+    /// - request：当前按钮仅支持回传交互
+    /// - multi：当前按钮同时支持链接跳转和回传交互
+    /// - form_submit：将当前按钮与提交事件绑定。用户点击后，将触发表单容器的提交事件，异步提交所有已填写的表单项内容
+    /// - form_reset：将当前按钮与取消提交事件绑定。用户点击后，将触发表单容器的取消提交事件，重置所有表单组件的输入值为初始值
+    #[serde(skip_serializing_if = "Option::is_none")]
+    action_type: Option<String>,
 }
 
 impl FeishuCardButton {
@@ -79,6 +100,9 @@ impl FeishuCardButton {
             disabled_tips: None,
             confirm: None,
             behaviors: None,
+            name: None,
+            required: None,
+            action_type: None,
         }
     }
 
@@ -130,6 +154,21 @@ impl FeishuCardButton {
 
     pub fn behaviors(mut self, behaviors: Vec<Behaviors>) -> Self {
         self.behaviors = Some(behaviors);
+        self
+    }
+
+    pub fn name(mut self, name: &str) -> Self {
+        self.name = Some(name.to_string());
+        self
+    }
+
+    pub fn required(mut self, required: bool) -> Self {
+        self.required = Some(required);
+        self
+    }
+
+    pub fn action_type(mut self, action_type: &str) -> Self {
+        self.action_type = Some(action_type.to_string());
         self
     }
 }

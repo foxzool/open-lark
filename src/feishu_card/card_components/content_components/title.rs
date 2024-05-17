@@ -117,7 +117,6 @@ impl Default for Title {
     }
 }
 
-
 impl Title {
     pub fn new() -> Self {
         Title::default()
@@ -151,8 +150,6 @@ impl Default for FeishuCardIcon {
         }
     }
 }
-
-
 
 impl FeishuCardIcon {
     pub fn new() -> Self {
@@ -223,17 +220,14 @@ mod test {
 
     #[test]
     fn test_title() {
-        let title = Title::new()
-            .content("content")
-            .i18n(
-                vec![
-                    (FeishuCardLanguage::ZhCN, "中文".to_string()),
-                    (FeishuCardLanguage::EnUS, "english".to_string()),
-                ]
-                .into_iter()
-                .collect(),
-            )
-            ;
+        let title = Title::new().content("content").i18n(
+            vec![
+                (FeishuCardLanguage::ZhCN, "中文".to_string()),
+                (FeishuCardLanguage::EnUS, "english".to_string()),
+            ]
+            .into_iter()
+            .collect(),
+        );
         let json = json!({"tag":"plain_text","content":"content","i18n":{"zh_cn":"中文","en_us":"english"}});
 
         assert_eq!(serde_json::to_value(&title).unwrap(), json);
@@ -255,8 +249,7 @@ mod test {
                     .color("neutral")
                     .build(),
             ])
-            .ud_icon(FeishuCardUdIconBuilder::new("meego_colorful").build())
-            .build();
+            .ud_icon(FeishuCardUdIconBuilder::new("meego_colorful").build());
         let json = serde_json::to_value(&title).unwrap();
 
         assert_eq!(
