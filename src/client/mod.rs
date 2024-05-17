@@ -1,8 +1,9 @@
 use std::time::Duration;
 
-use crate::core::config::Config;
-use crate::core::constants::AppType;
-use crate::service::im::ImService;
+use crate::{
+    core::{config::Config, constants::AppType},
+    service::im::ImService,
+};
 
 pub struct LarkClient {
     pub config: Config,

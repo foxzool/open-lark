@@ -1,6 +1,7 @@
-use crate::core::config::Config;
-use crate::service::im::v1::chats::ChatsService;
-use crate::service::im::v1::message::MessageService;
+use crate::{
+    core::config::Config,
+    service::im::v1::{chats::ChatsService, message::MessageService},
+};
 
 pub mod chats;
 pub mod message;

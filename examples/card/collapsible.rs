@@ -3,18 +3,22 @@ use std::env;
 use dotenvy::dotenv;
 use uuid::Uuid;
 
-use open_lark::client::LarkClientBuilder;
-use open_lark::feishu_card::card_components::CardElement;
-use open_lark::feishu_card::card_components::containers::collapsible_panel::{
-    CollapsibleHeader, CollapsiblePanel,
-};
-use open_lark::feishu_card::card_components::content_components::plain_text::PlainText;
-use open_lark::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdown;
-use open_lark::feishu_card::card_components::content_components::title::{FeishuCardTitle, Title};
-use open_lark::feishu_card::FeishuCard;
-use open_lark::feishu_card::icon::FeishuCardTextIcon;
-use open_lark::service::im::v1::message::{
-    CreateMessageReqBody, CreateMessageReqBuilder, SendMessageTrait,
+use open_lark::{
+    card::{
+        components::{
+            containers::collapsible_panel::{CollapsibleHeader, CollapsiblePanel},
+            content_components::{
+                plain_text::PlainText,
+                rich_text::FeishuCardMarkdown,
+                title::{FeishuCardTitle, Title},
+            },
+            CardElement,
+        },
+        icon::FeishuCardTextIcon,
+        FeishuCard,
+    },
+    client::LarkClientBuilder,
+    service::im::v1::message::{CreateMessageReqBody, CreateMessageReqBuilder, SendMessageTrait},
 };
 
 fn main() {

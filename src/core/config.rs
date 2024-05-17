@@ -1,9 +1,7 @@
-use std::collections::HashMap;
-use std::time::Duration;
+use std::{collections::HashMap, time::Duration};
 use ureq::Agent;
 
-use crate::core::constants::AppType;
-use crate::core::constants::FEISHU_BASE_URL;
+use crate::core::constants::{AppType, FEISHU_BASE_URL};
 
 #[derive(Debug, Clone)]
 pub struct Config {

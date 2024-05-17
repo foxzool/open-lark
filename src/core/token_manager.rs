@@ -1,22 +1,23 @@
-use std::sync::Mutex;
-use std::time::Duration;
+use std::{sync::Mutex, time::Duration};
 
 use lazy_static::lazy_static;
 use log::warn;
 use serde::{Deserialize, Serialize};
 
-use crate::core::api_req::ApiReq;
-use crate::core::api_resp::{ApiResp, CodeMsg};
-use crate::core::app_ticket_manager::APP_TICKET_MANAGER;
-use crate::core::cache::{Cache, LocalCache};
-use crate::core::config::Config;
-use crate::core::constants::{
-    AccessTokenType, AppType, APP_ACCESS_TOKEN_INTERNAL_URL_PATH, APP_ACCESS_TOKEN_KEY_PREFIX,
-    EXPIRY_DELTA, TENANT_ACCESS_TOKEN_URL_PATH,
+use crate::core::{
+    api_req::ApiReq,
+    api_resp::{ApiResp, CodeMsg},
+    app_ticket_manager::APP_TICKET_MANAGER,
+    cache::{Cache, LocalCache},
+    config::Config,
+    constants::{
+        AccessTokenType, AppType, APP_ACCESS_TOKEN_INTERNAL_URL_PATH, APP_ACCESS_TOKEN_KEY_PREFIX,
+        EXPIRY_DELTA, TENANT_ACCESS_TOKEN_URL_PATH,
+    },
+    error::LarkAPIError,
+    http::Transport,
+    SDKResult,
 };
-use crate::core::error::LarkAPIError;
-use crate::core::http::Transport;
-use crate::core::SDKResult;
 
 lazy_static! {
     pub static ref TOKEN_MANAGER: Mutex<TokenManager> = Mutex::new(TokenManager::new());

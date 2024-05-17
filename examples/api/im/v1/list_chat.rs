@@ -2,8 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::client::LarkClientBuilder;
-use open_lark::service::im::v1::chats::ListChatReqBuilder;
+use open_lark::{client::LarkClientBuilder, service::im::v1::chats::ListChatReqBuilder};
 
 /// 获取用户或机器人所在的群列表
 /// GET /open-apis/im/v1/messages

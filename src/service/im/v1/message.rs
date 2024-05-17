@@ -4,13 +4,15 @@ use log::error;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
-use crate::core::api_req::ApiReq;
-use crate::core::api_resp::{ApiResp, BaseResp, CodeMsg};
-use crate::core::config::Config;
-use crate::core::constants::AccessTokenType;
-use crate::core::error::LarkAPIError;
-use crate::core::http::Transport;
-use crate::core::req_option::RequestOption;
+use crate::core::{
+    api_req::ApiReq,
+    api_resp::{ApiResp, BaseResp, CodeMsg},
+    config::Config,
+    constants::AccessTokenType,
+    error::LarkAPIError,
+    http::Transport,
+    req_option::RequestOption,
+};
 
 pub struct MessageService {
     pub config: Config,
@@ -19,7 +21,8 @@ pub struct MessageService {
 impl MessageService {
     /// 发送消息
     ///
-    /// 给指定用户或者会话发送消息，支持文本、富文本、可交互的消息卡片、群名片、个人名片、图片、视频、音频、文件、表情包。
+    /// 给指定用户或者会话发送消息，支持文本、富文本、可交互的消息卡片、群名片、个人名片、图片、
+    /// 视频、音频、文件、表情包。
     pub fn create(
         &self,
         req: CreateMessageReq,
@@ -161,15 +164,18 @@ pub struct CreateMessageReq {
 /// 发送消息 请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateMessageReqBody {
-    /// 消息接收者的ID，ID类型应与查询参数receive_id_type 对应；推荐使用 OpenID，获取方式可参考文档如何获取 Open ID？
+    /// 消息接收者的ID，ID类型应与查询参数receive_id_type 对应；推荐使用
+    /// OpenID，获取方式可参考文档如何获取 Open ID？
     ///
     /// 示例值："ou_7d8a6e6df7621556ce0d21922b676706ccs"
     pub receive_id: String,
-    /// 消息类型 包括：text、post、image、file、audio、media、sticker、interactive、share_chat、share_user等，类型定义请参考发送消息内容
+    /// 消息类型 包括：text、post、image、file、audio、media、sticker、interactive、share_chat、
+    /// share_user等，类型定义请参考发送消息内容
     ///
     /// 示例值："text"
     pub msg_type: String,
-    /// 消息内容，JSON结构序列化后的字符串。不同msg_type对应不同内容，具体格式说明参考：发送消息内容
+    /// 消息内容，JSON结构序列化后的字符串。不同msg_type对应不同内容，具体格式说明参考：
+    /// 发送消息内容
     ///
     /// 注意：
     /// JSON字符串需进行转义，如换行符转义后为\\n
@@ -177,7 +183,8 @@ pub struct CreateMessageReqBody {
     /// 卡片及富文本消息请求体最大不能超过30KB
     /// 示例值："{\"text\":\"test content\"}"
     pub content: String,
-    /// 由开发者生成的唯一字符串序列，用于发送消息请求去重；持有相同uuid的请求1小时内至多成功发送一条消息
+    /// 由开发者生成的唯一字符串序列，用于发送消息请求去重；
+    /// 持有相同uuid的请求1小时内至多成功发送一条消息
     ///
     /// 示例值："选填，每次调用前请更换，如a0d69e20-1dd1-458b-k525-dfeca4015204"
     ///
@@ -213,7 +220,8 @@ pub struct Message {
     pub parent_id: Option<String>,
     /// 消息所属的话题 ID（不返回说明该消息非话题消息）
     pub thread_id: Option<String>,
-    /// 消息类型 包括：text、post、image、file、audio、media、sticker、interactive、share_chat、share_user等
+    /// 消息类型 包括：text、post、image、file、audio、media、sticker、interactive、share_chat、
+    /// share_user等
     pub msg_type: String,
     /// 消息生成的时间戳（毫秒）
     pub create_time: String,
@@ -252,7 +260,8 @@ pub struct Sender {
     /// - anonymous: 匿名
     /// - unknown: 未知
     sender_type: String,
-    /// 为租户在飞书上的唯一标识，用来换取对应的tenant_access_token，也可以用作租户在应用里面的唯一标识
+    /// 为租户在飞书上的唯一标识，用来换取对应的tenant_access_token，
+    /// 也可以用作租户在应用里面的唯一标识
     tenant_key: String,
 }
 
@@ -261,7 +270,8 @@ pub struct Sender {
 pub struct MessageBody {
     /// 消息内容，json结构序列化后的字符串。不同msg_type对应不同内容。
     ///
-    /// 消息类型 包括：text、post、image、file、audio、media、sticker、interactive、share_chat、share_user等，
+    /// 消息类型 包括：text、post、image、file、audio、media、sticker、interactive、share_chat、
+    /// share_user等，
     pub content: String,
 }
 
@@ -276,7 +286,8 @@ pub struct Mention {
     pub id_type: String,
     /// 被@的用户或机器人的姓名
     pub name: String,
-    /// 为租户在飞书上的唯一标识，用来换取对应的tenant_access_token，也可以用作租户在应用里面的唯一标识
+    /// 为租户在飞书上的唯一标识，用来换取对应的tenant_access_token，
+    /// 也可以用作租户在应用里面的唯一标识
     pub tenant_key: String,
     /// 合并转发消息中，上一层级的消息id message_id
     pub upper_message_id: String,
@@ -358,7 +369,8 @@ impl ListMessageReqBuilder {
         self
     }
 
-    /// 分页标记，第一次请求不填，表示从头开始遍历；分页查询结果还有更多项时会同时返回新的 page_token，下次遍历可采用该 page_token 获取查询结果
+    /// 分页标记，第一次请求不填，表示从头开始遍历；分页查询结果还有更多项时会同时返回新的
+    /// page_token，下次遍历可采用该 page_token 获取查询结果
     pub fn page_token(mut self, page_token: impl ToString) -> Self {
         self.api_req
             .query_params
@@ -541,7 +553,8 @@ pub struct TextNode {
     /// 表示是不是 unescape 解码，默认为 false ，不用可以不填。
     #[serde(skip_serializing_if = "Option::is_none")]
     un_escape: Option<bool>,
-    /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、lineThrough与italic，非可选值将被忽略。
+    /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、
+    /// lineThrough与italic，非可选值将被忽略。
     #[serde(skip_serializing_if = "Option::is_none")]
     style: Option<Vec<String>>,
 }
@@ -573,7 +586,8 @@ pub struct ANode {
     text: String,
     /// 默认的链接地址，请确保链接地址的合法性，否则消息会发送失败。
     href: String,
-    /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、lineThrough与italic，非可选值将被忽略。
+    /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、
+    /// lineThrough与italic，非可选值将被忽略。
     #[serde(skip_serializing_if = "Option::is_none")]
     style: Option<Vec<String>>,
 }
@@ -598,7 +612,8 @@ pub struct AtNode {
     /// 用户的open_id，union_id 或 user_id，请参考如何获取 User ID、Open ID 和 Union ID？
     /// 注意: @单个用户时，user_id字段必须是有效值；@所有人填"all"。
     user_id: String,
-    /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、lineThrough与italic，非可选值将被忽略。
+    /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、
+    /// lineThrough与italic，非可选值将被忽略。
     #[serde(skip_serializing_if = "Option::is_none")]
     style: Option<Vec<String>>,
 }

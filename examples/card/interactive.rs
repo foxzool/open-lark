@@ -4,32 +4,34 @@ use dotenvy::dotenv;
 use serde_json::json;
 use uuid::Uuid;
 
-use open_lark::client::LarkClientBuilder;
-use open_lark::feishu_card::{FeishuCard, FeishuCardConfig};
-use open_lark::feishu_card::card_components::CardElement;
-use open_lark::feishu_card::card_components::containers::column_set::{
-    Column, ColumnAction, ColumnSetContainer,
-};
-use open_lark::feishu_card::card_components::containers::form::FormContainer;
-use open_lark::feishu_card::card_components::containers::interactive::InteractiveContainer;
-use open_lark::feishu_card::card_components::content_components::divider::FeishuCardDivider;
-use open_lark::feishu_card::card_components::content_components::image::FeishuCardImage;
-use open_lark::feishu_card::card_components::content_components::plain_text::PlainText;
-use open_lark::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdown;
-use open_lark::feishu_card::card_components::content_components::title::{
-    FeishuCardTitle, FeishuCardUdIcon, Title,
-};
-use open_lark::feishu_card::card_components::interactive_components::button::FeishuCardButton;
-use open_lark::feishu_card::card_components::interactive_components::input::{
-    FeishuCardInput, InputConfirm,
-};
-use open_lark::feishu_card::card_components::interactive_components::select_static::{
-    SelectStatic, SelectStaticOption,
-};
-use open_lark::feishu_card::icon::FeishuCardTextIcon;
-use open_lark::feishu_card::interactions::{Behaviors, CallbackBehavior};
-use open_lark::service::im::v1::message::{
-    CreateMessageReqBody, CreateMessageReqBuilder, SendMessageTrait,
+use open_lark::{
+    card::{
+        components::{
+            containers::{
+                column_set::{Column, ColumnAction, ColumnSetContainer},
+                form::FormContainer,
+                interactive::InteractiveContainer,
+            },
+            content_components::{
+                divider::FeishuCardDivider,
+                image::FeishuCardImage,
+                plain_text::PlainText,
+                rich_text::FeishuCardMarkdown,
+                title::{FeishuCardTitle, FeishuCardUdIcon, Title},
+            },
+            interactive_components::{
+                button::FeishuCardButton,
+                input::{FeishuCardInput, InputConfirm},
+                select_static::{SelectStatic, SelectStaticOption},
+            },
+            CardElement,
+        },
+        icon::FeishuCardTextIcon,
+        interactions::{Behaviors, CallbackBehavior},
+        FeishuCard, FeishuCardConfig,
+    },
+    client::LarkClientBuilder,
+    service::im::v1::message::{CreateMessageReqBody, CreateMessageReqBuilder, SendMessageTrait},
 };
 
 fn main() {

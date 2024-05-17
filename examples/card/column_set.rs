@@ -4,10 +4,8 @@ use dotenvy::dotenv;
 use uuid::Uuid;
 
 use open_lark::{
-    client::LarkClientBuilder,
-    feishu_card::{
-        card_components::{
-            CardElement,
+    card::{
+        components::{
             containers::column_set::{Column, ColumnAction, ColumnSetContainer},
             content_components::{
                 divider::FeishuCardDivider,
@@ -16,10 +14,12 @@ use open_lark::{
                 rich_text::FeishuCardMarkdown,
                 title::{FeishuCardTitle, Title},
             },
+            CardElement,
         },
-        FeishuCard,
         href::FeishuCardHrefVal,
+        FeishuCard,
     },
+    client::LarkClientBuilder,
     service::im::v1::message::{CreateMessageReqBody, CreateMessageReqBuilder, SendMessageTrait},
 };
 

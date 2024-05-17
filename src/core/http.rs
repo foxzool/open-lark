@@ -1,20 +1,21 @@
-use std::collections::HashSet;
-use std::io::Read;
+use std::{collections::HashSet, io::Read};
 
 use bytes::Bytes;
 use log::debug;
 use serde_json::Value;
 use ureq::Request;
 
-use crate::core::api_req::ApiReq;
-use crate::core::api_resp::{ApiResp, CodeMsg};
-use crate::core::app_ticket_manager::apply_app_ticket;
-use crate::core::config::Config;
-use crate::core::constants::*;
-use crate::core::error::LarkAPIError;
-use crate::core::req_option::RequestOption;
-use crate::core::req_translator::ReqTranslator;
-use crate::core::SDKResult;
+use crate::core::{
+    api_req::ApiReq,
+    api_resp::{ApiResp, CodeMsg},
+    app_ticket_manager::apply_app_ticket,
+    config::Config,
+    constants::*,
+    error::LarkAPIError,
+    req_option::RequestOption,
+    req_translator::ReqTranslator,
+    SDKResult,
+};
 
 pub struct Transport;
 
@@ -61,10 +62,10 @@ impl Transport {
             let file_download_success = option.file_upload && raw_resp.status_code == 200;
             if file_download_success
                 || raw_resp
-                    .header
-                    .iter()
-                    .find(|v| *v == CONTENT_TYPE_HEADER)
-                    .is_some_and(|v| v.contains(CONTENT_TYPE_JSON))
+                .header
+                .iter()
+                .find(|v| *v == CONTENT_TYPE_HEADER)
+                .is_some_and(|v| v.contains(CONTENT_TYPE_JSON))
             {
                 break;
             }

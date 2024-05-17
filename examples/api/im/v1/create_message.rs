@@ -4,10 +4,12 @@ use dotenvy::dotenv;
 use serde_json::json;
 use uuid::Uuid;
 
-use open_lark::client::LarkClientBuilder;
-use open_lark::service::im::v1::message::{
-    ANode, AtNode, CreateMessageReqBody, CreateMessageReqBuilder, EmotionNode, ImgNode,
-    MessageCardTemplate, MessagePost, MessagePostNode, MessageText, SendMessageTrait, TextNode,
+use open_lark::{
+    client::LarkClientBuilder,
+    service::im::v1::message::{
+        ANode, AtNode, CreateMessageReqBody, CreateMessageReqBuilder, EmotionNode, ImgNode,
+        MessageCardTemplate, MessagePost, MessagePostNode, MessageText, SendMessageTrait, TextNode,
+    },
 };
 
 // POST /open-apis/im/v1/messages

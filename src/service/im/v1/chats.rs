@@ -1,12 +1,10 @@
 use log::error;
 use serde::{Deserialize, Serialize};
 
-use crate::core::api_req::ApiReq;
-use crate::core::api_resp::BaseResp;
-use crate::core::config::Config;
-use crate::core::constants::AccessTokenType;
-use crate::core::http::Transport;
-use crate::core::req_option::RequestOption;
+use crate::core::{
+    api_req::ApiReq, api_resp::BaseResp, config::Config, constants::AccessTokenType,
+    http::Transport, req_option::RequestOption,
+};
 
 use crate::core::SDKResult;
 
@@ -116,7 +114,8 @@ impl ListChatReqBuilder {
         self
     }
 
-    /// 分页标记，第一次请求不填，表示从头开始遍历；分页查询结果还有更多项时会同时返回新的 page_token，下次遍历可采用该page_token 获取查询结果
+    /// 分页标记，第一次请求不填，表示从头开始遍历；分页查询结果还有更多项时会同时返回新的
+    /// page_token，下次遍历可采用该page_token 获取查询结果
     ///
     /// 示例值：dmJCRHhpd3JRbGV1VEVNRFFyTitRWDY5ZFkybmYrMEUwMUFYT0VMMWdENEtuYUhsNUxGMDIwemtvdE5ORjBNQQ==
     pub fn page_token(mut self, page_token: impl ToString) -> Self {
@@ -172,7 +171,8 @@ pub struct ListChat {
     pub owner_id_type: String,
     /// 是否是外部群
     pub external: bool,
-    /// 租户Key，为租户在飞书上的唯一标识，用来换取对应的tenant_access_token，也可以用作租户在应用中的唯一标识
+    /// 租户Key，为租户在飞书上的唯一标识，用来换取对应的tenant_access_token，
+    /// 也可以用作租户在应用中的唯一标识
     pub tenant_key: String,
     /// 群状态
     pub chat_status: String,

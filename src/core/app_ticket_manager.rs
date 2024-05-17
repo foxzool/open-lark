@@ -4,13 +4,15 @@ use lazy_static::lazy_static;
 use log::error;
 use serde::{Deserialize, Serialize};
 
-use crate::core::api_req::ApiReq;
-use crate::core::api_resp::{ApiResp, CodeMsg};
-use crate::core::cache::{Cache, LocalCache};
-use crate::core::config::Config;
-use crate::core::constants::{AccessTokenType, APPLY_APP_TICKET_PATH, APP_TICKET_KEY_PREFIX};
-use crate::core::http::Transport;
-use crate::core::SDKResult;
+use crate::core::{
+    api_req::ApiReq,
+    api_resp::{ApiResp, CodeMsg},
+    cache::{Cache, LocalCache},
+    config::Config,
+    constants::{AccessTokenType, APPLY_APP_TICKET_PATH, APP_TICKET_KEY_PREFIX},
+    http::Transport,
+    SDKResult,
+};
 
 lazy_static! {
     pub static ref APP_TICKET_MANAGER: AppTicketManager = AppTicketManager::new();

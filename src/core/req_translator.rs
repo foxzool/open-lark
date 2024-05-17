@@ -5,16 +5,18 @@ use serde_json::Value;
 use ureq::Request;
 use url::Url;
 
-use crate::core::api_req::ApiReq;
-use crate::core::config::Config;
-use crate::core::constants::{
-    AccessTokenType, CONTENT_TYPE_HEADER, CUSTOM_REQUEST_ID, DEFAULT_CONTENT_TYPE,
-    USER_AGENT_HEADER,
+use crate::core::{
+    api_req::ApiReq,
+    config::Config,
+    constants::{
+        AccessTokenType, CONTENT_TYPE_HEADER, CUSTOM_REQUEST_ID, DEFAULT_CONTENT_TYPE,
+        USER_AGENT_HEADER,
+    },
+    error::LarkAPIError,
+    req_option::RequestOption,
+    token_manager::TOKEN_MANAGER,
+    utils::user_agent,
 };
-use crate::core::error::LarkAPIError;
-use crate::core::req_option::RequestOption;
-use crate::core::token_manager::TOKEN_MANAGER;
-use crate::core::utils::user_agent;
 
 pub struct ReqTranslator;
 

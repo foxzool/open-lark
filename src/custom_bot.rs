@@ -1,7 +1,6 @@
 use std::io::Read;
 
-use base64::{encode, Engine};
-use base64::prelude::BASE64_STANDARD;
+use base64::{encode, prelude::BASE64_STANDARD, Engine};
 use bytes::Bytes;
 use hmac::{Hmac, Mac};
 use log::debug;
@@ -9,11 +8,10 @@ use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
 use ureq::Response;
 
-use crate::core::api_resp::ApiResp;
-use crate::core::http::Transport;
-use crate::core::SDKResult;
-use crate::service::im::v1::message::{MessageCardTemplate, MessageText};
-use crate::service::im::v1::message::SendMessageTrait;
+use crate::{
+    core::{api_resp::ApiResp, http::Transport, SDKResult},
+    service::im::v1::message::{MessageCardTemplate, MessageText, SendMessageTrait},
+};
 
 /// 自定义机器人
 ///
@@ -66,6 +64,7 @@ impl CustomBot {
         )
     }
 
+    /// 如果设置了密钥，就计算签名
     fn check_sign(&self, json: &mut Value) {
         if let Some(secret) = self.secret.as_ref() {
             let now = chrono::Local::now().timestamp();
@@ -80,9 +79,6 @@ impl CustomBot {
         let string_to_sign = format!("{}\n{}", timestamp, secret);
         let mut hmac: Hmac<Sha256> = Hmac::new_from_slice(string_to_sign.as_bytes()).unwrap();
         let hmac_code = hmac.finalize().into_bytes();
-
-        // Perform Base64 encoding
-        let sign = BASE64_STANDARD.encode(hmac_code);
-        sign
+        BASE64_STANDARD.encode(hmac_code)
     }
 }

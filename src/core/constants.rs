@@ -1,5 +1,4 @@
-use std::fmt::Display;
-use std::time::Duration;
+use std::{fmt::Display, time::Duration};
 
 /// 应用类型
 #[derive(Default, Hash, Eq, PartialEq, Debug, Copy, Clone)]

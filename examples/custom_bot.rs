@@ -1,13 +1,14 @@
-use std::env;
-use std::thread::sleep;
+use std::{env, thread::sleep};
 
 use dotenvy::dotenv;
 use serde_json::{json, Value};
 
-use open_lark::custom_bot::CustomBot;
-use open_lark::service::im::v1::message::{
-    ANode, AtNode, MessageCardTemplate, MessagePost, MessagePostNode, MessageText,
-    SendMessageTrait, TextNode,
+use open_lark::{
+    custom_bot::CustomBot,
+    service::im::v1::message::{
+        ANode, AtNode, MessageCardTemplate, MessagePost, MessagePostNode, MessageText,
+        SendMessageTrait, TextNode,
+    },
 };
 
 fn main() {
