@@ -93,8 +93,8 @@ pub struct FeishuCardButton {
     action_type: Option<String>,
 }
 
-impl FeishuCardButton {
-    pub fn new() -> Self {
+impl Default for FeishuCardButton {
+    fn default() -> Self {
         Self {
             tag: "button".to_string(),
             r#type: None,
@@ -111,6 +111,12 @@ impl FeishuCardButton {
             required: None,
             action_type: None,
         }
+    }
+}
+
+impl FeishuCardButton {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     /// 按钮的类型。默认为 default。

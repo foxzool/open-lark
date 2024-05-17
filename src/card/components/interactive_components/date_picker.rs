@@ -54,8 +54,8 @@ pub struct DatePicker {
     confirm: Option<InputConfirm>,
 }
 
-impl DatePicker {
-    pub fn new() -> Self {
+impl Default for DatePicker {
+    fn default() -> Self {
         Self {
             tag: "date_picker".to_string(),
             name: None,
@@ -67,6 +67,12 @@ impl DatePicker {
             value: Value::Null,
             confirm: None,
         }
+    }
+}
+
+impl DatePicker {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn name(mut self, name: &str) -> Self {

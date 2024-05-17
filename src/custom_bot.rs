@@ -1,16 +1,11 @@
-use std::io::Read;
-
-use base64::{encode, prelude::BASE64_STANDARD, Engine};
-use bytes::Bytes;
+use base64::{prelude::BASE64_STANDARD, Engine};
 use hmac::{Hmac, Mac};
-use log::debug;
 use serde_json::{json, Value};
-use sha2::{Digest, Sha256};
-use ureq::Response;
+use sha2::Sha256;
 
 use crate::{
     core::{api_resp::ApiResp, http::Transport, SDKResult},
-    service::im::v1::message::{MessageCardTemplate, MessageText, SendMessageTrait},
+    service::im::v1::message::{MessageCardTemplate, SendMessageTrait},
 };
 
 /// 自定义机器人
@@ -77,7 +72,7 @@ impl CustomBot {
     /// 计算签名
     fn sign(timestamp: i64, secret: &str) -> String {
         let string_to_sign = format!("{}\n{}", timestamp, secret);
-        let mut hmac: Hmac<Sha256> = Hmac::new_from_slice(string_to_sign.as_bytes()).unwrap();
+        let hmac: Hmac<Sha256> = Hmac::new_from_slice(string_to_sign.as_bytes()).unwrap();
         let hmac_code = hmac.finalize().into_bytes();
         BASE64_STANDARD.encode(hmac_code)
     }

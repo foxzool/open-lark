@@ -79,49 +79,39 @@ pub struct FeishuCardTableHeaderStyle {
     lines: Option<i32>,
 }
 
-pub struct FeishuCardTableHeaderStyleBuilder {
-    header_style: FeishuCardTableHeaderStyle,
-}
-
-impl FeishuCardTableHeaderStyleBuilder {
+impl FeishuCardTableHeaderStyle {
     pub fn new() -> Self {
-        FeishuCardTableHeaderStyleBuilder {
-            header_style: FeishuCardTableHeaderStyle::default(),
-        }
+        Self::default()
     }
 
     pub fn text_align(mut self, text_align: &str) -> Self {
-        self.header_style.text_align = Some(text_align.to_string());
+        self.text_align = Some(text_align.to_string());
         self
     }
 
     pub fn text_size(mut self, text_size: &str) -> Self {
-        self.header_style.text_size = Some(text_size.to_string());
+        self.text_size = Some(text_size.to_string());
         self
     }
 
     pub fn background_style(mut self, background_style: &str) -> Self {
-        self.header_style.background_style = Some(background_style.to_string());
+        self.background_style = Some(background_style.to_string());
         self
     }
 
     pub fn text_color(mut self, text_color: &str) -> Self {
-        self.header_style.text_color = Some(text_color.to_string());
+        self.text_color = Some(text_color.to_string());
         self
     }
 
     pub fn bold(mut self, bold: bool) -> Self {
-        self.header_style.bold = Some(bold);
+        self.bold = Some(bold);
         self
     }
 
     pub fn lines(mut self, lines: i32) -> Self {
-        self.header_style.lines = Some(lines);
+        self.lines = Some(lines);
         self
-    }
-
-    pub fn build(self) -> FeishuCardTableHeaderStyle {
-        self.header_style
     }
 }
 
@@ -176,129 +166,104 @@ pub struct FeishuCardTableColumnFormat {
     separator: Option<bool>,
 }
 
-/// 表格格式构建器
-pub struct FeishuCardTableColumnFormatBuilder {
-    column: FeishuCardTableColumnFormat,
-}
-
-impl FeishuCardTableColumnFormatBuilder {
+impl FeishuCardTableColumnFormat {
     pub fn new() -> Self {
-        FeishuCardTableColumnFormatBuilder {
-            column: FeishuCardTableColumnFormat::default(),
-        }
+        FeishuCardTableColumnFormat::default()
     }
 
     pub fn precision(mut self, precision: i32) -> Self {
-        self.column.precision = Some(precision);
+        self.precision = Some(precision);
         self
     }
 
     pub fn symbol(mut self, symbol: &str) -> Self {
-        self.column.symbol = Some(symbol.to_string());
+        self.symbol = Some(symbol.to_string());
         self
     }
 
     pub fn separator(mut self, separator: bool) -> Self {
-        self.column.separator = Some(separator);
+        self.separator = Some(separator);
         self
     }
+}
 
-    pub fn build(self) -> FeishuCardTableColumnFormat {
-        self.column
+impl Default for FeishuCardTableColumn {
+    fn default() -> Self {
+        FeishuCardTableColumn {
+            name: "".to_string(),
+            display_name: None,
+            width: None,
+            horizontal_align: None,
+            data_type: "".to_string(),
+            format: None,
+        }
     }
 }
 
-pub struct FeishuCardTableColumnBuilder {
-    column: FeishuCardTableColumn,
-}
-
-impl FeishuCardTableColumnBuilder {
+impl FeishuCardTableColumn {
     pub fn new() -> Self {
-        FeishuCardTableColumnBuilder {
-            column: FeishuCardTableColumn {
-                name: "".to_string(),
-                display_name: None,
-                width: None,
-                horizontal_align: None,
-                data_type: "".to_string(),
-                format: None,
-            },
-        }
+        Self::default()
     }
 
     pub fn name(mut self, name: &str) -> Self {
-        self.column.name = name.to_string();
+        self.name = name.to_string();
         self
     }
 
     pub fn display_name(mut self, display_name: &str) -> Self {
-        self.column.display_name = Some(display_name.to_string());
+        self.display_name = Some(display_name.to_string());
         self
     }
 
     pub fn width(mut self, width: &str) -> Self {
-        self.column.width = Some(width.to_string());
+        self.width = Some(width.to_string());
         self
     }
 
     pub fn horizontal_align(mut self, horizontal_align: &str) -> Self {
-        self.column.horizontal_align = Some(horizontal_align.to_string());
+        self.horizontal_align = Some(horizontal_align.to_string());
         self
     }
 
     pub fn data_type(mut self, data_type: &str) -> Self {
-        self.column.data_type = data_type.to_string();
+        self.data_type = data_type.to_string();
         self
     }
 
     pub fn format(mut self, format: FeishuCardTableColumnFormat) -> Self {
-        self.column.format = Some(format);
+        self.format = Some(format);
         self
     }
-
-    pub fn build(self) -> FeishuCardTableColumn {
-        self.column
-    }
 }
 
-pub struct FeishuCardTableBuilder {
-    table: FeishuCardTable,
-}
-
-impl FeishuCardTableBuilder {
+impl FeishuCardTable {
     pub fn new() -> Self {
-        FeishuCardTableBuilder {
-            table: FeishuCardTable::default(),
-        }
+        Self::default()
     }
 
     pub fn page_zie(mut self, page_zie: i32) -> Self {
-        self.table.page_size = Some(page_zie);
+        self.page_size = Some(page_zie);
         self
     }
 
     pub fn row_height(mut self, row_height: &str) -> Self {
-        self.table.row_height = Some(row_height.to_string());
+        self.row_height = Some(row_height.to_string());
         self
     }
 
     pub fn header_style(mut self, header_style: FeishuCardTableHeaderStyle) -> Self {
-        self.table.header_style = Some(header_style);
+        self.header_style = Some(header_style);
         self
     }
 
     pub fn columns(mut self, columns: Vec<FeishuCardTableColumn>) -> Self {
-        self.table.columns = columns;
+        self.columns = columns;
         self
     }
 
     pub fn rows(mut self, rows: Value) -> Self {
-        self.table.rows = rows;
+        self.rows = rows;
         self
-    }
-
-    pub fn build(self) -> FeishuCardTable {
-        self.table
     }
 }
 
@@ -307,53 +272,48 @@ mod test {
     use serde_json::json;
 
     use crate::card::components::content_components::table::{
-        FeishuCardTableBuilder, FeishuCardTableColumnBuilder, FeishuCardTableColumnFormatBuilder,
-        FeishuCardTableHeaderStyleBuilder,
+        FeishuCardTable, FeishuCardTableColumn, FeishuCardTableColumnFormat,
+        FeishuCardTableHeaderStyle,
     };
 
     #[test]
     fn test_table() {
-        let table = FeishuCardTableBuilder::new()
+        let table = FeishuCardTable::new()
             .page_zie(1)
             .row_height("middle")
             .header_style(
-                FeishuCardTableHeaderStyleBuilder::new()
+                FeishuCardTableHeaderStyle::new()
                     .bold(true)
                     .background_style("grey")
                     .lines(1)
                     .text_size("heading")
                     .text_align("center")
-                    .build(),
+                ,
             )
             .columns(vec![
-                FeishuCardTableColumnBuilder::new()
+                FeishuCardTableColumn::new()
                     .name("customer_name")
                     .display_name("客户名称")
-                    .data_type("text")
-                    .build(),
-                FeishuCardTableColumnBuilder::new()
+                    .data_type("text"),
+                FeishuCardTableColumn::new()
                     .name("customer_scale")
                     .display_name("客户规模")
                     .data_type("options")
-                    .width("90px")
-                    .build(),
-                FeishuCardTableColumnBuilder::new()
+                    .width("90px"),
+                FeishuCardTableColumn::new()
                     .name("customer_arr")
                     .display_name("ARR(万元)")
                     .data_type("number")
                     .format(
-                        FeishuCardTableColumnFormatBuilder::new()
+                        FeishuCardTableColumnFormat::new()
                             .precision(2)
-                            .symbol("¥")
-                            .build(),
+                            .symbol("¥"),
                     )
-                    .width("120px")
-                    .build(),
-                FeishuCardTableColumnBuilder::new()
+                    .width("120px"),
+                FeishuCardTableColumn::new()
                     .name("customer_year")
                     .display_name("签约年限")
-                    .data_type("text")
-                    .build(),
+                    .data_type("text"),
             ])
             .rows(json!([
                     {
@@ -367,8 +327,7 @@ mod test {
                         "customer_arr": 26.57774928467545,
                         "customer_year": "2年"
                     }
-                ]))
-            .build();
+                ]));
 
         let json = json!( {
             "tag": "table",

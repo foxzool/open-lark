@@ -8,16 +8,8 @@ use open_lark::{
     card::{
         components::{
             containers::{
-                column_set::{Column, ColumnAction, ColumnSetContainer},
-                form::FormContainer,
+                column_set::{Column, ColumnSetContainer},
                 interactive::InteractiveContainer,
-            },
-            content_components::{
-                divider::FeishuCardDivider,
-                image::FeishuCardImage,
-                plain_text::PlainText,
-                rich_text::FeishuCardMarkdown,
-                title::{FeishuCardTitle, FeishuCardUdIcon, Title},
             },
             interactive_components::{
                 button::FeishuCardButton,
@@ -33,6 +25,8 @@ use open_lark::{
     client::LarkClientBuilder,
     service::im::v1::message::{CreateMessageReqBody, CreateMessageReqBuilder, SendMessageTrait},
 };
+use open_lark::card::components::content_components::rich_text::FeishuCardMarkdown;
+use open_lark::card::components::content_components::title::{FeishuCardTitle, FeishuCardUdIcon, Title};
 
 fn main() {
     dotenv().expect(".env file not found");

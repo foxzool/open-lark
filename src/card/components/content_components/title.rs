@@ -202,7 +202,7 @@ impl FeishuCardUdIcon {
 mod test {
     use serde_json::json;
 
-    use crate::card::{components::content_components::plain_text::PlainText, TextTagBuilder};
+    use crate::card::{components::content_components::plain_text::PlainText, TextTag};
 
     use super::*;
 
@@ -213,8 +213,8 @@ mod test {
                 (FeishuCardLanguage::ZhCN, "中文".to_string()),
                 (FeishuCardLanguage::EnUS, "english".to_string()),
             ]
-            .into_iter()
-            .collect(),
+                .into_iter()
+                .collect(),
         );
         let json = json!({"tag":"plain_text","content":"content","i18n":{"zh_cn":"中文","en_us":"english"}});
 
@@ -228,14 +228,13 @@ mod test {
             .subtitle(Title::new("示例文本"))
             .template("blue")
             .text_tag_list(vec![
-                TextTagBuilder::new()
+                TextTag::new()
                     .text(PlainText::text("标签 1"))
                     .color("neutral")
-                    .build(),
-                TextTagBuilder::new()
+                ,
+                TextTag::new()
                     .text(PlainText::text("标签 2"))
-                    .color("neutral")
-                    .build(),
+                    .color("neutral"),
             ])
             .ud_icon(FeishuCardUdIcon::new("meego_colorful"));
         let json = serde_json::to_value(&title).unwrap();

@@ -52,8 +52,8 @@ pub struct MultiSelectPerson {
     options: Option<Vec<SelectPersonOption>>,
 }
 
-impl MultiSelectPerson {
-    pub fn new() -> Self {
+impl Default for MultiSelectPerson {
+    fn default() -> Self {
         Self {
             tag: "multi_select_person".to_string(),
             r#type: None,
@@ -65,6 +65,12 @@ impl MultiSelectPerson {
             selected_values: None,
             options: None,
         }
+    }
+}
+
+impl MultiSelectPerson {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn r#type(mut self, r#type: &str) -> Self {

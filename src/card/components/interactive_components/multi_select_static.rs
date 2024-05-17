@@ -64,21 +64,26 @@ pub struct MultiSelectStatic {
     confirm: Option<InputConfirm>,
 }
 
-impl MultiSelectStatic {
-    pub fn new() -> Self {
+impl Default for MultiSelectStatic {
+    fn default() -> Self {
         Self {
             tag: "multi_select_static".to_string(),
             r#type: None,
             name: None,
             required: None,
             disabled: None,
-
             placeholder: None,
             width: None,
             options: None,
             confirm: None,
             selected_values: None,
         }
+    }
+}
+
+impl MultiSelectStatic {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn r#type(mut self, r#type: &str) -> Self {

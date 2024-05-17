@@ -29,7 +29,7 @@ fn main() {
         .build();
 
     // 富文本
-    let rich_text_message = MessagePost::new("zh_cn")
+    let _rich_text_message = MessagePost::new("zh_cn")
         .title("我是一个标题")
         .append_content(vec![
             MessagePostNode::Text(TextNode::new("第一行:").style(vec!["bold", "underline"])),

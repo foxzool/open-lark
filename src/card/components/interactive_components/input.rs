@@ -127,12 +127,18 @@ pub struct InputFallback {
     text: PlainText,
 }
 
-impl InputFallback {
-    pub fn new() -> Self {
-        Self {
+impl Default for InputFallback {
+    fn default() -> Self {
+        InputFallback {
             tag: "fallback_text".to_string(),
             text: PlainText::default(),
         }
+    }
+}
+
+impl InputFallback {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn text(mut self, text: PlainText) -> Self {

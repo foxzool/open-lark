@@ -162,8 +162,8 @@ pub struct Column {
     action: Option<ColumnAction>,
 }
 
-impl Column {
-    pub fn new() -> Self {
+impl Default for Column {
+    fn default() -> Self {
         Column {
             tag: "column".to_string(),
             background_style: None,
@@ -175,6 +175,12 @@ impl Column {
             elements: vec![],
             action: None,
         }
+    }
+}
+
+impl Column {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn background_style(mut self, background_style: impl ToString) -> Self {
@@ -220,7 +226,7 @@ impl Column {
 
 /// 设置点击分栏时的交互配置。当前仅支持跳转交互。如果布局容器内有交互组件，
 /// 则优先响应交互组件定义的交互。
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct ColumnAction {
     /// 配置各个端的链接地址。
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -229,9 +235,7 @@ pub struct ColumnAction {
 
 impl ColumnAction {
     pub fn new() -> Self {
-        ColumnAction {
-            multi_url: Some(FeishuCardHrefVal::default()),
-        }
+        Self::default()
     }
 
     pub fn multi_url(mut self, multi_url: FeishuCardHrefVal) -> Self {

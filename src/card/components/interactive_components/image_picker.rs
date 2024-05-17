@@ -72,7 +72,7 @@ pub struct ImagePicker {
     options: Option<Vec<SelectImageOption>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct SelectImageOption {
     /// 图片资源的 Key。你可以调用上传图片接口或在搭建工具中上传图片，获取图片的 key。
     img_key: String,
@@ -125,8 +125,8 @@ impl SelectImageOption {
     }
 }
 
-impl ImagePicker {
-    pub fn new() -> Self {
+impl Default for ImagePicker {
+    fn default() -> Self {
         Self {
             tag: "select_img".to_string(),
             style: None,
@@ -141,6 +141,12 @@ impl ImagePicker {
             value: None,
             options: None,
         }
+    }
+}
+
+impl ImagePicker {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn style(mut self, style: &str) -> Self {

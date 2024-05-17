@@ -34,8 +34,8 @@ pub struct FeishuCardOverflow {
     confirm: Option<InputConfirm>,
 }
 
-impl FeishuCardOverflow {
-    pub fn new() -> Self {
+impl Default for FeishuCardOverflow {
+    fn default() -> Self {
         Self {
             tag: "overflow".to_string(),
             width: None,
@@ -43,6 +43,12 @@ impl FeishuCardOverflow {
             value: None,
             confirm: None,
         }
+    }
+}
+
+impl FeishuCardOverflow {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn width(mut self, width: &str) -> Self {
@@ -72,7 +78,7 @@ impl FeishuCardOverflow {
 }
 
 /// options 字段说明
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct OverflowOption {
     /// 按钮上的文本。
     text: Option<PlainText>,
@@ -84,11 +90,7 @@ pub struct OverflowOption {
 
 impl OverflowOption {
     pub fn new() -> Self {
-        Self {
-            text: None,
-            multi_url: None,
-            value: None,
-        }
+        Self::default()
     }
 
     pub fn text(mut self, text: PlainText) -> Self {

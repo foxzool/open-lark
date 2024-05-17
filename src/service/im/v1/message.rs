@@ -777,13 +777,14 @@ mod test {
             ]);
         assert_eq!(post.msg_type(), "post");
         assert_eq!(
-            post.content(),
+            json!(post),
             json!({
+                "post": {
                 "zh_cn": {
                     "title":"title",
                     "content": [[{"tag":"text","text":"text"},{"tag":"a","text":"text","href":"https://www.feishu.cn"},{"tag":"at","user_id":"user_id"},{"tag":"img","image_key":"image_key"},{"tag":"media","file_key":"file_key","image_key":"image_key"},{"tag":"emotion","emoji_type":"SMILE"}
                     ]]
-                }}).to_string()
+                }}})
         );
     }
 

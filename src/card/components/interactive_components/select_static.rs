@@ -63,8 +63,8 @@ pub struct SelectStatic {
     confirm: Option<InputConfirm>,
 }
 
-impl SelectStatic {
-    pub fn new() -> Self {
+impl Default for SelectStatic {
+    fn default() -> Self {
         Self {
             tag: "select_static".to_string(),
             r#type: None,
@@ -77,6 +77,12 @@ impl SelectStatic {
             options: None,
             confirm: None,
         }
+    }
+}
+
+impl SelectStatic {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn r#type(mut self, r#type: &str) -> Self {

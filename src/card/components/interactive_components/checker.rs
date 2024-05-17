@@ -77,8 +77,8 @@ pub struct Checker {
     disabled_tips: Option<PlainText>,
 }
 
-impl Checker {
-    pub fn new() -> Self {
+impl Default for Checker {
+    fn default() -> Self {
         Self {
             tag: "checker".to_string(),
             name: None,
@@ -95,6 +95,12 @@ impl Checker {
             disabled: None,
             disabled_tips: None,
         }
+    }
+}
+
+impl Checker {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn name(mut self, name: &str) -> Self {
@@ -164,7 +170,7 @@ impl Checker {
 }
 
 /// 按钮区配置
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct ButtonArea {
     #[serde(skip_serializing_if = "Option::is_none")]
     pc_display_rule: Option<String>,
@@ -270,7 +276,7 @@ impl Buttons {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct CheckedStyle {
     /// 是否展示内容区的贯穿式删除线。
     show_strikethrough: Option<bool>,
@@ -280,10 +286,7 @@ pub struct CheckedStyle {
 
 impl CheckedStyle {
     pub fn new() -> Self {
-        Self {
-            show_strikethrough: None,
-            opacity: None,
-        }
+        Self::default()
     }
 
     pub fn show_strikethrough(mut self, show_strikethrough: bool) -> Self {
@@ -296,6 +299,7 @@ impl CheckedStyle {
         self
     }
 }
+
 #[cfg(test)]
 mod test {
     use serde_json::json;
@@ -318,14 +322,14 @@ mod test {
             .overall_checkable(true)
             .button_area(ButtonArea::new().pc_display_rule("always").buttons(
                 vec![Buttons::new("text")
-                        .size("small")
-                        .text(PlainText::text("text按钮"))
-                        .icon(
-                            FeishuCardTextIcon::new()
-                                .token("chat-forbidden_outlined")
-                                .color("orange")
-                                .img_key("img_v2_38811724"),
-                        ).disabled(false)],
+                    .size("small")
+                    .text(PlainText::text("text按钮"))
+                    .icon(
+                        FeishuCardTextIcon::new()
+                            .token("chat-forbidden_outlined")
+                            .color("orange")
+                            .img_key("img_v2_38811724"),
+                    ).disabled(false)],
             ))
             .checked_style(CheckedStyle::new().show_strikethrough(true).opacity(1.0))
             .margin("0px")

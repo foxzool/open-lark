@@ -62,10 +62,10 @@ impl Transport {
             let file_download_success = option.file_upload && raw_resp.status_code == 200;
             if file_download_success
                 || raw_resp
-                .header
-                .iter()
-                .find(|v| *v == CONTENT_TYPE_HEADER)
-                .is_some_and(|v| v.contains(CONTENT_TYPE_JSON))
+                    .header
+                    .iter()
+                    .find(|v| *v == CONTENT_TYPE_HEADER)
+                    .is_some_and(|v| v.contains(CONTENT_TYPE_JSON))
             {
                 break;
             }
@@ -116,10 +116,10 @@ impl Transport {
             Err(err) => {
                 let resp = err.into_response().unwrap();
                 // 返回4xx或5xx状态码， 但可以读取响应体
-                return match resp.into_json::<CodeMsg>() {
+                match resp.into_json::<CodeMsg>() {
                     Ok(code_msg) => Err(LarkAPIError::CodeError(code_msg)),
                     Err(err) => Err(LarkAPIError::IOErr(err)),
-                };
+                }
             }
         }
     }

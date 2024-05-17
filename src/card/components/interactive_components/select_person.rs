@@ -51,8 +51,8 @@ pub struct SelectPerson {
     confirm: Option<InputConfirm>,
 }
 
-impl SelectPerson {
-    pub fn new() -> Self {
+impl Default for SelectPerson {
+    fn default() -> Self {
         Self {
             tag: "select_person".to_string(),
             r#type: None,
@@ -63,6 +63,12 @@ impl SelectPerson {
             options: None,
             confirm: None,
         }
+    }
+}
+
+impl SelectPerson {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn r#type(mut self, r#type: &str) -> Self {

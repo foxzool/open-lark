@@ -95,7 +95,7 @@ impl TokenManager {
         let mut app_ticket = app_ticket.to_string();
         if app_ticket.is_empty() {
             match APP_TICKET_MANAGER.get(config) {
-                None => return Err(LarkAPIError::AppTicketEmpty),
+                None => return Err(LarkAPIError::IllegalParamError("App ticket is empty".to_string())),
                 Some(ticket) => {
                     app_ticket = ticket;
                 }

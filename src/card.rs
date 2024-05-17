@@ -89,7 +89,7 @@ pub struct FeishuCardConfig {
     /// - false：不允许
     /// 默认值为 true，该字段要求飞书客户端的版本为 V3.31.0 及以上。
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub enable_forward: Option<bool>,
+    enable_forward: Option<bool>,
     /// 是否为共享卡片。取值：
     ///
     /// - true：是共享卡片，更新卡片的内容对所有收到这张卡片的人员可见。
@@ -97,67 +97,60 @@ pub struct FeishuCardConfig {
     ///
     /// 默认值为 false。
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub update_multi: Option<bool>,
+    update_multi: Option<bool>,
     /// 卡片宽度模式。取值：
     ///
     /// - default：默认宽度。PC 端宽版、iPad 端上的宽度上限为 600px。
     /// - fill：自适应屏幕宽度
-    pub width_mode: Option<FeishuCardWidthMode>,
+    width_mode: Option<FeishuCardWidthMode>,
     /// 是否使用自定义翻译数据。取值：
     ///
     /// - true：在用户点击消息翻译后，使用 i18n 对应的目标语种作为翻译结果。若 i18n
     ///   取不到，则使用当前内容请求飞书的机器翻译。
     /// - false：不使用自定义翻译数据，直接请求飞书的机器翻译。
-    pub use_custom_translation: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    use_custom_translation: Option<bool>,
     /// 转发的卡片是否仍然支持回传交互。
-    pub enable_forward_interaction: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    enable_forward_interaction: Option<bool>,
     ///  添加自定义字号和颜色。可应用于组件的 JSON 数据中，设置字号和颜色属性。
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub style: Option<FeishuCardStyle>,
 }
 
-pub struct FeishuCardConfigBuilder {
-    config: FeishuCardConfig,
-}
-
-impl FeishuCardConfigBuilder {
+impl FeishuCardConfig {
     pub fn new() -> Self {
-        FeishuCardConfigBuilder {
-            config: FeishuCardConfig::default(),
-        }
+        Self::default()
     }
 
     pub fn enable_forward(mut self, enable_forward: bool) -> Self {
-        self.config.enable_forward = Some(enable_forward);
+        self.enable_forward = Some(enable_forward);
         self
     }
 
     pub fn update_multi(mut self, update_multi: bool) -> Self {
-        self.config.update_multi = Some(update_multi);
+        self.update_multi = Some(update_multi);
         self
     }
 
     pub fn width_mode(mut self, width_mode: FeishuCardWidthMode) -> Self {
-        self.config.width_mode = Some(width_mode);
+        self.width_mode = Some(width_mode);
         self
     }
 
     pub fn use_custom_translation(mut self, use_custom_translation: bool) -> Self {
-        self.config.use_custom_translation = Some(use_custom_translation);
+        self.use_custom_translation = Some(use_custom_translation);
         self
     }
 
     pub fn enable_forward_interaction(mut self, enable_forward_interaction: bool) -> Self {
-        self.config.enable_forward_interaction = Some(enable_forward_interaction);
+        self.enable_forward_interaction = Some(enable_forward_interaction);
         self
     }
 
     pub fn style(mut self, style: FeishuCardStyle) -> Self {
-        self.config.style = Some(style);
+        self.style = Some(style);
         self
-    }
-
-    pub fn build(self) -> FeishuCardConfig {
-        self.config
     }
 }
 
@@ -236,30 +229,19 @@ impl Default for TextTag {
     }
 }
 
-/// 标题标签构建器
-pub struct TextTagBuilder {
-    text_tag: TextTag,
-}
-
-impl TextTagBuilder {
+impl TextTag {
     pub fn new() -> Self {
-        TextTagBuilder {
-            text_tag: TextTag::default(),
-        }
+        Self::default()
     }
 
     pub fn text(mut self, text: PlainText) -> Self {
-        self.text_tag.text = Some(text);
+        self.text = Some(text);
         self
     }
 
     pub fn color(mut self, color: &str) -> Self {
-        self.text_tag.color = Some(color.to_string());
+        self.color = Some(color.to_string());
         self
-    }
-
-    pub fn build(self) -> TextTag {
-        self.text_tag
     }
 }
 

@@ -59,8 +59,8 @@ pub struct PickerTime {
     confirm: Option<InputConfirm>,
 }
 
-impl PickerTime {
-    pub fn new() -> Self {
+impl Default for PickerTime {
+    fn default() -> Self {
         Self {
             tag: "picker_time".to_string(),
             name: None,
@@ -72,6 +72,12 @@ impl PickerTime {
             value: Value::Null,
             confirm: None,
         }
+    }
+}
+
+impl PickerTime {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn name(mut self, name: &str) -> Self {
