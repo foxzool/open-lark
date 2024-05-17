@@ -5,7 +5,7 @@ use uuid::Uuid;
 
 use open_lark::client::LarkClientBuilder;
 use open_lark::feishu_card::{FeishuCardBuilder, FeishuCardElement};
-use open_lark::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdownBuilder;
+use open_lark::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdown;
 use open_lark::feishu_card::card_components::content_components::title::{
     FeishuCardTitleBuilder, TitleBuilder,
 };
@@ -26,9 +26,9 @@ fn main() {
         .push_header(FeishuCardTitleBuilder::new().title(TitleBuilder::new().content("这里是卡片标题").build()).template("blue").build())
         // .push_element(FeishuCardElement::Hr)
         .push_element(FeishuCardElement::Markdown(
-            FeishuCardMarkdownBuilder::new()
+            FeishuCardMarkdown::new()
                 .content("这里是卡片文本，支持使用markdown标签设置文本格式。例如：\n*斜体* 、**粗体**、~~删除线~~、[文字链接](https://www.feishu.cn)、<at id=all></at>、<font color='red'> 彩色文本 </font>")
-                .build(),
+                ,
         ))
         .build();
 

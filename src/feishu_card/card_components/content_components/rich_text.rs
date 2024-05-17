@@ -43,42 +43,36 @@ impl Default for FeishuCardMarkdown {
     }
 }
 
-pub struct FeishuCardMarkdownBuilder {
-    markdown: FeishuCardMarkdown,
-}
-
-impl FeishuCardMarkdownBuilder {
+impl FeishuCardMarkdown {
     pub fn new() -> Self {
-        FeishuCardMarkdownBuilder {
-            markdown: FeishuCardMarkdown::default(),
-        }
+        FeishuCardMarkdown::default()
     }
 
     pub fn text_align(mut self, text_align: &str) -> Self {
-        self.markdown.text_align = Some(text_align.to_string());
+        self.text_align = Some(text_align.to_string());
         self
     }
 
     pub fn text_size(mut self, text_size: &str) -> Self {
-        self.markdown.text_size = Some(text_size.to_string());
+        self.text_size = Some(text_size.to_string());
         self
     }
 
     pub fn icon(mut self, icon: FeishuCardTextIcon) -> Self {
-        self.markdown.icon = Some(icon);
+        self.icon = Some(icon);
         self
     }
 
     pub fn href(mut self, href: FeishuCardHrefVal) -> Self {
-        match self.markdown.href {
+        match self.href {
             None => {
                 let mut map = HashMap::new();
                 map.insert("urlVal".to_string(), href);
-                self.markdown.href = Some(map);
+                self.href = Some(map);
             }
             Some(mut m) => {
                 m.insert("urlVal".to_string(), href);
-                self.markdown.href = Some(m);
+                self.href = Some(m);
             }
         }
 
@@ -86,48 +80,43 @@ impl FeishuCardMarkdownBuilder {
     }
 
     pub fn content(mut self, content: &str) -> Self {
-        self.markdown.content = content.to_string();
+        self.content = content.to_string();
         self
-    }
-
-    pub fn build(self) -> FeishuCardMarkdown {
-        self.markdown
     }
 }
 
 #[cfg(test)]
 mod test {
-    use crate::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdownBuilder;
+    use serde_json::json;
+
+    use crate::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdown;
     use crate::feishu_card::href::FeishuCardHrefVal;
 
     #[test]
     fn test_markdown() {
-        let markdown = FeishuCardMarkdownBuilder::new()
+        let markdown = FeishuCardMarkdown::new()
             .href(
-                FeishuCardHrefVal::new("xxx1")
+                FeishuCardHrefVal::new().url("xxx1")
                     .pc_url("xxx2")
                     .ios_url("xxx3")
                     .android_url("xxx4"),
             )
             .content("普通文本\n标准emoji😁😢🌞💼🏆❌✅\n*斜体*\n**粗体**\n~~删除线~~\n文字链接\n差异化跳转\n<at id=all></at>")
-           .build();
+          ;
 
-        let json = serde_json::to_value(&markdown).unwrap();
+        let json = json!( {
+          "tag": "markdown",
+          "href": {
+            "urlVal": {
+              "url": "xxx1",
+              "pc_url": "xxx2",
+              "ios_url": "xxx3",
+              "android_url": "xxx4"
+            }
+          },
+          "content": "普通文本\n标准emoji😁😢🌞💼🏆❌✅\n*斜体*\n**粗体**\n~~删除线~~\n文字链接\n差异化跳转\n<at id=all></at>"
+        });
 
-        assert_eq!(
-            json,
-            serde_json::json!( {
-              "tag": "markdown",
-              "href": {
-                "urlVal": {
-                  "url": "xxx1",
-                  "pc_url": "xxx2",
-                  "ios_url": "xxx3",
-                  "android_url": "xxx4"
-                }
-              },
-              "content": "普通文本\n标准emoji😁😢🌞💼🏆❌✅\n*斜体*\n**粗体**\n~~删除线~~\n文字链接\n差异化跳转\n<at id=all></at>"
-            })
-        );
+        assert_eq!(json, serde_json::to_value(&markdown).unwrap());
     }
 }

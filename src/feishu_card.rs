@@ -8,7 +8,7 @@ use strum_macros::EnumString;
 use crate::{
     feishu_card::{
         card_components::{
-            containers::column_set::FeishuCardColumnSet,
+            containers::column_set::ColumnSetContainer,
             content_components::{
                 plain_text::PlainText, rich_text::FeishuCardMarkdown, title::FeishuCardTitle,
             },
@@ -364,7 +364,7 @@ pub enum MessageCardColor {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum FeishuCardElement {
-    ColumnSet(FeishuCardColumnSet),
+    ColumnSet(ColumnSetContainer),
     Hr,
     Div,
     Markdown(FeishuCardMarkdown),
@@ -375,7 +375,6 @@ pub enum FeishuCardElement {
 
 #[cfg(test)]
 mod test {
-    use crate::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdownBuilder;
     use crate::feishu_card::href::FeishuCardHrefVal;
     use crate::feishu_card::icon::FeishuCardTextIcon;
 
@@ -385,7 +384,7 @@ mod test {
         let card = FeishuCardBuilder::new()
             .push_element(FeishuCardElement::Hr)
             .push_element(FeishuCardElement::Markdown(
-                FeishuCardMarkdownBuilder::new()
+                FeishuCardMarkdown::new()
                     .text_size("heading")
                     .text_align("center")
                     .icon(
@@ -397,14 +396,13 @@ mod test {
                             ,
                     )
                     .href(
-                        FeishuCardHrefVal::new("xxx")
+                        FeishuCardHrefVal::new().url("xxx")
                             .pc_url("xxx1")
                             .ios_url("xxx2")
                             .android_url("xxx3")
                             
                     )
-                    .content("notation字号\n标准emoji 😁😢🌞💼🏆❌✅\n*斜体*\n**粗体**\n~~删除线~~\n[差异化跳转]($urlVal)\n<at id=all></at>")
-                    .build(),
+                    .content("notation字号\n标准emoji 😁😢🌞💼🏆❌✅\n*斜体*\n**粗体**\n~~删除线~~\n[差异化跳转]($urlVal)\n<at id=all></at>"),
             ))
             .build();
         let json = serde_json::to_value(&card).unwrap();

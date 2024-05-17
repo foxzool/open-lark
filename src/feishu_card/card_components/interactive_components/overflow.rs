@@ -119,9 +119,9 @@ mod test {
             .width("fill")
             .options(vec![OverflowOption::new()
                 .text(PlainText::new("这是一个链接跳转"))
-                .multi_url(FeishuCardHrefVal::new(
-                    "https://open.feishu.cn/document/home/index",
-                ))
+                .multi_url(
+                    FeishuCardHrefVal::new().url("https://open.feishu.cn/document/home/index"),
+                )
                 .value("document")])
             .value(json!({"key_1": "value_1"}))
             .confirm(InputConfirm::new("title", "content"));

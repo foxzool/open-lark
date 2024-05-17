@@ -207,7 +207,7 @@ impl TokenManager {
             tenant_key: tenant_key.to_string(),
         })?;
         let body = body.into();
-        let mut req = ApiReq {
+        let req = ApiReq {
             http_method: "POST".to_string(),
             api_path: TENANT_ACCESS_TOKEN_URL_PATH.to_string(),
             body,

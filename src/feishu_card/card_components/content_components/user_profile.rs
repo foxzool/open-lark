@@ -29,29 +29,19 @@ impl Default for FeishuCardUserProfile {
     }
 }
 
-pub struct FeishuCardUserProfileBuilder {
-    user_profile: FeishuCardUserProfile,
-}
-
-impl FeishuCardUserProfileBuilder {
+impl FeishuCardUserProfile {
     pub fn new() -> Self {
-        Self {
-            user_profile: FeishuCardUserProfile::default(),
-        }
+        FeishuCardUserProfile::default()
     }
 
     pub fn size(mut self, size: &str) -> Self {
-        self.user_profile.size = Some(size.to_string());
+        self.size = Some(size.to_string());
         self
     }
 
     pub fn user_id(mut self, user_id: &str) -> Self {
-        self.user_profile.user_id = user_id.to_string();
+        self.user_id = user_id.to_string();
         self
-    }
-
-    pub fn build(self) -> FeishuCardUserProfile {
-        self.user_profile
     }
 }
 
@@ -63,10 +53,9 @@ mod test {
 
     #[test]
     fn test() {
-        let user_profile = FeishuCardUserProfileBuilder::new()
+        let user_profile = FeishuCardUserProfile::new()
             .user_id("ou_449b53ad6aee526f7ed311b216aabcef")
-            .size("medium")
-            .build();
+            .size("medium");
         let json = json!( {
             "tag": "person",
             "size": "medium",

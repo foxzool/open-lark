@@ -31,48 +31,37 @@ pub enum FeishuCardNoteElement {
     Text(PlainText),
 }
 
-/// Note 构建器
-pub struct FeishuCardNoteBuilder {
-    note: FeishuCardNote,
-}
 
-impl FeishuCardNoteBuilder {
+impl FeishuCardNote {
     pub fn new() -> Self {
-        FeishuCardNoteBuilder {
-            note: FeishuCardNote::default(),
-        }
+        FeishuCardNote::default()
     }
 
     pub fn icon(mut self, icon: FeishuCardTextIcon) -> Self {
-        self.note.elements.push(FeishuCardNoteElement::Icon(icon));
+        self.elements.push(FeishuCardNoteElement::Icon(icon));
         self
     }
 
     pub fn image(mut self, image: FeishuCardImage) -> Self {
-        self.note.elements.push(FeishuCardNoteElement::Image(image));
+        self.elements.push(FeishuCardNoteElement::Image(image));
         self
     }
 
     pub fn text(mut self, text: PlainText) -> Self {
-        self.note.elements.push(FeishuCardNoteElement::Text(text));
+        self.elements.push(FeishuCardNoteElement::Text(text));
         self
-    }
-
-    pub fn build(self) -> FeishuCardNote {
-        self.note
     }
 }
 
 #[cfg(test)]
 mod test {
-    use crate::feishu_card::card_components::content_components::image::FeishuCardImageBuilder;
 
     #[test]
     fn test_note() {
         use crate::feishu_card::card_components::content_components::note::*;
         use serde_json::json;
 
-        let note = FeishuCardNoteBuilder::new()
+        let note = FeishuCardNote::new()
             .icon(
                 FeishuCardTextIcon::new()
                     .tag("custom_icon")
@@ -81,13 +70,12 @@ mod test {
             )
             .text(PlainText::new("备注信息1"))
             .image(
-                FeishuCardImageBuilder::new()
+                FeishuCardImage::new()
                     .img_key("img_v2_041b28e3-5680-48c2-9af2-497ace79333g")
                     .alt(PlainText::new("这是备注图片"))
                     .build(),
             )
-            .text(PlainText::new("备注信息2"))
-            .build();
+            .text(PlainText::new("备注信息2"));
         let json = json!({
           "tag": "note",
           "elements": [

@@ -9,6 +9,7 @@ readme = "README.md"
 description = "Lark/Feishu Open API SDK(WIP)"
 keywords = ["sdk", "feishu", "lark", "rest"]
 categories = ["api-bindings"]
+documentation = "https://docs.rs/open-lark"
 repository = "https://github.com/foxzool/open-lark"
 license = "MIT OR Apache-2.0"
 

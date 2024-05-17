@@ -4,7 +4,7 @@ use crate::feishu_card::icon::FeishuCardTextIcon;
 
 /// 文本组件
 #[derive(Debug, Serialize, Deserialize)]
-pub struct CardPlainText {
+pub struct FeishuCardText {
     /// 组件的标签。普通文本组件的标签为 div。
     tag: String,
     /// 配置卡片的普通文本信息。
@@ -15,9 +15,9 @@ pub struct CardPlainText {
     icon: Option<FeishuCardTextIcon>,
 }
 
-impl Default for CardPlainText {
+impl Default for FeishuCardText {
     fn default() -> Self {
-        CardPlainText {
+        FeishuCardText {
             tag: "div".to_string(),
             text: None,
             icon: None,
@@ -25,29 +25,19 @@ impl Default for CardPlainText {
     }
 }
 
-pub struct CardPlainTextBuilder {
-    text: CardPlainText,
-}
-
-impl CardPlainTextBuilder {
+impl FeishuCardText {
     pub fn new() -> Self {
-        CardPlainTextBuilder {
-            text: CardPlainText::default(),
-        }
+        FeishuCardText::default()
     }
 
     pub fn text(mut self, text: PlainText) -> Self {
-        self.text.text = Some(text);
+        self.text = Some(text);
         self
     }
 
     pub fn icon(mut self, icon: FeishuCardTextIcon) -> Self {
-        self.text.icon = Some(icon);
+        self.icon = Some(icon);
         self
-    }
-
-    pub fn build(self) -> CardPlainText {
-        self.text
     }
 }
 
@@ -137,7 +127,7 @@ mod test {
     #[test]
     fn test_message_card_text() {
         use super::*;
-        let text = CardPlainTextBuilder::new()
+        let text = FeishuCardText::new()
             .text(
                 PlainText::new("这是一段普通文本示例。")
                     .text_size("cus-0")
@@ -148,27 +138,23 @@ mod test {
                 FeishuCardTextIcon::new()
                     .token("app-default_filled")
                     .color("blue"),
-            )
-            .build();
-        let json = serde_json::to_value(&text).unwrap();
-        assert_eq!(
-            json,
-            json!({
-                    "tag": "div",
-                    "text": {
-                      "tag": "plain_text",
-                      "content": "这是一段普通文本示例。",
-                      "text_size": "cus-0",
-                      "text_align": "center",
-                      "text_color": "default"
-                    },
-                    "icon": {
-                      "tag": "standard_icon",
-                      "token": "app-default_filled",
-                      "color": "blue"
-                    }
-                  }
-            )
+            );
+        let json = json!({
+                "tag": "div",
+                "text": {
+                  "tag": "plain_text",
+                  "content": "这是一段普通文本示例。",
+                  "text_size": "cus-0",
+                  "text_align": "center",
+                  "text_color": "default"
+                },
+                "icon": {
+                  "tag": "standard_icon",
+                  "token": "app-default_filled",
+                  "color": "blue"
+                }
+              }
         );
+        assert_eq!(json, serde_json::to_value(&text).unwrap());
     }
 }

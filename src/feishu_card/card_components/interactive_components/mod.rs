@@ -6,7 +6,7 @@ pub mod multi_select_static;
 pub mod select_person;
 pub mod multi_select_person;
 pub mod date_picker;
-pub mod time_selector;
+pub mod picker_time;
 pub mod date_time_picker;
 pub mod image_picker;
 pub mod checker;

@@ -54,40 +54,33 @@ pub struct FeishuCardUserId {
     id: String,
 }
 
-/// 人员列表构建器
-pub struct FeishuCardUserListBuilder {
-    user_list: FeishuCardUserList,
-}
-
-impl FeishuCardUserListBuilder {
+impl FeishuCardUserList {
     pub fn new() -> Self {
-        Self {
-            user_list: FeishuCardUserList::default(),
-        }
+        FeishuCardUserList::default()
     }
 
     pub fn lines(mut self, lines: i32) -> Self {
-        self.user_list.lines = Some(lines);
+        self.lines = Some(lines);
         self
     }
 
     pub fn show_name(mut self, show_name: bool) -> Self {
-        self.user_list.show_name = Some(show_name);
+        self.show_name = Some(show_name);
         self
     }
 
     pub fn show_avatar(mut self, show_avatar: bool) -> Self {
-        self.user_list.show_avatar = Some(show_avatar);
+        self.show_avatar = Some(show_avatar);
         self
     }
 
     pub fn size(mut self, size: &str) -> Self {
-        self.user_list.size = Some(size.to_string());
+        self.size = Some(size.to_string());
         self
     }
 
     pub fn persons(mut self, persons: Vec<&str>) -> Self {
-        self.user_list.persons = persons
+        self.persons = persons
             .iter()
             .map(|id| FeishuCardUserId { id: id.to_string() })
             .collect();
@@ -95,12 +88,8 @@ impl FeishuCardUserListBuilder {
     }
 
     pub fn icon(mut self, icon: FeishuCardTextIcon) -> Self {
-        self.user_list.icon = Some(icon);
+        self.icon = Some(icon);
         self
-    }
-
-    pub fn build(self) -> FeishuCardUserList {
-        self.user_list
     }
 }
 
@@ -108,12 +97,12 @@ impl FeishuCardUserListBuilder {
 mod test {
     use serde_json::json;
 
-    use crate::feishu_card::card_components::content_components::user_list::FeishuCardUserListBuilder;
+    use crate::feishu_card::card_components::content_components::user_list::FeishuCardUserList;
     use crate::feishu_card::icon::FeishuCardTextIcon;
 
     #[test]
     fn test_user_list() {
-        let user_list = FeishuCardUserListBuilder::new()
+        let user_list = FeishuCardUserList::new()
             .lines(1)
             .show_name(true)
             .show_avatar(true)
@@ -124,8 +113,7 @@ mod test {
                     .tag("standard_icon")
                     .token("token")
                     .color("red"),
-            )
-            .build();
+            );
         let json = json!({
             "tag": "person_list",
             "lines": 1,
@@ -141,7 +129,7 @@ mod test {
         });
         assert_eq!(serde_json::to_value(&user_list).unwrap(), json);
 
-        let user_list = FeishuCardUserListBuilder::new()
+        let user_list = FeishuCardUserList::new()
             .lines(1)
             .show_name(true)
             .show_avatar(true)
@@ -155,8 +143,7 @@ mod test {
                     .token("chat-forbidden_outlined")
                     .color("orange")
                     .img_key("img_v2_38811724"),
-            )
-            .build();
+            );
 
         let json = json!({
           "tag": "person_list",

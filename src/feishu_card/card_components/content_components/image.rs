@@ -67,59 +67,53 @@ impl Default for FeishuCardImage {
     }
 }
 
-pub struct FeishuCardImageBuilder {
-    image: FeishuCardImage,
-}
-
-impl FeishuCardImageBuilder {
+impl FeishuCardImage {
     pub fn new() -> Self {
-        FeishuCardImageBuilder {
-            image: FeishuCardImage::default(),
-        }
+        FeishuCardImage::default()
     }
 
     pub fn img_key(mut self, img_key: &str) -> Self {
-        self.image.img_key = img_key.to_string();
+        self.img_key = img_key.to_string();
         self
     }
 
     pub fn alt(mut self, alt: PlainText) -> Self {
-        self.image.alt = Some(alt);
+        self.alt = Some(alt);
         self
     }
 
     pub fn title(mut self, title: PlainText) -> Self {
-        self.image.title = Some(title);
+        self.title = Some(title);
         self
     }
 
     pub fn corner_radius(mut self, corner_radius: &str) -> Self {
-        self.image.corner_radius = Some(corner_radius.to_string());
+        self.corner_radius = Some(corner_radius.to_string());
         self
     }
 
     pub fn scale_type(mut self, scale_type: &str) -> Self {
-        self.image.scale_type = Some(scale_type.to_string());
+        self.scale_type = Some(scale_type.to_string());
         self
     }
 
     pub fn size(mut self, size: &str) -> Self {
-        self.image.size = Some(size.to_string());
+        self.size = Some(size.to_string());
         self
     }
 
     pub fn transparent(mut self, transparent: bool) -> Self {
-        self.image.transparent = Some(transparent);
+        self.transparent = Some(transparent);
         self
     }
 
     pub fn preview(mut self, preview: bool) -> Self {
-        self.image.preview = Some(preview);
+        self.preview = Some(preview);
         self
     }
 
     pub fn build(self) -> FeishuCardImage {
-        self.image
+        self
     }
 }
 
@@ -131,12 +125,11 @@ mod test {
 
     #[test]
     fn test_image() {
-        let image = FeishuCardImageBuilder::new()
+        let image = FeishuCardImage::new()
             .img_key("img_v2_ace8a4f2-ae13-420f-9eb3-b3530b4abcef")
             .scale_type("crop_top")
             .size("stretch")
-            .preview(true)
-            .build();
+            .preview(true);
         assert_eq!(
             serde_json::to_value(image).unwrap(),
             json!( {

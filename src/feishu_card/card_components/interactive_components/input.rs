@@ -135,79 +135,73 @@ impl InputFallback {
     }
 }
 
-pub struct FeishuCardInputBuilder {
-    input: FeishuCardInput,
-}
-
-impl FeishuCardInputBuilder {
+impl FeishuCardInput {
     pub fn new() -> Self {
-        FeishuCardInputBuilder {
-            input: FeishuCardInput::default(),
-        }
+        FeishuCardInput::default()
     }
 
     pub fn name(mut self, name: &str) -> Self {
-        self.input.name = Some(name.to_string());
+        self.name = Some(name.to_string());
         self
     }
 
     pub fn required(mut self, required: bool) -> Self {
-        self.input.required = Some(required);
+        self.required = Some(required);
         self
     }
 
     pub fn disabled(mut self, disabled: bool) -> Self {
-        self.input.disabled = Some(disabled);
+        self.disabled = Some(disabled);
         self
     }
 
     pub fn placeholder(mut self, placeholder: PlainText) -> Self {
-        self.input.placeholder = Some(placeholder);
+        self.placeholder = Some(placeholder);
         self
     }
 
     pub fn default_value(mut self, default_value: &str) -> Self {
-        self.input.default_value = Some(default_value.to_string());
+        self.default_value = Some(default_value.to_string());
         self
     }
 
     pub fn width(mut self, width: &str) -> Self {
-        self.input.width = Some(width.to_string());
+        self.width = Some(width.to_string());
         self
     }
 
     pub fn max_length(mut self, max_length: u32) -> Self {
-        self.input.max_length = Some(max_length);
+        self.max_length = Some(max_length);
         self
     }
 
     pub fn label(mut self, label: PlainText) -> Self {
-        self.input.label = Some(label);
+        self.label = Some(label);
         self
     }
 
     pub fn label_position(mut self, label_position: &str) -> Self {
-        self.input.label_position = Some(label_position.to_string());
+        self.label_position = Some(label_position.to_string());
         self
     }
 
     pub fn value(mut self, value: Value) -> Self {
-        self.input.value = Some(value);
+        self.value = Some(value);
         self
     }
 
     pub fn confirm(mut self, confirm: InputConfirm) -> Self {
-        self.input.confirm = Some(confirm);
+        self.confirm = Some(confirm);
         self
     }
 
     pub fn fallback(mut self, fallback: InputFallback) -> Self {
-        self.input.fallback = Some(fallback);
+        self.fallback = Some(fallback);
         self
     }
 
     pub fn build(self) -> FeishuCardInput {
-        self.input
+        self
     }
 }
 
@@ -221,7 +215,7 @@ mod tests {
 
     #[test]
     fn test_input_builder() {
-        let input = FeishuCardInputBuilder::new()
+        let input = FeishuCardInput::new()
             .name("input1")
             .required(false)
             .disabled(false)
@@ -233,9 +227,7 @@ mod tests {
             .label_position("left")
             .value(json!({"k": "v"}))
             .confirm(InputConfirm::new("title", "content"))
-            .fallback(InputFallback::new().text(PlainText::new("自定义声明")))
-            .build()
-            ;
+            .fallback(InputFallback::new().text(PlainText::new("自定义声明")));
 
         let json = json!({
           "tag": "input", // 输入框的标签。

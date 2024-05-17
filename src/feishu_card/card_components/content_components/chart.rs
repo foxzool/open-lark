@@ -55,55 +55,46 @@ impl Default for FeishuCardChart {
     }
 }
 
-pub struct FeishuCardChartBuilder {
-    chart: FeishuCardChart,
-}
-
-impl FeishuCardChartBuilder {
+impl FeishuCardChart {
     pub fn new() -> Self {
-        Self {
-            chart: FeishuCardChart::default(),
-        }
+        FeishuCardChart::default()
     }
 
     pub fn aspect_ratio(mut self, aspect_ratio: &str) -> Self {
-        self.chart.aspect_ratio = Some(aspect_ratio.to_string());
+        self.aspect_ratio = Some(aspect_ratio.to_string());
         self
     }
 
     pub fn color_theme(mut self, color_theme: &str) -> Self {
-        self.chart.color_theme = Some(color_theme.to_string());
+        self.color_theme = Some(color_theme.to_string());
         self
     }
 
     pub fn chart_spec(mut self, chart_spec: Value) -> Self {
-        self.chart.chart_spec = chart_spec;
+        self.chart_spec = chart_spec;
         self
     }
 
     pub fn preview(mut self, preview: bool) -> Self {
-        self.chart.preview = Some(preview);
+        self.preview = Some(preview);
         self
     }
 
     pub fn height(mut self, height: &str) -> Self {
-        self.chart.height = Some(height.to_string());
+        self.height = Some(height.to_string());
         self
-    }
-
-    pub fn build(self) -> FeishuCardChart {
-        self.chart
     }
 }
 
 #[cfg(test)]
 mod test {
     use serde_json::json;
-    use crate::feishu_card::card_components::content_components::chart::{FeishuCardChartBuilder};
+
+    use crate::feishu_card::card_components::content_components::chart::FeishuCardChart;
 
     #[test]
     fn test_chart() {
-        let chart = FeishuCardChartBuilder::new()
+        let chart = FeishuCardChart::new()
             .aspect_ratio("1:1")
             .color_theme("brand")
             .chart_spec(json!({
@@ -115,8 +106,7 @@ mod test {
                 ]
             }))
             .preview(true)
-            .height("auto")
-            .build();
+            .height("auto");
         let json = json!({
             "tag": "chart",
             "aspect_ratio": "1:1",

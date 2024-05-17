@@ -41,39 +41,29 @@ struct RawImage {
     img_key: String,
 }
 
-pub struct FeishuCardMultiImageLayoutBuilder {
-    multi_image_layout: FeishuCardMultiImageLayout,
-}
-
-impl FeishuCardMultiImageLayoutBuilder {
+impl FeishuCardMultiImageLayout {
     pub fn new() -> Self {
-        FeishuCardMultiImageLayoutBuilder {
-            multi_image_layout: FeishuCardMultiImageLayout::default(),
-        }
+        FeishuCardMultiImageLayout::default()
     }
 
     pub fn combination_mode(mut self, combination_mode: &str) -> Self {
-        self.multi_image_layout.combination_mode = combination_mode.to_string();
+        self.combination_mode = combination_mode.to_string();
         self
     }
 
     pub fn corner_radius(mut self, corner_radius: &str) -> Self {
-        self.multi_image_layout.corner_radius = Some(corner_radius.to_string());
+        self.corner_radius = Some(corner_radius.to_string());
         self
     }
 
     pub fn img_list(mut self, img_list: Vec<&str>) -> Self {
-        self.multi_image_layout.img_list = img_list
+        self.img_list = img_list
             .iter()
             .map(|img_key| RawImage {
                 img_key: img_key.to_string(),
             })
             .collect();
         self
-    }
-
-    pub fn build(self) -> FeishuCardMultiImageLayout {
-        self.multi_image_layout
     }
 }
 
@@ -85,14 +75,13 @@ mod test {
 
     #[test]
     fn test_multi_image_layout() {
-        let multi_image_layout = FeishuCardMultiImageLayoutBuilder::new()
+        let multi_image_layout = FeishuCardMultiImageLayout::new()
             .combination_mode("trisect")
             .img_list(vec![
                 "img_v2_4c772db0-9aff-4eba-bbf4-6e6121cabcef",
                 "img_v2_4c772db0-9aff-4eba-bbf4-6e6121cabcef",
                 "img_v2_4c772db0-9aff-4eba-bbf4-6e6121cabcef",
-            ])
-            .build();
+            ]);
 
         assert_eq!(
             serde_json::to_value(multi_image_layout).unwrap(),
