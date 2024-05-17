@@ -14,7 +14,7 @@ fn main() {
     dotenv().expect(".env file not found");
 
     // 创建 CustomBot 实例
-    let bot = CustomBot::new(env::var("URL").unwrap(), None);
+    let bot = CustomBot::new(env::var("HOOK_URL").unwrap(), env::var("HOOK_SECRET").ok());
 
     // 发送文本消息
     let message = MessageText::new("新更新提醒");
@@ -36,7 +36,8 @@ fn main() {
     // 发送消息卡片
     let card_template = MessageCardTemplate::new(
         "AAqk4PdEIBaSV",
-        json!({"project_name": "project", "address": "address", "money": "money", "zlrq": "zlrq", "comment": "comment", "search_url": "search_url"}),
+        json!({"project_name": "project", "address": "address", "money": 100, "zlrq": "zlrq", "comment": "comment", "search_url": "search_url"}),
     );
-    let _resp = bot.send_card(card_template).unwrap();
+    let resp = bot.send_card(card_template).unwrap();
+    println!("{:?}", resp);
 }
