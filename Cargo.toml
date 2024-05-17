@@ -36,6 +36,10 @@ name = "feishu_card_column_set"
 path = "examples/card/column_set.rs"
 
 [[example]]
+name = "feishu_card_form"
+path = "examples/card/form.rs"
+
+[[example]]
 name = "create_message"
 path = "examples/api/im/v1/create_message.rs"
 

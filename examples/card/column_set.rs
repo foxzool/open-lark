@@ -3,20 +3,24 @@ use std::env;
 use dotenvy::dotenv;
 use uuid::Uuid;
 
-use open_lark::client::LarkClientBuilder;
-use open_lark::feishu_card::{FeishuCard, FeishuCardElement};
-use open_lark::feishu_card::card_components::containers::column_set::{
-    Column, ColumnAction, ColumnSetContainer,
-};
-use open_lark::feishu_card::card_components::content_components::divider::FeishuCardDivider;
-use open_lark::feishu_card::card_components::content_components::image::FeishuCardImage;
-use open_lark::feishu_card::card_components::content_components::plain_text::PlainText;
-use open_lark::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdown;
-use open_lark::feishu_card::card_components::content_components::title::{FeishuCardTitle, Title};
-use open_lark::feishu_card::card_components::Element;
-use open_lark::feishu_card::href::FeishuCardHrefVal;
-use open_lark::service::im::v1::message::{
-    CreateMessageReqBody, CreateMessageReqBuilder, SendMessageTrait,
+use open_lark::{
+    client::LarkClientBuilder,
+    feishu_card::{
+        card_components::{
+            containers::column_set::{Column, ColumnAction, ColumnSetContainer},
+            content_components::{
+                divider::FeishuCardDivider,
+                image::FeishuCardImage,
+                plain_text::PlainText,
+                rich_text::FeishuCardMarkdown,
+                title::{FeishuCardTitle, Title},
+            },
+            Element,
+        },
+        FeishuCard,
+        href::FeishuCardHrefVal,
+    },
+    service::im::v1::message::{CreateMessageReqBody, CreateMessageReqBuilder, SendMessageTrait},
 };
 
 fn main() {
@@ -38,11 +42,11 @@ fn main() {
         .elements(
             "zh_cn",
             vec![
-                FeishuCardElement::Markdown(FeishuCardMarkdown::new().content(
+                Element::Markdown(FeishuCardMarkdown::new().content(
                     "入住酒店：杭州xxxx酒店\n<font color='grey'>📍 浙江省杭州市西湖区</font>",
                 )),
-                FeishuCardElement::Divider(FeishuCardDivider::default()),
-                FeishuCardElement::ColumnSet(
+                Element::Divider(FeishuCardDivider::default()),
+                Element::ColumnSet(
                     ColumnSetContainer::new()
                         .flex_mode("none")
                         .background_style("default")
@@ -63,7 +67,7 @@ fn main() {
                                 .vertical_align("center")
                                 .elements(vec![Element::Image(
                                     FeishuCardImage::new()
-                                        .img_key("img_v2_120b03c8-27e3-456f-89c0-90ede1aa59ag").scale_type("fit_horizontal").alt(PlainText::new().content("")),
+                                        .img_key("img_v2_120b03c8-27e3-456f-89c0-90ede1aa59ag").scale_type("fit_horizontal").alt(PlainText::default()),
                                 )]),
                             Column::new()
                                 .width("weighted")
@@ -75,8 +79,8 @@ fn main() {
                                 )]),
                         ]),
                 ),
-                FeishuCardElement::Divider(FeishuCardDivider::default()),
-                FeishuCardElement::ColumnSet(
+                Element::Divider(FeishuCardDivider::default()),
+                Element::ColumnSet(
                     ColumnSetContainer::new()
                         .flex_mode("none")
                         .background_style("default")
@@ -97,7 +101,7 @@ fn main() {
                                 .vertical_align("center")
                                 .elements(vec![Element::Image(
                                     FeishuCardImage::new()
-                                        .img_key("img_v2_120b03c8-27e3-456f-89c0-90ede1aa59ag").scale_type("fit_horizontal").alt(PlainText::new().content("")),
+                                        .img_key("img_v2_120b03c8-27e3-456f-89c0-90ede1aa59ag").scale_type("fit_horizontal").alt(PlainText::default()),
                                 )]),
                             Column::new()
                                 .width("weighted")

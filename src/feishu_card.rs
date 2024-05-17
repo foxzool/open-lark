@@ -7,17 +7,14 @@ use strum_macros::EnumString;
 
 use crate::{
     feishu_card::{
-        card_components::{
-            containers::column_set::ColumnSetContainer,
-            content_components::{
-                plain_text::PlainText, rich_text::FeishuCardMarkdown, title::FeishuCardTitle,
-            },
+        card_components::content_components::{
+            plain_text::PlainText, title::FeishuCardTitle,
         },
         text::CustomTextSize,
     },
     service::im::v1::message::SendMessageTrait,
 };
-use crate::feishu_card::card_components::content_components::divider::FeishuCardDivider;
+use crate::feishu_card::card_components::Element;
 
 pub mod card_components;
 pub mod color;
@@ -35,7 +32,7 @@ pub struct FeishuCard {
     /// 用于配置卡片的标题
     pub i18n_header: HashMap<FeishuCardLanguage, FeishuCardTitle>,
     /// 卡片的多语言正文内容
-    pub i18n_elements: HashMap<FeishuCardLanguage, Vec<FeishuCardElement>>,
+    pub i18n_elements: HashMap<FeishuCardLanguage, Vec<Element>>,
 }
 
 impl SendMessageTrait for FeishuCard {
@@ -48,7 +45,6 @@ impl SendMessageTrait for FeishuCard {
     }
 }
 
-
 impl FeishuCard {
     pub fn new() -> Self {
         let lng = FeishuCardLanguage::ZhCN;
@@ -59,7 +55,7 @@ impl FeishuCard {
         Self {
             config: None,
             i18n_header: header,
-            i18n_elements: elements
+            i18n_elements: elements,
         }
     }
 
@@ -76,15 +72,13 @@ impl FeishuCard {
         self
     }
 
-
     /// 添加组件
-    pub fn elements(mut self, lng: &str, elements: Vec<FeishuCardElement>) -> Self {
+    pub fn elements(mut self, lng: &str, elements: Vec<Element>) -> Self {
         let language: FeishuCardLanguage = lng.parse().expect("unknown language");
         let self_elements = self.i18n_elements.entry(language).or_default();
         self_elements.extend(elements);
         self
     }
-
 }
 
 /// 卡片全局行为设置
@@ -304,16 +298,4 @@ pub enum MessageCardColor {
     Red,
     Purple,
     Carmine,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum FeishuCardElement {
-    ColumnSet(ColumnSetContainer),
-    Divider(FeishuCardDivider),
-    Div,
-    Markdown(FeishuCardMarkdown),
-    Img,
-    Note,
-    Actions,
 }

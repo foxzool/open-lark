@@ -15,16 +15,18 @@ use crate::feishu_card::card_components::{
         picker_time::PickerTime, select_person::SelectPerson, select_static::SelectStatic,
     },
 };
+use crate::feishu_card::card_components::containers::form::FormContainer;
 
 pub mod containers;
 pub mod content_components;
 pub mod interactive_components;
 
-/// 分栏组件支持内嵌的组件
+/// 卡片组件枚举
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum Element {
     ColumnSet(ColumnSetContainer),
+    FormContainer(FormContainer),
     PlainText(FeishuCardText),
     Markdown(FeishuCardMarkdown),
     Image(FeishuCardImage),
