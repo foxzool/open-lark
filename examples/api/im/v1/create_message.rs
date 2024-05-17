@@ -1,12 +1,13 @@
 use std::env;
 
 use dotenvy::dotenv;
+use serde_json::json;
 use uuid::Uuid;
 
 use open_lark::client::LarkClientBuilder;
 use open_lark::service::im::v1::message::{
-    CreateMessageReqBody, CreateMessageReqBuilder, MessagePost, MessagePostNode,
-    MessageTextBuilder, SendMessageTrait,
+    CreateMessageReqBody, CreateMessageReqBuilder, MessageCardTemplate, MessagePost,
+    MessagePostNode, MessageTextBuilder, SendMessageTrait,
 };
 
 // POST /open-apis/im/v1/messages
@@ -55,12 +56,16 @@ fn main() {
             emoji_type: "SMILE".to_string(),
         }]);
 
+    // 卡片模板
+    let card_template =
+        MessageCardTemplate::new("AAqk4PdEIBaSV", json!({"project_name": "project"}));
+
     let req = CreateMessageReqBuilder::new()
         .receive_id_type("chat_id")
         .body(CreateMessageReqBody {
             receive_id: "oc_84d53efe245072c16ba4b4ff597f52f3".to_string(),
-            msg_type: rich_text_message.msg_type(),
-            content: rich_text_message.content(),
+            msg_type: card_template.msg_type(),
+            content: card_template.content(),
             uuid: Some(uuid.to_string()),
         })
         .build();

@@ -1,6 +1,6 @@
 use log::error;
 use serde::{Deserialize, Serialize};
-use serde_json::json;
+use serde_json::{json, Value};
 
 use crate::core::api_req::ApiReq;
 use crate::core::api_resp::{ApiResp, BaseResp, CodeMsg};
@@ -593,11 +593,48 @@ impl SendMessageTrait for MessageImage {
     }
 }
 
-/// 消息卡片
-pub enum MessageInteractive {
-    Card,
-    Template,
+
+/// 卡片模板
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MessageCardTemplate {
+    /// 固定值：template
+    r#type: String,
+    /// 卡片模板数据
+    data: CardTemplate
 }
+
+impl SendMessageTrait for MessageCardTemplate {
+    fn msg_type(&self) -> String {
+        "interactive".to_string()
+    }
+
+    fn content(&self) -> String {
+        serde_json::to_string(self).unwrap()
+    }
+}
+
+impl MessageCardTemplate {
+    pub fn new(template_id: impl ToString, template_variable: Value) -> Self {
+        Self {
+            r#type: "template".to_string(),
+            data: CardTemplate {
+                template_id: template_id.to_string(),
+                template_variable
+            }
+        }
+    }
+}
+
+/// 卡片模板数据
+#[derive(Debug, Serialize, Deserialize)]
+struct CardTemplate {
+    /// 卡片模板 ID，可在消息卡片搭建工具，我的卡片中，通过复制卡片 ID 获取
+    template_id: String,
+    /// 卡片中的变量数据，值为{key:value}形式，其中 key 表示变量名称。value 值表示变量的值
+    template_variable: Value
+}
+
+
 
 #[cfg(test)]
 mod test {
