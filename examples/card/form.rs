@@ -14,7 +14,7 @@ use open_lark::feishu_card::card_components::content_components::image::FeishuCa
 use open_lark::feishu_card::card_components::content_components::plain_text::PlainText;
 use open_lark::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdown;
 use open_lark::feishu_card::card_components::content_components::title::{FeishuCardTitle, Title};
-use open_lark::feishu_card::card_components::Element;
+use open_lark::feishu_card::card_components::CardElement;
 use open_lark::feishu_card::card_components::interactive_components::button::FeishuCardButton;
 use open_lark::feishu_card::card_components::interactive_components::input::{
     FeishuCardInput, InputConfirm,
@@ -38,7 +38,7 @@ fn main() {
     let uuid = Uuid::new_v4();
 
     let form = FormContainer::new().name("Form_lvxmxsxf").elements(vec![
-        Element::ColumnSet(
+        CardElement::ColumnSet(
             ColumnSetContainer::new()
                 .flex_mode("stretch")
                 .background_style("default")
@@ -47,14 +47,14 @@ fn main() {
                         .width("weighted")
                         .weight(1)
                         .vertical_align("top")
-                        .elements(vec![Element::Markdown(
+                        .elements(vec![CardElement::Markdown(
                             FeishuCardMarkdown::new().content("请选择："),
                         )]),
                     Column::new()
                         .width("weighted")
                         .weight(1)
                         .vertical_align("top")
-                        .elements(vec![Element::SelectStatic(
+                        .elements(vec![CardElement::SelectStatic(
                             SelectStatic::new()
                                 .name("Select_pj6kw7cxyl")
                                 .placeholder(PlainText::new("这是一个选择菜单"))
@@ -67,7 +67,7 @@ fn main() {
                         )]),
                 ]),
         ),
-        Element::InputForm(
+        CardElement::InputForm(
             FeishuCardInput::new()
                 .name("Input_fhaty9jktke")
                 .placeholder(PlainText::new("请输入"))
@@ -76,7 +76,7 @@ fn main() {
                 .label_position("left")
                 .value(json!({"k":"v"})),
         ),
-        Element::Button(
+        CardElement::Button(
             FeishuCardButton::new()
                 .action_type("form_submit")
                 .name("Button_e4d9u982x5k")
@@ -93,7 +93,7 @@ fn main() {
                 .title(Title::new().content("选择菜单"))
                 .template("green"),
         )
-        .elements("zh_cn", vec![Element::FormContainer(form)]);
+        .elements("zh_cn", vec![CardElement::FormSet(form)]);
 
     let req = CreateMessageReqBuilder::new()
         .receive_id_type("chat_id")

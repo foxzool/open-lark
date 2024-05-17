@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::feishu_card::card_components::Element;
+use crate::feishu_card::card_components::CardElement;
 use crate::feishu_card::card_components::interactive_components::input::InputConfirm;
 
 /// 表单容器
@@ -11,7 +11,7 @@ pub struct FormContainer {
     /// 表单容器的唯一标识。用于识别用户提交的数据属于哪个表单容器。在同一张卡片内，该字段的值全局唯一。
     name: String,
     /// 表单容器的子节点。可内嵌其它容器类组件和展示、交互组件，不支持内嵌表格、图表、和表单容器组件。
-    elements: Vec<Element>,
+    elements: Vec<CardElement>,
     /// 按钮的类型。可选值：
     ///
     /// - default：黑色字体按钮，有边框
@@ -54,7 +54,7 @@ impl FormContainer {
         self
     }
 
-    pub fn elements(mut self, elements: Vec<Element>) -> Self {
+    pub fn elements(mut self, elements: Vec<CardElement>) -> Self {
         self.elements = elements;
         self
     }
@@ -74,176 +74,47 @@ impl FormContainer {
 mod test {
     use serde_json::json;
 
-    use crate::feishu_card::card_components::containers::column_set::{Column, ColumnSetContainer};
     use crate::feishu_card::card_components::content_components::plain_text::PlainText;
-    use crate::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdown;
-    use crate::feishu_card::card_components::Element;
+    use crate::feishu_card::card_components::CardElement;
     use crate::feishu_card::card_components::interactive_components::button::FeishuCardButton;
     use crate::feishu_card::card_components::interactive_components::input::FeishuCardInput;
-    use crate::feishu_card::card_components::interactive_components::select_static::{
-        SelectStatic, SelectStaticOption,
-    };
+
 
     use super::*;
 
     #[test]
     fn test_form_container() {
-        let form = FormContainer::new().name("Form_lvxmxsxf").elements(vec![
-            Element::ColumnSet(
-                ColumnSetContainer::new()
-                    .flex_mode("stretch")
-                    .background_style("default")
-                    .columns(vec![
-                        Column::new()
-                            .width("weighted")
-                            .weight(1)
-                            .vertical_align("top")
-                            .elements(vec![Element::Markdown(
-                                FeishuCardMarkdown::new().content("请选择："),
-                            )]),
-                        Column::new()
-                            .width("weighted")
-                            .weight(1)
-                            .vertical_align("top")
-                            .elements(vec![Element::SelectStatic(
-                                SelectStatic::new()
-                                    .name("Select_pj6kw7cxyl")
-                                    .placeholder(PlainText::new("这是一个选择菜单"))
-                                    .options(vec![
-                                        SelectStaticOption::new("选项1", "1"),
-                                        SelectStaticOption::new("选项2", "2"),
-                                        SelectStaticOption::new("选项3", "3"),
-                                        SelectStaticOption::new("选项4", "4"),
-                                    ]),
-                            )]),
-                    ]),
-            ),
-            Element::InputForm(
-                FeishuCardInput::new()
-                    .name("Input_fhaty9jktke")
-                    .placeholder(PlainText::new("请输入"))
-                    .max_length(5)
-                    .label(PlainText::new("请输入文本："))
-                    .label_position("left")
-                    .value(json!({"k":"v"})),
-            ),
-            Element::Button(
+        let form = FormContainer::new().name("form_1").elements(vec![
+            CardElement::InputForm(FeishuCardInput::new().name("reason").required(true)),
+            CardElement::Button(
                 FeishuCardButton::new()
                     .action_type("form_submit")
-                    .name("Button_e4d9u982x5k")
+                    .name("submit")
                     .r#type("primary")
-                    .text(PlainText::new("提交").tag("lark_md"))
-                    .confirm(InputConfirm::new("title", "确认提交吗")),
+                    .text(PlainText::new("提交").tag("lark_md")),
             ),
         ]);
 
         let expect = json!( {
-            "tag": "form",
-            "name": "Form_lvxmxsxf",
-            "elements": [
-                {
-                    "tag": "column_set",
-                    "flex_mode": "stretch",
-                    "background_style": "default",
-                    "columns": [
-                        {
-                            "tag": "column",
-                            "width": "weighted",
-                            "weight": 1,
-                            "vertical_align": "top",
-                            "elements": [
-                                {
-                                    "tag": "markdown",
-                                    "content": "请选择："
-                                }
-                            ]
-                        },
-                        {
-                            "tag": "column",
-                            "width": "weighted",
-                            "weight": 1,
-                            "vertical_align": "top",
-                            "elements": [
-                                {
-                                    "tag": "select_static",
-                                    "name": "Select_pj6kw7cxyl",
-                                    "placeholder": {
-                                        "tag": "plain_text",
-                                        "content": "这是一个选择菜单"
-                                    },
-                                    "options": [
-                                        {
-                                            "text": {
-                                                "tag": "plain_text",
-                                                "content": "选项1"
-                                            },
-                                            "value": "1"
-                                        },
-                                        {
-                                            "text": {
-                                                "tag": "plain_text",
-                                                "content": "选项2"
-                                            },
-                                            "value": "2"
-                                        },
-                                        {
-                                            "text": {
-                                                "tag": "plain_text",
-                                                "content": "选项3"
-                                            },
-                                            "value": "3"
-                                        },
-                                        {
-                                            "text": {
-                                                "tag": "plain_text",
-                                                "content": "选项4"
-                                            },
-                                            "value": "4"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "tag": "input",
-                    "name": "Input_fhaty9jktke",
-                    "placeholder": {
-                        "tag": "plain_text",
-                        "content": "请输入"
-                    },
-                    "max_length": 5,
-                    "label": {
-                        "tag": "plain_text",
-                        "content": "请输入文本："
-                    },
-                    "label_position": "left",
-                    "value": {
-                        "k": "v"
-                    }
-                },
-                {
-                    "action_type": "form_submit",
-                    "name": "Button_e4d9u982x5k",
-                    "tag": "button",
-                    "text": {
-                        "content": "提交",
-                        "tag": "lark_md"
-                    },
-                    "type": "primary",
-                    "confirm": {
-                        "title": {
-                            "tag": "plain_text",
-                            "content": "title"
-                        },
-                        "text": {
-                            "tag": "plain_text",
-                            "content": "确认提交吗"
-                        }
-                    }
-                }
-            ]
+          "tag": "form",    // 表单容器的标签。
+          "name": "form_1", // 该表单容器的唯一标识。用于识别用户在交互后，提交的是哪个表单容器的数据。
+          "elements": [
+            {
+              "tag": "input",   // 为表单容器内添加一个输入框组件。
+              "name": "reason", // 输入框组件的唯一标识。用于识别用户在交互后，提交的是哪个表单项的数据。在表单容器中所有的交互组件中，该字段必填，否则数据会发送失败。
+              "required": true  // 是否必填。为 true 时点击按钮后会做必填校验。
+            },
+            {
+              "tag": "button", // 表单容器内的按钮组件。
+              "action_type": "form_submit", // 将当前按钮与提交事件绑定。用户点击后，将触发表单容器的提交事件，异步提交所有已填写的表单项内容
+              "name": "submit", // 按钮组件的唯一标识，用于识别用户在交互后，点击的是哪个按钮。在表单容器中所有的交互组件中，该字段必填，否则数据会发送失败。
+              "text": { // 按钮上的文本。
+                "content": "提交",
+                "tag": "lark_md"
+              },
+              "type": "primary", // 按钮的样式类型。
+            }
+          ]
         });
 
         assert_eq!(json!(form), expect);

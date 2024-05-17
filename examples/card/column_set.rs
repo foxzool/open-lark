@@ -15,7 +15,7 @@ use open_lark::{
                 rich_text::FeishuCardMarkdown,
                 title::{FeishuCardTitle, Title},
             },
-            Element,
+            CardElement,
         },
         FeishuCard,
         href::FeishuCardHrefVal,
@@ -42,11 +42,11 @@ fn main() {
         .elements(
             "zh_cn",
             vec![
-                Element::Markdown(FeishuCardMarkdown::new().content(
+                CardElement::Markdown(FeishuCardMarkdown::new().content(
                     "入住酒店：杭州xxxx酒店\n<font color='grey'>📍 浙江省杭州市西湖区</font>",
                 )),
-                Element::Divider(FeishuCardDivider::default()),
-                Element::ColumnSet(
+                CardElement::Divider(FeishuCardDivider::default()),
+                CardElement::ColumnSet(
                     ColumnSetContainer::new()
                         .flex_mode("none")
                         .background_style("default")
@@ -65,22 +65,22 @@ fn main() {
                                 .width("weighted")
                                 .weight(1)
                                 .vertical_align("center")
-                                .elements(vec![Element::Image(
+                                .elements(vec![CardElement::Image(
                                     FeishuCardImage::new()
                                         .img_key("img_v2_120b03c8-27e3-456f-89c0-90ede1aa59ag").scale_type("fit_horizontal").alt(PlainText::default()),
                                 )]),
                             Column::new()
                                 .width("weighted")
                                 .weight(3)
-                                .elements(vec![Element::Markdown(
+                                .elements(vec![CardElement::Markdown(
                                     FeishuCardMarkdown::new()
                                         .content("**高级双床房**\n<font color='grey'>双早|40-47㎡|有窗户|双床</font>\n<font color='red'>¥699</font> 起")
                                         .text_align("left"),
                                 )]),
                         ]),
                 ),
-                Element::Divider(FeishuCardDivider::default()),
-                Element::ColumnSet(
+                CardElement::Divider(FeishuCardDivider::default()),
+                CardElement::ColumnSet(
                     ColumnSetContainer::new()
                         .flex_mode("none")
                         .background_style("default")
@@ -99,7 +99,7 @@ fn main() {
                                 .width("weighted")
                                 .weight(1)
                                 .vertical_align("center")
-                                .elements(vec![Element::Image(
+                                .elements(vec![CardElement::Image(
                                     FeishuCardImage::new()
                                         .img_key("img_v2_120b03c8-27e3-456f-89c0-90ede1aa59ag").scale_type("fit_horizontal").alt(PlainText::default()),
                                 )]),
@@ -107,7 +107,7 @@ fn main() {
                                 .width("weighted")
                                 .weight(3)
                                 .vertical_align("top")
-                                .elements(vec![Element::Markdown(
+                                .elements(vec![CardElement::Markdown(
                                     FeishuCardMarkdown::new()
                                         .content("**精品大床房**\n<font color='grey'>双早|40-47㎡|有窗户|大床</font>\n<font color='red'>¥666</font> 起")
                                         .text_align("left"),

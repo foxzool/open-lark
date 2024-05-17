@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::feishu_card::card_components::Element;
+use crate::feishu_card::card_components::CardElement;
 use crate::feishu_card::href::FeishuCardHrefVal;
 
 /// 多列布局的参数
@@ -153,7 +153,7 @@ pub struct Column {
     #[serde(skip_serializing_if = "Option::is_none")]
     padding: Option<String>,
     /// 列容器中内嵌的组件。可内嵌组件参考上文嵌套关系
-    elements: Vec<Element>,
+    elements: Vec<CardElement>,
     /// 设置点击列时的交互配置。当前仅支持跳转交互。如果布局容器内有交互组件，则优先响应交互组件定义的交互。
     #[serde(skip_serializing_if = "Option::is_none")]
     action: Option<ColumnAction>,
@@ -204,7 +204,7 @@ impl Column {
         self
     }
 
-    pub fn elements(mut self, elements: Vec<Element>) -> Self {
+    pub fn elements(mut self, elements: Vec<CardElement>) -> Self {
         self.elements = elements;
         self
     }

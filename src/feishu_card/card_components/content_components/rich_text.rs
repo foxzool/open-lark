@@ -44,8 +44,11 @@ impl Default for FeishuCardMarkdown {
 }
 
 impl FeishuCardMarkdown {
-    pub fn new() -> Self {
-        FeishuCardMarkdown::default()
+    pub fn new(text: &str) -> Self {
+        Self {
+            content: text.to_string(),
+            ..Default::default()
+        }
     }
 
     pub fn text_align(mut self, text_align: &str) -> Self {

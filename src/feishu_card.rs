@@ -14,7 +14,7 @@ use crate::{
     },
     service::im::v1::message::SendMessageTrait,
 };
-use crate::feishu_card::card_components::Element;
+use crate::feishu_card::card_components::CardElement;
 
 pub mod card_components;
 pub mod color;
@@ -32,7 +32,7 @@ pub struct FeishuCard {
     /// 用于配置卡片的标题
     pub i18n_header: HashMap<FeishuCardLanguage, FeishuCardTitle>,
     /// 卡片的多语言正文内容
-    pub i18n_elements: HashMap<FeishuCardLanguage, Vec<Element>>,
+    pub i18n_elements: HashMap<FeishuCardLanguage, Vec<CardElement>>,
 }
 
 impl SendMessageTrait for FeishuCard {
@@ -73,7 +73,7 @@ impl FeishuCard {
     }
 
     /// 添加组件
-    pub fn elements(mut self, lng: &str, elements: Vec<Element>) -> Self {
+    pub fn elements(mut self, lng: &str, elements: Vec<CardElement>) -> Self {
         let language: FeishuCardLanguage = lng.parse().expect("unknown language");
         let self_elements = self.i18n_elements.entry(language).or_default();
         self_elements.extend(elements);

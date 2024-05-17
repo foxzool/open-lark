@@ -16,6 +16,7 @@ use crate::feishu_card::card_components::{
     },
 };
 use crate::feishu_card::card_components::containers::form::FormContainer;
+use crate::feishu_card::card_components::containers::interactive::InteractiveContainer;
 
 pub mod containers;
 pub mod content_components;
@@ -24,10 +25,11 @@ pub mod interactive_components;
 /// 卡片组件枚举
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum Element {
+pub enum CardElement {
     ColumnSet(ColumnSetContainer),
-    FormContainer(FormContainer),
-    PlainText(FeishuCardText),
+    FormSet(FormContainer),
+    InteractiveSet(InteractiveContainer),
+    Text(FeishuCardText),
     Markdown(FeishuCardMarkdown),
     Image(FeishuCardImage),
     InputForm(FeishuCardInput),

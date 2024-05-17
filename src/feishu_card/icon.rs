@@ -20,6 +20,17 @@ pub struct FeishuCardTextIcon {
     img_key: Option<String>,
 }
 
+impl Default for FeishuCardTextIcon {
+    fn default() -> Self {
+        FeishuCardTextIcon {
+            tag: Some("standard_icon".to_string()),
+            token: None,
+            color: None,
+            img_key: None,
+        }
+    }
+}
+
 impl FeishuCardTextIcon {
     pub fn new() -> Self {
         FeishuCardTextIcon {

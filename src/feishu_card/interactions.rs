@@ -88,12 +88,18 @@ pub struct FormBehavior {
     behavior: Option<String>,
 }
 
-impl FormBehavior {
-    pub fn new() -> Self {
+impl Default for FormBehavior {
+    fn default() -> Self {
         Self {
             r#type: "form_action".to_string(),
-            behavior: None,
+            behavior: Some("submit".to_string()),
         }
+    }
+}
+
+impl FormBehavior {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn behavior(mut self, behavior: &str) -> Self {

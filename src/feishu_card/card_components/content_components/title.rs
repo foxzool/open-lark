@@ -118,8 +118,8 @@ impl Default for Title {
 }
 
 impl Title {
-    pub fn new() -> Self {
-        Title::default()
+    pub fn new(content: &str) -> Self {
+        Self::default().content(content)
     }
 
     pub fn content(mut self, content: &str) -> Self {
@@ -178,34 +178,23 @@ pub struct FeishuCardUdIcon {
     style: Option<FeishuCardStyle>,
 }
 
-/// 自定义图标构建器
-pub struct FeishuCardUdIconBuilder {
-    ud_icon: FeishuCardUdIcon,
-}
-
-impl FeishuCardUdIconBuilder {
+impl FeishuCardUdIcon {
     pub fn new(token: &str) -> Self {
-        FeishuCardUdIconBuilder {
-            ud_icon: FeishuCardUdIcon {
-                tag: "standard_icon".to_string(),
-                token: Some(token.to_string()),
-                ..Default::default()
-            },
+        Self {
+            tag: "standard_icon".to_string(),
+            token: Some(token.to_string()),
+            ..Default::default()
         }
     }
 
     pub fn token(mut self, token: &str) -> Self {
-        self.ud_icon.token = Some(token.to_string());
+        self.token = Some(token.to_string());
         self
     }
 
     pub fn style(mut self, style: FeishuCardStyle) -> Self {
-        self.ud_icon.style = Some(style);
+        self.style = Some(style);
         self
-    }
-
-    pub fn build(self) -> FeishuCardUdIcon {
-        self.ud_icon
     }
 }
 
@@ -220,7 +209,7 @@ mod test {
 
     #[test]
     fn test_title() {
-        let title = Title::new().content("content").i18n(
+        let title = Title::new("content").i18n(
             vec![
                 (FeishuCardLanguage::ZhCN, "中文".to_string()),
                 (FeishuCardLanguage::EnUS, "english".to_string()),
@@ -236,8 +225,8 @@ mod test {
     #[test]
     fn test_feishu_card_title() {
         let title = FeishuCardTitle::new()
-            .title(Title::new().content("示例标题"))
-            .subtitle(Title::new().content("示例文本"))
+            .title(Title::new("示例标题"))
+            .subtitle(Title::new("示例文本"))
             .template("blue")
             .text_tag_list(vec![
                 TextTagBuilder::new()
@@ -249,7 +238,7 @@ mod test {
                     .color("neutral")
                     .build(),
             ])
-            .ud_icon(FeishuCardUdIconBuilder::new("meego_colorful").build());
+            .ud_icon(FeishuCardUdIcon::new("meego_colorful"));
         let json = serde_json::to_value(&title).unwrap();
 
         assert_eq!(
