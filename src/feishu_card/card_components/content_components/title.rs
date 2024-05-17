@@ -34,52 +34,45 @@ pub struct FeishuCardTitle {
     ud_icon: Option<FeishuCardUdIcon>,
 }
 
-/// 标题组件构建器
-pub struct FeishuCardTitleBuilder {
-    header: FeishuCardTitle,
-}
-
-impl FeishuCardTitleBuilder {
+impl FeishuCardTitle {
     pub fn new() -> Self {
-        FeishuCardTitleBuilder {
-            header: FeishuCardTitle::default(),
-        }
+        FeishuCardTitle::default()
     }
 
     /// 设置标题
     pub fn title(mut self, title: Title) -> Self {
-        self.header.title = Some(title);
+        self.title = Some(title);
         self
     }
 
     /// 设置副标题
     pub fn subtitle(mut self, subtitle: Title) -> Self {
-        self.header.subtitle = Some(subtitle);
+        self.subtitle = Some(subtitle);
         self
     }
 
     /// 设置标题图标
     pub fn icon(mut self, icon: FeishuCardIcon) -> Self {
-        self.header.icon = Some(icon);
+        self.icon = Some(icon);
         self
     }
 
     /// 设置自定义图标
     pub fn ud_icon(mut self, ud_icon: FeishuCardUdIcon) -> Self {
-        self.header.ud_icon = Some(ud_icon);
+        self.ud_icon = Some(ud_icon);
         self
     }
 
     /// 设置标题主题颜色
     pub fn template(mut self, template: &str) -> Self {
         let template = FeishuCardHeaderTemplate::from_str(template).expect("invalid template");
-        self.header.template = Some(template);
+        self.template = Some(template);
         self
     }
 
     /// 设置标题标签
     pub fn text_tag_list(mut self, text_tag_list: Vec<TextTag>) -> Self {
-        self.header.text_tag_list = Some(text_tag_list);
+        self.text_tag_list = Some(text_tag_list);
         self
     }
 
@@ -88,13 +81,8 @@ impl FeishuCardTitleBuilder {
         mut self,
         i18n_text_tag_list: HashMap<FeishuCardLanguage, Vec<TextTag>>,
     ) -> Self {
-        self.header.i18n_text_tag_list = Some(i18n_text_tag_list);
+        self.i18n_text_tag_list = Some(i18n_text_tag_list);
         self
-    }
-
-    /// 构建标题组件
-    pub fn build(self) -> FeishuCardTitle {
-        self.header
     }
 }
 
@@ -129,29 +117,20 @@ impl Default for Title {
     }
 }
 
-pub struct TitleBuilder {
-    title: Title,
-}
 
-impl TitleBuilder {
+impl Title {
     pub fn new() -> Self {
-        TitleBuilder {
-            title: Title::default(),
-        }
+        Title::default()
     }
 
     pub fn content(mut self, content: &str) -> Self {
-        self.title.content = Some(content.to_string());
+        self.content = Some(content.to_string());
         self
     }
 
     pub fn i18n(mut self, i18n: HashMap<FeishuCardLanguage, String>) -> Self {
-        self.title.i18n = Some(i18n);
+        self.i18n = Some(i18n);
         self
-    }
-
-    pub fn build(self) -> Title {
-        self.title
     }
 }
 
@@ -173,24 +152,20 @@ impl Default for FeishuCardIcon {
     }
 }
 
-pub struct FeishuCardIconBuilder {
-    icon: FeishuCardIcon,
-}
 
-impl FeishuCardIconBuilder {
+
+impl FeishuCardIcon {
     pub fn new() -> Self {
-        FeishuCardIconBuilder {
-            icon: FeishuCardIcon::default(),
-        }
+        FeishuCardIcon::default()
     }
 
     pub fn img_key(mut self, img_key: &str) -> Self {
-        self.icon.img_key = Some(img_key.to_string());
+        self.img_key = Some(img_key.to_string());
         self
     }
 
     pub fn build(self) -> FeishuCardIcon {
-        self.icon
+        self
     }
 }
 
@@ -248,7 +223,7 @@ mod test {
 
     #[test]
     fn test_title() {
-        let title = TitleBuilder::new()
+        let title = Title::new()
             .content("content")
             .i18n(
                 vec![
@@ -258,7 +233,7 @@ mod test {
                 .into_iter()
                 .collect(),
             )
-            .build();
+            ;
         let json = json!({"tag":"plain_text","content":"content","i18n":{"zh_cn":"中文","en_us":"english"}});
 
         assert_eq!(serde_json::to_value(&title).unwrap(), json);
@@ -266,9 +241,9 @@ mod test {
 
     #[test]
     fn test_feishu_card_title() {
-        let title = FeishuCardTitleBuilder::new()
-            .title(TitleBuilder::new().content("示例标题").build())
-            .subtitle(TitleBuilder::new().content("示例文本").build())
+        let title = FeishuCardTitle::new()
+            .title(Title::new().content("示例标题"))
+            .subtitle(Title::new().content("示例文本"))
             .template("blue")
             .text_tag_list(vec![
                 TextTagBuilder::new()

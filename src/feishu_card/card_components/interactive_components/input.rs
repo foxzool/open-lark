@@ -97,8 +97,8 @@ pub struct InputConfirm {
 impl InputConfirm {
     pub fn new(title: &str, text: &str) -> Self {
         InputConfirm {
-            title: PlainText::new(title),
-            text: PlainText::new(text),
+            title: PlainText::new().content(title),
+            text: PlainText::new().content(text),
         }
     }
 
@@ -125,7 +125,7 @@ impl InputFallback {
     pub fn new() -> Self {
         Self {
             tag: "fallback_text".to_string(),
-            text: PlainText::new(""),
+            text: PlainText::new(),
         }
     }
 
@@ -219,15 +219,15 @@ mod tests {
             .name("input1")
             .required(false)
             .disabled(false)
-            .placeholder(PlainText::new("请输入"))
+            .placeholder(PlainText::new().content("请输入"))
             .default_value("demo")
             .width("default")
             .max_length(5)
-            .label(PlainText::new("请输入文本："))
+            .label(PlainText::new().content("请输入文本："))
             .label_position("left")
             .value(json!({"k": "v"}))
             .confirm(InputConfirm::new("title", "content"))
-            .fallback(InputFallback::new().text(PlainText::new("自定义声明")));
+            .fallback(InputFallback::new().text(PlainText::new().content("自定义声明")));
 
         let json = json!({
           "tag": "input", // 输入框的标签。

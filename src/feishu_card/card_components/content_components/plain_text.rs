@@ -72,16 +72,22 @@ pub struct PlainText {
     lines: Option<i32>,
 }
 
-impl PlainText {
-    pub fn new(content: &str) -> Self {
-        Self {
+impl Default for PlainText {
+    fn default() -> Self {
+        PlainText {
             tag: "plain_text".to_string(),
-            content: content.to_string(),
+            content: "".to_string(),
             text_size: None,
             text_color: None,
             text_align: None,
             lines: None,
         }
+    }
+}
+
+impl PlainText {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     /// 文本类型的标签。可取值：

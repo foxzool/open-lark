@@ -32,8 +32,8 @@ env_logger = "0.11.3"
 uuid = { version = "1.8.0", features = ["v4"] }
 
 [[example]]
-name = "feishu_card"
-path = "examples/feishu_card.rs"
+name = "feishu_card_column_set"
+path = "examples/card/column_set.rs"
 
 [[example]]
 name = "create_message"

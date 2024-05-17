@@ -260,9 +260,8 @@ impl ColumnAction {
 #[serde(untagged)]
 pub enum ColumnSetAllowElement {
     ColumnSet(ColumnSetContainer),
-    Repeat(RepeatContainer),
     PlainText(FeishuCardText),
-    RichText(FeishuCardMarkdown),
+    Markdown(FeishuCardMarkdown),
     Image(FeishuCardImage),
     InputForm(FeishuCardInput),
     MultiImage(FeishuCardMultiImageLayout),

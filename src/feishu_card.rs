@@ -17,6 +17,7 @@ use crate::{
     },
     service::im::v1::message::SendMessageTrait,
 };
+use crate::feishu_card::card_components::content_components::divider::FeishuCardDivider;
 
 pub mod card_components;
 pub mod color;
@@ -32,11 +33,9 @@ pub struct FeishuCard {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub config: Option<FeishuCardConfig>,
     /// 用于配置卡片的标题
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub i18n_header: Option<HashMap<FeishuCardLanguage, FeishuCardTitle>>,
+    pub i18n_header: HashMap<FeishuCardLanguage, FeishuCardTitle>,
     /// 卡片的多语言正文内容
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub i18n_elements: Option<HashMap<FeishuCardLanguage, Vec<FeishuCardElement>>>,
+    pub i18n_elements: HashMap<FeishuCardLanguage, Vec<FeishuCardElement>>,
 }
 
 impl SendMessageTrait for FeishuCard {
@@ -49,40 +48,19 @@ impl SendMessageTrait for FeishuCard {
     }
 }
 
-pub struct FeishuCardBuilder {
-    current_language: FeishuCardLanguage,
-    config: Option<FeishuCardConfig>,
-    i18n_header: Option<HashMap<FeishuCardLanguage, FeishuCardTitle>>,
-    i18n_elements: Option<HashMap<FeishuCardLanguage, Vec<FeishuCardElement>>>,
-}
 
-impl FeishuCardBuilder {
+impl FeishuCard {
     pub fn new() -> Self {
         let lng = FeishuCardLanguage::ZhCN;
         let mut header = HashMap::new();
         header.insert(lng, FeishuCardTitle::default());
         let mut elements = HashMap::new();
         elements.insert(lng, vec![]);
-        FeishuCardBuilder {
-            current_language: FeishuCardLanguage::ZhCN,
+        Self {
             config: None,
-            i18n_header: Some(header),
-            i18n_elements: Some(elements),
+            i18n_header: header,
+            i18n_elements: elements
         }
-    }
-
-    pub fn current_language(mut self, language: &str) -> Self {
-        self.current_language = language.parse().unwrap();
-        self
-    }
-
-    pub fn add_language(mut self, language: &str) -> Self {
-        let lng: FeishuCardLanguage = language.parse().unwrap();
-        let mut header = HashMap::new();
-        header.insert(lng, FeishuCardTitle::default());
-        let mut elements = HashMap::<FeishuCardLanguage, Vec<FeishuCardElement>>::new();
-        elements.insert(lng, vec![]);
-        self
     }
 
     pub fn config(mut self, config: FeishuCardConfig) -> Self {
@@ -90,56 +68,23 @@ impl FeishuCardBuilder {
         self
     }
 
-    pub fn header(mut self, header: FeishuCardTitle) -> Self {
-        let mut i18n_header = self.i18n_header.unwrap_or_default();
-        let mut origin_header = i18n_header.entry(self.current_language).or_default();
+    pub fn header(mut self, lng: &str, header: FeishuCardTitle) -> Self {
+        let language: FeishuCardLanguage = lng.parse().expect("unknown language");
+        let origin_header = self.i18n_header.entry(language).or_default();
         *origin_header = header;
-        self.i18n_header = Some(i18n_header);
+
         self
     }
 
-    pub fn push_header(mut self, header: FeishuCardTitle) -> Self {
-        let mut i18n_header = self.i18n_header.unwrap_or_default();
-        let mut origin_header = i18n_header.entry(self.current_language).or_default();
-        *origin_header = header;
-        self.i18n_header = Some(i18n_header);
+
+    /// 添加组件
+    pub fn elements(mut self, lng: &str, elements: Vec<FeishuCardElement>) -> Self {
+        let language: FeishuCardLanguage = lng.parse().expect("unknown language");
+        let self_elements = self.i18n_elements.entry(language).or_default();
+        self_elements.extend(elements);
         self
     }
 
-    pub fn i18n_element(
-        mut self,
-        i18n_element: HashMap<FeishuCardLanguage, Vec<FeishuCardElement>>,
-    ) -> Self {
-        self.i18n_elements = Some(i18n_element);
-        self
-    }
-
-    /// 向默认语言添加组件
-    pub fn push_element(mut self, element: FeishuCardElement) -> Self {
-        let mut i18n_element = self.i18n_elements.unwrap_or_default();
-        let elements = i18n_element.entry(self.current_language).or_default();
-        elements.push(element);
-        self.i18n_elements = Some(i18n_element);
-        self
-    }
-
-    /// 向指定语言添加组件
-    pub fn push_language_element(mut self, language: &str, element: FeishuCardElement) -> Self {
-        let lng: FeishuCardLanguage = language.parse().unwrap();
-        let mut i18n_element = self.i18n_elements.unwrap_or_default();
-        let elements = i18n_element.entry(lng).or_default();
-        elements.push(element);
-        self.i18n_elements = Some(i18n_element);
-        self
-    }
-
-    pub fn build(self) -> FeishuCard {
-        FeishuCard {
-            config: self.config,
-            i18n_header: self.i18n_header,
-            i18n_elements: self.i18n_elements,
-        }
-    }
 }
 
 /// 卡片全局行为设置
@@ -262,7 +207,7 @@ impl FromStr for FeishuCardLanguage {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
+        match s.to_ascii_lowercase().as_str() {
             "zh_cn" => Ok(FeishuCardLanguage::ZhCN),
             "en_us" => Ok(FeishuCardLanguage::EnUS),
             "ja_jp" => Ok(FeishuCardLanguage::JaJP),
@@ -365,7 +310,7 @@ pub enum MessageCardColor {
 #[serde(untagged)]
 pub enum FeishuCardElement {
     ColumnSet(ColumnSetContainer),
-    Hr,
+    Divider(FeishuCardDivider),
     Div,
     Markdown(FeishuCardMarkdown),
     Img,
@@ -381,7 +326,7 @@ mod test {
     #[test]
     fn test_build() {
         use super::*;
-        let card = FeishuCardBuilder::new()
+        let card = FeishuCard::new()
             .push_element(FeishuCardElement::Hr)
             .push_element(FeishuCardElement::Markdown(
                 FeishuCardMarkdown::new()
