@@ -7,6 +7,7 @@ use open_lark::{
     client::LarkClientBuilder,
     feishu_card::{
         card_components::{
+            CardElement,
             containers::column_set::{Column, ColumnAction, ColumnSetContainer},
             content_components::{
                 divider::FeishuCardDivider,
@@ -15,7 +16,6 @@ use open_lark::{
                 rich_text::FeishuCardMarkdown,
                 title::{FeishuCardTitle, Title},
             },
-            CardElement,
         },
         FeishuCard,
         href::FeishuCardHrefVal,
@@ -36,13 +36,13 @@ fn main() {
         .header(
             "zh_cn",
             FeishuCardTitle::new()
-                .title(Title::new().content("🏨 酒店申请已通过，请选择房型"))
+                .title(Title::new("🏨 酒店申请已通过，请选择房型"))
                 .template("green"),
         )
         .elements(
             "zh_cn",
             vec![
-                CardElement::Markdown(FeishuCardMarkdown::new().content(
+                CardElement::Markdown(FeishuCardMarkdown::new(
                     "入住酒店：杭州xxxx酒店\n<font color='grey'>📍 浙江省杭州市西湖区</font>",
                 )),
                 CardElement::Divider(FeishuCardDivider::default()),
@@ -73,8 +73,7 @@ fn main() {
                                 .width("weighted")
                                 .weight(3)
                                 .elements(vec![CardElement::Markdown(
-                                    FeishuCardMarkdown::new()
-                                        .content("**高级双床房**\n<font color='grey'>双早|40-47㎡|有窗户|双床</font>\n<font color='red'>¥699</font> 起")
+                                    FeishuCardMarkdown::new("**高级双床房**\n<font color='grey'>双早|40-47㎡|有窗户|双床</font>\n<font color='red'>¥699</font> 起")
                                         .text_align("left"),
                                 )]),
                         ]),
@@ -108,8 +107,7 @@ fn main() {
                                 .weight(3)
                                 .vertical_align("top")
                                 .elements(vec![CardElement::Markdown(
-                                    FeishuCardMarkdown::new()
-                                        .content("**精品大床房**\n<font color='grey'>双早|40-47㎡|有窗户|大床</font>\n<font color='red'>¥666</font> 起")
+                                    FeishuCardMarkdown::new("**精品大床房**\n<font color='grey'>双早|40-47㎡|有窗户|大床</font>\n<font color='red'>¥666</font> 起")
                                         .text_align("left"),
                                 )]),
                         ]),

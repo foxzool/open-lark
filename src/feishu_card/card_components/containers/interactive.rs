@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::feishu_card::{
     card_components::{
-        content_components::plain_text::PlainText, CardElement,
+        CardElement, content_components::plain_text::PlainText,
         interactive_components::input::InputConfirm,
     },
     interactions::Behaviors,
@@ -196,11 +196,11 @@ mod test {
                 Behaviors::Callback(CallbackBehavior::new(json!({
                     "key": "value"
                 }))),
-                Behaviors::Form(FormBehavior::new()),
+                Behaviors::Form(FormBehavior::new().behavior("submit")),
             ])
-            .hover_tips(PlainText::new("demo"))
+            .hover_tips(PlainText::text("demo"))
             .disabled(false)
-            .disabled_tips(PlainText::new("demo"))
+            .disabled_tips(PlainText::text("demo"))
             .elements(vec![]);
 
         let expect = json!({

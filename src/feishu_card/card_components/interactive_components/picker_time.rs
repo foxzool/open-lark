@@ -122,7 +122,7 @@ mod test {
             .required(false)
             .disabled(false)
             .initial_time("11:30")
-            .placeholder(super::PlainText::new("请选择"))
+            .placeholder(super::PlainText::text("请选择"))
             .width("default")
             .value(json!({ "key_1": "value_1"}))
             .confirm(super::InputConfirm::new("title", "content"));

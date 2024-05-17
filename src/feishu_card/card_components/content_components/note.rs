@@ -68,14 +68,14 @@ mod test {
                     .token("chat-forbidden_outlined")
                     .img_key("img_v2_041b28e3-5680-48c2-9af2-497ace79333g"),
             )
-            .text(PlainText::new("备注信息1"))
+            .text(PlainText::text("备注信息1"))
             .image(
                 FeishuCardImage::new()
                     .img_key("img_v2_041b28e3-5680-48c2-9af2-497ace79333g")
-                    .alt(PlainText::new("这是备注图片"))
+                    .alt(PlainText::text("这是备注图片"))
                     .build(),
             )
-            .text(PlainText::new("备注信息2"));
+            .text(PlainText::text("备注信息2"));
         let json = json!({
           "tag": "note",
           "elements": [

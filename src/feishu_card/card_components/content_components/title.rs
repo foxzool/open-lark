@@ -230,11 +230,11 @@ mod test {
             .template("blue")
             .text_tag_list(vec![
                 TextTagBuilder::new()
-                    .text(PlainText::new("标签 1"))
+                    .text(PlainText::text("标签 1"))
                     .color("neutral")
                     .build(),
                 TextTagBuilder::new()
-                    .text(PlainText::new("标签 2"))
+                    .text(PlainText::text("标签 2"))
                     .color("neutral")
                     .build(),
             ])

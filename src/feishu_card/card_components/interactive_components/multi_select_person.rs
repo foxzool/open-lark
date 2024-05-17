@@ -117,7 +117,7 @@ mod test {
             .name("multi_select_users")
             .required(true)
             .disabled(false)
-            .placeholder(PlainText::new("默认提示文本"))
+            .placeholder(PlainText::text("默认提示文本"))
             .width("default")
             .selected_values(vec!["ou_48d0958ee4b2ab3eaf0b5f6c968xxxxx"])
             .options(vec![

@@ -214,13 +214,13 @@ mod test {
             .can_preview(false)
             .aspect_ratio("16:9")
             .disabled(false)
-            .disabled_tips(PlainText::new("用户禁用提示文案"))
+            .disabled_tips(PlainText::text("用户禁用提示文案"))
             .value(json!({"key": "value"}))
             .options(vec![SelectImageOption::new("xxxxxxxxxxxxxx")
                 .value("picture1")
                 .disabled(false)
-                .disabled_tips(PlainText::new("用户禁用提示文案"))
-                .hover_tips(PlainText::new("第一张图"))]);
+                .disabled_tips(PlainText::text("用户禁用提示文案"))
+                .hover_tips(PlainText::text("第一张图"))]);
 
         let json = json!(  {
           "tag": "select_img", // 组件标签。

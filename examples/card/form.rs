@@ -48,7 +48,7 @@ fn main() {
                         .weight(1)
                         .vertical_align("top")
                         .elements(vec![CardElement::Markdown(
-                            FeishuCardMarkdown::new().content("请选择："),
+                            FeishuCardMarkdown::new("请选择："),
                         )]),
                     Column::new()
                         .width("weighted")
@@ -57,7 +57,7 @@ fn main() {
                         .elements(vec![CardElement::SelectStatic(
                             SelectStatic::new()
                                 .name("Select_pj6kw7cxyl")
-                                .placeholder(PlainText::new("这是一个选择菜单"))
+                                .placeholder(PlainText::text("这是一个选择菜单"))
                                 .options(vec![
                                     SelectStaticOption::new("选项1", "1"),
                                     SelectStaticOption::new("选项2", "2"),
@@ -70,9 +70,9 @@ fn main() {
         CardElement::InputForm(
             FeishuCardInput::new()
                 .name("Input_fhaty9jktke")
-                .placeholder(PlainText::new("请输入"))
+                .placeholder(PlainText::text("请输入"))
                 .max_length(5)
-                .label(PlainText::new("请输入文本："))
+                .label(PlainText::text("请输入文本："))
                 .label_position("left")
                 .value(json!({"k":"v"})),
         ),
@@ -81,7 +81,7 @@ fn main() {
                 .action_type("form_submit")
                 .name("Button_e4d9u982x5k")
                 .r#type("primary")
-                .text(PlainText::new("提交").tag("lark_md"))
+                .text(PlainText::text("提交").tag("lark_md"))
                 .confirm(InputConfirm::new("title", "确认提交吗")),
         ),
     ]);
@@ -90,7 +90,7 @@ fn main() {
         .header(
             "zh_cn",
             FeishuCardTitle::new()
-                .title(Title::new().content("选择菜单"))
+                .title(Title::new("选择菜单"))
                 .template("green"),
         )
         .elements("zh_cn", vec![CardElement::FormSet(form)]);

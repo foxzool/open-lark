@@ -191,7 +191,7 @@ mod test {
             .r#type("primary")
             .size("small")
             .width("default")
-            .text(PlainText::new("确定"))
+            .text(PlainText::text("确定"))
             .icon(
                 FeishuCardTextIcon::new()
                     .token("chat-forbidden_outlined")

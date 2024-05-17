@@ -86,9 +86,20 @@ impl Default for PlainText {
 }
 
 impl PlainText {
-    pub fn new(content: &str) -> Self {
+    pub fn text(content: &str) -> Self {
         Self {
             tag: "plain_text".to_string(),
+            content: content.to_string(),
+            text_size: None,
+            text_color: None,
+            text_align: None,
+            lines: None,
+        }
+    }
+
+    pub fn markdown(content: &str) -> Self {
+        Self {
+            tag: "lark_md".to_string(),
             content: content.to_string(),
             text_size: None,
             text_color: None,
@@ -142,7 +153,7 @@ mod test {
         use super::*;
         let text = FeishuCardText::new()
             .text(
-                PlainText::new("这是一段普通文本示例。")
+                PlainText::text("这是一段普通文本示例。")
                     .text_size("cus-0")
                     .text_align("center")
                     .text_color("default"),

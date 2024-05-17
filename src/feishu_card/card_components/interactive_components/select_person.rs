@@ -123,7 +123,7 @@ mod test {
             .r#type("text")
             .required(true)
             .disabled(false)
-            .placeholder(PlainText::new("默认提示文本"))
+            .placeholder(PlainText::text("默认提示文本"))
             .width("default")
             .options(vec![
                 SelectPersonOption::new("ou_48d0958ee4b2ab3eaf0b5f6c968xxxxx"),

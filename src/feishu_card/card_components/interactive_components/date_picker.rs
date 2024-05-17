@@ -116,7 +116,7 @@ mod tests {
             .name("date_picker1")
             .required(false)
             .disabled(false)
-            .placeholder(PlainText::new("请选择"))
+            .placeholder(PlainText::text("请选择"))
             .width("default")
             .initial_date("2024-01-01")
             .value(json!({"key_1": "value_1"}))

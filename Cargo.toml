@@ -44,6 +44,10 @@ name = "card_interactive"
 path = "examples/card/interactive.rs"
 
 [[example]]
+name = "card_collapsible"
+path = "examples/card/collapsible.rs"
+
+[[example]]
 name = "create_message"
 path = "examples/api/im/v1/create_message.rs"
 

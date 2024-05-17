@@ -15,6 +15,7 @@ use crate::feishu_card::card_components::{
         picker_time::PickerTime, select_person::SelectPerson, select_static::SelectStatic,
     },
 };
+use crate::feishu_card::card_components::containers::collapsible_panel::CollapsiblePanel;
 use crate::feishu_card::card_components::containers::form::FormContainer;
 use crate::feishu_card::card_components::containers::interactive::InteractiveContainer;
 
@@ -29,6 +30,7 @@ pub enum CardElement {
     ColumnSet(ColumnSetContainer),
     FormSet(FormContainer),
     InteractiveSet(InteractiveContainer),
+    CollapsePanelContainer(CollapsiblePanel),
     Text(FeishuCardText),
     Markdown(FeishuCardMarkdown),
     Image(FeishuCardImage),

@@ -92,7 +92,7 @@ impl Default for FormBehavior {
     fn default() -> Self {
         Self {
             r#type: "form_action".to_string(),
-            behavior: Some("submit".to_string()),
+            behavior: None
         }
     }
 }
@@ -142,7 +142,7 @@ mod test {
     fn test_form() {
         let form_behavior = Behaviors::Form(FormBehavior::new());
         let json = json!({
-           "type": "form_action"
+           "type": "form_action",
         });
 
         assert_eq!(serde_json::to_value(&form_behavior).unwrap(), json)

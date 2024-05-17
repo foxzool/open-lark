@@ -18,6 +18,9 @@ pub struct FeishuCardTextIcon {
     /// 自定义前缀图标的图片 key。当 tag 为 custom_icon 时生效。
     #[serde(skip_serializing_if = "Option::is_none")]
     img_key: Option<String>,
+    /// 图标的尺寸。支持 "[1,999] [1,999]px"。
+    #[serde(skip_serializing_if = "Option::is_none")]
+    size: Option<String>,
 }
 
 impl Default for FeishuCardTextIcon {
@@ -27,18 +30,14 @@ impl Default for FeishuCardTextIcon {
             token: None,
             color: None,
             img_key: None,
+            size: None,
         }
     }
 }
 
 impl FeishuCardTextIcon {
     pub fn new() -> Self {
-        FeishuCardTextIcon {
-            tag: Some("standard_icon".to_string()),
-            token: None,
-            color: None,
-            img_key: None,
-        }
+        Self::default()
     }
 
     pub fn tag(mut self, tag: &str) -> Self {
@@ -58,6 +57,11 @@ impl FeishuCardTextIcon {
 
     pub fn img_key(mut self, img_key: &str) -> Self {
         self.img_key = Some(img_key.to_string());
+        self
+    }
+
+    pub fn size(mut self, size: &str) -> Self {
+        self.size = Some(size.to_string());
         self
     }
 }

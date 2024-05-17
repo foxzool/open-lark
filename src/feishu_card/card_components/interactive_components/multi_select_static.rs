@@ -136,7 +136,7 @@ mod test {
             .name("multi_select_departments")
             .required(true)
             .disabled(false)
-            .placeholder(PlainText::new("默认提示文本"))
+            .placeholder(PlainText::text("默认提示文本"))
             .width("default")
             .values(vec![])
             .options(vec![SelectStaticOption::new(

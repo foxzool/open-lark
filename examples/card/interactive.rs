@@ -26,7 +26,6 @@ use open_lark::feishu_card::card_components::interactive_components::input::{
 use open_lark::feishu_card::card_components::interactive_components::select_static::{
     SelectStatic, SelectStaticOption,
 };
-use open_lark::feishu_card::href::FeishuCardHrefVal;
 use open_lark::feishu_card::icon::FeishuCardTextIcon;
 use open_lark::feishu_card::interactions::{Behaviors, CallbackBehavior};
 use open_lark::service::im::v1::message::{

@@ -118,7 +118,7 @@ mod test {
         let overflow = FeishuCardOverflow::new()
             .width("fill")
             .options(vec![OverflowOption::new()
-                .text(PlainText::new("这是一个链接跳转"))
+                .text(PlainText::text("这是一个链接跳转"))
                 .multi_url(
                     FeishuCardHrefVal::new().url("https://open.feishu.cn/document/home/index"),
                 )

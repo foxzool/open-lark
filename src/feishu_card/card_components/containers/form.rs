@@ -91,7 +91,7 @@ mod test {
                     .action_type("form_submit")
                     .name("submit")
                     .r#type("primary")
-                    .text(PlainText::new("提交").tag("lark_md")),
+                    .text(PlainText::text("提交").tag("lark_md")),
             ),
         ]);
 

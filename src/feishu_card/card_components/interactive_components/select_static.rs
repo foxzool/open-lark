@@ -134,7 +134,7 @@ pub struct SelectStaticOption {
 impl SelectStaticOption {
     pub fn new(text: &str, value: &str) -> Self {
         Self {
-            text: PlainText::new(text),
+            text: PlainText::text(text),
             icon: None,
             value: value.to_string(),
         }
@@ -175,7 +175,7 @@ mod test {
             .required(false)
             .disabled(false)
             .initial_index(1)
-            .placeholder(PlainText::new("默认提示文本"))
+            .placeholder(PlainText::text("默认提示文本"))
             .width("default")
             .options(vec![SelectStaticOption::new("我是交互组件", "selectDemo1")
                 .icon(

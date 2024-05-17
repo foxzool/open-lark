@@ -124,7 +124,7 @@ mod tests {
             .required(false)
             .disabled(false)
             .initial_datetime("2024-01-01 11:30")
-            .placeholder(PlainText::new("请选择"))
+            .placeholder(PlainText::text("请选择"))
             .width("default")
             .value(json!({
                 "key_1": "value_1"

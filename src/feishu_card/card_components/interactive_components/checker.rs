@@ -304,7 +304,7 @@ mod test {
             .name("check_1")
             .checked(false)
             .text(
-                PlainText::new("")
+                PlainText::text("")
                     .text_size("normal")
                     .text_color("default")
                     .text_align("left"),
@@ -313,7 +313,7 @@ mod test {
             .button_area(ButtonArea::new().pc_display_rule("always").buttons(
                 vec![Buttons::new("text")
                         .size("small")
-                        .text(PlainText::new("text按钮"))
+                        .text(PlainText::text("text按钮"))
                         .icon(
                             FeishuCardTextIcon::new()
                                 .token("chat-forbidden_outlined")
