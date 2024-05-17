@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use log::error;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
@@ -401,21 +403,17 @@ pub trait SendMessageTrait {
 
 /// 文本 text
 pub struct MessageText {
-    pub text: String,
-}
-
-pub struct MessageTextBuilder {
     text: String,
 }
 
-impl MessageTextBuilder {
-    pub fn new() -> MessageTextBuilder {
-        MessageTextBuilder {
-            text: "".to_string(),
+impl MessageText {
+    pub fn new(text: &str) -> Self {
+        Self {
+            text: text.to_string(),
         }
     }
 
-    pub fn text(mut self, text: &str) -> Self {
+    pub fn add_text(mut self, text: &str) -> Self {
         self.text += text;
         self
     }
@@ -457,11 +455,11 @@ impl SendMessageTrait for MessageText {
 
 /// 富文本参数
 #[derive(Debug, Serialize, Deserialize)]
-pub enum MessagePost {
-    #[serde(rename = "zh_cn")]
-    ZhCN(MessagePostContent),
-    #[serde(rename = "zh_cn")]
-    EnUS(MessagePostContent),
+pub struct MessagePost {
+    /// 默认的语言
+    #[serde(skip)]
+    default_language: String,
+    post: HashMap<String, MessagePostContent>,
 }
 
 impl SendMessageTrait for MessagePost {
@@ -475,48 +473,41 @@ impl SendMessageTrait for MessagePost {
 }
 
 impl MessagePost {
-    pub fn zh_cn() -> Self {
-        Self::ZhCN(MessagePostContent {
-            title: "".to_string(),
-            content: vec![],
-        })
-    }
-
-    pub fn en_us() -> Self {
-        Self::EnUS(MessagePostContent {
-            title: "".to_string(),
-            content: vec![],
-        })
-    }
-
-    pub fn title(self, title: impl ToString) -> Self {
-        match self {
-            Self::ZhCN(mut content) => {
-                content.title = title.to_string();
-                Self::ZhCN(content)
-            }
-            Self::EnUS(mut content) => {
-                content.title = title.to_string();
-                Self::EnUS(content)
-            }
+    pub fn new(lng: &str) -> Self {
+        let post = HashMap::new();
+        Self {
+            default_language: lng.to_string(),
+            post,
         }
     }
 
-    pub fn append_content(self, contents: Vec<MessagePostNode>) -> Self {
-        match self {
-            Self::ZhCN(mut content) => {
-                content.content.push(contents);
-                Self::ZhCN(content)
-            }
-            Self::EnUS(mut content) => {
-                content.content.push(contents);
-                Self::EnUS(content)
-            }
-        }
+    pub fn title(mut self, title: impl ToString) -> Self {
+        let post = self
+            .post
+            .entry(self.default_language.clone())
+            .or_insert(MessagePostContent {
+                title: title.to_string(),
+                content: vec![],
+            });
+        post.title = title.to_string();
+        self
+    }
+
+    /// 追加富文本内容
+    pub fn append_content(mut self, contents: Vec<MessagePostNode>) -> Self {
+        let post = self
+            .post
+            .entry(self.default_language.clone())
+            .or_insert(MessagePostContent {
+                title: "".to_string(),
+                content: vec![],
+            });
+        post.content.push(contents);
+        self
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct MessagePostContent {
     /// 富文本消息的标题。
     pub title: String,
@@ -530,52 +521,147 @@ pub struct MessagePostContent {
 pub enum MessagePostNode {
     /// 文本内容。
     #[serde(rename = "text")]
-    Text {
-        text: String,
-        /// 表示是不是 unescape 解码，默认为 false ，不用可以不填。
-        #[serde(skip_serializing_if = "Option::is_none")]
-        un_escape: Option<bool>,
-        /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、lineThrough与italic，非可选值将被忽略。
-        #[serde(skip_serializing_if = "Option::is_none")]
-        style: Option<Vec<String>>,
-    },
+    Text(TextNode),
     #[serde(rename = "a")]
-    A {
-        /// 文本内容
-        text: String,
-        /// 默认的链接地址，请确保链接地址的合法性，否则消息会发送失败。
-        href: String,
-        /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、lineThrough与italic，非可选值将被忽略。
-        #[serde(skip_serializing_if = "Option::is_none")]
-        style: Option<Vec<String>>,
-    },
+    A(ANode),
     #[serde(rename = "at")]
-    At {
-        /// 用户的open_id，union_id 或 user_id，请参考如何获取 User ID、Open ID 和 Union ID？
-        /// 注意: @单个用户时，user_id字段必须是有效值；@所有人填"all"。
-        user_id: String,
-        /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、lineThrough与italic，非可选值将被忽略。
-        #[serde(skip_serializing_if = "Option::is_none")]
-        style: Option<Vec<String>>,
-    },
+    At(AtNode),
     #[serde(rename = "img")]
-    Img {
-        /// 图片的唯一标识，可通过 上传图片 接口获取image_key。
-        image_key: String,
-    },
+    Img(ImgNode),
     #[serde(rename = "media")]
-    Media {
-        /// 视频文件的唯一标识，可通过 上传文件 接口获取file_key
-        file_key: String,
-        /// 视频封面图片的唯一标识，可通过 上传图片 接口获取image_key。
-        #[serde(skip_serializing_if = "Option::is_none")]
-        image_key: Option<String>,
-    },
+    Media(MediaNode),
     #[serde(rename = "emotion")]
-    Emotion {
-        /// 表情类型，部分可选值请参见表情文案。
-        emoji_type: String,
-    },
+    Emotion(EmotionNode),
+}
+
+/// 文本node
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TextNode {
+    text: String,
+    /// 表示是不是 unescape 解码，默认为 false ，不用可以不填。
+    #[serde(skip_serializing_if = "Option::is_none")]
+    un_escape: Option<bool>,
+    /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、lineThrough与italic，非可选值将被忽略。
+    #[serde(skip_serializing_if = "Option::is_none")]
+    style: Option<Vec<String>>,
+}
+
+impl TextNode {
+    pub fn new(text: &str) -> Self {
+        Self {
+            text: text.to_string(),
+            un_escape: None,
+            style: None,
+        }
+    }
+
+    pub fn un_escape(mut self, un_escape: bool) -> Self {
+        self.un_escape = Some(un_escape);
+        self
+    }
+
+    pub fn style(mut self, style: Vec<&str>) -> Self {
+        self.style = Some(style.iter().map(|s| s.to_string()).collect());
+        self
+    }
+}
+
+/// a Node
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ANode {
+    /// 文本内容
+    text: String,
+    /// 默认的链接地址，请确保链接地址的合法性，否则消息会发送失败。
+    href: String,
+    /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、lineThrough与italic，非可选值将被忽略。
+    #[serde(skip_serializing_if = "Option::is_none")]
+    style: Option<Vec<String>>,
+}
+
+impl ANode {
+    pub fn new(text: &str, href: &str) -> Self {
+        Self {
+            text: text.to_string(),
+            href: href.to_string(),
+            style: None,
+        }
+    }
+
+    pub fn style(mut self, style: Vec<&str>) -> Self {
+        self.style = Some(style.iter().map(|s| s.to_string()).collect());
+        self
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct AtNode {
+    /// 用户的open_id，union_id 或 user_id，请参考如何获取 User ID、Open ID 和 Union ID？
+    /// 注意: @单个用户时，user_id字段必须是有效值；@所有人填"all"。
+    user_id: String,
+    /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、lineThrough与italic，非可选值将被忽略。
+    #[serde(skip_serializing_if = "Option::is_none")]
+    style: Option<Vec<String>>,
+}
+
+impl AtNode {
+    pub fn new(user_id: &str) -> Self {
+        Self {
+            user_id: user_id.to_string(),
+            style: None,
+        }
+    }
+
+    pub fn style(mut self, style: Vec<&str>) -> Self {
+        self.style = Some(style.iter().map(|s| s.to_string()).collect());
+        self
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ImgNode {
+    /// 图片的唯一标识，可通过 上传图片 接口获取image_key。
+    image_key: String,
+}
+
+impl ImgNode {
+    pub fn new(image_key: &str) -> Self {
+        Self {
+            image_key: image_key.to_string(),
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MediaNode {
+    /// 视频文件的唯一标识，可通过 上传文件 接口获取file_key
+    file_key: String,
+    /// 视频封面图片的唯一标识，可通过 上传图片 接口获取image_key。
+    #[serde(skip_serializing_if = "Option::is_none")]
+    image_key: Option<String>,
+}
+
+impl MediaNode {
+    pub fn new(file_key: &str, image_key: Option<&str>) -> Self {
+        Self {
+            file_key: file_key.to_string(),
+            image_key: image_key.map(|s| s.to_string()),
+        }
+    }
+}
+
+/// 表情类型
+#[derive(Debug, Serialize, Deserialize)]
+pub struct EmotionNode {
+    /// 表情类型，部分可选值请参见表情文案。
+    emoji_type: String,
+}
+
+impl EmotionNode {
+    pub fn new(emoji_type: &str) -> Self {
+        Self {
+            emoji_type: emoji_type.to_string(),
+        }
+    }
 }
 
 /// 图片消息
@@ -593,14 +679,13 @@ impl SendMessageTrait for MessageImage {
     }
 }
 
-
 /// 卡片模板
 #[derive(Debug, Serialize, Deserialize)]
 pub struct MessageCardTemplate {
     /// 固定值：template
     r#type: String,
     /// 卡片模板数据
-    data: CardTemplate
+    data: CardTemplate,
 }
 
 impl SendMessageTrait for MessageCardTemplate {
@@ -619,8 +704,8 @@ impl MessageCardTemplate {
             r#type: "template".to_string(),
             data: CardTemplate {
                 template_id: template_id.to_string(),
-                template_variable
-            }
+                template_variable,
+            },
         }
     }
 }
@@ -631,66 +716,50 @@ struct CardTemplate {
     /// 卡片模板 ID，可在消息卡片搭建工具，我的卡片中，通过复制卡片 ID 获取
     template_id: String,
     /// 卡片中的变量数据，值为{key:value}形式，其中 key 表示变量名称。value 值表示变量的值
-    template_variable: Value
+    template_variable: Value,
 }
-
-
 
 #[cfg(test)]
 mod test {
     use serde_json::json;
 
-    use crate::service::im::v1::message::{MessageTextBuilder, SendMessageTrait};
+    use crate::service::im::v1::message::{
+        ANode, AtNode, EmotionNode, ImgNode, MediaNode, MessageText, SendMessageTrait, TextNode,
+    };
 
     #[test]
     fn test_message_text() {
-        let t1 = MessageTextBuilder::new().text(" test content").build();
+        let t1 = MessageText::new("").add_text(" test content").build();
         assert_eq!(t1.text, " test content");
-        let t2 = MessageTextBuilder::new().text_line(" test content").build();
+        let t2 = MessageText::new("").text_line(" test content").build();
         assert_eq!(t2.text, " test content\n");
-        let t3 = MessageTextBuilder::new()
-            .text(" test content")
+        let t3 = MessageText::new("")
+            .add_text(" test content")
             .line()
             .build();
         assert_eq!(t3.text, " test content\n");
-        let t4 = MessageTextBuilder::new()
-            .text(" test content")
+        let t4 = MessageText::new("")
+            .add_text(" test content")
             .at_user("user_id")
             .build();
         assert_eq!(t4.text, " test content<at user_id=\"user_id\"></at>");
-        let t5 = MessageTextBuilder::new().at_all().build();
+        let t5 = MessageText::new("").at_all().build();
         assert_eq!(t5.text, "<at user_id=\"all\">name=\"全体成员\"</at>");
     }
 
     #[test]
     fn test_message_post() {
         use crate::service::im::v1::message::{MessagePost, MessagePostNode};
-        let post = MessagePost::zh_cn().title("title").append_content(vec![
-            MessagePostNode::Text {
-                text: "text".to_string(),
-                un_escape: None,
-                style: None,
-            },
-            MessagePostNode::A {
-                text: "text".to_string(),
-                href: "https://www.feishu.cn".to_string(),
-                style: None,
-            },
-            MessagePostNode::At {
-                user_id: "user_id".to_string(),
-                style: None,
-            },
-            MessagePostNode::Img {
-                image_key: "image_key".to_string(),
-            },
-            MessagePostNode::Media {
-                file_key: "file_key".to_string(),
-                image_key: Some("image_key".to_string()),
-            },
-            MessagePostNode::Emotion {
-                emoji_type: "SMILE".to_string(),
-            },
-        ]);
+        let post = MessagePost::new("zh_cn")
+            .title("title")
+            .append_content(vec![
+                MessagePostNode::Text(TextNode::new("text")),
+                MessagePostNode::A(ANode::new("text", "https://www.feishu.cn")),
+                MessagePostNode::At(AtNode::new("user_id")),
+                MessagePostNode::Img(ImgNode::new("image_key")),
+                MessagePostNode::Media(MediaNode::new("file_key", Some("image_key"))),
+                MessagePostNode::Emotion(EmotionNode::new("SMILE")),
+            ]);
         assert_eq!(post.msg_type(), "post");
         assert_eq!(
             post.content(),

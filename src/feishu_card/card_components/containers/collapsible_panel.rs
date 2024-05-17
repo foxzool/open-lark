@@ -206,7 +206,7 @@ mod test {
 
     use crate::feishu_card::card_components::CardElement;
     use crate::feishu_card::card_components::containers::collapsible_panel::{
-        CollapsibleBorder, CollapsibleHeader, CollapsiblePanel,
+        CollapsibleHeader, CollapsiblePanel,
     };
     use crate::feishu_card::card_components::content_components::plain_text::PlainText;
     use crate::feishu_card::card_components::content_components::rich_text::FeishuCardMarkdown;

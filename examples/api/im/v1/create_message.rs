@@ -6,8 +6,8 @@ use uuid::Uuid;
 
 use open_lark::client::LarkClientBuilder;
 use open_lark::service::im::v1::message::{
-    CreateMessageReqBody, CreateMessageReqBuilder, MessageCardTemplate, MessagePost,
-    MessagePostNode, MessageTextBuilder, SendMessageTrait,
+    ANode, AtNode, CreateMessageReqBody, CreateMessageReqBuilder, EmotionNode, ImgNode,
+    MessageCardTemplate, MessagePost, MessagePostNode, MessageText, SendMessageTrait, TextNode,
 };
 
 // POST /open-apis/im/v1/messages
@@ -21,44 +21,31 @@ fn main() {
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
     let uuid = Uuid::new_v4();
     // 文本
-    let _text_message = MessageTextBuilder::new()
+    let _text_message = MessageText::new("hello world")
         .text_line("next line")
-        .text("你好!")
+        .add_text("你好!")
         .build();
 
     // 富文本
-    let rich_text_message = MessagePost::zh_cn()
+    let rich_text_message = MessagePost::new("zh_cn")
         .title("我是一个标题")
         .append_content(vec![
-            MessagePostNode::Text {
-                text: "我是一个文本".to_string(),
-                un_escape: None,
-                style: Some(vec!["bold".to_string(), "underline".to_string()]),
-            },
-            MessagePostNode::A {
-                text: "超链接".to_string(),
-                href: "https://www.feishu.cn".to_string(),
-                style: Some(vec!["bold".to_string(), "italic".to_string()]),
-            },
-            MessagePostNode::At {
-                user_id: "ou_1avnmsbv3k45jnk34j5".to_string(),
-                style: Some(vec!["lineThrough".to_string()]),
-            },
+            MessagePostNode::Text(TextNode::new("第一行:").style(vec!["bold", "underline"])),
+            MessagePostNode::A(
+                ANode::new("超链接", "https://www.feishu.cn").style(vec!["bold", "underline"]),
+            ),
+            MessagePostNode::At(AtNode::new("ou_1avnmsbv3k45jnk34j5").style(vec!["lineThrough"])),
         ])
-        .append_content(vec![MessagePostNode::Img {
-            image_key: "img_7ea74629-9191-4176-998c-2e603c9c5e8g".to_string(),
-        }])
-        // .append_content(vec![MessagePostElement::Media {
-        //     file_key: "75235e0c-4f92-430a-a99b-8446610223cg".to_string(),
-        //     image_key: Some("img_7ea74629-9191-4176-998c-2e603c9c5e8g".to_string()),
-        // }])
-        .append_content(vec![MessagePostNode::Emotion {
-            emoji_type: "SMILE".to_string(),
-        }]);
+        .append_content(vec![MessagePostNode::Img(ImgNode::new(
+            "img_7ea74629-9191-4176-998c-2e603c9c5e8g",
+        ))])
+        .append_content(vec![MessagePostNode::Emotion(EmotionNode::new("SMILE"))]);
 
     // 卡片模板
-    let card_template =
-        MessageCardTemplate::new("AAqk4PdEIBaSV", json!({"project_name": "project"}));
+    let card_template = MessageCardTemplate::new(
+        "AAqk4PdEIBaSV",
+        json!({"project_name": "project", "address": "address", "money": "money", "zlrq": "zlrq", "comment": "comment", "search_url": "search_url"}),
+    );
 
     let req = CreateMessageReqBuilder::new()
         .receive_id_type("chat_id")

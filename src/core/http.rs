@@ -92,7 +92,7 @@ impl Transport {
         Ok(raw_resp)
     }
 
-    fn do_send(raw_request: Request, body: &[u8]) -> SDKResult<ApiResp> {
+    pub fn do_send(raw_request: Request, body: &[u8]) -> SDKResult<ApiResp> {
         match raw_request.send_bytes(body) {
             Ok(response) => {
                 let status_code = response.status();
