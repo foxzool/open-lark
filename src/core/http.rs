@@ -1,13 +1,14 @@
-use std::{collections::HashSet, io::Read};
+use std::{collections::HashSet, io::Read, marker::PhantomData};
 
 use bytes::Bytes;
 use log::debug;
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use ureq::Request;
 
 use crate::core::{
     api_req::ApiReq,
-    api_resp::{ApiResp, CodeMsg},
+    api_resp::{ApiResponse, ApiResponseFormat, BaseResp, RawResponse},
     app_ticket_manager::apply_app_ticket,
     config::Config,
     constants::*,
@@ -17,14 +18,16 @@ use crate::core::{
     SDKResult,
 };
 
-pub struct Transport;
+pub struct Transport<T> {
+    phantom_data: PhantomData<T>,
+}
 
-impl Transport {
+impl<T: ApiResponseFormat> Transport<T> {
     pub fn request(
         mut req: ApiReq,
         config: &Config,
         option: Option<RequestOption>,
-    ) -> Result<ApiResp, LarkAPIError> {
+    ) -> Result<ApiResponse<T>, LarkAPIError> {
         let option = option.unwrap_or_default();
 
         if req.supported_access_token_types.is_empty() {
@@ -47,8 +50,7 @@ impl Transport {
         access_token_type: AccessTokenType,
         config: &Config,
         option: RequestOption,
-    ) -> SDKResult<ApiResp> {
-        let mut raw_resp = ApiResp::default();
+    ) -> SDKResult<ApiResponse<T>> {
         for _i in 0..2 {
             let req = ReqTranslator::translate(http_req, access_token_type, config, &option)?;
             debug!("Req:{:?}", req);
@@ -56,68 +58,76 @@ impl Transport {
                 debug!("body json {}", some_json.to_string());
             }
 
-            raw_resp = Self::do_send(req, &http_req.body)?;
-            debug!("Res:{:?}", raw_resp);
+            let resp = Self::do_send(req, &http_req.body)?;
+            debug!("Res:{:?}", resp);
 
-            let file_download_success = option.file_upload && raw_resp.status_code == 200;
-            if file_download_success
-                || raw_resp
-                    .header
-                    .iter()
-                    .find(|v| *v == CONTENT_TYPE_HEADER)
-                    .is_some_and(|v| v.contains(CONTENT_TYPE_JSON))
-            {
-                break;
-            }
-
-            let code_error: CodeMsg = serde_json::from_slice(&raw_resp.raw_body.clone())?;
-            let code = code_error.code;
-            if code == ERR_CODE_APP_TICKET_INVALID {
-                apply_app_ticket(config)?;
-            }
-            if access_token_type == AccessTokenType::None {
-                break;
-            }
-            if !config.enable_token_cache {
-                break;
+            // let file_download_success = option.file_upload && raw_resp.status_code == 200;
+            // if file_download_success
+            //     || raw_resp
+            //     .header
+            //     .iter()
+            //     .find(|v| *v == CONTENT_TYPE_HEADER)
+            //     .is_some_and(|v| v.contains(CONTENT_TYPE_JSON))
+            // {
+            //     break;
+            // }
+            if let ApiResponse::Error(code_error) = &resp {
+                let code = code_error.code;
+                if code == ERR_CODE_APP_TICKET_INVALID {
+                    apply_app_ticket(config)?;
+                }
             }
 
-            if code != ERR_CODE_ACCESS_TOKEN_INVALID
-                && code != ERR_CODE_APP_ACCESS_TOKEN_INVALID
-                && code != ERR_CODE_TENANT_ACCESS_TOKEN_INVALID
-            {
-                break;
-            }
+            return Ok(resp);
         }
 
-        Ok(raw_resp)
+        Err(LarkAPIError::RequestError("request failed".to_string()))
     }
 
-    pub fn do_send(raw_request: Request, body: &[u8]) -> SDKResult<ApiResp> {
+    pub fn do_send(raw_request: Request, body: &[u8]) -> SDKResult<ApiResponse<T>> {
         match raw_request.send_bytes(body) {
             Ok(response) => {
                 let status_code = response.status();
                 let header = response.headers_names();
                 // let len: usize = response.header("Content-Length").unwrap().parse().unwrap();
-                let mut bytes: Vec<u8> = Vec::new();
-
-                response
-                    .into_reader()
-                    .take(10_000_000)
-                    .read_to_end(&mut bytes)?;
-                let raw_body: Bytes = Bytes::copy_from_slice(&bytes);
-
-                Ok(ApiResp {
-                    status_code,
-                    header,
-                    raw_body,
-                })
+                // let mut bytes: Vec<u8> = Vec::new();
+                //
+                // // response
+                // //     .into_reader()
+                // //     .take(10_000_000)
+                // //     .read_to_end(&mut bytes)?;
+                // // let raw_body: Bytes = Bytes::copy_from_slice(&bytes);
+                let raw_body: Value = response.into_json()?;
+                debug!("raw_body: {:?}", raw_body);
+                if T::standard_data_format() {
+                    match serde_json::from_value::<BaseResp<T>>(raw_body) {
+                        Ok(base_resp) => Ok(return if base_resp.raw_response.code == 0 {
+                            Ok(ApiResponse::Success {
+                                data: base_resp.data,
+                                status_code,
+                                header,
+                            })
+                        } else {
+                            Ok(ApiResponse::Error(base_resp.raw_response))
+                        }),
+                        Err(err) => Err(LarkAPIError::DeserializeError(err)),
+                    }
+                } else {
+                    match serde_json::from_value::<T>(raw_body) {
+                        Ok(data) => Ok(ApiResponse::Success {
+                            data,
+                            status_code,
+                            header,
+                        }),
+                        Err(err) => Err(LarkAPIError::DeserializeError(err)),
+                    }
+                }
             }
             Err(err) => {
                 let resp = err.into_response().unwrap();
                 // 返回4xx或5xx状态码， 但可以读取响应体
-                match resp.into_json::<CodeMsg>() {
-                    Ok(code_msg) => Err(LarkAPIError::CodeError(code_msg)),
+                match resp.into_json::<RawResponse>() {
+                    Ok(code_msg) => Ok(ApiResponse::Error(code_msg)),
                     Err(err) => Err(LarkAPIError::IOErr(err)),
                 }
             }

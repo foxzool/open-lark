@@ -17,12 +17,7 @@ fn main() {
 
     // 发起请求
     let resp = client.im.v1.chats.list(&req, None).unwrap();
-    if resp.success() {
-        // 业务处理
-        println!("response: {:?}", resp.data);
-    } else {
-        println!("list chat failed: {} ", resp.error_msg());
-    }
+    println!("response: {:?}", resp);
 
     // 使用迭代器
     client.im.v1.chats.list_iter(req, None).for_each(|chats| {

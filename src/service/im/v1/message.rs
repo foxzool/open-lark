@@ -6,13 +6,14 @@ use serde_json::{json, Value};
 
 use crate::core::{
     api_req::ApiReq,
-    api_resp::{ApiResp, BaseResp, CodeMsg},
+    api_resp::{ApiResponse, RawResponse},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
 };
+use crate::core::api_resp::ApiResponseFormat;
 
 pub struct MessageService {
     pub config: Config,
@@ -27,7 +28,7 @@ impl MessageService {
         &self,
         req: CreateMessageReq,
         option: Option<RequestOption>,
-    ) -> Result<BaseResp<Message>, LarkAPIError> {
+    ) -> Result<ApiResponse<Message>, LarkAPIError> {
         let mut api_req = req.api_req;
         api_req.http_method = "POST".to_string();
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
@@ -35,7 +36,7 @@ impl MessageService {
 
         let api_resp = Transport::request(api_req, &self.config, option)?;
 
-        Ok(api_resp.try_into()?)
+        Ok(api_resp)
     }
 
     /// 获取会话历史消息
@@ -46,7 +47,7 @@ impl MessageService {
         &self,
         req: &ListMessageReq,
         option: Option<RequestOption>,
-    ) -> Result<BaseResp<ListMessageRespData>, LarkAPIError> {
+    ) -> Result<ApiResponse<ListMessageRespData>, LarkAPIError> {
         let mut api_req = req.api_req.clone();
         api_req.http_method = "GET".to_string();
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
@@ -54,7 +55,7 @@ impl MessageService {
 
         let api_resp = Transport::request(api_req, &self.config, option)?;
 
-        Ok(api_resp.try_into()?)
+        Ok(api_resp)
     }
 
     pub fn list_iter(
@@ -86,8 +87,8 @@ impl<'a> Iterator for ListMessageIterator<'a> {
             return None;
         }
         match self.service.list(&self.req, self.option.clone()) {
-            Ok(resp) => {
-                if let Some(data) = resp.data {
+            Ok(resp) => match resp {
+                ApiResponse::Success { data, .. } => {
                     self.has_more = data.has_more;
                     if data.has_more {
                         self.req
@@ -100,11 +101,12 @@ impl<'a> Iterator for ListMessageIterator<'a> {
                     } else {
                         Some(data.items)
                     }
-                } else {
-                    error!("Error: {:?}", resp.error_msg());
+                }
+                ApiResponse::Error(error_msg) => {
+                    error!("Error: {}", error_msg);
                     None
                 }
-            }
+            },
             Err(e) => {
                 error!("Error: {:?}", e);
                 None
@@ -196,17 +198,7 @@ pub struct CreateMessageReqBody {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CreateMessageResp {
-    #[serde(skip)]
-    pub api_resp: ApiResp,
-    #[serde(flatten)]
-    pub code_error: CodeMsg,
     pub data: Message,
-}
-
-impl CreateMessageResp {
-    pub fn success(&self) -> bool {
-        self.code_error.code == 0
-    }
 }
 
 /// 消息类型
@@ -239,6 +231,12 @@ pub struct Message {
     pub body: MessageBody,
     /// 被@的用户或机器人的id列表
     pub mentions: Option<Vec<Mention>>,
+}
+
+impl ApiResponseFormat for Message {
+    fn standard_data_format() -> bool {
+        true
+    }
 }
 
 /// 发送者，可以是用户或应用
@@ -406,6 +404,13 @@ pub struct ListMessageRespData {
     /// 分页标记，当 has_more 为 true 时，会同时返回新的 page_token，否则不返回 page_token
     pub page_token: Option<String>,
     pub items: Vec<Message>,
+}
+
+impl ApiResponseFormat for ListMessageRespData {
+    fn standard_data_format() -> bool {
+        true
+    }
+
 }
 
 pub trait SendMessageTrait {
@@ -779,12 +784,12 @@ mod test {
         assert_eq!(
             json!(post),
             json!({
-                "post": {
-                "zh_cn": {
-                    "title":"title",
-                    "content": [[{"tag":"text","text":"text"},{"tag":"a","text":"text","href":"https://www.feishu.cn"},{"tag":"at","user_id":"user_id"},{"tag":"img","image_key":"image_key"},{"tag":"media","file_key":"file_key","image_key":"image_key"},{"tag":"emotion","emoji_type":"SMILE"}
-                    ]]
-                }}})
+            "post": {
+            "zh_cn": {
+                "title":"title",
+                "content": [[{"tag":"text","text":"text"},{"tag":"a","text":"text","href":"https://www.feishu.cn"},{"tag":"at","user_id":"user_id"},{"tag":"img","image_key":"image_key"},{"tag":"media","file_key":"file_key","image_key":"image_key"},{"tag":"emotion","emoji_type":"SMILE"}
+                ]]
+            }}})
         );
     }
 

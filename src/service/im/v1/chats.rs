@@ -2,9 +2,14 @@ use log::error;
 use serde::{Deserialize, Serialize};
 
 use crate::core::{
-    api_req::ApiReq, api_resp::BaseResp, config::Config, constants::AccessTokenType,
-    http::Transport, req_option::RequestOption,
+    api_req::ApiReq,
+    api_resp::{ApiResponse},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption,
 };
+use crate::core::api_resp::ApiResponseFormat;
 
 use crate::core::SDKResult;
 
@@ -18,7 +23,7 @@ impl ChatsService {
         &self,
         req: &ListChatReq,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResp<ListChatRespData>> {
+    ) -> SDKResult<ApiResponse<ListChatRespData>> {
         let mut api_req = req.api_req.clone();
         api_req.http_method = "GET".to_string();
         api_req.api_path = "/open-apis/im/v1/chats".to_string();
@@ -26,7 +31,7 @@ impl ChatsService {
 
         let api_resp = Transport::request(api_req, &self.config, option)?;
 
-        Ok(api_resp.try_into()?)
+        Ok(api_resp)
     }
 
     pub fn list_iter(&self, req: ListChatReq, option: Option<RequestOption>) -> ListChatIterator {
@@ -54,8 +59,8 @@ impl<'a> Iterator for ListChatIterator<'a> {
             return None;
         }
         match self.service.list(&self.req, self.option.clone()) {
-            Ok(resp) => {
-                if let Some(data) = resp.data {
+            Ok(resp) => match resp {
+                ApiResponse::Success { data, .. } => {
                     self.has_more = data.has_more;
                     if data.has_more {
                         self.req
@@ -68,13 +73,12 @@ impl<'a> Iterator for ListChatIterator<'a> {
                     } else {
                         Some(data.items)
                     }
-                } else {
-                    error!("Error: {}", resp.error_msg());
+                }
+                ApiResponse::Error(_) => {
                     None
                 }
-            }
-            Err(e) => {
-                error!("Error: {:?}", e);
+            },
+            Err(_) => {
                 None
             }
         }
@@ -152,6 +156,12 @@ pub struct ListChatRespData {
     pub page_token: String,
     /// 是否还有更多项
     pub has_more: bool,
+}
+
+impl ApiResponseFormat for ListChatRespData {
+    fn standard_data_format() -> bool {
+        true
+    }
 }
 
 /// chat 列表

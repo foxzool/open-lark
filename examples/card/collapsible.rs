@@ -132,10 +132,5 @@ fn main() {
 
     // 发起请求
     let resp = client.im.v1.message.create(req, None).unwrap();
-    if resp.success() {
-        // 业务处理
-        println!("response: {:?}", resp.data);
-    } else {
-        println!("send message failed: {} ", resp.error_msg());
-    }
+    println!("response: {:?}", resp);
 }

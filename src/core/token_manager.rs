@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::core::{
     api_req::ApiReq,
-    api_resp::{ApiResp, CodeMsg},
+    api_resp::{ApiResponse, ApiResponseFormat, RawResponse},
     app_ticket_manager::APP_TICKET_MANAGER,
     cache::{Cache, LocalCache},
     config::Config,
@@ -71,21 +71,23 @@ impl TokenManager {
             path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
         };
-        let raw_resp = Transport::request(req, config, None)?;
-        let resp: AppAccessTokenResp = serde_json::from_slice(&raw_resp.raw_body)?;
-        if resp.code_error.code != 0 {
-            warn!("custom app appAccessToken cache {:#?}", resp.code_error);
-            return Err(LarkAPIError::CodeError(resp.code_error.clone()));
+        let resp: ApiResponse<AppAccessTokenResp> = Transport::request(req, config, None)?;
+        match resp {
+            ApiResponse::Success { data, .. } => {
+                let expire = Duration::from_secs(data.expire as u64) - EXPIRY_DELTA;
+                self.set(
+                    &app_access_token_key(&config.app_id),
+                    &data.app_access_token,
+                    expire,
+                );
+
+                Ok(data.app_access_token)
+            }
+            ApiResponse::Error(error_resp) => {
+                warn!("custom app appAccessToken cache {:#?}", error_resp);
+                Err(LarkAPIError::CodeError(error_resp))
+            }
         }
-        let expire = Duration::from_secs(resp.expire as u64) - EXPIRY_DELTA;
-
-        self.set(
-            &app_access_token_key(&config.app_id),
-            &resp.app_access_token,
-            expire,
-        );
-
-        Ok(resp.app_access_token)
     }
     fn get_marketplace_app_access_token_then_cache(
         &mut self,
@@ -95,7 +97,11 @@ impl TokenManager {
         let mut app_ticket = app_ticket.to_string();
         if app_ticket.is_empty() {
             match APP_TICKET_MANAGER.get(config) {
-                None => return Err(LarkAPIError::IllegalParamError("App ticket is empty".to_string())),
+                None => {
+                    return Err(LarkAPIError::IllegalParamError(
+                        "App ticket is empty".to_string(),
+                    ))
+                }
                 Some(ticket) => {
                     app_ticket = ticket;
                 }
@@ -117,24 +123,24 @@ impl TokenManager {
             path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
         };
-        let raw_resp = Transport::request(req, config, None)?;
-        let resp: AppAccessTokenResp = serde_json::from_slice(&raw_resp.raw_body)?;
-        if resp.code_error.code != 0 {
-            warn!(
-                "marketplace app appAccessToken cache {:#?}",
-                resp.code_error
-            );
-            return Err(LarkAPIError::CodeError(resp.code_error.clone()));
+        let raw_resp: ApiResponse<AppAccessTokenResp> = Transport::request(req, config, None)?;
+        match raw_resp {
+            ApiResponse::Success { data, .. } => {
+                let expire = Duration::from_secs(data.expire as u64) - EXPIRY_DELTA;
+
+                self.set(
+                    &app_access_token_key(&config.app_id),
+                    &data.app_access_token,
+                    expire,
+                );
+
+                Ok(data.app_access_token)
+            }
+            ApiResponse::Error(error_resp) => {
+                warn!("marketplace app appAccessToken cache {:#?}", error_resp);
+                Err(LarkAPIError::CodeError(error_resp))
+            }
         }
-        let expire = Duration::from_secs(resp.expire as u64) - EXPIRY_DELTA;
-
-        self.set(
-            &app_access_token_key(&config.app_id),
-            &resp.app_access_token,
-            expire,
-        );
-
-        Ok(resp.app_access_token)
     }
 
     pub fn get_tenant_access_token(
@@ -177,21 +183,25 @@ impl TokenManager {
             path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
         };
-        let raw_resp = Transport::request(req, config, None)?;
-        let resp: TenantAccessTokenResp = serde_json::from_slice(&raw_resp.raw_body)?;
-        if resp.code_error.code != 0 {
-            warn!("custom app tenantAccessToken cache {:#?}", resp.code_error);
-            return Err(LarkAPIError::CodeError(resp.code_error.clone()));
+        let raw_resp: ApiResponse<TenantAccessTokenResp> = Transport::request(req, config, None)?;
+
+        match raw_resp {
+            ApiResponse::Success { data, .. } => {
+                let expire = Duration::from_secs(data.expire as u64) - EXPIRY_DELTA;
+
+                self.set(
+                    &tenant_access_token_key(&config.app_id, tenant_key),
+                    &data.tenant_access_token,
+                    expire,
+                );
+
+                Ok(data.tenant_access_token)
+            }
+            ApiResponse::Error(error_resp) => {
+                warn!("custom app tenantAccessToken cache {:#?}", error_resp);
+                Err(LarkAPIError::CodeError(error_resp))
+            }
         }
-        let expire = Duration::from_secs(resp.expire as u64) - EXPIRY_DELTA;
-
-        self.set(
-            &tenant_access_token_key(&config.app_id, tenant_key),
-            &resp.tenant_access_token,
-            expire,
-        );
-
-        Ok(resp.tenant_access_token)
     }
 
     fn get_marketplace_tenant_access_token_then_cache(
@@ -216,24 +226,24 @@ impl TokenManager {
             path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
         };
-        let raw_resp = Transport::request(req, config, None)?;
-        let resp: TenantAccessTokenResp = serde_json::from_slice(&raw_resp.raw_body)?;
-        if resp.code_error.code != 0 {
-            warn!(
-                "marketplace app tenantAccessToken cache {:#?}",
-                resp.code_error
-            );
-            return Err(LarkAPIError::CodeError(resp.code_error.clone()));
+        let raw_resp: ApiResponse<TenantAccessTokenResp> = Transport::request(req, config, None)?;
+        match raw_resp {
+            ApiResponse::Success { data, .. } => {
+                let expire = Duration::from_secs(data.expire as u64) - EXPIRY_DELTA;
+
+                self.set(
+                    &tenant_access_token_key(&config.app_id, tenant_key),
+                    &data.tenant_access_token,
+                    expire,
+                );
+
+                Ok(data.tenant_access_token)
+            }
+            ApiResponse::Error(error_resp) => {
+                warn!("marketplace app tenantAccessToken cache {:#?}", error_resp);
+                Err(LarkAPIError::CodeError(error_resp))
+            }
         }
-        let expire = Duration::from_secs(resp.expire as u64) - EXPIRY_DELTA;
-
-        self.set(
-            &tenant_access_token_key(&config.app_id, tenant_key),
-            &resp.tenant_access_token,
-            expire,
-        );
-
-        Ok(resp.tenant_access_token)
     }
 }
 
@@ -259,12 +269,16 @@ struct SelfBuiltTenantAccessTokenReq {
 
 #[derive(Serialize, Deserialize, Debug)]
 struct AppAccessTokenResp {
-    #[serde(skip)]
-    api_resp: ApiResp,
     #[serde(flatten)]
-    code_error: CodeMsg,
+    raw_response: RawResponse,
     expire: i32,
     app_access_token: String,
+}
+
+impl ApiResponseFormat for AppAccessTokenResp {
+    fn standard_data_format() -> bool {
+        false
+    }
 }
 
 #[derive(Serialize, Deserialize)]
@@ -280,12 +294,16 @@ struct MarketplaceTenantAccessTokenReq {
     tenant_key: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 struct TenantAccessTokenResp {
-    #[serde(skip)]
-    api_resp: ApiResp,
     #[serde(flatten)]
-    code_error: CodeMsg,
+    raw_response: RawResponse,
     expire: i32,
     tenant_access_token: String,
+}
+
+impl ApiResponseFormat for TenantAccessTokenResp {
+    fn standard_data_format() -> bool {
+        false
+    }
 }

@@ -6,13 +6,14 @@ use serde::{Deserialize, Serialize};
 
 use crate::core::{
     api_req::ApiReq,
-    api_resp::{ApiResp, CodeMsg},
+    api_resp::{ApiResponse, RawResponse},
     cache::{Cache, LocalCache},
     config::Config,
     constants::{AccessTokenType, APPLY_APP_TICKET_PATH, APP_TICKET_KEY_PREFIX},
     http::Transport,
     SDKResult,
 };
+use crate::core::api_resp::BaseResp;
 
 lazy_static! {
     pub static ref APP_TICKET_MANAGER: AppTicketManager = AppTicketManager::new();
@@ -60,7 +61,7 @@ fn app_ticket_key(app_id: &str) -> String {
 }
 
 pub fn apply_app_ticket(config: &Config) -> SDKResult<()> {
-    let resp = Transport::request(
+    let resp: ApiResponse<RawResponse> = Transport::request(
         ApiReq {
             http_method: "POST".to_string(),
             api_path: APPLY_APP_TICKET_PATH.to_string(),
@@ -73,23 +74,23 @@ pub fn apply_app_ticket(config: &Config) -> SDKResult<()> {
         None,
     )?;
 
-    let code_error: CodeMsg = serde_json::from_slice(&resp.raw_body)?;
-    if code_error.code != 0 {
-        error!("apply_app_ticket failed: {}", code_error);
+    if let ApiResponse::Error(error_msg) = resp {
+        error!("apply_app_ticket failed: {}", error_msg);
     }
 
     Ok(())
 }
+
 #[derive(Serialize, Deserialize)]
 struct ResendAppTicketReq {
     app_id: String,
     app_secret: String,
 }
 
-#[derive(Serialize, Deserialize)]
-struct ResendAppTicketResp {
-    #[serde(skip)]
-    api_resp: ApiResp,
-    #[serde(flatten)]
-    code_error: CodeMsg,
-}
+// #[derive(Serialize, Deserialize)]
+// struct ResendAppTicketResp {
+//     #[serde(skip)]
+//     api_resp: ApiResponse,
+//     #[serde(flatten)]
+//     code_error: ErrorResponse,
+// }

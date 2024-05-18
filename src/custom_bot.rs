@@ -4,9 +4,10 @@ use serde_json::{json, Value};
 use sha2::Sha256;
 
 use crate::{
-    core::{api_resp::ApiResp, http::Transport, SDKResult},
+    core::{api_resp::ApiResponse, http::Transport, SDKResult},
     service::im::v1::message::{MessageCardTemplate, SendMessageTrait},
 };
+use crate::core::api_resp::RawResponse;
 
 /// 自定义机器人
 ///
@@ -30,7 +31,7 @@ impl CustomBot {
 }
 
 impl CustomBot {
-    pub fn send_message(&self, message: impl SendMessageTrait) -> SDKResult<ApiResp> {
+    pub fn send_message(&self, message: impl SendMessageTrait) -> SDKResult<ApiResponse<RawResponse>> {
         let mut json = json!({
             "msg_type": message.msg_type(),
             "content": message.content()
@@ -45,7 +46,7 @@ impl CustomBot {
     }
 
     /// 发送飞书卡片消息， 因为自定义机器人发送飞书卡片消息的格式比较特殊，所以单独提供一个方法
-    pub fn send_card(&self, message: MessageCardTemplate) -> SDKResult<ApiResp> {
+    pub fn send_card(&self, message: MessageCardTemplate) -> SDKResult<ApiResponse<RawResponse>> {
         let mut json = json!({
             "msg_type": message.msg_type(),
             "card": message.content()

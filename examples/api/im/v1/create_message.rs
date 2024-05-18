@@ -62,12 +62,7 @@ fn main() {
     // 发起请求
     match client.im.v1.message.create(req, None) {
         Ok(resp) => {
-            if resp.success() {
-                // 业务处理
-                println!("response: {:?}", resp.data);
-            } else {
-                println!("send message failed: {} ", resp.error_msg());
-            }
+            println!("response: {:?}", resp);
         }
         Err(err) => {
             println!("send message http error: {} ", err.to_string());
