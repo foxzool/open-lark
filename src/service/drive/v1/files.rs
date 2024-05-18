@@ -1,26 +1,77 @@
+use crate::core::config::Config;
 use bytes::Bytes;
 
 /// 上传文件 请求体
-#[derive(Debug, Clone)]
-pub struct UploadAllReqBody {
+#[derive(Debug, Clone, Default)]
+pub struct UploadAllRequest {
     /// 文件名。
     ///
     /// 示例值："demo.pdf"
-    pub file_name: String,
+    file_name: String,
     /// 上传点类型。
     ///
     /// 示例值："explorer"
-    pub parent_type: String,
+    parent_type: String,
     /// 文件夹token，获取方式见 概述
     ///
     /// 示例值："fldbcO1UuPz8VwnpPx5a92abcef"
-    pub parent_node: String,
+    parent_node: String,
     /// 文件大小（以字节为单位）。
     ///
     /// 示例值：1024
-    pub size: i32,
+    size: i32,
     /// 文件adler32校验和(可选)。
-    pub checksum: Option<String>,
+    checksum: Option<String>,
     /// 文件二进制内容。
-    pub file: Bytes,
+    file: Bytes,
+}
+
+impl UploadAllRequest {
+    pub fn file_name(mut self, file_name: impl ToString) -> Self {
+        self.file_name = file_name.to_string();
+        self
+    }
+
+    pub fn parent_type(mut self, parent_type: impl ToString) -> Self {
+        self.parent_type = parent_type.to_string();
+        self
+    }
+
+    pub fn parent_node(mut self, parent_node: impl ToString) -> Self {
+        self.parent_node = parent_node.to_string();
+        self
+    }
+
+    pub fn size(mut self, size: i32) -> Self {
+        self.size = size;
+        self
+    }
+
+    pub fn checksum(mut self, checksum: Option<impl ToString>) -> Self {
+        self.checksum = checksum.map(|x| x.to_string());
+        self
+    }
+
+    pub fn file(mut self, file: Bytes) -> Self {
+        self.file = file;
+        self
+    }
+}
+
+pub struct FilesService {
+    config: Config,
+}
+
+impl FilesService {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+
+    /// 上传文件
+    pub async fn upload_all(
+        &self,
+        req_body: UploadAllRequest,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        Ok(())
+    }
 }

@@ -63,3 +63,12 @@ path = "examples/api/im/v1/list_message.rs"
 [[example]]
 name = "list_chat"
 path = "examples/api/im/v1/list_chat.rs"
+
+[[example]]
+name = "file_upload_all"
+path = "examples/api/drive/v1/files/upload_all.rs"
+
+
+[[example]]
+name = "root_meta"
+path = "examples/api/drive/v2/explorer/meta.rs"

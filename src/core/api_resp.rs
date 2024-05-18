@@ -1,6 +1,6 @@
 use std::fmt::{Debug, Display, Formatter};
 
-use bytes::Bytes;
+
 use serde::{Deserialize, Serialize};
 
 use crate::core::constants::{HTTP_HEADER_KEY_LOG_ID, HTTP_HEADER_KEY_REQUEST_ID};
@@ -23,20 +23,6 @@ pub trait ApiResponseFormat:
     fn standard_data_format() -> bool;
 }
 
-// impl<T> SuccessResponse<T> {
-//     pub fn success(&self) -> bool {
-//         self.code_msg.code == 0
-//     }
-//
-//     pub fn error_msg(&self) -> String {
-//         format!(
-//             "code: {}, msg: {}, request_id: {}",
-//             self.code_msg.code,
-//             self.code_msg.msg,
-//             self.api_resp.request_id()
-//         )
-//     }
-// }
 
 #[derive(Debug)]
 pub enum ApiResponse<T> {
@@ -69,12 +55,12 @@ pub enum ApiResponse<T> {
 //     }
 // }
 
-// impl ApiResponse {
+// impl ApiResponse {request_id
 //     pub fn success(&self) -> bool {
 //         200 <= self.status_code && self.status_code < 300
 //     }
 //     pub fn request_id(&self) -> String {
-//         match self.header.iter().find(|v| *v == HTTP_HEADER_KEY_LOG_ID) {
+//         match self.header.iter().find(|v| *v == HTTP_HEADER_KEY_LOG_ID) {request_id
 //             None => self
 //                 .header
 //                 .iter()

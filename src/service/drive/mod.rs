@@ -1,21 +1,21 @@
 use crate::{
     core::config::Config,
-    service::im::{v1::V1, v2::V2},
+    service::drive::{v1::V1, v2::V2},
 };
 
 pub mod v1;
 pub mod v2;
 
-pub struct ImService {
+pub struct DriveService {
     pub v1: V1,
     pub v2: V2,
 }
 
-impl ImService {
+impl DriveService {
     pub fn new(config: Config) -> Self {
         Self {
             v1: V1::new(config.clone()),
-            v2: V2::new(config),
+            v2: V2::new(config.clone()),
         }
     }
 }
