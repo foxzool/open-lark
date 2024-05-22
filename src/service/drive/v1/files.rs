@@ -66,8 +66,8 @@ impl UploadAllRequest {
     }
 
     /// 文件adler32校验和(可选)
-    pub fn checksum(mut self, checksum: Option<impl ToString>) -> Self {
-        self.checksum = checksum.map(|x| x.to_string());
+    pub fn checksum(mut self, checksum: impl ToString) -> Self {
+        self.checksum = Some(checksum.to_string());
         self
     }
 

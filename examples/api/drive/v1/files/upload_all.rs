@@ -1,6 +1,7 @@
 use std::{env, io::Read};
 
 use dotenvy::dotenv;
+use simd_adler32::Adler32;
 
 use open_lark::{
     client::LarkClientBuilder, core::api_resp::ApiResponse,
@@ -21,12 +22,16 @@ fn main() {
     let file_name = "1.txt";
     let mut buffer = vec![];
     file.read_to_end(&mut buffer).unwrap();
+    let mut alder = Adler32::new();
+    alder.write(&buffer);
+    let checksum = alder.finish();
 
     let req = UploadAllRequest::builder()
         .file_name(file_name)
         .parent_type("explorer")
         .parent_node("nodcnBh4MAgg2GpI5IkRVZuw3Jd")
         .size(file_size as i32)
+        .checksum(checksum.to_string())
         .file(buffer.into())
         .build();
 

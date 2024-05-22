@@ -23,6 +23,7 @@ log = "0.4.21"
 mime = "0.3.17"
 mime_guess = "2.0.4"
 rand = "0.9.0-alpha.1"
+simd-adler32 = "0.3.7"
 serde = { version = "1.0.197", features = ["derive"] }
 serde_json = "1.0.115"
 sha2 = "0.10.8"
