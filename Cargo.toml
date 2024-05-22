@@ -76,3 +76,7 @@ path = "examples/api/drive/v2/explorer/meta.rs"
 [[example]]
 name = "create_folder"
 path = "examples/api/drive/v2/explorer/create_folder.rs"
+
+[[example]]
+name = "list_folder"
+path = "examples/api/drive/v2/explorer/list_folder.rs"

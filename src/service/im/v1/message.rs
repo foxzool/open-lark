@@ -90,7 +90,7 @@ impl<'a> Iterator for ListMessageIterator<'a> {
                             .insert("page_token".to_string(), data.page_token.unwrap());
                         Some(data.items)
                     } else if data.items.is_empty() {
-                        return None;
+                        None
                     } else {
                         Some(data.items)
                     }

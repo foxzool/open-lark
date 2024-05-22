@@ -21,7 +21,7 @@ fn main() {
         .folder_token("nodcnBh4MAgg2GpI5IkRVZuw3Jd")
         .build();
     // 发起请求
-    let resp = client.drive.v2.explorer.create_folder(req).unwrap();
+    let resp = client.drive.v2.explorer.create_folder(req, None).unwrap();
     if let ApiResponse::Success { data, .. } = resp {
         println!("response: {:#?}", data);
     }

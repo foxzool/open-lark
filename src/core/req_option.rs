@@ -8,10 +8,10 @@ pub struct RequestOption {
     pub user_access_token: String,
     pub app_access_token: String,
     pub tenant_access_token: String,
-    need_helpdesk_auth: bool,
+    pub need_helpdesk_auth: bool,
     pub request_id: String,
     pub app_ticket: String,
     pub file_upload: bool,
-    file_download: bool,
+    pub file_download: bool,
     pub header: HashMap<String, String>,
 }
