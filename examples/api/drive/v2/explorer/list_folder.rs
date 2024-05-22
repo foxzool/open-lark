@@ -14,6 +14,7 @@ fn main() {
     env_logger::init();
     let app_id = env::var("APP_ID").unwrap();
     let app_secret = env::var("APP_SECRET").unwrap();
+    let user_access_token = env::var("USER_ACCESS_TOKEN").unwrap();
     // 创建 Client
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
 
@@ -36,10 +37,7 @@ fn main() {
         .explorer
         .list_folder_iter(
             req,
-            Some(RequestOption {
-                user_access_token: env::var("USER_ACCESS_TOKEN").unwrap(),
-                ..Default::default()
-            }),
+            Some(RequestOption::builder().user_access_token(&user_access_token)),
         )
         .for_each(|folders| {
             for folder in folders {
