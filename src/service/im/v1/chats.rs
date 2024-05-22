@@ -1,11 +1,14 @@
 use serde::{Deserialize, Serialize};
 
 use crate::core::{
-    api_req::ApiReq, api_resp::ApiResponse, config::Config, constants::AccessTokenType,
-    http::Transport, req_option::RequestOption,
+    api_req::ApiReq,
+    api_resp::{ApiResponse, ApiResponseTrait},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
-use crate::core::api_resp::ApiResponseFormat;
-use crate::core::SDKResult;
 
 pub struct ChatsService {
     pub config: Config,
@@ -15,10 +18,10 @@ impl ChatsService {
     /// 获取用户或机器人所在的群列表
     pub fn list(
         &self,
-        req: &ListChatReq,
+        req: &ApiReq,
         option: Option<RequestOption>,
     ) -> SDKResult<ApiResponse<ListChatRespData>> {
-        let mut api_req = req.api_req.clone();
+        let mut api_req = req.clone();
         api_req.http_method = "GET".to_string();
         api_req.api_path = "/open-apis/im/v1/chats".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
@@ -28,7 +31,7 @@ impl ChatsService {
         Ok(api_resp)
     }
 
-    pub fn list_iter(&self, req: ListChatReq, option: Option<RequestOption>) -> ListChatIterator {
+    pub fn list_iter(&self, req: ApiReq, option: Option<RequestOption>) -> ListChatIterator {
         ListChatIterator {
             service: self,
             req,
@@ -40,7 +43,7 @@ impl ChatsService {
 
 pub struct ListChatIterator<'a> {
     service: &'a ChatsService,
-    req: ListChatReq,
+    req: ApiReq,
     option: Option<RequestOption>,
     has_more: bool,
 }
@@ -58,7 +61,6 @@ impl<'a> Iterator for ListChatIterator<'a> {
                     self.has_more = data.has_more;
                     if data.has_more {
                         self.req
-                            .api_req
                             .query_params
                             .insert("page_token".to_string(), data.page_token.to_string());
                         Some(data.items)
@@ -75,21 +77,14 @@ impl<'a> Iterator for ListChatIterator<'a> {
     }
 }
 
-pub struct ListChatReqBuilder {
+#[derive(Default)]
+pub struct ListChatReq {
     api_req: ApiReq,
 }
 
-impl Default for ListChatReqBuilder {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl ListChatReqBuilder {
-    pub fn new() -> ListChatReqBuilder {
-        ListChatReqBuilder {
-            api_req: ApiReq::default(),
-        }
+impl ListChatReq {
+    pub fn new() -> ListChatReq {
+        ListChatReq::default()
     }
 
     /// 用户 ID 类型
@@ -127,15 +122,9 @@ impl ListChatReqBuilder {
         self
     }
 
-    pub fn build(self) -> ListChatReq {
-        ListChatReq {
-            api_req: self.api_req,
-        }
+    pub fn build(self) -> ApiReq {
+        self.api_req
     }
-}
-
-pub struct ListChatReq {
-    pub api_req: ApiReq,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -148,7 +137,7 @@ pub struct ListChatRespData {
     pub has_more: bool,
 }
 
-impl ApiResponseFormat for ListChatRespData {
+impl ApiResponseTrait for ListChatRespData {
     fn standard_data_format() -> bool {
         true
     }

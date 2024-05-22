@@ -6,14 +6,13 @@ use serde_json::{json, Value};
 
 use crate::core::{
     api_req::ApiReq,
-    api_resp::{ApiResponse},
+    api_resp::{ApiResponse, ApiResponseTrait},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
 };
-use crate::core::api_resp::ApiResponseFormat;
 
 pub struct MessageService {
     pub config: Config,
@@ -26,10 +25,9 @@ impl MessageService {
     /// 视频、音频、文件、表情包。
     pub fn create(
         &self,
-        req: CreateMessageReq,
+        mut api_req: ApiReq,
         option: Option<RequestOption>,
     ) -> Result<ApiResponse<Message>, LarkAPIError> {
-        let mut api_req = req.api_req;
         api_req.http_method = "POST".to_string();
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
@@ -45,10 +43,10 @@ impl MessageService {
     /// https://open.feishu.cn/document/server-docs/im-v1/message/list
     pub fn list(
         &self,
-        req: &ListMessageReq,
+        api_req: &ApiReq,
         option: Option<RequestOption>,
     ) -> Result<ApiResponse<ListMessageRespData>, LarkAPIError> {
-        let mut api_req = req.api_req.clone();
+        let mut api_req = api_req.clone();
         api_req.http_method = "GET".to_string();
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
@@ -58,11 +56,7 @@ impl MessageService {
         Ok(api_resp)
     }
 
-    pub fn list_iter(
-        &self,
-        req: ListMessageReq,
-        option: Option<RequestOption>,
-    ) -> ListMessageIterator {
+    pub fn list_iter(&self, req: ApiReq, option: Option<RequestOption>) -> ListMessageIterator {
         ListMessageIterator {
             service: self,
             req,
@@ -74,7 +68,7 @@ impl MessageService {
 
 pub struct ListMessageIterator<'a> {
     service: &'a MessageService,
-    req: ListMessageReq,
+    req: ApiReq,
     option: Option<RequestOption>,
     has_more: bool,
 }
@@ -92,7 +86,6 @@ impl<'a> Iterator for ListMessageIterator<'a> {
                     self.has_more = data.has_more;
                     if data.has_more {
                         self.req
-                            .api_req
                             .query_params
                             .insert("page_token".to_string(), data.page_token.unwrap());
                         Some(data.items)
@@ -115,23 +108,14 @@ impl<'a> Iterator for ListMessageIterator<'a> {
     }
 }
 
-pub struct CreateMessageReqBuilder {
+#[derive(Default)]
+pub struct CreateMessageReq {
     api_req: ApiReq,
-    body: Option<CreateMessageReqBody>,
 }
 
-impl Default for CreateMessageReqBuilder {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl CreateMessageReqBuilder {
-    pub fn new() -> CreateMessageReqBuilder {
-        CreateMessageReqBuilder {
-            api_req: ApiReq::default(),
-            body: None,
-        }
+impl CreateMessageReq {
+    pub fn new() -> CreateMessageReq {
+        CreateMessageReq::default()
     }
 
     pub fn receive_id_type(mut self, receive_id_type: impl ToString) -> Self {
@@ -142,32 +126,20 @@ impl CreateMessageReqBuilder {
     }
 
     pub fn body(mut self, body: CreateMessageReqBody) -> Self {
-        self.body = Some(body);
+        self.api_req.body = serde_json::to_vec(&body).unwrap().into();
         self
     }
 
-    pub fn build(mut self) -> CreateMessageReq {
-        self.api_req.body = serde_json::to_vec(&self.body.clone().unwrap())
-            .unwrap()
-            .into();
-        CreateMessageReq {
-            api_req: self.api_req,
-            body: self.body.unwrap(),
-        }
+    pub fn build(self) -> ApiReq {
+        self.api_req
     }
-}
-
-#[derive(Debug)]
-pub struct CreateMessageReq {
-    pub api_req: ApiReq,
-    pub body: CreateMessageReqBody,
 }
 
 /// 发送消息 请求体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateMessageReqBody {
-    /// 消息接收者的ID，ID类型应与查询参数receive_id_type 对应；推荐使用
-    /// OpenID，获取方式可参考文档如何获取 Open ID？
+    /// 消息接收者的ID，ID类型应与查询参数receive_id_type 对应；
+    /// 推荐使用 OpenID，获取方式可参考文档如何获取 Open ID？
     ///
     /// 示例值："ou_7d8a6e6df7621556ce0d21922b676706ccs"
     pub receive_id: String,
@@ -233,7 +205,7 @@ pub struct Message {
     pub mentions: Option<Vec<Mention>>,
 }
 
-impl ApiResponseFormat for Message {
+impl ApiResponseTrait for Message {
     fn standard_data_format() -> bool {
         true
     }
@@ -291,29 +263,14 @@ pub struct Mention {
     pub upper_message_id: String,
 }
 
-pub struct ListMessageReqBuilder {
+#[derive(Default)]
+pub struct ListMessageReq {
     api_req: ApiReq,
-    limit: Option<i32>,
 }
 
-impl Default for ListMessageReqBuilder {
-    fn default() -> Self {
-        ListMessageReqBuilder::new()
-    }
-}
-
-impl ListMessageReqBuilder {
-    pub fn new() -> ListMessageReqBuilder {
-        ListMessageReqBuilder {
-            api_req: ApiReq::default(),
-            limit: None,
-        }
-    }
-
-    /// 最大返回多少记录
-    pub fn limit(mut self, limit: i32) -> Self {
-        self.limit = Some(limit);
-        self
+impl ListMessageReq {
+    pub fn new() -> ListMessageReq {
+        ListMessageReq::default()
     }
 
     /// 容器类型 ，目前可选值仅有"chat"，包含单聊（p2p）和群聊（group）
@@ -386,15 +343,9 @@ impl ListMessageReqBuilder {
         self
     }
 
-    pub fn build(self) -> ListMessageReq {
-        ListMessageReq {
-            api_req: self.api_req,
-        }
+    pub fn build(self) -> ApiReq {
+        self.api_req
     }
-}
-
-pub struct ListMessageReq {
-    pub api_req: ApiReq,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -406,11 +357,10 @@ pub struct ListMessageRespData {
     pub items: Vec<Message>,
 }
 
-impl ApiResponseFormat for ListMessageRespData {
+impl ApiResponseTrait for ListMessageRespData {
     fn standard_data_format() -> bool {
         true
     }
-
 }
 
 pub trait SendMessageTrait {

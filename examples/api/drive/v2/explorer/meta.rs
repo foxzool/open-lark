@@ -22,6 +22,7 @@ fn main() {
     if let ApiResponse::Success { data, ..} = resp {
         println!("root_meta: {:#?}", data);
 
+        // 获取文件夹元信息
         let resp = client.drive.v2.explorer.folder_meta(&data.token).unwrap();
         println!("folder_meta: {:?}", resp)
     }

@@ -1,9 +1,6 @@
 use std::fmt::{Debug, Display, Formatter};
 
-
 use serde::{Deserialize, Serialize};
-
-use crate::core::constants::{HTTP_HEADER_KEY_LOG_ID, HTTP_HEADER_KEY_REQUEST_ID};
 
 /// 业务返回值
 #[derive(Debug, Serialize, Deserialize)]
@@ -16,13 +13,12 @@ pub struct BaseResp<T> {
 }
 
 /// 业务返回值格式
-pub trait ApiResponseFormat:
+pub trait ApiResponseTrait:
     Serialize + for<'a> Deserialize<'a> + Send + Sync + 'static + Debug
 {
     /// 是否是标准数据格式, 既是用data包裹数据
     fn standard_data_format() -> bool;
 }
-
 
 #[derive(Debug)]
 pub enum ApiResponse<T> {
@@ -80,7 +76,7 @@ pub struct RawResponse {
     pub err: Option<ErrorInfo>,
 }
 
-impl ApiResponseFormat for RawResponse {
+impl ApiResponseTrait for RawResponse {
     fn standard_data_format() -> bool {
         false
     }

@@ -4,7 +4,7 @@ use dotenvy::dotenv;
 
 use open_lark::{
     client::LarkClientBuilder,
-    service::{drive::v1::files::UploadAllRequest, im::v1::chats::ListChatReqBuilder},
+    service::{drive::v1::files::UploadAllRequest, im::v1::chats::ListChatReq},
 };
 
 /// 向云空间指定目录下上传一个小文件

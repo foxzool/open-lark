@@ -29,7 +29,7 @@ use open_lark::{
         FeishuCard,
     },
     client::LarkClientBuilder,
-    service::im::v1::message::{CreateMessageReqBody, CreateMessageReqBuilder, SendMessageTrait},
+    service::im::v1::message::{CreateMessageReqBody, CreateMessageReq, SendMessageTrait},
 };
 
 fn main() {
@@ -99,7 +99,7 @@ fn main() {
         )
         .elements("zh_cn", vec![CardElement::FormSet(form)]);
 
-    let req = CreateMessageReqBuilder::new()
+    let req = CreateMessageReq::new()
         .receive_id_type("chat_id")
         .body(CreateMessageReqBody {
             receive_id: "oc_84d53efe245072c16ba4b4ff597f52f3".to_string(),

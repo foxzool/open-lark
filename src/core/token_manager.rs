@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::core::{
     api_req::ApiReq,
-    api_resp::{ApiResponse, ApiResponseFormat, RawResponse},
+    api_resp::{ApiResponse, ApiResponseTrait, RawResponse},
     app_ticket_manager::APP_TICKET_MANAGER,
     cache::{Cache, LocalCache},
     config::Config,
@@ -275,7 +275,7 @@ struct AppAccessTokenResp {
     app_access_token: String,
 }
 
-impl ApiResponseFormat for AppAccessTokenResp {
+impl ApiResponseTrait for AppAccessTokenResp {
     fn standard_data_format() -> bool {
         false
     }
@@ -302,7 +302,7 @@ struct TenantAccessTokenResp {
     tenant_access_token: String,
 }
 
-impl ApiResponseFormat for TenantAccessTokenResp {
+impl ApiResponseTrait for TenantAccessTokenResp {
     fn standard_data_format() -> bool {
         false
     }

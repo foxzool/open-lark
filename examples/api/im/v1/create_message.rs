@@ -7,7 +7,7 @@ use uuid::Uuid;
 use open_lark::{
     client::LarkClientBuilder,
     service::im::v1::message::{
-        ANode, AtNode, CreateMessageReqBody, CreateMessageReqBuilder, EmotionNode, ImgNode,
+        ANode, AtNode, CreateMessageReqBody, CreateMessageReq, EmotionNode, ImgNode,
         MessageCardTemplate, MessagePost, MessagePostNode, MessageText, SendMessageTrait, TextNode,
     },
 };
@@ -49,7 +49,7 @@ fn main() {
         json!({"project_name": "project", "address": "address", "money": "money", "zlrq": "zlrq", "comment": "comment", "search_url": "search_url"}),
     );
 
-    let req = CreateMessageReqBuilder::new()
+    let req = CreateMessageReq::new()
         .receive_id_type("chat_id")
         .body(CreateMessageReqBody {
             receive_id: "oc_84d53efe245072c16ba4b4ff597f52f3".to_string(),

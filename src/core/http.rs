@@ -1,4 +1,4 @@
-use std::{collections::HashSet,  marker::PhantomData};
+use std::{collections::HashSet, marker::PhantomData};
 
 use log::debug;
 use serde_json::Value;
@@ -6,7 +6,7 @@ use ureq::Request;
 
 use crate::core::{
     api_req::ApiReq,
-    api_resp::{ApiResponse, ApiResponseFormat, BaseResp, RawResponse},
+    api_resp::{ApiResponse, ApiResponseTrait, BaseResp, RawResponse},
     app_ticket_manager::apply_app_ticket,
     config::Config,
     constants::*,
@@ -20,7 +20,7 @@ pub struct Transport<T> {
     phantom_data: PhantomData<T>,
 }
 
-impl<T: ApiResponseFormat> Transport<T> {
+impl<T: ApiResponseTrait> Transport<T> {
     pub fn request(
         mut req: ApiReq,
         config: &Config,
@@ -99,15 +99,17 @@ impl<T: ApiResponseFormat> Transport<T> {
                 debug!("raw_body: {:?}", raw_body);
                 if T::standard_data_format() {
                     match serde_json::from_value::<BaseResp<T>>(raw_body) {
-                        Ok(base_resp) => Ok(return if base_resp.raw_response.code == 0 {
-                            Ok(ApiResponse::Success {
-                                data: base_resp.data,
-                                status_code,
-                                header,
-                            })
-                        } else {
-                            Ok(ApiResponse::Error(base_resp.raw_response))
-                        }),
+                        Ok(base_resp) => {
+                            return if base_resp.raw_response.code == 0 {
+                                Ok(ApiResponse::Success {
+                                    data: base_resp.data,
+                                    status_code,
+                                    header,
+                                })
+                            } else {
+                                Ok(ApiResponse::Error(base_resp.raw_response))
+                            }
+                        }
                         Err(err) => Err(LarkAPIError::DeserializeError(err)),
                     }
                 } else {
