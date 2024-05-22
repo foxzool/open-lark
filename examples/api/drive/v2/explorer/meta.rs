@@ -4,8 +4,8 @@ use dotenvy::dotenv;
 
 use open_lark::{
     client::LarkClientBuilder,
-    service::{drive::v1::files::UploadAllRequest, im::v1::chats::ListChatReqBuilder},
 };
+use open_lark::core::api_resp::ApiResponse;
 
 /// 获取我的空间（root folder）元信息
 fn main() {
@@ -18,6 +18,11 @@ fn main() {
 
 
     // 发起请求
-    let resp = client.drive.v2.explorer.meta_data().unwrap();
-    println!("response: {:?}", resp);
+    let resp = client.drive.v2.explorer.root_folder_meta().unwrap();
+    if let ApiResponse::Success { data, ..} = resp {
+        println!("root_meta: {:#?}", data);
+
+        let resp = client.drive.v2.explorer.folder_meta(&data.token).unwrap();
+        println!("folder_meta: {:?}", resp)
+    }
 }

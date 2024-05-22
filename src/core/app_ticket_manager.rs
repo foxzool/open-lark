@@ -9,11 +9,10 @@ use crate::core::{
     api_resp::{ApiResponse, RawResponse},
     cache::{Cache, LocalCache},
     config::Config,
-    constants::{AccessTokenType, APPLY_APP_TICKET_PATH, APP_TICKET_KEY_PREFIX},
+    constants::{AccessTokenType, APP_TICKET_KEY_PREFIX, APPLY_APP_TICKET_PATH},
     http::Transport,
     SDKResult,
 };
-use crate::core::api_resp::BaseResp;
 
 lazy_static! {
     pub static ref APP_TICKET_MANAGER: AppTicketManager = AppTicketManager::new();

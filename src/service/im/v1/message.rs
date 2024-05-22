@@ -6,7 +6,7 @@ use serde_json::{json, Value};
 
 use crate::core::{
     api_req::ApiReq,
-    api_resp::{ApiResponse, RawResponse},
+    api_resp::{ApiResponse},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,

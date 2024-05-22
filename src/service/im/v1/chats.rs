@@ -1,16 +1,10 @@
-use log::error;
 use serde::{Deserialize, Serialize};
 
 use crate::core::{
-    api_req::ApiReq,
-    api_resp::{ApiResponse},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
+    api_req::ApiReq, api_resp::ApiResponse, config::Config, constants::AccessTokenType,
+    http::Transport, req_option::RequestOption,
 };
 use crate::core::api_resp::ApiResponseFormat;
-
 use crate::core::SDKResult;
 
 pub struct ChatsService {
@@ -74,13 +68,9 @@ impl<'a> Iterator for ListChatIterator<'a> {
                         Some(data.items)
                     }
                 }
-                ApiResponse::Error(_) => {
-                    None
-                }
+                ApiResponse::Error(_) => None,
             },
-            Err(_) => {
-                None
-            }
+            Err(_) => None,
         }
     }
 }

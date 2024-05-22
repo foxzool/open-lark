@@ -1,8 +1,6 @@
-use std::{collections::HashSet, io::Read, marker::PhantomData};
+use std::{collections::HashSet,  marker::PhantomData};
 
-use bytes::Bytes;
 use log::debug;
-use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use ureq::Request;
 
