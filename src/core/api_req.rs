@@ -1,4 +1,3 @@
-use bytes::Bytes;
 use std::collections::HashMap;
 
 use crate::core::constants::AccessTokenType;
@@ -7,9 +6,9 @@ use crate::core::constants::AccessTokenType;
 pub struct ApiReq {
     pub(crate) http_method: String,
     pub api_path: String,
-    pub body: Bytes,
+    pub body: Vec<u8>,
     pub query_params: HashMap<String, String>,
     pub path_params: HashMap<String, Vec<String>>,
     pub(crate) supported_access_token_types: Vec<AccessTokenType>,
+    pub file: Vec<u8>,
 }
-

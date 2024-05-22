@@ -1,10 +1,10 @@
-use std::env;
+use std::{env, io::Read};
 
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClientBuilder,
-    service::{drive::v1::files::UploadAllRequest, im::v1::chats::ListChatReq},
+    client::LarkClientBuilder, core::api_resp::ApiResponse,
+    service::drive::v1::files::UploadAllRequest,
 };
 
 /// 向云空间指定目录下上传一个小文件
@@ -16,8 +16,23 @@ fn main() {
     // 创建 Client
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
 
-    let req = UploadAllRequest::default();
+    let mut file = std::fs::File::open("target/1.txt").unwrap();
+    let file_size = file.metadata().unwrap().len() as usize;
+    let file_name = "1.txt";
+    let mut buffer = vec![];
+    file.read_to_end(&mut buffer).unwrap();
+
+    let req = UploadAllRequest::builder()
+        .file_name(file_name)
+        .parent_type("explorer")
+        .parent_node("nodcnBh4MAgg2GpI5IkRVZuw3Jd")
+        .size(file_size as i32)
+        .file(buffer.into())
+        .build();
+
     // 发起请求
-    let resp = client.drive.v1.files.upload_all(req).unwrap();
-    println!("response: {:?}", resp);
+    let resp = client.drive.v1.files.upload_all(req, None).unwrap();
+    if let ApiResponse::Success { data, .. } = resp {
+        println!("上传成功响应: {:#?}", data);
+    }
 }

@@ -38,10 +38,11 @@ impl CustomBot {
         });
 
         self.check_sign(&mut json);
+        // let json_string = json.to_string().into_bytes();
 
         Transport::do_send(
             self.client.post(&self.webhook_url),
-            json.to_string().as_bytes(),
+            json.to_string().into_bytes().into()
         )
     }
 
@@ -56,7 +57,7 @@ impl CustomBot {
 
         Transport::do_send(
             self.client.post(&self.webhook_url),
-            json.to_string().as_bytes(),
+            json.to_string().into_bytes().into(),
         )
     }
 

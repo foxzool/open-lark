@@ -64,10 +64,8 @@ pub fn apply_app_ticket(config: &Config) -> SDKResult<()> {
         ApiReq {
             http_method: "POST".to_string(),
             api_path: APPLY_APP_TICKET_PATH.to_string(),
-            body: Default::default(),
-            query_params: Default::default(),
-            path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::App],
+            ..Default::default()
         },
         config,
         None,

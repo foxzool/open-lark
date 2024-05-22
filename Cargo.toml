@@ -16,19 +16,21 @@ license = "MIT OR Apache-2.0"
 
 [dependencies]
 base64 = "0.22.1"
-bytes = "1.6.0"
 chrono = "0.4.38"
 hmac = "0.12.1"
-sha2 = "0.10.8"
 lazy_static = "1.4.0"
+log = "0.4.21"
+mime = "0.3.17"
+mime_guess = "2.0.4"
+rand = "0.9.0-alpha.1"
 serde = { version = "1.0.197", features = ["derive"] }
 serde_json = "1.0.115"
-thiserror = "1.0.60"
-log = "0.4.21"
-url = { version = "2.5.0", features = ["serde"] }
-ureq = { version = "2.9.7", features = ["json", "socks-proxy"] }
+sha2 = "0.10.8"
 strum = "0.26.2"
 strum_macros = "0.26.2"
+thiserror = "1.0.60"
+url = { version = "2.5.0", features = ["serde"] }
+ureq = { version = "2.9.7", features = ["json", "socks-proxy"] }
 
 
 [dev-dependencies]

@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::io::Write;
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -13,6 +14,7 @@ use crate::core::{
         USER_AGENT_HEADER,
     },
     error::LarkAPIError,
+    multi_part::MultipartBuilder,
     req_option::RequestOption,
     token_manager::TOKEN_MANAGER,
     utils::user_agent,
@@ -22,14 +24,14 @@ pub struct ReqTranslator;
 
 impl ReqTranslator {
     pub fn translate(
-        req: &ApiReq,
+        req: &mut ApiReq,
         access_token_type: AccessTokenType,
         config: &Config,
         option: &RequestOption,
     ) -> Result<Request, LarkAPIError> {
         let client = ureq::Agent::new();
 
-        let path = format!("{}/{}", config.base_url, req.api_path);
+        let path = format!("{}{}", config.base_url, req.api_path);
         let query_params = req
             .query_params
             .iter()
@@ -80,14 +82,38 @@ impl ReqTranslator {
             }
         }
 
-        let mut file_upload = false;
-        let body = req.body.clone();
-        if serde_json::from_slice::<FormData>(&body).is_ok() || option.file_upload {
-            file_upload = true;
-        }
+        if !req.file.is_empty() {
+            let json_value = serde_json::from_slice::<Value>(&req.body)?;
 
-        if file_upload {
-            // req_builder = req_builder.multipart(to_form_data(body).await?);
+            if let Some(form_obj) = json_value.as_object() {
+                let mut builder = MultipartBuilder::new();
+                let file_name = form_obj["file_name"].as_str().unwrap();
+                // builder = builder.add_file("file", "target/1.txt").unwrap();
+                builder = builder.load_file(&file_name, req.file.clone())?;
+
+                for (k, v) in form_obj.iter() {
+                    if v == &Value::Null {
+                        continue;
+                    }
+                    match v {
+                        Value::String(s) => {
+                            builder = builder.add_text(k, s)?;
+                        }
+                        Value::Number(n) => {
+                            builder = builder.add_text(k, n.to_string().as_str())?;
+                        }
+                        Value::Bool(b) => {
+                            builder = builder.add_text(k, b.to_string().as_str())?;
+                        }
+                        _ => {}
+                    }
+                }
+
+                let (content_type, data) = builder.finish().unwrap();
+                req.body = data;
+
+                req_builder = req_builder.set(CONTENT_TYPE_HEADER, &content_type);
+            }
         } else {
             req_builder = req_builder.set(CONTENT_TYPE_HEADER, DEFAULT_CONTENT_TYPE);
             // req_builder = req_builder.body(req.body.clone())

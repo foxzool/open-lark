@@ -11,7 +11,7 @@ use crate::core::{
     cache::{Cache, LocalCache},
     config::Config,
     constants::{
-        AccessTokenType, AppType, APP_ACCESS_TOKEN_INTERNAL_URL_PATH, APP_ACCESS_TOKEN_KEY_PREFIX,
+        AccessTokenType, APP_ACCESS_TOKEN_INTERNAL_URL_PATH, APP_ACCESS_TOKEN_KEY_PREFIX, AppType,
         EXPIRY_DELTA, TENANT_ACCESS_TOKEN_URL_PATH,
     },
     error::LarkAPIError,
@@ -66,10 +66,8 @@ impl TokenManager {
         let req = ApiReq {
             http_method: "POST".to_string(),
             api_path: APP_ACCESS_TOKEN_INTERNAL_URL_PATH.to_string(),
-            body: Default::default(),
-            query_params: Default::default(),
-            path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
+            ..Default::default()
         };
         let resp: ApiResponse<AppAccessTokenResp> = Transport::request(req, config, None)?;
         match resp {
@@ -119,9 +117,8 @@ impl TokenManager {
             http_method: "POST".to_string(),
             api_path: APP_ACCESS_TOKEN_INTERNAL_URL_PATH.to_string(),
             body,
-            query_params: Default::default(),
-            path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
+            ..Default::default()
         };
         let raw_resp: ApiResponse<AppAccessTokenResp> = Transport::request(req, config, None)?;
         match raw_resp {
@@ -179,9 +176,8 @@ impl TokenManager {
             http_method: "POST".to_string(),
             api_path: APP_ACCESS_TOKEN_INTERNAL_URL_PATH.to_string(),
             body,
-            query_params: Default::default(),
-            path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
+            ..Default::default()
         };
         let raw_resp: ApiResponse<TenantAccessTokenResp> = Transport::request(req, config, None)?;
 
@@ -222,9 +218,8 @@ impl TokenManager {
             http_method: "POST".to_string(),
             api_path: TENANT_ACCESS_TOKEN_URL_PATH.to_string(),
             body,
-            query_params: Default::default(),
-            path_params: Default::default(),
             supported_access_token_types: vec![AccessTokenType::None],
+            ..Default::default()
         };
         let raw_resp: ApiResponse<TenantAccessTokenResp> = Transport::request(req, config, None)?;
         match raw_resp {

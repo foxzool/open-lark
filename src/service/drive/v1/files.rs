@@ -1,8 +1,17 @@
-use crate::core::config::Config;
-use bytes::Bytes;
+use serde::{Deserialize, Serialize};
+
+use crate::core::{
+    api_req::ApiReq,
+    api_resp::{ApiResponse, ApiResponseTrait},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
 
 /// 上传文件 请求体
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct UploadAllRequest {
     /// 文件名。
     ///
@@ -22,39 +31,57 @@ pub struct UploadAllRequest {
     size: i32,
     /// 文件adler32校验和(可选)。
     checksum: Option<String>,
+    #[serde(skip)]
     /// 文件二进制内容。
-    file: Bytes,
+    file: Vec<u8>,
 }
 
 impl UploadAllRequest {
+    pub fn builder() -> Self {
+        Self::default()
+    }
+
+    /// 文件名
     pub fn file_name(mut self, file_name: impl ToString) -> Self {
         self.file_name = file_name.to_string();
         self
     }
 
+    /// 上传点类型。
     pub fn parent_type(mut self, parent_type: impl ToString) -> Self {
         self.parent_type = parent_type.to_string();
         self
     }
 
+    /// 文件夹token
     pub fn parent_node(mut self, parent_node: impl ToString) -> Self {
         self.parent_node = parent_node.to_string();
         self
     }
 
+    /// 文件大小（以字节为单位）
     pub fn size(mut self, size: i32) -> Self {
         self.size = size;
         self
     }
 
+    /// 文件adler32校验和(可选)
     pub fn checksum(mut self, checksum: Option<impl ToString>) -> Self {
         self.checksum = checksum.map(|x| x.to_string());
         self
     }
 
-    pub fn file(mut self, file: Bytes) -> Self {
+    /// 文件二进制内容。
+    pub fn file(mut self, file: Vec<u8>) -> Self {
         self.file = file;
         self
+    }
+
+    pub fn build(self) -> ApiReq {
+        let mut api_req = ApiReq::default();
+        api_req.body = serde_json::to_vec(&self).unwrap().into();
+        api_req.file = self.file;
+        api_req
     }
 }
 
@@ -68,10 +95,30 @@ impl FilesService {
     }
 
     /// 上传文件
-    pub async fn upload_all(
+    pub fn upload_all(
         &self,
-        req_body: UploadAllRequest,
-    ) -> Result<(), Box<dyn std::error::Error>> {
-        Ok(())
+        mut api_req: ApiReq,
+        option: Option<RequestOption>,
+    ) -> SDKResult<ApiResponse<UploadAllResponse>> {
+        api_req.http_method = "POST".to_string();
+        api_req.api_path = "/open-apis/drive/v1/files/upload_all".to_string();
+        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+
+        let api_resp = Transport::request(api_req, &self.config, option)?;
+
+        Ok(api_resp)
+    }
+}
+
+/// 上传文件响应体
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UploadAllResponse {
+    /// 新创建文件的 token
+    file_token: String,
+}
+
+impl ApiResponseTrait for UploadAllResponse {
+    fn standard_data_format() -> bool {
+        true
     }
 }

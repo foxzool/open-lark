@@ -46,6 +46,7 @@ pub const FEISHU_BASE_URL: &str = "https://open.feishu.cn";
 pub const LARK_BASE_URL: &str = "https://open.larksuite.com";
 
 pub const DEFAULT_CONTENT_TYPE: &str = "application/json; charset=utf-8";
+pub const FILE_CONTENT_TYPE: &str = "multipart/form-data";
 pub const USER_AGENT_HEADER: &str = "User-Agent";
 
 pub const HTTP_HEADER_KEY_REQUEST_ID: &str = "X-Request-Id";

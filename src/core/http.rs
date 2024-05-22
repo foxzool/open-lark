@@ -1,5 +1,6 @@
 use std::{collections::HashSet, marker::PhantomData};
 
+
 use log::debug;
 use serde_json::Value;
 use ureq::Request;
@@ -40,23 +41,19 @@ impl<T: ApiResponseTrait> Transport<T> {
         );
         validate(config, &option, access_token_type)?;
 
-        Self::do_request(&req, access_token_type, config, option)
+        Self::do_request(req, access_token_type, config, option)
     }
 
     fn do_request(
-        http_req: &ApiReq,
+        mut http_req: ApiReq,
         access_token_type: AccessTokenType,
         config: &Config,
         option: RequestOption,
     ) -> SDKResult<ApiResponse<T>> {
         for _i in 0..2 {
-            let req = ReqTranslator::translate(http_req, access_token_type, config, &option)?;
+            let req = ReqTranslator::translate(&mut http_req, access_token_type, config, &option)?;
             debug!("Req:{:?}", req);
-            if let Ok(some_json) = serde_json::from_slice::<Value>(&http_req.body) {
-                debug!("body json {}", some_json.to_string());
-            }
-
-            let resp = Self::do_send(req, &http_req.body)?;
+            let resp = Self::do_send(req, http_req.body)?;
             debug!("Res:{:?}", resp);
 
             // let file_download_success = option.file_upload && raw_resp.status_code == 200;
@@ -82,8 +79,8 @@ impl<T: ApiResponseTrait> Transport<T> {
         Err(LarkAPIError::RequestError("request failed".to_string()))
     }
 
-    pub fn do_send(raw_request: Request, body: &[u8]) -> SDKResult<ApiResponse<T>> {
-        match raw_request.send_bytes(body) {
+    pub fn do_send(raw_request: Request, body: Vec<u8>) -> SDKResult<ApiResponse<T>> {
+        match raw_request.send_bytes(&body) {
             Ok(response) => {
                 let status_code = response.status();
                 let header = response.headers_names();
