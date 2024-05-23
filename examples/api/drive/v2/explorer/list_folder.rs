@@ -4,9 +4,9 @@ use dotenvy::dotenv;
 
 use open_lark::{
     client::LarkClientBuilder,
+    core::{api_resp::ApiResponse, req_option::RequestOption},
     service::drive::v2::explorer::ListFolderRequest,
 };
-use open_lark::core::api_resp::ApiResponse;
 
 /// 获取文件夹下的清单
 fn main() {
@@ -18,27 +18,36 @@ fn main() {
     // 创建 Client
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
 
-    let req = ListFolderRequest::builder().build();
-    // // 发起请求
+    let req = ListFolderRequest::builder()
+        .folder_token("ZeUcfrcgDl1eHEdSUHacER7Lnbc")
+        .build();
+    // 发起请求
     let resp = client
         .drive
         .v2
         .explorer
-        .list_folder(req.clone(), None)
+        .list_folder(
+            req.clone(),
+            Some(
+                RequestOption::builder()
+                    .user_access_token(user_access_token)
+                    .build(),
+            ),
+        )
         .unwrap();
     if let ApiResponse::Success { data, .. } = resp {
         println!("response: {:#?}", data);
     }
 
     // 使用迭代器
-    client
-        .drive
-        .v2
-        .explorer
-        .list_folder_iter(req, None)
-        .for_each(|folders| {
-            for folder in folders {
-                println!("folder {:?}", folder);
-            }
-        })
+    // client
+    //     .drive
+    //     .v2
+    //     .explorer
+    //     .list_folder_iter(req, None)
+    //     .for_each(|folders| {
+    //         for folder in folders {
+    //             println!("folder {:?}", folder);
+    //         }
+    //     })
 }

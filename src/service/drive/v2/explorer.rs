@@ -77,7 +77,7 @@ impl ExplorerService {
     }
 
     /// GET https://open.feishu.cn/open-apis/drive/v1/files
-    /// 新建文件夹
+    /// 获取文件夹下的清单
     pub fn list_folder(
         &self,
         list_folder_request: ListFolderRequest,
@@ -268,71 +268,43 @@ pub struct ListFolderRequestBuilder {
 
 impl ListFolderRequestBuilder {
     /// 页大小
-    pub fn page_size(mut self, page_size: i32) -> Self {
-        self.request.page_size = Some(page_size);
-        self
-    }
-
-    /// 分页标记
-    pub fn page_token(mut self, page_token: impl ToString) -> Self {
-        self.request.page_token = Some(page_token.to_string());
-        self
-    }
-
-    /// 文件夹的token
-    pub fn fold_token(mut self, fold_token: impl ToString) -> Self {
-        self.request.fold_token = Some(fold_token.to_string());
-        self
-    }
-
-    /// 排序规则
-    pub fn order_by(mut self, order_by: impl ToString) -> Self {
-        self.request.order_by = Some(order_by.to_string());
-        self
-    }
-
-    /// 升序降序
-    pub fn direction(mut self, direction: impl ToString) -> Self {
-        self.request.direction = Some(direction.to_string());
-        self
-    }
-
-    /// 用户 ID 类型
-    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
-        self.request.user_id_type = Some(user_id_type.to_string());
-        self
-    }
-
-    pub fn build(mut self) -> ListFolderRequest {
-        self.request.api_req.body = serde_json::to_vec(&self.request).unwrap();
-
-        self.request
-    }
-}
-
-/// 列出文件夹查询参数
-#[derive(Default, Clone, Serialize, Deserialize)]
-pub struct ListFolderRequest {
-    /// 请求体
-    #[serde(skip)]
-    api_req: ApiRequest,
-    /// 页大小
     ///
     /// 示例值：50
     ///
     /// 数据校验规则：
     ///
     /// 最大值：200
-    page_size: Option<i32>,
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.request
+            .api_req
+            .query_params
+            .insert("page_size".to_string(), page_size.to_string());
+        self
+    }
+
     /// 分页标记，第一次请求不填，表示从头开始遍历；分页查询结果还有更多项时会同时返回新的
     /// page_token，下次遍历可采用该 page_token 获取查询结果
     ///
     /// 示例值："MTY1NTA3MTA1OXw3MTA4NDc2MDc1NzkyOTI0Nabcef"
-    page_token: Option<String>,
+    pub fn page_token(mut self, page_token: impl ToString) -> Self {
+        self.request
+            .api_req
+            .query_params
+            .insert("page_token".to_string(), page_token.to_string());
+        self
+    }
+
     /// 文件夹的token（若不填写该参数或填写空字符串，则默认获取用户云空间下的清单，且不支持分页）
     ///
     /// 示例值："fldbcO1UuPz8VwnpPx5a9abcef"
-    fold_token: Option<String>,
+    pub fn folder_token(mut self, fold_token: impl ToString) -> Self {
+        self.request
+            .api_req
+            .query_params
+            .insert("folder_token".to_string(), fold_token.to_string());
+        self
+    }
+
     /// 排序规则
     ///
     /// 示例值："EditedTime"
@@ -342,7 +314,14 @@ pub struct ListFolderRequest {
     /// - EditedTime：编辑时间排序
     /// - CreatedTime：创建时间排序
     /// 默认值：EditedTime
-    order_by: Option<String>,
+    pub fn order_by(mut self, order_by: impl ToString) -> Self {
+        self.request
+            .api_req
+            .query_params
+            .insert("order_by".to_string(), order_by.to_string());
+        self
+    }
+
     /// 升序降序
     ///
     /// 示例值："DESC"
@@ -352,7 +331,14 @@ pub struct ListFolderRequest {
     /// - ASC：升序
     /// - DESC：降序
     /// 默认值：DESC
-    direction: Option<String>,
+    pub fn direction(mut self, direction: impl ToString) -> Self {
+        self.request
+            .api_req
+            .query_params
+            .insert("direction".to_string(), direction.to_string());
+        self
+    }
+
     /// 用户 ID 类型
     ///
     /// 示例值："open_id"
@@ -368,7 +354,25 @@ pub struct ListFolderRequest {
     ///   是不同的。在同一个租户内，一个用户的 User ID 在所有应用（包括商店应用）中都保持一致。User
     ///   ID 主要用于在不同的应用间打通用户数据。了解更多：如何获取 User ID？
     /// 默认值：open_id
-    user_id_type: Option<String>,
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
+        self.request
+            .api_req
+            .query_params
+            .insert("user_id_type".to_string(), user_id_type.to_string());
+        self
+    }
+
+    pub fn build(self) -> ListFolderRequest {
+        self.request
+    }
+}
+
+/// 列出文件夹查询参数
+#[derive(Default, Clone, Serialize, Deserialize)]
+pub struct ListFolderRequest {
+    /// 请求体
+    #[serde(skip)]
+    api_req: ApiRequest,
 }
 
 impl ListFolderRequest {
