@@ -6,7 +6,7 @@ use ureq::Request;
 use url::Url;
 
 use crate::core::{
-    api_req::ApiReq,
+    api_req::ApiRequest,
     config::Config,
     constants::{
         AccessTokenType, CONTENT_TYPE_HEADER, CUSTOM_REQUEST_ID, DEFAULT_CONTENT_TYPE,
@@ -23,7 +23,7 @@ pub struct ReqTranslator;
 
 impl ReqTranslator {
     pub fn translate(
-        req: &mut ApiReq,
+        req: &mut ApiRequest,
         access_token_type: AccessTokenType,
         config: &Config,
         option: &RequestOption,

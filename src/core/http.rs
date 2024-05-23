@@ -5,7 +5,7 @@ use serde_json::Value;
 use ureq::Request;
 
 use crate::core::{
-    api_req::ApiReq,
+    api_req::ApiRequest,
     api_resp::{ApiResponse, ApiResponseTrait, BaseResp, RawResponse, ResponseFormat},
     app_ticket_manager::apply_app_ticket,
     config::Config,
@@ -22,7 +22,7 @@ pub struct Transport<T> {
 
 impl<T: ApiResponseTrait> Transport<T> {
     pub fn request(
-        mut req: ApiReq,
+        mut req: ApiRequest,
         config: &Config,
         option: Option<RequestOption>,
     ) -> Result<ApiResponse<T>, LarkAPIError> {
@@ -44,7 +44,7 @@ impl<T: ApiResponseTrait> Transport<T> {
     }
 
     fn do_request(
-        mut http_req: ApiReq,
+        mut http_req: ApiRequest,
         access_token_type: AccessTokenType,
         config: &Config,
         option: RequestOption,
@@ -273,7 +273,7 @@ fn validate(
 
 /// 解析文件名
 fn decode_file_name(file_name: &str) -> Option<String> {
-    let mut parts = file_name.split(';');
+    let parts = file_name.split(';');
 
     for part in parts {
         if part.trim().starts_with("filename*=") {

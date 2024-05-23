@@ -1,15 +1,14 @@
 use serde::{Deserialize, Serialize};
 
 use crate::core::{
-    api_req::ApiReq,
-    api_resp::{ApiResponse, ApiResponseTrait},
+    api_req::ApiRequest,
+    api_resp::{ApiResponse, ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
-use crate::core::api_resp::ResponseFormat;
 
 pub struct ChatsService {
     pub config: Config,
@@ -19,10 +18,10 @@ impl ChatsService {
     /// 获取用户或机器人所在的群列表
     pub fn list(
         &self,
-        req: &ApiReq,
+        list_chat_request: ListChatRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<ApiResponse<ListChatRespData>> {
-        let mut api_req = req.clone();
+        let mut api_req = list_chat_request.api_req;
         api_req.http_method = "GET".to_string();
         api_req.api_path = "/open-apis/im/v1/chats".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
@@ -32,10 +31,10 @@ impl ChatsService {
         Ok(api_resp)
     }
 
-    pub fn list_iter(&self, req: ApiReq, option: Option<RequestOption>) -> ListChatIterator {
+    pub fn list_iter(&self, list_chat_request: ListChatRequest, option: Option<RequestOption>) -> ListChatIterator {
         ListChatIterator {
             service: self,
-            req,
+            request: list_chat_request,
             option,
             has_more: true,
         }
@@ -44,7 +43,7 @@ impl ChatsService {
 
 pub struct ListChatIterator<'a> {
     service: &'a ChatsService,
-    req: ApiReq,
+    request: ListChatRequest,
     option: Option<RequestOption>,
     has_more: bool,
 }
@@ -56,12 +55,13 @@ impl<'a> Iterator for ListChatIterator<'a> {
         if !self.has_more {
             return None;
         }
-        match self.service.list(&self.req, self.option.clone()) {
+        match self.service.list(self.request.clone(), self.option.clone()) {
             Ok(resp) => match resp {
                 ApiResponse::Success { data, .. } => {
                     self.has_more = data.has_more;
                     if data.has_more {
-                        self.req
+                        self.request
+                            .api_req
                             .query_params
                             .insert("page_token".to_string(), data.page_token.to_string());
                         Some(data.items)
@@ -78,19 +78,27 @@ impl<'a> Iterator for ListChatIterator<'a> {
     }
 }
 
-#[derive(Default)]
-pub struct ListChatReq {
-    api_req: ApiReq,
+#[derive(Default, Clone)]
+pub struct ListChatRequest {
+    api_req: ApiRequest,
 }
 
-impl ListChatReq {
-    pub fn new() -> ListChatReq {
-        ListChatReq::default()
+impl ListChatRequest {
+    pub fn builder() -> ListChatRequestBuilder {
+        ListChatRequestBuilder::default()
     }
+}
 
+#[derive(Default)]
+pub struct ListChatRequestBuilder {
+    request: ListChatRequest,
+}
+
+impl ListChatRequestBuilder {
     /// 用户 ID 类型
     pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
-        self.api_req
+        self.request
+            .api_req
             .query_params
             .insert("user_id_type".to_string(), user_id_type.to_string());
         self
@@ -98,7 +106,8 @@ impl ListChatReq {
 
     /// 群组排序方式
     pub fn sort_type(mut self, sort_type: impl ToString) -> Self {
-        self.api_req
+        self.request
+            .api_req
             .query_params
             .insert("sort_type".to_string(), sort_type.to_string());
         self
@@ -109,7 +118,8 @@ impl ListChatReq {
     ///
     /// 示例值：dmJCRHhpd3JRbGV1VEVNRFFyTitRWDY5ZFkybmYrMEUwMUFYT0VMMWdENEtuYUhsNUxGMDIwemtvdE5ORjBNQQ==
     pub fn page_token(mut self, page_token: impl ToString) -> Self {
-        self.api_req
+        self.request
+            .api_req
             .query_params
             .insert("page_token".to_string(), page_token.to_string());
         self
@@ -117,14 +127,15 @@ impl ListChatReq {
 
     /// 分页大小
     pub fn page_size(mut self, page_size: i32) -> Self {
-        self.api_req
+        self.request
+            .api_req
             .query_params
             .insert("page_size".to_string(), page_size.to_string());
         self
     }
 
-    pub fn build(self) -> ApiReq {
-        self.api_req
+    pub fn build(self) -> ListChatRequest {
+        self.request
     }
 }
 

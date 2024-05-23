@@ -5,7 +5,7 @@ use log::error;
 use serde::{Deserialize, Serialize};
 
 use crate::core::{
-    api_req::ApiReq,
+    api_req::ApiRequest,
     api_resp::{ApiResponse, RawResponse},
     cache::{Cache, LocalCache},
     config::Config,
@@ -61,7 +61,7 @@ fn app_ticket_key(app_id: &str) -> String {
 
 pub fn apply_app_ticket(config: &Config) -> SDKResult<()> {
     let resp: ApiResponse<RawResponse> = Transport::request(
-        ApiReq {
+        ApiRequest {
             http_method: "POST".to_string(),
             api_path: APPLY_APP_TICKET_PATH.to_string(),
             supported_access_token_types: vec![AccessTokenType::App],

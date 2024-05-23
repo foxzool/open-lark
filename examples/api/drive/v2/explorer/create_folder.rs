@@ -4,8 +4,9 @@ use dotenvy::dotenv;
 
 use open_lark::{
     client::LarkClientBuilder, core::api_resp::ApiResponse,
-    service::drive::v2::explorer::CreateFolderReq,
+    service::drive::v2::explorer::CreateFolderRequestBuilder,
 };
+use open_lark::service::drive::v2::explorer::CreateFolderRequest;
 
 /// 新建文件夹
 fn main() {
@@ -16,7 +17,7 @@ fn main() {
     // 创建 Client
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
 
-    let req = CreateFolderReq::new()
+    let req = CreateFolderRequest::builder()
         .name("测试文件夹")
         .folder_token("nodcnBh4MAgg2GpI5IkRVZuw3Jd")
         .build();

@@ -5,15 +5,14 @@ use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
 use crate::core::{
-    api_req::ApiReq,
-    api_resp::{ApiResponse, ApiResponseTrait},
+    api_req::ApiRequest,
+    api_resp::{ApiResponse, ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
 };
-use crate::core::api_resp::ResponseFormat;
 
 pub struct MessageService {
     pub config: Config,
@@ -26,7 +25,7 @@ impl MessageService {
     /// 视频、音频、文件、表情包。
     pub fn create(
         &self,
-        mut api_req: ApiReq,
+        mut api_req: ApiRequest,
         option: Option<RequestOption>,
     ) -> Result<ApiResponse<Message>, LarkAPIError> {
         api_req.http_method = "POST".to_string();
@@ -44,10 +43,10 @@ impl MessageService {
     /// https://open.feishu.cn/document/server-docs/im-v1/message/list
     pub fn list(
         &self,
-        api_req: &ApiReq,
+        list_message_request: ListMessageRequest,
         option: Option<RequestOption>,
     ) -> Result<ApiResponse<ListMessageRespData>, LarkAPIError> {
-        let mut api_req = api_req.clone();
+        let mut api_req = list_message_request.api_req;
         api_req.http_method = "GET".to_string();
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
@@ -57,10 +56,14 @@ impl MessageService {
         Ok(api_resp)
     }
 
-    pub fn list_iter(&self, req: ApiReq, option: Option<RequestOption>) -> ListMessageIterator {
+    pub fn list_iter(
+        &self,
+        list_message_request: ListMessageRequest,
+        option: Option<RequestOption>,
+    ) -> ListMessageIterator {
         ListMessageIterator {
             service: self,
-            req,
+            req: list_message_request,
             option,
             has_more: true,
         }
@@ -69,7 +72,7 @@ impl MessageService {
 
 pub struct ListMessageIterator<'a> {
     service: &'a MessageService,
-    req: ApiReq,
+    req: ListMessageRequest,
     option: Option<RequestOption>,
     has_more: bool,
 }
@@ -81,12 +84,13 @@ impl<'a> Iterator for ListMessageIterator<'a> {
         if !self.has_more {
             return None;
         }
-        match self.service.list(&self.req, self.option.clone()) {
+        match self.service.list(self.req.clone(), self.option.clone()) {
             Ok(resp) => match resp {
                 ApiResponse::Success { data, .. } => {
                     self.has_more = data.has_more;
                     if data.has_more {
                         self.req
+                            .api_req
                             .query_params
                             .insert("page_token".to_string(), data.page_token.unwrap());
                         Some(data.items)
@@ -111,7 +115,7 @@ impl<'a> Iterator for ListMessageIterator<'a> {
 
 #[derive(Default)]
 pub struct CreateMessageReq {
-    api_req: ApiReq,
+    api_req: ApiRequest,
 }
 
 impl CreateMessageReq {
@@ -131,7 +135,7 @@ impl CreateMessageReq {
         self
     }
 
-    pub fn build(self) -> ApiReq {
+    pub fn build(self) -> ApiRequest {
         self.api_req
     }
 }
@@ -264,21 +268,27 @@ pub struct Mention {
     pub upper_message_id: String,
 }
 
-#[derive(Default)]
-pub struct ListMessageReq {
-    api_req: ApiReq,
+#[derive(Default, Clone)]
+pub struct ListMessageRequest {
+    api_req: ApiRequest,
+}
+impl ListMessageRequest {
+    pub fn builder() -> ListMessageRequestBuilder {
+        ListMessageRequestBuilder::default()
+    }
 }
 
-impl ListMessageReq {
-    pub fn new() -> ListMessageReq {
-        ListMessageReq::default()
-    }
+#[derive(Default)]
+pub struct ListMessageRequestBuilder {
+    request: ListMessageRequest,
+}
 
+impl ListMessageRequestBuilder {
     /// 容器类型 ，目前可选值仅有"chat"，包含单聊（p2p）和群聊（group）
     ///
     /// 示例值：chat
     pub fn container_id_type(mut self, container_id_type: impl ToString) -> Self {
-        self.api_req.query_params.insert(
+        self.request.api_req.query_params.insert(
             "container_id_type".to_string(),
             container_id_type.to_string(),
         );
@@ -289,7 +299,8 @@ impl ListMessageReq {
     ///
     /// 示例值：oc_234jsi43d3ssi993d43545f
     pub fn container_id(mut self, container_id: impl ToString) -> Self {
-        self.api_req
+        self.request
+            .api_req
             .query_params
             .insert("container_id".to_string(), container_id.to_string());
         self
@@ -299,7 +310,8 @@ impl ListMessageReq {
     ///
     /// 示例值：1609296809
     pub fn start_time(mut self, start_time: i64) -> Self {
-        self.api_req
+        self.request
+            .api_req
             .query_params
             .insert("start_time".to_string(), start_time.to_string());
         self
@@ -309,7 +321,8 @@ impl ListMessageReq {
     ///
     /// 示例值：1608594809
     pub fn end_time(mut self, end_time: i64) -> Self {
-        self.api_req
+        self.request
+            .api_req
             .query_params
             .insert("end_time".to_string(), end_time.to_string());
         self
@@ -319,7 +332,8 @@ impl ListMessageReq {
     ///
     /// 示例值：ByCreateTimeAsc
     pub fn sort_type(mut self, sort_type: impl ToString) -> Self {
-        self.api_req
+        self.request
+            .api_req
             .query_params
             .insert("sort_type".to_string(), sort_type.to_string());
         self
@@ -328,7 +342,8 @@ impl ListMessageReq {
     /// 分页标记，第一次请求不填，表示从头开始遍历；分页查询结果还有更多项时会同时返回新的
     /// page_token，下次遍历可采用该 page_token 获取查询结果
     pub fn page_token(mut self, page_token: impl ToString) -> Self {
-        self.api_req
+        self.request
+            .api_req
             .query_params
             .insert("page_token".to_string(), page_token.to_string());
         self
@@ -338,14 +353,15 @@ impl ListMessageReq {
     ///
     /// 示例值：20
     pub fn page_size(mut self, page_size: i32) -> Self {
-        self.api_req
+        self.request
+            .api_req
             .query_params
             .insert("page_size".to_string(), page_size.to_string());
         self
     }
 
-    pub fn build(self) -> ApiReq {
-        self.api_req
+    pub fn build(self) -> ListMessageRequest {
+        self.request
     }
 }
 

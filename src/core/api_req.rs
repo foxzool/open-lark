@@ -2,8 +2,9 @@ use std::collections::HashMap;
 
 use crate::core::constants::AccessTokenType;
 
+/// Request 请求结构体
 #[derive(Debug, Clone, Default)]
-pub struct ApiReq {
+pub struct ApiRequest {
     pub(crate) http_method: String,
     pub api_path: String,
     pub body: Vec<u8>,

@@ -4,15 +4,14 @@ use log::error;
 use serde::{Deserialize, Serialize};
 
 use crate::core::{
-    api_req::ApiReq,
-    api_resp::{ApiResponse, ApiResponseTrait},
+    api_req::ApiRequest,
+    api_resp::{ApiResponse, ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
-use crate::core::api_resp::ResponseFormat;
 
 pub struct ExplorerService {
     config: Config,
@@ -30,7 +29,7 @@ impl ExplorerService {
         &self,
         option: Option<RequestOption>,
     ) -> SDKResult<ApiResponse<ExplorerRootMeta>> {
-        let mut api_req = ApiReq::default();
+        let mut api_req = ApiRequest::default();
         api_req.http_method = "GET".to_string();
         api_req.api_path = "/open-apis/drive/explorer/v2/root_folder/meta".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
@@ -48,7 +47,7 @@ impl ExplorerService {
         folder_token: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<ApiResponse<ExplorerFolderMeta>> {
-        let mut api_req = ApiReq::default();
+        let mut api_req = ApiRequest::default();
         api_req.http_method = "GET".to_string();
         api_req.api_path = format!("/open-apis/drive/explorer/v2/folder/{folder_token}/meta");
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
@@ -62,9 +61,10 @@ impl ExplorerService {
     /// 新建文件夹
     pub fn create_folder(
         &self,
-        mut api_req: ApiReq,
+        create_folder_request: CreateFolderRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<ApiResponse<CreateFolderResponse>> {
+        let mut api_req = create_folder_request.api_req;
         api_req.http_method = "POST".to_string();
         api_req.api_path = "/open-apis/drive/v1/files/create_folder".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
@@ -78,9 +78,10 @@ impl ExplorerService {
     /// 新建文件夹
     pub fn list_folder(
         &self,
-        mut api_req: ApiReq,
+        list_folder_request: ListFolderRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<ApiResponse<ListFolderResponse>> {
+        let mut api_req = list_folder_request.api_req;
         api_req.http_method = "GET".to_string();
         api_req.api_path = "/open-apis/drive/v1/files".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
@@ -92,7 +93,7 @@ impl ExplorerService {
 
     pub fn list_folder_iter(
         &self,
-        req: ApiReq,
+        req: ListFolderRequest,
         option: Option<RequestOption>,
     ) -> ListFolderIterator {
         ListFolderIterator {
@@ -106,7 +107,7 @@ impl ExplorerService {
 
 pub struct ListFolderIterator<'a> {
     explorer_service: &'a ExplorerService,
-    req: ApiReq,
+    req: ListFolderRequest,
     option: Option<RequestOption>,
     has_more: bool,
 }
@@ -128,6 +129,7 @@ impl<'a> Iterator for ListFolderIterator<'a> {
                     self.has_more = data.has_more;
                     if data.has_more {
                         self.req
+                            .api_req
                             .query_params
                             .insert("page_token".to_string(), data.next_page_token.unwrap());
                         Some(data.files)
@@ -197,7 +199,10 @@ impl ApiResponseTrait for ExplorerFolderMeta {
 }
 
 #[derive(Default, Serialize, Deserialize)]
-pub struct CreateFolderReqBody {
+pub struct CreateFolderRequest {
+    /// 请求体
+    #[serde(skip)]
+    api_req: ApiRequest,
     /// 文件夹名称
     ///
     /// 示例值："New Folder"
@@ -206,34 +211,35 @@ pub struct CreateFolderReqBody {
     folder_token: String,
 }
 
-#[derive(Default)]
-/// 创建文件夹请求体
-pub struct CreateFolderReq {
-    req_body: CreateFolderReqBody,
-    api_req: ApiReq,
+impl CreateFolderRequest {
+    pub fn builder() -> CreateFolderRequestBuilder {
+        CreateFolderRequestBuilder::default()
+    }
 }
 
-impl CreateFolderReq {
-    pub fn new() -> Self {
-        Self::default()
-    }
+#[derive(Default)]
+/// 创建文件夹请求体
+pub struct CreateFolderRequestBuilder {
+    request: CreateFolderRequest,
+}
 
+impl CreateFolderRequestBuilder {
     /// 文件夹名称
     pub fn name(mut self, name: impl ToString) -> Self {
-        self.req_body.name = name.to_string();
+        self.request.name = name.to_string();
         self
     }
 
     /// 父文件夹token
     pub fn folder_token(mut self, folder_token: impl ToString) -> Self {
-        self.req_body.folder_token = folder_token.to_string();
+        self.request.folder_token = folder_token.to_string();
         self
     }
 
-    pub fn build(mut self) -> ApiReq {
-        self.api_req.body = serde_json::to_vec(&self.req_body).unwrap().into();
+    pub fn build(mut self) -> CreateFolderRequest {
+        self.request.api_req.body = serde_json::to_vec(&self.request).unwrap().into();
 
-        self.api_req
+        self.request
     }
 }
 
@@ -254,62 +260,60 @@ impl ApiResponseTrait for CreateFolderResponse {
 
 /// 列出文件夹请求体
 #[derive(Default)]
-pub struct ListFolderReq {
-    req_body: ListFolderReqBody,
-    api_req: ApiReq,
+pub struct ListFolderRequestBuilder {
+    request: ListFolderRequest,
 }
 
-impl ListFolderReq {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
+impl ListFolderRequestBuilder {
     /// 页大小
     pub fn page_size(mut self, page_size: i32) -> Self {
-        self.req_body.page_size = Some(page_size);
+        self.request.page_size = Some(page_size);
         self
     }
 
     /// 分页标记
     pub fn page_token(mut self, page_token: impl ToString) -> Self {
-        self.req_body.page_token = Some(page_token.to_string());
+        self.request.page_token = Some(page_token.to_string());
         self
     }
 
     /// 文件夹的token
     pub fn fold_token(mut self, fold_token: impl ToString) -> Self {
-        self.req_body.fold_token = Some(fold_token.to_string());
+        self.request.fold_token = Some(fold_token.to_string());
         self
     }
 
     /// 排序规则
     pub fn order_by(mut self, order_by: impl ToString) -> Self {
-        self.req_body.order_by = Some(order_by.to_string());
+        self.request.order_by = Some(order_by.to_string());
         self
     }
 
     /// 升序降序
     pub fn direction(mut self, direction: impl ToString) -> Self {
-        self.req_body.direction = Some(direction.to_string());
+        self.request.direction = Some(direction.to_string());
         self
     }
 
     /// 用户 ID 类型
     pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
-        self.req_body.user_id_type = Some(user_id_type.to_string());
+        self.request.user_id_type = Some(user_id_type.to_string());
         self
     }
 
-    pub fn build(mut self) -> ApiReq {
-        self.api_req.body = serde_json::to_vec(&self.req_body).unwrap().into();
+    pub fn build(mut self) -> ListFolderRequest {
+        self.request.api_req.body = serde_json::to_vec(&self.request).unwrap().into();
 
-        self.api_req
+        self.request
     }
 }
 
 /// 列出文件夹查询参数
-#[derive(Default, Serialize, Deserialize)]
-struct ListFolderReqBody {
+#[derive(Default, Clone, Serialize, Deserialize)]
+pub struct ListFolderRequest {
+    /// 请求体
+    #[serde(skip)]
+    api_req: ApiRequest,
     /// 页大小
     ///
     /// 示例值：50
@@ -363,6 +367,12 @@ struct ListFolderReqBody {
     ///   ID 主要用于在不同的应用间打通用户数据。了解更多：如何获取 User ID？
     /// 默认值：open_id
     user_id_type: Option<String>,
+}
+
+impl ListFolderRequest {
+    pub fn builder() -> ListFolderRequestBuilder {
+        ListFolderRequestBuilder::default()
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]

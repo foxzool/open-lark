@@ -5,7 +5,7 @@ use log::warn;
 use serde::{Deserialize, Serialize};
 
 use crate::core::{
-    api_req::ApiReq,
+    api_req::ApiRequest,
     api_resp::{ApiResponse, ApiResponseTrait, RawResponse},
     app_ticket_manager::APP_TICKET_MANAGER,
     cache::{Cache, LocalCache},
@@ -64,7 +64,7 @@ impl TokenManager {
     }
 
     fn get_custom_app_access_token_then_cache(&mut self, config: &Config) -> SDKResult<String> {
-        let req = ApiReq {
+        let req = ApiRequest {
             http_method: "POST".to_string(),
             api_path: APP_ACCESS_TOKEN_INTERNAL_URL_PATH.to_string(),
             supported_access_token_types: vec![AccessTokenType::None],
@@ -114,7 +114,7 @@ impl TokenManager {
         })?;
         let body = body.into();
 
-        let req = ApiReq {
+        let req = ApiRequest {
             http_method: "POST".to_string(),
             api_path: APP_ACCESS_TOKEN_INTERNAL_URL_PATH.to_string(),
             body,
@@ -173,7 +173,7 @@ impl TokenManager {
             app_secret: config.app_secret.clone(),
         })?;
         let body = body.into();
-        let req = ApiReq {
+        let req = ApiRequest {
             http_method: "POST".to_string(),
             api_path: APP_ACCESS_TOKEN_INTERNAL_URL_PATH.to_string(),
             body,
@@ -215,7 +215,7 @@ impl TokenManager {
             tenant_key: tenant_key.to_string(),
         })?;
         let body = body.into();
-        let req = ApiReq {
+        let req = ApiRequest {
             http_method: "POST".to_string(),
             api_path: TENANT_ACCESS_TOKEN_URL_PATH.to_string(),
             body,
