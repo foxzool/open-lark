@@ -13,6 +13,7 @@ use crate::core::{
     http::Transport,
     req_option::RequestOption,
 };
+use crate::core::api_resp::ResponseFormat;
 
 pub struct MessageService {
     pub config: Config,
@@ -206,8 +207,8 @@ pub struct Message {
 }
 
 impl ApiResponseTrait for Message {
-    fn standard_data_format() -> bool {
-        true
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
@@ -358,8 +359,8 @@ pub struct ListMessageRespData {
 }
 
 impl ApiResponseTrait for ListMessageRespData {
-    fn standard_data_format() -> bool {
-        true
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 

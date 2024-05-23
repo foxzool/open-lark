@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::core::{
     api_req::ApiReq,
-    api_resp::{ApiResponse, ApiResponseTrait},
+    api_resp::{ApiResponse, ApiResponseTrait, BinaryResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
@@ -108,6 +108,22 @@ impl FilesService {
 
         Ok(api_resp)
     }
+
+    /// 下载文件
+    pub fn download(
+        &self,
+        request: DownloadRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<ApiResponse<BinaryResponse>> {
+        let mut api_req = request.api_req;
+        api_req.http_method = "GET".to_string();
+        api_req.api_path = format!("/open-apis/drive/v1/files/{}/download", request.file_token);
+        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+
+        let api_resp = Transport::request(api_req, &self.config, option)?;
+
+        Ok(api_resp)
+    }
 }
 
 /// 上传文件响应体
@@ -118,7 +134,36 @@ pub struct UploadAllResponse {
 }
 
 impl ApiResponseTrait for UploadAllResponse {
-    fn standard_data_format() -> bool {
-        true
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+#[derive(Default, Serialize, Deserialize)]
+pub struct DownloadRequest {
+    #[serde(skip)]
+    api_req: ApiReq,
+    file_token: String,
+}
+
+#[derive(Default)]
+pub struct DownloadRequestBuilder {
+    req: DownloadRequest,
+}
+
+impl DownloadRequestBuilder {
+    pub fn file_token(mut self, file_token: impl ToString) -> Self {
+        self.req.file_token = file_token.to_string();
+        self
+    }
+
+    pub fn build(self) -> DownloadRequest {
+        self.req
+    }
+}
+
+impl DownloadRequest {
+    pub fn builder() -> DownloadRequestBuilder {
+        DownloadRequestBuilder::default()
     }
 }

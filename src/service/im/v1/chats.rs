@@ -9,6 +9,7 @@ use crate::core::{
     req_option::RequestOption,
     SDKResult,
 };
+use crate::core::api_resp::ResponseFormat;
 
 pub struct ChatsService {
     pub config: Config,
@@ -138,8 +139,8 @@ pub struct ListChatRespData {
 }
 
 impl ApiResponseTrait for ListChatRespData {
-    fn standard_data_format() -> bool {
-        true
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 

@@ -13,11 +13,22 @@ pub struct BaseResp<T> {
 }
 
 /// 业务返回值格式
-pub trait ApiResponseTrait:
-    Serialize + for<'a> Deserialize<'a> + Send + Sync + 'static + Debug
-{
+pub trait ApiResponseTrait: for<'a> Deserialize<'a> + Send + Sync + 'static + Debug {
     /// 是否是标准数据格式, 既是用data包裹数据
-    fn standard_data_format() -> bool;
+    fn data_format() -> ResponseFormat;
+
+    fn from_binary(_file_name: String, _body: Vec<u8>) -> Option<Self> {
+       None
+    }
+}
+
+pub enum ResponseFormat {
+    /// 标准数据格式, 既是用data包裹数据
+    Data,
+    /// 扁平数据格式, 既是直接返回数据
+    Flatten,
+    /// 二进制数据格式
+    Binary,
 }
 
 #[derive(Debug)]
@@ -30,44 +41,6 @@ pub enum ApiResponse<T> {
     Error(RawResponse),
 }
 
-// impl<T: for<'a> Deserialize<'a>> TryInto<BaseResp<T>> for ApiResponse {
-//     type Error = serde_json::Error;
-//
-//     fn try_into(self) -> Result<BaseResp<T>, Self::Error> {
-//         match serde_json::from_slice::<BaseResp<T>>(&self.raw_body) {
-//             Ok(mut resp) => {
-//                 resp.api_resp = self;
-//                 Ok(resp)
-//             }
-//             Err(_) => {
-//                 let code_msg = serde_json::from_slice::<CodeMsg>(&self.raw_body)?;
-//                 Ok(BaseResp {
-//                     api_resp: self,
-//                     code_msg,
-//                     data: None,
-//                 })
-//             }
-//         }
-//     }
-// }
-
-// impl ApiResponse {request_id
-//     pub fn success(&self) -> bool {
-//         200 <= self.status_code && self.status_code < 300
-//     }
-//     pub fn request_id(&self) -> String {
-//         match self.header.iter().find(|v| *v == HTTP_HEADER_KEY_LOG_ID) {request_id
-//             None => self
-//                 .header
-//                 .iter()
-//                 .find(|v| HTTP_HEADER_KEY_REQUEST_ID == *v)
-//                 .unwrap()
-//                 .to_string(),
-//             Some(log_id) => log_id.to_string(),
-//         }
-//     }
-// }
-
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct RawResponse {
     pub code: i32,
@@ -77,14 +50,31 @@ pub struct RawResponse {
 }
 
 impl ApiResponseTrait for RawResponse {
-    fn standard_data_format() -> bool {
-        false
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Flatten
     }
 }
 
 impl Display for RawResponse {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         write!(f, "code: {}, msg: {}", self.code, self.msg)
+    }
+}
+
+/// 二进制数据响应体
+#[derive(Debug, Serialize, Deserialize)]
+pub struct BinaryResponse {
+    pub file_name: String,
+    pub body: Vec<u8>,
+}
+
+impl ApiResponseTrait for BinaryResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Binary
+    }
+
+    fn from_binary(file_name: String, body: Vec<u8>) -> Option<Self> {
+        Some(BinaryResponse { file_name, body })
     }
 }
 

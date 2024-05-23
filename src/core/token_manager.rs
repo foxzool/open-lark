@@ -18,6 +18,7 @@ use crate::core::{
     http::Transport,
     SDKResult,
 };
+use crate::core::api_resp::ResponseFormat;
 
 lazy_static! {
     pub static ref TOKEN_MANAGER: Mutex<TokenManager> = Mutex::new(TokenManager::new());
@@ -271,8 +272,8 @@ struct AppAccessTokenResp {
 }
 
 impl ApiResponseTrait for AppAccessTokenResp {
-    fn standard_data_format() -> bool {
-        false
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Flatten
     }
 }
 
@@ -298,7 +299,7 @@ struct TenantAccessTokenResp {
 }
 
 impl ApiResponseTrait for TenantAccessTokenResp {
-    fn standard_data_format() -> bool {
-        false
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Flatten
     }
 }

@@ -12,6 +12,7 @@ use crate::core::{
     req_option::RequestOption,
     SDKResult,
 };
+use crate::core::api_resp::ResponseFormat;
 
 pub struct ExplorerService {
     config: Config,
@@ -161,8 +162,8 @@ pub struct ExplorerRootMeta {
 }
 
 impl ApiResponseTrait for ExplorerRootMeta {
-    fn standard_data_format() -> bool {
-        true
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
@@ -190,8 +191,8 @@ pub struct ExplorerFolderMeta {
 }
 
 impl ApiResponseTrait for ExplorerFolderMeta {
-    fn standard_data_format() -> bool {
-        true
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
@@ -246,8 +247,8 @@ pub struct CreateFolderResponse {
 }
 
 impl ApiResponseTrait for CreateFolderResponse {
-    fn standard_data_format() -> bool {
-        true
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }
 
@@ -440,7 +441,7 @@ pub struct ShortcutInfo {
 }
 
 impl ApiResponseTrait for ListFolderResponse {
-    fn standard_data_format() -> bool {
-        true
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
     }
 }

@@ -1,5 +1,4 @@
-use std::{collections::HashSet, marker::PhantomData};
-
+use std::{collections::HashSet, io::Read, marker::PhantomData};
 
 use log::debug;
 use serde_json::Value;
@@ -7,7 +6,7 @@ use ureq::Request;
 
 use crate::core::{
     api_req::ApiReq,
-    api_resp::{ApiResponse, ApiResponseTrait, BaseResp, RawResponse},
+    api_resp::{ApiResponse, ApiResponseTrait, BaseResp, RawResponse, ResponseFormat},
     app_ticket_manager::apply_app_ticket,
     config::Config,
     constants::*,
@@ -56,16 +55,6 @@ impl<T: ApiResponseTrait> Transport<T> {
             let resp = Self::do_send(req, http_req.body)?;
             debug!("Res:{:?}", resp);
 
-            // let file_download_success = option.file_upload && raw_resp.status_code == 200;
-            // if file_download_success
-            //     || raw_resp
-            //     .header
-            //     .iter()
-            //     .find(|v| *v == CONTENT_TYPE_HEADER)
-            //     .is_some_and(|v| v.contains(CONTENT_TYPE_JSON))
-            // {
-            //     break;
-            // }
             if let ApiResponse::Error(code_error) = &resp {
                 let code = code_error.code;
                 if code == ERR_CODE_APP_TICKET_INVALID {
@@ -84,43 +73,64 @@ impl<T: ApiResponseTrait> Transport<T> {
             Ok(response) => {
                 let status_code = response.status();
                 let header = response.headers_names();
-                // let len: usize = response.header("Content-Length").unwrap().parse().unwrap();
-                // let mut bytes: Vec<u8> = Vec::new();
-                //
-                // // response
-                // //     .into_reader()
-                // //     .take(10_000_000)
-                // //     .read_to_end(&mut bytes)?;
-                // // let raw_body: Bytes = Bytes::copy_from_slice(&bytes);
-                let raw_body: Value = response.into_json()?;
-                debug!("raw_body: {:?}", raw_body);
-                if T::standard_data_format() {
-                    match serde_json::from_value::<BaseResp<T>>(raw_body) {
-                        Ok(base_resp) => {
-                            return if base_resp.raw_response.code == 0 {
-                                Ok(ApiResponse::Success {
-                                    data: base_resp.data,
-                                    status_code,
-                                    header,
-                                })
-                            } else {
-                                Ok(ApiResponse::Error(base_resp.raw_response))
+                match T::data_format() {
+                    ResponseFormat::Data => {
+                        let raw_body: Value = response.into_json()?;
+                        debug!("raw_body: {:?}", raw_body);
+                        match serde_json::from_value::<BaseResp<T>>(raw_body) {
+                            Ok(base_resp) => {
+                                return if base_resp.raw_response.code == 0 {
+                                    Ok(ApiResponse::Success {
+                                        data: base_resp.data,
+                                        status_code,
+                                        header,
+                                    })
+                                } else {
+                                    Ok(ApiResponse::Error(base_resp.raw_response))
+                                };
                             }
+                            Err(err) => Err(LarkAPIError::DeserializeError(err)),
                         }
-                        Err(err) => Err(LarkAPIError::DeserializeError(err)),
                     }
-                } else {
-                    match serde_json::from_value::<T>(raw_body) {
-                        Ok(data) => Ok(ApiResponse::Success {
+                    ResponseFormat::Flatten => {
+                        let raw_body: Value = response.into_json()?;
+                        debug!("raw_body: {:?}", raw_body);
+                        match serde_json::from_value::<T>(raw_body) {
+                            Ok(data) => Ok(ApiResponse::Success {
+                                data,
+                                status_code,
+                                header,
+                            }),
+                            Err(err) => Err(LarkAPIError::DeserializeError(err)),
+                        }
+                    }
+                    // 处理二进制数据
+                    ResponseFormat::Binary => {
+                        let len: usize =
+                            response.header("Content-Length").unwrap().parse().unwrap();
+
+                        let file_name = response
+                            .header("Content-Disposition")
+                            .unwrap_or_default()
+                            .to_string();
+                        let file_name = decode_file_name(&file_name).unwrap_or_default();
+                        let mut bytes: Vec<u8> = Vec::with_capacity(len);
+                        response
+                            .into_reader()
+                            .take(20_971_520)
+                            .read_to_end(&mut bytes)?;
+
+                        let data = T::from_binary(file_name, bytes).unwrap();
+                        Ok(ApiResponse::Success {
                             data,
                             status_code,
                             header,
-                        }),
-                        Err(err) => Err(LarkAPIError::DeserializeError(err)),
+                        })
                     }
                 }
             }
             Err(err) => {
+                println!("err: {:?}", err);
                 let resp = err.into_response().unwrap();
                 // 返回4xx或5xx状态码， 但可以读取响应体
                 match resp.into_json::<RawResponse>() {
@@ -259,4 +269,34 @@ fn validate(
     }
 
     Ok(())
+}
+
+/// 解析文件名
+fn decode_file_name(file_name: &str) -> Option<String> {
+    let mut parts = file_name.split(';');
+
+    for part in parts {
+        if part.trim().starts_with("filename*=") {
+            let filename = part
+                .trim()
+                .strip_prefix("filename*=UTF-8''")
+                .unwrap_or("")
+                .to_string();
+            return Some(filename);
+        }
+    }
+
+    None
+}
+
+#[cfg(test)]
+mod test {
+    use crate::core::http::decode_file_name;
+
+    #[test]
+    fn test_decode_file_name() {
+        let raw = "attachment; filename=\"upload_all.rs\"; filename*=UTF-8''upload_all.rs";
+        let file_name = decode_file_name(raw).unwrap();
+        assert_eq!(file_name, "upload_all.rs");
+    }
 }
