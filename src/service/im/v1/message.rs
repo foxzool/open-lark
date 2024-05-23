@@ -25,9 +25,10 @@ impl MessageService {
     /// 视频、音频、文件、表情包。
     pub fn create(
         &self,
-        mut api_req: ApiRequest,
+        create_message_request: CreateMessageRequest,
         option: Option<RequestOption>,
     ) -> Result<ApiResponse<Message>, LarkAPIError> {
+        let mut api_req = create_message_request.api_req;
         api_req.http_method = "POST".to_string();
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
@@ -114,45 +115,53 @@ impl<'a> Iterator for ListMessageIterator<'a> {
 }
 
 #[derive(Default)]
-pub struct CreateMessageReq {
+pub struct CreateMessageRequest {
     api_req: ApiRequest,
 }
 
-impl CreateMessageReq {
-    pub fn new() -> CreateMessageReq {
-        CreateMessageReq::default()
+impl CreateMessageRequest {
+    pub fn builder() -> CreateMessageRequestBuilder {
+        CreateMessageRequestBuilder::default()
     }
+}
 
+#[derive(Default)]
+pub struct CreateMessageRequestBuilder {
+    request: CreateMessageRequest,
+}
+
+impl CreateMessageRequestBuilder {
     pub fn receive_id_type(mut self, receive_id_type: impl ToString) -> Self {
-        self.api_req
+        self.request
+            .api_req
             .query_params
             .insert("receive_id_type".to_string(), receive_id_type.to_string());
         self
     }
 
-    pub fn body(mut self, body: CreateMessageReqBody) -> Self {
-        self.api_req.body = serde_json::to_vec(&body).unwrap().into();
+    pub fn request_body(mut self, body: CreateMessageRequestBody) -> Self {
+        self.request.api_req.body = serde_json::to_vec(&body).unwrap();
         self
     }
 
-    pub fn build(self) -> ApiRequest {
-        self.api_req
+    pub fn build(self) -> CreateMessageRequest {
+        self.request
     }
 }
 
 /// 发送消息 请求体
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreateMessageReqBody {
+#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+pub struct CreateMessageRequestBody {
     /// 消息接收者的ID，ID类型应与查询参数receive_id_type 对应；
     /// 推荐使用 OpenID，获取方式可参考文档如何获取 Open ID？
     ///
     /// 示例值："ou_7d8a6e6df7621556ce0d21922b676706ccs"
-    pub receive_id: String,
+    receive_id: String,
     /// 消息类型 包括：text、post、image、file、audio、media、sticker、interactive、share_chat、
     /// share_user等，类型定义请参考发送消息内容
     ///
     /// 示例值："text"
-    pub msg_type: String,
+    msg_type: String,
     /// 消息内容，JSON结构序列化后的字符串。不同msg_type对应不同内容，具体格式说明参考：
     /// 发送消息内容
     ///
@@ -161,7 +170,7 @@ pub struct CreateMessageReqBody {
     /// 文本消息请求体最大不能超过150KB
     /// 卡片及富文本消息请求体最大不能超过30KB
     /// 示例值："{\"text\":\"test content\"}"
-    pub content: String,
+    content: String,
     /// 由开发者生成的唯一字符串序列，用于发送消息请求去重；
     /// 持有相同uuid的请求1小时内至多成功发送一条消息
     ///
@@ -170,7 +179,68 @@ pub struct CreateMessageReqBody {
     /// 数据校验规则：
     ///
     /// 最大长度：50 字符
-    pub uuid: Option<String>,
+    uuid: Option<String>,
+}
+
+impl CreateMessageRequestBody {
+    pub fn builder() -> CreateMessageRequestBodyBuilder {
+        CreateMessageRequestBodyBuilder::default()
+    }
+}
+
+#[derive(Default)]
+pub struct CreateMessageRequestBodyBuilder {
+    request: CreateMessageRequestBody,
+}
+
+impl CreateMessageRequestBodyBuilder {
+    /// 消息接收者的ID，ID类型应与查询参数receive_id_type 对应；
+    /// 推荐使用 OpenID，获取方式可参考文档如何获取 Open ID？
+    ///
+    /// 示例值："ou_7d8a6e6df7621556ce0d21922b676706ccs"
+    pub fn receive_id(mut self, receive_id: impl ToString) -> Self {
+        self.request.receive_id = receive_id.to_string();
+        self
+    }
+
+    /// 消息类型 包括：text、post、image、file、audio、media、sticker、interactive、share_chat、
+    /// share_user等，类型定义请参考发送消息内容
+    ///
+    /// 示例值："text"
+    pub fn msg_type(mut self, msg_type: impl ToString) -> Self {
+        self.request.msg_type = msg_type.to_string();
+        self
+    }
+
+    /// 消息内容，JSON结构序列化后的字符串。不同msg_type对应不同内容，具体格式说明参考：
+    /// 发送消息内容
+    ///
+    /// 注意：
+    /// JSON字符串需进行转义，如换行符转义后为\\n
+    /// 文本消息请求体最大不能超过150KB
+    /// 卡片及富文本消息请求体最大不能超过30KB
+    /// 示例值："{\"text\":\"test content\"}"
+    pub fn content(mut self, content: impl ToString) -> Self {
+        self.request.content = content.to_string();
+        self
+    }
+
+    /// 由开发者生成的唯一字符串序列，用于发送消息请求去重；
+    /// 持有相同uuid的请求1小时内至多成功发送一条消息
+    ///
+    /// 示例值："选填，每次调用前请更换，如a0d69e20-1dd1-458b-k525-dfeca4015204"
+    ///
+    /// 数据校验规则：
+    ///
+    /// 最大长度：50 字符
+    pub fn uuid(mut self, uuid: impl ToString) -> Self {
+        self.request.uuid = Some(uuid.to_string());
+        self
+    }
+
+    pub fn build(self) -> CreateMessageRequestBody {
+        self.request
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]

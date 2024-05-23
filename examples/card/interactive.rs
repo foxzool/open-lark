@@ -23,7 +23,7 @@ use open_lark::{
         FeishuCard, FeishuCardConfig,
     },
     client::LarkClientBuilder,
-    service::im::v1::message::{CreateMessageReqBody, CreateMessageReq, SendMessageTrait},
+    service::im::v1::message::{CreateMessageRequestBody, CreateMessageRequest, SendMessageTrait},
 };
 use open_lark::card::components::content_components::rich_text::FeishuCardMarkdown;
 use open_lark::card::components::content_components::title::{FeishuCardTitle, FeishuCardUdIcon, Title};
@@ -185,9 +185,9 @@ fn main() {
         )
         .elements("zh_cn", elements);
 
-    let req = CreateMessageReq::new()
+    let req = CreateMessageRequest::new()
         .receive_id_type("chat_id")
-        .body(CreateMessageReqBody {
+        .body(CreateMessageRequestBody {
             receive_id: "oc_84d53efe245072c16ba4b4ff597f52f3".to_string(),
             msg_type: feishu_card.msg_type(),
             content: feishu_card.content(),

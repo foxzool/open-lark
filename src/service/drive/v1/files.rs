@@ -42,7 +42,7 @@ impl UploadAllRequest {
     }
 }
 
-///
+/// 上传文件 请求体构建器
 #[derive(Default)]
 pub struct UploadAllRequestBuilder {
     request: UploadAllRequest,
@@ -86,7 +86,7 @@ impl UploadAllRequestBuilder {
     }
 
     pub fn build(mut self) -> UploadAllRequest {
-        self.request.api_req.body = serde_json::to_vec(&self.request).unwrap().into();
+        self.request.api_req.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
 }

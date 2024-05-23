@@ -79,7 +79,7 @@ impl<T: ApiResponseTrait> Transport<T> {
                         debug!("raw_body: {:?}", raw_body);
                         match serde_json::from_value::<BaseResp<T>>(raw_body) {
                             Ok(base_resp) => {
-                                return if base_resp.raw_response.code == 0 {
+                                if base_resp.raw_response.code == 0 {
                                     Ok(ApiResponse::Success {
                                         data: base_resp.data,
                                         status_code,
@@ -87,7 +87,7 @@ impl<T: ApiResponseTrait> Transport<T> {
                                     })
                                 } else {
                                     Ok(ApiResponse::Error(base_resp.raw_response))
-                                };
+                                }
                             }
                             Err(err) => Err(LarkAPIError::DeserializeError(err)),
                         }

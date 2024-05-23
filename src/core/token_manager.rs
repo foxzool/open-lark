@@ -112,7 +112,7 @@ impl TokenManager {
             app_secret: config.app_secret.clone(),
             app_ticket,
         })?;
-        let body = body.into();
+
 
         let req = ApiRequest {
             http_method: "POST".to_string(),
@@ -172,7 +172,7 @@ impl TokenManager {
             app_id: config.app_id.clone(),
             app_secret: config.app_secret.clone(),
         })?;
-        let body = body.into();
+
         let req = ApiRequest {
             http_method: "POST".to_string(),
             api_path: APP_ACCESS_TOKEN_INTERNAL_URL_PATH.to_string(),
@@ -214,7 +214,7 @@ impl TokenManager {
             app_access_token,
             tenant_key: tenant_key.to_string(),
         })?;
-        let body = body.into();
+
         let req = ApiRequest {
             http_method: "POST".to_string(),
             api_path: TENANT_ACCESS_TOKEN_URL_PATH.to_string(),

@@ -42,7 +42,7 @@ impl CustomBot {
 
         Transport::do_send(
             self.client.post(&self.webhook_url),
-            json.to_string().into_bytes().into()
+            json.to_string().into_bytes()
         )
     }
 
@@ -57,7 +57,7 @@ impl CustomBot {
 
         Transport::do_send(
             self.client.post(&self.webhook_url),
-            json.to_string().into_bytes().into(),
+            json.to_string().into_bytes(),
         )
     }
 

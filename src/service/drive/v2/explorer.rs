@@ -29,10 +29,12 @@ impl ExplorerService {
         &self,
         option: Option<RequestOption>,
     ) -> SDKResult<ApiResponse<ExplorerRootMeta>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = "GET".to_string();
-        api_req.api_path = "/open-apis/drive/explorer/v2/root_folder/meta".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        let api_req = ApiRequest {
+            http_method: "GET".to_string(),
+            api_path: "/open-apis/drive/explorer/v2/root_folder/meta".to_string(),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option)?;
 
@@ -237,7 +239,7 @@ impl CreateFolderRequestBuilder {
     }
 
     pub fn build(mut self) -> CreateFolderRequest {
-        self.request.api_req.body = serde_json::to_vec(&self.request).unwrap().into();
+        self.request.api_req.body = serde_json::to_vec(&self.request).unwrap();
 
         self.request
     }
@@ -302,7 +304,7 @@ impl ListFolderRequestBuilder {
     }
 
     pub fn build(mut self) -> ListFolderRequest {
-        self.request.api_req.body = serde_json::to_vec(&self.request).unwrap().into();
+        self.request.api_req.body = serde_json::to_vec(&self.request).unwrap();
 
         self.request
     }
