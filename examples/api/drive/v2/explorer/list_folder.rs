@@ -4,9 +4,9 @@ use dotenvy::dotenv;
 
 use open_lark::{
     client::LarkClientBuilder,
-    core::req_option::RequestOption,
     service::drive::v2::explorer::ListFolderRequest,
 };
+use open_lark::core::api_resp::ApiResponse;
 
 /// 获取文件夹下的清单
 fn main() {
@@ -20,29 +20,22 @@ fn main() {
 
     let req = ListFolderRequest::builder().build();
     // // 发起请求
-    // let resp = client
-    //     .drive
-    //     .v2
-    //     .explorer
-    //     .list_folder(req.clone(), None)
-    //     .unwrap();
-    // if let ApiResponse::Success { data, .. } = resp {
-    //     println!("response: {:#?}", data);
-    // }
+    let resp = client
+        .drive
+        .v2
+        .explorer
+        .list_folder(req.clone(), None)
+        .unwrap();
+    if let ApiResponse::Success { data, .. } = resp {
+        println!("response: {:#?}", data);
+    }
 
     // 使用迭代器
     client
         .drive
         .v2
         .explorer
-        .list_folder_iter(
-            req,
-            Some(
-                RequestOption::builder()
-                    .user_access_token(&user_access_token)
-                    .build(),
-            ),
-        )
+        .list_folder_iter(req, None)
         .for_each(|folders| {
             for folder in folders {
                 println!("folder {:?}", folder);

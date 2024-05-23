@@ -10,6 +10,11 @@ use crate::core::{
     SDKResult,
 };
 
+
+pub struct FilesService {
+    config: Config,
+}
+
 /// 上传文件 请求体
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct UploadAllRequest {
@@ -91,9 +96,6 @@ impl UploadAllRequestBuilder {
     }
 }
 
-pub struct FilesService {
-    config: Config,
-}
 
 impl FilesService {
     pub fn new(config: Config) -> Self {

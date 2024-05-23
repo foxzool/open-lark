@@ -2,13 +2,14 @@ use std::time::Duration;
 
 use crate::{
     core::{config::Config, constants::AppType},
-    service::{drive::DriveService, im::ImService},
+    service::{drive::DriveService, im::ImService, search::SearchService},
 };
 
 pub struct LarkClient {
     pub config: Config,
     pub im: ImService,
     pub drive: DriveService,
+    pub search: SearchService,
 }
 
 pub struct LarkClientBuilder {
@@ -60,6 +61,7 @@ impl LarkClientBuilder {
             config: self.config.clone(),
             im: ImService::new(self.config.clone()),
             drive: DriveService::new(self.config.clone()),
+            search: SearchService::new(self.config),
         }
     }
 }

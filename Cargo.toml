@@ -87,3 +87,8 @@ path = "examples/api/drive/v2/explorer/create_folder.rs"
 [[example]]
 name = "list_folder"
 path = "examples/api/drive/v2/explorer/list_folder.rs"
+
+
+[[example]]
+name = "search_user"
+path = "examples/api/search/v1/user.rs"
