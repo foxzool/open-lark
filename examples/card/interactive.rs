@@ -7,26 +7,28 @@ use uuid::Uuid;
 use open_lark::{
     card::{
         components::{
+            CardElement,
             containers::{
                 column_set::{Column, ColumnSetContainer},
                 interactive::InteractiveContainer,
+            },
+            content_components::{
+                rich_text::FeishuCardMarkdown,
+                title::{FeishuCardTitle, FeishuCardUdIcon, Title},
             },
             interactive_components::{
                 button::FeishuCardButton,
                 input::{FeishuCardInput, InputConfirm},
                 select_static::{SelectStatic, SelectStaticOption},
             },
-            CardElement,
         },
-        icon::FeishuCardTextIcon,
-        interactions::{Behaviors, CallbackBehavior},
-        FeishuCard, FeishuCardConfig,
+        FeishuCard,
+        FeishuCardConfig,
+        icon::FeishuCardTextIcon, interactions::{Behaviors, CallbackBehavior},
     },
     client::LarkClientBuilder,
-    service::im::v1::message::{CreateMessageRequestBody, CreateMessageRequest, SendMessageTrait},
+    service::im::v1::message::{CreateMessageRequest, CreateMessageRequestBody, SendMessageTrait},
 };
-use open_lark::card::components::content_components::rich_text::FeishuCardMarkdown;
-use open_lark::card::components::content_components::title::{FeishuCardTitle, FeishuCardUdIcon, Title};
 
 fn main() {
     dotenv().expect(".env file not found");
@@ -187,13 +189,14 @@ fn main() {
 
     let req = CreateMessageRequest::new()
         .receive_id_type("chat_id")
-        .body(CreateMessageRequestBody {
-            receive_id: "oc_84d53efe245072c16ba4b4ff597f52f3".to_string(),
-            msg_type: feishu_card.msg_type(),
-            content: feishu_card.content(),
-            uuid: Some(uuid.to_string()),
-        })
-        .build();
+        .request_body(
+            CreateMessageRequestBody::builder()
+                .receive_id("oc_84d53efe245072c16ba4b4ff597f52f3".to_string())
+                .msg_type(feishu_card.msg_type())
+                .content(feishu_card.content())
+                .uuid(Some(uuid.to_string()))
+                .build(),
+        );
 
     // 发起请求
     let resp = client.im.v1.message.create(req, None).unwrap();

@@ -49,23 +49,19 @@ impl<T: ApiResponseTrait> Transport<T> {
         config: &Config,
         option: RequestOption,
     ) -> SDKResult<ApiResponse<T>> {
-        for _i in 0..2 {
-            let req = ReqTranslator::translate(&mut http_req, access_token_type, config, &option)?;
-            debug!("Req:{:?}", req);
-            let resp = Self::do_send(req, http_req.body)?;
-            debug!("Res:{:?}", resp);
+        let req = ReqTranslator::translate(&mut http_req, access_token_type, config, &option)?;
+        debug!("Req:{:?}", req);
+        let resp = Self::do_send(req, http_req.body)?;
+        debug!("Res:{:?}", resp);
 
-            if let ApiResponse::Error(code_error) = &resp {
-                let code = code_error.code;
-                if code == ERR_CODE_APP_TICKET_INVALID {
-                    apply_app_ticket(config)?;
-                }
+        if let ApiResponse::Error(code_error) = &resp {
+            let code = code_error.code;
+            if code == ERR_CODE_APP_TICKET_INVALID {
+                apply_app_ticket(config)?;
             }
-
-            return Ok(resp);
         }
 
-        Err(LarkAPIError::RequestError("request failed".to_string()))
+        Ok(resp)
     }
 
     pub fn do_send(raw_request: Request, body: Vec<u8>) -> SDKResult<ApiResponse<T>> {

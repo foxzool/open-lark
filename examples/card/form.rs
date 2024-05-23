@@ -7,6 +7,7 @@ use uuid::Uuid;
 use open_lark::{
     card::{
         components::{
+            CardElement,
             containers::{
                 column_set::{Column, ColumnAction, ColumnSetContainer},
                 form::FormContainer,
@@ -23,13 +24,12 @@ use open_lark::{
                 input::{FeishuCardInput, InputConfirm},
                 select_static::{SelectStatic, SelectStaticOption},
             },
-            CardElement,
         },
-        href::FeishuCardHrefVal,
         FeishuCard,
+        href::FeishuCardHrefVal,
     },
     client::LarkClientBuilder,
-    service::im::v1::message::{CreateMessageRequestBody, CreateMessageRequest, SendMessageTrait},
+    service::im::v1::message::{CreateMessageRequest, CreateMessageRequestBody, SendMessageTrait},
 };
 
 fn main() {
@@ -101,12 +101,14 @@ fn main() {
 
     let req = CreateMessageRequest::new()
         .receive_id_type("chat_id")
-        .body(CreateMessageRequestBody {
-            receive_id: "oc_84d53efe245072c16ba4b4ff597f52f3".to_string(),
-            msg_type: feishu_card.msg_type(),
-            content: feishu_card.content(),
-            uuid: Some(uuid.to_string()),
-        })
+        .request_body(
+            CreateMessageRequestBody::builder()
+                .receive_id("oc_84d53efe245072c16ba4b4ff597f52f3")
+                .msg_type(feishu_card.msg_type())
+                .content(feishu_card.content())
+                .uuid(uuid)
+                .build(),
+        )
         .build();
 
     // 发起请求

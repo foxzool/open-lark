@@ -3,10 +3,10 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClientBuilder, core::api_resp::ApiResponse,
-    service::drive::v2::explorer::CreateFolderRequestBuilder,
+    client::LarkClientBuilder,
+    core::api_resp::ApiResponse,
+    service::drive::v2::explorer::CreateFolderRequest,
 };
-use open_lark::service::drive::v2::explorer::CreateFolderRequest;
 
 /// 新建文件夹
 fn main() {
