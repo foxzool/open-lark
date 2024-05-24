@@ -55,10 +55,8 @@ impl<T: ApiResponseTrait> Transport<T> {
         let resp = Self::do_send(req, http_req.body, !http_req.file.is_empty()).await?;
         debug!("Res:{:?}", resp);
 
-        if !resp.success() {
-            if resp.raw_response.code == ERR_CODE_APP_TICKET_INVALID {
-                apply_app_ticket(config).await?;
-            }
+        if !resp.success() && resp.raw_response.code == ERR_CODE_APP_TICKET_INVALID {
+            apply_app_ticket(config).await?;
         }
 
         Ok(resp)

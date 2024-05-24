@@ -59,22 +59,24 @@ impl ReqTranslator {
             AccessTokenType::App => {
                 let mut app_access_token = option.app_access_token.clone();
                 if config.enable_token_cache && app_access_token.is_empty() {
-                    app_access_token = TOKEN_MANAGER
-                        .lock()
-                        .unwrap()
-                        .get_app_access_token(config, &option.app_ticket)
-                        .await?
+                    {
+                        let mut token_manager = TOKEN_MANAGER.lock().await;
+                        app_access_token = token_manager
+                            .get_app_access_token(config, &option.app_ticket)
+                            .await?
+                    }
                 }
                 req_builder = authorization_to_header(req_builder, &app_access_token);
             }
             AccessTokenType::Tenant => {
                 let mut tenant_access_token = option.tenant_access_token.clone();
                 if config.enable_token_cache {
-                    tenant_access_token = TOKEN_MANAGER
-                        .lock()
-                        .unwrap()
-                        .get_tenant_access_token(config, &option.tenant_key, &option.app_ticket)
-                        .await?;
+                    {
+                        let mut token_manager = TOKEN_MANAGER.lock().await;
+                        tenant_access_token = token_manager
+                            .get_tenant_access_token(config, &option.tenant_key, &option.app_ticket)
+                            .await?;
+                    }
                 }
 
                 req_builder = authorization_to_header(req_builder, &tenant_access_token);

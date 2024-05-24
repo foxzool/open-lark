@@ -28,7 +28,7 @@ impl Default for FeishuCardNote {
 #[serde(untagged)]
 pub enum FeishuCardNoteElement {
     Icon(FeishuCardTextIcon),
-    Image(FeishuCardImage),
+    Image(Box<FeishuCardImage>),
     Text(PlainText),
 }
 
@@ -43,7 +43,8 @@ impl FeishuCardNote {
     }
 
     pub fn image(mut self, image: FeishuCardImage) -> Self {
-        self.elements.push(FeishuCardNoteElement::Image(image));
+        self.elements
+            .push(FeishuCardNoteElement::Image(Box::new(image)));
         self
     }
 

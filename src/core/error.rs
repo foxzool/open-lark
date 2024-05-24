@@ -1,4 +1,3 @@
-use crate::core::api_resp::RawResponse;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -13,6 +12,4 @@ pub enum LarkAPIError {
     RequestError(#[from] reqwest::Error),
     #[error("Url parse error: {0}")]
     UrlParseError(#[from] url::ParseError),
-    #[error("Code: {0}")]
-    CodeError(RawResponse),
 }

@@ -6,14 +6,13 @@ use serde::{Deserialize, Serialize};
 
 use crate::core::{
     api_req::ApiRequest,
-    api_resp::{ ApiResponseTrait, ResponseFormat},
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
-use crate::core::api_resp::BaseResponse;
 
 pub struct ExplorerService {
     config: Config,
@@ -51,10 +50,12 @@ impl ExplorerService {
         folder_token: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExplorerFolderMeta>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!("/open-apis/drive/explorer/v2/folder/{folder_token}/meta");
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        let api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!("/open-apis/drive/explorer/v2/folder/{folder_token}/meta"),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 
