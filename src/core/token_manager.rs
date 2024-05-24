@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::core::{
     api_req::ApiRequest,
-    api_resp::{ ApiResponseTrait, BaseResp, RawResponse, ResponseFormat},
+    api_resp::{ApiResponseTrait, BaseResponse, RawResponse, ResponseFormat},
     app_ticket_manager::APP_TICKET_MANAGER,
     cache::{Cache, LocalCache},
     config::Config,
@@ -79,7 +79,7 @@ impl TokenManager {
             supported_access_token_types: vec![AccessTokenType::None],
             ..Default::default()
         };
-        let resp: BaseResp<AppAccessTokenResp> = Transport::request(req, config, None).await?;
+        let resp: BaseResponse<AppAccessTokenResp> = Transport::request(req, config, None).await?;
         if resp.success() {
             let data = resp.data.unwrap();
             let expire = Duration::from_secs(data.expire as u64) - EXPIRY_DELTA;
@@ -127,7 +127,7 @@ impl TokenManager {
             supported_access_token_types: vec![AccessTokenType::None],
             ..Default::default()
         };
-        let raw_resp: BaseResp<AppAccessTokenResp> = Transport::request(req, config, None).await?;
+        let raw_resp: BaseResponse<AppAccessTokenResp> = Transport::request(req, config, None).await?;
 
         if raw_resp.success() {
             let data = raw_resp.data.unwrap();
@@ -190,7 +190,7 @@ impl TokenManager {
             supported_access_token_types: vec![AccessTokenType::None],
             ..Default::default()
         };
-        let base_resp: BaseResp<TenantAccessTokenResp> =
+        let base_resp: BaseResponse<TenantAccessTokenResp> =
             Transport::request(req, config, None).await?;
 
         if base_resp.success() {
@@ -235,7 +235,7 @@ impl TokenManager {
             supported_access_token_types: vec![AccessTokenType::None],
             ..Default::default()
         };
-        let raw_resp: BaseResp<TenantAccessTokenResp> =
+        let raw_resp: BaseResponse<TenantAccessTokenResp> =
             Transport::request(req, config, None).await?;
 
         if raw_resp.success() {

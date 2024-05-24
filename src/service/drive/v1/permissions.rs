@@ -10,7 +10,7 @@ use crate::core::{
     req_option::RequestOption,
     SDKResult,
 };
-use crate::core::api_resp::BaseResp;
+use crate::core::api_resp::BaseResponse;
 
 pub struct PermissionsService {
     config: Config,
@@ -25,7 +25,7 @@ impl PermissionsService {
         &self,
         request: GetPermissionRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResp<GetPermissionResponse>> {
+    ) -> SDKResult<BaseResponse<GetPermissionResponse>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::GET;
         api_req.api_path = format!("/open-apis/drive/v2/permissions/{}/public", request.token);

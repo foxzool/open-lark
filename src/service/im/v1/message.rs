@@ -7,7 +7,7 @@ use serde_json::{json, Value};
 
 use crate::core::{
     api_req::ApiRequest,
-    api_resp::{ ApiResponseTrait, BaseResp, ResponseFormat},
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
@@ -28,7 +28,7 @@ impl MessageService {
         &self,
         create_message_request: CreateMessageRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResp<Message>> {
+    ) -> SDKResult<BaseResponse<Message>> {
         let mut api_req = create_message_request.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
@@ -47,7 +47,7 @@ impl MessageService {
         &self,
         list_message_request: ListMessageRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResp<ListMessageRespData>> {
+    ) -> SDKResult<BaseResponse<ListMessageRespData>> {
         let mut api_req = list_message_request.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/im/v1/messages".to_string();

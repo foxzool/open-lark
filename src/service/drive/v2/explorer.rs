@@ -13,7 +13,7 @@ use crate::core::{
     req_option::RequestOption,
     SDKResult,
 };
-use crate::core::api_resp::BaseResp;
+use crate::core::api_resp::BaseResponse;
 
 pub struct ExplorerService {
     config: Config,
@@ -30,7 +30,7 @@ impl ExplorerService {
     pub async fn root_folder_meta(
         &self,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResp<ExplorerRootMeta>> {
+    ) -> SDKResult<BaseResponse<ExplorerRootMeta>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: "/open-apis/drive/explorer/v2/root_folder/meta".to_string(),
@@ -50,7 +50,7 @@ impl ExplorerService {
         &self,
         folder_token: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResp<ExplorerFolderMeta>> {
+    ) -> SDKResult<BaseResponse<ExplorerFolderMeta>> {
         let mut api_req = ApiRequest::default();
         api_req.http_method = Method::GET;
         api_req.api_path = format!("/open-apis/drive/explorer/v2/folder/{folder_token}/meta");
@@ -67,7 +67,7 @@ impl ExplorerService {
         &self,
         create_folder_request: CreateFolderRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResp<CreateFolderResponse>> {
+    ) -> SDKResult<BaseResponse<CreateFolderResponse>> {
         let mut api_req = create_folder_request.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/drive/v1/files/create_folder".to_string();
@@ -84,7 +84,7 @@ impl ExplorerService {
         &self,
         list_folder_request: ListFolderRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResp<ListFolderResponse>> {
+    ) -> SDKResult<BaseResponse<ListFolderResponse>> {
         let mut api_req = list_folder_request.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/drive/v1/files".to_string();

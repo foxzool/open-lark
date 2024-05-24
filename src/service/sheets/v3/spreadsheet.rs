@@ -10,7 +10,7 @@ use crate::core::{
     req_option::RequestOption,
     SDKResult,
 };
-use crate::core::api_resp::BaseResp;
+use crate::core::api_resp::BaseResponse;
 
 /// 电子表格
 pub struct SpreadsheetService {
@@ -27,7 +27,7 @@ impl SpreadsheetService {
         &self,
         request: CreateSpreedSheetRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResp<CreateSpreedSheetResponseData>> {
+    ) -> SDKResult<BaseResponse<CreateSpreedSheetResponseData>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/sheets/v3/spreadsheets".to_string();
@@ -43,7 +43,7 @@ impl SpreadsheetService {
         &self,
         request: PatchSpreadSheetRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResp<RawResponse>> {
+    ) -> SDKResult<BaseResponse<RawResponse>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::PATCH;
         api_req.api_path = format!(
@@ -62,7 +62,7 @@ impl SpreadsheetService {
         &self,
         request: GetSpreadsheetRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResp<GetSpreadsheetResponseData>> {
+    ) -> SDKResult<BaseResponse<GetSpreadsheetResponseData>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::GET;
         api_req.api_path = format!(

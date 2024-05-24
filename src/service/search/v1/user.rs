@@ -11,7 +11,7 @@ use crate::core::{
     req_option::RequestOption,
     SDKResult,
 };
-use crate::core::api_resp::BaseResp;
+use crate::core::api_resp::BaseResponse;
 
 pub struct UserService {
     config: Config,
@@ -27,7 +27,7 @@ impl UserService {
         &self,
         search_user_request: SearchUserRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResp<SearchUserResponse>> {
+    ) -> SDKResult<BaseResponse<SearchUserResponse>> {
         let mut api_req = search_user_request.api_request;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/search/v1/user".to_string();

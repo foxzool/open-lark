@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::core::{
     api_req::ApiRequest,
-    api_resp::{BaseResp, RawResponse},
+    api_resp::{BaseResponse, RawResponse},
     cache::{Cache, LocalCache},
     config::Config,
     constants::{AccessTokenType, APP_TICKET_KEY_PREFIX, APPLY_APP_TICKET_PATH},
@@ -62,7 +62,7 @@ fn app_ticket_key(app_id: &str) -> String {
 
 #[async_recursion(?Send)]
 pub async fn apply_app_ticket(config: &Config) -> SDKResult<()> {
-    let _resp: BaseResp<RawResponse> = Transport::request(
+    let _resp: BaseResponse<RawResponse> = Transport::request(
         ApiRequest {
             http_method: Method::POST,
             api_path: APPLY_APP_TICKET_PATH.to_string(),

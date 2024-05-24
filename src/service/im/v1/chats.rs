@@ -10,7 +10,7 @@ use crate::core::{
     req_option::RequestOption,
     SDKResult,
 };
-use crate::core::api_resp::BaseResp;
+use crate::core::api_resp::BaseResponse;
 
 pub struct ChatsService {
     pub config: Config,
@@ -22,7 +22,7 @@ impl ChatsService {
         &self,
         list_chat_request: ListChatRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResp<ListChatRespData>> {
+    ) -> SDKResult<BaseResponse<ListChatRespData>> {
         let mut api_req = list_chat_request.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/im/v1/chats".to_string();

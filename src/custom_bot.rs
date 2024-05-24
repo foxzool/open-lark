@@ -11,7 +11,7 @@ use crate::{
     },
     service::im::v1::message::{MessageCardTemplate, SendMessageTrait},
 };
-use crate::core::api_resp::BaseResp;
+use crate::core::api_resp::BaseResponse;
 
 /// 自定义机器人
 ///
@@ -38,7 +38,7 @@ impl CustomBot {
     pub async fn send_message(
         &self,
         message: impl SendMessageTrait,
-    ) -> SDKResult<BaseResp<RawResponse>> {
+    ) -> SDKResult<BaseResponse<RawResponse>> {
         let mut json = json!({
             "msg_type": message.msg_type(),
             "content": message.content()
@@ -55,7 +55,7 @@ impl CustomBot {
     }
 
     /// 发送飞书卡片消息， 因为自定义机器人发送飞书卡片消息的格式比较特殊，所以单独提供一个方法
-    pub async fn send_card(&self, message: MessageCardTemplate) -> SDKResult<BaseResp<RawResponse>> {
+    pub async fn send_card(&self, message: MessageCardTemplate) -> SDKResult<BaseResponse<RawResponse>> {
         let mut json = json!({
             "msg_type": message.msg_type(),
             "card": message.content()

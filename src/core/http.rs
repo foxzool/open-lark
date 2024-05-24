@@ -6,7 +6,7 @@ use serde_json::Value;
 
 use crate::core::{
     api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResp, RawResponse, ResponseFormat},
+    api_resp::{ApiResponseTrait, BaseResponse, RawResponse, ResponseFormat},
     app_ticket_manager::apply_app_ticket,
     config::Config,
     constants::*,
@@ -25,7 +25,7 @@ impl<T: ApiResponseTrait> Transport<T> {
         mut req: ApiRequest,
         config: &Config,
         option: Option<RequestOption>,
-    ) -> Result<BaseResp<T>, LarkAPIError> {
+    ) -> Result<BaseResponse<T>, LarkAPIError> {
         let option = option.unwrap_or_default();
 
         if req.supported_access_token_types.is_empty() {
@@ -48,7 +48,7 @@ impl<T: ApiResponseTrait> Transport<T> {
         access_token_type: AccessTokenType,
         config: &Config,
         option: RequestOption,
-    ) -> SDKResult<BaseResp<T>> {
+    ) -> SDKResult<BaseResponse<T>> {
         let req =
             ReqTranslator::translate(&mut http_req, access_token_type, config, &option).await?;
         debug!("Req:{:?}", req);
@@ -68,7 +68,7 @@ impl<T: ApiResponseTrait> Transport<T> {
         raw_request: RequestBuilder,
         body: Vec<u8>,
         multi_part: bool,
-    ) -> SDKResult<BaseResp<T>> {
+    ) -> SDKResult<BaseResponse<T>> {
         let future = if multi_part {
             raw_request.send()
         } else {
@@ -80,7 +80,7 @@ impl<T: ApiResponseTrait> Transport<T> {
                     ResponseFormat::Data => {
                         let raw_body: Value = response.json().await?;
                         debug!("raw_body: {:?}", raw_body);
-                        let base_resp = serde_json::from_value::<BaseResp<T>>(raw_body)?;
+                        let base_resp = serde_json::from_value::<BaseResponse<T>>(raw_body)?;
                         Ok(base_resp)
                     }
                     ResponseFormat::Flatten => {
@@ -94,7 +94,7 @@ impl<T: ApiResponseTrait> Transport<T> {
                             None
                         };
 
-                        Ok(BaseResp { raw_response, data })
+                        Ok(BaseResponse { raw_response, data })
                     }
                     // 处理二进制数据
                     ResponseFormat::Binary => {
@@ -109,7 +109,7 @@ impl<T: ApiResponseTrait> Transport<T> {
                         let bytes = response.bytes().await?.to_vec();
 
                         let data = T::from_binary(file_name, bytes).unwrap();
-                        Ok(BaseResp {
+                        Ok(BaseResponse {
                             raw_response: RawResponse {
                                 code: 0,
                                 msg: "success".to_string(),

@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 /// 业务返回值
 #[derive(Debug, Serialize, Deserialize)]
-pub struct BaseResp<T> {
+pub struct BaseResponse<T> {
     /// 响应头
     #[serde(flatten)]
     pub raw_response: RawResponse,
@@ -12,7 +12,7 @@ pub struct BaseResp<T> {
     pub data: Option<T>,
 }
 
-impl<T> BaseResp<T> {
+impl<T> BaseResponse<T> {
     pub fn success(&self) -> bool {
         self.raw_response.code == 0
     }
