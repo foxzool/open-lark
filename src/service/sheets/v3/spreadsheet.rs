@@ -144,13 +144,13 @@ impl ApiResponseTrait for CreateSpreedSheetResponseData {
 #[derive(Deserialize, Debug)]
 pub struct CreateSpreedSheetResponse {
     /// 表格标题
-    title: String,
+    pub title: String,
     /// 文件夹token
-    folder_token: String,
+    pub folder_token: String,
     /// 文档url
-    url: String,
+    pub url: String,
     /// 表格token
-    spreadsheet_token: String,
+    pub spreadsheet_token: String,
 }
 
 /// 修改电子表格属性 请求体

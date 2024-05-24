@@ -88,6 +88,9 @@ path = "examples/api/drive/v2/explorer/create_folder.rs"
 name = "list_folder"
 path = "examples/api/drive/v2/explorer/list_folder.rs"
 
+[[example]]
+name = "get_permission"
+path = "examples/api/drive/v2/permission/get.rs"
 
 [[example]]
 name = "search_user"
@@ -105,6 +108,7 @@ path = "examples/api/sheets/v3/spreadsheets/patch.rs"
 [[example]]
 name = "get_spreadsheet"
 path = "examples/api/sheets/v3/spreadsheets/get.rs"
+
 
 
 

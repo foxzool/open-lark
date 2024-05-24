@@ -5,10 +5,10 @@ use dotenvy::dotenv;
 use open_lark::{
     client::LarkClientBuilder,
     core::{api_resp::ApiResponse, req_option::RequestOption},
-    service::sheets::v3::spreadsheet::CreateSpreedSheetRequest,
+    service::drive::v1::permissions::GetPermissionRequest,
 };
 
-/// 创建表格
+/// 获取云文档权限设置
 fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
@@ -17,15 +17,17 @@ fn main() {
     let user_access_token = env::var("USER_ACCESS_TOKEN").unwrap();
     // 创建 Client
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
-
-    let req = CreateSpreedSheetRequest::builder().title("xx").build();
-
+    // 构建请求体
+    let req = GetPermissionRequest::builder()
+        .token("UONOs1jSahmgoGtOlKHcRCaPnKd")
+        .r#type("sheet")
+        .build();
     // 发起请求
     let resp = client
-        .sheets
-        .v3
-        .spreadsheet
-        .create(
+        .drive
+        .v2
+        .permission
+        .get(
             req,
             Some(
                 RequestOption::builder()
@@ -35,6 +37,6 @@ fn main() {
         )
         .unwrap();
     if let ApiResponse::Success { data, .. } = resp {
-        println!("create spread response: {:#?}", data.spreadsheet);
+        println!("patch spread response: {:#?}", data);
     }
 }
