@@ -98,4 +98,8 @@ path = "examples/api/search/v1/user.rs"
 name = "create_spreadsheet"
 path = "examples/api/sheets/v3/spreadsheets/create.rs"
 
+[[example]]
+name = "patch_spreadsheet"
+path = "examples/api/sheets/v3/spreadsheets/patch.rs"
+
 
