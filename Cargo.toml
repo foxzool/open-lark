@@ -92,3 +92,10 @@ path = "examples/api/drive/v2/explorer/list_folder.rs"
 [[example]]
 name = "search_user"
 path = "examples/api/search/v1/user.rs"
+
+
+[[example]]
+name = "create_spreadsheet"
+path = "examples/api/sheets/v3/spreadsheets/create.rs"
+
+

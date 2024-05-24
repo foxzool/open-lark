@@ -5,10 +5,10 @@ use dotenvy::dotenv;
 use open_lark::{
     client::LarkClientBuilder,
     core::{api_resp::ApiResponse, req_option::RequestOption},
-    service::search::v1::user::SearchUserRequest,
+    service::sheets::v3::spreadsheet::CreateSpreedSheetRequest,
 };
 
-/// 搜索用户
+/// 创建表格
 fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
@@ -18,15 +18,15 @@ fn main() {
     // 创建 Client
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
 
-    let req = SearchUserRequest::builder().query("xxx").build();
+    let req = CreateSpreedSheetRequest::builder().title("xx").build();
 
     // 发起请求
     let resp = client
-        .search
-        .v1
-        .user
-        .search_user(
-            req.clone(),
+        .sheets
+        .v3
+        .spreadsheet
+        .create(
+            req,
             Some(
                 RequestOption::builder()
                     .user_access_token(user_access_token.clone())
@@ -35,25 +35,6 @@ fn main() {
         )
         .unwrap();
     if let ApiResponse::Success { data, .. } = resp {
-        println!("search: {:#?}", data);
+        println!("create spread response: {:#?}", data);
     }
-
-    // 使用迭代器
-    client
-        .search
-        .v1
-        .user
-        .search_user_iter(
-            req,
-            Some(
-                RequestOption::builder()
-                    .user_access_token(user_access_token)
-                    .build(),
-            ),
-        )
-        .for_each(|users| {
-            for user in users {
-                println!("user {:?}", user);
-            }
-        })
 }
