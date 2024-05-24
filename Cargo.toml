@@ -102,4 +102,9 @@ path = "examples/api/sheets/v3/spreadsheets/create.rs"
 name = "patch_spreadsheet"
 path = "examples/api/sheets/v3/spreadsheets/patch.rs"
 
+[[example]]
+name = "get_spreadsheet"
+path = "examples/api/sheets/v3/spreadsheets/get.rs"
+
+
 
