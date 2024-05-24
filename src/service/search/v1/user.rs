@@ -1,15 +1,8 @@
 use log::error;
+use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponse, ApiResponseTrait},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
-};
+use crate::core::{AfitAsyncIter, api_req::ApiRequest, api_resp::{ApiResponse, ApiResponseTrait}, config::Config, constants::AccessTokenType, http::Transport, req_option::RequestOption, SDKResult};
 
 pub struct UserService {
     config: Config,
@@ -21,17 +14,17 @@ impl UserService {
     }
 
     /// 搜索用户。
-    pub fn search_user(
+    pub async fn search_user(
         &self,
         search_user_request: SearchUserRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<ApiResponse<SearchUserResponse>> {
         let mut api_req = search_user_request.api_request;
-        api_req.http_method = "GET".to_string();
+        api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/search/v1/user".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option)?;
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
@@ -154,17 +147,17 @@ pub struct SearchUserIterator<'a> {
     has_more: bool,
 }
 
-impl<'a> Iterator for SearchUserIterator<'a> {
+impl<'a> AfitAsyncIter for SearchUserIterator<'a> {
     type Item = Vec<UserInSearchResponse>;
 
-    fn next(&mut self) -> Option<Self::Item> {
+    async fn next(&mut self) -> Option<Self::Item> {
         if !self.has_more {
             return None;
         }
 
         match self
             .user_service
-            .search_user(self.request.clone(), self.option.clone())
+            .search_user(self.request.clone(), self.option.clone()).await
         {
             Ok(resp) => match resp {
                 ApiResponse::Success { data, .. } => {

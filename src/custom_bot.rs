@@ -1,13 +1,16 @@
-use base64::{prelude::BASE64_STANDARD, Engine};
+use base64::{Engine, prelude::BASE64_STANDARD};
 use hmac::{Hmac, Mac};
 use serde_json::{json, Value};
 use sha2::Sha256;
 
 use crate::{
-    core::{api_resp::ApiResponse, http::Transport, SDKResult},
+    core::{
+        api_resp::{ApiResponse, RawResponse},
+        http::Transport,
+        SDKResult,
+    },
     service::im::v1::message::{MessageCardTemplate, SendMessageTrait},
 };
-use crate::core::api_resp::RawResponse;
 
 /// 自定义机器人
 ///
@@ -17,7 +20,7 @@ pub struct CustomBot {
     webhook_url: String,
     /// 密钥
     secret: Option<String>,
-    client: ureq::Agent,
+    client: reqwest::Client,
 }
 
 impl CustomBot {
@@ -25,13 +28,16 @@ impl CustomBot {
         CustomBot {
             webhook_url,
             secret,
-            client: ureq::Agent::new(),
+            client: reqwest::Client::new(),
         }
     }
 }
 
 impl CustomBot {
-    pub fn send_message(&self, message: impl SendMessageTrait) -> SDKResult<ApiResponse<RawResponse>> {
+    pub async fn send_message(
+        &self,
+        message: impl SendMessageTrait,
+    ) -> SDKResult<ApiResponse<RawResponse>> {
         let mut json = json!({
             "msg_type": message.msg_type(),
             "content": message.content()
@@ -42,12 +48,12 @@ impl CustomBot {
 
         Transport::do_send(
             self.client.post(&self.webhook_url),
-            json.to_string().into_bytes()
-        )
+            json.to_string().into_bytes(),
+        ).await
     }
 
     /// 发送飞书卡片消息， 因为自定义机器人发送飞书卡片消息的格式比较特殊，所以单独提供一个方法
-    pub fn send_card(&self, message: MessageCardTemplate) -> SDKResult<ApiResponse<RawResponse>> {
+    pub async fn send_card(&self, message: MessageCardTemplate) -> SDKResult<ApiResponse<RawResponse>> {
         let mut json = json!({
             "msg_type": message.msg_type(),
             "card": message.content()
@@ -58,7 +64,7 @@ impl CustomBot {
         Transport::do_send(
             self.client.post(&self.webhook_url),
             json.to_string().into_bytes(),
-        )
+        ).await
     }
 
     /// 如果设置了密钥，就计算签名

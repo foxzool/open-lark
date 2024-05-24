@@ -12,6 +12,15 @@ pub mod req_option;
 pub mod req_translator;
 pub mod token_manager;
 pub mod utils;
-pub mod multi_part;
+// pub mod multi_part;
 
 pub type SDKResult<T> = Result<T, LarkAPIError>;
+
+
+/// 异步迭代器
+/// `async fn next` using AFIT
+pub trait AfitAsyncIter {
+    type Item;
+
+    async fn next(&mut self) -> Option<Self::Item>;
+}

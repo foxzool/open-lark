@@ -1,7 +1,9 @@
 use std::time::Duration;
+use async_recursion::async_recursion;
 
 use lazy_static::lazy_static;
 use log::error;
+use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::core::{
@@ -40,13 +42,13 @@ impl AppTicketManager {
         self.cache.set(&key, value, expire_time);
     }
 
-    pub fn get(&self, config: &Config) -> Option<String> {
+    pub async fn get(&self, config: &Config) -> Option<String> {
         let key = app_ticket_key(&config.app_id);
         match self.cache.get(&key) {
             None => None,
             Some(ticket) => {
                 if ticket.is_empty() {
-                    apply_app_ticket(config).ok();
+                    apply_app_ticket(config).await.ok();
                 }
 
                 Some(ticket)
@@ -59,17 +61,19 @@ fn app_ticket_key(app_id: &str) -> String {
     format!("{}-{}", APP_TICKET_KEY_PREFIX, app_id)
 }
 
-pub fn apply_app_ticket(config: &Config) -> SDKResult<()> {
+#[async_recursion(?Send)]
+pub async fn apply_app_ticket(config: &Config) -> SDKResult<()> {
     let resp: ApiResponse<RawResponse> = Transport::request(
         ApiRequest {
-            http_method: "POST".to_string(),
+            http_method: Method::POST,
             api_path: APPLY_APP_TICKET_PATH.to_string(),
             supported_access_token_types: vec![AccessTokenType::App],
             ..Default::default()
         },
         config,
         None,
-    )?;
+    )
+    .await?;
 
     if let ApiResponse::Error(error_msg) = resp {
         error!("apply_app_ticket failed: {}", error_msg);

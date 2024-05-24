@@ -1,14 +1,7 @@
+use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponse, ApiResponseTrait, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
-};
+use crate::core::{api_req::ApiRequest, api_resp::{ApiResponse, ApiResponseTrait, ResponseFormat}, AfitAsyncIter, config::Config, constants::AccessTokenType, http::Transport, req_option::RequestOption, SDKResult};
 
 pub struct ChatsService {
     pub config: Config,
@@ -16,17 +9,17 @@ pub struct ChatsService {
 
 impl ChatsService {
     /// 获取用户或机器人所在的群列表
-    pub fn list(
+    pub async fn list(
         &self,
         list_chat_request: ListChatRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<ApiResponse<ListChatRespData>> {
         let mut api_req = list_chat_request.api_req;
-        api_req.http_method = "GET".to_string();
+        api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/im/v1/chats".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option)?;
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
@@ -48,14 +41,14 @@ pub struct ListChatIterator<'a> {
     has_more: bool,
 }
 
-impl<'a> Iterator for ListChatIterator<'a> {
+impl<'a> AfitAsyncIter for ListChatIterator<'a> {
     type Item = Vec<ListChat>;
 
-    fn next(&mut self) -> Option<Self::Item> {
+    async fn next(&mut self) -> Option<Self::Item> {
         if !self.has_more {
             return None;
         }
-        match self.service.list(self.request.clone(), self.option.clone()) {
+        match self.service.list(self.request.clone(), self.option.clone()).await {
             Ok(resp) => match resp {
                 ApiResponse::Success { data, .. } => {
                     self.has_more = data.has_more;

@@ -56,7 +56,10 @@ impl LarkClientBuilder {
 
     pub fn build(mut self) -> LarkClient {
         if let Some(req_timeout) = self.config.req_timeout {
-            self.config.http_client = ureq::AgentBuilder::new().timeout(req_timeout).build();
+            self.config.http_client = reqwest::Client::builder()
+                .timeout(req_timeout)
+                .build()
+                .unwrap()
         }
 
         LarkClient {

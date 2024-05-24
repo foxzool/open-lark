@@ -9,7 +9,8 @@ use open_lark::{
 };
 
 /// 获取云文档权限设置
-fn main() {
+#[tokio::main]
+async fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
     let app_id = env::var("APP_ID").unwrap();
@@ -34,7 +35,7 @@ fn main() {
                     .user_access_token(user_access_token.clone())
                     .build(),
             ),
-        )
+        ).await
         .unwrap();
     if let ApiResponse::Success { data, .. } = resp {
         println!("patch spread response: {:#?}", data);

@@ -33,7 +33,7 @@ use std::{fs::File, io, io::prelude::*, path::Path};
 
 use mime::Mime;
 use rand::Rng;
-use ureq::{Error, Request, Response};
+
 
 const BOUNDARY_LEN: usize = 29;
 

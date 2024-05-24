@@ -1,8 +1,8 @@
 use std::{collections::HashSet, io::Read, marker::PhantomData};
 
 use log::debug;
+use reqwest::{Request, RequestBuilder};
 use serde_json::Value;
-use ureq::Request;
 
 use crate::core::{
     api_req::ApiRequest,
@@ -21,7 +21,7 @@ pub struct Transport<T> {
 }
 
 impl<T: ApiResponseTrait> Transport<T> {
-    pub fn request(
+    pub async fn request(
         mut req: ApiRequest,
         config: &Config,
         option: Option<RequestOption>,
@@ -40,38 +40,38 @@ impl<T: ApiResponseTrait> Transport<T> {
         );
         validate(config, &option, access_token_type)?;
 
-        Self::do_request(req, access_token_type, config, option)
+        Self::do_request(req, access_token_type, config, option).await
     }
 
-    fn do_request(
+    async fn do_request(
         mut http_req: ApiRequest,
         access_token_type: AccessTokenType,
         config: &Config,
         option: RequestOption,
     ) -> SDKResult<ApiResponse<T>> {
-        let req = ReqTranslator::translate(&mut http_req, access_token_type, config, &option)?;
+        let req = ReqTranslator::translate(&mut http_req, access_token_type, config, &option).await?;
         debug!("Req:{:?}", req);
-        let resp = Self::do_send(req, http_req.body)?;
+        let resp = Self::do_send(req, http_req.body).await?;
         debug!("Res:{:?}", resp);
 
         if let ApiResponse::Error(code_error) = &resp {
             let code = code_error.code;
             if code == ERR_CODE_APP_TICKET_INVALID {
-                apply_app_ticket(config)?;
+                apply_app_ticket(config).await?;
             }
         }
 
         Ok(resp)
     }
 
-    pub fn do_send(raw_request: Request, body: Vec<u8>) -> SDKResult<ApiResponse<T>> {
-        match raw_request.send_bytes(&body) {
+    pub async fn do_send(raw_request: RequestBuilder, body: Vec<u8>) -> SDKResult<ApiResponse<T>> {
+        match raw_request.body(body).send().await {
             Ok(response) => {
-                let status_code = response.status();
-                let header = response.headers_names();
+                let status_code = response.status().as_u16();
+                let header = response.headers().keys().map(|k| k.to_string()).collect();
                 match T::data_format() {
                     ResponseFormat::Data => {
-                        let raw_body: Value = response.into_json()?;
+                        let raw_body: Value = response.json().await?;
                         debug!("raw_body: {:?}", raw_body);
                         match serde_json::from_value::<BaseResp<T>>(raw_body) {
                             Ok(base_resp) => {
@@ -89,7 +89,7 @@ impl<T: ApiResponseTrait> Transport<T> {
                         }
                     }
                     ResponseFormat::Flatten => {
-                        let raw_body: Value = response.into_json()?;
+                        let raw_body: Value = response.json().await?;
                         debug!("raw_body: {:?}", raw_body);
                         match serde_json::from_value::<T>(raw_body) {
                             Ok(data) => Ok(ApiResponse::Success {
@@ -102,19 +102,24 @@ impl<T: ApiResponseTrait> Transport<T> {
                     }
                     // 处理二进制数据
                     ResponseFormat::Binary => {
-                        let len: usize =
-                            response.header("Content-Length").unwrap().parse().unwrap();
+                        let len: usize = response
+                            .headers()
+                            .get("Content-Length")
+                            .unwrap()
+                            .to_str()
+                            .unwrap()
+                            .parse()
+                            .unwrap();
 
                         let file_name = response
-                            .header("Content-Disposition")
-                            .unwrap_or_default()
+                            .headers()
+                            .get("Content-Disposition")
+                            .unwrap()
+                            .to_str()
+                            .unwrap()
                             .to_string();
                         let file_name = decode_file_name(&file_name).unwrap_or_default();
-                        let mut bytes: Vec<u8> = Vec::with_capacity(len);
-                        response
-                            .into_reader()
-                            .take(20_971_520)
-                            .read_to_end(&mut bytes)?;
+                        let bytes = response.bytes().await?.to_vec();
 
                         let data = T::from_binary(file_name, bytes).unwrap();
                         Ok(ApiResponse::Success {
@@ -127,12 +132,14 @@ impl<T: ApiResponseTrait> Transport<T> {
             }
             Err(err) => {
                 println!("err: {:?}", err);
-                let resp = err.into_response().unwrap();
-                // 返回4xx或5xx状态码， 但可以读取响应体
-                match resp.into_json::<RawResponse>() {
-                    Ok(code_msg) => Ok(ApiResponse::Error(code_msg)),
-                    Err(err) => Err(LarkAPIError::IOErr(err)),
-                }
+                Err(LarkAPIError::RequestError(err))
+
+                // let resp = err.into_response().unwrap();
+                // // 返回4xx或5xx状态码， 但可以读取响应体
+                // match resp.into_json::<RawResponse>() {
+                //     Ok(code_msg) => Ok(ApiResponse::Error(code_msg)),
+                //     Err(err) => Err(LarkAPIError::IOErr(err)),
+                // }
             }
         }
     }

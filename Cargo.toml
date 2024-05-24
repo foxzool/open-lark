@@ -1,6 +1,6 @@
 [package]
 name = "open-lark"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
 authors = [
     "ZoOL <zhooul@gmail.com>"
@@ -15,6 +15,7 @@ license = "MIT OR Apache-2.0"
 
 
 [dependencies]
+async-recursion = "1.1.1"
 base64 = "0.22.1"
 chrono = "0.4.38"
 hmac = "0.12.1"
@@ -31,7 +32,11 @@ strum = "0.26.2"
 strum_macros = "0.26.2"
 thiserror = "1.0.60"
 url = { version = "2.5.0", features = ["serde"] }
-ureq = { version = "2.9.7", features = ["json", "socks-proxy"] }
+#ureq = { version = "2.9.7", features = ["json", "socks-proxy"] }
+reqwest = { version = "0.12.4", features = ["json"] }
+tokio = { version = "1.0.0", features = ["rt", "rt-multi-thread", "macros"] }
+futures = "0.3.30"
+
 
 
 [dev-dependencies]

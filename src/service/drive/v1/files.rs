@@ -1,3 +1,4 @@
+use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::core::{
@@ -103,33 +104,33 @@ impl FilesService {
     }
 
     /// 上传文件
-    pub fn upload_all(
+    pub async fn upload_all(
         &self,
         upload_all_request: UploadAllRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<ApiResponse<UploadAllResponse>> {
         let mut api_req = upload_all_request.api_req;
-        api_req.http_method = "POST".to_string();
+        api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/drive/v1/files/upload_all".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option)?;
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
 
     /// 下载文件
-    pub fn download(
+    pub async fn download(
         &self,
         request: DownloadRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<ApiResponse<BinaryResponse>> {
         let mut api_req = request.api_req;
-        api_req.http_method = "GET".to_string();
+        api_req.http_method = Method::GET;
         api_req.api_path = format!("/open-apis/drive/v1/files/{}/download", request.file_token);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option)?;
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }

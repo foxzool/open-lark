@@ -1,17 +1,10 @@
+use reqwest::Method;
 use std::fmt::Debug;
 
 use log::error;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponse, ApiResponseTrait, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
-};
+use crate::core::{AfitAsyncIter, api_req::ApiRequest, api_resp::{ApiResponse, ApiResponseTrait, ResponseFormat}, config::Config, constants::AccessTokenType, http::Transport, req_option::RequestOption, SDKResult};
 
 pub struct ExplorerService {
     config: Config,
@@ -25,18 +18,18 @@ impl ExplorerService {
     /// GET /open-apis/drive/explorer/v2/root_folder/meta
     ///
     /// 获取云空间的根目录
-    pub fn root_folder_meta(
+    pub async fn root_folder_meta(
         &self,
         option: Option<RequestOption>,
     ) -> SDKResult<ApiResponse<ExplorerRootMeta>> {
         let api_req = ApiRequest {
-            http_method: "GET".to_string(),
+            http_method: Method::GET,
             api_path: "/open-apis/drive/explorer/v2/root_folder/meta".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, option)?;
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
@@ -44,51 +37,51 @@ impl ExplorerService {
     /// GET /open-apis/drive/explorer/v2/folder/:folderToken/meta
     ///
     /// 获取文件夹的元信息
-    pub fn folder_meta(
+    pub async fn folder_meta(
         &self,
         folder_token: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<ApiResponse<ExplorerFolderMeta>> {
         let mut api_req = ApiRequest::default();
-        api_req.http_method = "GET".to_string();
+        api_req.http_method = Method::GET;
         api_req.api_path = format!("/open-apis/drive/explorer/v2/folder/{folder_token}/meta");
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option)?;
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
 
     /// POST /open-apis/drive/v1/files/create_folder
     /// 新建文件夹
-    pub fn create_folder(
+    pub async fn create_folder(
         &self,
         create_folder_request: CreateFolderRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<ApiResponse<CreateFolderResponse>> {
         let mut api_req = create_folder_request.api_req;
-        api_req.http_method = "POST".to_string();
+        api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/drive/v1/files/create_folder".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option)?;
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
 
     /// GET https://open.feishu.cn/open-apis/drive/v1/files
     /// 获取文件夹下的清单
-    pub fn list_folder(
+    pub async fn list_folder(
         &self,
         list_folder_request: ListFolderRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<ApiResponse<ListFolderResponse>> {
         let mut api_req = list_folder_request.api_req;
-        api_req.http_method = "GET".to_string();
+        api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/drive/v1/files".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option)?;
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
@@ -114,17 +107,17 @@ pub struct ListFolderIterator<'a> {
     has_more: bool,
 }
 
-impl<'a> Iterator for ListFolderIterator<'a> {
+impl<'a> AfitAsyncIter for ListFolderIterator<'a> {
     type Item = Vec<FileInFolder>;
 
-    fn next(&mut self) -> Option<Self::Item> {
+    async fn next(&mut self) -> Option<Self::Item> {
         if !self.has_more {
             return None;
         }
 
         match self
             .explorer_service
-            .list_folder(self.req.clone(), self.option.clone())
+            .list_folder(self.req.clone(), self.option.clone()).await
         {
             Ok(resp) => match resp {
                 ApiResponse::Success { data, .. } => {

@@ -1,18 +1,11 @@
+use reqwest::Method;
 use std::collections::HashMap;
 
 use log::error;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponse, ApiResponseTrait, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    error::LarkAPIError,
-    http::Transport,
-    req_option::RequestOption,
-};
+use crate::core::{api_req::ApiRequest, api_resp::{ApiResponse, ApiResponseTrait, ResponseFormat}, AfitAsyncIter, config::Config, constants::AccessTokenType, error::LarkAPIError, http::Transport, req_option::RequestOption};
 
 pub struct MessageService {
     pub config: Config,
@@ -23,17 +16,17 @@ impl MessageService {
     ///
     /// 给指定用户或者会话发送消息，支持文本、富文本、可交互的消息卡片、群名片、个人名片、图片、
     /// 视频、音频、文件、表情包。
-    pub fn create(
+    pub async fn create(
         &self,
         create_message_request: CreateMessageRequest,
         option: Option<RequestOption>,
     ) -> Result<ApiResponse<Message>, LarkAPIError> {
         let mut api_req = create_message_request.api_req;
-        api_req.http_method = "POST".to_string();
+        api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option)?;
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
@@ -42,17 +35,17 @@ impl MessageService {
     ///
     /// 获取会话（包括单聊、群组）的历史消息（聊天记录）
     /// https://open.feishu.cn/document/server-docs/im-v1/message/list
-    pub fn list(
+    pub async fn list(
         &self,
         list_message_request: ListMessageRequest,
         option: Option<RequestOption>,
     ) -> Result<ApiResponse<ListMessageRespData>, LarkAPIError> {
         let mut api_req = list_message_request.api_req;
-        api_req.http_method = "GET".to_string();
+        api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option)?;
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
@@ -78,14 +71,14 @@ pub struct ListMessageIterator<'a> {
     has_more: bool,
 }
 
-impl<'a> Iterator for ListMessageIterator<'a> {
+impl<'a> AfitAsyncIter for ListMessageIterator<'a> {
     type Item = Vec<Message>;
 
-    fn next(&mut self) -> Option<Self::Item> {
+    async fn next(&mut self) -> Option<Self::Item> {
         if !self.has_more {
             return None;
         }
-        match self.service.list(self.req.clone(), self.option.clone()) {
+        match self.service.list(self.req.clone(), self.option.clone()).await {
             Ok(resp) => match resp {
                 ApiResponse::Success { data, .. } => {
                     self.has_more = data.has_more;

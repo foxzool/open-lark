@@ -1,3 +1,4 @@
+use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::core::{
@@ -21,55 +22,55 @@ impl SpreadsheetService {
     }
 
     /// 创建表格
-    pub fn create(
+    pub async fn create(
         &self,
         request: CreateSpreedSheetRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<ApiResponse<CreateSpreedSheetResponseData>> {
         let mut api_req = request.api_request;
-        api_req.http_method = "POST".to_string();
+        api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/sheets/v3/spreadsheets".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option)?;
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
 
     /// 修改电子表格属性
-    pub fn patch(
+    pub async fn patch(
         &self,
         request: PatchSpreadSheetRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<ApiResponse<RawResponse>> {
         let mut api_req = request.api_request;
-        api_req.http_method = "PATCH".to_string();
+        api_req.http_method = Method::PATCH;
         api_req.api_path = format!(
             "/open-apis/sheets/v3/spreadsheets/{}",
             request.spreadsheet_token
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option)?;
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
 
     /// 获取电子表格信息
-    pub fn get(
+    pub async fn get(
         &self,
         request: GetSpreadsheetRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<ApiResponse<GetSpreadsheetResponseData>> {
         let mut api_req = request.api_request;
-        api_req.http_method = "GET".to_string();
+        api_req.http_method = Method::GET;
         api_req.api_path = format!(
             "/open-apis/sheets/v3/spreadsheets/{}",
             request.spreadsheet_token
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option)?;
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
     }
