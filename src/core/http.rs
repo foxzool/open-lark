@@ -49,9 +49,10 @@ impl<T: ApiResponseTrait> Transport<T> {
         config: &Config,
         option: RequestOption,
     ) -> SDKResult<ApiResponse<T>> {
-        let req = ReqTranslator::translate(&mut http_req, access_token_type, config, &option).await?;
+        let req =
+            ReqTranslator::translate(&mut http_req, access_token_type, config, &option).await?;
         debug!("Req:{:?}", req);
-        let resp = Self::do_send(req, http_req.body).await?;
+        let resp = Self::do_send(req, http_req.body, !http_req.file.is_empty()).await?;
         debug!("Res:{:?}", resp);
 
         if let ApiResponse::Error(code_error) = &resp {
@@ -64,8 +65,17 @@ impl<T: ApiResponseTrait> Transport<T> {
         Ok(resp)
     }
 
-    pub async fn do_send(raw_request: RequestBuilder, body: Vec<u8>) -> SDKResult<ApiResponse<T>> {
-        match raw_request.body(body).send().await {
+    pub async fn do_send(
+        raw_request: RequestBuilder,
+        body: Vec<u8>,
+        multi_part: bool,
+    ) -> SDKResult<ApiResponse<T>> {
+        let future = if multi_part {
+            raw_request.send()
+        } else {
+            raw_request.body(body).send()
+        };
+        match future.await {
             Ok(response) => {
                 let status_code = response.status().as_u16();
                 let header = response.headers().keys().map(|k| k.to_string()).collect();
@@ -73,31 +83,32 @@ impl<T: ApiResponseTrait> Transport<T> {
                     ResponseFormat::Data => {
                         let raw_body: Value = response.json().await?;
                         debug!("raw_body: {:?}", raw_body);
-                        match serde_json::from_value::<BaseResp<T>>(raw_body) {
-                            Ok(base_resp) => {
-                                if base_resp.raw_response.code == 0 {
-                                    Ok(ApiResponse::Success {
-                                        data: base_resp.data,
-                                        status_code,
-                                        header,
-                                    })
-                                } else {
-                                    Ok(ApiResponse::Error(base_resp.raw_response))
-                                }
-                            }
-                            Err(err) => Err(LarkAPIError::DeserializeError(err)),
+                        if raw_body["code"] == 0 {
+                            let base_resp = serde_json::from_value::<BaseResp<T>>(raw_body)?;
+                            Ok(ApiResponse::Success {
+                                data: base_resp.data,
+                                status_code,
+                                header,
+                            })
+                        } else {
+                            let raw_response = serde_json::from_value::<RawResponse>(raw_body)?;
+                            Ok(ApiResponse::Error(raw_response))
                         }
                     }
                     ResponseFormat::Flatten => {
                         let raw_body: Value = response.json().await?;
                         debug!("raw_body: {:?}", raw_body);
-                        match serde_json::from_value::<T>(raw_body) {
-                            Ok(data) => Ok(ApiResponse::Success {
+
+                        if raw_body["code"] == 0 {
+                            let data = serde_json::from_value::<T>(raw_body)?;
+                            Ok(ApiResponse::Success {
                                 data,
                                 status_code,
                                 header,
-                            }),
-                            Err(err) => Err(LarkAPIError::DeserializeError(err)),
+                            })
+                        } else {
+                            let raw_response = serde_json::from_value::<RawResponse>(raw_body)?;
+                            Ok(ApiResponse::Error(raw_response))
                         }
                     }
                     // 处理二进制数据

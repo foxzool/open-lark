@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use async_recursion::async_recursion;
-use reqwest::RequestBuilder;
+use reqwest::{multipart, RequestBuilder};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use url::Url;
@@ -85,40 +85,43 @@ impl ReqTranslator {
         }
 
         if !req.file.is_empty() {
-            let json_value = serde_json::from_slice::<Value>(&req.body)?;
+            let json_value = serde_json::from_slice::<Value>(&req.body.clone())?;
 
             if let Some(form_obj) = json_value.as_object() {
-                // let mut builder = MultipartBuilder::new();
-                // let file_name = form_obj["file_name"].as_str().unwrap();
-                // // builder = builder.add_file("file", "target/1.txt").unwrap();
-                // builder = builder.load_file(&file_name, req.file.clone())?;
-                //
-                // for (k, v) in form_obj.iter() {
-                //     if v == &Value::Null {
-                //         continue;
-                //     }
-                //     match v {
-                //         Value::String(s) => {
-                //             builder = builder.add_text(k, s)?;
-                //         }
-                //         Value::Number(n) => {
-                //             builder = builder.add_text(k, n.to_string().as_str())?;
-                //         }
-                //         Value::Bool(b) => {
-                //             builder = builder.add_text(k, b.to_string().as_str())?;
-                //         }
-                //         _ => {}
-                //     }
-                // }
-                //
-                // let (content_type, data) = builder.finish().unwrap();
-                // req.body = data;
-                //
-                // req_builder = req_builder.set(CONTENT_TYPE_HEADER, &content_type);
+                let mut form = multipart::Form::new();
+                let file_name = form_obj
+                    .get("file_name")
+                    .unwrap()
+                    .as_str()
+                    .unwrap()
+                    .to_string();
+
+                let file_part = multipart::Part::bytes(req.file.clone()).file_name(file_name);
+                form = form.part("file", file_part);
+
+                for (k, v) in form_obj.iter() {
+                    if v == &Value::Null {
+                        continue;
+                    }
+                    match v {
+                        Value::String(s) => {
+                            form = form.text(k.to_string(), s.to_string());
+                        }
+                        Value::Number(n) => {
+                            form = form.text(k.to_string(), n.to_string().as_str().to_string());
+                        }
+                        Value::Bool(b) => {
+                            form = form.text(k.to_string(), b.to_string().as_str().to_string());
+                        }
+                        _ => {}
+                    }
+                }
+
+                form = form.percent_encode_noop();
+                req_builder = req_builder.multipart(form);
             }
         } else {
             req_builder = req_builder.header(CONTENT_TYPE_HEADER, DEFAULT_CONTENT_TYPE);
-            // req_builder = req_builder.body(req.body.clone())
         }
 
         Ok(req_builder)

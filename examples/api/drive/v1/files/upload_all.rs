@@ -18,7 +18,7 @@ async fn main() {
     // 创建 Client
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
 
-    let mut file = std::fs::File::open("target/1.txt").unwrap();
+    let mut file = std::fs::File::open("tmp/1.txt").unwrap();
     let file_size = file.metadata().unwrap().len() as usize;
     let file_name = "1.txt";
     let mut buffer = vec![];

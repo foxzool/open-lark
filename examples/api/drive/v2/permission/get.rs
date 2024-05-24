@@ -39,6 +39,6 @@ async fn main() {
         .await
         .unwrap();
     if let ApiResponse::Success { data, .. } = resp {
-        println!("patch spread response: {:#?}", data);
+        println!("patch spreadsheet response: {:#?}", data);
     }
 }
