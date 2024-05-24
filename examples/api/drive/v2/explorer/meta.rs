@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClientBuilder, core::api_resp::ApiResponse};
+use open_lark::client::LarkClientBuilder;
 
 /// 获取我的空间（root folder）元信息
 #[tokio::main]
@@ -22,7 +22,7 @@ async fn main() {
         .root_folder_meta(None)
         .await
         .unwrap();
-    if let ApiResponse::Success { data, .. } = resp {
+    if let Some(data) = resp.data {
         println!("root_meta: {:#?}", data);
 
         // 获取文件夹元信息

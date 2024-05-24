@@ -4,7 +4,7 @@ use dotenvy::dotenv;
 
 use open_lark::{
     client::LarkClientBuilder,
-    core::{api_resp::ApiResponse, req_option::RequestOption},
+    core::{ req_option::RequestOption},
     service::sheets::v3::spreadsheet::GetSpreadsheetRequest,
 };
 
@@ -37,7 +37,7 @@ async fn main() {
         )
         .await
         .unwrap();
-    if let ApiResponse::Success { data, .. } = resp {
+    if let Some(data) = resp.data {
         println!("patch spread response: {:#?}", data);
     }
 }

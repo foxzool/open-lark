@@ -1,14 +1,13 @@
 use std::time::Duration;
-use async_recursion::async_recursion;
 
+use async_recursion::async_recursion;
 use lazy_static::lazy_static;
-use log::error;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::core::{
     api_req::ApiRequest,
-    api_resp::{ApiResponse, RawResponse},
+    api_resp::{BaseResp, RawResponse},
     cache::{Cache, LocalCache},
     config::Config,
     constants::{AccessTokenType, APP_TICKET_KEY_PREFIX, APPLY_APP_TICKET_PATH},
@@ -63,7 +62,7 @@ fn app_ticket_key(app_id: &str) -> String {
 
 #[async_recursion(?Send)]
 pub async fn apply_app_ticket(config: &Config) -> SDKResult<()> {
-    let resp: ApiResponse<RawResponse> = Transport::request(
+    let _resp: BaseResp<RawResponse> = Transport::request(
         ApiRequest {
             http_method: Method::POST,
             api_path: APPLY_APP_TICKET_PATH.to_string(),
@@ -74,10 +73,6 @@ pub async fn apply_app_ticket(config: &Config) -> SDKResult<()> {
         None,
     )
     .await?;
-
-    if let ApiResponse::Error(error_msg) = resp {
-        error!("apply_app_ticket failed: {}", error_msg);
-    }
 
     Ok(())
 }
@@ -91,7 +86,7 @@ struct ResendAppTicketReq {
 // #[derive(Serialize, Deserialize)]
 // struct ResendAppTicketResp {
 //     #[serde(skip)]
-//     api_resp: ApiResponse,
+//     api_resp:
 //     #[serde(flatten)]
 //     code_error: ErrorResponse,
 // }

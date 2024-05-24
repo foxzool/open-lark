@@ -4,7 +4,7 @@ use dotenvy::dotenv;
 use simd_adler32::Adler32;
 
 use open_lark::{
-    client::LarkClientBuilder, core::api_resp::ApiResponse,
+    client::LarkClientBuilder,
     service::drive::v1::files::UploadAllRequest,
 };
 
@@ -38,7 +38,7 @@ async fn main() {
 
     // 发起请求
     let resp = client.drive.v1.files.upload_all(req, None).await.unwrap();
-    if let ApiResponse::Success { data, .. } = resp {
+    if let Some(data) = resp.data {
         println!("上传成功响应: {:#?}", data);
     }
 }

@@ -3,13 +3,14 @@ use serde::Deserialize;
 
 use crate::core::{
     api_req::ApiRequest,
-    api_resp::{ApiResponse, ApiResponseTrait},
+    api_resp::ApiResponseTrait,
     config::Config,
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
+use crate::core::api_resp::BaseResp;
 
 pub struct PermissionsService {
     config: Config,
@@ -24,7 +25,7 @@ impl PermissionsService {
         &self,
         request: GetPermissionRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<ApiResponse<GetPermissionResponse>> {
+    ) -> SDKResult<BaseResp<GetPermissionResponse>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::GET;
         api_req.api_path = format!("/open-apis/drive/v2/permissions/{}/public", request.token);

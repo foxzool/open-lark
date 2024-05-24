@@ -6,13 +6,14 @@ use serde::{Deserialize, Serialize};
 
 use crate::core::{
     api_req::ApiRequest,
-    api_resp::{ApiResponse, ApiResponseTrait, ResponseFormat},
+    api_resp::{ ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
+use crate::core::api_resp::BaseResp;
 
 pub struct ExplorerService {
     config: Config,
@@ -29,7 +30,7 @@ impl ExplorerService {
     pub async fn root_folder_meta(
         &self,
         option: Option<RequestOption>,
-    ) -> SDKResult<ApiResponse<ExplorerRootMeta>> {
+    ) -> SDKResult<BaseResp<ExplorerRootMeta>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: "/open-apis/drive/explorer/v2/root_folder/meta".to_string(),
@@ -49,7 +50,7 @@ impl ExplorerService {
         &self,
         folder_token: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<ApiResponse<ExplorerFolderMeta>> {
+    ) -> SDKResult<BaseResp<ExplorerFolderMeta>> {
         let mut api_req = ApiRequest::default();
         api_req.http_method = Method::GET;
         api_req.api_path = format!("/open-apis/drive/explorer/v2/folder/{folder_token}/meta");
@@ -66,7 +67,7 @@ impl ExplorerService {
         &self,
         create_folder_request: CreateFolderRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<ApiResponse<CreateFolderResponse>> {
+    ) -> SDKResult<BaseResp<CreateFolderResponse>> {
         let mut api_req = create_folder_request.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/drive/v1/files/create_folder".to_string();
@@ -83,7 +84,7 @@ impl ExplorerService {
         &self,
         list_folder_request: ListFolderRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<ApiResponse<ListFolderResponse>> {
+    ) -> SDKResult<BaseResp<ListFolderResponse>> {
         let mut api_req = list_folder_request.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/drive/v1/files".to_string();
@@ -126,8 +127,8 @@ impl<'a> ListFolderIterator<'a> {
             .list_folder(self.req.clone(), self.option.clone())
             .await
         {
-            Ok(resp) => match resp {
-                ApiResponse::Success { data, .. } => {
+            Ok(resp) => match resp.data {
+                Some(data) => {
                     self.has_more = data.has_more;
                     if data.has_more {
                         self.req
@@ -141,10 +142,7 @@ impl<'a> ListFolderIterator<'a> {
                         Some(data.files)
                     }
                 }
-                ApiResponse::Error(error_msg) => {
-                    error!("Error: {}", error_msg);
-                    None
-                }
+                None => None,
             },
             Err(e) => {
                 error!("Error: {:?}", e);

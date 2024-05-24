@@ -3,13 +3,14 @@ use serde::{Deserialize, Serialize};
 
 use crate::core::{
     api_req::ApiRequest,
-    api_resp::{ApiResponse, ApiResponseTrait, ResponseFormat},
+    api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
-    req_option::RequestOption
-    , SDKResult,
+    req_option::RequestOption,
+    SDKResult,
 };
+use crate::core::api_resp::BaseResp;
 
 pub struct ChatsService {
     pub config: Config,
@@ -21,7 +22,7 @@ impl ChatsService {
         &self,
         list_chat_request: ListChatRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<ApiResponse<ListChatRespData>> {
+    ) -> SDKResult<BaseResp<ListChatRespData>> {
         let mut api_req = list_chat_request.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/im/v1/chats".to_string();
@@ -63,8 +64,8 @@ impl ListChatIterator<'_> {
             .list(self.request.clone(), self.option.clone())
             .await
         {
-            Ok(resp) => match resp {
-                ApiResponse::Success { data, .. } => {
+            Ok(resp) => match resp.data {
+                Some(data) => {
                     self.has_more = data.has_more;
                     if data.has_more {
                         self.request
@@ -78,7 +79,7 @@ impl ListChatIterator<'_> {
                         Some(data.items)
                     }
                 }
-                ApiResponse::Error(_) => None,
+                None => None,
             },
             Err(_) => None,
         }

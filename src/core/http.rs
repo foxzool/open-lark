@@ -1,12 +1,12 @@
-use std::{collections::HashSet, io::Read, marker::PhantomData};
+use std::{collections::HashSet, marker::PhantomData};
 
 use log::debug;
-use reqwest::{Request, RequestBuilder};
+use reqwest::RequestBuilder;
 use serde_json::Value;
 
 use crate::core::{
     api_req::ApiRequest,
-    api_resp::{ApiResponse, ApiResponseTrait, BaseResp, RawResponse, ResponseFormat},
+    api_resp::{ApiResponseTrait, BaseResp, RawResponse, ResponseFormat},
     app_ticket_manager::apply_app_ticket,
     config::Config,
     constants::*,
@@ -25,7 +25,7 @@ impl<T: ApiResponseTrait> Transport<T> {
         mut req: ApiRequest,
         config: &Config,
         option: Option<RequestOption>,
-    ) -> Result<ApiResponse<T>, LarkAPIError> {
+    ) -> Result<BaseResp<T>, LarkAPIError> {
         let option = option.unwrap_or_default();
 
         if req.supported_access_token_types.is_empty() {
@@ -48,16 +48,15 @@ impl<T: ApiResponseTrait> Transport<T> {
         access_token_type: AccessTokenType,
         config: &Config,
         option: RequestOption,
-    ) -> SDKResult<ApiResponse<T>> {
+    ) -> SDKResult<BaseResp<T>> {
         let req =
             ReqTranslator::translate(&mut http_req, access_token_type, config, &option).await?;
         debug!("Req:{:?}", req);
         let resp = Self::do_send(req, http_req.body, !http_req.file.is_empty()).await?;
         debug!("Res:{:?}", resp);
 
-        if let ApiResponse::Error(code_error) = &resp {
-            let code = code_error.code;
-            if code == ERR_CODE_APP_TICKET_INVALID {
+        if !resp.success() {
+            if resp.raw_response.code == ERR_CODE_APP_TICKET_INVALID {
                 apply_app_ticket(config).await?;
             }
         }
@@ -69,7 +68,7 @@ impl<T: ApiResponseTrait> Transport<T> {
         raw_request: RequestBuilder,
         body: Vec<u8>,
         multi_part: bool,
-    ) -> SDKResult<ApiResponse<T>> {
+    ) -> SDKResult<BaseResp<T>> {
         let future = if multi_part {
             raw_request.send()
         } else {
@@ -77,51 +76,28 @@ impl<T: ApiResponseTrait> Transport<T> {
         };
         match future.await {
             Ok(response) => {
-                let status_code = response.status().as_u16();
-                let header = response.headers().keys().map(|k| k.to_string()).collect();
                 match T::data_format() {
                     ResponseFormat::Data => {
                         let raw_body: Value = response.json().await?;
                         debug!("raw_body: {:?}", raw_body);
-                        if raw_body["code"] == 0 {
-                            let base_resp = serde_json::from_value::<BaseResp<T>>(raw_body)?;
-                            Ok(ApiResponse::Success {
-                                data: base_resp.data,
-                                status_code,
-                                header,
-                            })
-                        } else {
-                            let raw_response = serde_json::from_value::<RawResponse>(raw_body)?;
-                            Ok(ApiResponse::Error(raw_response))
-                        }
+                        let base_resp = serde_json::from_value::<BaseResp<T>>(raw_body)?;
+                        Ok(base_resp)
                     }
                     ResponseFormat::Flatten => {
                         let raw_body: Value = response.json().await?;
                         debug!("raw_body: {:?}", raw_body);
+                        let raw_response = serde_json::from_value::<RawResponse>(raw_body.clone())?;
 
-                        if raw_body["code"] == 0 {
-                            let data = serde_json::from_value::<T>(raw_body)?;
-                            Ok(ApiResponse::Success {
-                                data,
-                                status_code,
-                                header,
-                            })
+                        let data = if raw_response.code == 0 {
+                            Some(serde_json::from_value::<T>(raw_body.clone())?)
                         } else {
-                            let raw_response = serde_json::from_value::<RawResponse>(raw_body)?;
-                            Ok(ApiResponse::Error(raw_response))
-                        }
+                            None
+                        };
+
+                        Ok(BaseResp { raw_response, data })
                     }
                     // 处理二进制数据
                     ResponseFormat::Binary => {
-                        let len: usize = response
-                            .headers()
-                            .get("Content-Length")
-                            .unwrap()
-                            .to_str()
-                            .unwrap()
-                            .parse()
-                            .unwrap();
-
                         let file_name = response
                             .headers()
                             .get("Content-Disposition")
@@ -133,10 +109,13 @@ impl<T: ApiResponseTrait> Transport<T> {
                         let bytes = response.bytes().await?.to_vec();
 
                         let data = T::from_binary(file_name, bytes).unwrap();
-                        Ok(ApiResponse::Success {
-                            data,
-                            status_code,
-                            header,
+                        Ok(BaseResp {
+                            raw_response: RawResponse {
+                                code: 0,
+                                msg: "success".to_string(),
+                                err: None,
+                            },
+                            data: Some(data),
                         })
                     }
                 }

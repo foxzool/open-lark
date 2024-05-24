@@ -9,7 +9,25 @@ pub struct BaseResp<T> {
     #[serde(flatten)]
     pub raw_response: RawResponse,
     /// 具体数据
-    pub data: T,
+    pub data: Option<T>,
+}
+
+impl<T> BaseResp<T> {
+    pub fn success(&self) -> bool {
+        self.raw_response.code == 0
+    }
+
+    pub fn code(&self) -> i32 {
+        self.raw_response.code
+    }
+
+    pub fn msg(&self) -> &str {
+        &self.raw_response.msg
+    }
+
+    pub fn err(&self) -> Option<&ErrorInfo> {
+        self.raw_response.err.as_ref()
+    }
 }
 
 /// 业务返回值格式
@@ -18,7 +36,7 @@ pub trait ApiResponseTrait: for<'a> Deserialize<'a> + Send + Sync + 'static + De
     fn data_format() -> ResponseFormat;
 
     fn from_binary(_file_name: String, _body: Vec<u8>) -> Option<Self> {
-       None
+        None
     }
 }
 
@@ -29,16 +47,6 @@ pub enum ResponseFormat {
     Flatten,
     /// 二进制数据格式
     Binary,
-}
-
-#[derive(Debug)]
-pub enum ApiResponse<T> {
-    Success {
-        data: T,
-        status_code: u16,
-        header: Vec<String>,
-    },
-    Error(RawResponse),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

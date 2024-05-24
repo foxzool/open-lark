@@ -1,11 +1,19 @@
-use reqwest::Method;
 use std::collections::HashMap;
 
 use log::error;
+use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
-use crate::core::{api_req::ApiRequest, api_resp::{ApiResponse, ApiResponseTrait, ResponseFormat}, config::Config, constants::AccessTokenType, error::LarkAPIError, http::Transport, req_option::RequestOption};
+use crate::core::{
+    api_req::ApiRequest,
+    api_resp::{ ApiResponseTrait, BaseResp, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
 
 pub struct MessageService {
     pub config: Config,
@@ -20,7 +28,7 @@ impl MessageService {
         &self,
         create_message_request: CreateMessageRequest,
         option: Option<RequestOption>,
-    ) -> Result<ApiResponse<Message>, LarkAPIError> {
+    ) -> SDKResult<BaseResp<Message>> {
         let mut api_req = create_message_request.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
@@ -39,7 +47,7 @@ impl MessageService {
         &self,
         list_message_request: ListMessageRequest,
         option: Option<RequestOption>,
-    ) -> Result<ApiResponse<ListMessageRespData>, LarkAPIError> {
+    ) -> SDKResult<BaseResp<ListMessageRespData>> {
         let mut api_req = list_message_request.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
@@ -72,14 +80,17 @@ pub struct ListMessageIterator<'a> {
 }
 
 impl<'a> ListMessageIterator<'a> {
-
     pub async fn next(&mut self) -> Option<Vec<Message>> {
         if !self.has_more {
             return None;
         }
-        match self.service.list(self.req.clone(), self.option.clone()).await {
-            Ok(resp) => match resp {
-                ApiResponse::Success { data, .. } => {
+        match self
+            .service
+            .list(self.req.clone(), self.option.clone())
+            .await
+        {
+            Ok(resp) => match resp.data {
+                Some(data) => {
                     self.has_more = data.has_more;
                     if data.has_more {
                         self.req
@@ -93,10 +104,7 @@ impl<'a> ListMessageIterator<'a> {
                         Some(data.items)
                     }
                 }
-                ApiResponse::Error(error_msg) => {
-                    error!("Error: {}", error_msg);
-                    None
-                }
+                None => None,
             },
             Err(e) => {
                 error!("Error: {:?}", e);

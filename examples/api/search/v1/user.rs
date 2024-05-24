@@ -3,8 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClientBuilder,
-    core::{api_resp::ApiResponse, req_option::RequestOption},
+    client::LarkClientBuilder, core::req_option::RequestOption,
     service::search::v1::user::SearchUserRequest,
 };
 
@@ -33,25 +32,22 @@ async fn main() {
                     .user_access_token(user_access_token.clone())
                     .build(),
             ),
-        ).await
+        )
+        .await
         .unwrap();
-    if let ApiResponse::Success { data, .. } = resp {
+    if let Some(data) = resp.data {
         println!("search: {:#?}", data);
     }
 
     // 使用迭代器
-    let mut iterator =  client
-        .search
-        .v1
-        .user
-        .search_user_iter(
-            req,
-            Some(
-                RequestOption::builder()
-                    .user_access_token(user_access_token)
-                    .build(),
-            ),
-        );
+    let mut iterator = client.search.v1.user.search_user_iter(
+        req,
+        Some(
+            RequestOption::builder()
+                .user_access_token(user_access_token)
+                .build(),
+        ),
+    );
 
     while let Some(users) = iterator.next().await {
         for user in users {

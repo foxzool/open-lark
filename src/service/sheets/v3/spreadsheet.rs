@@ -3,13 +3,14 @@ use serde::{Deserialize, Serialize};
 
 use crate::core::{
     api_req::ApiRequest,
-    api_resp::{ApiResponse, ApiResponseTrait, RawResponse, ResponseFormat},
+    api_resp::{ApiResponseTrait, RawResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
+use crate::core::api_resp::BaseResp;
 
 /// 电子表格
 pub struct SpreadsheetService {
@@ -26,7 +27,7 @@ impl SpreadsheetService {
         &self,
         request: CreateSpreedSheetRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<ApiResponse<CreateSpreedSheetResponseData>> {
+    ) -> SDKResult<BaseResp<CreateSpreedSheetResponseData>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/sheets/v3/spreadsheets".to_string();
@@ -42,7 +43,7 @@ impl SpreadsheetService {
         &self,
         request: PatchSpreadSheetRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<ApiResponse<RawResponse>> {
+    ) -> SDKResult<BaseResp<RawResponse>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::PATCH;
         api_req.api_path = format!(
@@ -61,7 +62,7 @@ impl SpreadsheetService {
         &self,
         request: GetSpreadsheetRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<ApiResponse<GetSpreadsheetResponseData>> {
+    ) -> SDKResult<BaseResp<GetSpreadsheetResponseData>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::GET;
         api_req.api_path = format!(

@@ -4,13 +4,14 @@ use serde::{Deserialize, Serialize};
 
 use crate::core::{
     api_req::ApiRequest,
-    api_resp::{ApiResponse, ApiResponseTrait},
+    api_resp::{ ApiResponseTrait},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
+use crate::core::api_resp::BaseResp;
 
 pub struct UserService {
     config: Config,
@@ -26,7 +27,7 @@ impl UserService {
         &self,
         search_user_request: SearchUserRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<ApiResponse<SearchUserResponse>> {
+    ) -> SDKResult<BaseResp<SearchUserResponse>> {
         let mut api_req = search_user_request.api_request;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/search/v1/user".to_string();
@@ -166,8 +167,8 @@ impl<'a> SearchUserIterator<'a> {
             .search_user(self.request.clone(), self.option.clone())
             .await
         {
-            Ok(resp) => match resp {
-                ApiResponse::Success { data, .. } => {
+            Ok(resp) => match resp.data {
+                Some(data) => {
                     self.has_more = data.has_more;
                     if data.has_more {
                         self.request
@@ -181,10 +182,7 @@ impl<'a> SearchUserIterator<'a> {
                         Some(data.users)
                     }
                 }
-                ApiResponse::Error(error_msg) => {
-                    error!("Error: {}", error_msg);
-                    None
-                }
+                None => None,
             },
             Err(e) => {
                 error!("Error: {:?}", e);

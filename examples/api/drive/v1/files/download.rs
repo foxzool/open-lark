@@ -4,7 +4,7 @@ use dotenvy::dotenv;
 
 use open_lark::{
     client::LarkClientBuilder,
-    core::{api_resp::ApiResponse, req_option::RequestOption},
+    core::req_option::RequestOption,
     service::drive::v1::files::DownloadRequest,
 };
 
@@ -34,9 +34,10 @@ async fn main() {
                     .add_header("Range", "bytes=0-1024")
                     .build(),
             ),
-        ).await
+        )
+        .await
         .unwrap();
-    if let ApiResponse::Success { data, .. } = resp {
-        println!("file data: {:#?}", data);
+    if resp.success() {
+        println!("file data: {:#?}", resp.data);
     }
 }

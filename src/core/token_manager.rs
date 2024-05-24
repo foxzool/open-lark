@@ -1,13 +1,13 @@
-use reqwest::Method;
 use std::{sync::Mutex, time::Duration};
 
 use lazy_static::lazy_static;
 use log::warn;
+use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::core::{
     api_req::ApiRequest,
-    api_resp::{ApiResponse, ApiResponseTrait, RawResponse},
+    api_resp::{ ApiResponseTrait, BaseResp, RawResponse, ResponseFormat},
     app_ticket_manager::APP_TICKET_MANAGER,
     cache::{Cache, LocalCache},
     config::Config,
@@ -19,7 +19,6 @@ use crate::core::{
     http::Transport,
     SDKResult,
 };
-use crate::core::api_resp::ResponseFormat;
 
 lazy_static! {
     pub static ref TOKEN_MANAGER: Mutex<TokenManager> = Mutex::new(TokenManager::new());
@@ -49,7 +48,11 @@ impl TokenManager {
         self.cache.set(key, value, expire_time);
     }
 
-    pub async fn get_app_access_token(&mut self, config: &Config, app_ticket: &str) -> SDKResult<String> {
+    pub async fn get_app_access_token(
+        &mut self,
+        config: &Config,
+        app_ticket: &str,
+    ) -> SDKResult<String> {
         let mut token = self
             .get(&app_access_token_key(&config.app_id))
             .unwrap_or_default();
@@ -58,35 +61,38 @@ impl TokenManager {
         if app_type == AppType::SelfBuild {
             token = self.get_custom_app_access_token_then_cache(config).await?;
         } else {
-            token = self.get_marketplace_app_access_token_then_cache(config, app_ticket).await?;
+            token = self
+                .get_marketplace_app_access_token_then_cache(config, app_ticket)
+                .await?;
         }
 
         Ok(token)
     }
 
-    async fn get_custom_app_access_token_then_cache(&mut self, config: &Config) -> SDKResult<String> {
+    async fn get_custom_app_access_token_then_cache(
+        &mut self,
+        config: &Config,
+    ) -> SDKResult<String> {
         let req = ApiRequest {
             http_method: Method::POST,
             api_path: APP_ACCESS_TOKEN_INTERNAL_URL_PATH.to_string(),
             supported_access_token_types: vec![AccessTokenType::None],
             ..Default::default()
         };
-        let resp: ApiResponse<AppAccessTokenResp> = Transport::request(req, config, None).await?;
-        match resp {
-            ApiResponse::Success { data, .. } => {
-                let expire = Duration::from_secs(data.expire as u64) - EXPIRY_DELTA;
-                self.set(
-                    &app_access_token_key(&config.app_id),
-                    &data.app_access_token,
-                    expire,
-                );
+        let resp: BaseResp<AppAccessTokenResp> = Transport::request(req, config, None).await?;
+        if resp.success() {
+            let data = resp.data.unwrap();
+            let expire = Duration::from_secs(data.expire as u64) - EXPIRY_DELTA;
+            self.set(
+                &app_access_token_key(&config.app_id),
+                &data.app_access_token,
+                expire,
+            );
 
-                Ok(data.app_access_token)
-            }
-            ApiResponse::Error(error_resp) => {
-                warn!("custom app appAccessToken cache {:#?}", error_resp);
-                Err(LarkAPIError::CodeError(error_resp))
-            }
+            Ok(data.app_access_token)
+        } else {
+            warn!("custom app appAccessToken cache {:#?}", resp.raw_response);
+            Err(LarkAPIError::CodeError(resp.raw_response))
         }
     }
     async fn get_marketplace_app_access_token_then_cache(
@@ -114,7 +120,6 @@ impl TokenManager {
             app_ticket,
         })?;
 
-
         let req = ApiRequest {
             http_method: Method::POST,
             api_path: APP_ACCESS_TOKEN_INTERNAL_URL_PATH.to_string(),
@@ -122,23 +127,25 @@ impl TokenManager {
             supported_access_token_types: vec![AccessTokenType::None],
             ..Default::default()
         };
-        let raw_resp: ApiResponse<AppAccessTokenResp> = Transport::request(req, config, None).await?;
-        match raw_resp {
-            ApiResponse::Success { data, .. } => {
-                let expire = Duration::from_secs(data.expire as u64) - EXPIRY_DELTA;
+        let raw_resp: BaseResp<AppAccessTokenResp> = Transport::request(req, config, None).await?;
 
-                self.set(
-                    &app_access_token_key(&config.app_id),
-                    &data.app_access_token,
-                    expire,
-                );
+        if raw_resp.success() {
+            let data = raw_resp.data.unwrap();
+            let expire = Duration::from_secs(data.expire as u64) - EXPIRY_DELTA;
 
-                Ok(data.app_access_token)
-            }
-            ApiResponse::Error(error_resp) => {
-                warn!("marketplace app appAccessToken cache {:#?}", error_resp);
-                Err(LarkAPIError::CodeError(error_resp))
-            }
+            self.set(
+                &app_access_token_key(&config.app_id),
+                &data.app_access_token,
+                expire,
+            );
+
+            Ok(data.app_access_token)
+        } else {
+            warn!(
+                "marketplace app appAccessToken cache {:#?}",
+                raw_resp.raw_response
+            );
+            Err(LarkAPIError::CodeError(raw_resp.raw_response))
         }
     }
 
@@ -153,11 +160,13 @@ impl TokenManager {
             .unwrap_or_default();
         if token.is_empty() {
             if config.app_type == AppType::SelfBuild {
-                token = self.get_custom_tenant_access_token_then_cache(config, tenant_key).await?;
+                token = self
+                    .get_custom_tenant_access_token_then_cache(config, tenant_key)
+                    .await?;
             } else {
-                token = self.get_marketplace_tenant_access_token_then_cache(
-                    config, tenant_key, app_ticket,
-                ).await?;
+                token = self
+                    .get_marketplace_tenant_access_token_then_cache(config, tenant_key, app_ticket)
+                    .await?;
             }
         }
 
@@ -181,24 +190,26 @@ impl TokenManager {
             supported_access_token_types: vec![AccessTokenType::None],
             ..Default::default()
         };
-        let raw_resp: ApiResponse<TenantAccessTokenResp> = Transport::request(req, config, None).await?;
+        let base_resp: BaseResp<TenantAccessTokenResp> =
+            Transport::request(req, config, None).await?;
 
-        match raw_resp {
-            ApiResponse::Success { data, .. } => {
-                let expire = Duration::from_secs(data.expire as u64) - EXPIRY_DELTA;
+        if base_resp.success() {
+            let data = base_resp.data.unwrap();
+            let expire = Duration::from_secs(data.expire as u64) - EXPIRY_DELTA;
 
-                self.set(
-                    &tenant_access_token_key(&config.app_id, tenant_key),
-                    &data.tenant_access_token,
-                    expire,
-                );
+            self.set(
+                &tenant_access_token_key(&config.app_id, tenant_key),
+                &data.tenant_access_token,
+                expire,
+            );
 
-                Ok(data.tenant_access_token)
-            }
-            ApiResponse::Error(error_resp) => {
-                warn!("custom app tenantAccessToken cache {:#?}", error_resp);
-                Err(LarkAPIError::CodeError(error_resp))
-            }
+            Ok(data.tenant_access_token)
+        } else {
+            warn!(
+                "custom app tenantAccessToken cache {:#?}",
+                base_resp.raw_response
+            );
+            Err(LarkAPIError::CodeError(base_resp.raw_response))
         }
     }
 
@@ -208,8 +219,9 @@ impl TokenManager {
         tenant_key: &str,
         app_ticket: &str,
     ) -> SDKResult<String> {
-        let app_access_token =
-            self.get_marketplace_app_access_token_then_cache(config, app_ticket).await?;
+        let app_access_token = self
+            .get_marketplace_app_access_token_then_cache(config, app_ticket)
+            .await?;
 
         let body = serde_json::to_vec(&MarketplaceTenantAccessTokenReq {
             app_access_token,
@@ -223,23 +235,26 @@ impl TokenManager {
             supported_access_token_types: vec![AccessTokenType::None],
             ..Default::default()
         };
-        let raw_resp: ApiResponse<TenantAccessTokenResp> = Transport::request(req, config, None).await?;
-        match raw_resp {
-            ApiResponse::Success { data, .. } => {
-                let expire = Duration::from_secs(data.expire as u64) - EXPIRY_DELTA;
+        let raw_resp: BaseResp<TenantAccessTokenResp> =
+            Transport::request(req, config, None).await?;
 
-                self.set(
-                    &tenant_access_token_key(&config.app_id, tenant_key),
-                    &data.tenant_access_token,
-                    expire,
-                );
+        if raw_resp.success() {
+            let data = raw_resp.data.unwrap();
+            let expire = Duration::from_secs(data.expire as u64) - EXPIRY_DELTA;
 
-                Ok(data.tenant_access_token)
-            }
-            ApiResponse::Error(error_resp) => {
-                warn!("marketplace app tenantAccessToken cache {:#?}", error_resp);
-                Err(LarkAPIError::CodeError(error_resp))
-            }
+            self.set(
+                &tenant_access_token_key(&config.app_id, tenant_key),
+                &data.tenant_access_token,
+                expire,
+            );
+
+            Ok(data.tenant_access_token)
+        } else {
+            warn!(
+                "marketplace app tenantAccessToken cache {:#?}",
+                raw_resp.raw_response
+            );
+            Err(LarkAPIError::CodeError(raw_resp.raw_response))
         }
     }
 }

@@ -4,7 +4,6 @@ use dotenvy::dotenv;
 
 use open_lark::{
     client::LarkClientBuilder,
-    core::api_resp::ApiResponse,
     service::drive::v2::explorer::CreateFolderRequest,
 };
 
@@ -23,8 +22,14 @@ async fn main() {
         .folder_token("nodcnBh4MAgg2GpI5IkRVZuw3Jd")
         .build();
     // 发起请求
-    let resp = client.drive.v2.explorer.create_folder(req, None).await.unwrap();
-    if let ApiResponse::Success { data, .. } = resp {
+    let resp = client
+        .drive
+        .v2
+        .explorer
+        .create_folder(req, None)
+        .await
+        .unwrap();
+    if let Some(data) = resp.data {
         println!("response: {:#?}", data);
     }
 }

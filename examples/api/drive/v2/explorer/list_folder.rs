@@ -4,7 +4,7 @@ use dotenvy::dotenv;
 
 use open_lark::{
     client::LarkClientBuilder,
-    core::{api_resp::ApiResponse, req_option::RequestOption},
+    core::{ req_option::RequestOption},
     service::drive::v2::explorer::ListFolderRequest,
 };
 
@@ -35,7 +35,7 @@ fn main() {
             ),
         )
         .unwrap();
-    if let ApiResponse::Success { data, .. } = resp {
+    if let Some(data) = resp.data {
         println!("response: {:#?}", data);
     }
 

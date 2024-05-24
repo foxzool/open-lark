@@ -4,7 +4,7 @@ use dotenvy::dotenv;
 
 use open_lark::{
     client::LarkClientBuilder,
-    core::{api_resp::ApiResponse, req_option::RequestOption},
+    core::{ req_option::RequestOption},
     service::drive::v1::permissions::GetPermissionRequest,
 };
 
@@ -38,7 +38,7 @@ async fn main() {
         )
         .await
         .unwrap();
-    if let ApiResponse::Success { data, .. } = resp {
+    if let Some(data) = resp.data {
         println!("patch spreadsheet response: {:#?}", data);
     }
 }

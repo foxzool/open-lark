@@ -3,13 +3,14 @@ use serde::{Deserialize, Serialize};
 
 use crate::core::{
     api_req::ApiRequest,
-    api_resp::{ApiResponse, ApiResponseTrait, BinaryResponse, ResponseFormat},
+    api_resp::{ ApiResponseTrait, BinaryResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
+use crate::core::api_resp::BaseResp;
 
 
 pub struct FilesService {
@@ -108,7 +109,7 @@ impl FilesService {
         &self,
         upload_all_request: UploadAllRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<ApiResponse<UploadAllResponse>> {
+    ) -> SDKResult<BaseResp<UploadAllResponse>> {
         let mut api_req = upload_all_request.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/drive/v1/files/upload_all".to_string();
@@ -124,7 +125,7 @@ impl FilesService {
         &self,
         request: DownloadRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<ApiResponse<BinaryResponse>> {
+    ) -> SDKResult<BaseResp<BinaryResponse>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = format!("/open-apis/drive/v1/files/{}/download", request.file_token);
