@@ -5,7 +5,8 @@ use dotenvy::dotenv;
 use open_lark::{client::LarkClientBuilder, core::api_resp::ApiResponse};
 
 /// 获取我的空间（root folder）元信息
-fn main() {
+#[tokio::main]
+async fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
     let app_id = env::var("APP_ID").unwrap();
@@ -14,7 +15,13 @@ fn main() {
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
 
     // 发起请求
-    let resp = client.drive.v2.explorer.root_folder_meta(None).unwrap();
+    let resp = client
+        .drive
+        .v2
+        .explorer
+        .root_folder_meta(None)
+        .await
+        .unwrap();
     if let ApiResponse::Success { data, .. } = resp {
         println!("root_meta: {:#?}", data);
 
@@ -24,6 +31,7 @@ fn main() {
             .v2
             .explorer
             .folder_meta(&data.token, None)
+            .await
             .unwrap();
         println!("folder_meta: {:?}", resp)
     }

@@ -21,7 +21,8 @@ use open_lark::{
     service::im::v1::message::{CreateMessageRequest, CreateMessageRequestBody, SendMessageTrait},
 };
 
-fn main() {
+#[tokio::main]
+async fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
     let app_id = env::var("APP_ID").unwrap();
@@ -120,17 +121,18 @@ fn main() {
         )
         .elements("zh_cn", elements);
 
-    let req = CreateMessageRequest::new()
+    let req = CreateMessageRequest::builder()
         .receive_id_type("chat_id")
         .request_body(
             CreateMessageRequestBody::builder()
                 .receive_id("oc_84d53efe245072c16ba4b4ff597f52f3")
                 .msg_type(feishu_card.msg_type())
                 .content(feishu_card.content())
-                .uuid(Some(uuid.to_string()))
+                .uuid(uuid)
                 .build(),
-        );
+        )
+        .build();
     // 发起请求
-    let resp = client.im.v1.message.create(req, None).unwrap();
+    let resp = client.im.v1.message.create(req, None).await.unwrap();
     println!("response: {:?}", resp);
 }

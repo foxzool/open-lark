@@ -9,7 +9,8 @@ use open_lark::{
 };
 
 /// 下载文件
-fn main() {
+#[tokio::main]
+async fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
     let app_id = env::var("APP_ID").unwrap();
@@ -33,7 +34,7 @@ fn main() {
                     .add_header("Range", "bytes=0-1024")
                     .build(),
             ),
-        )
+        ).await
         .unwrap();
     if let ApiResponse::Success { data, .. } = resp {
         println!("file data: {:#?}", data);

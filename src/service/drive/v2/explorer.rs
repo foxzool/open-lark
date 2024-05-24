@@ -1,10 +1,18 @@
-use reqwest::Method;
 use std::fmt::Debug;
 
 use log::error;
+use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{AfitAsyncIter, api_req::ApiRequest, api_resp::{ApiResponse, ApiResponseTrait, ResponseFormat}, config::Config, constants::AccessTokenType, http::Transport, req_option::RequestOption, SDKResult};
+use crate::core::{
+    api_req::ApiRequest,
+    api_resp::{ApiResponse, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
 
 pub struct ExplorerService {
     config: Config,
@@ -107,17 +115,16 @@ pub struct ListFolderIterator<'a> {
     has_more: bool,
 }
 
-impl<'a> AfitAsyncIter for ListFolderIterator<'a> {
-    type Item = Vec<FileInFolder>;
-
-    async fn next(&mut self) -> Option<Self::Item> {
+impl<'a> ListFolderIterator<'a> {
+    pub async fn next(&mut self) -> Option<Vec<FileInFolder>> {
         if !self.has_more {
             return None;
         }
 
         match self
             .explorer_service
-            .list_folder(self.req.clone(), self.option.clone()).await
+            .list_folder(self.req.clone(), self.option.clone())
+            .await
         {
             Ok(resp) => match resp {
                 ApiResponse::Success { data, .. } => {

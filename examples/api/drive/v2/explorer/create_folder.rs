@@ -9,7 +9,8 @@ use open_lark::{
 };
 
 /// 新建文件夹
-fn main() {
+#[tokio::main]
+async fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
     let app_id = env::var("APP_ID").unwrap();
@@ -22,7 +23,7 @@ fn main() {
         .folder_token("nodcnBh4MAgg2GpI5IkRVZuw3Jd")
         .build();
     // 发起请求
-    let resp = client.drive.v2.explorer.create_folder(req, None).unwrap();
+    let resp = client.drive.v2.explorer.create_folder(req, None).await.unwrap();
     if let ApiResponse::Success { data, .. } = resp {
         println!("response: {:#?}", data);
     }

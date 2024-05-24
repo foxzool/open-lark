@@ -9,7 +9,8 @@ use open_lark::{
 };
 
 /// 向云空间指定目录下上传一个小文件
-fn main() {
+#[tokio::main]
+async fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
     let app_id = env::var("APP_ID").unwrap();
@@ -36,7 +37,7 @@ fn main() {
         .build();
 
     // 发起请求
-    let resp = client.drive.v1.files.upload_all(req, None).unwrap();
+    let resp = client.drive.v1.files.upload_all(req, None).await.unwrap();
     if let ApiResponse::Success { data, .. } = resp {
         println!("上传成功响应: {:#?}", data);
     }

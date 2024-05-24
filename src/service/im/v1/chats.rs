@@ -1,7 +1,15 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{api_req::ApiRequest, api_resp::{ApiResponse, ApiResponseTrait, ResponseFormat}, AfitAsyncIter, config::Config, constants::AccessTokenType, http::Transport, req_option::RequestOption, SDKResult};
+use crate::core::{
+    api_req::ApiRequest,
+    api_resp::{ApiResponse, ApiResponseTrait, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption
+    , SDKResult,
+};
 
 pub struct ChatsService {
     pub config: Config,
@@ -24,7 +32,11 @@ impl ChatsService {
         Ok(api_resp)
     }
 
-    pub fn list_iter(&self, list_chat_request: ListChatRequest, option: Option<RequestOption>) -> ListChatIterator {
+    pub fn list_iter(
+        &self,
+        list_chat_request: ListChatRequest,
+        option: Option<RequestOption>,
+    ) -> ListChatIterator {
         ListChatIterator {
             service: self,
             request: list_chat_request,
@@ -41,14 +53,16 @@ pub struct ListChatIterator<'a> {
     has_more: bool,
 }
 
-impl<'a> AfitAsyncIter for ListChatIterator<'a> {
-    type Item = Vec<ListChat>;
-
-    async fn next(&mut self) -> Option<Self::Item> {
+impl ListChatIterator<'_> {
+    pub async fn next(&mut self) -> Option<Vec<ListChat>> {
         if !self.has_more {
             return None;
         }
-        match self.service.list(self.request.clone(), self.option.clone()).await {
+        match self
+            .service
+            .list(self.request.clone(), self.option.clone())
+            .await
+        {
             Ok(resp) => match resp {
                 ApiResponse::Success { data, .. } => {
                     self.has_more = data.has_more;

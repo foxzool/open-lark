@@ -14,7 +14,8 @@ use open_lark::{
 
 // POST /open-apis/im/v1/messages
 
-fn main() {
+#[tokio::main]
+async fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
     let app_id = env::var("APP_ID").unwrap();
@@ -62,7 +63,7 @@ fn main() {
         .build();
 
     // 发起请求
-    match client.im.v1.message.create(req, None) {
+    match client.im.v1.message.create(req, None).await {
         Ok(resp) => {
             println!("response: {:?}", resp);
         }

@@ -2,7 +2,15 @@ use log::error;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{AfitAsyncIter, api_req::ApiRequest, api_resp::{ApiResponse, ApiResponseTrait}, config::Config, constants::AccessTokenType, http::Transport, req_option::RequestOption, SDKResult};
+use crate::core::{
+    api_req::ApiRequest,
+    api_resp::{ApiResponse, ApiResponseTrait},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
 
 pub struct UserService {
     config: Config,
@@ -147,17 +155,16 @@ pub struct SearchUserIterator<'a> {
     has_more: bool,
 }
 
-impl<'a> AfitAsyncIter for SearchUserIterator<'a> {
-    type Item = Vec<UserInSearchResponse>;
-
-    async fn next(&mut self) -> Option<Self::Item> {
+impl<'a> SearchUserIterator<'a> {
+    pub async fn next(&mut self) -> Option<Vec<UserInSearchResponse>> {
         if !self.has_more {
             return None;
         }
 
         match self
             .user_service
-            .search_user(self.request.clone(), self.option.clone()).await
+            .search_user(self.request.clone(), self.option.clone())
+            .await
         {
             Ok(resp) => match resp {
                 ApiResponse::Success { data, .. } => {

@@ -35,7 +35,8 @@ async fn main() {
                     .user_access_token(user_access_token.clone())
                     .build(),
             ),
-        ).await
+        )
+        .await
         .unwrap();
     if let ApiResponse::Success { data, .. } = resp {
         println!("patch spread response: {:#?}", data);

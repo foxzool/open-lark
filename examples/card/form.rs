@@ -32,7 +32,8 @@ use open_lark::{
     service::im::v1::message::{CreateMessageRequest, CreateMessageRequestBody, SendMessageTrait},
 };
 
-fn main() {
+#[tokio::main]
+async fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
     let app_id = env::var("APP_ID").unwrap();
@@ -99,7 +100,7 @@ fn main() {
         )
         .elements("zh_cn", vec![CardElement::FormSet(form)]);
 
-    let req = CreateMessageRequest::new()
+    let req = CreateMessageRequest::builder()
         .receive_id_type("chat_id")
         .request_body(
             CreateMessageRequestBody::builder()
@@ -112,6 +113,6 @@ fn main() {
         .build();
 
     // 发起请求
-    let resp = client.im.v1.message.create(req, None).unwrap();
+    let resp = client.im.v1.message.create(req, None).await.unwrap();
     println!("response: {:?}", resp);
 }

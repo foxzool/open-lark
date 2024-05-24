@@ -5,7 +5,7 @@ use log::error;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
-use crate::core::{api_req::ApiRequest, api_resp::{ApiResponse, ApiResponseTrait, ResponseFormat}, AfitAsyncIter, config::Config, constants::AccessTokenType, error::LarkAPIError, http::Transport, req_option::RequestOption};
+use crate::core::{api_req::ApiRequest, api_resp::{ApiResponse, ApiResponseTrait, ResponseFormat}, config::Config, constants::AccessTokenType, error::LarkAPIError, http::Transport, req_option::RequestOption};
 
 pub struct MessageService {
     pub config: Config,
@@ -71,10 +71,9 @@ pub struct ListMessageIterator<'a> {
     has_more: bool,
 }
 
-impl<'a> AfitAsyncIter for ListMessageIterator<'a> {
-    type Item = Vec<Message>;
+impl<'a> ListMessageIterator<'a> {
 
-    async fn next(&mut self) -> Option<Self::Item> {
+    pub async fn next(&mut self) -> Option<Vec<Message>> {
         if !self.has_more {
             return None;
         }

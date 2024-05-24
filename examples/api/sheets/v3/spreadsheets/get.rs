@@ -9,7 +9,8 @@ use open_lark::{
 };
 
 /// 获取电子表格信息
-fn main() {
+#[tokio::main]
+async fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
     let app_id = env::var("APP_ID").unwrap();
@@ -34,6 +35,7 @@ fn main() {
                     .build(),
             ),
         )
+        .await
         .unwrap();
     if let ApiResponse::Success { data, .. } = resp {
         println!("patch spread response: {:#?}", data);

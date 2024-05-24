@@ -15,12 +15,3 @@ pub mod utils;
 // pub mod multi_part;
 
 pub type SDKResult<T> = Result<T, LarkAPIError>;
-
-
-/// 异步迭代器
-/// `async fn next` using AFIT
-pub trait AfitAsyncIter {
-    type Item;
-
-    async fn next(&mut self) -> Option<Self::Item>;
-}

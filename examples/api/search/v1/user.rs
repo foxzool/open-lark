@@ -9,7 +9,8 @@ use open_lark::{
 };
 
 /// 搜索用户
-fn main() {
+#[tokio::main]
+async fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
     let app_id = env::var("APP_ID").unwrap();
@@ -32,14 +33,14 @@ fn main() {
                     .user_access_token(user_access_token.clone())
                     .build(),
             ),
-        )
+        ).await
         .unwrap();
     if let ApiResponse::Success { data, .. } = resp {
         println!("search: {:#?}", data);
     }
 
     // 使用迭代器
-    client
+    let mut iterator =  client
         .search
         .v1
         .user
@@ -50,10 +51,11 @@ fn main() {
                     .user_access_token(user_access_token)
                     .build(),
             ),
-        )
-        .for_each(|users| {
-            for user in users {
-                println!("user {:?}", user);
-            }
-        })
+        );
+
+    while let Some(users) = iterator.next().await {
+        for user in users {
+            println!("user {:?}", user);
+        }
+    }
 }

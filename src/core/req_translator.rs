@@ -1,7 +1,7 @@
 use std::collections::HashMap;
-use async_recursion::async_recursion;
 
-use reqwest::{Request, RequestBuilder};
+use async_recursion::async_recursion;
+use reqwest::RequestBuilder;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use url::Url;
@@ -62,18 +62,19 @@ impl ReqTranslator {
                     app_access_token = TOKEN_MANAGER
                         .lock()
                         .unwrap()
-                        .get_app_access_token(config, &option.app_ticket).await?
+                        .get_app_access_token(config, &option.app_ticket)
+                        .await?
                 }
                 req_builder = authorization_to_header(req_builder, &app_access_token);
             }
             AccessTokenType::Tenant => {
                 let mut tenant_access_token = option.tenant_access_token.clone();
                 if config.enable_token_cache {
-                    tenant_access_token = TOKEN_MANAGER.lock().unwrap().get_tenant_access_token(
-                        config,
-                        &option.tenant_key,
-                        &option.app_ticket,
-                    ).await?;
+                    tenant_access_token = TOKEN_MANAGER
+                        .lock()
+                        .unwrap()
+                        .get_tenant_access_token(config, &option.tenant_key, &option.app_ticket)
+                        .await?;
                 }
 
                 req_builder = authorization_to_header(req_builder, &tenant_access_token);

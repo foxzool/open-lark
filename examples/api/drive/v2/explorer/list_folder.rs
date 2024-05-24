@@ -40,14 +40,10 @@ fn main() {
     }
 
     // 使用迭代器
-    // client
-    //     .drive
-    //     .v2
-    //     .explorer
-    //     .list_folder_iter(req, None)
-    //     .for_each(|folders| {
-    //         for folder in folders {
-    //             println!("folder {:?}", folder);
-    //         }
-    //     })
+    let mut iterator = client.drive.v2.explorer.list_folder_iter(req, None);
+    while let Some(folders) = iterator.next() {
+        for folder in folders {
+            println!("folder {:?}", folder);
+        }
+    }
 }

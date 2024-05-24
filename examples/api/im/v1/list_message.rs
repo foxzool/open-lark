@@ -6,7 +6,8 @@ use open_lark::{client::LarkClientBuilder, service::im::v1::message::ListMessage
 
 /// 获取会话历史消息
 /// GET /open-apis/im/v1/messages
-fn main() {
+#[tokio::main]
+async fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
     let app_id = env::var("APP_ID").unwrap();
@@ -19,18 +20,14 @@ fn main() {
         .build();
 
     // 发起请求
-    let resp = client.im.v1.message.list(req.clone(), None).unwrap();
+    let resp = client.im.v1.message.list(req.clone(), None).await.unwrap();
     println!("response: {:?}", resp);
 
     // 使用迭代器
-    client
-        .im
-        .v1
-        .message
-        .list_iter(req, None)
-        .for_each(|messages| {
-            for message in messages {
-                println!("message {:?}", message);
-            }
-        })
+    let mut iterator = client.im.v1.message.list_iter(req, None);
+    while let Some(messages) = iterator.next().await {
+        for message in messages {
+            println!("message {:?}", message);
+        }
+    }
 }

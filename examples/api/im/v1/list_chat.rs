@@ -2,11 +2,14 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClientBuilder, service::im::v1::chats::ListChatRequest};
+use open_lark::{
+    client::LarkClientBuilder, service::im::v1::chats::ListChatRequest,
+};
 
 /// 获取用户或机器人所在的群列表
 /// GET /open-apis/im/v1/messages
-fn main() {
+#[tokio::main]
+async fn main() {
     dotenv().expect(".env file not found");
     env_logger::init();
     let app_id = env::var("APP_ID").unwrap();
@@ -16,13 +19,15 @@ fn main() {
     let req = ListChatRequest::builder().build();
 
     // 发起请求
-    let resp = client.im.v1.chats.list(req.clone(), None).unwrap();
+    let resp = client.im.v1.chats.list(req.clone(), None).await.unwrap();
     println!("response: {:?}", resp);
 
-    // 使用迭代器
-    client.im.v1.chats.list_iter(req, None).for_each(|chats| {
+
+    // 循环
+    let mut iterator = client.im.v1.chats.list_iter(req, None);
+    while let Some(chats) = iterator.next().await {
         for chat in chats {
             println!("chat {:?}", chat);
         }
-    })
+    }
 }

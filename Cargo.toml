@@ -24,6 +24,7 @@ log = "0.4.21"
 mime = "0.3.17"
 mime_guess = "2.0.4"
 rand = "0.9.0-alpha.1"
+reqwest = { version = "0.12.4", features = ["json"] }
 simd-adler32 = "0.3.7"
 serde = { version = "1.0.197", features = ["derive"] }
 serde_json = "1.0.115"
@@ -31,11 +32,10 @@ sha2 = "0.10.8"
 strum = "0.26.2"
 strum_macros = "0.26.2"
 thiserror = "1.0.60"
-url = { version = "2.5.0", features = ["serde"] }
-#ureq = { version = "2.9.7", features = ["json", "socks-proxy"] }
-reqwest = { version = "0.12.4", features = ["json"] }
 tokio = { version = "1.0.0", features = ["rt", "rt-multi-thread", "macros"] }
-futures = "0.3.30"
+tokio-stream = "0.1"
+url = { version = "2.5.0", features = ["serde"] }
+
 
 
 
