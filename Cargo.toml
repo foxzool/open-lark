@@ -33,7 +33,7 @@ thiserror = "1.0.60"
 tokio = { version = "1.0.0", features = ["rt", "rt-multi-thread", "macros"] }
 tokio-stream = "0.1"
 url = { version = "2.5.0", features = ["serde"] }
-
+tokio-tungstenite = { version = "0.21" }
 
 
 
@@ -41,6 +41,11 @@ url = { version = "2.5.0", features = ["serde"] }
 dotenvy = "0.15.7"
 env_logger = "0.11.3"
 uuid = { version = "1.8.0", features = ["v4"] }
+
+[[example]]
+name = "ws_client"
+path = "examples/ws_client.rs"
+
 
 [[example]]
 name = "card_column_set"

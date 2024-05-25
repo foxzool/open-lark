@@ -1,17 +1,18 @@
 use std::time::Duration;
 
+pub mod ws;
+
 use crate::{
     core::{config::Config, constants::AppType},
-    service::{drive::DriveService, im::ImService, search::SearchService},
+    service::{drive::DriveService, im::ImService, search::SearchService, sheets::SheetsService},
 };
-use crate::service::sheets::SheetsService;
 
 pub struct LarkClient {
     pub config: Config,
     pub im: ImService,
     pub drive: DriveService,
     pub search: SearchService,
-    pub sheets: SheetsService
+    pub sheets: SheetsService,
 }
 
 pub struct LarkClientBuilder {
