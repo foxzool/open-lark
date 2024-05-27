@@ -19,7 +19,7 @@ async fn main() {
 
     let req = CreateFolderRequest::builder()
         .name("收入报表")
-        .folder_token("nodcnBh4MAgg2GpI5IkRVZuw3Jd")
+        .folder_token("")
         .build();
     // 发起请求
     let resp = client

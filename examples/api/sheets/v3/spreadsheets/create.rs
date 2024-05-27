@@ -19,7 +19,7 @@ async fn main() {
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
 
     let req = CreateSpreedSheetRequest::builder()
-        .folder_token("JGH5fa2UglREZJdXN7Ac1cvanOh")
+        .folder_token("FQmNfKO5plqA0sdnSXYcDifknEe")
         .title("2024年收入")
         .build();
 
