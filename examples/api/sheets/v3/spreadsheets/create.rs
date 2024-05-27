@@ -4,7 +4,6 @@ use dotenvy::dotenv;
 
 use open_lark::{
     client::LarkClientBuilder,
-    core::{ req_option::RequestOption},
     service::sheets::v3::spreadsheet::CreateSpreedSheetRequest,
 };
 
@@ -15,11 +14,14 @@ async fn main() {
     env_logger::init();
     let app_id = env::var("APP_ID").unwrap();
     let app_secret = env::var("APP_SECRET").unwrap();
-    let user_access_token = env::var("USER_ACCESS_TOKEN").unwrap();
+    // let user_access_token = env::var("USER_ACCESS_TOKEN").unwrap();
     // 创建 Client
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
 
-    let req = CreateSpreedSheetRequest::builder().title("xx").build();
+    let req = CreateSpreedSheetRequest::builder()
+        .folder_token("JGH5fa2UglREZJdXN7Ac1cvanOh")
+        .title("2024年收入")
+        .build();
 
     // 发起请求
     let resp = client
@@ -28,11 +30,12 @@ async fn main() {
         .spreadsheet
         .create(
             req,
-            Some(
-                RequestOption::builder()
-                    .user_access_token(user_access_token.clone())
-                    .build(),
-            ),
+            None,
+            // Some(
+            //     RequestOption::builder()
+            //         .user_access_token(user_access_token.clone())
+            //         .build(),
+            // ),
         )
         .await
         .unwrap();

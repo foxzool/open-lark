@@ -3,9 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClientBuilder,
-    core::{ req_option::RequestOption},
-    service::sheets::v3::spreadsheet::GetSpreadsheetRequest,
+    client::LarkClientBuilder, service::sheets::v3::spreadsheet::GetSpreadsheetRequest,
 };
 
 /// 获取电子表格信息
@@ -15,12 +13,11 @@ async fn main() {
     env_logger::init();
     let app_id = env::var("APP_ID").unwrap();
     let app_secret = env::var("APP_SECRET").unwrap();
-    let user_access_token = env::var("USER_ACCESS_TOKEN").unwrap();
     // 创建 Client
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
     // 构建请求体
     let req = GetSpreadsheetRequest::builder()
-        .spreadsheet_token("UONOs1jSahmgoGtOlKHcRCaPnKd")
+        .spreadsheet_token("MQaOsFqVSh831dtHR8hc6UC6nIh")
         .build();
     // 发起请求
     let resp = client
@@ -29,11 +26,11 @@ async fn main() {
         .spreadsheet
         .get(
             req,
-            Some(
-                RequestOption::builder()
-                    .user_access_token(user_access_token.clone())
-                    .build(),
-            ),
+            None, /* Some(
+                  *     open_lark::core::req_option::RequestOption::builder()
+                  *         .user_access_token(env::var("USER_ACCESS_TOKEN").unwrap())
+                  *         .build(),
+                  * ), */
         )
         .await
         .unwrap();

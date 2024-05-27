@@ -1,14 +1,11 @@
 use std::collections::HashMap;
+
 use futures_util::{SinkExt, StreamExt};
-
-
-use kanal::{AsyncReceiver, AsyncSender};
+use kanal::AsyncSender;
 use log::debug;
 use serde::Deserialize;
 use serde_json::json;
-use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use tokio::net::TcpStream;
-use tokio_tungstenite::{connect_async, MaybeTlsStream, tungstenite::protocol::Message, WebSocketStream};
+use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
 use url::Url;
 
 use crate::core::{api_resp::BaseResponse, constants::FEISHU_BASE_URL};
@@ -68,10 +65,9 @@ impl LarkWsClient {
         let (mut write, mut read) = ws_stream.split();
         let (sender_tx, sender_rx) = kanal::unbounded_async::<Message>();
 
-
         let write_task = async move {
             while let Ok(msg) = sender_rx.recv().await {
-                write.send( msg).await.unwrap();
+                write.send(msg).await.unwrap();
             }
         };
 
@@ -186,7 +182,8 @@ impl LarkWsClient {
         if let Some(msg_tx) = self.sender_tx.clone() {
             tokio::spawn(async move {
                 loop {
-                    tokio::time::sleep(tokio::time::Duration::from_secs(ping_interval as u64)).await;
+                    tokio::time::sleep(tokio::time::Duration::from_secs(ping_interval as u64))
+                        .await;
                     let body = json!({
                         "device_id": conn_id,
                         "service_id": service_id
@@ -198,9 +195,6 @@ impl LarkWsClient {
         }
     }
 }
-
-
-
 
 #[derive(Debug, Deserialize)]
 pub struct EndPointResponse {

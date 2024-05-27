@@ -18,7 +18,7 @@ async fn main() {
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
 
     let req = CreateFolderRequest::builder()
-        .name("测试文件夹")
+        .name("收入报表")
         .folder_token("nodcnBh4MAgg2GpI5IkRVZuw3Jd")
         .build();
     // 发起请求

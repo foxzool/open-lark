@@ -104,6 +104,10 @@ name = "get_permission"
 path = "examples/api/drive/v2/permission/get.rs"
 
 [[example]]
+name = "patch_permission"
+path = "examples/api/drive/v2/permission/patch.rs"
+
+[[example]]
 name = "search_user"
 path = "examples/api/search/v1/user.rs"
 
