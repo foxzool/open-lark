@@ -13,8 +13,12 @@ documentation = "https://docs.rs/open-lark"
 repository = "https://github.com/foxzool/open-lark"
 license = "MIT OR Apache-2.0"
 
+[workspace]
+members = ["crates/*"]
 
 [dependencies]
+lark-protobuf = { path = "crates/protobuf" }
+
 async-recursion = "1.1.1"
 base64 = "0.22.1"
 chrono = "0.4.38"
@@ -37,6 +41,7 @@ tokio-stream = "0.1"
 url = { version = "2.5.0", features = ["serde"] }
 tokio-tungstenite = { version = "0.21", features = ["rustls-tls-native-roots"] }
 futures-channel = "0.3.30"
+prost = "0.12.6"
 
 
 

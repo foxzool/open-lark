@@ -1,18 +1,22 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, sync::Arc};
 
 use futures_util::{SinkExt, StreamExt};
 use kanal::AsyncSender;
-use log::debug;
+use log::{debug, error};
+use prost::Message as ProstMessage;
 use serde::Deserialize;
 use serde_json::json;
+use tokio::sync::Mutex;
 use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
 use url::Url;
+
+use lark_protobuf::{pbbp2, pbbp2::Frame};
 
 use crate::core::{api_resp::BaseResponse, constants::FEISHU_BASE_URL};
 
 const END_POINT_URL: &str = "/callback/ws/endpoint";
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LarkWsClient {
     app_id: String,
     app_secret: String,
@@ -46,11 +50,11 @@ impl LarkWsClient {
         }
     }
 
-    pub async fn start(&mut self) -> WsResult<()> {
-        self.connect().await
+    pub async fn start(self) -> WsResult<()> {
+        Self::connect(self).await
     }
 
-    async fn connect(&mut self) -> WsResult<()> {
+    async fn connect(mut self) -> WsResult<()> {
         let conn_url = self.get_conn_url().await?;
         let url = Url::parse(&conn_url)?;
 
@@ -71,13 +75,17 @@ impl LarkWsClient {
             }
         };
 
-        self.sender_tx = Some(sender_tx);
+        self.sender_tx = Some(sender_tx.clone());
+
+        let new_client = Arc::new(Mutex::new(self.clone()));
+        let new_client_clone = new_client.clone();
 
         let read_task = async move {
+            let mut new_client = new_client_clone.lock().await;
             while let Some(message) = read.next().await {
                 match message {
                     Ok(msg) => {
-                        self.handle_message(msg);
+                        new_client.handle_message(msg).unwrap();
                     }
                     Err(e) => {
                         println!("Error: {:?}", e);
@@ -86,9 +94,35 @@ impl LarkWsClient {
             }
         };
 
+        let new_client_clone = new_client.clone();
+
+        let ping_task = async move {
+            loop {
+                let mut new_client = new_client_clone.lock().await;
+                tokio::time::sleep(tokio::time::Duration::from_secs(
+                    new_client.ping_interval as u64,
+                ))
+                .await;
+                let body = json!({
+                    "device_id": new_client.conn_id,
+                    "service_id": new_client.service_id
+                });
+                let msg = Message::Binary(serde_json::to_string(&body).unwrap().into());
+                debug!("Sending ping message: {:?}", msg);
+                new_client
+                    .sender_tx
+                    .clone()
+                    .unwrap()
+                    .send(msg)
+                    .await
+                    .unwrap();
+            }
+        };
+
         tokio::select! {
             _ = write_task => {}
             _ = read_task => {}
+            _ = ping_task => {}
         }
 
         Ok(())
@@ -151,47 +185,103 @@ impl LarkWsClient {
         self.ping_interval = config.ping_interval;
     }
 
-    fn handle_message(&self, message: Message) {
+    fn handle_message(&mut self, message: Message) -> WsResult<()> {
         match message {
             Message::Text(text) => {
                 debug!("Received a text message: {:?}", text);
             }
             Message::Binary(bin) => {
-                debug!("Received a binary message: {:?}", bin);
+                let frame = Frame::decode(&*bin)?;
+                debug!("Received a binary message: {:?}", frame);
+                match frame.method {
+                    // FrameTypeControl
+                    0 => self.handle_control_frame(frame),
+                    // FrameTypeData
+                    1 => self.handle_data_frame(frame),
+
+                    _ => {}
+                }
             }
             Message::Ping(ping) => {
                 debug!("Received a ping message {:?}", ping);
             }
             Message::Pong(pong) => {
-                debug!("Received a pong message");
-                let config: ClientConfig = serde_json::from_slice(&pong).unwrap();
-                debug!("{:?}", config);
+                debug!("Received a pong message {:?}", pong);
             }
             Message::Close(close) => {
                 debug!("Received a close message: {:?}", close);
             }
-            Message::Frame(_) => {}
+            Message::Frame(frame) => {
+                debug!("Received a frame message: {:?}", frame);
+            }
+        }
+
+        Ok(())
+    }
+
+    fn handle_control_frame(&mut self, frame: Frame) {
+        let headers = frame.headers;
+        let t = headers.iter().find(|h| h.key == "type").unwrap();
+        match t.value.as_ref() {
+            "pong" => {
+                debug!("Received a pong frame");
+                let config =
+                    serde_json::from_slice::<ClientConfig>(&frame.payload.unwrap()).unwrap();
+                self.configure(config);
+            }
+            _ => {}
         }
     }
 
-    fn ping_loop(&mut self) {
-        let ping_interval = self.ping_interval;
-        let conn_id = self.conn_id.clone();
-        let service_id = self.service_id.clone();
-        let conn_url = self.conn_url.clone();
-        if let Some(msg_tx) = self.sender_tx.clone() {
-            tokio::spawn(async move {
-                loop {
-                    tokio::time::sleep(tokio::time::Duration::from_secs(ping_interval as u64))
-                        .await;
-                    let body = json!({
-                        "device_id": conn_id,
-                        "service_id": service_id
-                    });
-                    let msg = Message::Binary(serde_json::to_string(&body).unwrap().into());
-                    msg_tx.send(msg).await.unwrap();
-                }
-            });
+    fn handle_data_frame(&mut self, frame: Frame) {
+        let headers = frame.headers;
+        // 拆包数, 未拆包为1
+        let sum: i32 = headers
+            .iter()
+            .find(|h| h.key == "sum")
+            .unwrap()
+            .value
+            .parse()
+            .unwrap();
+        // 包序号, 未拆包为0
+        let seq: i32 = headers
+            .iter()
+            .find(|h| h.key == "seq")
+            .unwrap()
+            .value
+            .parse()
+            .unwrap();
+        let type_ = headers
+            .iter()
+            .find(|h| h.key == "type")
+            .unwrap()
+            .value
+            .as_str();
+        //  消息ID, 拆包后继承
+        let message_id = headers
+            .iter()
+            .find(|h| h.key == "message_id")
+            .unwrap()
+            .value
+            .as_str();
+        // 链路ID
+        let trace_id = headers
+            .iter()
+            .find(|h| h.key == "trace_id")
+            .unwrap()
+            .value
+            .as_str();
+
+        let payload = frame.payload.unwrap();
+        if sum > 1 {
+            debug!("Received a multi-frame message");
+        }
+
+        match type_ {
+            "data" => {
+                debug!("Received a data frame");
+            }
+            _ => {}
         }
     }
 }
@@ -230,4 +320,6 @@ pub enum WsClientError {
     ClientError { code: i32, message: String },
     #[error("WebSocket error: {0}")]
     WsError(#[from] tokio_tungstenite::tungstenite::Error),
+    #[error("Prost error: {0}")]
+    ProstError(#[from] prost::DecodeError),
 }
