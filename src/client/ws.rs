@@ -10,7 +10,7 @@ use tokio::sync::Mutex;
 use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
 use url::Url;
 
-use lark_protobuf::{pbbp2, pbbp2::Frame};
+use lark_protobuf::pbbp2::Frame;
 
 use crate::core::{api_resp::BaseResponse, constants::FEISHU_BASE_URL};
 
@@ -20,16 +20,9 @@ const END_POINT_URL: &str = "/callback/ws/endpoint";
 pub struct LarkWsClient {
     app_id: String,
     app_secret: String,
-    auto_reconnect: bool,
+
     domain: String,
-    reconnect_count: i32,
-    reconnect_interval: i32,
-    reconnect_nonce: i32,
-    ping_interval: i32,
     conn_url: String,
-    conn_id: String,
-    service_id: String,
-    sender_tx: Option<AsyncSender<Message>>,
 }
 
 impl LarkWsClient {
@@ -37,16 +30,8 @@ impl LarkWsClient {
         Self {
             app_id: app_id.to_string(),
             app_secret: app_secret.to_string(),
-            auto_reconnect: true,
             domain: FEISHU_BASE_URL.to_string(),
-            reconnect_count: 30,
-            reconnect_interval: -1,
-            reconnect_nonce: 2 * 60,
-            ping_interval: 2 * 60,
             conn_url: "".to_string(),
-            conn_id: "".to_string(),
-            service_id: "".to_string(),
-            sender_tx: None,
         }
     }
 
@@ -61,12 +46,11 @@ impl LarkWsClient {
         let query_pairs: HashMap<_, _> = url.query_pairs().into_iter().collect();
         let conn_id = query_pairs.get("device_id").unwrap().to_string();
         let service_id = query_pairs.get("device_id").unwrap().to_string();
-        self.conn_id = conn_id;
-        self.service_id = service_id;
+
         self.conn_url = url.to_string();
 
         let (ws_stream, _response) = connect_async(url).await?;
-        let (mut write, mut read) = ws_stream.split();
+        let (mut write, read) = ws_stream.split();
         let (sender_tx, sender_rx) = kanal::unbounded_async::<Message>();
 
         let write_task = async move {
@@ -75,16 +59,18 @@ impl LarkWsClient {
             }
         };
 
-        self.sender_tx = Some(sender_tx.clone());
+        let ws_client = Client::new(conn_id, service_id, sender_tx.clone());
 
-        let new_client = Arc::new(Mutex::new(self.clone()));
-        let new_client_clone = new_client.clone();
+        let client = Arc::new(Mutex::new(ws_client));
+        let read_client = Arc::clone(&client);
 
         let read_task = async move {
-            let mut new_client = new_client_clone.lock().await;
+            let mut read = read;
+
             while let Some(message) = read.next().await {
                 match message {
                     Ok(msg) => {
+                        let mut new_client = read_client.lock().await;
                         new_client.handle_message(msg).unwrap();
                     }
                     Err(e) => {
@@ -94,28 +80,22 @@ impl LarkWsClient {
             }
         };
 
-        let new_client_clone = new_client.clone();
+        let ping_client = Arc::clone(&client);
 
         let ping_task = async move {
             loop {
-                let mut new_client = new_client_clone.lock().await;
+                let mut ping_client = ping_client.lock().await;
                 tokio::time::sleep(tokio::time::Duration::from_secs(
-                    new_client.ping_interval as u64,
+                    ping_client.ping_interval as u64,
                 ))
                 .await;
                 let body = json!({
-                    "device_id": new_client.conn_id,
-                    "service_id": new_client.service_id
+                    "device_id": ping_client.conn_id,
+                    "service_id": ping_client.service_id
                 });
                 let msg = Message::Binary(serde_json::to_string(&body).unwrap().into());
                 debug!("Sending ping message: {:?}", msg);
-                new_client
-                    .sender_tx
-                    .clone()
-                    .unwrap()
-                    .send(msg)
-                    .await
-                    .unwrap();
+                ping_client.sender_tx.send(msg).await.unwrap();
             }
         };
 
@@ -170,14 +150,36 @@ impl LarkWsClient {
             });
         }
 
-        if let Some(client_config) = end_point.client_config {
-            self.configure(client_config)
-        }
-
         Ok(end_point.url.unwrap())
     }
+}
 
-    /// 配置
+#[derive(Debug, Clone)]
+struct Client {
+    auto_reconnect: bool,
+    reconnect_count: i32,
+    reconnect_interval: i32,
+    reconnect_nonce: i32,
+    ping_interval: i32,
+    conn_id: String,
+    service_id: String,
+    sender_tx: AsyncSender<Message>,
+}
+
+impl Client {
+    pub fn new(conn_id: String, service_id: String, sender_tx: AsyncSender<Message>) -> Self {
+        Self {
+            auto_reconnect: true,
+            reconnect_count: 30,
+            reconnect_interval: -1,
+            reconnect_nonce: 2 * 60,
+            ping_interval: 2 * 60,
+            conn_id,
+            service_id,
+            sender_tx,
+        }
+    }
+
     fn configure(&mut self, config: ClientConfig) {
         self.reconnect_count = config.reconnect_count;
         self.reconnect_interval = config.reconnect_interval;
