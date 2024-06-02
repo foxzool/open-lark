@@ -10,7 +10,7 @@ use tokio::sync::Mutex;
 use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
 use url::Url;
 
-use lark_protobuf::pbbp2::Frame;
+use lark_protobuf::pbbp2::{Frame, Header};
 
 use crate::core::{api_resp::BaseResponse, constants::FEISHU_BASE_URL};
 
@@ -45,7 +45,7 @@ impl LarkWsClient {
 
         let query_pairs: HashMap<_, _> = url.query_pairs().into_iter().collect();
         let conn_id = query_pairs.get("device_id").unwrap().to_string();
-        let service_id = query_pairs.get("device_id").unwrap().to_string();
+        let service_id = query_pairs.get("service_id").unwrap().to_string();
 
         self.conn_url = url.to_string();
 
@@ -55,7 +55,12 @@ impl LarkWsClient {
 
         let write_task = async move {
             while let Ok(msg) = sender_rx.recv().await {
-                write.send(msg).await.unwrap();
+                match write.send(msg).await {
+                    Ok(_) => {}
+                    Err(e) => {
+                        error!("Error: {:?}", e);
+                    }
+                }
             }
         };
 
@@ -85,17 +90,15 @@ impl LarkWsClient {
         let ping_task = async move {
             loop {
                 let mut ping_client = ping_client.lock().await;
+                let service_id: i32 = ping_client.service_id.parse().unwrap();
+                let frame = new_frame(service_id);
+                let msg = Message::Binary(frame.encode_to_vec());
+                debug!("Sending ping message: {:?}", msg);
+                ping_client.sender_tx.send(msg).await.unwrap();
                 tokio::time::sleep(tokio::time::Duration::from_secs(
                     ping_client.ping_interval as u64,
                 ))
                 .await;
-                let body = json!({
-                    "device_id": ping_client.conn_id,
-                    "service_id": ping_client.service_id
-                });
-                let msg = Message::Binary(serde_json::to_string(&body).unwrap().into());
-                debug!("Sending ping message: {:?}", msg);
-                ping_client.sender_tx.send(msg).await.unwrap();
             }
         };
 
@@ -324,4 +327,23 @@ pub enum WsClientError {
     WsError(#[from] tokio_tungstenite::tungstenite::Error),
     #[error("Prost error: {0}")]
     ProstError(#[from] prost::DecodeError),
+}
+
+fn new_frame(service_id: i32) -> Frame {
+    let mut headers = vec![];
+    headers.push(Header {
+        key: "type".to_string(),
+        value: "ping".to_string(),
+    });
+    Frame {
+        seq_id: 0,
+        log_id: 0,
+        service: service_id,
+        method: 0,
+        headers,
+        payload_encoding: None,
+        payload_type: None,
+        payload: None,
+        log_id_new: None,
+    }
 }
