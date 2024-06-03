@@ -129,6 +129,6 @@ path = "examples/api/sheets/v3/spreadsheets/patch.rs"
 name = "get_spreadsheet"
 path = "examples/api/sheets/v3/spreadsheets/get.rs"
 
-
-
-
+[[example]]
+name = "get_bitable"
+path = "examples/api/bitable/v1/get.rs"
