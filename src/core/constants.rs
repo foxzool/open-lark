@@ -1,4 +1,4 @@
-use std::{fmt::Display, time::Duration};
+use std::fmt::Display;
 
 /// 应用类型
 #[derive(Default, Hash, Eq, PartialEq, Debug, Copy, Clone)]
@@ -59,8 +59,7 @@ pub const CUSTOM_REQUEST_ID: &str = "Open-Lark-Request-Id";
 pub const APP_TICKET_KEY_PREFIX: &str = "app_ticket";
 pub const APP_ACCESS_TOKEN_KEY_PREFIX: &str = "app_access_token";
 pub const TENANT_ACCESS_TOKEN_KEY_PREFIX: &str = "tenant_access_token";
-pub const EXPIRY_DELTA: Duration = Duration::from_secs(60 * 3);
-
+pub const EXPIRY_DELTA: i32 = 60 * 3;
 pub const ERR_CODE_APP_TICKET_INVALID: i32 = 10012;
 pub const ERR_CODE_ACCESS_TOKEN_INVALID: i32 = 99991671;
 pub const ERR_CODE_APP_ACCESS_TOKEN_INVALID: i32 = 99991664;

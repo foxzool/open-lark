@@ -3,8 +3,13 @@ use serde::Deserialize;
 
 use crate::core::api_resp::ApiResponseTrait;
 use crate::core::{
-    api_req::ApiRequest, api_resp::BaseResponse, config::Config, constants::AccessTokenType,
-    http::Transport, req_option::RequestOption, SDKResult,
+    api_req::ApiRequest,
+    api_resp::{ApiResponseTrait, BaseResponse},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
 
 pub struct AppService {

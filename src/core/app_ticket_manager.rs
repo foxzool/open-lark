@@ -1,5 +1,3 @@
-use std::time::Duration;
-
 use async_recursion::async_recursion;
 use lazy_static::lazy_static;
 use reqwest::Method;
@@ -8,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use crate::core::{
     api_req::ApiRequest,
     api_resp::{BaseResponse, RawResponse},
-    cache::{Cache, LocalCache},
+    cache::QuickCache,
     config::Config,
     constants::{AccessTokenType, APP_TICKET_KEY_PREFIX, APPLY_APP_TICKET_PATH},
     http::Transport,
@@ -20,7 +18,7 @@ lazy_static! {
 }
 
 pub struct AppTicketManager {
-    cache: LocalCache,
+    pub cache: QuickCache,
 }
 
 impl Default for AppTicketManager {
@@ -32,11 +30,11 @@ impl Default for AppTicketManager {
 impl AppTicketManager {
     pub fn new() -> Self {
         Self {
-            cache: LocalCache::new(),
+            cache: QuickCache::new(),
         }
     }
 
-    pub fn set(&mut self, app_id: &str, value: &str, expire_time: Duration) {
+    pub fn set(&mut self, app_id: &str, value: &str, expire_time: i32) {
         let key = app_ticket_key(app_id);
         self.cache.set(&key, value, expire_time);
     }
@@ -60,7 +58,7 @@ fn app_ticket_key(app_id: &str) -> String {
     format!("{}-{}", APP_TICKET_KEY_PREFIX, app_id)
 }
 
-#[async_recursion(?Send)]
+#[async_recursion]
 pub async fn apply_app_ticket(config: &Config) -> SDKResult<()> {
     let _resp: BaseResponse<RawResponse> = Transport::request(
         ApiRequest {
