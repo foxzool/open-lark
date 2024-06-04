@@ -17,7 +17,7 @@ license = "MIT OR Apache-2.0"
 members = ["crates/*"]
 
 [dependencies]
-lark-protobuf = { path = "crates/protobuf" }
+lark-protobuf = { path = "crates/protobuf", version = "0.1.0" }
 
 async-recursion = "1.1.1"
 base64 = "0.22.1"
