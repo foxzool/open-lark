@@ -8,6 +8,7 @@ use crate::{
     },
 };
 
+#[cfg(feature = "websocket")]
 pub mod ws;
 
 pub struct LarkClient {
