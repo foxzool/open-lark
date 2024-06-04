@@ -136,3 +136,7 @@ path = "examples/api/bitable/v1/app/get.rs"
 [[example]]
 name = "app_table_record_search"
 path = "examples/api/bitable/v1/app_table_record/search.rs"
+
+[[example]]
+name = "app_table_field_list"
+path = "examples/api/bitable/v1/app_table_field/list.rs"
