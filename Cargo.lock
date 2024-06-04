@@ -671,7 +671,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "lark-protobuf"
+name = "lark-websocket-protobuf"
 version = "0.1.0"
 dependencies = [
  "bytes",
@@ -826,7 +826,7 @@ dependencies = [
  "futures-util",
  "hmac",
  "kanal",
- "lark-protobuf",
+ "lark-websocket-protobuf",
  "lazy_static",
  "log",
  "prost",

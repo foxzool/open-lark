@@ -10,7 +10,7 @@ use tokio::sync::Mutex;
 use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
 use url::Url;
 
-use lark_protobuf::pbbp2::{Frame, Header};
+use lark_websocket_protobuf::pbbp2::{Frame, Header};
 
 use crate::core::{api_resp::BaseResponse, constants::FEISHU_BASE_URL};
 

@@ -2,9 +2,7 @@
 name = "open-lark"
 version = "0.2.1"
 edition = "2021"
-authors = [
-    "ZoOL <zhooul@gmail.com>"
-]
+authors = ["ZoOL <zhooul@gmail.com>"]
 readme = "README.md"
 description = "Lark/Feishu Open API SDK(WIP)"
 keywords = ["sdk", "feishu", "lark", "rest"]
@@ -17,8 +15,7 @@ license = "MIT OR Apache-2.0"
 members = ["crates/*"]
 
 [dependencies]
-lark-protobuf = { path = "crates/protobuf", version = "0.1.0" }
-
+lark-websocket-protobuf = { path = "crates/protobuf", version = "0.1.0" }
 async-recursion = "1.1.1"
 base64 = "0.22.1"
 chrono = "0.4.38"
