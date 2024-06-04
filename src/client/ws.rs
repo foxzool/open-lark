@@ -89,7 +89,7 @@ impl LarkWsClient {
 
         let ping_task = async move {
             loop {
-                let mut ping_client = ping_client.lock().await;
+                let ping_client = ping_client.lock().await;
                 let service_id: i32 = ping_client.service_id.parse().unwrap();
                 let frame = new_frame(service_id);
                 let msg = Message::Binary(frame.encode_to_vec());
@@ -227,14 +227,10 @@ impl Client {
     fn handle_control_frame(&mut self, frame: Frame) {
         let headers = frame.headers;
         let t = headers.iter().find(|h| h.key == "type").unwrap();
-        match t.value.as_ref() {
-            "pong" => {
-                debug!("Received a pong frame");
-                let config =
-                    serde_json::from_slice::<ClientConfig>(&frame.payload.unwrap()).unwrap();
-                self.configure(config);
-            }
-            _ => {}
+        if t.value.to_string() == *"pong" {
+            debug!("Received a pong frame");
+            let config = serde_json::from_slice::<ClientConfig>(&frame.payload.unwrap()).unwrap();
+            self.configure(config);
         }
     }
 
@@ -282,11 +278,8 @@ impl Client {
             debug!("Received a multi-frame message");
         }
 
-        match type_ {
-            "data" => {
-                debug!("Received a data frame");
-            }
-            _ => {}
+        if type_ == "data" {
+            debug!("Received a data frame");
         }
     }
 }
@@ -330,11 +323,11 @@ pub enum WsClientError {
 }
 
 fn new_frame(service_id: i32) -> Frame {
-    let mut headers = vec![];
-    headers.push(Header {
+    let headers = vec![Header {
         key: "type".to_string(),
         value: "ping".to_string(),
-    });
+    }];
+
     Frame {
         seq_id: 0,
         log_id: 0,

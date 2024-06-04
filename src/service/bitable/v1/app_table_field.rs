@@ -1,5 +1,6 @@
 use reqwest::Method;
 use serde::Deserialize;
+use serde_repr::Deserialize_repr;
 
 use crate::core::{
     api_req::ApiRequest,
@@ -266,7 +267,7 @@ pub struct AppTableField {
     /// - 1003：创建人
     /// - 1004：修改人
     /// - 1005：自动编号
-    pub r#type: i32,
+    pub r#type: FieldType,
     /// 字段属性
     pub property: Option<AppTableFieldProperty>,
     /// 字段的描述
@@ -303,7 +304,7 @@ pub struct AppTableField {
     /// - CreatedUser：创建人
     /// - ModifiedUser：修改人
     /// - AutoNumber：自动编号
-    pub ui_type: String,
+    pub ui_type: UiType,
     /// 是否是隐藏字段
     pub is_hidden: Option<bool>,
 }
@@ -423,4 +424,101 @@ pub struct AppTableFieldDescription {
     pub disable_sync: bool,
     /// 字段描述内容
     pub text: String,
+}
+
+#[derive(Debug, Deserialize, PartialEq)]
+pub enum UiType {
+    Text,
+    /// 多行文本
+    Barcode,
+    /// 条码
+    Number,
+    /// 数字
+    Progress,
+    /// 进度
+    Currency,
+    /// 货币
+    Rating,
+    /// 评分
+    SingleSelect,
+    /// 单选
+    MultiSelect,
+    /// 多选
+    DateTime,
+    /// 日期
+    Checkbox,
+    /// 复选框
+    User,
+    /// 人员
+    GroupChat,
+    /// 群组
+    Phone,
+    /// 电话号码
+    Url,
+    /// 超链接
+    Attachment,
+    /// 附件
+    SingleLink,
+    /// 单向关联
+    Formula,
+    /// 公式
+    DuplexLink,
+    /// 双向关联
+    Location,
+    /// 地理位置
+    CreatedTime,
+    /// 创建时间
+    ModifiedTime,
+    /// 最后更新时间
+    CreatedUser,
+    /// 创建人
+    ModifiedUser,
+    /// 修改人
+    /// 自动编号
+    AutoNumber,
+}
+
+#[derive(Debug, Deserialize_repr, PartialEq)]
+#[repr(u16)]
+pub enum FieldType {
+    /// - 1：多行文本
+    Text = 1,
+    /// - 2：数字
+    Number = 2,
+    /// - 3：单选
+    SingleSelect = 3,
+    /// - 4：多选
+    MultiSelect = 4,
+    /// - 5：日期
+    DateTime = 5,
+    /// - 7：复选框
+    Checkbox = 7,
+    /// - 11：人员
+    User = 11,
+    /// - 13：电话号码
+    PhoneNumber = 13,
+    /// - 15：超链接
+    Url = 15,
+    /// - 17：附件
+    Attachment = 17,
+    /// - 18：关联
+    Link = 18,
+    /// - 20：公式
+    Formula = 20,
+    /// - 21：双向关联
+    DuplexLink = 21,
+    /// - 22：地理位置
+    Location = 22,
+    /// - 23：群组
+    GroupChat = 23,
+    /// - 1001：创建时间
+    CreatedTime = 1001,
+    /// - 1002：最后更新时间
+    ModifiedTime = 1002,
+    /// - 1003：创建人
+    CreatedUser = 1003,
+    /// - 1004：修改人
+    ModifiedUser = 1004,
+    /// - 1005：自动编号
+    AutoSerial = 1005,
 }

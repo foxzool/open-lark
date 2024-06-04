@@ -32,6 +32,7 @@ reqwest = { version = "0.12.4", features = ["json", "multipart"] }
 simd-adler32 = "0.3.7"
 serde = { version = "1.0.197", features = ["derive"] }
 serde_json = "1.0.115"
+serde_repr = "0.1.19"
 sha2 = "0.10.8"
 strum = "0.26.2"
 strum_macros = "0.26.2"
