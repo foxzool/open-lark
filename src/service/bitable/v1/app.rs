@@ -7,11 +7,11 @@ use crate::core::{
 };
 use crate::core::api_resp::ApiResponseTrait;
 
-pub struct App {
+pub struct AppService {
     config: Config,
 }
 
-impl App {
+impl AppService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
@@ -70,7 +70,7 @@ pub struct GetAppResponse {
 #[derive(Deserialize, Debug)]
 pub struct GetAppResponseData {
     /// 多维表格的 app_token
-  pub  app_token: String,
+    pub  app_token: String,
     /// 多维表格的名字
     pub   name: String,
     /// 多维表格的版本号（对多维表格进行修改时更新，如新增、删除数据表，修改数据表名等，初始为1，

@@ -131,4 +131,8 @@ path = "examples/api/sheets/v3/spreadsheets/get.rs"
 
 [[example]]
 name = "get_bitable"
-path = "examples/api/bitable/v1/get.rs"
+path = "examples/api/bitable/v1/app/get.rs"
+
+[[example]]
+name = "app_table_record_search"
+path = "examples/api/bitable/v1/app_table_record/search.rs"
