@@ -1,19 +1,17 @@
-use std::time::Duration;
-
 use lazy_static::lazy_static;
 use log::warn;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
-use tokio::sync::Mutex;
+use tokio::{sync::Mutex, time::Instant};
 
 use crate::core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, RawResponse, ResponseFormat},
     app_ticket_manager::APP_TICKET_MANAGER,
-    cache::{Cache, LocalCache},
+    cache::QuickCache,
     config::Config,
     constants::{
-        AccessTokenType, AppType, APP_ACCESS_TOKEN_INTERNAL_URL_PATH, APP_ACCESS_TOKEN_KEY_PREFIX,
+        AccessTokenType, APP_ACCESS_TOKEN_INTERNAL_URL_PATH, APP_ACCESS_TOKEN_KEY_PREFIX, AppType,
         EXPIRY_DELTA, TENANT_ACCESS_TOKEN_URL_PATH,
     },
     error::LarkAPIError,
@@ -26,7 +24,7 @@ lazy_static! {
 }
 
 pub struct TokenManager {
-    cache: LocalCache,
+    cache: QuickCache,
 }
 
 impl Default for TokenManager {
@@ -37,24 +35,17 @@ impl Default for TokenManager {
 
 impl TokenManager {
     pub fn new() -> Self {
-        let cache = LocalCache::new();
-        Self { cache } //
+        Self {
+            cache: QuickCache::new(),
+        }
     }
-
-    pub fn get(&self, key: &str) -> Option<String> {
-        self.cache.get(key)
-    }
-
-    pub fn set(&mut self, key: &str, value: &str, expire_time: Duration) {
-        self.cache.set(key, value, expire_time);
-    }
-
     pub async fn get_app_access_token(
         &mut self,
         config: &Config,
         app_ticket: &str,
     ) -> SDKResult<String> {
         let mut token = self
+            .cache
             .get(&app_access_token_key(&config.app_id))
             .ok_or(LarkAPIError::IllegalParamError("cache error".to_string()))?;
 
@@ -85,8 +76,8 @@ impl TokenManager {
         let resp: BaseResponse<AppAccessTokenResp> = Transport::request(req, config, None).await?;
         if resp.success() {
             let data = resp.data.unwrap();
-            let expire = Duration::from_secs(data.expire as u64) - EXPIRY_DELTA;
-            self.set(
+            let expire = data.expire - EXPIRY_DELTA;
+            self.cache.set(
                 &app_access_token_key(&config.app_id),
                 &data.app_access_token,
                 expire,
@@ -134,9 +125,9 @@ impl TokenManager {
 
         if resp.success() {
             let data = resp.data.unwrap();
-            let expire = Duration::from_secs(data.expire as u64) - EXPIRY_DELTA;
+            let expire = data.expire - EXPIRY_DELTA;
 
-            self.set(
+            self.cache.set(
                 &app_access_token_key(&config.app_id),
                 &data.app_access_token,
                 expire,
@@ -159,6 +150,7 @@ impl TokenManager {
         app_ticket: &str,
     ) -> SDKResult<String> {
         let mut token = self
+            .cache
             .get(&tenant_access_token_key(&config.app_id, tenant_key))
             .unwrap_or_default();
         if token.is_empty() {
@@ -198,9 +190,9 @@ impl TokenManager {
 
         if resp.success() {
             let data = resp.data.unwrap();
-            let expire = Duration::from_secs(data.expire as u64) - EXPIRY_DELTA;
+            let expire = data.expire - EXPIRY_DELTA;
 
-            self.set(
+            self.cache.set(
                 &tenant_access_token_key(&config.app_id, tenant_key),
                 &data.tenant_access_token,
                 expire,
@@ -243,9 +235,9 @@ impl TokenManager {
 
         if resp.success() {
             let data = resp.data.unwrap();
-            let expire = Duration::from_secs(data.expire as u64) - EXPIRY_DELTA;
+            let expire = data.expire - EXPIRY_DELTA;
 
-            self.set(
+            self.cache.set(
                 &tenant_access_token_key(&config.app_id, tenant_key),
                 &data.tenant_access_token,
                 expire,

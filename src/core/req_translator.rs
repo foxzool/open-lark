@@ -23,7 +23,7 @@ use crate::core::{
 pub struct ReqTranslator;
 
 impl ReqTranslator {
-    #[async_recursion(?Send)]
+    #[async_recursion]
     pub async fn translate(
         req: &mut ApiRequest,
         access_token_type: AccessTokenType,
