@@ -1,11 +1,11 @@
 use reqwest::Method;
-use serde::{Deserialize};
+use serde::Deserialize;
 
+use crate::core::api_resp::ApiResponseTrait;
 use crate::core::{
     api_req::ApiRequest, api_resp::BaseResponse, config::Config, constants::AccessTokenType,
     http::Transport, req_option::RequestOption, SDKResult,
 };
-use crate::core::api_resp::ApiResponseTrait;
 
 pub struct AppService {
     config: Config,
@@ -65,14 +65,14 @@ impl GetAppRequestBuilder {
 
 #[derive(Deserialize, Debug)]
 pub struct GetAppResponse {
-    app: GetAppResponseData,
+    _app: GetAppResponseData,
 }
 #[derive(Deserialize, Debug)]
 pub struct GetAppResponseData {
     /// 多维表格的 app_token
-    pub  app_token: String,
+    pub app_token: String,
     /// 多维表格的名字
-    pub   name: String,
+    pub name: String,
     /// 多维表格的版本号（对多维表格进行修改时更新，如新增、删除数据表，修改数据表名等，初始为1，
     /// 每次更新+1）
     pub revision: i32,
@@ -80,11 +80,10 @@ pub struct GetAppResponseData {
     ///
     /// - true：表示开启了高级权限
     /// - false：表示关闭了高级权限
-    pub   is_advanced: bool,
+    pub is_advanced: bool,
     /// 文档时区
-    pub   time_zone: String,
+    pub time_zone: String,
 }
-
 
 impl ApiResponseTrait for GetAppResponse {
     fn data_format() -> crate::core::api_resp::ResponseFormat {
