@@ -20,9 +20,7 @@ const END_POINT_URL: &str = "/callback/ws/endpoint";
 pub struct LarkWsClient {
     app_id: String,
     app_secret: String,
-
     domain: String,
-    conn_url: String,
 }
 
 impl LarkWsClient {
@@ -31,7 +29,6 @@ impl LarkWsClient {
             app_id: app_id.to_string(),
             app_secret: app_secret.to_string(),
             domain: FEISHU_BASE_URL.to_string(),
-            conn_url: "".to_string(),
         }
     }
 
@@ -42,14 +39,10 @@ impl LarkWsClient {
     async fn connect(mut self) -> WsResult<()> {
         let conn_url = self.get_conn_url().await?;
         let url = Url::parse(&conn_url)?;
-
         let query_pairs: HashMap<_, _> = url.query_pairs().into_iter().collect();
         let conn_id = query_pairs.get("device_id").unwrap().to_string();
         let service_id = query_pairs.get("service_id").unwrap().to_string();
-
-        self.conn_url = url.to_string();
-
-        let (ws_stream, _response) = connect_async(url).await?;
+        let (ws_stream, _response) = connect_async(conn_url).await?;
         let (mut write, read) = ws_stream.split();
         let (sender_tx, sender_rx) = kanal::unbounded_async::<Message>();
 
@@ -89,7 +82,7 @@ impl LarkWsClient {
 
         let ping_task = async move {
             loop {
-                let mut ping_client = ping_client.lock().await;
+                let ping_client = ping_client.lock().await;
                 let service_id: i32 = ping_client.service_id.parse().unwrap();
                 let frame = new_frame(service_id);
                 let msg = Message::Binary(frame.encode_to_vec());
@@ -159,25 +152,25 @@ impl LarkWsClient {
 
 #[derive(Debug, Clone)]
 struct Client {
-    auto_reconnect: bool,
+    _auto_reconnect: bool,
     reconnect_count: i32,
     reconnect_interval: i32,
     reconnect_nonce: i32,
     ping_interval: i32,
-    conn_id: String,
+    _conn_id: String,
     service_id: String,
     sender_tx: AsyncSender<Message>,
 }
 
 impl Client {
-    pub fn new(conn_id: String, service_id: String, sender_tx: AsyncSender<Message>) -> Self {
+    pub fn new(_conn_id: String, service_id: String, sender_tx: AsyncSender<Message>) -> Self {
         Self {
-            auto_reconnect: true,
+            _auto_reconnect: true,
             reconnect_count: 30,
             reconnect_interval: -1,
             reconnect_nonce: 2 * 60,
             ping_interval: 2 * 60,
-            conn_id,
+            _conn_id,
             service_id,
             sender_tx,
         }
@@ -227,14 +220,10 @@ impl Client {
     fn handle_control_frame(&mut self, frame: Frame) {
         let headers = frame.headers;
         let t = headers.iter().find(|h| h.key == "type").unwrap();
-        match t.value.as_ref() {
-            "pong" => {
-                debug!("Received a pong frame");
-                let config =
-                    serde_json::from_slice::<ClientConfig>(&frame.payload.unwrap()).unwrap();
-                self.configure(config);
-            }
-            _ => {}
+        if let "pong" = t.value.as_ref() {
+            debug!("Received a pong frame");
+            let config = serde_json::from_slice::<ClientConfig>(&frame.payload.unwrap()).unwrap();
+            self.configure(config);
         }
     }
 
@@ -249,7 +238,7 @@ impl Client {
             .parse()
             .unwrap();
         // 包序号, 未拆包为0
-        let seq: i32 = headers
+        let _seq: i32 = headers
             .iter()
             .find(|h| h.key == "seq")
             .unwrap()
@@ -263,30 +252,26 @@ impl Client {
             .value
             .as_str();
         //  消息ID, 拆包后继承
-        let message_id = headers
+        let _message_id = headers
             .iter()
             .find(|h| h.key == "message_id")
             .unwrap()
             .value
             .as_str();
         // 链路ID
-        let trace_id = headers
+        let _trace_id = headers
             .iter()
             .find(|h| h.key == "trace_id")
             .unwrap()
             .value
             .as_str();
 
-        let payload = frame.payload.unwrap();
+        let _payload = frame.payload.unwrap();
         if sum > 1 {
             debug!("Received a multi-frame message");
         }
-
-        match type_ {
-            "data" => {
-                debug!("Received a data frame");
-            }
-            _ => {}
+        if type_ == "data" {
+            debug!("Received a data frame");
         }
     }
 }
@@ -330,11 +315,10 @@ pub enum WsClientError {
 }
 
 fn new_frame(service_id: i32) -> Frame {
-    let mut headers = vec![];
-    headers.push(Header {
+    let headers = vec![Header {
         key: "type".to_string(),
         value: "ping".to_string(),
-    });
+    }];
     Frame {
         seq_id: 0,
         log_id: 0,
