@@ -2,12 +2,10 @@ use std::env;
 
 use dotenvy::dotenv;
 use serde_json::json;
-use uuid::Uuid;
 
 use open_lark::{
     card::{
         components::{
-            CardElement,
             containers::{
                 column_set::{Column, ColumnSetContainer},
                 interactive::InteractiveContainer,
@@ -16,15 +14,11 @@ use open_lark::{
                 rich_text::FeishuCardMarkdown,
                 title::{FeishuCardTitle, FeishuCardUdIcon, Title},
             },
-            interactive_components::{
-                button::FeishuCardButton,
-                input::{FeishuCardInput, InputConfirm},
-                select_static::{SelectStatic, SelectStaticOption},
-            },
+            CardElement,
         },
+        icon::FeishuCardTextIcon,
+        interactions::{Behaviors, CallbackBehavior},
         FeishuCard,
-        FeishuCardConfig,
-        icon::FeishuCardTextIcon, interactions::{Behaviors, CallbackBehavior},
     },
     client::LarkClientBuilder,
     service::im::v1::message::{CreateMessageRequest, CreateMessageRequestBody, SendMessageTrait},
@@ -38,7 +32,6 @@ async fn main() {
     let app_secret = env::var("APP_SECRET").unwrap();
     // 创建 Client
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
-    let uuid = Uuid::new_v4();
 
     let elements = vec![
         CardElement::Markdown(FeishuCardMarkdown::new(
