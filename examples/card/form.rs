@@ -7,14 +7,11 @@ use uuid::Uuid;
 use open_lark::{
     card::{
         components::{
-            CardElement,
             containers::{
-                column_set::{Column, ColumnAction, ColumnSetContainer},
+                column_set::{Column, ColumnSetContainer},
                 form::FormContainer,
             },
             content_components::{
-                divider::FeishuCardDivider,
-                image::FeishuCardImage,
                 plain_text::PlainText,
                 rich_text::FeishuCardMarkdown,
                 title::{FeishuCardTitle, Title},
@@ -24,9 +21,9 @@ use open_lark::{
                 input::{FeishuCardInput, InputConfirm},
                 select_static::{SelectStatic, SelectStaticOption},
             },
+            CardElement,
         },
         FeishuCard,
-        href::FeishuCardHrefVal,
     },
     client::LarkClientBuilder,
     service::im::v1::message::{CreateMessageRequest, CreateMessageRequestBody, SendMessageTrait},
