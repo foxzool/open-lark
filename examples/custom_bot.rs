@@ -13,9 +13,10 @@ use open_lark::{
 #[tokio::main]
 async fn main() {
     dotenv().expect(".env file not found");
-
+    let hook_url = &(env::var("HOOK_URL").unwrap());
+    let secret = env::var("HOOK_SECRET").ok();
     // 创建 CustomBot 实例
-    let bot = CustomBot::new(env::var("HOOK_URL").unwrap(), env::var("HOOK_SECRET").ok());
+    let bot = CustomBot::new(hook_url, secret.as_deref());
 
     // 发送文本消息
     let message = MessageText::new("新更新提醒");

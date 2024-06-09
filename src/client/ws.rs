@@ -17,18 +17,18 @@ use crate::core::{api_resp::BaseResponse, constants::FEISHU_BASE_URL};
 const END_POINT_URL: &str = "/callback/ws/endpoint";
 
 #[derive(Debug, Clone)]
-pub struct LarkWsClient {
-    app_id: String,
-    app_secret: String,
-    domain: String,
+pub struct LarkWsClient<'a> {
+    app_id: &'a str,
+    app_secret: &'a str,
+    domain: &'a str,
 }
 
-impl LarkWsClient {
-    pub fn new(app_id: impl ToString, app_secret: impl ToString) -> Self {
+impl<'a> LarkWsClient<'a> {
+    pub fn new(app_id: &'a str, app_secret: &'a str) -> Self {
         Self {
-            app_id: app_id.to_string(),
-            app_secret: app_secret.to_string(),
-            domain: FEISHU_BASE_URL.to_string(),
+            app_id,
+            app_secret,
+            domain: FEISHU_BASE_URL,
         }
     }
 
@@ -40,8 +40,8 @@ impl LarkWsClient {
         let conn_url = self.get_conn_url().await?;
         let url = Url::parse(&conn_url)?;
         let query_pairs: HashMap<_, _> = url.query_pairs().into_iter().collect();
-        let conn_id = query_pairs.get("device_id").unwrap().to_string();
-        let service_id = query_pairs.get("service_id").unwrap().to_string();
+        let conn_id = query_pairs.get("device_id").unwrap();
+        let service_id = query_pairs.get("service_id").unwrap();
         let (ws_stream, _response) = connect_async(conn_url).await?;
         let (mut write, read) = ws_stream.split();
         let (sender_tx, sender_rx) = kanal::unbounded_async::<Message>();
@@ -58,10 +58,8 @@ impl LarkWsClient {
         };
 
         let ws_client = Client::new(conn_id, service_id, sender_tx.clone());
-
         let client = Arc::new(Mutex::new(ws_client));
         let read_client = Arc::clone(&client);
-
         let read_task = async move {
             let mut read = read;
 
@@ -79,7 +77,6 @@ impl LarkWsClient {
         };
 
         let ping_client = Arc::clone(&client);
-
         let ping_task = async move {
             loop {
                 let ping_client = ping_client.lock().await;
@@ -151,19 +148,19 @@ impl LarkWsClient {
 }
 
 #[derive(Debug, Clone)]
-struct Client {
+struct Client<'a> {
     _auto_reconnect: bool,
     reconnect_count: i32,
     reconnect_interval: i32,
     reconnect_nonce: i32,
     ping_interval: i32,
-    _conn_id: String,
-    service_id: String,
+    _conn_id: &'a str,
+    service_id: &'a str,
     sender_tx: AsyncSender<Message>,
 }
 
-impl Client {
-    pub fn new(_conn_id: String, service_id: String, sender_tx: AsyncSender<Message>) -> Self {
+impl<'a> Client<'a> {
+    pub fn new(_conn_id: &'a str, service_id: &'a str, sender_tx: AsyncSender<Message>) -> Self {
         Self {
             _auto_reconnect: true,
             reconnect_count: 30,

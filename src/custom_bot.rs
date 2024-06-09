@@ -1,31 +1,27 @@
-use base64::{Engine, prelude::BASE64_STANDARD};
+use base64::{prelude::BASE64_STANDARD, Engine};
 use hmac::{Hmac, Mac};
 use serde_json::{json, Value};
 use sha2::Sha256;
 
+use crate::core::api_resp::BaseResponse;
 use crate::{
-    core::{
-        api_resp::{RawResponse},
-        http::Transport,
-        SDKResult,
-    },
+    core::{api_resp::RawResponse, http::Transport, SDKResult},
     service::im::v1::message::{MessageCardTemplate, SendMessageTrait},
 };
-use crate::core::api_resp::BaseResponse;
 
 /// 自定义机器人
 ///
 /// [使用指南](https://open.feishu.cn/document/client-docs/bot-v3/add-custom-bot)
-pub struct CustomBot {
+pub struct CustomBot<'a> {
     /// webhook 地址
-    webhook_url: String,
+    webhook_url: &'a str,
     /// 密钥
-    secret: Option<String>,
+    secret: Option<&'a str>,
     client: reqwest::Client,
 }
 
-impl CustomBot {
-    pub fn new(webhook_url: String, secret: Option<String>) -> Self {
+impl<'a> CustomBot<'a> {
+    pub fn new(webhook_url: &'a str, secret: Option<&'a str>) -> Self {
         CustomBot {
             webhook_url,
             secret,
@@ -34,28 +30,29 @@ impl CustomBot {
     }
 }
 
-impl CustomBot {
-    pub async fn send_message(
-        &self,
-        message: impl SendMessageTrait,
-    ) -> SDKResult<BaseResponse<RawResponse>> {
+impl<'a> CustomBot<'a> {
+    pub async fn send_message<T>(&self, message: T) -> SDKResult<BaseResponse<RawResponse>>
+    where
+        T: SendMessageTrait,
+    {
         let mut json = json!({
             "msg_type": message.msg_type(),
             "content": message.content()
         });
-
         self.check_sign(&mut json);
-        // let json_string = json.to_string().into_bytes();
-
         Transport::do_send(
-            self.client.post(&self.webhook_url),
-            json.to_string().into_bytes(),
+            self.client.post(self.webhook_url),
+            json.to_string().into(),
             false,
-        ).await
+        )
+        .await
     }
 
     /// 发送飞书卡片消息， 因为自定义机器人发送飞书卡片消息的格式比较特殊，所以单独提供一个方法
-    pub async fn send_card(&self, message: MessageCardTemplate) -> SDKResult<BaseResponse<RawResponse>> {
+    pub async fn send_card(
+        &self,
+        message: MessageCardTemplate,
+    ) -> SDKResult<BaseResponse<RawResponse>> {
         let mut json = json!({
             "msg_type": message.msg_type(),
             "card": message.content()
@@ -64,10 +61,11 @@ impl CustomBot {
         self.check_sign(&mut json);
 
         Transport::do_send(
-            self.client.post(&self.webhook_url),
+            self.client.post(self.webhook_url),
             json.to_string().into_bytes(),
             false,
-        ).await
+        )
+        .await
     }
 
     /// 如果设置了密钥，就计算签名
