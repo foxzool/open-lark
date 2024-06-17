@@ -9,6 +9,7 @@ use crate::{
     },
     service::sheets::v2::spreadsheet_sheet::SpreadsheetSheetService,
 };
+use crate::service::sheets::v2::spreadsheet_sheet::UpdateSheetProperty;
 
 #[derive(Serialize, Deserialize, Debug, Default)]
 pub struct OperateSheetsRequest {
@@ -21,7 +22,7 @@ pub struct OperateSheetsRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-enum OperateSheetsRequestElem {
+pub enum OperateSheetsRequestElem {
     /// 增加工作表。
     #[serde(rename = "addSheet")]
     AddSheet {
@@ -35,6 +36,12 @@ enum OperateSheetsRequestElem {
         source: CopySheetSource,
         /// 新工作表的属性
         destination: CopySheetDestination,
+    },
+    /// 更新工作表
+    #[serde(rename = "updateSheet")]
+    UpdateSheet {
+        /// 工作表属性
+        properties: UpdateSheetProperty,
     },
     /// 删除工作表。
     #[serde(rename = "deleteSheet")]
@@ -51,16 +58,10 @@ pub struct AddSheetProperty {
     /// 新增工作表的标题
     pub title: String,
     /// 新增工作表的位置。不填默认在工作表的第 0 索引位置增加工作表。
-    pub index: Option<u32>,
+    pub index: Option<i32>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Default)]
-pub struct CopySheet {
-    /// 需要复制的工作表资源
-    pub source: CopySheetSource,
-    /// 新工作表的属性
-    pub destination: CopySheetDestination,
-}
+
 
 /// 需要复制的工作表资源
 #[derive(Serialize, Deserialize, Debug, Default)]
@@ -75,14 +76,6 @@ pub struct CopySheetSource {
 pub struct CopySheetDestination {
     /// 新工作表名称。不填默认为“源工作表名称”+“(副本_源工作表的 index 值)”，如 “Sheet1(副本_0)”。
     title: Option<String>,
-}
-
-/// 删除工作表。
-#[derive(Serialize, Deserialize, Debug, Default)]
-pub struct DeleteSheet {
-    /// 要删除的工作表的 ID。调用获取工作表获取 ID
-    #[serde(rename = "sheetId")]
-    pub sheet_id: String,
 }
 
 impl OperateSheetsRequest {
@@ -103,7 +96,7 @@ impl OperateSheetsRequestBuilder {
     }
 
     /// 增加工作表。
-    pub fn add_sheet(mut self, title: impl ToString, index: Option<u32>) -> Self {
+    pub fn add_sheet(mut self, title: impl ToString, index: Option<i32>) -> Self {
         self.request
             .requests
             .push(OperateSheetsRequestElem::AddSheet {
@@ -191,6 +184,9 @@ pub enum OperateSheetReply {
     /// 复制工作表的结果
     #[serde(rename = "copySheet")]
     CopySheet { properties: SheetResponse },
+    /// 更新工作表的结果
+    #[serde(rename = "updateSheet")]
+    UpdateSheet { properties: UpdateSheetProperty },
     /// 删除工作表的结果
     #[serde(rename = "deleteSheet")]
     DeleteSheet {
@@ -210,5 +206,5 @@ pub struct SheetResponse {
     /// 工作表的标题
     pub title: String,
     /// 工作表的位置
-    pub index: Option<u32>,
+    pub index: Option<i32>,
 }
