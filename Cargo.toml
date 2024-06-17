@@ -124,15 +124,19 @@ path = "examples/api/search/v1/user.rs"
 
 [[example]]
 name = "create_spreadsheet"
-path = "examples/api/sheets/v3/spreadsheets/create.rs"
+path = "examples/api/sheets/v3/spreadsheet/create.rs"
 
 [[example]]
 name = "patch_spreadsheet"
-path = "examples/api/sheets/v3/spreadsheets/patch.rs"
+path = "examples/api/sheets/v3/spreadsheet/patch.rs"
 
 [[example]]
 name = "get_spreadsheet"
-path = "examples/api/sheets/v3/spreadsheets/get.rs"
+path = "examples/api/sheets/v3/spreadsheet/get.rs"
+
+[[example]]
+name = "query_spreadsheet"
+path = "examples/api/sheets/v3/spreadsheet-sheet/query.rs"
 
 [[example]]
 name = "get_bitable"
