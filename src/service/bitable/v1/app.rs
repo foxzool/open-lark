@@ -1,7 +1,6 @@
 use reqwest::Method;
 use serde::Deserialize;
 
-use crate::core::api_resp::ApiResponseTrait;
 use crate::core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse},
