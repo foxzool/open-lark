@@ -3,15 +3,15 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     core::{
+        api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
     },
-    service::sheets::v3::spreadsheet::{SpreadsheetService},
+    service::sheets::v3::spreadsheet::SpreadsheetService,
 };
-use crate::core::api_req::ApiRequest;
 
 impl SpreadsheetService {
     /// 获取电子表格信息
@@ -34,7 +34,6 @@ impl SpreadsheetService {
     }
 }
 
-
 #[derive(Serialize, Deserialize, Debug, Default)]
 pub struct GetSpreadsheetRequest {
     #[serde(skip)]
@@ -43,7 +42,7 @@ pub struct GetSpreadsheetRequest {
     spreadsheet_token: String,
     /// 用户 ID 类型
     ///
-    /// 示例值："open_id"
+    /// 默认值：open_id
     ///
     /// 可选值有：
     ///
@@ -55,9 +54,6 @@ pub struct GetSpreadsheetRequest {
     /// - user_id：标识一个用户在某个租户内的身份。同一个用户在租户 A 和租户 B 内的 User ID
     ///   是不同的。在同一个租户内，一个用户的 User ID 在所有应用（包括商店应用）中都保持一致。User
     ///   ID 主要用于在不同的应用间打通用户数据。了解更多：如何获取 User ID？
-    /// 默认值：open_id
-    ///
-    /// 当值为 user_id，字段权限要求：
     user_id_type: Option<String>,
 }
 
@@ -75,7 +71,7 @@ pub struct GetSpreadsheetRequestBuilder {
 impl GetSpreadsheetRequestBuilder {
     /// 用户 ID 类型
     ///
-    /// 示例值："open_id"
+    /// 默认值：open_id
     ///
     /// 可选值有：
     ///
@@ -87,9 +83,6 @@ impl GetSpreadsheetRequestBuilder {
     /// - user_id：标识一个用户在某个租户内的身份。同一个用户在租户 A 和租户 B 内的 User ID
     ///   是不同的。在同一个租户内，一个用户的 User ID 在所有应用（包括商店���用）中都保持一致。User
     ///   ID 主要用于在不同的应用间打通用户数据。了解更多：如何获取 User ID？
-    /// 默认值：open_id
-    ///
-    /// 当值为 user_id，字段权限要求：
     pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
         self.request.user_id_type = Some(user_id_type.to_string());
         self

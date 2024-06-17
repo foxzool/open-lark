@@ -27,6 +27,7 @@ pub struct ColumnSetContainer {
     /// - 单值，如 "10px"，表示列的四个外边距都为 10 px。
     /// - 多值，如 "4px 12px 4px 12px"，表示列的上、右、下、左的外边距分别为
     ///   4px，12px，4px，12px。四个值必填，使用空格间隔。
+    ///
     /// 注意：首行列的上外边距强制为 0，末行列的下外边距强制为 0。
     #[serde(skip_serializing_if = "Option::is_none")]
     margin: Option<String>,
