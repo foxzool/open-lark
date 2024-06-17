@@ -147,6 +147,10 @@ name = "operate_spreadsheet_sheet"
 path = "examples/api/sheets/v2/spreadsheet-sheet/operate.rs"
 
 [[example]]
+name = "update_spreadsheet_sheet_properties"
+path = "examples/api/sheets/v2/spreadsheet-sheet/update.rs"
+
+[[example]]
 name = "get_bitable"
 path = "examples/api/bitable/v1/app/get.rs"
 
