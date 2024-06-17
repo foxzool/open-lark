@@ -7,9 +7,15 @@ pub struct QuickCache {
     cache: Cache<String, (String, Instant)>,
 }
 
+impl Default for QuickCache {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl QuickCache {
     pub fn new() -> Self {
-        let cache = quick_cache::sync::Cache::new(10);
+        let cache = Cache::new(10);
         Self { cache } //
     }
 

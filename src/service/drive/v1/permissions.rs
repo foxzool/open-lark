@@ -155,7 +155,7 @@ pub struct PermissionPublic {
     /// - anyone_can_view：拥有可阅读权限的用户
     /// - anyone_can_edit：拥有可编辑权限的用户
     /// - only_full_access：拥有可管理权限（包括我）的用户
-    pub security_entity:  Option<String>,
+    pub security_entity: Option<String>,
     /// 谁可以评论
     ///
     /// 可选值有：
@@ -218,7 +218,7 @@ pub struct PatchPermissionRequest {
     /// - open：打开
     /// - closed：关闭
     /// - allow_share_partner_tenant：允许分享给关联组织（只有租户后台设置仅允许关联组织分享，
-    /// 才能设置为该值）
+    ///   才能设置为该值）
     #[serde(skip_serializing_if = "Option::is_none")]
     external_access_entity: Option<String>,
     /// 谁可以创建副本、打印、下载
@@ -333,7 +333,7 @@ impl PatchPermissionRequestBuilder {
     /// - open：打开
     /// - closed：关闭
     /// - allow_share_partner_tenant：允许分享给关联组织（只有租户后台设置仅允许关联组织分享，
-    /// 才能设置为该值）
+    ///   才能设置为该值）
     pub fn external_access_entity(mut self, external_access_entity: impl ToString) -> Self {
         self.request.external_access_entity = Some(external_access_entity.to_string());
         self

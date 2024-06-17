@@ -52,7 +52,7 @@ pub struct FeishuCardInput {
     ///
     /// - top：文本标签位于输入框上方
     /// - left：文本标签位于输入框左边
-    /// 注意：在移动端等窄屏幕场景下，文本标签将自适应固定展示在输入框上方。
+    ///   注意：在移动端等窄屏幕场景下，文本标签将自适应固定展示在输入框上方。
     #[serde(skip_serializing_if = "Option::is_none")]
     label_position: Option<String>,
     /// 你可在交互事件中自定义回传数据，支持 string 或 object 数据类型。
