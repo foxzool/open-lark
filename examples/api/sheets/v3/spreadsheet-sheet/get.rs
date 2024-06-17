@@ -4,10 +4,10 @@ use dotenvy::dotenv;
 
 use open_lark::{
     client::LarkClientBuilder,
-    service::sheets::v3::spreadsheet_sheet::QuerySpreadsheetSheetRequest,
+    service::sheets::v3::spreadsheet_sheet::GetSpreadsheetSheetRequest,
 };
 
-/// 获取工作表
+/// 查询工作表
 #[tokio::main]
 async fn main() {
     dotenv().expect(".env file not found");
@@ -17,15 +17,16 @@ async fn main() {
     // 创建 Client
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
     // 构建请求体
-    let req = QuerySpreadsheetSheetRequest::builder()
+    let req = GetSpreadsheetSheetRequest::builder()
         .spreadsheet_token("Je8CsF4SXhta8NtvBNpcxDH9nJb")
+        .sheet_id("98666d")
         .build();
     // 发起请求
     let resp = client
         .sheets
         .v3
         .spreadsheet_sheet
-        .query(
+        .get(
             req,
             None, /* Some(
                   *     open_lark::core::req_option::RequestOption::builder()
@@ -36,6 +37,6 @@ async fn main() {
         .await
         .unwrap();
     if let Some(data) = resp.data {
-        println!("query spreadsheet sheet response: {:#?}", data);
+        println!("get spreadsheet sheet response: {:#?}", data);
     }
 }

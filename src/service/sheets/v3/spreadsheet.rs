@@ -1,8 +1,8 @@
 
 
-pub use create_spreadsheet::*;
-pub use get_spreadsheet::*;
-pub use patch_spreadsheet::*;
+pub use create::*;
+pub use get::*;
+pub use patch::*;
 
 use crate::core::{config::Config};
 
@@ -11,9 +11,9 @@ pub struct SpreadsheetService {
     config: Config,
 }
 
-mod create_spreadsheet;
-mod get_spreadsheet;
-mod patch_spreadsheet;
+mod create;
+mod get;
+mod patch;
 
 impl SpreadsheetService {
     pub fn new(config: Config) -> Self {
