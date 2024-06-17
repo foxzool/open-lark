@@ -18,8 +18,8 @@ async fn main() {
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
     // 构建请求体
     let req = GetSpreadsheetSheetRequest::builder()
-        .spreadsheet_token("Je8CsF4SXhta8NtvBNpcxDH9nJb")
-        .sheet_id("98666d")
+        .spreadsheet_token("O21wsTInWht7sUtRj77cFwRXnme")
+        .sheet_id("0ae03b")
         .build();
     // 发起请求
     let resp = client

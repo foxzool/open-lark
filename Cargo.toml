@@ -143,6 +143,10 @@ name = "query_spreadsheet_sheet"
 path = "examples/api/sheets/v3/spreadsheet-sheet/query.rs"
 
 [[example]]
+name = "operate_spreadsheet_sheet"
+path = "examples/api/sheets/v2/spreadsheet-sheet/operate.rs"
+
+[[example]]
 name = "get_bitable"
 path = "examples/api/bitable/v1/app/get.rs"
 
