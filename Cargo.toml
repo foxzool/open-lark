@@ -135,7 +135,11 @@ name = "get_spreadsheet"
 path = "examples/api/sheets/v3/spreadsheet/get.rs"
 
 [[example]]
-name = "query_spreadsheet"
+name = "get_spreadsheet_sheet"
+path = "examples/api/sheets/v3/spreadsheet-sheet/get.rs"
+
+[[example]]
+name = "query_spreadsheet_sheet"
 path = "examples/api/sheets/v3/spreadsheet-sheet/query.rs"
 
 [[example]]
