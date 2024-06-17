@@ -2,7 +2,7 @@ use lazy_static::lazy_static;
 use log::warn;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
-use tokio::{sync::Mutex, time::Instant};
+use tokio::{sync::Mutex};
 
 use crate::core::{
     api_req::ApiRequest,
