@@ -176,6 +176,11 @@ path = "examples/api/sheets/v2/data-operation/write_multi_ranges.rs"
 name = "sheet-set_cell_style"
 path = "examples/api/sheets/v2/data-operation/set_cell_style.rs"
 
+# 批量设置单元格样式
+[[example]]
+name = "sheet-batch_set_cell_style"
+path = "examples/api/sheets/v2/data-operation/batch_set_cell_style.rs"
+
 
 [[example]]
 name = "operate_spreadsheet_sheet"
