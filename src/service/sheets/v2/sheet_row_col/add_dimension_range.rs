@@ -10,18 +10,19 @@ use crate::{
     service::sheets::v2::SpreadsheetService,
 };
 
+/// 增加行列请求
 #[derive(Serialize, Debug, Default)]
-pub struct DimensionRangeRequest {
+pub struct AddDimensionRangeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     #[serde(skip)]
     spreadsheet_token: String,
     /// 需要增加行列的维度信息
-    dimension: DimensionRequest,
+    dimension: Dimension,
 }
 
 #[derive(Serialize, Debug, Default)]
-struct DimensionRequest {
+struct Dimension {
     /// 电子表格工作表的 ID。调用获取工作表获取 ID
     #[serde(rename = "sheetId")]
     sheet_id: String,
@@ -34,18 +35,18 @@ struct DimensionRequest {
     length: i32,
 }
 
-impl DimensionRangeRequest {
-    pub fn builder() -> DimensionRangeRequestBuilder {
-        DimensionRangeRequestBuilder::default()
+impl AddDimensionRangeRequest {
+    pub fn builder() -> AddDimensionRangeRequestBuilder {
+        AddDimensionRangeRequestBuilder::default()
     }
 }
 
 #[derive(Default)]
-pub struct DimensionRangeRequestBuilder {
-    request: DimensionRangeRequest,
+pub struct AddDimensionRangeRequestBuilder {
+    request: AddDimensionRangeRequest,
 }
 
-impl DimensionRangeRequestBuilder {
+impl AddDimensionRangeRequestBuilder {
     pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
         self.request.spreadsheet_token = spreadsheet_token.to_string();
         self
@@ -71,7 +72,7 @@ impl DimensionRangeRequestBuilder {
         self
     }
 
-    pub fn build(mut self) -> DimensionRangeRequest {
+    pub fn build(mut self) -> AddDimensionRangeRequest {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
@@ -79,9 +80,9 @@ impl DimensionRangeRequestBuilder {
 
 impl SpreadsheetService {
     /// 该接口用于在电子表格中增加空白行或列。
-    pub async fn dimension_range(
+    pub async fn add_dimension_range(
         &self,
-        request: DimensionRangeRequest,
+        request: AddDimensionRangeRequest,
         option: Option<req_option::RequestOption>,
     ) -> SDKResult<BaseResponse<DimensionRangeResponse>> {
         let mut api_req = request.api_request;
