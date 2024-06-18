@@ -11,6 +11,7 @@ use crate::{
     service::sheets::v3::{spreadsheet_sheet::Sheet, SpreadsheetSheetService},
 };
 
+/// 获取工作表请求
 #[derive(Serialize, Deserialize, Debug, Default)]
 pub struct QuerySpreadsheetSheetRequest {
     #[serde(skip)]

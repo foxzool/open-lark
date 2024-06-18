@@ -121,6 +121,19 @@ path = "examples/api/drive/v2/permission/patch.rs"
 name = "search_user"
 path = "examples/api/search/v1/user.rs"
 
+# 电子表格
+
+[[example]]
+name = "sheet-add-rows-or-columns"
+path = "examples/api/sheets/v2/spreadsheet/add_row_or_columns.rs"
+
+[[example]]
+name = "operate_spreadsheet_sheet"
+path = "examples/api/sheets/v2/spreadsheet-sheet/operate.rs"
+
+[[example]]
+name = "update_spreadsheet_sheet_properties"
+path = "examples/api/sheets/v2/spreadsheet-sheet/update.rs"
 
 [[example]]
 name = "create_spreadsheet"
@@ -142,13 +155,7 @@ path = "examples/api/sheets/v3/spreadsheet-sheet/get.rs"
 name = "query_spreadsheet_sheet"
 path = "examples/api/sheets/v3/spreadsheet-sheet/query.rs"
 
-[[example]]
-name = "operate_spreadsheet_sheet"
-path = "examples/api/sheets/v2/spreadsheet-sheet/operate.rs"
 
-[[example]]
-name = "update_spreadsheet_sheet_properties"
-path = "examples/api/sheets/v2/spreadsheet-sheet/update.rs"
 
 [[example]]
 name = "get_bitable"
