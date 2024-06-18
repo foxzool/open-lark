@@ -4,10 +4,10 @@ use dotenvy::dotenv;
 use serde_json::json;
 
 use open_lark::{
-    client::LarkClientBuilder, service::sheets::v2::data_operation::PrependDataRequest,
+    client::LarkClientBuilder, service::sheets::v2::data_operation::AppendDataRequest,
 };
 
-/// 插入数据
+/// 追加数据
 #[tokio::main]
 async fn main() {
     dotenv().expect(".env file not found");
@@ -17,20 +17,20 @@ async fn main() {
     // 创建 Client
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
 
-    let req = PrependDataRequest::builder()
+    let req = AppendDataRequest::builder()
         .spreadsheet_token("O21wsTInWht7sUtRj77cFwRXnme")
-        .range("0ae03b!G2:H2")
-        .values(json!([["2021-09-01", "2021-09-02",]]))
+        .range("0ae03b!B2:C2")
+        .values(json!([[123, 456,]]))
         .build();
     let resp = client
         .sheets
         .v2
         .spreadsheet_sheet
-        .prepend_data(req, None)
+        .append_data(req, None)
         .await
         .unwrap();
 
     if let Some(data) = resp.data {
-        println!("sheet prepend data response: {:#?}", data);
+        println!("sheet append data response: {:#?}", data);
     }
 }

@@ -145,6 +145,11 @@ path = "examples/api/sheets/v2/spreadsheet/delete_row_or_columns.rs"
 name = "sheet-prepend_data"
 path = "examples/api/sheets/v2/data-operation/prepend_data.rs"
 
+# 追加数据
+[[example]]
+name = "sheet-append_data"
+path = "examples/api/sheets/v2/data-operation/append_data.rs"
+
 [[example]]
 name = "operate_spreadsheet_sheet"
 path = "examples/api/sheets/v2/spreadsheet-sheet/operate.rs"
