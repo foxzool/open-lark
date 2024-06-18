@@ -10,7 +10,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    service::sheets::v3::spreadsheet::SpreadsheetService,
+    service::sheets::v3::SpreadsheetService,
 };
 
 impl SpreadsheetService {

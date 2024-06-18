@@ -7,7 +7,7 @@ use crate::{
         constants::AccessTokenType,
         req_option, SDKResult,
     },
-    service::sheets::v2::spreadsheet_sheet::SpreadsheetSheetService,
+    service::sheets::v2::SpreadsheetSheetService,
 };
 use crate::service::sheets::v2::spreadsheet_sheet::UpdateSheetProperty;
 

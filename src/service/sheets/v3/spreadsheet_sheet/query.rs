@@ -4,13 +4,12 @@ use crate::{
     core::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        constants::AccessTokenType,
         req_option::RequestOption,
         SDKResult,
     },
-    service::sheets::v3::spreadsheet_sheet::SpreadsheetSheetService,
+    service::sheets::v3::{spreadsheet_sheet::Sheet, SpreadsheetSheetService},
 };
-use crate::core::constants::AccessTokenType;
-use crate::service::sheets::v3::spreadsheet_sheet::Sheet;
 
 #[derive(Serialize, Deserialize, Debug, Default)]
 pub struct QuerySpreadsheetSheetRequest {
@@ -22,7 +21,8 @@ pub struct QuerySpreadsheetSheetRequest {
 
 impl SpreadsheetSheetService {
     /// 获取工作表
-    /// 根据电子表格 token 获取表格中所有工作表及其属性信息，包括工作表 ID、标题、索引位置、是否被隐藏等。
+    /// 根据电子表格 token 获取表格中所有工作表及其属性信息，包括工作表
+    /// ID、标题、索引位置、是否被隐藏等。
     pub async fn query(
         &self,
         request: QuerySpreadsheetSheetRequest,
