@@ -208,6 +208,11 @@ path = "examples/api/sheets/v2/spreadsheet-sheet/update.rs"
 name = "sheet-find_cells"
 path = "examples/api/sheets/v3/data_operation/find_cells.rs"
 
+# 替换单元格
+[[example]]
+name = "sheet-relace_cells"
+path = "examples/api/sheets/v3/data_operation/replace_cells.rs"
+
 [[example]]
 name = "create_spreadsheet"
 path = "examples/api/sheets/v3/spreadsheet/create.rs"
