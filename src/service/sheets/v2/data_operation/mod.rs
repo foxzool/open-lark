@@ -8,6 +8,7 @@ pub use share::*;
 pub use write_data_to_a_single_range::*;
 pub use write_data_to_multi_ranges::*;
 pub use write_image::*;
+pub use merge_cells::*;
 
 mod append_data;
 mod batch_set_cell_style;
@@ -19,3 +20,4 @@ mod share;
 mod write_data_to_a_single_range;
 mod write_data_to_multi_ranges;
 mod write_image;
+mod merge_cells;
