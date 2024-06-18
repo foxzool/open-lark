@@ -108,7 +108,7 @@ pub struct CellStyle {
     #[serde(rename = "vAlign")]
     /// 垂直对齐， 0 上对齐，1 中对齐， 2 下对齐
     pub(crate) v_align: Option<i32>,
-    /// 	字体颜色
+    /// 字体颜色
     #[serde(rename = "foreColor")]
     pub(crate) fore_color: Option<String>,
     /// 背景颜色

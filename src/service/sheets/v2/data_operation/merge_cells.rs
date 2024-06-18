@@ -42,7 +42,7 @@ impl MergeCellsRequestBuilder {
         self
     }
 
-    /// 	查询范围，包含 sheetId 与单元格范围两部分，目前支持四种索引方式，详见 在线表格开发指南
+    /// 查询范围，包含 sheetId 与单元格范围两部分，目前支持四种索引方式，详见 在线表格开发指南
     pub fn range(mut self, range: impl ToString) -> Self {
         self.request.range = range.to_string();
         self
