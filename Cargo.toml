@@ -191,6 +191,11 @@ name = "sheet-merge_cells"
 path = "examples/api/sheets/v2/data-operation/merge_cells.rs"
 
 
+# 拆分单元格
+[[example]]
+name = "sheet-split_cells"
+path = "examples/api/sheets/v2/data-operation/split_cells.rs"
+
 [[example]]
 name = "operate_spreadsheet_sheet"
 path = "examples/api/sheets/v2/spreadsheet-sheet/operate.rs"
