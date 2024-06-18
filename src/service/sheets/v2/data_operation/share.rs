@@ -26,8 +26,7 @@ pub(crate) struct ValueRangeResponse {
     pub(crate) revision: i32
 }
 
-/// 插入数据响应体
-pub type PrependDataResponse = AppendDataResponse;
+
 
 /// 追加数据响应体
 #[derive(Deserialize, Debug)]
@@ -55,16 +54,16 @@ struct AppendDataUpdate {
     spreed_sheet_token: String,
     /// 写入的范围
     #[serde(rename = "updatedRange")]
-    update_range: String,
+    updated_range: String,
     /// 写入的行数
     #[serde(rename = "updatedRows")]
-    update_rows: i32,
+    updated_rows: i32,
     /// 写入的列数
     #[serde(rename = "updatedColumns")]
-    update_columns: i32,
+    updated_columns: i32,
     /// 写入的单元格总数
     #[serde(rename = "updatedCells")]
-    update_cells: i32,
+    updated_cells: i32,
     /// sheet 的版本号
     revision: i32,
 }
