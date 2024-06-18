@@ -30,43 +30,49 @@ pub(crate) struct ValueRangeResponse {
 /// 追加数据响应体
 #[derive(Deserialize, Debug)]
 #[allow(dead_code)]
-pub struct AppendDataResponse {
+pub struct UpdateDataResponse {
     /// spreadsheet 的 token
     #[serde(rename = "spreadsheetToken")]
-    spreed_sheet_token: String,
+    pub spreed_sheet_token: String,
     /// 写入的范围
     #[serde(rename = "tableRange")]
-    table_range: String,
+    pub table_range: String,
     /// sheet 的版本号
-    revision: i32,
+    pub revision: i32,
     /// 追加数据的范围、行列数等
-    updates: AppendDataUpdate,
+    pub updates: DataUpdates,
+}
+
+impl ApiResponseTrait for UpdateDataResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
 
 /// 追加数据的范围、行列数等
 #[derive(Deserialize, Debug)]
 #[allow(dead_code)]
-struct AppendDataUpdate {
+pub struct DataUpdates {
     /// spreadsheet 的 token
     #[serde(rename = "spreadsheetToken")]
-    spreed_sheet_token: String,
+    pub spreed_sheet_token: String,
     /// 写入的范围
     #[serde(rename = "updatedRange")]
-    updated_range: String,
+    pub updated_range: String,
     /// 写入的行数
     #[serde(rename = "updatedRows")]
-    updated_rows: i32,
+    pub updated_rows: i32,
     /// 写入的列数
     #[serde(rename = "updatedColumns")]
-    updated_columns: i32,
+    pub updated_columns: i32,
     /// 写入的单元格总数
     #[serde(rename = "updatedCells")]
-    updated_cells: i32,
+    pub updated_cells: i32,
     /// sheet 的版本号
-    revision: i32,
+    pub revision: i32,
 }
 
-impl ApiResponseTrait for AppendDataResponse {
+impl ApiResponseTrait for DataUpdates {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
