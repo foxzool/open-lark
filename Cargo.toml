@@ -140,6 +140,11 @@ path = "examples/api/sheets/v2/spreadsheet/update_row_or_columns.rs"
 name = "sheet-delete-rows-or-columns"
 path = "examples/api/sheets/v2/spreadsheet/delete_row_or_columns.rs"
 
+# 插入数据
+[[example]]
+name = "sheet-prepend_data"
+path = "examples/api/sheets/v2/data-operation/prepend_data.rs"
+
 [[example]]
 name = "operate_spreadsheet_sheet"
 path = "examples/api/sheets/v2/spreadsheet-sheet/operate.rs"
