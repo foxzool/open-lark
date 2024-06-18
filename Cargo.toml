@@ -160,6 +160,11 @@ path = "examples/api/sheets/v2/data-operation/reading_a_single_range.rs"
 name = "sheet-write_a_single_range"
 path = "examples/api/sheets/v2/data-operation/write_a_single_range.rs"
 
+# 读取多个范围
+[[example]]
+name = "sheet-reading_multi_ranges"
+path = "examples/api/sheets/v2/data-operation/reading_multi_ranges.rs"
+
 [[example]]
 name = "operate_spreadsheet_sheet"
 path = "examples/api/sheets/v2/spreadsheet-sheet/operate.rs"

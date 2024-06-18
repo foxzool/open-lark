@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+
 use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
 
 #[derive(Serialize, Debug, Default)]
@@ -23,10 +24,8 @@ pub(crate) struct ValueRangeResponse {
     /// 需要写入的值，如要写入公式、超链接、email、@人等，可详看附录sheet 支持写入数据类型
     pub(crate) values: Value,
     /// sheet 的版本号
-    pub(crate) revision: i32
+    pub(crate) revision: i32,
 }
-
-
 
 /// 追加数据响应体
 #[derive(Deserialize, Debug)]
@@ -40,10 +39,9 @@ pub struct AppendDataResponse {
     table_range: String,
     /// sheet 的版本号
     revision: i32,
-    ///追加数据的范围、行列数等
+    /// 追加数据的范围、行列数等
     updates: AppendDataUpdate,
 }
-
 
 /// 追加数据的范围、行列数等
 #[derive(Deserialize, Debug)]
@@ -72,4 +70,19 @@ impl ApiResponseTrait for AppendDataResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
+}
+
+/// 值与范围
+#[derive(Deserialize, Debug)]
+#[allow(dead_code)]
+pub struct ReadRangeValueRange {
+    /// 插入维度
+    #[serde(rename = "majorDimension")]
+    pub major_dimension: String,
+    /// 返回数据的范围，为空时表示查询范围没有数据
+    pub range: String,
+    /// sheet 的版本号
+    pub revision: i32,
+    /// 查询得到的值
+    pub values: Value,
 }

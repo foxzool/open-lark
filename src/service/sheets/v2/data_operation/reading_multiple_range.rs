@@ -12,13 +12,14 @@ use crate::{
 
 /// 读取单个范围请求
 #[derive(Debug, Default)]
-pub struct ReadingSingleRangeRequest {
+pub struct ReadingMultipleRangeRequest {
     api_request: ApiRequest,
     /// spreadsheet 的 token
     spreadsheet_token: String,
-    /// 查询范围，包含 sheetId 与单元格范围两部分，详见在线表格开发指南。若查询范围中使用形如
-    /// <sheetId>!<开始单元格>:<结束列>的范围时，仅支持获取100列数据
-    range: String,
+    /// 多个查询范围，范围之间使用逗号分隔，如range1,range2。其中 range 包含 sheetId
+    /// 与单元格范围两部分，目前支持四种索引方式，详见 在线表格开发指南
+    /// 。若查询范围中使用形如<sheetId>!<开始单元格>:<结束列>的范围时，仅支持获取100列数据
+    ranges: String,
     /// 指定单元格数据的格式。可选值为如下所示。当参数缺省时，默认不进行公式计算，返回公式本身；
     /// 数值不进行数字格式化。
     ///
@@ -45,27 +46,32 @@ pub struct ReadingSingleRangeRequest {
     user_id_type: Option<String>,
 }
 
-impl ReadingSingleRangeRequest {
-    pub fn builder() -> ReadingSingleRangeRequestBuilder {
-        ReadingSingleRangeRequestBuilder::default()
+impl ReadingMultipleRangeRequest {
+    pub fn builder() -> ReadingMultiRangesRequestBuilder {
+        ReadingMultiRangesRequestBuilder::default()
     }
 }
 
 #[derive(Default)]
-pub struct ReadingSingleRangeRequestBuilder {
-    request: ReadingSingleRangeRequest,
+pub struct ReadingMultiRangesRequestBuilder {
+    request: ReadingMultipleRangeRequest,
 }
 
-impl ReadingSingleRangeRequestBuilder {
+impl ReadingMultiRangesRequestBuilder {
     pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
         self.request.spreadsheet_token = spreadsheet_token.to_string();
         self
     }
 
-    /// 查询范围，包含 sheetId 与单元格范围两部分，详见在线表格开发指南。若查询范围中使用形如
-    /// <sheetId>!<开始单元格>:<结束列>的范围时，仅支持获取100列数据
-    pub fn range(mut self, range: impl ToString) -> Self {
-        self.request.range = range.to_string();
+    /// 多个查询范围，范围之间使用逗号分隔，如range1,range2。⁣其中 range 包含 sheetId
+    /// 与单元格范围两部分，目前支持四种索引方式，详见 在线表格开发指南
+    /// 。若查询范围中使用形如<sheetId>!<开始单元格>:<结束列>的范围时，仅支持获取100列数据。
+    pub fn ranges(mut self, ranges: impl ToString) -> Self {
+        self.request.ranges = ranges.to_string();
+        self.request
+            .api_request
+            .query_params
+            .insert("ranges".to_string(), ranges.to_string());
         self
     }
 
@@ -117,7 +123,7 @@ impl ReadingSingleRangeRequestBuilder {
         self
     }
 
-    pub fn build(self) -> ReadingSingleRangeRequest {
+    pub fn build(self) -> ReadingMultipleRangeRequest {
         self.request
     }
 }
@@ -125,35 +131,37 @@ impl ReadingSingleRangeRequestBuilder {
 /// 读取数据响应体
 #[derive(Deserialize, Debug)]
 #[allow(dead_code)]
-pub struct ReadingSingleRangeResponse {
+pub struct ReadingMultiRangesResponse {
     /// sheet 的版本号
     revision: i32,
     /// spreadsheet 的 token，详见电子表格概述
     #[serde(rename = "spreadsheetToken")]
     spreadsheet_token: String,
+    /// 读取的单元格总数
+    #[serde(rename = "totalCells")]
+    total_cells: i32,
     /// 值与范围
-    #[serde(rename = "valueRange")]
-    value_range: ValueRangeResponse,
+    #[serde(rename = "valueRanges")]
+    value_ranges: Vec<ValueRangeResponse>,
 }
 
-impl ApiResponseTrait for ReadingSingleRangeResponse {
+impl ApiResponseTrait for ReadingMultiRangesResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
 }
 
 impl SpreadsheetService {
-    /// 读取单个范围
-    pub async fn reading_a_single_range(
+    /// 读取多个范围
+    pub async fn reading_multi_ranges(
         &self,
-        request: ReadingSingleRangeRequest,
+        request: ReadingMultipleRangeRequest,
         option: Option<req_option::RequestOption>,
-    ) -> SDKResult<BaseResponse<ReadingSingleRangeResponse>> {
+    ) -> SDKResult<BaseResponse<ReadingMultiRangesResponse>> {
         let mut api_req = request.api_request;
         api_req.api_path = format!(
-            "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values/{range}",
+            "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_batch_get",
             spreadsheet_token = request.spreadsheet_token,
-            range = request.range,
         );
         api_req.http_method = reqwest::Method::GET;
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::App];
