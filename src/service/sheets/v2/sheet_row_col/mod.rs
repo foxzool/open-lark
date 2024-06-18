@@ -5,6 +5,5 @@ pub use update_dimension_range::*;
 
 mod add_dimension_range;
 mod insert_dimension_range;
-mod update_dimension_range;
-
 mod share;
+mod update_dimension_range;

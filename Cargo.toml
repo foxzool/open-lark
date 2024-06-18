@@ -163,6 +163,10 @@ path = "examples/api/sheets/v3/spreadsheet-sheet/get.rs"
 name = "query_spreadsheet_sheet"
 path = "examples/api/sheets/v3/spreadsheet-sheet/query.rs"
 
+[[example]]
+name = "sheet_move_dimension"
+path = "examples/api/sheets/v3/spreadsheet-sheet/move_dimension.rs"
+
 
 
 [[example]]
