@@ -9,35 +9,39 @@ use crate::{
         req_option, SDKResult,
     },
     service::sheets::v2::{
-        data_operation::{PrependDataResponse, ValueRange},
+        data_operation::{AppendDataResponse, ValueRange},
         SpreadsheetSheetService,
     },
 };
 
-/// 插入数据请求
+/// 追加数据请求
 #[derive(Serialize, Debug, Default)]
-pub struct PrependDataRequest {
+pub struct AppendDataRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     #[serde(skip)]
     spreadsheet_token: String,
+    /// 遇到空行追加，默认 OVERWRITE，若空行的数量小于追加数据的行数，则会覆盖已有数据；可选
+    /// INSERT_ROWS ，会在插入足够数量的行后再进行数据追加
+    #[serde(rename = "insertDataOption")]
+    insert_data_option: String,
     /// 值与范围
     #[serde(rename = "valueRange")]
     value_range: ValueRange,
 }
 
-impl PrependDataRequest {
-    pub fn builder() -> PrependDataRequestBuilder {
-        PrependDataRequestBuilder::default()
+impl AppendDataRequest {
+    pub fn builder() -> AppendDataRequestBuilder {
+        AppendDataRequestBuilder::default()
     }
 }
 
 #[derive(Default)]
-pub struct PrependDataRequestBuilder {
-    request: PrependDataRequest,
+pub struct AppendDataRequestBuilder {
+    request: AppendDataRequest,
 }
 
-impl PrependDataRequestBuilder {
+impl AppendDataRequestBuilder {
     pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
         self.request.spreadsheet_token = spreadsheet_token.to_string();
         self
@@ -56,22 +60,22 @@ impl PrependDataRequestBuilder {
         self
     }
 
-    pub fn build(mut self) -> PrependDataRequest {
+    pub fn build(mut self) -> AppendDataRequest {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
 }
 
 impl SpreadsheetSheetService {
-    /// 插入数据
-    pub async fn prepend_data(
+    /// 追加数据
+    pub async fn append_data(
         &self,
-        request: PrependDataRequest,
+        request: AppendDataRequest,
         option: Option<req_option::RequestOption>,
-    ) -> SDKResult<BaseResponse<PrependDataResponse>> {
+    ) -> SDKResult<BaseResponse<AppendDataResponse>> {
         let mut api_req = request.api_request;
         api_req.api_path = format!(
-            "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_prepend",
+            "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_append",
             spreadsheet_token = request.spreadsheet_token
         );
         api_req.http_method = reqwest::Method::POST;
