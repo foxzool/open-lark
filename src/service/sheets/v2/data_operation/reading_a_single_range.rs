@@ -16,7 +16,7 @@ use crate::{
 
 /// 读取单个范围请求
 #[derive(Debug, Default)]
-pub struct ReadASingleRangeRequest {
+pub struct ReadSingleRangeRequest {
     api_request: ApiRequest,
     /// spreadsheet 的 token
     spreadsheet_token: String,
@@ -49,18 +49,18 @@ pub struct ReadASingleRangeRequest {
     user_id_type: Option<String>,
 }
 
-impl ReadASingleRangeRequest {
-    pub fn builder() -> ReadASingleRangeRequestBuilder {
-        ReadASingleRangeRequestBuilder::default()
+impl ReadSingleRangeRequest {
+    pub fn builder() -> ReadSingleRangeRequestBuilder {
+        ReadSingleRangeRequestBuilder::default()
     }
 }
 
 #[derive(Default)]
-pub struct ReadASingleRangeRequestBuilder {
-    request: ReadASingleRangeRequest,
+pub struct ReadSingleRangeRequestBuilder {
+    request: ReadSingleRangeRequest,
 }
 
-impl ReadASingleRangeRequestBuilder {
+impl ReadSingleRangeRequestBuilder {
     pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
         self.request.spreadsheet_token = spreadsheet_token.to_string();
         self
@@ -121,7 +121,7 @@ impl ReadASingleRangeRequestBuilder {
         self
     }
 
-    pub fn build(self) -> ReadASingleRangeRequest {
+    pub fn build(self) -> ReadSingleRangeRequest {
         self.request
     }
 }
@@ -165,7 +165,7 @@ impl SpreadsheetService {
     /// 读取单个范围
     pub async fn reading_a_single_range(
         &self,
-        request: ReadASingleRangeRequest,
+        request: ReadSingleRangeRequest,
         option: Option<req_option::RequestOption>,
     ) -> SDKResult<BaseResponse<ReadRangeResponse>> {
         let mut api_req = request.api_request;

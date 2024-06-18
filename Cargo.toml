@@ -155,6 +155,11 @@ path = "examples/api/sheets/v2/data-operation/append_data.rs"
 name = "sheet-reading_a_single_range"
 path = "examples/api/sheets/v2/data-operation/reading_a_single_range.rs"
 
+# 向单个范围写入数据
+[[example]]
+name = "sheet-write_a_single_range"
+path = "examples/api/sheets/v2/data-operation/write_a_single_range.rs"
+
 [[example]]
 name = "operate_spreadsheet_sheet"
 path = "examples/api/sheets/v2/spreadsheet-sheet/operate.rs"

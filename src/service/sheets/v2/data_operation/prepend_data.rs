@@ -3,13 +3,11 @@ use serde_json::Value;
 
 use crate::{
     core::{
-        api_req::ApiRequest,
-        api_resp::BaseResponse,
-        constants::AccessTokenType,
-        req_option, SDKResult,
+        api_req::ApiRequest, api_resp::BaseResponse, constants::AccessTokenType, req_option,
+        SDKResult,
     },
     service::sheets::v2::{
-        data_operation::{PrependDataResponse, ValueRangeRequest},
+        data_operation::{AppendDataResponse, ValueRangeRequest},
         SpreadsheetSheetService,
     },
 };
@@ -61,6 +59,9 @@ impl PrependDataRequestBuilder {
         self.request
     }
 }
+
+/// 插入数据响应体
+pub type PrependDataResponse = AppendDataResponse;
 
 impl SpreadsheetSheetService {
     /// 插入数据
