@@ -9,7 +9,7 @@ use crate::{
         req_option, SDKResult,
     },
     service::sheets::v2::{
-        data_operation::{PrependDataResponse, ValueRange},
+        data_operation::{PrependDataResponse, ValueRangeRequest},
         SpreadsheetSheetService,
     },
 };
@@ -23,7 +23,7 @@ pub struct PrependDataRequest {
     spreadsheet_token: String,
     /// 值与范围
     #[serde(rename = "valueRange")]
-    value_range: ValueRange,
+    value_range: ValueRangeRequest,
 }
 
 impl PrependDataRequest {
