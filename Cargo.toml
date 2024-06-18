@@ -170,6 +170,13 @@ path = "examples/api/sheets/v2/data-operation/reading_multi_ranges.rs"
 name = "sheet-write_multi_ranges"
 path = "examples/api/sheets/v2/data-operation/write_multi_ranges.rs"
 
+
+# 设置单元格样式
+[[example]]
+name = "sheet-set_cell_style"
+path = "examples/api/sheets/v2/data-operation/set_cell_style.rs"
+
+
 [[example]]
 name = "operate_spreadsheet_sheet"
 path = "examples/api/sheets/v2/spreadsheet-sheet/operate.rs"

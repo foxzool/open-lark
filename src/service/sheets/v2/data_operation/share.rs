@@ -27,10 +27,10 @@ pub(crate) struct ValueRangeResponse {
     pub(crate) revision: i32,
 }
 
-/// 追加数据响应体
+/// 更新数据响应体
 #[derive(Deserialize, Debug)]
 #[allow(dead_code)]
-pub struct UpdateDataResponse {
+pub struct UpdateSheetDataResponse {
     /// spreadsheet 的 token
     #[serde(rename = "spreadsheetToken")]
     pub spreed_sheet_token: String,
@@ -40,10 +40,10 @@ pub struct UpdateDataResponse {
     /// sheet 的版本号
     pub revision: i32,
     /// 追加数据的范围、行列数等
-    pub updates: DataUpdates,
+    pub updates: SheetDataUpdates,
 }
 
-impl ApiResponseTrait for UpdateDataResponse {
+impl ApiResponseTrait for UpdateSheetDataResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
@@ -52,7 +52,7 @@ impl ApiResponseTrait for UpdateDataResponse {
 /// 追加数据的范围、行列数等
 #[derive(Deserialize, Debug)]
 #[allow(dead_code)]
-pub struct DataUpdates {
+pub struct SheetDataUpdates {
     /// spreadsheet 的 token
     #[serde(rename = "spreadsheetToken")]
     pub spreed_sheet_token: String,
@@ -72,7 +72,7 @@ pub struct DataUpdates {
     pub revision: i32,
 }
 
-impl ApiResponseTrait for DataUpdates {
+impl ApiResponseTrait for SheetDataUpdates {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
