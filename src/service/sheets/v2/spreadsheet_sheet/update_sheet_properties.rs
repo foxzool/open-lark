@@ -1,10 +1,13 @@
 use serde::{Deserialize, Serialize};
 
-use crate::core::api_req::ApiRequest;
-use crate::core::api_resp::BaseResponse;
-use crate::core::constants::AccessTokenType;
-use crate::core::{req_option, SDKResult};
-use crate::service::sheets::v2::spreadsheet_sheet::{OperateSheetResponse, OperateSheetsRequestElem, SpreadsheetSheetService};
+use crate::{
+    core::{
+        api_req::ApiRequest, api_resp::BaseResponse, constants::AccessTokenType, req_option,
+        SDKResult,
+    },
+    service::sheets::v2::spreadsheet_sheet::{OperateSheetResponse, OperateSheetsRequestElem},
+};
+use crate::service::sheets::v2::SpreadsheetSheetService;
 
 #[derive(Serialize, Debug, Default)]
 pub struct UpdateSheetPropertiesRequest {
@@ -26,8 +29,6 @@ pub struct UpdateSheetPropertiesRequest {
     /// 更新工作表属性的请求
     requests: Vec<OperateSheetsRequestElem>,
 }
-
-
 
 /// 工作表属性
 #[derive(Serialize, Deserialize, Default, Debug)]
@@ -90,12 +91,12 @@ impl UpdateSheetPropertiesRequestBuilder {
         self
     }
 
-
-
     pub fn add_request(mut self, update_property: UpdateSheetProperty) -> Self {
-        self.request.requests.push(OperateSheetsRequestElem::UpdateSheet {
-            properties: update_property,
-        });
+        self.request
+            .requests
+            .push(OperateSheetsRequestElem::UpdateSheet {
+                properties: update_property,
+            });
         self
     }
 
@@ -104,7 +105,6 @@ impl UpdateSheetPropertiesRequestBuilder {
         self.request
     }
 }
-
 
 impl SpreadsheetSheetService {
     pub async fn update_sheet_properties(

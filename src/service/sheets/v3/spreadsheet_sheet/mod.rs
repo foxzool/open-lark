@@ -1,25 +1,10 @@
 use serde::Deserialize;
-use crate::core::config::Config;
 
-pub use query::*;
 pub use get::*;
+pub use query::*;
 
-mod query;
 mod get;
-
-
-/// 工作表
-pub struct SpreadsheetSheetService {
-    config: Config,
-}
-
-impl SpreadsheetSheetService {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-}
-
-
+mod query;
 
 #[derive(Deserialize, Debug)]
 pub struct Sheet {

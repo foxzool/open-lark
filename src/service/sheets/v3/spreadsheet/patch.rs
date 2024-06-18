@@ -1,12 +1,17 @@
 use reqwest::Method;
 use serde::Serialize;
-use crate::core::api_req::ApiRequest;
-use crate::core::api_resp::{BaseResponse, RawResponse};
-use crate::core::constants::AccessTokenType;
-use crate::core::http::Transport;
-use crate::core::req_option::RequestOption;
-use crate::core::SDKResult;
-use crate::service::sheets::v3::spreadsheet::{SpreadsheetService};
+
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{BaseResponse, RawResponse},
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    service::sheets::v3::SpreadsheetService,
+};
 
 impl SpreadsheetService {
     /// 修改电子表格属性
@@ -28,7 +33,6 @@ impl SpreadsheetService {
         Ok(api_resp)
     }
 }
-
 
 /// 修改电子表格属性 请求体
 #[derive(Default, Debug, Serialize)]
