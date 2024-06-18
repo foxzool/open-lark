@@ -1,42 +1,49 @@
 use serde::Serialize;
 
-use crate::core::api_req::ApiRequest;
-use crate::core::api_resp::{BaseResponse, EmptyResponse};
-use crate::core::{req_option, SDKResult};
-use crate::core::constants::AccessTokenType;
-use crate::service::sheets::v2::sheet_row_col::UpdateDimension;
-use crate::service::sheets::v2::SpreadsheetService;
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{BaseResponse, EmptyResponse},
+        constants::AccessTokenType,
+        req_option, SDKResult,
+    },
+    service::sheets::v2::{sheet_row_col::UpdateDimension, SpreadsheetService},
+};
 
-/// 插入行列请求
-#[derive(Serialize, Default, Debug)]
-pub struct InsertDimensionRangeRequest {
+/// 更新行列请求
+#[derive(Serialize, Debug, Default)]
+pub struct UpdateDimensionRangeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     #[serde(skip)]
     spreadsheet_token: String,
-    /// 需要插入行列的维度信息
+    /// 需要更新行列的维度信息
     dimension: UpdateDimension,
-    /// 插入的空白行或列是否继承表中的单元格样式。不填或设置为空即不继承任何样式，为默认空白样式。
-    /// 可选值：
-    /// - BEFORE：继承起始位置的单元格的样式
-    /// - AFTER：继承结束位置的单元格的样式
-    #[serde(rename = "inheritStyle")]
-    inherit_style: Option<String>,
+    /// 更新行或列的属性。至少写入以下参数之一
+    #[serde(rename = "dimensionProperties")]
+    dimension_properties: DimensionProperties,
 }
 
+/// 更新行或列的属性。至少写入以下参数之一
+#[derive(Serialize, Debug, Default)]
+struct DimensionProperties {
+    visible: Option<bool>,
+    #[serde(rename = "fixedSize")]
+    fixed_size: Option<i32>,
+}
 
-impl InsertDimensionRangeRequest {
-    pub fn builder() -> InsertDimensionRangeRequestBuilder {
-        InsertDimensionRangeRequestBuilder::default()
+impl UpdateDimensionRangeRequest {
+    pub fn builder() -> UpdateDimensionRangeRequestBuilder {
+        UpdateDimensionRangeRequestBuilder::default()
     }
 }
 
 #[derive(Default)]
-pub struct InsertDimensionRangeRequestBuilder {
-    request: InsertDimensionRangeRequest,
+pub struct UpdateDimensionRangeRequestBuilder {
+    request: UpdateDimensionRangeRequest,
 }
 
-impl InsertDimensionRangeRequestBuilder {
+impl UpdateDimensionRangeRequestBuilder {
     pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
         self.request.spreadsheet_token = spreadsheet_token.to_string();
         self
@@ -71,34 +78,39 @@ impl InsertDimensionRangeRequestBuilder {
         self
     }
 
-    /// 插入的空白行或列是否继承表中的单元格样式。不填或设置为空即不继承任何样式，为默认空白样式。
-    /// 可选值：
-    /// - BEFORE：继承起始位置的单元格的样式
-    /// - AFTER：继承结束位置的单元格的样式
-    pub fn inherit_style(mut self, inherit_style: impl ToString) -> Self {
-        self.request.inherit_style = Some(inherit_style.to_string());
+    /// 是否隐藏行或列。可选值：
+    /// - true：显示行或列
+    /// - false：隐藏行或列
+    pub fn visible(mut self, visible: bool) -> Self {
+        self.request.dimension_properties.visible = Some(visible);
         self
     }
 
-    pub fn build(mut self) -> InsertDimensionRangeRequest {
+    /// 行高或列宽。单位为像素。fixedSize 为 0 时，等价于隐藏行或列。
+    pub fn fixed_size(mut self, fixed_size: i32) -> Self {
+        self.request.dimension_properties.fixed_size = Some(fixed_size);
+        self
+    }
+
+    pub fn build(mut self) -> UpdateDimensionRangeRequest {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
 }
 
 impl SpreadsheetService {
-    /// 插入行列
-    pub async fn insert_dimension_range(
+    /// 该接口用于更新设置电子表格中行列的属性，包括是否隐藏行列和设置行高列宽。
+    pub async fn update_dimension_range(
         &self,
-        request: InsertDimensionRangeRequest,
+        request: UpdateDimensionRangeRequest,
         option: Option<req_option::RequestOption>,
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut api_req = request.api_request;
         api_req.api_path = format!(
-            "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/insert_dimension_range",
+            "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/dimension_range",
             spreadsheet_token = request.spreadsheet_token
         );
-        api_req.http_method = reqwest::Method::POST;
+        api_req.http_method = reqwest::Method::PUT;
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::App];
 
         let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;

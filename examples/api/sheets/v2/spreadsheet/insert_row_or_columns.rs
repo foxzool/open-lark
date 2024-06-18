@@ -17,7 +17,6 @@ async fn main() {
     // 创建 Client
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
 
-    // 查询原测试工作表的sheet id
     let req = InsertDimensionRangeRequest::builder()
         .spreadsheet_token("O21wsTInWht7sUtRj77cFwRXnme")
         .sheet_id("0ae03b")
