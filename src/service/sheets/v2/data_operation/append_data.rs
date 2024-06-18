@@ -9,7 +9,7 @@ use crate::{
         req_option, SDKResult,
     },
     service::sheets::v2::{
-        data_operation::{AppendDataResponse, ValueRange},
+        data_operation::{AppendDataResponse, ValueRangeRequest},
         SpreadsheetSheetService,
     },
 };
@@ -27,7 +27,7 @@ pub struct AppendDataRequest {
     insert_data_option: String,
     /// 值与范围
     #[serde(rename = "valueRange")]
-    value_range: ValueRange,
+    value_range: ValueRangeRequest,
 }
 
 impl AppendDataRequest {

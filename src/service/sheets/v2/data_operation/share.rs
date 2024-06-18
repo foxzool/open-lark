@@ -3,12 +3,27 @@ use serde_json::Value;
 use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
 
 #[derive(Serialize, Debug, Default)]
-pub(crate) struct ValueRange {
+pub(crate) struct ValueRangeRequest {
     /// 插入范围，包含 sheetId 与单元格范围两部分，目前支持四种索引方式，详见
     /// 在线表格开发指南，range所表示的范围需要大于等于values占用的范围。
     pub(crate) range: String,
     /// 需要写入的值，如要写入公式、超链接、email、@人等，可详看附录sheet 支持写入数据类型
     pub(crate) values: Value,
+}
+
+#[derive(Deserialize, Debug, Default)]
+#[allow(dead_code)]
+pub(crate) struct ValueRangeResponse {
+    /// 插入维度
+    #[serde(rename = "majorDimension")]
+    pub(crate) major_dimension: String,
+    /// 插入范围，包含 sheetId 与单元格范围两部分，目前支持四种索引方式，详见
+    /// 在线表格开发指南，range所表示的范围需要大于等于values占用的范围。
+    pub(crate) range: String,
+    /// 需要写入的值，如要写入公式、超链接、email、@人等，可详看附录sheet 支持写入数据类型
+    pub(crate) values: Value,
+    /// sheet 的版本号
+    pub(crate) revision: i32
 }
 
 /// 插入数据响应体
