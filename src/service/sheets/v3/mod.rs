@@ -2,6 +2,7 @@ use crate::core::config::Config;
 
 pub mod spreadsheet;
 pub mod spreadsheet_sheet;
+pub mod sheet_row_col;
 
 pub struct V3 {
     pub spreadsheet: SpreadsheetService,
