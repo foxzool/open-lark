@@ -69,6 +69,18 @@ impl Display for RawResponse {
     }
 }
 
+/// 空响应体
+#[derive(Debug, Serialize, Deserialize)]
+pub struct EmptyResponse {
+
+}
+
+impl ApiResponseTrait for EmptyResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
 /// 二进制数据响应体
 #[derive(Debug, Serialize, Deserialize)]
 pub struct BinaryResponse {
