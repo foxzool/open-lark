@@ -6,7 +6,7 @@ use crate::{
         SDKResult,
     },
     service::sheets::v2::{
-        data_operation::{AppendDataResponse, ValueRangeRequest},
+        data_operation::{DataUpdates, ValueRangeRequest},
         SpreadsheetService,
     },
 };
@@ -55,7 +55,7 @@ impl WriteDataToSingleRangeBuilder {
 }
 
 /// 写入单个范围响应体
-pub type WriteDataToSingleRangeResponse = AppendDataResponse;
+pub type WriteDataToSingleRangeResponse = DataUpdates;
 
 impl SpreadsheetService {
     /// 写入单个范围
