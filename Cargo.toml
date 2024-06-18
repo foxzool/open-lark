@@ -135,6 +135,11 @@ path = "examples/api/sheets/v2/spreadsheet/insert_row_or_columns.rs"
 name = "sheet-update-rows-or-columns"
 path = "examples/api/sheets/v2/spreadsheet/update_row_or_columns.rs"
 
+# 删除行列
+[[example]]
+name = "sheet-delete-rows-or-columns"
+path = "examples/api/sheets/v2/spreadsheet/delete_row_or_columns.rs"
+
 [[example]]
 name = "operate_spreadsheet_sheet"
 path = "examples/api/sheets/v2/spreadsheet-sheet/operate.rs"
