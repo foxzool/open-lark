@@ -71,11 +71,18 @@ impl Display for RawResponse {
 
 /// 空响应体
 #[derive(Debug, Serialize, Deserialize)]
-pub struct EmptyResponse {
-
-}
+pub struct EmptyResponse {}
 
 impl ApiResponseTrait for EmptyResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// JSON响应体
+pub type JsonResponse = serde_json::Value;
+
+impl ApiResponseTrait for JsonResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
@@ -153,5 +160,3 @@ pub struct CodeErrorFieldViolation {
     )]
     pub description: Option<String>,
 }
-
-

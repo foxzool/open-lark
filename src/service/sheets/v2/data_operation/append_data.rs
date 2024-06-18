@@ -7,7 +7,7 @@ use crate::{
         SDKResult,
     },
     service::sheets::v2::{
-        data_operation::{UpdateDataResponse, ValueRangeRequest},
+        data_operation::{UpdateSheetDataResponse, ValueRangeRequest},
         SpreadsheetSheetService,
     },
 };
@@ -64,7 +64,7 @@ impl AppendDataRequestBuilder {
     }
 }
 
-pub type AppendDataResponse = UpdateDataResponse;
+pub type AppendDataResponse = UpdateSheetDataResponse;
 
 impl SpreadsheetSheetService {
     /// 追加数据
