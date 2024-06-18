@@ -190,7 +190,6 @@ path = "examples/api/sheets/v2/data-operation/batch_set_cell_style.rs"
 name = "sheet-merge_cells"
 path = "examples/api/sheets/v2/data-operation/merge_cells.rs"
 
-
 # 拆分单元格
 [[example]]
 name = "sheet-split_cells"
@@ -203,6 +202,11 @@ path = "examples/api/sheets/v2/spreadsheet-sheet/operate.rs"
 [[example]]
 name = "update_spreadsheet_sheet_properties"
 path = "examples/api/sheets/v2/spreadsheet-sheet/update.rs"
+
+# 查找单元格
+[[example]]
+name = "sheet-find_cells"
+path = "examples/api/sheets/v3/data_operation/find_cells.rs"
 
 [[example]]
 name = "create_spreadsheet"
