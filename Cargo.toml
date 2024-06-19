@@ -252,6 +252,11 @@ path = "examples/api/sheets/v3/spreadsheet-sheet-filter/get.rs"
 name = "spreadsheet-sheet-filter-create"
 path = "examples/api/sheets/v3/spreadsheet-sheet-filter/create.rs"
 
+# 更新筛选
+[[example]]
+name = "spreadsheet-sheet-filter-update"
+path = "examples/api/sheets/v3/spreadsheet-sheet-filter/update.rs"
+
 [[example]]
 name = "get_bitable"
 path = "examples/api/bitable/v1/app/get.rs"
