@@ -257,6 +257,11 @@ path = "examples/api/sheets/v3/spreadsheet-sheet-filter/create.rs"
 name = "spreadsheet-sheet-filter-update"
 path = "examples/api/sheets/v3/spreadsheet-sheet-filter/update.rs"
 
+# 删除筛选
+[[example]]
+name = "spreadsheet-sheet-filter-delete"
+path = "examples/api/sheets/v3/spreadsheet-sheet-filter/delete.rs"
+
 [[example]]
 name = "get_bitable"
 path = "examples/api/bitable/v1/app/get.rs"
