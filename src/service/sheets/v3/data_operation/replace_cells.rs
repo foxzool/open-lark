@@ -7,9 +7,11 @@ use crate::{
         constants::AccessTokenType,
         req_option, SDKResult,
     },
-    service::sheets::v3::{data_operation::FindReplaceResult, SpreadsheetSheetService},
+    service::sheets::v3::{
+        data_operation::{FindCondition, FindReplaceResult},
+        SpreadsheetSheetService,
+    },
 };
-use crate::service::sheets::v3::data_operation::FindCondition;
 
 #[derive(Serialize, Debug, Default)]
 pub struct ReplaceCellsRequest {

@@ -3,8 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClientBuilder,
-    service::sheets::v2::sheet_row_col::AddDimensionRangeRequest,
+    client::LarkClientBuilder, service::sheets::v2::sheet_row_col::AddDimensionRangeRequest,
 };
 
 /// 操作工作表
@@ -16,7 +15,6 @@ async fn main() {
     let app_secret = env::var("APP_SECRET").unwrap();
     // 创建 Client
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
-
 
     let req = AddDimensionRangeRequest::builder()
         .spreadsheet_token("O21wsTInWht7sUtRj77cFwRXnme")

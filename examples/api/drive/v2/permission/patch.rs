@@ -3,9 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClientBuilder
-    ,
-    service::drive::v1::permissions::PatchPermissionRequest,
+    client::LarkClientBuilder, service::drive::v1::permissions::PatchPermissionRequest,
 };
 
 /// 获取云文档权限设置

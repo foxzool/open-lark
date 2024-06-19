@@ -7,9 +7,11 @@ use crate::{
         constants::AccessTokenType,
         req_option, SDKResult,
     },
-    service::sheets::v2::{data_operation::SheetDataUpdates, SpreadsheetService},
+    service::sheets::v2::{
+        data_operation::{CellStyle, SheetDataUpdates, StyleFont},
+        SpreadsheetService,
+    },
 };
-use crate::service::sheets::v2::data_operation::{CellStyle, StyleFont};
 
 #[derive(Debug, Serialize, Default)]
 pub struct SetCellStyleRequest {

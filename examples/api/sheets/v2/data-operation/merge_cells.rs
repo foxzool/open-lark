@@ -3,8 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClientBuilder,
-    service::sheets::v2::data_operation::MergeCellsRequest,
+    client::LarkClientBuilder, service::sheets::v2::data_operation::MergeCellsRequest,
 };
 
 /// 合并单元格

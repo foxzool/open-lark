@@ -4,9 +4,7 @@ use dotenvy::dotenv;
 
 use open_lark::{
     client::LarkClientBuilder,
-    service::sheets::v2::data_operation::{
-        SetCellStyleRequest, StyleFont,
-    },
+    service::sheets::v2::data_operation::{SetCellStyleRequest, StyleFont},
 };
 
 /// 设置单元格样式
@@ -24,12 +22,7 @@ async fn main() {
         .range("0ae03b!C4:D4")
         .font(StyleFont::builder().bold(true).build())
         .build();
-    let resp = client
-        .sheets
-        .v2
-        .spreadsheet
-        .set_cell_style(req, None)
-        .await;
+    let resp = client.sheets.v2.spreadsheet.set_cell_style(req, None).await;
 
     match resp {
         Ok(base_resp) => {

@@ -6,16 +6,16 @@ use uuid::Uuid;
 use open_lark::{
     card::{
         components::{
-            CardElement,
             containers::collapsible_panel::{CollapsibleHeader, CollapsiblePanel},
             content_components::{
                 plain_text::PlainText,
                 rich_text::FeishuCardMarkdown,
                 title::{FeishuCardTitle, Title},
             },
+            CardElement,
         },
-        FeishuCard,
         icon::FeishuCardTextIcon,
+        FeishuCard,
     },
     client::LarkClientBuilder,
     service::im::v1::message::{CreateMessageRequest, CreateMessageRequestBody, SendMessageTrait},

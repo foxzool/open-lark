@@ -3,8 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClientBuilder,
-    service::sheets::v3::data_operation::ReplaceCellsRequest,
+    client::LarkClientBuilder, service::sheets::v3::data_operation::ReplaceCellsRequest,
 };
 
 /// 替换单元格

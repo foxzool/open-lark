@@ -3,10 +3,7 @@ use std::{env, io::Read};
 use dotenvy::dotenv;
 use simd_adler32::Adler32;
 
-use open_lark::{
-    client::LarkClientBuilder,
-    service::drive::v1::files::UploadAllRequest,
-};
+use open_lark::{client::LarkClientBuilder, service::drive::v1::files::UploadAllRequest};
 
 /// 向云空间指定目录下上传一个小文件
 #[tokio::main]

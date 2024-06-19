@@ -7,9 +7,11 @@ use crate::{
         constants::AccessTokenType,
         req_option, SDKResult,
     },
-    service::sheets::v3::SpreadsheetSheetService,
+    service::sheets::v3::{
+        data_operation::{FindCondition, FindReplaceResult},
+        SpreadsheetSheetService,
+    },
 };
-use crate::service::sheets::v3::data_operation::{FindCondition, FindReplaceResult};
 
 #[derive(Serialize, Debug, Default)]
 pub struct FindCellsRequest {
@@ -30,7 +32,6 @@ pub struct FindCellsRequest {
     /// - 正则查找示例: "[A-Z]\w+""
     find: String,
 }
-
 
 impl FindCellsRequest {
     pub fn builder() -> FindCellsRequestBuilder {
@@ -102,7 +103,6 @@ impl ApiResponseTrait for FindCellsResponse {
         ResponseFormat::Data
     }
 }
-
 
 impl SpreadsheetSheetService {
     /// 查找单元格

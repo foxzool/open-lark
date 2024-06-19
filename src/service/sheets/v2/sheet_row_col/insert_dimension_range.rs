@@ -1,11 +1,14 @@
 use serde::Serialize;
 
-use crate::core::api_req::ApiRequest;
-use crate::core::api_resp::{BaseResponse, EmptyResponse};
-use crate::core::{req_option, SDKResult};
-use crate::core::constants::AccessTokenType;
-use crate::service::sheets::v2::sheet_row_col::UpdateDimension;
-use crate::service::sheets::v2::SpreadsheetService;
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{BaseResponse, EmptyResponse},
+        constants::AccessTokenType,
+        req_option, SDKResult,
+    },
+    service::sheets::v2::{sheet_row_col::UpdateDimension, SpreadsheetService},
+};
 
 /// 插入行列请求
 #[derive(Serialize, Default, Debug)]
@@ -23,7 +26,6 @@ pub struct InsertDimensionRangeRequest {
     #[serde(rename = "inheritStyle")]
     inherit_style: Option<String>,
 }
-
 
 impl InsertDimensionRangeRequest {
     pub fn builder() -> InsertDimensionRangeRequestBuilder {

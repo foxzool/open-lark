@@ -7,9 +7,8 @@ use crate::{
         constants::AccessTokenType,
         req_option, SDKResult,
     },
-    service::sheets::v3::spreadsheet_sheet::Sheet,
+    service::sheets::v3::{spreadsheet_sheet::Sheet, SpreadsheetSheetService},
 };
-use crate::service::sheets::v3::SpreadsheetSheetService;
 
 #[derive(Serialize, Deserialize, Debug, Default)]
 pub struct GetSpreadsheetSheetRequest {

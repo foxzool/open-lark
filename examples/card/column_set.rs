@@ -6,7 +6,6 @@ use uuid::Uuid;
 use open_lark::{
     card::{
         components::{
-            CardElement,
             containers::column_set::{Column, ColumnAction, ColumnSetContainer},
             content_components::{
                 divider::FeishuCardDivider,
@@ -15,9 +14,10 @@ use open_lark::{
                 rich_text::FeishuCardMarkdown,
                 title::{FeishuCardTitle, Title},
             },
+            CardElement,
         },
-        FeishuCard,
         href::FeishuCardHrefVal,
+        FeishuCard,
     },
     client::LarkClientBuilder,
     service::im::v1::message::{CreateMessageRequest, CreateMessageRequestBody, SendMessageTrait},

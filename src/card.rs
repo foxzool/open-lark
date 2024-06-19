@@ -86,8 +86,7 @@ pub struct FeishuCardConfig {
     /// 是否允许转发卡片。取值：
     ///
     /// - true：允许
-    /// - false：不允许
-    ///   默认值为 true，该字段要求飞书客户端的版本为 V3.31.0 及以上。
+    /// - false：不允许 默认值为 true，该字段要求飞书客户端的版本为 V3.31.0 及以上。
     #[serde(skip_serializing_if = "Option::is_none")]
     enable_forward: Option<bool>,
     /// 是否为共享卡片。取值：

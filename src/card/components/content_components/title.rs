@@ -213,8 +213,8 @@ mod test {
                 (FeishuCardLanguage::ZhCN, "中文".to_string()),
                 (FeishuCardLanguage::EnUS, "english".to_string()),
             ]
-                .into_iter()
-                .collect(),
+            .into_iter()
+            .collect(),
         );
         let json = json!({"tag":"plain_text","content":"content","i18n":{"zh_cn":"中文","en_us":"english"}});
 
@@ -230,8 +230,7 @@ mod test {
             .text_tag_list(vec![
                 TextTag::new()
                     .text(PlainText::text("标签 1"))
-                    .color("neutral")
-                ,
+                    .color("neutral"),
                 TextTag::new()
                     .text(PlainText::text("标签 2"))
                     .color("neutral"),

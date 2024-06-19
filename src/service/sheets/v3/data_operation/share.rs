@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Debug, Default)]
-pub(crate) struct  FindCondition {
+pub(crate) struct FindCondition {
     /// 查找范围，参考 名词解释 Range
     pub(crate) range: String,
     /// 是否忽略大小写，默认为 false

@@ -3,9 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClientBuilder
-    ,
-    service::sheets::v2::data_operation::ReadingMultipleRangeRequest,
+    client::LarkClientBuilder, service::sheets::v2::data_operation::ReadingMultipleRangeRequest,
 };
 
 /// 读取多个范围
@@ -31,10 +29,7 @@ async fn main() {
 
     match resp {
         Ok(base_resp) => {
-            println!(
-                "sheet reading_multi_ranges response: {:#?}",
-                base_resp.data
-            );
+            println!("sheet reading_multi_ranges response: {:#?}", base_resp.data);
         }
         Err(err) => {
             println!("sheet reading_multi_ranges error: {:#?}", err);

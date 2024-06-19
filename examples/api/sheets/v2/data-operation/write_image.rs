@@ -3,8 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClientBuilder,
-    service::sheets::v2::data_operation::WriteImageRequest,
+    client::LarkClientBuilder, service::sheets::v2::data_operation::WriteImageRequest,
 };
 
 /// 写入图片
@@ -29,12 +28,7 @@ async fn main() {
         .name("test.png")
         .build();
 
-    let resp = client
-        .sheets
-        .v2
-        .spreadsheet
-        .write_image(req, None)
-        .await;
+    let resp = client.sheets.v2.spreadsheet.write_image(req, None).await;
 
     match resp {
         Ok(base_resp) => {

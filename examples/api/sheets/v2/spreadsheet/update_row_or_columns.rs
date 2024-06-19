@@ -3,8 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClientBuilder,
-    service::sheets::v2::sheet_row_col::UpdateDimensionRangeRequest,
+    client::LarkClientBuilder, service::sheets::v2::sheet_row_col::UpdateDimensionRangeRequest,
 };
 
 /// 插入行列

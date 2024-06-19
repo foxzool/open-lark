@@ -2,7 +2,7 @@ use lazy_static::lazy_static;
 use log::warn;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
-use tokio::{sync::Mutex};
+use tokio::sync::Mutex;
 
 use crate::core::{
     api_req::ApiRequest,
@@ -11,7 +11,7 @@ use crate::core::{
     cache::QuickCache,
     config::Config,
     constants::{
-        AccessTokenType, APP_ACCESS_TOKEN_INTERNAL_URL_PATH, APP_ACCESS_TOKEN_KEY_PREFIX, AppType,
+        AccessTokenType, AppType, APP_ACCESS_TOKEN_INTERNAL_URL_PATH, APP_ACCESS_TOKEN_KEY_PREFIX,
         EXPIRY_DELTA, TENANT_ACCESS_TOKEN_URL_PATH,
     },
     error::LarkAPIError,

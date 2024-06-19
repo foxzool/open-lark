@@ -7,9 +7,8 @@ use crate::{
         constants::AccessTokenType,
         req_option, SDKResult,
     },
-    service::sheets::v2::SpreadsheetSheetService,
+    service::sheets::v2::{spreadsheet_sheet::UpdateSheetProperty, SpreadsheetSheetService},
 };
-use crate::service::sheets::v2::spreadsheet_sheet::UpdateSheetProperty;
 
 #[derive(Serialize, Deserialize, Debug, Default)]
 pub struct OperateSheetsRequest {
@@ -61,8 +60,6 @@ pub struct AddSheetProperty {
     pub index: Option<i32>,
 }
 
-
-
 /// 需要复制的工作表资源
 #[derive(Serialize, Deserialize, Debug, Default)]
 pub struct CopySheetSource {
@@ -109,20 +106,14 @@ impl OperateSheetsRequestBuilder {
     }
 
     /// 复制工作表。复制的新工作表位于源工作表索引位置之后。
-    pub fn copy_sheet(
-        mut self,
-        source: impl ToString,
-        destination: Option<String>,
-    ) -> Self {
+    pub fn copy_sheet(mut self, source: impl ToString, destination: Option<String>) -> Self {
         self.request
             .requests
             .push(OperateSheetsRequestElem::CopySheet {
                 source: CopySheetSource {
                     sheet_id: source.to_string(),
                 },
-                destination: CopySheetDestination {
-                    title: destination,
-                },
+                destination: CopySheetDestination { title: destination },
             });
         self
     }
@@ -194,7 +185,8 @@ pub enum OperateSheetReply {
         result: bool,
         /// 被删除的工作表的 ID
         #[serde(rename = "sheetId")]
-        sheet_id: String },
+        sheet_id: String,
+    },
 }
 
 #[derive(Deserialize, Debug)]

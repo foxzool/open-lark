@@ -3,14 +3,13 @@ use serde::{Deserialize, Serialize};
 
 use crate::core::{
     api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, ResponseFormat},
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
-use crate::core::api_resp::BaseResponse;
 
 pub struct ChatsService {
     pub config: Config,

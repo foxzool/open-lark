@@ -3,8 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClientBuilder,
-    core::req_option::RequestOption,
+    client::LarkClientBuilder, core::req_option::RequestOption,
     service::drive::v1::files::DownloadRequest,
 };
 

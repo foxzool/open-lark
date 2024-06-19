@@ -284,13 +284,13 @@ pub struct EndPointResponse {
 #[derive(Debug, Deserialize)]
 pub struct ClientConfig {
     #[serde(rename = "ReconnectCount")]
-    reconnect_count: i32,
+    pub reconnect_count: i32,
     #[serde(rename = "ReconnectInterval")]
-    reconnect_interval: i32,
+    pub reconnect_interval: i32,
     #[serde(rename = "ReconnectNonce")]
-    reconnect_nonce: i32,
+    pub reconnect_nonce: i32,
     #[serde(rename = "PingInterval")]
-    ping_interval: i32,
+    pub ping_interval: i32,
 }
 
 pub type WsResult<T> = Result<T, WsClientError>;
