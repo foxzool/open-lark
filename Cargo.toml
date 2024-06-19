@@ -247,6 +247,11 @@ path = "examples/api/sheets/v3/spreadsheet-sheet/move_dimension.rs"
 name = "spreadsheet-sheet-filter-get"
 path = "examples/api/sheets/v3/spreadsheet-sheet-filter/get.rs"
 
+# 创建筛选
+[[example]]
+name = "spreadsheet-sheet-filter-create"
+path = "examples/api/sheets/v3/spreadsheet-sheet-filter/create.rs"
+
 [[example]]
 name = "get_bitable"
 path = "examples/api/bitable/v1/app/get.rs"
