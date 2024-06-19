@@ -109,8 +109,6 @@ pub struct CreateSpreedSheetResponse {
     pub spreadsheet_token: String,
 }
 
-
-
 #[cfg(test)]
 mod test {
     use serde_json::json;

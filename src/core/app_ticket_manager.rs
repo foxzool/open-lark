@@ -8,7 +8,7 @@ use crate::core::{
     api_resp::{BaseResponse, RawResponse},
     cache::QuickCache,
     config::Config,
-    constants::{AccessTokenType, APP_TICKET_KEY_PREFIX, APPLY_APP_TICKET_PATH},
+    constants::{AccessTokenType, APPLY_APP_TICKET_PATH, APP_TICKET_KEY_PREFIX},
     http::Transport,
     SDKResult,
 };

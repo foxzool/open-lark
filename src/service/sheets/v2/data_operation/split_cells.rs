@@ -44,7 +44,6 @@ impl SplitCellsRequestBuilder {
         self
     }
 
-
     pub fn build(mut self) -> SplitCellsRequest {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request

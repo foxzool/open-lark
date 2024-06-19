@@ -127,13 +127,13 @@ impl ReadingSingleRangeRequestBuilder {
 #[allow(dead_code)]
 pub struct ReadingSingleRangeResponse {
     /// sheet 的版本号
-    revision: i32,
+    pub revision: i32,
     /// spreadsheet 的 token，详见电子表格概述
     #[serde(rename = "spreadsheetToken")]
-    spreadsheet_token: String,
+    pub spreadsheet_token: String,
     /// 值与范围
     #[serde(rename = "valueRange")]
-    value_range: ValueRangeResponse,
+    pub value_range: ValueRangeResponse,
 }
 
 impl ApiResponseTrait for ReadingSingleRangeResponse {

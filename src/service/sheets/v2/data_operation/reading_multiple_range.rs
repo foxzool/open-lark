@@ -133,16 +133,16 @@ impl ReadingMultiRangesRequestBuilder {
 #[allow(dead_code)]
 pub struct ReadingMultiRangesResponse {
     /// sheet 的版本号
-    revision: i32,
+    pub revision: i32,
     /// spreadsheet 的 token，详见电子表格概述
     #[serde(rename = "spreadsheetToken")]
-    spreadsheet_token: String,
+    pub spreadsheet_token: String,
     /// 读取的单元格总数
     #[serde(rename = "totalCells")]
-    total_cells: i32,
+    pub total_cells: i32,
     /// 值与范围
     #[serde(rename = "valueRanges")]
-    value_ranges: Vec<ValueRangeResponse>,
+    pub value_ranges: Vec<ValueRangeResponse>,
 }
 
 impl ApiResponseTrait for ReadingMultiRangesResponse {

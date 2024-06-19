@@ -3,15 +3,13 @@ use serde::{Deserialize, Serialize};
 
 use crate::core::{
     api_req::ApiRequest,
-    api_resp::{ ApiResponseTrait, BinaryResponse, ResponseFormat},
+    api_resp::{ApiResponseTrait, BaseResponse, BinaryResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
-use crate::core::api_resp::BaseResponse;
-
 
 pub struct FilesService {
     config: Config,
@@ -98,7 +96,6 @@ impl UploadAllRequestBuilder {
     }
 }
 
-
 impl FilesService {
     pub fn new(config: Config) -> Self {
         Self { config }
@@ -141,7 +138,7 @@ impl FilesService {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UploadAllResponse {
     /// 新创建文件的 token
-    file_token: String,
+    pub file_token: String,
 }
 
 impl ApiResponseTrait for UploadAllResponse {

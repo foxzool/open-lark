@@ -2,9 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{
-    client::LarkClientBuilder, service::im::v1::chats::ListChatRequest,
-};
+use open_lark::{client::LarkClientBuilder, service::im::v1::chats::ListChatRequest};
 
 /// 获取用户或机器人所在的群列表
 /// GET /open-apis/im/v1/messages
@@ -21,7 +19,6 @@ async fn main() {
     // 发起请求
     let resp = client.im.v1.chats.list(req.clone(), None).await.unwrap();
     println!("response: {:?}", resp);
-
 
     // 循环
     let mut iterator = client.im.v1.chats.list_iter(req, None);

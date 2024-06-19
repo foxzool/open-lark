@@ -5,9 +5,11 @@ use crate::{
         api_req::ApiRequest, api_resp::BaseResponse, constants::AccessTokenType, req_option,
         SDKResult,
     },
-    service::sheets::v2::spreadsheet_sheet::{OperateSheetResponse, OperateSheetsRequestElem},
+    service::sheets::v2::{
+        spreadsheet_sheet::{OperateSheetResponse, OperateSheetsRequestElem},
+        SpreadsheetSheetService,
+    },
 };
-use crate::service::sheets::v2::SpreadsheetSheetService;
 
 #[derive(Serialize, Debug, Default)]
 pub struct UpdateSheetPropertiesRequest {

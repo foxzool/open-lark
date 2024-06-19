@@ -114,11 +114,11 @@ impl ApiResponseTrait for GetSpreadsheetResponseData {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct GetSpreadsheetResponse {
     /// 电子表格标题
-    title: String,
+    pub title: String,
     /// 电子表格owner
-    owner_id: String,
+    pub owner_id: String,
     /// 电子表格token
-    token: String,
+    pub token: String,
     /// 电子表格url
-    url: String,
+    pub url: String,
 }

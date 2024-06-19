@@ -3,8 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClientBuilder,
-    service::sheets::v3::spreadsheet::CreateSpreedSheetRequest,
+    client::LarkClientBuilder, service::sheets::v3::spreadsheet::CreateSpreedSheetRequest,
 };
 
 /// 创建表格

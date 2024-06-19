@@ -5,9 +5,7 @@ use dotenvy::dotenv;
 use open_lark::{
     client::LarkClientBuilder,
     service::sheets::{
-        v2::spreadsheet_sheet::{
-            UpdateSheetPropertiesRequest, UpdateSheetProperty,
-        },
+        v2::spreadsheet_sheet::{UpdateSheetPropertiesRequest, UpdateSheetProperty},
         v3::spreadsheet_sheet::QuerySpreadsheetSheetRequest,
     },
 };

@@ -15,9 +15,7 @@ async fn main() {
     // 创建 Client
     let client = LarkClientBuilder::new(&app_id, &app_secret).build();
 
-    let req = ListFolderRequest::builder()
-        .folder_token("")
-        .build();
+    let req = ListFolderRequest::builder().folder_token("").build();
     // 发起请求
     let resp = client
         .drive

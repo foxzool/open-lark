@@ -3,9 +3,12 @@ use hmac::{Hmac, Mac};
 use serde_json::{json, Value};
 use sha2::Sha256;
 
-use crate::core::api_resp::BaseResponse;
 use crate::{
-    core::{api_resp::RawResponse, http::Transport, SDKResult},
+    core::{
+        api_resp::{BaseResponse, RawResponse},
+        http::Transport,
+        SDKResult,
+    },
     service::im::v1::message::{MessageCardTemplate, SendMessageTrait},
 };
 
