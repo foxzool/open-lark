@@ -4,6 +4,7 @@ pub mod data_operation;
 pub mod sheet_row_col;
 pub mod spreadsheet;
 pub mod spreadsheet_sheet;
+pub mod spreadsheet_sheet_filter;
 
 pub struct V3 {
     pub spreadsheet: SpreadsheetService,

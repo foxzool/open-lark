@@ -195,10 +195,12 @@ path = "examples/api/sheets/v2/data-operation/merge_cells.rs"
 name = "sheet-split_cells"
 path = "examples/api/sheets/v2/data-operation/split_cells.rs"
 
+# 操作工作表
 [[example]]
 name = "operate_spreadsheet_sheet"
 path = "examples/api/sheets/v2/spreadsheet-sheet/operate.rs"
 
+# 更新工作表属性
 [[example]]
 name = "update_spreadsheet_sheet_properties"
 path = "examples/api/sheets/v2/spreadsheet-sheet/update.rs"
@@ -225,19 +227,25 @@ path = "examples/api/sheets/v3/spreadsheet/patch.rs"
 name = "get_spreadsheet"
 path = "examples/api/sheets/v3/spreadsheet/get.rs"
 
+# 查询工作表
 [[example]]
 name = "get_spreadsheet_sheet"
 path = "examples/api/sheets/v3/spreadsheet-sheet/get.rs"
 
+# 获取工作表
 [[example]]
 name = "query_spreadsheet_sheet"
 path = "examples/api/sheets/v3/spreadsheet-sheet/query.rs"
 
+# 移动行列
 [[example]]
 name = "sheet_move_dimension"
 path = "examples/api/sheets/v3/spreadsheet-sheet/move_dimension.rs"
 
-
+# 获取筛选
+[[example]]
+name = "spreadsheet-sheet-filter-get"
+path = "examples/api/sheets/v3/spreadsheet-sheet-filter/get.rs"
 
 [[example]]
 name = "get_bitable"
