@@ -9,8 +9,7 @@ use crate::{
         SDKResult,
     },
     service::sheets::v3::{
-        spreadsheet_sheet_filter::SheetFilterCondition, SpreadsheetSheetFilterService
-        ,
+        spreadsheet_sheet_filter::SheetFilterCondition, SpreadsheetSheetFilterService,
     },
 };
 

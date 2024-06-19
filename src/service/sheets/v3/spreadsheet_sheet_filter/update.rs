@@ -9,8 +9,7 @@ use crate::{
         SDKResult,
     },
     service::sheets::v3::{
-        spreadsheet_sheet_filter::SheetFilterCondition, SpreadsheetSheetFilterService
-        ,
+        spreadsheet_sheet_filter::SheetFilterCondition, SpreadsheetSheetFilterService,
     },
 };
 
@@ -52,7 +51,6 @@ impl UpdateSheetFilterRequestBuilder {
         self.request.sheet_id = sheet_id.to_string();
         self
     }
-
 
     /// 设置筛选条件的列
     pub fn col(mut self, col: impl ToString) -> Self {
