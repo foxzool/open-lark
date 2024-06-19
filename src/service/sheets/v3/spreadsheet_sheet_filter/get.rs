@@ -8,7 +8,10 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    service::sheets::v3::SpreadsheetSheetService,
+    service::sheets::v3::{
+        spreadsheet_sheet_filter::SheetFilterCondition, SpreadsheetSheetFilterService
+        ,
+    },
 };
 
 /// 获取子表的详细筛选信息请求
@@ -50,7 +53,7 @@ impl SheetFilterRequestBuilder {
 
 #[derive(Deserialize, Debug)]
 pub struct SheetFilterResponse {
-    pub sheet_filter_info: Option<SheetFilterInfo>
+    pub sheet_filter_info: Option<SheetFilterInfo>,
 }
 
 impl ApiResponseTrait for SheetFilterResponse {
@@ -68,7 +71,6 @@ pub struct SheetFilterInfo {
     pub filtered_out_rows: Vec<i32>,
     /// sheet的筛选条件
     pub filter_infos: Vec<FilterInfo>,
-
 }
 
 /// sheet的筛选条件
@@ -80,20 +82,9 @@ pub struct FilterInfo {
     pub conditions: Vec<SheetFilterCondition>,
 }
 
-/// 筛选条件
-#[derive(Deserialize, Debug)]
-pub struct SheetFilterCondition {
-    /// 筛选类型
-    pub filter_type: String,
-    /// 比较类型
-    pub compare_type: String,
-    /// 筛选参数
-    pub expected: Vec<String>,
-}
-
-impl SpreadsheetSheetService {
+impl SpreadsheetSheetFilterService {
     /// 获取子表的详细筛选信息
-    pub async fn sheet_filter(
+    pub async fn get(
         &self,
         request: SheetFilterRequest,
         option: Option<RequestOption>,
