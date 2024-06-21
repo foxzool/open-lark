@@ -1,193 +1,261 @@
-use std::{collections::HashMap, sync::Arc};
+use std::{
+    collections::HashMap,
+    time::{Duration, Instant},
+};
 
-use futures_util::{SinkExt, StreamExt};
-use kanal::AsyncSender;
-use log::{debug, error};
+use futures_util::{
+    stream::{SplitSink, SplitStream},
+    SinkExt, StreamExt,
+};
+use lark_websocket_protobuf::pbbp2::{Frame, Header};
+use log::{debug, error, info, trace};
 use prost::Message as ProstMessage;
 use serde::Deserialize;
 use serde_json::json;
-use tokio::sync::Mutex;
-use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
+use tokio::{net::TcpStream, sync::mpsc, time::Interval};
+use tokio_tungstenite::{
+    connect_async,
+    tungstenite::protocol::{frame::coding::CloseCode, Message},
+    MaybeTlsStream, WebSocketStream,
+};
 use url::Url;
-
-use lark_websocket_protobuf::pbbp2::{Frame, Header};
 
 use crate::core::{api_resp::BaseResponse, constants::FEISHU_BASE_URL};
 
 const END_POINT_URL: &str = "/callback/ws/endpoint";
 
-#[derive(Debug, Clone)]
-pub struct LarkWsClient<'a> {
-    app_id: &'a str,
-    app_secret: &'a str,
-    domain: &'a str,
+const HEARTBEAT_TIMEOUT: Duration = Duration::from_secs(120);
+
+#[derive(Debug)]
+pub struct LarkWsClient {
+    pub frame_tx: mpsc::UnboundedSender<Frame>,
+    pub event_rx: mpsc::UnboundedReceiver<WsEvent>,
 }
 
-impl<'a> LarkWsClient<'a> {
-    pub fn new(app_id: &'a str, app_secret: &'a str) -> Self {
-        Self {
-            app_id,
-            app_secret,
-            domain: FEISHU_BASE_URL,
-        }
-    }
-
-    pub async fn start(self) -> WsResult<()> {
-        Self::connect(self).await
-    }
-
-    async fn connect(mut self) -> WsResult<()> {
-        let conn_url = self.get_conn_url().await?;
+impl LarkWsClient {
+    pub async fn open(app_id: &str, app_secret: &str) -> WsClientResult<Self> {
+        let end_point = get_conn_url(app_id, app_secret).await?;
+        let conn_url = end_point.url.unwrap();
+        let client_config = end_point.client_config.unwrap();
         let url = Url::parse(&conn_url)?;
         let query_pairs: HashMap<_, _> = url.query_pairs().into_iter().collect();
-        let conn_id = query_pairs.get("device_id").unwrap();
-        let service_id = query_pairs.get("service_id").unwrap();
-        let (ws_stream, _response) = connect_async(conn_url).await?;
-        let (mut write, read) = ws_stream.split();
-        let (sender_tx, sender_rx) = kanal::unbounded_async::<Message>();
+        // let conn_id = query_pairs.get("device_id").unwrap();
+        let service_id = query_pairs.get("service_id").unwrap().parse().unwrap();
 
-        let write_task = async move {
-            while let Ok(msg) = sender_rx.recv().await {
-                match write.send(msg).await {
-                    Ok(_) => {}
-                    Err(e) => {
-                        error!("Error: {:?}", e);
-                    }
-                }
-            }
-        };
-
-        let ws_client = Client::new(conn_id, service_id, sender_tx.clone());
-        let client = Arc::new(Mutex::new(ws_client));
-        let read_client = Arc::clone(&client);
-        let read_task = async move {
-            let mut read = read;
-
-            while let Some(message) = read.next().await {
-                match message {
-                    Ok(msg) => {
-                        let mut new_client = read_client.lock().await;
-                        new_client.handle_message(msg).unwrap();
-                    }
-                    Err(e) => {
-                        println!("Error: {:?}", e);
-                    }
-                }
-            }
-        };
-
-        let ping_client = Arc::clone(&client);
-        let ping_task = async move {
-            loop {
-                let ping_client = ping_client.lock().await;
-                let service_id: i32 = ping_client.service_id.parse().unwrap();
-                let frame = new_frame(service_id);
-                let msg = Message::Binary(frame.encode_to_vec());
-                debug!("Sending ping message: {:?}", msg);
-                ping_client.sender_tx.send(msg).await.unwrap();
-                tokio::time::sleep(tokio::time::Duration::from_secs(
-                    ping_client.ping_interval as u64,
-                ))
-                .await;
-            }
-        };
-
-        tokio::select! {
-            _ = write_task => {}
-            _ = read_task => {}
-            _ = ping_task => {}
-        }
-
-        Ok(())
-    }
-
-    /// 获取连接地址
-    async fn get_conn_url(&mut self) -> WsResult<String> {
-        let body = json!({
-            "AppID": self.app_id,
-            "AppSecret": self.app_secret
-        });
-
-        let req = reqwest::Client::new()
-            .post(&format!("{}{END_POINT_URL}", self.domain))
-            .header("locale", "zh")
-            .json(&body)
-            .send()
-            .await?;
-
-        let resp = req.json::<BaseResponse<EndPointResponse>>().await?;
-        debug!("{:?}", resp.data);
-
-        if !resp.success() {
-            return match resp.raw_response.code {
-                1 => Err(WsClientError::ServerError {
-                    code: resp.raw_response.code,
-                    message: resp.raw_response.msg,
-                }),
-                1000040343 => Err(WsClientError::ServerError {
-                    code: resp.raw_response.code,
-                    message: resp.raw_response.msg,
-                }),
-                _ => Err(WsClientError::ClientError {
-                    code: resp.raw_response.code,
-                    message: resp.raw_response.msg,
-                }),
-            };
-        }
-
-        let end_point = resp.data.unwrap();
-        if end_point.url.is_none() || end_point.url.as_ref().unwrap().is_empty() {
-            return Err(WsClientError::ServerError {
-                code: 500,
-                message: "No available endpoint".to_string(),
-            });
-        }
-
-        Ok(end_point.url.unwrap())
-    }
-}
-
-#[derive(Debug, Clone)]
-struct Client<'a> {
-    _auto_reconnect: bool,
-    reconnect_count: i32,
-    reconnect_interval: i32,
-    reconnect_nonce: i32,
-    ping_interval: i32,
-    _conn_id: &'a str,
-    service_id: &'a str,
-    sender_tx: AsyncSender<Message>,
-}
-
-impl<'a> Client<'a> {
-    pub fn new(_conn_id: &'a str, service_id: &'a str, sender_tx: AsyncSender<Message>) -> Self {
-        Self {
-            _auto_reconnect: true,
-            reconnect_count: 30,
-            reconnect_interval: -1,
-            reconnect_nonce: 2 * 60,
-            ping_interval: 2 * 60,
-            _conn_id,
+        let (conn, _response) = connect_async(conn_url).await?;
+        info!("connected to {url}");
+        let (frame_tx, frame_rx) = mpsc::unbounded_channel();
+        let (event_tx, event_rx) = mpsc::unbounded_channel();
+        tokio::spawn(client_loop(
             service_id,
-            sender_tx,
+            client_config,
+            conn,
+            frame_rx,
+            event_tx,
+        ));
+        Ok(Self { frame_tx, event_rx })
+    }
+}
+
+/// 获取连接配置
+async fn get_conn_url(app_id: &str, app_secret: &str) -> WsClientResult<EndPointResponse> {
+    let body = json!({
+        "AppID": app_id,
+        "AppSecret": app_secret
+    });
+
+    let req = reqwest::Client::new()
+        .post(&format!("{FEISHU_BASE_URL}/{END_POINT_URL}"))
+        .header("locale", "zh")
+        .json(&body)
+        .send()
+        .await?;
+
+    let resp = req.json::<BaseResponse<EndPointResponse>>().await?;
+    debug!("{:?}", resp.data);
+
+    if !resp.success() {
+        return match resp.raw_response.code {
+            1 => Err(WsClientError::ServerError {
+                code: resp.raw_response.code,
+                message: resp.raw_response.msg,
+            }),
+            1000040343 => Err(WsClientError::ServerError {
+                code: resp.raw_response.code,
+                message: resp.raw_response.msg,
+            }),
+            _ => Err(WsClientError::ClientError {
+                code: resp.raw_response.code,
+                message: resp.raw_response.msg,
+            }),
+        };
+    }
+
+    let end_point = resp.data.unwrap();
+    if end_point.url.is_none() || end_point.url.as_ref().unwrap().is_empty() {
+        return Err(WsClientError::ServerError {
+            code: 500,
+            message: "No available endpoint".to_string(),
+        });
+    }
+
+    Ok(end_point)
+}
+
+#[derive(Debug, Deserialize)]
+pub struct EndPointResponse {
+    #[serde(rename = "URL")]
+    pub url: Option<String>,
+    #[serde(rename = "ClientConfig")]
+    pub client_config: Option<ClientConfig>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct ClientConfig {
+    #[serde(rename = "ReconnectCount")]
+    pub reconnect_count: i32,
+    #[serde(rename = "ReconnectInterval")]
+    pub reconnect_interval: i32,
+    #[serde(rename = "ReconnectNonce")]
+    pub reconnect_nonce: i32,
+    #[serde(rename = "PingInterval")]
+    pub ping_interval: i32,
+}
+
+pub type WsClientResult<T> = Result<T, WsClientError>;
+
+#[derive(Debug, thiserror::Error)]
+pub enum WsClientError {
+    #[error("unexpected response")]
+    UnexpectedResponse,
+    #[error("Request error: {0}")]
+    RequestError(#[from] reqwest::Error),
+    #[error("Url parse error: {0}")]
+    UrlParseError(#[from] url::ParseError),
+    #[error("Server error: {code}, {message}")]
+    ServerError { code: i32, message: String },
+    #[error("Client error: {code}, {message}")]
+    ClientError { code: i32, message: String },
+    #[error("connection closed")]
+    ConnectionClosed {
+        /// The reason the connection was closed
+        reason: Option<WsCloseReason>,
+    },
+    #[error("WebSocket error: {0}")]
+    WsError(#[from] tokio_tungstenite::tungstenite::Error),
+    #[error("Prost error: {0}")]
+    ProstError(#[from] prost::DecodeError),
+}
+
+fn new_ping_frame(service_id: i32) -> Frame {
+    let headers = vec![Header {
+        key: "type".to_string(),
+        value: "ping".to_string(),
+    }];
+    Frame {
+        seq_id: 0,
+        log_id: 0,
+        service: service_id,
+        method: 0,
+        headers,
+        payload_encoding: Some("".to_string()),
+        payload_type: Some("".to_string()),
+        payload: None,
+        log_id_new: Some("".to_string()),
+    }
+}
+
+struct Context<'a> {
+    service_id: i32,
+    sink: SplitSink<WebSocketStream<MaybeTlsStream<TcpStream>>, Message>,
+    stream: SplitStream<WebSocketStream<MaybeTlsStream<TcpStream>>>,
+    command_rx: &'a mut mpsc::UnboundedReceiver<Frame>,
+    event_sender: &'a mut mpsc::UnboundedSender<WsEvent>,
+    client_config: ClientConfig,
+    ping_frame_interval: Interval,
+}
+
+impl<'a> Context<'a> {
+    fn new(
+        service_id: i32,
+        client_config: ClientConfig,
+        conn: WebSocketStream<MaybeTlsStream<TcpStream>>,
+        command_rx: &'a mut mpsc::UnboundedReceiver<Frame>,
+        event_sender: &'a mut mpsc::UnboundedSender<WsEvent>,
+    ) -> Self {
+        let (sink, stream) = conn.split();
+        Context {
+            service_id,
+            sink,
+            stream,
+            command_rx,
+            event_sender,
+            ping_frame_interval: tokio::time::interval(Duration::from_secs(
+                client_config.ping_interval as u64,
+            )),
+            client_config,
         }
     }
 
-    fn configure(&mut self, config: ClientConfig) {
-        self.reconnect_count = config.reconnect_count;
-        self.reconnect_interval = config.reconnect_interval;
-        self.reconnect_nonce = config.reconnect_nonce;
-        self.ping_interval = config.ping_interval;
+    fn send_event(&mut self, event: WsEvent) {
+        let _ = self.event_sender.send(event);
     }
 
-    fn handle_message(&mut self, message: Message) -> WsResult<()> {
-        match message {
-            Message::Text(text) => {
-                debug!("Received a text message: {:?}", text);
+    async fn process_loop(&mut self) -> WsClientResult<()> {
+        let mut ping_time = Instant::now();
+        let mut checkout_timeout = tokio::time::interval(Duration::from_secs(1));
+        loop {
+            tokio::select! {
+                item = self.stream.next() => {
+                    match item.transpose()? {
+                        Some(msg) => {
+                            if msg.is_ping() {
+                                ping_time = Instant::now();
+                            }
+                            self.handle_message(msg).await?;
+                        },
+                        None => return Err(WsClientError::ConnectionClosed { reason: None}),
+                    }
+                }
+                item = self.command_rx.recv() => {
+                    match item {
+                        Some(command) => self.handle_send_frame(command).await?,
+                        None => return Ok(()),
+                    }
+                }
+                _ = self.ping_frame_interval.tick() => {
+                        let service_id: i32 = self.service_id;
+                        let frame = new_ping_frame(service_id);
+                        let msg = Message::Binary(frame.encode_to_vec());
+                        trace!(
+                            "Sending ping message:  {:?} {} {}",
+                            msg,
+                            msg.len(),
+                            service_id
+                        );
+                        self.sink.send(msg).await.unwrap();
+
+                }
+
+                _ = checkout_timeout.tick() => {
+                    if (Instant::now() - ping_time) > HEARTBEAT_TIMEOUT {
+                        return Err(WsClientError::ConnectionClosed {
+                            reason: None
+                        });
+                    }
+                }
             }
-            Message::Binary(bin) => {
-                let frame = Frame::decode(&*bin)?;
-                debug!("Received a binary message: {:?}", frame);
+        }
+    }
+
+    async fn handle_message(&mut self, msg: Message) -> WsClientResult<()> {
+        match msg {
+            Message::Ping(data) => {
+                self.sink.send(Message::Pong(data)).await?;
+            }
+            Message::Binary(data) => {
+                let frame = Frame::decode(&*data)?;
+                debug!("Received frame: {:?}", frame);
                 match frame.method {
                     // FrameTypeControl
                     0 => self.handle_control_frame(frame),
@@ -196,19 +264,17 @@ impl<'a> Client<'a> {
 
                     _ => {}
                 }
+                // self.send_event(WsEvent::Push(frame));
             }
-            Message::Ping(ping) => {
-                debug!("Received a ping message {:?}", ping);
+            Message::Close(Some(close_frame)) => {
+                return Err(WsClientError::ConnectionClosed {
+                    reason: Some(WsCloseReason {
+                        code: close_frame.code,
+                        message: close_frame.reason.into_owned(),
+                    }),
+                });
             }
-            Message::Pong(pong) => {
-                debug!("Received a pong message {:?}", pong);
-            }
-            Message::Close(close) => {
-                debug!("Received a close message: {:?}", close);
-            }
-            Message::Frame(frame) => {
-                debug!("Received a frame message: {:?}", frame);
-            }
+            _ => return Err(WsClientError::UnexpectedResponse),
         }
 
         Ok(())
@@ -218,9 +284,12 @@ impl<'a> Client<'a> {
         let headers = frame.headers;
         let t = headers.iter().find(|h| h.key == "type").unwrap();
         if t.value == "pong" {
-            debug!("Received a pong frame");
             let config = serde_json::from_slice::<ClientConfig>(&frame.payload.unwrap()).unwrap();
-            self.configure(config);
+            self.ping_frame_interval =
+                tokio::time::interval(Duration::from_secs(config.ping_interval as u64));
+            self.ping_frame_interval
+                .reset_after(Duration::from_secs(config.ping_interval as u64));
+            self.client_config = config;
         }
     }
 
@@ -271,60 +340,52 @@ impl<'a> Client<'a> {
             debug!("Received a data frame");
         }
     }
-}
 
-#[derive(Debug, Deserialize)]
-pub struct EndPointResponse {
-    #[serde(rename = "URL")]
-    pub url: Option<String>,
-    #[serde(rename = "ClientConfig")]
-    pub client_config: Option<ClientConfig>,
-}
+    async fn handle_send_frame(&mut self, frame: Frame) -> WsClientResult<()> {
+        debug!("send frame: {:?}", frame);
+        let msg = Message::Binary(frame.encode_to_vec());
 
-#[derive(Debug, Deserialize)]
-pub struct ClientConfig {
-    #[serde(rename = "ReconnectCount")]
-    pub reconnect_count: i32,
-    #[serde(rename = "ReconnectInterval")]
-    pub reconnect_interval: i32,
-    #[serde(rename = "ReconnectNonce")]
-    pub reconnect_nonce: i32,
-    #[serde(rename = "PingInterval")]
-    pub ping_interval: i32,
-}
-
-pub type WsResult<T> = Result<T, WsClientError>;
-
-#[derive(Debug, thiserror::Error)]
-pub enum WsClientError {
-    #[error("Request error: {0}")]
-    RequestError(#[from] reqwest::Error),
-    #[error("Url parse error: {0}")]
-    UrlParseError(#[from] url::ParseError),
-    #[error("Server error: {code}, {message}")]
-    ServerError { code: i32, message: String },
-    #[error("Client error: {code}, {message}")]
-    ClientError { code: i32, message: String },
-    #[error("WebSocket error: {0}")]
-    WsError(#[from] tokio_tungstenite::tungstenite::Error),
-    #[error("Prost error: {0}")]
-    ProstError(#[from] prost::DecodeError),
-}
-
-fn new_frame(service_id: i32) -> Frame {
-    let headers = vec![Header {
-        key: "type".to_string(),
-        value: "ping".to_string(),
-    }];
-    Frame {
-        seq_id: 0,
-        log_id: 0,
-        service: service_id,
-        method: 0,
-        headers,
-        payload_encoding: None,
-        payload_type: None,
-        payload: None,
-        log_id_new: None,
+        self.sink.send(msg).await?;
+        Ok(())
     }
+}
+
+async fn client_loop(
+    service_id: i32,
+    client_config: ClientConfig,
+    conn: WebSocketStream<MaybeTlsStream<TcpStream>>,
+    mut frame_tx: mpsc::UnboundedReceiver<Frame>,
+    mut event_sender: mpsc::UnboundedSender<WsEvent>,
+) {
+    let mut ctx = Context::new(
+        service_id,
+        client_config,
+        conn,
+        &mut frame_tx,
+        &mut event_sender,
+    );
+
+    let res = ctx.process_loop().await;
+    match res {
+        Ok(()) => return,
+        Err(err) => {
+            ctx.send_event(WsEvent::Error(err));
+        }
+    };
+}
+
+#[derive(Debug)]
+pub enum WsEvent {
+    Error(WsClientError),
+    Push(Frame),
+}
+
+/// Connection close reason
+#[derive(Debug)]
+pub struct WsCloseReason {
+    /// Close code
+    pub code: CloseCode,
+
+    /// Reason string
+    pub message: String,
 }
