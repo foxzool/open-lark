@@ -9,7 +9,11 @@ async fn main() {
     let app_id = env::var("APP_ID").unwrap();
     let app_secret = env::var("APP_SECRET").unwrap();
 
-    let client = LarkWsClient::new(&app_id, &app_secret);
+    let mut client = LarkWsClient::open(&app_id, &app_secret).await.unwrap();
 
-    client.start().await.unwrap();
+
+    while let Some(ws_event) = client.event_rx.recv().await {
+        println!("{:?}", ws_event)
+    }
+
 }

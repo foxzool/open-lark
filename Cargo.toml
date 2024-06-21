@@ -18,7 +18,7 @@ websocket = ["tokio-tungstenite"]
 members = ["crates/*"]
 
 [dependencies]
-lark-websocket-protobuf = { path = "crates/protobuf", version = "0.1.0" }
+lark-websocket-protobuf = { version = "0.1.0" }
 async-recursion = "1.1.1"
 base64 = "0.22.1"
 chrono = "0.4.38"
@@ -44,7 +44,7 @@ thiserror = "1.0.61"
 tokio = { version = "1.38", features = ["rt", "rt-multi-thread", "macros"] }
 tokio-stream = "0.1.15"
 url = { version = "2.5.0", features = ["serde"] }
-tokio-tungstenite = { version = "0.23", features = ["rustls-tls-native-roots"], optional = true }
+tokio-tungstenite = { version = "0.23", features = ["native-tls"], optional = true }
 futures-channel = "0.3.30"
 prost = "0.12.6"
 
