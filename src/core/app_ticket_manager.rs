@@ -18,7 +18,7 @@ lazy_static! {
 }
 
 pub struct AppTicketManager {
-    pub cache: QuickCache,
+    pub cache: QuickCache<String>,
 }
 
 impl Default for AppTicketManager {
@@ -36,7 +36,7 @@ impl AppTicketManager {
 
     pub fn set(&mut self, app_id: &str, value: &str, expire_time: i32) {
         let key = app_ticket_key(app_id);
-        self.cache.set(&key, value, expire_time);
+        self.cache.set(&key, value.to_string(), expire_time);
     }
 
     pub async fn get(&self, config: &Config) -> Option<String> {

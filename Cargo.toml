@@ -1,6 +1,6 @@
 [package]
 name = "open-lark"
-version = "0.2.6"
+version = "0.3.0"
 edition = "2021"
 authors = ["ZoOL <zhooul@gmail.com>"]
 readme = "README.md"
@@ -19,6 +19,8 @@ members = ["crates/*"]
 
 [dependencies]
 lark-websocket-protobuf = { version = "0.1.0" }
+
+anyhow = "1.0.86"
 async-recursion = "1.1.1"
 base64 = "0.22.1"
 chrono = "0.4.38"
