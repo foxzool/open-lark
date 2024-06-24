@@ -3,23 +3,23 @@ use std::time::Duration;
 use quick_cache::sync::Cache;
 use tokio::time::Instant;
 
-pub struct QuickCache {
-    cache: Cache<String, (String, Instant)>,
+pub struct QuickCache<T: Clone> {
+    cache: Cache<String, (T, Instant)>,
 }
 
-impl Default for QuickCache {
+impl<T: Clone> Default for QuickCache<T> {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl QuickCache {
+impl<T: Clone> QuickCache<T> {
     pub fn new() -> Self {
         let cache = Cache::new(10);
         Self { cache } //
     }
 
-    pub fn get(&self, key: &str) -> Option<String> {
+    pub fn get(&self, key: &str) -> Option<T> {
         match self.cache.get(key) {
             None => None,
             Some((value, expire_time)) => {
@@ -33,9 +33,9 @@ impl QuickCache {
         }
     }
 
-    pub fn set(&mut self, key: &str, value: &str, expire_time: i32) {
+    /// Set a key-value pair with an expire time in seconds.
+    pub fn set(&mut self, key: &str, value: T, expire_time: i32) {
         let expire_time = Instant::now() + Duration::from_secs(expire_time as u64);
-        self.cache
-            .insert(key.to_string(), (value.to_string(), expire_time));
+        self.cache.insert(key.to_string(), (value, expire_time));
     }
 }

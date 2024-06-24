@@ -4,7 +4,10 @@
 [![CI](https://github.com/foxzool/open-lark/workflows/CI/badge.svg)](https://github.com/foxzool/open-lark/actions)
 [![Documentation](https://docs.rs/open-lark/badge.svg)](https://docs.rs/open-lark)
 
-# 飞书开放平台相关API调用
+# 飞书开放平台非官方SDK, 个人开发, 请谨慎使用
+
+支持自定义机器人、长连接机器人、云文档、飞书卡片、消息、群组等API调用。
+
 
 ## 已完成
 
@@ -16,6 +19,10 @@
 
 - [x] 发送消息
 - [x] 签名验证
+
+### 长连接机器人
+
+- [x] 接收事件推送
 
 ### 云文档
 
@@ -68,10 +75,10 @@
     - [x] 查找单元格
     - [x] 替换单元格
 - 筛选
-  - [x] 获取筛选
-  - [x] 创建筛选
-  - [x] 更新筛选
-  - [x] 删除筛选
+    - [x] 获取筛选
+    - [x] 创建筛选
+    - [x] 更新筛选
+    - [x] 删除筛选
 
 #### 多维表格
 
@@ -133,6 +140,8 @@
         - [x] 富文本
         - [x] 图片
         - [x] 卡片
+- 事件
+  - [x] 接收消息
 
 ### 群组
 

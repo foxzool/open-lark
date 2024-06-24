@@ -1,6 +1,12 @@
-use dotenvy::dotenv;
-use open_lark::client::ws::LarkWsClient;
 use std::env;
+
+use dotenvy::dotenv;
+use log::info;
+
+use open_lark::{
+    client::ws_client::LarkWsClient,
+    event::dispatcher::{EventDispatcherHandler, P2ImMessageReceiveV1},
+};
 
 #[tokio::main]
 async fn main() {
@@ -9,11 +15,14 @@ async fn main() {
     let app_id = env::var("APP_ID").unwrap();
     let app_secret = env::var("APP_SECRET").unwrap();
 
-    let mut client = LarkWsClient::open(&app_id, &app_secret).await.unwrap();
+    let event_handler = EventDispatcherHandler::builder()
+        .register_p2_im_message_receive_v1(Box::new(handle_p2_im_message_receive_v1)).build();
 
+    LarkWsClient::open(&app_id, &app_secret, event_handler)
+        .await
+        .unwrap();
+}
 
-    while let Some(ws_event) = client.event_rx.recv().await {
-        println!("{:?}", ws_event)
-    }
-
+fn handle_p2_im_message_receive_v1(data: P2ImMessageReceiveV1) {
+    info!("receive message: {:?}", data);
 }

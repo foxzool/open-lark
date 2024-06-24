@@ -4,36 +4,45 @@ use std::{
 };
 
 use futures_util::{
-    stream::{SplitSink, SplitStream},
-    SinkExt, StreamExt,
+    SinkExt,
+    stream::{SplitSink, SplitStream}, StreamExt,
 };
 use lark_websocket_protobuf::pbbp2::{Frame, Header};
 use log::{debug, error, info, trace};
 use prost::Message as ProstMessage;
-use serde::Deserialize;
+use reqwest::StatusCode;
+use serde::{Deserialize, Serialize};
 use serde_json::json;
 use tokio::{net::TcpStream, sync::mpsc, time::Interval};
 use tokio_tungstenite::{
     connect_async,
-    tungstenite::protocol::{frame::coding::CloseCode, Message},
-    MaybeTlsStream, WebSocketStream,
+    MaybeTlsStream,
+    tungstenite::protocol::{frame::coding::CloseCode, Message}, WebSocketStream,
 };
 use url::Url;
 
-use crate::core::{api_resp::BaseResponse, constants::FEISHU_BASE_URL};
+use crate::{
+    core::{api_resp::BaseResponse, cache::QuickCache, constants::FEISHU_BASE_URL},
+    event::dispatcher::EventDispatcherHandler,
+};
 
 const END_POINT_URL: &str = "/callback/ws/endpoint";
-
+/// 业务处理时长，单位ms
+const HEADER_BIZ_RT: &str = "biz_rt";
 const HEARTBEAT_TIMEOUT: Duration = Duration::from_secs(120);
 
-#[derive(Debug)]
 pub struct LarkWsClient {
-    pub frame_tx: mpsc::UnboundedSender<Frame>,
-    pub event_rx: mpsc::UnboundedReceiver<WsEvent>,
+    frame_tx: mpsc::UnboundedSender<Frame>,
+    event_rx: mpsc::UnboundedReceiver<WsEvent>,
+    cache: QuickCache<Vec<Vec<u8>>>,
 }
 
 impl LarkWsClient {
-    pub async fn open(app_id: &str, app_secret: &str) -> WsClientResult<Self> {
+    pub async fn open(
+        app_id: &str,
+        app_secret: &str,
+        event_handler: EventDispatcherHandler,
+    ) -> WsClientResult<()> {
         let end_point = get_conn_url(app_id, app_secret).await?;
         let conn_url = end_point.url.unwrap();
         let client_config = end_point.client_config.unwrap();
@@ -53,7 +62,127 @@ impl LarkWsClient {
             frame_rx,
             event_tx,
         ));
-        Ok(Self { frame_tx, event_rx })
+        let mut client = LarkWsClient {
+            frame_tx,
+            event_rx,
+            cache: QuickCache::new(),
+        };
+
+        client.handler_loop(event_handler).await;
+
+        Ok(())
+    }
+
+    async fn handler_loop(&mut self, event_handler: EventDispatcherHandler) {
+        while let Some(ws_event) = self.event_rx.recv().await {
+            if let WsEvent::Data(mut frame) = ws_event {
+                let headers: &[Header] = frame.headers.as_ref();
+                // 拆包数, 未拆包为1
+                let sum: usize = headers
+                    .iter()
+                    .find(|h| h.key == "sum")
+                    .unwrap()
+                    .value
+                    .parse()
+                    .unwrap();
+                // 包序号, 未拆包为0
+                let seq: usize = headers
+                    .iter()
+                    .find(|h| h.key == "seq")
+                    .unwrap()
+                    .value
+                    .parse()
+                    .unwrap();
+                let msg_type = headers
+                    .iter()
+                    .find(|h| h.key == "type")
+                    .unwrap()
+                    .value
+                    .as_str();
+                //  消息ID, 拆包后继承
+                let msg_id = headers
+                    .iter()
+                    .find(|h| h.key == "message_id")
+                    .unwrap()
+                    .value
+                    .as_str();
+                // 链路ID
+                let trace_id = headers
+                    .iter()
+                    .find(|h| h.key == "trace_id")
+                    .unwrap()
+                    .value
+                    .as_str();
+
+                let mut pl = frame.payload.unwrap();
+                if sum > 1 {
+                    match self.combine(msg_id, sum, seq, &pl) {
+                        Some(payload) => {
+                            pl = payload;
+                        }
+                        None => {
+                            return;
+                        }
+                    }
+                }
+                debug!(
+                    "Received a data frame, message type: {}, message_id: {}, payload: {}",
+                    msg_type,
+                    trace_id,
+                    String::from_utf8(pl.clone()).unwrap()
+                );
+                match msg_type {
+                    "event" => {
+                        let mut resp = NewWsResponse::new(StatusCode::OK);
+
+                        let start = Instant::now();
+                        match event_handler.do_without_validation(pl) {
+                            Ok(_) => {
+                                let end = start.elapsed().as_millis();
+                                frame.headers.push(Header {
+                                    key: HEADER_BIZ_RT.to_string(),
+                                    value: end.to_string(),
+                                });
+                            }
+                            Err(err) => {
+                                error!("handle message failed, message_type: {msg_type}, message_id: {msg_id}, trace_id: {trace_id}, err:  {:?}",  err);
+                                resp = NewWsResponse::new(StatusCode::INTERNAL_SERVER_ERROR);
+                            }
+                        };
+                        frame.payload = Some(serde_json::to_vec(&resp).unwrap());
+
+                        self.frame_tx.send(frame).unwrap()
+                    }
+                    "card" => {
+                        return;
+                    }
+                    _ => return,
+                }
+            }
+        }
+    }
+
+    fn combine(&mut self, msg_id: &str, sum: usize, seq: usize, bs: &[u8]) -> Option<Vec<u8>> {
+        let val = self.cache.get(msg_id);
+        if val.is_none() {
+            let mut buf = vec![Vec::new(); sum];
+            buf[seq] = bs.to_vec();
+            self.cache.set(&msg_id, buf, 5);
+            return None;
+        }
+
+        let mut val = val.unwrap();
+        val[seq] = bs.to_vec();
+        let mut pl = Vec::new();
+        for v in val.iter() {
+            if v.is_empty() {
+                self.cache.set(&msg_id, val, 5);
+                return None;
+            }
+            pl.extend_from_slice(v);
+        }
+
+        Some(pl)
     }
 }
 
@@ -255,12 +384,12 @@ impl<'a> Context<'a> {
             }
             Message::Binary(data) => {
                 let frame = Frame::decode(&*data)?;
-                debug!("Received frame: {:?}", frame);
+                trace!("Received frame: {:?}", frame);
                 match frame.method {
                     // FrameTypeControl
                     0 => self.handle_control_frame(frame),
                     // FrameTypeData
-                    1 => self.handle_data_frame(frame),
+                    1 => self.event_sender.send(WsEvent::Data(frame)).unwrap(),
 
                     _ => {}
                 }
@@ -293,56 +422,8 @@ impl<'a> Context<'a> {
         }
     }
 
-    fn handle_data_frame(&mut self, frame: Frame) {
-        let headers = frame.headers;
-        // 拆包数, 未拆包为1
-        let sum: i32 = headers
-            .iter()
-            .find(|h| h.key == "sum")
-            .unwrap()
-            .value
-            .parse()
-            .unwrap();
-        // 包序号, 未拆包为0
-        let _seq: i32 = headers
-            .iter()
-            .find(|h| h.key == "seq")
-            .unwrap()
-            .value
-            .parse()
-            .unwrap();
-        let type_ = headers
-            .iter()
-            .find(|h| h.key == "type")
-            .unwrap()
-            .value
-            .as_str();
-        //  消息ID, 拆包后继承
-        let _message_id = headers
-            .iter()
-            .find(|h| h.key == "message_id")
-            .unwrap()
-            .value
-            .as_str();
-        // 链路ID
-        let _trace_id = headers
-            .iter()
-            .find(|h| h.key == "trace_id")
-            .unwrap()
-            .value
-            .as_str();
-
-        let _payload = frame.payload.unwrap();
-        if sum > 1 {
-            debug!("Received a multi-frame message");
-        }
-        if type_ == "data" {
-            debug!("Received a data frame");
-        }
-    }
-
     async fn handle_send_frame(&mut self, frame: Frame) -> WsClientResult<()> {
-        debug!("send frame: {:?}", frame);
+        trace!("send frame: {:?}", frame);
         let msg = Message::Binary(frame.encode_to_vec());
 
         self.sink.send(msg).await?;
@@ -377,7 +458,7 @@ async fn client_loop(
 #[derive(Debug)]
 pub enum WsEvent {
     Error(WsClientError),
-    Push(Frame),
+    Data(Frame),
 }
 
 /// Connection close reason
@@ -388,4 +469,21 @@ pub struct WsCloseReason {
 
     /// Reason string
     pub message: String,
+}
+
+#[derive(Serialize)]
+struct NewWsResponse {
+    code: u16,
+    headers: HashMap<String, String>,
+    data: Vec<u8>,
+}
+
+impl NewWsResponse {
+    fn new(code: StatusCode) -> Self {
+        Self {
+            code: code.as_u16(),
+            headers: Default::default(),
+            data: Default::default(),
+        }
+    }
 }

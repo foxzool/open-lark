@@ -24,7 +24,7 @@ lazy_static! {
 }
 
 pub struct TokenManager {
-    cache: QuickCache,
+    cache: QuickCache<String>,
 }
 
 impl Default for TokenManager {
@@ -79,7 +79,7 @@ impl TokenManager {
             let expire = data.expire - EXPIRY_DELTA;
             self.cache.set(
                 &app_access_token_key(&config.app_id),
-                &data.app_access_token,
+                data.app_access_token.clone(),
                 expire,
             );
 
@@ -129,7 +129,7 @@ impl TokenManager {
 
             self.cache.set(
                 &app_access_token_key(&config.app_id),
-                &data.app_access_token,
+                data.app_access_token.clone(),
                 expire,
             );
 
@@ -194,7 +194,7 @@ impl TokenManager {
 
             self.cache.set(
                 &tenant_access_token_key(&config.app_id, tenant_key),
-                &data.tenant_access_token,
+                data.tenant_access_token.clone(),
                 expire,
             );
 
@@ -239,7 +239,7 @@ impl TokenManager {
 
             self.cache.set(
                 &tenant_access_token_key(&config.app_id, tenant_key),
-                &data.tenant_access_token,
+                data.tenant_access_token.clone(),
                 expire,
             );
 

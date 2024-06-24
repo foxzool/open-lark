@@ -7,3 +7,4 @@ pub mod core;
 pub mod custom_bot;
 pub mod prelude;
 pub mod service;
+pub mod event;
