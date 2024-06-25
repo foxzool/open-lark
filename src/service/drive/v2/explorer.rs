@@ -79,8 +79,9 @@ impl ExplorerService {
         Ok(api_resp)
     }
 
-    /// GET https://open.feishu.cn/open-apis/drive/v1/files
     /// 获取文件夹下的清单
+    ///
+    /// <https://open.feishu.cn/open-apis/drive/v1/files>
     pub async fn list_folder(
         &self,
         list_folder_request: ListFolderRequest,

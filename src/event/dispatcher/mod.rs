@@ -2,11 +2,11 @@ use std::collections::HashMap;
 
 use crate::{
     event::context::EventContext,
-    service::im::v1::p2_im_message_receive_v1::{
-        P2ImMessageReceiveV1, P2ImMessageReceiveV1ProcessorImpl,
+    service::im::v1::{
+        p2_im_message_read_v1::{P2ImMessageReadV1, P2ImMessageReadV1ProcessorImpl},
+        p2_im_message_receive_v1::{P2ImMessageReceiveV1, P2ImMessageReceiveV1ProcessorImpl},
     },
 };
-use crate::service::im::v1::p2_im_message_read_v1::{P2ImMessageReadV1, P2ImMessageReadV1ProcessorImpl};
 
 /// 事件分发处理器
 pub struct EventDispatcherHandler {

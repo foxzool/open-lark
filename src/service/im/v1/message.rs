@@ -42,7 +42,8 @@ impl MessageService {
     /// 获取会话历史消息
     ///
     /// 获取会话（包括单聊、群组）的历史消息（聊天记录）
-    /// https://open.feishu.cn/document/server-docs/im-v1/message/list
+    ///
+    /// <https://open.feishu.cn/document/server-docs/im-v1/message/list>
     pub async fn list(
         &self,
         list_message_request: ListMessageRequest,
