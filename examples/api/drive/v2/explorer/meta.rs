@@ -2,6 +2,8 @@ use std::env;
 
 use dotenvy::dotenv;
 
+use open_lark::client::LarkClient;
+
 /// 获取我的空间（root folder）元信息
 #[tokio::main]
 async fn main() {
