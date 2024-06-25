@@ -6,7 +6,7 @@ use crate::core::constants::{AppType, FEISHU_BASE_URL};
 pub struct Config {
     pub app_id: String,
     pub app_secret: String,
-    /// 域名, 默认为 https://open.feishu.cn
+    /// 域名, 默认为 <https://open.feishu.cn>
     pub base_url: String,
     pub enable_token_cache: bool,
     /// 客户端超时时间, 单位秒, 默认永不超时

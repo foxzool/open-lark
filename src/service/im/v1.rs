@@ -5,8 +5,8 @@ use crate::{
 
 pub mod chats;
 pub mod message;
-pub mod p2_im_message_receive_v1;
 pub mod p2_im_message_read_v1;
+pub mod p2_im_message_receive_v1;
 
 pub struct V1 {
     pub chats: ChatsService,
