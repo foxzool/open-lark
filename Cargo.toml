@@ -12,7 +12,7 @@ repository = "https://github.com/foxzool/open-lark"
 license = "MIT OR Apache-2.0"
 
 [features]
-websocket = ["tokio-tungstenite"]
+websocket = ["tokio-tungstenite", "prost"]
 
 [workspace]
 members = ["crates/*"]
@@ -32,6 +32,7 @@ hmac = "0.12.1"
 lazy_static = "1.4.0"
 log = "0.4.21"
 kanal = "0.1.0-pre8"
+prost = { version = "0.12.6", optional = true }
 quick_cache = { version = "0.5.1", features = [] }
 rand = "0.9.0-alpha.1"
 reqwest = { version = "0.12.4", features = ["json", "multipart"] }
@@ -48,7 +49,7 @@ tokio-stream = "0.1.15"
 url = { version = "2.5.0", features = ["serde"] }
 tokio-tungstenite = { version = "0.23", features = ["native-tls"], optional = true }
 futures-channel = "0.3.30"
-prost = "0.12.6"
+
 
 
 [dev-dependencies]
