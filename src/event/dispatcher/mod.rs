@@ -1,7 +1,5 @@
 use std::collections::HashMap;
 
-pub use im_v1_event::*;
-
 use crate::event::context::EventContext;
 
 mod im_v1_event;
