@@ -12,6 +12,5 @@ pub mod req_option;
 pub mod req_translator;
 pub mod token_manager;
 pub mod utils;
-// pub mod multi_part;
 
 pub type SDKResult<T> = Result<T, LarkAPIError>;
