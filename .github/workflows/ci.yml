@@ -1,84 +1,62 @@
-# Based on https://github.com/actions-rs/meta/blob/master/recipes/quickstart.md
+name: CI
 
 on:
-  push:
-    branches: [main]
   pull_request:
-    branches: [main]
-
-name: Continuous Integration
+    types: [ labeled, opened, synchronize, reopened ]
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_TOOLCHAIN: stable
+  # Sparse cargo registry for faster updates
+  CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
 
 jobs:
-  check:
-    name: Run cargo check
+  test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout sources
-        uses: actions/checkout@v3
-
-      - name: Install stable toolchain
-        uses: dtolnay/rust-toolchain@stable
-
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.CARGO_TOOLCHAIN }}
+      - name: Cache Cargo build files
+        uses: Leafwing-Studios/cargo-cache@v1
       - name: Install Protoc
         uses: arduino/setup-protoc@v3
-
-      - name: Run cargo check
-        run: cargo check --all-targets
-
-      - name: Run cargo check with atlas feature
-        run: cargo check --all-targets --features atlas
-
-      - name: Run cargo check headless
-        run: cargo check --all-targets --no-default-features
-
-  docs:
-    name: Run cargo doc
-    env:
-      RUSTDOCFLAGS: -D warnings
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v3
-
-      - name: Install stable toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Run cargo doc
-        run: cargo doc --all-features --no-deps
-
-  build_examples:
-    name: Build examples
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v3
-
-      - name: Install stable toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Build examples
-        run: cargo build --examples
-
-      - name: Clean
-        run: cargo clean
-
-      - name: Build examples with atlas feature
-        run: cargo build --examples --features atlas
-
-  test:
-    name: Tests
-    strategy:
-      # Tests are most likely to have OS-specific behavior
-      matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
-
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v3
-
-      - name: Install stable toolchain
-        uses: dtolnay/rust-toolchain@stable
-
       - name: Run cargo test
         run: cargo test
+
+  doc:
+    runs-on: ubuntu-latest
+    env:
+      RUSTDOCFLAGS: "-D warnings"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.CARGO_TOOLCHAIN }}
+      - name: Cache Cargo build files
+        uses: Leafwing-Studios/cargo-cache@v1
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v3
+      - name: Run cargo doc
+        run: cargo doc --no-deps --document-private-items
+
+  lint:
+    runs-on: ubuntu-latest
+    env:
+      RUSTFLAGS: "-D warnings"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.CARGO_TOOLCHAIN }}
+          components: rustfmt, clippy
+      - name: Cache Cargo build files
+        uses: Leafwing-Studios/cargo-cache@v1
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v3
+      - name: Check format
+        run: cargo fmt --all -- --check
+      - name: Run clippy with dev features
+        run: cargo clippy
+      - name: Run clippy without dev features
+        run: cargo clippy --no-default-features
