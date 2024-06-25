@@ -101,6 +101,7 @@ pub struct SearchSort {
     /// 默认值：false
     pub desc: Option<bool>,
 }
+
 #[derive(Debug, Serialize, Default)]
 pub struct SearchFilterInfo {
     /// 条件逻辑连接词

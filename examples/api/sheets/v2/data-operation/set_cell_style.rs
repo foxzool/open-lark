@@ -3,7 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClientBuilder,
+    client::LarkClient,
     service::sheets::v2::data_operation::{SetCellStyleRequest, StyleFont},
 };
 
@@ -15,7 +15,7 @@ async fn main() {
     let app_id = env::var("APP_ID").unwrap();
     let app_secret = env::var("APP_SECRET").unwrap();
     // 创建 Client
-    let client = LarkClientBuilder::new(&app_id, &app_secret).build();
+    let client = LarkClient::builder(&app_id, &app_secret).build();
 
     let req = SetCellStyleRequest::builder()
         .spreadsheet_token("O21wsTInWht7sUtRj77cFwRXnme")

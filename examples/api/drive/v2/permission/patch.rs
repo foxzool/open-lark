@@ -2,9 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{
-    client::LarkClientBuilder, service::drive::v1::permissions::PatchPermissionRequest,
-};
+use open_lark::{client::LarkClient, service::drive::v1::permissions::PatchPermissionRequest};
 
 /// 获取云文档权限设置
 #[tokio::main]
@@ -15,7 +13,7 @@ async fn main() {
     let app_secret = env::var("APP_SECRET").unwrap();
 
     // 创建 Client
-    let client = LarkClientBuilder::new(&app_id, &app_secret).build();
+    let client = LarkClient::builder(&app_id, &app_secret).build();
     // 构建请求体
     let req = PatchPermissionRequest::builder()
         .token("AD0Ls3hpDh8shwtHy6OcqOetnec")

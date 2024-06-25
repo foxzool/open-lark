@@ -3,9 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 use serde_json::json;
 
-use open_lark::{
-    client::LarkClientBuilder, service::sheets::v2::data_operation::PrependDataRequest,
-};
+use open_lark::{client::LarkClient, service::sheets::v2::data_operation::PrependDataRequest};
 
 /// 插入数据
 #[tokio::main]
@@ -15,7 +13,7 @@ async fn main() {
     let app_id = env::var("APP_ID").unwrap();
     let app_secret = env::var("APP_SECRET").unwrap();
     // 创建 Client
-    let client = LarkClientBuilder::new(&app_id, &app_secret).build();
+    let client = LarkClient::builder(&app_id, &app_secret).build();
 
     let req = PrependDataRequest::builder()
         .spreadsheet_token("O21wsTInWht7sUtRj77cFwRXnme")

@@ -11,6 +11,7 @@ use crate::{
 #[cfg(feature = "websocket")]
 pub mod ws_client;
 
+/// 飞书开放平台SDK client
 pub struct LarkClient {
     pub config: Config,
     pub im: ImService,
@@ -21,20 +22,10 @@ pub struct LarkClient {
 }
 
 pub struct LarkClientBuilder {
-    pub config: Config,
+    config: Config,
 }
 
 impl LarkClientBuilder {
-    pub fn new(app_id: &str, app_secret: &str) -> Self {
-        let config = Config {
-            app_id: app_id.to_string(),
-            app_secret: app_secret.to_string(),
-            ..Default::default()
-        };
-
-        Self { config }
-    }
-
     pub fn with_app_type(mut self, app_type: AppType) -> Self {
         self.config.app_type = app_type;
         self
@@ -75,6 +66,18 @@ impl LarkClientBuilder {
             search: SearchService::new(self.config.clone()),
             sheets: SheetsService::new(self.config.clone()),
             bitable: BitableService::new(self.config),
+        }
+    }
+}
+
+impl LarkClient {
+    pub fn builder(app_id: &str, app_secret: &str) -> LarkClientBuilder {
+        LarkClientBuilder {
+            config: Config {
+                app_id: app_id.to_string(),
+                app_secret: app_secret.to_string(),
+                ..Default::default()
+            },
         }
     }
 }

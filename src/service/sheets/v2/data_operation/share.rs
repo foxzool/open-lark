@@ -213,7 +213,6 @@ impl StyleFont {
 }
 
 #[derive(Default)]
-
 pub struct StyleFontBuilder {
     font: StyleFont,
 }

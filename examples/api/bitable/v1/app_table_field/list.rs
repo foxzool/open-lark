@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClientBuilder, service::bitable::v1::ListAppTableFieldRequest};
+use open_lark::{client::LarkClient, service::bitable::v1::ListAppTableFieldRequest};
 
 /// 查询记录
 #[tokio::main]
@@ -12,7 +12,7 @@ async fn main() {
     let app_id = env::var("APP_ID").unwrap();
     let app_secret = env::var("APP_SECRET").unwrap();
     // 创建 Client
-    let client = LarkClientBuilder::new(&app_id, &app_secret).build();
+    let client = LarkClient::builder(&app_id, &app_secret).build();
     // 构建请求体
     let req = ListAppTableFieldRequest::builder()
         .app_token("Iht6bSSnvaL4mxsGPMPcInvun8b")

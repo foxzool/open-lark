@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClientBuilder, service::im::v1::chats::ListChatRequest};
+use open_lark::{client::LarkClient, service::im::v1::chats::ListChatRequest};
 
 /// 获取用户或机器人所在的群列表
 /// GET /open-apis/im/v1/messages
@@ -13,7 +13,7 @@ async fn main() {
     let app_id = env::var("APP_ID").unwrap();
     let app_secret = env::var("APP_SECRET").unwrap();
     // 创建 Client
-    let client = LarkClientBuilder::new(&app_id, &app_secret).build();
+    let client = LarkClient::builder(&app_id, &app_secret).build();
     let req = ListChatRequest::builder().build();
 
     // 发起请求

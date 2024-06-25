@@ -47,8 +47,12 @@ impl EventDispatcherHandler {
         if context.schema.is_some() {
             // 解析 v2 事件
             context.schema = Some("p2".to_string());
-            context.type_ = context.header.as_ref().unwrap().event_type.clone();
-            context.token = context.header.as_ref().unwrap().token.clone();
+            context
+                .type_
+                .clone_from(&context.header.as_ref().unwrap().event_type);
+            context
+                .token
+                .clone_from(&context.header.as_ref().unwrap().token)
         } else if context.uuid.is_some() {
             // 解析 v1 事件
             context.schema = Some("p1".to_string());

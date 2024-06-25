@@ -71,6 +71,7 @@ impl GetAppRequestBuilder {
 pub struct GetAppResponse {
     _app: GetAppResponseData,
 }
+
 #[derive(Deserialize, Debug)]
 pub struct GetAppResponseData {
     /// 多维表格的 app_token

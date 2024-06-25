@@ -17,7 +17,7 @@ use open_lark::{
         icon::FeishuCardTextIcon,
         FeishuCard,
     },
-    client::LarkClientBuilder,
+    client::LarkClient,
     service::im::v1::message::{CreateMessageRequest, CreateMessageRequestBody, SendMessageTrait},
 };
 
@@ -28,7 +28,7 @@ async fn main() {
     let app_id = env::var("APP_ID").unwrap();
     let app_secret = env::var("APP_SECRET").unwrap();
     // 创建 Client
-    let client = LarkClientBuilder::new(&app_id, &app_secret).build();
+    let client = LarkClient::builder(&app_id, &app_secret).build();
     let uuid = Uuid::new_v4();
 
     let elements = vec![
@@ -56,7 +56,6 @@ async fn main() {
                     "很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本",
                 ))]),
         ),
-
         CardElement::Markdown(FeishuCardMarkdown::new(
             "下面是一个 标题带背景色 且 默认展开 的折叠面板组件",
         )),
@@ -84,7 +83,6 @@ async fn main() {
                     "很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本",
                 ))]),
         ),
-
         CardElement::Markdown(FeishuCardMarkdown::new(
             "下面是一个无边框折叠面板组件",
         )),

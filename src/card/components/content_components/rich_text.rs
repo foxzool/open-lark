@@ -105,7 +105,7 @@ mod test {
                     .android_url("xxx4"),
             )
 
-          ;
+            ;
 
         let json = json!( {
           "tag": "markdown",

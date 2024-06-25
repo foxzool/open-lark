@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClientBuilder, service::drive::v2::explorer::CreateFolderRequest};
+use open_lark::{client::LarkClient, service::drive::v2::explorer::CreateFolderRequest};
 
 /// 新建文件夹
 #[tokio::main]
@@ -12,7 +12,7 @@ async fn main() {
     let app_id = env::var("APP_ID").unwrap();
     let app_secret = env::var("APP_SECRET").unwrap();
     // 创建 Client
-    let client = LarkClientBuilder::new(&app_id, &app_secret).build();
+    let client = LarkClient::builder(&app_id, &app_secret).build();
 
     let req = CreateFolderRequest::builder()
         .name("收入报表")
