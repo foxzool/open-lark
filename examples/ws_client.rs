@@ -4,8 +4,11 @@ use dotenvy::dotenv;
 use log::info;
 
 use open_lark::{
-    client::ws_client::LarkWsClient, event::dispatcher::EventDispatcherHandler,
-    service::im::v1::p2_im_message_receive_v1::P2ImMessageReceiveV1,
+    client::ws_client::LarkWsClient,
+    event::dispatcher::EventDispatcherHandler,
+    service::im::v1::{
+        p2_im_message_read_v1::P2ImMessageReadV1, p2_im_message_receive_v1::P2ImMessageReceiveV1,
+    },
 };
 
 #[tokio::main]
@@ -16,7 +19,8 @@ async fn main() {
     let app_secret = env::var("APP_SECRET").unwrap();
 
     let event_handler = EventDispatcherHandler::builder()
-        .register_p2_im_message_receive_v1(Box::new(handle_p2_im_message_receive_v1))
+        .register_p2_im_message_receive_v1(handle_p2_im_message_receive_v1)
+        .register_p2_im_message_read_v1(handle_p2_im_message_read_v1)
         .build();
 
     LarkWsClient::open(&app_id, &app_secret, event_handler)
@@ -25,5 +29,9 @@ async fn main() {
 }
 
 fn handle_p2_im_message_receive_v1(data: P2ImMessageReceiveV1) {
-    info!("receive message: {:?}", data);
+    info!("p2.im.message.receive_v1: {:?}", data);
+}
+
+fn handle_p2_im_message_read_v1(data: P2ImMessageReadV1) {
+    info!("p2.im.message.message_read_v1: {:?}", data);
 }
