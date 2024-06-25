@@ -2,8 +2,6 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::client::LarkClientBuilder;
-
 /// 获取我的空间（root folder）元信息
 #[tokio::main]
 async fn main() {
@@ -12,7 +10,7 @@ async fn main() {
     let app_id = env::var("APP_ID").unwrap();
     let app_secret = env::var("APP_SECRET").unwrap();
     // 创建 Client
-    let client = LarkClientBuilder::new(&app_id, &app_secret).build();
+    let client = LarkClient::builder(&app_id, &app_secret).build();
 
     // 发起请求
     let resp = client

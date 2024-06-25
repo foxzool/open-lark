@@ -388,7 +388,6 @@ pub struct AppTableFieldPropertyAutoSerialOption {
 }
 
 /// 地理位置输入方式
-
 #[derive(Debug, Deserialize)]
 pub struct AppTableFieldPropertyLocation {
     /// 地理位置输入限制

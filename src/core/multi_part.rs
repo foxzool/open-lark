@@ -6,7 +6,7 @@
 //! # Examples 1
 //!
 //! ```ignore
-//! 
+//!
 //! use ureq_multipart::MultipartBuilder;
 //!
 //! let (content_type,data) = MultipartBuilder::new()
@@ -22,7 +22,7 @@
 //! # Examples 2
 //!
 //! ```ignore
-//! 
+//!
 //! use ureq_multipart::MultipartRequest;
 //!
 //! let resp: Value = ureq::post("http://some.service.url")
@@ -33,7 +33,6 @@ use std::{fs::File, io, io::prelude::*, path::Path};
 
 use mime::Mime;
 use rand::Rng;
-
 
 const BOUNDARY_LEN: usize = 29;
 
@@ -62,11 +61,13 @@ pub struct MultipartBuilder {
     inner: Vec<u8>,
     data_written: bool,
 }
+
 impl Default for MultipartBuilder {
     fn default() -> Self {
         Self::new()
     }
 }
+
 #[allow(dead_code)]
 impl MultipartBuilder {
     pub fn new() -> Self {
@@ -190,6 +191,7 @@ pub trait MultipartRequest {
     fn send_multipart_files<P: AsRef<Path>>(self, files: &[P]) -> Result<Response, Error>;
     fn send_multipart_file<P: AsRef<Path>>(self, name: &str, file: P) -> Result<Response, Error>;
 }
+
 impl MultipartRequest for Request {
     /// send multi files,auto set the name with file's name by multipart
     fn send_multipart_files<P: AsRef<Path>>(self, files: &[P]) -> Result<Response, Error> {
@@ -212,6 +214,7 @@ impl MultipartRequest for Request {
         self.set("Content-Type", &content_type).send_bytes(&data)
     }
 }
+
 #[cfg(test)]
 mod test {
     use super::*;

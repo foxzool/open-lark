@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClientBuilder, service::im::v1::message::ListMessageRequest};
+use open_lark::{client::LarkClient, service::im::v1::message::ListMessageRequest};
 
 /// 获取会话历史消息
 /// GET /open-apis/im/v1/messages
@@ -13,7 +13,7 @@ async fn main() {
     let app_id = env::var("APP_ID").unwrap();
     let app_secret = env::var("APP_SECRET").unwrap();
     // 创建 Client
-    let client = LarkClientBuilder::new(&app_id, &app_secret).build();
+    let client = LarkClient::builder(&app_id, &app_secret).build();
     let req = ListMessageRequest::builder()
         .container_id_type("chat")
         .container_id("oc_84d53efe245072c16ba4b4ff597f52f3")

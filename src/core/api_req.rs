@@ -1,5 +1,6 @@
-use reqwest::Method;
 use std::collections::HashMap;
+
+use reqwest::Method;
 
 use crate::core::constants::AccessTokenType;
 

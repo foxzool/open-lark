@@ -3,7 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClientBuilder, core::req_option::RequestOption,
+    client::LarkClient, core::req_option::RequestOption,
     service::search::v1::user::SearchUserRequest,
 };
 
@@ -16,7 +16,7 @@ async fn main() {
     let app_secret = env::var("APP_SECRET").unwrap();
     let user_access_token = env::var("USER_ACCESS_TOKEN").unwrap();
     // 创建 Client
-    let client = LarkClientBuilder::new(&app_id, &app_secret).build();
+    let client = LarkClient::builder(&app_id, &app_secret).build();
 
     let req = SearchUserRequest::builder().query("xxx").build();
 

@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClientBuilder, service::drive::v2::explorer::ListFolderRequest};
+use open_lark::{client::LarkClient, service::drive::v2::explorer::ListFolderRequest};
 
 /// 获取文件夹下的清单
 #[tokio::main]
@@ -13,7 +13,7 @@ async fn main() {
     let app_secret = env::var("APP_SECRET").unwrap();
     // let user_access_token = env::var("USER_ACCESS_TOKEN").unwrap();
     // 创建 Client
-    let client = LarkClientBuilder::new(&app_id, &app_secret).build();
+    let client = LarkClient::builder(&app_id, &app_secret).build();
 
     let req = ListFolderRequest::builder().folder_token("").build();
     // 发起请求

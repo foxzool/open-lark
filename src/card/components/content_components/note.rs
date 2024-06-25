@@ -56,7 +56,6 @@ impl FeishuCardNote {
 
 #[cfg(test)]
 mod test {
-
     #[test]
     fn test_note() {
         use crate::card::components::content_components::note::*;

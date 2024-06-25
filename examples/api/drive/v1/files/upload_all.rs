@@ -3,7 +3,7 @@ use std::{env, io::Read};
 use dotenvy::dotenv;
 use simd_adler32::Adler32;
 
-use open_lark::{client::LarkClientBuilder, service::drive::v1::files::UploadAllRequest};
+use open_lark::{client::LarkClient, service::drive::v1::files::UploadAllRequest};
 
 /// 向云空间指定目录下上传一个小文件
 #[tokio::main]
@@ -13,7 +13,7 @@ async fn main() {
     let app_id = env::var("APP_ID").unwrap();
     let app_secret = env::var("APP_SECRET").unwrap();
     // 创建 Client
-    let client = LarkClientBuilder::new(&app_id, &app_secret).build();
+    let client = LarkClient::builder(&app_id, &app_secret).build();
 
     let mut file = std::fs::File::open("tmp/1.txt").unwrap();
     let file_size = file.metadata().unwrap().len() as usize;

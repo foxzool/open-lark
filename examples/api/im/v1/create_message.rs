@@ -5,7 +5,7 @@ use serde_json::json;
 use uuid::Uuid;
 
 use open_lark::{
-    client::LarkClientBuilder,
+    client::LarkClient,
     service::im::v1::message::{
         ANode, AtNode, CreateMessageRequest, CreateMessageRequestBody, EmotionNode, ImgNode,
         MessageCardTemplate, MessagePost, MessagePostNode, MessageText, SendMessageTrait, TextNode,
@@ -21,7 +21,7 @@ async fn main() {
     let app_id = env::var("APP_ID").unwrap();
     let app_secret = env::var("APP_SECRET").unwrap();
     // 创建 Client
-    let client = LarkClientBuilder::new(&app_id, &app_secret).build();
+    let client = LarkClient::builder(&app_id, &app_secret).build();
     let uuid = Uuid::new_v4();
     // 文本
     let _text_message = MessageText::new("hello world")

@@ -343,6 +343,7 @@ pub struct Mention {
 pub struct ListMessageRequest {
     api_req: ApiRequest,
 }
+
 impl ListMessageRequest {
     pub fn builder() -> ListMessageRequestBuilder {
         ListMessageRequestBuilder::default()

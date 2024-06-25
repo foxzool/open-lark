@@ -25,7 +25,7 @@ use open_lark::{
         },
         FeishuCard,
     },
-    client::LarkClientBuilder,
+    client::LarkClient,
     service::im::v1::message::{CreateMessageRequest, CreateMessageRequestBody, SendMessageTrait},
 };
 
@@ -36,7 +36,7 @@ async fn main() {
     let app_id = env::var("APP_ID").unwrap();
     let app_secret = env::var("APP_SECRET").unwrap();
     // 创建 Client
-    let client = LarkClientBuilder::new(&app_id, &app_secret).build();
+    let client = LarkClient::builder(&app_id, &app_secret).build();
     let uuid = Uuid::new_v4();
 
     let form = FormContainer::new().name("Form_lvxmxsxf").elements(vec![
