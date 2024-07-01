@@ -4,8 +4,8 @@ use std::{
 };
 
 use futures_util::{
-    stream::{SplitSink, SplitStream},
-    SinkExt, StreamExt,
+    SinkExt,
+    stream::{SplitSink, SplitStream}, StreamExt,
 };
 use lark_websocket_protobuf::pbbp2::{Frame, Header};
 use log::{debug, error, info, trace};
@@ -16,8 +16,8 @@ use serde_json::json;
 use tokio::{net::TcpStream, sync::mpsc, time::Interval};
 use tokio_tungstenite::{
     connect_async,
-    tungstenite::protocol::{frame::coding::CloseCode, Message},
-    MaybeTlsStream, WebSocketStream,
+    MaybeTlsStream,
+    tungstenite::protocol::{frame::coding::CloseCode, Message}, WebSocketStream,
 };
 use url::Url;
 
@@ -167,7 +167,7 @@ impl LarkWsClient {
         if val.is_none() {
             let mut buf = vec![Vec::new(); sum];
             buf[seq] = bs.to_vec();
-            self.cache.set(&msg_id, buf, 5);
+            self.cache.set(msg_id, buf, 5);
             return None;
         }
 
@@ -176,7 +176,7 @@ impl LarkWsClient {
         let mut pl = Vec::new();
         for v in val.iter() {
             if v.is_empty() {
-                self.cache.set(&msg_id, val, 5);
+                self.cache.set(msg_id, val, 5);
                 return None;
             }
             pl.extend_from_slice(v);
@@ -448,7 +448,7 @@ async fn client_loop(
 
     let res = ctx.process_loop().await;
     match res {
-        Ok(()) => return,
+        Ok(()) => (),
         Err(err) => {
             ctx.send_event(WsEvent::Error(err));
         }

@@ -68,7 +68,7 @@ async fn main() {
             println!("response: {:?}", resp);
         }
         Err(err) => {
-            println!("send message http error: {} ", err.to_string());
+            println!("send message http error: {} ", err);
         }
     }
 }
