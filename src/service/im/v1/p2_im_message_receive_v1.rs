@@ -120,8 +120,6 @@ mod test {
 
     use crate::event::context::EventContext;
 
-    use super::*;
-
     #[test]
     fn test_decode() {
         let p1 = json!({"schema":"2.0","header":{"event_id":"7db4fd0bb90cfa6127e3aaa446d39b37","token

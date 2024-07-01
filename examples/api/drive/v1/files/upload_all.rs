@@ -30,7 +30,7 @@ async fn main() {
         .parent_node("nodcnBh4MAgg2GpI5IkRVZuw3Jd")
         .size(file_size as i32)
         .checksum(checksum.to_string())
-        .file(buffer.into())
+        .file(buffer)
         .build();
 
     // 发起请求
