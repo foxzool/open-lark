@@ -4,8 +4,8 @@ use std::{
 };
 
 use futures_util::{
-    SinkExt,
-    stream::{SplitSink, SplitStream}, StreamExt,
+    stream::{SplitSink, SplitStream},
+    SinkExt, StreamExt,
 };
 use lark_websocket_protobuf::pbbp2::{Frame, Header};
 use log::{debug, error, info, trace};
@@ -16,8 +16,8 @@ use serde_json::json;
 use tokio::{net::TcpStream, sync::mpsc, time::Interval};
 use tokio_tungstenite::{
     connect_async,
-    MaybeTlsStream,
-    tungstenite::protocol::{frame::coding::CloseCode, Message}, WebSocketStream,
+    tungstenite::protocol::{frame::coding::CloseCode, Message},
+    MaybeTlsStream, WebSocketStream,
 };
 use url::Url;
 
