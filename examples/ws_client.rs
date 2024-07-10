@@ -6,7 +6,7 @@ use log::info;
 use tokio::sync::Mutex;
 
 use open_lark::{
-    client::{LarkClient, ws_client::LarkWsClient},
+    client::{ws_client::LarkWsClient, LarkClient},
     event::dispatcher::EventDispatcherHandler,
     service::im::v1::{
         message::{CreateMessageRequest, CreateMessageRequestBody},

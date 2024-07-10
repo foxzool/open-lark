@@ -1,7 +1,8 @@
-use std::{env, thread::sleep};
+use std::env;
 
 use dotenvy::dotenv;
 use serde_json::json;
+use tokio::time::sleep;
 
 use open_lark::{
     custom_bot::CustomBot,
@@ -22,7 +23,7 @@ async fn main() {
     let message = MessageText::new("新更新提醒");
 
     bot.send_message(message).await.unwrap();
-    sleep(std::time::Duration::from_secs(1));
+    sleep(std::time::Duration::from_secs(1)).await;
 
     // 发送富文本消息
     let message = MessagePost::new("zh_cn")
