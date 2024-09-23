@@ -3,8 +3,8 @@ use std::time::Duration;
 use crate::{
     core::{config::Config, constants::AppType},
     service::{
-        bitable::BitableService, drive::DriveService, im::ImService, search::SearchService,
-        sheets::SheetsService,
+        authentication::AuthenService, bitable::BitableService, drive::DriveService, im::ImService,
+        search::SearchService, sheets::SheetsService,
     },
 };
 
@@ -14,6 +14,7 @@ pub mod ws_client;
 /// 飞书开放平台SDK client
 pub struct LarkClient {
     pub config: Config,
+    pub auth: AuthenService,
     pub im: ImService,
     pub drive: DriveService,
     pub search: SearchService,
@@ -61,6 +62,7 @@ impl LarkClientBuilder {
 
         LarkClient {
             config: self.config.clone(),
+            auth: AuthenService::new(self.config.clone()),
             im: ImService::new(self.config.clone()),
             drive: DriveService::new(self.config.clone()),
             search: SearchService::new(self.config.clone()),

@@ -1,3 +1,4 @@
+pub mod authentication;
 pub mod bitable;
 pub mod drive;
 pub mod im;

@@ -194,7 +194,7 @@ async fn get_conn_url(app_id: &str, app_secret: &str) -> WsClientResult<EndPoint
     });
 
     let req = reqwest::Client::new()
-        .post(&format!("{FEISHU_BASE_URL}/{END_POINT_URL}"))
+        .post(format!("{FEISHU_BASE_URL}/{END_POINT_URL}"))
         .header("locale", "zh")
         .json(&body)
         .send()
