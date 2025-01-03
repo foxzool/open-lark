@@ -11,6 +11,7 @@ use crate::{
     },
 };
 
+/// 向单个范围写入数据 请求体
 #[derive(Serialize, Debug, Default)]
 pub struct WriteDataToSingleRangeRequest {
     #[serde(skip)]
