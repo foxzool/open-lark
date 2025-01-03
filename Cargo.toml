@@ -270,9 +270,7 @@ path = "examples/api/sheets/v3/spreadsheet-sheet-filter/delete.rs"
 name = "get_bitable"
 path = "examples/api/bitable/v1/app/get.rs"
 
-[[example]]
-name = "app_table_record_search"
-path = "examples/api/bitable/v1/app_table_record/search.rs"
+
 
 [[example]]
 name = "app_table_field_list"
@@ -283,3 +281,11 @@ path = "examples/api/bitable/v1/app_table_field/list.rs"
 name = "auth_get_user_info"
 path = "examples/api/authen/v1/user_info.rs"
 
+
+[[example]]
+name = "app_table_record_create"
+path = "examples/api/bitable/v1/app_table_record/create.rs"
+
+[[example]]
+name = "app_table_record_search"
+path = "examples/api/bitable/v1/app_table_record/search.rs"

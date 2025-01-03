@@ -31,7 +31,7 @@ async fn main() {
 
     match resp {
         Ok(base_resp) => {
-            println!("sheet write_multi_ranges response: {:#?}", base_resp.data);
+            println!("sheet write_multi_ranges response: {:#?}", base_resp);
         }
         Err(err) => {
             println!("sheet write_multi_ranges error: {:#?}", err);

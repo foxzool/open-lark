@@ -78,7 +78,19 @@ impl<T: ApiResponseTrait> Transport<T> {
                     ResponseFormat::Data => {
                         let raw_body: Value = response.json().await?;
                         debug!("raw_body: {:?}", raw_body);
-                        let base_resp = serde_json::from_value::<BaseResponse<T>>(raw_body)?;
+                        let base_resp = if raw_body["code"].as_i64() == Some(0) {
+                            serde_json::from_value::<BaseResponse<T>>(raw_body)?
+                        } else {
+                            BaseResponse {
+                                raw_response: RawResponse {
+                                    code: raw_body["code"].as_i64().unwrap() as i32,
+                                    msg: raw_body["msg"].as_str().unwrap().to_string(),
+                                    err: None,
+                                },
+                                data: None,
+                            }
+                        };
+
                         Ok(base_resp)
                     }
                     ResponseFormat::Flatten => {

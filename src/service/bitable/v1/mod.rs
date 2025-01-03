@@ -8,6 +8,9 @@ mod app;
 mod app_table_field;
 mod app_table_record;
 
+mod share;
+pub use share::*;
+
 pub struct V1 {
     /// 多维表格
     pub app: AppService,
