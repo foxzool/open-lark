@@ -1,6 +1,6 @@
 [package]
 name = "open-lark"
-version = "0.3.2"
+version = "0.3.3"
 edition = "2021"
 authors = ["ZoOL <zhooul@gmail.com>"]
 readme = "README.md"
@@ -285,6 +285,10 @@ path = "examples/api/authen/v1/user_info.rs"
 [[example]]
 name = "app_table_record_create"
 path = "examples/api/bitable/v1/app_table_record/create.rs"
+
+[[example]]
+name = "app_table_record_batch_create"
+path = "examples/api/bitable/v1/app_table_record/batch_create.rs"
 
 [[example]]
 name = "app_table_record_search"

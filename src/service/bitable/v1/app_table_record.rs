@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -47,9 +45,9 @@ impl AppTableRecordService {
     /// 新增多条记录
     pub async fn batch_create(
         &self,
-        request: CreateAppTableRecordRequest,
+        request: BatchCreateAppTableRecordRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CreateAppTableRecordResponse>> {
+    ) -> SDKResult<BaseResponse<BatchCreateAppTableRecordResponse>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::POST;
         api_req.api_path = format!(
@@ -143,7 +141,8 @@ pub struct CreateAppTableRecordRequest {
     ///
     /// 示例值：{"人员": [{"id": "ou_2910013f1e6456f16a0ce75ede9abcef"}]
     ///
-    fields: HashMap<String, Value>,
+    #[serde(flatten)]
+    fields: Record,
 }
 
 impl CreateAppTableRecordRequest {
@@ -250,14 +249,17 @@ impl AppTableRecordCreateRequestBuilder {
     /// 地理位置：填写经纬度坐标
     /// 不同类型字段的数据结构请参考多维表格记录数据结构。
     /// 示例值：{"人员": [{"id": "ou_2910013f1e6456f16a0ce75ede9abcef"}]
-    pub fn fields(mut self, fields: HashMap<String, Value>) -> Self {
+    pub fn fields(mut self, fields: Record) -> Self {
         self.request.fields = fields;
         self
     }
 
-    /// 添加字段记录
+    /// 添加记录
     pub fn add_field(mut self, field_name: impl ToString, value: Value) -> Self {
-        self.request.fields.insert(field_name.to_string(), value);
+        self.request
+            .fields
+            .fields
+            .insert(field_name.to_string(), value);
         self
     }
 
@@ -273,6 +275,193 @@ pub struct CreateAppTableRecordResponse {
 }
 
 impl ApiResponseTrait for CreateAppTableRecordResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 新增多条记录
+#[derive(Debug, Serialize, Default)]
+pub struct BatchCreateAppTableRecordRequest {
+    #[serde(skip)]
+    api_request: ApiRequest,
+    /// 多维表格的唯一标识符
+    #[serde(skip)]
+    app_token: String,
+    /// 多维表格数据表的唯一标识符
+    #[serde(skip)]
+    table_id: String,
+    /// 用户 ID 类型
+    ///
+    /// 示例值："open_id"
+    ///
+    /// 可选值有：
+    ///
+    /// open_id：标识一个用户在某个应用中的身份。同一个用户在不同应用中的 Open ID 不同。了解更多：如何获取 Open ID
+    /// union_id：标识一个用户在某个应用开发商下的身份。同一用户在同一开发商下的应用中的 Union ID 是相同的，在不同开发商下的应用中的 Union ID 是不同的。通过 Union ID，应用开发商可以把同个用户在多个应用中的身份关联起来。了解更多：如何获取 Union ID？
+    /// user_id：标识一个用户在某个租户内的身份。同一个用户在租户 A 和租户 B 内的 User ID 是不同的。在同一个租户内，一个用户的 User ID 在所有应用（包括商店应用）中都保持一致。User ID 主要用于在不同的应用间打通用户数据。了解更多：如何获取 User ID？
+    #[serde(skip)]
+    user_id_type: Option<String>,
+    /// 格式为标准的 uuidv4，操作的唯一标识，用于幂等的进行更新操作。此值为空表示将发起一次新的请求，此值非空表示幂等的进行更新操作。
+    ///
+    /// 示例值："fe599b60-450f-46ff-b2ef-9f6675625b97"
+    #[serde(skip)]
+    client_token: Option<String>,
+    /// 是否忽略一致性读写检查，默认为 false，即在进行读写操作时，系统将确保读取到的数据和写入的数据是一致的。可选值：
+    ///
+    /// * true：忽略读写一致性检查，提高性能，但可能会导致某些节点的数据不同步，出现暂时不一致
+    /// * false：开启读写一致性检查，确保数据在读写过程中一致
+    #[serde(skip)]
+    ignore_consistency_check: Option<bool>,
+    ///
+    /// 要新增的记录的数据。你需先指定数据表中的字段（即指定列），再传入正确格式的数据作为一条记录。
+    ///
+    /// 注意：
+    ///
+    /// 该接口支持的字段类型及其描述如下所示：
+    ///
+    /// 文本：原值展示，不支持 markdown 语法
+    /// 数字：填写数字格式的值
+    /// 单选：填写选项值，对于新的选项值，将会创建一个新的选项
+    /// 多选：填写多个选项值，对于新的选项值，将会创建一个新的选项。如果填写多个相同的新选项值，将会创建多个相同的选项
+    /// 日期：填写毫秒级时间戳
+    /// 复选框：填写 true 或 false
+    /// 条码
+    /// 人员：填写用户的open_id、union_id 或 user_id，类型需要与 user_id_type 指定的类型一致
+    /// 电话号码：填写文本内容
+    /// 超链接：参考以下示例，text 为文本值，link 为 URL 链接
+    /// 附件：填写附件 token，需要先调用上传素材或分片上传素材接口将附件上传至该多维表格中
+    /// 单向关联：填写被关联表的记录 ID
+    /// 双向关联：填写被关联表的记录 ID
+    /// 地理位置：填写经纬度坐标
+    /// 不同类型字段的数据结构请参考多维表格记录数据结构。
+    ///
+    /// 示例值：{"人员": [{"id": "ou_2910013f1e6456f16a0ce75ede9abcef"}]
+    ///
+    records: Vec<Record>,
+}
+
+impl BatchCreateAppTableRecordRequest {
+    pub fn builder() -> AppTableRecordBatchCreateRequestBuilder {
+        AppTableRecordBatchCreateRequestBuilder::default()
+    }
+}
+
+impl BatchCreateAppTableRecordRequest {
+    pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {
+        Self {
+            app_token: app_token.to_string(),
+            table_id: table_id.to_string(),
+            ..Default::default()
+        }
+    }
+
+    pub async fn create(
+        &self,
+        config: &Config,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<BatchCreateAppTableRecordResponse>> {
+        let mut api_req = self.api_request.clone();
+        api_req.http_method = Method::POST;
+        api_req.api_path = format!(
+            "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records",
+            app_token = self.app_token,
+            table_id = self.table_id
+        );
+        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+
+        let api_resp = Transport::request(api_req, config, option).await?;
+
+        Ok(api_resp)
+    }
+}
+
+#[derive(Default)]
+pub struct AppTableRecordBatchCreateRequestBuilder {
+    request: BatchCreateAppTableRecordRequest,
+}
+
+impl AppTableRecordBatchCreateRequestBuilder {
+    /// 多维表格的唯一标识符
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
+        self.request.app_token = app_token.to_string();
+        self
+    }
+
+    /// 表ID
+    pub fn table_id(mut self, table_id: impl ToString) -> Self {
+        self.request.table_id = table_id.to_string();
+        self
+    }
+
+    /// 用户 ID 类型
+    /// 可选值有：
+    ///
+    /// - open_id：标识一个用户在某个应用中的身份。同一个用户在不同应用中的 Open ID
+    ///   不同。了解更多：如何获取 Open ID
+    /// - union_id：标识一个用户在某个应用开发商下的身份。同一用户在同一开发商下的应用中的 Union ID
+    ///   是相同的，在不同开发商下的应用中的 Union ID 是不同的。通过 Union
+    ///   ID，应用开发商可以把同个用户在多个应用中的身份关联起来。了解更多：如何获取 Union ID？
+    /// - user_id：标识一个用户在某个租户内的身份。同一个用户在租户 A 和租户 B 内的 User ID
+    ///   是不同的。在同一个租户内，一个用户的 User ID 在所有应用（包括商店应用）中都保持一致。User
+    ///   ID 主要用于在不同的应用间打通用户数据。
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
+        self.request.user_id_type = Some(user_id_type.to_string());
+        self
+    }
+
+    /// 格式为标准的 uuidv4，操作的唯一标识，用于幂等的进行更新操作。此值为空表示将发起一次新的请求，此值非空表示幂等的进行更新操作。
+    ///
+    /// 示例值："fe599b60-450f-46ff-b2ef-9f667562
+    pub fn client_token(mut self, client_token: impl ToString) -> Self {
+        self.request.client_token = Some(client_token.to_string());
+        self
+    }
+
+    /// 是否忽略一致性读写检查，默认为 false，即在进行读写操作时，系统将确保读取到的数据和写入的数据是一致的。可选值：
+    /// * true：忽略读写一致性检查，提高性能，但可能会导致某些节点的数据不同步，出现暂时不一致
+    /// * false：开启读写一致性检查，确保数据在读写过程中一致
+    pub fn ignore_consistency_check(mut self, ignore_consistency_check: bool) -> Self {
+        self.request.ignore_consistency_check = Some(ignore_consistency_check);
+        self
+    }
+
+    /// 要新增的记录的数据。你需先指定数据表中的字段（即指定列），再传入正确格式的数据作为一条记录。
+    /// 注意：
+    /// 该接口支持的字段类型及其描述如下所示：
+    /// 文本：原值展示，不支持 markdown 语法
+    /// 数字：填写数字格式的值
+    /// 单选：填写选项值，对于新的选项值，将会创建一个新的选项
+    /// 多选：填写多个选项值，对于新的选项值，将会创建一个新的选项。如果填写多个相同的新选项值，将会创建多个相同的选项
+    /// 日期：填写毫秒级时间戳
+    /// 复选框：填写 true 或 false
+    /// 条码
+    /// 人员：填写用户的open_id、union_id 或 user_id，类型需要与 user_id_type 指定的类型一致
+    /// 电话号码：填写文本内容
+    /// 超链接：参考以下示例，text 为文本值，link 为 URL 链接
+    /// 附件：填写附件 token，需要先调用上传素材或分片上传素材接口将附件上传至该多维表格中
+    /// 单向关联：填写被关联表的记录 ID
+    /// 双向关联：填写被关联表的记录 ID
+    /// 地理位置：填写经纬度坐标
+    /// 不同类型字段的数据结构请参考多维表格记录数据结构。
+    /// 示例值：{"人员": [{"id": "ou_2910013f1e6456f16a0ce75ede9abcef"}]
+    pub fn records(mut self, fields: Vec<Record>) -> Self {
+        self.request.records = fields;
+        self
+    }
+
+    pub fn build(mut self) -> BatchCreateAppTableRecordRequest {
+        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
+        self.request
+    }
+}
+
+#[derive(Debug, Deserialize)]
+pub struct BatchCreateAppTableRecordResponse {
+    pub records: Vec<Record>,
+}
+
+impl ApiResponseTrait for BatchCreateAppTableRecordResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }

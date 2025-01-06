@@ -155,7 +155,7 @@ pub struct SearchUserIterator<'a> {
     has_more: bool,
 }
 
-impl<'a> SearchUserIterator<'a> {
+impl SearchUserIterator<'_> {
     pub async fn next(&mut self) -> Option<Vec<UserInSearchResponse>> {
         if !self.has_more {
             return None;

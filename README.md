@@ -1,8 +1,8 @@
 [![crates.io](https://img.shields.io/crates/v/open-lark)](https://crates.io/crates/open-lark)
 [![MIT/Apache 2.0](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)](https://github.com/Seldom-SE/seldom_pixel#license)
-[![crates.io](https://img.shields.io/crates/d/open-lark)](https://crates.io/crates/open-lark)
 [![CI](https://github.com/foxzool/open-lark/workflows/CI/badge.svg)](https://github.com/foxzool/open-lark/actions)
 [![Documentation](https://docs.rs/open-lark/badge.svg)](https://docs.rs/open-lark)
+![Discord Shield](https://discord.com/api/guilds/1319490473060073532/widget.png?style=shield)
 
 # 飞书开放平台非官方SDK, 个人开发, 请谨慎使用
 
@@ -86,7 +86,9 @@
 - 字段
     - [x] 列出字段
 - 记录
+    - [x] 新增记录
     - [x] 查询记录
+    - [x] 新增多条记录
 
 #### 通讯录
 
