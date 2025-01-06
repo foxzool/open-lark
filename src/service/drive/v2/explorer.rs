@@ -118,7 +118,7 @@ pub struct ListFolderIterator<'a> {
     has_more: bool,
 }
 
-impl<'a> ListFolderIterator<'a> {
+impl ListFolderIterator<'_> {
     pub async fn next(&mut self) -> Option<Vec<FileInFolder>> {
         if !self.has_more {
             return None;
@@ -353,7 +353,6 @@ impl ListFolderRequestBuilder {
     /// - user_id：标识一个用户在某个租户内的身份。同一个用户在租户 A 和租户 B 内的 User ID
     ///   是不同的。在同一个租户内，一个用户的 User ID 在所有应用（包括商店应用）中都保持一致。User
     ///   ID 主要用于在不同的应用间打通用户数据。了解更多：如何获取 User ID？
-
     pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
         self.request
             .api_req

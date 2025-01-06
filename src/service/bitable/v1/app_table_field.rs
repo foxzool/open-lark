@@ -1,5 +1,5 @@
 use reqwest::Method;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serde_repr::Deserialize_repr;
 
 use crate::core::{
@@ -70,7 +70,7 @@ pub enum FieldValue {
 }
 
 /// 人员
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Person {
     /// 人员名字
     pub name: String,

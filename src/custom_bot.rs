@@ -33,7 +33,7 @@ impl<'a> CustomBot<'a> {
     }
 }
 
-impl<'a> CustomBot<'a> {
+impl CustomBot<'_> {
     pub async fn send_message<T>(&self, message: T) -> SDKResult<BaseResponse<RawResponse>>
     where
         T: SendMessageTrait,
