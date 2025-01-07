@@ -69,7 +69,7 @@ impl GetAppRequestBuilder {
 
 #[derive(Deserialize, Debug)]
 pub struct GetAppResponse {
-    _app: GetAppResponseData,
+    app: GetAppResponseData,
 }
 
 #[derive(Deserialize, Debug)]
