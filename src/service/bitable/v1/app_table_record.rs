@@ -759,23 +759,22 @@ pub struct UpdateAppTableRecordRequest {
     /// 记录的唯一标识符
     #[serde(skip)]
     record_id: String,
-    /// 用户 ID 类型
-    ///
-    /// 示例值："open_id"
-    ///
-    /// 可选值有：
-    ///
-    /// open_id：标识一个用户在某个应用中的身份。同一个用户在不同应用中的 Open ID 不同。了解更多：如何获取 Open ID
-    /// union_id：标识一个用户在某个应用开发商下的身份。同一用户在同一开发商下的应用中的 Union ID 是相同的，在不同开发商下的应用中的 Union ID 是不同的。通过 Union ID，应用开发商可以把同个用户在多个应用中的身份关联起来。了解更多：如何获取 Union ID？
-    /// user_id：标识一个用户在某个租户内的身份。同一个用户在租户 A 和租户 B 内的 User ID 是不同的。在同一个租户内，一个用户的 User ID 在所有应用（包括商店应用）中都保持一致。User ID 主要用于在不同的应用间打通用户数据。了解更多：如何获取 User ID？
-    #[serde(skip)]
-    user_id_type: Option<String>,
-    /// 格式为标准的 uuidv4，操作的唯一标识，用于幂等的进行更新操作。此值为空表示将发起一次新的请求，此值非空表示幂等的进行更新操作。
-    ///
-    /// 示例值："fe599b60-450f-46ff-b2ef-9f6675625b97"
-    #[serde(skip)]
-    client_token: Option<String>,
-
+    // /// 用户 ID 类型
+    // ///
+    // /// 示例值："open_id"
+    // ///
+    // /// 可选值有：
+    // ///
+    // /// open_id：标识一个用户在某个应用中的身份。同一个用户在不同应用中的 Open ID 不同。了解更多：如何获取 Open ID
+    // /// union_id：标识一个用户在某个应用开发商下的身份。同一用户在同一开发商下的应用中的 Union ID 是相同的，在不同开发商下的应用中的 Union ID 是不同的。通过 Union ID，应用开发商可以把同个用户在多个应用中的身份关联起来。了解更多：如何获取 Union ID？
+    // /// user_id：标识一个用户在某个租户内的身份。同一个用户在租户 A 和租户 B 内的 User ID 是不同的。在同一个租户内，一个用户的 User ID 在所有应用（包括商店应用）中都保持一致。User ID 主要用于在不同的应用间打通用户数据。了解更多：如何获取 User ID？
+    // #[serde(skip)]
+    // user_id_type: Option<String>,
+    // /// 格式为标准的 uuidv4，操作的唯一标识，用于幂等的进行更新操作。此值为空表示将发起一次新的请求，此值非空表示幂等的进行更新操作。
+    // ///
+    // /// 示例值："fe599b60-450f-46ff-b2ef-9f6675625b97"
+    // #[serde(skip)]
+    // client_token: Option<String>,
     /// 要更新的记录的数据。你需先指定数据表中的字段（即指定列），再传入正确格式的数据作为一条记录。
     fields: Value,
 }
