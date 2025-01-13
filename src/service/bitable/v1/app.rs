@@ -67,9 +67,11 @@ impl GetAppRequestBuilder {
     }
 }
 
+#[allow(dead_code)]
 #[derive(Deserialize, Debug)]
 pub struct GetAppResponse {
-    _app: GetAppResponseData,
+    /// 多维表格的 app 信息
+    app: GetAppResponseData,
 }
 
 #[derive(Deserialize, Debug)]

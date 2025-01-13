@@ -271,7 +271,8 @@ pub struct AppTableField {
     /// 字段属性
     pub property: Option<AppTableFieldProperty>,
     /// 字段的描述
-    pub description: Option<AppTableFieldDescription>,
+    // pub description: Option<AppTableFieldDescription>,
+    pub description: Option<String>,
     /// 是否是索引列
     pub is_primary: bool,
     /// 多维表格字段 id

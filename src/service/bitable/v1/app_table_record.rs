@@ -81,6 +81,27 @@ impl AppTableRecordService {
 
         Ok(api_resp)
     }
+
+    /// 更新记录
+    pub async fn update(
+        &self,
+        request: UpdateAppTableRecordRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<UpdateAppTableRecordResponse>> {
+        let mut api_req = request.api_request;
+        api_req.http_method = Method::PUT;
+        api_req.api_path = format!(
+            "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/{record_id}",
+            app_token = request.app_token,
+            table_id = request.table_id,
+            record_id = request.record_id
+        );
+        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
+
+        Ok(api_resp)
+    }
 }
 
 /// 新增记录
@@ -720,6 +741,93 @@ pub struct SearchAppTableRecordResponse {
 }
 
 impl ApiResponseTrait for SearchAppTableRecordResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+#[derive(Debug, Serialize, Default)]
+pub struct UpdateAppTableRecordRequest {
+    #[serde(skip)]
+    api_request: ApiRequest,
+    /// 多维表格的唯一标识符
+    #[serde(skip)]
+    app_token: String,
+    /// 多维表格数据表的唯一标识符
+    #[serde(skip)]
+    table_id: String,
+    /// 记录的唯一标识符
+    #[serde(skip)]
+    record_id: String,
+    // /// 用户 ID 类型
+    // ///
+    // /// 示例值："open_id"
+    // ///
+    // /// 可选值有：
+    // ///
+    // /// open_id：标识一个用户在某个应用中的身份。同一个用户在不同应用中的 Open ID 不同。了解更多：如何获取 Open ID
+    // /// union_id：标识一个用户在某个应用开发商下的身份。同一用户在同一开发商下的应用中的 Union ID 是相同的，在不同开发商下的应用中的 Union ID 是不同的。通过 Union ID，应用开发商可以把同个用户在多个应用中的身份关联起来。了解更多：如何获取 Union ID？
+    // /// user_id：标识一个用户在某个租户内的身份。同一个用户在租户 A 和租户 B 内的 User ID 是不同的。在同一个租户内，一个用户的 User ID 在所有应用（包括商店应用）中都保持一致。User ID 主要用于在不同的应用间打通用户数据。了解更多：如何获取 User ID？
+    // #[serde(skip)]
+    // user_id_type: Option<String>,
+    // /// 格式为标准的 uuidv4，操作的唯一标识，用于幂等的进行更新操作。此值为空表示将发起一次新的请求，此值非空表示幂等的进行更新操作。
+    // ///
+    // /// 示例值："fe599b60-450f-46ff-b2ef-9f6675625b97"
+    // #[serde(skip)]
+    // client_token: Option<String>,
+    /// 要更新的记录的数据。你需先指定数据表中的字段（即指定列），再传入正确格式的数据作为一条记录。
+    fields: Value,
+}
+
+impl UpdateAppTableRecordRequest {
+    pub fn builder() -> AppTableRecordUpdateRequestBuilder {
+        AppTableRecordUpdateRequestBuilder::default()
+    }
+}
+
+#[derive(Default)]
+pub struct AppTableRecordUpdateRequestBuilder {
+    request: UpdateAppTableRecordRequest,
+}
+
+impl AppTableRecordUpdateRequestBuilder {
+    /// 多维表格的唯一标识符
+    pub fn app_token(mut self, app_token: impl ToString) -> Self {
+        self.request.app_token = app_token.to_string();
+        self
+    }
+
+    /// 表ID
+    pub fn table_id(mut self, table_id: impl ToString) -> Self {
+        self.request.table_id = table_id.to_string();
+        self
+    }
+
+    /// 记录的唯一标识符
+    pub fn record_id(mut self, record_id: impl ToString) -> Self {
+        self.request.record_id = record_id.to_string();
+        self
+    }
+
+    /// fields
+    pub fn fields(mut self, fields: Value) -> Self {
+        self.request.fields = fields;
+        self
+    }
+
+    /// build
+    pub fn build(mut self) -> UpdateAppTableRecordRequest {
+        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
+        self.request
+    }
+}
+
+#[derive(Debug, Deserialize)]
+pub struct UpdateAppTableRecordResponse {
+    pub record: Value,
+}
+
+impl ApiResponseTrait for UpdateAppTableRecordResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
