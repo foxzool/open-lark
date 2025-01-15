@@ -1,10 +1,11 @@
-use std::env;
-
 use dotenvy::dotenv;
 use log::error;
-use open_lark::{client::LarkClient, service::bitable::v1::SearchAppTableRecordRequest};
+use open_lark::client::LarkClient;
+use open_lark::service::bitable::v1::UpdateAppTableRecordRequest;
+use serde_json::json;
+use std::env;
 
-/// 查询记录
+/// 更新记录
 #[tokio::main]
 async fn main() {
     dotenv().expect(".env file not found");
@@ -14,25 +15,27 @@ async fn main() {
     // 创建 Client
     let client = LarkClient::builder(&app_id, &app_secret).build();
     // 构建请求体
-    let req = SearchAppTableRecordRequest::builder()
+    let req = UpdateAppTableRecordRequest::builder()
         .app_token("UHNYbRv2BaxTllsMLt8cykiSnsb")
         .table_id("tbli6aSCRbJKDFIe")
+        .record_id("recqavj45m")
+        .fields(json!({"文本": "更新文本"}))
         .build();
     // 发起请求
     let resp = client
         .bitable
         .v1
         .app_table_record
-        .search(req, None)
+        .update(req, None)
         .await
         .unwrap();
-    // println!("{:?}", resp);
+
     match resp.data {
         None => {
             error!("{:?}", resp)
         }
         Some(data) => {
-            println!("search  bitable app record response: {:#?}", data);
+            println!("create  bitable app record response: {:#?}", data);
         }
     }
 }

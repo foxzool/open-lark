@@ -1,6 +1,6 @@
 [package]
 name = "open-lark"
-version = "0.3.3"
+version = "0.3.4"
 edition = "2021"
 authors = ["ZoOL <zhooul@gmail.com>"]
 readme = "README.md"
@@ -32,10 +32,8 @@ futures-util = { version = "0.3.30", default-features = false, features = [
 hmac = "0.12.1"
 lazy_static = "1.4.0"
 log = "0.4.21"
-kanal = "0.1.0-pre8"
 prost = { version = "0.13.1", optional = true }
 quick_cache = { version = "0.6.3", features = [] }
-rand = "0.9.0-alpha.1"
 reqwest = { version = "0.12.7", default-features = false, features = ["json", "multipart", "rustls-tls"] }
 simd-adler32 = "0.3.7"
 serde_repr = "0.1.19"
@@ -46,10 +44,8 @@ strum = "0.26.2"
 strum_macros = "0.26.4"
 thiserror = "1.0.61"
 tokio = { version = "1.38", features = ["rt", "rt-multi-thread", "macros"] }
-tokio-stream = "0.1.15"
 url = { version = "2.5.0", features = ["serde"] }
 tokio-tungstenite = { version = "0.23", features = ["rustls-tls-native-roots"], optional = true }
-futures-channel = "0.3.30"
 
 
 
@@ -285,6 +281,11 @@ path = "examples/api/authen/v1/user_info.rs"
 [[example]]
 name = "app_table_record_create"
 path = "examples/api/bitable/v1/app_table_record/create.rs"
+
+# 更新记录
+[[example]]
+name = "app_table_record_update"
+path = "examples/api/bitable/v1/app_table_record/update.rs"
 
 [[example]]
 name = "app_table_record_batch_create"
