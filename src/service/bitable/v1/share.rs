@@ -35,3 +35,21 @@ impl Record {
         }
     }
 }
+
+/// 一些帮助函数
+impl Record {
+    /// 获取文本
+    pub fn get_text(&self, key: &str) -> Option<String> {
+        let value = self.fields.get(key)?;
+        let array = value.as_array()?;
+        let text = array[0].get("text")?.as_str()?;
+        Some(text.to_string())
+    }
+
+    /// 获取数字
+    pub fn get_number(&self, key: &str) -> Option<f64> {
+        let value = self.fields.get(key)?;
+        let number = value.as_f64()?;
+        Some(number)
+    }
+}
