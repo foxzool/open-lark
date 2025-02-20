@@ -52,4 +52,16 @@ impl Record {
         let number = value.as_f64()?;
         Some(number)
     }
+
+    /// 获取数组文本
+    pub fn get_array_text(&self, key: &str) -> Option<Vec<String>> {
+        let value = self.fields.get(key)?;
+        let array = value.as_array()?;
+        let mut texts = Vec::new();
+        for item in array {
+            let text = item.as_str()?.to_string();
+            texts.push(text);
+        }
+        Some(texts)
+    }
 }
