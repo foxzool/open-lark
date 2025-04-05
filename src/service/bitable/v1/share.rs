@@ -64,4 +64,30 @@ impl Record {
         }
         Some(texts)
     }
+
+    /// 获取单选文本
+    pub fn get_single_select_text(&self, key: &str) -> Option<String> {
+        let value = self.fields.get(key)?;
+        let text = value.as_str()?;
+        Some(text.to_string())
+    }
+
+    /// 获取多选文本
+    pub fn get_multi_select_text(&self, key: &str) -> Option<Vec<String>> {
+        let value = self.fields.get(key)?;
+        let array = value.as_array()?;
+        let mut texts = Vec::new();
+        for item in array {
+            let text = item.as_str()?.to_string();
+            texts.push(text);
+        }
+        Some(texts)
+    }
+
+    /// 获取布尔值（通过 checkbox）
+    pub fn get_checkbox(&self, key: &str) -> Option<bool> {
+        let value = self.fields.get(key)?;
+        let checkbox = value.as_bool()?;
+        Some(checkbox)
+    }
 }

@@ -32,21 +32,26 @@ futures-util = { version = "0.3.30", default-features = false, features = [
 hmac = "0.12.1"
 lazy_static = "1.4.0"
 log = "0.4.21"
-prost = { version = "0.13.1", optional = true }
+prost = { version = "0.13", optional = true }
 quick_cache = { version = "0.6.3", features = [] }
-reqwest = { version = "0.12.7", default-features = false, features = ["json", "multipart", "rustls-tls"] }
+reqwest = { version = "0.12.7", default-features = false, features = [
+    "json",
+    "multipart",
+    "rustls-tls",
+] }
 simd-adler32 = "0.3.7"
 serde_repr = "0.1.19"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 sha2 = "0.10.8"
-strum = "0.26.2"
-strum_macros = "0.26.4"
-thiserror = "1.0.61"
+strum = "0.27"
+strum_macros = "0.27"
+thiserror = "2.0"
 tokio = { version = "1.38", features = ["rt", "rt-multi-thread", "macros"] }
 url = { version = "2.5.0", features = ["serde"] }
-tokio-tungstenite = { version = "0.23", features = ["rustls-tls-native-roots"], optional = true }
-
+tokio-tungstenite = { version = "0.23", features = [
+    "rustls-tls-native-roots",
+], optional = true }
 
 
 [dev-dependencies]
@@ -265,7 +270,6 @@ path = "examples/api/sheets/v3/spreadsheet-sheet-filter/delete.rs"
 [[example]]
 name = "get_bitable"
 path = "examples/api/bitable/v1/app/get.rs"
-
 
 
 [[example]]
