@@ -262,6 +262,7 @@ pub struct AppTableField {
     /// - 21：双向关联
     /// - 22：地理位置
     /// - 23：群组
+    /// - 24: 流程
     /// - 1001：创建时间
     /// - 1002：最后更新时间
     /// - 1003：创建人
@@ -476,6 +477,12 @@ pub enum UiType {
     /// 修改人
     /// 自动编号
     AutoNumber,
+    /// 流程
+    Stage,
+    /// 查找引用
+    Lookup,
+    /// 按钮
+    Button,
 }
 
 #[derive(Debug, Deserialize_repr, PartialEq)]
@@ -503,6 +510,8 @@ pub enum FieldType {
     Attachment = 17,
     /// - 18：关联
     Link = 18,
+    /// - 19：查找引用
+    Lookup = 19,
     /// - 20：公式
     Formula = 20,
     /// - 21：双向关联
@@ -511,6 +520,8 @@ pub enum FieldType {
     Location = 22,
     /// - 23：群组
     GroupChat = 23,
+    /// - 24：流程
+    Stage = 24,
     /// - 1001：创建时间
     CreatedTime = 1001,
     /// - 1002：最后更新时间
@@ -521,4 +532,6 @@ pub enum FieldType {
     ModifiedUser = 1004,
     /// - 1005：自动编号
     AutoSerial = 1005,
+    /// - 3001: 按钮
+    Button = 3001,
 }
