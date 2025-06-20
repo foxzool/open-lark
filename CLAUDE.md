@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-和我交互使用中文
+和我交互使用中文, git 注释使用中文
 
 ## Project Overview
 
@@ -13,13 +13,15 @@ open-lark 是飞书开放平台的非官方 Rust SDK，支持自定义机器人�
 ### Building and Testing
 ```bash
 # Build the project
-cargo build
+just build
+# or: cargo build --all-features
 
-# Build with all features
-cargo build --all-features
+# Build release version
+just build-release
 
 # Run tests
-cargo test
+just test
+# or: cargo test --all-features
 
 # Run a specific test
 cargo test test_name
@@ -29,8 +31,36 @@ cargo test -- --nocapture
 
 # Lint the code
 just lint
-# or
-cargo clippy --workspace --all-targets --all-features -- -Dwarnings
+
+# Format code
+just fmt
+
+# Check code formatting
+just fmt-check
+
+# Generate documentation
+just docs
+
+# Run all pre-release checks
+just check-all
+
+# Show all available commands
+just help
+```
+
+### Release Process
+```bash
+# Release a new version (e.g., 0.4.0)
+just release 0.4.0
+
+# This will:
+# 1. Check if on main branch and working directory is clean
+# 2. Pull latest changes
+# 3. Verify version matches Cargo.toml
+# 4. Run all pre-release checks (format, lint, test, build, docs)
+# 5. Check if CHANGELOG.md has entry for the version
+# 6. Create and push git tag
+# 7. Trigger GitHub Actions for automated release
 ```
 
 ### Running Examples
