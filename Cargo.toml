@@ -391,3 +391,16 @@ path = "examples/api/attendance/v1/user_stats_data/query_fields.rs"
 [[example]]
 name = "attendance_user_stats_data_query_data"
 path = "examples/api/attendance/v1/user_stats_data/query_data.rs"
+
+# 假勤审批
+[[example]]
+name = "attendance_user_approval_query"
+path = "examples/api/attendance/v1/user_approval/query.rs"
+
+[[example]]
+name = "attendance_user_approval_create"
+path = "examples/api/attendance/v1/user_approval/create.rs"
+
+[[example]]
+name = "attendance_user_approval_process"
+path = "examples/api/attendance/v1/user_approval/process.rs"

@@ -56,7 +56,27 @@
 ## 归档报表
 
 - [ ] [查询归档报表表头](https://open.feishu.cn/document/attendance-v1/archive_rule/user_stats_fields_query)
-- [ ] []()
-- [ ] []()
-- [ ] []()
-- [ ] []()
+- [ ] [写入归档报表结果](https://open.feishu.cn/document/attendance-v1/archive_rule/upload_report)
+- [ ] [删除归档报表行数据](https://open.feishu.cn/document/attendance-v1/archive_rule/del_report)
+- [ ] [查询所有归档规则](https://open.feishu.cn/document/attendance-v1/archive_rule/list)
+
+
+## 打卡信息管理
+
+- [ ] [导入打卡流水](https://open.feishu.cn/document/server-docs/attendance-v1/user_task/batch_create)
+- [ ] [查询打卡流水](https://open.feishu.cn/document/server-docs/attendance-v1/user_task/get)
+- [ ] [批量查询打卡流水](https://open.feishu.cn/document/server-docs/attendance-v1/user_task/query-2)
+- [ ] [删除打卡流水](https://open.feishu.cn/document/attendance-v1/user_task/batch_del)
+- [ ] [查询打卡结果](https://open.feishu.cn/document/server-docs/attendance-v1/user_task/query)
+
+## 休假获取过期发放记录
+
+- [ ] [通过过期时间获取发放记录](https://open.feishu.cn/document/server-docs/attendance-v1/leave_employ_expire_record/get)
+
+## 休假发放记录
+- [ ] [修改发放记录](https://open.feishu.cn/document/server-docs/attendance-v1/leave_accrual_record/patch)
+
+## 事件
+
+- [ ] [打卡流水](https://open.feishu.cn/document/server-docs/attendance-v1/event/user-attendance-records-event)
+- [ ] [用户任务状态变更](https://open.feishu.cn/document/server-docs/attendance-v1/event/user-task-status-change-event)
