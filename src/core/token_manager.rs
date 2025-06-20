@@ -47,7 +47,7 @@ impl TokenManager {
         let mut token = self
             .cache
             .get(&app_access_token_key(&config.app_id))
-            .ok_or(LarkAPIError::IllegalParamError("cache error".to_string()))?;
+            .ok_or_else(|| LarkAPIError::illegal_param("cache error"))?;
 
         let app_type = config.app_type;
         if token.is_empty() {
@@ -86,7 +86,7 @@ impl TokenManager {
             Ok(data.app_access_token)
         } else {
             warn!("custom app appAccessToken cache {:#?}", resp.raw_response);
-            Err(LarkAPIError::IllegalParamError(resp.msg().to_string()))
+            Err(LarkAPIError::illegal_param(resp.msg()))
         }
     }
     async fn get_marketplace_app_access_token_then_cache(
@@ -98,9 +98,7 @@ impl TokenManager {
         if app_ticket.is_empty() {
             match APP_TICKET_MANAGER.get(config).await {
                 None => {
-                    return Err(LarkAPIError::IllegalParamError(
-                        "App ticket is empty".to_string(),
-                    ))
+                    return Err(LarkAPIError::illegal_param("App ticket is empty"))
                 }
                 Some(ticket) => {
                     app_ticket = ticket;
@@ -139,7 +137,7 @@ impl TokenManager {
                 "marketplace app appAccessToken cache {:#?}",
                 resp.raw_response
             );
-            Err(LarkAPIError::IllegalParamError(resp.msg().to_string()))
+            Err(LarkAPIError::illegal_param(resp.msg()))
         }
     }
 
@@ -204,7 +202,7 @@ impl TokenManager {
                 "custom app tenantAccessToken cache {:#?}",
                 resp.raw_response
             );
-            Err(LarkAPIError::IllegalParamError(resp.msg().to_string()))
+            Err(LarkAPIError::illegal_param(resp.msg()))
         }
     }
 
@@ -249,7 +247,7 @@ impl TokenManager {
                 "marketplace app tenantAccessToken cache {:#?}",
                 resp.raw_response
             );
-            Err(LarkAPIError::IllegalParamError(resp.msg().to_string()))
+            Err(LarkAPIError::illegal_param(resp.msg()))
         }
     }
 }

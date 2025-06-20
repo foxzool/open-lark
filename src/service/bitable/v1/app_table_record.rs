@@ -2,16 +2,18 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    service::bitable::v1::Record,
 };
-use crate::service::bitable::v1::Record;
 
 pub struct AppTableRecordService {
     config: Config,
@@ -137,7 +139,6 @@ pub struct CreateAppTableRecordRequest {
     /// * false：开启读写一致性检查，确保数据在读写过程中一致
     #[serde(skip)]
     ignore_consistency_check: Option<bool>,
-    ///
     /// 要新增的记录的数据。你需先指定数据表中的字段（即指定列），再传入正确格式的数据作为一条记录。
     ///
     /// 注意：
@@ -161,7 +162,6 @@ pub struct CreateAppTableRecordRequest {
     /// 不同类型字段的数据结构请参考多维表格记录数据结构。
     ///
     /// 示例值：{"人员": [{"id": "ou_2910013f1e6456f16a0ce75ede9abcef"}]
-    ///
     #[serde(flatten)]
     fields: Record,
 }
@@ -334,7 +334,6 @@ pub struct BatchCreateAppTableRecordRequest {
     /// * false：开启读写一致性检查，确保数据在读写过程中一致
     #[serde(skip)]
     ignore_consistency_check: Option<bool>,
-    ///
     /// 要新增的记录的数据。你需先指定数据表中的字段（即指定列），再传入正确格式的数据作为一条记录。
     ///
     /// 注意：
@@ -358,7 +357,6 @@ pub struct BatchCreateAppTableRecordRequest {
     /// 不同类型字段的数据结构请参考多维表格记录数据结构。
     ///
     /// 示例值：{"人员": [{"id": "ou_2910013f1e6456f16a0ce75ede9abcef"}]
-    ///
     records: Vec<Record>,
 }
 

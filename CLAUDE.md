@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+和我交互使用中文
+
 ## Project Overview
 
 open-lark 是飞书开放平台的非官方 Rust SDK，支持自定义机器人、长连接机器人、云文档、飞书卡片、消息、群组等 API 调用。
@@ -18,6 +20,12 @@ cargo build --all-features
 
 # Run tests
 cargo test
+
+# Run a specific test
+cargo test test_name
+
+# Run tests with output
+cargo test -- --nocapture
 
 # Lint the code
 just lint
@@ -56,9 +64,10 @@ Each service follows version-based API organization (v1, v2, v3) with standardiz
 
 ### Event System
 - **EventDispatcherHandler**: Central event dispatcher in `src/event/dispatcher/mod.rs`
-- **Builder Pattern**: Used for registering event handlers
-- **Version Support**: Handles both v1 and v2 event formats
+- **Builder Pattern**: Used for registering event handlers with `.register_p2_im_message_receive_v1()` etc.
+- **Version Support**: Handles both v1 (p1) and v2 (p2) event formats automatically
 - **Type Safety**: Uses traits and generics for compile-time safety
+- **WebSocket Support**: Real-time event handling via WebSocket connection (optional feature)
 
 ### Authentication Flow
 - Supports multiple token types: App Access Token, Tenant Access Token, User Access Token
@@ -76,8 +85,9 @@ Each service follows version-based API organization (v1, v2, v3) with standardiz
 
 Create a `.env` file based on `.env-example` with your API credentials:
 ```
-LARK_APP_ID=your_app_id
-LARK_APP_SECRET=your_app_secret
+APP_ID=your_app_id
+APP_SECRET=your_app_secret
+USER_ACCESS_TOKEN=your_user_access_token  # Optional: for user-specific operations
 ```
 
 ## Features
@@ -93,6 +103,36 @@ Examples are extensively documented and located in `examples/` directory. They a
 - Root level: High-level integration examples
 
 When adding new examples, follow the existing naming convention and add corresponding `[[example]]` entries to `Cargo.toml`.
+
+## Client Usage Patterns
+
+### Basic Client Setup
+``` norun
+use open_lark::prelude::*;
+
+let client = LarkClient::builder(app_id, app_secret)
+    .with_app_type(AppType::SelfBuilt)  // or AppType::Marketplace
+    .with_enable_token_cache(true)
+    .build();
+```
+
+### Error Handling
+All API calls return `SDKResult<T>` which wraps `Result<T, LarkAPIError>`. Always handle errors appropriately:
+``` norun
+match client.im.create_message(&req).await {
+    Ok(response) => println!("Success: {:?}", response),
+    Err(e) => eprintln!("Error: {:?}", e),
+}
+```
+
+### Event Handling
+``` norun
+let handler = EventDispatcherHandler::builder()
+    .register_p2_im_message_receive_v1(|event| {
+        println!("Received message: {:?}", event);
+    })
+    .build();
+```
 
 ## Protobuf Integration
 

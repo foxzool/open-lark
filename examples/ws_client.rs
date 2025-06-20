@@ -1,7 +1,6 @@
 use std::{env, sync::Arc};
 
 use dotenvy::dotenv;
-use lazy_static::lazy_static;
 use log::info;
 use tokio::sync::Mutex;
 
@@ -39,14 +38,6 @@ async fn main() {
         .unwrap();
 }
 
-lazy_static! {
-    pub static ref LARK_CLIENT: Mutex<LarkClient> = {
-        let app_id = env::var("APP_ID").unwrap();
-        let app_secret = env::var("APP_SECRET").unwrap();
-        let client = LarkClient::builder(&app_id, &app_secret).build();
-        Mutex::new(client)
-    };
-}
 
 async fn handle_p2_im_message_receive_v1(
     api_client: Arc<Mutex<LarkClient>>,
@@ -66,7 +57,7 @@ async fn handle_p2_im_message_receive_v1(
         .build();
 
     // 发起请求
-    api_client
+    match api_client
         .lock()
         .await
         .im
@@ -74,7 +65,10 @@ async fn handle_p2_im_message_receive_v1(
         .message
         .create(req, None)
         .await
-        .unwrap();
+    {
+        Ok(response) => info!("Message sent successfully: {:?}", response),
+        Err(e) => info!("Failed to send message: {:?}", e),
+    }
 }
 
 fn handle_p2_im_message_read_v1(data: P2ImMessageReadV1) {
