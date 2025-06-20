@@ -339,3 +339,249 @@ impl ApiResponseTrait for BatchCreateTempUserDailyShiftRespData {
         ResponseFormat::Data
     }
 }
+
+/// 考勤组信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Group {
+    /// 考勤组 ID
+    pub group_id: String,
+    /// 考勤组名称
+    pub group_name: String,
+    /// 时区
+    pub time_zone: Option<String>,
+    /// 绑定的部门列表
+    pub bind_dept_ids: Option<Vec<String>>,
+    /// 例外日期设置
+    pub except_date_rule: Option<Vec<ExceptDateRule>>,
+    /// 考勤方式
+    pub attendance_type: Option<i32>,
+    /// 打卡方式
+    pub punch_type: Option<i32>,
+    /// 允许迟到时间，单位：分钟
+    pub allow_late_minutes: Option<i32>,
+    /// 允许早退时间，单位：分钟
+    pub allow_early_leave_minutes: Option<i32>,
+    /// 工作日设置
+    pub work_day_rule: Option<Vec<WorkDayRule>>,
+    /// 班次设置
+    pub shift_rule: Option<Vec<ShiftRule>>,
+    /// 成员设置
+    pub member_rule: Option<MemberRule>,
+    /// 创建时间
+    pub create_time: Option<String>,
+    /// 修改时间
+    pub update_time: Option<String>,
+}
+
+/// 例外日期规则
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ExceptDateRule {
+    /// 例外日期，格式：YYYY-MM-DD
+    pub date: String,
+    /// 例外类型：1-工作日 2-休息日
+    pub except_type: i32,
+    /// 班次 ID（当例外类型为工作日时必填）
+    pub shift_id: Option<String>,
+}
+
+/// 工作日规则
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WorkDayRule {
+    /// 星期几：1-7，1代表周一
+    pub week_day: i32,
+    /// 班次 ID
+    pub shift_id: String,
+}
+
+/// 班次规则
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ShiftRule {
+    /// 班次 ID
+    pub shift_id: String,
+    /// 班次名称
+    pub shift_name: Option<String>,
+}
+
+/// 成员规则
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MemberRule {
+    /// 成员类型：1-部门 2-用户
+    pub member_type: i32,
+    /// 成员 ID 列表
+    pub member_ids: Vec<String>,
+}
+
+/// 考勤组成员信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GroupUser {
+    /// 用户 ID
+    pub user_id: String,
+    /// 用户姓名
+    pub user_name: Option<String>,
+    /// 员工工号
+    pub employee_no: Option<String>,
+    /// 所属部门 ID
+    pub department_id: Option<String>,
+    /// 加入时间
+    pub join_time: Option<String>,
+}
+
+/// 查询考勤组下所有成员请求
+#[derive(Default)]
+pub struct ListGroupUserRequest {
+    pub api_req: ApiRequest,
+    /// 考勤组 ID
+    pub group_id: String,
+    /// 员工 ID 类型
+    pub employee_type: String,
+    /// 部门 ID 类型
+    pub dept_type: Option<String>,
+    /// 分页大小，最大值：100
+    pub page_size: Option<i32>,
+    /// 分页标记
+    pub page_token: Option<String>,
+}
+
+/// 查询考勤组成员响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ListGroupUserRespData {
+    /// 成员列表
+    pub user_list: Vec<GroupUser>,
+    /// 是否还有更多项
+    pub has_more: bool,
+    /// 分页标记
+    pub page_token: Option<String>,
+}
+
+impl ApiResponseTrait for ListGroupUserRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 创建或修改考勤组请求
+#[derive(Default)]
+pub struct CreateGroupRequest {
+    pub api_req: ApiRequest,
+    /// 员工 ID 类型
+    pub employee_type: String,
+    /// 部门 ID 类型
+    pub dept_type: Option<String>,
+    /// 考勤组名称
+    pub group_name: String,
+    /// 时区
+    pub time_zone: Option<String>,
+    /// 绑定的部门列表
+    pub bind_dept_ids: Option<Vec<String>>,
+    /// 例外日期设置
+    pub except_date_rule: Option<Vec<ExceptDateRule>>,
+    /// 考勤方式
+    pub attendance_type: Option<i32>,
+    /// 打卡方式
+    pub punch_type: Option<i32>,
+    /// 允许迟到时间，单位：分钟
+    pub allow_late_minutes: Option<i32>,
+    /// 允许早退时间，单位：分钟
+    pub allow_early_leave_minutes: Option<i32>,
+    /// 工作日设置
+    pub work_day_rule: Option<Vec<WorkDayRule>>,
+    /// 班次设置
+    pub shift_rule: Option<Vec<ShiftRule>>,
+    /// 成员设置
+    pub member_rule: Option<MemberRule>,
+}
+
+/// 创建考勤组响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateGroupRespData {
+    /// 考勤组信息
+    pub group: Group,
+}
+
+impl ApiResponseTrait for CreateGroupRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 删除考勤组请求
+#[derive(Default)]
+pub struct DeleteGroupRequest {
+    pub api_req: ApiRequest,
+    /// 考勤组 ID
+    pub group_id: String,
+}
+
+/// 获取考勤组请求
+#[derive(Default)]
+pub struct GetGroupRequest {
+    pub api_req: ApiRequest,
+    /// 考勤组 ID
+    pub group_id: String,
+    /// 员工 ID 类型
+    pub employee_type: String,
+    /// 部门 ID 类型
+    pub dept_type: Option<String>,
+}
+
+/// 按名称查询考勤组请求
+#[derive(Default)]
+pub struct SearchGroupRequest {
+    pub api_req: ApiRequest,
+    /// 员工 ID 类型
+    pub employee_type: String,
+    /// 部门 ID 类型
+    pub dept_type: Option<String>,
+    /// 考勤组名称
+    pub group_name: String,
+}
+
+/// 查询考勤组响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SearchGroupRespData {
+    /// 考勤组列表
+    pub group_list: Vec<Group>,
+}
+
+impl ApiResponseTrait for SearchGroupRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 查询所有考勤组请求
+#[derive(Default)]
+pub struct ListGroupRequest {
+    pub api_req: ApiRequest,
+    /// 员工 ID 类型
+    pub employee_type: String,
+    /// 部门 ID 类型
+    pub dept_type: Option<String>,
+    /// 分页大小，最大值：100
+    pub page_size: Option<i32>,
+    /// 分页标记
+    pub page_token: Option<String>,
+}
+
+/// 考勤组列表响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ListGroupRespData {
+    /// 考勤组列表
+    pub group_list: Vec<Group>,
+    /// 是否还有更多项
+    pub has_more: bool,
+    /// 分页标记
+    pub page_token: Option<String>,
+}
+
+impl ApiResponseTrait for ListGroupRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for Group {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
