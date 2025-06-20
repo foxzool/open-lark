@@ -90,7 +90,7 @@ pub struct FacePunchConfig {
 #[derive(Default)]
 pub struct CreateShiftRequest {
     pub api_req: ApiRequest,
-    /// 请求体中的 user_ids 和响应体中的 user_id 的员工ID类型。如果没有后台管理权限，可使用通过手机号或邮箱获取用户 ID
+    /// 员工ID类型，作为查询参数。如果没有后台管理权限，可使用通过手机号或邮箱获取用户 ID
     ///
     /// 示例值："employee_id"
     ///
@@ -170,7 +170,7 @@ pub struct GetShiftRequest {
 #[derive(Default)]
 pub struct QueryShiftRequest {
     pub api_req: ApiRequest,
-    /// 员工类型，同创建班次接口
+    /// 员工类型，作为查询参数，同创建班次接口
     pub employee_type: String,
     /// 班次名称
     pub shift_name: String,

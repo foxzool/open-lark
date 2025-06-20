@@ -162,15 +162,21 @@ impl ShiftService {
         let body = json!({
             "shift_name": request.shift_name
         });
-        
-        api_req.body = serde_json::to_vec(&body).unwrap();
+
+        api_req.body = serde_json::to_vec(&body).map_err(|e| {
+            log::error!("序列化请求体失败: {:?}", e);
+            e
+        })?;
 
         // 调试日志：打印API请求内容
         log::debug!("查询班次API请求详情:");
         log::debug!("  路径: {}", api_req.api_path);
         log::debug!("  方法: {:?}", api_req.http_method);
         log::debug!("  查询参数: {:?}", api_req.query_params);
-        log::debug!("  请求体: {}", serde_json::to_string_pretty(&body).unwrap_or_else(|_| "无法序列化".to_string()));
+        log::debug!(
+            "  请求体: {}",
+            serde_json::to_string_pretty(&body).unwrap_or_else(|_| "无法序列化".to_string())
+        );
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)

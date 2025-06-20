@@ -1,8 +1,8 @@
+use chrono::Utc;
 use open_lark::{
     prelude::*,
     service::attendance::v1::models::{CreateShiftRequest, PunchTimeRule},
 };
-use chrono::Utc;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
