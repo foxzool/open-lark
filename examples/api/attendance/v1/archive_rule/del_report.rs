@@ -1,8 +1,5 @@
 use dotenvy::dotenv;
-use open_lark::{
-    prelude::LarkClient,
-    service::attendance::v1::models::DelArchiveReportRequest,
-};
+use open_lark::{prelude::LarkClient, service::attendance::v1::models::DelArchiveReportRequest};
 
 /// 删除归档报表行数据示例
 ///
@@ -47,7 +44,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     if !failed_records.is_empty() {
                         println!("删除失败详情:");
                         for failed in failed_records {
-                            println!("删除失败的记录ID: {} - 错误: {}", failed.record_id, failed.reason);
+                            println!(
+                                "删除失败的记录ID: {} - 错误: {}",
+                                failed.record_id, failed.reason
+                            );
                         }
                     }
                 }

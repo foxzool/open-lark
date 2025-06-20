@@ -1,7 +1,9 @@
 use crate::{
     core::config::Config,
     service::attendance::v1::{
-        archive_rule::ArchiveRuleService, group::GroupService, shift::ShiftService,
+        archive_rule::ArchiveRuleService, group::GroupService,
+        leave_accrual_record::LeaveAccrualRecordService,
+        leave_employ_expire_record::LeaveEmployExpireRecordService, shift::ShiftService,
         user_approval::UserApprovalService, user_daily_shift::UserDailyShiftService,
         user_setting::UserSettingService, user_stats_data::UserStatsDataService,
         user_task_remedy::UserTaskRemedyService,
@@ -10,6 +12,8 @@ use crate::{
 
 pub mod archive_rule;
 pub mod group;
+pub mod leave_accrual_record;
+pub mod leave_employ_expire_record;
 pub mod models;
 pub mod p2_attendance_user_task_status_change_v1;
 pub mod p2_attendance_user_task_updated_v1;
@@ -29,6 +33,8 @@ pub struct V1 {
     pub user_approval: UserApprovalService,
     pub user_task_remedy: UserTaskRemedyService,
     pub archive_rule: ArchiveRuleService,
+    pub leave_employ_expire_record: LeaveEmployExpireRecordService,
+    pub leave_accrual_record: LeaveAccrualRecordService,
 }
 
 impl V1 {
@@ -55,7 +61,13 @@ impl V1 {
             user_task_remedy: UserTaskRemedyService {
                 config: config.clone(),
             },
-            archive_rule: ArchiveRuleService { config },
+            archive_rule: ArchiveRuleService {
+                config: config.clone(),
+            },
+            leave_employ_expire_record: LeaveEmployExpireRecordService {
+                config: config.clone(),
+            },
+            leave_accrual_record: LeaveAccrualRecordService { config },
         }
     }
 }

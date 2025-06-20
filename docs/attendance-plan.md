@@ -71,10 +71,10 @@
 
 ## 休假获取过期发放记录
 
-- [ ] [通过过期时间获取发放记录](https://open.feishu.cn/document/server-docs/attendance-v1/leave_employ_expire_record/get)
+- [x] [通过过期时间获取发放记录](https://open.feishu.cn/document/server-docs/attendance-v1/leave_employ_expire_record/get)
 
 ## 休假发放记录
-- [ ] [修改发放记录](https://open.feishu.cn/document/server-docs/attendance-v1/leave_accrual_record/patch)
+- [x] [修改发放记录](https://open.feishu.cn/document/server-docs/attendance-v1/leave_accrual_record/patch)
 
 ## 事件
 

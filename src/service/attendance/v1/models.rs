@@ -1641,3 +1641,160 @@ impl ApiResponseTrait for ListArchiveRulesRespData {
         ResponseFormat::Data
     }
 }
+
+// ==================== 休假相关数据结构 ====================
+
+/// 通过过期时间获取发放记录请求
+#[derive(Default)]
+pub struct GetLeaveEmployExpireRecordRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 过期时间开始（毫秒级时间戳）
+    pub start_time: i64,
+    /// 过期时间结束（毫秒级时间戳）
+    pub end_time: i64,
+    /// 分页大小，最大100
+    pub page_size: Option<i32>,
+    /// 分页偏移量
+    pub page_token: Option<String>,
+}
+
+/// 休假发放记录信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LeaveEmployExpireRecord {
+    /// 记录ID
+    pub record_id: String,
+    /// 员工ID
+    pub employee_id: String,
+    /// 员工名称
+    pub employee_name: Option<String>,
+    /// 休假类型ID
+    pub leave_type_id: String,
+    /// 休假类型名称
+    pub leave_type_name: String,
+    /// 发放数量（小时）
+    pub granted_amount: f64,
+    /// 过期时间（毫秒级时间戳）
+    pub expire_time: i64,
+    /// 发放时间（毫秒级时间戳）
+    pub granted_time: i64,
+    /// 发放原因
+    pub granted_reason: Option<String>,
+    /// 剩余数量（小时）
+    pub remaining_amount: f64,
+    /// 状态：1-有效，2-已过期，3-已使用完
+    pub status: i32,
+    /// 创建时间（毫秒级时间戳）
+    pub create_time: i64,
+    /// 更新时间（毫秒级时间戳）
+    pub update_time: i64,
+}
+
+/// 通过过期时间获取发放记录响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetLeaveEmployExpireRecordRespData {
+    /// 发放记录列表
+    pub records: Vec<LeaveEmployExpireRecord>,
+    /// 是否还有更多数据
+    pub has_more: bool,
+    /// 下一页令牌
+    pub page_token: Option<String>,
+    /// 总记录数
+    pub total_count: i32,
+}
+
+/// 修改发放记录请求
+#[derive(Default)]
+pub struct PatchLeaveAccrualRecordRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 发放记录ID
+    pub leave_accrual_record_id: String,
+    /// 修改的发放记录信息
+    pub leave_accrual_record: LeaveAccrualRecordPatch,
+}
+
+/// 发放记录修改信息
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct LeaveAccrualRecordPatch {
+    /// 员工ID
+    pub employee_id: Option<String>,
+    /// 休假类型ID
+    pub leave_type_id: Option<String>,
+    /// 发放数量（小时）
+    pub granted_amount: Option<f64>,
+    /// 过期时间（毫秒级时间戳）
+    pub expire_time: Option<i64>,
+    /// 发放时间（毫秒级时间戳）
+    pub granted_time: Option<i64>,
+    /// 发放原因
+    pub granted_reason: Option<String>,
+    /// 有效期类型：1-永久有效，2-指定过期时间
+    pub validity_type: Option<i32>,
+    /// 发放类型：1-系统自动发放，2-管理员手动发放，3-员工申请发放
+    pub granted_type: Option<i32>,
+    /// 发放说明
+    pub granted_description: Option<String>,
+}
+
+/// 修改发放记录响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PatchLeaveAccrualRecordRespData {
+    /// 修改后的发放记录信息
+    pub leave_accrual_record: LeaveAccrualRecord,
+}
+
+/// 完整的发放记录信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LeaveAccrualRecord {
+    /// 记录ID
+    pub record_id: String,
+    /// 员工ID
+    pub employee_id: String,
+    /// 员工名称
+    pub employee_name: Option<String>,
+    /// 休假类型ID
+    pub leave_type_id: String,
+    /// 休假类型名称
+    pub leave_type_name: String,
+    /// 发放数量（小时）
+    pub granted_amount: f64,
+    /// 过期时间（毫秒级时间戳）
+    pub expire_time: Option<i64>,
+    /// 发放时间（毫秒级时间戳）
+    pub granted_time: i64,
+    /// 发放原因
+    pub granted_reason: Option<String>,
+    /// 剩余数量（小时）
+    pub remaining_amount: f64,
+    /// 已使用数量（小时）
+    pub used_amount: f64,
+    /// 状态：1-有效，2-已过期，3-已使用完
+    pub status: i32,
+    /// 有效期类型：1-永久有效，2-指定过期时间
+    pub validity_type: i32,
+    /// 发放类型：1-系统自动发放，2-管理员手动发放，3-员工申请发放
+    pub granted_type: i32,
+    /// 发放说明
+    pub granted_description: Option<String>,
+    /// 创建时间（毫秒级时间戳）
+    pub create_time: i64,
+    /// 更新时间（毫秒级时间戳）
+    pub update_time: i64,
+}
+
+// 实现 ApiResponseTrait
+
+impl ApiResponseTrait for GetLeaveEmployExpireRecordRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for PatchLeaveAccrualRecordRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
