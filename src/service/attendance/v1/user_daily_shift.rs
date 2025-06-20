@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde_json::json;
 
 use crate::core::{
-    api_resp::BaseResponse, config::Config, constants::AccessTokenType,
-    http::Transport, req_option::RequestOption, SDKResult,
+    api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
+    req_option::RequestOption, SDKResult,
 };
 
 use super::models::{
@@ -96,7 +96,8 @@ impl UserDailyShiftService {
     ) -> SDKResult<BaseResponse<BatchCreateTempUserDailyShiftRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/attendance/v1/user_daily_shifts/batch_create_temp".to_string();
+        api_req.api_path =
+            "/open-apis/attendance/v1/user_daily_shifts/batch_create_temp".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加必需的查询参数
@@ -115,4 +116,3 @@ impl UserDailyShiftService {
         Ok(api_resp)
     }
 }
-

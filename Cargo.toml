@@ -332,3 +332,28 @@ path = "examples/api/attendance/v1/user_daily_shift/query.rs"
 [[example]]
 name = "attendance_user_daily_shift_batch_create_temp"
 path = "examples/api/attendance/v1/user_daily_shift/batch_create_temp.rs"
+
+# 考勤组管理
+[[example]]
+name = "attendance_group_list_user"
+path = "examples/api/attendance/v1/group/list_user.rs"
+
+[[example]]
+name = "attendance_group_create"
+path = "examples/api/attendance/v1/group/create.rs"
+
+[[example]]
+name = "attendance_group_delete"
+path = "examples/api/attendance/v1/group/delete.rs"
+
+[[example]]
+name = "attendance_group_get"
+path = "examples/api/attendance/v1/group/get.rs"
+
+[[example]]
+name = "attendance_group_search"
+path = "examples/api/attendance/v1/group/search.rs"
+
+[[example]]
+name = "attendance_group_list"
+path = "examples/api/attendance/v1/group/list.rs"

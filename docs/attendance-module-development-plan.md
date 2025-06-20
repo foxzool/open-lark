@@ -20,12 +20,12 @@
 
 ## 考勤管理
 
-- [ ] [查询考勤组下所有成员](https://open.feishu.cn/document/attendance-v1/group/list_user)
-- [ ] [创建或修改考勤组](https://open.feishu.cn/document/server-docs/attendance-v1/group/create)
-- [ ] [删除考勤组](https://open.feishu.cn/open-apis/attendance/v1/groups/:group_id)
-- [ ] [按 ID 查询考勤组](https://open.feishu.cn/document/server-docs/attendance-v1/group/get)
-- [ ] [按名称查询考勤组](https://open.feishu.cn/document/server-docs/attendance-v1/group/search)
-- [ ] [查询所有考勤组](https://open.feishu.cn/document/server-docs/attendance-v1/group/list)
+- [x] [查询考勤组下所有成员](https://open.feishu.cn/document/attendance-v1/group/list_user)
+- [x] [创建或修改考勤组](https://open.feishu.cn/document/server-docs/attendance-v1/group/create)
+- [x] [删除考勤组](https://open.feishu.cn/open-apis/attendance/v1/groups/:group_id)
+- [x] [按 ID 查询考勤组](https://open.feishu.cn/document/server-docs/attendance-v1/group/get)
+- [x] [按名称查询考勤组](https://open.feishu.cn/document/server-docs/attendance-v1/group/search)
+- [x] [查询所有考勤组](https://open.feishu.cn/document/server-docs/attendance-v1/group/list)
 
 ## 考勤用户管理
 
