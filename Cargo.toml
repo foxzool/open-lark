@@ -422,3 +422,20 @@ path = "examples/api/attendance/v1/user_task_remedy/query_user_allowed_remedys.r
 [[example]]
 name = "attendance_user_task_remedy_query"
 path = "examples/api/attendance/v1/user_task_remedy/query.rs"
+
+# 归档报表管理
+[[example]]
+name = "attendance_archive_rule_query_user_stats_fields"
+path = "examples/api/attendance/v1/archive_rule/query_user_stats_fields.rs"
+
+[[example]]
+name = "attendance_archive_rule_upload_report"
+path = "examples/api/attendance/v1/archive_rule/upload_report.rs"
+
+[[example]]
+name = "attendance_archive_rule_del_report"
+path = "examples/api/attendance/v1/archive_rule/del_report.rs"
+
+[[example]]
+name = "attendance_archive_rule_list"
+path = "examples/api/attendance/v1/archive_rule/list.rs"

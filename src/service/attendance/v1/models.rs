@@ -1437,3 +1437,207 @@ impl ApiResponseTrait for QueryUserTaskResultRespData {
         ResponseFormat::Data
     }
 }
+
+// ==================== 归档报表相关数据结构 ====================
+
+/// 查询归档报表表头请求
+#[derive(Default)]
+pub struct QueryArchiveStatsFieldsRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 归档规则ID
+    pub archive_rule_id: String,
+}
+
+/// 归档报表字段信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ArchiveStatsField {
+    /// 字段ID
+    pub field_id: String,
+    /// 字段名称
+    pub field_name: String,
+    /// 字段类型，1：文本，2：数值，3：日期，4：布尔值
+    pub field_type: i32,
+    /// 字段描述
+    pub field_description: Option<String>,
+    /// 是否必填
+    pub is_required: bool,
+    /// 字段默认值
+    pub default_value: Option<String>,
+    /// 字段选项（用于枚举类型）
+    pub field_options: Option<Vec<ArchiveFieldOption>>,
+}
+
+/// 归档报表字段选项
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ArchiveFieldOption {
+    /// 选项值
+    pub value: String,
+    /// 选项显示名称
+    pub label: String,
+}
+
+/// 查询归档报表表头响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QueryArchiveStatsFieldsRespData {
+    /// 报表字段列表
+    pub fields: Vec<ArchiveStatsField>,
+    /// 报表名称
+    pub report_name: String,
+    /// 归档规则名称
+    pub archive_rule_name: String,
+}
+
+/// 写入归档报表结果请求
+#[derive(Default)]
+pub struct UploadArchiveReportRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 归档规则ID
+    pub archive_rule_id: String,
+    /// 报表数据
+    pub report_data: Vec<ArchiveReportRecord>,
+}
+
+/// 归档报表记录
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct ArchiveReportRecord {
+    /// 记录ID（用于更新或删除）
+    pub record_id: Option<String>,
+    /// 用户ID
+    pub user_id: String,
+    /// 归档日期，格式：yyyy-MM-dd
+    pub archive_date: String,
+    /// 报表字段数据，key为字段ID，value为字段值
+    pub field_data: std::collections::HashMap<String, String>,
+}
+
+/// 写入归档报表结果响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UploadArchiveReportRespData {
+    /// 上传成功的记录数
+    pub success_count: i32,
+    /// 上传失败的记录数
+    pub failed_count: i32,
+    /// 失败记录详情
+    pub failed_records: Option<Vec<ArchiveReportFailure>>,
+}
+
+/// 归档报表上传失败信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ArchiveReportFailure {
+    /// 用户ID
+    pub user_id: String,
+    /// 归档日期
+    pub archive_date: String,
+    /// 失败原因
+    pub reason: String,
+    /// 错误代码
+    pub error_code: Option<String>,
+}
+
+/// 删除归档报表行数据请求
+#[derive(Default)]
+pub struct DelArchiveReportRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 归档规则ID
+    pub archive_rule_id: String,
+    /// 要删除的记录ID列表
+    pub record_ids: Vec<String>,
+}
+
+/// 删除归档报表行数据响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DelArchiveReportRespData {
+    /// 删除成功的记录数
+    pub success_count: i32,
+    /// 删除失败的记录数
+    pub failed_count: i32,
+    /// 失败记录详情
+    pub failed_records: Option<Vec<ArchiveReportDeleteFailure>>,
+}
+
+/// 归档报表删除失败信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ArchiveReportDeleteFailure {
+    /// 记录ID
+    pub record_id: String,
+    /// 失败原因
+    pub reason: String,
+    /// 错误代码
+    pub error_code: Option<String>,
+}
+
+/// 查询所有归档规则请求
+#[derive(Default)]
+pub struct ListArchiveRulesRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 分页大小，最大100
+    pub page_size: Option<i32>,
+    /// 分页偏移量
+    pub page_token: Option<String>,
+}
+
+/// 归档规则信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ArchiveRule {
+    /// 归档规则ID
+    pub archive_rule_id: String,
+    /// 归档规则名称
+    pub archive_rule_name: String,
+    /// 归档规则描述
+    pub description: Option<String>,
+    /// 归档周期类型，1：日，2：周，3：月，4：季，5：年
+    pub archive_period_type: i32,
+    /// 是否启用
+    pub is_enabled: bool,
+    /// 创建时间戳（毫秒）
+    pub create_time: String,
+    /// 更新时间戳（毫秒）
+    pub update_time: String,
+    /// 关联的统计字段数量
+    pub field_count: i32,
+}
+
+/// 查询所有归档规则响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ListArchiveRulesRespData {
+    /// 归档规则列表
+    pub archive_rules: Vec<ArchiveRule>,
+    /// 是否还有更多数据
+    pub has_more: bool,
+    /// 下一页令牌
+    pub page_token: Option<String>,
+}
+
+// 实现 ApiResponseTrait
+
+impl ApiResponseTrait for QueryArchiveStatsFieldsRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for UploadArchiveReportRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for DelArchiveReportRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for ListArchiveRulesRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
