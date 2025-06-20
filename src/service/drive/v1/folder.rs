@@ -101,6 +101,26 @@ impl FolderService {
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
     }
+
+    /// 新建文件夹
+    ///
+    /// 该接口用于根据父文件夹的token在其中创建一个新的空文件夹。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/create_folder>
+    pub async fn create_folder(
+        &self,
+        request: CreateFolderRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<CreateFolderRespData>> {
+        let mut api_req = ApiRequest::default();
+        api_req.http_method = Method::POST;
+        api_req.api_path = "/open-apis/drive/v1/folders".to_string();
+        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        api_req.body = serde_json::to_vec(&request)?;
+
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
+        Ok(api_resp)
+    }
 }
 
 /// 获取我的空间（root folder）元数据响应数据
@@ -262,6 +282,39 @@ pub struct GetFolderMetaRespData {
 }
 
 impl ApiResponseTrait for GetFolderMetaRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 新建文件夹请求参数
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateFolderRequest {
+    /// 文件夹名称
+    pub name: String,
+    /// 父文件夹token
+    pub parent_token: String,
+}
+
+impl CreateFolderRequest {
+    pub fn new(name: impl Into<String>, parent_token: impl Into<String>) -> Self {
+        Self {
+            name: name.into(),
+            parent_token: parent_token.into(),
+        }
+    }
+}
+
+/// 新建文件夹响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateFolderRespData {
+    /// 新创建文件夹的token
+    pub token: String,
+    /// 新创建文件夹的链接
+    pub url: String,
+}
+
+impl ApiResponseTrait for CreateFolderRespData {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
