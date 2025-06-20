@@ -299,15 +299,23 @@ path = "examples/api/bitable/v1/app_table_record/batch_create.rs"
 name = "app_table_record_search"
 path = "examples/api/bitable/v1/app_table_record/search.rs"
 
-# 考勤模块示例
+# 考勤班次管理 - 单独接口示例
 [[example]]
-name = "attendance_demo"
-path = "examples/attendance_demo.rs"
+name = "attendance_shift_create"
+path = "examples/api/attendance/v1/shift/create.rs"
 
 [[example]]
-name = "attendance_query_user_records"
-path = "examples/api/attendance/v1/query_user_records.rs"
+name = "attendance_shift_delete"
+path = "examples/api/attendance/v1/shift/delete.rs"
 
 [[example]]
-name = "attendance_query_user_flow"
-path = "examples/api/attendance/v1/query_user_flow.rs"
+name = "attendance_shift_get"
+path = "examples/api/attendance/v1/shift/get.rs"
+
+[[example]]
+name = "attendance_shift_query"
+path = "examples/api/attendance/v1/shift/query.rs"
+
+[[example]]
+name = "attendance_shift_list"
+path = "examples/api/attendance/v1/shift/list.rs"
