@@ -6,17 +6,17 @@
 
 ## 考勤班次
 
-- [ ] [创建班次](https://open.feishu.cn/document/server-docs/attendance-v1/shift/create)
-- [ ] [删除班次](https://open.feishu.cn/document/server-docs/attendance-v1/shift/delete)
-- [ ] [按 ID 查询班次](https://open.feishu.cn/document/server-docs/attendance-v1/shift/get)
-- [ ] [按名称查询班次](https://open.feishu.cn/document/server-docs/attendance-v1/shift/query)
-- [ ] [查询所有班次](https://open.feishu.cn/document/server-docs/attendance-v1/shift/list)
+- [x] [创建班次](https://open.feishu.cn/document/server-docs/attendance-v1/shift/create)
+- [x] [删除班次](https://open.feishu.cn/document/server-docs/attendance-v1/shift/delete)
+- [x] [按 ID 查询班次](https://open.feishu.cn/document/server-docs/attendance-v1/shift/get)
+- [x] [按名称查询班次](https://open.feishu.cn/document/server-docs/attendance-v1/shift/query)
+- [x] [查询所有班次](https://open.feishu.cn/document/server-docs/attendance-v1/shift/list)
 
 ## 考勤排版
 
-- [ ] [创建或修改排班表](https://open.feishu.cn/document/server-docs/attendance-v1/user_daily_shift/batch_create)
-- [ ] [查询排班表](https://open.feishu.cn/document/server-docs/attendance-v1/user_daily_shift/query)
-- [ ] [创建或修改临时排班](https://open.feishu.cn/document/attendance-v1/user_daily_shift/batch_create_temp)
+- [x] [创建或修改排班表](https://open.feishu.cn/document/server-docs/attendance-v1/user_daily_shift/batch_create)
+- [x] [查询排班表](https://open.feishu.cn/document/server-docs/attendance-v1/user_daily_shift/query)
+- [x] [创建或修改临时排班](https://open.feishu.cn/document/attendance-v1/user_daily_shift/batch_create_temp)
 
 ## 考勤管理
 
