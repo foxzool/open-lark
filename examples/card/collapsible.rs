@@ -117,7 +117,9 @@ async fn main() {
                 .title(Title::new("折叠面板展示"))
                 .template("yellow"),
         )
-        .elements("zh_cn", elements);
+        .expect("Failed to set header")
+        .elements("zh_cn", elements)
+        .expect("Failed to set elements");
 
     let req = CreateMessageRequest::builder()
         .receive_id_type("chat_id")

@@ -35,11 +35,12 @@ impl EventDispatcherHandler {
     }
 
     fn emit(&self, event: &str, payload: &[u8]) -> anyhow::Result<()> {
-        let handler = self
-            .processor_map
-            .get(event)
-            .unwrap_or_else(|| panic!("event processor {event} not found"));
-        handler.handle(payload)
+        if let Some(handler) = self.processor_map.get(event) {
+            handler.handle(payload)
+        } else {
+            log::warn!("No event processor found for event: {}", event);
+            Err(anyhow::anyhow!("event processor {} not found", event))
+        }
     }
 
     pub fn do_without_validation(&self, payload: Vec<u8>) -> anyhow::Result<()> {
@@ -88,29 +89,29 @@ impl EventDispatcherHandlerBuilder {
 }
 
 impl EventDispatcherHandlerBuilder {
-    pub fn register_p2_im_message_receive_v1<F>(mut self, f: F) -> Self
+    pub fn register_p2_im_message_receive_v1<F>(mut self, f: F) -> Result<Self, String>
     where
         F: Fn(P2ImMessageReceiveV1) + 'static + Sync + Send,
     {
         let key = "p2.im.message.receive_v1".to_string();
         if self.processor_map.contains_key(&key) {
-            panic!("processor already registered, type: {}", key);
+            return Err(format!("processor already registered, type: {}", key));
         }
         let processor = P2ImMessageReceiveV1ProcessorImpl::new(f);
         self.processor_map.insert(key, Box::new(processor));
-        self
+        Ok(self)
     }
 
-    pub fn register_p2_im_message_read_v1<F>(mut self, f: F) -> Self
+    pub fn register_p2_im_message_read_v1<F>(mut self, f: F) -> Result<Self, String>
     where
         F: Fn(P2ImMessageReadV1) + 'static + Sync + Send,
     {
         let key = "p2.im.message.message_read_v1".to_string();
         if self.processor_map.contains_key(&key) {
-            panic!("processor already registered, type: {}", key);
+            return Err(format!("processor already registered, type: {}", key));
         }
         let processor = P2ImMessageReadV1ProcessorImpl::new(f);
         self.processor_map.insert(key, Box::new(processor));
-        self
+        Ok(self)
     }
 }
