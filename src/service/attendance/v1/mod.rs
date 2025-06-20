@@ -1,12 +1,14 @@
 use crate::{
     core::config::Config,
     service::attendance::v1::{
-        group::GroupService, shift::ShiftService, user_approval::UserApprovalService,
-        user_daily_shift::UserDailyShiftService, user_setting::UserSettingService,
-        user_stats_data::UserStatsDataService, user_task_remedy::UserTaskRemedyService,
+        archive_rule::ArchiveRuleService, group::GroupService, shift::ShiftService,
+        user_approval::UserApprovalService, user_daily_shift::UserDailyShiftService,
+        user_setting::UserSettingService, user_stats_data::UserStatsDataService,
+        user_task_remedy::UserTaskRemedyService,
     },
 };
 
+pub mod archive_rule;
 pub mod group;
 pub mod models;
 pub mod p2_attendance_user_task_status_change_v1;
@@ -26,6 +28,7 @@ pub struct V1 {
     pub user_stats_data: UserStatsDataService,
     pub user_approval: UserApprovalService,
     pub user_task_remedy: UserTaskRemedyService,
+    pub archive_rule: ArchiveRuleService,
 }
 
 impl V1 {
@@ -49,7 +52,10 @@ impl V1 {
             user_approval: UserApprovalService {
                 config: config.clone(),
             },
-            user_task_remedy: UserTaskRemedyService { config },
+            user_task_remedy: UserTaskRemedyService {
+                config: config.clone(),
+            },
+            archive_rule: ArchiveRuleService { config },
         }
     }
 }

@@ -55,10 +55,10 @@
 
 ## 归档报表
 
-- [ ] [查询归档报表表头](https://open.feishu.cn/document/attendance-v1/archive_rule/user_stats_fields_query)
-- [ ] [写入归档报表结果](https://open.feishu.cn/document/attendance-v1/archive_rule/upload_report)
-- [ ] [删除归档报表行数据](https://open.feishu.cn/document/attendance-v1/archive_rule/del_report)
-- [ ] [查询所有归档规则](https://open.feishu.cn/document/attendance-v1/archive_rule/list)
+- [x] [查询归档报表表头](https://open.feishu.cn/document/attendance-v1/archive_rule/user_stats_fields_query)
+- [x] [写入归档报表结果](https://open.feishu.cn/document/attendance-v1/archive_rule/upload_report)
+- [x] [删除归档报表行数据](https://open.feishu.cn/document/attendance-v1/archive_rule/del_report)
+- [x] [查询所有归档规则](https://open.feishu.cn/document/attendance-v1/archive_rule/list)
 
 
 ## 打卡信息管理
