@@ -62,9 +62,17 @@ impl FeishuCard {
         self
     }
 
-    pub fn header(mut self, lng: &str, header: FeishuCardTitle) -> Result<Self, crate::core::error::LarkAPIError> {
-        let language: FeishuCardLanguage = lng.parse()
-            .map_err(|e| crate::core::error::LarkAPIError::illegal_param(format!("unknown language '{}': {}", lng, e)))?;
+    pub fn header(
+        mut self,
+        lng: &str,
+        header: FeishuCardTitle,
+    ) -> Result<Self, crate::core::error::LarkAPIError> {
+        let language: FeishuCardLanguage = lng.parse().map_err(|e| {
+            crate::core::error::LarkAPIError::illegal_param(format!(
+                "unknown language '{}': {}",
+                lng, e
+            ))
+        })?;
         let origin_header = self.i18n_header.entry(language).or_default();
         *origin_header = header;
 
@@ -72,9 +80,17 @@ impl FeishuCard {
     }
 
     /// 添加组件
-    pub fn elements(mut self, lng: &str, elements: Vec<CardElement>) -> Result<Self, crate::core::error::LarkAPIError> {
-        let language: FeishuCardLanguage = lng.parse()
-            .map_err(|e| crate::core::error::LarkAPIError::illegal_param(format!("unknown language '{}': {}", lng, e)))?;
+    pub fn elements(
+        mut self,
+        lng: &str,
+        elements: Vec<CardElement>,
+    ) -> Result<Self, crate::core::error::LarkAPIError> {
+        let language: FeishuCardLanguage = lng.parse().map_err(|e| {
+            crate::core::error::LarkAPIError::illegal_param(format!(
+                "unknown language '{}': {}",
+                lng, e
+            ))
+        })?;
         let self_elements = self.i18n_elements.entry(language).or_default();
         self_elements.extend(elements);
         Ok(self)
