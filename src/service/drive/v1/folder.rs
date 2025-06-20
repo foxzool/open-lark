@@ -121,6 +121,51 @@ impl FolderService {
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
     }
+
+    /// 移动或删除文件夹
+    ///
+    /// 该接口用于根据文件夹的token移动或删除文件夹。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/move-delete-folder>
+    pub async fn move_or_delete_folder(
+        &self,
+        request: MoveOrDeleteFolderRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<MoveOrDeleteFolderRespData>> {
+        let mut api_req = ApiRequest::default();
+        api_req.http_method = Method::POST;
+        api_req.api_path = format!("/open-apis/drive/v1/folders/{}/move", request.folder_token);
+        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+
+        // 构建请求体，只包含需要的字段
+        let body = serde_json::json!({
+            "type": request.operation_type,
+            "parent_token": request.parent_token
+        });
+        api_req.body = serde_json::to_vec(&body)?;
+
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
+        Ok(api_resp)
+    }
+
+    /// 查询异步任务状态
+    ///
+    /// 该接口用于查询异步任务的执行状态，如移动或删除文件夹等操作。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/file/async-task/task_check>
+    pub async fn check_async_task(
+        &self,
+        request: CheckAsyncTaskRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<CheckAsyncTaskRespData>> {
+        let mut api_req = ApiRequest::default();
+        api_req.http_method = Method::GET;
+        api_req.api_path = format!("/open-apis/drive/v1/tasks/{}", request.task_id);
+        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
+        Ok(api_resp)
+    }
 }
 
 /// 获取我的空间（root folder）元数据响应数据
@@ -315,6 +360,81 @@ pub struct CreateFolderRespData {
 }
 
 impl ApiResponseTrait for CreateFolderRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 移动或删除文件夹请求参数
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MoveOrDeleteFolderRequest {
+    /// 文件夹token
+    pub folder_token: String,
+    /// 操作类型，move: 移动，delete: 删除
+    #[serde(rename = "type")]
+    pub operation_type: String,
+    /// 移动的目标父文件夹token（删除操作时可以为空）
+    pub parent_token: Option<String>,
+}
+
+impl MoveOrDeleteFolderRequest {
+    /// 创建移动文件夹的请求
+    pub fn move_folder(folder_token: impl Into<String>, parent_token: impl Into<String>) -> Self {
+        Self {
+            folder_token: folder_token.into(),
+            operation_type: "move".to_string(),
+            parent_token: Some(parent_token.into()),
+        }
+    }
+
+    /// 创建删除文件夹的请求
+    pub fn delete_folder(folder_token: impl Into<String>) -> Self {
+        Self {
+            folder_token: folder_token.into(),
+            operation_type: "delete".to_string(),
+            parent_token: None,
+        }
+    }
+}
+
+/// 移动或删除文件夹响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MoveOrDeleteFolderRespData {
+    /// 异步任务ID，可以通过该ID查询任务执行状态
+    pub task_id: Option<String>,
+}
+
+impl ApiResponseTrait for MoveOrDeleteFolderRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 查询异步任务状态请求参数
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CheckAsyncTaskRequest {
+    /// 任务ID
+    pub task_id: String,
+}
+
+impl CheckAsyncTaskRequest {
+    pub fn new(task_id: impl Into<String>) -> Self {
+        Self {
+            task_id: task_id.into(),
+        }
+    }
+}
+
+/// 查询异步任务状态响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CheckAsyncTaskRespData {
+    /// 任务状态，PENDING: 等待中，SUCCESS: 成功，FAILURE: 失败
+    pub status: String,
+    /// 任务错误信息（如果失败）
+    pub error_msg: Option<String>,
+}
+
+impl ApiResponseTrait for CheckAsyncTaskRespData {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
