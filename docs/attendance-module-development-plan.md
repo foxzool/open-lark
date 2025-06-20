@@ -43,9 +43,9 @@
 
 ## 假勤审批
 
-- [ ] [获取审批数据](https://open.feishu.cn/document/server-docs/attendance-v1/user_approval/query)
-- [ ] [写入审批结果](https://open.feishu.cn/document/server-docs/attendance-v1/user_approval/create)
-- [ ] [通知审批状态更新](https://open.feishu.cn/document/server-docs/attendance-v1/user_approval/process)
+- [x] [获取审批数据](https://open.feishu.cn/document/server-docs/attendance-v1/user_approval/query)
+- [x] [写入审批结果](https://open.feishu.cn/document/server-docs/attendance-v1/user_approval/create)
+- [x] [通知审批状态更新](https://open.feishu.cn/document/server-docs/attendance-v1/user_approval/process)
 
 ## 考勤补卡
 
