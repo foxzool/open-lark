@@ -1,8 +1,5 @@
 use dotenvy::dotenv;
-use open_lark::{
-    prelude::LarkClient,
-    service::attendance::v1::models::ListArchiveRulesRequest,
-};
+use open_lark::{prelude::LarkClient, service::attendance::v1::models::ListArchiveRulesRequest};
 
 /// 查询所有归档规则示例
 ///

@@ -439,3 +439,12 @@ path = "examples/api/attendance/v1/archive_rule/del_report.rs"
 [[example]]
 name = "attendance_archive_rule_list"
 path = "examples/api/attendance/v1/archive_rule/list.rs"
+
+# 休假管理
+[[example]]
+name = "attendance_leave_employ_expire_record_get"
+path = "examples/api/attendance/v1/leave_employ_expire_record/get.rs"
+
+[[example]]
+name = "attendance_leave_accrual_record_patch"
+path = "examples/api/attendance/v1/leave_accrual_record/patch.rs"

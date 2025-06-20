@@ -1,7 +1,6 @@
 use dotenvy::dotenv;
 use open_lark::{
-    prelude::LarkClient,
-    service::attendance::v1::models::QueryArchiveStatsFieldsRequest,
+    prelude::LarkClient, service::attendance::v1::models::QueryArchiveStatsFieldsRequest,
 };
 
 /// 查询归档报表表头示例
