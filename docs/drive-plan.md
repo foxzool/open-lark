@@ -42,4 +42,11 @@
 - [ ] [下载素材](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/download)
 - [ ] [获取素材临时下载链接](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/batch_get_tmp_download_url)
 
-## 文档棒棒
+## 文档版本
+
+[文档版本概述](https://open.feishu.cn/document/server-docs/docs/drive-v1/file-version/overview)
+
+- [ ] [创建文档版本](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/create)
+- [ ] [删除文档版本](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/delete)
+- [ ] [获取文档版本](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/get)
+- [ ] [获取文档版本列表](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/list)
