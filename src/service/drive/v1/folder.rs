@@ -82,6 +82,25 @@ impl FolderService {
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
     }
+
+    /// 获取文件夹元数据
+    ///
+    /// 该接口用于根据文件夹的token获取文件夹的详细元数据信息。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-folder-meta>
+    pub async fn get_folder_meta(
+        &self,
+        request: GetFolderMetaRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<GetFolderMetaRespData>> {
+        let mut api_req = ApiRequest::default();
+        api_req.http_method = Method::GET;
+        api_req.api_path = format!("/open-apis/drive/v1/folders/{}", request.folder_token);
+        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
+        Ok(api_resp)
+    }
 }
 
 /// 获取我的空间（root folder）元数据响应数据
@@ -200,4 +219,50 @@ pub struct DriveFile {
     pub modified_time: Option<String>,
     /// 拥有者id
     pub owner_id: Option<String>,
+}
+
+/// 获取文件夹元数据请求参数
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetFolderMetaRequest {
+    /// 文件夹的token
+    pub folder_token: String,
+}
+
+impl GetFolderMetaRequest {
+    pub fn new(folder_token: impl Into<String>) -> Self {
+        Self {
+            folder_token: folder_token.into(),
+        }
+    }
+}
+
+/// 获取文件夹元数据响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetFolderMetaRespData {
+    /// 文件夹token
+    pub token: String,
+    /// 文件夹ID
+    pub id: String,
+    /// 文件夹名称
+    pub name: String,
+    /// 父文件夹token
+    pub parent_token: Option<String>,
+    /// 拥有者ID
+    pub owner_id: String,
+    /// 创建者ID
+    pub creator_id: Option<String>,
+    /// 创建时间
+    pub create_time: String,
+    /// 修改时间
+    pub edit_time: String,
+    /// 文件夹描述
+    pub description: Option<String>,
+    /// 文件夹链接
+    pub url: String,
+}
+
+impl ApiResponseTrait for GetFolderMetaRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
 }
