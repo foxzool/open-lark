@@ -861,3 +861,131 @@ impl ApiResponseTrait for QueryUserStatsDataRespData {
         ResponseFormat::Data
     }
 }
+
+// ==================== 假勤审批相关数据结构 ====================
+
+/// 获取审批数据请求
+#[derive(Default)]
+pub struct QueryUserApprovalRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 审批状态，1：待审批，2：已通过，3：已拒绝
+    pub status: Option<i32>,
+    /// 审批开始时间，格式YYYY-MM-DD
+    pub date_from: Option<String>,
+    /// 审批结束时间，格式YYYY-MM-DD  
+    pub date_to: Option<String>,
+    /// 审批员工ID列表
+    pub user_ids: Option<Vec<String>>,
+    /// 分页大小，最大100
+    pub page_size: Option<i32>,
+    /// 分页偏移量
+    pub page_token: Option<String>,
+}
+
+/// 审批数据项
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserApproval {
+    /// 审批ID
+    pub approval_id: String,
+    /// 用户ID
+    pub user_id: String,
+    /// 用户姓名
+    pub user_name: Option<String>,
+    /// 审批类型，1：请假，2：出差，3：外出，4：加班，5：调休
+    pub approval_type: i32,
+    /// 审批状态，1：待审批，2：已通过，3：已拒绝
+    pub status: i32,
+    /// 申请开始时间
+    pub start_time: String,
+    /// 申请结束时间
+    pub end_time: String,
+    /// 申请时长（小时）
+    pub duration: Option<f64>,
+    /// 申请理由
+    pub reason: Option<String>,
+    /// 审批备注
+    pub approval_note: Option<String>,
+    /// 提交时间
+    pub created_at: Option<String>,
+    /// 审批时间
+    pub approved_at: Option<String>,
+}
+
+/// 获取审批数据响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QueryUserApprovalRespData {
+    /// 审批数据列表
+    pub approvals: Vec<UserApproval>,
+    /// 是否还有更多数据
+    pub has_more: bool,
+    /// 下一页令牌
+    pub page_token: Option<String>,
+}
+
+/// 写入审批结果请求
+#[derive(Default)]
+pub struct CreateUserApprovalRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 审批ID
+    pub approval_id: String,
+    /// 审批状态，2：已通过，3：已拒绝
+    pub status: i32,
+    /// 审批备注
+    pub approval_note: Option<String>,
+}
+
+/// 写入审批结果响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateUserApprovalRespData {
+    /// 处理是否成功
+    pub success: bool,
+    /// 审批ID
+    pub approval_id: String,
+}
+
+/// 通知审批状态更新请求
+#[derive(Default)]
+pub struct ProcessUserApprovalRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 审批ID
+    pub approval_id: String,
+    /// 通知类型，1：审批通过，2：审批拒绝，3：撤回申请
+    pub action: i32,
+    /// 通知消息
+    pub message: Option<String>,
+}
+
+/// 通知审批状态更新响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ProcessUserApprovalRespData {
+    /// 通知是否成功
+    pub success: bool,
+    /// 审批ID
+    pub approval_id: String,
+}
+
+// 实现 ApiResponseTrait
+
+impl ApiResponseTrait for QueryUserApprovalRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for CreateUserApprovalRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for ProcessUserApprovalRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
