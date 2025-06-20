@@ -24,7 +24,7 @@ lark-websocket-protobuf = { path = "crates/protobuf", version = "0.1.1", optiona
 anyhow = "1.0.86"
 async-recursion = "1.1.1"
 base64 = "0.22.1"
-chrono = "0.4.38"
+chrono = { version = "0.4.38", features = ["serde"] }
 futures-util = { version = "0.3.30", default-features = false, features = [
     "sink",
     "std",
@@ -298,3 +298,16 @@ path = "examples/api/bitable/v1/app_table_record/batch_create.rs"
 [[example]]
 name = "app_table_record_search"
 path = "examples/api/bitable/v1/app_table_record/search.rs"
+
+# 考勤模块示例
+[[example]]
+name = "attendance_demo"
+path = "examples/attendance_demo.rs"
+
+[[example]]
+name = "attendance_query_user_records"
+path = "examples/api/attendance/v1/query_user_records.rs"
+
+[[example]]
+name = "attendance_query_user_flow"
+path = "examples/api/attendance/v1/query_user_flow.rs"

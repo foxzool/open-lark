@@ -3,8 +3,8 @@ use std::time::Duration;
 use crate::{
     core::{config::Config, constants::AppType},
     service::{
-        authentication::AuthenService, bitable::BitableService, drive::DriveService, im::ImService,
-        search::SearchService, sheets::SheetsService,
+        attendance::AttendanceService, authentication::AuthenService, bitable::BitableService,
+        drive::DriveService, im::ImService, search::SearchService, sheets::SheetsService,
     },
 };
 
@@ -20,6 +20,7 @@ pub struct LarkClient {
     pub search: SearchService,
     pub sheets: SheetsService,
     pub bitable: BitableService,
+    pub attendance: AttendanceService,
 }
 
 pub struct LarkClientBuilder {
@@ -67,7 +68,8 @@ impl LarkClientBuilder {
             drive: DriveService::new(self.config.clone()),
             search: SearchService::new(self.config.clone()),
             sheets: SheetsService::new(self.config.clone()),
-            bitable: BitableService::new(self.config),
+            bitable: BitableService::new(self.config.clone()),
+            attendance: AttendanceService::new(self.config),
         }
     }
 }
