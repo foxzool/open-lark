@@ -70,7 +70,7 @@ release VERSION:
   fi
   
   # Verify version in Cargo.toml
-  @CARGO_VERSION=$$(grep '^version = ' Cargo.toml | sed 's/version = "\(.*\)"/\1/'); \
+  @CARGO_VERSION=$$(grep '^version = ' Cargo.toml | sed 's/version = "\\(.*\\)"/\\1/'); \
   if [ "$$CARGO_VERSION" != "{{VERSION}}" ]; then \
     echo "❌ Version mismatch: Cargo.toml has $$CARGO_VERSION, but you specified {{VERSION}}"; \
     echo "ℹ️  Please update Cargo.toml first"; \
