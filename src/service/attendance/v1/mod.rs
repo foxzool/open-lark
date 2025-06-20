@@ -9,6 +9,8 @@ use crate::{
 
 pub mod group;
 pub mod models;
+pub mod p2_attendance_user_task_status_change_v1;
+pub mod p2_attendance_user_task_updated_v1;
 pub mod shift;
 pub mod user_approval;
 pub mod user_daily_shift;

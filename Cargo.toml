@@ -404,3 +404,8 @@ path = "examples/api/attendance/v1/user_approval/create.rs"
 [[example]]
 name = "attendance_user_approval_process"
 path = "examples/api/attendance/v1/user_approval/process.rs"
+
+# 考勤事件
+[[example]]
+name = "attendance_events"
+path = "examples/event/attendance/attendance_events.rs"

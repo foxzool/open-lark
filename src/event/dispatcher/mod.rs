@@ -1,8 +1,18 @@
 use crate::{
     event::context::EventContext,
-    service::im::v1::{
-        p2_im_message_read_v1::{P2ImMessageReadV1, P2ImMessageReadV1ProcessorImpl},
-        p2_im_message_receive_v1::{P2ImMessageReceiveV1, P2ImMessageReceiveV1ProcessorImpl},
+    service::{
+        attendance::v1::{
+            p2_attendance_user_task_status_change_v1::{
+                P2AttendanceUserTaskStatusChangeV1, P2AttendanceUserTaskStatusChangeV1ProcessorImpl,
+            },
+            p2_attendance_user_task_updated_v1::{
+                P2AttendanceUserTaskUpdatedV1, P2AttendanceUserTaskUpdatedV1ProcessorImpl,
+            },
+        },
+        im::v1::{
+            p2_im_message_read_v1::{P2ImMessageReadV1, P2ImMessageReadV1ProcessorImpl},
+            p2_im_message_receive_v1::{P2ImMessageReceiveV1, P2ImMessageReceiveV1ProcessorImpl},
+        },
     },
 };
 use log::debug;
@@ -111,6 +121,37 @@ impl EventDispatcherHandlerBuilder {
             return Err(format!("processor already registered, type: {}", key));
         }
         let processor = P2ImMessageReadV1ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    /// 注册考勤打卡流水事件处理器
+    pub fn register_p2_attendance_user_task_updated_v1<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2AttendanceUserTaskUpdatedV1) + 'static + Sync + Send,
+    {
+        let key = "p2.attendance.user_task.updated_v1".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {}", key));
+        }
+        let processor = P2AttendanceUserTaskUpdatedV1ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    /// 注册考勤用户任务状态变更事件处理器
+    pub fn register_p2_attendance_user_task_status_change_v1<F>(
+        mut self,
+        f: F,
+    ) -> Result<Self, String>
+    where
+        F: Fn(P2AttendanceUserTaskStatusChangeV1) + 'static + Sync + Send,
+    {
+        let key = "p2.attendance.user_task.status_change_v1".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {}", key));
+        }
+        let processor = P2AttendanceUserTaskStatusChangeV1ProcessorImpl::new(f);
         self.processor_map.insert(key, Box::new(processor));
         Ok(self)
     }

@@ -78,5 +78,5 @@
 
 ## 事件
 
-- [ ] [打卡流水](https://open.feishu.cn/document/server-docs/attendance-v1/event/user-attendance-records-event)
-- [ ] [用户任务状态变更](https://open.feishu.cn/document/server-docs/attendance-v1/event/user-task-status-change-event)
+- [x] [打卡流水](https://open.feishu.cn/document/server-docs/attendance-v1/event/user-attendance-records-event)
+- [x] [用户任务状态变更](https://open.feishu.cn/document/server-docs/attendance-v1/event/user-task-status-change-event)
