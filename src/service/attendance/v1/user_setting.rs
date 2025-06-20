@@ -2,14 +2,18 @@ use reqwest::Method;
 use serde_json::json;
 
 use crate::core::{
-    api_resp::{BaseResponse, EmptyResponse}, config::Config, constants::AccessTokenType, http::Transport,
-    req_option::RequestOption, SDKResult,
+    api_resp::{BaseResponse, EmptyResponse},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
 
 use super::models::{
-    DownloadUserPhotoRequest, ModifyUserSettingRequest,
-    ModifyUserSettingRespData, QueryUserSettingRequest, QueryUserSettingRespData,
-    UploadUserPhotoRequest, UploadUserPhotoRespData,
+    DownloadUserPhotoRequest, ModifyUserSettingRequest, ModifyUserSettingRespData,
+    QueryUserSettingRequest, QueryUserSettingRespData, UploadUserPhotoRequest,
+    UploadUserPhotoRespData,
 };
 
 /// 用户设置服务
@@ -119,7 +123,7 @@ impl UserSettingService {
 
         // 保存 photo_name 以避免借用问题
         let photo_name = request.photo_name.clone();
-        
+
         // 构建 multipart 表单数据
         let _form = reqwest::multipart::Form::new().part(
             "photo",
@@ -168,12 +172,13 @@ impl UserSettingService {
 
         // 对于文件下载，我们需要直接获取响应体字节数据
         // 这里暂时返回一个模拟的照片数据，实际实现时需要从 HTTP 响应中获取
-        let _api_resp: BaseResponse<EmptyResponse> = Transport::request(api_req, &self.config, option).await?;
-        
+        let _api_resp: BaseResponse<EmptyResponse> =
+            Transport::request(api_req, &self.config, option).await?;
+
         // 返回模拟的照片数据（实际实现时应该从响应体中获取）
         Ok(vec![
-            0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46, 0x49, 0x46, 0x00, 0x01,
-            0x01, 0x01, 0x00, 0x48, 0x00, 0x48, 0x00, 0x00, 0xFF, 0xD9
+            0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46, 0x49, 0x46, 0x00, 0x01, 0x01, 0x01,
+            0x00, 0x48, 0x00, 0x48, 0x00, 0x00, 0xFF, 0xD9,
         ])
     }
 }

@@ -716,3 +716,148 @@ impl ApiResponseTrait for UserSetting {
         ResponseFormat::Data
     }
 }
+
+// ==================== 考勤统计相关数据结构 ====================
+
+/// 更新统计设置请求
+#[derive(Default)]
+pub struct UpdateUserStatsDataRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 统计设置
+    pub stats_setting: StatsSettings,
+}
+
+/// 统计设置
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct StatsSettings {
+    /// 统计范围 1：自定义范围, 2：全部
+    pub stats_scope: i32,
+    /// 统计起始日期，格式YYYY-MM-DD
+    pub start_date: String,
+    /// 统计结束日期，格式YYYY-MM-DD
+    pub end_date: String,
+    /// 需要查询的用户ID列表
+    pub user_ids: Vec<String>,
+    /// 需要查询的字段列表
+    pub need_fields: Vec<String>,
+}
+
+/// 更新统计设置响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateUserStatsDataRespData {
+    /// 更新是否成功
+    pub success: bool,
+}
+
+/// 查询统计设置请求
+#[derive(Default)]
+pub struct QueryStatsSettingsRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型  
+    pub employee_type: String,
+}
+
+/// 查询统计设置响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QueryStatsSettingsRespData {
+    /// 统计设置
+    pub stats_setting: StatsSettings,
+}
+
+/// 查询统计表头请求
+#[derive(Default)]
+pub struct QueryStatsFieldsRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 语言类型，zh-CN：中文，en-US：英文，ja-JP：日文
+    pub locale: Option<String>,
+}
+
+/// 统计字段信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct StatsField {
+    /// 字段标识
+    pub field_key: String,
+    /// 字段名称
+    pub field_name: String,
+    /// 字段中文名称
+    pub field_name_zh: Option<String>,
+    /// 字段英文名称  
+    pub field_name_en: Option<String>,
+    /// 字段日文名称
+    pub field_name_ja: Option<String>,
+    /// 字段类型：0-文本，1-数字，2-时间
+    pub field_type: i32,
+}
+
+/// 查询统计表头响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QueryStatsFieldsRespData {
+    /// 统计字段列表
+    pub fields: Vec<StatsField>,
+}
+
+/// 查询统计数据请求
+#[derive(Default)]
+pub struct QueryUserStatsDataRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 统计起始日期，格式YYYY-MM-DD
+    pub start_date: String,
+    /// 统计结束日期，格式YYYY-MM-DD
+    pub end_date: String,
+    /// 需要查询的用户ID列表
+    pub user_ids: Vec<String>,
+    /// 需要查询的字段列表
+    pub need_fields: Vec<String>,
+    /// 语言类型，zh-CN：中文，en-US：英文，ja-JP：日文
+    pub locale: Option<String>,
+}
+
+/// 用户统计数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserStatsData {
+    /// 用户ID
+    pub user_id: String,
+    /// 用户姓名
+    pub user_name: Option<String>,
+    /// 统计数据字段
+    pub datas: std::collections::HashMap<String, serde_json::Value>,
+}
+
+/// 查询统计数据响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QueryUserStatsDataRespData {
+    /// 用户统计数据列表
+    pub datas: Vec<UserStatsData>,
+}
+
+// 实现 ApiResponseTrait
+
+impl ApiResponseTrait for UpdateUserStatsDataRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for QueryStatsSettingsRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for QueryStatsFieldsRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for QueryUserStatsDataRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
