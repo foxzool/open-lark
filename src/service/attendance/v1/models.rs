@@ -225,3 +225,117 @@ impl ApiResponseTrait for EmptyResponse {
         ResponseFormat::Data
     }
 }
+
+/// 用户排班信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserDailyShift {
+    /// 用户 ID
+    pub user_id: String,
+    /// 日期，格式：YYYY-MM-DD
+    pub shift_date: String,
+    /// 班次 ID
+    pub shift_id: String,
+}
+
+/// 创建或修改排班表请求
+#[derive(Default)]
+pub struct BatchCreateUserDailyShiftRequest {
+    pub api_req: ApiRequest,
+    /// 员工类型，用于指定 user_daily_shifts 中的 user_id 类型
+    /// 可选值：
+    /// - employee_id：员工 employee ID
+    /// - employee_no：员工工号
+    pub employee_type: String,
+    /// 用户排班信息列表
+    pub user_daily_shifts: Vec<UserDailyShift>,
+}
+
+/// 批量操作响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BatchCreateUserDailyShiftRespData {
+    /// 失败的用户排班信息
+    pub failed_user_daily_shifts: Option<Vec<UserDailyShift>>,
+    /// 成功的数量
+    pub success_count: Option<i32>,
+    /// 失败的数量
+    pub failed_count: Option<i32>,
+}
+
+impl ApiResponseTrait for BatchCreateUserDailyShiftRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 查询排班表请求
+#[derive(Default)]
+pub struct QueryUserDailyShiftRequest {
+    pub api_req: ApiRequest,
+    /// 员工类型，用于指定 user_ids 中的用户 ID 类型
+    pub employee_type: String,
+    /// 用户 ID 列表，一次最多 50 个
+    pub user_ids: Vec<String>,
+    /// 查询的起始时间，精确到日期
+    pub check_date_from: String,
+    /// 查询的结束时间，精确到日期
+    pub check_date_to: String,
+}
+
+/// 查询排班表响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QueryUserDailyShiftRespData {
+    /// 用户排班信息列表
+    pub user_daily_shift_list: Vec<UserDailyShiftData>,
+}
+
+impl ApiResponseTrait for QueryUserDailyShiftRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 用户排班详细信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserDailyShiftData {
+    /// 用户 ID
+    pub user_id: String,
+    /// 日期，格式：YYYY-MM-DD
+    pub shift_date: String,
+    /// 班次 ID
+    pub shift_id: String,
+    /// 班次名称
+    pub shift_name: String,
+    /// 是否为临时班次
+    pub is_temp: Option<bool>,
+    /// 创建时间
+    pub create_time: Option<String>,
+    /// 修改时间
+    pub update_time: Option<String>,
+}
+
+/// 创建或修改临时排班请求
+#[derive(Default)]
+pub struct BatchCreateTempUserDailyShiftRequest {
+    pub api_req: ApiRequest,
+    /// 员工类型，用于指定 user_daily_shifts 中的 user_id 类型
+    pub employee_type: String,
+    /// 用户排班信息列表
+    pub user_daily_shifts: Vec<UserDailyShift>,
+}
+
+/// 创建或修改临时排班响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BatchCreateTempUserDailyShiftRespData {
+    /// 失败的用户排班信息
+    pub failed_user_daily_shifts: Option<Vec<UserDailyShift>>,
+    /// 成功的数量
+    pub success_count: Option<i32>,
+    /// 失败的数量
+    pub failed_count: Option<i32>,
+}
+
+impl ApiResponseTrait for BatchCreateTempUserDailyShiftRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
