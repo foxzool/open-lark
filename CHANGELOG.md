@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2025-01-21
+
+### Added
+- 新增详细的 SDK 完成进度评估报告 (`docs/sdk-completion-assessment.md`)
+- 添加完整的 `prelude` 模块，导出常用类型和 trait
+- 新增项目基础设施文件：GitHub 工作流、Issue 模板、PR 模板、安全政策等
+
+### Changed
+- 重构 `FeishuCard::header()` 和 `FeishuCard::elements()` 方法返回 `Result` 类型
+- 改进事件注册器方法返回 `Result` 避免重复注册时的 panic
+- 优化事件分发器错误处理，移除 panic 改为返回错误和记录警告
+- 修复 WebSocket 示例中的异步运行时反模式问题
+- 增强 `justfile` 构建脚本，添加完整的发布流程
+
+### Removed
+- 删除空的 `src/card/color.rs` 文件
+
+### Fixed
+- 修复所有卡片示例以正确处理新的 `Result` 返回类型
+- 改善库代码的健壮性，消除潜在的运行时崩溃
+
 ## [0.4.0] - 2025-01-20
 
 ### Added
