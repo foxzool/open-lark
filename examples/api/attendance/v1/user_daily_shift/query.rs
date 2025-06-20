@@ -1,3 +1,5 @@
+#![allow(clippy::field_reassign_with_default)]
+
 use dotenvy::dotenv;
 use open_lark::{prelude::LarkClient, service::attendance::v1::models::QueryUserDailyShiftRequest};
 use std::env;

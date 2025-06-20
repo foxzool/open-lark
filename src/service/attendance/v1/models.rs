@@ -585,3 +585,134 @@ impl ApiResponseTrait for Group {
         ResponseFormat::Data
     }
 }
+
+/// 用户人脸识别设置信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserSetting {
+    /// 用户 ID
+    pub user_id: String,
+    /// 是否开启人脸识别打卡
+    pub face_key_open: Option<bool>,
+    /// 人脸识别照片文件 key
+    pub face_key: Option<String>,
+    /// 活体检测等级
+    pub face_live_need_action: Option<bool>,
+    /// 人脸识别降级开关
+    pub face_downgrade: Option<bool>,
+    /// 创建时间
+    pub create_time: Option<String>,
+    /// 修改时间
+    pub update_time: Option<String>,
+}
+
+/// 修改用户人脸识别信息请求
+#[derive(Default)]
+pub struct ModifyUserSettingRequest {
+    pub api_req: ApiRequest,
+    /// 员工 ID 类型
+    pub employee_type: String,
+    /// 用户 ID
+    pub user_id: String,
+    /// 是否开启人脸识别打卡
+    pub face_key_open: Option<bool>,
+    /// 人脸识别照片文件 key
+    pub face_key: Option<String>,
+    /// 活体检测等级
+    pub face_live_need_action: Option<bool>,
+    /// 人脸识别降级开关
+    pub face_downgrade: Option<bool>,
+}
+
+/// 修改用户人脸识别信息响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ModifyUserSettingRespData {
+    /// 用户设置信息
+    pub user_setting: UserSetting,
+}
+
+impl ApiResponseTrait for ModifyUserSettingRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 批量查询用户人脸识别信息请求
+#[derive(Default)]
+pub struct QueryUserSettingRequest {
+    pub api_req: ApiRequest,
+    /// 员工 ID 类型
+    pub employee_type: String,
+    /// 用户 ID 列表，一次最多 50 个
+    pub user_ids: Vec<String>,
+}
+
+/// 批量查询用户人脸识别信息响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QueryUserSettingRespData {
+    /// 用户设置信息列表
+    pub user_setting_list: Vec<UserSetting>,
+}
+
+impl ApiResponseTrait for QueryUserSettingRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 上传用户人脸识别照片请求
+#[derive(Default)]
+pub struct UploadUserPhotoRequest {
+    pub api_req: ApiRequest,
+    /// 员工 ID 类型
+    pub employee_type: String,
+    /// 用户 ID
+    pub user_id: String,
+    /// 人脸识别照片的二进制数据
+    pub photo_data: Vec<u8>,
+    /// 照片文件名
+    pub photo_name: String,
+}
+
+/// 上传用户人脸识别照片响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UploadUserPhotoRespData {
+    /// 人脸识别照片文件 key
+    pub face_key: String,
+}
+
+impl ApiResponseTrait for UploadUserPhotoRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 下载用户人脸识别照片请求
+#[derive(Default)]
+pub struct DownloadUserPhotoRequest {
+    pub api_req: ApiRequest,
+    /// 员工 ID 类型
+    pub employee_type: String,
+    /// 用户 ID
+    pub user_id: String,
+    /// 人脸识别照片Key
+    pub face_key: String,
+}
+
+/// 下载用户人脸识别照片响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DownloadUserPhotoRespData {
+    /// 照片的二进制数据
+    pub photo_data: Vec<u8>,
+}
+
+impl ApiResponseTrait for DownloadUserPhotoRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for UserSetting {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}

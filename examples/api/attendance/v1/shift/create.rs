@@ -36,7 +36,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("📝 创建标准班次...");
     let request = CreateShiftRequest::builder()
         .employee_type("employee_id") // 使用员工 employee ID
-        .shift_name(&format!("API示例-标准班次-{}", Utc::now().timestamp()))
+        .shift_name(format!("API示例-标准班次-{}", Utc::now().timestamp()))
         .punch_times(2)
         .is_flexible(false)
         .no_need_off(false)
@@ -77,7 +77,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("📝 创建弹性班次...");
     let flexible_request = CreateShiftRequest::builder()
         .employee_type("employee_id") // 使用员工 employee ID
-        .shift_name(&format!("API示例-弹性班次-{}", Utc::now().timestamp()))
+        .shift_name(format!("API示例-弹性班次-{}", Utc::now().timestamp()))
         .punch_times(2)
         .is_flexible(true)
         .flexible_minutes(30)
