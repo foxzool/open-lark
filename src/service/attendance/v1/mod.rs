@@ -2,7 +2,7 @@ use crate::{
     core::config::Config,
     service::attendance::v1::{
         group::GroupService, shift::ShiftService, user_daily_shift::UserDailyShiftService,
-        user_setting::UserSettingService,
+        user_setting::UserSettingService, user_stats_data::UserStatsDataService,
     },
 };
 
@@ -11,12 +11,14 @@ pub mod models;
 pub mod shift;
 pub mod user_daily_shift;
 pub mod user_setting;
+pub mod user_stats_data;
 
 pub struct V1 {
     pub shift: ShiftService,
     pub user_daily_shift: UserDailyShiftService,
     pub group: GroupService,
     pub user_setting: UserSettingService,
+    pub user_stats_data: UserStatsDataService,
 }
 
 impl V1 {
@@ -31,7 +33,10 @@ impl V1 {
             group: GroupService {
                 config: config.clone(),
             },
-            user_setting: UserSettingService { config },
+            user_setting: UserSettingService {
+                config: config.clone(),
+            },
+            user_stats_data: UserStatsDataService { config },
         }
     }
 }

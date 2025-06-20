@@ -374,3 +374,20 @@ path = "examples/api/attendance/v1/user_setting/upload.rs"
 [[example]]
 name = "attendance_user_setting_download"
 path = "examples/api/attendance/v1/user_setting/download.rs"
+
+# 考勤统计
+[[example]]
+name = "attendance_user_stats_data_update"
+path = "examples/api/attendance/v1/user_stats_data/update.rs"
+
+[[example]]
+name = "attendance_user_stats_data_query_settings"
+path = "examples/api/attendance/v1/user_stats_data/query_settings.rs"
+
+[[example]]
+name = "attendance_user_stats_data_query_fields"
+path = "examples/api/attendance/v1/user_stats_data/query_fields.rs"
+
+[[example]]
+name = "attendance_user_stats_data_query_data"
+path = "examples/api/attendance/v1/user_stats_data/query_data.rs"
