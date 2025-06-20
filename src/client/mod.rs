@@ -14,13 +14,13 @@ pub mod ws_client;
 /// 飞书开放平台SDK client
 pub struct LarkClient {
     pub config: Config,
+    pub attendance: AttendanceService,
     pub auth: AuthenService,
     pub im: ImService,
     pub drive: DriveService,
     pub search: SearchService,
     pub sheets: SheetsService,
     pub bitable: BitableService,
-    pub attendance: AttendanceService,
 }
 
 pub struct LarkClientBuilder {
@@ -63,13 +63,13 @@ impl LarkClientBuilder {
 
         LarkClient {
             config: self.config.clone(),
+            attendance: AttendanceService::new(self.config.clone()),
             auth: AuthenService::new(self.config.clone()),
             im: ImService::new(self.config.clone()),
             drive: DriveService::new(self.config.clone()),
             search: SearchService::new(self.config.clone()),
             sheets: SheetsService::new(self.config.clone()),
             bitable: BitableService::new(self.config.clone()),
-            attendance: AttendanceService::new(self.config),
         }
     }
 }

@@ -19,13 +19,3 @@ pub use crate::card::{FeishuCard, FeishuCardConfig, FeishuCardLanguage};
 pub use crate::service::im::v1::{
     p2_im_message_read_v1::P2ImMessageReadV1, p2_im_message_receive_v1::P2ImMessageReceiveV1,
 };
-
-// 导出考勤相关类型
-pub use crate::service::attendance::v1::{
-    models::{
-        CheckInStatus, CheckMethod, CheckType, ExceptionType, UserFlowQueryRequest,
-        UserFlowQueryResponse, UserFlowRecord, UserTaskQueryRequest, UserTaskQueryResponse,
-        UserTaskRecord,
-    },
-    shift::{ShiftInfo, ShiftQueryRequest, ShiftQueryResponse},
-};
