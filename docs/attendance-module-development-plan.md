@@ -29,7 +29,7 @@
 
 ## 考勤用户管理
 
-- [ ] [修改用户人脸识别信息](https://open.feishu.cn/document/server-docs/attendance-v1/user_setting/modify)
-- [ ] [批量查询用户人脸识别信息](https://open.feishu.cn/document/server-docs/attendance-v1/user_setting/query)
-- [ ] [上传用户人脸识别照片](https://open.feishu.cn/document/server-docs/attendance-v1/user_setting/upload)
-- [ ] [下载用户人脸识别照片](https://open.feishu.cn/document/server-docs/attendance-v1/user_setting/download)
+- [x] [修改用户人脸识别信息](https://open.feishu.cn/document/server-docs/attendance-v1/user_setting/modify)
+- [x] [批量查询用户人脸识别信息](https://open.feishu.cn/document/server-docs/attendance-v1/user_setting/query)
+- [x] [上传用户人脸识别照片](https://open.feishu.cn/document/server-docs/attendance-v1/user_setting/upload)
+- [x] [下载用户人脸识别照片](https://open.feishu.cn/document/server-docs/attendance-v1/user_setting/download)

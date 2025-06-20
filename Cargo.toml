@@ -357,3 +357,20 @@ path = "examples/api/attendance/v1/group/search.rs"
 [[example]]
 name = "attendance_group_list"
 path = "examples/api/attendance/v1/group/list.rs"
+
+# 考勤用户设置
+[[example]]
+name = "attendance_user_setting_modify"
+path = "examples/api/attendance/v1/user_setting/modify.rs"
+
+[[example]]
+name = "attendance_user_setting_query"
+path = "examples/api/attendance/v1/user_setting/query.rs"
+
+[[example]]
+name = "attendance_user_setting_upload"
+path = "examples/api/attendance/v1/user_setting/upload.rs"
+
+[[example]]
+name = "attendance_user_setting_download"
+path = "examples/api/attendance/v1/user_setting/download.rs"
