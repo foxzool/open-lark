@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use crate::{
     event::context::EventContext,
     service::im::v1::{
@@ -7,6 +5,8 @@ use crate::{
         p2_im_message_receive_v1::{P2ImMessageReceiveV1, P2ImMessageReceiveV1ProcessorImpl},
     },
 };
+use log::debug;
+use std::collections::HashMap;
 
 /// 事件分发处理器
 pub struct EventDispatcherHandler {
@@ -43,7 +43,8 @@ impl EventDispatcherHandler {
     }
 
     pub fn do_without_validation(&self, payload: Vec<u8>) -> anyhow::Result<()> {
-        let mut context = serde_json::from_slice::<EventContext>(&payload).unwrap();
+        let mut context = serde_json::from_slice::<EventContext>(&payload)?;
+        debug!("{:?}", context);
         if context.schema.is_some() {
             // 解析 v2 事件
             context.schema = Some("p2".to_string());

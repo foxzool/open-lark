@@ -1,7 +1,6 @@
 use dotenvy::dotenv;
 use log::error;
-use open_lark::client::LarkClient;
-use open_lark::service::bitable::v1::CreateAppTableRecordRequest;
+use open_lark::{client::LarkClient, service::bitable::v1::CreateAppTableRecordRequest};
 use serde_json::json;
 use std::env;
 

@@ -1,10 +1,12 @@
-use crate::core::api_req::ApiRequest;
-use crate::core::api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat};
-use crate::core::config::Config;
-use crate::core::constants::AccessTokenType;
-use crate::core::http::Transport;
-use crate::core::req_option::RequestOption;
-use crate::core::SDKResult;
+use crate::core::{
+    api_req::ApiRequest,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
 use serde::Deserialize;
 
 pub struct UserInfoService {
