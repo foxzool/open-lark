@@ -8,8 +8,8 @@
 - [x] [获取文件夹中的文件清单](https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/list?appId=cli_a891adf51b3d1013)
 - [x] [获取文件夹元数据](https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-folder-meta)
 - [x] [新建文件夹](https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/create_folder)
-- [ ] [移动或删除文件夹](https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/move-delete-folder)
-- [ ] [查询异步任务状态](https://open.feishu.cn/document/server-docs/docs/drive-v1/file/async-task/task_check)
+- [x] [移动或删除文件夹](https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/move-delete-folder)
+- [x] [查询异步任务状态](https://open.feishu.cn/document/server-docs/docs/drive-v1/file/async-task/task_check)
 
 
 ## 文件
