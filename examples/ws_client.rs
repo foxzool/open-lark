@@ -38,7 +38,6 @@ async fn main() {
         .unwrap();
 }
 
-
 async fn handle_p2_im_message_receive_v1(
     api_client: Arc<Mutex<LarkClient>>,
     data: P2ImMessageReceiveV1,
