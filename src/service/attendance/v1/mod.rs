@@ -3,7 +3,7 @@ use crate::{
     service::attendance::v1::{
         group::GroupService, shift::ShiftService, user_approval::UserApprovalService,
         user_daily_shift::UserDailyShiftService, user_setting::UserSettingService,
-        user_stats_data::UserStatsDataService,
+        user_stats_data::UserStatsDataService, user_task_remedy::UserTaskRemedyService,
     },
 };
 
@@ -16,6 +16,7 @@ pub mod user_approval;
 pub mod user_daily_shift;
 pub mod user_setting;
 pub mod user_stats_data;
+pub mod user_task_remedy;
 
 pub struct V1 {
     pub shift: ShiftService,
@@ -24,6 +25,7 @@ pub struct V1 {
     pub user_setting: UserSettingService,
     pub user_stats_data: UserStatsDataService,
     pub user_approval: UserApprovalService,
+    pub user_task_remedy: UserTaskRemedyService,
 }
 
 impl V1 {
@@ -44,7 +46,10 @@ impl V1 {
             user_stats_data: UserStatsDataService {
                 config: config.clone(),
             },
-            user_approval: UserApprovalService { config },
+            user_approval: UserApprovalService {
+                config: config.clone(),
+            },
+            user_task_remedy: UserTaskRemedyService { config },
         }
     }
 }

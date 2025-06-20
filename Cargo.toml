@@ -409,3 +409,16 @@ path = "examples/api/attendance/v1/user_approval/process.rs"
 [[example]]
 name = "attendance_events"
 path = "examples/event/attendance/attendance_events.rs"
+
+# 考勤补卡
+[[example]]
+name = "attendance_user_task_remedy_create"
+path = "examples/api/attendance/v1/user_task_remedy/create.rs"
+
+[[example]]
+name = "attendance_user_task_remedy_query_user_allowed_remedys"
+path = "examples/api/attendance/v1/user_task_remedy/query_user_allowed_remedys.rs"
+
+[[example]]
+name = "attendance_user_task_remedy_query"
+path = "examples/api/attendance/v1/user_task_remedy/query.rs"

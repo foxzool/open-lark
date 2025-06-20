@@ -989,3 +989,451 @@ impl ApiResponseTrait for ProcessUserApprovalRespData {
         ResponseFormat::Data
     }
 }
+
+// ==================== 考勤补卡相关数据结构 ====================
+
+/// 通知补卡审批发起请求
+#[derive(Default)]
+pub struct CreateUserTaskRemedyRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 补卡申请信息
+    pub remedy_application: UserTaskRemedyApplication,
+}
+
+/// 补卡申请信息
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct UserTaskRemedyApplication {
+    /// 用户ID
+    pub user_id: String,
+    /// 补卡日期，格式：yyyy-MM-dd
+    pub remedy_date: String,
+    /// 补卡时间，格式：HH:mm
+    pub remedy_time: String,
+    /// 补卡类型，1：上班补卡，2：下班补卡
+    pub remedy_type: i32,
+    /// 补卡原因
+    pub reason: String,
+    /// 补卡备注
+    pub comment: Option<String>,
+}
+
+/// 通知补卡审批发起响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateUserTaskRemedyRespData {
+    /// 补卡申请ID
+    pub remedy_id: String,
+    /// 申请是否成功提交
+    pub success: bool,
+}
+
+/// 获取可补卡时间请求
+#[derive(Default)]
+pub struct QueryUserAllowedRemedysRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 用户ID
+    pub user_id: String,
+    /// 查询开始日期，格式：yyyy-MM-dd
+    pub date_from: Option<String>,
+    /// 查询结束日期，格式：yyyy-MM-dd
+    pub date_to: Option<String>,
+}
+
+/// 可补卡时间数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserAllowedRemedy {
+    /// 日期，格式：yyyy-MM-dd
+    pub date: String,
+    /// 班次ID
+    pub shift_id: String,
+    /// 班次名称
+    pub shift_name: String,
+    /// 可补卡时间段列表
+    pub remedy_periods: Vec<RemedyPeriod>,
+}
+
+/// 补卡时间段
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RemedyPeriod {
+    /// 补卡类型，1：上班补卡，2：下班补卡
+    pub remedy_type: i32,
+    /// 补卡类型名称
+    pub remedy_type_name: String,
+    /// 标准打卡时间，格式：HH:mm
+    pub standard_time: String,
+    /// 可补卡开始时间，格式：HH:mm
+    pub remedy_start_time: String,
+    /// 可补卡结束时间，格式：HH:mm
+    pub remedy_end_time: String,
+    /// 是否可以补卡
+    pub can_remedy: bool,
+    /// 不可补卡原因
+    pub block_reason: Option<String>,
+}
+
+/// 获取可补卡时间响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QueryUserAllowedRemedysRespData {
+    /// 可补卡时间列表
+    pub allowed_remedys: Vec<UserAllowedRemedy>,
+}
+
+/// 获取补卡记录请求
+#[derive(Default)]
+pub struct QueryUserTaskRemedyRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 用户ID列表
+    pub user_ids: Option<Vec<String>>,
+    /// 查询开始日期，格式：yyyy-MM-dd
+    pub date_from: Option<String>,
+    /// 查询结束日期，格式：yyyy-MM-dd
+    pub date_to: Option<String>,
+    /// 补卡状态，1：待审批，2：已通过，3：已拒绝
+    pub status: Option<i32>,
+    /// 分页大小，最大100
+    pub page_size: Option<i32>,
+    /// 分页偏移量
+    pub page_token: Option<String>,
+}
+
+/// 补卡记录数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserTaskRemedy {
+    /// 补卡记录ID
+    pub remedy_id: String,
+    /// 用户ID
+    pub user_id: String,
+    /// 用户姓名
+    pub user_name: Option<String>,
+    /// 补卡日期，格式：yyyy-MM-dd
+    pub remedy_date: String,
+    /// 补卡时间，格式：HH:mm
+    pub remedy_time: String,
+    /// 补卡类型，1：上班补卡，2：下班补卡
+    pub remedy_type: i32,
+    /// 补卡状态，1：待审批，2：已通过，3：已拒绝
+    pub status: i32,
+    /// 申请原因
+    pub reason: String,
+    /// 补卡备注
+    pub comment: Option<String>,
+    /// 申请时间戳（毫秒）
+    pub apply_time: String,
+    /// 审批时间戳（毫秒）
+    pub approve_time: Option<String>,
+    /// 审批人ID
+    pub approver_id: Option<String>,
+    /// 审批备注
+    pub approve_comment: Option<String>,
+}
+
+/// 获取补卡记录响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QueryUserTaskRemedyRespData {
+    /// 补卡记录列表
+    pub remedys: Vec<UserTaskRemedy>,
+    /// 是否还有更多数据
+    pub has_more: bool,
+    /// 下一页令牌
+    pub page_token: Option<String>,
+}
+
+// 实现 ApiResponseTrait
+
+impl ApiResponseTrait for CreateUserTaskRemedyRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for QueryUserAllowedRemedysRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for QueryUserTaskRemedyRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+// ==================== 打卡信息管理相关数据结构 ====================
+
+/// 导入打卡流水请求
+#[derive(Default)]
+pub struct BatchCreateUserTaskRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 打卡记录列表
+    pub user_tasks: Vec<UserTaskCreate>,
+}
+
+/// 打卡记录创建信息
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct UserTaskCreate {
+    /// 用户ID
+    pub user_id: String,
+    /// 考勤组ID
+    pub group_id: String,
+    /// 班次ID
+    pub shift_id: String,
+    /// 打卡日期，格式：yyyy-MM-dd
+    pub check_date: String,
+    /// 打卡时间，格式：yyyy-MM-dd HH:mm:ss
+    pub check_time: String,
+    /// 打卡类型，1：上班打卡，2：下班打卡
+    pub check_type: i32,
+    /// 打卡结果，1：正常，2：早退，3：迟到，4：严重迟到，5：缺卡，6：无效，7：无班次，8：休息
+    pub check_result: i32,
+    /// 位置信息
+    pub location: Option<UserTaskLocation>,
+    /// 是否外勤打卡
+    pub is_field: Option<bool>,
+    /// 是否补卡
+    pub is_remedy: Option<bool>,
+    /// 打卡备注
+    pub comment: Option<String>,
+}
+
+/// 打卡位置信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserTaskLocation {
+    /// 纬度
+    pub latitude: f64,
+    /// 经度
+    pub longitude: f64,
+    /// 位置名称
+    pub address: Option<String>,
+}
+
+/// 导入打卡流水响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BatchCreateUserTaskRespData {
+    /// 导入成功的记录数
+    pub success_count: i32,
+    /// 导入失败的记录数
+    pub failed_count: i32,
+    /// 失败记录详情
+    pub failed_records: Option<Vec<UserTaskCreateFailure>>,
+}
+
+/// 打卡记录创建失败信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserTaskCreateFailure {
+    /// 用户ID
+    pub user_id: String,
+    /// 失败原因
+    pub reason: String,
+    /// 错误代码
+    pub error_code: Option<String>,
+}
+
+/// 查询打卡流水请求
+#[derive(Default)]
+pub struct GetUserTaskRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 用户ID
+    pub user_id: String,
+    /// 查询日期，格式：yyyy-MM-dd
+    pub check_date: String,
+}
+
+/// 打卡流水信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserTask {
+    /// 打卡记录ID
+    pub task_id: String,
+    /// 用户ID
+    pub user_id: String,
+    /// 用户姓名
+    pub user_name: Option<String>,
+    /// 考勤组ID
+    pub group_id: String,
+    /// 班次ID
+    pub shift_id: String,
+    /// 班次名称
+    pub shift_name: String,
+    /// 打卡日期，格式：yyyy-MM-dd
+    pub check_date: String,
+    /// 打卡时间，格式：yyyy-MM-dd HH:mm:ss
+    pub check_time: String,
+    /// 打卡类型，1：上班打卡，2：下班打卡
+    pub check_type: i32,
+    /// 打卡结果，1：正常，2：早退，3：迟到，4：严重迟到，5：缺卡，6：无效，7：无班次，8：休息
+    pub check_result: i32,
+    /// 位置信息
+    pub location: Option<UserTaskLocation>,
+    /// 是否外勤打卡
+    pub is_field: bool,
+    /// 是否补卡
+    pub is_remedy: bool,
+    /// 打卡备注
+    pub comment: Option<String>,
+    /// 记录创建时间戳（毫秒）
+    pub create_time: String,
+    /// 记录更新时间戳（毫秒）
+    pub update_time: String,
+}
+
+/// 查询打卡流水响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetUserTaskRespData {
+    /// 打卡流水列表
+    pub user_tasks: Vec<UserTask>,
+}
+
+/// 批量查询打卡流水请求
+#[derive(Default)]
+pub struct QueryUserTaskRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 用户ID列表
+    pub user_ids: Option<Vec<String>>,
+    /// 查询开始日期，格式：yyyy-MM-dd
+    pub check_date_from: Option<String>,
+    /// 查询结束日期，格式：yyyy-MM-dd
+    pub check_date_to: Option<String>,
+    /// 打卡类型，1：上班打卡，2：下班打卡
+    pub check_type: Option<i32>,
+    /// 分页大小，最大100
+    pub page_size: Option<i32>,
+    /// 分页偏移量
+    pub page_token: Option<String>,
+}
+
+/// 批量查询打卡流水响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QueryUserTaskRespData {
+    /// 打卡流水列表
+    pub user_tasks: Vec<UserTask>,
+    /// 是否还有更多数据
+    pub has_more: bool,
+    /// 下一页令牌
+    pub page_token: Option<String>,
+}
+
+/// 删除打卡流水请求
+#[derive(Default)]
+pub struct BatchDelUserTaskRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 打卡记录ID列表
+    pub task_ids: Vec<String>,
+}
+
+/// 删除打卡流水响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BatchDelUserTaskRespData {
+    /// 删除成功的记录数
+    pub success_count: i32,
+    /// 删除失败的记录数
+    pub failed_count: i32,
+    /// 失败记录详情
+    pub failed_records: Option<Vec<UserTaskDeleteFailure>>,
+}
+
+/// 打卡记录删除失败信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserTaskDeleteFailure {
+    /// 打卡记录ID
+    pub task_id: String,
+    /// 失败原因
+    pub reason: String,
+    /// 错误代码
+    pub error_code: Option<String>,
+}
+
+/// 查询打卡结果请求
+#[derive(Default)]
+pub struct QueryUserTaskResultRequest {
+    pub api_req: ApiRequest,
+    /// 员工ID类型
+    pub employee_type: String,
+    /// 用户ID列表
+    pub user_ids: Option<Vec<String>>,
+    /// 查询开始日期，格式：yyyy-MM-dd
+    pub check_date_from: Option<String>,
+    /// 查询结束日期，格式：yyyy-MM-dd
+    pub check_date_to: Option<String>,
+    /// 分页大小，最大100
+    pub page_size: Option<i32>,
+    /// 分页偏移量
+    pub page_token: Option<String>,
+}
+
+/// 打卡结果信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserTaskResult {
+    /// 用户ID
+    pub user_id: String,
+    /// 用户姓名
+    pub user_name: Option<String>,
+    /// 考勤日期，格式：yyyy-MM-dd
+    pub attendance_date: String,
+    /// 考勤状态，1：正常，2：迟到，3：早退，4：缺勤，5：休息，6：加班
+    pub attendance_status: i32,
+    /// 上班打卡记录
+    pub check_in_records: Option<Vec<UserTask>>,
+    /// 下班打卡记录
+    pub check_out_records: Option<Vec<UserTask>>,
+    /// 工作时长（小时）
+    pub work_duration: Option<f64>,
+    /// 加班时长（小时）
+    pub overtime_duration: Option<f64>,
+    /// 考勤异常信息
+    pub exceptions: Option<Vec<String>>,
+}
+
+/// 查询打卡结果响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QueryUserTaskResultRespData {
+    /// 打卡结果列表
+    pub user_task_results: Vec<UserTaskResult>,
+    /// 是否还有更多数据
+    pub has_more: bool,
+    /// 下一页令牌
+    pub page_token: Option<String>,
+}
+
+// 实现 ApiResponseTrait
+
+impl ApiResponseTrait for BatchCreateUserTaskRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for GetUserTaskRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for QueryUserTaskRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for BatchDelUserTaskRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for QueryUserTaskResultRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}

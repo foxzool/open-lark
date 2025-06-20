@@ -49,9 +49,9 @@
 
 ## 考勤补卡
 
-- [ ] [通知补卡审批发起](https://open.feishu.cn/document/server-docs/attendance-v1/user_task_remedy/create)
-- [ ] [获取可补卡时间](https://open.feishu.cn/document/server-docs/attendance-v1/user_task_remedy/query_user_allowed_remedys)
-- [ ] [获取补卡记录](https://open.feishu.cn/document/server-docs/attendance-v1/user_task_remedy/query)
+- [x] [通知补卡审批发起](https://open.feishu.cn/document/server-docs/attendance-v1/user_task_remedy/create)
+- [x] [获取可补卡时间](https://open.feishu.cn/document/server-docs/attendance-v1/user_task_remedy/query_user_allowed_remedys)
+- [x] [获取补卡记录](https://open.feishu.cn/document/server-docs/attendance-v1/user_task_remedy/query)
 
 ## 归档报表
 
