@@ -22,15 +22,16 @@ async fn main() {
     let app_secret = env::var("APP_SECRET").unwrap();
     let client = LarkClient::builder(&app_id, &app_secret).build();
     let client = Arc::new(Mutex::new(client));
-    let rt = tokio::runtime::Runtime::new().unwrap();
     let event_handler = EventDispatcherHandler::builder()
         .register_p2_im_message_receive_v1(move |data: P2ImMessageReceiveV1| {
             let client = client.clone();
-            rt.spawn(async move {
+            tokio::spawn(async move {
                 handle_p2_im_message_receive_v1(client, data).await;
             });
         })
+        .expect("Failed to register p2_im_message_receive_v1 handler")
         .register_p2_im_message_read_v1(handle_p2_im_message_read_v1)
+        .expect("Failed to register p2_im_message_read_v1 handler")
         .build();
 
     LarkWsClient::open(&app_id, &app_secret, event_handler)

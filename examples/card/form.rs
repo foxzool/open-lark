@@ -95,7 +95,9 @@ async fn main() {
                 .title(Title::new("选择菜单"))
                 .template("green"),
         )
-        .elements("zh_cn", vec![CardElement::FormSet(form)]);
+        .expect("Failed to set header")
+        .elements("zh_cn", vec![CardElement::FormSet(form)])
+        .expect("Failed to set elements");
 
     let req = CreateMessageRequest::builder()
         .receive_id_type("chat_id")

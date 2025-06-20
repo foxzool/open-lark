@@ -179,7 +179,9 @@ async fn main() {
                 .title(Title::new("交互容器示例（依赖端版本 7.4+)"))
                 .ud_icon(FeishuCardUdIcon::default()),
         )
-        .elements("zh_cn", elements);
+        .expect("Failed to set header")
+        .elements("zh_cn", elements)
+        .expect("Failed to set elements");
 
     let req = CreateMessageRequest::builder()
         .receive_id_type("chat_id")

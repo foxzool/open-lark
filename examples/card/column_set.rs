@@ -40,6 +40,7 @@ async fn main() {
                 .title(Title::new("🏨 酒店申请已通过，请选择房型"))
                 .template("green"),
         )
+        .expect("Failed to set header")
         .elements(
             "zh_cn",
             vec![
@@ -114,7 +115,8 @@ async fn main() {
                         ]),
                 ),
             ],
-        );
+        )
+        .expect("Failed to set elements");
 
     let req = CreateMessageRequest::builder()
         .receive_id_type("chat_id")

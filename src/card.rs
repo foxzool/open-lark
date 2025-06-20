@@ -15,7 +15,6 @@ use crate::{
     service::im::v1::message::SendMessageTrait,
 };
 
-pub mod color;
 pub mod components;
 pub mod href;
 pub mod icon;
@@ -63,20 +62,22 @@ impl FeishuCard {
         self
     }
 
-    pub fn header(mut self, lng: &str, header: FeishuCardTitle) -> Self {
-        let language: FeishuCardLanguage = lng.parse().expect("unknown language");
+    pub fn header(mut self, lng: &str, header: FeishuCardTitle) -> Result<Self, crate::core::error::LarkAPIError> {
+        let language: FeishuCardLanguage = lng.parse()
+            .map_err(|e| crate::core::error::LarkAPIError::illegal_param(format!("unknown language '{}': {}", lng, e)))?;
         let origin_header = self.i18n_header.entry(language).or_default();
         *origin_header = header;
 
-        self
+        Ok(self)
     }
 
     /// 添加组件
-    pub fn elements(mut self, lng: &str, elements: Vec<CardElement>) -> Self {
-        let language: FeishuCardLanguage = lng.parse().expect("unknown language");
+    pub fn elements(mut self, lng: &str, elements: Vec<CardElement>) -> Result<Self, crate::core::error::LarkAPIError> {
+        let language: FeishuCardLanguage = lng.parse()
+            .map_err(|e| crate::core::error::LarkAPIError::illegal_param(format!("unknown language '{}': {}", lng, e)))?;
         let self_elements = self.i18n_elements.entry(language).or_default();
         self_elements.extend(elements);
-        self
+        Ok(self)
     }
 }
 
