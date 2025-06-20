@@ -63,11 +63,11 @@
 
 ## 打卡信息管理
 
-- [ ] [导入打卡流水](https://open.feishu.cn/document/server-docs/attendance-v1/user_task/batch_create)
-- [ ] [查询打卡流水](https://open.feishu.cn/document/server-docs/attendance-v1/user_task/get)
-- [ ] [批量查询打卡流水](https://open.feishu.cn/document/server-docs/attendance-v1/user_task/query-2)
-- [ ] [删除打卡流水](https://open.feishu.cn/document/attendance-v1/user_task/batch_del)
-- [ ] [查询打卡结果](https://open.feishu.cn/document/server-docs/attendance-v1/user_task/query)
+- [x] [导入打卡流水](https://open.feishu.cn/document/server-docs/attendance-v1/user_task/batch_create)
+- [x] [查询打卡流水](https://open.feishu.cn/document/server-docs/attendance-v1/user_task/get)
+- [x] [批量查询打卡流水](https://open.feishu.cn/document/server-docs/attendance-v1/user_task/query-2)
+- [x] [删除打卡流水](https://open.feishu.cn/document/attendance-v1/user_task/batch_del)
+- [x] [查询打卡结果](https://open.feishu.cn/document/server-docs/attendance-v1/user_task/query)
 
 ## 休假获取过期发放记录
 
