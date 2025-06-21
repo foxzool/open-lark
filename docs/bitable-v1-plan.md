@@ -76,5 +76,18 @@
 
 ### 协作者
 
+[新增协作者](https://open.feishu.cn/document/server-docs/docs/bitable-v1/advanced-permission/app-role-member/create)
+[批量新增协作者](https://open.feishu.cn/document/server-docs/docs/bitable-v1/advanced-permission/app-role-member/batch_create)
+[列出协作者](https://open.feishu.cn/document/server-docs/docs/bitable-v1/advanced-permission/app-role-member/list)
+[删除协作者](https://open.feishu.cn/document/server-docs/docs/bitable-v1/advanced-permission/app-role-member/delete)
+[批量删除协作者](https://open.feishu.cn/document/server-docs/docs/bitable-v1/advanced-permission/app-role-member/batch_delete)
 
+## 自动化
 
+[列出自动化流程](https://open.feishu.cn/document/docs/bitable-v1/app-workflow/list)
+[更新自动化流程状态](https://open.feishu.cn/document/docs/bitable-v1/app-workflow/update)
+
+## 事件
+
+[多维表格记录变更](https://open.feishu.cn/document/docs/bitable-v1/events/bitable_record_changed)
+[多维表格字段变更](https://open.feishu.cn/document/server-docs/docs/drive-v1/event/list/bitable_field_changed)
