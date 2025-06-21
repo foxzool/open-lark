@@ -5,7 +5,7 @@ use crate::{
     service::{
         attendance::AttendanceService, authentication::AuthenService, bitable::BitableService,
         docs::DocsService, drive::DriveService, im::ImService, search::SearchService,
-        sheets::SheetsService,
+        sheets::SheetsService, wiki::WikiService,
     },
 };
 
@@ -23,6 +23,7 @@ pub struct LarkClient {
     pub search: SearchService,
     pub sheets: SheetsService,
     pub bitable: BitableService,
+    pub wiki: WikiService,
 }
 
 pub struct LarkClientBuilder {
@@ -73,6 +74,7 @@ impl LarkClientBuilder {
             search: SearchService::new(self.config.clone()),
             sheets: SheetsService::new(self.config.clone()),
             bitable: BitableService::new(self.config.clone()),
+            wiki: WikiService::new(self.config),
         }
     }
 }
