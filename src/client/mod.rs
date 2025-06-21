@@ -3,10 +3,10 @@ use std::{sync::Arc, time::Duration};
 use crate::{
     core::{config::Config, constants::AppType},
     service::{
-        attendance::AttendanceService, authentication::AuthenService, bitable::BitableService,
-        board::BoardService, comments::CommentsService, docs::DocsService, drive::DriveService,
-        im::ImService, permission::PermissionService, search::SearchService, sheets::SheetsService,
-        wiki::WikiService,
+        assistant::AssistantService, attendance::AttendanceService, authentication::AuthenService, 
+        bitable::BitableService, board::BoardService, comments::CommentsService, 
+        docs::DocsService, drive::DriveService, im::ImService, permission::PermissionService, 
+        search::SearchService, sheets::SheetsService, wiki::WikiService,
     },
 };
 
@@ -16,6 +16,7 @@ pub mod ws_client;
 /// 飞书开放平台SDK client
 pub struct LarkClient {
     pub config: Config,
+    pub assistant: AssistantService,
     pub attendance: AttendanceService,
     pub auth: AuthenService,
     pub docs: DocsService,
@@ -70,6 +71,7 @@ impl LarkClientBuilder {
 
         LarkClient {
             config: self.config.clone(),
+            assistant: AssistantService::new(Arc::new(self.config.clone())),
             attendance: AttendanceService::new(self.config.clone()),
             auth: AuthenService::new(self.config.clone()),
             docs: DocsService::new(self.config.clone()),
