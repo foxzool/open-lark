@@ -2,6 +2,7 @@ pub use app_table_field::AppTableFieldService;
 pub use app_dashboard::AppDashboardService;
 pub use form::FormService;
 pub use app_role::AppRoleService;
+pub use app_role_member::AppRoleMemberService;
 
 // 为了避免名称冲突，使用模块路径而不是全局导入
 pub mod app;
@@ -15,6 +16,7 @@ mod app_table_field;
 mod app_dashboard;
 mod form;
 mod app_role;
+mod app_role_member;
 
 mod share;
 pub use share::*;
@@ -36,6 +38,8 @@ pub struct V1 {
     pub form: FormService,
     /// 自定义角色
     pub app_role: AppRoleService,
+    /// 协作者
+    pub app_role_member: AppRoleMemberService,
 }
 
 impl V1 {
@@ -48,7 +52,8 @@ impl V1 {
             app_table_record: app_table_record::AppTableRecordService::new(config.clone()),
             app_dashboard: AppDashboardService::new(config.clone()),
             form: FormService::new(config.clone()),
-            app_role: AppRoleService::new(config),
+            app_role: AppRoleService::new(config.clone()),
+            app_role_member: AppRoleMemberService::new(config),
         }
     }
 }
