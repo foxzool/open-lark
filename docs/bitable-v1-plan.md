@@ -2,16 +2,16 @@
 
 ## 📊 实现进度总览
 
-- ✅ **已完整实现**: 10 个接口 + 示例代码  
-- 🚧 **正在进行**: 视图模块 (0/5)
-- ⏳ **待实现**: 其他模块 (38/48)
-- 🎉 **当前完成度**: 20.8% (10/48)
+- ✅ **已完整实现**: 15 个接口 + 示例代码  
+- 🚧 **正在进行**: 记录模块 (0/8)
+- ⏳ **待实现**: 其他模块 (33/48)
+- 🎉 **当前完成度**: 31.25% (15/48)
 
 ### 🎯 核心功能状态
 - **多维表格**: ✅ 完成 (4/4) + 示例
 - **数据表**: ✅ 完成 (6/6) + 示例
-- **视图**: 🚧 进行中 (0/5)
-- **记录**: ⏳ 待实现 (0/8)  
+- **视图**: ✅ 完成 (5/5) + 示例
+- **记录**: 🚧 进行中 (0/8)  
 - **字段**: ⏳ 待实现 (0/4)
 
 ---
@@ -38,11 +38,11 @@
 
 ## 视图 
 
-[新增视图](https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/create)
-[更新视图](https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/patch)
-[列出视图](https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/list)
-[获取视图](https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/get)
-[删除视图](https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/delete)
+- [x] [新增视图](https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/create) ✅ 已实现 + 示例
+- [x] [更新视图](https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/patch) ✅ 已实现 + 示例
+- [x] [列出视图](https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/list) ✅ 已实现 + 示例
+- [x] [获取视图](https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/get) ✅ 已实现 + 示例
+- [x] [删除视图](https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/delete) ✅ 已实现 + 示例
 
 ## 记录
 
