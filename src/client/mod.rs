@@ -4,7 +4,8 @@ use crate::{
     core::{config::Config, constants::AppType},
     service::{
         attendance::AttendanceService, authentication::AuthenService, bitable::BitableService,
-        drive::DriveService, im::ImService, search::SearchService, sheets::SheetsService,
+        docs::DocsService, drive::DriveService, im::ImService, search::SearchService,
+        sheets::SheetsService,
     },
 };
 
@@ -16,6 +17,7 @@ pub struct LarkClient {
     pub config: Config,
     pub attendance: AttendanceService,
     pub auth: AuthenService,
+    pub docs: DocsService,
     pub im: ImService,
     pub drive: DriveService,
     pub search: SearchService,
@@ -65,6 +67,7 @@ impl LarkClientBuilder {
             config: self.config.clone(),
             attendance: AttendanceService::new(self.config.clone()),
             auth: AuthenService::new(self.config.clone()),
+            docs: DocsService::new(self.config.clone()),
             im: ImService::new(self.config.clone()),
             drive: DriveService::new(self.config.clone()),
             search: SearchService::new(self.config.clone()),
