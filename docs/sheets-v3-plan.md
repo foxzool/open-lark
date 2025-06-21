@@ -4,9 +4,9 @@
 
 ## 📊 实现进度总览
 
-- ✅ **已完整实现**: 42 个接口 + 示例代码
+- ✅ **已完整实现**: 46 个接口 + 示例代码
 - 🚧 **占位符已创建**: 0 个接口模块
-- 🔜 **待实现**: 17 个接口
+- 🔜 **待实现**: 13 个接口
 - 📚 **文档参考**: 5 个指南文档
 
 ### 🎯 核心功能状态
@@ -16,7 +16,8 @@
 - **筛选功能**: ✅ 基础筛选完成 (4/4)
 - **行列操作**: ✅ 完成 (5/5) + 示例
 - **保护功能**: ✅ 完成 (4/4)
-- **高级功能**: 🔜 待开发 (数据校验、条件格式、浮动图片)
+- **数据校验**: ✅ 完成 (4/4)
+- **高级功能**: 🔜 待开发 (条件格式、浮动图片)
 
 ---
 
@@ -98,10 +99,10 @@
 ## 数据校验
 
 - [ ] [数据校验概述](https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/datavalidation-guide) 📚 文档参考
-- [ ] [设置下拉列表](https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/set-dropdown) 🔜 待实现
-- [ ] [更新下拉列表设置](https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/update-datavalidation) 🔜 待实现
-- [ ] [查询下拉列表设置](https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/query-datavalidation) 🔜 待实现
-- [ ] [删除下拉列表设置](https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/delete-datavalidation) 🔜 待实现
+- [x] [设置下拉列表](https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/set-dropdown) ✅ 已实现 + 示例
+- [x] [更新下拉列表设置](https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/update-datavalidation) ✅ 已实现
+- [x] [查询下拉列表设置](https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/query-datavalidation) ✅ 已实现
+- [x] [删除下拉列表设置](https://open.feishu.cn/document/server-docs/docs/sheets-v3/datavalidation/delete-datavalidation) ✅ 已实现
 
 ## 条件格式
 
