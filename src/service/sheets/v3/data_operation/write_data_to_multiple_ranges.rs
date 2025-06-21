@@ -152,7 +152,7 @@ pub struct RangeUpdateResponse {
 mod test {
     use serde_json::json;
 
-    use super::{WriteDataToMultipleRangesResponseData, MultiRangeValueData};
+    use super::{MultiRangeValueData, WriteDataToMultipleRangesResponseData};
 
     #[test]
     fn test_write_data_to_multiple_ranges_response() {

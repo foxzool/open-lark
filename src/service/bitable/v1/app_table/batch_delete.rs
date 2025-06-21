@@ -21,7 +21,10 @@ impl AppTableService {
     ) -> SDKResult<BaseResponse<BatchDeleteTablesResponse>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::POST;
-        api_req.api_path = format!("/open-apis/bitable/v1/apps/{}/tables/batch_delete", request.app_token);
+        api_req.api_path = format!(
+            "/open-apis/bitable/v1/apps/{}/tables/batch_delete",
+            request.app_token
+        );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
         api_req.body = serde_json::to_vec(&BatchDeleteTablesRequestBody {
             table_ids: request.table_ids,
@@ -143,7 +146,7 @@ mod tests {
     fn test_batch_delete_tables_request_new() {
         let table_ids = vec!["table1".to_string(), "table2".to_string()];
         let request = BatchDeleteTablesRequest::new("bascnmBA*****yGehy8", table_ids.clone());
-        
+
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.table_ids, table_ids);
     }

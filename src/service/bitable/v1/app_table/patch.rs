@@ -22,14 +22,11 @@ impl AppTableService {
         let mut api_req = request.api_request;
         api_req.http_method = Method::PATCH;
         api_req.api_path = format!(
-            "/open-apis/bitable/v1/apps/{}/tables/{}", 
-            request.app_token, 
-            request.table_id
+            "/open-apis/bitable/v1/apps/{}/tables/{}",
+            request.app_token, request.table_id
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
-        api_req.body = serde_json::to_vec(&PatchTableRequestBody {
-            name: request.name,
-        })?;
+        api_req.body = serde_json::to_vec(&PatchTableRequestBody { name: request.name })?;
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)

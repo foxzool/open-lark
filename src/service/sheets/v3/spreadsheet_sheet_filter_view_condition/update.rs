@@ -26,7 +26,10 @@ impl SpreadsheetSheetFilterViewService {
         api_req.http_method = Method::PUT;
         api_req.api_path = format!(
             "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions/{}",
-            request.spreadsheet_token, request.sheet_id, request.filter_view_id, request.condition_id
+            request.spreadsheet_token,
+            request.sheet_id,
+            request.filter_view_id,
+            request.condition_id
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 

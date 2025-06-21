@@ -32,7 +32,9 @@ impl SpreadsheetService {
 
         // 添加查询参数
         if let Some(sheet_id) = &request.sheet_id {
-            api_req.query_params.insert("sheet_id".to_string(), sheet_id.clone());
+            api_req
+                .query_params
+                .insert("sheet_id".to_string(), sheet_id.clone());
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

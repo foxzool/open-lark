@@ -169,7 +169,7 @@ pub struct WriteImageUpdatesInfo {
 mod test {
     use serde_json::json;
 
-    use super::{WriteImagesResponseData, ImageData};
+    use super::{ImageData, WriteImagesResponseData};
 
     #[test]
     fn test_write_images_response() {
@@ -193,9 +193,9 @@ mod test {
 
     #[test]
     fn test_image_data_creation() {
-        let image = ImageData::new("img_v2_041b9112-02e8-4c12-b2f2-**********g")
-            .with_size(200, 150);
-        
+        let image =
+            ImageData::new("img_v2_041b9112-02e8-4c12-b2f2-**********g").with_size(200, 150);
+
         assert_eq!(image.data_type, "image");
         assert_eq!(image.width, Some(200));
         assert_eq!(image.height, Some(150));
@@ -212,7 +212,10 @@ mod test {
 
         let json = serde_json::to_value(&image).unwrap();
         assert_eq!(json["type"], "image");
-        assert_eq!(json["image_token"], "img_v2_041b9112-02e8-4c12-b2f2-**********g");
+        assert_eq!(
+            json["image_token"],
+            "img_v2_041b9112-02e8-4c12-b2f2-**********g"
+        );
         assert_eq!(json["width"], 100);
         assert_eq!(json["height"], 80);
     }

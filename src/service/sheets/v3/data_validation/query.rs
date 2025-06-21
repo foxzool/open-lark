@@ -32,7 +32,9 @@ impl SpreadsheetSheetService {
 
         // 添加查询参数
         if let Some(range) = &request.range {
-            api_req.query_params.insert("range".to_string(), range.clone());
+            api_req
+                .query_params
+                .insert("range".to_string(), range.clone());
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -149,7 +151,10 @@ mod test {
         let response: QueryDataValidationsResponseData = serde_json::from_value(json).unwrap();
         assert_eq!(response.items.len(), 2);
         assert_eq!(response.items[0].data_validation_id, "dv_001");
-        assert_eq!(response.items[1].data_validation.condition_type, "number_between");
+        assert_eq!(
+            response.items[1].data_validation.condition_type,
+            "number_between"
+        );
         assert!(!response.has_more);
     }
 }

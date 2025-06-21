@@ -4,7 +4,7 @@ use open_lark::prelude::*;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
-    
+
     let app_id = std::env::var("APP_ID").expect("APP_ID not found");
     let app_secret = std::env::var("APP_SECRET").expect("APP_SECRET not found");
 
@@ -15,24 +15,36 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 设置下拉列表数据校验示例
     println!("--- 1. 设置下拉列表数据校验 ---");
-    
+
     use open_lark::service::sheets::v3::data_validation::DataValidationRule;
-    
+
     // 创建一个下拉列表校验规则
     let validation_rule = DataValidationRule::dropdown(
-        "A1:A10", 
-        vec!["优秀".to_string(), "良好".to_string(), "一般".to_string(), "较差".to_string()]
+        "A1:A10",
+        vec![
+            "优秀".to_string(),
+            "良好".to_string(),
+            "一般".to_string(),
+            "较差".to_string(),
+        ],
     )
     .with_input_message("请选择评价等级")
     .with_error_message("请从下拉列表中选择有效选项");
-    
-    let set_req = open_lark::service::sheets::v3::data_validation::SetDataValidationRequest::builder()
-        .spreadsheet_token("shtcnmBA*****yGehy8") // 替换为实际的表格 token
-        .sheet_id("Sheet1") // 替换为实际的工作表 ID
-        .data_validation(validation_rule)
-        .build();
 
-    let validation_id = match client.sheets.v3.spreadsheet_sheet.set_data_validation(set_req, None).await {
+    let set_req =
+        open_lark::service::sheets::v3::data_validation::SetDataValidationRequest::builder()
+            .spreadsheet_token("shtcnmBA*****yGehy8") // 替换为实际的表格 token
+            .sheet_id("Sheet1") // 替换为实际的工作表 ID
+            .data_validation(validation_rule)
+            .build();
+
+    let validation_id = match client
+        .sheets
+        .v3
+        .spreadsheet_sheet
+        .set_data_validation(set_req, None)
+        .await
+    {
         Ok(resp) => {
             if let Some(data) = resp.data {
                 println!("✅ 设置下拉列表数据校验成功!");
@@ -58,14 +70,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let number_validation = DataValidationRule::number_range("B1:B10", 1.0, 100.0)
         .with_input_message("请输入1到100之间的数字")
         .with_error_message("数字必须在1到100之间");
-    
-    let set_number_req = open_lark::service::sheets::v3::data_validation::SetDataValidationRequest::builder()
-        .spreadsheet_token("shtcnmBA*****yGehy8")
-        .sheet_id("Sheet1")
-        .data_validation(number_validation)
-        .build();
 
-    let number_validation_id = match client.sheets.v3.spreadsheet_sheet.set_data_validation(set_number_req, None).await {
+    let set_number_req =
+        open_lark::service::sheets::v3::data_validation::SetDataValidationRequest::builder()
+            .spreadsheet_token("shtcnmBA*****yGehy8")
+            .sheet_id("Sheet1")
+            .data_validation(number_validation)
+            .build();
+
+    let number_validation_id = match client
+        .sheets
+        .v3
+        .spreadsheet_sheet
+        .set_data_validation(set_number_req, None)
+        .await
+    {
         Ok(resp) => {
             if let Some(data) = resp.data {
                 println!("✅ 设置数字范围校验成功!");
@@ -86,19 +105,27 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 查询所有数据校验设置
     println!("\n--- 3. 查询所有数据校验设置 ---");
-    let query_req = open_lark::service::sheets::v3::data_validation::QueryDataValidationsRequest::builder()
-        .spreadsheet_token("shtcnmBA*****yGehy8")
-        .sheet_id("Sheet1")
-        .build();
+    let query_req =
+        open_lark::service::sheets::v3::data_validation::QueryDataValidationsRequest::builder()
+            .spreadsheet_token("shtcnmBA*****yGehy8")
+            .sheet_id("Sheet1")
+            .build();
 
-    match client.sheets.v3.spreadsheet_sheet.query_data_validations(query_req, None).await {
+    match client
+        .sheets
+        .v3
+        .spreadsheet_sheet
+        .query_data_validations(query_req, None)
+        .await
+    {
         Ok(resp) => {
             if let Some(data) = resp.data {
                 println!("✅ 查询数据校验设置成功!");
                 println!("📊 共找到 {} 个数据校验规则:", data.items.len());
                 for (i, item) in data.items.iter().enumerate() {
-                    println!("  {}. ID: {}, 类型: {}, 范围: {}, 严格模式: {}", 
-                        i + 1, 
+                    println!(
+                        "  {}. ID: {}, 类型: {}, 范围: {}, 严格模式: {}",
+                        i + 1,
                         item.data_validation_id,
                         item.data_validation.condition_type,
                         item.data_validation.range,
@@ -121,20 +148,33 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("\n--- 4. 更新数据校验设置 ---");
     let new_validation_rule = DataValidationRule::dropdown(
         "A1:A15", // 扩大范围
-        vec!["优秀".to_string(), "良好".to_string(), "一般".to_string(), "较差".to_string(), "未评价".to_string()] // 增加选项
+        vec![
+            "优秀".to_string(),
+            "良好".to_string(),
+            "一般".to_string(),
+            "较差".to_string(),
+            "未评价".to_string(),
+        ], // 增加选项
     )
     .with_input_message("请选择新的评价等级")
     .with_error_message("请从下拉列表中选择有效的新选项")
     .with_strict(false); // 改为非严格模式
-    
-    let update_req = open_lark::service::sheets::v3::data_validation::UpdateDataValidationRequest::builder()
-        .spreadsheet_token("shtcnmBA*****yGehy8")
-        .sheet_id("Sheet1")
-        .data_validation_id(&validation_id)
-        .data_validation(new_validation_rule)
-        .build();
 
-    match client.sheets.v3.spreadsheet_sheet.update_data_validation(update_req, None).await {
+    let update_req =
+        open_lark::service::sheets::v3::data_validation::UpdateDataValidationRequest::builder()
+            .spreadsheet_token("shtcnmBA*****yGehy8")
+            .sheet_id("Sheet1")
+            .data_validation_id(&validation_id)
+            .data_validation(new_validation_rule)
+            .build();
+
+    match client
+        .sheets
+        .v3
+        .spreadsheet_sheet
+        .update_data_validation(update_req, None)
+        .await
+    {
         Ok(resp) => {
             if let Some(data) = resp.data {
                 println!("✅ 更新数据校验设置成功!");
@@ -156,43 +196,41 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 删除数据校验设置 (演示用)
     println!("\n--- 5. 删除数据校验设置 (演示用) ---");
     println!("⚠️  注意：这将永久删除数据校验设置!");
-    
-    // 取消注释以下代码来执行删除操作
-    /*
-    let delete_req = open_lark::service::sheets::v3::data_validation::DeleteDataValidationRequest::builder()
-        .spreadsheet_token("shtcnmBA*****yGehy8")
-        .sheet_id("Sheet1")
-        .data_validation_id(&number_validation_id)
-        .build();
 
-    match client.sheets.v3.spreadsheet_sheet.delete_data_validation(delete_req, None).await {
-        Ok(resp) => {
-            if let Some(data) = resp.data {
-                println!("✅ 删除数据校验设置成功: {}", data.success);
-                if let Some(deleted_id) = data.data_validation_id {
-                    println!("🗑️  已删除数据校验 ID: {}", deleted_id);
-                }
-            } else {
-                println!("❌ 响应数据为空");
-            }
-        }
-        Err(e) => {
-            eprintln!("❌ 删除数据校验设置失败: {:?}", e);
-        }
-    }
-    */
+    // 取消注释以下代码来执行删除操作
+    // let delete_req = open_lark::service::sheets::v3::data_validation::DeleteDataValidationRequest::builder()
+    // .spreadsheet_token("shtcnmBA*****yGehy8")
+    // .sheet_id("Sheet1")
+    // .data_validation_id(&number_validation_id)
+    // .build();
+    //
+    // match client.sheets.v3.spreadsheet_sheet.delete_data_validation(delete_req, None).await {
+    // Ok(resp) => {
+    // if let Some(data) = resp.data {
+    // println!("✅ 删除数据校验设置成功: {}", data.success);
+    // if let Some(deleted_id) = data.data_validation_id {
+    // println!("🗑️  已删除数据校验 ID: {}", deleted_id);
+    // }
+    // } else {
+    // println!("❌ 响应数据为空");
+    // }
+    // }
+    // Err(e) => {
+    // eprintln!("❌ 删除数据校验设置失败: {:?}", e);
+    // }
+    // }
 
     println!("\n💡 数据校验功能说明:");
     println!("- 数据校验用于限制单元格可以输入的数据类型和范围");
     println!("- 支持多种校验类型：下拉列表、数字范围、文本长度等");
     println!("- 可以设置输入提示和错误提示消息");
     println!("- 支持严格模式和非严格模式");
-    
+
     println!("\n📋 支持的校验类型:");
     println!("- dropdown: 下拉列表，用户只能从预设选项中选择");
     println!("- number_between: 数字范围，限制数字在指定范围内");
     println!("- text_length: 文本长度，限制文本的最小和最大长度");
-    
+
     println!("\n⚙️ 校验设置说明:");
     println!("- strict: true = 严格模式，拒绝无效输入");
     println!("- strict: false = 非严格模式，允许无效输入但显示警告");

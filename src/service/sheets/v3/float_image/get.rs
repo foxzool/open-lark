@@ -131,6 +131,9 @@ mod test {
 
         let response: GetFloatImageResponseData = serde_json::from_value(json).unwrap();
         assert_eq!(response.float_image.float_image_id, "fimg_001");
-        assert_eq!(response.float_image.float_image.image_token, "img_token_123");
+        assert_eq!(
+            response.float_image.float_image.image_token,
+            "img_token_123"
+        );
     }
 }

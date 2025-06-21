@@ -4,7 +4,7 @@ use open_lark::prelude::*;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
-    
+
     let app_id = std::env::var("APP_ID").expect("APP_ID not found");
     let app_secret = std::env::var("APP_SECRET").expect("APP_SECRET not found");
 
@@ -15,7 +15,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 创建多维表格示例
     println!("--- 1. 创建多维表格 ---");
-    
+
     let create_req = open_lark::service::bitable::v1::app::CreateAppRequest::builder()
         .name("API测试多维表格")
         .time_zone("Asia/Shanghai")
@@ -52,7 +52,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("🆔 App Token: {}", data.app.app_token);
                 println!("📋 名称: {}", data.app.name);
                 println!("🔢 版本号: {}", data.app.revision);
-                println!("🔐 高级权限: {}", if data.app.is_advanced { "已开启" } else { "未开启" });
+                println!(
+                    "🔐 高级权限: {}",
+                    if data.app.is_advanced {
+                        "已开启"
+                    } else {
+                        "未开启"
+                    }
+                );
                 println!("🌏 时区: {}", data.app.time_zone);
             } else {
                 println!("❌ 响应数据为空");
@@ -78,7 +85,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("🆔 App Token: {}", data.app.app_token);
                 println!("📋 新名称: {}", data.app.name);
                 println!("🔢 新版本号: {}", data.app.revision);
-                println!("🔐 高级权限: {}", if data.app.is_advanced { "已开启" } else { "未开启" });
+                println!(
+                    "🔐 高级权限: {}",
+                    if data.app.is_advanced {
+                        "已开启"
+                    } else {
+                        "未开启"
+                    }
+                );
             } else {
                 println!("❌ 响应数据为空");
             }
@@ -104,7 +118,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("📋 新名称: {}", data.app.name);
                 println!("🔢 版本号: {}", data.app.revision);
                 println!("🔗 新链接: {}", data.app.url);
-                
+
                 println!("\n💡 复制说明:");
                 println!("- 原表格 Token: {}", app_token);
                 println!("- 复制表格 Token: {}", data.app.app_token);
@@ -123,7 +137,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("- 可以创建多个数据表，每个表有独立的字段和记录");
     println!("- 支持视图功能，可以对数据进行筛选、排序、分组");
     println!("- 高级权限功能可以精细控制用户访问权限");
-    
+
     println!("\n🎯 接下来可以进行的操作:");
     println!("- 使用数据表 API 创建和管理表格");
     println!("- 使用字段 API 定义数据结构");

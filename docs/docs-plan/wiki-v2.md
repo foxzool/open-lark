@@ -29,4 +29,12 @@
 [更新知识空间节点标题](https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/update_title)
 [创建知识空间节点副本](https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/copy)
 
+## 云文档
 
+[移动云空间文档至知识空间](https://open.feishu.cn/document/server-docs/docs/wiki-v2/task/move_docs_to_wiki)
+[获取任务结果](https://open.feishu.cn/document/server-docs/docs/wiki-v2/task/get)
+
+
+## 搜索
+
+[搜索 Wiki](https://open.feishu.cn/document/server-docs/docs/wiki-v2/search_wiki)

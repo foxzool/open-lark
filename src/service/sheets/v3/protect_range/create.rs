@@ -93,7 +93,12 @@ pub struct ProtectRangeData {
 }
 
 impl ProtectRangeData {
-    pub fn new(dimension: impl ToString, sheet_id: impl ToString, start_index: i32, end_index: i32) -> Self {
+    pub fn new(
+        dimension: impl ToString,
+        sheet_id: impl ToString,
+        start_index: i32,
+        end_index: i32,
+    ) -> Self {
         Self {
             dimension: dimension.to_string(),
             sheet_id: sheet_id.to_string(),

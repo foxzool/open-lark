@@ -128,7 +128,10 @@ mod tests {
             .build();
 
         assert_eq!(request.name, "测试多维表格");
-        assert_eq!(request.folder_token, Some("fldcnmBA*****yGehy8".to_string()));
+        assert_eq!(
+            request.folder_token,
+            Some("fldcnmBA*****yGehy8".to_string())
+        );
         assert_eq!(request.time_zone, Some("Asia/Shanghai".to_string()));
     }
 

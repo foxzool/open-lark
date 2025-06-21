@@ -300,7 +300,7 @@ mod test {
     fn test_condition_format_rule_creation() {
         let format = FormatStyle::background_color("#FF0000").with_text_color("#FFFFFF");
         let rule = ConditionFormatRule::greater_than("A1:A10", 100.0, format);
-        
+
         assert_eq!(rule.range, "A1:A10");
         assert_eq!(rule.condition_type, "NUMBER_GREATER");
         assert_eq!(rule.condition_values.as_ref().unwrap()[0], "100");

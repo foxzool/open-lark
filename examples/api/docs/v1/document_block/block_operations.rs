@@ -1,9 +1,13 @@
 use dotenv::dotenv;
-use open_lark::prelude::*;
-use open_lark::service::docs::v1::document::CreateDocumentRequest;
-use open_lark::service::docs::v1::document_block::{
-    BatchDeleteBlockRequest, BatchUpdateBlockRequest, BlockData, CreateBlockRequest,
-    ListChildrenRequest, PatchBlockRequest, UpdateBlockItem,
+use open_lark::{
+    prelude::*,
+    service::docs::v1::{
+        document::CreateDocumentRequest,
+        document_block::{
+            BatchDeleteBlockRequest, BatchUpdateBlockRequest, BlockData, CreateBlockRequest,
+            ListChildrenRequest, PatchBlockRequest, UpdateBlockItem,
+        },
+    },
 };
 use serde_json::{json, Value};
 use std::env;
@@ -36,7 +40,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let doc_title = format!("块操作测试文档_{}", chrono::Utc::now().timestamp());
     let create_doc_request = CreateDocumentRequest::new(doc_title.clone());
 
-    let document_id = match client.docs.v1.document.create(create_doc_request, None).await {
+    let document_id = match client
+        .docs
+        .v1
+        .document
+        .create(create_doc_request, None)
+        .await
+    {
         Ok(response) => {
             if let Some(data) = response.data {
                 println!("✅ 文档创建成功: {}", data.document_id);
@@ -54,7 +64,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 2. 创建文本块
     println!("\n🧱 创建文本块...");
-    
+
     // 创建段落块的示例数据
     let text_block = BlockData {
         block_type: 2, // 段落类型
@@ -85,7 +95,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("✅ 文本块创建成功:");
                 println!("  - 创建块数量: {}", data.blocks.len());
                 println!("  - 文档版本: {}", data.document_revision_id);
-                
+
                 if let Some(block) = data.blocks.first() {
                     println!("  - 第一个块ID: {}", block.block_id);
                     println!("  - 块类型: {}", block.block_type);
@@ -106,7 +116,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 3. 添加更多块
     println!("\n➕ 添加更多块...");
-    
+
     let heading_block = BlockData {
         block_type: 1, // 标题类型
         block: json!({
@@ -137,7 +147,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }),
     };
 
-    let create_more_blocks = CreateBlockRequest::new(&document_id, vec![heading_block, bullet_block]);
+    let create_more_blocks =
+        CreateBlockRequest::new(&document_id, vec![heading_block, bullet_block]);
 
     let additional_block_ids = match client
         .docs
@@ -150,10 +161,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(data) = response.data {
                 println!("✅ 额外块创建成功:");
                 println!("  - 创建块数量: {}", data.blocks.len());
-                
+
                 let mut block_ids = Vec::new();
                 for (i, block) in data.blocks.iter().enumerate() {
-                    println!("  - 块 {}: {} (类型: {})", i + 1, block.block_id, block.block_type);
+                    println!(
+                        "  - 块 {}: {} (类型: {})",
+                        i + 1,
+                        block.block_id,
+                        block.block_type
+                    );
                     block_ids.push(block.block_id.clone());
                 }
                 block_ids
@@ -198,7 +214,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 5. 更新块内容
     if let Some(block_id) = &first_block_id {
         println!("\n✏️  更新块内容...");
-        
+
         let update_content = json!({
             "paragraph": {
                 "elements": [
@@ -244,7 +260,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 6. 批量更新多个块
     if additional_block_ids.len() >= 2 {
         println!("\n🔄 批量更新多个块...");
-        
+
         let updates = vec![
             UpdateBlockItem {
                 block_id: additional_block_ids[0].clone(),
@@ -301,7 +317,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 7. 获取子块（演示）
     println!("\n👶 获取子块...");
     let list_children_request = ListChildrenRequest::new().with_page_size(10);
-    
+
     match client
         .docs
         .v1
@@ -314,9 +330,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("✅ 子块信息:");
                 println!("  - 是否还有更多: {}", data.has_more);
                 println!("  - 子块数量: {}", data.items.len());
-                
+
                 for (i, block) in data.items.iter().enumerate() {
-                    println!("  - 子块 {}: {} (类型: {})", i + 1, block.block_id, block.block_type);
+                    println!(
+                        "  - 子块 {}: {} (类型: {})",
+                        i + 1,
+                        block.block_id,
+                        block.block_type
+                    );
                 }
             }
         }
@@ -328,7 +349,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 8. 删除部分块（清理）
     if additional_block_ids.len() >= 1 {
         println!("\n🗑️  删除部分块...");
-        
+
         let delete_request = BatchDeleteBlockRequest::new(vec![additional_block_ids[0].clone()]);
 
         match client
@@ -360,7 +381,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("  ✅ 批量更新多个块");
     println!("  ✅ 获取子块信息");
     println!("  ✅ 删除块");
-    
+
     println!("\n💡 提示:");
     println!("  - 文档ID: {}", document_id);
     println!("  - 可以在飞书中查看文档的变化");
