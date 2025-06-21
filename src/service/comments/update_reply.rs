@@ -11,7 +11,7 @@ use crate::core::{
     SDKResult,
 };
 
-use super::list::{ReplyContent, Reply};
+use super::list::ReplyContent;
 
 /// 更新回复的内容请求
 #[derive(Debug, Serialize, Default)]
@@ -209,7 +209,10 @@ impl UpdatedReply {
             .elements
             .iter()
             .filter_map(|element| {
-                element.text_run.as_ref().map(|text_run| text_run.text.clone())
+                element
+                    .text_run
+                    .as_ref()
+                    .map(|text_run| text_run.text.clone())
             })
             .collect::<Vec<_>>()
             .join("")
@@ -290,9 +293,7 @@ mod tests {
 
     #[test]
     fn test_update_reply_request_builder() {
-        let content = ContentBuilder::new()
-            .add_text("更新后的回复内容")
-            .build();
+        let content = ContentBuilder::new().add_text("更新后的回复内容").build();
 
         let request = UpdateReplyRequest::builder()
             .file_token("doccnxxxxxx")

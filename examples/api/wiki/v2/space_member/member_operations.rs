@@ -31,13 +31,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .page_size(20)
         .build();
 
-    match client
-        .wiki
-        .v2
-        .space_member
-        .list(list_request, None)
-        .await
-    {
+    match client.wiki.v2.space_member.list(list_request, None).await {
         Ok(list_response) => {
             println!("知识空间成员列表:");
             if list_response.data.items.is_empty() {

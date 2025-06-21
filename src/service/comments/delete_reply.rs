@@ -201,9 +201,8 @@ impl DeletedReply {
 
     /// 获取删除时间的格式化字符串
     pub fn delete_time_formatted(&self) -> Option<String> {
-        self.delete_time.map(|timestamp| {
-            format!("删除时间: {}", timestamp)
-        })
+        self.delete_time
+            .map(|timestamp| format!("删除时间: {}", timestamp))
     }
 
     /// 获取删除摘要信息

@@ -32,7 +32,8 @@ impl SpaceMemberService {
         &self,
         request: CreateSpaceMemberRequest,
         option: Option<crate::core::req_option::RequestOption>,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateSpaceMemberResponse>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateSpaceMemberResponse>>
+    {
         create_space_member(request, &self.config, option).await
     }
 
@@ -41,7 +42,8 @@ impl SpaceMemberService {
         &self,
         request: DeleteSpaceMemberRequest,
         option: Option<crate::core::req_option::RequestOption>,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<DeleteSpaceMemberResponse>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<DeleteSpaceMemberResponse>>
+    {
         delete_space_member(request, &self.config, option).await
     }
 }

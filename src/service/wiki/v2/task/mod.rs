@@ -25,7 +25,11 @@ impl TaskService {
         option: Option<RequestOption>,
     ) -> SDKResult<MoveDocsToWikiResponse> {
         let result = move_docs_to_wiki(request, &self.config, option).await?;
-        Ok(result.data)
+        result.data.ok_or_else(|| {
+            crate::core::error::LarkAPIError::IllegalParamError(
+                "Response data is missing".to_string()
+            )
+        })
     }
 
     /// 获取任务结果
@@ -35,6 +39,10 @@ impl TaskService {
         option: Option<RequestOption>,
     ) -> SDKResult<GetTaskResponse> {
         let result = get_task(request, &self.config, option).await?;
-        Ok(result.data)
+        result.data.ok_or_else(|| {
+            crate::core::error::LarkAPIError::IllegalParamError(
+                "Response data is missing".to_string()
+            )
+        })
     }
 }

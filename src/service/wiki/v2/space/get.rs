@@ -105,9 +105,7 @@ mod tests {
 
     #[test]
     fn test_get_space_request_builder() {
-        let request = GetSpaceRequest::builder()
-            .space_id("spcxxxxxx")
-            .build();
+        let request = GetSpaceRequest::builder().space_id("spcxxxxxx").build();
 
         assert_eq!(request.space_id, "spcxxxxxx");
     }

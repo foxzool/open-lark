@@ -42,10 +42,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("设置更新成功:");
             println!("  - 空间ID: {}", setting.space_id);
             if let Some(comment_enabled) = setting.comment_enabled {
-                println!("  - 评论功能: {}", if comment_enabled { "已开启" } else { "已关闭" });
+                println!(
+                    "  - 评论功能: {}",
+                    if comment_enabled {
+                        "已开启"
+                    } else {
+                        "已关闭"
+                    }
+                );
             }
             if let Some(copy_enabled) = setting.copy_enabled {
-                println!("  - 复制功能: {}", if copy_enabled { "已开启" } else { "已关闭" });
+                println!(
+                    "  - 复制功能: {}",
+                    if copy_enabled {
+                        "已开启"
+                    } else {
+                        "已关闭"
+                    }
+                );
             }
         }
         Err(e) => {
@@ -77,10 +91,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("部分设置更新成功:");
             println!("  - 空间ID: {}", setting.space_id);
             if let Some(comment_enabled) = setting.comment_enabled {
-                println!("  - 评论功能: {}", if comment_enabled { "已开启" } else { "已关闭" });
+                println!(
+                    "  - 评论功能: {}",
+                    if comment_enabled {
+                        "已开启"
+                    } else {
+                        "已关闭"
+                    }
+                );
             }
             if let Some(copy_enabled) = setting.copy_enabled {
-                println!("  - 复制功能: {}", if copy_enabled { "已开启" } else { "已关闭" });
+                println!(
+                    "  - 复制功能: {}",
+                    if copy_enabled {
+                        "已开启"
+                    } else {
+                        "已关闭"
+                    }
+                );
             }
         }
         Err(e) => {
@@ -109,10 +137,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("全部功能关闭成功:");
             println!("  - 空间ID: {}", setting.space_id);
             if let Some(comment_enabled) = setting.comment_enabled {
-                println!("  - 评论功能: {}", if comment_enabled { "已开启" } else { "已关闭" });
+                println!(
+                    "  - 评论功能: {}",
+                    if comment_enabled {
+                        "已开启"
+                    } else {
+                        "已关闭"
+                    }
+                );
             }
             if let Some(copy_enabled) = setting.copy_enabled {
-                println!("  - 复制功能: {}", if copy_enabled { "已开启" } else { "已关闭" });
+                println!(
+                    "  - 复制功能: {}",
+                    if copy_enabled {
+                        "已开启"
+                    } else {
+                        "已关闭"
+                    }
+                );
             }
         }
         Err(e) => {
@@ -141,10 +183,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("功能恢复成功:");
             println!("  - 空间ID: {}", setting.space_id);
             if let Some(comment_enabled) = setting.comment_enabled {
-                println!("  - 评论功能: {}", if comment_enabled { "已开启" } else { "已关闭" });
+                println!(
+                    "  - 评论功能: {}",
+                    if comment_enabled {
+                        "已开启"
+                    } else {
+                        "已关闭"
+                    }
+                );
             }
             if let Some(copy_enabled) = setting.copy_enabled {
-                println!("  - 复制功能: {}", if copy_enabled { "已开启" } else { "已关闭" });
+                println!(
+                    "  - 复制功能: {}",
+                    if copy_enabled {
+                        "已开启"
+                    } else {
+                        "已关闭"
+                    }
+                );
             }
         }
         Err(e) => {

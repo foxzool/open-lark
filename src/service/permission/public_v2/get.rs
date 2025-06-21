@@ -283,8 +283,8 @@ impl PublicSettingsV2 {
     /// 获取过期时间格式化字符串
     pub fn expire_time_formatted(&self) -> Option<String> {
         self.expire_time.map(|timestamp| {
-            let datetime = chrono::DateTime::from_timestamp(timestamp, 0)
-                .unwrap_or_else(chrono::Utc::now);
+            let datetime =
+                chrono::DateTime::from_timestamp(timestamp, 0).unwrap_or_else(chrono::Utc::now);
             datetime.format("%Y-%m-%d %H:%M:%S").to_string()
         })
     }
@@ -379,7 +379,8 @@ impl GetPermissionPublicV2Response {
         if self.permission_public.is_expired() {
             recommendations.push("文档分享已过期，需要重新设置".to_string());
         } else if let Some(remaining) = self.permission_public.remaining_valid_time() {
-            if remaining < 86400 { // 少于24小时
+            if remaining < 86400 {
+                // 少于24小时
                 recommendations.push("文档分享即将过期，请注意及时续期".to_string());
             }
         }

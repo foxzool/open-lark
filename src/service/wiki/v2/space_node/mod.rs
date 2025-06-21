@@ -1,10 +1,10 @@
 use crate::core::{config::Config, req_option::RequestOption, SDKResult};
 
 pub use copy::{copy_space_node, CopiedNode, CopySpaceNodeRequest, CopySpaceNodeResponse};
-pub use create::{create_space_node, CreatedNode, CreateSpaceNodeRequest, CreateSpaceNodeResponse};
+pub use create::{create_space_node, CreateSpaceNodeRequest, CreateSpaceNodeResponse, CreatedNode};
 pub use get::{get_space_node, GetSpaceNodeRequest, GetSpaceNodeResponse, SpaceNode};
 pub use list::{list_space_node, ListSpaceNodeRequest, ListSpaceNodeResponse, NodeItem};
-pub use r#move::{move_space_node, MovedNode, MoveSpaceNodeRequest, MoveSpaceNodeResponse};
+pub use r#move::{move_space_node, MoveSpaceNodeRequest, MoveSpaceNodeResponse, MovedNode};
 pub use update_title::{
     update_space_node_title, UpdateSpaceNodeTitleRequest, UpdateSpaceNodeTitleResponse, UpdatedNode,
 };
@@ -33,7 +33,11 @@ impl SpaceNodeService {
         option: Option<RequestOption>,
     ) -> SDKResult<CreateSpaceNodeResponse> {
         let result = create_space_node(request, &self.config, option).await?;
-        Ok(result.data)
+        result.data.ok_or_else(|| {
+            crate::core::error::LarkAPIError::IllegalParamError(
+                "Response data is missing".to_string()
+            )
+        })
     }
 
     /// 获取知识空间节点
@@ -43,7 +47,11 @@ impl SpaceNodeService {
         option: Option<RequestOption>,
     ) -> SDKResult<GetSpaceNodeResponse> {
         let result = get_space_node(request, &self.config, option).await?;
-        Ok(result.data)
+        result.data.ok_or_else(|| {
+            crate::core::error::LarkAPIError::IllegalParamError(
+                "Response data is missing".to_string()
+            )
+        })
     }
 
     /// 获取知识空间子节点列表
@@ -53,7 +61,11 @@ impl SpaceNodeService {
         option: Option<RequestOption>,
     ) -> SDKResult<ListSpaceNodeResponse> {
         let result = list_space_node(request, &self.config, option).await?;
-        Ok(result.data)
+        result.data.ok_or_else(|| {
+            crate::core::error::LarkAPIError::IllegalParamError(
+                "Response data is missing".to_string()
+            )
+        })
     }
 
     /// 移动知识空间节点
@@ -63,7 +75,11 @@ impl SpaceNodeService {
         option: Option<RequestOption>,
     ) -> SDKResult<MoveSpaceNodeResponse> {
         let result = move_space_node(request, &self.config, option).await?;
-        Ok(result.data)
+        result.data.ok_or_else(|| {
+            crate::core::error::LarkAPIError::IllegalParamError(
+                "Response data is missing".to_string()
+            )
+        })
     }
 
     /// 更新知识空间节点标题
@@ -73,7 +89,11 @@ impl SpaceNodeService {
         option: Option<RequestOption>,
     ) -> SDKResult<UpdateSpaceNodeTitleResponse> {
         let result = update_space_node_title(request, &self.config, option).await?;
-        Ok(result.data)
+        result.data.ok_or_else(|| {
+            crate::core::error::LarkAPIError::IllegalParamError(
+                "Response data is missing".to_string()
+            )
+        })
     }
 
     /// 复制知识空间节点
@@ -83,6 +103,10 @@ impl SpaceNodeService {
         option: Option<RequestOption>,
     ) -> SDKResult<CopySpaceNodeResponse> {
         let result = copy_space_node(request, &self.config, option).await?;
-        Ok(result.data)
+        result.data.ok_or_else(|| {
+            crate::core::error::LarkAPIError::IllegalParamError(
+                "Response data is missing".to_string()
+            )
+        })
     }
 }

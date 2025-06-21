@@ -11,7 +11,7 @@ use crate::core::{
     SDKResult,
 };
 
-use super::list::{Comment, Reply};
+use super::list::Comment;
 
 /// 批量获取评论请求
 #[derive(Debug, Serialize, Default)]
@@ -192,12 +192,18 @@ impl BatchQueryCommentsResponse {
 
     /// 获取已解决的评论
     pub fn solved_comments(&self) -> Vec<&Comment> {
-        self.items.iter().filter(|comment| comment.is_solved).collect()
+        self.items
+            .iter()
+            .filter(|comment| comment.is_solved)
+            .collect()
     }
 
     /// 获取未解决的评论
     pub fn unsolved_comments(&self) -> Vec<&Comment> {
-        self.items.iter().filter(|comment| !comment.is_solved).collect()
+        self.items
+            .iter()
+            .filter(|comment| !comment.is_solved)
+            .collect()
     }
 
     /// 获取全文评论

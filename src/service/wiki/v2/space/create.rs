@@ -116,6 +116,9 @@ mod tests {
             .build();
 
         assert_eq!(request.name, "我的知识空间");
-        assert_eq!(request.description, Some("这是一个测试知识空间".to_string()));
+        assert_eq!(
+            request.description,
+            Some("这是一个测试知识空间".to_string())
+        );
     }
 }

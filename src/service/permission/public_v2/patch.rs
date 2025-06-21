@@ -279,12 +279,12 @@ impl PatchPermissionPublicV2RequestBuilder {
     }
 
     /// 设置过期时间 (从现在开始的小时数)
-    pub fn expire_after_hours(mut self, hours: i64) -> Self {
+    pub fn expire_after_hours(self, hours: i64) -> Self {
         self.expire_after_seconds(hours * 3600)
     }
 
     /// 设置过期时间 (从现在开始的天数)
-    pub fn expire_after_days(mut self, days: i64) -> Self {
+    pub fn expire_after_days(self, days: i64) -> Self {
         self.expire_after_seconds(days * 86400)
     }
 
@@ -438,8 +438,8 @@ impl PermissionUpdateResultV2 {
             if timestamp == 0 {
                 "永久有效".to_string()
             } else {
-                let datetime = chrono::DateTime::from_timestamp(timestamp, 0)
-                    .unwrap_or_else(chrono::Utc::now);
+                let datetime =
+                    chrono::DateTime::from_timestamp(timestamp, 0).unwrap_or_else(chrono::Utc::now);
                 format!("过期时间: {}", datetime.format("%Y-%m-%d %H:%M:%S"))
             }
         })

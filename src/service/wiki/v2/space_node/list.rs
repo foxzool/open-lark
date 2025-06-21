@@ -140,7 +140,7 @@ pub async fn list_space_node(
     let mut api_req = request.api_request;
     api_req.http_method = Method::GET;
     api_req.api_path = format!("/open-apis/wiki/v2/spaces/{}/nodes", request.space_id);
-    
+
     // 构建查询参数
     let mut query_params = Vec::new();
     if let Some(page_size) = request.page_size {
@@ -152,11 +152,11 @@ pub async fn list_space_node(
     if let Some(parent_node_token) = request.parent_node_token {
         query_params.push(format!("parent_node_token={}", parent_node_token));
     }
-    
+
     if !query_params.is_empty() {
         api_req.api_path = format!("{}?{}", api_req.api_path, query_params.join("&"));
     }
-    
+
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
     let api_resp = Transport::request(api_req, config, option).await?;

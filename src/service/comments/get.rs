@@ -233,7 +233,11 @@ impl GetCommentResponse {
             "评论ID: {}, 用户: {}, 状态: {}, 回复数: {}, 创建时间: {}",
             self.comment_id(),
             self.user_id(),
-            if self.is_solved() { "已解决" } else { "未解决" },
+            if self.is_solved() {
+                "已解决"
+            } else {
+                "未解决"
+            },
             self.reply_count(),
             self.create_time()
         )

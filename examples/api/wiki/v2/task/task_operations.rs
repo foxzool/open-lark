@@ -36,7 +36,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .to_root() // 移动到知识空间根目录
         .build();
 
-    let task_id = match client.wiki.v2.task.move_docs_to_wiki(move_request, None).await {
+    let task_id = match client
+        .wiki
+        .v2
+        .task
+        .move_docs_to_wiki(move_request, None)
+        .await
+    {
         Ok(move_response) => {
             let task = &move_response.task;
             println!("移动任务创建成功:");
@@ -67,19 +73,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         match client.wiki.v2.task.get(get_request, None).await {
             Ok(task_response) => {
                 let task = &task_response.task;
-                
+
                 println!("任务状态更新:");
                 println!("  - 任务ID: {}", task.task_id);
                 println!("  - 状态: {:?}", task.status);
-                
+
                 if let Some(space_id) = &task.space_id {
                     println!("  - 目标空间: {}", space_id);
                 }
-                
+
                 if let (Some(processed), Some(total)) = (task.processed_count, task.total_count) {
-                    println!("  - 进度: {}/{} ({}%)", 
-                        processed, 
-                        total, 
+                    println!(
+                        "  - 进度: {}/{} ({}%)",
+                        processed,
+                        total,
                         task.progress_percentage().unwrap_or(0.0) as i32
                     );
                 }
@@ -88,7 +95,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 if task.status.is_finished() {
                     if task.status.is_success() {
                         println!("\n✅ 任务执行成功!");
-                        
+
                         if let Some(results) = &task.move_results {
                             println!("移动成功的文档:");
                             for (index, result) in results.iter().enumerate() {
@@ -103,20 +110,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                 }
                             }
                         }
-                        
+
                         println!("成功移动 {} 个文档", task.success_count());
-                        
                     } else if task.status.is_failed() {
                         println!("\n❌ 任务执行失败!");
                         if let Some(error) = &task.error_message {
                             println!("错误信息: {}", error);
                         }
                     }
-                    
+
                     if let Some(finish_time) = &task.finish_time {
                         println!("完成时间: {}", finish_time);
                     }
-                    
+
                     break;
                 } else {
                     println!("  - 任务进行中，等待下次检查...\n");

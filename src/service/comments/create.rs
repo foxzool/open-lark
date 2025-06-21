@@ -140,7 +140,7 @@ impl CreateCommentRequestBuilder {
     }
 
     /// 添加粗体文本
-    pub fn bold_text(mut self, text: impl ToString) -> Self {
+    pub fn bold_text(self, text: impl ToString) -> Self {
         let style = serde_json::json!({
             "bold": true
         });
@@ -148,7 +148,7 @@ impl CreateCommentRequestBuilder {
     }
 
     /// 添加斜体文本
-    pub fn italic_text(mut self, text: impl ToString) -> Self {
+    pub fn italic_text(self, text: impl ToString) -> Self {
         let style = serde_json::json!({
             "italic": true
         });
@@ -293,19 +293,19 @@ impl ContentBuilder {
     }
 
     /// 添加粗体文本
-    pub fn add_bold(mut self, text: impl ToString) -> Self {
+    pub fn add_bold(self, text: impl ToString) -> Self {
         let style = serde_json::json!({ "bold": true });
         self.add_styled_text(text, style)
     }
 
     /// 添加斜体文本
-    pub fn add_italic(mut self, text: impl ToString) -> Self {
+    pub fn add_italic(self, text: impl ToString) -> Self {
         let style = serde_json::json!({ "italic": true });
         self.add_styled_text(text, style)
     }
 
     /// 添加下划线文本
-    pub fn add_underline(mut self, text: impl ToString) -> Self {
+    pub fn add_underline(self, text: impl ToString) -> Self {
         let style = serde_json::json!({ "underline": true });
         self.add_styled_text(text, style)
     }

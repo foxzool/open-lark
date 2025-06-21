@@ -173,7 +173,10 @@ mod tests {
 
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.node_token, "wikcnxxxxxx");
-        assert_eq!(request.target_parent_token, Some("wikcnyyyyyyy".to_string()));
+        assert_eq!(
+            request.target_parent_token,
+            Some("wikcnyyyyyyy".to_string())
+        );
         assert_eq!(request.target_space_id, Some("spcyyyyyy".to_string()));
         assert_eq!(request.title, Some("复制的文档".to_string()));
     }

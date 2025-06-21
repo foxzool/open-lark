@@ -1,8 +1,6 @@
 use open_lark::{
     core::config::{AppType, Config},
-    service::wiki::v2::space::{
-        CreateSpaceRequest, GetSpaceRequest, ListSpaceRequest,
-    },
+    service::wiki::v2::space::{CreateSpaceRequest, GetSpaceRequest, ListSpaceRequest},
     LarkClient,
 };
 
@@ -23,17 +21,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 1. 获取知识空间列表
     println!("1. 获取知识空间列表...");
 
-    let list_request = ListSpaceRequest::builder()
-        .page_size(20)
-        .build();
+    let list_request = ListSpaceRequest::builder().page_size(20).build();
 
-    match client
-        .wiki
-        .v2
-        .space
-        .list(list_request, None)
-        .await
-    {
+    match client.wiki.v2.space.list(list_request, None).await {
         Ok(list_response) => {
             println!("知识空间列表:");
             if list_response.data.items.is_empty() {
@@ -62,17 +52,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("\n2. 获取知识空间详细信息...");
                 let space_id = &first_space.space_id;
 
-                let get_request = GetSpaceRequest::builder()
-                    .space_id(space_id)
-                    .build();
+                let get_request = GetSpaceRequest::builder().space_id(space_id).build();
 
-                match client
-                    .wiki
-                    .v2
-                    .space
-                    .get(get_request, None)
-                    .await
-                {
+                match client.wiki.v2.space.get(get_request, None).await {
                     Ok(get_response) => {
                         let space_info = &get_response.data.space;
                         println!("知识空间详细信息:");
@@ -109,19 +91,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 3. 创建新的知识空间（仅作为演示，实际使用时请谨慎）
     println!("\n3. 创建知识空间演示...");
-    
+
     let create_request = CreateSpaceRequest::builder()
         .name("API测试知识空间")
         .description("这是通过API创建的测试知识空间")
         .build();
 
-    match client
-        .wiki
-        .v2
-        .space
-        .create(create_request, None)
-        .await
-    {
+    match client.wiki.v2.space.create(create_request, None).await {
         Ok(create_response) => {
             let created_space = &create_response.data.space;
             println!("知识空间创建成功:");
@@ -139,18 +115,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             // 验证创建结果 - 再次获取空间信息
             println!("\n4. 验证创建结果...");
-            
+
             let verify_request = GetSpaceRequest::builder()
                 .space_id(&created_space.space_id)
                 .build();
 
-            match client
-                .wiki
-                .v2
-                .space
-                .get(verify_request, None)
-                .await
-            {
+            match client.wiki.v2.space.get(verify_request, None).await {
                 Ok(verify_response) => {
                     println!("验证成功，空间已正确创建:");
                     println!("  - 名称: {}", verify_response.data.space.name);
