@@ -1,16 +1,16 @@
 use crate::core::config::Config;
 
 pub mod create;
-pub mod patch;
-pub mod list;
-pub mod get;
 pub mod delete;
+pub mod get;
+pub mod list;
+pub mod patch;
 
 pub use create::*;
-pub use patch::*;
-pub use list::*;
-pub use get::*;
 pub use delete::*;
+pub use get::*;
+pub use list::*;
+pub use patch::*;
 
 /// 视图服务
 pub struct AppTableViewService {

@@ -186,7 +186,8 @@ mod test {
 
     #[test]
     fn test_data_validation_rule_creation() {
-        let validation = DataValidationRule::dropdown("A1:A10", vec!["选项1".to_string(), "选项2".to_string()]);
+        let validation =
+            DataValidationRule::dropdown("A1:A10", vec!["选项1".to_string(), "选项2".to_string()]);
         assert_eq!(validation.condition_type, "dropdown");
         assert_eq!(validation.range, "A1:A10");
         assert!(validation.strict);

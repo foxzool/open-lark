@@ -22,10 +22,8 @@ impl AppTableViewService {
         let mut api_req = request.api_request;
         api_req.http_method = Method::DELETE;
         api_req.api_path = format!(
-            "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}", 
-            request.app_token, 
-            request.table_id,
-            request.view_id
+            "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}",
+            request.app_token, request.table_id, request.view_id
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
@@ -52,11 +50,7 @@ impl DeleteViewRequest {
     }
 
     /// 创建删除视图请求
-    pub fn new(
-        app_token: impl ToString, 
-        table_id: impl ToString, 
-        view_id: impl ToString
-    ) -> Self {
+    pub fn new(app_token: impl ToString, table_id: impl ToString, view_id: impl ToString) -> Self {
         Self {
             api_request: ApiRequest::default(),
             app_token: app_token.to_string(),
@@ -126,12 +120,9 @@ mod tests {
 
     #[test]
     fn test_delete_view_request_new() {
-        let request = DeleteViewRequest::new(
-            "bascnmBA*****yGehy8",
-            "tblsRc9GRRXKqhvW", 
-            "vewTpR1urY"
-        );
-        
+        let request =
+            DeleteViewRequest::new("bascnmBA*****yGehy8", "tblsRc9GRRXKqhvW", "vewTpR1urY");
+
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.table_id, "tblsRc9GRRXKqhvW");
         assert_eq!(request.view_id, "vewTpR1urY");

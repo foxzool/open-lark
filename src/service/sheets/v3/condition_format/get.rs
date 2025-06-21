@@ -32,7 +32,9 @@ impl SpreadsheetSheetService {
 
         // 添加查询参数
         if let Some(range) = &request.range {
-            api_req.query_params.insert("range".to_string(), range.clone());
+            api_req
+                .query_params
+                .insert("range".to_string(), range.clone());
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -144,7 +146,10 @@ mod test {
         let response: GetConditionFormatsResponseData = serde_json::from_value(json).unwrap();
         assert_eq!(response.items.len(), 2);
         assert_eq!(response.items[0].cf_id, "cf_001");
-        assert_eq!(response.items[1].condition_format.condition_type, "TEXT_CONTAINS");
+        assert_eq!(
+            response.items[1].condition_format.condition_type,
+            "TEXT_CONTAINS"
+        );
         assert!(!response.has_more);
     }
 }

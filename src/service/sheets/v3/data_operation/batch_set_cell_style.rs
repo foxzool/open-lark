@@ -122,8 +122,10 @@ impl ApiResponseTrait for BatchSetCellStyleResponseData {
 mod test {
     use serde_json::json;
 
-    use super::{BatchSetCellStyleResponseData, RangeStyleData};
-    use super::super::set_cell_style::{CellStyle, FontStyle};
+    use super::{
+        super::set_cell_style::{CellStyle, FontStyle},
+        BatchSetCellStyleResponseData, RangeStyleData,
+    };
 
     #[test]
     fn test_batch_set_cell_style_response() {

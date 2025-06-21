@@ -1,6 +1,8 @@
 use dotenv::dotenv;
-use open_lark::prelude::*;
-use open_lark::service::docs::v1::document::{CreateDocumentRequest, ListDocumentBlocksRequest};
+use open_lark::{
+    prelude::*,
+    service::docs::v1::document::{CreateDocumentRequest, ListDocumentBlocksRequest},
+};
 use std::env;
 use tracing::info;
 
@@ -73,7 +75,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 3. 获取文档纯文本内容
     println!("\n📄 获取文档纯文本内容...");
-    match client.docs.v1.document.get_raw_content(&document_id, None).await {
+    match client
+        .docs
+        .v1
+        .document
+        .get_raw_content(&document_id, None)
+        .await
+    {
         Ok(response) => {
             if let Some(data) = response.data {
                 println!("✅ 文档纯文本内容:");
@@ -92,14 +100,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 4. 获取文档所有块
     println!("\n🧱 获取文档所有块...");
     let list_request = ListDocumentBlocksRequest::new(&document_id).with_page_size(50);
-    
-    match client.docs.v1.document.list_blocks(list_request, None).await {
+
+    match client
+        .docs
+        .v1
+        .document
+        .list_blocks(list_request, None)
+        .await
+    {
         Ok(response) => {
             if let Some(data) = response.data {
                 println!("✅ 文档块信息:");
                 println!("  - 是否还有更多: {}", data.has_more);
                 println!("  - 块数量: {}", data.items.len());
-                
+
                 for (i, block) in data.items.iter().enumerate() {
                     println!("  块 {}:", i + 1);
                     println!("    - 块ID: {}", block.block_id);
@@ -117,7 +131,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 5. 演示文档转换功能（如果需要）
     println!("\n🔄 演示文档转换功能...");
-    match client.docs.v1.document.convert_to_docx(&document_id, None).await {
+    match client
+        .docs
+        .v1
+        .document
+        .convert_to_docx(&document_id, None)
+        .await
+    {
         Ok(response) => {
             if let Some(data) = response.data {
                 println!("✅ 文档转换成功:");
@@ -138,7 +158,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("  ✅ 获取文档纯文本内容");
     println!("  ✅ 获取文档所有块");
     println!("  ✅ 演示文档转换功能");
-    
+
     println!("\n💡 提示:");
     println!("  - 创建的文档ID: {}", document_id);
     println!("  - 可以在飞书中查看和编辑这个文档");

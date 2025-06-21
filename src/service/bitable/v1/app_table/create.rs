@@ -154,7 +154,7 @@ impl TableField {
             .into_iter()
             .map(|opt| serde_json::json!({"name": opt}))
             .collect();
-        
+
         Self {
             field_name: name.to_string(),
             field_type: 3, // 单选
@@ -168,7 +168,7 @@ impl TableField {
             .into_iter()
             .map(|opt| serde_json::json!({"name": opt}))
             .collect();
-        
+
         Self {
             field_name: name.to_string(),
             field_type: 4, // 多选
@@ -240,7 +240,8 @@ mod tests {
         let number_field = TableField::number("数量");
         assert_eq!(number_field.field_type, 2);
 
-        let select_field = TableField::single_select("状态", vec!["A".to_string(), "B".to_string()]);
+        let select_field =
+            TableField::single_select("状态", vec!["A".to_string(), "B".to_string()]);
         assert_eq!(select_field.field_type, 3);
         assert!(select_field.property.is_some());
     }

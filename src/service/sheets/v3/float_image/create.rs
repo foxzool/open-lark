@@ -123,11 +123,7 @@ pub struct ImageSize {
 
 impl FloatImageData {
     /// 创建浮动图片
-    pub fn new(
-        image_token: impl ToString, 
-        position: ImagePosition, 
-        size: ImageSize
-    ) -> Self {
+    pub fn new(image_token: impl ToString, position: ImagePosition, size: ImageSize) -> Self {
         Self {
             image_token: image_token.to_string(),
             position,
@@ -171,7 +167,10 @@ impl ImageSize {
 
     /// 创建正方形图片大小
     pub fn square(size: f64) -> Self {
-        Self { width: size, height: size }
+        Self {
+            width: size,
+            height: size,
+        }
     }
 }
 
@@ -200,9 +199,9 @@ mod test {
     fn test_float_image_creation() {
         let position = ImagePosition::new(1, 1).with_offset(10.0, 20.0);
         let size = ImageSize::new(200.0, 150.0);
-        let float_image = FloatImageData::new("img_token_123", position, size)
-            .with_name("示例图片");
-        
+        let float_image =
+            FloatImageData::new("img_token_123", position, size).with_name("示例图片");
+
         assert_eq!(float_image.image_token, "img_token_123");
         assert_eq!(float_image.position.start_col_index, 1);
         assert_eq!(float_image.position.offset_x, 10.0);

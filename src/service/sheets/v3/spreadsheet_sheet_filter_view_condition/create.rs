@@ -99,7 +99,11 @@ pub struct FilterCondition {
 }
 
 impl FilterCondition {
-    pub fn new(col_name: impl ToString, filter_type: impl ToString, compare_values: Vec<String>) -> Self {
+    pub fn new(
+        col_name: impl ToString,
+        filter_type: impl ToString,
+        compare_values: Vec<String>,
+    ) -> Self {
         Self {
             col_name: col_name.to_string(),
             filter_type: filter_type.to_string(),

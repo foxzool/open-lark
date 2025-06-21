@@ -21,7 +21,10 @@ impl AppTableService {
     ) -> SDKResult<BaseResponse<BatchCreateTablesResponse>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::POST;
-        api_req.api_path = format!("/open-apis/bitable/v1/apps/{}/tables/batch_create", request.app_token);
+        api_req.api_path = format!(
+            "/open-apis/bitable/v1/apps/{}/tables/batch_create",
+            request.app_token
+        );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
         api_req.body = serde_json::to_vec(&BatchCreateTablesRequestBody {
             tables: request.tables,
@@ -111,17 +114,13 @@ mod tests {
     #[test]
     fn test_batch_create_tables_request() {
         let table1 = TableData::new("用户表")
-            .with_fields(vec![
-                TableField::text("姓名"),
-                TableField::text("邮箱"),
-            ]);
+            .with_fields(vec![TableField::text("姓名"), TableField::text("邮箱")]);
 
-        let table2 = TableData::new("订单表")
-            .with_fields(vec![
-                TableField::text("订单号"),
-                TableField::number("金额"),
-                TableField::single_select("状态", vec!["待支付".to_string(), "已支付".to_string()]),
-            ]);
+        let table2 = TableData::new("订单表").with_fields(vec![
+            TableField::text("订单号"),
+            TableField::number("金额"),
+            TableField::single_select("状态", vec!["待支付".to_string(), "已支付".to_string()]),
+        ]);
 
         let request = BatchCreateTablesRequest::builder()
             .app_token("bascnmBA*****yGehy8")
