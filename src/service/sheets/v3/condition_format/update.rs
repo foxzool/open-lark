@@ -125,7 +125,6 @@ impl ApiResponseTrait for UpdateConditionFormatsResponseData {
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::service::sheets::v3::condition_format::create::FormatStyle;
     use serde_json::json;
 
     #[test]

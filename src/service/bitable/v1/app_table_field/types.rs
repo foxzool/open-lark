@@ -3,6 +3,7 @@ use serde_repr::{Deserialize_repr, Serialize_repr};
 
 /// 字段的具体内容
 #[derive(Debug, Deserialize)]
+#[allow(dead_code)]
 pub enum FieldValue {
     MultiLine(String),
     Barcode(String),

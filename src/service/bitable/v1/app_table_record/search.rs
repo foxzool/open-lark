@@ -319,7 +319,7 @@ mod tests {
     fn test_search_record_request_builder() {
         let filter = FilterInfo::and(vec![
             FilterCondition::equals("状态", "进行中"),
-            FilterCondition::not_empty("标题"),
+            FilterCondition::is_not_empty("标题"),
         ]);
 
         let sort = vec![SortCondition {

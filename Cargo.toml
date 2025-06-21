@@ -514,3 +514,7 @@ path = "examples/api/bitable/v1/app_role/role_operations.rs"
 [[example]]
 name = "bitable_member_operations"
 path = "examples/api/bitable/v1/app_role_member/member_operations.rs"
+
+[[example]]
+name = "bitable_workflow_operations"
+path = "examples/api/bitable/v1/app_workflow/workflow_operations.rs"
