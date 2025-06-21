@@ -477,3 +477,8 @@ path = "examples/api/docs/v1/document/document_operations.rs"
 [[example]]
 name = "document_block_operations"
 path = "examples/api/docs/v1/document_block/block_operations.rs"
+
+# 多维表格模块
+[[example]]
+name = "bitable_app_operations"
+path = "examples/api/bitable/v1/app/app_operations.rs"
