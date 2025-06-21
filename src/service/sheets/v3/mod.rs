@@ -6,6 +6,7 @@ pub mod spreadsheet;
 pub mod spreadsheet_sheet;
 pub mod spreadsheet_sheet_filter;
 pub mod spreadsheet_sheet_filter_view;
+pub mod spreadsheet_sheet_filter_view_condition;
 
 pub struct V3 {
     pub spreadsheet: SpreadsheetService,
@@ -64,7 +65,6 @@ impl SpreadsheetSheetFilterService {
 
 /// 工作表筛选视图
 pub struct SpreadsheetSheetFilterViewService {
-    #[allow(dead_code)]
     config: Config,
 }
 
