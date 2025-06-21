@@ -47,7 +47,7 @@
 - [x] [查找单元格](https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/find) ✅ 已实现
 - [x] [替换单元格](https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/replace) ✅ 已实现
 - [x] [设置单元格样式](https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/set-cell-style) ✅ 已实现
-- [ ] [批量设置单元格样式](https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/batch-set-cell-style) 🚧 占位符已创建
+- [x] [批量设置单元格样式](https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/batch-set-cell-style) ✅ 已实现 + 示例
 
 ## 数据
 

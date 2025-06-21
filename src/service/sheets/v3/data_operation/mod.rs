@@ -1,4 +1,5 @@
 pub use append_data::*;
+pub use batch_set_cell_style::*;
 pub use find_cells::*;
 pub use merge_cells::*;
 pub use prepend_data::*;
@@ -10,7 +11,6 @@ pub use share::*;
 pub use split_cells::*;
 
 mod append_data;
-#[allow(dead_code)]
 mod batch_set_cell_style;
 mod find_cells;
 mod merge_cells;
