@@ -1,3 +1,4 @@
+pub mod assistant;
 pub mod attendance;
 pub mod authentication;
 pub mod bitable;
