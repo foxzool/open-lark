@@ -16,10 +16,11 @@ open-lark 是飞书开放平台的非官方 Rust SDK，支持自定义机器人�
 
 生成代码后, 先格式化, 再代码检查
 
+每个接口都要有example
+
 examples 需要用 dotenv 读取 本地.env配置
 
 在 examples/api目录下, 建立每个接口的单独example
-
 
 ```bash
 # Build the project
@@ -59,6 +60,7 @@ just help
 ```
 
 ### Release Process
+
 ```bash
 # Release a new version (e.g., 0.4.0)
 just release 0.4.0
@@ -74,6 +76,7 @@ just release 0.4.0
 ```
 
 ### Running Examples
+
 ```bash
 # Run specific example (requires .env file with API credentials)
 cargo run --example create_message
@@ -86,13 +89,16 @@ cargo build --examples
 ## Architecture Overview
 
 ### Core Components
+
 - **LarkClient**: Main client class that aggregates all service modules
 - **Transport Layer**: Unified HTTP request/response handling in `core/http.rs`
 - **Token Management**: Automatic access token caching and refresh in `core/token_manager.rs`
 - **Config**: Centralized configuration management in `core/config.rs`
 
 ### Service Organization
+
 Services are organized by functional domain under `src/service/`:
+
 - `authentication/`: User authentication (v1)
 - `bitable/`: Multi-dimensional tables (v1)
 - `drive/`: Cloud drive files (v1, v2)
@@ -103,6 +109,7 @@ Services are organized by functional domain under `src/service/`:
 Each service follows version-based API organization (v1, v2, v3) with standardized request/response patterns.
 
 ### Event System
+
 - **EventDispatcherHandler**: Central event dispatcher in `src/event/dispatcher/mod.rs`
 - **Builder Pattern**: Used for registering event handlers with `.register_p2_im_message_receive_v1()` etc.
 - **Version Support**: Handles both v1 (p1) and v2 (p2) event formats automatically
@@ -110,11 +117,13 @@ Each service follows version-based API organization (v1, v2, v3) with standardiz
 - **WebSocket Support**: Real-time event handling via WebSocket connection (optional feature)
 
 ### Authentication Flow
+
 - Supports multiple token types: App Access Token, Tenant Access Token, User Access Token
 - Automatic token caching and refresh mechanism
 - Configurable authentication options via `Config` struct
 
 ### Key Design Patterns
+
 - **Transport Pattern**: All API requests go through `Transport<T>` for consistent handling
 - **Builder Pattern**: Used for client configuration and event handler registration
 - **Type Safety**: Extensive use of Rust's type system and traits
@@ -124,6 +133,7 @@ Each service follows version-based API organization (v1, v2, v3) with standardiz
 ## Configuration
 
 Create a `.env` file based on `.env-example` with your API credentials:
+
 ```
 APP_ID=your_app_id
 APP_SECRET=your_app_secret
@@ -138,15 +148,18 @@ USER_ACCESS_TOKEN=your_user_access_token  # Optional: for user-specific operatio
 ## Working with Examples
 
 Examples are extensively documented and located in `examples/` directory. They are organized by:
+
 - `api/`: API usage examples by service and version
 - `card/`: Lark card component examples
 - Root level: High-level integration examples
 
-When adding new examples, follow the existing naming convention and add corresponding `[[example]]` entries to `Cargo.toml`.
+When adding new examples, follow the existing naming convention and add corresponding `[[example]]` entries to
+`Cargo.toml`.
 
 ## Client Usage Patterns
 
 ### Basic Client Setup
+
 ``` norun
 use open_lark::prelude::*;
 
@@ -157,7 +170,9 @@ let client = LarkClient::builder(app_id, app_secret)
 ```
 
 ### Error Handling
+
 All API calls return `SDKResult<T>` which wraps `Result<T, LarkAPIError>`. Always handle errors appropriately:
+
 ``` norun
 match client.im.create_message(&req).await {
     Ok(response) => println!("Success: {:?}", response),
@@ -166,6 +181,7 @@ match client.im.create_message(&req).await {
 ```
 
 ### Event Handling
+
 ``` norun
 let handler = EventDispatcherHandler::builder()
     .register_p2_im_message_receive_v1(|event| {
@@ -176,4 +192,5 @@ let handler = EventDispatcherHandler::builder()
 
 ## Protobuf Integration
 
-The project includes protobuf definitions in `crates/protobuf/` for WebSocket communication. Build scripts automatically generate Rust code from `.proto` files.
+The project includes protobuf definitions in `crates/protobuf/` for WebSocket communication. Build scripts automatically
+generate Rust code from `.proto` files.
