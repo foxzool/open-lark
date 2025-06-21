@@ -22,3 +22,12 @@
 ## 视图 
 
 [新增视图](https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/create)
+[更新视图](https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/patch)
+[列出视图](https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/list)
+[获取视图](https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/get)
+[删除视图](https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/delete)
+
+## 记录
+
+[多维表格记录数据结构](https://open.feishu.cn/document/docs/bitable-v1/app-table-record/bitable-record-data-structure-overview)
+
