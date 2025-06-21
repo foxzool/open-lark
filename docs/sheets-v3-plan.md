@@ -4,9 +4,9 @@
 
 ## 📊 实现进度总览
 
-- ✅ **已完整实现**: 50 个接口 + 示例代码
+- ✅ **已完整实现**: 55 个接口 + 示例代码
 - 🚧 **占位符已创建**: 0 个接口模块
-- 🔜 **待实现**: 9 个接口
+- 🔜 **待实现**: 4 个接口（全部为数据类型支持文档）
 - 📚 **文档参考**: 5 个指南文档
 
 ### 🎯 核心功能状态
@@ -18,7 +18,8 @@
 - **保护功能**: ✅ 完成 (4/4)
 - **数据校验**: ✅ 完成 (4/4)
 - **条件格式**: ✅ 完成 (4/4)
-- **高级功能**: 🔜 待开发 (浮动图片)
+- **浮动图片**: ✅ 完成 (5/5)
+- **全部功能**: ✅ 实现完成 (55/59)
 
 ---
 
@@ -116,9 +117,9 @@
 ## 浮动图片
 
 - [ ] [浮动图片概述](https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-float_image/float-image-user-guide) 📚 文档参考
-- [ ] [创建浮动图片](https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-float_image/create) 🔜 待实现
-- [ ] [更新浮动图片](https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-float_image/patch) 🔜 待实现
-- [ ] [获取浮动图片](https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-float_image/get) 🔜 待实现
-- [ ] [查询浮动图片](https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-float_image/query) 🔜 待实现
-- [ ] [删除浮动图片](https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-float_image/delete) 🔜 待实现
+- [x] [创建浮动图片](https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-float_image/create) ✅ 已实现 + 示例
+- [x] [更新浮动图片](https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-float_image/patch) ✅ 已实现
+- [x] [获取浮动图片](https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-float_image/get) ✅ 已实现
+- [x] [查询浮动图片](https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-float_image/query) ✅ 已实现
+- [x] [删除浮动图片](https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-float_image/delete) ✅ 已实现
 
