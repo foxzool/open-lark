@@ -282,6 +282,11 @@ path = "examples/api/sheets/v3/data_validation/data_validation_crud.rs"
 name = "condition_format_crud"
 path = "examples/api/sheets/v3/condition_format/condition_format_crud.rs"
 
+# 浮动图片管理
+[[example]]
+name = "float_image_crud"
+path = "examples/api/sheets/v3/float_image/float_image_crud.rs"
+
 [[example]]
 name = "get_bitable"
 path = "examples/api/bitable/v1/app/get.rs"
