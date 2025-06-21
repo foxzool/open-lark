@@ -534,3 +534,11 @@ path = "examples/api/wiki/v2/space_setting/setting_operations.rs"
 [[example]]
 name = "wiki_node_operations"
 path = "examples/api/wiki/v2/space_node/node_operations.rs"
+
+[[example]]
+name = "wiki_task_operations"
+path = "examples/api/wiki/v2/task/task_operations.rs"
+
+[[example]]
+name = "wiki_search_operations"
+path = "examples/api/wiki/v2/search/search_operations.rs"
