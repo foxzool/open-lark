@@ -1,4 +1,4 @@
-use crate::service::bitable::v1::Person;
+use crate::service::bitable::v1::app_table_field::Person;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;

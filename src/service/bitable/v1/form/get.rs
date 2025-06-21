@@ -1,16 +1,14 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
-        constants::AccessTokenType,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
-    },
+use crate::core::{
+    api_req::ApiRequest,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
 
 /// 获取表单元数据请求

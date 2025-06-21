@@ -64,15 +64,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Ok(list_response) => {
             println!("表单问题列表:");
             for question in &list_response.data.items {
-                println!("  - {}: {} (必填: {})", 
-                    question.title, 
-                    question.question_id, 
-                    question.required
+                println!(
+                    "  - {}: {} (必填: {})",
+                    question.title, question.question_id, question.required
                 );
                 if let Some(desc) = &question.description {
                     println!("    描述: {}", desc);
                 }
-                println!("    类型: {}, 字段ID: {}", question.question_type, question.field_id);
+                println!(
+                    "    类型: {}, 字段ID: {}",
+                    question.question_type, question.field_id
+                );
             }
             println!("总计 {} 个问题", list_response.data.total);
 

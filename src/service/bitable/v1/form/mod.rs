@@ -43,7 +43,8 @@ impl FormService {
         &self,
         request: PatchFormQuestionRequest,
         option: Option<crate::core::req_option::RequestOption>,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<PatchFormQuestionResponse>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<PatchFormQuestionResponse>>
+    {
         patch::patch_form_question(request, &self.config, option).await
     }
 
