@@ -5,12 +5,13 @@
 //! - 公开权限设置（v1/v2版本）
 
 pub mod member;
+pub mod public_v1;
 
 use std::sync::Arc;
 
 use crate::core::{config::Config, req_option::RequestOption, SDKResult};
 
-use self::member::*;
+use self::{member::*, public_v1::*};
 
 /// 权限服务
 pub struct PermissionService {
@@ -83,5 +84,50 @@ impl PermissionService {
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<DeletePermissionMemberResponse>> {
         delete_permission_member(request.clone(), &*self.config, option).await
+    }
+
+    /// 获取云文档权限设置
+    pub async fn get_permission_public(
+        &self,
+        request: &GetPermissionPublicRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<crate::core::api_resp::BaseResponse<GetPermissionPublicResponse>> {
+        get_permission_public(request.clone(), &*self.config, option).await
+    }
+
+    /// 更新云文档权限设置
+    pub async fn patch_permission_public(
+        &self,
+        request: &PatchPermissionPublicRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<crate::core::api_resp::BaseResponse<PatchPermissionPublicResponse>> {
+        patch_permission_public(request.clone(), &*self.config, option).await
+    }
+
+    /// 开启密码保护
+    pub async fn create_password(
+        &self,
+        request: &CreatePasswordRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<crate::core::api_resp::BaseResponse<CreatePasswordResponse>> {
+        create_password(request.clone(), &*self.config, option).await
+    }
+
+    /// 刷新密码
+    pub async fn update_password(
+        &self,
+        request: &UpdatePasswordRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<crate::core::api_resp::BaseResponse<UpdatePasswordResponse>> {
+        update_password(request.clone(), &*self.config, option).await
+    }
+
+    /// 关闭密码保护
+    pub async fn delete_password(
+        &self,
+        request: &DeletePasswordRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<crate::core::api_resp::BaseResponse<DeletePasswordResponse>> {
+        delete_password(request.clone(), &*self.config, option).await
     }
 }
