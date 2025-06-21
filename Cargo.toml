@@ -277,6 +277,11 @@ path = "examples/api/sheets/v3/protect_range/protect_range_crud.rs"
 name = "data_validation_crud"
 path = "examples/api/sheets/v3/data_validation/data_validation_crud.rs"
 
+# 条件格式管理
+[[example]]
+name = "condition_format_crud"
+path = "examples/api/sheets/v3/condition_format/condition_format_crud.rs"
+
 [[example]]
 name = "get_bitable"
 path = "examples/api/bitable/v1/app/get.rs"
