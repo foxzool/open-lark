@@ -9,6 +9,8 @@ pub use replace_cells::*;
 pub use set_cell_style::*;
 pub use share::*;
 pub use split_cells::*;
+pub use write_data_to_multiple_ranges::*;
+pub use write_images::*;
 
 mod append_data;
 mod batch_set_cell_style;
@@ -21,7 +23,5 @@ mod replace_cells;
 mod set_cell_style;
 mod share;
 mod split_cells;
-#[allow(dead_code)]
 mod write_data_to_multiple_ranges;
-#[allow(dead_code)]
 mod write_images;

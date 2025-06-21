@@ -53,10 +53,10 @@
 
 - [x] [插入数据](https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/prepend-data) ✅ 已实现 + 示例
 - [x] [追加数据](https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/append-data) ✅ 已实现 + 示例
-- [ ] [写入图片](https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/write-images) 🚧 占位符已创建
+- [x] [写入图片](https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/write-images) ✅ 已实现 + 示例
 - [x] [读取单个范围](https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-a-single-range) ✅ 已实现 + 示例
 - [x] [读取多个范围](https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-multiple-ranges) ✅ 已实现 + 示例
-- [ ] [向多个范围写入数据](https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/write-data-to-multiple-ranges) 🚧 占位符已创建
+- [x] [向多个范围写入数据](https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/write-data-to-multiple-ranges) ✅ 已实现 + 示例
 
 ### 数据类型支持
 - [ ] [支持写入数据类型](https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-types-supported-by-sheets) 📚 文档参考
