@@ -4,9 +4,9 @@
 
 ## 📊 实现进度总览
 
-- ✅ **已完整实现**: 46 个接口 + 示例代码
+- ✅ **已完整实现**: 50 个接口 + 示例代码
 - 🚧 **占位符已创建**: 0 个接口模块
-- 🔜 **待实现**: 13 个接口
+- 🔜 **待实现**: 9 个接口
 - 📚 **文档参考**: 5 个指南文档
 
 ### 🎯 核心功能状态
@@ -17,7 +17,8 @@
 - **行列操作**: ✅ 完成 (5/5) + 示例
 - **保护功能**: ✅ 完成 (4/4)
 - **数据校验**: ✅ 完成 (4/4)
-- **高级功能**: 🔜 待开发 (条件格式、浮动图片)
+- **条件格式**: ✅ 完成 (4/4)
+- **高级功能**: 🔜 待开发 (浮动图片)
 
 ---
 
@@ -107,10 +108,10 @@
 ## 条件格式
 
 - [ ] [条件格式概述](https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-guide) 📚 文档参考
-- [ ] [批量创建条件格式](https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-set) 🔜 待实现
-- [ ] [批量更新条件格式](https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-update) 🔜 待实现
-- [ ] [批量获取条件格式](https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-get) 🔜 待实现
-- [ ] [批量删除条件格式](https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-delete) 🔜 待实现
+- [x] [批量创建条件格式](https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-set) ✅ 已实现 + 示例
+- [x] [批量更新条件格式](https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-update) ✅ 已实现
+- [x] [批量获取条件格式](https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-get) ✅ 已实现
+- [x] [批量删除条件格式](https://open.feishu.cn/document/server-docs/docs/sheets-v3/conditionformat/condition-format-delete) ✅ 已实现
 
 ## 浮动图片
 
