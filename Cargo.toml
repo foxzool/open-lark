@@ -482,3 +482,7 @@ path = "examples/api/docs/v1/document_block/block_operations.rs"
 [[example]]
 name = "bitable_app_operations"
 path = "examples/api/bitable/v1/app/app_operations.rs"
+
+[[example]]
+name = "bitable_table_operations"
+path = "examples/api/bitable/v1/app_table/table_operations.rs"
