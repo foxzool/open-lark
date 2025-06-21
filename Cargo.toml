@@ -468,3 +468,12 @@ path = "examples/api/attendance/v1/leave_employ_expire_record/get.rs"
 [[example]]
 name = "attendance_leave_accrual_record_patch"
 path = "examples/api/attendance/v1/leave_accrual_record/patch.rs"
+
+# 文档模块
+[[example]]
+name = "document_operations"
+path = "examples/api/docs/v1/document/document_operations.rs"
+
+[[example]]
+name = "document_block_operations"
+path = "examples/api/docs/v1/document_block/block_operations.rs"
