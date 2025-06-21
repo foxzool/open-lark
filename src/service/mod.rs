@@ -5,6 +5,7 @@ pub mod comments;
 pub mod docs;
 pub mod drive;
 pub mod im;
+pub mod permission;
 pub mod search;
 pub mod sheets;
 pub mod wiki;

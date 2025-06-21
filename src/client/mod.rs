@@ -1,11 +1,12 @@
-use std::time::Duration;
+use std::{sync::Arc, time::Duration};
 
 use crate::{
     core::{config::Config, constants::AppType},
     service::{
         attendance::AttendanceService, authentication::AuthenService, bitable::BitableService,
-        comments::CommentsService, docs::DocsService, drive::DriveService, im::ImService, 
-        search::SearchService, sheets::SheetsService, wiki::WikiService,
+        comments::CommentsService, docs::DocsService, drive::DriveService, im::ImService,
+        permission::PermissionService, search::SearchService, sheets::SheetsService,
+        wiki::WikiService,
     },
 };
 
@@ -25,6 +26,7 @@ pub struct LarkClient {
     pub bitable: BitableService,
     pub wiki: WikiService,
     pub comments: CommentsService,
+    pub permission: PermissionService,
 }
 
 pub struct LarkClientBuilder {
@@ -76,7 +78,8 @@ impl LarkClientBuilder {
             sheets: SheetsService::new(self.config.clone()),
             bitable: BitableService::new(self.config.clone()),
             wiki: WikiService::new(self.config.clone()),
-            comments: CommentsService::new(self.config),
+            comments: CommentsService::new(self.config.clone()),
+            permission: PermissionService::new(Arc::new(self.config.clone())),
         }
     }
 }
