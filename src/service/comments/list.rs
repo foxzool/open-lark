@@ -208,14 +208,14 @@ pub struct Reply {
 }
 
 /// 回复内容
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct ReplyContent {
     /// 元素列表
     pub elements: Vec<ContentElement>,
 }
 
 /// 内容元素
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ContentElement {
     /// 元素类型
     #[serde(rename = "type")]
@@ -225,7 +225,7 @@ pub struct ContentElement {
 }
 
 /// 文本内容
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct TextRun {
     /// 文本内容
     pub text: String,
@@ -307,7 +307,9 @@ impl Comment {
 
     /// 是否有回复
     pub fn has_replies(&self) -> bool {
-        self.reply_list.as_ref().map_or(false, |replies| !replies.is_empty())
+        self.reply_list
+            .as_ref()
+            .map_or(false, |replies| !replies.is_empty())
     }
 
     /// 获取回复数量
@@ -323,7 +325,10 @@ impl Reply {
             .elements
             .iter()
             .filter_map(|element| {
-                element.text_run.as_ref().map(|text_run| text_run.text.clone())
+                element
+                    .text_run
+                    .as_ref()
+                    .map(|text_run| text_run.text.clone())
             })
             .collect::<Vec<_>>()
             .join("")

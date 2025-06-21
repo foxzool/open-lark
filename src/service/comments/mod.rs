@@ -40,9 +40,8 @@ impl CommentsService {
         &self,
         request: ListCommentsRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<ListCommentsResponse> {
-        let result = list_comments(request, &self.config, option).await?;
-        Ok(result.data)
+    ) -> SDKResult<crate::core::api_resp::BaseResponse<ListCommentsResponse>> {
+        list_comments(request, &self.config, option).await
     }
 
     /// 批量获取评论
@@ -50,9 +49,8 @@ impl CommentsService {
         &self,
         request: BatchQueryCommentsRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BatchQueryCommentsResponse> {
-        let result = batch_query_comments(request, &self.config, option).await?;
-        Ok(result.data)
+    ) -> SDKResult<crate::core::api_resp::BaseResponse<BatchQueryCommentsResponse>> {
+        batch_query_comments(request, &self.config, option).await
     }
 
     /// 解决/恢复评论
@@ -60,9 +58,8 @@ impl CommentsService {
         &self,
         request: PatchCommentRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<PatchCommentResponse> {
-        let result = patch_comment(request, &self.config, option).await?;
-        Ok(result.data)
+    ) -> SDKResult<crate::core::api_resp::BaseResponse<PatchCommentResponse>> {
+        patch_comment(request, &self.config, option).await
     }
 
     /// 添加全文评论
@@ -70,9 +67,8 @@ impl CommentsService {
         &self,
         request: CreateCommentRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<CreateCommentResponse> {
-        let result = create_comment(request, &self.config, option).await?;
-        Ok(result.data)
+    ) -> SDKResult<crate::core::api_resp::BaseResponse<CreateCommentResponse>> {
+        create_comment(request, &self.config, option).await
     }
 
     /// 获取全文评论
@@ -80,9 +76,8 @@ impl CommentsService {
         &self,
         request: GetCommentRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<GetCommentResponse> {
-        let result = get_comment(request, &self.config, option).await?;
-        Ok(result.data)
+    ) -> SDKResult<crate::core::api_resp::BaseResponse<GetCommentResponse>> {
+        get_comment(request, &self.config, option).await
     }
 
     /// 获取回复信息
@@ -90,9 +85,8 @@ impl CommentsService {
         &self,
         request: ListRepliesRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<ListRepliesResponse> {
-        let result = list_replies(request, &self.config, option).await?;
-        Ok(result.data)
+    ) -> SDKResult<crate::core::api_resp::BaseResponse<ListRepliesResponse>> {
+        list_replies(request, &self.config, option).await
     }
 
     /// 更新回复的内容
@@ -100,9 +94,8 @@ impl CommentsService {
         &self,
         request: UpdateReplyRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<UpdateReplyResponse> {
-        let result = update_reply(request, &self.config, option).await?;
-        Ok(result.data)
+    ) -> SDKResult<crate::core::api_resp::BaseResponse<UpdateReplyResponse>> {
+        update_reply(request, &self.config, option).await
     }
 
     /// 删除回复
@@ -110,8 +103,7 @@ impl CommentsService {
         &self,
         request: DeleteReplyRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<DeleteReplyResponse> {
-        let result = delete_reply(request, &self.config, option).await?;
-        Ok(result.data)
+    ) -> SDKResult<crate::core::api_resp::BaseResponse<DeleteReplyResponse>> {
+        delete_reply(request, &self.config, option).await
     }
 }

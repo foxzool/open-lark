@@ -155,15 +155,15 @@ pub async fn search_wiki(
 impl WikiSearchItem {
     /// 获取文档URL（如果有obj_token）
     pub fn get_doc_url(&self) -> Option<String> {
-        self.obj_token.as_ref().map(|token| {
-            match self.obj_type.as_deref() {
+        self.obj_token
+            .as_ref()
+            .map(|token| match self.obj_type.as_deref() {
                 Some("doc") => format!("https://feishu.cn/docs/{}", token),
                 Some("sheet") => format!("https://feishu.cn/sheets/{}", token),
                 Some("bitable") => format!("https://feishu.cn/base/{}", token),
                 Some("mindnote") => format!("https://feishu.cn/mindnote/{}", token),
                 _ => format!("https://feishu.cn/wiki/{}", token),
-            }
-        })
+            })
     }
 
     /// 是否有匹配的文本片段
@@ -173,10 +173,12 @@ impl WikiSearchItem {
 
     /// 获取显示标题（优先使用title，否则使用obj_token）
     pub fn display_title(&self) -> String {
-        self.title
-            .as_ref()
-            .cloned()
-            .unwrap_or_else(|| self.obj_token.as_ref().cloned().unwrap_or_else(|| self.node_token.clone()))
+        self.title.as_ref().cloned().unwrap_or_else(|| {
+            self.obj_token
+                .as_ref()
+                .cloned()
+                .unwrap_or_else(|| self.node_token.clone())
+        })
     }
 }
 
@@ -195,7 +197,10 @@ mod tests {
 
         assert_eq!(request.query, "测试搜索");
         assert_eq!(request.page_size, Some(20));
-        assert_eq!(request.space_ids, Some(vec!["spcxxxxxx".to_string(), "spcyyyyyy".to_string()]));
+        assert_eq!(
+            request.space_ids,
+            Some(vec!["spcxxxxxx".to_string(), "spcyyyyyy".to_string()])
+        );
     }
 
     #[test]
@@ -226,6 +231,9 @@ mod tests {
 
         assert_eq!(item.display_title(), "测试文档");
         assert!(item.has_snippet());
-        assert_eq!(item.get_doc_url(), Some("https://feishu.cn/docs/doccnxxxxxx".to_string()));
+        assert_eq!(
+            item.get_doc_url(),
+            Some("https://feishu.cn/docs/doccnxxxxxx".to_string())
+        );
     }
 }

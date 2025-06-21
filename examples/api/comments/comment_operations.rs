@@ -50,7 +50,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("\n  评论 {}:", index + 1);
                 println!("    - ID: {}", comment.comment_id);
                 println!("    - 用户: {}", comment.user_id);
-                println!("    - 状态: {}", if comment.is_solved { "已解决" } else { "未解决" });
+                println!(
+                    "    - 状态: {}",
+                    if comment.is_solved {
+                        "已解决"
+                    } else {
+                        "未解决"
+                    }
+                );
                 println!("    - 是否全文: {}", comment.is_whole.unwrap_or(false));
                 println!("    - 回复数: {}", comment.reply_count());
                 println!("    - 创建时间: {}", comment.create_time);
@@ -171,7 +178,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             Ok(patch_response) => {
                 println!("评论解决成功:");
                 println!("  - 评论ID: {}", patch_response.comment_id);
-                println!("  - 状态: {}", if patch_response.is_solved() { "已解决" } else { "未解决" });
+                println!(
+                    "  - 状态: {}",
+                    if patch_response.is_solved() {
+                        "已解决"
+                    } else {
+                        "未解决"
+                    }
+                );
                 if let Some(time) = patch_response.solved_time {
                     println!("  - 解决时间: {}", time);
                 }
@@ -201,7 +215,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             Ok(patch_response) => {
                 println!("评论恢复成功:");
                 println!("  - 评论ID: {}", patch_response.comment_id);
-                println!("  - 状态: {}", if patch_response.is_restored() { "已恢复" } else { "已解决" });
+                println!(
+                    "  - 状态: {}",
+                    if patch_response.is_restored() {
+                        "已恢复"
+                    } else {
+                        "已解决"
+                    }
+                );
             }
             Err(e) => {
                 println!("恢复评论失败: {:?}", e);
@@ -221,7 +242,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .with_open_id()
             .build();
 
-        match client.comments.list_replies(list_replies_request, None).await {
+        match client
+            .comments
+            .list_replies(list_replies_request, None)
+            .await
+        {
             Ok(replies_response) => {
                 println!("回复列表获取成功:");
                 println!("  {}", replies_response.summary());
@@ -292,7 +317,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         match client.comments.list(type_request, None).await {
             Ok(response) => {
-                println!("  {} ({}) 评论数量: {}", type_name, file_type, response.items.len());
+                println!(
+                    "  {} ({}) 评论数量: {}",
+                    type_name,
+                    file_type,
+                    response.items.len()
+                );
             }
             Err(e) => {
                 println!("  {} ({}) 获取失败: {:?}", type_name, file_type, e);

@@ -19,7 +19,8 @@ impl SpaceSettingService {
         &self,
         request: UpdateSpaceSettingRequest,
         option: Option<crate::core::req_option::RequestOption>,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<UpdateSpaceSettingResponse>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<UpdateSpaceSettingResponse>>
+    {
         update_space_setting(request, &self.config, option).await
     }
 }

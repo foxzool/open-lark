@@ -220,16 +220,12 @@ impl ListRepliesResponse {
 
     /// 获取最新的回复
     pub fn latest_reply(&self) -> Option<&Reply> {
-        self.items
-            .iter()
-            .max_by_key(|reply| reply.create_time)
+        self.items.iter().max_by_key(|reply| reply.create_time)
     }
 
     /// 获取最早的回复
     pub fn earliest_reply(&self) -> Option<&Reply> {
-        self.items
-            .iter()
-            .min_by_key(|reply| reply.create_time)
+        self.items.iter().min_by_key(|reply| reply.create_time)
     }
 
     /// 按创建时间排序的回复列表

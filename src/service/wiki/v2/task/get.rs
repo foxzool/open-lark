@@ -168,7 +168,9 @@ impl TaskDetail {
 
     /// 获取成功移动的文档数量
     pub fn success_count(&self) -> usize {
-        self.move_results.as_ref().map_or(0, |results| results.len())
+        self.move_results
+            .as_ref()
+            .map_or(0, |results| results.len())
     }
 }
 
@@ -178,9 +180,7 @@ mod tests {
 
     #[test]
     fn test_get_task_request_builder() {
-        let request = GetTaskRequest::builder()
-            .task_id("taskxxxxxx")
-            .build();
+        let request = GetTaskRequest::builder().task_id("taskxxxxxx").build();
 
         assert_eq!(request.task_id, "taskxxxxxx");
     }

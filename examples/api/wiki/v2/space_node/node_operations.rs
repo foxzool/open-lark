@@ -36,13 +36,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut node_token = String::new();
 
-    match client
-        .wiki
-        .v2
-        .space_node
-        .create(create_request, None)
-        .await
-    {
+    match client.wiki.v2.space_node.create(create_request, None).await {
         Ok(create_response) => {
             let node = &create_response.node;
             node_token = node.node_token.clone();
@@ -109,7 +103,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("根节点列表获取成功:");
             println!("  - 节点数量: {}", list_response.items.len());
             println!("  - 是否有更多: {}", list_response.has_more);
-            
+
             for (index, item) in list_response.items.iter().enumerate() {
                 println!("  节点 {}:", index + 1);
                 println!("    - Token: {}", item.node_token);
@@ -194,13 +188,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .append_to_end()
         .build();
 
-    match client
-        .wiki
-        .v2
-        .space_node
-        .r#move(move_request, None)
-        .await
-    {
+    match client.wiki.v2.space_node.r#move(move_request, None).await {
         Ok(move_response) => {
             let node = &move_response.node;
             println!("节点移动成功:");

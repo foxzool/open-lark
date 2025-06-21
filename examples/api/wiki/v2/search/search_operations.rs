@@ -27,17 +27,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .search_all_spaces()
         .build();
 
-    match client
-        .wiki
-        .v2
-        .search_wiki(basic_search_request, None)
-        .await
-    {
+    match client.wiki.v2.search_wiki(basic_search_request, None).await {
         Ok(search_response) => {
             println!("搜索完成:");
             println!("  - 找到 {} 个结果", search_response.items.len());
             println!("  - 是否有更多: {}", search_response.has_more);
-            
+
             if let Some(page_token) = &search_response.page_token {
                 println!("  - 下页标记: {}", page_token);
             }
@@ -95,7 +90,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("  - 找到 {} 个结果", search_response.items.len());
 
             for item in &search_response.items {
-                println!("  - {}: {} ({})", 
+                println!(
+                    "  - {}: {} ({})",
                     item.display_title(),
                     item.space_name.as_deref().unwrap_or("未知空间"),
                     item.obj_type.as_deref().unwrap_or("未知类型")
@@ -118,27 +114,27 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .page_size(15)
         .build();
 
-    match client
-        .wiki
-        .v2
-        .search_wiki(incremental_request, None)
-        .await
-    {
+    match client.wiki.v2.search_wiki(incremental_request, None).await {
         Ok(search_response) => {
             println!("增量添加空间搜索完成:");
             println!("  - 找到 {} 个结果", search_response.items.len());
 
             // 按空间分组显示结果
-            let mut space_groups: std::collections::HashMap<String, Vec<&_>> = std::collections::HashMap::new();
+            let mut space_groups: std::collections::HashMap<String, Vec<&_>> =
+                std::collections::HashMap::new();
             for item in &search_response.items {
-                space_groups.entry(item.space_id.clone()).or_default().push(item);
+                space_groups
+                    .entry(item.space_id.clone())
+                    .or_default()
+                    .push(item);
             }
 
             for (space_id, items) in space_groups {
-                let space_name = items.first()
+                let space_name = items
+                    .first()
                     .and_then(|item| item.space_name.as_deref())
                     .unwrap_or("未知空间");
-                    
+
                 println!("\n  空间 {} ({}):", space_name, space_id);
                 for item in items {
                     println!("    - {}", item.display_title());
@@ -163,9 +159,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let max_pages = 3; // 最多获取3页
 
     loop {
-        let mut paged_request = SearchWikiRequest::builder()
-            .query("技术文档")
-            .page_size(5);
+        let mut paged_request = SearchWikiRequest::builder().query("技术文档").page_size(5);
 
         if let Some(token) = &page_token {
             paged_request = paged_request.page_token(token);
@@ -177,9 +171,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             Ok(search_response) => {
                 println!("第 {} 页结果:", page_number);
                 println!("  - 本页结果数: {}", search_response.items.len());
-                
+
                 for (index, item) in search_response.items.iter().enumerate() {
-                    println!("    {}. {} ({})",
+                    println!(
+                        "    {}. {} ({})",
                         (page_number - 1) * 5 + index + 1,
                         item.display_title(),
                         item.obj_type.as_deref().unwrap_or("未知类型")
@@ -223,22 +218,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .search_all_spaces()
             .build();
 
-        match client
-            .wiki
-            .v2
-            .search_wiki(type_search_request, None)
-            .await
-        {
+        match client.wiki.v2.search_wiki(type_search_request, None).await {
             Ok(search_response) => {
                 println!("搜索 '{}' 的结果:", query);
-                
-                let filtered_items: Vec<_> = search_response.items
+
+                let filtered_items: Vec<_> = search_response
+                    .items
                     .iter()
                     .filter(|item| item.obj_type.as_deref() == Some(expected_type))
                     .collect();
-                
+
                 if !filtered_items.is_empty() {
-                    println!("  找到 {} 个 {} 类型的文档:", filtered_items.len(), expected_type);
+                    println!(
+                        "  找到 {} 个 {} 类型的文档:",
+                        filtered_items.len(),
+                        expected_type
+                    );
                     for item in filtered_items {
                         println!("    - {}", item.display_title());
                     }
