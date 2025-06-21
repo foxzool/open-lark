@@ -4,9 +4,9 @@
 
 ## 📊 实现进度总览
 
-- ✅ **已完整实现**: 22 个接口 + 示例代码
-- 🚧 **占位符已创建**: 8 个接口模块
-- 🔜 **待实现**: 28 个接口
+- ✅ **已完整实现**: 42 个接口 + 示例代码
+- 🚧 **占位符已创建**: 0 个接口模块
+- 🔜 **待实现**: 17 个接口
 - 📚 **文档参考**: 5 个指南文档
 
 ### 🎯 核心功能状态
@@ -15,7 +15,8 @@
 - **数据读写**: ✅ 核心功能完成 (7/9) + 示例
 - **筛选功能**: ✅ 基础筛选完成 (4/4)
 - **行列操作**: ✅ 完成 (5/5) + 示例
-- **高级功能**: 🔜 待开发 (保护范围、数据校验、条件格式、浮动图片)
+- **保护功能**: ✅ 完成 (4/4)
+- **高级功能**: 🔜 待开发 (数据校验、条件格式、浮动图片)
 
 ---
 
@@ -89,10 +90,10 @@
 
 ## 保护范围
 
-- [ ] [增加保护范围](https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/add-locked-cells) 🔜 待实现
-- [ ] [修改保护范围](https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/modify-protection-scopes) 🔜 待实现
-- [ ] [获取保护范围](https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/retrieve-protection-scopes) 🔜 待实现
-- [ ] [删除保护范围](https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/delete-protection-scopes) 🔜 待实现
+- [x] [增加保护范围](https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/add-locked-cells) ✅ 已实现 + 示例
+- [x] [修改保护范围](https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/modify-protection-scopes) ✅ 已实现
+- [x] [获取保护范围](https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/retrieve-protection-scopes) ✅ 已实现
+- [x] [删除保护范围](https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/delete-protection-scopes) ✅ 已实现
 
 ## 数据校验
 

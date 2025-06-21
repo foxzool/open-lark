@@ -267,6 +267,11 @@ path = "examples/api/sheets/v3/spreadsheet-sheet-filter/update.rs"
 name = "spreadsheet-sheet-filter-delete"
 path = "examples/api/sheets/v3/spreadsheet-sheet-filter/delete.rs"
 
+# 保护范围管理
+[[example]]
+name = "protect_range_crud"
+path = "examples/api/sheets/v3/protect_range/protect_range_crud.rs"
+
 [[example]]
 name = "get_bitable"
 path = "examples/api/bitable/v1/app/get.rs"
