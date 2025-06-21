@@ -3,23 +3,17 @@ use serde::Deserialize;
 
 use crate::core::{
     api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse},
-    config::Config,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
 
-pub struct AppService {
-    config: Config,
-}
+use super::AppService;
 
 impl AppService {
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-
+    /// 获取多维表格元数据
     pub async fn get(
         &self,
         request: GetAppRequest,
@@ -31,12 +25,11 @@ impl AppService {
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
-
         Ok(api_resp)
     }
 }
 
-/// 获取多维表格元数据 请求头
+/// 获取多维表格元数据请求
 #[derive(Debug, Default)]
 pub struct GetAppRequest {
     api_request: ApiRequest,
@@ -47,6 +40,14 @@ pub struct GetAppRequest {
 impl GetAppRequest {
     pub fn builder() -> GetAppRequestBuilder {
         GetAppRequestBuilder::default()
+    }
+
+    /// 创建获取多维表格元数据请求
+    pub fn new(app_token: impl ToString) -> Self {
+        Self {
+            api_request: ApiRequest::default(),
+            app_token: app_token.to_string(),
+        }
     }
 }
 
@@ -67,11 +68,10 @@ impl GetAppRequestBuilder {
     }
 }
 
-#[allow(dead_code)]
 #[derive(Deserialize, Debug)]
 pub struct GetAppResponse {
     /// 多维表格的 app 信息
-    app: GetAppResponseData,
+    pub app: GetAppResponseData,
 }
 
 #[derive(Deserialize, Debug)]
@@ -93,7 +93,27 @@ pub struct GetAppResponseData {
 }
 
 impl ApiResponseTrait for GetAppResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_app_request() {
+        let request = GetAppRequest::builder()
+            .app_token("bascnmBA*****yGehy8")
+            .build();
+
+        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
+    }
+
+    #[test]
+    fn test_get_app_request_new() {
+        let request = GetAppRequest::new("bascnmBA*****yGehy8");
+        assert_eq!(request.app_token, "bascnmBA*****yGehy8");
     }
 }
