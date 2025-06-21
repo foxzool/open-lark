@@ -6,12 +6,13 @@
 
 pub mod member;
 pub mod public_v1;
+pub mod public_v2;
 
 use std::sync::Arc;
 
 use crate::core::{config::Config, req_option::RequestOption, SDKResult};
 
-use self::{member::*, public_v1::*};
+use self::{member::*, public_v1::*, public_v2::*};
 
 /// 权限服务
 pub struct PermissionService {
@@ -129,5 +130,23 @@ impl PermissionService {
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<DeletePasswordResponse>> {
         delete_password(request.clone(), &*self.config, option).await
+    }
+
+    /// 获取云文档权限设置 (v2)
+    pub async fn get_permission_public_v2(
+        &self,
+        request: &GetPermissionPublicV2Request,
+        option: Option<RequestOption>,
+    ) -> SDKResult<crate::core::api_resp::BaseResponse<GetPermissionPublicV2Response>> {
+        get_permission_public_v2(request.clone(), &*self.config, option).await
+    }
+
+    /// 更新云文档权限设置 (v2)
+    pub async fn patch_permission_public_v2(
+        &self,
+        request: &PatchPermissionPublicV2Request,
+        option: Option<RequestOption>,
+    ) -> SDKResult<crate::core::api_resp::BaseResponse<PatchPermissionPublicV2Response>> {
+        patch_permission_public_v2(request.clone(), &*self.config, option).await
     }
 }
