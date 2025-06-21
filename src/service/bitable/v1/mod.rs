@@ -1,5 +1,6 @@
 pub use app_table_field::AppTableFieldService;
 pub use app_dashboard::AppDashboardService;
+pub use form::FormService;
 
 // 为了避免名称冲突，使用模块路径而不是全局导入
 pub mod app;
@@ -11,6 +12,7 @@ use crate::core::config::Config;
 
 mod app_table_field;
 mod app_dashboard;
+mod form;
 
 mod share;
 pub use share::*;
@@ -28,6 +30,8 @@ pub struct V1 {
     pub app_table_record: app_table_record::AppTableRecordService,
     /// 仪表盘
     pub app_dashboard: AppDashboardService,
+    /// 表单
+    pub form: FormService,
 }
 
 impl V1 {
@@ -38,7 +42,8 @@ impl V1 {
             app_table_view: app_table_view::AppTableViewService::new(config.clone()),
             app_table_field: AppTableFieldService::new(config.clone()),
             app_table_record: app_table_record::AppTableRecordService::new(config.clone()),
-            app_dashboard: AppDashboardService::new(config),
+            app_dashboard: AppDashboardService::new(config.clone()),
+            form: FormService::new(config),
         }
     }
 }
