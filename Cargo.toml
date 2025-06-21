@@ -486,3 +486,7 @@ path = "examples/api/bitable/v1/app/app_operations.rs"
 [[example]]
 name = "bitable_table_operations"
 path = "examples/api/bitable/v1/app_table/table_operations.rs"
+
+[[example]]
+name = "bitable_view_operations"
+path = "examples/api/bitable/v1/app_table_view/view_operations.rs"
