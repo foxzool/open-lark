@@ -1,6 +1,7 @@
 use crate::core::config::Config;
 
 pub mod data_operation;
+pub mod data_validation;
 pub mod protect_range;
 pub mod sheet_row_col;
 pub mod spreadsheet;
