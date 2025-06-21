@@ -1,6 +1,7 @@
 pub mod attendance;
 pub mod authentication;
 pub mod bitable;
+pub mod comments;
 pub mod docs;
 pub mod drive;
 pub mod im;

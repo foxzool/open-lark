@@ -542,3 +542,7 @@ path = "examples/api/wiki/v2/task/task_operations.rs"
 [[example]]
 name = "wiki_search_operations"
 path = "examples/api/wiki/v2/search/search_operations.rs"
+
+[[example]]
+name = "comment_operations"
+path = "examples/api/comments/comment_operations.rs"
