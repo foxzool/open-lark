@@ -1,4 +1,4 @@
-# 权限模块规划
+# 权限模块
 
 [权限概述](https://open.feishu.cn/document/server-docs/docs/permission/overview)
 

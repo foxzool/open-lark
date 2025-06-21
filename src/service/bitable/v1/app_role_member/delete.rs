@@ -1,16 +1,14 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
-        constants::AccessTokenType,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
-    },
+use crate::core::{
+    api_req::ApiRequest,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
 
 /// 删除协作者请求
@@ -37,11 +35,7 @@ impl DeleteRoleMemberRequest {
         DeleteRoleMemberRequestBuilder::default()
     }
 
-    pub fn new(
-        app_token: impl ToString,
-        role_id: impl ToString,
-        member_id: impl ToString,
-    ) -> Self {
+    pub fn new(app_token: impl ToString, role_id: impl ToString, member_id: impl ToString) -> Self {
         Self {
             app_token: app_token.to_string(),
             role_id: role_id.to_string(),

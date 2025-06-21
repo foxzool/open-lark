@@ -80,10 +80,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Ok(create_response) => {
             let member = &create_response.data.member;
             println!("协作者新增成功:");
-            println!(
-                "  - 成员ID: {} ({})",
-                member.member_id, member.member_type
-            );
+            println!("  - 成员ID: {} ({})", member.member_id, member.member_type);
             println!("  - 成员名称: {:?}", member.member_name);
         }
         Err(e) => {
@@ -131,7 +128,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     member.member_id, member.member_type, member.member_name
                 );
             }
-            println!("共新增 {} 个协作者", batch_create_response.data.members.len());
+            println!(
+                "共新增 {} 个协作者",
+                batch_create_response.data.members.len()
+            );
         }
         Err(e) => {
             println!("批量新增协作者失败: {:?}", e);
@@ -216,7 +216,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!(
                     "  - {} : {}",
                     result.member_id,
-                    if result.deleted { "删除成功" } else { "删除失败" }
+                    if result.deleted {
+                        "删除成功"
+                    } else {
+                        "删除失败"
+                    }
                 );
             }
         }

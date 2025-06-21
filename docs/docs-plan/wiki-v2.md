@@ -1,4 +1,4 @@
-# 知识库模块规划
+# 知识库模块
 
 [知识库概述](https://open.feishu.cn/document/server-docs/docs/wiki-v2/wiki-overview)
 [知识库常见问题](https://open.feishu.cn/document/server-docs/docs/wiki-v2/wiki-qa)

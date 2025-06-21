@@ -32,22 +32,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .page_size(20)
         .build();
 
-    let list_response = client
-        .bitable
-        .v1
-        .app_role
-        .list(list_request, None)
-        .await?;
+    let list_response = client.bitable.v1.app_role.list(list_request, None).await?;
 
     println!("现有自定义角色列表:");
     for role in &list_response.data.items {
         println!("  - {}: {} ", role.role_name, role.role_id);
         if let Some(table_roles) = &role.table_roles {
             for table_role in table_roles {
-                println!(
-                    "    表权限: {} -> {}",
-                    table_role.table_id, table_role.role
-                );
+                println!("    表权限: {} -> {}", table_role.table_id, table_role.role);
             }
         }
     }
