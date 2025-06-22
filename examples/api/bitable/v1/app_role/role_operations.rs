@@ -1,10 +1,5 @@
 use open_lark::{
-    core::config::{AppType, Config},
-    service::bitable::v1::app_role::{
-        BlockRole, CreateAppRoleRequest, DeleteAppRoleRequest, ListAppRoleRequest, TableRole,
-        UpdateAppRoleRequest,
-    },
-    prelude::LarkClient,
+    prelude::*,
 };
 
 #[tokio::main]

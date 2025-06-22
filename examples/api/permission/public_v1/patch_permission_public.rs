@@ -29,7 +29,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             let result = response.data.update_result();
             println!("更新摘要: {}", response.data.update_summary());
-            println!("安全评估: {}", response.data.security_assessment());
+            println!("安全评估: {}", if let Some(data) = response.data { data.security_assessment() } else { "N/A".to_string() });
 
             // 详细变更信息
             let changes = result.changes_summary();
@@ -142,7 +142,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 "安全级别: {}",
                 response.data.update_result().security_level()
             );
-            println!("安全评估: {}", response.data.security_assessment());
+            println!("安全评估: {}", if let Some(data) = response.data { data.security_assessment() } else { "N/A".to_string() });
         }
         Err(e) => {
             eprintln!("关闭分享失败: {:?}", e);

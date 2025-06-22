@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{prelude::LarkClient, service::bitable::v1::ListAppTableFieldRequest};
+use open_lark::{prelude::*, service::bitable::v1::app_table_field::ListFieldRequest};
 
 /// 查询记录
 #[tokio::main]
