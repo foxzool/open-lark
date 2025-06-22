@@ -41,8 +41,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 match client.drive.v1.folder.get_folder_meta(request, Some(option)).await {
                     Ok(response) => {
                         println!("API调用成功");
-                        println!("响应状态码: {}", response.code);
-                        println!("响应消息: {}", response.msg);
+                        println!("响应状态码: {}", response.code());
+                        println!("响应消息: {}", response.msg());
 
                         if let Some(data) = response.data {
                             println!("文件夹元数据信息:");
