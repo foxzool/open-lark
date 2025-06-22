@@ -18,14 +18,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .secure_mode()
         .build();
 
-    match client.permission.patch_permission_public(&request, None).await {
+    match client
+        .permission
+        .patch_permission_public(&request, None)
+        .await
+    {
         Ok(response) => {
             println!("更新权限设置成功");
-            
+
             let result = response.data.update_result();
             println!("更新摘要: {}", response.data.update_summary());
             println!("安全评估: {}", response.data.security_assessment());
-            
+
             // 详细变更信息
             let changes = result.changes_summary();
             if !changes.is_empty() {
@@ -34,7 +38,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("{}. {}", i + 1, change);
                 }
             }
-            
+
             // 操作建议
             let recommendations = response.data.operation_recommendations();
             if !recommendations.is_empty() {
@@ -57,12 +61,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .open_mode()
         .build();
 
-    match client.permission.patch_permission_public(&open_request, None).await {
+    match client
+        .permission
+        .patch_permission_public(&open_request, None)
+        .await
+    {
         Ok(response) => {
             println!("电子表格权限更新成功");
-            println!("安全级别: {}", response.data.update_result().security_level());
+            println!(
+                "安全级别: {}",
+                response.data.update_result().security_level()
+            );
             println!("更新摘要: {}", response.data.update_summary());
-            
+
             let recommendations = response.data.operation_recommendations();
             if !recommendations.is_empty() {
                 println!("\n安全提醒:");
@@ -87,14 +98,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .enable_watermark()
         .build();
 
-    match client.permission.patch_permission_public(&custom_request, None).await {
+    match client
+        .permission
+        .patch_permission_public(&custom_request, None)
+        .await
+    {
         Ok(response) => {
             println!("自定义权限设置成功");
-            
+
             let result = response.data.update_result();
-            println!("分享级别: {}", result.share_level_description().unwrap_or("未设置"));
+            println!(
+                "分享级别: {}",
+                result.share_level_description().unwrap_or("未设置")
+            );
             println!("安全级别: {}", result.security_level());
-            
+
             if let Some(time) = result.update_time_formatted() {
                 println!("更新信息: {}", time);
             }
@@ -112,10 +130,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .close_sharing()
         .build();
 
-    match client.permission.patch_permission_public(&close_request, None).await {
+    match client
+        .permission
+        .patch_permission_public(&close_request, None)
+        .await
+    {
         Ok(response) => {
             println!("分享已关闭");
-            println!("安全级别: {}", response.data.update_result().security_level());
+            println!(
+                "安全级别: {}",
+                response.data.update_result().security_level()
+            );
             println!("安全评估: {}", response.data.security_assessment());
         }
         Err(e) => {

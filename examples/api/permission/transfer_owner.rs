@@ -24,22 +24,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.transfer_owner(&request, None).await {
         Ok(response) => {
             println!("✅ 所有权转移成功!");
-            
+
             if let Some(data) = response.data {
                 println!("{}", data.success_summary());
-                
+
                 let member = &data.member;
                 println!("📋 转移详情:");
                 println!("  新所有者: {} ({})", member.member_id, member.member_type);
-                
+
                 if let Some(old_info) = member.old_owner_info() {
                     println!("  {}", old_info);
                 }
-                
+
                 if let Some(time) = member.transfer_time_formatted() {
                     println!("  🕒 {}", time);
                 }
-                
+
                 println!("  ✅ 原所有者保留编辑权限");
                 println!("  📧 已通知相关用户");
             }
@@ -71,14 +71,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.transfer_owner(&request, None).await {
         Ok(response) => {
             println!("✅ 完全所有权转移成功!");
-            
+
             if let Some(data) = response.data {
                 println!("{}", data.success_summary());
-                
+
                 let member = &data.member;
                 println!("📋 完全转移详情:");
                 println!("  新所有者: {}", member.new_owner_info());
-                
+
                 if member.has_old_owner_info() {
                     if let Some(old_info) = member.old_owner_info() {
                         println!("  {}", old_info);
@@ -87,9 +87,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 } else {
                     println!("  📝 原所有者信息未提供");
                 }
-                
+
                 println!("  🔇 静默转移，未发送通知");
-                
+
                 if data.is_transferred() {
                     println!("  ✅ 所有权转移确认完成");
                 }
@@ -115,19 +115,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.transfer_owner(&request, None).await {
         Ok(response) => {
             println!("✅ 表格所有权转移给群组成功!");
-            
+
             if let Some(data) = response.data {
                 println!("{}", data.success_summary());
-                
+
                 let member = &data.member;
                 println!("📋 群组所有权转移:");
                 println!("  群组ID: {}", member.member_id);
                 println!("  📊 电子表格现由群组管理");
-                
+
                 if let Some(transfer_time) = data.transfer_time() {
                     println!("  🕒 转移时间戳: {}", transfer_time);
                 }
-                
+
                 println!("  👥 群组成员权限说明:");
                 println!("     - 群组管理员：完全管理权限");
                 println!("     - 群组成员：根据群组设置获得相应权限");
@@ -154,24 +154,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.transfer_owner(&request, None).await {
         Ok(response) => {
             println!("✅ 知识库所有权转移给部门成功!");
-            
+
             if let Some(data) = response.data {
                 println!("{}", data.success_summary());
-                
+
                 let member = &data.member;
                 println!("📋 部门所有权转移:");
                 println!("  部门ID: {}", member.member_id);
                 println!("  📚 知识库现由部门管理");
-                
+
                 println!("  🏢 部门管理优势:");
                 println!("     - 统一的权限管理");
                 println!("     - 部门成员自动继承相应权限");
                 println!("     - 便于组织架构变更时的权限调整");
-                
+
                 if member.has_transfer_time() {
                     println!("  ✅ 转移已完成并记录时间");
                 }
-                
+
                 println!("  📧 已通知相关部门成员");
             }
         }

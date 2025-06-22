@@ -1,6 +1,5 @@
 use dotenv::dotenv;
-use open_lark::prelude::*;
-use open_lark::service::drive::v1::folder::GetFolderMetaRequest;
+use open_lark::{prelude::*, service::drive::v1::folder::GetFolderMetaRequest};
 use std::env;
 use tracing::info;
 
@@ -44,7 +43,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         info!("API调用成功");
                         println!("响应状态码: {}", response.code);
                         println!("响应消息: {}", response.msg);
-                        
+
                         if let Some(data) = response.data {
                             println!("文件夹元数据信息:");
                             println!("  - Token: {}", data.token);
@@ -54,17 +53,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             println!("  - 创建时间: {}", data.create_time);
                             println!("  - 修改时间: {}", data.edit_time);
                             println!("  - URL: {}", data.url);
-                            
+
                             if let Some(parent_token) = &data.parent_token {
                                 println!("  - 父文件夹Token: {}", parent_token);
                             } else {
                                 println!("  - 父文件夹Token: 无（根目录）");
                             }
-                            
+
                             if let Some(creator_id) = &data.creator_id {
                                 println!("  - 创建者ID: {}", creator_id);
                             }
-                            
+
                             if let Some(description) = &data.description {
                                 println!("  - 描述: {}", description);
                             }

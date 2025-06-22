@@ -1,6 +1,5 @@
 use dotenv::dotenv;
-use open_lark::prelude::*;
-use open_lark::service::drive::v1::folder::ListFilesRequest;
+use open_lark::{prelude::*, service::drive::v1::folder::ListFilesRequest};
 use std::env;
 use tracing::info;
 
@@ -48,7 +47,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         info!("API调用成功");
                         println!("响应状态码: {}", response.code);
                         println!("响应消息: {}", response.msg);
-                        
+
                         if let Some(data) = response.data {
                             println!("文件清单信息:");
                             println!("  - 是否还有更多文件: {}", data.has_more);
@@ -56,13 +55,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                 println!("  - 下一页标记: {}", page_token);
                             }
                             println!("  - 文件数量: {}", data.files.len());
-                            
+
                             for (i, file) in data.files.iter().enumerate() {
                                 println!("  文件 {}:", i + 1);
                                 println!("    - Token: {}", file.token);
                                 println!("    - 名称: {}", file.name);
                                 println!("    - 类型: {}", file.file_type);
-                                
+
                                 if let Some(size) = file.size {
                                     println!("    - 大小: {} 字节", size);
                                 }

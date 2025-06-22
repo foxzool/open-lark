@@ -1,7 +1,9 @@
 use dotenv::dotenv;
-use open_lark::prelude::*;
-use open_lark::service::drive::v1::folder::{
-    CheckAsyncTaskRequest, CreateFolderRequest, MoveOrDeleteFolderRequest,
+use open_lark::{
+    prelude::*,
+    service::drive::v1::folder::{
+        CheckAsyncTaskRequest, CreateFolderRequest, MoveOrDeleteFolderRequest,
+    },
 };
 use std::env;
 use tokio::time::{sleep, Duration};
@@ -40,12 +42,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                 // 步骤1: 创建第一个测试文件夹
                 let folder1_name = format!("测试文件夹1_{}", chrono::Utc::now().timestamp());
-                let create_request1 = CreateFolderRequest::new(folder1_name.clone(), root_token.clone());
-                
-                let folder1_token = match client.drive.v1.folder.create_folder(create_request1, None).await {
+                let create_request1 =
+                    CreateFolderRequest::new(folder1_name.clone(), root_token.clone());
+
+                let folder1_token = match client
+                    .drive
+                    .v1
+                    .folder
+                    .create_folder(create_request1, None)
+                    .await
+                {
                     Ok(response) => {
                         if let Some(data) = response.data {
-                            println!("✅ 创建文件夹1成功: {} (Token: {})", folder1_name, data.token);
+                            println!(
+                                "✅ 创建文件夹1成功: {} (Token: {})",
+                                folder1_name, data.token
+                            );
                             data.token
                         } else {
                             eprintln!("❌ 创建文件夹1失败：没有返回数据");
@@ -60,12 +72,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                 // 步骤2: 创建第二个测试文件夹
                 let folder2_name = format!("测试文件夹2_{}", chrono::Utc::now().timestamp());
-                let create_request2 = CreateFolderRequest::new(folder2_name.clone(), root_token.clone());
-                
-                let folder2_token = match client.drive.v1.folder.create_folder(create_request2, None).await {
+                let create_request2 =
+                    CreateFolderRequest::new(folder2_name.clone(), root_token.clone());
+
+                let folder2_token = match client
+                    .drive
+                    .v1
+                    .folder
+                    .create_folder(create_request2, None)
+                    .await
+                {
                     Ok(response) => {
                         if let Some(data) = response.data {
-                            println!("✅ 创建文件夹2成功: {} (Token: {})", folder2_name, data.token);
+                            println!(
+                                "✅ 创建文件夹2成功: {} (Token: {})",
+                                folder2_name, data.token
+                            );
                             data.token
                         } else {
                             eprintln!("❌ 创建文件夹2失败：没有返回数据");
@@ -80,34 +102,58 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                 // 步骤3: 将文件夹2移动到文件夹1下
                 println!("\n📁 将文件夹2移动到文件夹1下...");
-                let move_request = MoveOrDeleteFolderRequest::move_folder(folder2_token.clone(), folder1_token.clone());
-                
-                match client.drive.v1.folder.move_or_delete_folder(move_request, None).await {
+                let move_request = MoveOrDeleteFolderRequest::move_folder(
+                    folder2_token.clone(),
+                    folder1_token.clone(),
+                );
+
+                match client
+                    .drive
+                    .v1
+                    .folder
+                    .move_or_delete_folder(move_request, None)
+                    .await
+                {
                     Ok(response) => {
                         println!("✅ 移动文件夹操作已提交");
                         if let Some(data) = response.data {
                             if let Some(task_id) = data.task_id {
                                 println!("📋 异步任务ID: {}", task_id);
-                                
+
                                 // 查询任务状态
                                 let mut attempts = 0;
                                 loop {
                                     attempts += 1;
                                     let check_request = CheckAsyncTaskRequest::new(task_id.clone());
-                                    
-                                    match client.drive.v1.folder.check_async_task(check_request, None).await {
+
+                                    match client
+                                        .drive
+                                        .v1
+                                        .folder
+                                        .check_async_task(check_request, None)
+                                        .await
+                                    {
                                         Ok(task_response) => {
                                             if let Some(task_data) = task_response.data {
-                                                println!("🔍 任务状态检查 (第{}次): {}", attempts, task_data.status);
-                                                
+                                                println!(
+                                                    "🔍 任务状态检查 (第{}次): {}",
+                                                    attempts, task_data.status
+                                                );
+
                                                 match task_data.status.as_str() {
                                                     "SUCCESS" => {
                                                         println!("✅ 文件夹移动成功！");
                                                         break;
                                                     }
                                                     "FAILURE" => {
-                                                        let error_msg = task_data.error_msg.unwrap_or_else(|| "未知错误".to_string());
-                                                        eprintln!("❌ 文件夹移动失败: {}", error_msg);
+                                                        let error_msg =
+                                                            task_data.error_msg.unwrap_or_else(
+                                                                || "未知错误".to_string(),
+                                                            );
+                                                        eprintln!(
+                                                            "❌ 文件夹移动失败: {}",
+                                                            error_msg
+                                                        );
                                                         break;
                                                     }
                                                     "PENDING" => {
@@ -119,7 +165,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                                         sleep(Duration::from_secs(2)).await;
                                                     }
                                                     _ => {
-                                                        println!("❓ 未知任务状态: {}", task_data.status);
+                                                        println!(
+                                                            "❓ 未知任务状态: {}",
+                                                            task_data.status
+                                                        );
                                                         break;
                                                     }
                                                 }
@@ -144,47 +193,73 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 // 步骤4: 等待一会儿，然后删除文件夹1（会连同其下的文件夹2一起删除）
                 println!("\n🗑️  删除文件夹1（连同其子文件夹）...");
                 sleep(Duration::from_secs(3)).await;
-                
+
                 let delete_request = MoveOrDeleteFolderRequest::delete_folder(folder1_token);
-                
-                match client.drive.v1.folder.move_or_delete_folder(delete_request, None).await {
+
+                match client
+                    .drive
+                    .v1
+                    .folder
+                    .move_or_delete_folder(delete_request, None)
+                    .await
+                {
                     Ok(response) => {
                         println!("✅ 删除文件夹操作已提交");
                         if let Some(data) = response.data {
                             if let Some(task_id) = data.task_id {
                                 println!("📋 异步任务ID: {}", task_id);
-                                
+
                                 // 查询删除任务状态
                                 let mut attempts = 0;
                                 loop {
                                     attempts += 1;
                                     let check_request = CheckAsyncTaskRequest::new(task_id.clone());
-                                    
-                                    match client.drive.v1.folder.check_async_task(check_request, None).await {
+
+                                    match client
+                                        .drive
+                                        .v1
+                                        .folder
+                                        .check_async_task(check_request, None)
+                                        .await
+                                    {
                                         Ok(task_response) => {
                                             if let Some(task_data) = task_response.data {
-                                                println!("🔍 删除任务状态检查 (第{}次): {}", attempts, task_data.status);
-                                                
+                                                println!(
+                                                    "🔍 删除任务状态检查 (第{}次): {}",
+                                                    attempts, task_data.status
+                                                );
+
                                                 match task_data.status.as_str() {
                                                     "SUCCESS" => {
                                                         println!("✅ 文件夹删除成功！");
                                                         break;
                                                     }
                                                     "FAILURE" => {
-                                                        let error_msg = task_data.error_msg.unwrap_or_else(|| "未知错误".to_string());
-                                                        eprintln!("❌ 文件夹删除失败: {}", error_msg);
+                                                        let error_msg =
+                                                            task_data.error_msg.unwrap_or_else(
+                                                                || "未知错误".to_string(),
+                                                            );
+                                                        eprintln!(
+                                                            "❌ 文件夹删除失败: {}",
+                                                            error_msg
+                                                        );
                                                         break;
                                                     }
                                                     "PENDING" => {
                                                         if attempts >= 10 {
-                                                            println!("⏰ 删除任务仍在执行中，停止等待");
+                                                            println!(
+                                                                "⏰ 删除任务仍在执行中，停止等待"
+                                                            );
                                                             break;
                                                         }
                                                         println!("⏳ 删除任务进行中，2秒后重试...");
                                                         sleep(Duration::from_secs(2)).await;
                                                     }
                                                     _ => {
-                                                        println!("❓ 未知任务状态: {}", task_data.status);
+                                                        println!(
+                                                            "❓ 未知任务状态: {}",
+                                                            task_data.status
+                                                        );
                                                         break;
                                                     }
                                                 }

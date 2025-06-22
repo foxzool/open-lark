@@ -1,8 +1,12 @@
 use dotenv::dotenv;
-use open_lark::prelude::*;
-use open_lark::service::drive::v1::file::CreateFileRequest;
-use open_lark::service::drive::v1::file_version::{
-    CreateVersionRequest, DeleteVersionRequest, GetVersionRequest, ListVersionsRequest,
+use open_lark::{
+    prelude::*,
+    service::drive::v1::{
+        file::CreateFileRequest,
+        file_version::{
+            CreateVersionRequest, DeleteVersionRequest, GetVersionRequest, ListVersionsRequest,
+        },
+    },
 };
 use std::env;
 use tracing::info;
@@ -77,7 +81,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let create_version_request = CreateVersionRequest::new(
         doc_token.clone(),
         version_name,
-        "docx" // 文档类型
+        "docx", // 文档类型
     );
 
     let version_id = match client
@@ -109,11 +113,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 3. 再创建一个版本
     println!("\n📋 创建第二个文档版本...");
     let version2_name = "v2.0 - 更新版本";
-    let create_version2_request = CreateVersionRequest::new(
-        doc_token.clone(),
-        version2_name,
-        "docx"
-    );
+    let create_version2_request =
+        CreateVersionRequest::new(doc_token.clone(), version2_name, "docx");
 
     let version2_id = match client
         .drive
@@ -155,7 +156,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("✅ 获取版本列表成功:");
                 println!("  - 是否还有更多: {}", data.has_more);
                 println!("  - 版本数量: {}", data.items.len());
-                
+
                 for (i, version) in data.items.iter().enumerate() {
                     println!("  版本 {}:", i + 1);
                     println!("    - ID: {}", version.version_id);
@@ -243,7 +244,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(data) = response.data {
                 println!("✅ 验证版本列表:");
                 println!("  - 剩余版本数量: {}", data.items.len());
-                
+
                 for (i, version) in data.items.iter().enumerate() {
                     println!("  剩余版本 {}:", i + 1);
                     println!("    - ID: {}", version.version_id);
@@ -258,7 +259,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 8. 清理：删除测试文档
     println!("\n🧹 清理测试文档...");
-    let delete_file_request = open_lark::service::drive::v1::file::DeleteFileRequest::new(doc_token);
+    let delete_file_request =
+        open_lark::service::drive::v1::file::DeleteFileRequest::new(doc_token);
     match client
         .drive
         .v1

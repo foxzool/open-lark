@@ -22,26 +22,29 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.auth_permission(&request, None).await {
         Ok(response) => {
             println!("✅ 权限检查完成!");
-            
+
             if let Some(data) = response.data {
                 println!("{}", data.summary());
-                
+
                 let auth_result = &data.auth_result;
-                
+
                 if auth_result.has_permission() {
                     println!("  ✅ 当前用户有编辑权限");
-                    
+
                     // 检查是否有更高级别的权限
                     if auth_result.has_higher_permission() {
                         println!("  🚀 用户拥有更高级别的权限");
                         if let Some(actual) = auth_result.actual_permission() {
-                            println!("     实际权限: {}", match actual {
-                                "full_access" => "所有者",
-                                _ => actual,
-                            });
+                            println!(
+                                "     实际权限: {}",
+                                match actual {
+                                    "full_access" => "所有者",
+                                    _ => actual,
+                                }
+                            );
                         }
                     }
-                    
+
                     // 检查可执行的操作
                     println!("  📋 可执行操作:");
                     if data.can_perform_action("read") {
@@ -59,11 +62,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 } else {
                     println!("  ❌ 当前用户没有编辑权限");
                     if let Some(actual) = auth_result.actual_permission() {
-                        println!("     实际权限: {}", match actual {
-                            "view" => "仅查看",
-                            "comment" => "可评论",
-                            _ => actual,
-                        });
+                        println!(
+                            "     实际权限: {}",
+                            match actual {
+                                "view" => "仅查看",
+                                "comment" => "可评论",
+                                _ => actual,
+                            }
+                        );
                     } else {
                         println!("     无任何权限");
                     }
@@ -88,15 +94,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.auth_permission(&request, None).await {
         Ok(response) => {
             println!("✅ 所有者权限检查完成!");
-            
+
             if let Some(data) = response.data {
                 println!("{}", data.summary());
-                
+
                 if data.has_permission() {
                     println!("  👑 当前用户是文档所有者");
                     println!("  📋 拥有完全管理权限:");
                     println!("     🛡️  管理协作者权限");
-                    println!("     ⚙️  修改文档设置"); 
+                    println!("     ⚙️  修改文档设置");
                     println!("     🗑️  删除文档");
                     println!("     📤 转移所有权");
                 } else {
@@ -123,17 +129,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.auth_permission(&request, None).await {
         Ok(response) => {
             println!("✅ 查看权限检查完成!");
-            
+
             if let Some(data) = response.data {
                 println!("{}", data.summary());
-                
+
                 if data.has_permission() {
                     println!("  ✅ 当前用户可以查看电子表格");
-                    
+
                     // 权限级别分析
                     let auth_result = &data.auth_result;
                     let level = auth_result.actual_permission_level();
-                    
+
                     println!("  📊 权限级别: {}/4", level);
                     match level {
                         1 => println!("     👁️  基础查看权限"),
@@ -142,7 +148,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         4 => println!("     🛡️  完全管理权限"),
                         _ => println!("     ❓ 无权限"),
                     }
-                    
+
                     // 建议的操作
                     println!("  💡 建议操作:");
                     if data.can_perform_action("edit") {

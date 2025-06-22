@@ -21,27 +21,27 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.update_password(&request, None).await {
         Ok(response) => {
             println!("密码更新成功");
-            
+
             let password_info = response.data.password_info();
             println!("新密码: {}", password_info.password);
             println!("密码变更摘要: {}", password_info.change_summary());
-            
+
             if let Some(update_time) = password_info.update_time_formatted() {
                 println!("更新信息: {}", update_time);
             }
-            
+
             if let Some(expire_time) = password_info.expire_time_formatted() {
                 println!("过期信息: {}", expire_time);
             }
-            
+
             if let Some(prev_hint) = &password_info.previous_password_hint {
                 println!("原密码提示: {}", prev_hint);
             }
-            
+
             println!("更新摘要: {}", response.data.update_summary());
             println!("安全评估: {}", response.data.security_assessment());
             println!("安全改进: {}", password_info.security_improvement());
-            
+
             // 安全建议
             let recommendations = response.data.security_recommendations();
             if !recommendations.is_empty() {
@@ -50,7 +50,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("{}. {}", i + 1, rec);
                 }
             }
-            
+
             // 操作提示
             let tips = response.data.operation_tips();
             if !tips.is_empty() {
@@ -73,17 +73,28 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .random_password(12)
         .build();
 
-    match client.permission.update_password(&random_request, None).await {
+    match client
+        .permission
+        .update_password(&random_request, None)
+        .await
+    {
         Ok(response) => {
             println!("电子表格随机密码更新成功");
-            
+
             let password_info = response.data.password_info();
             println!("新随机密码: {}", password_info.password);
             println!("密码长度: {}", password_info.password_length());
             println!("密码强度: {}", password_info.password_strength());
             println!("密码类型: {}", password_info.password_type());
-            
-            println!("是否更新成功: {}", if response.data.is_updated() { "是" } else { "否" });
+
+            println!(
+                "是否更新成功: {}",
+                if response.data.is_updated() {
+                    "是"
+                } else {
+                    "否"
+                }
+            );
         }
         Err(e) => {
             eprintln!("生成随机密码更新失败: {:?}", e);
@@ -98,15 +109,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .enhance_password("SecureBase")
         .build();
 
-    match client.permission.update_password(&enhance_request, None).await {
+    match client
+        .permission
+        .update_password(&enhance_request, None)
+        .await
+    {
         Ok(response) => {
             println!("多维表格增强密码更新成功");
-            
+
             let password_info = response.data.password_info();
             println!("增强密码: {}", password_info.password);
             println!("密码强度: {}", password_info.password_strength());
             println!("安全改进: {}", password_info.security_improvement());
-            
+
             // 检查密码类型
             if password_info.password_type() == "包含特殊字符" {
                 println!("✓ 密码包含特殊字符，安全性更高");
@@ -124,10 +139,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.update_password(&wiki_request, None).await {
         Ok(response) => {
             println!("知识库密码更新成功");
-            
+
             let password_info = response.data.password_info();
             println!("密码强度评估: {}", password_info.password_strength());
-            
+
             // 根据强度给出反馈
             match password_info.password_strength() {
                 "很强" => println!("✓ 密码安全性优秀"),
@@ -136,12 +151,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 "弱" => println!("⚠️ 密码安全性较弱，建议立即更换"),
                 _ => println!("? 密码强度未知"),
             }
-            
+
             // 详细分析
             println!("密码分析:");
             println!("- 长度: {} 位", password_info.password_length());
             println!("- 类型: {}", password_info.password_type());
-            println!("- 纯数字: {}", if password_info.is_numeric_password() { "是" } else { "否" });
+            println!(
+                "- 纯数字: {}",
+                if password_info.is_numeric_password() {
+                    "是"
+                } else {
+                    "否"
+                }
+            );
         }
         Err(e) => {
             eprintln!("更新知识库密码失败: {:?}", e);
@@ -156,17 +178,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .simple_password(654321)
         .build();
 
-    match client.permission.update_password(&simple_request, None).await {
+    match client
+        .permission
+        .update_password(&simple_request, None)
+        .await
+    {
         Ok(response) => {
             println!("简单数字密码更新完成");
-            
+
             let password_info = response.data.password_info();
             println!("数字密码: {}", password_info.password);
-            
+
             // 如果是弱密码，给出警告
             if password_info.password_strength() == "弱" {
                 println!("⚠️ 警告: 当前密码强度较弱");
-                
+
                 let recommendations = response.data.security_recommendations();
                 if !recommendations.is_empty() {
                     println!("强烈建议:");

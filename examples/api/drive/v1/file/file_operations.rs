@@ -1,8 +1,10 @@
 use dotenv::dotenv;
-use open_lark::prelude::*;
-use open_lark::service::drive::v1::file::{
-    CreateFileRequest, GetFileMetaRequest, SearchFilesRequest, DeleteFileRequest,
-    CopyFileRequest, CreateFileShortcutRequest,
+use open_lark::{
+    prelude::*,
+    service::drive::v1::file::{
+        CopyFileRequest, CreateFileRequest, CreateFileShortcutRequest, DeleteFileRequest,
+        GetFileMetaRequest, SearchFilesRequest,
+    },
 };
 use std::env;
 use tracing::info;
@@ -53,7 +55,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let create_request = CreateFileRequest::new(
         doc_name.clone(),
         "docx", // 飞书文档类型
-        root_token.clone()
+        root_token.clone(),
     );
 
     let doc_token = match client.drive.v1.file.create_file(create_request, None).await {
@@ -78,7 +80,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 2. 获取文档元数据
     println!("\n📊 获取文档元数据...");
     let meta_request = GetFileMetaRequest::new(vec![(doc_token.clone(), "docx".to_string())]);
-    
+
     match client.drive.v1.file.get_file_meta(meta_request, None).await {
         Ok(response) => {
             if let Some(data) = response.data {
@@ -104,11 +106,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 3. 复制文档
     println!("\n📋 复制文档...");
     let copy_name = format!("{}_副本", doc_name);
-    let copy_request = CopyFileRequest::new(
-        doc_token.clone(),
-        copy_name.clone(),
-        root_token.clone()
-    );
+    let copy_request =
+        CopyFileRequest::new(doc_token.clone(), copy_name.clone(), root_token.clone());
 
     let copied_doc_token = match client.drive.v1.file.copy_file(copy_request, None).await {
         Ok(response) => {
@@ -136,10 +135,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         "docx",
         doc_token.clone(),
         shortcut_name.clone(),
-        root_token.clone()
+        root_token.clone(),
     );
 
-    let shortcut_token = match client.drive.v1.file.create_file_shortcut(shortcut_request, None).await {
+    let shortcut_token = match client
+        .drive
+        .v1
+        .file
+        .create_file_shortcut(shortcut_request, None)
+        .await
+    {
         Ok(response) => {
             if let Some(data) = response.data {
                 println!("✅ 创建快捷方式成功:");
@@ -160,10 +165,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 5. 搜索文件
     println!("\n🔍 搜索文件...");
-    let search_request = SearchFilesRequest::new("测试")
-        .with_count(10);
+    let search_request = SearchFilesRequest::new("测试").with_count(10);
 
-    match client.drive.v1.file.search_files(search_request, None).await {
+    match client
+        .drive
+        .v1
+        .file
+        .search_files(search_request, None)
+        .await
+    {
         Ok(response) => {
             if let Some(data) = response.data {
                 println!("✅ 搜索结果 (关键词: '测试'):");
