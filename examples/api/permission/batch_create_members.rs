@@ -24,28 +24,32 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.batch_create_member(&request, None).await {
         Ok(response) => {
             println!("批量添加协作者权限成功!");
-            
+
             if let Some(data) = response.data {
                 println!("操作摘要: {}", data.summary());
-                
+
                 // 显示成功的操作
                 for member in data.successful_members() {
-                    println!("✅ 成功: {} ({}) - {}", 
-                        member.member_id, 
+                    println!(
+                        "✅ 成功: {} ({}) - {}",
+                        member.member_id,
                         member.member_type,
                         member.perm.description()
                     );
                 }
-                
+
                 // 显示失败的操作
                 for member in data.failed_members() {
-                    println!("❌ 失败: {} ({}) - {}",
+                    println!(
+                        "❌ 失败: {} ({}) - {}",
                         member.member_id,
                         member.member_type,
-                        member.error_message().unwrap_or_else(|| "未知错误".to_string())
+                        member
+                            .error_message()
+                            .unwrap_or_else(|| "未知错误".to_string())
                     );
                 }
-                
+
                 // 统计信息
                 println!("\n统计信息:");
                 println!("- 总计操作: {}", data.members.len());

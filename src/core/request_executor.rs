@@ -317,6 +317,7 @@ mod tests {
     }
 
     #[derive(Debug, Deserialize)]
+    #[allow(dead_code)]
     struct TestResponse {
         id: String,
         status: String,

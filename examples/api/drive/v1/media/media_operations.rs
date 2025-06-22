@@ -1,7 +1,9 @@
 use dotenv::dotenv;
-use open_lark::prelude::*;
-use open_lark::service::drive::v1::media::{
-    BatchGetTmpDownloadUrlRequest, DownloadMediaRequest, UploadMediaRequest,
+use open_lark::{
+    prelude::*,
+    service::drive::v1::media::{
+        BatchGetTmpDownloadUrlRequest, DownloadMediaRequest, UploadMediaRequest,
+    },
 };
 use std::env;
 use tracing::info;
@@ -49,11 +51,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 1. 创建一个简单的测试图片数据（一个小的PNG图片）
     // 这是一个1x1像素的透明PNG图片的二进制数据
     let test_image_data = vec![
-        0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D, 0x49, 0x48,
-        0x44, 0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x08, 0x06, 0x00, 0x00,
-        0x00, 0x1F, 0x15, 0xC4, 0x89, 0x00, 0x00, 0x00, 0x0A, 0x49, 0x44, 0x41, 0x54, 0x78,
-        0x9C, 0x63, 0x00, 0x01, 0x00, 0x00, 0x05, 0x00, 0x01, 0x0D, 0x0A, 0x2D, 0xB4, 0x00,
-        0x00, 0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82,
+        0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D, 0x49, 0x48, 0x44,
+        0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x08, 0x06, 0x00, 0x00, 0x00, 0x1F,
+        0x15, 0xC4, 0x89, 0x00, 0x00, 0x00, 0x0A, 0x49, 0x44, 0x41, 0x54, 0x78, 0x9C, 0x63, 0x00,
+        0x01, 0x00, 0x00, 0x05, 0x00, 0x01, 0x0D, 0x0A, 0x2D, 0xB4, 0x00, 0x00, 0x00, 0x00, 0x49,
+        0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82,
     ];
 
     // 2. 上传素材
@@ -113,18 +115,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("\n📥 下载素材...");
     let download_request = DownloadMediaRequest::new(media_token.clone());
 
-    match client
-        .drive
-        .v1
-        .media
-        .download(download_request, None)
-        .await
-    {
+    match client.drive.v1.media.download(download_request, None).await {
         Ok(response) => {
             if let Some(data) = response.data {
                 println!("✅ 素材下载成功:");
                 println!("  - 下载数据大小: {} 字节", data.data.len());
-                
+
                 // 验证下载的数据是否与原始数据一致
                 if data.data == test_image_data {
                     println!("  - ✅ 数据完整性验证通过");
@@ -140,18 +136,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 5. 演示分片上传（对于大文件）
     println!("\n📦 演示分片上传过程（模拟）...");
-    
+
     // 创建一个稍大的测试文件数据（重复上面的PNG数据）
     let large_file_data: Vec<u8> = test_image_data.repeat(100); // 约6KB
     let large_file_name = format!("大文件测试_{}.png", chrono::Utc::now().timestamp());
-    
+
     println!("  - 模拟大文件名称: {}", large_file_name);
     println!("  - 模拟大文件大小: {} 字节", large_file_data.len());
     println!("  - 分片上传步骤:");
     println!("    1. 预上传：获取上传ID和分片信息");
     println!("    2. 分片上传：逐个上传文件块");
     println!("    3. 完成上传：合并所有分片");
-    
+
     // 这里只是演示流程，实际的分片上传需要根据文件大小动态调整
     // 由于这是演示，我们不实际执行分片上传，只显示流程
 

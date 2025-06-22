@@ -8,6 +8,7 @@ pub mod subscription;
 pub struct V1 {
     /// 订阅管理
     pub subscription: SubscriptionService,
+    #[allow(dead_code)]
     config: Config,
 }
 

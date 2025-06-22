@@ -23,18 +23,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.delete_member(&request, None).await {
         Ok(response) => {
             println!("✅ 移除协作者成功!");
-            
+
             if let Some(data) = response.data {
                 println!("{}", data.success_summary());
-                
+
                 let member = &data.member;
                 println!("📋 移除详情:");
                 println!("  用户ID: {}", member.member_id());
                 println!("  风险级别: {}", data.risk_level());
-                
+
                 if let Some(old_perm) = member.old_permission() {
                     println!("  原权限: {}", old_perm.description());
-                    
+
                     // 权限分析
                     if member.was_owner() {
                         println!("  ⚠️  移除了所有者权限，请确认已转移所有权");
@@ -44,11 +44,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         println!("  👁️  移除了查看权限");
                     }
                 }
-                
+
                 if member.was_notified() {
                     println!("  📧 已通知用户权限移除");
                 }
-                
+
                 if let Some(time) = member.delete_time_formatted() {
                     println!("  🕒 {}", time);
                 }
@@ -72,20 +72,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.delete_member(&request, None).await {
         Ok(response) => {
             println!("✅ 移除群组协作权限成功!");
-            
+
             if let Some(data) = response.data {
                 println!("{}", data.success_summary());
-                
+
                 let member = &data.member;
                 println!("📋 群组移除详情:");
                 println!("  群组ID: {}", member.member_id());
                 println!("  风险级别: {}", data.risk_level());
-                
+
                 if data.deleted_editor() {
                     println!("  📝 该群组失去了编辑权限");
                     println!("  💡 群组成员将无法再编辑此文档");
                 }
-                
+
                 println!("  👥 群组所有成员的权限已移除");
             }
         }
@@ -108,19 +108,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.delete_member(&request, None).await {
         Ok(response) => {
             println!("✅ 移除部门权限成功!");
-            
+
             if let Some(data) = response.data {
                 println!("{}", data.success_summary());
-                
+
                 let member = &data.member;
                 if !member.was_notified() {
                     println!("  🔇 静默移除，未发送通知");
                 }
-                
+
                 println!("  🏢 部门ID: {}", member.member_id());
                 println!("  📊 电子表格权限已移除");
                 println!("  风险级别: {}", data.risk_level());
-                
+
                 // 操作建议
                 match data.risk_level() {
                     "高风险" => {
@@ -147,7 +147,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("\n💡 权限管理提示:");
     println!("   - 移除所有者权限前请先转移所有权");
-    println!("   - 移除编辑权限可能影响协作流程");  
+    println!("   - 移除编辑权限可能影响协作流程");
     println!("   - 建议在移除重要权限前备份相关数据");
 
     Ok(())

@@ -24,15 +24,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.update_member(&request, None).await {
         Ok(response) => {
             println!("✅ 更新协作者权限成功!");
-            
+
             if let Some(data) = response.data {
                 println!("{}", data.success_summary());
-                
+
                 let member = &data.member;
                 println!("📋 权限变化:");
                 println!("  用户ID: {}", member.member_id());
                 println!("  权限变化: {}", member.permission_change_description());
-                
+
                 if member.permission_upgraded() {
                     println!("  📈 权限已升级");
                 } else if member.permission_downgraded() {
@@ -40,11 +40,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 } else if !member.permission_changed() {
                     println!("  ⚪ 权限无变化");
                 }
-                
+
                 if member.was_notified() {
                     println!("  📧 已发送通知");
                 }
-                
+
                 if let Some(time) = member.update_time_formatted() {
                     println!("  🕒 {}", time);
                 }
@@ -69,19 +69,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.update_member(&request, None).await {
         Ok(response) => {
             println!("✅ 更新群组权限成功!");
-            
+
             if let Some(data) = response.data {
                 println!("{}", data.success_summary());
-                
+
                 let member = &data.member;
                 println!("📋 群组权限更新:");
                 println!("  群组ID: {}", member.member_id());
-                
+
                 if let Some(old_perm) = member.old_permission() {
                     println!("  原权限: {}", old_perm.description());
                 }
                 println!("  新权限: {}", member.new_permission().description());
-                
+
                 if member.permission_downgraded() {
                     println!("  ⚠️  权限已降级，群组成员编辑能力受限");
                 }
@@ -107,18 +107,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.update_member(&request, None).await {
         Ok(response) => {
             println!("✅ 更新部门权限成功!");
-            
+
             if let Some(data) = response.data {
                 println!("{}", data.success_summary());
-                
+
                 let member = &data.member;
                 if !member.was_notified() {
                     println!("  🔇 静默更新，未发送通知");
                 }
-                
+
                 println!("  🏢 部门ID: {}", member.member_id());
                 println!("  📊 表格权限: {}", member.new_permission().description());
-                
+
                 // 权限级别分析
                 let level = member.new_permission().level();
                 match level {

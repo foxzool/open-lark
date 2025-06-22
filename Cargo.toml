@@ -58,11 +58,26 @@ dotenvy = "0.15.7"
 env_logger = "0.11.3"
 uuid = { version = "1.8.0", features = ["v4"] }
 
+# ===========================================
+# WebSocket 客户端示例
+# ===========================================
+
 [[example]]
 name = "ws_client"
 path = "examples/ws_client.rs"
 required-features = ["websocket"]
 
+# ===========================================
+# 自定义机器人示例
+# ===========================================
+
+[[example]]
+name = "custom_bot"
+path = "examples/custom_bot.rs"
+
+# ===========================================  
+# 飞书卡片组件示例
+# ===========================================
 
 [[example]]
 name = "card_column_set"
@@ -80,18 +95,27 @@ path = "examples/card/interactive.rs"
 name = "card_collapsible"
 path = "examples/card/collapsible.rs"
 
+# ===========================================
+# IM 即时消息模块
+# ===========================================
+
 [[example]]
 name = "create_message"
-path = "examples/api/im/v1/create_message.rs"
+path = "examples/api/im/v1/message/create_message.rs"
 
 [[example]]
 name = "list_message"
-path = "examples/api/im/v1/list_message.rs"
+path = "examples/api/im/v1/message/list_message.rs"
 
 [[example]]
 name = "list_chat"
-path = "examples/api/im/v1/list_chat.rs"
+path = "examples/api/im/v1/chat/list_chat.rs"
 
+# ===========================================
+# 云空间文件模块
+# ===========================================
+
+# Drive v1 文件操作
 [[example]]
 name = "file_upload_all"
 path = "examples/api/drive/v1/files/upload_all.rs"
@@ -100,7 +124,41 @@ path = "examples/api/drive/v1/files/upload_all.rs"
 name = "file_download"
 path = "examples/api/drive/v1/files/download.rs"
 
+[[example]]
+name = "file_operations"
+path = "examples/api/drive/v1/file/file_operations.rs"
 
+[[example]]
+name = "file_version_operations"
+path = "examples/api/drive/v1/file_version/file_version_operations.rs"
+
+# Drive v1 文件夹管理
+[[example]]
+name = "create_folder_v1"
+path = "examples/api/drive/v1/folder/create_folder.rs"
+
+[[example]]
+name = "get_folder_meta"
+path = "examples/api/drive/v1/folder/get_folder_meta.rs"
+
+[[example]]
+name = "get_root_folder_meta"
+path = "examples/api/drive/v1/folder/get_root_folder_meta.rs"
+
+[[example]]
+name = "list_files"
+path = "examples/api/drive/v1/folder/list_files.rs"
+
+[[example]]
+name = "move_delete_folder"
+path = "examples/api/drive/v1/folder/move_delete_folder.rs"
+
+# Drive v1 媒体文件
+[[example]]
+name = "media_operations"
+path = "examples/api/drive/v1/media/media_operations.rs"
+
+# Drive v2 文件管理
 [[example]]
 name = "root_meta"
 path = "examples/api/drive/v2/explorer/meta.rs"
@@ -113,6 +171,7 @@ path = "examples/api/drive/v2/explorer/create_folder.rs"
 name = "list_folder"
 path = "examples/api/drive/v2/explorer/list_folder.rs"
 
+# Drive v2 权限管理
 [[example]]
 name = "get_permission"
 path = "examples/api/drive/v2/permission/get.rs"
@@ -121,12 +180,19 @@ path = "examples/api/drive/v2/permission/get.rs"
 name = "patch_permission"
 path = "examples/api/drive/v2/permission/patch.rs"
 
+# ===========================================
+# 搜索模块
+# ===========================================
+
 [[example]]
 name = "search_user"
 path = "examples/api/search/v1/user.rs"
 
-# 电子表格
+# ===========================================
+# 电子表格模块
+# ===========================================
 
+# Sheets v2 工作表操作
 [[example]]
 name = "sheet-add-rows-or-columns"
 path = "examples/api/sheets/v2/spreadsheet/add_row_or_columns.rs"
@@ -139,86 +205,74 @@ path = "examples/api/sheets/v2/spreadsheet/insert_row_or_columns.rs"
 name = "sheet-update-rows-or-columns"
 path = "examples/api/sheets/v2/spreadsheet/update_row_or_columns.rs"
 
-# 删除行列
 [[example]]
 name = "sheet-delete-rows-or-columns"
 path = "examples/api/sheets/v2/spreadsheet/delete_row_or_columns.rs"
 
-# 插入数据
+# Sheets v2 数据操作
 [[example]]
 name = "sheet-prepend_data"
-path = "examples/api/sheets/v2/data-operation/prepend_data.rs"
+path = "examples/api/sheets/v2/data_operation/prepend_data.rs"
 
-# 追加数据
 [[example]]
 name = "sheet-append_data"
-path = "examples/api/sheets/v2/data-operation/append_data.rs"
+path = "examples/api/sheets/v2/data_operation/append_data.rs"
 
-# 读取单个范围
 [[example]]
 name = "sheet-reading_a_single_range"
-path = "examples/api/sheets/v2/data-operation/reading_a_single_range.rs"
+path = "examples/api/sheets/v2/data_operation/reading_a_single_range.rs"
 
-# 向单个范围写入数据
 [[example]]
 name = "sheet-write_a_single_range"
-path = "examples/api/sheets/v2/data-operation/write_a_single_range.rs"
+path = "examples/api/sheets/v2/data_operation/write_a_single_range.rs"
 
-# 读取多个范围
 [[example]]
 name = "sheet-reading_multi_ranges"
-path = "examples/api/sheets/v2/data-operation/reading_multi_ranges.rs"
+path = "examples/api/sheets/v2/data_operation/reading_multi_ranges.rs"
 
-# 向单个范围写入数据
 [[example]]
 name = "sheet-write_multi_ranges"
-path = "examples/api/sheets/v2/data-operation/write_multi_ranges.rs"
+path = "examples/api/sheets/v2/data_operation/write_multi_ranges.rs"
 
-# 设置单元格样式
 [[example]]
 name = "sheet-set_cell_style"
-path = "examples/api/sheets/v2/data-operation/set_cell_style.rs"
+path = "examples/api/sheets/v2/data_operation/set_cell_style.rs"
 
-# 批量设置单元格样式
 [[example]]
 name = "sheet-write_image"
-path = "examples/api/sheets/v2/data-operation/write_image.rs"
+path = "examples/api/sheets/v2/data_operation/write_image.rs"
 
-# 写入图片
 [[example]]
 name = "sheet-batch_set_cell_style"
-path = "examples/api/sheets/v2/data-operation/batch_set_cell_style.rs"
+path = "examples/api/sheets/v2/data_operation/batch_set_cell_style.rs"
 
-# 合并单元格
 [[example]]
 name = "sheet-merge_cells"
-path = "examples/api/sheets/v2/data-operation/merge_cells.rs"
+path = "examples/api/sheets/v2/data_operation/merge_cells.rs"
 
-# 拆分单元格
 [[example]]
 name = "sheet-split_cells"
-path = "examples/api/sheets/v2/data-operation/split_cells.rs"
+path = "examples/api/sheets/v2/data_operation/split_cells.rs"
 
-# 操作工作表
+# Sheets v2 工作表属性
 [[example]]
 name = "operate_spreadsheet_sheet"
-path = "examples/api/sheets/v2/spreadsheet-sheet/operate.rs"
+path = "examples/api/sheets/v2/spreadsheet_sheet/operate.rs"
 
-# 更新工作表属性
 [[example]]
 name = "update_spreadsheet_sheet_properties"
-path = "examples/api/sheets/v2/spreadsheet-sheet/update.rs"
+path = "examples/api/sheets/v2/spreadsheet_sheet/update.rs"
 
-# 查找单元格
+# Sheets v3 数据操作
 [[example]]
 name = "sheet-find_cells"
 path = "examples/api/sheets/v3/data_operation/find_cells.rs"
 
-# 替换单元格
 [[example]]
 name = "sheet-relace_cells"
 path = "examples/api/sheets/v3/data_operation/replace_cells.rs"
 
+# Sheets v3 工作簿管理
 [[example]]
 name = "create_spreadsheet"
 path = "examples/api/sheets/v3/spreadsheet/create.rs"
@@ -231,81 +285,80 @@ path = "examples/api/sheets/v3/spreadsheet/patch.rs"
 name = "get_spreadsheet"
 path = "examples/api/sheets/v3/spreadsheet/get.rs"
 
-# 查询工作表
+# Sheets v3 工作表管理
 [[example]]
 name = "get_spreadsheet_sheet"
-path = "examples/api/sheets/v3/spreadsheet-sheet/get.rs"
+path = "examples/api/sheets/v3/spreadsheet_sheet/get.rs"
 
-# 获取工作表
 [[example]]
 name = "query_spreadsheet_sheet"
-path = "examples/api/sheets/v3/spreadsheet-sheet/query.rs"
+path = "examples/api/sheets/v3/spreadsheet_sheet/query.rs"
 
-# 移动行列
 [[example]]
 name = "sheet_move_dimension"
-path = "examples/api/sheets/v3/spreadsheet-sheet/move_dimension.rs"
+path = "examples/api/sheets/v3/spreadsheet_sheet/move_dimension.rs"
 
-# 获取筛选
+# Sheets v3 筛选功能
 [[example]]
 name = "spreadsheet-sheet-filter-get"
-path = "examples/api/sheets/v3/spreadsheet-sheet-filter/get.rs"
+path = "examples/api/sheets/v3/spreadsheet_sheet_filter/get.rs"
 
-# 创建筛选
 [[example]]
 name = "spreadsheet-sheet-filter-create"
-path = "examples/api/sheets/v3/spreadsheet-sheet-filter/create.rs"
+path = "examples/api/sheets/v3/spreadsheet_sheet_filter/create.rs"
 
-# 更新筛选
 [[example]]
 name = "spreadsheet-sheet-filter-update"
-path = "examples/api/sheets/v3/spreadsheet-sheet-filter/update.rs"
+path = "examples/api/sheets/v3/spreadsheet_sheet_filter/update.rs"
 
-# 删除筛选
 [[example]]
 name = "spreadsheet-sheet-filter-delete"
-path = "examples/api/sheets/v3/spreadsheet-sheet-filter/delete.rs"
+path = "examples/api/sheets/v3/spreadsheet_sheet_filter/delete.rs"
 
-# 保护范围管理
+# Sheets v3 高级功能
 [[example]]
 name = "protect_range_crud"
 path = "examples/api/sheets/v3/protect_range/protect_range_crud.rs"
 
-# 数据校验管理
 [[example]]
 name = "data_validation_crud"
 path = "examples/api/sheets/v3/data_validation/data_validation_crud.rs"
 
-# 条件格式管理
 [[example]]
 name = "condition_format_crud"
 path = "examples/api/sheets/v3/condition_format/condition_format_crud.rs"
 
-# 浮动图片管理
 [[example]]
 name = "float_image_crud"
 path = "examples/api/sheets/v3/float_image/float_image_crud.rs"
 
-[[example]]
-name = "get_bitable"
-path = "examples/api/bitable/v1/app/get.rs"
-
-
-[[example]]
-name = "app_table_field_list"
-path = "examples/api/bitable/v1/app_table_field/list.rs"
-
+# ===========================================
+# 用户认证模块
+# ===========================================
 
 [[example]]
 name = "auth_get_user_info"
 path = "examples/api/authen/v1/user_info.rs"
 
+# ===========================================
+# 多维表格模块 
+# ===========================================
 
+# Bitable 应用管理
+[[example]]
+name = "get_bitable"
+path = "examples/api/bitable/v1/app/get.rs"
+
+# Bitable 字段管理
+[[example]]
+name = "app_table_field_list"
+path = "examples/api/bitable/v1/app_table_field/list.rs"
+
+# Bitable 记录管理
 [[example]]
 name = "app_table_record_create"
 path = "examples/api/bitable/v1/app_table_record/create.rs"
 
-# 更新记录
 [[example]]
 name = "app_table_record_update"
 path = "examples/api/bitable/v1/app_table_record/update.rs"
@@ -318,7 +371,11 @@ path = "examples/api/bitable/v1/app_table_record/batch_create.rs"
 name = "app_table_record_search"
 path = "examples/api/bitable/v1/app_table_record/search.rs"
 
-# 考勤班次管理 - 单独接口示例
+# ===========================================
+# 考勤管理模块
+# ===========================================
+
+# 考勤班次管理
 [[example]]
 name = "attendance_shift_create"
 path = "examples/api/attendance/v1/shift/create.rs"
@@ -394,7 +451,7 @@ path = "examples/api/attendance/v1/user_setting/upload.rs"
 name = "attendance_user_setting_download"
 path = "examples/api/attendance/v1/user_setting/download.rs"
 
-# 考勤统计
+# 考勤统计数据
 [[example]]
 name = "attendance_user_stats_data_update"
 path = "examples/api/attendance/v1/user_stats_data/update.rs"
@@ -411,7 +468,7 @@ path = "examples/api/attendance/v1/user_stats_data/query_fields.rs"
 name = "attendance_user_stats_data_query_data"
 path = "examples/api/attendance/v1/user_stats_data/query_data.rs"
 
-# 假勤审批
+# 考勤审批管理
 [[example]]
 name = "attendance_user_approval_query"
 path = "examples/api/attendance/v1/user_approval/query.rs"
@@ -424,12 +481,12 @@ path = "examples/api/attendance/v1/user_approval/create.rs"
 name = "attendance_user_approval_process"
 path = "examples/api/attendance/v1/user_approval/process.rs"
 
-# 考勤事件
+# 考勤事件处理
 [[example]]
 name = "attendance_events"
 path = "examples/event/attendance/attendance_events.rs"
 
-# 考勤补卡
+# 考勤补卡管理
 [[example]]
 name = "attendance_user_task_remedy_create"
 path = "examples/api/attendance/v1/user_task_remedy/create.rs"
@@ -442,7 +499,7 @@ path = "examples/api/attendance/v1/user_task_remedy/query_user_allowed_remedys.r
 name = "attendance_user_task_remedy_query"
 path = "examples/api/attendance/v1/user_task_remedy/query.rs"
 
-# 归档报表管理
+# 考勤归档报表
 [[example]]
 name = "attendance_archive_rule_query_user_stats_fields"
 path = "examples/api/attendance/v1/archive_rule/query_user_stats_fields.rs"
@@ -459,7 +516,7 @@ path = "examples/api/attendance/v1/archive_rule/del_report.rs"
 name = "attendance_archive_rule_list"
 path = "examples/api/attendance/v1/archive_rule/list.rs"
 
-# 休假管理
+# 考勤休假管理
 [[example]]
 name = "attendance_leave_employ_expire_record_get"
 path = "examples/api/attendance/v1/leave_employ_expire_record/get.rs"
@@ -468,7 +525,10 @@ path = "examples/api/attendance/v1/leave_employ_expire_record/get.rs"
 name = "attendance_leave_accrual_record_patch"
 path = "examples/api/attendance/v1/leave_accrual_record/patch.rs"
 
-# 文档模块
+# ===========================================
+# 云文档模块
+# ===========================================
+
 [[example]]
 name = "document_operations"
 path = "examples/api/docs/v1/document/document_operations.rs"
@@ -477,7 +537,10 @@ path = "examples/api/docs/v1/document/document_operations.rs"
 name = "document_block_operations"
 path = "examples/api/docs/v1/document_block/block_operations.rs"
 
-# 多维表格模块
+# ===========================================
+# 多维表格扩展操作示例
+# ===========================================
+
 [[example]]
 name = "bitable_app_operations"
 path = "examples/api/bitable/v1/app/app_operations.rs"
@@ -518,6 +581,10 @@ path = "examples/api/bitable/v1/app_role_member/member_operations.rs"
 name = "bitable_workflow_operations"
 path = "examples/api/bitable/v1/app_workflow/workflow_operations.rs"
 
+# ===========================================
+# 知识库模块
+# ===========================================
+
 [[example]]
 name = "wiki_space_operations"
 path = "examples/api/wiki/v2/space/space_operations.rs"
@@ -542,6 +609,89 @@ path = "examples/api/wiki/v2/task/task_operations.rs"
 name = "wiki_search_operations"
 path = "examples/api/wiki/v2/search/search_operations.rs"
 
+# ===========================================
+# 评论模块
+# ===========================================
+
 [[example]]
 name = "comment_operations"
 path = "examples/api/comments/comment_operations.rs"
+
+# ===========================================
+# 权限管理模块 
+# ===========================================
+
+[[example]]
+name = "permission_auth"
+path = "examples/api/permission/auth_permission.rs"
+
+[[example]]
+name = "permission_create_member"
+path = "examples/api/permission/create_member.rs"
+
+[[example]]
+name = "permission_delete_member"
+path = "examples/api/permission/delete_member.rs"
+
+[[example]]
+name = "permission_list_members"
+path = "examples/api/permission/list_members.rs"
+
+[[example]]
+name = "permission_transfer_owner"
+path = "examples/api/permission/transfer_owner.rs"
+
+[[example]]
+name = "permission_update_member"
+path = "examples/api/permission/update_member.rs"
+
+[[example]]
+name = "permission_batch_create_members"
+path = "examples/api/permission/batch_create_members.rs"
+
+# 权限公开设置 v1
+[[example]]
+name = "permission_public_v1_create_password"
+path = "examples/api/permission/public_v1/create_password.rs"
+
+[[example]]
+name = "permission_public_v1_delete_password"
+path = "examples/api/permission/public_v1/delete_password.rs"
+
+[[example]]
+name = "permission_public_v1_get"
+path = "examples/api/permission/public_v1/get_permission_public.rs"
+
+[[example]]
+name = "permission_public_v1_patch"
+path = "examples/api/permission/public_v1/patch_permission_public.rs"
+
+[[example]]
+name = "permission_public_v1_update_password"
+path = "examples/api/permission/public_v1/update_password.rs"
+
+# 权限公开设置 v2
+[[example]]
+name = "permission_public_v2_get"
+path = "examples/api/permission/public_v2/get_permission_public_v2.rs"
+
+[[example]]
+name = "permission_public_v2_patch"
+path = "examples/api/permission/public_v2/patch_permission_public_v2.rs"
+
+# ===========================================
+# 画板模块
+# ===========================================
+
+[[example]]
+name = "board_list_whiteboard_nodes"
+path = "examples/api/board/v1/list_whiteboard_nodes.rs"
+
+# ===========================================
+# 云文档助手模块
+# ===========================================
+
+[[example]]
+name = "assistant_subscription_operations"
+path = "examples/api/assistant/v1/subscription_operations.rs"
+

@@ -1,6 +1,5 @@
 use dotenv::dotenv;
-use open_lark::prelude::*;
-use open_lark::service::drive::v1::folder::CreateFolderRequest;
+use open_lark::{prelude::*, service::drive::v1::folder::CreateFolderRequest};
 use std::env;
 use tracing::info;
 
@@ -45,18 +44,27 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         info!("API调用成功");
                         println!("响应状态码: {}", response.code);
                         println!("响应消息: {}", response.msg);
-                        
+
                         if let Some(data) = response.data {
                             println!("新建文件夹成功:");
                             println!("  - 文件夹名称: {}", folder_name);
                             println!("  - 文件夹Token: {}", data.token);
                             println!("  - 文件夹URL: {}", data.url);
-                            
+
                             // 验证创建成功 - 尝试获取刚创建的文件夹元数据
                             info!("验证文件夹创建成功，获取文件夹元数据...");
-                            let get_meta_request = open_lark::service::drive::v1::folder::GetFolderMetaRequest::new(data.token.clone());
-                            
-                            match client.drive.v1.folder.get_folder_meta(get_meta_request, None).await {
+                            let get_meta_request =
+                                open_lark::service::drive::v1::folder::GetFolderMetaRequest::new(
+                                    data.token.clone(),
+                                );
+
+                            match client
+                                .drive
+                                .v1
+                                .folder
+                                .get_folder_meta(get_meta_request, None)
+                                .await
+                            {
                                 Ok(meta_response) => {
                                     if let Some(meta_data) = meta_response.data {
                                         println!("  - 验证成功，文件夹详细信息:");

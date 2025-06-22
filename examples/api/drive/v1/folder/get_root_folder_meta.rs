@@ -33,7 +33,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             info!("API调用成功");
             println!("响应状态码: {}", response.code);
             println!("响应消息: {}", response.msg);
-            
+
             if let Some(data) = response.data {
                 println!("根目录信息:");
                 println!("  - 根目录 Token: {}", data.token);

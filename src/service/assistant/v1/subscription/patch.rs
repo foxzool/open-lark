@@ -435,7 +435,7 @@ mod tests {
 
     #[test]
     fn test_patch_subscription_request_builder() {
-        let mut builder = PatchSubscriptionRequest::builder()
+        let builder = PatchSubscriptionRequest::builder()
             .file_token("doccnxxxxxx")
             .as_doc()
             .activate()
