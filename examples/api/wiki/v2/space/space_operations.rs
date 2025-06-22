@@ -1,6 +1,10 @@
 use open_lark::{
-    service::wiki::v2::space::{CreateSpaceRequest, GetSpaceRequest, ListSpaceRequest},
-    LarkClient,
+    prelude::*,
+    service::wiki::v2::space::{
+        create::CreateSpaceRequest,
+        get::GetSpaceRequest,
+        list::ListSpaceRequest,
+    },
 };
 
 #[tokio::main]

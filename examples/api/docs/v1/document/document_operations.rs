@@ -19,7 +19,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let user_access_token = env::var("USER_ACCESS_TOKEN").expect("USER_ACCESS_TOKEN 必须设置");
 
     // 创建客户端
-    let client = LarkClient::builder(app_id, app_secret).build();
+    let client = LarkClient::builder(&app_id, &app_secret).build();
     
     // 创建RequestOption以传递用户访问令牌
     let option = Some(RequestOption::builder()
