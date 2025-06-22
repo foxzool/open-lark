@@ -1,4 +1,5 @@
 use dotenvy::dotenv;
+use log::info;
 use open_lark::{
     prelude::*,
     service::docs::v1::{
@@ -24,9 +25,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app_secret = env::var("APP_SECRET").expect("APP_SECRET 必须设置");
     let user_access_token = env::var("USER_ACCESS_TOKEN").expect("USER_ACCESS_TOKEN 必须设置");
 
-    // 创建客户端，使用用户访问凭证
+    // 创建客户端
     let client = LarkClient::builder(&app_id, &app_secret)
-        .with_user_access_token(user_access_token)
+        .with_enable_token_cache(true)
+        .build();
+        
+    let option = RequestOption::builder()
+        .user_access_token(user_access_token)
         .build();
 
     info!("开始文档块操作演示...");

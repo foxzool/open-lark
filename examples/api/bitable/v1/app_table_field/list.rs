@@ -13,17 +13,16 @@ async fn main() {
     let app_secret = env::var("APP_SECRET").unwrap();
     // 创建 Client
     let client = LarkClient::builder(&app_id, &app_secret).build();
-    // 构建请求体
-    let req = open_lark::service::bitable::v1::app_table_field::list::ListFieldRequest::builder()
-        .app_token("Iht6bSSnvaL4mxsGPMPcInvun8b")
-        .table_id("tblxIYN0WCaZNC0Y")
-        .build();
+    // 构建请求体 - 直接使用服务方法避免访问私有模块
+    let app_token = "Iht6bSSnvaL4mxsGPMPcInvun8b";
+    let table_id = "tblxIYN0WCaZNC0Y";
+    
     // 发起请求
     let resp = client
         .bitable
         .v1
         .app_table_field
-        .list(req, None)
+        .list_field(app_token, table_id, None)
         .await
         .unwrap();
     if let Some(data) = resp.data {

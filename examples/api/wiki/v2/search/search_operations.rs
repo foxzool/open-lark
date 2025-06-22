@@ -1,6 +1,6 @@
 use open_lark::{
     service::wiki::v2::SearchWikiRequest,
-    LarkClient,
+    prelude::LarkClient,
 };
 
 #[tokio::main]
@@ -130,7 +130,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             for (space_id, items) in space_groups {
                 let space_name = items
                     .first()
-                    .and_then(|item| item.space_name.as_deref())
+                    .and_then(|item| item.space_id.as_deref())
                     .unwrap_or("未知空间");
 
                 println!("\n  空间 {} ({}):", space_name, space_id);

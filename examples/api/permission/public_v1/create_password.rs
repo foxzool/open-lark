@@ -105,7 +105,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let numeric_request = CreatePasswordRequest::builder()
         .token("bascnxxxxxx")
         .as_bitable()
-        .numeric_password(6)
+        .simple_password(6)
         .with_expiration(7)
         .build();
 
@@ -119,7 +119,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("是否纯数字: {}", password_info.is_numeric_password());
                 println!("密码强度: {}", password_info.password_strength());
 
-                if password_info.is_weak_password() {
+                if password_info.is_numeric_password() {
                     println!("⚠️ 密码强度较弱，建议使用更复杂的密码");
                 }
             }
@@ -142,19 +142,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("复杂密码强度: {}", password_info.password_strength());
                 println!(
                     "密码复杂度评级: {}",
-                    if password_info.is_strong_password() {
-                        "高"
-                    } else if password_info.is_medium_password() {
-                        "中"
-                    } else {
-                        "低"
+                    match password_info.password_strength() {
+                        "strong" => "高",
+                        "medium" => "中",
+                        _ => "低"
                     }
                 );
 
                 let security_tips = data.security_tips();
                 println!("安全提醒数量: {}", security_tips.len());
 
-                if password_info.is_strong_password() {
+                if password_info.password_strength() == "strong" {
                     println!("✓ 密码强度良好");
                 }
             }

@@ -28,8 +28,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("更新权限设置成功");
 
             let result = response.data.as_ref().unwrap().update_result();
-            println!("更新摘要: {}", response.data.update_summary());
-            println!("安全评估: {}", if let Some(data) = response.data { data.security_assessment() } else { "N/A".to_string() });
+            if let Some(data) = &response.data {
+                println!("更新摘要: {}", data.update_summary());
+                println!("安全评估: {}", data.security_assessment());
 
             // 详细变更信息
             let changes = result.changes_summary();
@@ -41,12 +42,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
 
             // 操作建议
-            let recommendations = response.data.operation_recommendations();
+            let recommendations = data.operation_recommendations();
             if !recommendations.is_empty() {
                 println!("\n操作建议:");
                 for (i, rec) in recommendations.iter().enumerate() {
                     println!("{}. {}", i + 1, rec);
                 }
+            }
             }
         }
         Err(e) => {
@@ -73,14 +75,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 "安全级别: {}",
                 response.data.as_ref().unwrap().update_result().security_level()
             );
-            println!("更新摘要: {}", response.data.update_summary());
+            if let Some(data) = &response.data {
+                println!("更新摘要: {}", data.update_summary());
 
-            let recommendations = response.data.operation_recommendations();
+            let recommendations = data.operation_recommendations();
             if !recommendations.is_empty() {
                 println!("\n安全提醒:");
                 for rec in recommendations {
                     println!("- {}", rec);
                 }
+            }
             }
         }
         Err(e) => {
