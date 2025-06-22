@@ -1,10 +1,4 @@
-use open_lark::{
-    core::config::{AppType, Config},
-    service::bitable::v1::form::{
-        GetFormRequest, ListFormQuestionRequest, PatchFormMetaRequest, PatchFormQuestionRequest,
-    },
-    LarkClient,
-};
+use open_lark::prelude::*;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

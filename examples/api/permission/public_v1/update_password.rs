@@ -39,7 +39,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
 
             println!("更新摘要: {}", response.data.update_summary());
-            println!("安全评估: {}", response.data.security_assessment());
+            println!("安全评估: {}", if let Some(data) = response.data { data.security_assessment() } else { "N/A".to_string() });
             println!("安全改进: {}", password_info.security_improvement());
 
             // 安全建议
