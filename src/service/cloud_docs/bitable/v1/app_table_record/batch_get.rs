@@ -122,6 +122,27 @@ impl BatchGetRecordRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 直接执行批量获取记录请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.batch_get()`
+    pub async fn execute(
+        self,
+        service: &crate::service::cloud_docs::bitable::v1::app_table_record::AppTableRecordService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchGetRecordResponse>> {
+        service.batch_get(self.build(), None).await
+    }
+
+    /// 直接执行批量获取记录请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.batch_get()`
+    pub async fn execute_with_options(
+        self,
+        service: &crate::service::cloud_docs::bitable::v1::app_table_record::AppTableRecordService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchGetRecordResponse>> {
+        service.batch_get(self.build(), Some(option)).await
+    }
 }
 
 /// 批量获取记录响应

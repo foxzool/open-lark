@@ -148,6 +148,27 @@ impl CreateMessageRequestBuilder {
     pub fn build(self) -> CreateMessageRequest {
         self.request
     }
+
+    /// 直接执行发送消息请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.create()`
+    pub async fn execute(
+        self,
+        service: &MessageService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<Message>> {
+        service.create(self.build(), None).await
+    }
+
+    /// 直接执行发送消息请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.create()`
+    pub async fn execute_with_options(
+        self,
+        service: &MessageService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<Message>> {
+        service.create(self.build(), Some(option)).await
+    }
 }
 
 /// 发送消息 请求体
@@ -434,6 +455,27 @@ impl ListMessageRequestBuilder {
 
     pub fn build(self) -> ListMessageRequest {
         self.request
+    }
+
+    /// 直接执行获取会话历史消息请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list()`
+    pub async fn execute(
+        self,
+        service: &MessageService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListMessageRespData>> {
+        service.list(self.build(), None).await
+    }
+
+    /// 直接执行获取会话历史消息请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list()`
+    pub async fn execute_with_options(
+        self,
+        service: &MessageService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListMessageRespData>> {
+        service.list(self.build(), Some(option)).await
     }
 }
 
