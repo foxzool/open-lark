@@ -1,5 +1,8 @@
 use dotenvy::dotenv;
-use open_lark::prelude::*;
+use open_lark::{
+    prelude::*,
+    service::permission::member::{BatchCreatePermissionMemberRequest, Permission},
+};
 use std::env;
 
 #[tokio::main]
