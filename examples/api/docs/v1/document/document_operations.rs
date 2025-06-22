@@ -22,9 +22,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = LarkClient::builder(&app_id, &app_secret).build();
     
     // 创建RequestOption以传递用户访问令牌
-    let option = Some(RequestOption::builder()
+    let option = RequestOption::builder()
         .user_access_token(&user_access_token)
-        .build());
+        .build();
 
     println!("开始文档操作演示...");
 
@@ -33,7 +33,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let doc_title = format!("API测试文档_{}", chrono::Utc::now().timestamp());
     let create_request = CreateDocumentRequest::new(doc_title.clone());
 
-    let document_id = match client.docs.v1.document.create(create_request, option).await {
+    let document_id = match client.docs.v1.document.create(create_request, Some(option.clone())).await {
         Ok(response) => {
             if let Some(data) = response.data {
                 println!("✅ 文档创建成功:");
@@ -54,7 +54,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 2. 获取文档基本信息
     println!("\n📋 获取文档基本信息...");
-    match client.docs.v1.document.get(&document_id, option).await {
+    match client.docs.v1.document.get(&document_id, Some(option.clone())).await {
         Ok(response) => {
             if let Some(data) = response.data {
                 let doc = data.document;
@@ -79,7 +79,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .docs
         .v1
         .document
-        .get_raw_content(&document_id, option)
+        .get_raw_content(&document_id, Some(option.clone()))
         .await
     {
         Ok(response) => {
@@ -105,7 +105,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .docs
         .v1
         .document
-        .list_blocks(list_request, option)
+        .list_blocks(list_request, Some(option.clone()))
         .await
     {
         Ok(response) => {
@@ -135,7 +135,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .docs
         .v1
         .document
-        .convert_to_docx(&document_id, option)
+        .convert_to_docx(&document_id, Some(option.clone()))
         .await
     {
         Ok(response) => {

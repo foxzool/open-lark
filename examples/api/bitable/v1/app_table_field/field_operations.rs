@@ -1,9 +1,11 @@
 use open_lark::{
+    prelude::*,
     service::bitable::v1::app_table_field::{
-        AppTableFieldProperty, AppTableFieldPropertyOption, CreateFieldRequest, DeleteFieldRequest,
-        FieldType, ListFieldRequest, UpdateFieldRequest,
+        create::{CreateFieldRequest, AppTableFieldProperty, AppTableFieldPropertyOption, FieldType},
+        delete::DeleteFieldRequest,
+        list::ListFieldRequest,
+        update::UpdateFieldRequest,
     },
-    LarkClient,
 };
 
 #[tokio::main]
