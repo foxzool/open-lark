@@ -7,7 +7,6 @@ use open_lark::{
     },
 };
 use std::env;
-use tracing::info;
 
 /// 文件操作综合示例
 ///
@@ -16,23 +15,24 @@ use tracing::info;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 从环境变量获取配置
     dotenv().ok();
-    tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::DEBUG)
-        .init();
 
     let app_id = env::var("APP_ID").expect("APP_ID 必须设置");
     let app_secret = env::var("APP_SECRET").expect("APP_SECRET 必须设置");
     let user_access_token = env::var("USER_ACCESS_TOKEN").expect("USER_ACCESS_TOKEN 必须设置");
 
-    // 创建客户端，使用用户访问凭证
+    // 创建客户端
     let client = LarkClient::builder(app_id, app_secret)
-        .with_user_access_token(user_access_token)
+        .with_enable_token_cache(true)
+        .build();
+    
+    let option = RequestOption::builder()
+        .user_access_token(user_access_token)
         .build();
 
-    info!("开始文件操作演示...");
+    println!("开始文件操作演示...");
 
     // 获取根目录token
-    let root_token = match client.drive.v1.folder.get_root_folder_meta(None).await {
+    let root_token = match client.drive.v1.folder.get_root_folder_meta(Some(option.clone())).await {
         Ok(response) => {
             if let Some(data) = response.data {
                 data.token
@@ -58,7 +58,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         root_token.clone(),
     );
 
-    let doc_token = match client.drive.v1.file.create_file(create_request, None).await {
+    let doc_token = match client.drive.v1.file.create_file(create_request, Some(option.clone())).await {
         Ok(response) => {
             if let Some(data) = response.data {
                 println!("✅ 创建文档成功:");
@@ -81,7 +81,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("\n📊 获取文档元数据...");
     let meta_request = GetFileMetaRequest::new(vec![(doc_token.clone(), "docx".to_string())]);
 
-    match client.drive.v1.file.get_file_meta(meta_request, None).await {
+    match client.drive.v1.file.get_file_meta(meta_request, Some(option.clone())).await {
         Ok(response) => {
             if let Some(data) = response.data {
                 for meta in data.metas {
@@ -109,7 +109,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let copy_request =
         CopyFileRequest::new(doc_token.clone(), copy_name.clone(), root_token.clone());
 
-    let copied_doc_token = match client.drive.v1.file.copy_file(copy_request, None).await {
+    let copied_doc_token = match client.drive.v1.file.copy_file(copy_request, Some(option.clone())).await {
         Ok(response) => {
             if let Some(data) = response.data {
                 println!("✅ 复制文档成功:");
@@ -142,7 +142,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .drive
         .v1
         .file
-        .create_file_shortcut(shortcut_request, None)
+        .create_file_shortcut(shortcut_request, Some(option.clone()))
         .await
     {
         Ok(response) => {
@@ -171,7 +171,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .drive
         .v1
         .file
-        .search_files(search_request, None)
+        .search_files(search_request, Some(option.clone()))
         .await
     {
         Ok(response) => {
@@ -198,7 +198,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 删除快捷方式
     if let Some(token) = shortcut_token {
         let delete_request = DeleteFileRequest::new(token);
-        match client.drive.v1.file.delete_file(delete_request, None).await {
+        match client.drive.v1.file.delete_file(delete_request, Some(option.clone())).await {
             Ok(_) => println!("✅ 快捷方式删除成功"),
             Err(e) => eprintln!("❌ 删除快捷方式失败: {}", e),
         }
@@ -207,7 +207,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 删除副本
     if let Some(token) = copied_doc_token {
         let delete_request = DeleteFileRequest::new(token);
-        match client.drive.v1.file.delete_file(delete_request, None).await {
+        match client.drive.v1.file.delete_file(delete_request, Some(option.clone())).await {
             Ok(_) => println!("✅ 副本文档删除成功"),
             Err(e) => eprintln!("❌ 删除副本失败: {}", e),
         }
@@ -215,7 +215,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 删除原文档
     let delete_request = DeleteFileRequest::new(doc_token);
-    match client.drive.v1.file.delete_file(delete_request, None).await {
+    match client.drive.v1.file.delete_file(delete_request, Some(option)).await {
         Ok(_) => println!("✅ 原文档删除成功"),
         Err(e) => eprintln!("❌ 删除原文档失败: {}", e),
     }

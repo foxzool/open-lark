@@ -1,4 +1,4 @@
-use open_lark::prelude::*;
+use open_lark::{prelude::*, service::permission::public_v1::password::update::UpdatePasswordRequest};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

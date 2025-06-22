@@ -29,44 +29,40 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("画板中没有节点");
                     return Ok(());
                 }
-            } else {
-                println!("没有获取到节点数据");
-                return Ok(());
-            }
 
-            // 按类型统计节点
-            println!("\n--- 节点类型分析 ---");
-            let type_counts = nodes_data.count_by_type();
-            for (node_type, count) in type_counts {
-                println!(
-                    "- {}: {}个 ({})",
-                    node_type.description(),
-                    count,
-                    node_type.category()
-                );
-            }
-
-            // 显示前几个节点的详细信息
-            println!("\n--- 节点详情 (前5个) ---");
-            for (i, node) in nodes_data.items.iter().take(5).enumerate() {
-                println!("{}. {}", i + 1, node.node_summary());
-
-                let status = node.node_status();
-                for stat in status {
-                    println!("   {}", stat);
+                // 按类型统计节点
+                println!("\n--- 节点类型分析 ---");
+                let type_counts = nodes_data.count_by_type();
+                for (node_type, count) in type_counts {
+                    println!(
+                        "- {}: {}个 ({})",
+                        node_type.description(),
+                        count,
+                        node_type.category()
+                    );
                 }
 
-                if let Some(create_time) = node.create_time_formatted() {
-                    println!("   创建时间: {}", create_time);
-                }
+                // 显示前几个节点的详细信息
+                println!("\n--- 节点详情 (前5个) ---");
+                for (i, node) in nodes_data.items.iter().take(5).enumerate() {
+                    println!("{}. {}", i + 1, node.node_summary());
 
-                if let Some(update_time) = node.update_time_formatted() {
-                    println!("   更新时间: {}", update_time);
-                }
+                    let status = node.node_status();
+                    for stat in status {
+                        println!("   {}", stat);
+                    }
 
-                println!("   复杂度: {} 分", node.complexity_score());
-                println!();
-            }
+                    if let Some(create_time) = node.create_time_formatted() {
+                        println!("   创建时间: {}", create_time);
+                    }
+
+                    if let Some(update_time) = node.update_time_formatted() {
+                        println!("   更新时间: {}", update_time);
+                    }
+
+                    println!("   复杂度: {} 分", node.complexity_score());
+                    println!();
+                }
 
             // 特殊节点分析
             println!("--- 特殊节点分析 ---");
@@ -233,8 +229,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         }
                     }
                 }
+            } else {
+                println!("没有获取到节点数据");
+                return Ok(());
             }
-        }
         }
         Err(e) => {
             eprintln!("获取画板节点失败: {:?}", e);

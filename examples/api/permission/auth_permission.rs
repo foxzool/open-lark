@@ -1,5 +1,5 @@
 use dotenvy::dotenv;
-use open_lark::prelude::*;
+use open_lark::{prelude::*, service::permission::member::auth::AuthPermissionRequest};
 use std::env;
 
 #[tokio::main]

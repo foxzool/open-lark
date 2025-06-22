@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 use log::error;
-use open_lark::{prelude::LarkClient, service::bitable::v1::SearchAppTableRecordRequest};
+use open_lark::{prelude::*, service::bitable::v1::app_table_record::search::SearchRecordRequest};
 
 /// 查询记录
 #[tokio::main]
@@ -14,7 +14,7 @@ async fn main() {
     // 创建 Client
     let client = LarkClient::builder(&app_id, &app_secret).build();
     // 构建请求体
-    let req = SearchAppTableRecordRequest::builder()
+    let req = SearchRecordRequest::builder()
         .app_token("UHNYbRv2BaxTllsMLt8cykiSnsb")
         .table_id("tbli6aSCRbJKDFIe")
         .build();
