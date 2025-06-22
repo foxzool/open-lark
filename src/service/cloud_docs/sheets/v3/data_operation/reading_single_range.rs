@@ -106,6 +106,27 @@ impl ReadingSingleRangeRequestBuilder {
     pub fn build(self) -> ReadingSingleRangeRequest {
         self.request
     }
+
+    /// 直接执行读取单个范围请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.reading_single_range()`
+    pub async fn execute(
+        self,
+        service: &DataOperationService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ReadingSingleRangeResponseData>> {
+        service.reading_single_range(self.build(), None).await
+    }
+
+    /// 直接执行读取单个范围请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.reading_single_range()`
+    pub async fn execute_with_options(
+        self,
+        service: &DataOperationService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ReadingSingleRangeResponseData>> {
+        service.reading_single_range(self.build(), Some(option)).await
+    }
 }
 
 /// 读取单个范围响应体最外层
