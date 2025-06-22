@@ -106,7 +106,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .token("bascnxxxxxx")
         .as_bitable()
         .simple_password(6)
-        .with_expiration(7)
         .build();
 
     match client.permission.create_password(&numeric_request, None).await {

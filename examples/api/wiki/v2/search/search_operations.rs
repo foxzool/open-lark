@@ -130,7 +130,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             for (space_id, items) in space_groups {
                 let space_name = items
                     .first()
-                    .and_then(|item| item.space_id.as_deref())
+                    .map(|item| item.space_id.as_str())
                     .unwrap_or("未知空间");
 
                 println!("\n  空间 {} ({}):", space_name, space_id);

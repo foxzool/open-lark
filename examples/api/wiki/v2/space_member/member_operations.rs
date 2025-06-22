@@ -2,7 +2,7 @@ use open_lark::{
     service::wiki::v2::space_member::{
         CreateSpaceMemberRequest, DeleteSpaceMemberRequest, ListSpaceMemberRequest,
     },
-    LarkClient,
+    prelude::LarkClient,
 };
 
 #[tokio::main]

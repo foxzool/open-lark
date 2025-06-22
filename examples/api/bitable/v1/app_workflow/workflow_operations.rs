@@ -1,6 +1,6 @@
 use open_lark::{
-    service::bitable::v1::app_workflow::{ListWorkflowRequest, UpdateWorkflowRequest},
-    LarkClient,
+    prelude::*,
+    service::bitable::v1::AppWorkflowService,
 };
 
 #[tokio::main]
