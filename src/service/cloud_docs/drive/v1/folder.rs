@@ -199,13 +199,15 @@ pub struct ListFilesRequest {
 }
 
 impl ListFilesRequest {
-    pub fn builder(folder_token: impl Into<String>) -> ListFilesRequestBuilder {
-        ListFilesRequestBuilder {
-            request: ListFilesRequest {
-                folder_token: folder_token.into(),
-                ..Default::default()
-            },
+    pub fn new(folder_token: impl Into<String>) -> Self {
+        Self {
+            folder_token: folder_token.into(),
+            ..Default::default()
         }
+    }
+
+    pub fn builder() -> ListFilesRequestBuilder {
+        ListFilesRequestBuilder::default()
     }
 }
 
@@ -216,6 +218,11 @@ pub struct ListFilesRequestBuilder {
 }
 
 impl ListFilesRequestBuilder {
+    pub fn folder_token(mut self, folder_token: impl Into<String>) -> Self {
+        self.request.folder_token = folder_token.into();
+        self
+    }
+
     pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
         self.request.page_token = Some(page_token.into());
         self
