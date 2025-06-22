@@ -7,7 +7,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app_id = std::env::var("APP_ID").unwrap();
     let app_secret = std::env::var("APP_SECRET").unwrap();
 
-    let client = LarkClient::builder(app_id, app_secret)
+    let client = LarkClient::builder(&app_id, &app_secret)
         .with_enable_token_cache(true)
         .build();
 
@@ -233,6 +233,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("没有获取到节点数据");
                 return Ok(());
             }
+        }
         }
         Err(e) => {
             eprintln!("获取画板节点失败: {:?}", e);

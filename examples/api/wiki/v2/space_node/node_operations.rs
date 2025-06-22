@@ -1,9 +1,13 @@
 use open_lark::{
+    prelude::*,
     service::wiki::v2::space_node::{
-        CopySpaceNodeRequest, CreateSpaceNodeRequest, GetSpaceNodeRequest, ListSpaceNodeRequest,
-        MoveSpaceNodeRequest, UpdateSpaceNodeTitleRequest,
+        copy::CopySpaceNodeRequest,
+        create::CreateSpaceNodeRequest,
+        get::GetSpaceNodeRequest,
+        list::ListSpaceNodeRequest,
+        r#move::MoveSpaceNodeRequest,
+        update_title::UpdateSpaceNodeTitleRequest,
     },
-    LarkClient,
 };
 
 #[tokio::main]

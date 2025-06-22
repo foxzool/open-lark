@@ -1,6 +1,6 @@
 use open_lark::{
-    service::wiki::v2::space_setting::UpdateSpaceSettingRequest,
-    LarkClient,
+    prelude::*,
+    service::wiki::v2::space_setting::update::UpdateSpaceSettingRequest,
 };
 
 #[tokio::main]

@@ -1,6 +1,6 @@
 use dotenvy::dotenv;
 use log::error;
-use open_lark::{prelude::LarkClient, service::bitable::v1::app_table_record::CreateRecordRequest};
+use open_lark::{prelude::*, service::bitable::v1::app_table_record::create::CreateRecordRequest};
 use serde_json::json;
 use std::env;
 
@@ -14,7 +14,7 @@ async fn main() {
     // 创建 Client
     let client = LarkClient::builder(&app_id, &app_secret).build();
     // 构建请求体
-    let req = CreateAppTableRecordRequest::builder()
+    let req = CreateRecordRequest::builder()
         .app_token("P7t0b91y4accAks27oScppjgnuc")
         .table_id("tbl1TSGmbFDIezBZ")
         .add_field("订单编号", json!("20210909001"))
