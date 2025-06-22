@@ -94,6 +94,27 @@ impl UploadAllRequestBuilder {
         self.request.api_req.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 直接执行上传文件请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.upload_all()`
+    pub async fn execute(
+        self,
+        service: &FilesService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<UploadAllResponse>> {
+        service.upload_all(self.build(), None).await
+    }
+
+    /// 直接执行上传文件请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.upload_all()`
+    pub async fn execute_with_options(
+        self,
+        service: &FilesService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<UploadAllResponse>> {
+        service.upload_all(self.build(), Some(option)).await
+    }
 }
 
 impl FilesService {
@@ -171,6 +192,31 @@ impl DownloadRequestBuilder {
 
     pub fn build(self) -> DownloadRequest {
         self.req
+    }
+
+    /// 直接执行下载文件请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.download()`
+    pub async fn execute(
+        self,
+        service: &FilesService,
+    ) -> crate::core::SDKResult<
+        crate::core::api_resp::BaseResponse<crate::core::api_resp::BinaryResponse>,
+    > {
+        service.download(self.build(), None).await
+    }
+
+    /// 直接执行下载文件请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.download()`
+    pub async fn execute_with_options(
+        self,
+        service: &FilesService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<
+        crate::core::api_resp::BaseResponse<crate::core::api_resp::BinaryResponse>,
+    > {
+        service.download(self.build(), Some(option)).await
     }
 }
 

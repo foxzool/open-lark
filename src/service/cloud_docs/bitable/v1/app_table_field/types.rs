@@ -45,6 +45,7 @@ pub struct Person {
 
 /// 群组
 #[derive(Debug, Deserialize)]
+#[allow(dead_code)]
 pub struct GroupChat {
     /// 群组名
     pub name: String,
@@ -65,6 +66,7 @@ pub struct Link {
 
 /// 附件
 #[derive(Debug, Deserialize)]
+#[allow(dead_code)]
 pub struct Attachment {
     /// 附件token
     pub file_token: String,
