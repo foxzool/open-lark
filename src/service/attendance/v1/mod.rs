@@ -6,7 +6,7 @@ use crate::{
         leave_employ_expire_record::LeaveEmployExpireRecordService, shift::ShiftService,
         user_approval::UserApprovalService, user_daily_shift::UserDailyShiftService,
         user_setting::UserSettingService, user_stats_data::UserStatsDataService,
-        user_task_remedy::UserTaskRemedyService,
+        user_task::UserTaskService, user_task_remedy::UserTaskRemedyService,
     },
 };
 
@@ -22,6 +22,7 @@ pub mod user_approval;
 pub mod user_daily_shift;
 pub mod user_setting;
 pub mod user_stats_data;
+pub mod user_task;
 pub mod user_task_remedy;
 
 pub struct V1 {
@@ -31,6 +32,7 @@ pub struct V1 {
     pub user_setting: UserSettingService,
     pub user_stats_data: UserStatsDataService,
     pub user_approval: UserApprovalService,
+    pub user_task: UserTaskService,
     pub user_task_remedy: UserTaskRemedyService,
     pub archive_rule: ArchiveRuleService,
     pub leave_employ_expire_record: LeaveEmployExpireRecordService,
@@ -56,6 +58,9 @@ impl V1 {
                 config: config.clone(),
             },
             user_approval: UserApprovalService {
+                config: config.clone(),
+            },
+            user_task: UserTaskService {
                 config: config.clone(),
             },
             user_task_remedy: UserTaskRemedyService {
