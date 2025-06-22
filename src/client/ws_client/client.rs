@@ -43,13 +43,27 @@ impl LarkWsClient {
         app_secret: &str,
         event_handler: EventDispatcherHandler,
     ) -> WsClientResult<()> {
-        let end_point = get_conn_url(app_id, app_secret).await?;
-        let conn_url = end_point.url.unwrap();
-        let client_config = end_point.client_config.unwrap();
+        // 创建临时的 Config 以复用 http_client
+        let config = crate::core::config::Config {
+            app_id: app_id.to_string(),
+            app_secret: app_secret.to_string(),
+            ..Default::default()
+        };
+        let end_point = get_conn_url(&config).await?;
+        let conn_url = end_point
+            .url
+            .ok_or(WsClientError::UnexpectedResponse)?;
+        let client_config = end_point
+            .client_config
+            .ok_or(WsClientError::UnexpectedResponse)?;
         let url = Url::parse(&conn_url)?;
         let query_pairs: HashMap<_, _> = url.query_pairs().into_iter().collect();
         // let conn_id = query_pairs.get("device_id").unwrap();
-        let service_id = query_pairs.get("service_id").unwrap().parse().unwrap();
+        let service_id = query_pairs
+            .get("service_id")
+            .ok_or(WsClientError::UnexpectedResponse)?
+            .parse()
+            .map_err(|_| WsClientError::UnexpectedResponse)?;
 
         let (conn, _response) = connect_async(conn_url).await?;
         info!("connected to {url}");
@@ -81,40 +95,36 @@ impl LarkWsClient {
                 let sum: usize = headers
                     .iter()
                     .find(|h| h.key == "sum")
-                    .unwrap()
-                    .value
-                    .parse()
-                    .unwrap();
+                    .and_then(|h| h.value.parse().ok())
+                    .unwrap_or(1);
                 // 包序号, 未拆包为0
                 let seq: usize = headers
                     .iter()
                     .find(|h| h.key == "seq")
-                    .unwrap()
-                    .value
-                    .parse()
-                    .unwrap();
+                    .and_then(|h| h.value.parse().ok())
+                    .unwrap_or(0);
                 let msg_type = headers
                     .iter()
                     .find(|h| h.key == "type")
-                    .unwrap()
-                    .value
-                    .as_str();
+                    .map(|h| h.value.as_str())
+                    .unwrap_or("");
                 //  消息ID, 拆包后继承
                 let msg_id = headers
                     .iter()
                     .find(|h| h.key == "message_id")
-                    .unwrap()
-                    .value
-                    .as_str();
+                    .map(|h| h.value.as_str())
+                    .unwrap_or("");
                 // 链路ID
                 let trace_id = headers
                     .iter()
                     .find(|h| h.key == "trace_id")
-                    .unwrap()
-                    .value
-                    .as_str();
+                    .map(|h| h.value.as_str())
+                    .unwrap_or("");
 
-                let mut pl = frame.payload.unwrap();
+                let Some(mut pl) = frame.payload else {
+                    error!("Frame payload is empty");
+                    continue;
+                };
                 if sum > 1 {
                     match self.combine(msg_id, sum, seq, &pl) {
                         Some(payload) => {
@@ -129,7 +139,7 @@ impl LarkWsClient {
                     "Received a data frame, message type: {}, message_id: {}, payload: {}",
                     msg_type,
                     trace_id,
-                    String::from_utf8(pl.clone()).unwrap()
+                    String::from_utf8(pl.clone()).unwrap_or_else(|_| "<binary data>".to_string())
                 );
                 match msg_type {
                     "event" => {
@@ -149,9 +159,14 @@ impl LarkWsClient {
                                 resp = NewWsResponse::new(StatusCode::INTERNAL_SERVER_ERROR);
                             }
                         };
-                        frame.payload = Some(serde_json::to_vec(&resp).unwrap());
+                        frame.payload = Some(serde_json::to_vec(&resp).unwrap_or_else(|e| {
+                            error!("Failed to serialize response: {:?}", e);
+                            vec![]
+                        }));
 
-                        self.frame_tx.send(frame).unwrap()
+                        if let Err(e) = self.frame_tx.send(frame) {
+                            error!("Failed to send frame: {:?}", e);
+                        }
                     }
                     "card" => {
                         return;
@@ -171,7 +186,9 @@ impl LarkWsClient {
             return None;
         }
 
-        let mut val = val.unwrap();
+        let Some(mut val) = val else {
+            return None;
+        };
         val[seq] = bs.to_vec();
         let mut pl = Vec::new();
         for v in val.iter() {
@@ -187,13 +204,13 @@ impl LarkWsClient {
 }
 
 /// 获取连接配置
-async fn get_conn_url(app_id: &str, app_secret: &str) -> WsClientResult<EndPointResponse> {
+async fn get_conn_url(config: &crate::core::config::Config) -> WsClientResult<EndPointResponse> {
     let body = json!({
-        "AppID": app_id,
-        "AppSecret": app_secret
+        "AppID": &config.app_id,
+        "AppSecret": &config.app_secret
     });
 
-    let req = reqwest::Client::new()
+    let req = config.http_client
         .post(format!("{FEISHU_BASE_URL}/{END_POINT_URL}"))
         .header("locale", "zh")
         .json(&body)
@@ -220,8 +237,8 @@ async fn get_conn_url(app_id: &str, app_secret: &str) -> WsClientResult<EndPoint
         };
     }
 
-    let end_point = resp.data.unwrap();
-    if end_point.url.is_none() || end_point.url.as_ref().unwrap().is_empty() {
+    let end_point = resp.data.ok_or(WsClientError::UnexpectedResponse)?;
+    if end_point.url.as_ref().map_or(true, |url| url.is_empty()) {
         return Err(WsClientError::ServerError {
             code: 500,
             message: "No available endpoint".to_string(),
@@ -362,7 +379,10 @@ impl<'a> Context<'a> {
                             msg.len(),
                             service_id
                         );
-                        self.sink.send(msg).await.unwrap();
+                        if let Err(e) = self.sink.send(msg).await {
+                            error!("Failed to send ping message: {:?}", e);
+                            return Err(WsClientError::WsError(e));
+                        }
 
                 }
 
@@ -389,7 +409,11 @@ impl<'a> Context<'a> {
                     // FrameTypeControl
                     0 => self.handle_control_frame(frame),
                     // FrameTypeData
-                    1 => self.event_sender.send(WsEvent::Data(frame)).unwrap(),
+                    1 => {
+                        if let Err(e) = self.event_sender.send(WsEvent::Data(frame)) {
+                            error!("Failed to send data event: {:?}", e);
+                        }
+                    }
 
                     _ => {}
                 }
@@ -411,9 +435,22 @@ impl<'a> Context<'a> {
 
     fn handle_control_frame(&mut self, frame: Frame) {
         let headers = frame.headers;
-        let t = headers.iter().find(|h| h.key == "type").unwrap();
+        let Some(t) = headers.iter().find(|h| h.key == "type") else {
+            error!("Control frame missing type header");
+            return;
+        };
         if t.value == "pong" {
-            let config = serde_json::from_slice::<ClientConfig>(&frame.payload.unwrap()).unwrap();
+            let Some(payload) = frame.payload else {
+                error!("Pong frame missing payload");
+                return;
+            };
+            let config = match serde_json::from_slice::<ClientConfig>(&payload) {
+                Ok(cfg) => cfg,
+                Err(e) => {
+                    error!("Failed to parse ClientConfig: {:?}", e);
+                    return;
+                }
+            };
             self.ping_frame_interval =
                 tokio::time::interval(Duration::from_secs(config.ping_interval as u64));
             self.ping_frame_interval

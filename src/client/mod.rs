@@ -3,10 +3,10 @@ use std::{sync::Arc, time::Duration};
 use crate::{
     core::{config::Config, constants::AppType},
     service::{
-        assistant::AssistantService, attendance::AttendanceService, authentication::AuthenService, 
-        bitable::BitableService, board::BoardService, comments::CommentsService, 
-        docs::DocsService, drive::DriveService, im::ImService, permission::PermissionService, 
-        search::SearchService, sheets::SheetsService, wiki::WikiService,
+        assistant::AssistantService, attendance::AttendanceService, authentication::AuthenService,
+        bitable::BitableService, board::BoardService, comments::CommentsService, docs::DocsService,
+        drive::DriveService, im::ImService, permission::PermissionService, search::SearchService,
+        sheets::SheetsService, wiki::WikiService,
     },
 };
 
@@ -66,24 +66,27 @@ impl LarkClientBuilder {
             self.config.http_client = reqwest::Client::builder()
                 .timeout(req_timeout)
                 .build()
-                .unwrap()
+                .expect("Failed to build HTTP client with timeout")
         }
 
+        // 创建单个 Arc<Config> 并在所有服务间共享
+        let config = Arc::new(self.config.clone());
+
         LarkClient {
-            config: self.config.clone(),
-            assistant: AssistantService::new(Arc::new(self.config.clone())),
-            attendance: AttendanceService::new(self.config.clone()),
-            auth: AuthenService::new(self.config.clone()),
-            docs: DocsService::new(self.config.clone()),
-            im: ImService::new(self.config.clone()),
-            drive: DriveService::new(self.config.clone()),
-            search: SearchService::new(self.config.clone()),
-            sheets: SheetsService::new(self.config.clone()),
-            bitable: BitableService::new(self.config.clone()),
-            wiki: WikiService::new(self.config.clone()),
-            comments: CommentsService::new(self.config.clone()),
-            permission: PermissionService::new(Arc::new(self.config.clone())),
-            board: BoardService::new(Arc::new(self.config.clone())),
+            config: self.config,
+            assistant: AssistantService::new(Arc::clone(&config)),
+            attendance: AttendanceService::new(Arc::clone(&config)),
+            auth: AuthenService::new(Arc::clone(&config)),
+            docs: DocsService::new(Arc::clone(&config)),
+            im: ImService::new(Arc::clone(&config)),
+            drive: DriveService::new(Arc::clone(&config)),
+            search: SearchService::new(Arc::clone(&config)),
+            sheets: SheetsService::new(Arc::clone(&config)),
+            bitable: BitableService::new(Arc::clone(&config)),
+            wiki: WikiService::new(Arc::clone(&config)),
+            comments: CommentsService::new(Arc::clone(&config)),
+            permission: PermissionService::new(Arc::clone(&config)),
+            board: BoardService::new(Arc::clone(&config)),
         }
     }
 }
