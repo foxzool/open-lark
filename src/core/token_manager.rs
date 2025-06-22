@@ -1,11 +1,11 @@
-use lazy_static::lazy_static;
 use log::warn;
 use serde::{Deserialize, Serialize};
+use std::sync::Arc;
 use tokio::sync::Mutex;
 
 use crate::core::{
     api_resp::{ApiResponseTrait, RawResponse, ResponseFormat},
-    app_ticket_manager::APP_TICKET_MANAGER,
+    app_ticket_manager::AppTicketManager,
     cache::QuickCache,
     config::Config,
     constants::{
@@ -17,10 +17,7 @@ use crate::core::{
     SDKResult,
 };
 
-lazy_static! {
-    pub static ref TOKEN_MANAGER: Mutex<TokenManager> = Mutex::new(TokenManager::new());
-}
-
+#[derive(Debug)]
 pub struct TokenManager {
     cache: QuickCache<String>,
 }
@@ -41,6 +38,7 @@ impl TokenManager {
         &mut self,
         config: &Config,
         app_ticket: &str,
+        app_ticket_manager: &Arc<Mutex<AppTicketManager>>,
     ) -> SDKResult<String> {
         let mut token = self
             .cache
@@ -53,7 +51,7 @@ impl TokenManager {
                 token = self.get_custom_app_access_token_then_cache(config).await?;
             } else {
                 token = self
-                    .get_marketplace_app_access_token_then_cache(config, app_ticket)
+                    .get_marketplace_app_access_token_then_cache(config, app_ticket, app_ticket_manager)
                     .await?;
             }
         }
@@ -97,10 +95,11 @@ impl TokenManager {
         &mut self,
         config: &Config,
         app_ticket: &str,
+        app_ticket_manager: &Arc<Mutex<AppTicketManager>>,
     ) -> SDKResult<String> {
         let mut app_ticket = app_ticket.to_string();
         if app_ticket.is_empty() {
-            match APP_TICKET_MANAGER.get(config).await {
+            match app_ticket_manager.lock().await.get(config).await {
                 None => return Err(LarkAPIError::illegal_param("App ticket is empty")),
                 Some(ticket) => {
                     app_ticket = ticket;
@@ -148,6 +147,7 @@ impl TokenManager {
         config: &Config,
         tenant_key: &str,
         app_ticket: &str,
+        app_ticket_manager: &Arc<Mutex<AppTicketManager>>,
     ) -> SDKResult<String> {
         let mut token = self
             .cache
@@ -160,7 +160,7 @@ impl TokenManager {
                     .await?;
             } else {
                 token = self
-                    .get_marketplace_tenant_access_token_then_cache(config, tenant_key, app_ticket)
+                    .get_marketplace_tenant_access_token_then_cache(config, tenant_key, app_ticket, app_ticket_manager)
                     .await?;
             }
         }
@@ -212,9 +212,10 @@ impl TokenManager {
         config: &Config,
         tenant_key: &str,
         app_ticket: &str,
+        app_ticket_manager: &Arc<Mutex<AppTicketManager>>,
     ) -> SDKResult<String> {
         let app_access_token = self
-            .get_marketplace_app_access_token_then_cache(config, app_ticket)
+            .get_marketplace_app_access_token_then_cache(config, app_ticket, app_ticket_manager)
             .await?;
 
         let url = format!("{}{}", config.base_url, TENANT_ACCESS_TOKEN_URL_PATH);

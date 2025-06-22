@@ -423,7 +423,7 @@ mod tests {
             password: "Complex@123".to_string(),
             update_time: Some(1234567890),
             expire_time: Some(1234567999),
-            previous_password_hint: Some("old****").to_string(),
+            previous_password_hint: Some("old****".to_string()),
         };
 
         assert!(result.has_update_time());

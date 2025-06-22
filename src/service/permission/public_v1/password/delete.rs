@@ -345,8 +345,8 @@ mod tests {
         let result = PasswordDeletionResult {
             delete_time: Some(1234567890),
             password_removed: true,
-            previous_password_hint: Some("pass****").to_string(),
-            operation_id: Some("op123456").to_string(),
+            previous_password_hint: Some("pass****".to_string()),
+            operation_id: Some("op123456".to_string()),
         };
 
         assert!(result.has_delete_time());
@@ -377,8 +377,8 @@ mod tests {
             password_deletion: PasswordDeletionResult {
                 delete_time: Some(1234567890),
                 password_removed: true,
-                previous_password_hint: Some("old****").to_string(),
-                operation_id: Some("op789").to_string(),
+                previous_password_hint: Some("old****".to_string()),
+                operation_id: Some("op789".to_string()),
             },
         };
 

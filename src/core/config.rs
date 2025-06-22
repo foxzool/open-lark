@@ -1,6 +1,11 @@
-use std::{collections::HashMap, time::Duration};
+use std::{collections::HashMap, sync::Arc, time::Duration};
+use tokio::sync::Mutex;
 
-use crate::core::constants::{AppType, FEISHU_BASE_URL};
+use crate::core::{
+    app_ticket_manager::AppTicketManager,
+    constants::{AppType, FEISHU_BASE_URL},
+    token_manager::TokenManager,
+};
 
 #[derive(Debug, Clone)]
 pub struct Config {
@@ -15,6 +20,10 @@ pub struct Config {
     /// 客户端超时时间, 默认永不超时
     pub req_timeout: Option<Duration>,
     pub header: HashMap<String, String>,
+    /// Token 管理器
+    pub token_manager: Arc<Mutex<TokenManager>>,
+    /// App Ticket 管理器  
+    pub app_ticket_manager: Arc<Mutex<AppTicketManager>>,
 }
 
 impl Default for Config {
@@ -28,6 +37,8 @@ impl Default for Config {
             http_client: reqwest::Client::new(),
             req_timeout: None,
             header: Default::default(),
+            token_manager: Arc::new(Mutex::new(TokenManager::new())),
+            app_ticket_manager: Arc::new(Mutex::new(AppTicketManager::new())),
         }
     }
 }
