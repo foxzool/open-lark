@@ -22,6 +22,10 @@ async fn main() {
     let app_secret = env::var("APP_SECRET").unwrap();
     let client = LarkClient::builder(&app_id, &app_secret).build();
     let client = Arc::new(Mutex::new(client));
+
+    // 创建共享的配置，复用HTTP客户端
+    let config = Arc::new(client.lock().await.config.clone());
+
     let event_handler = EventDispatcherHandler::builder()
         .register_p2_im_message_receive_v1(move |data: P2ImMessageReceiveV1| {
             let client = client.clone();
@@ -34,9 +38,7 @@ async fn main() {
         .expect("Failed to register p2_im_message_read_v1 handler")
         .build();
 
-    LarkWsClient::open(&app_id, &app_secret, event_handler)
-        .await
-        .unwrap();
+    LarkWsClient::open(config, event_handler).await.unwrap();
 }
 
 async fn handle_p2_im_message_receive_v1(

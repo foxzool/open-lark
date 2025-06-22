@@ -79,23 +79,23 @@ impl WebSocketStateMachine {
         let new_state = match (&self.state, event.clone()) {
             // 从初始状态开始连接
             (Initial, StartConnection) => Connecting,
-            
+
             // 连接成功
             (Connecting, ConnectionEstablished) => Connected,
-            
+
             // 在已连接状态下的各种事件
             (Connected, PingReceived) => Connected,
             (Connected, PongReceived) => Connected,
             (Connected, DataReceived) => Connected,
             (Connected, RequestDisconnect) => Disconnecting,
-            
+
             // 断开连接
             (Disconnecting, ConnectionClosed(reason)) => Disconnected { reason },
             (Connected, ConnectionClosed(reason)) => Disconnected { reason },
-            
+
             // 错误处理
             (_, ErrorOccurred(msg)) => Error { message: msg },
-            
+
             // 非法状态转换
             _ => {
                 return Err(format!(
@@ -146,40 +146,51 @@ mod tests {
     #[test]
     fn test_state_transitions() {
         let mut sm = WebSocketStateMachine::new();
-        
+
         // 初始状态
         assert_eq!(sm.current_state(), &ConnectionState::Initial);
-        
+
         // 开始连接
         assert!(sm.handle_event(StateMachineEvent::StartConnection).is_ok());
         assert_eq!(sm.current_state(), &ConnectionState::Connecting);
-        
+
         // 连接成功
-        assert!(sm.handle_event(StateMachineEvent::ConnectionEstablished).is_ok());
+        assert!(sm
+            .handle_event(StateMachineEvent::ConnectionEstablished)
+            .is_ok());
         assert_eq!(sm.current_state(), &ConnectionState::Connected);
         assert!(sm.can_send_data());
-        
+
         // 收到数据
         assert!(sm.handle_event(StateMachineEvent::DataReceived).is_ok());
         assert_eq!(sm.current_state(), &ConnectionState::Connected);
-        
+
         // 断开连接
-        assert!(sm.handle_event(StateMachineEvent::RequestDisconnect).is_ok());
+        assert!(sm
+            .handle_event(StateMachineEvent::RequestDisconnect)
+            .is_ok());
         assert_eq!(sm.current_state(), &ConnectionState::Disconnecting);
-        
+
         // 连接关闭
         let close_reason = Some(CloseReason {
             code: 1000,
             reason: "Normal closure".to_string(),
         });
-        assert!(sm.handle_event(StateMachineEvent::ConnectionClosed(close_reason.clone())).is_ok());
-        assert_eq!(sm.current_state(), &ConnectionState::Disconnected { reason: close_reason });
+        assert!(sm
+            .handle_event(StateMachineEvent::ConnectionClosed(close_reason.clone()))
+            .is_ok());
+        assert_eq!(
+            sm.current_state(),
+            &ConnectionState::Disconnected {
+                reason: close_reason
+            }
+        );
     }
 
     #[test]
     fn test_invalid_transitions() {
         let mut sm = WebSocketStateMachine::new();
-        
+
         // 不能从初始状态直接收到数据
         assert!(sm.handle_event(StateMachineEvent::DataReceived).is_err());
     }

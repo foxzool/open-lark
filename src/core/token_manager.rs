@@ -10,7 +10,7 @@ use crate::core::{
     config::Config,
     constants::{
         AppType, APP_ACCESS_TOKEN_INTERNAL_URL_PATH, APP_ACCESS_TOKEN_KEY_PREFIX,
-        APP_ACCESS_TOKEN_URL_PATH, EXPIRY_DELTA, TENANT_ACCESS_TOKEN_INTERNAL_URL_PATH, 
+        APP_ACCESS_TOKEN_URL_PATH, EXPIRY_DELTA, TENANT_ACCESS_TOKEN_INTERNAL_URL_PATH,
         TENANT_ACCESS_TOKEN_URL_PATH,
     },
     error::LarkAPIError,
@@ -51,7 +51,11 @@ impl TokenManager {
                 token = self.get_custom_app_access_token_then_cache(config).await?;
             } else {
                 token = self
-                    .get_marketplace_app_access_token_then_cache(config, app_ticket, app_ticket_manager)
+                    .get_marketplace_app_access_token_then_cache(
+                        config,
+                        app_ticket,
+                        app_ticket_manager,
+                    )
                     .await?;
             }
         }
@@ -64,17 +68,13 @@ impl TokenManager {
         config: &Config,
     ) -> SDKResult<String> {
         let url = format!("{}{}", config.base_url, APP_ACCESS_TOKEN_INTERNAL_URL_PATH);
-        
+
         let body = SelfBuiltAppAccessTokenReq {
             app_id: config.app_id.clone(),
             app_secret: config.app_secret.clone(),
         };
 
-        let response = config.http_client
-            .post(&url)
-            .json(&body)
-            .send()
-            .await?;
+        let response = config.http_client.post(&url).json(&body).send().await?;
 
         let resp: AppAccessTokenResp = response.json().await?;
         if resp.raw_response.code == 0 {
@@ -108,18 +108,14 @@ impl TokenManager {
         }
 
         let url = format!("{}{}", config.base_url, APP_ACCESS_TOKEN_URL_PATH);
-        
+
         let body = MarketplaceAppAccessTokenReq {
             app_id: config.app_id.clone(),
             app_secret: config.app_secret.clone(),
             app_ticket,
         };
 
-        let response = config.http_client
-            .post(&url)
-            .json(&body)
-            .send()
-            .await?;
+        let response = config.http_client.post(&url).json(&body).send().await?;
 
         let resp: AppAccessTokenResp = response.json().await?;
 
@@ -160,7 +156,12 @@ impl TokenManager {
                     .await?;
             } else {
                 token = self
-                    .get_marketplace_tenant_access_token_then_cache(config, tenant_key, app_ticket, app_ticket_manager)
+                    .get_marketplace_tenant_access_token_then_cache(
+                        config,
+                        tenant_key,
+                        app_ticket,
+                        app_ticket_manager,
+                    )
                     .await?;
             }
         }
@@ -173,18 +174,17 @@ impl TokenManager {
         config: &Config,
         tenant_key: &str,
     ) -> SDKResult<String> {
-        let url = format!("{}{}", config.base_url, TENANT_ACCESS_TOKEN_INTERNAL_URL_PATH);
-        
+        let url = format!(
+            "{}{}",
+            config.base_url, TENANT_ACCESS_TOKEN_INTERNAL_URL_PATH
+        );
+
         let body = SelfBuiltTenantAccessTokenReq {
             app_id: config.app_id.clone(),
             app_secret: config.app_secret.clone(),
         };
 
-        let response = config.http_client
-            .post(&url)
-            .json(&body)
-            .send()
-            .await?;
+        let response = config.http_client.post(&url).json(&body).send().await?;
 
         let resp: TenantAccessTokenResp = response.json().await?;
 
@@ -219,16 +219,20 @@ impl TokenManager {
             .await?;
 
         let url = format!("{}{}", config.base_url, TENANT_ACCESS_TOKEN_URL_PATH);
-        
+
         let body = MarketplaceTenantAccessTokenReq {
             app_access_token,
             tenant_key: tenant_key.to_string(),
         };
 
-        let response = config.http_client
+        let response = config
+            .http_client
             .post(&url)
             .json(&body)
-            .header("Authorization", &format!("Bearer {}", &body.app_access_token))
+            .header(
+                "Authorization",
+                &format!("Bearer {}", &body.app_access_token),
+            )
             .send()
             .await?;
 

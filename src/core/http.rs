@@ -2,15 +2,15 @@ use std::{collections::HashSet, marker::PhantomData};
 
 use log::debug;
 use reqwest::RequestBuilder;
-use serde_json::Value;
 
 use crate::core::{
     api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, RawResponse, ResponseFormat},
+    api_resp::{ApiResponseTrait, BaseResponse},
     app_ticket_manager::apply_app_ticket,
     config::Config,
     constants::*,
     error::LarkAPIError,
+    improved_response_handler::ImprovedResponseHandler,
     req_option::RequestOption,
     req_translator::ReqTranslator,
     SDKResult,
@@ -72,74 +72,15 @@ impl<T: ApiResponseTrait> Transport<T> {
         } else {
             raw_request.body(body).send()
         };
+
         match future.await {
             Ok(response) => {
-                match T::data_format() {
-                    ResponseFormat::Data => {
-                        let raw_body: Value = response.json().await?;
-                        debug!("raw_body: {:?}", raw_body);
-                        let base_resp = if raw_body["code"].as_i64() == Some(0) {
-                            serde_json::from_value::<BaseResponse<T>>(raw_body)?
-                        } else {
-                            BaseResponse {
-                                raw_response: RawResponse {
-                                    code: raw_body["code"].as_i64().unwrap() as i32,
-                                    msg: raw_body["msg"].as_str().unwrap().to_string(),
-                                    err: None,
-                                },
-                                data: None,
-                            }
-                        };
-
-                        Ok(base_resp)
-                    }
-                    ResponseFormat::Flatten => {
-                        let raw_body: Value = response.json().await?;
-                        debug!("raw_body: {:?}", raw_body);
-                        let raw_response = serde_json::from_value::<RawResponse>(raw_body.clone())?;
-
-                        let data = if raw_response.code == 0 {
-                            Some(serde_json::from_value::<T>(raw_body.clone())?)
-                        } else {
-                            None
-                        };
-
-                        Ok(BaseResponse { raw_response, data })
-                    }
-                    // 处理二进制数据
-                    ResponseFormat::Binary => {
-                        let file_name = response
-                            .headers()
-                            .get("Content-Disposition")
-                            .unwrap()
-                            .to_str()
-                            .unwrap()
-                            .to_string();
-                        let file_name = decode_file_name(&file_name).unwrap_or_default();
-                        let bytes = response.bytes().await?.to_vec();
-
-                        let data = T::from_binary(file_name, bytes).unwrap();
-                        Ok(BaseResponse {
-                            raw_response: RawResponse {
-                                code: 0,
-                                msg: "success".to_string(),
-                                err: None,
-                            },
-                            data: Some(data),
-                        })
-                    }
-                }
+                // 使用改进的响应处理器，单次解析而非双重解析
+                ImprovedResponseHandler::handle_response(response).await
             }
             Err(err) => {
-                println!("err: {:?}", err);
+                debug!("Request error: {:?}", err);
                 Err(LarkAPIError::RequestError(err))
-
-                // let resp = err.into_response().unwrap();
-                // // 返回4xx或5xx状态码， 但可以读取响应体
-                // match resp.into_json::<RawResponse>() {
-                //     Ok(code_msg) => Ok(ApiResponse::Error(code_msg)),
-                //     Err(err) => Err(LarkAPIError::IOErr(err)),
-                // }
             }
         }
     }

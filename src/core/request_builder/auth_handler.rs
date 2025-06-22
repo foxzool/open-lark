@@ -1,8 +1,5 @@
 use crate::core::{
-    config::Config,
-    constants::AccessTokenType,
-    error::LarkAPIError,
-    req_option::RequestOption,
+    config::Config, constants::AccessTokenType, error::LarkAPIError, req_option::RequestOption,
 };
 use reqwest::RequestBuilder;
 
@@ -56,7 +53,12 @@ impl AuthHandler {
         } else if config.enable_token_cache {
             let mut token_manager = config.token_manager.lock().await;
             token_manager
-                .get_tenant_access_token(config, &option.tenant_key, &option.app_ticket, &config.app_ticket_manager)
+                .get_tenant_access_token(
+                    config,
+                    &option.tenant_key,
+                    &option.app_ticket,
+                    &config.app_ticket_manager,
+                )
                 .await?
         } else {
             return Err(LarkAPIError::MissingAccessToken);

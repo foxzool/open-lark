@@ -13,7 +13,7 @@ impl MultipartBuilder {
         file_data: &[u8],
     ) -> Result<RequestBuilder, LarkAPIError> {
         let json_value = serde_json::from_slice::<Value>(body)?;
-        
+
         let form_obj = json_value
             .as_object()
             .ok_or_else(|| LarkAPIError::BadRequest("Invalid form data".to_string()))?;
@@ -44,9 +44,8 @@ impl MultipartBuilder {
             .ok_or_else(|| LarkAPIError::BadRequest("Missing file_name in form data".to_string()))?
             .to_string();
 
-        let file_part = multipart::Part::bytes(file_data.to_vec())
-            .file_name(file_name);
-        
+        let file_part = multipart::Part::bytes(file_data.to_vec()).file_name(file_name);
+
         form = form.part("file", file_part);
         Ok(form)
     }

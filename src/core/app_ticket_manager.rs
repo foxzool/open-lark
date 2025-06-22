@@ -51,17 +51,13 @@ fn app_ticket_key(app_id: &str) -> String {
 
 pub async fn apply_app_ticket(config: &Config) -> SDKResult<()> {
     let url = format!("{}{}", config.base_url, APPLY_APP_TICKET_PATH);
-    
+
     let body = ResendAppTicketReq {
         app_id: config.app_id.clone(),
         app_secret: config.app_secret.clone(),
     };
 
-    let _response = config.http_client
-        .post(&url)
-        .json(&body)
-        .send()
-        .await?;
+    let _response = config.http_client.post(&url).json(&body).send().await?;
 
     Ok(())
 }

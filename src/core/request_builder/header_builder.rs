@@ -38,11 +38,7 @@ impl HeaderBuilder {
     }
 
     /// 添加单个请求头（工具方法）
-    pub fn add_header(
-        req_builder: RequestBuilder,
-        key: &str,
-        value: &str,
-    ) -> RequestBuilder {
+    pub fn add_header(req_builder: RequestBuilder, key: &str, value: &str) -> RequestBuilder {
         req_builder.header(key, value)
     }
 
