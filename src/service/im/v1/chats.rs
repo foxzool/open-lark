@@ -144,6 +144,27 @@ impl ListChatRequestBuilder {
     pub fn build(self) -> ListChatRequest {
         self.request
     }
+
+    /// 直接执行获取群组列表请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list()`
+    pub async fn execute(
+        self,
+        service: &ChatsService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListChatRespData>> {
+        service.list(self.build(), None).await
+    }
+
+    /// 直接执行获取群组列表请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list()`
+    pub async fn execute_with_options(
+        self,
+        service: &ChatsService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListChatRespData>> {
+        service.list(self.build(), Some(option)).await
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]

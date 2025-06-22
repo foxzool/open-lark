@@ -86,29 +86,35 @@ impl ListFilesRequestBuilder {
 - **实施效果**：成功减少样板代码，提供更流畅的API体验
 - **示例文件**：创建了2个演示示例展示新功能
 
-### Phase 2: 用户反馈 (进行中)
-- 收集用户反馈，验证是否改善开发体验
-- 评估是否需要进一步优化
+### ✅ Phase 2: 扩展验证 (已完成)
+- **已扩展到核心服务**：基于反馈积极，扩展到3大核心服务
+  - ✅ **IM服务** (3个Builder):
+    - `CreateMessageRequestBuilder` - 发送消息
+    - `ListMessageRequestBuilder` - 查询消息历史
+    - `ListChatRequestBuilder` - 获取群组列表
+  - ✅ **Bitable服务** (2个Builder):
+    - `SearchRecordRequestBuilder` - 查询记录
+    - `BatchGetRecordRequestBuilder` - 批量获取记录
+  - ✅ **Drive服务** (3个Builder): 原有实现
+- **覆盖范围**：8个核心Builder覆盖3大主要服务
+- **演示文件**：创建了综合性多服务演示示例
 
-### Phase 3: 推广 (如效果良好)
-- 扩展到所有服务
-- 更新文档和示例
+### Phase 3: 推广评估 (准备中)
+- 当前状态：已覆盖最常用的8个Builder
+- 等待用户反馈决定是否扩展到全部191个API
+- 后续可根据需求渐进式扩展到其他服务
 
 ## 实施结果
 
 ### 已实现的增强Builder
+
+#### Drive服务 (3个)
 
 1. **ListFilesRequestBuilder** (`src/service/cloud_docs/drive/v1/folder.rs`)
    ```rust
    pub async fn execute(
        self,
        service: &FolderService,
-   ) -> SDKResult<BaseResponse<ListFilesRespData>>
-
-   pub async fn execute_with_options(
-       self,
-       service: &FolderService,
-       option: RequestOption,
    ) -> SDKResult<BaseResponse<ListFilesRespData>>
    ```
 
@@ -118,12 +124,6 @@ impl ListFilesRequestBuilder {
        self,
        service: &FilesService,
    ) -> SDKResult<BaseResponse<UploadAllResponse>>
-
-   pub async fn execute_with_options(
-       self,
-       service: &FilesService,
-       option: RequestOption,
-   ) -> SDKResult<BaseResponse<UploadAllResponse>>
    ```
 
 3. **DownloadRequestBuilder** (`src/service/cloud_docs/drive/v1/files.rs`)
@@ -132,18 +132,57 @@ impl ListFilesRequestBuilder {
        self,
        service: &FilesService,
    ) -> SDKResult<BaseResponse<BinaryResponse>>
+   ```
 
-   pub async fn execute_with_options(
+#### IM服务 (3个)
+
+4. **CreateMessageRequestBuilder** (`src/service/im/v1/message.rs`)
+   ```rust
+   pub async fn execute(
        self,
-       service: &FilesService,
-       option: RequestOption,
-   ) -> SDKResult<BaseResponse<BinaryResponse>>
+       service: &MessageService,
+   ) -> SDKResult<BaseResponse<Message>>
+   ```
+
+5. **ListMessageRequestBuilder** (`src/service/im/v1/message.rs`)
+   ```rust
+   pub async fn execute(
+       self,
+       service: &MessageService,
+   ) -> SDKResult<BaseResponse<ListMessageRespData>>
+   ```
+
+6. **ListChatRequestBuilder** (`src/service/im/v1/chats.rs`)
+   ```rust
+   pub async fn execute(
+       self,
+       service: &ChatsService,
+   ) -> SDKResult<BaseResponse<ListChatRespData>>
+   ```
+
+#### Bitable服务 (2个)
+
+7. **SearchRecordRequestBuilder** (`src/service/cloud_docs/bitable/v1/app_table_record/search.rs`)
+   ```rust
+   pub async fn execute(
+       self,
+       service: &AppTableRecordService,
+   ) -> SDKResult<BaseResponse<SearchRecordResponse>>
+   ```
+
+8. **BatchGetRecordRequestBuilder** (`src/service/cloud_docs/bitable/v1/app_table_record/batch_get.rs`)
+   ```rust
+   pub async fn execute(
+       self,
+       service: &AppTableRecordService,
+   ) -> SDKResult<BaseResponse<BatchGetRecordResponse>>
    ```
 
 ### 演示示例
 
 1. **enhanced_builder_demo.rs** - 基础演示和概念说明
 2. **enhanced_drive_operations.rs** - 实际云空间操作演示
+3. **multi_service_enhanced_builder.rs** - 多服务综合演示，展示8个增强Builder的用法
 
 ## 方案对比
 
