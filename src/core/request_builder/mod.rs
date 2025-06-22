@@ -7,10 +7,7 @@ pub use header_builder::HeaderBuilder;
 pub use multipart_builder::MultipartBuilder;
 
 use crate::core::{
-    api_req::ApiRequest,
-    config::Config,
-    constants::AccessTokenType,
-    error::LarkAPIError,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
     req_option::RequestOption,
 };
 use reqwest::RequestBuilder;
@@ -29,18 +26,16 @@ impl UnifiedRequestBuilder {
         Box::pin(async move {
             // 1. 构建基础请求
             let url = Self::build_url(config, req)?;
-            let mut req_builder = config.http_client.request(req.http_method.clone(), url.as_ref());
+            let mut req_builder = config
+                .http_client
+                .request(req.http_method.clone(), url.as_ref());
 
             // 2. 构建请求头
             req_builder = HeaderBuilder::build_headers(req_builder, config, option);
 
             // 3. 处理认证
-            req_builder = AuthHandler::apply_auth(
-                req_builder,
-                access_token_type,
-                config,
-                option,
-            ).await?;
+            req_builder =
+                AuthHandler::apply_auth(req_builder, access_token_type, config, option).await?;
 
             // 4. 处理请求体
             if !req.file.is_empty() {

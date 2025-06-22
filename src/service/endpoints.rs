@@ -1,5 +1,5 @@
 /// 飞书开放API接口端点常量管理
-/// 
+///
 /// 此模块集中管理所有API路径，提供统一的入口便于维护和更新
 
 // 认证相关
@@ -62,11 +62,11 @@ pub const ASSISTANT_V1_CONVERSATIONS: &str = "/open-apis/ai/v1/conversations";
 /// API路径辅助函数
 impl EndpointHelper {
     /// 替换路径中的参数占位符
-    /// 
+    ///
     /// # Example
     /// ```
     /// let path = EndpointHelper::replace_path_params(
-    ///     WIKI_V2_SPACE_NODES, 
+    ///     WIKI_V2_SPACE_NODES,
     ///     &[("space_id", "space123")]
     /// );
     /// assert_eq!(path, "/open-apis/wiki/v2/spaces/space123/nodes");
@@ -79,7 +79,7 @@ impl EndpointHelper {
         }
         result
     }
-    
+
     /// 检查路径是否包含未替换的参数
     pub fn has_unresolved_params(path: &str) -> bool {
         path.contains('{') && path.contains('}')
@@ -94,10 +94,8 @@ mod tests {
 
     #[test]
     fn test_replace_path_params() {
-        let result = EndpointHelper::replace_path_params(
-            WIKI_V2_SPACE_NODES,
-            &[("space_id", "space123")]
-        );
+        let result =
+            EndpointHelper::replace_path_params(WIKI_V2_SPACE_NODES, &[("space_id", "space123")]);
         assert_eq!(result, "/open-apis/wiki/v2/spaces/space123/nodes");
     }
 

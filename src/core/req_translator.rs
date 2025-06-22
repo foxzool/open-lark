@@ -3,12 +3,8 @@ use std::{future::Future, pin::Pin};
 use reqwest::RequestBuilder;
 
 use crate::core::{
-    api_req::ApiRequest,
-    config::Config,
-    constants::AccessTokenType,
-    error::LarkAPIError,
-    req_option::RequestOption,
-    request_builder::UnifiedRequestBuilder,
+    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    req_option::RequestOption, request_builder::UnifiedRequestBuilder,
 };
 
 pub struct ReqTranslator;

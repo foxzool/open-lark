@@ -54,7 +54,7 @@ impl FrameHandler {
     /// 处理 Pong 帧
     fn handle_pong_frame(frame: Frame) -> Option<Frame> {
         let payload = frame.payload.as_ref()?;
-        
+
         match serde_json::from_slice::<ClientConfig>(&payload) {
             Ok(config) => {
                 debug!("Received pong with config: {:?}", config);
@@ -75,7 +75,7 @@ impl FrameHandler {
         _event_tx: &tokio::sync::mpsc::UnboundedSender<WsEvent>,
     ) -> Option<Frame> {
         let headers = &frame.headers;
-        
+
         // 提取必要的头部信息
         let msg_type = Self::get_header_value(headers, "type").unwrap_or_default();
         let msg_id = Self::get_header_value(headers, "message_id").unwrap_or_default();
@@ -94,7 +94,7 @@ impl FrameHandler {
         match msg_type.as_str() {
             "event" => {
                 let response = Self::process_event(payload, event_handler).await;
-                
+
                 // 添加处理时间到响应头
                 if let Some(biz_rt) = response.headers.get("biz_rt") {
                     frame.headers.push(Header {
@@ -102,13 +102,13 @@ impl FrameHandler {
                         value: biz_rt.clone(),
                     });
                 }
-                
+
                 // 序列化响应
                 frame.payload = Some(serde_json::to_vec(&response).unwrap_or_else(|e| {
                     error!("Failed to serialize response: {:?}", e);
                     vec![]
                 }));
-                
+
                 // 返回响应帧供上层发送
                 Some(frame)
             }
@@ -129,12 +129,14 @@ impl FrameHandler {
         event_handler: &EventDispatcherHandler,
     ) -> NewWsResponse {
         let start = Instant::now();
-        
+
         match event_handler.do_without_validation(payload) {
             Ok(_) => {
                 let elapsed = start.elapsed().as_millis();
                 let mut response = NewWsResponse::ok();
-                response.headers.insert("biz_rt".to_string(), elapsed.to_string());
+                response
+                    .headers
+                    .insert("biz_rt".to_string(), elapsed.to_string());
                 response
             }
             Err(err) => {
@@ -171,11 +173,7 @@ impl FrameHandler {
     }
 
     /// 构建数据帧响应
-    pub fn build_response_frame(
-        service_id: i32,
-        headers: Vec<Header>,
-        payload: Vec<u8>,
-    ) -> Frame {
+    pub fn build_response_frame(service_id: i32, headers: Vec<Header>, payload: Vec<u8>) -> Frame {
         Frame {
             seq_id: 0,
             log_id: 0,
