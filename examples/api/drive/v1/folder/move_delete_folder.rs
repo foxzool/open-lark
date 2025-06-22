@@ -17,25 +17,28 @@ use tokio::time::{sleep, Duration};
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 从环境变量获取配置
     dotenv().ok();
-        .init();
 
     let app_id = env::var("APP_ID").expect("APP_ID 必须设置");
     let app_secret = env::var("APP_SECRET").expect("APP_SECRET 必须设置");
     let user_access_token = env::var("USER_ACCESS_TOKEN").expect("USER_ACCESS_TOKEN 必须设置");
 
-    // 创建客户端，使用用户访问凭证
+    // 创建客户端
     let client = LarkClient::builder(app_id, app_secret)
-        .with_user_access_token(user_access_token)
+        .with_enable_token_cache(true)
+        .build();
+    
+    let option = RequestOption::builder()
+        .user_access_token(user_access_token)
         .build();
 
-    info!("开始演示移动和删除文件夹...");
+    println!("开始演示移动和删除文件夹...");
 
     // 首先获取根目录的token
-    match client.drive.v1.folder.get_root_folder_meta(None).await {
+    match client.drive.v1.folder.get_root_folder_meta(Some(option.clone())).await {
         Ok(root_response) => {
             if let Some(root_data) = root_response.data {
                 let root_token = root_data.token;
-                info!("获取到根目录token: {}", root_token);
+                println!("获取到根目录token: {}", root_token);
 
                 // 步骤1: 创建第一个测试文件夹
                 let folder1_name = format!("测试文件夹1_{}", chrono::Utc::now().timestamp());
@@ -46,7 +49,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .drive
                     .v1
                     .folder
-                    .create_folder(create_request1, None)
+                    .create_folder(create_request1, Some(option.clone()))
                     .await
                 {
                     Ok(response) => {
@@ -76,7 +79,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .drive
                     .v1
                     .folder
-                    .create_folder(create_request2, None)
+                    .create_folder(create_request2, Some(option.clone()))
                     .await
                 {
                     Ok(response) => {
@@ -108,7 +111,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .drive
                     .v1
                     .folder
-                    .move_or_delete_folder(move_request, None)
+                    .move_or_delete_folder(move_request, Some(option.clone()))
                     .await
                 {
                     Ok(response) => {
@@ -127,7 +130,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                         .drive
                                         .v1
                                         .folder
-                                        .check_async_task(check_request, None)
+                                        .check_async_task(check_request, Some(option.clone()))
                                         .await
                                     {
                                         Ok(task_response) => {
@@ -197,7 +200,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .drive
                     .v1
                     .folder
-                    .move_or_delete_folder(delete_request, None)
+                    .move_or_delete_folder(delete_request, Some(option.clone()))
                     .await
                 {
                     Ok(response) => {
@@ -216,7 +219,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                         .drive
                                         .v1
                                         .folder
-                                        .check_async_task(check_request, None)
+                                        .check_async_task(check_request, Some(option.clone()))
                                         .await
                                     {
                                         Ok(task_response) => {

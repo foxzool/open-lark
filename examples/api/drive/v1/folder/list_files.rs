@@ -11,25 +11,28 @@ use std::env;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 从环境变量获取配置
     dotenv().ok();
-        .init();
 
     let app_id = env::var("APP_ID").expect("APP_ID 必须设置");
     let app_secret = env::var("APP_SECRET").expect("APP_SECRET 必须设置");
     let user_access_token = env::var("USER_ACCESS_TOKEN").expect("USER_ACCESS_TOKEN 必须设置");
 
-    // 创建客户端，使用用户访问凭证
-    let client = LarkClient::builder(app_id, app_secret)
-        .with_user_access_token(user_access_token)
+    // 创建客户端
+    let client = LarkClient::builder(&app_id, &app_secret)
+        .with_enable_token_cache(true)
+        .build();
+    
+    let option = RequestOption::builder()
+        .user_access_token(user_access_token)
         .build();
 
-    info!("开始获取文件夹中的文件清单...");
+    println!("开始获取文件夹中的文件清单...");
 
     // 首先获取根目录的token，用于后续查询
-    match client.drive.v1.folder.get_root_folder_meta(None).await {
+    match client.drive.v1.folder.get_root_folder_meta(Some(option.clone())).await {
         Ok(root_response) => {
             if let Some(root_data) = root_response.data {
                 let folder_token = root_data.token;
-                info!("获取到根目录token: {}", folder_token);
+                println!("获取到根目录token: {}", folder_token);
 
                 // 构建获取文件清单的请求
                 let request = ListFilesRequest::builder(folder_token)
@@ -39,11 +42,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .build();
 
                 // 调用API获取文件清单
-                match client.drive.v1.folder.list_files(request, None).await {
+                match client.drive.v1.folder.list_files(request, Some(option)).await {
                     Ok(response) => {
-                        info!("API调用成功");
-                        println!("响应状态码: {}", response.code);
-                        println!("响应消息: {}", response.msg);
+                        println!("API调用成功");
+                        println!("响应状态码: {}", response.code());
+                        println!("响应消息: {}", response.msg());
 
                         if let Some(data) = response.data {
                             println!("文件清单信息:");

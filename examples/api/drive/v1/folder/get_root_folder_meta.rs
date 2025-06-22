@@ -11,23 +11,26 @@ use std::env;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 从环境变量获取配置
     dotenv().ok();
-        .init();
 
     let app_id = env::var("APP_ID").expect("APP_ID 必须设置");
     let app_secret = env::var("APP_SECRET").expect("APP_SECRET 必须设置");
     let user_access_token = env::var("USER_ACCESS_TOKEN").expect("USER_ACCESS_TOKEN 必须设置");
 
-    // 创建客户端，使用用户访问凭证
-    let client = LarkClient::builder(app_id, app_secret)
-        .with_user_access_token(user_access_token)
+    // 创建客户端
+    let client = LarkClient::builder(&app_id, &app_secret)
+        .with_enable_token_cache(true)
+        .build();
+    
+    let option = RequestOption::builder()
+        .user_access_token(user_access_token)
         .build();
 
-    info!("开始获取用户根目录元数据...");
+    println!("开始获取用户根目录元数据...");
 
     // 调用API获取根目录元数据
-    match client.drive.v1.folder.get_root_folder_meta(None).await {
+    match client.drive.v1.folder.get_root_folder_meta(Some(option)).await {
         Ok(response) => {
-            info!("API调用成功");
+            println!("API调用成功");
             println!("响应状态码: {}", response.code);
             println!("响应消息: {}", response.msg);
 
