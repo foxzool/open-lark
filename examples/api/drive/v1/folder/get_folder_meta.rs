@@ -32,7 +32,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Ok(root_response) => {
             if let Some(root_data) = root_response.data {
                 let folder_token = root_data.token;
-                info!("获取到根目录token: {}", folder_token);
+                println!("获取到根目录token: {}", folder_token);
 
                 // 构建获取文件夹元数据的请求
                 let request = GetFolderMetaRequest::new(folder_token);
