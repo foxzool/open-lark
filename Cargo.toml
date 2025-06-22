@@ -29,7 +29,6 @@ futures-util = { version = "0.3.30", default-features = false, features = [
     "std",
 ] }
 hmac = "0.12.1"
-lazy_static = "1.4.0"
 log = "0.4.21"
 prost = { version = "0.13", optional = true }
 quick_cache = { version = "0.6.3", features = [] }

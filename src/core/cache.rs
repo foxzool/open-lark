@@ -3,6 +3,7 @@ use std::time::Duration;
 use quick_cache::sync::Cache;
 use tokio::time::Instant;
 
+#[derive(Debug)]
 pub struct QuickCache<T: Clone> {
     cache: Cache<String, (T, Instant)>,
 }

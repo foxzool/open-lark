@@ -1,4 +1,3 @@
-use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
 
 use crate::core::{
@@ -8,10 +7,7 @@ use crate::core::{
     SDKResult,
 };
 
-lazy_static! {
-    pub static ref APP_TICKET_MANAGER: AppTicketManager = AppTicketManager::new();
-}
-
+#[derive(Debug)]
 pub struct AppTicketManager {
     pub cache: QuickCache<String>,
 }
