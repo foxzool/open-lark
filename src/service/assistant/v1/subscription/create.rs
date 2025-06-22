@@ -262,13 +262,12 @@ pub async fn create_subscription(
 ) -> SDKResult<BaseResponse<CreateSubscriptionResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::POST;
-    
+
     api_req.api_path = format!(
         "/open-apis/assistant/v1/file/{}/{}/subscription",
-        request.file_type,
-        request.file_token
+        request.file_type, request.file_token
     );
-    
+
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
     let api_resp = Transport::request(api_req, config, option).await?;
@@ -348,7 +347,9 @@ impl SubscriptionConfig {
 
     /// 获取优先级
     pub fn get_priority(&self) -> SubscriptionPriority {
-        self.priority.clone().unwrap_or(SubscriptionPriority::Normal)
+        self.priority
+            .clone()
+            .unwrap_or(SubscriptionPriority::Normal)
     }
 
     /// 是否启用自动续费
@@ -369,9 +370,9 @@ impl SubscriptionConfig {
     /// 获取配置摘要
     pub fn summary(&self) -> String {
         let mut parts = Vec::new();
-        
+
         parts.push(format!("优先级: {}", self.get_priority().description()));
-        
+
         if self.has_notification() {
             let interval = self.get_notification_interval_hours();
             if interval < 1.0 {
@@ -382,16 +383,16 @@ impl SubscriptionConfig {
         } else {
             parts.push("通知: 已禁用".to_string());
         }
-        
+
         if self.has_auto_renew() {
             parts.push("自动续费: 是".to_string());
         }
-        
+
         let tags = self.get_tags();
         if !tags.is_empty() {
             parts.push(format!("标签: {}", tags.join(", ")));
         }
-        
+
         parts.join(" | ")
     }
 }
@@ -411,8 +412,8 @@ impl CreateSubscriptionResponse {
     /// 获取创建时间格式化字符串
     pub fn create_time_formatted(&self) -> Option<String> {
         self.create_time.map(|timestamp| {
-            let datetime = chrono::DateTime::from_timestamp(timestamp, 0)
-                .unwrap_or_else(chrono::Utc::now);
+            let datetime =
+                chrono::DateTime::from_timestamp(timestamp, 0).unwrap_or_else(chrono::Utc::now);
             datetime.format("%Y-%m-%d %H:%M:%S").to_string()
         })
     }
@@ -420,18 +421,22 @@ impl CreateSubscriptionResponse {
     /// 获取完整信息摘要
     pub fn info_summary(&self) -> String {
         let mut parts = vec![
-            format!("{} ({})", self.file_type_enum().chinese_name(), self.file_token),
+            format!(
+                "{} ({})",
+                self.file_type_enum().chinese_name(),
+                self.file_token
+            ),
             self.subscription.summary(),
         ];
-        
+
         if let Some(ref subscription_id) = self.subscription_id {
             parts.push(format!("订阅ID: {}", subscription_id));
         }
-        
+
         if let Some(create_time) = self.create_time_formatted() {
             parts.push(format!("创建时间: {}", create_time));
         }
-        
+
         parts.join(" | ")
     }
 }
@@ -463,7 +468,7 @@ mod tests {
     #[test]
     fn test_subscription_config_methods() {
         let config = SubscriptionConfig::default();
-        
+
         assert!(config.has_notification());
         assert_eq!(config.get_notification_interval(), 3600);
         assert_eq!(config.get_notification_interval_hours(), 1.0);

@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 pub mod v1;
 
 pub struct BitableService {
@@ -5,9 +7,9 @@ pub struct BitableService {
 }
 
 impl BitableService {
-    pub fn new(config: crate::core::config::Config) -> Self {
+    pub fn new(config: Arc<crate::core::config::Config>) -> Self {
         Self {
-            v1: v1::V1::new(config),
+            v1: v1::V1::new((*config).clone()),
         }
     }
 }

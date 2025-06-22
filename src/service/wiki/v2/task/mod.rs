@@ -27,7 +27,7 @@ impl TaskService {
         let result = move_docs_to_wiki(request, &self.config, option).await?;
         result.data.ok_or_else(|| {
             crate::core::error::LarkAPIError::IllegalParamError(
-                "Response data is missing".to_string()
+                "Response data is missing".to_string(),
             )
         })
     }
@@ -41,7 +41,7 @@ impl TaskService {
         let result = get_task(request, &self.config, option).await?;
         result.data.ok_or_else(|| {
             crate::core::error::LarkAPIError::IllegalParamError(
-                "Response data is missing".to_string()
+                "Response data is missing".to_string(),
             )
         })
     }

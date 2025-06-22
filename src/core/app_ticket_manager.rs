@@ -1,15 +1,10 @@
-use async_recursion::async_recursion;
 use lazy_static::lazy_static;
-use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{BaseResponse, RawResponse},
     cache::QuickCache,
     config::Config,
-    constants::{AccessTokenType, APPLY_APP_TICKET_PATH, APP_TICKET_KEY_PREFIX},
-    http::Transport,
+    constants::{APPLY_APP_TICKET_PATH, APP_TICKET_KEY_PREFIX},
     SDKResult,
 };
 
@@ -58,19 +53,19 @@ fn app_ticket_key(app_id: &str) -> String {
     format!("{}-{}", APP_TICKET_KEY_PREFIX, app_id)
 }
 
-#[async_recursion]
 pub async fn apply_app_ticket(config: &Config) -> SDKResult<()> {
-    let _resp: BaseResponse<RawResponse> = Transport::request(
-        ApiRequest {
-            http_method: Method::POST,
-            api_path: APPLY_APP_TICKET_PATH.to_string(),
-            supported_access_token_types: vec![AccessTokenType::App],
-            ..Default::default()
-        },
-        config,
-        None,
-    )
-    .await?;
+    let url = format!("{}{}", config.base_url, APPLY_APP_TICKET_PATH);
+    
+    let body = ResendAppTicketReq {
+        app_id: config.app_id.clone(),
+        app_secret: config.app_secret.clone(),
+    };
+
+    let _response = config.http_client
+        .post(&url)
+        .json(&body)
+        .send()
+        .await?;
 
     Ok(())
 }

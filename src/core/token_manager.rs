@@ -1,21 +1,19 @@
 use lazy_static::lazy_static;
 use log::warn;
-use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use tokio::sync::Mutex;
 
 use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, RawResponse, ResponseFormat},
+    api_resp::{ApiResponseTrait, RawResponse, ResponseFormat},
     app_ticket_manager::APP_TICKET_MANAGER,
     cache::QuickCache,
     config::Config,
     constants::{
-        AccessTokenType, AppType, APP_ACCESS_TOKEN_INTERNAL_URL_PATH, APP_ACCESS_TOKEN_KEY_PREFIX,
-        EXPIRY_DELTA, TENANT_ACCESS_TOKEN_URL_PATH,
+        AppType, APP_ACCESS_TOKEN_INTERNAL_URL_PATH, APP_ACCESS_TOKEN_KEY_PREFIX,
+        APP_ACCESS_TOKEN_URL_PATH, EXPIRY_DELTA, TENANT_ACCESS_TOKEN_INTERNAL_URL_PATH, 
+        TENANT_ACCESS_TOKEN_URL_PATH,
     },
     error::LarkAPIError,
-    http::Transport,
     SDKResult,
 };
 
@@ -67,26 +65,32 @@ impl TokenManager {
         &mut self,
         config: &Config,
     ) -> SDKResult<String> {
-        let req = ApiRequest {
-            http_method: Method::POST,
-            api_path: APP_ACCESS_TOKEN_INTERNAL_URL_PATH.to_string(),
-            supported_access_token_types: vec![AccessTokenType::None],
-            ..Default::default()
+        let url = format!("{}{}", config.base_url, APP_ACCESS_TOKEN_INTERNAL_URL_PATH);
+        
+        let body = SelfBuiltAppAccessTokenReq {
+            app_id: config.app_id.clone(),
+            app_secret: config.app_secret.clone(),
         };
-        let resp: BaseResponse<AppAccessTokenResp> = Transport::request(req, config, None).await?;
-        if resp.success() {
-            let data = resp.data.unwrap();
-            let expire = data.expire - EXPIRY_DELTA;
+
+        let response = config.http_client
+            .post(&url)
+            .json(&body)
+            .send()
+            .await?;
+
+        let resp: AppAccessTokenResp = response.json().await?;
+        if resp.raw_response.code == 0 {
+            let expire = resp.expire - EXPIRY_DELTA;
             self.cache.set(
                 &app_access_token_key(&config.app_id),
-                data.app_access_token.clone(),
+                resp.app_access_token.clone(),
                 expire,
             );
 
-            Ok(data.app_access_token)
+            Ok(resp.app_access_token)
         } else {
             warn!("custom app appAccessToken cache {:#?}", resp.raw_response);
-            Err(LarkAPIError::illegal_param(resp.msg()))
+            Err(LarkAPIError::illegal_param(resp.raw_response.msg.clone()))
         }
     }
     async fn get_marketplace_app_access_token_then_cache(
@@ -104,38 +108,38 @@ impl TokenManager {
             }
         }
 
-        let body = serde_json::to_vec(&MarketplaceAppAccessTokenReq {
+        let url = format!("{}{}", config.base_url, APP_ACCESS_TOKEN_URL_PATH);
+        
+        let body = MarketplaceAppAccessTokenReq {
             app_id: config.app_id.clone(),
             app_secret: config.app_secret.clone(),
             app_ticket,
-        })?;
-
-        let req = ApiRequest {
-            http_method: Method::POST,
-            api_path: APP_ACCESS_TOKEN_INTERNAL_URL_PATH.to_string(),
-            body,
-            supported_access_token_types: vec![AccessTokenType::None],
-            ..Default::default()
         };
-        let resp: BaseResponse<AppAccessTokenResp> = Transport::request(req, config, None).await?;
 
-        if resp.success() {
-            let data = resp.data.unwrap();
-            let expire = data.expire - EXPIRY_DELTA;
+        let response = config.http_client
+            .post(&url)
+            .json(&body)
+            .send()
+            .await?;
+
+        let resp: AppAccessTokenResp = response.json().await?;
+
+        if resp.raw_response.code == 0 {
+            let expire = resp.expire - EXPIRY_DELTA;
 
             self.cache.set(
                 &app_access_token_key(&config.app_id),
-                data.app_access_token.clone(),
+                resp.app_access_token.clone(),
                 expire,
             );
 
-            Ok(data.app_access_token)
+            Ok(resp.app_access_token)
         } else {
             warn!(
                 "marketplace app appAccessToken cache {:#?}",
                 resp.raw_response
             );
-            Err(LarkAPIError::illegal_param(resp.msg()))
+            Err(LarkAPIError::illegal_param(resp.raw_response.msg.clone()))
         }
     }
 
@@ -169,38 +173,37 @@ impl TokenManager {
         config: &Config,
         tenant_key: &str,
     ) -> SDKResult<String> {
-        let body = serde_json::to_vec(&SelfBuiltAppAccessTokenReq {
+        let url = format!("{}{}", config.base_url, TENANT_ACCESS_TOKEN_INTERNAL_URL_PATH);
+        
+        let body = SelfBuiltTenantAccessTokenReq {
             app_id: config.app_id.clone(),
             app_secret: config.app_secret.clone(),
-        })?;
-
-        let req = ApiRequest {
-            http_method: Method::POST,
-            api_path: APP_ACCESS_TOKEN_INTERNAL_URL_PATH.to_string(),
-            body,
-            supported_access_token_types: vec![AccessTokenType::None],
-            ..Default::default()
         };
-        let resp: BaseResponse<TenantAccessTokenResp> =
-            Transport::request(req, config, None).await?;
 
-        if resp.success() {
-            let data = resp.data.unwrap();
-            let expire = data.expire - EXPIRY_DELTA;
+        let response = config.http_client
+            .post(&url)
+            .json(&body)
+            .send()
+            .await?;
+
+        let resp: TenantAccessTokenResp = response.json().await?;
+
+        if resp.raw_response.code == 0 {
+            let expire = resp.expire - EXPIRY_DELTA;
 
             self.cache.set(
                 &tenant_access_token_key(&config.app_id, tenant_key),
-                data.tenant_access_token.clone(),
+                resp.tenant_access_token.clone(),
                 expire,
             );
 
-            Ok(data.tenant_access_token)
+            Ok(resp.tenant_access_token)
         } else {
             warn!(
                 "custom app tenantAccessToken cache {:#?}",
                 resp.raw_response
             );
-            Err(LarkAPIError::illegal_param(resp.msg()))
+            Err(LarkAPIError::illegal_param(resp.raw_response.msg.clone()))
         }
     }
 
@@ -214,38 +217,38 @@ impl TokenManager {
             .get_marketplace_app_access_token_then_cache(config, app_ticket)
             .await?;
 
-        let body = serde_json::to_vec(&MarketplaceTenantAccessTokenReq {
+        let url = format!("{}{}", config.base_url, TENANT_ACCESS_TOKEN_URL_PATH);
+        
+        let body = MarketplaceTenantAccessTokenReq {
             app_access_token,
             tenant_key: tenant_key.to_string(),
-        })?;
-
-        let req = ApiRequest {
-            http_method: Method::POST,
-            api_path: TENANT_ACCESS_TOKEN_URL_PATH.to_string(),
-            body,
-            supported_access_token_types: vec![AccessTokenType::None],
-            ..Default::default()
         };
-        let resp: BaseResponse<TenantAccessTokenResp> =
-            Transport::request(req, config, None).await?;
 
-        if resp.success() {
-            let data = resp.data.unwrap();
-            let expire = data.expire - EXPIRY_DELTA;
+        let response = config.http_client
+            .post(&url)
+            .json(&body)
+            .header("Authorization", &format!("Bearer {}", &body.app_access_token))
+            .send()
+            .await?;
+
+        let resp: TenantAccessTokenResp = response.json().await?;
+
+        if resp.raw_response.code == 0 {
+            let expire = resp.expire - EXPIRY_DELTA;
 
             self.cache.set(
                 &tenant_access_token_key(&config.app_id, tenant_key),
-                data.tenant_access_token.clone(),
+                resp.tenant_access_token.clone(),
                 expire,
             );
 
-            Ok(data.tenant_access_token)
+            Ok(resp.tenant_access_token)
         } else {
             warn!(
                 "marketplace app tenantAccessToken cache {:#?}",
                 resp.raw_response
             );
-            Err(LarkAPIError::illegal_param(resp.msg()))
+            Err(LarkAPIError::illegal_param(resp.raw_response.msg.clone()))
         }
     }
 }

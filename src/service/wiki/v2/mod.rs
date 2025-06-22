@@ -49,7 +49,7 @@ impl V2 {
         let result = search_wiki(request, &self.config, option).await?;
         result.data.ok_or_else(|| {
             crate::core::error::LarkAPIError::IllegalParamError(
-                "Response data is missing".to_string()
+                "Response data is missing".to_string(),
             )
         })
     }

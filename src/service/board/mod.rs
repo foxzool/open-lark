@@ -27,6 +27,6 @@ impl BoardService {
         request: &ListWhiteboardNodesRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<ListWhiteboardNodesResponse>> {
-        list_whiteboard_nodes(request.clone(), &*self.config, option).await
+        list_whiteboard_nodes(request.clone(), &self.config, option).await
     }
 }

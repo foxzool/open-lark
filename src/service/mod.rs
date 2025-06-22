@@ -6,6 +6,7 @@ pub mod board;
 pub mod comments;
 pub mod docs;
 pub mod drive;
+pub mod endpoints;
 pub mod im;
 pub mod permission;
 pub mod search;

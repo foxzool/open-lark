@@ -133,7 +133,10 @@ impl PatchSubscriptionRequestBuilder {
     pub fn notification(mut self, enable: bool) -> Self {
         let mut config = self.request.config.unwrap_or_default();
         config.enable_notification = Some(enable);
-        self.changes.push(format!("通知: {}", if enable { "已启用" } else { "已禁用" }));
+        self.changes.push(format!(
+            "通知: {}",
+            if enable { "已启用" } else { "已禁用" }
+        ));
         self.request.config = Some(config);
         self
     }
@@ -144,7 +147,8 @@ impl PatchSubscriptionRequestBuilder {
         config.notification_interval = Some(interval.max(1));
         let hours = interval as f64 / 3600.0;
         if hours < 1.0 {
-            self.changes.push(format!("通知频率: 每{:.0}分钟", hours * 60.0));
+            self.changes
+                .push(format!("通知频率: 每{:.0}分钟", hours * 60.0));
         } else {
             self.changes.push(format!("通知频率: 每{:.1}小时", hours));
         }
@@ -171,7 +175,8 @@ impl PatchSubscriptionRequestBuilder {
     pub fn priority(mut self, priority: SubscriptionPriority) -> Self {
         let mut config = self.request.config.unwrap_or_default();
         config.priority = Some(priority.clone());
-        self.changes.push(format!("优先级: {}", priority.description()));
+        self.changes
+            .push(format!("优先级: {}", priority.description()));
         self.request.config = Some(config);
         self
     }
@@ -195,7 +200,10 @@ impl PatchSubscriptionRequestBuilder {
     pub fn auto_renew(mut self, enable: bool) -> Self {
         let mut config = self.request.config.unwrap_or_default();
         config.auto_renew = Some(enable);
-        self.changes.push(format!("自动续费: {}", if enable { "已启用" } else { "已禁用" }));
+        self.changes.push(format!(
+            "自动续费: {}",
+            if enable { "已启用" } else { "已禁用" }
+        ));
         self.request.config = Some(config);
         self
     }
@@ -246,9 +254,7 @@ impl PatchSubscriptionRequestBuilder {
 
     /// 批量暂停订阅（安全模式）
     pub fn safe_pause(self) -> Self {
-        self.pause()
-            .notification(false)
-            .add_tag("paused_by_system")
+        self.pause().notification(false).add_tag("paused_by_system")
     }
 
     /// 批量激活订阅（快速模式）
@@ -320,13 +326,12 @@ pub async fn patch_subscription(
 ) -> SDKResult<BaseResponse<PatchSubscriptionResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::PATCH;
-    
+
     api_req.api_path = format!(
         "/open-apis/assistant/v1/file/{}/{}/subscription",
-        request.file_type,
-        request.file_token
+        request.file_type, request.file_token
     );
-    
+
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
     let api_resp = Transport::request(api_req, config, option).await?;
@@ -351,9 +356,7 @@ impl PatchSubscriptionRequest {
 
     /// 获取请求摘要
     pub fn summary(&self) -> String {
-        let mut parts = vec![
-            format!("文档: {} ({})", self.file_token, self.file_type)
-        ];
+        let mut parts = vec![format!("文档: {} ({})", self.file_token, self.file_type)];
 
         if let Some(ref status) = self.status {
             parts.push(format!("状态: {}", status.description()));
@@ -382,8 +385,8 @@ impl PatchSubscriptionResponse {
     /// 获取更新时间格式化字符串
     pub fn update_time_formatted(&self) -> Option<String> {
         self.update_time.map(|timestamp| {
-            let datetime = chrono::DateTime::from_timestamp(timestamp, 0)
-                .unwrap_or_else(chrono::Utc::now);
+            let datetime =
+                chrono::DateTime::from_timestamp(timestamp, 0).unwrap_or_else(chrono::Utc::now);
             datetime.format("%Y-%m-%d %H:%M:%S").to_string()
         })
     }
@@ -396,23 +399,27 @@ impl PatchSubscriptionResponse {
     /// 获取完整信息摘要
     pub fn info_summary(&self) -> String {
         let mut parts = vec![
-            format!("{} ({})", self.file_type_enum().chinese_name(), self.file_token),
+            format!(
+                "{} ({})",
+                self.file_type_enum().chinese_name(),
+                self.file_token
+            ),
             self.subscription.summary(),
         ];
-        
+
         if let Some(ref subscription_id) = self.subscription_id {
             parts.push(format!("订阅ID: {}", subscription_id));
         }
-        
+
         if let Some(update_time) = self.update_time_formatted() {
             parts.push(format!("更新时间: {}", update_time));
         }
-        
+
         let updated_fields = self.get_updated_fields();
         if !updated_fields.is_empty() {
             parts.push(format!("更新字段: {}", updated_fields.join(", ")));
         }
-        
+
         parts.join(" | ")
     }
 
@@ -436,12 +443,12 @@ mod tests {
             .quick_notification()
             .auto_renew(true)
             .add_tag("updated");
-        
+
         let changes = builder.get_changes();
         assert!(!changes.is_empty());
         assert!(changes.iter().any(|c| c.contains("状态")));
         assert!(changes.iter().any(|c| c.contains("优先级")));
-        
+
         let request = builder.build();
         assert_eq!(request.file_token, "doccnxxxxxx");
         assert!(request.has_status_change());
@@ -458,7 +465,7 @@ mod tests {
 
         assert!(request.has_status_change());
         assert!(request.has_config_change());
-        
+
         let config = request.config.unwrap();
         assert!(config.has_notification());
         assert_eq!(config.get_notification_interval(), 300);

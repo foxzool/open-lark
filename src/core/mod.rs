@@ -10,6 +10,7 @@ pub mod error;
 pub mod http;
 pub mod req_option;
 pub mod req_translator;
+pub mod request_builder;
 pub mod token_manager;
 pub mod utils;
 
