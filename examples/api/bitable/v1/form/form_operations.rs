@@ -1,4 +1,9 @@
-use open_lark::prelude::*;
+use open_lark::{
+    prelude::*,
+    service::bitable::v1::form::{
+        GetFormRequest, ListFormQuestionRequest, PatchFormQuestionRequest, PatchFormMetaRequest,
+    },
+};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -27,7 +32,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match client.bitable.v1.form.get(get_request, None).await {
         Ok(get_response) => {
-            let form = &get_response.data.form;
+            let form = &get_response.data.as_ref().unwrap().form;
             println!("表单信息:");
             println!("  - 名称: {}", form.name);
             println!("  - ID: {}", form.form_id);
@@ -56,7 +61,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.bitable.v1.form.list(list_request, None).await {
         Ok(list_response) => {
             println!("表单问题列表:");
-            for question in &list_response.data.items {
+            for question in &list_response.data.as_ref().unwrap().items {
                 println!(
                     "  - {}: {} (必填: {})",
                     question.title, question.question_id, question.required
@@ -69,11 +74,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     question.question_type, question.field_id
                 );
             }
-            println!("总计 {} 个问题", list_response.data.total);
+            println!("总计 {} 个问题", list_response.data.as_ref().unwrap().total);
 
             // 3. 更新第一个问题（如果存在）
-            if !list_response.data.items.is_empty() {
-                let first_question = &list_response.data.items[0];
+            if !list_response.data.as_ref().unwrap().items.is_empty() {
+                let first_question = &list_response.data.as_ref().unwrap().items[0];
                 println!("\n3. 更新表单问题: {}", first_question.title);
 
                 let patch_question_request = PatchFormQuestionRequest::builder()
@@ -94,9 +99,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 {
                     Ok(patch_response) => {
                         println!("问题更新成功:");
-                        println!("  - 新标题: {}", patch_response.data.question.title);
-                        println!("  - 新描述: {:?}", patch_response.data.question.description);
-                        println!("  - 必填状态: {}", patch_response.data.question.required);
+                        println!("  - 新标题: {}", patch_response.data.as_ref().unwrap().question.title);
+                        println!("  - 新描述: {:?}", patch_response.data.as_ref().unwrap().question.description);
+                        println!("  - 必填状态: {}", patch_response.data.as_ref().unwrap().question.required);
                     }
                     Err(e) => {
                         println!("更新问题失败: {:?}", e);
