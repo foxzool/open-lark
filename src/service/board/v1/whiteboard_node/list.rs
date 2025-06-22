@@ -672,12 +672,10 @@ impl ListWhiteboardNodesResponse {
             } else {
                 format!("当前页: {}个节点，还有更多", self.node_count())
             }
+        } else if let Some(total) = self.total {
+            format!("全部{}个节点已加载完成", total)
         } else {
-            if let Some(total) = self.total {
-                format!("全部{}个节点已加载完成", total)
-            } else {
-                format!("全部{}个节点已加载完成", self.node_count())
-            }
+            format!("全部{}个节点已加载完成", self.node_count())
         }
     }
 }

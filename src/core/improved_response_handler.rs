@@ -143,7 +143,10 @@ impl ImprovedResponseHandler {
 
 /// 优化的BaseResponse，使用更好的serde特性
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
-pub struct OptimizedBaseResponse<T> {
+pub struct OptimizedBaseResponse<T>
+where
+    T: Default,
+{
     /// 响应状态码
     pub code: i32,
     /// 响应消息
@@ -156,7 +159,10 @@ pub struct OptimizedBaseResponse<T> {
     pub data: Option<T>,
 }
 
-impl<T> OptimizedBaseResponse<T> {
+impl<T> OptimizedBaseResponse<T>
+where
+    T: Default,
+{
     /// 检查请求是否成功
     pub fn is_success(&self) -> bool {
         self.code == 0
@@ -234,7 +240,7 @@ mod tests {
     use crate::core::api_resp::ResponseFormat;
     use serde::{Deserialize, Serialize};
 
-    #[derive(Debug, Serialize, Deserialize, PartialEq)]
+    #[derive(Debug, Serialize, Deserialize, PartialEq, Default)]
     struct TestData {
         id: i32,
         name: String,

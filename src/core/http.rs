@@ -216,6 +216,7 @@ fn validate(
 }
 
 /// 解析文件名
+#[allow(dead_code)]
 fn decode_file_name(file_name: &str) -> Option<String> {
     let parts = file_name.split(';');
 
