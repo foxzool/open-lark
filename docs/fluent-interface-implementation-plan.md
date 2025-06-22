@@ -87,7 +87,7 @@ impl ListFilesRequestBuilder {
 - **示例文件**：创建了2个演示示例展示新功能
 
 ### ✅ Phase 2: 扩展验证 (已完成)
-- **已扩展到核心服务**：基于反馈积极，扩展到3大核心服务
+- **已扩展到核心服务**：基于反馈积极，扩展到5大核心服务
   - ✅ **IM服务** (3个Builder):
     - `CreateMessageRequestBuilder` - 发送消息
     - `ListMessageRequestBuilder` - 查询消息历史
@@ -96,11 +96,19 @@ impl ListFilesRequestBuilder {
     - `SearchRecordRequestBuilder` - 查询记录
     - `BatchGetRecordRequestBuilder` - 批量获取记录
   - ✅ **Drive服务** (3个Builder): 原有实现
-- **覆盖范围**：8个核心Builder覆盖3大主要服务
-- **演示文件**：创建了综合性多服务演示示例
+    - `ListFilesRequestBuilder` - 文件夹列表
+    - `UploadAllRequestBuilder` - 文件上传
+    - `DownloadRequestBuilder` - 文件下载
+  - ✅ **Search服务** (1个Builder):
+    - `SearchUserRequestBuilder` - 用户搜索
+  - ✅ **Sheets服务** (2个Builder):
+    - `ReadingSingleRangeRequestBuilder` - 数据读取
+    - `FindCellsRequestBuilder` - 单元格查找
+- **覆盖范围**：11个核心Builder覆盖5大主要服务
+- **演示文件**：创建了综合性多服务演示示例和高级特性演示
 
 ### Phase 3: 推广评估 (准备中)
-- 当前状态：已覆盖最常用的8个Builder
+- 当前状态：已覆盖最常用的11个Builder
 - 等待用户反馈决定是否扩展到全部191个API
 - 后续可根据需求渐进式扩展到其他服务
 
@@ -178,11 +186,40 @@ impl ListFilesRequestBuilder {
    ) -> SDKResult<BaseResponse<BatchGetRecordResponse>>
    ```
 
+#### Search服务 (1个)
+
+9. **SearchUserRequestBuilder** (`src/service/search/v1/user.rs`)
+   ```rust
+   pub async fn execute(
+       self,
+       service: &UserService,
+   ) -> SDKResult<BaseResponse<SearchUserResponse>>
+   ```
+
+#### Sheets服务 (2个)
+
+10. **ReadingSingleRangeRequestBuilder** (`src/service/cloud_docs/sheets/v3/data_operation/reading_single_range.rs`)
+    ```rust
+    pub async fn execute(
+        self,
+        service: &DataOperationService,
+    ) -> SDKResult<BaseResponse<ReadingSingleRangeResponseData>>
+    ```
+
+11. **FindCellsRequestBuilder** (`src/service/cloud_docs/sheets/v3/data_operation/find_cells.rs`)
+    ```rust
+    pub async fn execute(
+        self,
+        service: &SpreadsheetSheetService,
+    ) -> SDKResult<BaseResponse<FindCellsResponse>>
+    ```
+
 ### 演示示例
 
 1. **enhanced_builder_demo.rs** - 基础演示和概念说明
 2. **enhanced_drive_operations.rs** - 实际云空间操作演示
 3. **multi_service_enhanced_builder.rs** - 多服务综合演示，展示8个增强Builder的用法
+4. **advanced_enhanced_builder.rs** - 高级特性演示，展示11个增强Builder和复杂业务场景
 
 ## 方案对比
 
