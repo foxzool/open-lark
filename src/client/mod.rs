@@ -3,10 +3,11 @@ use std::{sync::Arc, time::Duration};
 use crate::{
     core::{config::Config, constants::AppType},
     service::{
-        assistant::AssistantService, attendance::AttendanceService, authentication::AuthenService,
-        bitable::BitableService, board::BoardService, comments::CommentsService, docs::DocsService,
-        drive::DriveService, im::ImService, permission::PermissionService, search::SearchService,
-        sheets::SheetsService, wiki::WikiService,
+        attendance::AttendanceService, authentication::AuthenService, cloud_docs::CloudDocsService,
+        im::ImService, search::SearchService,
+        // 向后兼容的导入
+        AssistantService, BitableService, BoardService, CommentsService, DocsService,
+        DriveService, PermissionService, SheetsService, WikiService,
     },
 };
 
@@ -16,13 +17,17 @@ pub mod ws_client;
 /// 飞书开放平台SDK client
 pub struct LarkClient {
     pub config: Config,
-    pub assistant: AssistantService,
+    // 核心服务
     pub attendance: AttendanceService,
     pub auth: AuthenService,
-    pub docs: DocsService,
     pub im: ImService,
-    pub drive: DriveService,
     pub search: SearchService,
+    // 云文档服务聚合
+    pub cloud_docs: CloudDocsService,
+    // 向后兼容的字段
+    pub assistant: AssistantService,
+    pub docs: DocsService,
+    pub drive: DriveService,
     pub sheets: SheetsService,
     pub bitable: BitableService,
     pub wiki: WikiService,
@@ -72,15 +77,22 @@ impl LarkClientBuilder {
         // 创建单个 Arc<Config> 并在所有服务间共享
         let config = Arc::new(self.config.clone());
 
+        // 创建云文档服务聚合
+        let cloud_docs = CloudDocsService::new(Arc::clone(&config));
+        
         LarkClient {
             config: self.config,
-            assistant: AssistantService::new(Arc::clone(&config)),
+            // 核心服务
             attendance: AttendanceService::new(Arc::clone(&config)),
             auth: AuthenService::new(Arc::clone(&config)),
-            docs: DocsService::new(Arc::clone(&config)),
             im: ImService::new(Arc::clone(&config)),
-            drive: DriveService::new(Arc::clone(&config)),
             search: SearchService::new(Arc::clone(&config)),
+            // 云文档服务聚合
+            cloud_docs,
+            // 向后兼容的字段（重新创建实例）
+            assistant: AssistantService::new(Arc::clone(&config)),
+            docs: DocsService::new(Arc::clone(&config)),
+            drive: DriveService::new(Arc::clone(&config)),
             sheets: SheetsService::new(Arc::clone(&config)),
             bitable: BitableService::new(Arc::clone(&config)),
             wiki: WikiService::new(Arc::clone(&config)),
