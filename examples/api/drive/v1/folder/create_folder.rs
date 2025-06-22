@@ -17,7 +17,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let user_access_token = env::var("USER_ACCESS_TOKEN").expect("USER_ACCESS_TOKEN 必须设置");
 
     // 创建客户端
-    let client = LarkClient::builder(app_id, app_secret)
+    let client = LarkClient::builder(&app_id, &app_secret)
         .with_enable_token_cache(true)
         .build();
     
@@ -42,8 +42,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 match client.drive.v1.folder.create_folder(request, Some(option.clone())).await {
                     Ok(response) => {
                         println!("API调用成功");
-                        println!("响应状态码: {}", response.code);
-                        println!("响应消息: {}", response.msg);
+                        println!("响应状态码: {}", response.code());
+                        println!("响应消息: {}", response.msg());
 
                         if let Some(data) = response.data {
                             println!("新建文件夹成功:");

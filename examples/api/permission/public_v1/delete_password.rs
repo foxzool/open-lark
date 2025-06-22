@@ -7,7 +7,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app_id = std::env::var("APP_ID").unwrap();
     let app_secret = std::env::var("APP_SECRET").unwrap();
 
-    let client = LarkClient::builder(app_id, app_secret)
+    let client = LarkClient::builder(&app_id, &app_secret)
         .with_enable_token_cache(true)
         .build();
 
@@ -20,8 +20,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.delete_password(&request, None).await {
         Ok(response) => {
             println!("密码保护关闭操作完成");
-            println!("响应状态码: {}", response.code);
-            println!("响应消息: {}", response.msg);
+            println!("响应状态码: {}", response.code());
+            println!("响应消息: {}", response.msg());
             
             if let Some(data) = response.data {
                 println!("删除操作成功: {:?}", data);
@@ -45,8 +45,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.delete_password(&sheet_request, None).await {
         Ok(response) => {
             println!("电子表格密码保护关闭操作完成");
-            println!("响应状态码: {}", response.code);
-            println!("响应消息: {}", response.msg);
+            println!("响应状态码: {}", response.code());
+            println!("响应消息: {}", response.msg());
         }
         Err(e) => {
             eprintln!("关闭电子表格密码保护失败: {:?}", e);
@@ -64,8 +64,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     {
         Ok(response) => {
             println!("多维表格密码保护关闭操作完成");
-            println!("响应状态码: {}", response.code);
-            println!("响应消息: {}", response.msg);
+            println!("响应状态码: {}", response.code());
+            println!("响应消息: {}", response.msg());
         }
         Err(e) => {
             eprintln!("关闭多维表格密码保护失败: {:?}", e);
@@ -82,8 +82,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.permission.delete_password(&wiki_request, None).await {
         Ok(response) => {
             println!("知识库密码保护关闭操作完成");
-            println!("响应状态码: {}", response.code);
-            println!("响应消息: {}", response.msg);
+            println!("响应状态码: {}", response.code());
+            println!("响应消息: {}", response.msg());
         }
         Err(e) => {
             eprintln!("关闭知识库密码保护失败: {:?}", e);

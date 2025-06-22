@@ -17,7 +17,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app_secret = std::env::var("APP_SECRET").expect("APP_SECRET environment variable not set");
 
     // 创建客户端
-    let client = LarkClient::builder(app_id, app_secret)
+    let client = LarkClient::builder(&app_id, &app_secret)
         .with_enable_token_cache(true)
         .build();
 
