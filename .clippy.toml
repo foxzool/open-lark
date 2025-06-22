@@ -1,0 +1,13 @@
+# Clippy configuration for open-lark
+# Disable some overly strict lints for better development experience
+
+# Allow some common patterns that are fine in this codebase
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true
+
+# Increase complexity thresholds for this large codebase
+cognitive-complexity-threshold = 50
+type-complexity-threshold = 500
+
+# Allow some naming conventions used in the codebase
+allow-mixed-uninlined-format-args = true
