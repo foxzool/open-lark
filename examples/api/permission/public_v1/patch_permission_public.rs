@@ -27,7 +27,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Ok(response) => {
             println!("更新权限设置成功");
 
-            let result = response.data.update_result();
+            let result = response.data.as_ref().unwrap().update_result();
             println!("更新摘要: {}", response.data.update_summary());
             println!("安全评估: {}", if let Some(data) = response.data { data.security_assessment() } else { "N/A".to_string() });
 
@@ -71,7 +71,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("电子表格权限更新成功");
             println!(
                 "安全级别: {}",
-                response.data.update_result().security_level()
+                response.data.as_ref().unwrap().update_result().security_level()
             );
             println!("更新摘要: {}", response.data.update_summary());
 
@@ -107,7 +107,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Ok(response) => {
             println!("自定义权限设置成功");
 
-            let result = response.data.update_result();
+            let result = response.data.as_ref().unwrap().update_result();
             println!(
                 "分享级别: {}",
                 result.share_level_description().unwrap_or("未设置")
@@ -140,7 +140,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("分享已关闭");
             println!(
                 "安全级别: {}",
-                response.data.update_result().security_level()
+                response.data.as_ref().unwrap().update_result().security_level()
             );
             println!("安全评估: {}", if let Some(data) = response.data { data.security_assessment() } else { "N/A".to_string() });
         }

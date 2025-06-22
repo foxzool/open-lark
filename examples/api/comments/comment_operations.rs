@@ -45,11 +45,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match client.comments.list(list_request, None).await {
         Ok(list_response) => {
-            println!("评论列表获取成功:");
-            println!("  - 评论数量: {}", list_response.items.len());
-            println!("  - 是否有更多: {}", list_response.has_more);
+            if let Some(data) = &list_response.data {
+                println!("评论列表获取成功:");
+                println!("  - 评论数量: {}", data.items.len());
+                println!("  - 是否有更多: {}", data.has_more);
 
-            for (index, comment) in list_response.items.iter().enumerate() {
+            for (index, comment) in data.items.iter().enumerate() {
                 println!("\n  评论 {}:", index + 1);
                 println!("    - ID: {}", comment.comment_id);
                 println!("    - 用户: {}", comment.user_id);
@@ -78,6 +79,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     comment_id = comment.comment_id.clone();
                 }
             }
+            }
         }
         Err(e) => {
             println!("获取评论列表失败: {:?}", e);
@@ -102,13 +104,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match client.comments.create(create_request, None).await {
         Ok(create_response) => {
-            let comment = &create_response.comment;
-            comment_id = comment.comment_id.clone(); // 更新comment_id
+            if let Some(comment) = &create_response.data {
+            comment_id = comment.comment.comment_id.clone(); // 更新comment_id
             println!("评论创建成功:");
-            println!("  - 评论ID: {}", comment.comment_id);
-            println!("  - 用户ID: {}", comment.user_id);
-            println!("  - 创建时间: {}", comment.create_time);
-            println!("  - 是否全文: {}", comment.is_whole_comment());
+            println!("  - 评论ID: {}", comment.comment.comment_id);
+            println!("  - 用户ID: {}", comment.comment.user_id);
+            println!("  - 创建时间: {}", comment.comment.create_time);
+            println!("  - 是否全文: {}", comment.comment.is_whole_comment());
+            }
         }
         Err(e) => {
             println!("创建评论失败: {:?}", e);
@@ -128,10 +131,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         match client.comments.get(get_request, None).await {
             Ok(get_response) => {
+                if let Some(data) = &get_response.data {
                 println!("评论详情获取成功:");
-                println!("  {}", get_response.summary());
-                if let Some(quote) = get_response.quote() {
+                println!("  {}", data.summary());
+                if let Some(quote) = data.quote() {
                     println!("  - 引用内容: {}", quote);
+                }
                 }
             }
             Err(e) => {
@@ -153,11 +158,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         match client.comments.batch_query(batch_request, None).await {
             Ok(batch_response) => {
+                if let Some(data) = &batch_response.data {
                 println!("批量获取评论成功:");
-                println!("  - 获取到 {} 个评论", batch_response.count());
-                println!("  - 已解决: {}", batch_response.solved_comments().len());
-                println!("  - 未解决: {}", batch_response.unsolved_comments().len());
-                println!("  - 全文评论: {}", batch_response.whole_comments().len());
+                println!("  - 获取到 {} 个评论", data.count());
+                println!("  - 已解决: {}", data.solved_comments().len());
+                println!("  - 未解决: {}", data.unsolved_comments().len());
+                println!("  - 全文评论: {}", data.whole_comments().len());
+                }
             }
             Err(e) => {
                 println!("批量获取评论失败: {:?}", e);
@@ -179,21 +186,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         match client.comments.patch(solve_request, None).await {
             Ok(patch_response) => {
+                if let Some(data) = &patch_response.data {
                 println!("评论解决成功:");
-                println!("  - 评论ID: {}", patch_response.comment_id);
+                println!("  - 评论ID: {}", data.comment_id);
                 println!(
                     "  - 状态: {}",
-                    if patch_response.is_solved() {
+                    if data.is_solved() {
                         "已解决"
                     } else {
                         "未解决"
                     }
                 );
-                if let Some(time) = patch_response.solved_time {
+                if let Some(time) = data.solved_time {
                     println!("  - 解决时间: {}", time);
                 }
-                if let Some(solver) = &patch_response.solver_user_id {
+                if let Some(solver) = &data.solver_user_id {
                     println!("  - 解决者: {}", solver);
+                }
                 }
             }
             Err(e) => {
@@ -216,16 +225,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         match client.comments.patch(restore_request, None).await {
             Ok(patch_response) => {
+                if let Some(data) = &patch_response.data {
                 println!("评论恢复成功:");
-                println!("  - 评论ID: {}", patch_response.comment_id);
+                println!("  - 评论ID: {}", data.comment_id);
                 println!(
                     "  - 状态: {}",
-                    if patch_response.is_restored() {
+                    if !data.is_solved() {
                         "已恢复"
                     } else {
                         "已解决"
                     }
                 );
+                }
             }
             Err(e) => {
                 println!("恢复评论失败: {:?}", e);
@@ -251,11 +262,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .await
         {
             Ok(replies_response) => {
+                if let Some(data) = &replies_response.data {
                 println!("回复列表获取成功:");
-                println!("  {}", replies_response.summary());
+                println!("  {}", data.summary());
 
-                if !replies_response.is_empty() {
-                    let sorted_replies = replies_response.sorted_by_time();
+                if !data.is_empty() {
+                    let sorted_replies = data.sorted_by_time();
                     for (index, reply) in sorted_replies.iter().enumerate() {
                         println!("  回复 {}:", index + 1);
                         println!("    - ID: {}", reply.reply_id);
@@ -263,6 +275,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         println!("    - 内容: {}", reply.get_text_content());
                         println!("    - 时间: {}", reply.create_time);
                     }
+                }
                 }
             }
             Err(e) => {
@@ -290,9 +303,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match client.comments.create(complex_request, None).await {
         Ok(create_response) => {
+            if let Some(data) = &create_response.data {
             println!("复杂评论创建成功:");
-            println!("  - 评论ID: {}", create_response.comment.comment_id);
+            println!("  - 评论ID: {}", data.comment.comment_id);
             println!("  - 包含多种格式的文本");
+            }
         }
         Err(e) => {
             println!("创建复杂评论失败: {:?}", e);
@@ -324,7 +339,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     "  {} ({}) 评论数量: {}",
                     type_name,
                     file_type,
-                    response.items.len()
+                    response.data.as_ref().map_or(0, |d| d.items.len())
                 );
             }
             Err(e) => {
@@ -346,7 +361,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build();
 
     if let Ok(response) = client.comments.list(whole_comments_request, None).await {
-        println!("  - 全文评论数量: {}", response.items.len());
+        if let Some(data) = &response.data {
+        println!("  - 全文评论数量: {}", data.items.len());
+        }
     }
 
     // 只获取已解决的评论
@@ -359,7 +376,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build();
 
     if let Ok(response) = client.comments.list(solved_comments_request, None).await {
-        println!("  - 已解决评论数量: {}", response.items.len());
+        if let Some(data) = &response.data {
+        println!("  - 已解决评论数量: {}", data.items.len());
+        }
     }
 
     // 只获取未解决的评论
@@ -372,7 +391,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build();
 
     if let Ok(response) = client.comments.list(unsolved_comments_request, None).await {
-        println!("  - 未解决评论数量: {}", response.items.len());
+        if let Some(data) = &response.data {
+        println!("  - 未解决评论数量: {}", data.items.len());
+        }
     }
 
     println!("\n评论操作示例完成！");

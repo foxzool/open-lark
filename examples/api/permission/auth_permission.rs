@@ -1,5 +1,5 @@
 use dotenvy::dotenv;
-use open_lark::{prelude::*, service::permission::member::auth::AuthPermissionRequest};
+use open_lark::{prelude::*, service::permission::member::{auth::AuthPermissionRequest, Permission}};
 use std::env;
 
 #[tokio::main]
@@ -81,7 +81,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    println!("\n" + &"=".repeat(50));
+    println!("\n{}", "=".repeat(50));
 
     // 示例2：检查所有者权限
     println!("🔹 示例2: 检查当前用户的所有者权限");
@@ -116,7 +116,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    println!("\n" + &"=".repeat(50));
+    println!("\n{}", "=".repeat(50));
 
     // 示例3：检查电子表格的查看权限
     println!("🔹 示例3: 检查电子表格的查看权限");
