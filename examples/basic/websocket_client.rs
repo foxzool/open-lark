@@ -14,7 +14,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("🔌 WebSocket Client Example");
     println!("Note: WebSocket features require the 'websocket' feature flag");
-    
+
     #[cfg(feature = "websocket")]
     {
         println!("✅ WebSocket feature is enabled");
@@ -24,7 +24,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!("- Chat member changes");
         println!("- Document updates");
     }
-    
+
     #[cfg(not(feature = "websocket"))]
     {
         println!("❌ WebSocket feature is not enabled");

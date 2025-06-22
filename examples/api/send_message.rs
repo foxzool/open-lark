@@ -18,12 +18,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("- Valid chat_id or user_id");
     println!("- Proper message content");
     println!("- Required permissions");
-    
+
     println!("\n📋 Available IM operations:");
     println!("- client.im.v1.message - Message operations");
     println!("- client.im.v1.chat - Chat operations");
     println!("- client.im.v2.message - V2 message operations");
-    
+
     println!("\n💡 Tip: Check official API docs for detailed parameters");
 
     Ok(())

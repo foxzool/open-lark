@@ -1,30 +1,30 @@
-use std::sync::Arc;
 use crate::core::config::Config;
+use std::sync::Arc;
 
 // 子模块声明
-pub mod drive;
-pub mod wiki;
-pub mod docx;
-pub mod sheets;
+pub mod assistant;
 pub mod bitable;
 pub mod board;
-pub mod permission;
 pub mod comments;
-pub mod assistant;
+pub mod docx;
+pub mod drive;
+pub mod permission;
+pub mod sheets;
+pub mod wiki;
 
 // 重新导出服务类型
-pub use drive::DriveService;
-pub use wiki::WikiService;
-pub use docx::DocxService;
-pub use sheets::SheetsService;
+pub use assistant::AssistantService;
 pub use bitable::BitableService;
 pub use board::BoardService;
-pub use permission::PermissionService;
 pub use comments::CommentsService;
-pub use assistant::AssistantService;
+pub use docx::DocxService;
+pub use drive::DriveService;
+pub use permission::PermissionService;
+pub use sheets::SheetsService;
+pub use wiki::WikiService;
 
 /// 云文档服务聚合器
-/// 
+///
 /// 提供统一的云文档相关功能访问接口，包括：
 /// - 云空间 (drive)
 /// - 知识库 (wiki)  

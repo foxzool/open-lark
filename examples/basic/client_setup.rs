@@ -16,7 +16,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("✅ Lark client created successfully!");
     println!("📱 App ID: {}", app_id);
     println!("🔧 Token cache: enabled");
-    
+
     println!("\n🚀 Available services:");
     println!("- IM (instant messaging)");
     println!("- Drive (file management)");

@@ -221,6 +221,104 @@ impl FileService {
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
     }
+
+    /// 分片上传文件-预上传
+    ///
+    /// 该接口用于分片上传的预上传步骤，获取上传事务ID和分片信息。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/multipart-upload-file-/upload_prepare>
+    pub async fn upload_prepare(
+        &self,
+        request: FileUploadPrepareRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<FileUploadPrepareRespData>> {
+        let mut api_req = ApiRequest::default();
+        api_req.http_method = Method::POST;
+        api_req.api_path = "/open-apis/drive/v1/files/upload_prepare".to_string();
+        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        api_req.body = serde_json::to_vec(&request)?;
+
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
+        Ok(api_resp)
+    }
+
+    /// 分片上传文件-上传分片
+    ///
+    /// 该接口用于上传文件分片。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/multipart-upload-file-/upload_part>
+    pub async fn upload_part(
+        &self,
+        request: FileUploadPartRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<FileUploadPartRespData>> {
+        let mut api_req = request.api_req;
+        api_req.http_method = Method::POST;
+        api_req.api_path = "/open-apis/drive/v1/files/upload_part".to_string();
+        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
+        Ok(api_resp)
+    }
+
+    /// 分片上传文件-完成上传
+    ///
+    /// 该接口用于完成分片上传。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/multipart-upload-file-/upload_finish>
+    pub async fn upload_finish(
+        &self,
+        request: FileUploadFinishRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<FileUploadFinishRespData>> {
+        let mut api_req = ApiRequest::default();
+        api_req.http_method = Method::POST;
+        api_req.api_path = "/open-apis/drive/v1/files/upload_finish".to_string();
+        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        api_req.body = serde_json::to_vec(&request)?;
+
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
+        Ok(api_resp)
+    }
+
+    /// 创建导入任务
+    ///
+    /// 该接口用于创建文档导入任务。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/import_task/create>
+    pub async fn create_import_task(
+        &self,
+        request: CreateImportTaskRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<CreateImportTaskRespData>> {
+        let mut api_req = ApiRequest::default();
+        api_req.http_method = Method::POST;
+        api_req.api_path = "/open-apis/drive/v1/import_tasks".to_string();
+        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        api_req.body = serde_json::to_vec(&request)?;
+
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
+        Ok(api_resp)
+    }
+
+    /// 查询导入任务结果
+    ///
+    /// 该接口用于查询导入任务的执行结果。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/import_task/get>
+    pub async fn get_import_task(
+        &self,
+        request: GetImportTaskRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<GetImportTaskRespData>> {
+        let mut api_req = ApiRequest::default();
+        api_req.http_method = Method::GET;
+        api_req.api_path = format!("/open-apis/drive/v1/import_tasks/{}", request.ticket);
+        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
+        Ok(api_resp)
+    }
 }
 
 // === 请求和响应数据结构 ===
@@ -610,6 +708,268 @@ pub struct SearchFileItem {
 }
 
 impl ApiResponseTrait for SearchFilesRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 分片上传文件-预上传请求参数
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FileUploadPrepareRequest {
+    /// 文件名称
+    pub file_name: String,
+    /// 父文件夹token
+    pub parent_token: String,
+    /// 文件大小
+    pub size: i64,
+    /// 分片大小（可选）
+    pub block_size: Option<i32>,
+    /// 文件校验和（可选）
+    pub checksum: Option<String>,
+}
+
+impl FileUploadPrepareRequest {
+    pub fn new(file_name: impl Into<String>, parent_token: impl Into<String>, size: i64) -> Self {
+        Self {
+            file_name: file_name.into(),
+            parent_token: parent_token.into(),
+            size,
+            block_size: None,
+            checksum: None,
+        }
+    }
+
+    pub fn with_block_size(mut self, block_size: i32) -> Self {
+        self.block_size = Some(block_size);
+        self
+    }
+
+    pub fn with_checksum(mut self, checksum: impl Into<String>) -> Self {
+        self.checksum = Some(checksum.into());
+        self
+    }
+}
+
+/// 分片上传文件-预上传响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FileUploadPrepareRespData {
+    /// 上传事务ID
+    pub upload_id: String,
+    /// 分片大小
+    pub block_size: i32,
+    /// 分片数量
+    pub block_num: i32,
+}
+
+impl ApiResponseTrait for FileUploadPrepareRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 分片上传文件-上传分片请求参数
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct FileUploadPartRequest {
+    /// 请求体
+    #[serde(skip)]
+    pub api_req: ApiRequest,
+    /// 上传事务ID
+    upload_id: String,
+    /// 分片序号
+    seq: i32,
+    /// 分片大小
+    size: i32,
+    /// 分片校验和（可选）
+    checksum: Option<String>,
+}
+
+impl FileUploadPartRequest {
+    pub fn builder() -> FileUploadPartRequestBuilder {
+        FileUploadPartRequestBuilder::default()
+    }
+}
+
+/// 分片上传文件-上传分片请求构建器
+#[derive(Default)]
+pub struct FileUploadPartRequestBuilder {
+    request: FileUploadPartRequest,
+}
+
+impl FileUploadPartRequestBuilder {
+    pub fn upload_id(mut self, upload_id: impl Into<String>) -> Self {
+        self.request.upload_id = upload_id.into();
+        self
+    }
+
+    pub fn seq(mut self, seq: i32) -> Self {
+        self.request.seq = seq;
+        self
+    }
+
+    pub fn size(mut self, size: i32) -> Self {
+        self.request.size = size;
+        self
+    }
+
+    pub fn checksum(mut self, checksum: impl Into<String>) -> Self {
+        self.request.checksum = Some(checksum.into());
+        self
+    }
+
+    pub fn file_chunk(mut self, chunk: Vec<u8>) -> Self {
+        self.request.api_req.file = chunk;
+        self
+    }
+
+    pub fn build(mut self) -> FileUploadPartRequest {
+        self.request.api_req.body = serde_json::to_vec(&self.request).unwrap();
+        self.request
+    }
+}
+
+/// 分片上传文件-上传分片响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FileUploadPartRespData {
+    /// 分片ETag
+    pub etag: String,
+}
+
+impl ApiResponseTrait for FileUploadPartRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 分片上传文件-完成上传请求参数
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FileUploadFinishRequest {
+    /// 上传事务ID
+    pub upload_id: String,
+    /// 分片信息列表
+    pub block_infos: Vec<FileBlockInfo>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FileBlockInfo {
+    /// 分片ETag
+    pub etag: String,
+    /// 分片序号
+    pub seq: i32,
+}
+
+impl FileUploadFinishRequest {
+    pub fn new(upload_id: impl Into<String>, block_infos: Vec<FileBlockInfo>) -> Self {
+        Self {
+            upload_id: upload_id.into(),
+            block_infos,
+        }
+    }
+}
+
+/// 分片上传文件-完成上传响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FileUploadFinishRespData {
+    /// 文件token
+    pub file_token: String,
+}
+
+impl ApiResponseTrait for FileUploadFinishRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 创建导入任务请求参数
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateImportTaskRequest {
+    /// 导入文件的token
+    pub file_extension: String,
+    /// 导入文件类型
+    pub file_token: String,
+    /// 导入文件类型
+    #[serde(rename = "type")]
+    pub import_type: String,
+    /// 导入的目标文件夹token
+    pub parent_token: String,
+    /// 导入的文件名称
+    pub file_name: String,
+    /// 导入点类型
+    pub parent_type: String,
+}
+
+impl CreateImportTaskRequest {
+    pub fn new(
+        file_extension: impl Into<String>,
+        file_token: impl Into<String>,
+        import_type: impl Into<String>,
+        parent_token: impl Into<String>,
+        file_name: impl Into<String>,
+        parent_type: impl Into<String>,
+    ) -> Self {
+        Self {
+            file_extension: file_extension.into(),
+            file_token: file_token.into(),
+            import_type: import_type.into(),
+            parent_token: parent_token.into(),
+            file_name: file_name.into(),
+            parent_type: parent_type.into(),
+        }
+    }
+}
+
+/// 创建导入任务响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateImportTaskRespData {
+    /// 导入任务ID
+    pub ticket: String,
+}
+
+impl ApiResponseTrait for CreateImportTaskRespData {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 查询导入任务结果请求参数
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetImportTaskRequest {
+    /// 导入任务ID
+    pub ticket: String,
+}
+
+impl GetImportTaskRequest {
+    pub fn new(ticket: impl Into<String>) -> Self {
+        Self {
+            ticket: ticket.into(),
+        }
+    }
+}
+
+/// 查询导入任务结果响应数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetImportTaskRespData {
+    /// 任务结果
+    pub result: ImportTaskResult,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ImportTaskResult {
+    /// 任务类型
+    #[serde(rename = "type")]
+    pub task_type: String,
+    /// 任务ID
+    pub ticket: String,
+    /// 任务状态
+    pub job_status: i32,
+    /// 任务错误码
+    pub job_error_msg: Option<String>,
+    /// 导入结果
+    pub token: Option<String>,
+    /// 导入结果类型
+    pub url: Option<String>,
+}
+
+impl ApiResponseTrait for GetImportTaskRespData {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
