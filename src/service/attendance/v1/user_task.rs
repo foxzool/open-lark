@@ -9,7 +9,7 @@ use crate::core::{
 use super::models::{
     BatchCreateUserTaskRequest, BatchCreateUserTaskRespData, BatchDelUserTaskRequest,
     BatchDelUserTaskRespData, GetUserTaskRequest, GetUserTaskRespData, QueryUserTaskRequest,
-    QueryUserTaskResultRequest, QueryUserTaskResultRespData, QueryUserTaskRespData,
+    QueryUserTaskRespData, QueryUserTaskResultRequest, QueryUserTaskResultRespData,
 };
 
 /// 用户打卡任务服务

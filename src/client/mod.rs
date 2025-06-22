@@ -3,11 +3,21 @@ use std::{sync::Arc, time::Duration};
 use crate::{
     core::{config::Config, constants::AppType},
     service::{
-        attendance::AttendanceService, authentication::AuthenService, cloud_docs::CloudDocsService,
-        im::ImService, search::SearchService,
+        attendance::AttendanceService,
+        authentication::AuthenService,
+        cloud_docs::CloudDocsService,
+        im::ImService,
+        search::SearchService,
         // 向后兼容的导入
-        AssistantService, BitableService, BoardService, CommentsService, DocsService,
-        DriveService, PermissionService, SheetsService, WikiService,
+        AssistantService,
+        BitableService,
+        BoardService,
+        CommentsService,
+        DocsService,
+        DriveService,
+        PermissionService,
+        SheetsService,
+        WikiService,
     },
 };
 
@@ -79,7 +89,7 @@ impl LarkClientBuilder {
 
         // 创建云文档服务聚合
         let cloud_docs = CloudDocsService::new(Arc::clone(&config));
-        
+
         LarkClient {
             config: self.config,
             // 核心服务

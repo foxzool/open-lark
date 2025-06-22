@@ -14,11 +14,15 @@ use self::v1::*;
 /// 画板服务
 pub struct BoardService {
     config: Arc<Config>,
+    pub whiteboard: v1::whiteboard::WhiteboardService,
 }
 
 impl BoardService {
     pub fn new(config: Arc<Config>) -> Self {
-        Self { config }
+        Self {
+            whiteboard: v1::whiteboard::WhiteboardService::new((*config).clone()),
+            config,
+        }
     }
 
     /// 获取画板所有节点
