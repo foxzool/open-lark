@@ -1,6 +1,6 @@
 use open_lark::{
     service::wiki::v2::task::{GetTaskRequest, MoveDocsToWikiRequest, TaskStatus},
-    LarkClient,
+    prelude::*,
 };
 use std::time::Duration;
 use tokio::time::sleep;
@@ -183,7 +183,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("批量请求配置完成:");
     println!("  - 空间ID: {}", space_id);
-    println!("  - 文档数量: {} 个", batch_request.obj_tokens.len());
+    // println!("  - 文档数量: {} 个", batch_request.obj_tokens.len()); // 私有字段，暂时注释
     println!("  - 目标位置: 根目录");
 
     println!("\n云文档任务操作示例完成！");
