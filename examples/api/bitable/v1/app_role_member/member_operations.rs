@@ -1,9 +1,12 @@
 use open_lark::{
+    prelude::*,
     service::bitable::v1::app_role_member::{
-        BatchCreateRoleMemberRequest, BatchDeleteRoleMemberRequest, CreateRoleMemberRequest,
-        DeleteRoleMemberRequest, ListRoleMemberRequest, MemberInfo,
+        batch_create::BatchCreateRoleMemberRequest,
+        batch_delete::BatchDeleteRoleMemberRequest,
+        create::CreateRoleMemberRequest,
+        delete::DeleteRoleMemberRequest,
+        list::{ListRoleMemberRequest, MemberInfo},
     },
-    LarkClient,
 };
 
 #[tokio::main]

@@ -1,10 +1,15 @@
 use open_lark::{
+    prelude::*,
     service::comments::{
-        BatchQueryCommentsRequest, ContentBuilder, CreateCommentRequest, DeleteReplyRequest,
-        GetCommentRequest, ListCommentsRequest, ListRepliesRequest, PatchCommentRequest,
-        UpdateReplyRequest,
+        batch_query::BatchQueryCommentsRequest,
+        create::{CreateCommentRequest, ContentBuilder},
+        delete_reply::DeleteReplyRequest,
+        get::GetCommentRequest,
+        list::ListCommentsRequest,
+        list_replies::ListRepliesRequest,
+        patch::PatchCommentRequest,
+        update_reply::UpdateReplyRequest,
     },
-    LarkClient,
 };
 
 #[tokio::main]
