@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClient, service::im::v1::message::ListMessageRequest};
+use open_lark::{prelude::LarkClient, service::im::v1::message::ListMessageRequest};
 
 /// 获取会话历史消息
 /// GET /open-apis/im/v1/messages

@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClient, service::drive::v2::explorer::CreateFolderRequest};
+use open_lark::{prelude::LarkClient, service::drive::v2::explorer::CreateFolderRequest};
 
 /// 新建文件夹
 #[tokio::main]

@@ -1,4 +1,4 @@
-use dotenv::dotenv;
+use dotenvy::dotenv;
 use open_lark::prelude::*;
 use std::env;
 
@@ -49,7 +49,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    println!("\n" + &"=".repeat(50));
+    println!("{}", "\n".to_string() + &"=".repeat(50));
 
     // 示例2：完全转移所有权（移除原所有者权限）
     println!("🔹 示例2: 完全转移所有权（移除原所有者权限）");
@@ -100,7 +100,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    println!("\n" + &"=".repeat(50));
+    println!("{}", "\n".to_string() + &"=".repeat(50));
 
     // 示例3：转移电子表格所有权给群组
     println!("🔹 示例3: 转移电子表格所有权给群组");
@@ -139,7 +139,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    println!("\n" + &"=".repeat(50));
+    println!("{}", "\n".to_string() + &"=".repeat(50));
 
     // 示例4：转移知识库所有权给部门
     println!("🔹 示例4: 转移知识库所有权给部门");

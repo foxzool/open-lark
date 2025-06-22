@@ -4,7 +4,7 @@ use dotenvy::dotenv;
 use serde_json::json;
 
 use open_lark::{
-    client::LarkClient, service::sheets::v2::data_operation::WriteDataToSingleRangeRequest,
+    prelude::LarkClient, service::sheets::v2::data_operation::WriteDataToSingleRangeRequest,
 };
 
 /// 读取单个范围

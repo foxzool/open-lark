@@ -1,8 +1,8 @@
-use open_lark::prelude::*;
+use open_lark::{prelude::*, service::board::v1::ListWhiteboardNodesRequest};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    dotenv::dotenv().ok();
+    dotenvy::dotenv().ok();
 
     let app_id = std::env::var("APP_ID").unwrap();
     let app_secret = std::env::var("APP_SECRET").unwrap();
@@ -21,12 +21,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Ok(response) => {
             println!("获取画板节点成功");
 
-            let nodes_data = &response.data;
-            println!("节点统计: {}", nodes_data.statistics_summary());
-            println!("分页信息: {}", nodes_data.pagination_info());
+            if let Some(nodes_data) = &response.data {
+                println!("节点统计: {}", nodes_data.statistics_summary());
+                println!("分页信息: {}", nodes_data.pagination_info());
 
-            if nodes_data.is_empty() {
-                println!("画板中没有节点");
+                if nodes_data.is_empty() {
+                    println!("画板中没有节点");
+                    return Ok(());
+                }
+            } else {
+                println!("没有获取到节点数据");
                 return Ok(());
             }
 
@@ -219,8 +223,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                     match client.board.list_nodes(&next_request, None).await {
                         Ok(next_response) => {
-                            println!("下一页节点: {}个", next_response.data.node_count());
-                            println!("分页信息: {}", next_response.data.pagination_info());
+                            if let Some(data) = &next_response.data {
+                                println!("下一页节点: {}个", data.node_count());
+                                println!("分页信息: {}", data.pagination_info());
+                            }
                         }
                         Err(e) => {
                             eprintln!("获取下一页失败: {:?}", e);
@@ -228,6 +234,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                 }
             }
+        }
         }
         Err(e) => {
             eprintln!("获取画板节点失败: {:?}", e);
@@ -245,7 +252,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match client.board.list_nodes(&small_request, None).await {
         Ok(response) => {
-            println!("小分页 (20个): {}", response.data.statistics_summary());
+            if let Some(data) = &response.data {
+                println!("小分页 (20个): {}", data.statistics_summary());
+            }
         }
         Err(e) => {
             eprintln!("小分页查询失败: {:?}", e);
@@ -260,7 +269,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match client.board.list_nodes(&large_request, None).await {
         Ok(response) => {
-            println!("大分页 (100个): {}", response.data.statistics_summary());
+            if let Some(data) = &response.data {
+                println!("大分页 (100个): {}", data.statistics_summary());
+            }
         }
         Err(e) => {
             eprintln!("大分页查询失败: {:?}", e);

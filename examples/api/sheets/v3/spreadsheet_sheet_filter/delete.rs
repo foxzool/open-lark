@@ -3,7 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClient, service::sheets::v3::spreadsheet_sheet_filter::DeleteSheetFilterRequest,
+    prelude::LarkClient, service::sheets::v3::spreadsheet_sheet_filter::DeleteSheetFilterRequest,
 };
 
 /// 删除筛选

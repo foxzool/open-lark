@@ -1,4 +1,4 @@
-use dotenv::dotenv;
+use dotenvy::dotenv;
 use open_lark::prelude::*;
 use std::env;
 

@@ -1,7 +1,7 @@
 use dotenvy::dotenv;
 use std::env;
 
-use open_lark::client::LarkClient;
+use open_lark::prelude::LarkClient;
 
 /// 获取登录用户信息
 #[tokio::main]

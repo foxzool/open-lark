@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClient, service::sheets::v2::data_operation::WriteImageRequest};
+use open_lark::{prelude::LarkClient, service::sheets::v2::data_operation::WriteImageRequest};
 
 /// 写入图片
 #[tokio::main]

@@ -1,10 +1,9 @@
-use dotenv::dotenv;
+use dotenvy::dotenv;
 use open_lark::{
     prelude::*,
     service::docs::v1::document::{CreateDocumentRequest, ListDocumentBlocksRequest},
 };
 use std::env;
-use tracing::info;
 
 /// 文档操作综合示例
 ///

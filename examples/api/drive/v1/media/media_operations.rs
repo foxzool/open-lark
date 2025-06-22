@@ -1,4 +1,4 @@
-use dotenv::dotenv;
+use dotenvy::dotenv;
 use open_lark::{
     prelude::*,
     service::drive::v1::media::{
@@ -6,7 +6,6 @@ use open_lark::{
     },
 };
 use std::env;
-use tracing::info;
 
 /// 媒体操作示例
 ///

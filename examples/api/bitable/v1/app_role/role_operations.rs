@@ -4,7 +4,7 @@ use open_lark::{
         BlockRole, CreateAppRoleRequest, DeleteAppRoleRequest, ListAppRoleRequest, TableRole,
         UpdateAppRoleRequest,
     },
-    LarkClient,
+    prelude::LarkClient,
 };
 
 #[tokio::main]

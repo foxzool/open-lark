@@ -1,4 +1,4 @@
-use dotenv::dotenv;
+use dotenvy::dotenv;
 use open_lark::{
     prelude::*,
     service::docs::v1::{
@@ -11,7 +11,6 @@ use open_lark::{
 };
 use serde_json::{json, Value};
 use std::env;
-use tracing::info;
 
 /// 文档块操作综合示例
 ///

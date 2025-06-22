@@ -3,7 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClient, service::sheets::v3::spreadsheet_sheet::GetSpreadsheetSheetRequest,
+    prelude::LarkClient, service::sheets::v3::spreadsheet_sheet::GetSpreadsheetSheetRequest,
 };
 
 /// 查询工作表

@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClient, service::sheets::v2::data_operation::SplitCellsRequest};
+use open_lark::{prelude::LarkClient, service::sheets::v2::data_operation::SplitCellsRequest};
 
 /// 拆分单元格
 #[tokio::main]

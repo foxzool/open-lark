@@ -1,5 +1,6 @@
-use dotenv::dotenv;
+use dotenvy::dotenv;
 use open_lark::prelude::*;
+use open_lark::service::permission::member::{CreatePermissionMemberRequest, Permission};
 use std::env;
 
 #[tokio::main]
@@ -49,7 +50,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    println!("\n" + &"=".repeat(50));
+    println!("{}", "\n".to_string() + &"=".repeat(50));
 
     // 示例2：使用便捷方法为群组添加查看权限
     println!("🔹 示例2: 为群组添加查看权限");
@@ -84,7 +85,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    println!("\n" + &"=".repeat(50));
+    println!("{}", "\n".to_string() + &"=".repeat(50));
 
     // 示例3：为部门添加评论权限（无通知）
     println!("🔹 示例3: 为部门添加评论权限（静默）");

@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 use log::error;
-use open_lark::{client::LarkClient, service::bitable::v1::SearchAppTableRecordRequest};
+use open_lark::{prelude::LarkClient, service::bitable::v1::SearchAppTableRecordRequest};
 
 /// 查询记录
 #[tokio::main]

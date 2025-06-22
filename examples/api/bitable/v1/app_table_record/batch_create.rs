@@ -1,8 +1,8 @@
 use dotenvy::dotenv;
 use log::error;
 use open_lark::{
-    client::LarkClient,
-    service::bitable::v1::{BatchCreateAppTableRecordRequest, Record},
+    prelude::*,
+    service::bitable::v1::app_table_record::{BatchCreateRecordRequest, Record},
 };
 use serde_json::json;
 use std::env;
@@ -17,7 +17,7 @@ async fn main() {
     // 创建 Client
     let client = LarkClient::builder(&app_id, &app_secret).build();
     // 构建请求体
-    let req = BatchCreateAppTableRecordRequest::builder()
+    let req = BatchCreateRecordRequest::builder()
         .app_token("P7t0b91y4accAks27oScppjgnuc")
         .table_id("tbl1TSGmbFDIezBZ")
         .records(vec![

@@ -1,4 +1,4 @@
-use dotenv::dotenv;
+use dotenvy::dotenv;
 use open_lark::{
     prelude::*,
     service::drive::v1::folder::{
@@ -7,7 +7,6 @@ use open_lark::{
 };
 use std::env;
 use tokio::time::{sleep, Duration};
-use tracing::info;
 
 /// 移动或删除文件夹示例
 ///

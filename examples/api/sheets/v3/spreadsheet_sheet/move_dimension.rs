@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClient, service::sheets::v3::sheet_row_col::MoveDimensionRequest};
+use open_lark::{prelude::LarkClient, service::sheets::v3::sheet_row_col::MoveDimensionRequest};
 
 /// 移动行列
 #[tokio::main]

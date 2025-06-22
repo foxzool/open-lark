@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClient, service::bitable::v1::GetAppRequest};
+use open_lark::{prelude::LarkClient, service::bitable::v1::app::GetAppRequest};
 
 /// 获取多维表格元数据
 #[tokio::main]

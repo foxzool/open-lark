@@ -3,7 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClient,
+    prelude::LarkClient,
     service::sheets::{
         v2::spreadsheet_sheet::{UpdateSheetPropertiesRequest, UpdateSheetProperty},
         v3::spreadsheet_sheet::QuerySpreadsheetSheetRequest,

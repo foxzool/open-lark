@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClient, service::sheets::v3::spreadsheet::CreateSpreedSheetRequest};
+use open_lark::{prelude::LarkClient, service::sheets::v3::spreadsheet::CreateSpreedSheetRequest};
 
 /// 创建表格
 #[tokio::main]

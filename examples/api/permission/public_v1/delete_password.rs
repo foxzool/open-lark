@@ -2,7 +2,7 @@ use open_lark::prelude::*;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    dotenv::dotenv().ok();
+    dotenvy::dotenv().ok();
 
     let app_id = std::env::var("APP_ID").unwrap();
     let app_secret = std::env::var("APP_SECRET").unwrap();
@@ -168,14 +168,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("{}", warning);
                 }
 
-                let recommendations = response.data.follow_up_recommendations();
+                let recommendations = if let Some(data) = &response.data {
+                    data.follow_up_recommendations()
+                } else {
+                    vec![]
+                };
                 println!("\n推荐操作:");
                 for (i, rec) in recommendations.iter().enumerate() {
                     println!("{}. {}", i + 1, rec);
                 }
             } else {
                 println!("\n密码保护关闭失败，可能的原因:");
-                let reasons = response.data.deletion_info().deletion_reasons();
+                let reasons = if let Some(data) = &response.data {
+                    data.deletion_info().deletion_reasons()
+                } else {
+                    vec![]
+                };
                 for reason in reasons {
                     if reason.contains("失败") || reason.contains("错误") || reason.contains("权限")
                     {

@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClient, service::sheets::v3::data_operation::FindCellsRequest};
+use open_lark::{prelude::LarkClient, service::sheets::v3::data_operation::FindCellsRequest};
 
 /// 查找单元格
 #[tokio::main]
