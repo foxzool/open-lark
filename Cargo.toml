@@ -74,3 +74,7 @@ path = "examples/api/send_message.rs"
 name = "websocket_client"
 path = "examples/basic/websocket_client.rs"
 required-features = ["websocket"]
+
+[[example]]
+name = "cloud_docs_test"
+path = "examples/cloud_docs_test.rs"
