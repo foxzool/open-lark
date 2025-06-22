@@ -14,9 +14,6 @@ use std::env;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 从环境变量获取配置
     dotenv().ok();
-    tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::DEBUG)
-        .init();
 
     let app_id = env::var("APP_ID").expect("APP_ID 必须设置");
     let app_secret = env::var("APP_SECRET").expect("APP_SECRET 必须设置");

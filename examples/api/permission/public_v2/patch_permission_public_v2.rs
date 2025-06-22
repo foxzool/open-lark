@@ -1,4 +1,4 @@
-use open_lark::prelude::*;
+use open_lark::{prelude::*, service::permission::public_v2::patch::PatchPermissionPublicV2Request};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

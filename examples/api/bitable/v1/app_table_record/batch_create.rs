@@ -2,7 +2,10 @@ use dotenvy::dotenv;
 use log::error;
 use open_lark::{
     prelude::*,
-    service::bitable::v1::app_table_record::{BatchCreateRecordRequest, Record},
+    service::bitable::v1::app_table_record::{
+        batch_create::BatchCreateRecordRequest,
+        types::Record,
+    },
 };
 use serde_json::json;
 use std::env;

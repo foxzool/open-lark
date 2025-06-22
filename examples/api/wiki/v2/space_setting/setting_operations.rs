@@ -1,5 +1,4 @@
 use open_lark::{
-    core::config::{AppType, Config},
     service::wiki::v2::space_setting::UpdateSpaceSettingRequest,
     LarkClient,
 };
@@ -14,7 +13,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 创建客户端
     let client = LarkClient::builder(&app_id, &app_secret)
-        .with_app_type(AppType::SelfBuild)
         .with_enable_token_cache(true)
         .build();
 

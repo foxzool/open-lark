@@ -9,7 +9,6 @@ use open_lark::{
     },
 };
 use std::env;
-use tracing::info;
 
 /// 文件版本管理示例
 ///
@@ -18,23 +17,24 @@ use tracing::info;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 从环境变量获取配置
     dotenv().ok();
-    tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::DEBUG)
-        .init();
 
     let app_id = env::var("APP_ID").expect("APP_ID 必须设置");
     let app_secret = env::var("APP_SECRET").expect("APP_SECRET 必须设置");
     let user_access_token = env::var("USER_ACCESS_TOKEN").expect("USER_ACCESS_TOKEN 必须设置");
 
-    // 创建客户端，使用用户访问凭证
+    // 创建客户端
     let client = LarkClient::builder(app_id, app_secret)
-        .with_user_access_token(user_access_token)
+        .with_enable_token_cache(true)
+        .build();
+    
+    let option = RequestOption::builder()
+        .user_access_token(user_access_token)
         .build();
 
-    info!("开始文件版本管理演示...");
+    println!("开始文件版本管理演示...");
 
     // 获取根目录token
-    let root_token = match client.drive.v1.folder.get_root_folder_meta(None).await {
+    let root_token = match client.drive.v1.folder.get_root_folder_meta(Some(option.clone())).await {
         Ok(response) => {
             if let Some(data) = response.data {
                 data.token
@@ -56,7 +56,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let doc_name = format!("版本管理测试文档_{}", chrono::Utc::now().timestamp());
     let create_request = CreateFileRequest::new(doc_name.clone(), "docx", root_token.clone());
 
-    let doc_token = match client.drive.v1.file.create_file(create_request, None).await {
+    let doc_token = match client.drive.v1.file.create_file(create_request, Some(option.clone())).await {
         Ok(response) => {
             if let Some(data) = response.data {
                 println!("✅ 创建文档成功:");
@@ -88,7 +88,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .drive
         .v1
         .file_version
-        .create_version(create_version_request, None)
+        .create_version(create_version_request, Some(option.clone()))
         .await
     {
         Ok(response) => {
@@ -120,7 +120,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .drive
         .v1
         .file_version
-        .create_version(create_version2_request, None)
+        .create_version(create_version2_request, Some(option.clone()))
         .await
     {
         Ok(response) => {
@@ -148,7 +148,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .drive
         .v1
         .file_version
-        .list_versions(list_request, None)
+        .list_versions(list_request, Some(option.clone()))
         .await
     {
         Ok(response) => {
@@ -183,7 +183,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .drive
         .v1
         .file_version
-        .get_version(get_version_request, None)
+        .get_version(get_version_request, Some(option.clone()))
         .await
     {
         Ok(response) => {
@@ -212,7 +212,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .drive
         .v1
         .file_version
-        .delete_version(delete_version_request, None)
+        .delete_version(delete_version_request, Some(option.clone()))
         .await
     {
         Ok(response) => {
@@ -237,7 +237,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .drive
         .v1
         .file_version
-        .list_versions(list_request2, None)
+        .list_versions(list_request2, Some(option.clone()))
         .await
     {
         Ok(response) => {
@@ -265,7 +265,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .drive
         .v1
         .file
-        .delete_file(delete_file_request, None)
+        .delete_file(delete_file_request, Some(option))
         .await
     {
         Ok(_) => println!("✅ 测试文档删除成功"),

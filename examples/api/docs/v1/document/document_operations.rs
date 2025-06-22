@@ -1,6 +1,7 @@
 use dotenvy::dotenv;
 use open_lark::{
     prelude::*,
+    core::req_option::RequestOption,
     service::docs::v1::document::{CreateDocumentRequest, ListDocumentBlocksRequest},
 };
 use std::env;
@@ -12,27 +13,27 @@ use std::env;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 从环境变量获取配置
     dotenv().ok();
-    tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::DEBUG)
-        .init();
 
     let app_id = env::var("APP_ID").expect("APP_ID 必须设置");
     let app_secret = env::var("APP_SECRET").expect("APP_SECRET 必须设置");
     let user_access_token = env::var("USER_ACCESS_TOKEN").expect("USER_ACCESS_TOKEN 必须设置");
 
-    // 创建客户端，使用用户访问凭证
-    let client = LarkClient::builder(app_id, app_secret)
-        .with_user_access_token(user_access_token)
-        .build();
+    // 创建客户端
+    let client = LarkClient::builder(app_id, app_secret).build();
+    
+    // 创建RequestOption以传递用户访问令牌
+    let option = Some(RequestOption::builder()
+        .user_access_token(&user_access_token)
+        .build());
 
-    info!("开始文档操作演示...");
+    println!("开始文档操作演示...");
 
     // 1. 创建新文档
     println!("📝 创建新文档...");
     let doc_title = format!("API测试文档_{}", chrono::Utc::now().timestamp());
     let create_request = CreateDocumentRequest::new(doc_title.clone());
 
-    let document_id = match client.docs.v1.document.create(create_request, None).await {
+    let document_id = match client.docs.v1.document.create(create_request, option).await {
         Ok(response) => {
             if let Some(data) = response.data {
                 println!("✅ 文档创建成功:");
@@ -53,7 +54,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 2. 获取文档基本信息
     println!("\n📋 获取文档基本信息...");
-    match client.docs.v1.document.get(&document_id, None).await {
+    match client.docs.v1.document.get(&document_id, option).await {
         Ok(response) => {
             if let Some(data) = response.data {
                 let doc = data.document;
@@ -78,7 +79,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .docs
         .v1
         .document
-        .get_raw_content(&document_id, None)
+        .get_raw_content(&document_id, option)
         .await
     {
         Ok(response) => {
@@ -104,7 +105,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .docs
         .v1
         .document
-        .list_blocks(list_request, None)
+        .list_blocks(list_request, option)
         .await
     {
         Ok(response) => {
@@ -134,7 +135,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .docs
         .v1
         .document
-        .convert_to_docx(&document_id, None)
+        .convert_to_docx(&document_id, option)
         .await
     {
         Ok(response) => {
