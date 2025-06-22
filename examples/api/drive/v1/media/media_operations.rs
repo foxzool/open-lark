@@ -119,10 +119,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Ok(response) => {
             if let Some(data) = response.data {
                 println!("✅ 素材下载成功:");
-                println!("  - 下载数据大小: {} 字节", data.data.len());
+                println!("  - 下载数据大小: {} 字节", data.body.len());
 
                 // 验证下载的数据是否与原始数据一致
-                if data.data == test_image_data {
+                if data.body == test_image_data {
                     println!("  - ✅ 数据完整性验证通过");
                 } else {
                     println!("  - ❌ 数据完整性验证失败");
