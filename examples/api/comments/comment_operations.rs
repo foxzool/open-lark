@@ -1,14 +1,9 @@
 use open_lark::{
     prelude::*,
     service::comments::{
-        batch_query::BatchQueryCommentsRequest,
-        create::{CreateCommentRequest, ContentBuilder},
-        delete_reply::DeleteReplyRequest,
-        get::GetCommentRequest,
-        list::ListCommentsRequest,
-        list_replies::ListRepliesRequest,
-        patch::PatchCommentRequest,
-        update_reply::UpdateReplyRequest,
+        BatchQueryCommentsRequest, CreateCommentRequest, ContentBuilder, DeleteReplyRequest,
+        GetCommentRequest, ListCommentsRequest, ListRepliesRequest, PatchCommentRequest,
+        UpdateReplyRequest,
     },
 };
 

@@ -32,21 +32,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match client.wiki.v2.space_member.list(list_request, None).await {
         Ok(list_response) => {
             println!("知识空间成员列表:");
-            if list_response.data.items.is_empty() {
-                println!("  暂无成员");
-            } else {
-                for member in &list_response.data.items {
-                    println!("  成员信息:");
-                    println!("    - 成员ID: {}", member.member_id);
-                    println!("    - 成员类型: {}", member.member_type);
-                    println!("    - 权限角色: {}", member.role);
-                    if let Some(member_type) = &member.r#type {
-                        println!("    - 类型: {}", member_type);
+            if let Some(data) = &list_response.data {
+                if data.items.is_empty() {
+                    println!("  暂无成员");
+                } else {
+                    for member in &data.items {
+                        println!("  成员信息:");
+                        println!("    - 成员ID: {}", member.member_id);
+                        println!("    - 成员类型: {}", member.member_type);
+                        println!("    - 权限角色: {}", member.role);
+                        if let Some(member_type) = &member.r#type {
+                            println!("    - 类型: {}", member_type);
+                        }
+                        println!();
                     }
-                    println!();
                 }
+                println!("是否有更多: {}", data.has_more);
             }
-            println!("是否有更多: {}", list_response.data.has_more);
         }
         Err(e) => {
             println!("获取成员列表失败: {:?}", e);
@@ -72,11 +74,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await
     {
         Ok(create_response) => {
-            let member = &create_response.data.member;
-            println!("成员添加成功:");
-            println!("  - 成员ID: {}", member.member_id);
-            println!("  - 成员类型: {}", member.member_type);
-            println!("  - 权限角色: {}", member.role);
+            if let Some(data) = &create_response.data {
+                let member = &data.member;
+                println!("成员添加成功:");
+                println!("  - 成员ID: {}", member.member_id);
+                println!("  - 成员类型: {}", member.member_type);
+                println!("  - 权限角色: {}", member.role);
+            }
         }
         Err(e) => {
             println!("添加成员失败: {:?}", e);
@@ -104,13 +108,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     {
         Ok(list_response_after) => {
             println!("更新后的成员列表:");
-            for member in &list_response_after.data.items {
+            for member in &list_response_after.data.as_ref().unwrap().items {
                 println!(
                     "  - {} ({}): {}",
                     member.member_id, member.member_type, member.role
                 );
             }
-            println!("总计 {} 个成员", list_response_after.data.items.len());
+            println!("总计 {} 个成员", list_response_after.data.as_ref().unwrap().items.len());
         }
         Err(e) => {
             println!("获取更新后成员列表失败: {:?}", e);
@@ -135,8 +139,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     {
         Ok(delete_response) => {
             println!("删除成员成功:");
-            println!("  - 删除的成员ID: {}", delete_response.data.member_id);
-            println!("  - 删除状态: {}", delete_response.data.deleted);
+            println!("  - 删除的成员ID: {}", delete_response.data.as_ref().unwrap().member_id);
+            println!("  - 删除状态: {}", delete_response.data.as_ref().unwrap().deleted);
         }
         Err(e) => {
             println!("删除成员失败: {:?}", e);
@@ -164,13 +168,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     {
         Ok(final_list_response) => {
             println!("最终成员列表:");
-            for member in &final_list_response.data.items {
+            for member in &final_list_response.data.as_ref().unwrap().items {
                 println!(
                     "  - {} ({}): {}",
                     member.member_id, member.member_type, member.role
                 );
             }
-            println!("总计 {} 个成员", final_list_response.data.items.len());
+            println!("总计 {} 个成员", final_list_response.data.as_ref().unwrap().items.len());
         }
         Err(e) => {
             println!("获取最终成员列表失败: {:?}", e);

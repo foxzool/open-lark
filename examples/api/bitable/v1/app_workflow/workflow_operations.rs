@@ -1,6 +1,9 @@
 use open_lark::{
     prelude::*,
-    service::bitable::v1::AppWorkflowService,
+    service::bitable::v1::{
+        AppWorkflowService,
+        app_workflow::{ListWorkflowRequest, UpdateWorkflowRequest},
+    },
 };
 
 #[tokio::main]
@@ -35,8 +38,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await
     {
         Ok(list_response) => {
-            println!("自动化流程列表:");
-            for workflow in &list_response.data.items {
+            if let Some(data) = &list_response.data {
+                println!("自动化流程列表:");
+                for workflow in &data.items {
                 println!("  流程信息:");
                 println!("    - ID: {}", workflow.id);
                 println!("    - 名称: {}", workflow.name);
@@ -66,11 +70,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 list_response
                     .data
                     .total
-                    .unwrap_or(list_response.data.items.len() as i32)
+                    .unwrap_or(data.items.len() as i32)
             );
 
             // 如果有自动化流程，演示状态更新
-            if let Some(first_workflow) = list_response.data.items.first() {
+            if let Some(first_workflow) = data.items.first() {
                 println!("\n2. 更新自动化流程状态...");
                 let workflow_id = &first_workflow.id;
                 let current_enabled = first_workflow.is_enabled == 1;
@@ -170,17 +174,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .list(final_list_request, None)
                     .await?;
 
-                println!("最终流程状态:");
-                for workflow in &final_list_response.data.items {
-                    println!(
-                        "  - {}: {}",
-                        workflow.name,
-                        if workflow.is_enabled == 1 {
-                            "已启用"
-                        } else {
-                            "未启用"
-                        }
-                    );
+                if let Some(final_data) = &final_list_response.data {
+                    println!("最终流程状态:");
+                    for workflow in &final_data.items {
+                        println!(
+                            "  - {}: {}",
+                            workflow.name,
+                            if workflow.is_enabled == 1 {
+                                "已启用"
+                            } else {
+                                "未启用"
+                            }
+                        );
+                    }
                 }
             } else {
                 println!("\n没有找到自动化流程，跳过状态更新演示");

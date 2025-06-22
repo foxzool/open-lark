@@ -22,7 +22,7 @@ async fn main() {
         .bitable
         .v1
         .app_table_field
-        .list_field(app_token, table_id, None)
+        .list(app_token, table_id, None)
         .await
         .unwrap();
     if let Some(data) = resp.data {
