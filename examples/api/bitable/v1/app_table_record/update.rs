@@ -1,6 +1,6 @@
 use dotenvy::dotenv;
 use log::error;
-use open_lark::{client::LarkClient, service::bitable::v1::UpdateAppTableRecordRequest};
+use open_lark::{prelude::*, service::bitable::v1::app_table_record::UpdateRecordRequest};
 use serde_json::json;
 use std::env;
 
@@ -14,7 +14,7 @@ async fn main() {
     // 创建 Client
     let client = LarkClient::builder(&app_id, &app_secret).build();
     // 构建请求体
-    let req = UpdateAppTableRecordRequest::builder()
+    let req = UpdateRecordRequest::builder()
         .app_token("UHNYbRv2BaxTllsMLt8cykiSnsb")
         .table_id("tbli6aSCRbJKDFIe")
         .record_id("recqavj45m")

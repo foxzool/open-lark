@@ -1,7 +1,6 @@
-use dotenv::dotenv;
+use dotenvy::dotenv;
 use open_lark::{prelude::*, service::drive::v1::folder::GetFolderMetaRequest};
 use std::env;
-use tracing::info;
 
 /// 获取文件夹元数据示例
 ///

@@ -3,7 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClient, service::sheets::v2::data_operation::ReadingSingleRangeRequest,
+    prelude::LarkClient, service::sheets::v2::data_operation::ReadingSingleRangeRequest,
 };
 
 /// 读取单个范围

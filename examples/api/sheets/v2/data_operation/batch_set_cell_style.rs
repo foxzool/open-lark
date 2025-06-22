@@ -3,7 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClient,
+    prelude::LarkClient,
     service::sheets::v2::data_operation::{BatchSetCellStyleRequest, CellStyle, StyleFont},
 };
 

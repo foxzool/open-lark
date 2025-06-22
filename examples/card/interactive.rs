@@ -20,7 +20,7 @@ use open_lark::{
         interactions::{Behaviors, CallbackBehavior},
         FeishuCard,
     },
-    client::LarkClient,
+    prelude::LarkClient,
     service::im::v1::message::{CreateMessageRequest, CreateMessageRequestBody, SendMessageTrait},
 };
 

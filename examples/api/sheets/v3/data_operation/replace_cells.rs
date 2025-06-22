@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClient, service::sheets::v3::data_operation::ReplaceCellsRequest};
+use open_lark::{prelude::LarkClient, service::sheets::v3::data_operation::ReplaceCellsRequest};
 
 /// 替换单元格
 #[tokio::main]

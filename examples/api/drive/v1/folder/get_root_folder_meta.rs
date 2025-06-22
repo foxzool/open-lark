@@ -1,7 +1,6 @@
-use dotenv::dotenv;
+use dotenvy::dotenv;
 use open_lark::prelude::*;
 use std::env;
-use tracing::info;
 
 /// 获取我的空间（root folder）元数据示例
 ///

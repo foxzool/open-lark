@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClient, service::drive::v2::explorer::ListFolderRequest};
+use open_lark::{prelude::LarkClient, service::drive::v2::explorer::ListFolderRequest};
 
 /// 获取文件夹下的清单
 #[tokio::main]

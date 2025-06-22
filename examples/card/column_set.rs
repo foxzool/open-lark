@@ -19,7 +19,7 @@ use open_lark::{
         href::FeishuCardHrefVal,
         FeishuCard,
     },
-    client::LarkClient,
+    prelude::LarkClient,
     service::im::v1::message::{CreateMessageRequest, CreateMessageRequestBody, SendMessageTrait},
 };
 

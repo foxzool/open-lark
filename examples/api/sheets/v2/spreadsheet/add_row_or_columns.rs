@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClient, service::sheets::v2::sheet_row_col::AddDimensionRangeRequest};
+use open_lark::{prelude::LarkClient, service::sheets::v2::sheet_row_col::AddDimensionRangeRequest};
 
 /// 操作工作表
 #[tokio::main]

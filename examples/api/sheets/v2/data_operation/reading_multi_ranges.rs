@@ -3,7 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClient, service::sheets::v2::data_operation::ReadingMultipleRangeRequest,
+    prelude::LarkClient, service::sheets::v2::data_operation::ReadingMultipleRangeRequest,
 };
 
 /// 读取多个范围

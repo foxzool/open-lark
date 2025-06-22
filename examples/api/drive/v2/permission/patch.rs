@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClient, service::drive::v1::permissions::PatchPermissionRequest};
+use open_lark::{prelude::LarkClient, service::drive::v1::permissions::PatchPermissionRequest};
 
 /// 获取云文档权限设置
 #[tokio::main]

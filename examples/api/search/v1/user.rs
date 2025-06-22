@@ -3,7 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 
 use open_lark::{
-    client::LarkClient, core::req_option::RequestOption,
+    prelude::LarkClient, core::req_option::RequestOption,
     service::search::v1::user::SearchUserRequest,
 };
 

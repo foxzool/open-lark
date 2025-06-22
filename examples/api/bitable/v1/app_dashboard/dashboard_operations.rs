@@ -1,7 +1,7 @@
 use open_lark::{
     core::config::{AppType, Config},
     service::bitable::v1::app_dashboard::{CopyDashboardRequest, ListDashboardRequest},
-    LarkClient,
+    prelude::LarkClient,
 };
 
 #[tokio::main]

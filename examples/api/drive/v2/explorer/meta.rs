@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::client::LarkClient;
+use open_lark::prelude::LarkClient;
 
 /// 获取我的空间（root folder）元信息
 #[tokio::main]

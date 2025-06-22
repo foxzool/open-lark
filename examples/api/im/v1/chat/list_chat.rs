@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClient, service::im::v1::chats::ListChatRequest};
+use open_lark::{prelude::LarkClient, service::im::v1::chats::ListChatRequest};
 
 /// 获取用户或机器人所在的群列表
 /// GET /open-apis/im/v1/messages

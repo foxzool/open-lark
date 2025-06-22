@@ -4,7 +4,7 @@ use dotenvy::dotenv;
 use serde_json::json;
 
 use open_lark::{
-    client::LarkClient, service::sheets::v2::data_operation::WriteDataToMultiRangesRequest,
+    prelude::LarkClient, service::sheets::v2::data_operation::WriteDataToMultiRangesRequest,
 };
 
 /// 向多个范围写入数据

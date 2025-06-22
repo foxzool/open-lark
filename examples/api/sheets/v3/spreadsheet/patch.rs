@@ -2,7 +2,7 @@ use std::env;
 
 use dotenvy::dotenv;
 
-use open_lark::{client::LarkClient, service::sheets::v3::spreadsheet::PatchSpreadSheetRequest};
+use open_lark::{prelude::LarkClient, service::sheets::v3::spreadsheet::PatchSpreadSheetRequest};
 
 /// 修改电子表格属性
 #[tokio::main]

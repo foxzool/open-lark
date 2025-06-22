@@ -3,7 +3,7 @@ use std::env;
 use dotenvy::dotenv;
 use serde_json::json;
 
-use open_lark::{client::LarkClient, service::sheets::v2::data_operation::AppendDataRequest};
+use open_lark::{prelude::LarkClient, service::sheets::v2::data_operation::AppendDataRequest};
 
 /// 追加数据
 #[tokio::main]

@@ -17,7 +17,7 @@ use open_lark::{
         icon::FeishuCardTextIcon,
         FeishuCard,
     },
-    client::LarkClient,
+    prelude::LarkClient,
     service::im::v1::message::{CreateMessageRequest, CreateMessageRequestBody, SendMessageTrait},
 };
 

@@ -5,7 +5,7 @@ use serde_json::json;
 use uuid::Uuid;
 
 use open_lark::{
-    client::LarkClient,
+    prelude::LarkClient,
     service::im::v1::message::{
         ANode, AtNode, CreateMessageRequest, CreateMessageRequestBody, EmotionNode, ImgNode,
         MessageCardTemplate, MessagePost, MessagePostNode, MessageText, SendMessageTrait, TextNode,

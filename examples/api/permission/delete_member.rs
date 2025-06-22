@@ -1,5 +1,6 @@
-use dotenv::dotenv;
+use dotenvy::dotenv;
 use open_lark::prelude::*;
+use open_lark::service::permission::member::DeletePermissionMemberRequest;
 use std::env;
 
 #[tokio::main]
@@ -59,7 +60,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    println!("\n" + &"=".repeat(50));
+    println!("{}", "\n".to_string() + &"=".repeat(50));
 
     // 示例2：使用便捷方法移除群组权限
     println!("🔹 示例2: 移除群组的协作权限");
@@ -94,7 +95,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    println!("\n" + &"=".repeat(50));
+    println!("{}", "\n".to_string() + &"=".repeat(50));
 
     // 示例3：静默移除部门权限
     println!("🔹 示例3: 静默移除部门权限");
