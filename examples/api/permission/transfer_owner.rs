@@ -60,15 +60,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     );
 
     // 使用builder进一步配置
-    let request = TransferOwnerRequest::builder()
-        .token(request.token)
-        .obj_type(request.obj_type)
-        .new_owner(request.member_type, request.member_id)
+    let request2 = TransferOwnerRequest::builder()
+        .token("doccnxxxxxxxxxxxxxx")
+        .obj_type("doc")
+        .new_owner("user", "new_owner_user_id")
         .remove_current_owner() // 完全移除当前所有者权限
         .without_notification() // 静默转移
         .build();
 
-    match client.permission.transfer_owner(&request, None).await {
+    match client.permission.transfer_owner(&request2, None).await {
         Ok(response) => {
             println!("✅ 完全所有权转移成功!");
 
