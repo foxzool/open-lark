@@ -1,13 +1,14 @@
 use crate::core::{config::Config, req_option::RequestOption, SDKResult};
 
 pub use create::{
-    create_subscription, CreateSubscriptionRequest, CreateSubscriptionResponse,
-    SubscriptionConfig, SubscriptionPriority,
+    create_subscription, CreateSubscriptionRequest, CreateSubscriptionResponse, SubscriptionConfig,
+    SubscriptionPriority,
 };
-pub use get::{get_subscription, GetSubscriptionRequest, GetSubscriptionResponse, FileType, SubscriptionDetail, SubscriptionStatus};
-pub use patch::{
-    patch_subscription, PatchSubscriptionRequest, PatchSubscriptionResponse,
+pub use get::{
+    get_subscription, FileType, GetSubscriptionRequest, GetSubscriptionResponse,
+    SubscriptionDetail, SubscriptionStatus,
 };
+pub use patch::{patch_subscription, PatchSubscriptionRequest, PatchSubscriptionResponse};
 
 pub mod create;
 pub mod get;
@@ -32,7 +33,7 @@ impl SubscriptionService {
         let result = get_subscription(request, &self.config, option).await?;
         result.data.ok_or_else(|| {
             crate::core::error::LarkAPIError::IllegalParamError(
-                "Response data is missing".to_string()
+                "Response data is missing".to_string(),
             )
         })
     }
@@ -46,7 +47,7 @@ impl SubscriptionService {
         let result = create_subscription(request, &self.config, option).await?;
         result.data.ok_or_else(|| {
             crate::core::error::LarkAPIError::IllegalParamError(
-                "Response data is missing".to_string()
+                "Response data is missing".to_string(),
             )
         })
     }
@@ -60,7 +61,7 @@ impl SubscriptionService {
         let result = patch_subscription(request, &self.config, option).await?;
         result.data.ok_or_else(|| {
             crate::core::error::LarkAPIError::IllegalParamError(
-                "Response data is missing".to_string()
+                "Response data is missing".to_string(),
             )
         })
     }
@@ -76,7 +77,7 @@ impl SubscriptionService {
             .as_doc()
             .basic_subscription()
             .build();
-        
+
         self.create(request, option).await
     }
 
@@ -91,7 +92,7 @@ impl SubscriptionService {
             .as_bitable()
             .premium_subscription()
             .build();
-        
+
         self.create(request, option).await
     }
 
@@ -106,7 +107,7 @@ impl SubscriptionService {
             .as_sheet()
             .basic_subscription()
             .build();
-        
+
         self.create(request, option).await
     }
 
@@ -121,7 +122,7 @@ impl SubscriptionService {
             .as_wiki()
             .basic_subscription()
             .build();
-        
+
         self.create(request, option).await
     }
 
@@ -137,7 +138,7 @@ impl SubscriptionService {
             .file_type(file_type)
             .activate()
             .build();
-        
+
         self.patch(request, option).await
     }
 
@@ -153,7 +154,7 @@ impl SubscriptionService {
             .file_type(file_type)
             .pause()
             .build();
-        
+
         self.patch(request, option).await
     }
 
@@ -169,7 +170,7 @@ impl SubscriptionService {
             .file_type(file_type)
             .cancel()
             .build();
-        
+
         self.patch(request, option).await
     }
 
@@ -185,7 +186,7 @@ impl SubscriptionService {
             .file_type(file_type)
             .quick_activate()
             .build();
-        
+
         self.patch(request, option).await
     }
 
@@ -201,7 +202,7 @@ impl SubscriptionService {
             .file_type(file_type)
             .eco_activate()
             .build();
-        
+
         self.patch(request, option).await
     }
 
@@ -217,7 +218,7 @@ impl SubscriptionService {
             .file_type(file_type)
             .safe_pause()
             .build();
-        
+
         self.patch(request, option).await
     }
 
@@ -232,7 +233,7 @@ impl SubscriptionService {
             .file_token(file_token)
             .file_type(file_type)
             .build();
-        
+
         let response = self.get(request, option).await?;
         Ok(response.subscription.is_subscribed())
     }
@@ -244,18 +245,18 @@ impl SubscriptionService {
         option: Option<RequestOption>,
     ) -> Vec<SDKResult<CreateSubscriptionResponse>> {
         let mut results = Vec::new();
-        
+
         for (file_token, file_type) in files {
             let request = CreateSubscriptionRequest::builder()
                 .file_token(file_token)
                 .file_type(file_type)
                 .basic_subscription()
                 .build();
-            
+
             let result = self.create(request, option.clone()).await;
             results.push(result);
         }
-        
+
         results
     }
 }

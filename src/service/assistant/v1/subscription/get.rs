@@ -92,7 +92,7 @@ pub enum FileType {
     /// 多维表格
     Bitable,
     /// 文档
-    Doc, 
+    Doc,
     /// 电子表格
     Sheet,
     /// Wiki
@@ -157,7 +157,10 @@ impl SubscriptionStatus {
 
     /// 是否可以激活
     pub fn can_activate(&self) -> bool {
-        matches!(self, SubscriptionStatus::Unsubscribed | SubscriptionStatus::Paused)
+        matches!(
+            self,
+            SubscriptionStatus::Unsubscribed | SubscriptionStatus::Paused
+        )
     }
 
     /// 获取状态描述
@@ -229,13 +232,12 @@ pub async fn get_subscription(
 ) -> SDKResult<BaseResponse<GetSubscriptionResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::GET;
-    
+
     api_req.api_path = format!(
         "/open-apis/assistant/v1/file/{}/{}/subscription",
-        request.file_type,
-        request.file_token
+        request.file_type, request.file_token
     );
-    
+
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
     let api_resp = Transport::request(api_req, config, option).await?;
@@ -269,8 +271,8 @@ impl SubscriptionDetail {
     /// 获取订阅时间格式化字符串
     pub fn start_time_formatted(&self) -> Option<String> {
         self.start_time.map(|timestamp| {
-            let datetime = chrono::DateTime::from_timestamp(timestamp, 0)
-                .unwrap_or_else(chrono::Utc::now);
+            let datetime =
+                chrono::DateTime::from_timestamp(timestamp, 0).unwrap_or_else(chrono::Utc::now);
             datetime.format("%Y-%m-%d %H:%M:%S").to_string()
         })
     }
@@ -278,8 +280,8 @@ impl SubscriptionDetail {
     /// 获取结束时间格式化字符串
     pub fn end_time_formatted(&self) -> Option<String> {
         self.end_time.map(|timestamp| {
-            let datetime = chrono::DateTime::from_timestamp(timestamp, 0)
-                .unwrap_or_else(chrono::Utc::now);
+            let datetime =
+                chrono::DateTime::from_timestamp(timestamp, 0).unwrap_or_else(chrono::Utc::now);
             datetime.format("%Y-%m-%d %H:%M:%S").to_string()
         })
     }
@@ -287,8 +289,8 @@ impl SubscriptionDetail {
     /// 获取最后更新时间格式化字符串
     pub fn last_update_time_formatted(&self) -> Option<String> {
         self.last_update_time.map(|timestamp| {
-            let datetime = chrono::DateTime::from_timestamp(timestamp, 0)
-                .unwrap_or_else(chrono::Utc::now);
+            let datetime =
+                chrono::DateTime::from_timestamp(timestamp, 0).unwrap_or_else(chrono::Utc::now);
             datetime.format("%Y-%m-%d %H:%M:%S").to_string()
         })
     }
@@ -296,25 +298,25 @@ impl SubscriptionDetail {
     /// 获取订阅摘要
     pub fn summary(&self) -> String {
         let mut parts = Vec::new();
-        
+
         parts.push(format!("状态: {}", self.status.description()));
-        
+
         if let Some(start) = self.start_time_formatted() {
             parts.push(format!("开始时间: {}", start));
         }
-        
+
         if let Some(end) = self.end_time_formatted() {
             parts.push(format!("结束时间: {}", end));
         }
-        
+
         if let Some(days) = self.duration_days() {
             parts.push(format!("持续时间: {:.1} 天", days));
         }
-        
+
         if let Some(ref subscriber_id) = self.subscriber_id {
             parts.push(format!("订阅者: {}", subscriber_id));
         }
-        
+
         parts.join(" | ")
     }
 }
@@ -370,7 +372,7 @@ mod tests {
         assert!(!SubscriptionStatus::Unsubscribed.is_active());
         assert!(SubscriptionStatus::Unsubscribed.can_activate());
         assert!(!SubscriptionStatus::Subscribed.can_activate());
-        
+
         assert_eq!(SubscriptionStatus::Subscribed.description(), "已订阅");
         assert_eq!(SubscriptionStatus::Subscribed.color(), "green");
     }

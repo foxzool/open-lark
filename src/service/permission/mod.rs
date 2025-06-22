@@ -30,7 +30,7 @@ impl PermissionService {
         request: &BatchCreatePermissionMemberRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<BatchCreatePermissionMemberResponse>> {
-        batch_create_permission_member(request.clone(), &*self.config, option).await
+        batch_create_permission_member(request.clone(), &self.config, option).await
     }
 
     /// 转移所有者
@@ -39,7 +39,7 @@ impl PermissionService {
         request: &TransferOwnerRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<TransferOwnerResponse>> {
-        transfer_owner(request.clone(), &*self.config, option).await
+        transfer_owner(request.clone(), &self.config, option).await
     }
 
     /// 判断当前用户是否有某权限
@@ -48,7 +48,7 @@ impl PermissionService {
         request: &AuthPermissionRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<AuthPermissionResponse>> {
-        auth_permission(request.clone(), &*self.config, option).await
+        auth_permission(request.clone(), &self.config, option).await
     }
 
     /// 获取协作者列表
@@ -57,7 +57,7 @@ impl PermissionService {
         request: &ListPermissionMembersRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<ListPermissionMembersResponse>> {
-        list_permission_members(request.clone(), &*self.config, option).await
+        list_permission_members(request.clone(), &self.config, option).await
     }
 
     /// 增加协作者权限
@@ -66,7 +66,7 @@ impl PermissionService {
         request: &CreatePermissionMemberRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<CreatePermissionMemberResponse>> {
-        create_permission_member(request.clone(), &*self.config, option).await
+        create_permission_member(request.clone(), &self.config, option).await
     }
 
     /// 更新协作者权限
@@ -75,7 +75,7 @@ impl PermissionService {
         request: &UpdatePermissionMemberRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<UpdatePermissionMemberResponse>> {
-        update_permission_member(request.clone(), &*self.config, option).await
+        update_permission_member(request.clone(), &self.config, option).await
     }
 
     /// 移除协作者权限
@@ -84,7 +84,7 @@ impl PermissionService {
         request: &DeletePermissionMemberRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<DeletePermissionMemberResponse>> {
-        delete_permission_member(request.clone(), &*self.config, option).await
+        delete_permission_member(request.clone(), &self.config, option).await
     }
 
     /// 获取云文档权限设置
@@ -93,7 +93,7 @@ impl PermissionService {
         request: &GetPermissionPublicRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<GetPermissionPublicResponse>> {
-        get_permission_public(request.clone(), &*self.config, option).await
+        get_permission_public(request.clone(), &self.config, option).await
     }
 
     /// 更新云文档权限设置
@@ -102,7 +102,7 @@ impl PermissionService {
         request: &PatchPermissionPublicRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<PatchPermissionPublicResponse>> {
-        patch_permission_public(request.clone(), &*self.config, option).await
+        patch_permission_public(request.clone(), &self.config, option).await
     }
 
     /// 开启密码保护
@@ -111,7 +111,7 @@ impl PermissionService {
         request: &CreatePasswordRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<CreatePasswordResponse>> {
-        create_password(request.clone(), &*self.config, option).await
+        create_password(request.clone(), &self.config, option).await
     }
 
     /// 刷新密码
@@ -120,7 +120,7 @@ impl PermissionService {
         request: &UpdatePasswordRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<UpdatePasswordResponse>> {
-        update_password(request.clone(), &*self.config, option).await
+        update_password(request.clone(), &self.config, option).await
     }
 
     /// 关闭密码保护
@@ -129,7 +129,7 @@ impl PermissionService {
         request: &DeletePasswordRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<DeletePasswordResponse>> {
-        delete_password(request.clone(), &*self.config, option).await
+        delete_password(request.clone(), &self.config, option).await
     }
 
     /// 获取云文档权限设置 (v2)
@@ -138,7 +138,7 @@ impl PermissionService {
         request: &GetPermissionPublicV2Request,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<GetPermissionPublicV2Response>> {
-        get_permission_public_v2(request.clone(), &*self.config, option).await
+        get_permission_public_v2(request.clone(), &self.config, option).await
     }
 
     /// 更新云文档权限设置 (v2)
@@ -147,6 +147,6 @@ impl PermissionService {
         request: &PatchPermissionPublicV2Request,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<PatchPermissionPublicV2Response>> {
-        patch_permission_public_v2(request.clone(), &*self.config, option).await
+        patch_permission_public_v2(request.clone(), &self.config, option).await
     }
 }

@@ -24,6 +24,12 @@ pub enum LarkAPIError {
         message: String,
         request_id: Option<String>,
     },
+
+    #[error("Missing access token")]
+    MissingAccessToken,
+
+    #[error("Bad request: {0}")]
+    BadRequest(String),
 }
 
 impl LarkAPIError {
