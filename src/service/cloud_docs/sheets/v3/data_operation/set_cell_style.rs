@@ -85,6 +85,27 @@ impl SetCellStyleRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 直接执行设置单元格样式请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.set_cell_style()`
+    pub async fn execute(
+        self,
+        service: &crate::service::sheets::v3::DataOperationService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<SetCellStyleResponseData>> {
+        service.set_cell_style(self.build(), None).await
+    }
+
+    /// 直接执行设置单元格样式请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.set_cell_style()`
+    pub async fn execute_with_options(
+        self,
+        service: &crate::service::sheets::v3::DataOperationService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<SetCellStyleResponseData>> {
+        service.set_cell_style(self.build(), Some(option)).await
+    }
 }
 
 /// 单元格样式
