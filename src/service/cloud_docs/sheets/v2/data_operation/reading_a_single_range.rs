@@ -120,6 +120,23 @@ impl ReadingSingleRangeRequestBuilder {
     pub fn build(self) -> ReadingSingleRangeRequest {
         self.request
     }
+
+    /// 直接执行读取单个范围数据操作
+    pub async fn execute(
+        self,
+        service: &SpreadsheetService,
+    ) -> SDKResult<BaseResponse<ReadingSingleRangeResponse>> {
+        service.reading_a_single_range(self.build(), None).await
+    }
+
+    /// 直接执行读取单个范围数据操作并提供自定义选项
+    pub async fn execute_with_options(
+        self,
+        service: &SpreadsheetService,
+        option: req_option::RequestOption,
+    ) -> SDKResult<BaseResponse<ReadingSingleRangeResponse>> {
+        service.reading_a_single_range(self.build(), Some(option)).await
+    }
 }
 
 /// 读取数据响应体
