@@ -68,7 +68,9 @@ impl WriteDataToSingleRangeBuilder {
         service: &SpreadsheetService,
         option: req_option::RequestOption,
     ) -> SDKResult<BaseResponse<WriteDataToSingleRangeResponse>> {
-        service.write_data_to_single_range(self.build(), Some(option)).await
+        service
+            .write_data_to_single_range(self.build(), Some(option))
+            .await
     }
 }
 

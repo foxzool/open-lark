@@ -2,7 +2,10 @@
 
 pub use crate::{
     client::{LarkClient, LarkClientBuilder},
-    core::{constants::AppType, error::LarkAPIError, req_option::RequestOption, SDKResult},
+    core::{
+        constants::AppType, error::LarkAPIError, req_option::RequestOption,
+        token_manager::PreheatingConfig, SDKResult,
+    },
     custom_bot::CustomBot,
     event::dispatcher::EventDispatcherHandler,
 };

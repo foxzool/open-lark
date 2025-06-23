@@ -65,7 +65,9 @@ impl WriteDataToMultiRangesBuilder {
         service: &SpreadsheetService,
         option: req_option::RequestOption,
     ) -> SDKResult<BaseResponse<WriteDataToMultiRangesResponse>> {
-        service.write_data_multi_ranges(self.build(), Some(option)).await
+        service
+            .write_data_multi_ranges(self.build(), Some(option))
+            .await
     }
 }
 

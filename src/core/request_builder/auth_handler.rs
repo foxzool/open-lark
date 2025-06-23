@@ -31,7 +31,7 @@ impl AuthHandler {
         let app_access_token = if !option.app_access_token.is_empty() {
             option.app_access_token.clone()
         } else if config.enable_token_cache {
-            let mut token_manager = config.token_manager.lock().await;
+            let token_manager = config.token_manager.lock().await;
             token_manager
                 .get_app_access_token(config, &option.app_ticket, &config.app_ticket_manager)
                 .await?
@@ -51,7 +51,7 @@ impl AuthHandler {
         let tenant_access_token = if !option.tenant_access_token.is_empty() {
             option.tenant_access_token.clone()
         } else if config.enable_token_cache {
-            let mut token_manager = config.token_manager.lock().await;
+            let token_manager = config.token_manager.lock().await;
             token_manager
                 .get_tenant_access_token(
                     config,

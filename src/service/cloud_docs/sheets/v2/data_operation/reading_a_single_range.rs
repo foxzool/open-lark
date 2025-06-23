@@ -135,7 +135,9 @@ impl ReadingSingleRangeRequestBuilder {
         service: &SpreadsheetService,
         option: req_option::RequestOption,
     ) -> SDKResult<BaseResponse<ReadingSingleRangeResponse>> {
-        service.reading_a_single_range(self.build(), Some(option)).await
+        service
+            .reading_a_single_range(self.build(), Some(option))
+            .await
     }
 }
 
