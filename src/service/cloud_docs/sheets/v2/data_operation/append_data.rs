@@ -62,6 +62,23 @@ impl AppendDataRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 直接执行追加数据操作
+    pub async fn execute(
+        self,
+        service: &SpreadsheetSheetService,
+    ) -> SDKResult<BaseResponse<AppendDataResponse>> {
+        service.append_data(self.build(), None).await
+    }
+
+    /// 直接执行追加数据操作并提供自定义选项
+    pub async fn execute_with_options(
+        self,
+        service: &SpreadsheetSheetService,
+        option: req_option::RequestOption,
+    ) -> SDKResult<BaseResponse<AppendDataResponse>> {
+        service.append_data(self.build(), Some(option)).await
+    }
 }
 
 pub type AppendDataResponse = UpdateSheetDataResponse;

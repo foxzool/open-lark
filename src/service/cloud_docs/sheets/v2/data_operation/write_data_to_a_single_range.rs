@@ -53,6 +53,23 @@ impl WriteDataToSingleRangeBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 直接执行向单个范围写入数据操作
+    pub async fn execute(
+        self,
+        service: &SpreadsheetService,
+    ) -> SDKResult<BaseResponse<WriteDataToSingleRangeResponse>> {
+        service.write_data_to_single_range(self.build(), None).await
+    }
+
+    /// 直接执行向单个范围写入数据操作并提供自定义选项
+    pub async fn execute_with_options(
+        self,
+        service: &SpreadsheetService,
+        option: req_option::RequestOption,
+    ) -> SDKResult<BaseResponse<WriteDataToSingleRangeResponse>> {
+        service.write_data_to_single_range(self.build(), Some(option)).await
+    }
 }
 
 /// 写入单个范围响应体
