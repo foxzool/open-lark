@@ -187,23 +187,14 @@ impl TokenManager {
     /// 这个方法会启动一个后台任务，定期检查即将过期的token并预先刷新它们
     ///
     /// # 参数
-    /// - `cache`: 缓存实例
-    /// - `metrics`: 性能指标
     /// - `config`: 应用配置，用于token刷新
     /// - `app_ticket_manager`: App ticket管理器的引用
-    /// - `preheat_config`: 预热配置（可选，使用默认配置如果为None）
-    ///
-    /// # 返回值
-    /// 返回后台任务的句柄，可用于停止预热任务
     pub fn start_background_preheating(
-        cache: Arc<RwLock<QuickCache<String>>>,
-        metrics: Arc<TokenMetrics>,
+        &mut self,
         config: Config,
         app_ticket_manager: Arc<Mutex<AppTicketManager>>,
-    ) -> tokio::task::JoinHandle<()> {
-        Self::start_background_preheating_with_config(
-            cache,
-            metrics,
+    ) {
+        self.start_background_preheating_with_config(
             config,
             app_ticket_manager,
             PreheatingConfig::default(),
@@ -212,13 +203,21 @@ impl TokenManager {
 
     /// 启动带自定义配置的后台token预热机制
     pub fn start_background_preheating_with_config(
-        cache: Arc<RwLock<QuickCache<String>>>,
-        metrics: Arc<TokenMetrics>,
+        &mut self,
         config: Config,
         app_ticket_manager: Arc<Mutex<AppTicketManager>>,
         preheat_config: PreheatingConfig,
-    ) -> tokio::task::JoinHandle<()> {
-        tokio::spawn(async move {
+    ) {
+        // 如果已有预热任务在运行，先停止它
+        if self.preheating_handle.is_some() {
+            log::info!("🔄 停止现有预热任务，启动新配置的预热任务");
+            self.stop_background_preheating();
+        }
+
+        let cache = self.cache.clone();
+        let metrics = self.metrics.clone();
+        
+        let handle = tokio::spawn(async move {
             let mut interval = interval(Duration::from_secs(preheat_config.check_interval_seconds));
             log::info!(
                 "🔄 Token后台预热机制已启动，检查间隔: {}分钟，预热阈值: {}分钟",
@@ -242,7 +241,10 @@ impl TokenManager {
                     // 记录错误但继续运行
                 }
             }
-        })
+        });
+
+        self.preheating_handle = Some(handle);
+        log::info!("✅ Token后台预热任务已启动并注册到TokenManager");
     }
 
     /// 检查并预热即将过期的token（使用默认配置）
@@ -285,7 +287,7 @@ impl TokenManager {
         .await
         {
             log::info!("🔄 开始预热 app access token");
-            if let Err(e) = Self::preheat_app_token(config, app_ticket_manager).await {
+            if let Err(e) = Self::preheat_app_token(cache, config, app_ticket_manager).await {
                 log::warn!("❌ App token预热失败: {:?}", e);
                 metrics.refresh_failures.fetch_add(1, Ordering::Relaxed);
             } else {
@@ -312,7 +314,7 @@ impl TokenManager {
                 {
                     log::info!("🔄 开始预热 tenant access token: {}", tenant_key);
                     if let Err(e) =
-                        Self::preheat_tenant_token(config, &tenant_key, app_ticket_manager).await
+                        Self::preheat_tenant_token(cache, config, &tenant_key, app_ticket_manager).await
                     {
                         log::warn!("❌ Tenant token预热失败 ({}): {:?}", tenant_key, e);
                         metrics.refresh_failures.fetch_add(1, Ordering::Relaxed);
@@ -385,13 +387,18 @@ impl TokenManager {
         vec![]
     }
 
-    /// 预热app access token
+    /// 预热app access token (直接更新主缓存)
     async fn preheat_app_token(
+        cache: &Arc<RwLock<QuickCache<String>>>,
         config: &Config,
         app_ticket_manager: &Arc<Mutex<AppTicketManager>>,
     ) -> SDKResult<String> {
-        // 创建一个临时的TokenManager实例来执行预热
-        let temp_manager = TokenManager::new();
+        // 直接使用主缓存实例进行预热
+        let temp_manager = TokenManager {
+            cache: cache.clone(),
+            metrics: Arc::new(TokenMetrics::new()), // 临时指标，只用于API调用
+            preheating_handle: None,
+        };
 
         match config.app_type {
             AppType::SelfBuild => {
@@ -407,14 +414,19 @@ impl TokenManager {
         }
     }
 
-    /// 预热tenant access token
+    /// 预热tenant access token (直接更新主缓存)
     async fn preheat_tenant_token(
+        cache: &Arc<RwLock<QuickCache<String>>>,
         config: &Config,
         tenant_key: &str,
         app_ticket_manager: &Arc<Mutex<AppTicketManager>>,
     ) -> SDKResult<String> {
-        // 创建一个临时的TokenManager实例来执行预热
-        let temp_manager = TokenManager::new();
+        // 直接使用主缓存实例进行预热
+        let temp_manager = TokenManager {
+            cache: cache.clone(),
+            metrics: Arc::new(TokenMetrics::new()), // 临时指标，只用于API调用
+            preheating_handle: None,
+        };
 
         if config.app_type == AppType::SelfBuild {
             temp_manager
