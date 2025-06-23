@@ -98,6 +98,23 @@ impl CreateRoleMemberRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 发起新增协作者请求
+    pub async fn execute(
+        self,
+        service: &crate::service::cloud_docs::bitable::v1::app_role_member::AppRoleMemberService,
+    ) -> SDKResult<BaseResponse<CreateRoleMemberResponse>> {
+        service.create(self.build(), None).await
+    }
+
+    /// 发起新增协作者请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        service: &crate::service::cloud_docs::bitable::v1::app_role_member::AppRoleMemberService,
+        option: RequestOption,
+    ) -> SDKResult<BaseResponse<CreateRoleMemberResponse>> {
+        service.create(self.build(), Some(option)).await
+    }
 }
 
 /// 协作者信息

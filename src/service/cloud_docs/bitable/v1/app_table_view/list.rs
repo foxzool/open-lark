@@ -108,6 +108,23 @@ impl ListViewsRequestBuilder {
     pub fn build(self) -> ListViewsRequest {
         self.request
     }
+
+    /// 发起列出视图请求
+    pub async fn execute(
+        self,
+        service: &AppTableViewService,
+    ) -> SDKResult<BaseResponse<ListViewsResponse>> {
+        service.list(self.build(), None).await
+    }
+
+    /// 发起列出视图请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        service: &AppTableViewService,
+        option: RequestOption,
+    ) -> SDKResult<BaseResponse<ListViewsResponse>> {
+        service.list(self.build(), Some(option)).await
+    }
 }
 
 #[derive(Deserialize, Debug)]

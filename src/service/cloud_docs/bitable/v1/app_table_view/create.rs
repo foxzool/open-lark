@@ -88,6 +88,23 @@ impl CreateViewRequestBuilder {
     pub fn build(self) -> CreateViewRequest {
         self.request
     }
+
+    /// 发起创建视图请求
+    pub async fn execute(
+        self,
+        service: &AppTableViewService,
+    ) -> SDKResult<BaseResponse<CreateViewResponse>> {
+        service.create(self.build(), None).await
+    }
+
+    /// 发起创建视图请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        service: &AppTableViewService,
+        option: RequestOption,
+    ) -> SDKResult<BaseResponse<CreateViewResponse>> {
+        service.create(self.build(), Some(option)).await
+    }
 }
 
 /// 视图数据

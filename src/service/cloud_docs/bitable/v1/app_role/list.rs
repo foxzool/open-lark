@@ -82,6 +82,23 @@ impl ListAppRoleRequestBuilder {
         }
         self.request
     }
+
+    /// 发起列出自定义角色请求
+    pub async fn execute(
+        self,
+        service: &crate::service::cloud_docs::bitable::v1::app_role::AppRoleService,
+    ) -> SDKResult<BaseResponse<ListAppRoleResponse>> {
+        service.list(self.build(), None).await
+    }
+
+    /// 发起列出自定义角色请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        service: &crate::service::cloud_docs::bitable::v1::app_role::AppRoleService,
+        option: RequestOption,
+    ) -> SDKResult<BaseResponse<ListAppRoleResponse>> {
+        service.list(self.build(), Some(option)).await
+    }
 }
 
 /// 列出自定义角色响应
