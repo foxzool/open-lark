@@ -451,6 +451,11 @@ impl TokenManager {
             log::info!("🛑 Token后台预热机制已停止");
         }
     }
+
+    /// 检查预热任务是否正在运行 (用于测试)
+    pub fn is_preheating_active(&self) -> bool {
+        self.preheating_handle.is_some()
+    }
     pub async fn get_app_access_token(
         &self,
         config: &Config,
