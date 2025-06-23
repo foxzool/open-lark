@@ -132,6 +132,27 @@ impl OperateSheetsRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 直接执行操作工作表请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.operate()`
+    pub async fn execute(
+        self,
+        service: &crate::service::sheets::v2::SpreadsheetSheetService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<OperateSheetResponse>> {
+        service.operate(self.build(), None).await
+    }
+
+    /// 直接执行操作工作表请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.operate()`
+    pub async fn execute_with_options(
+        self,
+        service: &crate::service::sheets::v2::SpreadsheetSheetService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<OperateSheetResponse>> {
+        service.operate(self.build(), Some(option)).await
+    }
 }
 
 impl SpreadsheetSheetService {

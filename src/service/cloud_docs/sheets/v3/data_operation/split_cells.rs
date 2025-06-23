@@ -78,6 +78,27 @@ impl SplitCellsRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 直接执行拆分单元格请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.split_cells()`
+    pub async fn execute(
+        self,
+        service: &crate::service::sheets::v3::DataOperationService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<SplitCellsResponseData>> {
+        service.split_cells(self.build(), None).await
+    }
+
+    /// 直接执行拆分单元格请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.split_cells()`
+    pub async fn execute_with_options(
+        self,
+        service: &crate::service::sheets::v3::DataOperationService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<SplitCellsResponseData>> {
+        service.split_cells(self.build(), Some(option)).await
+    }
 }
 
 /// 拆分单元格响应体最外层

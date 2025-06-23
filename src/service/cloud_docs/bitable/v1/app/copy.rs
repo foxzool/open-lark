@@ -87,6 +87,27 @@ impl CopyAppRequestBuilder {
     pub fn build(self) -> CopyAppRequest {
         self.request
     }
+
+    /// 直接执行复制多维表格请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.copy()`
+    pub async fn execute(
+        self,
+        service: &super::AppService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CopyAppResponse>> {
+        service.copy(self.build(), None).await
+    }
+
+    /// 直接执行复制多维表格请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.copy()`
+    pub async fn execute_with_options(
+        self,
+        service: &super::AppService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CopyAppResponse>> {
+        service.copy(self.build(), Some(option)).await
+    }
 }
 
 #[derive(Serialize)]

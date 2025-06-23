@@ -88,6 +88,27 @@ impl UpdateAppRequestBuilder {
     pub fn build(self) -> UpdateAppRequest {
         self.request
     }
+
+    /// 直接执行更新多维表格元数据请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.update()`
+    pub async fn execute(
+        self,
+        service: &super::AppService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<UpdateAppResponse>> {
+        service.update(self.build(), None).await
+    }
+
+    /// 直接执行更新多维表格元数据请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.update()`
+    pub async fn execute_with_options(
+        self,
+        service: &super::AppService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<UpdateAppResponse>> {
+        service.update(self.build(), Some(option)).await
+    }
 }
 
 #[derive(Serialize)]

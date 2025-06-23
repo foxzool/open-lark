@@ -96,6 +96,33 @@ impl UpdateDimensionRangeRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 直接执行更新行列请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.update_dimension_range()`
+    pub async fn execute(
+        self,
+        service: &crate::service::sheets::v2::SpreadsheetService,
+    ) -> crate::core::SDKResult<
+        crate::core::api_resp::BaseResponse<crate::core::api_resp::EmptyResponse>,
+    > {
+        service.update_dimension_range(self.build(), None).await
+    }
+
+    /// 直接执行更新行列请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.update_dimension_range()`
+    pub async fn execute_with_options(
+        self,
+        service: &crate::service::sheets::v2::SpreadsheetService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<
+        crate::core::api_resp::BaseResponse<crate::core::api_resp::EmptyResponse>,
+    > {
+        service
+            .update_dimension_range(self.build(), Some(option))
+            .await
+    }
 }
 
 impl SpreadsheetService {
