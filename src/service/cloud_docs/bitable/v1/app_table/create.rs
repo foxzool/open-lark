@@ -78,6 +78,27 @@ impl CreateTableRequestBuilder {
     pub fn build(self) -> CreateTableRequest {
         self.request
     }
+
+    /// 直接执行新增数据表请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.create()`
+    pub async fn execute(
+        self,
+        service: &super::AppTableService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateTableResponse>> {
+        service.create(self.build(), None).await
+    }
+
+    /// 直接执行新增数据表请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.create()`
+    pub async fn execute_with_options(
+        self,
+        service: &super::AppTableService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateTableResponse>> {
+        service.create(self.build(), Some(option)).await
+    }
 }
 
 /// 数据表数据
