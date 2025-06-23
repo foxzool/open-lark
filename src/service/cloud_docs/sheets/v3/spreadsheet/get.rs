@@ -98,6 +98,27 @@ impl GetSpreadsheetRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 直接执行获取电子表格信息请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.get()`
+    pub async fn execute(
+        self,
+        service: &crate::service::sheets::v3::SpreadsheetService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<GetSpreadsheetResponseData>> {
+        service.get(self.build(), None).await
+    }
+
+    /// 直接执行获取电子表格信息请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.get()`
+    pub async fn execute_with_options(
+        self,
+        service: &crate::service::sheets::v3::SpreadsheetService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<GetSpreadsheetResponseData>> {
+        service.get(self.build(), Some(option)).await
+    }
 }
 
 #[derive(Debug, Deserialize)]
