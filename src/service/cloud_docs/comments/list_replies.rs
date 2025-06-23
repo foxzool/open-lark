@@ -145,6 +145,27 @@ impl ListRepliesRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 直接执行获取回复信息请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list_replies()`
+    pub async fn execute(
+        self,
+        service: &crate::service::cloud_docs::comments::CommentsService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListRepliesResponse>> {
+        service.list_replies(self.build(), None).await
+    }
+
+    /// 直接执行获取回复信息请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list_replies()`
+    pub async fn execute_with_options(
+        self,
+        service: &crate::service::cloud_docs::comments::CommentsService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListRepliesResponse>> {
+        service.list_replies(self.build(), Some(option)).await
+    }
 }
 
 /// 获取回复信息响应

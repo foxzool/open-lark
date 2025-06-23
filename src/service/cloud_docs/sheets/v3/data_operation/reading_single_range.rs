@@ -113,7 +113,8 @@ impl ReadingSingleRangeRequestBuilder {
     pub async fn execute(
         self,
         service: &DataOperationService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ReadingSingleRangeResponseData>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ReadingSingleRangeResponseData>>
+    {
         service.reading_single_range(self.build(), None).await
     }
 
@@ -124,8 +125,11 @@ impl ReadingSingleRangeRequestBuilder {
         self,
         service: &DataOperationService,
         option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ReadingSingleRangeResponseData>> {
-        service.reading_single_range(self.build(), Some(option)).await
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ReadingSingleRangeResponseData>>
+    {
+        service
+            .reading_single_range(self.build(), Some(option))
+            .await
     }
 }
 

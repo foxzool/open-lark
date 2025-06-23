@@ -86,6 +86,27 @@ impl ListWhiteboardNodesRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 直接执行获取画板所有节点请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list_nodes()`
+    pub async fn execute(
+        self,
+        service: &crate::service::cloud_docs::board::BoardService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListWhiteboardNodesResponse>> {
+        service.list_nodes(&self.build(), None).await
+    }
+
+    /// 直接执行获取画板所有节点请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list_nodes()`
+    pub async fn execute_with_options(
+        self,
+        service: &crate::service::cloud_docs::board::BoardService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListWhiteboardNodesResponse>> {
+        service.list_nodes(&self.build(), Some(option)).await
+    }
 }
 
 /// 画板节点类型
