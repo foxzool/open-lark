@@ -288,7 +288,7 @@ impl DeletePasswordResponse {
     pub fn operation_log(&self) -> String {
         let mut log_parts = Vec::new();
 
-        log_parts.push(format!("操作: 关闭密码保护"));
+        log_parts.push("操作: 关闭密码保护".to_string());
         log_parts.push(format!(
             "状态: {}",
             self.password_deletion.deletion_status()

@@ -105,7 +105,8 @@ impl GetSpreadsheetRequestBuilder {
     pub async fn execute(
         self,
         service: &crate::service::sheets::v3::SpreadsheetService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<GetSpreadsheetResponseData>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<GetSpreadsheetResponseData>>
+    {
         service.get(self.build(), None).await
     }
 
@@ -116,7 +117,8 @@ impl GetSpreadsheetRequestBuilder {
         self,
         service: &crate::service::sheets::v3::SpreadsheetService,
         option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<GetSpreadsheetResponseData>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<GetSpreadsheetResponseData>>
+    {
         service.get(self.build(), Some(option)).await
     }
 }

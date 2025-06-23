@@ -89,7 +89,8 @@ impl CreateSpreedSheetRequestBuilder {
     pub async fn execute(
         self,
         service: &crate::service::sheets::v3::SpreadsheetService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateSpreedSheetResponseData>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateSpreedSheetResponseData>>
+    {
         service.create(self.build(), None).await
     }
 
@@ -100,7 +101,8 @@ impl CreateSpreedSheetRequestBuilder {
         self,
         service: &crate::service::sheets::v3::SpreadsheetService,
         option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateSpreedSheetResponseData>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateSpreedSheetResponseData>>
+    {
         service.create(self.build(), Some(option)).await
     }
 }

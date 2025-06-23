@@ -59,6 +59,7 @@ dotenv = "0.15.0"
 env_logger = "0.11.3"
 uuid = { version = "1.8.0", features = ["v4"] }
 chrono = { version = "0.4.38", features = ["serde"] }
+criterion = { version = "0.5", features = ["html_reports"] }
 
 # ===========================================
 # Examples
@@ -92,3 +93,23 @@ path = "examples/api/enhanced_drive_operations.rs"
 [[example]]
 name = "drive_builder_execute_demo"
 path = "examples/api/drive_builder_execute_demo.rs"
+
+[[example]]
+name = "enterprise_scenario_with_enhanced_builder"
+path = "examples/api/enterprise_scenario_with_enhanced_builder.rs"
+
+[[example]]
+name = "data_processing_with_enhanced_builder"
+path = "examples/api/data_processing_with_enhanced_builder.rs"
+
+[[example]]
+name = "multi_service_integration_enhanced"
+path = "examples/api/multi_service_integration_enhanced.rs"
+
+# ===========================================
+# Benchmarks
+# ===========================================
+
+[[bench]]
+name = "enhanced_builder_performance"
+harness = false

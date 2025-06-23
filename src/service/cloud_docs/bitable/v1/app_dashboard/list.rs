@@ -82,6 +82,20 @@ impl ListDashboardRequestBuilder {
         }
         self.request
     }
+
+    /// 执行列出仪表盘请求
+    pub async fn execute(self, config: &Config) -> SDKResult<BaseResponse<ListDashboardResponse>> {
+        list_dashboard(self.build(), config, None).await
+    }
+
+    /// 执行列出仪表盘请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        config: &Config,
+        option: RequestOption,
+    ) -> SDKResult<BaseResponse<ListDashboardResponse>> {
+        list_dashboard(self.build(), config, Some(option)).await
+    }
 }
 
 /// 列出仪表盘响应

@@ -69,6 +69,27 @@ impl DeleteFieldRequestBuilder {
     pub fn build(self) -> DeleteFieldRequest {
         self.request
     }
+
+    /// 直接执行删除字段请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `delete_field()`
+    pub async fn execute(
+        self,
+        config: &crate::core::config::Config,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<DeleteFieldResponse>> {
+        delete_field(self.build(), config, None).await
+    }
+
+    /// 直接执行删除字段请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `delete_field()`
+    pub async fn execute_with_options(
+        self,
+        config: &crate::core::config::Config,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<DeleteFieldResponse>> {
+        delete_field(self.build(), config, Some(option)).await
+    }
 }
 
 /// 删除字段响应

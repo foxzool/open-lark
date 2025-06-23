@@ -402,7 +402,7 @@ impl NodeStyle {
 impl NodeContent {
     /// 是否有文本内容
     pub fn has_text(&self) -> bool {
-        self.text.as_ref().map_or(false, |t| !t.is_empty())
+        self.text.as_ref().is_some_and(|t| !t.is_empty())
     }
 
     /// 是否有图片内容
@@ -412,7 +412,7 @@ impl NodeContent {
 
     /// 是否有连接信息
     pub fn has_connections(&self) -> bool {
-        self.connections.as_ref().map_or(false, |c| !c.is_empty())
+        self.connections.as_ref().is_some_and(|c| !c.is_empty())
     }
 
     /// 获取内容摘要

@@ -6,7 +6,6 @@
 // cargo run --example enhanced_builder_demo
 
 use open_lark::prelude::*;
-use tokio;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

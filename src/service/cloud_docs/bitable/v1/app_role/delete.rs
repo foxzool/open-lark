@@ -59,6 +59,27 @@ impl DeleteAppRoleRequestBuilder {
     pub fn build(self) -> DeleteAppRoleRequest {
         self.request
     }
+
+    /// 直接执行删除自定义角色请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `delete_app_role()`
+    pub async fn execute(
+        self,
+        config: &crate::core::config::Config,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<DeleteAppRoleResponse>> {
+        delete_app_role(self.build(), config, None).await
+    }
+
+    /// 直接执行删除自定义角色请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `delete_app_role()`
+    pub async fn execute_with_options(
+        self,
+        config: &crate::core::config::Config,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<DeleteAppRoleResponse>> {
+        delete_app_role(self.build(), config, Some(option)).await
+    }
 }
 
 /// 删除自定义角色响应

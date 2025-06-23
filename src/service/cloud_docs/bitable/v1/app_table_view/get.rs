@@ -87,6 +87,27 @@ impl GetViewRequestBuilder {
     pub fn build(self) -> GetViewRequest {
         self.request
     }
+
+    /// 直接执行获取视图请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.get()`
+    pub async fn execute(
+        self,
+        service: &AppTableViewService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<GetViewResponse>> {
+        service.get(self.build(), None).await
+    }
+
+    /// 直接执行获取视图请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.get()`
+    pub async fn execute_with_options(
+        self,
+        service: &AppTableViewService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<GetViewResponse>> {
+        service.get(self.build(), Some(option)).await
+    }
 }
 
 #[derive(Deserialize, Debug)]

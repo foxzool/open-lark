@@ -4,6 +4,7 @@ use serde::Deserialize;
 use crate::core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
@@ -19,17 +20,26 @@ impl AppTableViewService {
         request: DeleteViewRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<DeleteViewResponse>> {
-        let mut api_req = request.api_request;
-        api_req.http_method = Method::DELETE;
-        api_req.api_path = format!(
-            "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}",
-            request.app_token, request.table_id, request.view_id
-        );
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
-
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-        Ok(api_resp)
+        delete_view(request, &self.config, option).await
     }
+}
+
+/// 删除视图
+pub async fn delete_view(
+    request: DeleteViewRequest,
+    config: &Config,
+    option: Option<RequestOption>,
+) -> SDKResult<BaseResponse<DeleteViewResponse>> {
+    let mut api_req = request.api_request;
+    api_req.http_method = Method::DELETE;
+    api_req.api_path = format!(
+        "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}",
+        request.app_token, request.table_id, request.view_id
+    );
+    api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+
+    let api_resp = Transport::request(api_req, config, option).await?;
+    Ok(api_resp)
 }
 
 /// 删除视图请求
@@ -86,6 +96,20 @@ impl DeleteViewRequestBuilder {
 
     pub fn build(self) -> DeleteViewRequest {
         self.request
+    }
+
+    /// 执行删除视图请求
+    pub async fn execute(self, config: &Config) -> SDKResult<BaseResponse<DeleteViewResponse>> {
+        delete_view(self.build(), config, None).await
+    }
+
+    /// 执行删除视图请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        config: &Config,
+        option: RequestOption,
+    ) -> SDKResult<BaseResponse<DeleteViewResponse>> {
+        delete_view(self.build(), config, Some(option)).await
     }
 }
 

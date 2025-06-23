@@ -79,6 +79,20 @@ impl ListWorkflowRequestBuilder {
         }
         self.request
     }
+
+    /// 执行列出自动化流程请求
+    pub async fn execute(self, config: &Config) -> SDKResult<BaseResponse<ListWorkflowResponse>> {
+        list_workflows(self.build(), config, None).await
+    }
+
+    /// 执行列出自动化流程请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        config: &Config,
+        option: RequestOption,
+    ) -> SDKResult<BaseResponse<ListWorkflowResponse>> {
+        list_workflows(self.build(), config, Some(option)).await
+    }
 }
 
 /// 自动化流程信息

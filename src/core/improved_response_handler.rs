@@ -101,7 +101,7 @@ impl ImprovedResponseHandler {
             .headers()
             .get("Content-Disposition")
             .and_then(|header| header.to_str().ok())
-            .and_then(|header_str| Self::extract_filename(header_str))
+            .and_then(Self::extract_filename)
             .unwrap_or_default();
 
         // 获取二进制数据

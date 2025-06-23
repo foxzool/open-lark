@@ -109,6 +109,27 @@ impl PatchViewRequestBuilder {
     pub fn build(self) -> PatchViewRequest {
         self.request
     }
+
+    /// 直接执行更新视图请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.patch()`
+    pub async fn execute(
+        self,
+        service: &AppTableViewService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<PatchViewResponse>> {
+        service.patch(self.build(), None).await
+    }
+
+    /// 直接执行更新视图请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.patch()`
+    pub async fn execute_with_options(
+        self,
+        service: &AppTableViewService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<PatchViewResponse>> {
+        service.patch(self.build(), Some(option)).await
+    }
 }
 
 #[derive(Serialize)]
