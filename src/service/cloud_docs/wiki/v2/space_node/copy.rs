@@ -105,6 +105,23 @@ impl CopySpaceNodeRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 发起复制知识空间节点请求
+    pub async fn execute(
+        self,
+        service: &crate::service::cloud_docs::wiki::v2::space_node::SpaceNodeService,
+    ) -> SDKResult<CopySpaceNodeResponse> {
+        service.copy(self.build(), None).await
+    }
+
+    /// 发起复制知识空间节点请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        service: &crate::service::cloud_docs::wiki::v2::space_node::SpaceNodeService,
+        option: RequestOption,
+    ) -> SDKResult<CopySpaceNodeResponse> {
+        service.copy(self.build(), Some(option)).await
+    }
 }
 
 /// 复制后的节点信息
