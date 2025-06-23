@@ -385,9 +385,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("                            \"content\": \"查看需求表格\"");
     println!("                        }},");
     println!("                        \"type\": \"primary\",");
-    println!(
-        "                        \"url\": \"https://example.feishu.cn/sheets/{{}}\"",
-    );
+    println!("                        \"url\": \"https://example.feishu.cn/sheets/{{}}\"",);
     println!("                    }},");
     println!("                    {{");
     println!("                        \"tag\": \"button\",");
@@ -395,9 +393,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("                            \"tag\": \"plain_text\",");
     println!("                            \"content\": \"访问知识库\"");
     println!("                        }},");
-    println!(
-        "                        \"url\": \"https://example.feishu.cn/wiki/{{}}\"",
-    );
+    println!("                        \"url\": \"https://example.feishu.cn/wiki/{{}}\"",);
     println!("                    }}");
     println!("                ]");
     println!("            }}");
@@ -432,15 +428,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             product_name, member.role
         );
         println!("        \"🔗 快速链接：\\n\" +");
-        println!(
-            "        \"• 需求表格: https://example.feishu.cn/sheets/{{}}\\n\" +",
-        );
-        println!(
-            "        \"• 项目看板: https://example.feishu.cn/board/{{}}\\n\" +",
-        );
-        println!(
-            "        \"• 知识库: https://example.feishu.cn/wiki/{{}}\\n\\n\" +",
-        );
+        println!("        \"• 需求表格: https://example.feishu.cn/sheets/{{}}\\n\" +",);
+        println!("        \"• 项目看板: https://example.feishu.cn/board/{{}}\\n\" +",);
+        println!("        \"• 知识库: https://example.feishu.cn/wiki/{{}}\\n\\n\" +",);
         println!("        \"如有问题请随时联系项目经理。\"");
         println!("    ))");
         println!("    .execute(&client.im.v1.message)");

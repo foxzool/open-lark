@@ -59,7 +59,7 @@ dotenv = "0.15.0"
 env_logger = "0.11.3"
 uuid = { version = "1.8.0", features = ["v4"] }
 chrono = { version = "0.4.38", features = ["serde"] }
-criterion = { version = "0.5", features = ["html_reports"] }
+# criterion = { version = "0.5", features = ["html_reports"] } # Removed - benchmark not implemented
 
 # ===========================================
 # Examples
@@ -106,10 +106,15 @@ path = "examples/api/data_processing_with_enhanced_builder.rs"
 name = "multi_service_integration_enhanced"
 path = "examples/api/multi_service_integration_enhanced.rs"
 
+[[example]]
+name = "token_performance_monitoring"
+path = "examples/api/token_performance_monitoring.rs"
+
+[[example]]
+name = "background_token_preheating"
+path = "examples/api/background_token_preheating.rs"
+
 # ===========================================
 # Benchmarks
 # ===========================================
-
-[[bench]]
-name = "enhanced_builder_performance"
-harness = false
+# (Benchmarks removed due to missing implementation files)
