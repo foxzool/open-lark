@@ -95,7 +95,8 @@ impl BatchSetCellStyleRequestBuilder {
     pub async fn execute(
         self,
         service: &crate::service::sheets::v3::DataOperationService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchSetCellStyleResponseData>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchSetCellStyleResponseData>>
+    {
         service.batch_set_cell_style(self.build(), None).await
     }
 
@@ -106,8 +107,11 @@ impl BatchSetCellStyleRequestBuilder {
         self,
         service: &crate::service::sheets::v3::DataOperationService,
         option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchSetCellStyleResponseData>> {
-        service.batch_set_cell_style(self.build(), Some(option)).await
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchSetCellStyleResponseData>>
+    {
+        service
+            .batch_set_cell_style(self.build(), Some(option))
+            .await
     }
 }
 

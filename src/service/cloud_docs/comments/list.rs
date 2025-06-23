@@ -330,7 +330,7 @@ impl Comment {
     pub fn has_replies(&self) -> bool {
         self.reply_list
             .as_ref()
-            .map_or(false, |replies| !replies.is_empty())
+            .is_some_and(|replies| !replies.is_empty())
     }
 
     /// 获取回复数量

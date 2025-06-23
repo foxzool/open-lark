@@ -174,7 +174,8 @@ impl DeletePermissionMemberRequestBuilder {
     pub async fn execute(
         self,
         config: &crate::core::config::Config,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<DeletePermissionMemberResponse>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<DeletePermissionMemberResponse>>
+    {
         delete_permission_member(self.build(), config, None).await
     }
 
@@ -185,7 +186,8 @@ impl DeletePermissionMemberRequestBuilder {
         self,
         config: &crate::core::config::Config,
         option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<DeletePermissionMemberResponse>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<DeletePermissionMemberResponse>>
+    {
         delete_permission_member(self.build(), config, Some(option)).await
     }
 }

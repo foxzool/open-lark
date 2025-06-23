@@ -90,6 +90,23 @@ impl BatchDeleteRoleMemberRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 执行批量删除协作者请求
+    pub async fn execute(
+        self,
+        config: &Config,
+    ) -> SDKResult<BaseResponse<BatchDeleteRoleMemberResponse>> {
+        batch_delete_role_members(self.build(), config, None).await
+    }
+
+    /// 执行批量删除协作者请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        config: &Config,
+        option: RequestOption,
+    ) -> SDKResult<BaseResponse<BatchDeleteRoleMemberResponse>> {
+        batch_delete_role_members(self.build(), config, Some(option)).await
+    }
 }
 
 /// 删除结果

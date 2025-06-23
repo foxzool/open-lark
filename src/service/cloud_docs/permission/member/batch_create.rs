@@ -14,21 +14,17 @@ use crate::core::{
 /// 协作者权限
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "snake_case")]
+#[derive(Default)]
 pub enum Permission {
     /// 所有者
     FullAccess,
     /// 编辑者
     Edit,
     /// 阅读者
+    #[default]
     View,
     /// 评论者
     Comment,
-}
-
-impl Default for Permission {
-    fn default() -> Self {
-        Permission::View
-    }
 }
 
 /// 协作者信息
@@ -321,10 +317,8 @@ impl MemberResult {
             Some(format!("错误码: {}, 错误信息: {}", code, msg))
         } else if let Some(msg) = &self.msg {
             Some(msg.clone())
-        } else if let Some(code) = self.code {
-            Some(format!("错误码: {}", code))
         } else {
-            None
+            self.code.map(|code| format!("错误码: {}", code))
         }
     }
 }

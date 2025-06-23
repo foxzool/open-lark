@@ -10,7 +10,6 @@
 // APP_SECRET=your_app_secret
 
 use open_lark::prelude::*;
-use tokio;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -75,7 +74,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("  3. 调用.build()");
     println!("  4. 调用service.method(request, option)");
     println!("  5. 等待结果");
-    println!("");
+    println!();
     println!("增强方式只需要:");
     println!("  1. 创建Request::builder()");
     println!("  2. 设置参数");
@@ -88,10 +87,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 创建示例文件数据
     let sample_content = "这是一个使用增强Builder模式上传的测试文件！\n时间: {}";
     let current_time = chrono::Utc::now().format("%Y-%m-%d %H:%M:%S");
-    let file_content = format!(
-        "{}",
-        sample_content.replace("{}", &current_time.to_string())
-    );
+    let file_content = sample_content
+        .replace("{}", &current_time.to_string())
+        .to_string();
     let file_bytes = file_content.into_bytes();
 
     println!("准备上传文件内容 ({} 字节)", file_bytes.len());

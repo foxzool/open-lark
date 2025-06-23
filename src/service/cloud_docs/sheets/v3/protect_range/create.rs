@@ -71,6 +71,29 @@ impl AddProtectRangeRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 直接执行增加保护范围请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.add_protect_range()`
+    pub async fn execute(
+        self,
+        service: &crate::service::sheets::v3::SpreadsheetService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<AddProtectRangeResponseData>>
+    {
+        service.add_protect_range(self.build(), None).await
+    }
+
+    /// 直接执行增加保护范围请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.add_protect_range()`
+    pub async fn execute_with_options(
+        self,
+        service: &crate::service::sheets::v3::SpreadsheetService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<AddProtectRangeResponseData>>
+    {
+        service.add_protect_range(self.build(), Some(option)).await
+    }
 }
 
 /// 保护范围数据

@@ -13,7 +13,6 @@
 // APP_SECRET=your_app_secret
 
 use open_lark::prelude::*;
-use tokio;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

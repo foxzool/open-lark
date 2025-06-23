@@ -81,7 +81,8 @@ impl BatchDeleteRecordRequestBuilder {
     pub async fn execute(
         self,
         config: &crate::core::config::Config,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchDeleteRecordResponse>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchDeleteRecordResponse>>
+    {
         batch_delete_record(self.build(), config, None).await
     }
 
@@ -92,7 +93,8 @@ impl BatchDeleteRecordRequestBuilder {
         self,
         config: &crate::core::config::Config,
         option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchDeleteRecordResponse>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchDeleteRecordResponse>>
+    {
         batch_delete_record(self.build(), config, Some(option)).await
     }
 }

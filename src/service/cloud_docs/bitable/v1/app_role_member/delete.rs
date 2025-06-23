@@ -84,6 +84,23 @@ impl DeleteRoleMemberRequestBuilder {
         }
         self.request
     }
+
+    /// 执行删除协作者请求
+    pub async fn execute(
+        self,
+        config: &Config,
+    ) -> SDKResult<BaseResponse<DeleteRoleMemberResponse>> {
+        delete_role_member(self.build(), config, None).await
+    }
+
+    /// 执行删除协作者请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        config: &Config,
+        option: RequestOption,
+    ) -> SDKResult<BaseResponse<DeleteRoleMemberResponse>> {
+        delete_role_member(self.build(), config, Some(option)).await
+    }
 }
 
 /// 删除协作者响应

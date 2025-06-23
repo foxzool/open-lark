@@ -276,16 +276,16 @@ mod tests {
         assert_eq!(request.file_token, "doccnxxxxxx");
         assert_eq!(request.file_type, "doc");
         assert_eq!(request.comment_id, "comment123");
-        assert_eq!(request.is_solved, true);
+        assert!(request.is_solved);
         assert_eq!(request.user_id_type, Some("open_id".to_string()));
     }
 
     #[test]
     fn test_patch_comment_convenience_methods() {
         let solve_request = PatchCommentRequest::solve("doccnxxxxxx", "doc", "comment123");
-        assert_eq!(solve_request.is_solved, true);
+        assert!(solve_request.is_solved);
 
         let restore_request = PatchCommentRequest::restore("doccnxxxxxx", "doc", "comment123");
-        assert_eq!(restore_request.is_solved, false);
+        assert!(!restore_request.is_solved);
     }
 }

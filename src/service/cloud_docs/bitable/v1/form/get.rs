@@ -59,6 +59,20 @@ impl GetFormRequestBuilder {
     pub fn build(self) -> GetFormRequest {
         self.request
     }
+
+    /// 执行获取表单元数据请求
+    pub async fn execute(self, config: &Config) -> SDKResult<BaseResponse<GetFormResponse>> {
+        get_form(self.build(), config, None).await
+    }
+
+    /// 执行获取表单元数据请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        config: &Config,
+        option: RequestOption,
+    ) -> SDKResult<BaseResponse<GetFormResponse>> {
+        get_form(self.build(), config, Some(option)).await
+    }
 }
 
 /// 表单信息

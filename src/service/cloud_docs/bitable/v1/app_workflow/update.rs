@@ -81,6 +81,20 @@ impl UpdateWorkflowRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 执行更新自动化流程状态请求
+    pub async fn execute(self, config: &Config) -> SDKResult<BaseResponse<UpdateWorkflowResponse>> {
+        update_workflow(self.build(), config, None).await
+    }
+
+    /// 执行更新自动化流程状态请求（带选项）
+    pub async fn execute_with_options(
+        self,
+        config: &Config,
+        option: RequestOption,
+    ) -> SDKResult<BaseResponse<UpdateWorkflowResponse>> {
+        update_workflow(self.build(), config, Some(option)).await
+    }
 }
 
 /// 更新自动化流程状态响应
@@ -133,7 +147,7 @@ mod tests {
 
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.workflow_id, "wkfxxxxxx");
-        assert_eq!(request.is_enabled, true);
+        assert!(request.is_enabled);
     }
 
     #[test]
@@ -144,6 +158,6 @@ mod tests {
             .disable()
             .build();
 
-        assert_eq!(request.is_enabled, false);
+        assert!(!request.is_enabled);
     }
 }

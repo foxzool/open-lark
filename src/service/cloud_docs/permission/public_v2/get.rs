@@ -298,7 +298,7 @@ impl PublicSettingsV2 {
 
     /// 获取分享范围描述
     pub fn share_scope_description(&self) -> Option<&str> {
-        self.share_scope.as_ref().map(|scope| scope.as_str())
+        self.share_scope.as_deref()
     }
 
     /// 获取过期时间格式化字符串
