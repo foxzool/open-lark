@@ -2,13 +2,42 @@
 /// 
 /// 此示例展示如何启用和使用TokenManager的后台预热功能
 /// 包括自动token刷新、故障处理和监控集成
+/// 
+/// ## 使用说明
+/// 
+/// ### 使用演示凭据（会显示错误，但展示功能）:
+/// ```bash
+/// cargo run --example background_token_preheating
+/// ```
+/// 
+/// ### 使用真实凭据（正常工作）:
+/// ```bash
+/// APP_ID=your_real_app_id APP_SECRET=your_real_app_secret cargo run --example background_token_preheating
+/// ```
+/// 
+/// ### 或者创建 .env 文件:
+/// ```
+/// APP_ID=your_real_app_id
+/// APP_SECRET=your_real_app_secret
+/// ```
+/// 然后运行: `cargo run --example background_token_preheating`
+/// 
+/// ## 预期行为
+/// - 使用演示凭据: 会看到 "missing field `expire`" 错误，但预热机制和监控正常工作
+/// - 使用真实凭据: 所有功能正常，不会有API错误
 
 use std::time::Duration;
 use tokio::time::sleep;
 use open_lark::prelude::*;
+use open_lark::core::token_manager::PreheatingConfig;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // 尝试加载.env文件（如果存在）
+    if let Err(_) = dotenv::dotenv() {
+        // .env文件不存在或加载失败，这是正常的
+    }
+    
     // 初始化日志系统，启用INFO级别以查看预热日志
     env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
 
@@ -16,10 +45,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("==========================");
 
     // 创建客户端配置
-    let client = LarkClient::builder("demo_app_id", "demo_app_secret")
+    // 方案1: 使用环境变量中的真实凭据
+    let app_id = std::env::var("APP_ID").unwrap_or_else(|_| "demo_app_id".to_string());
+    let app_secret = std::env::var("APP_SECRET").unwrap_or_else(|_| "demo_app_secret".to_string());
+    
+    let client = LarkClient::builder(&app_id, &app_secret)
         .with_app_type(AppType::SelfBuild)
         .with_enable_token_cache(true)
         .build();
+    
+    println!("📝 使用凭据: APP_ID={}", if app_id == "demo_app_id" { "演示凭据(会失败)" } else { "真实凭据" });
+    
+    if app_id == "demo_app_id" {
+        println!("⚠️  注意: 当前使用演示凭据，API调用会失败");
+        println!("💡 要使用真实凭据，请设置环境变量:");
+        println!("   APP_ID=your_app_id APP_SECRET=your_app_secret cargo run --example background_token_preheating");
+        println!("   或创建.env文件包含真实凭据");
+        println!();
+    }
 
     println!("✅ 客户端初始化完成");
 
@@ -186,8 +229,8 @@ mod tests {
             client.config.app_ticket_manager.clone(),
         );
         
-        // 立即停止任务进行测试
-        let handle_exists = manager.preheating_handle.is_some();
+        // 立即检查任务状态
+        let handle_exists = manager.is_preheating_active();
         drop(manager);
 
         // 验证任务已启动
@@ -204,7 +247,7 @@ mod tests {
         
         // 验证任务已停止
         let manager = token_manager.lock().await;
-        assert!(manager.preheating_handle.is_none());
+        assert!(!manager.is_preheating_active());
     }
 
     #[tokio::test]
