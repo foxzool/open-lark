@@ -27,12 +27,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let token_manager = client.config.token_manager.clone();
     let config = client.config.clone();
 
-    // 从token_manager中提取缓存和指标
-    let (cache, metrics) = {
-        let manager = token_manager.lock().await;
-        (manager.get_cache(), manager.get_metrics())
-    };
-
     // 启动后台预热任务（使用自定义配置）
     println!("🔄 启动后台Token预热机制...");
     
@@ -44,13 +38,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         max_concurrent_preheat: 2,
     };
     
-    let preheating_handle = open_lark::core::token_manager::TokenManager::start_background_preheating_with_config(
-        cache.clone(),
-        metrics.clone(),
-        config,
-        client.config.app_ticket_manager.clone(),
-        preheat_config,
-    );
+    // 修复API调用 - 使用实例方法而非静态方法
+    {
+        let mut manager = token_manager.lock().await;
+        manager.start_background_preheating_with_config(
+            config,
+            client.config.app_ticket_manager.clone(),
+            preheat_config,
+        );
+    }
 
     println!("✅ 后台预热任务已启动");
     println!("ℹ️  预热任务会每2分钟检查一次token状态（演示配置）");
@@ -139,7 +135,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 演示手动停止预热任务
     println!("\n🛑 停止后台预热任务...");
-    preheating_handle.abort();
+    {
+        let mut manager = token_manager.lock().await;
+        manager.stop_background_preheating();
+    }
     println!("✅ 后台预热任务已停止");
 
     println!("\n💡 预热机制的优势:");
@@ -180,28 +179,32 @@ mod tests {
             .build();
 
         let token_manager = client.config.token_manager.clone();
-        let (cache, metrics) = {
-            let manager = token_manager.lock().await;
-            (manager.get_cache(), manager.get_metrics())
-        };
-
         // 启动预热任务
-        let handle = open_lark::core::token_manager::TokenManager::start_background_preheating(
-            cache,
-            metrics,
+        let mut manager = token_manager.lock().await;
+        manager.start_background_preheating(
             client.config.clone(),
             client.config.app_ticket_manager.clone(),
         );
+        
+        // 立即停止任务进行测试
+        let handle_exists = manager.preheating_handle.is_some();
+        drop(manager);
 
         // 验证任务已启动
-        assert!(!handle.is_finished());
+        assert!(handle_exists);
 
         // 停止任务
-        handle.abort();
+        {
+            let mut manager = token_manager.lock().await;
+            manager.stop_background_preheating();
+        }
         
         // 短暂等待确保任务停止
         tokio::time::sleep(Duration::from_millis(100)).await;
-        assert!(handle.is_finished());
+        
+        // 验证任务已停止
+        let manager = token_manager.lock().await;
+        assert!(manager.preheating_handle.is_none());
     }
 
     #[tokio::test]
