@@ -825,6 +825,27 @@ impl FileUploadPartRequestBuilder {
         self.request.api_req.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 直接执行文件分片上传请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.upload_part()`
+    pub async fn execute(
+        self,
+        service: &FileService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<FileUploadPartRespData>> {
+        service.upload_part(self.build(), None).await
+    }
+
+    /// 直接执行文件分片上传请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.upload_part()`
+    pub async fn execute_with_options(
+        self,
+        service: &FileService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<FileUploadPartRespData>> {
+        service.upload_part(self.build(), Some(option)).await
+    }
 }
 
 /// 分片上传文件-上传分片响应数据

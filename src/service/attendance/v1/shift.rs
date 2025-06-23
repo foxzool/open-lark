@@ -349,7 +349,9 @@ impl CreateShiftRequestBuilder {
     pub async fn execute(
         self,
         service: &ShiftService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<super::models::CreateShiftRespData>> {
+    ) -> crate::core::SDKResult<
+        crate::core::api_resp::BaseResponse<super::models::CreateShiftRespData>,
+    > {
         service.create(self.build(), None).await
     }
 
@@ -360,7 +362,9 @@ impl CreateShiftRequestBuilder {
         self,
         service: &ShiftService,
         option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<super::models::CreateShiftRespData>> {
+    ) -> crate::core::SDKResult<
+        crate::core::api_resp::BaseResponse<super::models::CreateShiftRespData>,
+    > {
         service.create(self.build(), Some(option)).await
     }
 }

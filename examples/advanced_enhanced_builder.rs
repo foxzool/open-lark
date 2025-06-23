@@ -24,7 +24,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app_secret = std::env::var("APP_SECRET").expect("请设置 APP_SECRET 环境变量");
 
     // 创建Lark客户端
-    let client = LarkClient::builder(&app_id, &app_secret)
+    let _client = LarkClient::builder(&app_id, &app_secret)
         .with_app_type(AppType::SelfBuild)
         .with_enable_token_cache(true)
         .build();

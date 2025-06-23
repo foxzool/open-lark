@@ -88,3 +88,7 @@ path = "examples/enhanced_builder_demo.rs"
 [[example]]
 name = "enhanced_drive_operations"
 path = "examples/api/enhanced_drive_operations.rs"
+
+[[example]]
+name = "drive_builder_execute_demo"
+path = "examples/api/drive_builder_execute_demo.rs"

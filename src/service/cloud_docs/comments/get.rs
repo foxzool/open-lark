@@ -127,6 +127,25 @@ impl GetCommentRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 执行请求
+    pub async fn execute(
+        mut self,
+        service: &crate::service::cloud_docs::comments::CommentsService,
+    ) -> SDKResult<BaseResponse<GetCommentResponse>> {
+        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
+        service.get(self.request, None).await
+    }
+
+    /// 执行请求（带选项）
+    pub async fn execute_with_options(
+        mut self,
+        service: &crate::service::cloud_docs::comments::CommentsService,
+        option: RequestOption,
+    ) -> SDKResult<BaseResponse<GetCommentResponse>> {
+        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
+        service.get(self.request, Some(option)).await
+    }
 }
 
 /// 获取全文评论响应
