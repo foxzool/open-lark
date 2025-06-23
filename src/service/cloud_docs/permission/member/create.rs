@@ -217,7 +217,8 @@ impl CreatePermissionMemberRequestBuilder {
     pub async fn execute(
         self,
         service: &crate::service::cloud_docs::permission::PermissionService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreatePermissionMemberResponse>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreatePermissionMemberResponse>>
+    {
         service.create_member(&self.build(), None).await
     }
 
@@ -228,7 +229,8 @@ impl CreatePermissionMemberRequestBuilder {
         self,
         service: &crate::service::cloud_docs::permission::PermissionService,
         option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreatePermissionMemberResponse>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreatePermissionMemberResponse>>
+    {
         service.create_member(&self.build(), Some(option)).await
     }
 }

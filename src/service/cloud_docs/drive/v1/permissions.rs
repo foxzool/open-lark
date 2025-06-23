@@ -122,6 +122,27 @@ impl GetPermissionRequestBuilder {
     pub fn build(self) -> GetPermissionRequest {
         self.request
     }
+
+    /// 直接执行获取权限设置请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.get()`
+    pub async fn execute(
+        self,
+        service: &PermissionsService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<GetPermissionResponse>> {
+        service.get(self.build(), None).await
+    }
+
+    /// 直接执行获取权限设置请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.get()`
+    pub async fn execute_with_options(
+        self,
+        service: &PermissionsService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<GetPermissionResponse>> {
+        service.get(self.build(), Some(option)).await
+    }
 }
 
 /// 返回的文档公共设置
@@ -427,5 +448,26 @@ impl PatchPermissionRequestBuilder {
     pub fn build(mut self) -> PatchPermissionRequest {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
+    }
+
+    /// 直接执行更新权限设置请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.patch()`
+    pub async fn execute(
+        self,
+        service: &PermissionsService,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<GetPermissionResponse>> {
+        service.patch(self.build(), None).await
+    }
+
+    /// 直接执行更新权限设置请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.patch()`
+    pub async fn execute_with_options(
+        self,
+        service: &PermissionsService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<GetPermissionResponse>> {
+        service.patch(self.build(), Some(option)).await
     }
 }

@@ -93,7 +93,8 @@ impl ListWhiteboardNodesRequestBuilder {
     pub async fn execute(
         self,
         service: &crate::service::cloud_docs::board::BoardService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListWhiteboardNodesResponse>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListWhiteboardNodesResponse>>
+    {
         service.list_nodes(&self.build(), None).await
     }
 
@@ -104,7 +105,8 @@ impl ListWhiteboardNodesRequestBuilder {
         self,
         service: &crate::service::cloud_docs::board::BoardService,
         option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListWhiteboardNodesResponse>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListWhiteboardNodesResponse>>
+    {
         service.list_nodes(&self.build(), Some(option)).await
     }
 }

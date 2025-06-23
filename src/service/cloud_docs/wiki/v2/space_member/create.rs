@@ -107,7 +107,8 @@ impl CreateSpaceMemberRequestBuilder {
     pub async fn execute(
         self,
         service: &crate::service::cloud_docs::wiki::v2::space_member::SpaceMemberService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateSpaceMemberResponse>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateSpaceMemberResponse>>
+    {
         service.create(self.build(), None).await
     }
 
@@ -118,7 +119,8 @@ impl CreateSpaceMemberRequestBuilder {
         self,
         service: &crate::service::cloud_docs::wiki::v2::space_member::SpaceMemberService,
         option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateSpaceMemberResponse>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateSpaceMemberResponse>>
+    {
         service.create(self.build(), Some(option)).await
     }
 }

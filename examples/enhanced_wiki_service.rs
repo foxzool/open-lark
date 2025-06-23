@@ -11,7 +11,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app_secret = env::var("APP_SECRET").expect("APP_SECRET environment variable not set");
 
     // 创建客户端
-    let client = LarkClient::builder(app_id, app_secret)
+    let client = LarkClient::builder(&app_id, &app_secret)
         .with_app_type(AppType::SelfBuild)
         .with_enable_token_cache(true)
         .build();
@@ -26,7 +26,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-async fn demo_wiki_operations(client: &LarkClient) -> Result<(), Box<dyn std::error::Error>> {
+async fn demo_wiki_operations(_client: &LarkClient) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n📚 Wiki服务 - 增强Builder模式演示");
     println!("{}", "-".repeat(50));
 
@@ -132,13 +132,16 @@ async fn demo_wiki_operations(client: &LarkClient) -> Result<(), Box<dyn std::er
     println!("🚀 更好的开发体验：接近现代SDK的使用模式");
 
     println!("\n📈 当前增强进度：");
-    println!("• ✅ Drive服务 (3个builders)");
-    println!("• ✅ IM服务 (3个builders)");
-    println!("• ✅ Bitable服务 (2个builders)");
-    println!("• ✅ Search服务 (1个builder)");
-    println!("• ✅ Sheets服务 (2个builders)");
+    println!("• ✅ Comments服务 (9个builders)");
+    println!("• ✅ Permission服务 (5个builders)");
+    println!("• ✅ Drive服务 (5个builders)");
+    println!("• ✅ Bitable服务 (6个builders)");
+    println!("• ✅ Sheets服务 (4个builders)");
     println!("• ✅ Wiki服务 (5个builders)");
-    println!("📊 总计：16个builders已增强");
+    println!("• ✅ Assistant服务 (3个builders)");
+    println!("• ✅ Board服务 (1个builder)");
+    println!("• ✅ Attendance服务 (1个builder)");
+    println!("📊 总计：39个builders已增强");
 
     Ok(())
 }

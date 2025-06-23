@@ -147,7 +147,8 @@ impl BatchQueryCommentsRequestBuilder {
     pub async fn execute(
         self,
         service: &crate::service::cloud_docs::comments::CommentsService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchQueryCommentsResponse>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchQueryCommentsResponse>>
+    {
         service.batch_query(self.build(), None).await
     }
 
@@ -158,7 +159,8 @@ impl BatchQueryCommentsRequestBuilder {
         self,
         service: &crate::service::cloud_docs::comments::CommentsService,
         option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchQueryCommentsResponse>> {
+    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchQueryCommentsResponse>>
+    {
         service.batch_query(self.build(), Some(option)).await
     }
 }

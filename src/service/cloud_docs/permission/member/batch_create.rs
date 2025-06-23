@@ -188,7 +188,9 @@ impl BatchCreatePermissionMemberRequestBuilder {
     pub async fn execute(
         self,
         service: &crate::service::cloud_docs::permission::PermissionService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchCreatePermissionMemberResponse>> {
+    ) -> crate::core::SDKResult<
+        crate::core::api_resp::BaseResponse<BatchCreatePermissionMemberResponse>,
+    > {
         service.batch_create_member(&self.build(), None).await
     }
 
@@ -199,8 +201,12 @@ impl BatchCreatePermissionMemberRequestBuilder {
         self,
         service: &crate::service::cloud_docs::permission::PermissionService,
         option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchCreatePermissionMemberResponse>> {
-        service.batch_create_member(&self.build(), Some(option)).await
+    ) -> crate::core::SDKResult<
+        crate::core::api_resp::BaseResponse<BatchCreatePermissionMemberResponse>,
+    > {
+        service
+            .batch_create_member(&self.build(), Some(option))
+            .await
     }
 }
 
