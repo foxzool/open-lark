@@ -45,15 +45,15 @@ pub struct ApiRequest {
     /// 由服务层根据具体API的要求设置。
     /// 使用 `pub(crate)` 限制只能在crate内部修改，保证一致性。
     pub(crate) http_method: Method,
-    
+
     /// API的相对路径
     ///
     /// 例如：`/open-apis/drive/v1/files/{file_id}`
-    /// 
+    ///
     /// 路径中的动态参数（如 `{file_id}`）通常通过 `format!` 宏直接嵌入，
     /// 而不是使用 `path_params` 字段。
     pub api_path: String,
-    
+
     /// 请求体数据（序列化后的字节数组）
     ///
     /// # 在不同请求类型中的用途：
@@ -66,7 +66,7 @@ pub struct ApiRequest {
     ///
     /// 服务层通常使用 `serde_json::to_vec()` 将请求结构体序列化到这个字段。
     pub body: Vec<u8>,
-    
+
     /// URL查询参数
     ///
     /// 存储将被附加到URL末尾的查询参数。
@@ -79,17 +79,17 @@ pub struct ApiRequest {
     /// api_req.query_params.insert("page_token".to_string(), token);
     /// ```
     pub query_params: HashMap<String, String>,
-    
+
     /// URL路径参数（当前未使用）
     ///
     /// 原设计意图可能是用于路径模板替换，如将 `/files/{id}` 中的 `{id}` 替换。
     /// 但当前实现中，路径参数都是通过 `format!` 宏直接嵌入到 `api_path` 中。
     ///
     /// # TODO
-    /// 
+    ///
     /// 考虑移除此字段或实现路径模板功能以保持设计一致性。
     pub path_params: HashMap<String, Vec<String>>,
-    
+
     /// 支持的访问令牌类型
     ///
     /// 指定此API端点接受哪些类型的访问令牌：
@@ -100,7 +100,7 @@ pub struct ApiRequest {
     /// Transport层会根据这个列表和当前配置选择合适的令牌类型。
     /// 使用 `pub(crate)` 确保只能由服务层设置。
     pub(crate) supported_access_token_types: Vec<AccessTokenType>,
-    
+
     /// 文件内容（用于multipart/form-data请求）
     ///
     /// # 在不同请求类型中的用途：

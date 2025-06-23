@@ -87,7 +87,7 @@ impl ListFilesRequestBuilder {
 - **示例文件**：创建了2个演示示例展示新功能
 
 ### ✅ Phase 2: 扩展验证 (已完成)
-- **已扩展到核心服务**：基于反馈积极，扩展到5大核心服务
+- **已扩展到核心服务**：基于反馈积极，扩展到6大核心服务
   - ✅ **IM服务** (3个Builder):
     - `CreateMessageRequestBuilder` - 发送消息
     - `ListMessageRequestBuilder` - 查询消息历史
@@ -104,13 +104,19 @@ impl ListFilesRequestBuilder {
   - ✅ **Sheets服务** (2个Builder):
     - `ReadingSingleRangeRequestBuilder` - 数据读取
     - `FindCellsRequestBuilder` - 单元格查找
-- **覆盖范围**：11个核心Builder覆盖5大主要服务
-- **演示文件**：创建了综合性多服务演示示例和高级特性演示
+  - ✅ **Wiki服务** (5个Builder):
+    - `SearchWikiRequestBuilder` - Wiki搜索
+    - `CreateSpaceNodeRequestBuilder` - 创建空间节点
+    - `ListSpaceNodeRequestBuilder` - 列出空间节点
+    - `CreateSpaceMemberRequestBuilder` - 添加空间成员
+    - `GetTaskRequestBuilder` - 获取任务状态
+- **覆盖范围**：16个核心Builder覆盖6大主要服务
+- **演示文件**：创建了综合性多服务演示示例、高级特性演示和Wiki服务专门演示
 
-### Phase 3: 推广评估 (准备中)
-- 当前状态：已覆盖最常用的11个Builder
-- 等待用户反馈决定是否扩展到全部191个API
-- 后续可根据需求渐进式扩展到其他服务
+### ✅ Phase 3: Wiki服务完成 (已完成)
+- **当前状态**：已覆盖最常用的16个Builder，新增Wiki服务全套Builder
+- **Wiki服务增强**：完成知识空间管理、搜索、成员管理、任务查询等核心功能
+- **下一步**：待用户反馈决定是否扩展到Comments、Attendance等其他服务
 
 ## 实施结果
 
@@ -214,12 +220,55 @@ impl ListFilesRequestBuilder {
     ) -> SDKResult<BaseResponse<FindCellsResponse>>
     ```
 
+#### Wiki服务 (5个)
+
+12. **SearchWikiRequestBuilder** (`src/service/cloud_docs/wiki/v2/search_wiki.rs`)
+    ```rust
+    pub async fn execute(
+        self,
+        service: &V2,
+    ) -> SDKResult<SearchWikiResponse>
+    ```
+
+13. **CreateSpaceNodeRequestBuilder** (`src/service/cloud_docs/wiki/v2/space_node/create.rs`)
+    ```rust
+    pub async fn execute(
+        self,
+        service: &SpaceNodeService,
+    ) -> SDKResult<CreateSpaceNodeResponse>
+    ```
+
+14. **ListSpaceNodeRequestBuilder** (`src/service/cloud_docs/wiki/v2/space_node/list.rs`)
+    ```rust
+    pub async fn execute(
+        self,
+        service: &SpaceNodeService,
+    ) -> SDKResult<ListSpaceNodeResponse>
+    ```
+
+15. **CreateSpaceMemberRequestBuilder** (`src/service/cloud_docs/wiki/v2/space_member/create.rs`)
+    ```rust
+    pub async fn execute(
+        self,
+        service: &SpaceMemberService,
+    ) -> SDKResult<BaseResponse<CreateSpaceMemberResponse>>
+    ```
+
+16. **GetTaskRequestBuilder** (`src/service/cloud_docs/wiki/v2/task/get.rs`)
+    ```rust
+    pub async fn execute(
+        self,
+        service: &TaskService,
+    ) -> SDKResult<GetTaskResponse>
+    ```
+
 ### 演示示例
 
 1. **enhanced_builder_demo.rs** - 基础演示和概念说明
 2. **enhanced_drive_operations.rs** - 实际云空间操作演示
 3. **multi_service_enhanced_builder.rs** - 多服务综合演示，展示8个增强Builder的用法
 4. **advanced_enhanced_builder.rs** - 高级特性演示，展示11个增强Builder和复杂业务场景
+5. **enhanced_wiki_service.rs** - Wiki服务专门演示，展示5个Wiki增强Builder的知识空间管理功能
 
 ## 方案对比
 

@@ -55,8 +55,10 @@ tokio-tungstenite = { version = "0.23", features = [
 
 [dev-dependencies]
 dotenvy = "0.15.7"
+dotenv = "0.15.0"
 env_logger = "0.11.3"
 uuid = { version = "1.8.0", features = ["v4"] }
+chrono = { version = "0.4.38", features = ["serde"] }
 
 # ===========================================
 # Examples
@@ -78,3 +80,11 @@ required-features = ["websocket"]
 [[example]]
 name = "cloud_docs_test"
 path = "examples/cloud_docs_test.rs"
+
+[[example]]
+name = "enhanced_builder_demo"
+path = "examples/enhanced_builder_demo.rs"
+
+[[example]]
+name = "enhanced_drive_operations"
+path = "examples/api/enhanced_drive_operations.rs"

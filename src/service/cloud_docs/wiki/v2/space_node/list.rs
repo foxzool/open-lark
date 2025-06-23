@@ -83,6 +83,27 @@ impl ListSpaceNodeRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 直接执行获取知识空间子节点列表请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list()`
+    pub async fn execute(
+        self,
+        service: &crate::service::cloud_docs::wiki::v2::space_node::SpaceNodeService,
+    ) -> crate::core::SDKResult<ListSpaceNodeResponse> {
+        service.list(self.build(), None).await
+    }
+
+    /// 直接执行获取知识空间子节点列表请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list()`
+    pub async fn execute_with_options(
+        self,
+        service: &crate::service::cloud_docs::wiki::v2::space_node::SpaceNodeService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<ListSpaceNodeResponse> {
+        service.list(self.build(), Some(option)).await
+    }
 }
 
 /// 知识空间节点信息

@@ -122,6 +122,27 @@ impl CreateSpaceNodeRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
+
+    /// 直接执行创建知识空间节点请求
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.create()`
+    pub async fn execute(
+        self,
+        service: &crate::service::cloud_docs::wiki::v2::space_node::SpaceNodeService,
+    ) -> crate::core::SDKResult<CreateSpaceNodeResponse> {
+        service.create(self.build(), None).await
+    }
+
+    /// 直接执行创建知识空间节点请求（带选项）
+    ///
+    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.create()`
+    pub async fn execute_with_options(
+        self,
+        service: &crate::service::cloud_docs::wiki::v2::space_node::SpaceNodeService,
+        option: crate::core::req_option::RequestOption,
+    ) -> crate::core::SDKResult<CreateSpaceNodeResponse> {
+        service.create(self.build(), Some(option)).await
+    }
 }
 
 /// 创建的节点信息
