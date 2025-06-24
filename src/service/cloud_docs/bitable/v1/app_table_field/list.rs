@@ -11,11 +11,12 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder,
     service::bitable::v1::app_table_field::AppTableField,
 };
 
 /// 列出字段请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Serialize, Default, Clone)]
 pub struct ListFieldRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -123,23 +124,16 @@ impl ListFieldRequestBuilder {
         self.request
     }
 
-    /// 发起列出字段请求
-    pub async fn execute(
-        self,
-        service: &crate::service::cloud_docs::bitable::v1::app_table_field::AppTableFieldService,
-    ) -> SDKResult<BaseResponse<ListFieldResponse>> {
-        service.list(self.build(), None).await
-    }
-
-    /// 发起列出字段请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::cloud_docs::bitable::v1::app_table_field::AppTableFieldService,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<ListFieldResponse>> {
-        service.list(self.build(), Some(option)).await
-    }
 }
+
+// 应用ExecutableBuilder trait到ListFieldRequestBuilder
+impl_executable_builder!(
+    ListFieldRequestBuilder,
+    super::AppTableFieldService,
+    ListFieldRequest,
+    BaseResponse<ListFieldResponse>,
+    list
+);
 
 /// 列出字段响应
 #[derive(Debug, Deserialize)]
