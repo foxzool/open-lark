@@ -1,18 +1,21 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 /// 批量删除记录请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Serialize, Default, Clone)]
 pub struct BatchDeleteRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -75,29 +78,16 @@ impl BatchDeleteRecordRequestBuilder {
         self.request
     }
 
-    /// 直接执行批量删除记录请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `batch_delete_record()`
-    pub async fn execute(
-        self,
-        config: &crate::core::config::Config,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchDeleteRecordResponse>>
-    {
-        batch_delete_record(self.build(), config, None).await
-    }
-
-    /// 直接执行批量删除记录请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `batch_delete_record()`
-    pub async fn execute_with_options(
-        self,
-        config: &crate::core::config::Config,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchDeleteRecordResponse>>
-    {
-        batch_delete_record(self.build(), config, Some(option)).await
-    }
 }
+
+// 应用ExecutableBuilder trait到BatchDeleteRecordRequestBuilder
+impl_executable_builder!(
+    BatchDeleteRecordRequestBuilder,
+    super::AppTableRecordService,
+    BatchDeleteRecordRequest,
+    BaseResponse<BatchDeleteRecordResponse>,
+    batch_delete
+);
 
 /// 批量删除记录响应
 #[derive(Debug, Deserialize)]

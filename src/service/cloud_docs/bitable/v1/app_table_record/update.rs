@@ -12,11 +12,12 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder,
     service::bitable::v1::Record,
 };
 
 /// 更新记录请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Serialize, Default, Clone)]
 pub struct UpdateRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -111,27 +112,16 @@ impl UpdateRecordRequestBuilder {
         self.request
     }
 
-    /// 直接执行更新记录请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.update()`
-    pub async fn execute(
-        self,
-        service: &super::AppTableRecordService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<UpdateRecordResponse>> {
-        service.update(self.build(), None).await
-    }
-
-    /// 直接执行更新记录请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.update()`
-    pub async fn execute_with_options(
-        self,
-        service: &super::AppTableRecordService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<UpdateRecordResponse>> {
-        service.update(self.build(), Some(option)).await
-    }
 }
+
+// 应用ExecutableBuilder trait到UpdateRecordRequestBuilder
+impl_executable_builder!(
+    UpdateRecordRequestBuilder,
+    super::AppTableRecordService,
+    UpdateRecordRequest,
+    BaseResponse<UpdateRecordResponse>,
+    update
+);
 
 /// 更新记录响应
 #[derive(Debug, Deserialize)]

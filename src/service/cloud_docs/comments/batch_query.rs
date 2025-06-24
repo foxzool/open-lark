@@ -1,20 +1,23 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 use super::list::Comment;
 
 /// 批量获取评论请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Serialize, Default, Clone)]
 pub struct BatchQueryCommentsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -141,29 +144,16 @@ impl BatchQueryCommentsRequestBuilder {
         self.request
     }
 
-    /// 直接执行批量获取评论请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.batch_query()`
-    pub async fn execute(
-        self,
-        service: &crate::service::cloud_docs::comments::CommentsService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchQueryCommentsResponse>>
-    {
-        service.batch_query(self.build(), None).await
-    }
-
-    /// 直接执行批量获取评论请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.batch_query()`
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::cloud_docs::comments::CommentsService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchQueryCommentsResponse>>
-    {
-        service.batch_query(self.build(), Some(option)).await
-    }
 }
+
+// 应用ExecutableBuilder trait到BatchQueryCommentsRequestBuilder
+impl_executable_builder!(
+    BatchQueryCommentsRequestBuilder,
+    super::CommentsService,
+    BatchQueryCommentsRequest,
+    BaseResponse<BatchQueryCommentsResponse>,
+    batch_query
+);
 
 /// 批量获取评论响应
 #[derive(Debug, Deserialize)]

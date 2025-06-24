@@ -12,11 +12,12 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder,
     service::bitable::v1::Record,
 };
 
 /// 新增记录请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Serialize, Default, Clone)]
 pub struct CreateRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -113,27 +114,16 @@ impl CreateRecordRequestBuilder {
         self.request
     }
 
-    /// 直接执行新增记录请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.create()`
-    pub async fn execute(
-        self,
-        service: &super::AppTableRecordService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateRecordResponse>> {
-        service.create(self.build(), None).await
-    }
-
-    /// 直接执行新增记录请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.create()`
-    pub async fn execute_with_options(
-        self,
-        service: &super::AppTableRecordService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateRecordResponse>> {
-        service.create(self.build(), Some(option)).await
-    }
 }
+
+// 应用ExecutableBuilder trait到CreateRecordRequestBuilder
+impl_executable_builder!(
+    CreateRecordRequestBuilder,
+    super::AppTableRecordService,
+    CreateRecordRequest,
+    BaseResponse<CreateRecordResponse>,
+    create
+);
 
 /// 新增记录响应
 #[derive(Debug, Deserialize)]

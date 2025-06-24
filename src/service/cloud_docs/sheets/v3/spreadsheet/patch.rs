@@ -10,6 +10,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder_owned,
     service::sheets::v3::SpreadsheetService,
 };
 
@@ -75,3 +76,12 @@ impl PatchSpreadSheetRequestBuilder {
         self.request
     }
 }
+
+// Trait implementation
+impl_executable_builder_owned!(
+    PatchSpreadSheetRequestBuilder,
+    SpreadsheetService,
+    PatchSpreadSheetRequest,
+    BaseResponse<RawResponse>,
+    patch
+);

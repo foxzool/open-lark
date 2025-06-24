@@ -10,6 +10,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder_owned,
     service::sheets::v3::DataOperationService,
 };
 
@@ -89,31 +90,16 @@ impl BatchSetCellStyleRequestBuilder {
         self.request
     }
 
-    /// 直接执行批量设置单元格样式请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.batch_set_cell_style()`
-    pub async fn execute(
-        self,
-        service: &crate::service::sheets::v3::DataOperationService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchSetCellStyleResponseData>>
-    {
-        service.batch_set_cell_style(self.build(), None).await
-    }
-
-    /// 直接执行批量设置单元格样式请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.batch_set_cell_style()`
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::sheets::v3::DataOperationService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchSetCellStyleResponseData>>
-    {
-        service
-            .batch_set_cell_style(self.build(), Some(option))
-            .await
-    }
 }
+
+// Trait implementation
+impl_executable_builder_owned!(
+    BatchSetCellStyleRequestBuilder,
+    DataOperationService,
+    BatchSetCellStyleRequest,
+    BaseResponse<BatchSetCellStyleResponseData>,
+    batch_set_cell_style
+);
 
 /// 范围样式数据
 #[derive(Debug, Serialize, Deserialize)]

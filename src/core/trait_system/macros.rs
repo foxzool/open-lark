@@ -56,3 +56,38 @@ macro_rules! impl_executable_builder {
         }
     };
 }
+
+/// 为使用值类型参数的Builder实现ExecutableBuilder trait
+/// 
+/// 与主宏的差异：服务方法接受值类型而不是引用类型的Request
+#[macro_export]
+macro_rules! impl_executable_builder_owned {
+    (
+        $builder:ty,
+        $service:ty,
+        $request:ty,
+        $response:ty,
+        $method:ident
+    ) => {
+        #[async_trait::async_trait]
+        impl $crate::core::trait_system::ExecutableBuilder<$service, $request, $response>
+            for $builder
+        {
+            fn build(self) -> $request {
+                self.build()
+            }
+
+            async fn execute(self, service: &$service) -> $crate::core::SDKResult<$response> {
+                service.$method(self.build(), None).await
+            }
+
+            async fn execute_with_options(
+                self,
+                service: &$service,
+                option: $crate::core::req_option::RequestOption,
+            ) -> $crate::core::SDKResult<$response> {
+                service.$method(self.build(), Some(option)).await
+            }
+        }
+    };
+}

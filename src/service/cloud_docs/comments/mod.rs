@@ -40,72 +40,72 @@ impl CommentsService {
     /// 获取云文档所有评论
     pub async fn list(
         &self,
-        request: ListCommentsRequest,
+        request: &ListCommentsRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<ListCommentsResponse>> {
-        list_comments(request, &self.config, option).await
+        list_comments(request.clone(), &self.config, option).await
     }
 
     /// 批量获取评论
     pub async fn batch_query(
         &self,
-        request: BatchQueryCommentsRequest,
+        request: &BatchQueryCommentsRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<BatchQueryCommentsResponse>> {
-        batch_query_comments(request, &self.config, option).await
+        batch_query_comments(request.clone(), &self.config, option).await
     }
 
     /// 解决/恢复评论
     pub async fn patch(
         &self,
-        request: PatchCommentRequest,
+        request: &PatchCommentRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<PatchCommentResponse>> {
-        patch_comment(request, &self.config, option).await
+        patch_comment(request.clone(), &self.config, option).await
     }
 
     /// 添加全文评论
     pub async fn create(
         &self,
-        request: CreateCommentRequest,
+        request: &CreateCommentRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<CreateCommentResponse>> {
-        create_comment(request, &self.config, option).await
+        create_comment(request.clone(), &self.config, option).await
     }
 
     /// 获取全文评论
     pub async fn get(
         &self,
-        request: GetCommentRequest,
+        request: &GetCommentRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<GetCommentResponse>> {
-        get_comment(request, &self.config, option).await
+        get_comment(request.clone(), &self.config, option).await
     }
 
     /// 获取回复信息
     pub async fn list_replies(
         &self,
-        request: ListRepliesRequest,
+        request: &ListRepliesRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<ListRepliesResponse>> {
-        list_replies(request, &self.config, option).await
+        list_replies(request.clone(), &self.config, option).await
     }
 
     /// 更新回复的内容
     pub async fn update_reply(
         &self,
-        request: UpdateReplyRequest,
+        request: &UpdateReplyRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<UpdateReplyResponse>> {
-        update_reply(request, &self.config, option).await
+        update_reply(request.clone(), &self.config, option).await
     }
 
     /// 删除回复
     pub async fn delete_reply(
         &self,
-        request: DeleteReplyRequest,
+        request: &DeleteReplyRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<DeleteReplyResponse>> {
-        delete_reply(request, &self.config, option).await
+        delete_reply(request.clone(), &self.config, option).await
     }
 }

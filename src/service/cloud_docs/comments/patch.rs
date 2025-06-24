@@ -1,18 +1,21 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 /// 解决/恢复评论请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Serialize, Default, Clone)]
 pub struct PatchCommentRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -166,25 +169,16 @@ impl PatchCommentRequestBuilder {
         self.request
     }
 
-    /// 执行请求
-    pub async fn execute(
-        mut self,
-        service: &crate::service::cloud_docs::comments::CommentsService,
-    ) -> SDKResult<BaseResponse<PatchCommentResponse>> {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        service.patch(self.request, None).await
-    }
-
-    /// 执行请求（带选项）
-    pub async fn execute_with_options(
-        mut self,
-        service: &crate::service::cloud_docs::comments::CommentsService,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<PatchCommentResponse>> {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        service.patch(self.request, Some(option)).await
-    }
 }
+
+// 应用ExecutableBuilder trait到PatchCommentRequestBuilder
+impl_executable_builder!(
+    PatchCommentRequestBuilder,
+    super::CommentsService,
+    PatchCommentRequest,
+    BaseResponse<PatchCommentResponse>,
+    patch
+);
 
 /// 解决/恢复评论响应
 #[derive(Debug, Deserialize)]

@@ -1,20 +1,23 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 use super::list::Comment;
 
 /// 获取全文评论请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Serialize, Default, Clone)]
 pub struct GetCommentRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -128,25 +131,16 @@ impl GetCommentRequestBuilder {
         self.request
     }
 
-    /// 执行请求
-    pub async fn execute(
-        mut self,
-        service: &crate::service::cloud_docs::comments::CommentsService,
-    ) -> SDKResult<BaseResponse<GetCommentResponse>> {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        service.get(self.request, None).await
-    }
-
-    /// 执行请求（带选项）
-    pub async fn execute_with_options(
-        mut self,
-        service: &crate::service::cloud_docs::comments::CommentsService,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<GetCommentResponse>> {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        service.get(self.request, Some(option)).await
-    }
 }
+
+// 应用ExecutableBuilder trait到GetCommentRequestBuilder
+impl_executable_builder!(
+    GetCommentRequestBuilder,
+    super::CommentsService,
+    GetCommentRequest,
+    BaseResponse<GetCommentResponse>,
+    get
+);
 
 /// 获取全文评论响应
 #[derive(Debug, Deserialize)]

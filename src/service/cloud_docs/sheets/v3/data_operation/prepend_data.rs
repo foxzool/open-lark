@@ -10,6 +10,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder_owned,
     service::sheets::v3::DataOperationService,
 };
 
@@ -93,27 +94,16 @@ impl PrependDataRequestBuilder {
         self.request
     }
 
-    /// 直接执行插入数据请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.prepend_data()`
-    pub async fn execute(
-        self,
-        service: &crate::service::sheets::v3::DataOperationService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<PrependDataResponseData>> {
-        service.prepend_data(self.build(), None).await
-    }
-
-    /// 直接执行插入数据请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.prepend_data()`
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::sheets::v3::DataOperationService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<PrependDataResponseData>> {
-        service.prepend_data(self.build(), Some(option)).await
-    }
 }
+
+// Trait implementation
+impl_executable_builder_owned!(
+    PrependDataRequestBuilder,
+    DataOperationService,
+    PrependDataRequest,
+    BaseResponse<PrependDataResponseData>,
+    prepend_data
+);
 
 /// 插入数据响应体最外层
 #[derive(Deserialize, Debug)]

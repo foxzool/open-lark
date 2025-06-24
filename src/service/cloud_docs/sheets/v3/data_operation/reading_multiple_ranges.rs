@@ -10,6 +10,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder_owned,
     service::sheets::v3::DataOperationService,
 };
 
@@ -97,27 +98,16 @@ impl ReadingMultipleRangesRequestBuilder {
         self.request
     }
 
-    /// 执行请求
-    pub async fn execute(
-        mut self,
-        service: &DataOperationService,
-    ) -> SDKResult<BaseResponse<ReadingMultipleRangesResponseData>> {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        service.reading_multiple_ranges(self.request, None).await
-    }
-
-    /// 执行请求（带选项）
-    pub async fn execute_with_options(
-        mut self,
-        service: &DataOperationService,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<ReadingMultipleRangesResponseData>> {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        service
-            .reading_multiple_ranges(self.request, Some(option))
-            .await
-    }
 }
+
+// Trait implementation
+impl_executable_builder_owned!(
+    ReadingMultipleRangesRequestBuilder,
+    DataOperationService,
+    ReadingMultipleRangesRequest,
+    BaseResponse<ReadingMultipleRangesResponseData>,
+    reading_multiple_ranges
+);
 
 /// 读取多个范围响应体最外层
 #[derive(Deserialize, Debug)]

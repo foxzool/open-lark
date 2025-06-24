@@ -25,35 +25,35 @@ impl GroupService {
     /// <https://open.feishu.cn/document/attendance-v1/group/list_user>
     pub async fn list_user(
         &self,
-        request: ListGroupUserRequest,
+        request: &ListGroupUserRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListGroupUserRespData>> {
-        let mut api_req = request.api_req;
+        let mut api_req = request.api_req.clone();
         api_req.http_method = Method::GET;
-        api_req.api_path = format!("/open-apis/attendance/v1/groups/{}/users", request.group_id);
+        api_req.api_path = format!("/open-apis/attendance/v1/groups/{}/users", request.group_id.clone());
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type".to_string(), request.employee_type.clone());
 
-        if let Some(dept_type) = request.dept_type {
+        if let Some(dept_type) = &request.dept_type {
             api_req
                 .query_params
-                .insert("dept_type".to_string(), dept_type);
+                .insert("dept_type".to_string(), dept_type.clone());
         }
 
-        if let Some(page_size) = request.page_size {
+        if let Some(page_size) = &request.page_size {
             api_req
                 .query_params
                 .insert("page_size".to_string(), page_size.to_string());
         }
 
-        if let Some(page_token) = request.page_token {
+        if let Some(page_token) = &request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert("page_token".to_string(), page_token.clone());
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -67,10 +67,10 @@ impl GroupService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/group/create>
     pub async fn create(
         &self,
-        request: CreateGroupRequest,
+        request: &CreateGroupRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateGroupRespData>> {
-        let mut api_req = request.api_req;
+        let mut api_req = request.api_req.clone();
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/attendance/v1/groups".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
@@ -78,48 +78,48 @@ impl GroupService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type".to_string(), request.employee_type.clone());
 
-        if let Some(dept_type) = request.dept_type {
+        if let Some(dept_type) = &request.dept_type {
             api_req
                 .query_params
-                .insert("dept_type".to_string(), dept_type);
+                .insert("dept_type".to_string(), dept_type.clone());
         }
 
         // 构建请求体
         let mut body = json!({
-            "group_name": request.group_name
+            "group_name": request.group_name.clone()
         });
 
-        if let Some(time_zone) = request.time_zone {
-            body["time_zone"] = json!(time_zone);
+        if let Some(time_zone) = &request.time_zone {
+            body["time_zone"] = json!(time_zone.clone());
         }
-        if let Some(bind_dept_ids) = request.bind_dept_ids {
-            body["bind_dept_ids"] = json!(bind_dept_ids);
+        if let Some(bind_dept_ids) = &request.bind_dept_ids {
+            body["bind_dept_ids"] = json!(bind_dept_ids.clone());
         }
-        if let Some(except_date_rule) = request.except_date_rule {
-            body["except_date_rule"] = json!(except_date_rule);
+        if let Some(except_date_rule) = &request.except_date_rule {
+            body["except_date_rule"] = json!(except_date_rule.clone());
         }
-        if let Some(attendance_type) = request.attendance_type {
-            body["attendance_type"] = json!(attendance_type);
+        if let Some(attendance_type) = &request.attendance_type {
+            body["attendance_type"] = json!(attendance_type.clone());
         }
-        if let Some(punch_type) = request.punch_type {
-            body["punch_type"] = json!(punch_type);
+        if let Some(punch_type) = &request.punch_type {
+            body["punch_type"] = json!(punch_type.clone());
         }
-        if let Some(allow_late_minutes) = request.allow_late_minutes {
-            body["allow_late_minutes"] = json!(allow_late_minutes);
+        if let Some(allow_late_minutes) = &request.allow_late_minutes {
+            body["allow_late_minutes"] = json!(allow_late_minutes.clone());
         }
-        if let Some(allow_early_leave_minutes) = request.allow_early_leave_minutes {
-            body["allow_early_leave_minutes"] = json!(allow_early_leave_minutes);
+        if let Some(allow_early_leave_minutes) = &request.allow_early_leave_minutes {
+            body["allow_early_leave_minutes"] = json!(allow_early_leave_minutes.clone());
         }
-        if let Some(work_day_rule) = request.work_day_rule {
-            body["work_day_rule"] = json!(work_day_rule);
+        if let Some(work_day_rule) = &request.work_day_rule {
+            body["work_day_rule"] = json!(work_day_rule.clone());
         }
-        if let Some(shift_rule) = request.shift_rule {
-            body["shift_rule"] = json!(shift_rule);
+        if let Some(shift_rule) = &request.shift_rule {
+            body["shift_rule"] = json!(shift_rule.clone());
         }
-        if let Some(member_rule) = request.member_rule {
-            body["member_rule"] = json!(member_rule);
+        if let Some(member_rule) = &request.member_rule {
+            body["member_rule"] = json!(member_rule.clone());
         }
 
         api_req.body = serde_json::to_vec(&body)?;
@@ -135,12 +135,12 @@ impl GroupService {
     /// <https://open.feishu.cn/open-apis/attendance/v1/groups/:group_id>
     pub async fn delete(
         &self,
-        request: DeleteGroupRequest,
+        request: &DeleteGroupRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
-        let mut api_req = request.api_req;
+        let mut api_req = request.api_req.clone();
         api_req.http_method = Method::DELETE;
-        api_req.api_path = format!("/open-apis/attendance/v1/groups/{}", request.group_id);
+        api_req.api_path = format!("/open-apis/attendance/v1/groups/{}", request.group_id.clone());
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -154,23 +154,23 @@ impl GroupService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/group/get>
     pub async fn get(
         &self,
-        request: GetGroupRequest,
+        request: &GetGroupRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<Group>> {
-        let mut api_req = request.api_req;
+        let mut api_req = request.api_req.clone();
         api_req.http_method = Method::GET;
-        api_req.api_path = format!("/open-apis/attendance/v1/groups/{}", request.group_id);
+        api_req.api_path = format!("/open-apis/attendance/v1/groups/{}", request.group_id.clone());
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type".to_string(), request.employee_type.clone());
 
-        if let Some(dept_type) = request.dept_type {
+        if let Some(dept_type) = &request.dept_type {
             api_req
                 .query_params
-                .insert("dept_type".to_string(), dept_type);
+                .insert("dept_type".to_string(), dept_type.clone());
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -184,10 +184,10 @@ impl GroupService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/group/search>
     pub async fn search(
         &self,
-        request: SearchGroupRequest,
+        request: &SearchGroupRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SearchGroupRespData>> {
-        let mut api_req = request.api_req;
+        let mut api_req = request.api_req.clone();
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/attendance/v1/groups/search".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
@@ -195,17 +195,17 @@ impl GroupService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type".to_string(), request.employee_type.clone());
 
-        if let Some(dept_type) = request.dept_type {
+        if let Some(dept_type) = &request.dept_type {
             api_req
                 .query_params
-                .insert("dept_type".to_string(), dept_type);
+                .insert("dept_type".to_string(), dept_type.clone());
         }
 
         // 构建请求体
         let body = json!({
-            "group_name": request.group_name
+            "group_name": request.group_name.clone()
         });
 
         api_req.body = serde_json::to_vec(&body)?;
@@ -221,10 +221,10 @@ impl GroupService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/group/list>
     pub async fn list(
         &self,
-        request: ListGroupRequest,
+        request: &ListGroupRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListGroupRespData>> {
-        let mut api_req = request.api_req;
+        let mut api_req = request.api_req.clone();
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/attendance/v1/groups".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
@@ -232,24 +232,24 @@ impl GroupService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type".to_string(), request.employee_type.clone());
 
-        if let Some(dept_type) = request.dept_type {
+        if let Some(dept_type) = &request.dept_type {
             api_req
                 .query_params
-                .insert("dept_type".to_string(), dept_type);
+                .insert("dept_type".to_string(), dept_type.clone());
         }
 
-        if let Some(page_size) = request.page_size {
+        if let Some(page_size) = &request.page_size {
             api_req
                 .query_params
                 .insert("page_size".to_string(), page_size.to_string());
         }
 
-        if let Some(page_token) = request.page_token {
+        if let Some(page_token) = &request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert("page_token".to_string(), page_token.clone());
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
