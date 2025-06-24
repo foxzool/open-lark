@@ -19,10 +19,10 @@ impl AppWorkflowService {
     /// 列出自动化流程
     pub async fn list(
         &self,
-        request: ListWorkflowRequest,
+        request: &ListWorkflowRequest,
         option: Option<crate::core::req_option::RequestOption>,
     ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListWorkflowResponse>> {
-        list_workflows(request, &self.config, option).await
+        list_workflows(request.clone(), &self.config, option).await
     }
 
     /// 更新自动化流程状态

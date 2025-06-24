@@ -19,10 +19,10 @@ impl AppTableViewService {
     /// 列出视图
     pub async fn list(
         &self,
-        request: ListViewsRequest,
+        request: &ListViewsRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListViewsResponse>> {
-        let mut api_req = request.api_request;
+        let mut api_req = request.api_request.clone();
         api_req.http_method = Method::GET;
         api_req.api_path = format!(
             "/open-apis/bitable/v1/apps/{}/tables/{}/views",
@@ -31,10 +31,10 @@ impl AppTableViewService {
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         // 添加查询参数
-        if let Some(page_token) = request.page_token {
+        if let Some(ref page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert("page_token".to_string(), page_token.clone());
         }
         if let Some(page_size) = request.page_size {
             api_req
@@ -112,23 +112,16 @@ impl ListViewsRequestBuilder {
         self.request
     }
 
-    /// 发起列出视图请求
-    pub async fn execute(
-        self,
-        service: &AppTableViewService,
-    ) -> SDKResult<BaseResponse<ListViewsResponse>> {
-        service.list(self.build(), None).await
-    }
-
-    /// 发起列出视图请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        service: &AppTableViewService,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<ListViewsResponse>> {
-        service.list(self.build(), Some(option)).await
-    }
 }
+
+// 应用ExecutableBuilder trait到ListViewsRequestBuilder
+impl_executable_builder!(
+    ListViewsRequestBuilder,
+    super::AppTableViewService,
+    ListViewsRequest,
+    BaseResponse<ListViewsResponse>,
+    list
+);
 
 #[derive(Deserialize, Debug)]
 pub struct ListViewsResponse {
