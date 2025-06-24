@@ -1,13 +1,16 @@
 use reqwest::Method;
 use serde::Deserialize;
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 use super::AppTableService;
@@ -16,19 +19,19 @@ impl AppTableService {
     /// 列出数据表
     pub async fn list(
         &self,
-        request: ListTablesRequest,
+        request: &ListTablesRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListTablesResponse>> {
-        let mut api_req = request.api_request;
+        let mut api_req = request.api_request.clone();
         api_req.http_method = Method::GET;
         api_req.api_path = format!("/open-apis/bitable/v1/apps/{}/tables", request.app_token);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         // 添加查询参数
-        if let Some(page_token) = request.page_token {
+        if let Some(ref page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert("page_token".to_string(), page_token.clone());
         }
         if let Some(page_size) = request.page_size {
             api_req
@@ -97,27 +100,16 @@ impl ListTablesRequestBuilder {
         self.request
     }
 
-    /// 直接执行列出数据表请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list()`
-    pub async fn execute(
-        self,
-        service: &super::AppTableService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListTablesResponse>> {
-        service.list(self.build(), None).await
-    }
-
-    /// 直接执行列出数据表请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list()`
-    pub async fn execute_with_options(
-        self,
-        service: &super::AppTableService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListTablesResponse>> {
-        service.list(self.build(), Some(option)).await
-    }
 }
+
+// 应用ExecutableBuilder trait到ListTablesRequestBuilder
+impl_executable_builder!(
+    ListTablesRequestBuilder,
+    super::AppTableService,
+    ListTablesRequest,
+    BaseResponse<ListTablesResponse>,
+    list
+);
 
 #[derive(Deserialize, Debug)]
 pub struct ListTablesResponse {
