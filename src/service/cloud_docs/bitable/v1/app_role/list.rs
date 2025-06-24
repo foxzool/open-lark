@@ -11,11 +11,12 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder,
     service::bitable::v1::app_role::AppRole,
 };
 
 /// 列出自定义角色请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Serialize, Default, Clone)]
 pub struct ListAppRoleRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -83,23 +84,16 @@ impl ListAppRoleRequestBuilder {
         self.request
     }
 
-    /// 发起列出自定义角色请求
-    pub async fn execute(
-        self,
-        service: &crate::service::cloud_docs::bitable::v1::app_role::AppRoleService,
-    ) -> SDKResult<BaseResponse<ListAppRoleResponse>> {
-        service.list(self.build(), None).await
-    }
-
-    /// 发起列出自定义角色请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::cloud_docs::bitable::v1::app_role::AppRoleService,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<ListAppRoleResponse>> {
-        service.list(self.build(), Some(option)).await
-    }
 }
+
+// 应用ExecutableBuilder trait到ListAppRoleRequestBuilder
+impl_executable_builder!(
+    ListAppRoleRequestBuilder,
+    super::AppRoleService,
+    ListAppRoleRequest,
+    BaseResponse<ListAppRoleResponse>,
+    list
+);
 
 /// 列出自定义角色响应
 #[derive(Debug, Deserialize)]
