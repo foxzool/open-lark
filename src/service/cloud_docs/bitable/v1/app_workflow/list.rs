@@ -1,18 +1,21 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 /// 列出自动化流程请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Serialize, Default, Clone)]
 pub struct ListWorkflowRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -80,20 +83,16 @@ impl ListWorkflowRequestBuilder {
         self.request
     }
 
-    /// 执行列出自动化流程请求
-    pub async fn execute(self, config: &Config) -> SDKResult<BaseResponse<ListWorkflowResponse>> {
-        list_workflows(self.build(), config, None).await
-    }
-
-    /// 执行列出自动化流程请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        config: &Config,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<ListWorkflowResponse>> {
-        list_workflows(self.build(), config, Some(option)).await
-    }
 }
+
+// 应用ExecutableBuilder trait到ListWorkflowRequestBuilder
+impl_executable_builder!(
+    ListWorkflowRequestBuilder,
+    super::AppWorkflowService,
+    ListWorkflowRequest,
+    BaseResponse<ListWorkflowResponse>,
+    list
+);
 
 /// 自动化流程信息
 #[derive(Debug, Deserialize)]
