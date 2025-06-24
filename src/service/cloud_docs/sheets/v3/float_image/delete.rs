@@ -10,6 +10,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder_owned,
     service::sheets::v3::SpreadsheetSheetService,
 };
 
@@ -79,6 +80,14 @@ impl DeleteFloatImageRequestBuilder {
         self.request
     }
 }
+
+impl_executable_builder_owned!(
+    DeleteFloatImageRequestBuilder,
+    SpreadsheetSheetService,
+    DeleteFloatImageRequest,
+    BaseResponse<DeleteFloatImageResponseData>,
+    delete_float_image
+);
 
 /// 删除浮动图片响应体最外层
 #[derive(Deserialize, Debug)]

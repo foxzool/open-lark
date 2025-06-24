@@ -10,6 +10,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder_owned,
     service::sheets::v3::SpreadsheetSheetService,
 };
 
@@ -88,6 +89,14 @@ impl UpdateFloatImageRequestBuilder {
         self.request
     }
 }
+
+impl_executable_builder_owned!(
+    UpdateFloatImageRequestBuilder,
+    SpreadsheetSheetService,
+    UpdateFloatImageRequest,
+    BaseResponse<UpdateFloatImageResponseData>,
+    update_float_image
+);
 
 /// 更新浮动图片响应体最外层
 #[derive(Deserialize, Debug)]
