@@ -720,13 +720,19 @@ impl ApiResponseTrait for UserSetting {
 // ==================== 考勤统计相关数据结构 ====================
 
 /// 更新统计设置请求
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct UpdateUserStatsDataRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
     pub employee_type: String,
     /// 统计设置
     pub stats_setting: StatsSettings,
+}
+
+impl UpdateUserStatsDataRequest {
+    pub fn build(self) -> Self {
+        self
+    }
 }
 
 /// 统计设置
@@ -752,7 +758,7 @@ pub struct UpdateUserStatsDataRespData {
 }
 
 /// 查询统计设置请求
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct QueryStatsSettingsRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型  
@@ -767,7 +773,7 @@ pub struct QueryStatsSettingsRespData {
 }
 
 /// 查询统计表头请求
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct QueryStatsFieldsRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -801,7 +807,7 @@ pub struct QueryStatsFieldsRespData {
 }
 
 /// 查询统计数据请求
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct QueryUserStatsDataRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -993,7 +999,7 @@ impl ApiResponseTrait for ProcessUserApprovalRespData {
 // ==================== 考勤补卡相关数据结构 ====================
 
 /// 通知补卡审批发起请求
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct CreateUserTaskRemedyRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1029,7 +1035,7 @@ pub struct CreateUserTaskRemedyRespData {
 }
 
 /// 获取可补卡时间请求
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct QueryUserAllowedRemedysRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1082,7 +1088,7 @@ pub struct QueryUserAllowedRemedysRespData {
 }
 
 /// 获取补卡记录请求
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct QueryUserTaskRemedyRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1441,7 +1447,7 @@ impl ApiResponseTrait for QueryUserTaskResultRespData {
 // ==================== 归档报表相关数据结构 ====================
 
 /// 查询归档报表表头请求
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct QueryArchiveStatsFieldsRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1490,7 +1496,7 @@ pub struct QueryArchiveStatsFieldsRespData {
 }
 
 /// 写入归档报表结果请求
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct UploadArchiveReportRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1539,7 +1545,7 @@ pub struct ArchiveReportFailure {
 }
 
 /// 删除归档报表行数据请求
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct DelArchiveReportRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1573,7 +1579,7 @@ pub struct ArchiveReportDeleteFailure {
 }
 
 /// 查询所有归档规则请求
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct ListArchiveRulesRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1645,7 +1651,7 @@ impl ApiResponseTrait for ListArchiveRulesRespData {
 // ==================== 休假相关数据结构 ====================
 
 /// 通过过期时间获取发放记录请求
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct GetLeaveEmployExpireRecordRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1705,7 +1711,7 @@ pub struct GetLeaveEmployExpireRecordRespData {
 }
 
 /// 修改发放记录请求
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct PatchLeaveAccrualRecordRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1796,5 +1802,78 @@ impl ApiResponseTrait for GetLeaveEmployExpireRecordRespData {
 impl ApiResponseTrait for PatchLeaveAccrualRecordRespData {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+// Build method implementations for trait support
+impl QueryStatsSettingsRequest {
+    pub fn build(self) -> Self {
+        self
+    }
+}
+
+impl QueryStatsFieldsRequest {
+    pub fn build(self) -> Self {
+        self
+    }
+}
+
+impl QueryUserStatsDataRequest {
+    pub fn build(self) -> Self {
+        self
+    }
+}
+
+impl CreateUserTaskRemedyRequest {
+    pub fn build(self) -> Self {
+        self
+    }
+}
+
+impl QueryUserAllowedRemedysRequest {
+    pub fn build(self) -> Self {
+        self
+    }
+}
+
+impl QueryUserTaskRemedyRequest {
+    pub fn build(self) -> Self {
+        self
+    }
+}
+
+impl QueryArchiveStatsFieldsRequest {
+    pub fn build(self) -> Self {
+        self
+    }
+}
+
+impl UploadArchiveReportRequest {
+    pub fn build(self) -> Self {
+        self
+    }
+}
+
+impl DelArchiveReportRequest {
+    pub fn build(self) -> Self {
+        self
+    }
+}
+
+impl ListArchiveRulesRequest {
+    pub fn build(self) -> Self {
+        self
+    }
+}
+
+impl GetLeaveEmployExpireRecordRequest {
+    pub fn build(self) -> Self {
+        self
+    }
+}
+
+impl PatchLeaveAccrualRecordRequest {
+    pub fn build(self) -> Self {
+        self
     }
 }

@@ -31,19 +31,19 @@ impl AppTableRecordService {
     /// 新增记录
     pub async fn create(
         &self,
-        request: CreateRecordRequest,
+        request: &CreateRecordRequest,
         option: Option<crate::core::req_option::RequestOption>,
     ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateRecordResponse>> {
-        create::create_record(request, &self.config, option).await
+        create::create_record(request.clone(), &self.config, option).await
     }
 
     /// 更新记录
     pub async fn update(
         &self,
-        request: UpdateRecordRequest,
+        request: &UpdateRecordRequest,
         option: Option<crate::core::req_option::RequestOption>,
     ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<UpdateRecordResponse>> {
-        update::update_record(request, &self.config, option).await
+        update::update_record(request.clone(), &self.config, option).await
     }
 
     /// 查询记录
@@ -58,48 +58,48 @@ impl AppTableRecordService {
     /// 删除记录
     pub async fn delete(
         &self,
-        request: DeleteRecordRequest,
+        request: &DeleteRecordRequest,
         option: Option<crate::core::req_option::RequestOption>,
     ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<DeleteRecordResponse>> {
-        delete::delete_record(request, &self.config, option).await
+        delete::delete_record(request.clone(), &self.config, option).await
     }
 
     /// 新增多条记录
     pub async fn batch_create(
         &self,
-        request: BatchCreateRecordRequest,
+        request: &BatchCreateRecordRequest,
         option: Option<crate::core::req_option::RequestOption>,
     ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchCreateRecordResponse>>
     {
-        batch_create::batch_create_record(request, &self.config, option).await
+        batch_create::batch_create_record(request.clone(), &self.config, option).await
     }
 
     /// 更新多条记录
     pub async fn batch_update(
         &self,
-        request: BatchUpdateRecordRequest,
+        request: &BatchUpdateRecordRequest,
         option: Option<crate::core::req_option::RequestOption>,
     ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchUpdateRecordResponse>>
     {
-        batch_update::batch_update_record(request, &self.config, option).await
+        batch_update::batch_update_record(request.clone(), &self.config, option).await
     }
 
     /// 批量获取记录
     pub async fn batch_get(
         &self,
-        request: BatchGetRecordRequest,
+        request: &BatchGetRecordRequest,
         option: Option<crate::core::req_option::RequestOption>,
     ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchGetRecordResponse>> {
-        batch_get::batch_get_record(request, &self.config, option).await
+        batch_get::batch_get_record(request.clone(), &self.config, option).await
     }
 
     /// 删除多条记录
     pub async fn batch_delete(
         &self,
-        request: BatchDeleteRecordRequest,
+        request: &BatchDeleteRecordRequest,
         option: Option<crate::core::req_option::RequestOption>,
     ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchDeleteRecordResponse>>
     {
-        batch_delete::batch_delete_record(request, &self.config, option).await
+        batch_delete::batch_delete_record(request.clone(), &self.config, option).await
     }
 }

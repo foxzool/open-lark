@@ -1,18 +1,21 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 /// 获取云文档所有评论请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Serialize, Default, Clone)]
 pub struct ListCommentsRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -160,27 +163,16 @@ impl ListCommentsRequestBuilder {
         self.request
     }
 
-    /// 直接执行获取云文档所有评论请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list()`
-    pub async fn execute(
-        self,
-        service: &crate::service::cloud_docs::comments::CommentsService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListCommentsResponse>> {
-        service.list(self.build(), None).await
-    }
-
-    /// 直接执行获取云文档所有评论请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list()`
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::cloud_docs::comments::CommentsService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListCommentsResponse>> {
-        service.list(self.build(), Some(option)).await
-    }
 }
+
+// 应用ExecutableBuilder trait到ListCommentsRequestBuilder
+impl_executable_builder!(
+    ListCommentsRequestBuilder,
+    super::CommentsService,
+    ListCommentsRequest,
+    BaseResponse<ListCommentsResponse>,
+    list
+);
 
 /// 评论信息
 #[derive(Debug, Deserialize)]
@@ -229,14 +221,14 @@ pub struct Reply {
 }
 
 /// 回复内容
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct ReplyContent {
     /// 元素列表
     pub elements: Vec<ContentElement>,
 }
 
 /// 内容元素
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ContentElement {
     /// 元素类型
     #[serde(rename = "type")]
@@ -246,7 +238,7 @@ pub struct ContentElement {
 }
 
 /// 文本内容
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct TextRun {
     /// 文本内容
     pub text: String,

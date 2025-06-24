@@ -7,6 +7,7 @@ use crate::{
         constants::AccessTokenType,
         req_option, SDKResult,
     },
+    impl_executable_builder_owned,
     service::sheets::v3::{
         data_operation::{FindCondition, FindReplaceResult},
         SpreadsheetSheetService,
@@ -97,27 +98,16 @@ impl ReplaceCellsRequestBuilder {
         self.request
     }
 
-    /// 直接执行替换单元格请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.replace_cells()`
-    pub async fn execute(
-        self,
-        service: &crate::service::sheets::v3::SpreadsheetSheetService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ReplaceCellsResponse>> {
-        service.replace_cells(self.build(), None).await
-    }
-
-    /// 直接执行替换单元格请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.replace_cells()`
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::sheets::v3::SpreadsheetSheetService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ReplaceCellsResponse>> {
-        service.replace_cells(self.build(), Some(option)).await
-    }
 }
+
+// Trait implementation
+impl_executable_builder_owned!(
+    ReplaceCellsRequestBuilder,
+    SpreadsheetSheetService,
+    ReplaceCellsRequest,
+    BaseResponse<ReplaceCellsResponse>,
+    replace_cells
+);
 
 /// 替换单元格响应
 #[derive(Deserialize, Debug)]

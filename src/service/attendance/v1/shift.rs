@@ -1,9 +1,12 @@
 use reqwest::Method;
 use serde_json::json;
 
-use crate::core::{
-    api_req::ApiRequest, api_resp::BaseResponse, config::Config, constants::AccessTokenType,
-    http::Transport, req_option::RequestOption, SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest, api_resp::BaseResponse, config::Config, constants::AccessTokenType,
+        http::Transport, req_option::RequestOption, SDKResult,
+    },
+    impl_executable_builder,
 };
 
 use super::models::{
@@ -23,10 +26,10 @@ impl ShiftService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/shift/create>
     pub async fn create(
         &self,
-        request: CreateShiftRequest,
+        request: &CreateShiftRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateShiftRespData>> {
-        let mut api_req = request.api_req;
+        let mut api_req = request.api_req.clone();
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/attendance/v1/shifts".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
@@ -48,13 +51,13 @@ impl ShiftService {
         if let Some(flexible_minutes) = request.flexible_minutes {
             body["flexible_minutes"] = json!(flexible_minutes);
         }
-        if let Some(flexible_rule) = request.flexible_rule {
+        if let Some(flexible_rule) = &request.flexible_rule {
             body["flexible_rule"] = json!(flexible_rule);
         }
         if let Some(no_need_off) = request.no_need_off {
             body["no_need_off"] = json!(no_need_off);
         }
-        if let Some(punch_time_rule) = request.punch_time_rule {
+        if let Some(punch_time_rule) = &request.punch_time_rule {
             body["punch_time_rule"] = json!(punch_time_rule);
         }
         if let Some(late_minutes_as_late) = request.late_minutes_as_late {
@@ -78,7 +81,7 @@ impl ShiftService {
         if let Some(allow_face_punch) = request.allow_face_punch {
             body["allow_face_punch"] = json!(allow_face_punch);
         }
-        if let Some(face_punch_cfg) = request.face_punch_cfg {
+        if let Some(face_punch_cfg) = &request.face_punch_cfg {
             body["face_punch_cfg"] = json!(face_punch_cfg);
         }
 
@@ -343,31 +346,16 @@ impl CreateShiftRequestBuilder {
         }
     }
 
-    /// 直接执行创建班次请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.create()`
-    pub async fn execute(
-        self,
-        service: &ShiftService,
-    ) -> crate::core::SDKResult<
-        crate::core::api_resp::BaseResponse<super::models::CreateShiftRespData>,
-    > {
-        service.create(self.build(), None).await
-    }
-
-    /// 直接执行创建班次请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.create()`
-    pub async fn execute_with_options(
-        self,
-        service: &ShiftService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<
-        crate::core::api_resp::BaseResponse<super::models::CreateShiftRespData>,
-    > {
-        service.create(self.build(), Some(option)).await
-    }
 }
+
+// 应用ExecutableBuilder trait到CreateShiftRequestBuilder
+impl_executable_builder!(
+    CreateShiftRequestBuilder,
+    ShiftService,
+    CreateShiftRequest,
+    BaseResponse<CreateShiftRespData>,
+    create
+);
 
 impl DeleteShiftRequest {
     pub fn new<T: Into<String>>(shift_id: T) -> Self {

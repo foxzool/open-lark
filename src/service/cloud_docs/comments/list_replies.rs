@@ -1,20 +1,23 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 use super::list::Reply;
 
 /// 获取回复信息请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Serialize, Default, Clone)]
 pub struct ListRepliesRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -146,27 +149,16 @@ impl ListRepliesRequestBuilder {
         self.request
     }
 
-    /// 直接执行获取回复信息请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list_replies()`
-    pub async fn execute(
-        self,
-        service: &crate::service::cloud_docs::comments::CommentsService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListRepliesResponse>> {
-        service.list_replies(self.build(), None).await
-    }
-
-    /// 直接执行获取回复信息请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list_replies()`
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::cloud_docs::comments::CommentsService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListRepliesResponse>> {
-        service.list_replies(self.build(), Some(option)).await
-    }
 }
+
+// 应用ExecutableBuilder trait到ListRepliesRequestBuilder
+impl_executable_builder!(
+    ListRepliesRequestBuilder,
+    super::CommentsService,
+    ListRepliesRequest,
+    BaseResponse<ListRepliesResponse>,
+    list_replies
+);
 
 /// 获取回复信息响应
 #[derive(Debug, Deserialize)]

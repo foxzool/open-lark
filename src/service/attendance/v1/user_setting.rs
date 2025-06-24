@@ -29,36 +29,36 @@ impl UserSettingService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_setting/modify>
     pub async fn modify(
         &self,
-        request: ModifyUserSettingRequest,
+        request: &ModifyUserSettingRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ModifyUserSettingRespData>> {
-        let mut api_req = request.api_req;
+        let mut api_req = request.api_req.clone();
         api_req.http_method = Method::POST;
         api_req.api_path = format!(
             "/open-apis/attendance/v1/user_settings/{}/modify",
-            request.user_id
+            request.user_id.clone()
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type".to_string(), request.employee_type.clone());
 
         // 构建请求体
         let mut body = json!({});
 
-        if let Some(face_key_open) = request.face_key_open {
-            body["face_key_open"] = json!(face_key_open);
+        if let Some(face_key_open) = &request.face_key_open {
+            body["face_key_open"] = json!(face_key_open.clone());
         }
-        if let Some(face_key) = request.face_key {
-            body["face_key"] = json!(face_key);
+        if let Some(face_key) = &request.face_key {
+            body["face_key"] = json!(face_key.clone());
         }
-        if let Some(face_live_need_action) = request.face_live_need_action {
-            body["face_live_need_action"] = json!(face_live_need_action);
+        if let Some(face_live_need_action) = &request.face_live_need_action {
+            body["face_live_need_action"] = json!(face_live_need_action.clone());
         }
-        if let Some(face_downgrade) = request.face_downgrade {
-            body["face_downgrade"] = json!(face_downgrade);
+        if let Some(face_downgrade) = &request.face_downgrade {
+            body["face_downgrade"] = json!(face_downgrade.clone());
         }
 
         api_req.body = serde_json::to_vec(&body)?;
@@ -74,10 +74,10 @@ impl UserSettingService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_setting/query>
     pub async fn query(
         &self,
-        request: QueryUserSettingRequest,
+        request: &QueryUserSettingRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<QueryUserSettingRespData>> {
-        let mut api_req = request.api_req;
+        let mut api_req = request.api_req.clone();
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/attendance/v1/user_settings/query".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
@@ -85,11 +85,11 @@ impl UserSettingService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type".to_string(), request.employee_type.clone());
 
         // 构建请求体
         let body = json!({
-            "user_ids": request.user_ids
+            "user_ids": request.user_ids.clone()
         });
 
         api_req.body = serde_json::to_vec(&body)?;
@@ -105,21 +105,21 @@ impl UserSettingService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_setting/upload>
     pub async fn upload_photo(
         &self,
-        request: UploadUserPhotoRequest,
+        request: &UploadUserPhotoRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UploadUserPhotoRespData>> {
-        let mut api_req = request.api_req;
+        let mut api_req = request.api_req.clone();
         api_req.http_method = Method::POST;
         api_req.api_path = format!(
             "/open-apis/attendance/v1/user_settings/{}/upload",
-            request.user_id
+            request.user_id.clone()
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type".to_string(), request.employee_type.clone());
 
         // 保存 photo_name 以避免借用问题
         let photo_name = request.photo_name.clone();
@@ -127,8 +127,8 @@ impl UserSettingService {
         // 构建 multipart 表单数据
         let _form = reqwest::multipart::Form::new().part(
             "photo",
-            reqwest::multipart::Part::bytes(request.photo_data)
-                .file_name(request.photo_name)
+            reqwest::multipart::Part::bytes(request.photo_data.clone())
+                .file_name(request.photo_name.clone())
                 .mime_str("image/jpeg")?,
         );
 
@@ -151,24 +151,24 @@ impl UserSettingService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_setting/download>
     pub async fn download_photo(
         &self,
-        request: DownloadUserPhotoRequest,
+        request: &DownloadUserPhotoRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<Vec<u8>> {
-        let mut api_req = request.api_req;
+        let mut api_req = request.api_req.clone();
         api_req.http_method = Method::GET;
         api_req.api_path = format!(
             "/open-apis/attendance/v1/user_settings/{}/download",
-            request.user_id
+            request.user_id.clone()
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type".to_string(), request.employee_type.clone());
         api_req
             .query_params
-            .insert("face_key".to_string(), request.face_key);
+            .insert("face_key".to_string(), request.face_key.clone());
 
         // 对于文件下载，我们需要直接获取响应体字节数据
         // 这里暂时返回一个模拟的照片数据，实际实现时需要从 HTTP 响应中获取

@@ -10,6 +10,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder_owned,
     service::sheets::v3::DataOperationService,
 };
 
@@ -90,25 +91,16 @@ impl MergeCellsRequestBuilder {
         self.request
     }
 
-    /// 执行请求
-    pub async fn execute(
-        mut self,
-        service: &DataOperationService,
-    ) -> SDKResult<BaseResponse<MergeCellsResponseData>> {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        service.merge_cells(self.request, None).await
-    }
-
-    /// 执行请求（带选项）
-    pub async fn execute_with_options(
-        mut self,
-        service: &DataOperationService,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<MergeCellsResponseData>> {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        service.merge_cells(self.request, Some(option)).await
-    }
 }
+
+// Trait implementation
+impl_executable_builder_owned!(
+    MergeCellsRequestBuilder,
+    DataOperationService,
+    MergeCellsRequest,
+    BaseResponse<MergeCellsResponseData>,
+    merge_cells
+);
 
 /// 合并单元格响应体最外层
 #[derive(Deserialize, Debug)]

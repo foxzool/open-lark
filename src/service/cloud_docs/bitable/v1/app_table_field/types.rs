@@ -31,7 +31,7 @@ pub enum FieldValue {
 }
 
 /// 人员
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Person {
     /// 人员名字
     pub name: String,

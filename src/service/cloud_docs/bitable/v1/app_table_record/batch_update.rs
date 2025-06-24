@@ -12,11 +12,12 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder,
     service::bitable::v1::Record,
 };
 
 /// 批量更新记录请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Serialize, Default, Clone)]
 pub struct BatchUpdateRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -34,7 +35,7 @@ pub struct BatchUpdateRecordRequest {
 }
 
 /// 要更新的记录数据
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Serialize, Default, Clone)]
 pub struct UpdateRecord {
     /// 记录 ID
     pub record_id: String,
@@ -106,29 +107,16 @@ impl BatchUpdateRecordRequestBuilder {
         self.request
     }
 
-    /// 直接执行批量更新记录请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.batch_update()`
-    pub async fn execute(
-        self,
-        service: &super::AppTableRecordService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchUpdateRecordResponse>>
-    {
-        service.batch_update(self.build(), None).await
-    }
-
-    /// 直接执行批量更新记录请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.batch_update()`
-    pub async fn execute_with_options(
-        self,
-        service: &super::AppTableRecordService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchUpdateRecordResponse>>
-    {
-        service.batch_update(self.build(), Some(option)).await
-    }
 }
+
+// 应用ExecutableBuilder trait到BatchUpdateRecordRequestBuilder
+impl_executable_builder!(
+    BatchUpdateRecordRequestBuilder,
+    super::AppTableRecordService,
+    BatchUpdateRecordRequest,
+    BaseResponse<BatchUpdateRecordResponse>,
+    batch_update
+);
 
 /// 批量更新记录响应
 #[derive(Debug, Deserialize)]

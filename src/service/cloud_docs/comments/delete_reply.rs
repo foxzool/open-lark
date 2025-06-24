@@ -1,18 +1,21 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 /// 删除回复请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Serialize, Default, Clone)]
 pub struct DeleteReplyRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -137,24 +140,6 @@ impl DeleteReplyRequestBuilder {
         self.request
     }
 
-    /// 执行请求
-    pub async fn execute(
-        mut self,
-        service: &crate::service::cloud_docs::comments::CommentsService,
-    ) -> SDKResult<BaseResponse<DeleteReplyResponse>> {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        service.delete_reply(self.request, None).await
-    }
-
-    /// 执行请求（带选项）
-    pub async fn execute_with_options(
-        mut self,
-        service: &crate::service::cloud_docs::comments::CommentsService,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<DeleteReplyResponse>> {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        service.delete_reply(self.request, Some(option)).await
-    }
 }
 
 /// 删除的回复信息
@@ -169,6 +154,15 @@ pub struct DeletedReply {
     /// 删除者用户ID
     pub deleter_user_id: Option<String>,
 }
+
+// 应用ExecutableBuilder trait到DeleteReplyRequestBuilder
+impl_executable_builder!(
+    DeleteReplyRequestBuilder,
+    super::CommentsService,
+    DeleteReplyRequest,
+    BaseResponse<DeleteReplyResponse>,
+    delete_reply
+);
 
 /// 删除回复响应
 #[derive(Debug, Deserialize)]

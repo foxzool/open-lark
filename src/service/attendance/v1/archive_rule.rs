@@ -1,9 +1,12 @@
 use reqwest::Method;
 use serde_json::json;
 
-use crate::core::{
-    api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
-    req_option::RequestOption, SDKResult,
+use crate::{
+    core::{
+        api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
+        req_option::RequestOption, SDKResult,
+    },
+    impl_executable_builder,
 };
 
 use super::models::{
@@ -25,21 +28,21 @@ impl ArchiveRuleService {
     /// <https://open.feishu.cn/document/attendance-v1/archive_rule/user_stats_fields_query>
     pub async fn query_user_stats_fields(
         &self,
-        request: QueryArchiveStatsFieldsRequest,
+        request: &QueryArchiveStatsFieldsRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<QueryArchiveStatsFieldsRespData>> {
-        let mut api_req = request.api_req;
+        let mut api_req = request.api_req.clone();
         api_req.http_method = Method::GET;
         api_req.api_path = format!(
             "/open-apis/attendance/v1/archive_rules/{}/user_stats_fields",
-            request.archive_rule_id
+            request.archive_rule_id.clone()
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type".to_string(), request.employee_type.clone());
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -52,25 +55,25 @@ impl ArchiveRuleService {
     /// <https://open.feishu.cn/document/attendance-v1/archive_rule/upload_report>
     pub async fn upload_report(
         &self,
-        request: UploadArchiveReportRequest,
+        request: &UploadArchiveReportRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UploadArchiveReportRespData>> {
-        let mut api_req = request.api_req;
+        let mut api_req = request.api_req.clone();
         api_req.http_method = Method::POST;
         api_req.api_path = format!(
             "/open-apis/attendance/v1/archive_rules/{}/upload_report",
-            request.archive_rule_id
+            request.archive_rule_id.clone()
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type".to_string(), request.employee_type.clone());
 
         // 构建请求体
         let body = json!({
-            "report_data": request.report_data
+            "report_data": request.report_data.clone()
         });
 
         api_req.body = serde_json::to_vec(&body)?;
@@ -86,25 +89,25 @@ impl ArchiveRuleService {
     /// <https://open.feishu.cn/document/attendance-v1/archive_rule/del_report>
     pub async fn del_report(
         &self,
-        request: DelArchiveReportRequest,
+        request: &DelArchiveReportRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<DelArchiveReportRespData>> {
-        let mut api_req = request.api_req;
+        let mut api_req = request.api_req.clone();
         api_req.http_method = Method::POST;
         api_req.api_path = format!(
             "/open-apis/attendance/v1/archive_rules/{}/del_report",
-            request.archive_rule_id
+            request.archive_rule_id.clone()
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type".to_string(), request.employee_type.clone());
 
         // 构建请求体
         let body = json!({
-            "record_ids": request.record_ids
+            "record_ids": request.record_ids.clone()
         });
 
         api_req.body = serde_json::to_vec(&body)?;
@@ -120,10 +123,10 @@ impl ArchiveRuleService {
     /// <https://open.feishu.cn/document/attendance-v1/archive_rule/list>
     pub async fn list(
         &self,
-        request: ListArchiveRulesRequest,
+        request: &ListArchiveRulesRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListArchiveRulesRespData>> {
-        let mut api_req = request.api_req;
+        let mut api_req = request.api_req.clone();
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/attendance/v1/archive_rules".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
@@ -131,21 +134,54 @@ impl ArchiveRuleService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type".to_string(), request.employee_type.clone());
 
-        if let Some(page_size) = request.page_size {
+        if let Some(page_size) = &request.page_size {
             api_req
                 .query_params
                 .insert("page_size".to_string(), page_size.to_string());
         }
 
-        if let Some(page_token) = request.page_token {
+        if let Some(page_token) = &request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert("page_token".to_string(), page_token.clone());
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
     }
 }
+
+// Builder implementations
+impl_executable_builder!(
+    QueryArchiveStatsFieldsRequest,
+    ArchiveRuleService,
+    QueryArchiveStatsFieldsRequest,
+    BaseResponse<QueryArchiveStatsFieldsRespData>,
+    query_user_stats_fields
+);
+
+impl_executable_builder!(
+    UploadArchiveReportRequest,
+    ArchiveRuleService,
+    UploadArchiveReportRequest,
+    BaseResponse<UploadArchiveReportRespData>,
+    upload_report
+);
+
+impl_executable_builder!(
+    DelArchiveReportRequest,
+    ArchiveRuleService,
+    DelArchiveReportRequest,
+    BaseResponse<DelArchiveReportRespData>,
+    del_report
+);
+
+impl_executable_builder!(
+    ListArchiveRulesRequest,
+    ArchiveRuleService,
+    ListArchiveRulesRequest,
+    BaseResponse<ListArchiveRulesRespData>,
+    list
+);

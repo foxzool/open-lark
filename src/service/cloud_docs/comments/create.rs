@@ -1,20 +1,23 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 use super::list::{ContentElement, ReplyContent, TextRun};
 
 /// 添加全文评论请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Serialize, Default, Clone)]
 pub struct CreateCommentRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -184,26 +187,6 @@ impl CreateCommentRequestBuilder {
         self.request
     }
 
-    /// 直接执行添加全文评论请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.create()`
-    pub async fn execute(
-        self,
-        service: &crate::service::cloud_docs::comments::CommentsService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateCommentResponse>> {
-        service.create(self.build(), None).await
-    }
-
-    /// 直接执行添加全文评论请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.create()`
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::cloud_docs::comments::CommentsService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateCommentResponse>> {
-        service.create(self.build(), Some(option)).await
-    }
 }
 
 /// 创建的评论信息
@@ -222,6 +205,15 @@ pub struct CreatedComment {
     /// 是否是全文评论
     pub is_whole: Option<bool>,
 }
+
+// 应用ExecutableBuilder trait到CreateCommentRequestBuilder
+impl_executable_builder!(
+    CreateCommentRequestBuilder,
+    super::CommentsService,
+    CreateCommentRequest,
+    BaseResponse<CreateCommentResponse>,
+    create
+);
 
 /// 添加全文评论响应
 #[derive(Debug, Deserialize)]

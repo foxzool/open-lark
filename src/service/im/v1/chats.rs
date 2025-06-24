@@ -1,14 +1,17 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 pub struct ChatsService {
@@ -19,10 +22,10 @@ impl ChatsService {
     /// 获取用户或机器人所在的群列表
     pub async fn list(
         &self,
-        list_chat_request: ListChatRequest,
+        list_chat_request: &ListChatRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListChatRespData>> {
-        let mut api_req = list_chat_request.api_req;
+        let mut api_req = list_chat_request.api_req.clone();
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/im/v1/chats".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
@@ -60,7 +63,7 @@ impl ListChatIterator<'_> {
         }
         match self
             .service
-            .list(self.request.clone(), self.option.clone())
+            .list(&self.request, self.option.clone())
             .await
         {
             Ok(resp) => match resp.data {
@@ -145,27 +148,16 @@ impl ListChatRequestBuilder {
         self.request
     }
 
-    /// 直接执行获取群组列表请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list()`
-    pub async fn execute(
-        self,
-        service: &ChatsService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListChatRespData>> {
-        service.list(self.build(), None).await
-    }
-
-    /// 直接执行获取群组列表请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list()`
-    pub async fn execute_with_options(
-        self,
-        service: &ChatsService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListChatRespData>> {
-        service.list(self.build(), Some(option)).await
-    }
 }
+
+// 应用ExecutableBuilder trait到ListChatRequestBuilder
+impl_executable_builder!(
+    ListChatRequestBuilder,
+    ChatsService,
+    ListChatRequest,
+    BaseResponse<ListChatRespData>,
+    list
+);
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ListChatRespData {

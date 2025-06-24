@@ -1,20 +1,23 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 use super::list::ReplyContent;
 
 /// 更新回复的内容请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Serialize, Default, Clone)]
 pub struct UpdateReplyRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -149,24 +152,6 @@ impl UpdateReplyRequestBuilder {
         self.request
     }
 
-    /// 执行请求
-    pub async fn execute(
-        mut self,
-        service: &crate::service::cloud_docs::comments::CommentsService,
-    ) -> SDKResult<BaseResponse<UpdateReplyResponse>> {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        service.update_reply(self.request, None).await
-    }
-
-    /// 执行请求（带选项）
-    pub async fn execute_with_options(
-        mut self,
-        service: &crate::service::cloud_docs::comments::CommentsService,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<UpdateReplyResponse>> {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        service.update_reply(self.request, Some(option)).await
-    }
 }
 
 /// 更新后的回复信息
@@ -183,6 +168,15 @@ pub struct UpdatedReply {
     /// 回复内容
     pub content: ReplyContent,
 }
+
+// 应用ExecutableBuilder trait到UpdateReplyRequestBuilder
+impl_executable_builder!(
+    UpdateReplyRequestBuilder,
+    super::CommentsService,
+    UpdateReplyRequest,
+    BaseResponse<UpdateReplyResponse>,
+    update_reply
+);
 
 /// 更新回复的内容响应
 #[derive(Debug, Deserialize)]

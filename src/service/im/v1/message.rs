@@ -5,14 +5,17 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 pub struct MessageService {
@@ -26,10 +29,10 @@ impl MessageService {
     /// 视频、音频、文件、表情包。
     pub async fn create(
         &self,
-        create_message_request: CreateMessageRequest,
+        create_message_request: &CreateMessageRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<Message>> {
-        let mut api_req = create_message_request.api_req;
+        let mut api_req = create_message_request.api_req.clone();
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
@@ -115,7 +118,7 @@ impl ListMessageIterator<'_> {
     }
 }
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct CreateMessageRequest {
     api_req: ApiRequest,
 }
@@ -149,27 +152,16 @@ impl CreateMessageRequestBuilder {
         self.request
     }
 
-    /// 直接执行发送消息请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.create()`
-    pub async fn execute(
-        self,
-        service: &MessageService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<Message>> {
-        service.create(self.build(), None).await
-    }
-
-    /// 直接执行发送消息请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.create()`
-    pub async fn execute_with_options(
-        self,
-        service: &MessageService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<Message>> {
-        service.create(self.build(), Some(option)).await
-    }
 }
+
+// 应用ExecutableBuilder trait到CreateMessageRequestBuilder
+impl_executable_builder!(
+    CreateMessageRequestBuilder,
+    MessageService,
+    CreateMessageRequest,
+    BaseResponse<Message>,
+    create
+);
 
 /// 发送消息 请求体
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
