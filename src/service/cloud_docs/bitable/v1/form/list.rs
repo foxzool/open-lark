@@ -1,18 +1,21 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 /// 列出表单问题请求
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Serialize, Default, Clone)]
 pub struct ListFormQuestionRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -90,6 +93,15 @@ impl ListFormQuestionRequestBuilder {
         self.request
     }
 }
+
+// 应用ExecutableBuilder trait到ListFormQuestionRequestBuilder
+impl_executable_builder!(
+    ListFormQuestionRequestBuilder,
+    super::FormService,
+    ListFormQuestionRequest,
+    BaseResponse<ListFormQuestionResponse>,
+    list
+);
 
 /// 表单问题信息
 #[derive(Debug, Deserialize)]

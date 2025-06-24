@@ -32,10 +32,10 @@ impl FormService {
     /// 列出表单问题
     pub async fn list(
         &self,
-        request: ListFormQuestionRequest,
+        request: &ListFormQuestionRequest,
         option: Option<crate::core::req_option::RequestOption>,
     ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListFormQuestionResponse>> {
-        list::list_form_questions(request, &self.config, option).await
+        list::list_form_questions(request.clone(), &self.config, option).await
     }
 
     /// 更新表单问题
