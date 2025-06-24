@@ -10,6 +10,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder_owned,
     service::sheets::v3::SpreadsheetSheetService,
 };
 
@@ -81,6 +82,14 @@ impl GetFloatImageRequestBuilder {
         self.request
     }
 }
+
+impl_executable_builder_owned!(
+    GetFloatImageRequestBuilder,
+    SpreadsheetSheetService,
+    GetFloatImageRequest,
+    BaseResponse<GetFloatImageResponseData>,
+    get_float_image
+);
 
 /// 获取浮动图片响应体最外层
 #[derive(Deserialize, Debug)]
