@@ -11,6 +11,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder,
     service::bitable::v1::app_dashboard::Dashboard,
 };
 
@@ -83,20 +84,16 @@ impl ListDashboardRequestBuilder {
         self.request
     }
 
-    /// 执行列出仪表盘请求
-    pub async fn execute(self, config: &Config) -> SDKResult<BaseResponse<ListDashboardResponse>> {
-        list_dashboard(self.build(), config, None).await
-    }
-
-    /// 执行列出仪表盘请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        config: &Config,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<ListDashboardResponse>> {
-        list_dashboard(self.build(), config, Some(option)).await
-    }
 }
+
+// 应用ExecutableBuilder trait到ListDashboardRequestBuilder
+impl_executable_builder!(
+    ListDashboardRequestBuilder,
+    DashboardService,
+    ListDashboardRequest,
+    BaseResponse<ListDashboardResponse>,
+    list
+);
 
 /// 列出仪表盘响应
 #[derive(Debug, Deserialize)]
@@ -117,22 +114,43 @@ impl ApiResponseTrait for ListDashboardResponse {
     }
 }
 
-/// 列出仪表盘
+/// 仪表盘服务
+pub struct DashboardService {
+    pub config: Config,
+}
+
+impl DashboardService {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+
+    /// 列出仪表盘
+    pub async fn list(
+        &self,
+        request: &ListDashboardRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<ListDashboardResponse>> {
+        let mut api_req = request.api_request.clone();
+        api_req.http_method = Method::GET;
+        api_req.api_path = format!(
+            "/open-apis/bitable/v1/apps/{app_token}/dashboards",
+            app_token = request.app_token
+        );
+        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
+        Ok(api_resp)
+    }
+}
+
+/// 列出仪表盘 (向后兼容的函数)
 pub async fn list_dashboard(
     request: ListDashboardRequest,
     config: &Config,
     option: Option<RequestOption>,
 ) -> SDKResult<BaseResponse<ListDashboardResponse>> {
-    let mut api_req = request.api_request;
-    api_req.http_method = Method::GET;
-    api_req.api_path = format!(
-        "/open-apis/bitable/v1/apps/{app_token}/dashboards",
-        app_token = request.app_token
-    );
-    api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
-
-    let api_resp = Transport::request(api_req, config, option).await?;
-    Ok(api_resp)
+    let service = DashboardService::new(config.clone());
+    service.list(&request, option).await
 }
 
 #[cfg(test)]
