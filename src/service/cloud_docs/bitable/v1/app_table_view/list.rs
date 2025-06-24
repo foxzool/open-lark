@@ -1,13 +1,16 @@
 use reqwest::Method;
 use serde::Deserialize;
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 use super::AppTableViewService;
@@ -45,7 +48,7 @@ impl AppTableViewService {
 }
 
 /// 列出视图请求
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 pub struct ListViewsRequest {
     api_request: ApiRequest,
     /// 多维表格的 app_token

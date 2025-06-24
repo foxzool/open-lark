@@ -49,10 +49,10 @@ impl AppTableRecordService {
     /// 查询记录
     pub async fn search(
         &self,
-        request: SearchRecordRequest,
+        request: &SearchRecordRequest,
         option: Option<crate::core::req_option::RequestOption>,
     ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<SearchRecordResponse>> {
-        search::search_record(request, &self.config, option).await
+        search::search_record(request.clone(), &self.config, option).await
     }
 
     /// 删除记录
