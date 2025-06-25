@@ -1,14 +1,17 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 /// 获取云文档权限设置请求 (v2)
@@ -105,27 +108,15 @@ impl GetPermissionPublicV2RequestBuilder {
         self.request
     }
 
-    /// 执行请求
-    pub async fn execute(
-        mut self,
-        service: &crate::service::cloud_docs::permission::PermissionService,
-    ) -> SDKResult<BaseResponse<GetPermissionPublicV2Response>> {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        service.get_permission_public_v2(&self.request, None).await
-    }
-
-    /// 执行请求（带选项）
-    pub async fn execute_with_options(
-        mut self,
-        service: &crate::service::cloud_docs::permission::PermissionService,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<GetPermissionPublicV2Response>> {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        service
-            .get_permission_public_v2(&self.request, Some(option))
-            .await
-    }
 }
+
+impl_executable_builder!(
+    GetPermissionPublicV2RequestBuilder,
+    crate::service::cloud_docs::permission::PermissionService,
+    GetPermissionPublicV2Request,
+    BaseResponse<GetPermissionPublicV2Response>,
+    get_permission_public_v2
+);
 
 /// 公开访问设置 (v2)
 #[derive(Debug, Deserialize)]
