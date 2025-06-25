@@ -17,6 +17,8 @@ use super::AppService;
 
 impl AppService {
     /// 创建多维表格
+    ///
+    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/create>
     pub async fn create(
         &self,
         request: CreateAppRequest,

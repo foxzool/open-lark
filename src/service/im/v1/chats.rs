@@ -20,6 +20,8 @@ pub struct ChatsService {
 
 impl ChatsService {
     /// 获取用户或机器人所在的群列表
+    ///
+    /// <https://open.feishu.cn/document/server-docs/im-v1/chat/list>
     pub async fn list(
         &self,
         list_chat_request: &ListChatRequest,
