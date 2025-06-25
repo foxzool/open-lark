@@ -84,10 +84,6 @@ name = "cloud_docs_test"
 path = "examples/cloud_docs_test.rs"
 
 [[example]]
-name = "enhanced_builder_demo"
-path = "examples/enhanced_builder_demo.rs"
-
-[[example]]
 name = "enhanced_drive_operations"
 path = "examples/api/enhanced_drive_operations.rs"
 
@@ -114,10 +110,6 @@ path = "examples/api/token_performance_monitoring.rs"
 [[example]]
 name = "background_token_preheating"
 path = "examples/api/background_token_preheating.rs"
-
-[[example]]
-name = "refactored_modules_test"
-path = "examples/api/refactored_modules_test.rs"
 
 # ===========================================
 # Benchmarks
