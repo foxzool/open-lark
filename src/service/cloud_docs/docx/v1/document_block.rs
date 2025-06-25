@@ -554,36 +554,47 @@ impl ApiResponseTrait for ListChildrenRespData {
 }
 
 // === Builder execute方法实现 ===
+// 为需要路径参数的Builder提供统一的execute方法
 
-impl CreateBlockRequestBuilder {
-    pub async fn execute(
-        self,
-        service: &DocumentBlockService,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CreateBlockRespData>> {
-        let (document_id, request) = self.build();
-        service.create(document_id, request, option).await
-    }
+macro_rules! impl_execute_with_path {
+    ($builder:ty, $response:ty, $method:ident) => {
+        impl $builder {
+            /// 执行请求
+            pub async fn execute(
+                self,
+                service: &DocumentBlockService,
+                option: Option<RequestOption>,
+            ) -> SDKResult<$response> {
+                let (document_id, request) = self.build();
+                service.$method(document_id, request, option).await
+            }
+
+            /// 执行请求（带选项）
+            pub async fn execute_with_options(
+                self,
+                service: &DocumentBlockService,
+                option: RequestOption,
+            ) -> SDKResult<$response> {
+                self.execute(service, Some(option)).await
+            }
+        }
+    };
 }
 
-impl BatchUpdateBlockRequestBuilder {
-    pub async fn execute(
-        self,
-        service: &DocumentBlockService,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<BatchUpdateBlockRespData>> {
-        let (document_id, request) = self.build();
-        service.batch_update(document_id, request, option).await
-    }
-}
+impl_execute_with_path!(
+    CreateBlockRequestBuilder,
+    BaseResponse<CreateBlockRespData>,
+    create
+);
 
-impl BatchDeleteBlockRequestBuilder {
-    pub async fn execute(
-        self,
-        service: &DocumentBlockService,
-        option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<BatchDeleteBlockRespData>> {
-        let (document_id, request) = self.build();
-        service.batch_delete(document_id, request, option).await
-    }
-}
+impl_execute_with_path!(
+    BatchUpdateBlockRequestBuilder,
+    BaseResponse<BatchUpdateBlockRespData>,
+    batch_update
+);
+
+impl_execute_with_path!(
+    BatchDeleteBlockRequestBuilder,
+    BaseResponse<BatchDeleteBlockRespData>,
+    batch_delete
+);
