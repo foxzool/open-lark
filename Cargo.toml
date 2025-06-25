@@ -111,6 +111,35 @@ path = "examples/api/token_performance_monitoring.rs"
 name = "background_token_preheating"
 path = "examples/api/background_token_preheating.rs"
 
+# Core API Examples
+[[example]]
+name = "core_send_message"
+path = "examples/core/send_message.rs"
+
+[[example]]
+name = "core_get_chat_history"
+path = "examples/core/get_chat_history.rs"
+
+[[example]]
+name = "core_upload_file"
+path = "examples/core/upload_file.rs"
+
+[[example]]
+name = "core_download_file"
+path = "examples/core/download_file.rs"
+
+[[example]]
+name = "core_list_folder"
+path = "examples/core/list_folder.rs"
+
+[[example]]
+name = "core_query_records"
+path = "examples/core/query_records.rs"
+
+[[example]]
+name = "core_create_record"
+path = "examples/core/create_record.rs"
+
 # ===========================================
 # Benchmarks
 # ===========================================
