@@ -7,6 +7,7 @@ use crate::{
         constants::AccessTokenType,
         req_option, SDKResult,
     },
+    impl_executable_builder_owned,
     service::sheets::v2::{sheet_row_col::UpdateDimension, SpreadsheetService},
 };
 
@@ -86,34 +87,16 @@ impl InsertDimensionRangeRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 直接执行插入行列请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.insert_dimension_range()`
-    pub async fn execute(
-        self,
-        service: &crate::service::sheets::v2::SpreadsheetService,
-    ) -> crate::core::SDKResult<
-        crate::core::api_resp::BaseResponse<crate::core::api_resp::EmptyResponse>,
-    > {
-        service.insert_dimension_range(self.build(), None).await
-    }
-
-    /// 直接执行插入行列请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.insert_dimension_range()`
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::sheets::v2::SpreadsheetService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<
-        crate::core::api_resp::BaseResponse<crate::core::api_resp::EmptyResponse>,
-    > {
-        service
-            .insert_dimension_range(self.build(), Some(option))
-            .await
-    }
 }
+
+// 使用宏实现ExecutableBuilder trait
+impl_executable_builder_owned!(
+    InsertDimensionRangeRequestBuilder,
+    SpreadsheetService,
+    InsertDimensionRangeRequest,
+    BaseResponse<EmptyResponse>,
+    insert_dimension_range
+);
 
 impl SpreadsheetService {
     /// 插入行列

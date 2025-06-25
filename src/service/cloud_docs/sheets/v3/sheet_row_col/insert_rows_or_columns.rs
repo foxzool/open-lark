@@ -10,6 +10,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder_owned,
     service::sheets::v3::SheetRowColService,
 };
 
@@ -97,31 +98,6 @@ impl InsertRowsOrColumnsRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 直接执行插入行列请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.insert_rows_or_columns()`
-    pub async fn execute(
-        self,
-        service: &crate::service::sheets::v3::SheetRowColService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<InsertRowsOrColumnsResponseData>>
-    {
-        service.insert_rows_or_columns(self.build(), None).await
-    }
-
-    /// 直接执行插入行列请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.insert_rows_or_columns()`
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::sheets::v3::SheetRowColService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<InsertRowsOrColumnsResponseData>>
-    {
-        service
-            .insert_rows_or_columns(self.build(), Some(option))
-            .await
-    }
 }
 
 /// 维度范围
@@ -181,3 +157,12 @@ mod test {
         assert_eq!(response.insert_range.end_index, 5);
     }
 }
+
+// 实现ExecutableBuilder trait
+impl_executable_builder_owned!(
+    InsertRowsOrColumnsRequestBuilder,
+    SheetRowColService,
+    InsertRowsOrColumnsRequest,
+    BaseResponse<InsertRowsOrColumnsResponseData>,
+    insert_rows_or_columns
+);

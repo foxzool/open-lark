@@ -345,7 +345,6 @@ impl PatchPermissionPublicV2RequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
 }
 
 impl_executable_builder!(

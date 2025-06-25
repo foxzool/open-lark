@@ -5,6 +5,7 @@ use crate::{
         api_req::ApiRequest, api_resp::BaseResponse, constants::AccessTokenType, req_option,
         SDKResult,
     },
+    impl_executable_builder_owned,
     service::sheets::v2::{
         spreadsheet_sheet::{OperateSheetResponse, OperateSheetsRequestElem},
         SpreadsheetSheetService,
@@ -106,30 +107,15 @@ impl UpdateSheetPropertiesRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 直接执行更新工作表属性请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.update_sheet_properties()`
-    pub async fn execute(
-        self,
-        service: &crate::service::sheets::v2::SpreadsheetSheetService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<OperateSheetResponse>> {
-        service.update_sheet_properties(self.build(), None).await
-    }
-
-    /// 直接执行更新工作表属性请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.update_sheet_properties()`
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::sheets::v2::SpreadsheetSheetService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<OperateSheetResponse>> {
-        service
-            .update_sheet_properties(self.build(), Some(option))
-            .await
-    }
 }
+
+impl_executable_builder_owned!(
+    UpdateSheetPropertiesRequestBuilder,
+    SpreadsheetSheetService,
+    UpdateSheetPropertiesRequest,
+    BaseResponse<OperateSheetResponse>,
+    update_sheet_properties
+);
 
 impl SpreadsheetSheetService {
     pub async fn update_sheet_properties(

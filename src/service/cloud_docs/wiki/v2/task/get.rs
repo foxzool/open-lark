@@ -1,14 +1,17 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
 };
 
 /// 获取任务结果请求
@@ -50,28 +53,15 @@ impl GetTaskRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 直接执行获取任务结果请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.get()`
-    pub async fn execute(
-        self,
-        service: &crate::service::cloud_docs::wiki::v2::task::TaskService,
-    ) -> crate::core::SDKResult<GetTaskResponse> {
-        service.get(self.build(), None).await
-    }
-
-    /// 直接执行获取任务结果请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.get()`
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::cloud_docs::wiki::v2::task::TaskService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<GetTaskResponse> {
-        service.get(self.build(), Some(option)).await
-    }
 }
+
+impl_executable_builder_owned!(
+    GetTaskRequestBuilder,
+    crate::service::cloud_docs::wiki::v2::task::TaskService,
+    GetTaskRequest,
+    GetTaskResponse,
+    get
+);
 
 /// 任务状态
 #[derive(Debug, Deserialize)]

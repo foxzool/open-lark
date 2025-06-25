@@ -115,6 +115,10 @@ path = "examples/api/token_performance_monitoring.rs"
 name = "background_token_preheating"
 path = "examples/api/background_token_preheating.rs"
 
+[[example]]
+name = "refactored_modules_test"
+path = "examples/api/refactored_modules_test.rs"
+
 # ===========================================
 # Benchmarks
 # ===========================================

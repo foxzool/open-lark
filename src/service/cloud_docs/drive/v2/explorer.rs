@@ -246,7 +246,6 @@ impl CreateFolderRequestBuilder {
 
         self.request
     }
-
 }
 
 /// 创建文件夹响应体
@@ -368,7 +367,6 @@ impl ListFolderRequestBuilder {
     pub fn build(self) -> ListFolderRequest {
         self.request
     }
-
 }
 
 /// 列出文件夹查询参数

@@ -1,14 +1,17 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
 };
 
 /// 创建知识空间请求
@@ -58,28 +61,15 @@ impl CreateSpaceRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 直接执行创建知识空间请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `create_space()`
-    pub async fn execute(
-        self,
-        config: &crate::core::config::Config,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateSpaceResponse>> {
-        create_space(self.build(), config, None).await
-    }
-
-    /// 直接执行创建知识空间请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `create_space()`
-    pub async fn execute_with_options(
-        self,
-        config: &crate::core::config::Config,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateSpaceResponse>> {
-        create_space(self.build(), config, Some(option)).await
-    }
 }
+
+impl_executable_builder_owned!(
+    CreateSpaceRequestBuilder,
+    crate::service::cloud_docs::wiki::v2::space::SpaceService,
+    CreateSpaceRequest,
+    BaseResponse<CreateSpaceResponse>,
+    create
+);
 
 /// 创建的知识空间信息
 #[derive(Debug, Deserialize)]

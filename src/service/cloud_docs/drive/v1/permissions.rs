@@ -125,7 +125,6 @@ impl GetPermissionRequestBuilder {
     pub fn build(self) -> GetPermissionRequest {
         self.request
     }
-
 }
 
 /// 返回的文档公共设置
@@ -432,7 +431,6 @@ impl PatchPermissionRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
 }
 
 impl_executable_builder_owned!(
