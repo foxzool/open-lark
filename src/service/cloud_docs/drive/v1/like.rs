@@ -1,14 +1,17 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
 };
 
 /// 点赞服务
@@ -68,6 +71,10 @@ pub struct ListFileLikesRequest {
 }
 
 impl ListFileLikesRequest {
+    pub fn builder() -> ListFileLikesRequestBuilder {
+        ListFileLikesRequestBuilder::default()
+    }
+
     pub fn new(file_token: impl Into<String>) -> Self {
         Self {
             file_token: file_token.into(),
@@ -86,6 +93,51 @@ impl ListFileLikesRequest {
         self
     }
 }
+
+/// 获取云文档的点赞者列表请求构建器
+#[derive(Default)]
+pub struct ListFileLikesRequestBuilder {
+    request: ListFileLikesRequest,
+}
+
+impl ListFileLikesRequestBuilder {
+    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
+        self.request.file_token = file_token.into();
+        self
+    }
+
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.request.page_token = Some(page_token.into());
+        self
+    }
+
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.request.page_size = Some(page_size);
+        self
+    }
+
+    pub fn build(self) -> ListFileLikesRequest {
+        self.request
+    }
+}
+
+impl Default for ListFileLikesRequest {
+    fn default() -> Self {
+        Self {
+            file_token: String::new(),
+            page_token: None,
+            page_size: None,
+        }
+    }
+}
+
+impl_executable_builder_owned!(
+    ListFileLikesRequestBuilder,
+    LikeService,
+    ListFileLikesRequest,
+    BaseResponse<ListFileLikesRespData>,
+    list_file_likes
+);
 
 /// 获取云文档的点赞者列表响应数据
 #[derive(Debug, Clone, Serialize, Deserialize)]

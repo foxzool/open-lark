@@ -193,6 +193,10 @@ pub struct CreateBlockRequest {
 }
 
 impl CreateBlockRequest {
+    pub fn builder() -> CreateBlockRequestBuilder {
+        CreateBlockRequestBuilder::default()
+    }
+
     pub fn new(parent_id: impl Into<String>, blocks: Vec<BlockData>) -> Self {
         Self {
             parent_id: parent_id.into(),
@@ -204,6 +208,54 @@ impl CreateBlockRequest {
     pub fn with_index(mut self, index: i32) -> Self {
         self.index = Some(index);
         self
+    }
+}
+
+/// 创建块请求构建器
+#[derive(Default)]
+pub struct CreateBlockRequestBuilder {
+    request: CreateBlockRequest,
+    document_id: String,
+}
+
+impl CreateBlockRequestBuilder {
+    pub fn document_id(mut self, document_id: impl Into<String>) -> Self {
+        self.document_id = document_id.into();
+        self
+    }
+
+    pub fn parent_id(mut self, parent_id: impl Into<String>) -> Self {
+        self.request.parent_id = parent_id.into();
+        self
+    }
+
+    pub fn index(mut self, index: i32) -> Self {
+        self.request.index = Some(index);
+        self
+    }
+
+    pub fn blocks(mut self, blocks: Vec<BlockData>) -> Self {
+        self.request.blocks = blocks;
+        self
+    }
+
+    pub fn add_block(mut self, block: BlockData) -> Self {
+        self.request.blocks.push(block);
+        self
+    }
+
+    pub fn build(self) -> (String, CreateBlockRequest) {
+        (self.document_id, self.request)
+    }
+}
+
+impl Default for CreateBlockRequest {
+    fn default() -> Self {
+        Self {
+            parent_id: String::new(),
+            index: None,
+            blocks: Vec::new(),
+        }
     }
 }
 
@@ -321,8 +373,51 @@ pub struct UpdateBlockItem {
 }
 
 impl BatchUpdateBlockRequest {
+    pub fn builder() -> BatchUpdateBlockRequestBuilder {
+        BatchUpdateBlockRequestBuilder::default()
+    }
+
     pub fn new(requests: Vec<UpdateBlockItem>) -> Self {
         Self { requests }
+    }
+}
+
+/// 批量更新块请求构建器
+#[derive(Default)]
+pub struct BatchUpdateBlockRequestBuilder {
+    request: BatchUpdateBlockRequest,
+    document_id: String,
+}
+
+impl BatchUpdateBlockRequestBuilder {
+    pub fn document_id(mut self, document_id: impl Into<String>) -> Self {
+        self.document_id = document_id.into();
+        self
+    }
+
+    pub fn requests(mut self, requests: Vec<UpdateBlockItem>) -> Self {
+        self.request.requests = requests;
+        self
+    }
+
+    pub fn add_request(mut self, block_id: impl Into<String>, block: Value) -> Self {
+        self.request.requests.push(UpdateBlockItem {
+            block_id: block_id.into(),
+            block,
+        });
+        self
+    }
+
+    pub fn build(self) -> (String, BatchUpdateBlockRequest) {
+        (self.document_id, self.request)
+    }
+}
+
+impl Default for BatchUpdateBlockRequest {
+    fn default() -> Self {
+        Self {
+            requests: Vec::new(),
+        }
     }
 }
 
@@ -349,8 +444,48 @@ pub struct BatchDeleteBlockRequest {
 }
 
 impl BatchDeleteBlockRequest {
+    pub fn builder() -> BatchDeleteBlockRequestBuilder {
+        BatchDeleteBlockRequestBuilder::default()
+    }
+
     pub fn new(block_ids: Vec<String>) -> Self {
         Self { block_ids }
+    }
+}
+
+/// 批量删除块请求构建器
+#[derive(Default)]
+pub struct BatchDeleteBlockRequestBuilder {
+    request: BatchDeleteBlockRequest,
+    document_id: String,
+}
+
+impl BatchDeleteBlockRequestBuilder {
+    pub fn document_id(mut self, document_id: impl Into<String>) -> Self {
+        self.document_id = document_id.into();
+        self
+    }
+
+    pub fn block_ids(mut self, block_ids: Vec<String>) -> Self {
+        self.request.block_ids = block_ids;
+        self
+    }
+
+    pub fn add_block_id(mut self, block_id: impl Into<String>) -> Self {
+        self.request.block_ids.push(block_id.into());
+        self
+    }
+
+    pub fn build(self) -> (String, BatchDeleteBlockRequest) {
+        (self.document_id, self.request)
+    }
+}
+
+impl Default for BatchDeleteBlockRequest {
+    fn default() -> Self {
+        Self {
+            block_ids: Vec::new(),
+        }
     }
 }
 
@@ -415,5 +550,40 @@ pub struct ListChildrenRespData {
 impl ApiResponseTrait for ListChildrenRespData {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+// === Builder execute方法实现 ===
+
+impl CreateBlockRequestBuilder {
+    pub async fn execute(
+        self,
+        service: &DocumentBlockService,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<CreateBlockRespData>> {
+        let (document_id, request) = self.build();
+        service.create(document_id, request, option).await
+    }
+}
+
+impl BatchUpdateBlockRequestBuilder {
+    pub async fn execute(
+        self,
+        service: &DocumentBlockService,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<BatchUpdateBlockRespData>> {
+        let (document_id, request) = self.build();
+        service.batch_update(document_id, request, option).await
+    }
+}
+
+impl BatchDeleteBlockRequestBuilder {
+    pub async fn execute(
+        self,
+        service: &DocumentBlockService,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<BatchDeleteBlockRespData>> {
+        let (document_id, request) = self.build();
+        service.batch_delete(document_id, request, option).await
     }
 }
