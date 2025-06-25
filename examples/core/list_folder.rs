@@ -96,7 +96,7 @@ async fn list_folder_contents(
                 if !data.files.is_empty() {
                     println!("\n📄 文件和文件夹列表:");
                     for (index, file) in data.files.iter().enumerate() {
-                        let file_type_icon = match file.type_.as_str() {
+                        let file_type_icon = match file.file_type.as_str() {
                             "folder" => "📁",
                             "docx" => "📝",
                             "sheet" => "📊",
@@ -113,14 +113,18 @@ async fn list_folder_contents(
                             index + 1,
                             file_type_icon,
                             file.name,
-                            file.type_
+                            file.file_type
                         );
 
                         println!("      Token: {}", file.token);
-                        println!("      创建时间: {}", file.created_time);
-                        println!("      修改时间: {}", file.modified_time);
+                        if let Some(created_time) = &file.created_time {
+                            println!("      创建时间: {}", created_time);
+                        }
+                        if let Some(modified_time) = &file.modified_time {
+                            println!("      修改时间: {}", modified_time);
+                        }
 
-                        if file.type_ != "folder" {
+                        if file.file_type != "folder" {
                             if let Some(size) = file.size {
                                 println!("      文件大小: {}", format_file_size(size));
                             }
@@ -138,7 +142,7 @@ async fn list_folder_contents(
 
                 if data.has_more {
                     println!("💡 提示: 还有更多文件可以通过分页获取");
-                    if let Some(next_page_token) = &data.next_page_token {
+                    if let Some(next_page_token) = &data.page_token {
                         println!("   下一页Token: {}", next_page_token);
                     }
                 }
@@ -197,7 +201,7 @@ async fn list_folder_with_pagination(
 
                     // 显示本页文件名
                     for file in &data.files {
-                        let file_type = match file.type_.as_str() {
+                        let file_type = match file.file_type.as_str() {
                             "folder" => "文件夹",
                             "docx" => "文档",
                             "sheet" => "表格",
@@ -209,7 +213,7 @@ async fn list_folder_with_pagination(
 
                     // 检查是否还有更多页面
                     if data.has_more {
-                        page_token = data.next_page_token.clone();
+                        page_token = data.page_token.clone();
                         println!("   → 还有更多页面，继续获取...");
 
                         // 为了演示，限制最大页数

@@ -126,15 +126,8 @@ async fn upload_text_file(
             if let Some(data) = &response.data {
                 println!("✅ 文件上传成功!");
                 println!("   文件Token: {}", data.file_token);
-                println!("   文件名称: {}", data.name);
-                println!("   文件大小: {} 字节", data.size);
-                println!("   创建时间: {}", data.created_time);
-                println!("   文件类型: {}", data.type_);
 
-                // 显示文件访问URL（如果有）
-                if let Some(url) = &data.url {
-                    println!("   访问链接: {}", url);
-                }
+                println!("   💡 文件已上传，可通过Drive API获取详细信息");
 
                 println!("\n💡 提示: 您可以在飞书云空间中查看上传的文件");
             } else {
@@ -188,7 +181,6 @@ async fn upload_local_file(
             if let Some(data) = &response.data {
                 println!("✅ 本地文件上传成功!");
                 println!("   文件Token: {}", data.file_token);
-                println!("   上传大小: {} 字节", data.size);
             }
         }
         Err(e) => {

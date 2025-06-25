@@ -9,7 +9,7 @@
 // APP_ID=your_app_id
 // APP_SECRET=your_app_secret
 
-use open_lark::prelude::*;
+use open_lark::{core::trait_system::ExecutableBuilder, prelude::*};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

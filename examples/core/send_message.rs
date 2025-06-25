@@ -77,7 +77,7 @@ async fn send_text_message(
             println!("   2. 确认应用有发送消息的权限");
             println!("   3. 验证RECEIVE_ID是否为有效的用户ID或群组ID");
             println!("   4. 确保目标用户与机器人在同一个群组中，或已添加机器人为好友");
-            return Err(e);
+            return Err(e.into());
         }
     }
 
@@ -145,7 +145,7 @@ async fn send_rich_text_message(
         }
         Err(e) => {
             println!("❌ 富文本消息发送失败: {:?}", e);
-            return Err(e);
+            return Err(e.into());
         }
     }
 

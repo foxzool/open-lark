@@ -33,11 +33,13 @@ impl DocumentBlockService {
         request: CreateBlockRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateBlockRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = format!("/open-apis/docx/v1/documents/{}/blocks", document_id.into());
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
-        api_req.body = serde_json::to_vec(&request)?;
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: format!("/open-apis/docx/v1/documents/{}/blocks", document_id.into()),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            body: serde_json::to_vec(&request)?,
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -54,14 +56,16 @@ impl DocumentBlockService {
         block_id: impl Into<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetBlockRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/docx/v1/documents/{}/blocks/{}",
-            document_id.into(),
-            block_id.into()
-        );
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!(
+                "/open-apis/docx/v1/documents/{}/blocks/{}",
+                document_id.into(),
+                block_id.into()
+            ),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -79,15 +83,17 @@ impl DocumentBlockService {
         request: PatchBlockRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<PatchBlockRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::PATCH;
-        api_req.api_path = format!(
-            "/open-apis/docx/v1/documents/{}/blocks/{}",
-            document_id.into(),
-            block_id.into()
-        );
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
-        api_req.body = serde_json::to_vec(&request)?;
+        let api_req = ApiRequest {
+            http_method: Method::PATCH,
+            api_path: format!(
+                "/open-apis/docx/v1/documents/{}/blocks/{}",
+                document_id.into(),
+                block_id.into()
+            ),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            body: serde_json::to_vec(&request)?,
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -104,12 +110,14 @@ impl DocumentBlockService {
         request: BatchUpdateBlockRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BatchUpdateBlockRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::PATCH;
-        api_req.api_path = format!(
-            "/open-apis/docx/v1/documents/{}/blocks/batch_update",
-            document_id.into()
-        );
+        let mut api_req = ApiRequest {
+            http_method: Method::PATCH,
+            api_path: format!(
+                "/open-apis/docx/v1/documents/{}/blocks/batch_update",
+                document_id.into()
+            ),
+            ..Default::default()
+        };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
         api_req.body = serde_json::to_vec(&request)?;
 
@@ -128,12 +136,14 @@ impl DocumentBlockService {
         request: BatchDeleteBlockRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BatchDeleteBlockRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::DELETE;
-        api_req.api_path = format!(
-            "/open-apis/docx/v1/documents/{}/blocks/batch_delete",
-            document_id.into()
-        );
+        let mut api_req = ApiRequest {
+            http_method: Method::DELETE,
+            api_path: format!(
+                "/open-apis/docx/v1/documents/{}/blocks/batch_delete",
+                document_id.into()
+            ),
+            ..Default::default()
+        };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
         api_req.body = serde_json::to_vec(&request)?;
 
@@ -153,14 +163,16 @@ impl DocumentBlockService {
         request: ListChildrenRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListChildrenRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/docx/v1/documents/{}/blocks/{}/children",
-            document_id.into(),
-            block_id.into()
-        );
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let mut api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!(
+                "/open-apis/docx/v1/documents/{}/blocks/{}/children",
+                document_id.into(),
+                block_id.into()
+            ),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            ..Default::default()
+        };
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -182,7 +194,7 @@ impl DocumentBlockService {
 // === 数据结构定义 ===
 
 /// 创建块请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CreateBlockRequest {
     /// 父块ID，如果创建在文档根级，传document_id
     pub parent_id: String,
@@ -246,16 +258,6 @@ impl CreateBlockRequestBuilder {
 
     pub fn build(self) -> (String, CreateBlockRequest) {
         (self.document_id, self.request)
-    }
-}
-
-impl Default for CreateBlockRequest {
-    fn default() -> Self {
-        Self {
-            parent_id: String::new(),
-            index: None,
-            blocks: Vec::new(),
-        }
     }
 }
 
@@ -357,7 +359,7 @@ impl ApiResponseTrait for PatchBlockRespData {
 }
 
 /// 批量更新块请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchUpdateBlockRequest {
     /// 要更新的块列表
     pub requests: Vec<UpdateBlockItem>,
@@ -413,14 +415,6 @@ impl BatchUpdateBlockRequestBuilder {
     }
 }
 
-impl Default for BatchUpdateBlockRequest {
-    fn default() -> Self {
-        Self {
-            requests: Vec::new(),
-        }
-    }
-}
-
 /// 批量更新块响应数据
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchUpdateBlockRespData {
@@ -437,7 +431,7 @@ impl ApiResponseTrait for BatchUpdateBlockRespData {
 }
 
 /// 批量删除块请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchDeleteBlockRequest {
     /// 要删除的块ID列表
     pub block_ids: Vec<String>,
@@ -478,14 +472,6 @@ impl BatchDeleteBlockRequestBuilder {
 
     pub fn build(self) -> (String, BatchDeleteBlockRequest) {
         (self.document_id, self.request)
-    }
-}
-
-impl Default for BatchDeleteBlockRequest {
-    fn default() -> Self {
-        Self {
-            block_ids: Vec::new(),
-        }
     }
 }
 

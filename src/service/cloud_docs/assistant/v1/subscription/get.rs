@@ -111,13 +111,13 @@ pub enum FileType {
     Wiki,
 }
 
-impl ToString for FileType {
-    fn to_string(&self) -> String {
+impl std::fmt::Display for FileType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            FileType::Bitable => "bitable".to_string(),
-            FileType::Doc => "doc".to_string(),
-            FileType::Sheet => "sheet".to_string(),
-            FileType::Wiki => "wiki".to_string(),
+            FileType::Bitable => write!(f, "bitable"),
+            FileType::Doc => write!(f, "doc"),
+            FileType::Sheet => write!(f, "sheet"),
+            FileType::Wiki => write!(f, "wiki"),
         }
     }
 }

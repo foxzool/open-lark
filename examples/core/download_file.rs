@@ -77,7 +77,7 @@ async fn get_target_file(client: &LarkClient) -> Result<String, Box<dyn std::err
                 let downloadable_files: Vec<_> = data
                     .files
                     .iter()
-                    .filter(|file| file.type_ != "folder") // 过滤掉文件夹
+                    .filter(|file| file.file_type != "folder") // 过滤掉文件夹
                     .collect();
 
                 if downloadable_files.is_empty() {
@@ -86,7 +86,7 @@ async fn get_target_file(client: &LarkClient) -> Result<String, Box<dyn std::err
 
                 println!("\n📋 可下载的文件列表:");
                 for (index, file) in downloadable_files.iter().enumerate() {
-                    println!("   {}. {} ({})", index + 1, file.name, file.type_);
+                    println!("   {}. {} ({})", index + 1, file.name, file.file_type);
                     println!("      Token: {}", file.token);
                     if let Some(size) = file.size {
                         println!("      大小: {}", format_file_size(size));
@@ -128,7 +128,7 @@ async fn download_file(
                 println!("✅ 文件下载成功!");
 
                 // 获取文件数据
-                let file_data = &data.data;
+                let file_data = &data.body;
                 println!("   下载大小: {} 字节", file_data.len());
 
                 // 生成本地文件名（使用时间戳避免冲突）

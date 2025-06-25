@@ -68,24 +68,28 @@ impl CreateSpaceNodeRequestBuilder {
     }
 
     /// 创建文档类型节点
+    #[allow(clippy::wrong_self_convention)]
     pub fn as_doc(mut self) -> Self {
         self.request.obj_type = "doc".to_string();
         self
     }
 
     /// 创建电子表格类型节点
+    #[allow(clippy::wrong_self_convention)]
     pub fn as_sheet(mut self) -> Self {
         self.request.obj_type = "sheet".to_string();
         self
     }
 
     /// 创建思维笔记类型节点
+    #[allow(clippy::wrong_self_convention)]
     pub fn as_mindnote(mut self) -> Self {
         self.request.obj_type = "mindnote".to_string();
         self
     }
 
     /// 创建多维表格类型节点
+    #[allow(clippy::wrong_self_convention)]
     pub fn as_bitable(mut self) -> Self {
         self.request.obj_type = "bitable".to_string();
         self
@@ -104,12 +108,14 @@ impl CreateSpaceNodeRequestBuilder {
     }
 
     /// 设置为正常节点
+    #[allow(clippy::wrong_self_convention)]
     pub fn as_origin_node(mut self) -> Self {
         self.request.node_type = Some("origin".to_string());
         self
     }
 
     /// 设置为快捷方式
+    #[allow(clippy::wrong_self_convention)]
     pub fn as_shortcut(mut self) -> Self {
         self.request.node_type = Some("shortcut".to_string());
         self

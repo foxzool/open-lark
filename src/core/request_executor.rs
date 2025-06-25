@@ -164,16 +164,12 @@ impl RequestExecutor {
         body: Option<B>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<T>> {
-        let mut api_req = ApiRequest::default();
-
-        // 设置HTTP方法
-        api_req.http_method = method;
-
-        // 设置API路径
-        api_req.api_path = path.to_string();
-
-        // 设置支持的访问令牌类型
-        api_req.supported_access_token_types = supported_tokens;
+        let mut api_req = ApiRequest {
+            http_method: method,
+            api_path: path.to_string(),
+            supported_access_token_types: supported_tokens,
+            ..Default::default()
+        };
 
         // 设置查询参数
         if let Some(params) = query_params {
@@ -212,6 +208,7 @@ impl RequestExecutor {
     ///     None,
     /// ).await?;
     /// ```
+    #[allow(clippy::too_many_arguments)]
     pub async fn execute_with_path_params<T: ApiResponseTrait, B: Serialize>(
         config: &Config,
         method: Method,

@@ -121,7 +121,7 @@ impl CreatePasswordRequestBuilder {
 
         let password: String = thread_rng()
             .sample_iter(&Alphanumeric)
-            .take(length.max(6).min(32))
+            .take(length.clamp(6, 32))
             .map(char::from)
             .collect();
 

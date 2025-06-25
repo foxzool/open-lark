@@ -34,13 +34,15 @@ impl LikeService {
         request: ListFileLikesRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListFileLikesRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/drive/v1/files/{}/like_records",
-            request.file_token
-        );
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let mut api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!(
+                "/open-apis/drive/v1/files/{}/like_records",
+                request.file_token
+            ),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            ..Default::default()
+        };
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
@@ -60,7 +62,7 @@ impl LikeService {
 }
 
 /// 获取云文档的点赞者列表请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ListFileLikesRequest {
     /// 文件token
     pub file_token: String,
@@ -118,16 +120,6 @@ impl ListFileLikesRequestBuilder {
 
     pub fn build(self) -> ListFileLikesRequest {
         self.request
-    }
-}
-
-impl Default for ListFileLikesRequest {
-    fn default() -> Self {
-        Self {
-            file_token: String::new(),
-            page_token: None,
-            page_size: None,
-        }
     }
 }
 

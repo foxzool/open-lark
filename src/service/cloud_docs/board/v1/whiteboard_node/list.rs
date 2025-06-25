@@ -57,7 +57,7 @@ impl ListWhiteboardNodesRequestBuilder {
 
     /// 分页大小，最大值100
     pub fn page_size(mut self, size: i32) -> Self {
-        self.request.page_size = Some(size.min(100).max(1));
+        self.request.page_size = Some(size.clamp(1, 100));
         self
     }
 
@@ -635,7 +635,7 @@ impl ListWhiteboardNodesResponse {
     /// 按复杂度排序节点
     pub fn nodes_by_complexity(&self) -> Vec<&WhiteboardNode> {
         let mut nodes: Vec<&WhiteboardNode> = self.items.iter().collect();
-        nodes.sort_by(|a, b| b.complexity_score().cmp(&a.complexity_score()));
+        nodes.sort_by_key(|node| std::cmp::Reverse(node.complexity_score()));
         nodes
     }
 

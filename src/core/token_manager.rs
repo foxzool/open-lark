@@ -354,7 +354,7 @@ impl TokenManager {
         let cache_read = cache.read().await;
 
         // 如果token不存在，需要预热
-        if cache_read.get(key).map_or(true, |token| token.is_empty()) {
+        if cache_read.get(key).is_none_or(|token| token.is_empty()) {
             log::debug!("🔍 Token {} 不存在，需要预热", key);
             return true;
         }

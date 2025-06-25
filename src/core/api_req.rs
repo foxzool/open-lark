@@ -26,17 +26,21 @@ use crate::core::constants::AccessTokenType;
 ///
 /// ```rust
 /// // 普通JSON请求
-/// let mut api_req = ApiRequest::default();
-/// api_req.http_method = Method::POST;
-/// api_req.api_path = "/open-apis/drive/v1/files".to_string();
-/// api_req.body = serde_json::to_vec(&request_data)?;
+/// let mut api_req = ApiRequest {
+///     http_method: Method::POST,
+///     api_path: "/open-apis/drive/v1/files".to_string(),
+///     body: serde_json::to_vec(&request_data)?,
+///     ..Default::default()
+/// };
 ///
 /// // 文件上传请求（multipart）
-/// let mut api_req = ApiRequest::default();
-/// api_req.http_method = Method::POST;
-/// api_req.api_path = "/open-apis/drive/v1/files/upload".to_string();
-/// api_req.body = serde_json::to_vec(&metadata)?;  // JSON元数据
-/// api_req.file = file_bytes;  // 文件内容
+/// let mut api_req = ApiRequest {
+///     http_method: Method::POST,
+///     api_path: "/open-apis/drive/v1/files/upload".to_string(),
+///     body: serde_json::to_vec(&metadata)?,  // JSON元数据
+///     file: file_bytes,  // 文件内容
+///     ..Default::default()
+/// };
 /// ```
 #[derive(Debug, Clone, Default)]
 pub struct ApiRequest {

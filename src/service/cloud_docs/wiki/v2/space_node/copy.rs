@@ -75,6 +75,7 @@ impl CopySpaceNodeRequestBuilder {
     }
 
     /// 复制到根目录
+    #[allow(clippy::wrong_self_convention)]
     pub fn to_root(mut self) -> Self {
         self.request.target_parent_token = None;
         self
@@ -87,6 +88,7 @@ impl CopySpaceNodeRequestBuilder {
     }
 
     /// 复制到当前空间
+    #[allow(clippy::wrong_self_convention)]
     pub fn to_current_space(mut self) -> Self {
         self.request.target_space_id = None;
         self
