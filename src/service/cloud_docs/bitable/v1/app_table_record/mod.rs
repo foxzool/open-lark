@@ -29,6 +29,8 @@ impl AppTableRecordService {
     }
 
     /// 新增记录
+    ///
+    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/create>
     pub async fn create(
         &self,
         request: &CreateRecordRequest,
@@ -38,6 +40,8 @@ impl AppTableRecordService {
     }
 
     /// 更新记录
+    ///
+    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/update>
     pub async fn update(
         &self,
         request: &UpdateRecordRequest,
@@ -47,6 +51,8 @@ impl AppTableRecordService {
     }
 
     /// 查询记录
+    ///
+    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/search>
     pub async fn search(
         &self,
         request: &SearchRecordRequest,
@@ -56,6 +62,8 @@ impl AppTableRecordService {
     }
 
     /// 删除记录
+    ///
+    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/delete>
     pub async fn delete(
         &self,
         request: &DeleteRecordRequest,
@@ -65,6 +73,8 @@ impl AppTableRecordService {
     }
 
     /// 新增多条记录
+    ///
+    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/batch_create>
     pub async fn batch_create(
         &self,
         request: &BatchCreateRecordRequest,
@@ -75,6 +85,8 @@ impl AppTableRecordService {
     }
 
     /// 更新多条记录
+    ///
+    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/batch_update>
     pub async fn batch_update(
         &self,
         request: &BatchUpdateRecordRequest,
@@ -85,6 +97,8 @@ impl AppTableRecordService {
     }
 
     /// 批量获取记录
+    ///
+    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/batch_get>
     pub async fn batch_get(
         &self,
         request: &BatchGetRecordRequest,
@@ -94,6 +108,8 @@ impl AppTableRecordService {
     }
 
     /// 删除多条记录
+    ///
+    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/batch_delete>
     pub async fn batch_delete(
         &self,
         request: &BatchDeleteRecordRequest,

@@ -135,7 +135,7 @@ impl GroupService {
     ///
     /// 删除指定的考勤组。
     ///
-    /// <https://open.feishu.cn/open-apis/attendance/v1/groups/:group_id>
+    /// <https://open.feishu.cn/document/server-docs/attendance-v1/group/delete>
     pub async fn delete(
         &self,
         request: &DeleteGroupRequest,

@@ -27,6 +27,8 @@ impl MessageService {
     ///
     /// 给指定用户或者会话发送消息，支持文本、富文本、可交互的消息卡片、群名片、个人名片、图片、
     /// 视频、音频、文件、表情包。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/im-v1/message/create>
     pub async fn create(
         &self,
         create_message_request: &CreateMessageRequest,

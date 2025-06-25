@@ -19,6 +19,8 @@ impl UserInfoService {
     }
 
     /// 获取登录用户信息
+    ///
+    /// <https://open.feishu.cn/document/server-docs/authentication-v1/user/get>
     pub async fn get(&self, user_access_token: impl ToString) -> SDKResult<BaseResponse<UserInfo>> {
         let api_req = ApiRequest {
             api_path: "/open-apis/authen/v1/user_info".to_string(),

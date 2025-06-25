@@ -24,7 +24,9 @@ impl UserService {
         Self { config }
     }
 
-    /// 搜索用户。
+    /// 搜索用户
+    ///
+    /// <https://open.feishu.cn/document/server-docs/search-v1/user/search>
     pub async fn search_user(
         &self,
         search_user_request: &SearchUserRequest,
