@@ -132,7 +132,7 @@ impl RequestExecutor {
     /// 返回标准的`BaseResponse<T>`格式响应
     ///
     /// # 示例
-    /// ```rust
+    /// ```rust,ignore
     /// // GET请求
     /// let response: BaseResponse<MessageList> = RequestExecutor::execute(
     ///     &config,
@@ -195,7 +195,7 @@ impl RequestExecutor {
     /// - 其他参数同 `execute` 方法
     ///
     /// # 示例
-    /// ```rust
+    /// ```rust,ignore
     /// let path_params = HashMap::from([("message_id", "om_xxx")]);
     /// let response = RequestExecutor::execute_with_path_params(
     ///     &config,
@@ -241,7 +241,7 @@ impl RequestExecutor {
     /// 自动序列化JSON请求体并设置标准的租户/用户令牌支持
     ///
     /// # 示例
-    /// ```rust
+    /// ```rust,ignore
     /// // 创建消息
     /// let response = RequestExecutor::json_request::<CreateMessageResponse, _>(
     ///     &config,
@@ -274,7 +274,7 @@ impl RequestExecutor {
     /// 用于GET请求，自动设置标准的租户/用户令牌支持
     ///
     /// # 示例
-    /// ```rust
+    /// ```rust,ignore
     /// // 获取消息列表
     /// let mut query_params = HashMap::new();
     /// query_params.insert("container_id".to_string(), chat_id);

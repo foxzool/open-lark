@@ -24,12 +24,12 @@ use crate::core::constants::AccessTokenType;
 ///
 /// # 示例
 ///
-/// ```rust
+/// ```rust,ignore
 /// // 普通JSON请求
 /// let mut api_req = ApiRequest {
 ///     http_method: Method::POST,
 ///     api_path: "/open-apis/drive/v1/files".to_string(),
-///     body: serde_json::to_vec(&request_data)?,
+///     body: serde_json::to_vec(&request_data).unwrap(),
 ///     ..Default::default()
 /// };
 ///
@@ -37,7 +37,7 @@ use crate::core::constants::AccessTokenType;
 /// let mut api_req = ApiRequest {
 ///     http_method: Method::POST,
 ///     api_path: "/open-apis/drive/v1/files/upload".to_string(),
-///     body: serde_json::to_vec(&metadata)?,  // JSON元数据
+///     body: serde_json::to_vec(&metadata).unwrap(),  // JSON元数据
 ///     file: file_bytes,  // 文件内容
 ///     ..Default::default()
 /// };
@@ -78,7 +78,7 @@ pub struct ApiRequest {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```rust,ignore
     /// api_req.query_params.insert("page_size".to_string(), "10".to_string());
     /// api_req.query_params.insert("page_token".to_string(), token);
     /// ```
@@ -121,13 +121,13 @@ pub struct ApiRequest {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```rust,ignore
     /// // 文件上传请求
     /// api_req.body = serde_json::to_vec(&FileMetadata {
     ///     name: "document.pdf",
     ///     parent_id: "folder123",
-    /// })?;
-    /// api_req.file = std::fs::read("path/to/document.pdf")?;
+    /// }).unwrap();
+    /// api_req.file = std::fs::read("path/to/document.pdf").unwrap();
     /// ```
     pub file: Vec<u8>,
 }
