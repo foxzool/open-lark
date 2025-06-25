@@ -78,8 +78,7 @@ impl MoveDocsToWikiRequestBuilder {
     }
 
     /// 移动到根节点
-    #[allow(clippy::wrong_self_convention)]
-    pub fn to_root(mut self) -> Self {
+    pub fn move_to_root(mut self) -> Self {
         self.request.parent_node_token = None;
         self
     }
@@ -150,7 +149,7 @@ mod tests {
         let request = MoveDocsToWikiRequest::builder()
             .space_id("spcxxxxxx")
             .obj_tokens(vec!["doccnxxxxxx".to_string(), "shtcnxxxxxx".to_string()])
-            .to_root()
+            .move_to_root()
             .build();
 
         assert_eq!(request.space_id, "spcxxxxxx");

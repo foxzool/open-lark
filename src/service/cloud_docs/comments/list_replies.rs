@@ -79,29 +79,25 @@ impl ListRepliesRequestBuilder {
     }
 
     /// 设置为文档类型
-    #[allow(clippy::wrong_self_convention)]
-    pub fn as_doc(mut self) -> Self {
+    pub fn with_doc_type(mut self) -> Self {
         self.request.file_type = "doc".to_string();
         self
     }
 
     /// 设置为docx类型
-    #[allow(clippy::wrong_self_convention)]
-    pub fn as_docx(mut self) -> Self {
+    pub fn with_docx_type(mut self) -> Self {
         self.request.file_type = "docx".to_string();
         self
     }
 
     /// 设置为电子表格类型
-    #[allow(clippy::wrong_self_convention)]
-    pub fn as_sheet(mut self) -> Self {
+    pub fn with_sheet_type(mut self) -> Self {
         self.request.file_type = "sheet".to_string();
         self
     }
 
     /// 设置为多维表格类型
-    #[allow(clippy::wrong_self_convention)]
-    pub fn as_bitable(mut self) -> Self {
+    pub fn with_bitable_type(mut self) -> Self {
         self.request.file_type = "bitable".to_string();
         self
     }
@@ -287,7 +283,7 @@ mod tests {
     fn test_list_replies_request_builder() {
         let request = ListRepliesRequest::builder()
             .file_token("doccnxxxxxx")
-            .as_doc()
+            .with_doc_type()
             .comment_id("comment123")
             .page_size(20)
             .with_open_id()

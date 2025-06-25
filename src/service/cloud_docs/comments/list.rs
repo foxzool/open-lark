@@ -75,36 +75,31 @@ impl ListCommentsRequestBuilder {
     }
 
     /// 设置为文档类型
-    #[allow(clippy::wrong_self_convention)]
-    pub fn as_doc(mut self) -> Self {
+    pub fn with_doc_type(mut self) -> Self {
         self.request.file_type = "doc".to_string();
         self
     }
 
     /// 设置为docx类型
-    #[allow(clippy::wrong_self_convention)]
-    pub fn as_docx(mut self) -> Self {
+    pub fn with_docx_type(mut self) -> Self {
         self.request.file_type = "docx".to_string();
         self
     }
 
     /// 设置为电子表格类型
-    #[allow(clippy::wrong_self_convention)]
-    pub fn as_sheet(mut self) -> Self {
+    pub fn with_sheet_type(mut self) -> Self {
         self.request.file_type = "sheet".to_string();
         self
     }
 
     /// 设置为多维表格类型
-    #[allow(clippy::wrong_self_convention)]
-    pub fn as_bitable(mut self) -> Self {
+    pub fn with_bitable_type(mut self) -> Self {
         self.request.file_type = "bitable".to_string();
         self
     }
 
     /// 是否是全文评论
-    #[allow(clippy::wrong_self_convention)]
-    pub fn is_whole(mut self, is_whole: bool) -> Self {
+    pub fn set_whole(mut self, is_whole: bool) -> Self {
         self.request.is_whole = Some(is_whole);
         self
     }
@@ -122,8 +117,7 @@ impl ListCommentsRequestBuilder {
     }
 
     /// 是否获取已解决的评论
-    #[allow(clippy::wrong_self_convention)]
-    pub fn is_solved(mut self, is_solved: bool) -> Self {
+    pub fn set_solved(mut self, is_solved: bool) -> Self {
         self.request.is_solved = Some(is_solved);
         self
     }
@@ -361,7 +355,7 @@ mod tests {
     fn test_list_comments_request_builder() {
         let request = ListCommentsRequest::builder()
             .file_token("doccnxxxxxx")
-            .as_doc()
+            .with_doc_type()
             .whole_comments_only()
             .unsolved_comments_only()
             .page_size(20)

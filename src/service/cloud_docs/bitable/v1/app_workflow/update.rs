@@ -63,8 +63,7 @@ impl UpdateWorkflowRequestBuilder {
     }
 
     /// 自动化流程状态：true-启用，false-停用
-    #[allow(clippy::wrong_self_convention)]
-    pub fn is_enabled(mut self, is_enabled: bool) -> Self {
+    pub fn set_enabled(mut self, is_enabled: bool) -> Self {
         self.request.is_enabled = is_enabled;
         self
     }

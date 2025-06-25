@@ -72,29 +72,25 @@ impl BatchQueryCommentsRequestBuilder {
     }
 
     /// 设置为文档类型
-    #[allow(clippy::wrong_self_convention)]
-    pub fn as_doc(mut self) -> Self {
+    pub fn with_doc_type(mut self) -> Self {
         self.request.file_type = "doc".to_string();
         self
     }
 
     /// 设置为docx类型
-    #[allow(clippy::wrong_self_convention)]
-    pub fn as_docx(mut self) -> Self {
+    pub fn with_docx_type(mut self) -> Self {
         self.request.file_type = "docx".to_string();
         self
     }
 
     /// 设置为电子表格类型
-    #[allow(clippy::wrong_self_convention)]
-    pub fn as_sheet(mut self) -> Self {
+    pub fn with_sheet_type(mut self) -> Self {
         self.request.file_type = "sheet".to_string();
         self
     }
 
     /// 设置为多维表格类型
-    #[allow(clippy::wrong_self_convention)]
-    pub fn as_bitable(mut self) -> Self {
+    pub fn with_bitable_type(mut self) -> Self {
         self.request.file_type = "bitable".to_string();
         self
     }
@@ -263,7 +259,7 @@ mod tests {
     fn test_batch_query_comments_request_builder() {
         let request = BatchQueryCommentsRequest::builder()
             .file_token("doccnxxxxxx")
-            .as_doc()
+            .with_doc_type()
             .add_comment_id("comment1")
             .add_comment_id("comment2")
             .add_comment_ids(vec!["comment3", "comment4"])

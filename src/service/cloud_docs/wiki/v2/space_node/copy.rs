@@ -75,8 +75,7 @@ impl CopySpaceNodeRequestBuilder {
     }
 
     /// 复制到根目录
-    #[allow(clippy::wrong_self_convention)]
-    pub fn to_root(mut self) -> Self {
+    pub fn move_to_root(mut self) -> Self {
         self.request.target_parent_token = None;
         self
     }
@@ -88,8 +87,7 @@ impl CopySpaceNodeRequestBuilder {
     }
 
     /// 复制到当前空间
-    #[allow(clippy::wrong_self_convention)]
-    pub fn to_current_space(mut self) -> Self {
+    pub fn move_to_current_space(mut self) -> Self {
         self.request.target_space_id = None;
         self
     }
@@ -199,8 +197,8 @@ mod tests {
         let request = CopySpaceNodeRequest::builder()
             .space_id("spcxxxxxx")
             .node_token("wikcnxxxxxx")
-            .to_root()
-            .to_current_space()
+            .move_to_root()
+            .move_to_current_space()
             .keep_original_title()
             .build();
 
