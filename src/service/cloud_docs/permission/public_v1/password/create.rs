@@ -366,6 +366,6 @@ mod tests {
         };
 
         assert!(numeric_result.is_numeric_password());
-        assert_eq!(numeric_result.password_strength(), "弱");
+        assert_eq!(numeric_result.password_strength(), "中等");
     }
 }
