@@ -1,14 +1,17 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 use super::batch_create::Permission;
@@ -105,25 +108,15 @@ impl ListPermissionMembersRequestBuilder {
         self.request
     }
 
-    /// 执行请求
-    pub async fn execute(
-        mut self,
-        service: &crate::service::cloud_docs::permission::PermissionService,
-    ) -> SDKResult<BaseResponse<ListPermissionMembersResponse>> {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        service.list_members(&self.request, None).await
-    }
-
-    /// 执行请求（带选项）
-    pub async fn execute_with_options(
-        mut self,
-        service: &crate::service::cloud_docs::permission::PermissionService,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<ListPermissionMembersResponse>> {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        service.list_members(&self.request, Some(option)).await
-    }
 }
+
+impl_executable_builder!(
+    ListPermissionMembersRequestBuilder,
+    crate::service::cloud_docs::permission::PermissionService,
+    ListPermissionMembersRequest,
+    BaseResponse<ListPermissionMembersResponse>,
+    list_members
+);
 
 /// 协作者信息
 #[derive(Debug, Deserialize)]

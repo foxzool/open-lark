@@ -1,14 +1,17 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 /// 协作者权限
@@ -178,33 +181,15 @@ impl BatchCreatePermissionMemberRequestBuilder {
         self.request
     }
 
-    /// 直接执行批量增加协作者权限请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.batch_create_member()`
-    pub async fn execute(
-        self,
-        service: &crate::service::cloud_docs::permission::PermissionService,
-    ) -> crate::core::SDKResult<
-        crate::core::api_resp::BaseResponse<BatchCreatePermissionMemberResponse>,
-    > {
-        service.batch_create_member(&self.build(), None).await
-    }
-
-    /// 直接执行批量增加协作者权限请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.batch_create_member()`
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::cloud_docs::permission::PermissionService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<
-        crate::core::api_resp::BaseResponse<BatchCreatePermissionMemberResponse>,
-    > {
-        service
-            .batch_create_member(&self.build(), Some(option))
-            .await
-    }
 }
+
+impl_executable_builder!(
+    BatchCreatePermissionMemberRequestBuilder,
+    crate::service::cloud_docs::permission::PermissionService,
+    BatchCreatePermissionMemberRequest,
+    BaseResponse<BatchCreatePermissionMemberResponse>,
+    batch_create_member
+);
 
 /// 成员操作结果
 #[derive(Debug, Deserialize)]
