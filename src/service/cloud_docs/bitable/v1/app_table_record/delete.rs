@@ -76,7 +76,6 @@ impl DeleteRecordRequestBuilder {
     pub fn build(self) -> DeleteRecordRequest {
         self.request
     }
-
 }
 
 // 应用ExecutableBuilder trait到DeleteRecordRequestBuilder

@@ -1,6 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
+use super::AppRoleService;
 use crate::{
     core::{
         api_req::ApiRequest,
@@ -11,6 +12,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder_owned,
     service::bitable::v1::app_role::{AppRole, BlockRole, TableRole},
 };
 
@@ -90,28 +92,15 @@ impl UpdateAppRoleRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 直接执行更新自定义角色请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `update_app_role()`
-    pub async fn execute(
-        self,
-        config: &crate::core::config::Config,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<UpdateAppRoleResponse>> {
-        update_app_role(self.build(), config, None).await
-    }
-
-    /// 直接执行更新自定义角色请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `update_app_role()`
-    pub async fn execute_with_options(
-        self,
-        config: &crate::core::config::Config,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<UpdateAppRoleResponse>> {
-        update_app_role(self.build(), config, Some(option)).await
-    }
 }
+
+impl_executable_builder_owned!(
+    UpdateAppRoleRequestBuilder,
+    AppRoleService,
+    UpdateAppRoleRequest,
+    BaseResponse<UpdateAppRoleResponse>,
+    update
+);
 
 /// 更新自定义角色响应
 #[derive(Debug, Deserialize)]

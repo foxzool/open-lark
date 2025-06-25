@@ -97,7 +97,9 @@ impl UserStatsDataService {
             .insert("employee_type".to_string(), request.employee_type.clone());
 
         if let Some(locale) = &request.locale {
-            api_req.query_params.insert("locale".to_string(), locale.clone());
+            api_req
+                .query_params
+                .insert("locale".to_string(), locale.clone());
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

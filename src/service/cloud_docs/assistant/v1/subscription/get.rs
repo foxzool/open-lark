@@ -1,14 +1,18 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
+    service::cloud_docs::assistant::v1::subscription::SubscriptionService,
 };
 
 /// 获取订阅状态请求
@@ -84,28 +88,15 @@ impl GetSubscriptionRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 直接执行获取订阅状态请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.get()`
-    pub async fn execute(
-        self,
-        service: &crate::service::cloud_docs::assistant::v1::subscription::SubscriptionService,
-    ) -> crate::core::SDKResult<GetSubscriptionResponse> {
-        service.get(self.build(), None).await
-    }
-
-    /// 直接执行获取订阅状态请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.get()`
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::cloud_docs::assistant::v1::subscription::SubscriptionService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<GetSubscriptionResponse> {
-        service.get(self.build(), Some(option)).await
-    }
 }
+
+impl_executable_builder_owned!(
+    GetSubscriptionRequestBuilder,
+    SubscriptionService,
+    GetSubscriptionRequest,
+    GetSubscriptionResponse,
+    get
+);
 
 /// 文档类型
 #[derive(Debug, Clone)]

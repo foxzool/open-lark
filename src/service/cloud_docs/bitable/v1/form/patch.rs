@@ -1,6 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
+use super::FormService;
 use crate::{
     core::{
         api_req::ApiRequest,
@@ -11,6 +12,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder_owned,
     service::bitable::v1::form::FormQuestion,
 };
 
@@ -122,24 +124,15 @@ impl PatchFormQuestionRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 执行更新表单问题请求
-    pub async fn execute(
-        self,
-        config: &Config,
-    ) -> SDKResult<BaseResponse<PatchFormQuestionResponse>> {
-        patch_form_question(self.build(), config, None).await
-    }
-
-    /// 执行更新表单问题请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        config: &Config,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<PatchFormQuestionResponse>> {
-        patch_form_question(self.build(), config, Some(option)).await
-    }
 }
+
+impl_executable_builder_owned!(
+    PatchFormQuestionRequestBuilder,
+    FormService,
+    PatchFormQuestionRequest,
+    BaseResponse<PatchFormQuestionResponse>,
+    patch
+);
 
 /// 更新表单问题响应
 #[derive(Debug, Deserialize)]

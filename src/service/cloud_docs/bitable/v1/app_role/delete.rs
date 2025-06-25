@@ -1,14 +1,18 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use super::AppRoleService;
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
 };
 
 /// 删除自定义角色请求
@@ -59,28 +63,15 @@ impl DeleteAppRoleRequestBuilder {
     pub fn build(self) -> DeleteAppRoleRequest {
         self.request
     }
-
-    /// 直接执行删除自定义角色请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `delete_app_role()`
-    pub async fn execute(
-        self,
-        config: &crate::core::config::Config,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<DeleteAppRoleResponse>> {
-        delete_app_role(self.build(), config, None).await
-    }
-
-    /// 直接执行删除自定义角色请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `delete_app_role()`
-    pub async fn execute_with_options(
-        self,
-        config: &crate::core::config::Config,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<DeleteAppRoleResponse>> {
-        delete_app_role(self.build(), config, Some(option)).await
-    }
 }
+
+impl_executable_builder_owned!(
+    DeleteAppRoleRequestBuilder,
+    AppRoleService,
+    DeleteAppRoleRequest,
+    BaseResponse<DeleteAppRoleResponse>,
+    delete
+);
 
 /// 删除自定义角色响应
 #[derive(Debug, Deserialize)]

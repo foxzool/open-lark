@@ -1,13 +1,16 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
 };
 
 use super::{AppTableService, TableData};
@@ -87,30 +90,15 @@ impl BatchCreateTablesRequestBuilder {
     pub fn build(self) -> BatchCreateTablesRequest {
         self.request
     }
-
-    /// 直接执行批量新增数据表请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.batch_create()`
-    pub async fn execute(
-        self,
-        service: &AppTableService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchCreateTablesResponse>>
-    {
-        service.batch_create(self.build(), None).await
-    }
-
-    /// 直接执行批量新增数据表请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.batch_create()`
-    pub async fn execute_with_options(
-        self,
-        service: &AppTableService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchCreateTablesResponse>>
-    {
-        service.batch_create(self.build(), Some(option)).await
-    }
 }
+
+impl_executable_builder_owned!(
+    BatchCreateTablesRequestBuilder,
+    AppTableService,
+    BatchCreateTablesRequest,
+    BaseResponse<BatchCreateTablesResponse>,
+    batch_create
+);
 
 #[derive(Serialize)]
 struct BatchCreateTablesRequestBody {

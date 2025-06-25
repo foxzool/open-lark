@@ -1,13 +1,16 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
 };
 
 use super::AppTableViewService;
@@ -88,24 +91,15 @@ impl CreateViewRequestBuilder {
     pub fn build(self) -> CreateViewRequest {
         self.request
     }
-
-    /// 发起创建视图请求
-    pub async fn execute(
-        self,
-        service: &AppTableViewService,
-    ) -> SDKResult<BaseResponse<CreateViewResponse>> {
-        service.create(self.build(), None).await
-    }
-
-    /// 发起创建视图请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        service: &AppTableViewService,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<CreateViewResponse>> {
-        service.create(self.build(), Some(option)).await
-    }
 }
+
+impl_executable_builder_owned!(
+    CreateViewRequestBuilder,
+    super::AppTableViewService,
+    CreateViewRequest,
+    BaseResponse<CreateViewResponse>,
+    create
+);
 
 /// 视图数据
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]

@@ -58,7 +58,7 @@ macro_rules! impl_executable_builder {
 }
 
 /// 为使用值类型参数的Builder实现ExecutableBuilder trait
-/// 
+///
 /// 与主宏的差异：服务方法接受值类型而不是引用类型的Request
 #[macro_export]
 macro_rules! impl_executable_builder_owned {
@@ -87,6 +87,38 @@ macro_rules! impl_executable_builder_owned {
                 option: $crate::core::req_option::RequestOption,
             ) -> $crate::core::SDKResult<$response> {
                 service.$method(self.build(), Some(option)).await
+            }
+        }
+    };
+}
+
+/// 为直接使用Config参数的独立函数实现ExecutableBuilder trait
+///
+/// 这个宏用于那些不通过服务而是直接调用独立函数的Builder类型
+#[macro_export]
+macro_rules! impl_executable_builder_config {
+    (
+        $builder:ty,
+        $request:ty,
+        $response:ty,
+        $function:ident
+    ) => {
+        impl $builder {
+            /// 执行请求
+            pub async fn execute(
+                self,
+                config: &$crate::core::config::Config,
+            ) -> $crate::core::SDKResult<$response> {
+                $function(self.build(), config, None).await
+            }
+
+            /// 执行请求（带选项）
+            pub async fn execute_with_options(
+                self,
+                config: &$crate::core::config::Config,
+                option: $crate::core::req_option::RequestOption,
+            ) -> $crate::core::SDKResult<$response> {
+                $function(self.build(), config, Some(option)).await
             }
         }
     };

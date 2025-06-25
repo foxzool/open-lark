@@ -107,7 +107,6 @@ impl ReadingSingleRangeRequestBuilder {
     pub fn build(self) -> ReadingSingleRangeRequest {
         self.request
     }
-
 }
 
 // Trait implementation

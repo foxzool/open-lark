@@ -111,7 +111,6 @@ impl ListViewsRequestBuilder {
     pub fn build(self) -> ListViewsRequest {
         self.request
     }
-
 }
 
 // 应用ExecutableBuilder trait到ListViewsRequestBuilder

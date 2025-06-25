@@ -345,7 +345,6 @@ impl CreateShiftRequestBuilder {
             face_punch_cfg: self.face_punch_cfg,
         }
     }
-
 }
 
 // 应用ExecutableBuilder trait到CreateShiftRequestBuilder

@@ -1,14 +1,18 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use super::AppRoleMemberService;
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
 };
 
 /// 删除协作者请求
@@ -84,24 +88,15 @@ impl DeleteRoleMemberRequestBuilder {
         }
         self.request
     }
-
-    /// 执行删除协作者请求
-    pub async fn execute(
-        self,
-        config: &Config,
-    ) -> SDKResult<BaseResponse<DeleteRoleMemberResponse>> {
-        delete_role_member(self.build(), config, None).await
-    }
-
-    /// 执行删除协作者请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        config: &Config,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<DeleteRoleMemberResponse>> {
-        delete_role_member(self.build(), config, Some(option)).await
-    }
 }
+
+impl_executable_builder_owned!(
+    DeleteRoleMemberRequestBuilder,
+    AppRoleMemberService,
+    DeleteRoleMemberRequest,
+    BaseResponse<DeleteRoleMemberResponse>,
+    delete
+);
 
 /// 删除协作者响应
 #[derive(Debug, Deserialize)]

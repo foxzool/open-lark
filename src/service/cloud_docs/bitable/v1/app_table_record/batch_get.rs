@@ -123,7 +123,6 @@ impl BatchGetRecordRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
 }
 
 // 应用ExecutableBuilder trait到BatchGetRecordRequestBuilder

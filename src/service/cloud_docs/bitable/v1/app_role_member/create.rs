@@ -1,15 +1,40 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
 };
+
+use super::AppRoleMemberService;
+
+impl AppRoleMemberService {
+    /// 新增协作者
+    pub async fn create(
+        &self,
+        request: CreateRoleMemberRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<CreateRoleMemberResponse>> {
+        let mut api_req = request.api_request;
+        api_req.http_method = Method::POST;
+        api_req.api_path = format!(
+            "/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}/members",
+            app_token = request.app_token,
+            role_id = request.role_id
+        );
+        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
+        Ok(api_resp)
+    }
+}
 
 /// 新增协作者请求
 #[derive(Debug, Serialize, Default)]
@@ -98,24 +123,15 @@ impl CreateRoleMemberRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 发起新增协作者请求
-    pub async fn execute(
-        self,
-        service: &crate::service::cloud_docs::bitable::v1::app_role_member::AppRoleMemberService,
-    ) -> SDKResult<BaseResponse<CreateRoleMemberResponse>> {
-        service.create(self.build(), None).await
-    }
-
-    /// 发起新增协作者请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::cloud_docs::bitable::v1::app_role_member::AppRoleMemberService,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<CreateRoleMemberResponse>> {
-        service.create(self.build(), Some(option)).await
-    }
 }
+
+impl_executable_builder_owned!(
+    CreateRoleMemberRequestBuilder,
+    AppRoleMemberService,
+    CreateRoleMemberRequest,
+    BaseResponse<CreateRoleMemberResponse>,
+    create
+);
 
 /// 协作者信息
 #[derive(Debug, Deserialize)]
@@ -139,25 +155,6 @@ impl ApiResponseTrait for CreateRoleMemberResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
-}
-
-/// 新增协作者
-pub async fn create_role_member(
-    request: CreateRoleMemberRequest,
-    config: &Config,
-    option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<CreateRoleMemberResponse>> {
-    let mut api_req = request.api_request;
-    api_req.http_method = Method::POST;
-    api_req.api_path = format!(
-        "/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}/members",
-        app_token = request.app_token,
-        role_id = request.role_id
-    );
-    api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
-
-    let api_resp = Transport::request(api_req, config, option).await?;
-    Ok(api_resp)
 }
 
 #[cfg(test)]
