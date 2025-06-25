@@ -93,29 +93,25 @@ impl PatchCommentRequestBuilder {
     }
 
     /// 设置为文档类型
-    #[allow(clippy::wrong_self_convention)]
-    pub fn as_doc(mut self) -> Self {
+    pub fn with_doc_type(mut self) -> Self {
         self.request.file_type = "doc".to_string();
         self
     }
 
     /// 设置为docx类型
-    #[allow(clippy::wrong_self_convention)]
-    pub fn as_docx(mut self) -> Self {
+    pub fn with_docx_type(mut self) -> Self {
         self.request.file_type = "docx".to_string();
         self
     }
 
     /// 设置为电子表格类型
-    #[allow(clippy::wrong_self_convention)]
-    pub fn as_sheet(mut self) -> Self {
+    pub fn with_sheet_type(mut self) -> Self {
         self.request.file_type = "sheet".to_string();
         self
     }
 
     /// 设置为多维表格类型
-    #[allow(clippy::wrong_self_convention)]
-    pub fn as_bitable(mut self) -> Self {
+    pub fn with_bitable_type(mut self) -> Self {
         self.request.file_type = "bitable".to_string();
         self
     }
@@ -127,8 +123,7 @@ impl PatchCommentRequestBuilder {
     }
 
     /// 是否解决
-    #[allow(clippy::wrong_self_convention)]
-    pub fn is_solved(mut self, is_solved: bool) -> Self {
+    pub fn set_solved(mut self, is_solved: bool) -> Self {
         self.request.is_solved = is_solved;
         self
     }
@@ -265,7 +260,7 @@ mod tests {
     fn test_patch_comment_request_builder() {
         let request = PatchCommentRequest::builder()
             .file_token("doccnxxxxxx")
-            .as_doc()
+            .with_doc_type()
             .comment_id("comment123")
             .solve_comment()
             .with_open_id()

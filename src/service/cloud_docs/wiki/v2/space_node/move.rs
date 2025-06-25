@@ -69,8 +69,7 @@ impl MoveSpaceNodeRequestBuilder {
     }
 
     /// 移动到根目录
-    #[allow(clippy::wrong_self_convention)]
-    pub fn to_root(mut self) -> Self {
+    pub fn move_to_root(mut self) -> Self {
         self.request.target_parent_token = None;
         self
     }
@@ -170,7 +169,7 @@ mod tests {
         let request = MoveSpaceNodeRequest::builder()
             .space_id("spcxxxxxx")
             .node_token("wikcnxxxxxx")
-            .to_root()
+            .move_to_root()
             .append_to_end()
             .build();
 
