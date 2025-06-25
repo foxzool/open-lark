@@ -8,6 +8,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder_owned,
     service::sheets::v3::{
         spreadsheet_sheet_filter::SheetFilterCondition, SpreadsheetSheetFilterService,
     },
@@ -76,31 +77,6 @@ impl CreateSheetFilterRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 直接执行创建筛选请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.create()`
-    pub async fn execute(
-        self,
-        service: &crate::service::sheets::v3::SpreadsheetSheetFilterService,
-    ) -> crate::core::SDKResult<
-        crate::core::api_resp::BaseResponse<crate::core::api_resp::EmptyResponse>,
-    > {
-        service.create(self.build(), None).await
-    }
-
-    /// 直接执行创建筛选请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.create()`
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::sheets::v3::SpreadsheetSheetFilterService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<
-        crate::core::api_resp::BaseResponse<crate::core::api_resp::EmptyResponse>,
-    > {
-        service.create(self.build(), Some(option)).await
-    }
 }
 
 impl SpreadsheetSheetFilterService {
@@ -124,3 +100,12 @@ impl SpreadsheetSheetFilterService {
         Ok(api_resp)
     }
 }
+
+// 实现ExecutableBuilder trait
+impl_executable_builder_owned!(
+    CreateSheetFilterRequestBuilder,
+    SpreadsheetSheetFilterService,
+    CreateSheetFilterRequest,
+    BaseResponse<EmptyResponse>,
+    create
+);

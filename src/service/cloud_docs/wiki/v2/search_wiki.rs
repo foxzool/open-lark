@@ -1,14 +1,17 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
 };
 
 /// 搜索Wiki请求
@@ -93,28 +96,15 @@ impl SearchWikiRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 直接执行搜索Wiki请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.search_wiki()`
-    pub async fn execute(
-        self,
-        service: &crate::service::cloud_docs::wiki::v2::V2,
-    ) -> crate::core::SDKResult<SearchWikiResponse> {
-        service.search_wiki(self.build(), None).await
-    }
-
-    /// 直接执行搜索Wiki请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.search_wiki()`
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::cloud_docs::wiki::v2::V2,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<SearchWikiResponse> {
-        service.search_wiki(self.build(), Some(option)).await
-    }
 }
+
+impl_executable_builder_owned!(
+    SearchWikiRequestBuilder,
+    crate::service::cloud_docs::wiki::v2::V2,
+    SearchWikiRequest,
+    SearchWikiResponse,
+    search_wiki
+);
 
 /// 搜索结果项
 #[derive(Debug, Deserialize)]

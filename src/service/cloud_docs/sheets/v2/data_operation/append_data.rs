@@ -6,6 +6,7 @@ use crate::{
         api_req::ApiRequest, api_resp::BaseResponse, constants::AccessTokenType, req_option,
         SDKResult,
     },
+    impl_executable_builder_owned,
     service::sheets::v2::{
         data_operation::{UpdateSheetDataResponse, ValueRangeRequest},
         SpreadsheetSheetService,
@@ -62,26 +63,18 @@ impl AppendDataRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 直接执行追加数据操作
-    pub async fn execute(
-        self,
-        service: &SpreadsheetSheetService,
-    ) -> SDKResult<BaseResponse<AppendDataResponse>> {
-        service.append_data(self.build(), None).await
-    }
-
-    /// 直接执行追加数据操作并提供自定义选项
-    pub async fn execute_with_options(
-        self,
-        service: &SpreadsheetSheetService,
-        option: req_option::RequestOption,
-    ) -> SDKResult<BaseResponse<AppendDataResponse>> {
-        service.append_data(self.build(), Some(option)).await
-    }
 }
 
 pub type AppendDataResponse = UpdateSheetDataResponse;
+
+// 使用宏实现ExecutableBuilder trait
+impl_executable_builder_owned!(
+    AppendDataRequestBuilder,
+    SpreadsheetSheetService,
+    AppendDataRequest,
+    BaseResponse<AppendDataResponse>,
+    append_data
+);
 
 impl SpreadsheetSheetService {
     /// 追加数据

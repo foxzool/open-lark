@@ -1,14 +1,17 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
 };
 
 /// 文件夹服务
@@ -246,27 +249,6 @@ impl ListFilesRequestBuilder {
     pub fn build(self) -> ListFilesRequest {
         self.request
     }
-
-    /// 直接执行列出文件夹中的文件请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list_files()`
-    pub async fn execute(
-        self,
-        service: &FolderService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListFilesRespData>> {
-        service.list_files(self.build(), None).await
-    }
-
-    /// 直接执行列出文件夹中的文件请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list_files()`
-    pub async fn execute_with_options(
-        self,
-        service: &FolderService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListFilesRespData>> {
-        service.list_files(self.build(), Some(option)).await
-    }
 }
 
 /// 获取文件夹中的文件清单响应数据
@@ -467,3 +449,13 @@ impl ApiResponseTrait for CheckAsyncTaskRespData {
         ResponseFormat::Data
     }
 }
+
+// === 宏实现 ===
+
+impl_executable_builder_owned!(
+    ListFilesRequestBuilder,
+    FolderService,
+    ListFilesRequest,
+    BaseResponse<ListFilesRespData>,
+    list_files
+);

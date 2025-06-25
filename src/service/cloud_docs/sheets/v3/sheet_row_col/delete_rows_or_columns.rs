@@ -10,6 +10,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder_owned,
     service::sheets::v3::SheetRowColService,
 };
 
@@ -89,31 +90,6 @@ impl DeleteRowsOrColumnsRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 直接执行删除行列请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.delete_rows_or_columns()`
-    pub async fn execute(
-        self,
-        service: &crate::service::sheets::v3::SheetRowColService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<DeleteRowsOrColumnsResponseData>>
-    {
-        service.delete_rows_or_columns(self.build(), None).await
-    }
-
-    /// 直接执行删除行列请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.delete_rows_or_columns()`
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::sheets::v3::SheetRowColService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<DeleteRowsOrColumnsResponseData>>
-    {
-        service
-            .delete_rows_or_columns(self.build(), Some(option))
-            .await
-    }
 }
 
 /// 删除行列响应体最外层
@@ -162,3 +138,12 @@ mod test {
         assert_eq!(response.delete_range.end_index, 4);
     }
 }
+
+// 实现ExecutableBuilder trait
+impl_executable_builder_owned!(
+    DeleteRowsOrColumnsRequestBuilder,
+    SheetRowColService,
+    DeleteRowsOrColumnsRequest,
+    BaseResponse<DeleteRowsOrColumnsResponseData>,
+    delete_rows_or_columns
+);

@@ -828,7 +828,6 @@ impl FileUploadPartRequestBuilder {
         self.request.api_req.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
 }
 
 impl_executable_builder_owned!(

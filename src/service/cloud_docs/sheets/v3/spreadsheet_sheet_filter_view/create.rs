@@ -10,6 +10,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder_owned,
     service::sheets::v3::SpreadsheetSheetFilterViewService,
 };
 
@@ -85,29 +86,6 @@ impl CreateFilterViewRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 直接执行创建筛选视图请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.create()`
-    pub async fn execute(
-        self,
-        service: &crate::service::sheets::v3::SpreadsheetSheetFilterViewService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateFilterViewResponseData>>
-    {
-        service.create(self.build(), None).await
-    }
-
-    /// 直接执行创建筛选视图请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.create()`
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::sheets::v3::SpreadsheetSheetFilterViewService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateFilterViewResponseData>>
-    {
-        service.create(self.build(), Some(option)).await
-    }
 }
 
 /// 创建筛选视图响应体最外层
@@ -147,3 +125,12 @@ mod test {
         assert_eq!(response.range, "A1:E100");
     }
 }
+
+// 实现ExecutableBuilder trait
+impl_executable_builder_owned!(
+    CreateFilterViewRequestBuilder,
+    SpreadsheetSheetFilterViewService,
+    CreateFilterViewRequest,
+    BaseResponse<CreateFilterViewResponseData>,
+    create
+);

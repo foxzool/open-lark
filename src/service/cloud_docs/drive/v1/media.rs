@@ -1,14 +1,17 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, BinaryResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, BinaryResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
 };
 
 /// 素材服务
@@ -204,27 +207,6 @@ impl UploadMediaRequestBuilder {
         self.request.api_req.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 直接执行上传素材请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.upload_all()`
-    pub async fn execute(
-        self,
-        service: &MediaService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<UploadMediaRespData>> {
-        service.upload_all(self.build(), None).await
-    }
-
-    /// 直接执行上传素材请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.upload_all()`
-    pub async fn execute_with_options(
-        self,
-        service: &MediaService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<UploadMediaRespData>> {
-        service.upload_all(self.build(), Some(option)).await
-    }
 }
 
 /// 上传素材响应数据
@@ -342,27 +324,6 @@ impl UploadPartRequestBuilder {
         self.request.api_req.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 直接执行上传分片请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.upload_part()`
-    pub async fn execute(
-        self,
-        service: &MediaService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<UploadPartRespData>> {
-        service.upload_part(self.build(), None).await
-    }
-
-    /// 直接执行上传分片请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.upload_part()`
-    pub async fn execute_with_options(
-        self,
-        service: &MediaService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<UploadPartRespData>> {
-        service.upload_part(self.build(), Some(option)).await
-    }
 }
 
 /// 上传分片响应数据
@@ -465,3 +426,21 @@ impl ApiResponseTrait for BatchGetTmpDownloadUrlRespData {
         ResponseFormat::Data
     }
 }
+
+// === 宏实现 ===
+
+impl_executable_builder_owned!(
+    UploadMediaRequestBuilder,
+    MediaService,
+    UploadMediaRequest,
+    BaseResponse<UploadMediaRespData>,
+    upload_all
+);
+
+impl_executable_builder_owned!(
+    UploadPartRequestBuilder,
+    MediaService,
+    UploadPartRequest,
+    BaseResponse<UploadPartRespData>,
+    upload_part
+);

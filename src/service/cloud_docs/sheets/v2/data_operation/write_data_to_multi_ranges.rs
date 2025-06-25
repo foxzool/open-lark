@@ -7,6 +7,7 @@ use crate::{
         constants::AccessTokenType,
         req_option, SDKResult,
     },
+    impl_executable_builder_owned,
     service::sheets::v2::{data_operation::ValueRangeRequest, SpreadsheetService},
 };
 
@@ -50,25 +51,6 @@ impl WriteDataToMultiRangesBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 直接执行向多个范围写入数据操作
-    pub async fn execute(
-        self,
-        service: &SpreadsheetService,
-    ) -> SDKResult<BaseResponse<WriteDataToMultiRangesResponse>> {
-        service.write_data_multi_ranges(self.build(), None).await
-    }
-
-    /// 直接执行向多个范围写入数据操作并提供自定义选项
-    pub async fn execute_with_options(
-        self,
-        service: &SpreadsheetService,
-        option: req_option::RequestOption,
-    ) -> SDKResult<BaseResponse<WriteDataToMultiRangesResponse>> {
-        service
-            .write_data_multi_ranges(self.build(), Some(option))
-            .await
-    }
 }
 
 /// 向多个范围写入数据响应体
@@ -106,6 +88,15 @@ impl ApiResponseTrait for WriteDataToMultiRangesResponse {
         ResponseFormat::Data
     }
 }
+
+// 使用宏实现ExecutableBuilder trait
+impl_executable_builder_owned!(
+    WriteDataToMultiRangesBuilder,
+    SpreadsheetService,
+    WriteDataToMultiRangesRequest,
+    BaseResponse<WriteDataToMultiRangesResponse>,
+    write_data_multi_ranges
+);
 
 impl SpreadsheetService {
     /// 向多个范围写入数据
