@@ -22,7 +22,7 @@
 
 ### 快速开始 - 考勤模块
 
-```rust
+```rust,ignore
 use open_lark::prelude::*;
 
 #[tokio::main]
@@ -58,7 +58,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ### 考勤事件监听
 
-```rust
+```rust,ignore
 use open_lark::event::EventDispatcherHandler;
 
 let handler = EventDispatcherHandler::builder()
