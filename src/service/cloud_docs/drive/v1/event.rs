@@ -1,14 +1,17 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
 };
 
 /// 事件订阅服务
@@ -98,6 +101,10 @@ pub struct SubscribeFileEventsRequest {
 }
 
 impl SubscribeFileEventsRequest {
+    pub fn builder() -> SubscribeFileEventsRequestBuilder {
+        SubscribeFileEventsRequestBuilder::default()
+    }
+
     pub fn new(
         file_token: impl Into<String>,
         file_type: impl Into<String>,
@@ -110,6 +117,56 @@ impl SubscribeFileEventsRequest {
         }
     }
 }
+
+/// 订阅云文档事件请求构建器
+#[derive(Default)]
+pub struct SubscribeFileEventsRequestBuilder {
+    request: SubscribeFileEventsRequest,
+}
+
+impl SubscribeFileEventsRequestBuilder {
+    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
+        self.request.file_token = file_token.into();
+        self
+    }
+
+    pub fn file_type(mut self, file_type: impl Into<String>) -> Self {
+        self.request.file_type = file_type.into();
+        self
+    }
+
+    pub fn event_types(mut self, event_types: Vec<String>) -> Self {
+        self.request.event_types = event_types;
+        self
+    }
+
+    pub fn add_event_type(mut self, event_type: impl Into<String>) -> Self {
+        self.request.event_types.push(event_type.into());
+        self
+    }
+
+    pub fn build(self) -> SubscribeFileEventsRequest {
+        self.request
+    }
+}
+
+impl Default for SubscribeFileEventsRequest {
+    fn default() -> Self {
+        Self {
+            file_token: String::new(),
+            file_type: String::new(),
+            event_types: Vec::new(),
+        }
+    }
+}
+
+impl_executable_builder_owned!(
+    SubscribeFileEventsRequestBuilder,
+    EventService,
+    SubscribeFileEventsRequest,
+    BaseResponse<SubscribeFileEventsRespData>,
+    subscribe_file_events
+);
 
 /// 订阅云文档事件响应数据
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -136,6 +193,10 @@ pub struct GetFileSubscriptionRequest {
 }
 
 impl GetFileSubscriptionRequest {
+    pub fn builder() -> GetFileSubscriptionRequestBuilder {
+        GetFileSubscriptionRequestBuilder::default()
+    }
+
     pub fn new(file_token: impl Into<String>, subscription_id: impl Into<String>) -> Self {
         Self {
             file_token: file_token.into(),
@@ -143,6 +204,45 @@ impl GetFileSubscriptionRequest {
         }
     }
 }
+
+/// 查询云文档事件订阅状态请求构建器
+#[derive(Default)]
+pub struct GetFileSubscriptionRequestBuilder {
+    request: GetFileSubscriptionRequest,
+}
+
+impl GetFileSubscriptionRequestBuilder {
+    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
+        self.request.file_token = file_token.into();
+        self
+    }
+
+    pub fn subscription_id(mut self, subscription_id: impl Into<String>) -> Self {
+        self.request.subscription_id = subscription_id.into();
+        self
+    }
+
+    pub fn build(self) -> GetFileSubscriptionRequest {
+        self.request
+    }
+}
+
+impl Default for GetFileSubscriptionRequest {
+    fn default() -> Self {
+        Self {
+            file_token: String::new(),
+            subscription_id: String::new(),
+        }
+    }
+}
+
+impl_executable_builder_owned!(
+    GetFileSubscriptionRequestBuilder,
+    EventService,
+    GetFileSubscriptionRequest,
+    BaseResponse<GetFileSubscriptionRespData>,
+    get_file_subscription
+);
 
 /// 查询云文档事件订阅状态响应数据
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -181,6 +281,10 @@ pub struct UnsubscribeFileEventsRequest {
 }
 
 impl UnsubscribeFileEventsRequest {
+    pub fn builder() -> UnsubscribeFileEventsRequestBuilder {
+        UnsubscribeFileEventsRequestBuilder::default()
+    }
+
     pub fn new(file_token: impl Into<String>, subscription_id: impl Into<String>) -> Self {
         Self {
             file_token: file_token.into(),
@@ -188,6 +292,45 @@ impl UnsubscribeFileEventsRequest {
         }
     }
 }
+
+/// 取消云文档事件订阅请求构建器
+#[derive(Default)]
+pub struct UnsubscribeFileEventsRequestBuilder {
+    request: UnsubscribeFileEventsRequest,
+}
+
+impl UnsubscribeFileEventsRequestBuilder {
+    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
+        self.request.file_token = file_token.into();
+        self
+    }
+
+    pub fn subscription_id(mut self, subscription_id: impl Into<String>) -> Self {
+        self.request.subscription_id = subscription_id.into();
+        self
+    }
+
+    pub fn build(self) -> UnsubscribeFileEventsRequest {
+        self.request
+    }
+}
+
+impl Default for UnsubscribeFileEventsRequest {
+    fn default() -> Self {
+        Self {
+            file_token: String::new(),
+            subscription_id: String::new(),
+        }
+    }
+}
+
+impl_executable_builder_owned!(
+    UnsubscribeFileEventsRequestBuilder,
+    EventService,
+    UnsubscribeFileEventsRequest,
+    BaseResponse<UnsubscribeFileEventsRespData>,
+    unsubscribe_file_events
+);
 
 /// 取消云文档事件订阅响应数据
 #[derive(Debug, Clone, Serialize, Deserialize)]

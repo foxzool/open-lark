@@ -1,14 +1,17 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
 };
 
 /// 文档服务
@@ -153,6 +156,10 @@ pub struct CreateDocumentRequest {
 }
 
 impl CreateDocumentRequest {
+    pub fn builder() -> CreateDocumentRequestBuilder {
+        CreateDocumentRequestBuilder::default()
+    }
+
     pub fn new(title: impl Into<String>) -> Self {
         Self {
             title: title.into(),
@@ -171,6 +178,51 @@ impl CreateDocumentRequest {
         self
     }
 }
+
+/// 创建文档请求构建器
+#[derive(Default)]
+pub struct CreateDocumentRequestBuilder {
+    request: CreateDocumentRequest,
+}
+
+impl CreateDocumentRequestBuilder {
+    pub fn title(mut self, title: impl Into<String>) -> Self {
+        self.request.title = title.into();
+        self
+    }
+
+    pub fn content(mut self, content: impl Into<String>) -> Self {
+        self.request.content = Some(content.into());
+        self
+    }
+
+    pub fn folder_token(mut self, folder_token: impl Into<String>) -> Self {
+        self.request.folder_token = Some(folder_token.into());
+        self
+    }
+
+    pub fn build(self) -> CreateDocumentRequest {
+        self.request
+    }
+}
+
+impl Default for CreateDocumentRequest {
+    fn default() -> Self {
+        Self {
+            title: String::new(),
+            content: None,
+            folder_token: None,
+        }
+    }
+}
+
+impl_executable_builder_owned!(
+    CreateDocumentRequestBuilder,
+    DocumentService,
+    CreateDocumentRequest,
+    BaseResponse<CreateDocumentRespData>,
+    create
+);
 
 /// 创建文档响应数据
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -246,6 +298,10 @@ pub struct ListDocumentBlocksRequest {
 }
 
 impl ListDocumentBlocksRequest {
+    pub fn builder() -> ListDocumentBlocksRequestBuilder {
+        ListDocumentBlocksRequestBuilder::default()
+    }
+
     pub fn new(document_id: impl Into<String>) -> Self {
         Self {
             document_id: document_id.into(),
@@ -264,6 +320,51 @@ impl ListDocumentBlocksRequest {
         self
     }
 }
+
+/// 获取文档所有块请求构建器
+#[derive(Default)]
+pub struct ListDocumentBlocksRequestBuilder {
+    request: ListDocumentBlocksRequest,
+}
+
+impl ListDocumentBlocksRequestBuilder {
+    pub fn document_id(mut self, document_id: impl Into<String>) -> Self {
+        self.request.document_id = document_id.into();
+        self
+    }
+
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.request.page_size = Some(page_size);
+        self
+    }
+
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.request.page_token = Some(page_token.into());
+        self
+    }
+
+    pub fn build(self) -> ListDocumentBlocksRequest {
+        self.request
+    }
+}
+
+impl Default for ListDocumentBlocksRequest {
+    fn default() -> Self {
+        Self {
+            document_id: String::new(),
+            page_size: None,
+            page_token: None,
+        }
+    }
+}
+
+impl_executable_builder_owned!(
+    ListDocumentBlocksRequestBuilder,
+    DocumentService,
+    ListDocumentBlocksRequest,
+    BaseResponse<ListDocumentBlocksRespData>,
+    list_blocks
+);
 
 /// 获取文档所有块响应数据
 #[derive(Debug, Clone, Serialize, Deserialize)]

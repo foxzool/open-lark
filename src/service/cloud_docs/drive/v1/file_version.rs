@@ -1,14 +1,17 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
 };
 
 /// 文档版本服务
@@ -136,6 +139,10 @@ pub struct CreateVersionRequest {
 }
 
 impl CreateVersionRequest {
+    pub fn builder() -> CreateVersionRequestBuilder {
+        CreateVersionRequestBuilder::default()
+    }
+
     pub fn new(
         file_token: impl Into<String>,
         name: impl Into<String>,
@@ -148,6 +155,51 @@ impl CreateVersionRequest {
         }
     }
 }
+
+/// 创建文档版本请求构建器
+#[derive(Default)]
+pub struct CreateVersionRequestBuilder {
+    request: CreateVersionRequest,
+}
+
+impl CreateVersionRequestBuilder {
+    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
+        self.request.file_token = file_token.into();
+        self
+    }
+
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.request.name = name.into();
+        self
+    }
+
+    pub fn obj_type(mut self, obj_type: impl Into<String>) -> Self {
+        self.request.obj_type = obj_type.into();
+        self
+    }
+
+    pub fn build(self) -> CreateVersionRequest {
+        self.request
+    }
+}
+
+impl Default for CreateVersionRequest {
+    fn default() -> Self {
+        Self {
+            file_token: String::new(),
+            name: String::new(),
+            obj_type: String::new(),
+        }
+    }
+}
+
+impl_executable_builder_owned!(
+    CreateVersionRequestBuilder,
+    FileVersionService,
+    CreateVersionRequest,
+    BaseResponse<CreateVersionRespData>,
+    create_version
+);
 
 /// 创建文档版本响应数据
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -178,6 +230,10 @@ pub struct DeleteVersionRequest {
 }
 
 impl DeleteVersionRequest {
+    pub fn builder() -> DeleteVersionRequestBuilder {
+        DeleteVersionRequestBuilder::default()
+    }
+
     pub fn new(file_token: impl Into<String>, version_id: impl Into<String>) -> Self {
         Self {
             file_token: file_token.into(),
@@ -185,6 +241,45 @@ impl DeleteVersionRequest {
         }
     }
 }
+
+/// 删除文档版本请求构建器
+#[derive(Default)]
+pub struct DeleteVersionRequestBuilder {
+    request: DeleteVersionRequest,
+}
+
+impl DeleteVersionRequestBuilder {
+    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
+        self.request.file_token = file_token.into();
+        self
+    }
+
+    pub fn version_id(mut self, version_id: impl Into<String>) -> Self {
+        self.request.version_id = version_id.into();
+        self
+    }
+
+    pub fn build(self) -> DeleteVersionRequest {
+        self.request
+    }
+}
+
+impl Default for DeleteVersionRequest {
+    fn default() -> Self {
+        Self {
+            file_token: String::new(),
+            version_id: String::new(),
+        }
+    }
+}
+
+impl_executable_builder_owned!(
+    DeleteVersionRequestBuilder,
+    FileVersionService,
+    DeleteVersionRequest,
+    BaseResponse<DeleteVersionRespData>,
+    delete_version
+);
 
 /// 删除文档版本响应数据
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -209,6 +304,10 @@ pub struct GetVersionRequest {
 }
 
 impl GetVersionRequest {
+    pub fn builder() -> GetVersionRequestBuilder {
+        GetVersionRequestBuilder::default()
+    }
+
     pub fn new(file_token: impl Into<String>, version_id: impl Into<String>) -> Self {
         Self {
             file_token: file_token.into(),
@@ -216,6 +315,45 @@ impl GetVersionRequest {
         }
     }
 }
+
+/// 获取文档版本请求构建器
+#[derive(Default)]
+pub struct GetVersionRequestBuilder {
+    request: GetVersionRequest,
+}
+
+impl GetVersionRequestBuilder {
+    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
+        self.request.file_token = file_token.into();
+        self
+    }
+
+    pub fn version_id(mut self, version_id: impl Into<String>) -> Self {
+        self.request.version_id = version_id.into();
+        self
+    }
+
+    pub fn build(self) -> GetVersionRequest {
+        self.request
+    }
+}
+
+impl Default for GetVersionRequest {
+    fn default() -> Self {
+        Self {
+            file_token: String::new(),
+            version_id: String::new(),
+        }
+    }
+}
+
+impl_executable_builder_owned!(
+    GetVersionRequestBuilder,
+    FileVersionService,
+    GetVersionRequest,
+    BaseResponse<GetVersionRespData>,
+    get_version
+);
 
 /// 获取文档版本响应数据
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -236,6 +374,10 @@ pub struct ListVersionsRequest {
 }
 
 impl ListVersionsRequest {
+    pub fn builder() -> ListVersionsRequestBuilder {
+        ListVersionsRequestBuilder::default()
+    }
+
     pub fn new(file_token: impl Into<String>) -> Self {
         Self {
             file_token: file_token.into(),
@@ -254,6 +396,51 @@ impl ListVersionsRequest {
         self
     }
 }
+
+/// 获取文档版本列表请求构建器
+#[derive(Default)]
+pub struct ListVersionsRequestBuilder {
+    request: ListVersionsRequest,
+}
+
+impl ListVersionsRequestBuilder {
+    pub fn file_token(mut self, file_token: impl Into<String>) -> Self {
+        self.request.file_token = file_token.into();
+        self
+    }
+
+    pub fn page_token(mut self, page_token: impl Into<String>) -> Self {
+        self.request.page_token = Some(page_token.into());
+        self
+    }
+
+    pub fn page_size(mut self, page_size: i32) -> Self {
+        self.request.page_size = Some(page_size);
+        self
+    }
+
+    pub fn build(self) -> ListVersionsRequest {
+        self.request
+    }
+}
+
+impl Default for ListVersionsRequest {
+    fn default() -> Self {
+        Self {
+            file_token: String::new(),
+            page_token: None,
+            page_size: None,
+        }
+    }
+}
+
+impl_executable_builder_owned!(
+    ListVersionsRequestBuilder,
+    FileVersionService,
+    ListVersionsRequest,
+    BaseResponse<ListVersionsRespData>,
+    list_versions
+);
 
 /// 获取文档版本列表响应数据
 #[derive(Debug, Clone, Serialize, Deserialize)]
