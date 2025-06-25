@@ -336,7 +336,7 @@ mod tests {
 /// 使用示例
 ///
 /// 在RequestExecutor中使用改进的响应处理器：
-/// ```rust
+/// ```rust,ignore
 /// impl RequestExecutor {
 ///     pub async fn execute_improved<T: ApiResponseTrait + DeserializeOwned>(
 ///         // ... 参数

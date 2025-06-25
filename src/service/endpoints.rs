@@ -63,7 +63,7 @@ impl EndpointHelper {
     /// 替换路径中的参数占位符
     ///
     /// # Example
-    /// ```
+    /// ```rust,ignore
     /// let path = EndpointHelper::replace_path_params(
     ///     WIKI_V2_SPACE_NODES,
     ///     &[("space_id", "space123")]

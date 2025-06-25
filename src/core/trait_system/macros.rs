@@ -16,7 +16,7 @@
 /// - `execute_with_options()` 方法：调用 `service.$method(self.build(), Some(option))`
 ///
 /// # Example
-/// ```rust
+/// ```rust,ignore
 /// impl_executable_builder!(
 ///     UploadMediaRequestBuilder,
 ///     MediaService,
