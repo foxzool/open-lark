@@ -25,18 +25,18 @@
 - `create_record.rs` - 创建记录
 
 ### 电子表格服务 (sheets/)
-- `read_range.rs` - 读取单元格范围
-- `write_data.rs` - 写入数据
+- `read_write_sheet.rs` - 电子表格读写操作
+- `create_sheet.rs` - 创建新电子表格
 
 ### 考勤服务 (attendance/)
-- `get_user_stats.rs` - 获取用户统计
-- `approve_leave.rs` - 请假审批
+- `query_attendance.rs` - 查询考勤统计数据
+- `process_leave_approval.rs` - 处理请假审批流程
 
 ### 搜索服务 (search/)
-- `search_user.rs` - 用户搜索
+- `search_user.rs` - 用户搜索和分页查询
 
 ### 认证服务 (auth/)
-- `refresh_token.rs` - 令牌刷新
+- `refresh_token.rs` - 用户身份验证和令牌管理
 
 ## 🚀 使用方法
 

@@ -1,7 +1,8 @@
+use open_lark::core::trait_system::ExecutableBuilder;
 /// 发送文本消息示例
-/// 
+///
 /// 这个示例演示如何使用飞书SDK发送基础的文本消息。
-/// 
+///
 /// 使用方法：
 /// cargo run --example send_message
 ///
@@ -9,53 +10,51 @@
 /// APP_ID=your_app_id
 /// APP_SECRET=your_app_secret
 /// RECEIVE_ID=target_user_open_id_or_chat_id
-
 use open_lark::prelude::*;
-use open_lark::core::trait_system::ExecutableBuilder;
 use serde_json::json;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 加载环境变量
     dotenvy::dotenv().ok();
-    
+
     let app_id = std::env::var("APP_ID").expect("APP_ID environment variable not set");
     let app_secret = std::env::var("APP_SECRET").expect("APP_SECRET environment variable not set");
-    let receive_id = std::env::var("RECEIVE_ID")
-        .unwrap_or_else(|_| "ou_example_user_id".to_string());
-    
+    let receive_id =
+        std::env::var("RECEIVE_ID").unwrap_or_else(|_| "ou_example_user_id".to_string());
+
     // 创建客户端
     let client = LarkClient::builder(&app_id, &app_secret)
         .with_enable_token_cache(true)
         .build();
-    
+
     println!("📨 飞书消息发送示例");
     println!("目标接收者: {}", receive_id);
     println!("{}", "=".repeat(50));
-    
+
     // 发送文本消息
     send_text_message(&client, &receive_id).await?;
-    
+
     Ok(())
 }
 
 /// 发送文本消息
 async fn send_text_message(
-    client: &LarkClient, 
-    receive_id: &str
+    client: &LarkClient,
+    receive_id: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n📤 发送文本消息...");
-    
+
     // 构建消息体
     let message_body = open_lark::service::im::v1::message::CreateMessageRequestBody::builder()
         .receive_id(receive_id)
         .msg_type("text")
         .content(json!({"text": "Hello from 飞书SDK! 🚀"}).to_string())
         .build();
-    
+
     // 使用增强Builder模式发送消息
     match open_lark::service::im::v1::message::CreateMessageRequest::builder()
-        .receive_id_type("open_id")  // 可以是 open_id, user_id, union_id, email, chat_id
+        .receive_id_type("open_id") // 可以是 open_id, user_id, union_id, email, chat_id
         .request_body(message_body)
         .execute(&client.im.v1.message)
         .await
@@ -81,18 +80,18 @@ async fn send_text_message(
             return Err(e);
         }
     }
-    
+
     Ok(())
 }
 
 /// 发送富文本消息示例
 #[allow(dead_code)]
 async fn send_rich_text_message(
-    client: &LarkClient, 
-    receive_id: &str
+    client: &LarkClient,
+    receive_id: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n📝 发送富文本消息...");
-    
+
     // 富文本消息格式
     let rich_content = json!({
         "post": {
@@ -125,13 +124,13 @@ async fn send_rich_text_message(
             }
         }
     });
-    
+
     let message_body = open_lark::service::im::v1::message::CreateMessageRequestBody::builder()
         .receive_id(receive_id)
         .msg_type("post")
         .content(rich_content.to_string())
         .build();
-    
+
     match open_lark::service::im::v1::message::CreateMessageRequest::builder()
         .receive_id_type("open_id")
         .request_body(message_body)
@@ -149,6 +148,6 @@ async fn send_rich_text_message(
             return Err(e);
         }
     }
-    
+
     Ok(())
 }

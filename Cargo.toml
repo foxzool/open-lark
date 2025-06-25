@@ -140,6 +140,30 @@ path = "examples/core/query_records.rs"
 name = "core_create_record"
 path = "examples/core/create_record.rs"
 
+[[example]]
+name = "core_read_write_sheet"
+path = "examples/core/read_write_sheet.rs"
+
+[[example]]
+name = "core_create_sheet"
+path = "examples/core/create_sheet.rs"
+
+[[example]]
+name = "core_query_attendance"
+path = "examples/core/query_attendance.rs"
+
+[[example]]
+name = "core_process_leave_approval"
+path = "examples/core/process_leave_approval.rs"
+
+[[example]]
+name = "core_search_user"
+path = "examples/core/search_user.rs"
+
+[[example]]
+name = "core_refresh_token"
+path = "examples/core/refresh_token.rs"
+
 # ===========================================
 # Benchmarks
 # ===========================================

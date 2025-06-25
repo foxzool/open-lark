@@ -1,7 +1,7 @@
 /// 多维表格记录查询示例
-/// 
+///
 /// 这个示例演示如何使用飞书SDK查询多维表格中的记录。
-/// 
+///
 /// 使用方法：
 /// cargo run --example query_records
 ///
@@ -10,59 +10,59 @@
 /// APP_SECRET=your_app_secret
 /// APP_TOKEN=your_bitable_app_token
 /// TABLE_ID=your_table_id
-
 use open_lark::prelude::*;
-use open_lark::core::trait_system::ExecutableBuilder;
-use open_lark::service::cloud_docs::bitable::v1::app_table_record::search::*;
+use open_lark::{
+    core::trait_system::ExecutableBuilder,
+    service::cloud_docs::bitable::v1::app_table_record::search::*,
+};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 加载环境变量
     dotenvy::dotenv().ok();
-    
+
     let app_id = std::env::var("APP_ID").expect("APP_ID environment variable not set");
     let app_secret = std::env::var("APP_SECRET").expect("APP_SECRET environment variable not set");
-    let app_token = std::env::var("APP_TOKEN")
-        .unwrap_or_else(|_| "bascnCMII2ORuEjIDXvVecCKNEc".to_string()); // 示例token
-    let table_id = std::env::var("TABLE_ID")
-        .unwrap_or_else(|_| "tblsRc9GRRXKqhvW".to_string()); // 示例table_id
-    
+    let app_token =
+        std::env::var("APP_TOKEN").unwrap_or_else(|_| "bascnCMII2ORuEjIDXvVecCKNEc".to_string()); // 示例token
+    let table_id = std::env::var("TABLE_ID").unwrap_or_else(|_| "tblsRc9GRRXKqhvW".to_string()); // 示例table_id
+
     // 创建客户端
     let client = LarkClient::builder(&app_id, &app_secret)
         .with_enable_token_cache(true)
         .build();
-    
+
     println!("🗃️ 飞书多维表格记录查询示例");
     println!("应用Token: {}", app_token);
     println!("表格ID: {}", table_id);
     println!("{}", "=".repeat(50));
-    
+
     // 基础查询
     query_all_records(&client, &app_token, &table_id).await?;
-    
+
     // 带条件查询
     query_with_filter(&client, &app_token, &table_id).await?;
-    
+
     // 带排序和分页查询
     query_with_sort_and_pagination(&client, &app_token, &table_id).await?;
-    
+
     Ok(())
 }
 
 /// 查询所有记录
 async fn query_all_records(
-    client: &LarkClient, 
-    app_token: &str, 
-    table_id: &str
+    client: &LarkClient,
+    app_token: &str,
+    table_id: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n📋 查询所有记录...");
-    
+
     // 使用增强Builder模式查询记录
     match SearchRecordRequest::builder()
         .app_token(app_token)
         .table_id(table_id)
         .page_size(20)
-        .automatic(true)  // 返回自动计算字段
+        .automatic(true) // 返回自动计算字段
         .execute(&client.bitable.v1.app_table_record)
         .await
     {
@@ -71,14 +71,14 @@ async fn query_all_records(
                 println!("✅ 记录查询成功!");
                 println!("   总记录数: {}", data.items.len());
                 println!("   是否有更多: {}", data.has_more);
-                
+
                 if !data.items.is_empty() {
                     println!("\n📄 记录列表:");
                     for (index, record) in data.items.iter().enumerate() {
                         println!("   {}. 记录ID: {}", index + 1, record.record_id);
                         println!("      创建时间: {}", record.created_time);
                         println!("      修改时间: {}", record.last_modified_time);
-                        
+
                         // 显示字段数据
                         if !record.fields.is_empty() {
                             println!("      字段数据:");
@@ -93,7 +93,7 @@ async fn query_all_records(
                 } else {
                     println!("📭 表格为空，没有记录");
                 }
-                
+
                 if data.has_more {
                     println!("💡 提示: 还有更多记录可以通过分页获取");
                     if let Some(page_token) = &data.page_token {
@@ -114,30 +114,28 @@ async fn query_all_records(
             return Err(e);
         }
     }
-    
+
     Ok(())
 }
 
 /// 带筛选条件查询
 async fn query_with_filter(
-    client: &LarkClient, 
-    app_token: &str, 
-    table_id: &str
+    client: &LarkClient,
+    app_token: &str,
+    table_id: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n🔍 带筛选条件查询...");
-    
+
     // 构建筛选条件：查找特定字段值
     let filter = FilterInfo {
         conjunction: "and".to_string(),
-        conditions: vec![
-            FilterCondition {
-                field_name: "名称".to_string(),  // 假设有"名称"字段
-                operator: "contains".to_string(),
-                value: Some(vec!["测试".to_string()]),
-            }
-        ],
+        conditions: vec![FilterCondition {
+            field_name: "名称".to_string(), // 假设有"名称"字段
+            operator: "contains".to_string(),
+            value: Some(vec!["测试".to_string()]),
+        }],
     };
-    
+
     match SearchRecordRequest::builder()
         .app_token(app_token)
         .table_id(table_id)
@@ -150,12 +148,12 @@ async fn query_with_filter(
             if let Some(data) = &response.data {
                 println!("✅ 筛选查询成功!");
                 println!("   筛选后记录数: {}", data.items.len());
-                
+
                 if !data.items.is_empty() {
                     println!("\n📋 筛选结果:");
                     for (index, record) in data.items.iter().enumerate() {
                         println!("   {}. 记录ID: {}", index + 1, record.record_id);
-                        
+
                         // 显示"名称"字段（如果存在）
                         if let Some(name_value) = record.fields.get("名称") {
                             println!("      名称: {}", format_field_value(name_value));
@@ -171,50 +169,51 @@ async fn query_with_filter(
             println!("   注意: 筛选字段名需要与实际表格字段匹配");
         }
     }
-    
+
     Ok(())
 }
 
 /// 带排序和分页查询
 async fn query_with_sort_and_pagination(
-    client: &LarkClient, 
-    app_token: &str, 
-    table_id: &str
+    client: &LarkClient,
+    app_token: &str,
+    table_id: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n📊 带排序的分页查询...");
-    
+
     // 构建排序条件
-    let sort_conditions = vec![
-        SortCondition {
-            field_name: "创建时间".to_string(),  // 假设有"创建时间"字段
-            desc: Some(true),  // 降序排序
-        }
-    ];
-    
+    let sort_conditions = vec![SortCondition {
+        field_name: "创建时间".to_string(), // 假设有"创建时间"字段
+        desc: Some(true),                   // 降序排序
+    }];
+
     let mut page_count = 0;
     let mut page_token: Option<String> = None;
-    
+
     loop {
         page_count += 1;
         println!("\n📄 获取第 {} 页...", page_count);
-        
+
         let mut request_builder = SearchRecordRequest::builder()
             .app_token(app_token)
             .table_id(table_id)
             .sort(sort_conditions.clone())
-            .page_size(5)  // 小页面用于演示
-            .automatic(false);  // 不返回自动计算字段，提高性能
-        
+            .page_size(5) // 小页面用于演示
+            .automatic(false); // 不返回自动计算字段，提高性能
+
         // 添加分页token
         if let Some(token) = &page_token {
             request_builder = request_builder.page_token(token);
         }
-        
-        match request_builder.execute(&client.bitable.v1.app_table_record).await {
+
+        match request_builder
+            .execute(&client.bitable.v1.app_table_record)
+            .await
+        {
             Ok(response) => {
                 if let Some(data) = &response.data {
                     println!("   本页记录数: {}", data.items.len());
-                    
+
                     // 显示记录摘要
                     for record in &data.items {
                         println!("     - 记录ID: {}", record.record_id);
@@ -222,12 +221,12 @@ async fn query_with_sort_and_pagination(
                             println!("       创建时间: {}", format_field_value(time_value));
                         }
                     }
-                    
+
                     // 检查是否还有更多
                     if data.has_more {
                         page_token = data.page_token.clone();
                         println!("   → 还有更多页面...");
-                        
+
                         // 演示限制：最多3页
                         if page_count >= 3 {
                             println!("   ⏹️ 演示限制：最多显示3页");
@@ -248,10 +247,10 @@ async fn query_with_sort_and_pagination(
             }
         }
     }
-    
+
     println!("\n📈 分页查询总结:");
     println!("   总页数: {}", page_count);
-    
+
     Ok(())
 }
 
@@ -263,7 +262,7 @@ fn format_field_value(value: &serde_json::Value) -> String {
         serde_json::Value::Bool(b) => b.to_string(),
         serde_json::Value::Array(arr) => {
             format!("[{}]", arr.len())
-        },
+        }
         serde_json::Value::Object(_) => "[对象]".to_string(),
         serde_json::Value::Null => "[空]".to_string(),
     }
@@ -289,7 +288,7 @@ fn build_complex_filter() -> FilterInfo {
                 field_name: "创建时间".to_string(),
                 operator: "isAfter".to_string(),
                 value: Some(vec!["2024-01-01".to_string()]),
-            }
+            },
         ],
     }
 }
