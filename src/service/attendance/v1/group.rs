@@ -30,7 +30,10 @@ impl GroupService {
     ) -> SDKResult<BaseResponse<ListGroupUserRespData>> {
         let mut api_req = request.api_req.clone();
         api_req.http_method = Method::GET;
-        api_req.api_path = format!("/open-apis/attendance/v1/groups/{}/users", request.group_id.clone());
+        api_req.api_path = format!(
+            "/open-apis/attendance/v1/groups/{}/users",
+            request.group_id.clone()
+        );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
@@ -140,7 +143,10 @@ impl GroupService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut api_req = request.api_req.clone();
         api_req.http_method = Method::DELETE;
-        api_req.api_path = format!("/open-apis/attendance/v1/groups/{}", request.group_id.clone());
+        api_req.api_path = format!(
+            "/open-apis/attendance/v1/groups/{}",
+            request.group_id.clone()
+        );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -159,7 +165,10 @@ impl GroupService {
     ) -> SDKResult<BaseResponse<Group>> {
         let mut api_req = request.api_req.clone();
         api_req.http_method = Method::GET;
-        api_req.api_path = format!("/open-apis/attendance/v1/groups/{}", request.group_id.clone());
+        api_req.api_path = format!(
+            "/open-apis/attendance/v1/groups/{}",
+            request.group_id.clone()
+        );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数

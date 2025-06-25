@@ -1,13 +1,16 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
 };
 
 use super::AppService;
@@ -88,28 +91,15 @@ impl UpdateAppRequestBuilder {
     pub fn build(self) -> UpdateAppRequest {
         self.request
     }
-
-    /// 直接执行更新多维表格元数据请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.update()`
-    pub async fn execute(
-        self,
-        service: &super::AppService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<UpdateAppResponse>> {
-        service.update(self.build(), None).await
-    }
-
-    /// 直接执行更新多维表格元数据请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.update()`
-    pub async fn execute_with_options(
-        self,
-        service: &super::AppService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<UpdateAppResponse>> {
-        service.update(self.build(), Some(option)).await
-    }
 }
+
+impl_executable_builder_owned!(
+    UpdateAppRequestBuilder,
+    AppService,
+    UpdateAppRequest,
+    BaseResponse<UpdateAppResponse>,
+    update
+);
 
 #[derive(Serialize)]
 struct UpdateAppRequestBody {

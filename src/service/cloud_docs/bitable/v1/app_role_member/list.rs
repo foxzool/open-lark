@@ -5,14 +5,36 @@ use crate::{
     core::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
     },
-    service::bitable::v1::app_role_member::RoleMember,
+    impl_executable_builder_owned,
 };
+
+use super::{AppRoleMemberService, RoleMember};
+
+impl AppRoleMemberService {
+    /// 列出协作者
+    pub async fn list(
+        &self,
+        request: ListRoleMemberRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<ListRoleMemberResponse>> {
+        let mut api_req = request.api_request;
+        api_req.http_method = Method::GET;
+        api_req.api_path = format!(
+            "/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}/members",
+            app_token = request.app_token,
+            role_id = request.role_id
+        );
+        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
+        Ok(api_resp)
+    }
+}
 
 /// 列出协作者请求
 #[derive(Debug, Serialize, Default)]
@@ -107,24 +129,15 @@ impl ListRoleMemberRequestBuilder {
         }
         self.request
     }
-
-    /// 发起列出协作者请求
-    pub async fn execute(
-        self,
-        service: &crate::service::cloud_docs::bitable::v1::app_role_member::AppRoleMemberService,
-    ) -> SDKResult<BaseResponse<ListRoleMemberResponse>> {
-        service.list(self.build(), None).await
-    }
-
-    /// 发起列出协作者请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::cloud_docs::bitable::v1::app_role_member::AppRoleMemberService,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<ListRoleMemberResponse>> {
-        service.list(self.build(), Some(option)).await
-    }
 }
+
+impl_executable_builder_owned!(
+    ListRoleMemberRequestBuilder,
+    AppRoleMemberService,
+    ListRoleMemberRequest,
+    BaseResponse<ListRoleMemberResponse>,
+    list
+);
 
 /// 列出协作者响应
 #[derive(Debug, Deserialize)]
@@ -143,25 +156,6 @@ impl ApiResponseTrait for ListRoleMemberResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
-}
-
-/// 列出协作者
-pub async fn list_role_members(
-    request: ListRoleMemberRequest,
-    config: &Config,
-    option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<ListRoleMemberResponse>> {
-    let mut api_req = request.api_request;
-    api_req.http_method = Method::GET;
-    api_req.api_path = format!(
-        "/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}/members",
-        app_token = request.app_token,
-        role_id = request.role_id
-    );
-    api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
-
-    let api_resp = Transport::request(api_req, config, option).await?;
-    Ok(api_resp)
 }
 
 #[cfg(test)]

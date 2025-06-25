@@ -82,7 +82,6 @@ impl ListWorkflowRequestBuilder {
         }
         self.request
     }
-
 }
 
 // 应用ExecutableBuilder trait到ListWorkflowRequestBuilder

@@ -10,7 +10,6 @@ pub use batch_create::*;
 pub use batch_delete::*;
 pub use create::*;
 pub use delete::*;
-pub use list::*;
 
 /// 协作者服务
 pub struct AppRoleMemberService {
@@ -22,15 +21,6 @@ impl AppRoleMemberService {
         Self { config }
     }
 
-    /// 新增协作者
-    pub async fn create(
-        &self,
-        request: CreateRoleMemberRequest,
-        option: Option<crate::core::req_option::RequestOption>,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateRoleMemberResponse>> {
-        create::create_role_member(request, &self.config, option).await
-    }
-
     /// 批量新增协作者
     pub async fn batch_create(
         &self,
@@ -39,15 +29,6 @@ impl AppRoleMemberService {
     ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<BatchCreateRoleMemberResponse>>
     {
         batch_create::batch_create_role_members(request, &self.config, option).await
-    }
-
-    /// 列出协作者
-    pub async fn list(
-        &self,
-        request: ListRoleMemberRequest,
-        option: Option<crate::core::req_option::RequestOption>,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListRoleMemberResponse>> {
-        list::list_role_members(request, &self.config, option).await
     }
 
     /// 删除协作者

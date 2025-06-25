@@ -1,15 +1,39 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
 };
+
+use super::AppRoleService;
+
+impl AppRoleService {
+    /// 新增自定义角色
+    pub async fn create(
+        &self,
+        request: CreateAppRoleRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<CreateAppRoleResponse>> {
+        let mut api_req = request.api_request;
+        api_req.http_method = Method::POST;
+        api_req.api_path = format!(
+            "/open-apis/bitable/v1/apps/{app_token}/roles",
+            app_token = request.app_token
+        );
+        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+
+        let api_resp = Transport::request(api_req, &self.config, option).await?;
+        Ok(api_resp)
+    }
+}
 
 /// 新增自定义角色请求
 #[derive(Debug, Serialize, Default)]
@@ -98,24 +122,15 @@ impl CreateAppRoleRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 发起创建自定义角色请求
-    pub async fn execute(
-        self,
-        service: &crate::service::cloud_docs::bitable::v1::app_role::AppRoleService,
-    ) -> SDKResult<BaseResponse<CreateAppRoleResponse>> {
-        service.create(self.build(), None).await
-    }
-
-    /// 发起创建自定义角色请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::cloud_docs::bitable::v1::app_role::AppRoleService,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<CreateAppRoleResponse>> {
-        service.create(self.build(), Some(option)).await
-    }
 }
+
+impl_executable_builder_owned!(
+    CreateAppRoleRequestBuilder,
+    AppRoleService,
+    CreateAppRoleRequest,
+    BaseResponse<CreateAppRoleResponse>,
+    create
+);
 
 /// 自定义角色信息
 #[derive(Debug, Deserialize)]
@@ -141,24 +156,6 @@ impl ApiResponseTrait for CreateAppRoleResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
-}
-
-/// 新增自定义角色
-pub async fn create_app_role(
-    request: CreateAppRoleRequest,
-    config: &Config,
-    option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<CreateAppRoleResponse>> {
-    let mut api_req = request.api_request;
-    api_req.http_method = Method::POST;
-    api_req.api_path = format!(
-        "/open-apis/bitable/v1/apps/{app_token}/roles",
-        app_token = request.app_token
-    );
-    api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
-
-    let api_resp = Transport::request(api_req, config, option).await?;
-    Ok(api_resp)
 }
 
 #[cfg(test)]

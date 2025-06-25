@@ -1,19 +1,23 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
 };
 
 use super::{
     create::{SubscriptionConfig, SubscriptionPriority},
     get::{FileType, SubscriptionDetail, SubscriptionStatus},
+    SubscriptionService,
 };
 
 /// 更新订阅状态请求
@@ -293,28 +297,15 @@ impl PatchSubscriptionRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 直接执行更新订阅状态请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.patch()`
-    pub async fn execute(
-        self,
-        service: &crate::service::cloud_docs::assistant::v1::subscription::SubscriptionService,
-    ) -> crate::core::SDKResult<PatchSubscriptionResponse> {
-        service.patch(self.build(), None).await
-    }
-
-    /// 直接执行更新订阅状态请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.patch()`
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::cloud_docs::assistant::v1::subscription::SubscriptionService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<PatchSubscriptionResponse> {
-        service.patch(self.build(), Some(option)).await
-    }
 }
+
+impl_executable_builder_owned!(
+    PatchSubscriptionRequestBuilder,
+    SubscriptionService,
+    PatchSubscriptionRequest,
+    PatchSubscriptionResponse,
+    patch
+);
 
 /// 更新订阅状态响应
 #[derive(Debug, Deserialize)]

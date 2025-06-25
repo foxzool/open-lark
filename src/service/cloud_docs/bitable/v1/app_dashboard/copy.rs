@@ -1,14 +1,17 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_config,
 };
 
 /// 复制仪表盘请求
@@ -69,21 +72,14 @@ impl CopyDashboardRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 执行复制仪表盘请求
-    pub async fn execute(self, config: &Config) -> SDKResult<BaseResponse<CopyDashboardResponse>> {
-        copy_dashboard(self.build(), config, None).await
-    }
-
-    /// 执行复制仪表盘请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        config: &Config,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<CopyDashboardResponse>> {
-        copy_dashboard(self.build(), config, Some(option)).await
-    }
 }
+
+impl_executable_builder_config!(
+    CopyDashboardRequestBuilder,
+    CopyDashboardRequest,
+    BaseResponse<CopyDashboardResponse>,
+    copy_dashboard
+);
 
 /// 仪表盘信息
 #[derive(Debug, Deserialize)]

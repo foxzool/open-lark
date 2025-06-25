@@ -1,6 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
+use super::AppTableFieldService;
 use crate::{
     core::{
         api_req::ApiRequest,
@@ -11,6 +12,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder_owned,
     service::bitable::v1::app_table_field::{
         AppTableField, AppTableFieldDescription, AppTableFieldProperty, FieldType, UiType,
     },
@@ -145,24 +147,15 @@ impl CreateFieldRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 发起创建字段请求
-    pub async fn execute(
-        self,
-        service: &crate::service::cloud_docs::bitable::v1::app_table_field::AppTableFieldService,
-    ) -> SDKResult<BaseResponse<CreateFieldResponse>> {
-        service.create(self.build(), None).await
-    }
-
-    /// 发起创建字段请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        service: &crate::service::cloud_docs::bitable::v1::app_table_field::AppTableFieldService,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<CreateFieldResponse>> {
-        service.create(self.build(), Some(option)).await
-    }
 }
+
+impl_executable_builder_owned!(
+    CreateFieldRequestBuilder,
+    AppTableFieldService,
+    CreateFieldRequest,
+    BaseResponse<CreateFieldResponse>,
+    create
+);
 
 /// 新增字段响应
 #[derive(Debug, Deserialize)]

@@ -61,11 +61,7 @@ impl ListChatIterator<'_> {
         if !self.has_more {
             return None;
         }
-        match self
-            .service
-            .list(&self.request, self.option.clone())
-            .await
-        {
+        match self.service.list(&self.request, self.option.clone()).await {
             Ok(resp) => match resp.data {
                 Some(data) => {
                     self.has_more = data.has_more;
@@ -147,7 +143,6 @@ impl ListChatRequestBuilder {
     pub fn build(self) -> ListChatRequest {
         self.request
     }
-
 }
 
 // 应用ExecutableBuilder trait到ListChatRequestBuilder

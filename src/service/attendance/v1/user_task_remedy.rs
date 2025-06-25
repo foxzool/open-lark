@@ -87,7 +87,9 @@ impl UserTaskRemedyService {
         }
 
         if let Some(date_to) = &request.date_to {
-            api_req.query_params.insert("date_to".to_string(), date_to.clone());
+            api_req
+                .query_params
+                .insert("date_to".to_string(), date_to.clone());
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -127,7 +129,9 @@ impl UserTaskRemedyService {
         }
 
         if let Some(date_to) = &request.date_to {
-            api_req.query_params.insert("date_to".to_string(), date_to.clone());
+            api_req
+                .query_params
+                .insert("date_to".to_string(), date_to.clone());
         }
 
         if let Some(status) = &request.status {

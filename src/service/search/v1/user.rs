@@ -2,14 +2,17 @@ use log::error;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder,
 };
 
 pub struct UserService {
@@ -24,10 +27,10 @@ impl UserService {
     /// 搜索用户。
     pub async fn search_user(
         &self,
-        search_user_request: SearchUserRequest,
+        search_user_request: &SearchUserRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SearchUserResponse>> {
-        let mut api_req = search_user_request.api_request;
+        let mut api_req = search_user_request.api_request.clone();
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/search/v1/user".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::User];
@@ -100,28 +103,15 @@ impl SearchUserRequestBuilder {
     pub fn build(self) -> SearchUserRequest {
         self.search_user_request
     }
-
-    /// 直接执行搜索用户请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.search_user()`
-    pub async fn execute(
-        self,
-        service: &UserService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<SearchUserResponse>> {
-        service.search_user(self.build(), None).await
-    }
-
-    /// 直接执行搜索用户请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.search_user()`
-    pub async fn execute_with_options(
-        self,
-        service: &UserService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<SearchUserResponse>> {
-        service.search_user(self.build(), Some(option)).await
-    }
 }
+
+impl_executable_builder!(
+    SearchUserRequestBuilder,
+    UserService,
+    SearchUserRequest,
+    BaseResponse<SearchUserResponse>,
+    search_user
+);
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct SearchUserResponse {
@@ -184,7 +174,7 @@ impl SearchUserIterator<'_> {
 
         match self
             .user_service
-            .search_user(self.request.clone(), self.option.clone())
+            .search_user(&self.request, self.option.clone())
             .await
         {
             Ok(resp) => match resp.data {

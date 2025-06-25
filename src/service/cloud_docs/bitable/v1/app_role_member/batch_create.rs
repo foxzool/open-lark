@@ -1,6 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
+use super::AppRoleMemberService;
 use crate::{
     core::{
         api_req::ApiRequest,
@@ -11,6 +12,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
+    impl_executable_builder_owned,
     service::bitable::v1::app_role_member::RoleMember,
 };
 
@@ -105,24 +107,15 @@ impl BatchCreateRoleMemberRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 执行批量新增协作者请求
-    pub async fn execute(
-        self,
-        config: &Config,
-    ) -> SDKResult<BaseResponse<BatchCreateRoleMemberResponse>> {
-        batch_create_role_members(self.build(), config, None).await
-    }
-
-    /// 执行批量新增协作者请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        config: &Config,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<BatchCreateRoleMemberResponse>> {
-        batch_create_role_members(self.build(), config, Some(option)).await
-    }
 }
+
+impl_executable_builder_owned!(
+    BatchCreateRoleMemberRequestBuilder,
+    AppRoleMemberService,
+    BatchCreateRoleMemberRequest,
+    BaseResponse<BatchCreateRoleMemberResponse>,
+    batch_create
+);
 
 /// 批量新增协作者响应
 #[derive(Debug, Deserialize)]

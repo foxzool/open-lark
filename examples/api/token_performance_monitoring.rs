@@ -75,14 +75,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             for i in 0..5 {
                 // 模拟获取app access token
                 let manager = token_manager.lock().await;
-                
+
                 // 注意：这里会因为无效的认证信息而失败，但我们主要关注性能指标
                 let _ = manager
-                    .get_app_access_token(
-                        &config,
-                        "",
-                        &config.app_ticket_manager,
-                    )
+                    .get_app_access_token(&config, "", &config.app_ticket_manager)
                     .await;
 
                 println!("📊 Task {} - Call {} completed", task_id, i + 1);

@@ -23,17 +23,17 @@ where
 {
     /// 构建请求对象
     fn build(self) -> TRequest;
-    
+
     /// 执行请求并返回响应
     async fn execute(self, service: &TService) -> crate::core::SDKResult<TResponse>
     where
         Self: Sized;
-    
+
     /// 带选项执行请求
     async fn execute_with_options(
-        self, 
-        service: &TService, 
-        option: crate::core::req_option::RequestOption
+        self,
+        service: &TService,
+        option: crate::core::req_option::RequestOption,
     ) -> crate::core::SDKResult<TResponse>
     where
         Self: Sized;

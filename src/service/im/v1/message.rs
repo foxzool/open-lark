@@ -49,10 +49,10 @@ impl MessageService {
     /// <https://open.feishu.cn/document/server-docs/im-v1/message/list>
     pub async fn list(
         &self,
-        list_message_request: ListMessageRequest,
+        list_message_request: &ListMessageRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListMessageRespData>> {
-        let mut api_req = list_message_request.api_req;
+        let mut api_req = list_message_request.api_req.clone();
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
@@ -88,11 +88,7 @@ impl ListMessageIterator<'_> {
         if !self.has_more {
             return None;
         }
-        match self
-            .service
-            .list(self.req.clone(), self.option.clone())
-            .await
-        {
+        match self.service.list(&self.req, self.option.clone()).await {
             Ok(resp) => match resp.data {
                 Some(data) => {
                     self.has_more = data.has_more;
@@ -151,7 +147,6 @@ impl CreateMessageRequestBuilder {
     pub fn build(self) -> CreateMessageRequest {
         self.request
     }
-
 }
 
 // 应用ExecutableBuilder trait到CreateMessageRequestBuilder
@@ -448,28 +443,15 @@ impl ListMessageRequestBuilder {
     pub fn build(self) -> ListMessageRequest {
         self.request
     }
-
-    /// 直接执行获取会话历史消息请求
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list()`
-    pub async fn execute(
-        self,
-        service: &MessageService,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListMessageRespData>> {
-        service.list(self.build(), None).await
-    }
-
-    /// 直接执行获取会话历史消息请求（带选项）
-    ///
-    /// 这是一个便捷方法，相当于 `builder.build()` 然后调用 `service.list()`
-    pub async fn execute_with_options(
-        self,
-        service: &MessageService,
-        option: crate::core::req_option::RequestOption,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListMessageRespData>> {
-        service.list(self.build(), Some(option)).await
-    }
 }
+
+impl_executable_builder!(
+    ListMessageRequestBuilder,
+    MessageService,
+    ListMessageRequest,
+    BaseResponse<ListMessageRespData>,
+    list
+);
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ListMessageRespData {

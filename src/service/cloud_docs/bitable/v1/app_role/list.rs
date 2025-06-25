@@ -83,7 +83,6 @@ impl ListAppRoleRequestBuilder {
         }
         self.request
     }
-
 }
 
 // 应用ExecutableBuilder trait到ListAppRoleRequestBuilder

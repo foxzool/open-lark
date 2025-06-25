@@ -1,14 +1,17 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_config,
 };
 
 /// 更新自动化流程状态请求
@@ -81,21 +84,14 @@ impl UpdateWorkflowRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
-    /// 执行更新自动化流程状态请求
-    pub async fn execute(self, config: &Config) -> SDKResult<BaseResponse<UpdateWorkflowResponse>> {
-        update_workflow(self.build(), config, None).await
-    }
-
-    /// 执行更新自动化流程状态请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        config: &Config,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<UpdateWorkflowResponse>> {
-        update_workflow(self.build(), config, Some(option)).await
-    }
 }
+
+impl_executable_builder_config!(
+    UpdateWorkflowRequestBuilder,
+    UpdateWorkflowRequest,
+    BaseResponse<UpdateWorkflowResponse>,
+    update_workflow
+);
 
 /// 更新自动化流程状态响应
 #[derive(Debug, Deserialize)]

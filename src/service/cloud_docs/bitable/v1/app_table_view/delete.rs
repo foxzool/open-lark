@@ -1,14 +1,17 @@
 use reqwest::Method;
 use serde::Deserialize;
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    impl_executable_builder_config,
 };
 
 use super::AppTableViewService;
@@ -97,21 +100,14 @@ impl DeleteViewRequestBuilder {
     pub fn build(self) -> DeleteViewRequest {
         self.request
     }
-
-    /// 执行删除视图请求
-    pub async fn execute(self, config: &Config) -> SDKResult<BaseResponse<DeleteViewResponse>> {
-        delete_view(self.build(), config, None).await
-    }
-
-    /// 执行删除视图请求（带选项）
-    pub async fn execute_with_options(
-        self,
-        config: &Config,
-        option: RequestOption,
-    ) -> SDKResult<BaseResponse<DeleteViewResponse>> {
-        delete_view(self.build(), config, Some(option)).await
-    }
 }
+
+impl_executable_builder_config!(
+    DeleteViewRequestBuilder,
+    DeleteViewRequest,
+    BaseResponse<DeleteViewResponse>,
+    delete_view
+);
 
 #[derive(Deserialize, Debug)]
 pub struct DeleteViewResponse {

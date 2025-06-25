@@ -50,7 +50,9 @@ impl UserApprovalService {
         }
 
         if let Some(date_to) = &request.date_to {
-            api_req.query_params.insert("date_to".to_string(), date_to.clone());
+            api_req
+                .query_params
+                .insert("date_to".to_string(), date_to.clone());
         }
 
         if let Some(user_ids) = &request.user_ids {

@@ -151,7 +151,6 @@ impl UpdateReplyRequestBuilder {
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
     }
-
 }
 
 /// 更新后的回复信息

@@ -123,7 +123,6 @@ impl ListFieldRequestBuilder {
         }
         self.request
     }
-
 }
 
 // 应用ExecutableBuilder trait到ListFieldRequestBuilder

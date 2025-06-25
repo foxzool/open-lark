@@ -216,7 +216,7 @@ impl TokenManager {
 
         let cache = self.cache.clone();
         let metrics = self.metrics.clone();
-        
+
         let handle = tokio::spawn(async move {
             let mut interval = interval(Duration::from_secs(preheat_config.check_interval_seconds));
             log::info!(
@@ -314,7 +314,8 @@ impl TokenManager {
                 {
                     log::info!("🔄 开始预热 tenant access token: {}", tenant_key);
                     if let Err(e) =
-                        Self::preheat_tenant_token(cache, config, &tenant_key, app_ticket_manager).await
+                        Self::preheat_tenant_token(cache, config, &tenant_key, app_ticket_manager)
+                            .await
                     {
                         log::warn!("❌ Tenant token预热失败 ({}): {:?}", tenant_key, e);
                         metrics.refresh_failures.fetch_add(1, Ordering::Relaxed);

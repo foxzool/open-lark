@@ -99,7 +99,6 @@ impl ListTablesRequestBuilder {
     pub fn build(self) -> ListTablesRequest {
         self.request
     }
-
 }
 
 // 应用ExecutableBuilder trait到ListTablesRequestBuilder

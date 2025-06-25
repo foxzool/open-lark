@@ -20,15 +20,6 @@ impl AppRoleService {
         Self { config }
     }
 
-    /// 新增自定义角色
-    pub async fn create(
-        &self,
-        request: CreateAppRoleRequest,
-        option: Option<crate::core::req_option::RequestOption>,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateAppRoleResponse>> {
-        create::create_app_role(request, &self.config, option).await
-    }
-
     /// 更新自定义角色
     pub async fn update(
         &self,
