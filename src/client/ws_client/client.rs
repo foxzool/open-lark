@@ -188,9 +188,7 @@ impl LarkWsClient {
             return None;
         }
 
-        let Some(mut val) = val else {
-            return None;
-        };
+        let mut val = val?;
         val[seq] = bs.to_vec();
         let mut pl = Vec::new();
         for v in val.iter() {
@@ -243,7 +241,7 @@ async fn get_conn_url(
     }
 
     let end_point = resp.data.ok_or(WsClientError::UnexpectedResponse)?;
-    if end_point.url.as_ref().map_or(true, |url| url.is_empty()) {
+    if end_point.url.as_ref().is_none_or(|url| url.is_empty()) {
         return Err(WsClientError::ServerError {
             code: 500,
             message: "No available endpoint".to_string(),
@@ -293,9 +291,15 @@ pub enum WsClientError {
         reason: Option<WsCloseReason>,
     },
     #[error("WebSocket error: {0}")]
-    WsError(#[from] tokio_tungstenite::tungstenite::Error),
+    WsError(Box<tokio_tungstenite::tungstenite::Error>),
     #[error("Prost error: {0}")]
     ProstError(#[from] prost::DecodeError),
+}
+
+impl From<tokio_tungstenite::tungstenite::Error> for WsClientError {
+    fn from(error: tokio_tungstenite::tungstenite::Error) -> Self {
+        WsClientError::WsError(Box::new(error))
+    }
 }
 
 struct Context<'a> {
@@ -368,7 +372,7 @@ impl<'a> Context<'a> {
                         );
                         if let Err(e) = self.sink.send(msg).await {
                             error!("Failed to send ping message: {:?}", e);
-                            return Err(WsClientError::WsError(e));
+                            return Err(WsClientError::WsError(Box::new(e)));
                         }
 
                 }

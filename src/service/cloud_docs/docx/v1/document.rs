@@ -34,11 +34,13 @@ impl DocumentService {
         request: CreateDocumentRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateDocumentRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/docx/v1/documents".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
-        api_req.body = serde_json::to_vec(&request)?;
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: "/open-apis/docx/v1/documents".to_string(),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            body: serde_json::to_vec(&request)?,
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -54,10 +56,12 @@ impl DocumentService {
         document_id: impl Into<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetDocumentRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!("/open-apis/docx/v1/documents/{}", document_id.into());
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!("/open-apis/docx/v1/documents/{}", document_id.into()),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -73,12 +77,14 @@ impl DocumentService {
         document_id: impl Into<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetRawContentRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/docx/v1/documents/{}/raw_content",
-            document_id.into()
-        );
+        let mut api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!(
+                "/open-apis/docx/v1/documents/{}/raw_content",
+                document_id.into()
+            ),
+            ..Default::default()
+        };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -95,12 +101,14 @@ impl DocumentService {
         request: ListDocumentBlocksRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListDocumentBlocksRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/docx/v1/documents/{}/blocks",
-            request.document_id
-        );
+        let mut api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!(
+                "/open-apis/docx/v1/documents/{}/blocks",
+                request.document_id
+            ),
+            ..Default::default()
+        };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
         // 添加查询参数
@@ -129,12 +137,14 @@ impl DocumentService {
         document_id: impl Into<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ConvertToDocxRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = format!(
-            "/open-apis/docx/v1/documents/{}/convert",
-            document_id.into()
-        );
+        let mut api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: format!(
+                "/open-apis/docx/v1/documents/{}/convert",
+                document_id.into()
+            ),
+            ..Default::default()
+        };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -145,7 +155,7 @@ impl DocumentService {
 // === 数据结构定义 ===
 
 /// 创建文档请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CreateDocumentRequest {
     /// 文档标题
     pub title: String,
@@ -203,16 +213,6 @@ impl CreateDocumentRequestBuilder {
 
     pub fn build(self) -> CreateDocumentRequest {
         self.request
-    }
-}
-
-impl Default for CreateDocumentRequest {
-    fn default() -> Self {
-        Self {
-            title: String::new(),
-            content: None,
-            folder_token: None,
-        }
     }
 }
 
@@ -287,7 +287,7 @@ impl ApiResponseTrait for GetRawContentRespData {
 }
 
 /// 获取文档所有块请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ListDocumentBlocksRequest {
     /// 文档ID
     pub document_id: String,
@@ -345,16 +345,6 @@ impl ListDocumentBlocksRequestBuilder {
 
     pub fn build(self) -> ListDocumentBlocksRequest {
         self.request
-    }
-}
-
-impl Default for ListDocumentBlocksRequest {
-    fn default() -> Self {
-        Self {
-            document_id: String::new(),
-            page_size: None,
-            page_token: None,
-        }
     }
 }
 

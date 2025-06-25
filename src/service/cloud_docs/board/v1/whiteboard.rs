@@ -31,13 +31,15 @@ impl WhiteboardService {
         request: GetWhiteboardThumbnailRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BinaryResponse>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/whiteboard/v1/whiteboards/{}/thumbnail",
-            request.whiteboard_token
-        );
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let mut api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!(
+                "/open-apis/whiteboard/v1/whiteboards/{}/thumbnail",
+                request.whiteboard_token
+            ),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            ..Default::default()
+        };
 
         // 添加查询参数
         if let Some(format) = request.format {

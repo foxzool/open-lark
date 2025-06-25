@@ -34,11 +34,13 @@ impl FileService {
         request: GetFileMetaRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetFileMetaRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/drive/v1/metas/batch_query".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
-        api_req.body = serde_json::to_vec(&request)?;
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: "/open-apis/drive/v1/metas/batch_query".to_string(),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            body: serde_json::to_vec(&request)?,
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -54,13 +56,15 @@ impl FileService {
         request: GetFileStatisticsRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetFileStatisticsRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/drive/v1/files/{}/statistics",
-            request.file_token
-        );
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!(
+                "/open-apis/drive/v1/files/{}/statistics",
+                request.file_token
+            ),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -76,13 +80,15 @@ impl FileService {
         request: ListFileViewRecordsRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListFileViewRecordsRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/drive/v1/files/{}/view_records",
-            request.file_token
-        );
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let mut api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!(
+                "/open-apis/drive/v1/files/{}/view_records",
+                request.file_token
+            ),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            ..Default::default()
+        };
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
@@ -110,11 +116,13 @@ impl FileService {
         request: CreateFileRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateFileRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/drive/v1/files".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
-        api_req.body = serde_json::to_vec(&request)?;
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: "/open-apis/drive/v1/files".to_string(),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            body: serde_json::to_vec(&request)?,
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -130,18 +138,20 @@ impl FileService {
         request: CopyFileRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CopyFileRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = format!("/open-apis/drive/v1/files/{}/copy", request.file_token);
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
-
         // 构建请求体
         let body = serde_json::json!({
             "name": request.name,
             "type": request.copy_type,
             "parent_token": request.parent_token
         });
-        api_req.body = serde_json::to_vec(&body)?;
+
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: format!("/open-apis/drive/v1/files/{}/copy", request.file_token),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            body: serde_json::to_vec(&body)?,
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -157,10 +167,12 @@ impl FileService {
         request: DeleteFileRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<DeleteFileRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::DELETE;
-        api_req.api_path = format!("/open-apis/drive/v1/files/{}", request.file_token);
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let api_req = ApiRequest {
+            http_method: Method::DELETE,
+            api_path: format!("/open-apis/drive/v1/files/{}", request.file_token),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -176,11 +188,13 @@ impl FileService {
         request: CreateFileShortcutRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateFileShortcutRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/drive/v1/files/create_shortcut".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
-        api_req.body = serde_json::to_vec(&request)?;
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: "/open-apis/drive/v1/files/create_shortcut".to_string(),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            body: serde_json::to_vec(&request)?,
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -196,10 +210,12 @@ impl FileService {
         request: SearchFilesRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SearchFilesRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/drive/v1/files/search".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let mut api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: "/open-apis/drive/v1/files/search".to_string(),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            ..Default::default()
+        };
 
         // 添加查询参数
         api_req
@@ -235,11 +251,13 @@ impl FileService {
         request: FileUploadPrepareRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<FileUploadPrepareRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/drive/v1/files/upload_prepare".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
-        api_req.body = serde_json::to_vec(&request)?;
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: "/open-apis/drive/v1/files/upload_prepare".to_string(),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            body: serde_json::to_vec(&request)?,
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -274,11 +292,13 @@ impl FileService {
         request: FileUploadFinishRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<FileUploadFinishRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/drive/v1/files/upload_finish".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
-        api_req.body = serde_json::to_vec(&request)?;
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: "/open-apis/drive/v1/files/upload_finish".to_string(),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            body: serde_json::to_vec(&request)?,
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -294,11 +314,13 @@ impl FileService {
         request: CreateImportTaskRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateImportTaskRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/drive/v1/import_tasks".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
-        api_req.body = serde_json::to_vec(&request)?;
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: "/open-apis/drive/v1/import_tasks".to_string(),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            body: serde_json::to_vec(&request)?,
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -314,10 +336,12 @@ impl FileService {
         request: GetImportTaskRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetImportTaskRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!("/open-apis/drive/v1/import_tasks/{}", request.ticket);
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!("/open-apis/drive/v1/import_tasks/{}", request.ticket),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)

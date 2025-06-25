@@ -78,6 +78,7 @@ impl MoveDocsToWikiRequestBuilder {
     }
 
     /// 移动到根节点
+    #[allow(clippy::wrong_self_convention)]
     pub fn to_root(mut self) -> Self {
         self.request.parent_node_token = None;
         self

@@ -55,7 +55,7 @@ impl FrameHandler {
     fn handle_pong_frame(frame: Frame) -> Option<Frame> {
         let payload = frame.payload.as_ref()?;
 
-        match serde_json::from_slice::<ClientConfig>(&payload) {
+        match serde_json::from_slice::<ClientConfig>(payload) {
             Ok(config) => {
                 debug!("Received pong with config: {:?}", config);
                 // 返回配置信息供上层处理

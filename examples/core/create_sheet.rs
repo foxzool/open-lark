@@ -106,14 +106,14 @@ async fn create_new_spreadsheet(client: &LarkClient) -> Result<String, Box<dyn s
 
 /// 获取表格详细信息
 async fn get_spreadsheet_info(
-    client: &LarkClient,
-    spreadsheet_token: &str,
+    _client: &LarkClient,
+    _spreadsheet_token: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n📋 获取表格详细信息...");
 
     match open_lark::service::sheets::v3::spreadsheet::GetSpreadsheetRequest::builder()
-        .spreadsheet_token(spreadsheet_token)
-        .execute(&client.sheets.v3.spreadsheet)
+        .spreadsheet_token(_spreadsheet_token)
+        .execute(&_client.sheets.v3.spreadsheet)
         .await
     {
         Ok(response) => {
@@ -376,8 +376,7 @@ async fn display_final_result(
                         print!("   统计: ");
                     }
 
-                    let row_text: Vec<String> =
-                        row.iter().map(|cell| format_cell_value(cell)).collect();
+                    let row_text: Vec<String> = row.iter().map(format_cell_value).collect();
                     println!("{}", row_text.join(" | "));
                 }
 

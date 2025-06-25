@@ -164,7 +164,7 @@ async fn create_complex_record(
     );
 
     // 创建Record结构
-    let record = open_lark::service::bitable::v1::Record { 
+    let record = open_lark::service::bitable::v1::Record {
         record_id: None,
         fields,
         created_by: None,
@@ -219,7 +219,7 @@ async fn create_multiple_records(
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n📦 演示创建多个记录...");
 
-    let records_data = vec![
+    let records_data = [
         ("任务1", "完成功能开发", "进行中"),
         ("任务2", "编写测试用例", "待开始"),
         ("任务3", "代码审查", "已完成"),
@@ -245,7 +245,8 @@ async fn create_multiple_records(
                 if let Some(data) = &response.data {
                     println!(
                         "   ✅ 记录 {} 创建成功 (ID: {})",
-                        title, data.record.record_id.as_ref().unwrap_or(&"N/A".to_string())
+                        title,
+                        data.record.record_id.as_ref().unwrap_or(&"N/A".to_string())
                     );
                 }
             }

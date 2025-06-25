@@ -53,11 +53,13 @@ impl MediaService {
         request: UploadPrepareRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UploadPrepareRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/drive/v1/medias/upload_prepare".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
-        api_req.body = serde_json::to_vec(&request)?;
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: "/open-apis/drive/v1/medias/upload_prepare".to_string(),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            body: serde_json::to_vec(&request)?,
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -92,11 +94,13 @@ impl MediaService {
         request: UploadFinishRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UploadFinishRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/drive/v1/medias/upload_finish".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
-        api_req.body = serde_json::to_vec(&request)?;
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: "/open-apis/drive/v1/medias/upload_finish".to_string(),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            body: serde_json::to_vec(&request)?,
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -112,10 +116,12 @@ impl MediaService {
         request: DownloadMediaRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BinaryResponse>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!("/open-apis/drive/v1/medias/{}/download", request.file_token);
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!("/open-apis/drive/v1/medias/{}/download", request.file_token),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -131,10 +137,12 @@ impl MediaService {
         request: BatchGetTmpDownloadUrlRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BatchGetTmpDownloadUrlRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/drive/v1/medias/batch_get_tmp_download_url".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let mut api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: "/open-apis/drive/v1/medias/batch_get_tmp_download_url".to_string(),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            ..Default::default()
+        };
 
         // 添加查询参数
         let file_tokens = request.file_tokens.join(",");

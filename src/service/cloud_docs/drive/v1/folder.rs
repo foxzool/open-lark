@@ -33,10 +33,12 @@ impl FolderService {
         &self,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetRootFolderMetaRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/drive/v1/folders/root_folder_meta".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::User];
+        let api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: "/open-apis/drive/v1/folders/root_folder_meta".to_string(),
+            supported_access_token_types: vec![AccessTokenType::User],
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -52,12 +54,14 @@ impl FolderService {
         request: ListFilesRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListFilesRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/drive/v1/folders/{}/children",
-            request.folder_token
-        );
+        let mut api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!(
+                "/open-apis/drive/v1/folders/{}/children",
+                request.folder_token
+            ),
+            ..Default::default()
+        };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
         // 添加查询参数
@@ -96,10 +100,12 @@ impl FolderService {
         request: GetFolderMetaRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetFolderMetaRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!("/open-apis/drive/v1/folders/{}", request.folder_token);
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!("/open-apis/drive/v1/folders/{}", request.folder_token),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -115,11 +121,13 @@ impl FolderService {
         request: CreateFolderRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateFolderRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/drive/v1/folders".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
-        api_req.body = serde_json::to_vec(&request)?;
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: "/open-apis/drive/v1/folders".to_string(),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            body: serde_json::to_vec(&request)?,
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -135,10 +143,12 @@ impl FolderService {
         request: MoveOrDeleteFolderRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<MoveOrDeleteFolderRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = format!("/open-apis/drive/v1/folders/{}/move", request.folder_token);
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let mut api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: format!("/open-apis/drive/v1/folders/{}/move", request.folder_token),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            ..Default::default()
+        };
 
         // 构建请求体，只包含需要的字段
         let body = serde_json::json!({
@@ -161,10 +171,12 @@ impl FolderService {
         request: CheckAsyncTaskRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CheckAsyncTaskRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!("/open-apis/drive/v1/tasks/{}", request.task_id);
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!("/open-apis/drive/v1/tasks/{}", request.task_id),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)

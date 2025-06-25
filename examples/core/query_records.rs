@@ -75,9 +75,17 @@ async fn query_all_records(
                 if !data.items.is_empty() {
                     println!("\n📄 记录列表:");
                     for (index, record) in data.items.iter().enumerate() {
-                        println!("   {}. 记录ID: {}", index + 1, record.record_id);
-                        println!("      创建时间: {}", record.created_time);
-                        println!("      修改时间: {}", record.last_modified_time);
+                        println!(
+                            "   {}. 记录ID: {}",
+                            index + 1,
+                            record.record_id.as_ref().unwrap_or(&"N/A".to_string())
+                        );
+                        if let Some(created_time) = &record.created_time {
+                            println!("      创建时间: {}", created_time);
+                        }
+                        if let Some(modified_time) = &record.last_modified_time {
+                            println!("      修改时间: {}", modified_time);
+                        }
 
                         // 显示字段数据
                         if !record.fields.is_empty() {
@@ -111,7 +119,7 @@ async fn query_all_records(
             println!("   2. 确认APP_TOKEN是否为有效的多维表格应用token");
             println!("   3. 验证TABLE_ID是否正确");
             println!("   4. 确保应用有多维表格的读取权限");
-            return Err(e);
+            return Err(e.into());
         }
     }
 
@@ -152,7 +160,11 @@ async fn query_with_filter(
                 if !data.items.is_empty() {
                     println!("\n📋 筛选结果:");
                     for (index, record) in data.items.iter().enumerate() {
-                        println!("   {}. 记录ID: {}", index + 1, record.record_id);
+                        println!(
+                            "   {}. 记录ID: {}",
+                            index + 1,
+                            record.record_id.as_ref().unwrap_or(&"N/A".to_string())
+                        );
 
                         // 显示"名称"字段（如果存在）
                         if let Some(name_value) = record.fields.get("名称") {
@@ -216,7 +228,10 @@ async fn query_with_sort_and_pagination(
 
                     // 显示记录摘要
                     for record in &data.items {
-                        println!("     - 记录ID: {}", record.record_id);
+                        println!(
+                            "     - 记录ID: {}",
+                            record.record_id.as_ref().unwrap_or(&"N/A".to_string())
+                        );
                         if let Some(time_value) = record.fields.get("创建时间") {
                             println!("       创建时间: {}", format_field_value(time_value));
                         }

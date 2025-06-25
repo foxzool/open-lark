@@ -34,10 +34,12 @@ impl FileVersionService {
         request: CreateVersionRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateVersionRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = format!("/open-apis/drive/v1/files/{}/versions", request.file_token);
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let mut api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: format!("/open-apis/drive/v1/files/{}/versions", request.file_token),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            ..Default::default()
+        };
 
         let body = serde_json::json!({
             "name": request.name,
@@ -59,12 +61,14 @@ impl FileVersionService {
         request: DeleteVersionRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<DeleteVersionRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::DELETE;
-        api_req.api_path = format!(
-            "/open-apis/drive/v1/files/{}/versions/{}",
-            request.file_token, request.version_id
-        );
+        let mut api_req = ApiRequest {
+            http_method: Method::DELETE,
+            api_path: format!(
+                "/open-apis/drive/v1/files/{}/versions/{}",
+                request.file_token, request.version_id
+            ),
+            ..Default::default()
+        };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -81,12 +85,14 @@ impl FileVersionService {
         request: GetVersionRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetVersionRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/drive/v1/files/{}/versions/{}",
-            request.file_token, request.version_id
-        );
+        let mut api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!(
+                "/open-apis/drive/v1/files/{}/versions/{}",
+                request.file_token, request.version_id
+            ),
+            ..Default::default()
+        };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -103,10 +109,12 @@ impl FileVersionService {
         request: ListVersionsRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListVersionsRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!("/open-apis/drive/v1/files/{}/versions", request.file_token);
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let mut api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!("/open-apis/drive/v1/files/{}/versions", request.file_token),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            ..Default::default()
+        };
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
@@ -128,7 +136,7 @@ impl FileVersionService {
 // === 数据结构定义 ===
 
 /// 创建文档版本请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CreateVersionRequest {
     /// 文档token
     pub file_token: String,
@@ -183,16 +191,6 @@ impl CreateVersionRequestBuilder {
     }
 }
 
-impl Default for CreateVersionRequest {
-    fn default() -> Self {
-        Self {
-            file_token: String::new(),
-            name: String::new(),
-            obj_type: String::new(),
-        }
-    }
-}
-
 impl_executable_builder_owned!(
     CreateVersionRequestBuilder,
     FileVersionService,
@@ -221,7 +219,7 @@ impl ApiResponseTrait for CreateVersionRespData {
 }
 
 /// 删除文档版本请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DeleteVersionRequest {
     /// 文档token
     pub file_token: String,
@@ -264,15 +262,6 @@ impl DeleteVersionRequestBuilder {
     }
 }
 
-impl Default for DeleteVersionRequest {
-    fn default() -> Self {
-        Self {
-            file_token: String::new(),
-            version_id: String::new(),
-        }
-    }
-}
-
 impl_executable_builder_owned!(
     DeleteVersionRequestBuilder,
     FileVersionService,
@@ -295,7 +284,7 @@ impl ApiResponseTrait for DeleteVersionRespData {
 }
 
 /// 获取文档版本请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetVersionRequest {
     /// 文档token
     pub file_token: String,
@@ -338,15 +327,6 @@ impl GetVersionRequestBuilder {
     }
 }
 
-impl Default for GetVersionRequest {
-    fn default() -> Self {
-        Self {
-            file_token: String::new(),
-            version_id: String::new(),
-        }
-    }
-}
-
 impl_executable_builder_owned!(
     GetVersionRequestBuilder,
     FileVersionService,
@@ -363,7 +343,7 @@ pub struct GetVersionRespData {
 }
 
 /// 获取文档版本列表请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ListVersionsRequest {
     /// 文档token
     pub file_token: String,
@@ -421,16 +401,6 @@ impl ListVersionsRequestBuilder {
 
     pub fn build(self) -> ListVersionsRequest {
         self.request
-    }
-}
-
-impl Default for ListVersionsRequest {
-    fn default() -> Self {
-        Self {
-            file_token: String::new(),
-            page_token: None,
-            page_size: None,
-        }
     }
 }
 

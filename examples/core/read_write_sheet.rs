@@ -265,7 +265,7 @@ async fn verify_data_update(
                     }
 
                     // 显示数据行
-                    for (row_index, row) in value_range.values.iter().skip(1).enumerate() {
+                    for (_row_index, row) in value_range.values.iter().skip(1).enumerate() {
                         print!("   ");
                         for (col_index, cell) in row.iter().enumerate() {
                             if col_index > 0 {
@@ -303,8 +303,8 @@ fn format_cell_value(value: &Value) -> String {
 /// 演示高级表格操作（供参考）
 #[allow(dead_code)]
 async fn advanced_sheet_operations(
-    client: &LarkClient,
-    spreadsheet_token: &str,
+    _client: &LarkClient,
+    _spreadsheet_token: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n🔧 高级表格操作演示...");
 

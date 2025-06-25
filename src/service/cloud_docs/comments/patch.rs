@@ -93,24 +93,28 @@ impl PatchCommentRequestBuilder {
     }
 
     /// 设置为文档类型
+    #[allow(clippy::wrong_self_convention)]
     pub fn as_doc(mut self) -> Self {
         self.request.file_type = "doc".to_string();
         self
     }
 
     /// 设置为docx类型
+    #[allow(clippy::wrong_self_convention)]
     pub fn as_docx(mut self) -> Self {
         self.request.file_type = "docx".to_string();
         self
     }
 
     /// 设置为电子表格类型
+    #[allow(clippy::wrong_self_convention)]
     pub fn as_sheet(mut self) -> Self {
         self.request.file_type = "sheet".to_string();
         self
     }
 
     /// 设置为多维表格类型
+    #[allow(clippy::wrong_self_convention)]
     pub fn as_bitable(mut self) -> Self {
         self.request.file_type = "bitable".to_string();
         self
@@ -123,6 +127,7 @@ impl PatchCommentRequestBuilder {
     }
 
     /// 是否解决
+    #[allow(clippy::wrong_self_convention)]
     pub fn is_solved(mut self, is_solved: bool) -> Self {
         self.request.is_solved = is_solved;
         self

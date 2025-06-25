@@ -34,11 +34,13 @@ impl EventService {
         request: SubscribeFileEventsRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SubscribeFileEventsRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/drive/v1/files/subscribe".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
-        api_req.body = serde_json::to_vec(&request)?;
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: "/open-apis/drive/v1/files/subscribe".to_string(),
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            body: serde_json::to_vec(&request)?,
+            ..Default::default()
+        };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -54,12 +56,14 @@ impl EventService {
         request: GetFileSubscriptionRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetFileSubscriptionRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/drive/v1/files/{}/subscriptions/{}",
-            request.file_token, request.subscription_id
-        );
+        let mut api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!(
+                "/open-apis/drive/v1/files/{}/subscriptions/{}",
+                request.file_token, request.subscription_id
+            ),
+            ..Default::default()
+        };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -76,12 +80,14 @@ impl EventService {
         request: UnsubscribeFileEventsRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UnsubscribeFileEventsRespData>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::DELETE;
-        api_req.api_path = format!(
-            "/open-apis/drive/v1/files/{}/subscriptions/{}",
-            request.file_token, request.subscription_id
-        );
+        let mut api_req = ApiRequest {
+            http_method: Method::DELETE,
+            api_path: format!(
+                "/open-apis/drive/v1/files/{}/subscriptions/{}",
+                request.file_token, request.subscription_id
+            ),
+            ..Default::default()
+        };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -90,7 +96,7 @@ impl EventService {
 }
 
 /// 订阅云文档事件请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct SubscribeFileEventsRequest {
     /// 文件token
     pub file_token: String,
@@ -150,16 +156,6 @@ impl SubscribeFileEventsRequestBuilder {
     }
 }
 
-impl Default for SubscribeFileEventsRequest {
-    fn default() -> Self {
-        Self {
-            file_token: String::new(),
-            file_type: String::new(),
-            event_types: Vec::new(),
-        }
-    }
-}
-
 impl_executable_builder_owned!(
     SubscribeFileEventsRequestBuilder,
     EventService,
@@ -184,7 +180,7 @@ impl ApiResponseTrait for SubscribeFileEventsRespData {
 }
 
 /// 查询云文档事件订阅状态请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetFileSubscriptionRequest {
     /// 文件token
     pub file_token: String,
@@ -227,15 +223,6 @@ impl GetFileSubscriptionRequestBuilder {
     }
 }
 
-impl Default for GetFileSubscriptionRequest {
-    fn default() -> Self {
-        Self {
-            file_token: String::new(),
-            subscription_id: String::new(),
-        }
-    }
-}
-
 impl_executable_builder_owned!(
     GetFileSubscriptionRequestBuilder,
     EventService,
@@ -272,7 +259,7 @@ impl ApiResponseTrait for GetFileSubscriptionRespData {
 }
 
 /// 取消云文档事件订阅请求参数
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UnsubscribeFileEventsRequest {
     /// 文件token
     pub file_token: String,
@@ -312,15 +299,6 @@ impl UnsubscribeFileEventsRequestBuilder {
 
     pub fn build(self) -> UnsubscribeFileEventsRequest {
         self.request
-    }
-}
-
-impl Default for UnsubscribeFileEventsRequest {
-    fn default() -> Self {
-        Self {
-            file_token: String::new(),
-            subscription_id: String::new(),
-        }
     }
 }
 

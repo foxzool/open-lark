@@ -10,9 +10,7 @@
 // APP_ID=your_app_id
 // APP_SECRET=your_app_secret
 
-use chrono::{DateTime, Duration, Utc};
 use open_lark::prelude::*;
-use std::collections::HashMap;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
