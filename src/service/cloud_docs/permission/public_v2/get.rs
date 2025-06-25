@@ -492,7 +492,7 @@ mod tests {
         assert!(settings.has_expire_time());
         assert!(!settings.is_expired());
         assert_eq!(settings.share_level_description(), "组织内可编辑");
-        assert_eq!(settings.security_level(), "中等安全");
+        assert_eq!(settings.security_level(), "较安全");
         assert_eq!(settings.share_scope_description(), Some("limited"));
 
         let features = settings.advanced_features_status();
