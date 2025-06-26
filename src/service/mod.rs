@@ -1,6 +1,7 @@
 // 核心服务模块
 pub mod attendance;
 pub mod authentication;
+pub mod calendar;
 pub mod endpoints;
 pub mod im;
 pub mod search;
@@ -11,6 +12,9 @@ pub mod cloud_docs;
 // 向后兼容的 re-export
 pub use cloud_docs::docx as docs; // docs -> docx 兼容
 pub use cloud_docs::{assistant, bitable, board, comments, drive, permission, sheets, wiki};
+
+// 日历服务 re-export
+pub use calendar::CalendarService;
 
 // 服务类型 re-export
 pub use cloud_docs::{
