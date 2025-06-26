@@ -80,7 +80,7 @@ impl<T: ApiResponseTrait> Transport<T> {
             }
             Err(err) => {
                 debug!("Request error: {:?}", err);
-                Err(LarkAPIError::RequestError(err))
+                Err(LarkAPIError::RequestError(err.to_string()))
             }
         }
     }
