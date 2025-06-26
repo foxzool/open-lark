@@ -1,6 +1,6 @@
 [package]
 name = "open-lark"
-version = "0.6.0"
+version = "0.7.0"
 edition = "2021"
 authors = ["ZoOL <zhooul@gmail.com>"]
 readme = "README.md"
@@ -206,6 +206,18 @@ path = "examples/api/im_v2_demo.rs"
 [[example]]
 name = "tenant_tag_demo"
 path = "examples/api/tenant_tag_demo.rs"
+
+[[example]]
+name = "vc_v1"
+path = "examples/api/vc_v1.rs"
+
+[[example]]
+name = "minutes_v1"
+path = "examples/api/minutes_v1.rs"
+
+[[example]]
+name = "approval_demo"
+path = "examples/api/approval_demo.rs"
 
 # ===========================================
 # Benchmarks

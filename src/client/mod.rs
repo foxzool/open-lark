@@ -3,6 +3,7 @@ use std::{sync::Arc, time::Duration};
 use crate::{
     core::{config::Config, constants::AppType},
     service::{
+        approval::ApprovalService,
         attendance::AttendanceService,
         authentication::AuthenService,
         calendar::CalendarService,
@@ -11,8 +12,10 @@ use crate::{
         directory::DirectoryService,
         group::GroupService,
         im::ImService,
+        minutes::MinutesService,
         search::SearchService,
         tenant_tag::TenantTagService,
+        vc::VcService,
         // 向后兼容的导入
         AssistantService,
         BitableService,
@@ -33,6 +36,7 @@ pub mod ws_client;
 pub struct LarkClient {
     pub config: Config,
     // 核心服务
+    pub approval: ApprovalService,
     pub attendance: AttendanceService,
     pub auth: AuthenService,
     pub calendar: CalendarService,
@@ -40,8 +44,10 @@ pub struct LarkClient {
     pub directory: DirectoryService,
     pub group: GroupService,
     pub im: ImService,
+    pub minutes: MinutesService,
     pub search: SearchService,
     pub tenant_tag: TenantTagService,
+    pub vc: VcService,
     // 云文档服务聚合
     pub cloud_docs: CloudDocsService,
     // 向后兼容的字段
@@ -103,6 +109,7 @@ impl LarkClientBuilder {
         LarkClient {
             config: self.config.clone(),
             // 核心服务
+            approval: ApprovalService::new((*config).clone()),
             attendance: AttendanceService::new(Arc::clone(&config)),
             auth: AuthenService::new(Arc::clone(&config)),
             calendar: CalendarService::new((*config).clone()),
@@ -110,8 +117,10 @@ impl LarkClientBuilder {
             directory: DirectoryService::new((*config).clone()),
             group: GroupService::new((*config).clone()),
             im: ImService::new(Arc::clone(&config)),
+            minutes: MinutesService::new((*config).clone()),
             search: SearchService::new(Arc::clone(&config)),
             tenant_tag: TenantTagService::new((*config).clone()),
+            vc: VcService::new((*config).clone()),
             // 云文档服务聚合
             cloud_docs,
             // 向后兼容的字段（重新创建实例）

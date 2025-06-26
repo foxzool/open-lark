@@ -1,6 +1,6 @@
-use std::collections::HashMap;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 use crate::core::{
     api_req::ApiRequest,

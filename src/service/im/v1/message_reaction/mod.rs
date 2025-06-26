@@ -1,17 +1,19 @@
-use std::collections::HashMap;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    service::im::v1::models::{MessageReaction, UserIdType},
 };
-use crate::service::im::v1::models::{MessageReaction, UserIdType};
 
 /// 表情回复服务
 pub struct MessageReactionService {
@@ -56,9 +58,12 @@ impl MessageReactionService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert("user_id_type".to_string(), user_id_type.as_str().to_string());
+            query_params.insert(
+                "user_id_type".to_string(),
+                user_id_type.as_str().to_string(),
+            );
         }
-        
+
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: format!("/open-apis/im/v1/messages/{}/reactions", message_id),
@@ -84,7 +89,10 @@ impl MessageReactionService {
     ) -> SDKResult<BaseResponse<ListReactionResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert("user_id_type".to_string(), user_id_type.as_str().to_string());
+            query_params.insert(
+                "user_id_type".to_string(),
+                user_id_type.as_str().to_string(),
+            );
         }
         if let Some(page_size) = page_size {
             query_params.insert("page_size".to_string(), page_size.to_string());
@@ -92,7 +100,7 @@ impl MessageReactionService {
         if let Some(page_token) = page_token {
             query_params.insert("page_token".to_string(), page_token);
         }
-        
+
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!("/open-apis/im/v1/messages/{}/reactions", message_id),
@@ -114,12 +122,18 @@ impl MessageReactionService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert("user_id_type".to_string(), user_id_type.as_str().to_string());
+            query_params.insert(
+                "user_id_type".to_string(),
+                user_id_type.as_str().to_string(),
+            );
         }
-        
+
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/im/v1/messages/{}/reactions/{}", message_id, reaction_id),
+            api_path: format!(
+                "/open-apis/im/v1/messages/{}/reactions/{}",
+                message_id, reaction_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

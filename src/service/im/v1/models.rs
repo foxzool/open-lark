@@ -95,9 +95,7 @@ pub struct EmojiType {
 
 impl EmojiType {
     pub fn new() -> Self {
-        Self {
-            emoji_type: None,
-        }
+        Self { emoji_type: None }
     }
 
     pub fn with_emoji_type(mut self, emoji_type: impl Into<String>) -> Self {

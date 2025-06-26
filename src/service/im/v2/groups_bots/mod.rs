@@ -1,18 +1,20 @@
-use std::collections::HashMap;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::collections::HashMap;
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    service::im::v2::models::{ButtonInfo, UserIdType},
 };
-use crate::service::im::v2::models::{UserIdType, ButtonInfo};
 
 /// 群聊或机器人消息服务
 pub struct GroupsBotsService {
@@ -119,7 +121,10 @@ impl GroupsBotsService {
             http_method: Method::POST,
             api_path: "/open-apis/im/v2/groups-bots/bot_time_sentive".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params: HashMap::from([("receive_id_type".to_string(), receive_id_type.as_str().to_string())]),
+            query_params: HashMap::from([(
+                "receive_id_type".to_string(),
+                receive_id_type.as_str().to_string(),
+            )]),
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
@@ -156,7 +161,10 @@ impl GroupsBotsService {
             http_method: Method::PATCH,
             api_path: "/open-apis/im/v2/groups-bots/patch".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params: HashMap::from([("receive_id_type".to_string(), receive_id_type.as_str().to_string())]),
+            query_params: HashMap::from([(
+                "receive_id_type".to_string(),
+                receive_id_type.as_str().to_string(),
+            )]),
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };

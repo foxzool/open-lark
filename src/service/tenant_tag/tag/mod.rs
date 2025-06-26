@@ -1,17 +1,19 @@
-use std::collections::HashMap;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    service::tenant_tag::models::{Tag, TagStatus, TagType, UserIdType},
 };
-use crate::service::tenant_tag::models::{Tag, TagType, TagStatus, UserIdType};
 
 /// 标签管理服务
 pub struct TagService {
@@ -101,7 +103,10 @@ impl TagService {
     ) -> SDKResult<BaseResponse<CreateTagResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert("user_id_type".to_string(), user_id_type.as_str().to_string());
+            query_params.insert(
+                "user_id_type".to_string(),
+                user_id_type.as_str().to_string(),
+            );
         }
 
         let api_req = ApiRequest {
@@ -126,7 +131,10 @@ impl TagService {
     ) -> SDKResult<BaseResponse<PatchTagResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert("user_id_type".to_string(), user_id_type.as_str().to_string());
+            query_params.insert(
+                "user_id_type".to_string(),
+                user_id_type.as_str().to_string(),
+            );
         }
 
         let api_req = ApiRequest {
@@ -161,7 +169,10 @@ impl TagService {
             query_params.insert("page_token".to_string(), page_token);
         }
         if let Some(user_id_type) = user_id_type {
-            query_params.insert("user_id_type".to_string(), user_id_type.as_str().to_string());
+            query_params.insert(
+                "user_id_type".to_string(),
+                user_id_type.as_str().to_string(),
+            );
         }
 
         let api_req = ApiRequest {

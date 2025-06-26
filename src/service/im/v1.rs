@@ -1,16 +1,10 @@
 use crate::{
     core::config::Config,
     service::im::v1::{
-        batch_message::BatchMessageService,
-        buzz_messages::BuzzMessagesService,
-        chats::ChatsService,
-        file::FileService,
-        image::ImageService,
-        message::MessageService,
-        message_card::MessageCardService,
-        message_reaction::MessageReactionService,
-        pin::PinService,
-        url_preview::UrlPreviewService,
+        batch_message::BatchMessageService, buzz_messages::BuzzMessagesService,
+        chats::ChatsService, file::FileService, image::ImageService, message::MessageService,
+        message_card::MessageCardService, message_reaction::MessageReactionService,
+        pin::PinService, url_preview::UrlPreviewService,
     },
 };
 
@@ -21,21 +15,21 @@ pub mod p2_im_message_read_v1;
 pub mod p2_im_message_receive_v1;
 
 // 新增模块
-pub mod models;
 pub mod batch_message;
-pub mod image;
-pub mod file;
 pub mod buzz_messages;
-pub mod message_reaction;
-pub mod pin;
+pub mod file;
+pub mod image;
 pub mod message_card;
+pub mod message_reaction;
+pub mod models;
+pub mod pin;
 pub mod url_preview;
 
 pub struct V1 {
     // 现有服务
     pub chats: ChatsService,
     pub message: MessageService,
-    
+
     // 新增服务
     pub batch_message: BatchMessageService,
     pub image: ImageService,
@@ -54,8 +48,10 @@ impl V1 {
             chats: ChatsService {
                 config: config.clone(),
             },
-            message: MessageService { config: config.clone() },
-            
+            message: MessageService {
+                config: config.clone(),
+            },
+
             // 新增服务
             batch_message: BatchMessageService::new(config.clone()),
             image: ImageService::new(config.clone()),
