@@ -32,6 +32,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - 完整数据模型: Card, CardElement, CardSettings, CardStatus
   - Builder模式支持和标准化响应格式
 
+#### 💬 即时消息模块 (IM v1) - 重大扩展
+- **🚀 IM服务扩展实现** - 飞书消息功能全面增强
+  - **消息表情回复**: `message_reaction` 模块 - 添加、获取、删除表情回复
+  - **Pin消息功能**: `pin` 模块 - Pin消息、移除Pin、获取群内Pin消息
+  - **图片处理**: `image` 模块 - 支持图片上传和下载
+  - **文件处理**: `file` 模块 - 支持文件上传和下载
+  - **数据模型完善**: MessageReaction, Pin, EmojiType, UserIdType 等核心类型
+  - **API架构统一**: 遵循现有Transport模式，支持完整的query_params和body处理
+  - **预留模块**: batch_message, message_card, buzz_messages, url_preview 基础架构
+
 ### Enhanced - 功能增强
 
 #### 🔧 SDK架构持续优化
@@ -49,7 +59,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Directory模块**: 21个新文件，1151行代码
 - **Group模块**: 23个新文件，711行代码  
 - **Cardkit模块**: 集成完成
-- **总计**: 65+个新文件，2000+行新代码
+- **IM v1扩展**: 9个新文件，550+行代码
+  - message_reaction, pin, image, file 模块完整实现
+  - models.rs 核心数据模型定义
+  - 4个预留模块基础架构
+- **总计**: 74+个新文件，2550+行新代码
 
 #### 🏗️ 架构模式
 - **模块化设计**: service/module/version/feature 四层架构
