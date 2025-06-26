@@ -1,17 +1,19 @@
-use std::collections::HashMap;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    service::tenant_tag::models::{TagBinding, UserIdType},
 };
-use crate::service::tenant_tag::models::{TagBinding, UserIdType};
 
 /// 标签绑定服务
 pub struct TagBindingService {
@@ -114,7 +116,7 @@ impl TagBindingService {
         let mut query_params = HashMap::new();
         query_params.insert("entity_id".to_string(), request.entity_id);
         query_params.insert("entity_type".to_string(), request.entity_type);
-        
+
         if let Some(tag_id) = request.tag_id {
             query_params.insert("tag_id".to_string(), tag_id);
         }
@@ -125,7 +127,10 @@ impl TagBindingService {
             query_params.insert("page_token".to_string(), page_token);
         }
         if let Some(user_id_type) = request.user_id_type {
-            query_params.insert("user_id_type".to_string(), user_id_type.as_str().to_string());
+            query_params.insert(
+                "user_id_type".to_string(),
+                user_id_type.as_str().to_string(),
+            );
         }
 
         let api_req = ApiRequest {
@@ -148,7 +153,10 @@ impl TagBindingService {
     ) -> SDKResult<BaseResponse<CreateTagBindingResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert("user_id_type".to_string(), user_id_type.as_str().to_string());
+            query_params.insert(
+                "user_id_type".to_string(),
+                user_id_type.as_str().to_string(),
+            );
         }
 
         let api_req = ApiRequest {
@@ -172,7 +180,10 @@ impl TagBindingService {
     ) -> SDKResult<BaseResponse<UpdateTagBindingResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert("user_id_type".to_string(), user_id_type.as_str().to_string());
+            query_params.insert(
+                "user_id_type".to_string(),
+                user_id_type.as_str().to_string(),
+            );
         }
 
         let api_req = ApiRequest {

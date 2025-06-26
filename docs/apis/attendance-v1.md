@@ -60,7 +60,6 @@
 [删除归档报表行数据](https://open.feishu.cn/document/attendance-v1/archive_rule/del_report)
 [查询所有归档规则](https://open.feishu.cn/document/attendance-v1/archive_rule/list)
 
-
 ## 打卡信息管理
 
 [导入打卡流水](https://open.feishu.cn/document/server-docs/attendance-v1/user_task/batch_create)
@@ -74,6 +73,7 @@
 [通过过期时间获取发放记录](https://open.feishu.cn/document/server-docs/attendance-v1/leave_employ_expire_record/get)
 
 ## 休假发放记录
+
 [修改发放记录](https://open.feishu.cn/document/server-docs/attendance-v1/leave_accrual_record/patch)
 
 ## 事件

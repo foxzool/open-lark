@@ -5,7 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - 2025-06-26
+## [Unreleased]
+
+## [0.7.0] - 2025-06-26
 
 ### Added - 🏗️ 新增模块和架构扩展
 
@@ -71,6 +73,104 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **⚡ 参数优化**: 使用GetTagBindingRequest解决too_many_arguments警告
 - **💻 完整演示**: `tenant_tag_demo.rs` - 120行功能演示，涵盖标签全生命周期管理
 
+#### 📹 视频会议模块 (VC v1) - 全新实现 🎥
+- **🎯 VcService 完整集成** - 飞书视频会议功能全面覆盖，4大核心服务
+  - **📅 预约管理服务** (`reserve`) - 会议预约全生命周期管理
+    - `apply()` - 预约会议，支持主题、时间、密码、参会人等配置
+    - `delete()` - 删除预约，支持预约取消操作
+    - `update()` - 更新预约，支持会议信息修改
+    - `get()` - 获取预约详情，查询预约状态和信息
+    - `get_active_meeting()` - 获取活跃会议，查询进行中的会议
+  - **🎪 会议管理服务** (`meeting`) - 实时会议操作管理
+    - `invite()` - 邀请参会人，支持批量邀请和结果反馈
+    - `kickout()` - 移除参会人，支持批量移除操作
+    - `set_host()` - 设置主持人，支持主持人权限转移
+    - `end()` - 结束会议，支持会议强制结束
+    - `get()` - 获取会议详情，查询会议状态和参与者信息
+    - `list_by_no()` - 根据会议号获取会议列表，支持时间范围查询
+  - **📽️ 录制管理服务** (`recording`) - 会议录制功能管理
+    - `start()` - 开始录制，支持自定义录制标题
+    - `stop()` - 停止录制，完成录制任务
+    - `get()` - 获取录制详情，查询录制文件信息
+    - `set_permission()` - 设置录制权限，管理访问控制
+  - **🏢 会议室管理服务** (`room`) - 会议室资源管理
+    - `create()` - 创建会议室，支持名称、描述、容量、位置配置
+    - `update()` - 更新会议室，支持信息修改
+    - `delete()` - 删除会议室，支持资源回收
+    - `get()` - 获取会议室详情，查询会议室配置信息
+    - `list()` - 获取会议室列表，支持分页查询
+    - `search()` - 搜索会议室，支持关键字和ID批量查询
+- **📊 完整数据模型**: Meeting, Reserve, Room, Recording, UserIdType, RoomIdType, MeetingStatus, MeetingType 等类型安全支持
+- **⚡ 代码优化**: 使用参数结构体 `ListMeetingsByNoParams`, `SearchRoomsParams` 解决函数参数过多问题
+- **🏗️ 统一架构**: 完全遵循Transport模式，与其他模块保持架构一致性
+- **🔧 集成完成**: 已集成到 `LarkClient`，可通过 `client.vc.v1.*` 访问
+- **💻 完整演示**: `vc_v1.rs` - 158行功能演示，涵盖视频会议全生命周期管理
+
+#### 📝 妙记模块 (Minutes v1) - 全新实现 🎯
+- **🎯 MinutesService 完整集成** - 飞书妙记功能全面覆盖，4大核心服务
+  - **📁 音视频文件服务** (`media`) - 妙记媒体文件管理
+    - `get()` - 下载妙记音视频文件，获取下载URL、文件信息、有效期等
+  - **📄 文字记录服务** (`transcript`) - 妙记转录内容导出
+    - `get()` - 导出妙记文字记录，获取转录文本、语言、格式等信息
+  - **📊 统计数据服务** (`statistics`) - 妙记会议数据分析
+    - `get()` - 获取妙记统计数据，包含会议时长、参会人数、发言统计、关键词分析等
+  - **ℹ️ 妙记信息服务** (`minute`) - 妙记基本信息查询
+    - `get()` - 获取妙记信息，包含标题、创建时间、状态、会议链接等基本信息
+- **📊 完整数据模型**: Minute, MinuteMedia, MinuteTranscript, MinuteStatistics, KeywordStatistic, UserInfo 等类型安全支持
+- **🏗️ 统一架构**: 完全遵循Transport模式，与其他模块保持架构一致性
+- **🔧 集成完成**: 已集成到 `LarkClient`，可通过 `client.minutes.v1.*` 访问
+- **⚡ 并发支持**: 示例中展示了并发获取多个妙记信息的批量处理模式
+- **💻 完整演示**: `minutes_v1.rs` - 142行功能演示，涵盖妙记全功能访问和批量处理
+
+#### 📋 审批模块 (Approval v4) - 企业级审批流程 🎉
+- **🚀 ApprovalService 完整实现** - 飞书审批系统全面覆盖，10大核心服务
+  - **📝 原生审批定义** (`approval`) - 审批流程定义管理
+    - `create()` - 创建审批定义，支持表单配置、流程设置、权限配置
+    - `get()` - 查看指定审批定义，获取完整配置信息
+  - **📋 原生审批实例** (`instance`) - 审批实例全生命周期管理
+    - `create()` - 创建审批实例，支持表单数据、发起人、部门信息
+    - `cancel()` - 撤回审批实例，支持实例撤回操作
+    - `cc()` - 抄送审批实例，支持批量抄送和消息自定义
+    - `preview()` - 预览审批流程，查看流程节点和审批人信息
+    - `get()` - 获取实例详情，查询实例状态和处理历史
+    - `list()` - 批量获取实例ID，支持多条件筛选和分页查询
+  - **✅ 原生审批任务** (`task`) - 审批任务操作管理
+    - `approve()` - 同意审批任务，支持审批意见和表单数据
+    - `reject()` - 拒绝审批任务，支持拒绝原因和表单数据
+    - `transfer()` - 转交审批任务，支持转交用户和转交原因
+    - `rollback()` - 退回审批任务，支持指定节点退回
+    - `add_sign()` - 审批任务加签，支持前加签、后加签、或签
+    - `resubmit()` - 重新提交审批任务，支持表单数据更新
+  - **📎 审批文件** (`file`) - 审批附件管理
+    - `upload()` - 上传审批文件，支持multipart表单上传
+  - **💬 审批评论** (`instance_comment`) - 审批过程评论
+    - `create()` - 创建评论，支持文本内容和附件
+    - `delete()` - 删除指定评论
+    - `remove_all()` - 清空实例所有评论
+    - `list()` - 获取评论列表，支持分页查询
+  - **🔗 三方审批定义** (`external_approval`) - 外部系统集成
+    - `create()` - 创建三方审批定义，支持外部URL和回调配置
+    - `get()` - 查看三方审批定义详情
+  - **📊 三方审批实例** (`external_instance`) - 外部审批同步
+    - `create()` - 同步三方审批实例，支持状态同步和流程详情
+    - `check()` - 校验三方审批实例，支持实例验证
+  - **📋 三方审批任务** (`external_task`) - 外部任务状态
+    - `list()` - 获取三方审批任务状态，支持多条件查询
+  - **🤖 审批Bot消息** (`message`) - 审批通知管理
+    - `send()` - 发送审批Bot消息，支持自定义消息内容和类型
+    - `update()` - 更新审批Bot消息，支持消息内容更新
+  - **🔍 审批查询** (`search`) - 审批数据查询分析
+    - `instances()` - 查询实例列表，支持多维度筛选和时间范围
+    - `tasks()` - 查询任务列表，支持状态筛选和批量查询
+    - `cc()` - 查询抄送列表，支持抄送记录查询
+    - `approval_id()` - 查询审批ID，支持名称模糊搜索
+    - `user_tasks()` - 查询用户任务列表，支持个人任务管理
+- **📊 完整数据模型**: Approval, ApprovalInstance, ApprovalTask, ApprovalFile, ApprovalComment, FormField, FormData, UserInfo, ProcessNode 等类型安全支持
+- **🏗️ 统一架构**: 完全遵循Transport模式，与其他模块保持架构一致性
+- **🔧 集成完成**: 已集成到 `LarkClient`，可通过 `client.approval.v4.*` 访问
+- **⚡ 类型安全**: 支持UserIdType、DepartmentIdType参数类型，确保API调用安全
+- **💻 完整演示**: `approval_demo.rs` - 290行功能演示，涵盖审批系统全生命周期管理
+
 ### Enhanced - 功能增强
 
 #### 🔧 SDK架构持续优化
@@ -83,6 +183,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `im_v1_demo.rs` - IM v1模块完整功能演示，涵盖8大子服务
   - `im_v2_demo.rs` - IM v2消息流模块演示，展示卡片管理和机器人消息
   - `tenant_tag_demo.rs` - 企业标签模块演示，展示标签管理和绑定操作
+  - `vc_v1.rs` - 视频会议模块演示，展示预约、会议、录制、会议室全功能
+  - `minutes_v1.rs` - 妙记模块演示，展示音视频文件、文字记录、统计数据、信息查询全功能
+  - `approval_demo.rs` - 审批模块演示，展示审批定义、实例、任务、文件、评论、三方集成、查询全功能
 - **文档和配置**: Cargo.toml示例配置更新
 
 ### Technical Details - 技术细节
@@ -103,10 +206,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - 完整的消息流卡片和机器人消息API覆盖
 - **Tenant Tag新增实现**: 8个新文件，679行新代码
   - tag 和 tag_binding 双服务架构完整实现
-  - models.rs 标签核心数据模型：Tag, TagBinding, TagType, TagStatus
+  - models.rs 企业标签核心数据模型：Tag, TagBinding, TagType, TagStatus
   - tenant_tag_demo.rs 功能演示，120行代码
-  - 企业级群组标签管理完整解决方案
-- **总计**: 97个新文件，5388行新代码
+  - 参数结构体优化，解决代码质量警告
+- **VC v1视频会议实现**: 12个新文件，875行新代码
+  - reserve, meeting, recording, room 四大服务模块完整实现
+  - models.rs 视频会议核心数据模型：Meeting, Reserve, Room, Recording, UserIdType, RoomIdType, MeetingStatus, MeetingType
+  - vc_v1.rs 完整功能演示，158行代码
+  - 参数结构体优化：ListMeetingsByNoParams, SearchRoomsParams 解决函数参数过多问题
+  - 统一Transport架构，完整集成到LarkClient
+- **Minutes v1妙记实现**: 8个新文件，420行新代码
+  - media, transcript, statistics, minute 四大服务模块完整实现
+  - models.rs 妙记核心数据模型：Minute, MinuteMedia, MinuteTranscript, MinuteStatistics, KeywordStatistic
+  - minutes_v1.rs 完整功能演示，142行代码
+  - 简洁的四GET接口设计，专注于妙记数据获取和导出
+  - 支持并发批量处理，统一Transport架构
+- **Approval v4审批实现**: 12个新文件，1145行新代码
+  - approval, instance, task, file, instance_comment, external_approval, external_instance, external_task, message, search 十大服务模块完整实现
+  - models.rs 审批核心数据模型：Approval, ApprovalInstance, ApprovalTask, ApprovalFile, ApprovalComment, FormField, FormData, ProcessNode, UserInfo
+  - approval_demo.rs 完整功能演示，290行代码
+  - 完整的原生审批和三方审批API覆盖，支持审批流程全生命周期管理
+  - 企业级审批工作流支持：定义、实例、任务、文件、评论、查询、消息、外部集成
+- **总计**: 126个新文件，7586行新代码
 
 #### 🏗️ 架构模式
 - **模块化设计**: service/module/version/feature 四层架构

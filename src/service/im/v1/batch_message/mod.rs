@@ -1,17 +1,19 @@
-use std::collections::HashMap;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
-use crate::core::{
-    api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
-    config::Config,
-    constants::AccessTokenType,
-    http::Transport,
-    req_option::RequestOption,
-    SDKResult,
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
+        config::Config,
+        constants::AccessTokenType,
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
+    },
+    service::im::v1::models::{BatchMessageStatus, ReceiveIdType, UserIdType},
 };
-use crate::service::im::v1::models::{BatchMessageStatus, UserIdType, ReceiveIdType};
 
 /// 批量消息服务
 pub struct BatchMessageService {
@@ -121,7 +123,10 @@ impl BatchMessageService {
             http_method: Method::POST,
             api_path: "/open-apis/im/v1/batch_messages".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params: HashMap::from([("receive_id_type".to_string(), receive_id_type.as_str().to_string())]),
+            query_params: HashMap::from([(
+                "receive_id_type".to_string(),
+                receive_id_type.as_str().to_string(),
+            )]),
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
@@ -153,7 +158,10 @@ impl BatchMessageService {
     ) -> SDKResult<BaseResponse<GetBatchProgressResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/im/v1/batch_messages/{}/get_progress", batch_message_id),
+            api_path: format!(
+                "/open-apis/im/v1/batch_messages/{}/get_progress",
+                batch_message_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
@@ -172,7 +180,10 @@ impl BatchMessageService {
     ) -> SDKResult<BaseResponse<GetBatchReadUserResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert("user_id_type".to_string(), user_id_type.as_str().to_string());
+            query_params.insert(
+                "user_id_type".to_string(),
+                user_id_type.as_str().to_string(),
+            );
         }
         if let Some(page_size) = page_size {
             query_params.insert("page_size".to_string(), page_size.to_string());
@@ -183,7 +194,10 @@ impl BatchMessageService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/im/v1/batch_messages/{}/read_user", batch_message_id),
+            api_path: format!(
+                "/open-apis/im/v1/batch_messages/{}/read_user",
+                batch_message_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

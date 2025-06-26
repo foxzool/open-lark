@@ -1,6 +1,6 @@
-use std::collections::HashMap;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 use crate::core::{
     api_req::ApiRequest,
@@ -59,7 +59,7 @@ impl FileService {
         let mut query_params = HashMap::new();
         query_params.insert("file_type".to_string(), file_type.to_string());
         query_params.insert("file_name".to_string(), file_name.to_string());
-        
+
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: "/open-apis/im/v1/files".to_string(),
