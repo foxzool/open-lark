@@ -81,15 +81,15 @@ impl CreateCardRequestBuilder {
 
         // 构建请求体
         let mut body = json!({});
-        
+
         if let Some(ref title) = self.request.title {
             body["title"] = json!(title);
         }
-        
+
         if let Some(ref description) = self.request.description {
             body["description"] = json!(description);
         }
-        
+
         if let Some(ref card_json) = self.request.card_json {
             body["card_json"] = card_json.clone();
         }

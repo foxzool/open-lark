@@ -87,15 +87,15 @@ impl UpdateCardSettingsRequestBuilder {
 
         // 构建请求体
         let mut body = json!({});
-        
+
         if let Some(enable_interaction) = self.request.enable_interaction {
             body["enable_interaction"] = json!(enable_interaction);
         }
-        
+
         if let Some(ref theme) = self.request.theme {
             body["theme"] = json!(theme);
         }
-        
+
         if let Some(ref custom_config) = self.request.custom_config {
             body["custom_config"] = custom_config.clone();
         }
