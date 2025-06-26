@@ -11,7 +11,6 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder_owned,
     service::bitable::v1::app_table_field::AppTableField,
 };
 

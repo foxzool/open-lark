@@ -1,16 +1,13 @@
 use reqwest::Method;
 use serde::Deserialize;
 
-use crate::{
-    core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        constants::AccessTokenType,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
-    },
-    impl_executable_builder_owned,
+use crate::core::{
+    api_req::ApiRequest,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
 
 use super::AppTableViewService;
