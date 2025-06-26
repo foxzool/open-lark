@@ -3,6 +3,7 @@ pub mod attendance;
 pub mod authentication;
 pub mod calendar;
 pub mod cardkit;
+pub mod directory;
 pub mod endpoints;
 pub mod im;
 pub mod search;
@@ -17,6 +18,7 @@ pub use cloud_docs::{assistant, bitable, board, comments, drive, permission, she
 // 核心服务 re-export
 pub use calendar::CalendarService;
 pub use cardkit::CardkitService;
+pub use directory::DirectoryService;
 
 // 服务类型 re-export
 pub use cloud_docs::{

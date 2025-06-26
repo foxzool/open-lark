@@ -187,6 +187,10 @@ path = "examples/api/calendar_demo.rs"
 name = "cardkit_demo"
 path = "examples/api/cardkit_demo.rs"
 
+[[example]]
+name = "directory_demo"
+path = "examples/api/directory_demo.rs"
+
 # ===========================================
 # Benchmarks
 # ===========================================
