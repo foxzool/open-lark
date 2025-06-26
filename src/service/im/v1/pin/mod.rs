@@ -75,17 +75,19 @@ impl PinService {
         user_id_type: Option<UserIdType>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreatePinResponse>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/im/v1/pins".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
-        
         let mut query_params = HashMap::new();
         query_params.insert("message_id".to_string(), message_id.to_string());
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type".to_string(), user_id_type.as_str().to_string());
         }
-        api_req.query_params = query_params;
+        
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: "/open-apis/im/v1/pins".to_string(),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            ..Default::default()
+        };
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -97,14 +99,19 @@ impl PinService {
         user_id_type: Option<UserIdType>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::DELETE;
-        api_req.api_path = format!("/open-apis/im/v1/pins/{}", pin_id);
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        let query_params = if let Some(user_id_type) = user_id_type {
+            HashMap::from([("user_id_type".to_string(), user_id_type.as_str().to_string())])
+        } else {
+            HashMap::new()
+        };
         
-        if let Some(user_id_type) = user_id_type {
-            api_req.query_params = HashMap::from([("user_id_type".to_string(), user_id_type.as_str().to_string())]);
-        }
+        let api_req = ApiRequest {
+            http_method: Method::DELETE,
+            api_path: format!("/open-apis/im/v1/pins/{}", pin_id),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            ..Default::default()
+        };
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -118,11 +125,6 @@ impl PinService {
         page_token: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListPinResponse>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/im/v1/pins".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
-        
         let mut query_params = HashMap::new();
         query_params.insert("chat_id".to_string(), chat_id.to_string());
         if let Some(user_id_type) = user_id_type {
@@ -134,7 +136,14 @@ impl PinService {
         if let Some(page_token) = page_token {
             query_params.insert("page_token".to_string(), page_token);
         }
-        api_req.query_params = query_params;
+        
+        let api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: "/open-apis/im/v1/pins".to_string(),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            ..Default::default()
+        };
 
         Transport::request(api_req, &self.config, option).await
     }

@@ -59,6 +59,18 @@ pub enum ReceiveIdType {
     ChatId,
 }
 
+impl ReceiveIdType {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            ReceiveIdType::OpenId => "open_id",
+            ReceiveIdType::UserId => "user_id",
+            ReceiveIdType::UnionId => "union_id",
+            ReceiveIdType::Email => "email",
+            ReceiveIdType::ChatId => "chat_id",
+        }
+    }
+}
+
 /// 批量消息状态
 #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(u8)]
