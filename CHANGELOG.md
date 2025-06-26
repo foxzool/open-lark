@@ -5,6 +5,59 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2025-06-26
+
+### Added - 🏗️ 新增模块和架构扩展
+
+#### 📋 组织架构模块 (Directory v1) - 全新上线
+- **💼 DirectoryService 集成** - 企业级组织架构管理
+  - 员工管理: 创建员工、批量获取员工列表 (create, filter)
+  - 部门管理: 创建部门 (create)
+  - 完整数据模型: Employee, Department, EmployeeStatus, DepartmentStatus
+  - Builder模式支持: `CreateEmployeeRequest::builder()` 链式调用
+  - 预留API接口: patch, delete, resurrect, search 等功能待实现
+
+#### 💬 群组模块 (Group v1) - 架构基础完成
+- **🔥 GroupService 全面架构** - 飞书群组功能完整基础
+  - **5大核心子模块**: chat(群管理), chat_member(成员管理), chat_announcement(群公告), chat_tab(标签页), chat_menu_tree(群菜单)
+  - **完整数据模型**: Chat, ChatMember, ChatConfig, ChatAnnouncement, ChatTab, ChatMenu
+  - **枚举类型支持**: ChatType, ChatMode, MemberType, MemberRole, UserIdType, ChatIdType
+  - **分页支持**: PageInfo 标准分页结构
+  - **服务路径**: `client.group.v1.*` 访问模式
+
+#### 🎨 卡片工具包模块 (Cardkit v1) - 完整实现
+- **🎯 CardkitService 完整集成** - 飞书卡片管理系统
+  - 卡片管理: 创建、更新、批量更新、获取设置 (4个核心API)
+  - 卡片元素管理: 创建卡片元素 (1个API)
+  - 完整数据模型: Card, CardElement, CardSettings, CardStatus
+  - Builder模式支持和标准化响应格式
+
+### Enhanced - 功能增强
+
+#### 🔧 SDK架构持续优化
+- **统一服务集成**: 所有新模块完整集成到 `LarkClient`
+- **标准化接口**: 统一的Builder模式、ExecutableBuilder trait、错误处理
+- **示例程序完善**: 
+  - `directory_demo.rs` - 组织架构模块演示
+  - `group_demo.rs` - 群组模块架构演示
+  - `cardkit_demo.rs` - 卡片工具包演示
+- **文档和配置**: Cargo.toml示例配置更新
+
+### Technical Details - 技术细节
+
+#### 📊 开发统计
+- **Directory模块**: 21个新文件，1151行代码
+- **Group模块**: 23个新文件，711行代码  
+- **Cardkit模块**: 集成完成
+- **总计**: 65+个新文件，2000+行新代码
+
+#### 🏗️ 架构模式
+- **模块化设计**: service/module/version/feature 四层架构
+- **版本管理**: 支持多API版本共存 (v1, v2, v3)
+- **类型安全**: 完整的数据模型和枚举类型
+- **错误处理**: 统一的 `SDKResult<T>` 和错误格式
+- **可扩展性**: 预留接口和占位符设计
+
 ## [0.6.0] - 2025-06-26
 
 ### Added - 🛡️ 企业级错误处理系统重构 ⭐

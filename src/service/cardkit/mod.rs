@@ -12,12 +12,12 @@ pub mod v1;
 /// # 示例
 /// ```rust,ignore
 /// use open_lark::LarkClient;
-/// 
+///
 /// let client = LarkClient::builder("app_id", "app_secret").build();
-/// 
+///
 /// // 创建卡片
 /// let response = client.cardkit.v1.card.create(request, None).await?;
-/// 
+///
 /// // 新增组件
 /// let response = client.cardkit.v1.card_element.create(request, None).await?;
 /// ```

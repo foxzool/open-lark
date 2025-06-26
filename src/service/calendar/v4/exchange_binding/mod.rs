@@ -4,7 +4,6 @@ pub mod create;
 pub mod delete;
 pub mod get;
 
-
 /// Exchange绑定服务
 pub struct ExchangeBindingService {
     pub config: Config,

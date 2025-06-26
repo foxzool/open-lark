@@ -126,7 +126,7 @@ impl CardService {
     ///         value: Some(serde_json::json!("新标题")),
     ///     }
     /// ];
-    /// 
+    ///
     /// let response = client.cardkit.v1.card.batch_update(
     ///     BatchUpdateCardRequest::builder("card_id")
     ///         .add_operations(operations)
@@ -143,7 +143,10 @@ impl CardService {
     ) -> SDKResult<BaseResponse<BatchUpdateCardResponse>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::PATCH;
-        api_req.api_path = format!("/open-apis/cardkit/v1/cards/{}/batch_update", request.card_id);
+        api_req.api_path = format!(
+            "/open-apis/cardkit/v1/cards/{}/batch_update",
+            request.card_id
+        );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

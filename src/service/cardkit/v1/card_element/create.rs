@@ -95,19 +95,19 @@ impl CreateElementRequestBuilder {
 
         // 构建请求体
         let mut body = json!({});
-        
+
         if let Some(ref element_type) = self.request.element_type {
             body["element_type"] = json!(element_type);
         }
-        
+
         if let Some(ref content) = self.request.content {
             body["content"] = content.clone();
         }
-        
+
         if let Some(ref properties) = self.request.properties {
             body["properties"] = properties.clone();
         }
-        
+
         if let Some(ref parent_id) = self.request.parent_id {
             body["parent_id"] = json!(parent_id);
         }

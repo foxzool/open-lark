@@ -18,9 +18,9 @@ use dotenvy::dotenv;
 use open_lark::{
     client::LarkClient,
     service::cardkit::v1::{
-        card::{CreateCardRequest, UpdateCardSettingsRequest, BatchUpdateCardRequest},
+        card::{BatchUpdateCardRequest, CreateCardRequest, UpdateCardSettingsRequest},
         card_element::CreateElementRequest,
-        models::{UserIdType, BatchUpdateOperation},
+        models::{BatchUpdateOperation, UserIdType},
     },
 };
 
@@ -156,6 +156,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("  3. 所有功能都支持Builder模式和ExecutableBuilder trait");
     println!("  4. 遵循open-lark SDK的统一架构模式");
     println!("  5. 支持完整的错误处理和响应格式");
-    
+
     Ok(())
 }

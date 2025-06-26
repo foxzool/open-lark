@@ -15,7 +15,7 @@ pub struct Card {
     pub status: Option<CardStatus>,
     /// 创建时间
     pub create_time: Option<String>,
-    /// 更新时间 
+    /// 更新时间
     pub update_time: Option<String>,
 }
 

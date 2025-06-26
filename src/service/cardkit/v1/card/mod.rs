@@ -1,14 +1,14 @@
 use crate::core::config::Config;
 
+pub mod batch_update;
 pub mod create;
 pub mod settings;
-pub mod batch_update;
 pub mod update;
 
 // 重新导出所有请求和响应类型
+pub use batch_update::*;
 pub use create::*;
 pub use settings::*;
-pub use batch_update::*;
 pub use update::*;
 
 /// 卡片管理服务
