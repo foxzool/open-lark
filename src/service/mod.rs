@@ -8,6 +8,7 @@ pub mod endpoints;
 pub mod group;
 pub mod im;
 pub mod search;
+pub mod tenant_tag;
 
 // 云文档服务模块
 pub mod cloud_docs;
@@ -21,6 +22,7 @@ pub use calendar::CalendarService;
 pub use cardkit::CardkitService;
 pub use directory::DirectoryService;
 pub use group::GroupService;
+pub use tenant_tag::TenantTagService;
 
 // 服务类型 re-export
 pub use cloud_docs::{
