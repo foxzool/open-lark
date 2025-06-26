@@ -9,6 +9,7 @@ use crate::{
         cardkit::CardkitService,
         cloud_docs::CloudDocsService,
         directory::DirectoryService,
+        group::GroupService,
         im::ImService,
         search::SearchService,
         // 向后兼容的导入
@@ -36,6 +37,7 @@ pub struct LarkClient {
     pub calendar: CalendarService,
     pub cardkit: CardkitService,
     pub directory: DirectoryService,
+    pub group: GroupService,
     pub im: ImService,
     pub search: SearchService,
     // 云文档服务聚合
@@ -104,6 +106,7 @@ impl LarkClientBuilder {
             calendar: CalendarService::new((*config).clone()),
             cardkit: CardkitService::new((*config).clone()),
             directory: DirectoryService::new((*config).clone()),
+            group: GroupService::new((*config).clone()),
             im: ImService::new(Arc::clone(&config)),
             search: SearchService::new(Arc::clone(&config)),
             // 云文档服务聚合

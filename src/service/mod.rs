@@ -5,6 +5,7 @@ pub mod calendar;
 pub mod cardkit;
 pub mod directory;
 pub mod endpoints;
+pub mod group;
 pub mod im;
 pub mod search;
 
@@ -19,6 +20,7 @@ pub use cloud_docs::{assistant, bitable, board, comments, drive, permission, she
 pub use calendar::CalendarService;
 pub use cardkit::CardkitService;
 pub use directory::DirectoryService;
+pub use group::GroupService;
 
 // 服务类型 re-export
 pub use cloud_docs::{
