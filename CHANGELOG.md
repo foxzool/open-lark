@@ -109,6 +109,62 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 修复测试中的生命周期问题，使用 `Arc<AtomicU32>` 替代可变引用
 - 修复死代码警告，为未使用的枚举变体添加 `#[allow(dead_code)]`
 
+#### 📅 日历模块 v4 API 支持 - 新增
+
+- **📦 完整的日历服务架构** (`src/service/calendar/`) - 企业级日历管理系统
+  - 支持10个子服务模块：日历管理、访问控制、日程管理、会议群、会议纪要等
+  - 60个新文件，1355行新代码，完整的模块化设计
+  - 集成到 `LarkClient` 主客户端，支持 `client.calendar.v4.*` 访问模式
+
+- **🛠️ 核心API功能实现**
+  - **日历管理** (`calendar/`) - 创建、查询、列表日历 (create, get, list)
+  - **数据模型** (`models.rs`) - Calendar, CalendarEvent, UserIdType 等核心数据结构
+  - **Builder模式** - 支持 `ExecutableBuilder` trait，链式调用和 `.execute()` 方法
+  - **标准化响应** - 统一的 `BaseResponse<T>` 格式和错误处理
+
+- **📋 服务模块架构**
+  ```
+  client.calendar.v4.calendar          // 日历管理 ✅
+  client.calendar.v4.calendar_acl      // 访问控制 🔧
+  client.calendar.v4.calendar_event    // 日程管理 🔧
+  client.calendar.v4.meeting_chat      // 会议群 🔧
+  client.calendar.v4.meeting_minute    // 会议纪要 🔧
+  client.calendar.v4.timeoff_event     // 请假日程 🔧
+  client.calendar.v4.meeting_room_event // 会议室日程 🔧
+  client.calendar.v4.attendee          // 参与人管理 🔧
+  client.calendar.v4.setting           // 设置 🔧
+  client.calendar.v4.exchange_binding  // Exchange绑定 🔧
+  ```
+
+- **🎯 使用示例** (`examples/api/calendar_demo.rs`)
+  ```rust
+  // 创建日历
+  let response = CreateCalendarRequest::builder()
+      .summary("团队日历")
+      .description("团队日程安排")
+      .color(1)
+      .execute(&client.calendar.v4.calendar)
+      .await?;
+  
+  // 查询日历
+  let response = GetCalendarRequest::builder("calendar_id")
+      .execute(&client.calendar.v4.calendar)
+      .await?;
+  
+  // 获取列表
+  let response = ListCalendarRequest::builder()
+      .page_size(20)
+      .execute(&client.calendar.v4.calendar)
+      .await?;
+  ```
+
+- **🔧 技术特性**
+  - 支持 Tenant Access Token 和 User Access Token 认证
+  - 完整的查询参数支持 (user_id_type, page_size, page_token等)
+  - 类型安全的枚举定义 (UserIdType, CalendarType, EventStatus等)
+  - 自动的请求体构建和查询参数处理
+  - 通过所有 lint 检查，零编译警告
+
 ### Technical Details - 技术细节
 - **新增依赖**: 无新的外部依赖，基于现有的 `tokio`, `serde`, `reqwest` 等
 - **性能优化**: 全异步处理，零阻塞操作，内存效率优化
