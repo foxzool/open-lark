@@ -199,6 +199,10 @@ path = "examples/api/group_demo.rs"
 name = "im_v1_demo"
 path = "examples/api/im_v1_demo.rs"
 
+[[example]]
+name = "im_v2_demo"
+path = "examples/api/im_v2_demo.rs"
+
 # ===========================================
 # Benchmarks
 # ===========================================
