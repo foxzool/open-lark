@@ -157,11 +157,7 @@ impl RetryAttempt {
 
     /// 剩余尝试次数
     pub fn remaining_attempts(&self) -> u32 {
-        if self.attempt >= self.max_attempts {
-            0
-        } else {
-            self.max_attempts - self.attempt
-        }
+        self.max_attempts.saturating_sub(self.attempt)
     }
 
     /// 打印重试信息
@@ -179,15 +175,16 @@ pub struct RetryMiddleware {
     config: RetryConfig,
 }
 
+impl Default for RetryMiddleware {
+    fn default() -> Self {
+        Self::new(RetryConfig::default())
+    }
+}
+
 impl RetryMiddleware {
     /// 创建新的重试中间件
     pub fn new(config: RetryConfig) -> Self {
         Self { config }
-    }
-
-    /// 使用默认配置创建
-    pub fn default() -> Self {
-        Self::new(RetryConfig::default())
     }
 
     /// 执行带重试的操作
@@ -509,7 +506,7 @@ mod tests {
 
     #[test]
     fn test_retry_stats() {
-        let mut stats = RetryStats {
+        let stats = RetryStats {
             total_attempts: 10,
             successful_attempts: 8,
             retry_count: 5,
@@ -522,41 +519,55 @@ mod tests {
 
     #[tokio::test]
     async fn test_retry_middleware_success() {
-        let middleware = RetryMiddleware::default();
-        let mut call_count = 0;
+        use std::sync::{
+            atomic::{AtomicU32, Ordering},
+            Arc,
+        };
 
-        let result = middleware
-            .execute(|| async {
-                call_count += 1;
-                if call_count == 1 {
-                    Err(LarkAPIError::api_error(500, "Server Error", None))
-                } else {
-                    Ok("Success")
+        let middleware = RetryMiddleware::default();
+        let call_count = Arc::new(AtomicU32::new(0));
+
+        let call_count_clone = Arc::clone(&call_count);
+        let result: Result<&str, LarkAPIError> = middleware
+            .execute(move || {
+                let count = call_count_clone.fetch_add(1, Ordering::SeqCst) + 1;
+                async move {
+                    if count == 1 {
+                        Err(LarkAPIError::api_error(500, "Server Error", None))
+                    } else {
+                        Ok("Success")
+                    }
                 }
             })
             .await;
 
         assert!(result.is_ok());
         assert_eq!(result.unwrap(), "Success");
-        assert_eq!(call_count, 2);
+        assert_eq!(call_count.load(Ordering::SeqCst), 2);
     }
 
     #[tokio::test]
     async fn test_retry_middleware_failure() {
+        use std::sync::{
+            atomic::{AtomicU32, Ordering},
+            Arc,
+        };
+
         let config = RetryConfig::new()
             .default_strategy(RetryStrategyBuilder::linear(2, Duration::from_millis(1)));
 
         let middleware = RetryMiddleware::new(config);
-        let mut call_count = 0;
+        let call_count = Arc::new(AtomicU32::new(0));
 
-        let result = middleware
-            .execute(|| async {
-                call_count += 1;
-                Err(LarkAPIError::api_error(500, "Server Error", None))
+        let call_count_clone = Arc::clone(&call_count);
+        let result: Result<&str, LarkAPIError> = middleware
+            .execute(move || {
+                call_count_clone.fetch_add(1, Ordering::SeqCst);
+                async move { Err(LarkAPIError::api_error(500, "Server Error", None)) }
             })
             .await;
 
         assert!(result.is_err());
-        assert_eq!(call_count, 2);
+        assert_eq!(call_count.load(Ordering::SeqCst), 2);
     }
 }

@@ -414,15 +414,16 @@ pub struct ErrorLogger {
     config: LoggerConfig,
 }
 
+impl Default for ErrorLogger {
+    fn default() -> Self {
+        Self::new(LoggerConfig::default())
+    }
+}
+
 impl ErrorLogger {
     /// 创建新的错误日志记录器
     pub fn new(config: LoggerConfig) -> Self {
         Self { config }
-    }
-
-    /// 使用默认配置创建
-    pub fn default() -> Self {
-        Self::new(LoggerConfig::default())
     }
 
     /// 记录日志条目

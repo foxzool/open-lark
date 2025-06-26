@@ -49,9 +49,11 @@ impl ErrorHelper {
 
     /// 处理API错误
     fn handle_api_error(error_code: LarkErrorCode, _message: &str) -> ErrorHandlingAdvice {
-        let mut advice = ErrorHandlingAdvice::default();
-        advice.error_code = Some(error_code);
-        advice.message = error_code.detailed_description().to_string();
+        let mut advice = ErrorHandlingAdvice {
+            error_code: Some(error_code),
+            message: error_code.detailed_description().to_string(),
+            ..Default::default()
+        };
 
         match error_code.category() {
             ErrorCategory::Authentication => {
@@ -105,9 +107,11 @@ impl ErrorHelper {
 
     /// 处理网络请求错误
     fn handle_request_error(req_err: &str) -> ErrorHandlingAdvice {
-        let mut advice = ErrorHandlingAdvice::default();
-        advice.category = ErrorHandlingCategory::NetworkError;
-        advice.is_recoverable = true;
+        let mut advice = ErrorHandlingAdvice {
+            category: ErrorHandlingCategory::NetworkError,
+            is_recoverable: true,
+            ..Default::default()
+        };
 
         if req_err.contains("timeout") || req_err.contains("timed out") {
             advice.message = "请求超时".to_string();

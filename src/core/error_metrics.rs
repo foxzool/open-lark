@@ -319,6 +319,12 @@ impl Default for AlertThresholds {
     }
 }
 
+impl Default for ErrorMonitor {
+    fn default() -> Self {
+        Self::new(MonitorConfig::default())
+    }
+}
+
 impl ErrorMonitor {
     /// 创建新的错误监控器
     pub fn new(config: MonitorConfig) -> Self {
@@ -327,11 +333,6 @@ impl ErrorMonitor {
             statistics: Arc::new(Mutex::new(ErrorStatistics::default())),
             config,
         }
-    }
-
-    /// 使用默认配置创建
-    pub fn default() -> Self {
-        Self::new(MonitorConfig::default())
     }
 
     /// 记录错误事件
@@ -473,6 +474,7 @@ impl ErrorMonitor {
 enum AlertType {
     HighErrorRate,
     CriticalErrors,
+    #[allow(dead_code)]
     ConsecutiveFailures,
 }
 
@@ -555,9 +557,11 @@ mod tests {
 
     #[test]
     fn test_error_statistics() {
-        let mut stats = ErrorStatistics::default();
-        stats.total_errors = 100;
-        stats.retryable_errors = 60;
+        let stats = ErrorStatistics {
+            total_errors: 100,
+            retryable_errors: 60,
+            ..Default::default()
+        };
 
         assert_eq!(stats.retryable_percentage(), 60.0);
     }
