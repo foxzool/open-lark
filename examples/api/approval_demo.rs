@@ -61,7 +61,7 @@ async fn demo_create_approval(client: &LarkClient) -> Result<(), Box<dyn std::er
             "required": true
         },
         {
-            "id": "amount", 
+            "id": "amount",
             "name": "申请金额",
             "type": "number",
             "required": true
@@ -286,10 +286,7 @@ async fn demo_search(client: &LarkClient) -> Result<(), Box<dyn std::error::Erro
     {
         Ok(response) => {
             if let Some(data) = response.data {
-                println!(
-                    "  ✅ 实例查询成功，找到 {} 个实例",
-                    data.instances.len()
-                );
+                println!("  ✅ 实例查询成功，找到 {} 个实例", data.instances.len());
             }
         }
         Err(e) => {
