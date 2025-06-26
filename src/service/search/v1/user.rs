@@ -2,16 +2,14 @@ use log::error;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse},
-        config::Config,
-        constants::AccessTokenType,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
-    },
+use crate::core::{
+    api_req::ApiRequest,
+    api_resp::{ApiResponseTrait, BaseResponse},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
 
 pub struct UserService {
