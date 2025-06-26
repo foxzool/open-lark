@@ -12,7 +12,6 @@
 
 use chrono::{DateTime, Duration, Utc};
 use open_lark::prelude::*;
-use std::collections::HashMap;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -23,7 +22,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app_secret = std::env::var("APP_SECRET").expect("请设置 APP_SECRET 环境变量");
 
     // 创建Lark客户端
-    let client = LarkClient::builder(&app_id, &app_secret)
+    let _client = LarkClient::builder(&app_id, &app_secret)
         .with_app_type(AppType::SelfBuild)
         .with_enable_token_cache(true)
         .build();
@@ -46,8 +45,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{}", "-".repeat(60));
 
     // 假设已有 spreadsheet_token 和 sheet_id
-    let spreadsheet_token = "mock_spreadsheet_token";
-    let sheet_id = "mock_sheet_id";
+    let _spreadsheet_token = "mock_spreadsheet_token";
+    let _sheet_id = "mock_sheet_id";
 
     // 1.1 批量写入数据
     println!("\n📝 批量写入销售数据:");
@@ -362,9 +361,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 // 辅助函数：生成示例销售数据
 fn generate_sample_sales_data() -> Vec<SalesRecord> {
     let mut records = Vec::new();
-    let sales_people = vec!["张三", "李四", "王五", "赵六", "陈七"];
-    let products = vec!["软件许可", "技术支持", "培训服务", "定制开发", "云服务"];
-    let statuses = vec!["待确认", "已确认", "已发货", "已完成"];
+    let sales_people = ["张三", "李四", "王五", "赵六", "陈七"];
+    let products = ["软件许可", "技术支持", "培训服务", "定制开发", "云服务"];
+    let statuses = ["待确认", "已确认", "已发货", "已完成"];
 
     let mut rng = rand::thread_rng();
     use rand::Rng;
@@ -394,6 +393,7 @@ fn generate_sample_sales_data() -> Vec<SalesRecord> {
 }
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 struct SalesRecord {
     id: String,
     date: DateTime<Utc>,
@@ -406,11 +406,13 @@ struct SalesRecord {
 }
 
 // 模拟的辅助函数
+#[allow(dead_code)]
 fn generate_sales_chart(_data: &[SalesRecord]) -> Vec<u8> {
     // 实际实现中，这里会生成真实的图表图片
     vec![0u8; 1024] // 模拟图片数据
 }
 
+#[allow(dead_code)]
 fn build_sales_report_card(_analysis: &()) -> serde_json::Value {
     // 实际实现中，这里会构建真实的报告卡片
     serde_json::json!({

@@ -265,7 +265,7 @@ async fn verify_data_update(
                     }
 
                     // 显示数据行
-                    for (_row_index, row) in value_range.values.iter().skip(1).enumerate() {
+                    for row in value_range.values.iter().skip(1) {
                         print!("   ");
                         for (col_index, cell) in row.iter().enumerate() {
                             if col_index > 0 {

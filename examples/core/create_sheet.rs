@@ -407,8 +407,8 @@ fn format_cell_value(value: &serde_json::Value) -> String {
 /// 演示更复杂的表格操作（供参考）
 #[allow(dead_code)]
 async fn advanced_spreadsheet_operations(
-    client: &LarkClient,
-    spreadsheet_token: &str,
+    _client: &LarkClient,
+    _spreadsheet_token: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n🔧 高级表格操作演示...");
 
