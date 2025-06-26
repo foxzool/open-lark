@@ -11,7 +11,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
 };
 
 use super::list::ReplyContent;
@@ -169,7 +169,7 @@ pub struct UpdatedReply {
 }
 
 // 应用ExecutableBuilder trait到UpdateReplyRequestBuilder
-impl_executable_builder!(
+impl_executable_builder_owned!(
     UpdateReplyRequestBuilder,
     super::CommentsService,
     UpdateReplyRequest,

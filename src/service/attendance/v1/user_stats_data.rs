@@ -6,7 +6,7 @@ use crate::{
         api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
         req_option::RequestOption, SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
 };
 
 use super::models::{
@@ -28,10 +28,10 @@ impl UserStatsDataService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_stats_data/update>
     pub async fn update(
         &self,
-        request: &UpdateUserStatsDataRequest,
+        request: UpdateUserStatsDataRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UpdateUserStatsDataRespData>> {
-        let mut api_req = request.api_req.clone();
+        let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/attendance/v1/user_stats_datas/update".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
@@ -39,11 +39,11 @@ impl UserStatsDataService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type.clone());
+            .insert("employee_type".to_string(), request.employee_type);
 
         // 构建请求体
         let body = json!({
-            "stats_setting": request.stats_setting.clone()
+            "stats_setting": request.stats_setting
         });
 
         api_req.body = serde_json::to_vec(&body)?;
@@ -59,10 +59,10 @@ impl UserStatsDataService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_stats_data/query>
     pub async fn query_settings(
         &self,
-        request: &QueryStatsSettingsRequest,
+        request: QueryStatsSettingsRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<QueryStatsSettingsRespData>> {
-        let mut api_req = request.api_req.clone();
+        let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/attendance/v1/user_stats_datas/query".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
@@ -70,7 +70,7 @@ impl UserStatsDataService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type.clone());
+            .insert("employee_type".to_string(), request.employee_type);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -83,10 +83,10 @@ impl UserStatsDataService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_stats_data/query-2>
     pub async fn query_fields(
         &self,
-        request: &QueryStatsFieldsRequest,
+        request: QueryStatsFieldsRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<QueryStatsFieldsRespData>> {
-        let mut api_req = request.api_req.clone();
+        let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/attendance/v1/user_stats_datas/query_fields".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
@@ -94,12 +94,10 @@ impl UserStatsDataService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type.clone());
+            .insert("employee_type".to_string(), request.employee_type);
 
-        if let Some(locale) = &request.locale {
-            api_req
-                .query_params
-                .insert("locale".to_string(), locale.clone());
+        if let Some(locale) = request.locale {
+            api_req.query_params.insert("locale".to_string(), locale);
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -113,10 +111,10 @@ impl UserStatsDataService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_stats_data/query-3>
     pub async fn query_data(
         &self,
-        request: &QueryUserStatsDataRequest,
+        request: QueryUserStatsDataRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<QueryUserStatsDataRespData>> {
-        let mut api_req = request.api_req.clone();
+        let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/attendance/v1/user_stats_datas/query_data".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
@@ -124,20 +122,18 @@ impl UserStatsDataService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type.clone());
+            .insert("employee_type".to_string(), request.employee_type);
 
-        if let Some(locale) = &request.locale {
-            api_req
-                .query_params
-                .insert("locale".to_string(), locale.clone());
+        if let Some(locale) = request.locale {
+            api_req.query_params.insert("locale".to_string(), locale);
         }
 
         // 构建请求体
         let body = json!({
-            "start_date": request.start_date.clone(),
-            "end_date": request.end_date.clone(),
-            "user_ids": request.user_ids.clone(),
-            "need_fields": request.need_fields.clone()
+            "start_date": request.start_date,
+            "end_date": request.end_date,
+            "user_ids": request.user_ids,
+            "need_fields": request.need_fields
         });
 
         api_req.body = serde_json::to_vec(&body)?;
@@ -148,7 +144,7 @@ impl UserStatsDataService {
 }
 
 // Builder implementations
-impl_executable_builder!(
+impl_executable_builder_owned!(
     UpdateUserStatsDataRequest,
     UserStatsDataService,
     UpdateUserStatsDataRequest,
@@ -156,7 +152,7 @@ impl_executable_builder!(
     update
 );
 
-impl_executable_builder!(
+impl_executable_builder_owned!(
     QueryStatsSettingsRequest,
     UserStatsDataService,
     QueryStatsSettingsRequest,
@@ -164,7 +160,7 @@ impl_executable_builder!(
     query_settings
 );
 
-impl_executable_builder!(
+impl_executable_builder_owned!(
     QueryStatsFieldsRequest,
     UserStatsDataService,
     QueryStatsFieldsRequest,
@@ -172,7 +168,7 @@ impl_executable_builder!(
     query_fields
 );
 
-impl_executable_builder!(
+impl_executable_builder_owned!(
     QueryUserStatsDataRequest,
     UserStatsDataService,
     QueryUserStatsDataRequest,

@@ -11,7 +11,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
 };
 
 use super::list::Reply;
@@ -151,7 +151,7 @@ impl ListRepliesRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait到ListRepliesRequestBuilder
-impl_executable_builder!(
+impl_executable_builder_owned!(
     ListRepliesRequestBuilder,
     super::CommentsService,
     ListRepliesRequest,

@@ -24,10 +24,10 @@ impl UserApprovalService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_approval/query>
     pub async fn query(
         &self,
-        request: &QueryUserApprovalRequest,
+        request: QueryUserApprovalRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<QueryUserApprovalRespData>> {
-        let mut api_req = request.api_req.clone();
+        let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/attendance/v1/user_approvals".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
@@ -35,42 +35,40 @@ impl UserApprovalService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type.clone());
+            .insert("employee_type".to_string(), request.employee_type);
 
-        if let Some(status) = &request.status {
+        if let Some(status) = request.status {
             api_req
                 .query_params
                 .insert("status".to_string(), status.to_string());
         }
 
-        if let Some(date_from) = &request.date_from {
+        if let Some(date_from) = request.date_from {
             api_req
                 .query_params
-                .insert("date_from".to_string(), date_from.clone());
+                .insert("date_from".to_string(), date_from);
         }
 
-        if let Some(date_to) = &request.date_to {
-            api_req
-                .query_params
-                .insert("date_to".to_string(), date_to.clone());
+        if let Some(date_to) = request.date_to {
+            api_req.query_params.insert("date_to".to_string(), date_to);
         }
 
-        if let Some(user_ids) = &request.user_ids {
+        if let Some(user_ids) = request.user_ids {
             api_req
                 .query_params
                 .insert("user_ids".to_string(), user_ids.join(","));
         }
 
-        if let Some(page_size) = &request.page_size {
+        if let Some(page_size) = request.page_size {
             api_req
                 .query_params
                 .insert("page_size".to_string(), page_size.to_string());
         }
 
-        if let Some(page_token) = &request.page_token {
+        if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token".to_string(), page_token);
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -84,10 +82,10 @@ impl UserApprovalService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_approval/create>
     pub async fn create(
         &self,
-        request: &CreateUserApprovalRequest,
+        request: CreateUserApprovalRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateUserApprovalRespData>> {
-        let mut api_req = request.api_req.clone();
+        let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/attendance/v1/user_approvals".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
@@ -95,16 +93,16 @@ impl UserApprovalService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type.clone());
+            .insert("employee_type".to_string(), request.employee_type);
 
         // 构建请求体
         let mut body = json!({
-            "approval_id": request.approval_id.clone(),
-            "status": &request.status
+            "approval_id": request.approval_id,
+            "status": request.status
         });
 
-        if let Some(approval_note) = &request.approval_note {
-            body["approval_note"] = json!(approval_note.clone());
+        if let Some(approval_note) = request.approval_note {
+            body["approval_note"] = json!(approval_note);
         }
 
         api_req.body = serde_json::to_vec(&body)?;
@@ -120,29 +118,29 @@ impl UserApprovalService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_approval/process>
     pub async fn process(
         &self,
-        request: &ProcessUserApprovalRequest,
+        request: ProcessUserApprovalRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ProcessUserApprovalRespData>> {
-        let mut api_req = request.api_req.clone();
+        let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = format!(
             "/open-apis/attendance/v1/user_approvals/{}/process",
-            request.approval_id.clone()
+            request.approval_id
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type.clone());
+            .insert("employee_type".to_string(), request.employee_type);
 
         // 构建请求体
         let mut body = json!({
-            "action": request.action.clone()
+            "action": request.action
         });
 
-        if let Some(message) = &request.message {
-            body["message"] = json!(message.clone());
+        if let Some(message) = request.message {
+            body["message"] = json!(message);
         }
 
         api_req.body = serde_json::to_vec(&body)?;

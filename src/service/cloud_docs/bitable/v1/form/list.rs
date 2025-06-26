@@ -11,7 +11,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
 };
 
 /// 列出表单问题请求
@@ -95,7 +95,7 @@ impl ListFormQuestionRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait到ListFormQuestionRequestBuilder
-impl_executable_builder!(
+crate::impl_executable_builder_owned!(
     ListFormQuestionRequestBuilder,
     super::FormService,
     ListFormQuestionRequest,

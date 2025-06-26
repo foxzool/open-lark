@@ -32,10 +32,10 @@ impl AppRoleService {
     /// 列出自定义角色
     pub async fn list(
         &self,
-        request: &ListAppRoleRequest,
+        request: ListAppRoleRequest,
         option: Option<crate::core::req_option::RequestOption>,
     ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListAppRoleResponse>> {
-        list::list_app_roles(request.clone(), &self.config, option).await
+        list::list_app_roles(request, &self.config, option).await
     }
 
     /// 删除自定义角色

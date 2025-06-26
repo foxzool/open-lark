@@ -1,17 +1,14 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
-        constants::AccessTokenType,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
-    },
-    impl_executable_builder,
+use crate::core::{
+    api_req::ApiRequest,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
 
 use super::batch_create::Permission;
@@ -215,7 +212,7 @@ impl CreatePermissionMemberRequestBuilder {
     }
 }
 
-impl_executable_builder!(
+crate::impl_executable_builder_owned!(
     CreatePermissionMemberRequestBuilder,
     crate::service::cloud_docs::permission::PermissionService,
     CreatePermissionMemberRequest,

@@ -11,7 +11,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
 };
 
 /// 获取画板所有节点请求
@@ -215,7 +215,7 @@ impl ApiResponseTrait for ListWhiteboardNodesResponse {
     }
 }
 
-impl_executable_builder!(
+impl_executable_builder_owned!(
     ListWhiteboardNodesRequestBuilder,
     crate::service::cloud_docs::board::BoardService,
     ListWhiteboardNodesRequest,

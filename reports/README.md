@@ -11,6 +11,8 @@
 
 ### 📊 专项报告
 - **[refactor_board_docx_services.md](./refactor_board_docx_services.md)** - Board和Docx服务重构
+- **[api_documentation_urls_update_report.md](./api_documentation_urls_update_report.md)** - API文档链接更新报告
+- **[example_strategy_analysis.md](./example_strategy_analysis.md)** - 示例代码策略分析
 
 ## 📈 项目状态概览
 

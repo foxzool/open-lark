@@ -11,7 +11,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
     service::bitable::v1::app_role::AppRole,
 };
 
@@ -86,7 +86,7 @@ impl ListAppRoleRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait到ListAppRoleRequestBuilder
-impl_executable_builder!(
+crate::impl_executable_builder_owned!(
     ListAppRoleRequestBuilder,
     super::AppRoleService,
     ListAppRoleRequest,

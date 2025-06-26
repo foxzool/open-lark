@@ -11,7 +11,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
 };
 
 /// 删除回复请求
@@ -155,7 +155,7 @@ pub struct DeletedReply {
 }
 
 // 应用ExecutableBuilder trait到DeleteReplyRequestBuilder
-impl_executable_builder!(
+impl_executable_builder_owned!(
     DeleteReplyRequestBuilder,
     super::CommentsService,
     DeleteReplyRequest,

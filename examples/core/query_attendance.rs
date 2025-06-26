@@ -65,7 +65,7 @@ async fn query_attendance_stats(client: &LarkClient) -> Result<(), Box<dyn std::
         .attendance
         .v1
         .user_stats_data
-        .query_data(&request, None)
+        .query_data(request, None)
         .await
     {
         Ok(response) => {
@@ -140,7 +140,7 @@ async fn query_approval_data(client: &LarkClient) -> Result<(), Box<dyn std::err
         .attendance
         .v1
         .user_approval
-        .query(&request, None)
+        .query(request, None)
         .await
     {
         Ok(response) => {
@@ -219,7 +219,7 @@ async fn query_stats_fields(client: &LarkClient) -> Result<(), Box<dyn std::erro
         .attendance
         .v1
         .user_stats_data
-        .query_fields(&request, None)
+        .query_fields(request, None)
         .await
     {
         Ok(response) => {

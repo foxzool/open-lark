@@ -12,7 +12,6 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
 };
 
 pub struct UserService {
@@ -29,10 +28,10 @@ impl UserService {
     /// <https://open.feishu.cn/document/server-docs/search-v1/user/search>
     pub async fn search_user(
         &self,
-        search_user_request: &SearchUserRequest,
+        search_user_request: SearchUserRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SearchUserResponse>> {
-        let mut api_req = search_user_request.api_request.clone();
+        let mut api_req = search_user_request.api_request;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/search/v1/user".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::User];
@@ -107,7 +106,7 @@ impl SearchUserRequestBuilder {
     }
 }
 
-impl_executable_builder!(
+crate::impl_executable_builder_owned!(
     SearchUserRequestBuilder,
     UserService,
     SearchUserRequest,
@@ -176,7 +175,7 @@ impl SearchUserIterator<'_> {
 
         match self
             .user_service
-            .search_user(&self.request, self.option.clone())
+            .search_user(self.request.clone(), self.option.clone())
             .await
         {
             Ok(resp) => match resp.data {

@@ -11,7 +11,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
 };
 
 /// 列出自动化流程请求
@@ -85,7 +85,7 @@ impl ListWorkflowRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait到ListWorkflowRequestBuilder
-impl_executable_builder!(
+crate::impl_executable_builder_owned!(
     ListWorkflowRequestBuilder,
     super::AppWorkflowService,
     ListWorkflowRequest,
