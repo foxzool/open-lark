@@ -1,6 +1,6 @@
 [package]
 name = "open-lark"
-version = "0.5.0"
+version = "0.6.0"
 edition = "2021"
 authors = ["ZoOL <zhooul@gmail.com>"]
 readme = "README.md"
