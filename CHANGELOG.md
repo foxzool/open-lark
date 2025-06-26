@@ -165,6 +165,78 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - 自动的请求体构建和查询参数处理
   - 通过所有 lint 检查，零编译警告
 
+#### 🎴 飞书卡片模块 v1 API 支持 - 新增
+
+- **📦 完整的卡片服务架构** (`src/service/cardkit/`) - 企业级卡片和组件管理系统
+  - 支持2个核心服务模块：卡片管理 (card) 和组件管理 (card_element)
+  - 18个新文件，1246行新代码，完整的模块化设计
+  - 集成到 `LarkClient` 主客户端，支持 `client.cardkit.v1.*` 访问模式
+
+- **🛠️ 核心API功能实现**
+  - **卡片管理** (`card/`) - 创建、配置、批量更新、全量更新 (create, settings, batch_update, update)
+  - **组件管理** (`card_element/`) - 新增组件 (create)，其他功能框架已建立
+  - **数据模型** (`models.rs`) - Card, CardElement, CardSettings, BatchUpdateOperation 等核心数据结构
+  - **Builder模式** - 支持 `ExecutableBuilder` trait，链式调用和 `.execute()` 方法
+
+- **📋 功能模块详情**
+  ```
+  🔹 卡片管理 (client.cardkit.v1.card):
+    - create       ✅ 创建卡片实体
+    - settings     ✅ 更新卡片配置
+    - batch_update ✅ 批量更新卡片实体
+    - update       ✅ 全量更新卡片实体
+  
+  🔹 组件管理 (client.cardkit.v1.card_element):
+    - create       ✅ 新增组件
+    - update       🔧 更新组件 (框架已建立)
+    - patch        🔧 更新组件属性 (框架已建立)
+    - content      🔧 流式更新文本 (框架已建立)
+    - delete       🔧 删除组件 (框架已建立)
+  ```
+
+- **🎯 使用示例** (`examples/api/cardkit_demo.rs`)
+  ```rust
+  // 创建卡片
+  let response = CreateCardRequest::builder()
+      .title("示例卡片")
+      .card_json(serde_json::json!({"elements": []}))
+      .execute(&client.cardkit.v1.card)
+      .await?;
+  
+  // 更新卡片配置
+  let response = UpdateCardSettingsRequest::builder("card_id")
+      .enable_interaction(true)
+      .theme("dark")
+      .execute(&client.cardkit.v1.card)
+      .await?;
+  
+  // 批量更新卡片
+  let operations = vec![BatchUpdateOperation {
+      operation: "replace".to_string(),
+      path: "/title".to_string(),
+      value: Some(serde_json::json!("新标题")),
+  }];
+  let response = BatchUpdateCardRequest::builder("card_id")
+      .add_operations(operations)
+      .execute(&client.cardkit.v1.card)
+      .await?;
+  
+  // 新增组件
+  let response = CreateElementRequest::builder("card_id")
+      .element_type("text")
+      .content(serde_json::json!({"text": "Hello World"}))
+      .execute(&client.cardkit.v1.card_element)
+      .await?;
+  ```
+
+- **🔧 技术特性**
+  - 支持 Tenant Access Token 和 User Access Token 认证
+  - 灵活的卡片JSON内容支持，适配飞书卡片2.0结构
+  - 批量操作支持 (replace, add, remove等操作类型)
+  - 类型安全的枚举定义 (CardStatus, UserIdType等)
+  - 完整的错误处理和响应格式标准化
+  - 通过所有 lint 检查，零编译警告
+
 ### Technical Details - 技术细节
 - **新增依赖**: 无新的外部依赖，基于现有的 `tokio`, `serde`, `reqwest` 等
 - **性能优化**: 全异步处理，零阻塞操作，内存效率优化
