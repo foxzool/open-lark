@@ -11,7 +11,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
 };
 
 /// 获取云文档所有评论请求
@@ -165,7 +165,7 @@ impl ListCommentsRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait到ListCommentsRequestBuilder
-impl_executable_builder!(
+impl_executable_builder_owned!(
     ListCommentsRequestBuilder,
     super::CommentsService,
     ListCommentsRequest,

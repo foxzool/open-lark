@@ -11,7 +11,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
 };
 
 use super::list::Comment;
@@ -146,7 +146,7 @@ impl BatchQueryCommentsRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait到BatchQueryCommentsRequestBuilder
-impl_executable_builder!(
+impl_executable_builder_owned!(
     BatchQueryCommentsRequestBuilder,
     super::CommentsService,
     BatchQueryCommentsRequest,

@@ -5,7 +5,7 @@ use crate::{
         api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
         req_option::RequestOption, SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
 };
 
 use super::models::{GetLeaveEmployExpireRecordRequest, GetLeaveEmployExpireRecordRespData};
@@ -24,10 +24,10 @@ impl LeaveEmployExpireRecordService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/leave_employ_expire_record/get>
     pub async fn get(
         &self,
-        request: &GetLeaveEmployExpireRecordRequest,
+        request: GetLeaveEmployExpireRecordRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetLeaveEmployExpireRecordRespData>> {
-        let mut api_req = request.api_req.clone();
+        let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/attendance/v1/leave_employ_expire_records".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
@@ -35,7 +35,7 @@ impl LeaveEmployExpireRecordService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type.clone());
+            .insert("employee_type".to_string(), request.employee_type);
         api_req
             .query_params
             .insert("start_time".to_string(), request.start_time.to_string());
@@ -43,16 +43,16 @@ impl LeaveEmployExpireRecordService {
             .query_params
             .insert("end_time".to_string(), request.end_time.to_string());
 
-        if let Some(page_size) = &request.page_size {
+        if let Some(page_size) = request.page_size {
             api_req
                 .query_params
                 .insert("page_size".to_string(), page_size.to_string());
         }
 
-        if let Some(page_token) = &request.page_token {
+        if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token".to_string(), page_token);
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -61,7 +61,7 @@ impl LeaveEmployExpireRecordService {
 }
 
 // Builder implementations
-impl_executable_builder!(
+impl_executable_builder_owned!(
     GetLeaveEmployExpireRecordRequest,
     LeaveEmployExpireRecordService,
     GetLeaveEmployExpireRecordRequest,

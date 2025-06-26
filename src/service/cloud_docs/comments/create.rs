@@ -11,7 +11,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
 };
 
 use super::list::{ContentElement, ReplyContent, TextRun};
@@ -206,7 +206,7 @@ pub struct CreatedComment {
 }
 
 // 应用ExecutableBuilder trait到CreateCommentRequestBuilder
-impl_executable_builder!(
+impl_executable_builder_owned!(
     CreateCommentRequestBuilder,
     super::CommentsService,
     CreateCommentRequest,

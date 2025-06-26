@@ -11,7 +11,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
 };
 
 use super::list::Comment;
@@ -133,7 +133,7 @@ impl GetCommentRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait到GetCommentRequestBuilder
-impl_executable_builder!(
+impl_executable_builder_owned!(
     GetCommentRequestBuilder,
     super::CommentsService,
     GetCommentRequest,

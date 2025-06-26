@@ -11,7 +11,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
 };
 
 /// 删除记录请求
@@ -79,7 +79,7 @@ impl DeleteRecordRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait到DeleteRecordRequestBuilder
-impl_executable_builder!(
+crate::impl_executable_builder_owned!(
     DeleteRecordRequestBuilder,
     super::AppTableRecordService,
     DeleteRecordRequest,

@@ -1,17 +1,14 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
-        constants::AccessTokenType,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
-    },
-    impl_executable_builder,
+use crate::core::{
+    api_req::ApiRequest,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
 
 pub struct ChatsService {
@@ -24,10 +21,10 @@ impl ChatsService {
     /// <https://open.feishu.cn/document/server-docs/im-v1/chat/list>
     pub async fn list(
         &self,
-        list_chat_request: &ListChatRequest,
+        list_chat_request: ListChatRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListChatRespData>> {
-        let mut api_req = list_chat_request.api_req.clone();
+        let mut api_req = list_chat_request.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/im/v1/chats".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
@@ -63,7 +60,11 @@ impl ListChatIterator<'_> {
         if !self.has_more {
             return None;
         }
-        match self.service.list(&self.request, self.option.clone()).await {
+        match self
+            .service
+            .list(self.request.clone(), self.option.clone())
+            .await
+        {
             Ok(resp) => match resp.data {
                 Some(data) => {
                     self.has_more = data.has_more;
@@ -148,7 +149,7 @@ impl ListChatRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait到ListChatRequestBuilder
-impl_executable_builder!(
+crate::impl_executable_builder_owned!(
     ListChatRequestBuilder,
     ChatsService,
     ListChatRequest,

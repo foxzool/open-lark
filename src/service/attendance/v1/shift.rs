@@ -6,7 +6,7 @@ use crate::{
         api_req::ApiRequest, api_resp::BaseResponse, config::Config, constants::AccessTokenType,
         http::Transport, req_option::RequestOption, SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
 };
 
 use super::models::{
@@ -26,10 +26,10 @@ impl ShiftService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/shift/create>
     pub async fn create(
         &self,
-        request: &CreateShiftRequest,
+        request: CreateShiftRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateShiftRespData>> {
-        let mut api_req = request.api_req.clone();
+        let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/attendance/v1/shifts".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
@@ -37,7 +37,7 @@ impl ShiftService {
         // 添加必需的查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type.clone());
+            .insert("employee_type".to_string(), request.employee_type);
 
         // 构建请求体
         let mut body = json!({
@@ -348,7 +348,7 @@ impl CreateShiftRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait到CreateShiftRequestBuilder
-impl_executable_builder!(
+impl_executable_builder_owned!(
     CreateShiftRequestBuilder,
     ShiftService,
     CreateShiftRequest,

@@ -11,7 +11,6 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
 };
 
 /// 更新云文档权限设置请求 (v2)
@@ -347,7 +346,7 @@ impl PatchPermissionPublicV2RequestBuilder {
     }
 }
 
-impl_executable_builder!(
+crate::impl_executable_builder_owned!(
     PatchPermissionPublicV2RequestBuilder,
     crate::service::cloud_docs::permission::PermissionService,
     PatchPermissionPublicV2Request,

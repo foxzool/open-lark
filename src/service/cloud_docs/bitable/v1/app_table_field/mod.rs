@@ -43,10 +43,10 @@ impl AppTableFieldService {
     /// 列出字段
     pub async fn list(
         &self,
-        request: &ListFieldRequest,
+        request: ListFieldRequest,
         option: Option<crate::core::req_option::RequestOption>,
     ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListFieldResponse>> {
-        list::list_field(request.clone(), &self.config, option).await
+        list::list_field(request, &self.config, option).await
     }
 
     /// 删除字段

@@ -10,7 +10,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
 };
 
 use super::AppTableService;
@@ -19,19 +19,19 @@ impl AppTableService {
     /// 列出数据表
     pub async fn list(
         &self,
-        request: &ListTablesRequest,
+        request: ListTablesRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListTablesResponse>> {
-        let mut api_req = request.api_request.clone();
+        let mut api_req = request.api_request;
         api_req.http_method = Method::GET;
         api_req.api_path = format!("/open-apis/bitable/v1/apps/{}/tables", request.app_token);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         // 添加查询参数
-        if let Some(ref page_token) = request.page_token {
+        if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token".to_string(), page_token);
         }
         if let Some(page_size) = request.page_size {
             api_req
@@ -102,7 +102,7 @@ impl ListTablesRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait到ListTablesRequestBuilder
-impl_executable_builder!(
+crate::impl_executable_builder_owned!(
     ListTablesRequestBuilder,
     super::AppTableService,
     ListTablesRequest,

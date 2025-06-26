@@ -11,7 +11,6 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
 };
 
 /// 获取云文档权限设置请求 (v2)
@@ -109,7 +108,7 @@ impl GetPermissionPublicV2RequestBuilder {
     }
 }
 
-impl_executable_builder!(
+crate::impl_executable_builder_owned!(
     GetPermissionPublicV2RequestBuilder,
     crate::service::cloud_docs::permission::PermissionService,
     GetPermissionPublicV2Request,

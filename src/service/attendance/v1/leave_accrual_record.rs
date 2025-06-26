@@ -6,7 +6,7 @@ use crate::{
         api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
         req_option::RequestOption, SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
 };
 
 use super::models::{PatchLeaveAccrualRecordRequest, PatchLeaveAccrualRecordRespData};
@@ -25,25 +25,25 @@ impl LeaveAccrualRecordService {
     /// <https://open.feishu.cn/document/server-docs/attendance-v1/leave_accrual_record/patch>
     pub async fn patch(
         &self,
-        request: &PatchLeaveAccrualRecordRequest,
+        request: PatchLeaveAccrualRecordRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<PatchLeaveAccrualRecordRespData>> {
-        let mut api_req = request.api_req.clone();
+        let mut api_req = request.api_req;
         api_req.http_method = Method::PATCH;
         api_req.api_path = format!(
             "/open-apis/attendance/v1/leave_accrual_records/{}",
-            request.leave_accrual_record_id.clone()
+            request.leave_accrual_record_id
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type.clone());
+            .insert("employee_type".to_string(), request.employee_type);
 
         // 构建请求体
         let body = json!({
-            "leave_accrual_record": request.leave_accrual_record.clone()
+            "leave_accrual_record": request.leave_accrual_record
         });
 
         api_req.body = serde_json::to_vec(&body)?;
@@ -54,7 +54,7 @@ impl LeaveAccrualRecordService {
 }
 
 // Builder implementations
-impl_executable_builder!(
+impl_executable_builder_owned!(
     PatchLeaveAccrualRecordRequest,
     LeaveAccrualRecordService,
     PatchLeaveAccrualRecordRequest,

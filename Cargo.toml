@@ -79,9 +79,6 @@ name = "websocket_client"
 path = "examples/basic/websocket_client.rs"
 required-features = ["websocket"]
 
-[[example]]
-name = "cloud_docs_test"
-path = "examples/cloud_docs_test.rs"
 
 [[example]]
 name = "enhanced_drive_operations"
@@ -163,6 +160,10 @@ path = "examples/core/search_user.rs"
 [[example]]
 name = "core_refresh_token"
 path = "examples/core/refresh_token.rs"
+
+[[example]]
+name = "permission_owned_demo"
+path = "examples/api/permission_owned_demo.rs"
 
 # ===========================================
 # Benchmarks

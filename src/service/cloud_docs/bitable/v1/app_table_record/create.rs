@@ -12,7 +12,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
     service::bitable::v1::Record,
 };
 
@@ -116,7 +116,7 @@ impl CreateRecordRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait到CreateRecordRequestBuilder
-impl_executable_builder!(
+crate::impl_executable_builder_owned!(
     CreateRecordRequestBuilder,
     super::AppTableRecordService,
     CreateRecordRequest,

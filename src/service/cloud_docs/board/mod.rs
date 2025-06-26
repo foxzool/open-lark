@@ -28,9 +28,9 @@ impl BoardService {
     /// 获取画板所有节点
     pub async fn list_nodes(
         &self,
-        request: &ListWhiteboardNodesRequest,
+        request: ListWhiteboardNodesRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<crate::core::api_resp::BaseResponse<ListWhiteboardNodesResponse>> {
-        list_whiteboard_nodes(request.clone(), &self.config, option).await
+        list_whiteboard_nodes(request, &self.config, option).await
     }
 }

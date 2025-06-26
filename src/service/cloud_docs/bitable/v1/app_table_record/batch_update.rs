@@ -12,7 +12,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
     service::bitable::v1::Record,
 };
 
@@ -109,7 +109,7 @@ impl BatchUpdateRecordRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait到BatchUpdateRecordRequestBuilder
-impl_executable_builder!(
+crate::impl_executable_builder_owned!(
     BatchUpdateRecordRequestBuilder,
     super::AppTableRecordService,
     BatchUpdateRecordRequest,

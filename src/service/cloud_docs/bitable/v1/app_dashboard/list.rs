@@ -11,7 +11,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
     service::bitable::v1::app_dashboard::Dashboard,
 };
 
@@ -86,7 +86,7 @@ impl ListDashboardRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait到ListDashboardRequestBuilder
-impl_executable_builder!(
+crate::impl_executable_builder_owned!(
     ListDashboardRequestBuilder,
     DashboardService,
     ListDashboardRequest,
@@ -126,10 +126,10 @@ impl DashboardService {
     /// 列出仪表盘
     pub async fn list(
         &self,
-        request: &ListDashboardRequest,
+        request: ListDashboardRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListDashboardResponse>> {
-        let mut api_req = request.api_request.clone();
+        let mut api_req = request.api_request;
         api_req.http_method = Method::GET;
         api_req.api_path = format!(
             "/open-apis/bitable/v1/apps/{app_token}/dashboards",
@@ -149,7 +149,7 @@ pub async fn list_dashboard(
     option: Option<RequestOption>,
 ) -> SDKResult<BaseResponse<ListDashboardResponse>> {
     let service = DashboardService::new(config.clone());
-    service.list(&request, option).await
+    service.list(request, option).await
 }
 
 #[cfg(test)]

@@ -64,7 +64,7 @@ async fn basic_user_search(
         .search
         .v1
         .user
-        .search_user(&request, Some(request_option))
+        .search_user(request, Some(request_option))
         .await
     {
         Ok(response) => {
@@ -156,7 +156,7 @@ async fn paginated_search(
             .search
             .v1
             .user
-            .search_user(&request, Some(request_option.clone()))
+            .search_user(request, Some(request_option.clone()))
             .await
         {
             Ok(response) => {
@@ -228,7 +228,7 @@ async fn advanced_search_demo(
             .search
             .v1
             .user
-            .search_user(&request, Some(request_option.clone()))
+            .search_user(request, Some(request_option.clone()))
             .await
         {
             Ok(response) => {
@@ -291,7 +291,7 @@ async fn display_user_details(
         .search
         .v1
         .user
-        .search_user(&request, Some(request_option))
+        .search_user(request, Some(request_option))
         .await
     {
         Ok(response) => {

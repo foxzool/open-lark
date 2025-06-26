@@ -66,7 +66,7 @@ async fn query_pending_leave_requests(
         .attendance
         .v1
         .user_approval
-        .query(&request, None)
+        .query(request, None)
         .await
     {
         Ok(response) => {
@@ -161,7 +161,7 @@ async fn create_leave_request(client: &LarkClient) -> Result<(), Box<dyn std::er
         .attendance
         .v1
         .user_approval
-        .create(&request, None)
+        .create(request, None)
         .await
     {
         Ok(response) => {
@@ -233,7 +233,7 @@ async fn demonstrate_approval_process(
         .attendance
         .v1
         .user_approval
-        .process(&request, None)
+        .process(request, None)
         .await
     {
         Ok(response) => {
@@ -308,7 +308,7 @@ async fn show_approval_statistics(client: &LarkClient) -> Result<(), Box<dyn std
             .attendance
             .v1
             .user_approval
-            .query(&request, None)
+            .query(request, None)
             .await
         {
             Ok(response) => {
@@ -375,7 +375,7 @@ async fn batch_approval_processing(client: &LarkClient) -> Result<(), Box<dyn st
         .attendance
         .v1
         .user_approval
-        .query(&request, None)
+        .query(request, None)
         .await
     {
         Ok(response) => {

@@ -11,7 +11,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    impl_executable_builder,
+    impl_executable_builder_owned,
 };
 
 /// 解决/恢复评论请求
@@ -171,7 +171,7 @@ impl PatchCommentRequestBuilder {
 }
 
 // 应用ExecutableBuilder trait到PatchCommentRequestBuilder
-impl_executable_builder!(
+impl_executable_builder_owned!(
     PatchCommentRequestBuilder,
     super::CommentsService,
     PatchCommentRequest,
