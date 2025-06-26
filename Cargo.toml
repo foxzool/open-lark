@@ -179,6 +179,10 @@ path = "examples/api/permission_owned_demo.rs"
 name = "comprehensive_error_codes_demo"
 path = "examples/api/comprehensive_error_codes_demo.rs"
 
+[[example]]
+name = "calendar_demo"
+path = "examples/api/calendar_demo.rs"
+
 # ===========================================
 # Benchmarks
 # ===========================================

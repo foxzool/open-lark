@@ -5,6 +5,7 @@ use crate::{
     service::{
         attendance::AttendanceService,
         authentication::AuthenService,
+        calendar::CalendarService,
         cloud_docs::CloudDocsService,
         im::ImService,
         search::SearchService,
@@ -30,6 +31,7 @@ pub struct LarkClient {
     // 核心服务
     pub attendance: AttendanceService,
     pub auth: AuthenService,
+    pub calendar: CalendarService,
     pub im: ImService,
     pub search: SearchService,
     // 云文档服务聚合
@@ -91,10 +93,11 @@ impl LarkClientBuilder {
         let cloud_docs = CloudDocsService::new(Arc::clone(&config));
 
         LarkClient {
-            config: self.config,
+            config: self.config.clone(),
             // 核心服务
             attendance: AttendanceService::new(Arc::clone(&config)),
             auth: AuthenService::new(Arc::clone(&config)),
+            calendar: CalendarService::new((*config).clone()),
             im: ImService::new(Arc::clone(&config)),
             search: SearchService::new(Arc::clone(&config)),
             // 云文档服务聚合
