@@ -108,6 +108,22 @@ path = "examples/api/token_performance_monitoring.rs"
 name = "background_token_preheating"
 path = "examples/api/background_token_preheating.rs"
 
+[[example]]
+name = "enhanced_error_handling"
+path = "examples/api/enhanced_error_handling.rs"
+
+[[example]]
+name = "response_handling_patterns"
+path = "examples/api/response_handling_patterns.rs"
+
+[[example]]
+name = "comprehensive_error_management"
+path = "examples/api/comprehensive_error_management.rs"
+
+[[example]]
+name = "simple_error_demo"
+path = "examples/api/simple_error_demo.rs"
+
 # Core API Examples
 [[example]]
 name = "core_send_message"

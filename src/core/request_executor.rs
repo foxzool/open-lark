@@ -179,7 +179,7 @@ impl RequestExecutor {
         // 序列化请求体
         if let Some(body_data) = body {
             api_req.body = serde_json::to_vec(&body_data)
-                .map_err(crate::core::error::LarkAPIError::DeserializeError)?;
+                .map_err(|e| crate::core::error::LarkAPIError::DeserializeError(e.to_string()))?;
         }
 
         // 执行请求

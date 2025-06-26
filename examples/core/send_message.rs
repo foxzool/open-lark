@@ -71,12 +71,37 @@ async fn send_text_message(
             }
         }
         Err(e) => {
-            println!("❌ 消息发送失败: {:?}", e);
-            println!("\n💡 常见错误解决方案:");
-            println!("   1. 检查APP_ID和APP_SECRET是否正确");
-            println!("   2. 确认应用有发送消息的权限");
-            println!("   3. 验证RECEIVE_ID是否为有效的用户ID或群组ID");
-            println!("   4. 确保目标用户与机器人在同一个群组中，或已添加机器人为好友");
+            println!("❌ 消息发送失败");
+
+            // 使用新的错误处理功能
+            let context = open_lark::core::error_helper::ErrorHelper::create_error_context(&e);
+
+            // 打印用户友好的错误信息
+            println!("错误原因: {}", context.user_friendly_message);
+
+            // 显示是否可重试
+            if context.is_retryable {
+                println!("🔄 此错误可以重试");
+                if let Some(strategy) = &context.retry_strategy {
+                    println!("   建议延迟 {:?} 后重试", strategy.base_delay);
+                }
+            } else {
+                println!("🚫 此错误需要手动处理");
+            }
+
+            // 显示建议的解决方案
+            if !context.suggested_actions.is_empty() {
+                println!("\n💡 建议解决方案:");
+                for (i, action) in context.suggested_actions.iter().enumerate() {
+                    println!("   {}. {}", i + 1, action);
+                }
+            }
+
+            // 显示帮助链接
+            if let Some(help_url) = &context.help_url {
+                println!("\n📚 参考文档: {}", help_url);
+            }
+
             return Err(e.into());
         }
     }
@@ -144,7 +169,16 @@ async fn send_rich_text_message(
             }
         }
         Err(e) => {
-            println!("❌ 富文本消息发送失败: {:?}", e);
+            println!("❌ 富文本消息发送失败");
+
+            // 使用增强的错误处理
+            let user_message = open_lark::core::error_helper::ErrorHelper::format_user_error(&e);
+            println!("错误详情: {}", user_message);
+
+            // 创建并显示错误上下文
+            let context = open_lark::core::error_helper::ErrorHelper::create_error_context(&e);
+            context.print_details();
+
             return Err(e.into());
         }
     }
