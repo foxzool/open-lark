@@ -183,6 +183,10 @@ path = "examples/api/comprehensive_error_codes_demo.rs"
 name = "calendar_demo"
 path = "examples/api/calendar_demo.rs"
 
+[[example]]
+name = "cardkit_demo"
+path = "examples/api/cardkit_demo.rs"
+
 # ===========================================
 # Benchmarks
 # ===========================================
