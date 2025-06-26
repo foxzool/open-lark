@@ -11,7 +11,6 @@
 // APP_SECRET=your_app_secret
 
 use open_lark::prelude::*;
-use std::collections::HashMap;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -22,7 +21,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app_secret = std::env::var("APP_SECRET").expect("请设置 APP_SECRET 环境变量");
 
     // 创建Lark客户端
-    let client = LarkClient::builder(&app_id, &app_secret)
+    let _client = LarkClient::builder(&app_id, &app_secret)
         .with_app_type(AppType::SelfBuild)
         .with_enable_token_cache(true)
         .build();
@@ -293,195 +292,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-// 辅助函数：创建卡片消息构建器
-struct CardMessageBuilder {
-    config: Option<Config>,
-    header: Option<Header>,
-    elements: Vec<serde_json::Value>,
-}
-
-impl CardMessageBuilder {
-    fn new() -> Self {
-        Self {
-            config: None,
-            header: None,
-            elements: Vec::new(),
-        }
-    }
-
-    fn config(mut self, config: Config) -> Self {
-        self.config = Some(config);
-        self
-    }
-
-    fn header(mut self, header: Header) -> Self {
-        self.header = Some(header);
-        self
-    }
-
-    fn element(mut self, element: impl serde::Serialize) -> Self {
-        if let Ok(json) = serde_json::to_value(element) {
-            self.elements.push(json);
-        }
-        self
-    }
-
-    fn build(self) -> serde_json::Value {
-        let mut card = serde_json::json!({});
-
-        if let Some(config) = self.config {
-            card["config"] = serde_json::to_value(config).unwrap();
-        }
-
-        if let Some(header) = self.header {
-            card["header"] = serde_json::to_value(header).unwrap();
-        }
-
-        if !self.elements.is_empty() {
-            card["elements"] = serde_json::Value::Array(self.elements);
-        }
-
-        serde_json::json!({ "card": card })
-    }
-}
-
-#[derive(serde::Serialize)]
-struct Config {
-    wide_screen_mode: bool,
-    enable_forward: bool,
-}
-
-impl Config {
-    fn new(wide_screen_mode: bool, enable_forward: bool) -> Self {
-        Self {
-            wide_screen_mode,
-            enable_forward,
-        }
-    }
-}
-
-#[derive(serde::Serialize)]
-struct Header {
-    title: PlainText,
-    template: Option<TemplateColor>,
-}
-
-impl Header {
-    fn new(title: impl ToString) -> Self {
-        Self {
-            title: PlainText {
-                tag: "plain_text".to_string(),
-                content: title.to_string(),
-            },
-            template: None,
-        }
-    }
-
-    fn template(mut self, color: TemplateColor) -> Self {
-        self.template = Some(color);
-        self
-    }
-}
-
-#[derive(serde::Serialize)]
-struct PlainText {
-    tag: String,
-    content: String,
-}
-
-#[derive(serde::Serialize)]
-#[serde(rename_all = "lowercase")]
-enum TemplateColor {
-    Blue,
-    Wathet,
-    Turquoise,
-    Green,
-    Yellow,
-    Orange,
-    Red,
-    Carmine,
-    Violet,
-    Purple,
-    Indigo,
-    Grey,
-}
-
-#[derive(serde::Serialize)]
-struct DivElement {
-    tag: String,
-    text: Option<PlainText>,
-    extra: Option<Button>,
-}
-
-impl DivElement {
-    fn new() -> Self {
-        Self {
-            tag: "div".to_string(),
-            text: None,
-            extra: None,
-        }
-    }
-
-    fn text(mut self, content: impl ToString) -> Self {
-        self.text = Some(PlainText {
-            tag: "plain_text".to_string(),
-            content: content.to_string(),
-        });
-        self
-    }
-
-    fn extra(mut self, button: Button) -> Self {
-        self.extra = Some(button);
-        self
-    }
-}
-
-#[derive(serde::Serialize)]
-struct Button {
-    tag: String,
-    text: PlainText,
-    url: Option<String>,
-    #[serde(rename = "type")]
-    type_: Option<ButtonType>,
-}
-
-impl Button {
-    fn new(text: impl ToString) -> Self {
-        Self {
-            tag: "button".to_string(),
-            text: PlainText {
-                tag: "plain_text".to_string(),
-                content: text.to_string(),
-            },
-            url: None,
-            type_: None,
-        }
-    }
-
-    fn url(mut self, url: impl ToString) -> Self {
-        self.url = Some(url.to_string());
-        self
-    }
-
-    fn type_(mut self, button_type: ButtonType) -> Self {
-        self.type_ = Some(button_type);
-        self
-    }
-}
-
-#[derive(serde::Serialize)]
-#[serde(rename_all = "lowercase")]
-enum ButtonType {
-    Default,
-    Primary,
-    Danger,
-}
-
 // 模拟权限枚举（实际会从SDK导入）
 #[derive(Debug, Clone, Copy)]
 enum Permission {
     FullAccess,
     Edit,
     Comment,
+    #[allow(dead_code)]
     View,
 }

@@ -59,7 +59,7 @@ async fn get_upload_folder(client: &LarkClient) -> Result<String, Box<dyn std::e
                 println!("   文件夹Token: {}", data.token);
                 Ok(data.token.clone())
             } else {
-                return Err("无法获取根文件夹信息".into());
+                Err("无法获取根文件夹信息".into())
             }
         }
         Err(e) => {
@@ -68,7 +68,7 @@ async fn get_upload_folder(client: &LarkClient) -> Result<String, Box<dyn std::e
             println!("   1. 确保设置了有效的 USER_ACCESS_TOKEN");
             println!("   2. 检查用户访问令牌的权限");
             println!("   3. 确认应用有云空间访问权限");
-            return Err(e.into());
+            Err(e.into())
         }
     }
 }

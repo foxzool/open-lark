@@ -11,14 +11,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app_secret = env::var("APP_SECRET").expect("APP_SECRET not found in environment");
 
     // 初始化客户端
-    let client = LarkClient::builder(&app_id, &app_secret).build();
+    let _client = LarkClient::builder(&app_id, &app_secret).build();
 
     // 演示使用Builder模式的execute方法
     println!("🚀 演示Drive服务Builder的execute方法");
 
     // 1. 演示媒体文件上传请求构建
     println!("\n📁 构建媒体文件上传请求...");
-    let upload_request =
+    let _upload_request =
         open_lark::service::cloud_docs::drive::v1::media::UploadMediaRequest::builder()
             .file_name("test.jpg")
             .parent_token("your_parent_token")
@@ -40,7 +40,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 2. 演示权限设置请求构建
     println!("\n🔐 构建权限设置请求...");
-    let permission_request =
+    let _permission_request =
         open_lark::service::cloud_docs::drive::v1::permissions::GetPermissionRequest::builder()
             .token("your_file_token")
             .r#type("doc")
@@ -50,7 +50,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 3. 演示文件夹创建请求构建
     println!("\n📂 构建文件夹创建请求...");
-    let folder_request =
+    let _folder_request =
         open_lark::service::cloud_docs::drive::v2::explorer::CreateFolderRequest::builder()
             .name("新建文件夹")
             .folder_token("parent_folder_token")
@@ -60,7 +60,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 4. 演示文件夹列表请求构建
     println!("\n📋 构建文件夹列表请求...");
-    let list_request =
+    let _list_request =
         open_lark::service::cloud_docs::drive::v2::explorer::ListFolderRequest::builder()
             .folder_token("folder_token")
             .page_size(50)

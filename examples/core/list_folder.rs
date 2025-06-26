@@ -60,12 +60,12 @@ async fn get_target_folder(client: &LarkClient) -> Result<String, Box<dyn std::e
                 println!("✅ 根文件夹获取成功: {}", data.token);
                 Ok(data.token.clone())
             } else {
-                return Err("无法获取根文件夹信息".into());
+                Err("无法获取根文件夹信息".into())
             }
         }
         Err(e) => {
             println!("❌ 获取根文件夹失败: {:?}", e);
-            return Err(e.into());
+            Err(e.into())
         }
     }
 }

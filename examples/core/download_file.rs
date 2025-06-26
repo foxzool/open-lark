@@ -97,14 +97,14 @@ async fn get_target_file(client: &LarkClient) -> Result<String, Box<dyn std::err
                 // 选择第一个文件进行演示
                 let first_file = downloadable_files[0];
                 println!("🎯 自动选择第一个文件进行下载演示: {}", first_file.name);
-                return Ok(first_file.token.clone());
+                Ok(first_file.token.clone())
             } else {
-                return Err("无法获取文件列表".into());
+                Err("无法获取文件列表".into())
             }
         }
         Err(e) => {
             println!("❌ 获取文件列表失败: {:?}", e);
-            return Err("请通过 FILE_TOKEN 环境变量指定要下载的文件".into());
+            Err("请通过 FILE_TOKEN 环境变量指定要下载的文件".into())
         }
     }
 }

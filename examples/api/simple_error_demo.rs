@@ -15,9 +15,8 @@ use tokio::time::sleep;
 
 use open_lark::core::{
     error::LarkAPIError,
-    error_codes::LarkErrorCode,
-    error_helper::{ErrorContext, ErrorHelper},
-    error_logger::{ErrorLogger, LogLevel, LoggerBuilder},
+    error_helper::ErrorHelper,
+    error_logger::{LogLevel, LoggerBuilder},
     error_metrics::{ErrorMonitor, MonitorConfig},
 };
 
