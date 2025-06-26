@@ -41,6 +41,7 @@
 [获取服务台自定义字段](https://open.feishu.cn/document/server-docs/helpdesk-v1/ticket-management/ticket/customized_fields)
 
 #### 事件
+
 [创建工单](https://open.feishu.cn/document/server-docs/helpdesk-v1/ticket-management/ticket/events/created)
 [工单状态变更](https://open.feishu.cn/document/server-docs/helpdesk-v1/ticket-management/ticket/events/updated)
 
@@ -66,6 +67,7 @@
 ## 知识库
 
 ### 知识库管理
+
 [富文本](https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/faq/rich-text)
 [创建知识库](https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/faq/create)
 [删除知识库](https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/faq/delete)
@@ -84,8 +86,21 @@
 [获取全部知识库分类](https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/category/list-categories)
 
 ## 推送中心
+
 [创建推送](https://open.feishu.cn/document/server-docs/helpdesk-v1/notification/create)
 [更新推送](https://open.feishu.cn/document/server-docs/helpdesk-v1/notification/patch)
 [查询推送](https://open.feishu.cn/document/server-docs/helpdesk-v1/notification/get)
 [预览推送](https://open.feishu.cn/document/server-docs/helpdesk-v1/notification/preview)
 [提交审核](https://open.feishu.cn/document/server-docs/helpdesk-v1/notification/submit_approve)
+[取消审核](https://open.feishu.cn/document/server-docs/helpdesk-v1/notification/cancel_approve)
+[执行推送](https://open.feishu.cn/document/server-docs/helpdesk-v1/notification/execute_send)
+[取消推送](https://open.feishu.cn/document/server-docs/helpdesk-v1/notification/cancel_send)
+
+### 事件
+
+[推送审核通知](https://open.feishu.cn/document/server-docs/helpdesk-v1/notification/events/approve)
+
+## 事件订阅
+
+[订阅服务台事件](https://open.feishu.cn/document/server-docs/helpdesk-v1/event/subscribe)
+[取消订阅服务台事件](https://open.feishu.cn/document/server-docs/helpdesk-v1/event/unsubscribe)
