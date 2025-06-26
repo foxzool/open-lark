@@ -181,6 +181,10 @@ path = "examples/core/refresh_token.rs"
 name = "permission_owned_demo"
 path = "examples/api/permission_owned_demo.rs"
 
+[[example]]
+name = "comprehensive_error_codes_demo"
+path = "examples/api/comprehensive_error_codes_demo.rs"
+
 # ===========================================
 # Benchmarks
 # ===========================================

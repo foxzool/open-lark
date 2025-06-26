@@ -80,7 +80,7 @@ impl From<url::ParseError> for LarkAPIError {
 }
 
 /// 错误严重程度
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ErrorSeverity {
     /// 信息级别
     Info,
