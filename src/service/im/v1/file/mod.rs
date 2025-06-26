@@ -56,17 +56,18 @@ impl FileService {
         file_data: Vec<u8>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateFileResponse>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/im/v1/files".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
-        
-        // 设置multipart表单数据
         let mut query_params = HashMap::new();
         query_params.insert("file_type".to_string(), file_type.to_string());
         query_params.insert("file_name".to_string(), file_name.to_string());
-        api_req.query_params = query_params;
-        api_req.body = file_data;
+        
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: "/open-apis/im/v1/files".to_string(),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            body: file_data,
+            ..Default::default()
+        };
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -77,10 +78,12 @@ impl FileService {
         file_key: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetFileResponse>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!("/open-apis/im/v1/files/{}", file_key);
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        let api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!("/open-apis/im/v1/files/{}", file_key),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            ..Default::default()
+        };
 
         Transport::request(api_req, &self.config, option).await
     }

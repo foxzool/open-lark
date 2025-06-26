@@ -55,14 +55,14 @@ impl ImageService {
         image_data: Vec<u8>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateImageResponse>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/im/v1/images".to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
-        
-        // 设置multipart表单数据
-        api_req.query_params = HashMap::from([("image_type".to_string(), image_type.to_string())]);
-        api_req.body = image_data;
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: "/open-apis/im/v1/images".to_string(),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params: HashMap::from([("image_type".to_string(), image_type.to_string())]),
+            body: image_data,
+            ..Default::default()
+        };
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -73,10 +73,12 @@ impl ImageService {
         image_key: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetImageResponse>> {
-        let mut api_req = ApiRequest::default();
-        api_req.http_method = Method::GET;
-        api_req.api_path = format!("/open-apis/im/v1/images/{}", image_key);
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        let api_req = ApiRequest {
+            http_method: Method::GET,
+            api_path: format!("/open-apis/im/v1/images/{}", image_key),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            ..Default::default()
+        };
 
         Transport::request(api_req, &self.config, option).await
     }
