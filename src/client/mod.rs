@@ -12,6 +12,7 @@ use crate::{
         group::GroupService,
         im::ImService,
         search::SearchService,
+        tenant_tag::TenantTagService,
         // 向后兼容的导入
         AssistantService,
         BitableService,
@@ -40,6 +41,7 @@ pub struct LarkClient {
     pub group: GroupService,
     pub im: ImService,
     pub search: SearchService,
+    pub tenant_tag: TenantTagService,
     // 云文档服务聚合
     pub cloud_docs: CloudDocsService,
     // 向后兼容的字段
@@ -109,6 +111,7 @@ impl LarkClientBuilder {
             group: GroupService::new((*config).clone()),
             im: ImService::new(Arc::clone(&config)),
             search: SearchService::new(Arc::clone(&config)),
+            tenant_tag: TenantTagService::new((*config).clone()),
             // 云文档服务聚合
             cloud_docs,
             // 向后兼容的字段（重新创建实例）
