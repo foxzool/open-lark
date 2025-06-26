@@ -44,6 +44,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **URL预览管理**: `url_preview` 模块 - 批量更新URL预览信息
   - **完整示例演示**: `im_v1_demo.rs` - 330行完整功能演示，涵盖所有子服务
 
+#### 📱 消息流模块 (IM v2) - 全新实现 ✨
+- **🎯 应用消息流卡片管理** - `app_feed_card` 模块完整实现
+  - **create**: 创建应用消息流卡片，支持自定义JSON内容和目标用户列表
+  - **update**: 更新现有消息流卡片的内容、标题和描述信息
+  - **delete**: 删除指定的消息流卡片，支持完整生命周期管理
+- **🤖 群聊机器人消息服务** - `groups_bots` 模块核心功能
+  - **bot_time_sentive**: 机器人单聊即时提醒，支持多种消息类型和格式
+  - **update**: 更新消息流卡片按钮状态和交互行为定义
+  - **patch**: 群组即时提醒功能，支持批量用户通知和状态追踪
+- **📊 完整数据模型**: FeedCard, ButtonInfo, TimelyNotification, UserIdType 等类型安全支持
+- **🔧 统一Transport架构**: 保持与IM v1一致的API调用模式和错误处理
+- **💻 完整演示**: `im_v2_demo.rs` - 140行功能演示，涵盖消息流卡片全生命周期
+
 ### Enhanced - 功能增强
 
 #### 🔧 SDK架构持续优化
@@ -54,6 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `group_demo.rs` - 群组模块架构演示
   - `cardkit_demo.rs` - 卡片工具包演示
   - `im_v1_demo.rs` - IM v1模块完整功能演示，涵盖8大子服务
+  - `im_v2_demo.rs` - IM v2消息流模块演示，展示卡片管理和机器人消息
 - **文档和配置**: Cargo.toml示例配置更新
 
 ### Technical Details - 技术细节
@@ -67,7 +81,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - models.rs 核心数据模型完善，包含UserIdType, ReceiveIdType, BatchMessageStatus等
   - im_v1_demo.rs 完整功能演示，330行代码
   - 统一Transport模式，零lint警告
-- **总计**: 82个新文件，4089行新代码
+- **IM v2新增实现**: 7个新文件，620行新代码
+  - app_feed_card 和 groups_bots 双模块架构完整实现
+  - models.rs 消息流核心数据模型：FeedCard, ButtonInfo, TimelyNotification
+  - im_v2_demo.rs 功能演示，140行代码
+  - 完整的消息流卡片和机器人消息API覆盖
+- **总计**: 89个新文件，4709行新代码
 
 #### 🏗️ 架构模式
 - **模块化设计**: service/module/version/feature 四层架构
