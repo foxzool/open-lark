@@ -4,8 +4,8 @@ version = "0.6.0"
 edition = "2021"
 authors = ["ZoOL <zhooul@gmail.com>"]
 readme = "README.md"
-description = "Lark/Feishu Open API SDK(WIP)"
-keywords = ["sdk", "feishu", "lark", "rest"]
+description = "Enterprise-grade Lark/Feishu Open API SDK with advanced error handling"
+keywords = ["sdk", "feishu", "lark", "api"]
 categories = ["api-bindings"]
 documentation = "https://docs.rs/open-lark"
 repository = "https://github.com/foxzool/open-lark"
@@ -56,11 +56,8 @@ tokio-tungstenite = { version = "0.23", features = [
 
 [dev-dependencies]
 dotenvy = "0.15.7"
-dotenv = "0.15.0"
 env_logger = "0.11.3"
 uuid = { version = "1.8.0", features = ["v4"] }
-chrono = { version = "0.4.38", features = ["serde"] }
-# criterion = { version = "0.5", features = ["html_reports"] } # Removed - benchmark not implemented
 
 # ===========================================
 # Examples
@@ -116,9 +113,6 @@ path = "examples/api/enhanced_error_handling.rs"
 name = "response_handling_patterns"
 path = "examples/api/response_handling_patterns.rs"
 
-[[example]]
-name = "comprehensive_error_management"
-path = "examples/api/comprehensive_error_management.rs"
 
 [[example]]
 name = "simple_error_demo"

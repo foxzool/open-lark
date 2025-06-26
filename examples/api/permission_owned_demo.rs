@@ -12,7 +12,7 @@ use open_lark::{
 /// 消除了不必要的clone()开销，提升了性能。
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    dotenv::dotenv().ok();
+    dotenvy::dotenv().ok();
 
     let app_id = std::env::var("APP_ID").expect("APP_ID environment variable not set");
     let app_secret = std::env::var("APP_SECRET").expect("APP_SECRET environment variable not set");

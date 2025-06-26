@@ -17,7 +17,7 @@ use std::collections::HashMap;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 读取环境变量
-    dotenv::dotenv().ok();
+    dotenvy::dotenv().ok();
 
     let app_id = std::env::var("APP_ID").expect("请设置 APP_ID 环境变量");
     let app_secret = std::env::var("APP_SECRET").expect("请设置 APP_SECRET 环境变量");

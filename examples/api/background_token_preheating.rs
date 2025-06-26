@@ -32,7 +32,7 @@ use tokio::time::sleep;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 尝试加载.env文件（如果存在）
-    if dotenv::dotenv().is_err() {
+    if dotenvy::dotenv().is_err() {
         // .env文件不存在或加载失败，这是正常的
     }
 
