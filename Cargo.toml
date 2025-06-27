@@ -220,6 +220,10 @@ name = "personal_settings_v1_system_status"
 path = "examples/api/personal_settings_v1_system_status.rs"
 
 [[example]]
+name = "search_v2_comprehensive"
+path = "examples/api/search_v2_comprehensive.rs"
+
+[[example]]
 name = "vc_v1"
 path = "examples/api/vc_v1.rs"
 
