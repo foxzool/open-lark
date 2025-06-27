@@ -69,8 +69,7 @@ impl FeishuCard {
     ) -> Result<Self, crate::core::error::LarkAPIError> {
         let language: FeishuCardLanguage = lng.parse().map_err(|e| {
             crate::core::error::LarkAPIError::illegal_param(format!(
-                "unknown language '{}': {}",
-                lng, e
+                "unknown language '{lng}': {e}"
             ))
         })?;
         let origin_header = self.i18n_header.entry(language).or_default();
@@ -87,8 +86,7 @@ impl FeishuCard {
     ) -> Result<Self, crate::core::error::LarkAPIError> {
         let language: FeishuCardLanguage = lng.parse().map_err(|e| {
             crate::core::error::LarkAPIError::illegal_param(format!(
-                "unknown language '{}': {}",
-                lng, e
+                "unknown language '{lng}': {e}"
             ))
         })?;
         let self_elements = self.i18n_elements.entry(language).or_default();
@@ -218,7 +216,7 @@ impl FromStr for FeishuCardLanguage {
             "ja_jp" => Ok(FeishuCardLanguage::JaJP),
             "zh_hk" => Ok(FeishuCardLanguage::ZhHK),
             "zh_tw" => Ok(FeishuCardLanguage::ZhTW),
-            _ => Err(format!("unknown language: {}", s)),
+            _ => Err(format!("unknown language: {s}")),
         }
     }
 }

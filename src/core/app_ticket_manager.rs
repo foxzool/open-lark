@@ -46,7 +46,7 @@ impl AppTicketManager {
 }
 
 fn app_ticket_key(app_id: &str) -> String {
-    format!("{}-{}", APP_TICKET_KEY_PREFIX, app_id)
+    format!("{APP_TICKET_KEY_PREFIX}-{app_id}")
 }
 
 pub async fn apply_app_ticket(config: &Config) -> SDKResult<()> {
