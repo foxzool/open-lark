@@ -6,7 +6,18 @@
 
 # 飞书开放平台非官方SDK, 个人开发, 请谨慎使用
 
-支持自定义机器人、长连接机器人、云文档、飞书卡片、消息、群组等API调用。
+支持自定义机器人、长连接机器人、云文档、飞书卡片、消息、群组、招聘管理等API调用。
+
+## 🎉 v0.11.0 重大更新 - 飞书招聘管理系统全面上线 🚀
+
+- **🎯 完整招聘管理系统**: 6个核心服务模块，17个功能子服务，100+个API接口
+- **🏗️ 企业级招聘架构**: 从职位发布到候选人入职的完整业务流程
+- **📊 多渠道人才获取**: 内推、官网、猎头、外部系统等多种人才来源
+- **🤖 智能化招聘**: 人才库管理、标签系统、搜索筛选、评估体系
+- **🔄 协同化面试**: 面试安排、多轮面试、评估体系、结果记录
+- **📋 规范化Offer**: Offer模板、审批流程、电子签约、状态管理
+- **💰 内推管理**: 内推奖励、账户管理、提现审批、统计分析
+- **🔗 生态对接**: 背调、笔试平台对接，扩展招聘能力
 
 ## 🎉 v0.8.0 重大更新 - AI能力全面支持 🤖
 
@@ -30,6 +41,63 @@
 ## 使用
 
 将`.env-example`文件重命名为`.env`，并填写相关配置。
+
+### 快速开始 - 招聘管理
+
+```rust,ignore
+use open_lark::prelude::*;
+use open_lark::service::hire::models::*;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = LarkClient::builder("your_app_id", "your_app_secret")
+        .with_app_type(AppType::SelfBuild)
+        .build();
+
+    // 获取职位列表
+    let job_request = JobListRequest {
+        page_size: Some(50),
+        page_token: None,
+        status: Some("active".to_string()),
+        ..Default::default()
+    };
+    let jobs = client.hire.recruitment_config.job.list_jobs(job_request, None).await?;
+    println!("职位列表: {:?}", jobs.data);
+
+    // 获取人才库列表
+    let pool_request = TalentPoolListRequest {
+        page_size: Some(20),
+        ..Default::default()
+    };
+    let pools = client.hire.candidate_management.talent_pool.list_pools(pool_request, None).await?;
+    println!("人才库列表: {:?}", pools.data);
+
+    // 创建人才
+    let talent_request = TalentCreateRequest {
+        name: "张三".to_string(),
+        email: Some("zhangsan@example.com".to_string()),
+        phone: Some("13800138000".to_string()),
+        ..Default::default()
+    };
+    let talent = client.hire.candidate_management.talent.create_talent(talent_request, None).await?;
+    println!("创建人才: {:?}", talent.data);
+
+    // 获取内推列表
+    let referral_request = ReferralListRequest {
+        page_size: Some(30),
+        ..Default::default()
+    };
+    let referrals = client.hire.get_candidates.referral.list_referrals(referral_request, None).await?;
+    println!("内推列表: {:?}", referrals.data);
+
+    // 查询内推账户余额
+    let user_id = "user_123456";
+    let balance = client.hire.referral_account.get_balance(user_id, None).await?;
+    println!("账户余额: {:?}", balance.data);
+
+    Ok(())
+}
+```
 
 ### 快速开始 - 企业级错误处理
 
@@ -337,6 +405,50 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 - [x] 获取用户或机器人所在的群列表
 
+### 招聘管理 🎉 v0.11.0 新增
+
+#### 招聘相关配置
+
+- [x] **地址管理**: 地点列表查询、地址信息获取
+- [x] **权限管理**: 角色管理、用户权限分配
+- [x] **职位管理**: 职位全生命周期管理(创建、发布、更新、关闭)
+- [x] **招聘需求**: 招聘需求创建、模板管理
+- [x] **招聘流程**: 招聘流程配置、阶段管理
+- [x] **项目管理**: 招聘项目组织、成员管理
+- [x] **面试设置**: 面试配置、评价表管理
+- [x] **Offer设置**: Offer配置、审批流程设置
+
+#### 获取候选人
+
+- [x] **内推管理**: 内推信息、奖励管理
+- [x] **官网管理**: 招聘官网、职位发布、投递管理
+- [x] **猎头管理**: 猎头供应商、保护期、推荐管理
+- [x] **外部系统**: 第三方HR系统集成
+
+#### 候选人管理
+
+- [x] **人才库**: 人才池组织、人才分组管理
+- [x] **人才管理**: 人才档案、标签、批量导入
+- [x] **投递管理**: 投递创建、流程推进、状态管理
+- [x] **面试管理**: 面试安排、评估、结果记录
+- [x] **Offer管理**: Offer发放、审批、接受流程
+
+#### 生态对接
+
+- [x] **背调管理**: 背调订单、报告管理
+- [x] **笔试管理**: 在线笔试、试卷、成绩管理
+
+#### 内推账户
+
+- [x] **账户管理**: 内推账户创建、余额查询、收入记录
+- [x] **提现管理**: 提现申请、审批流程、账户启停
+- [x] **统计分析**: 内推统计数据、奖励计算
+
+#### 附件管理
+
+- [x] **文件管理**: 简历、证书等附件上传下载
+- [x] **批量操作**: 文件预览、批量操作
+
 ### 考勤管理 🎉 v0.5.0 新增
 
 #### 考勤班次
@@ -471,8 +583,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 | **🏢 考勤管理**     | 43      | ✅ 100%     | 完整考勤解决方案                |
 | **⚙️ 个人设置**     | 7       | ✅ 100%     | 系统状态管理                  |
 | **🤖 AI能力**      | 22      | ✅ 100%     | **v0.8.0 新增** - 智能文档处理、OCR、语音识别、机器翻译 |
+| **🎯 招聘管理**     | **100+**| ✅ 100%     | **v0.11.0 新增** - 完整招聘管理系统 |
 | **🛡️ 错误处理系统**  | 5       | ✅ 100%     | **v0.6.0 新增** - 企业级错误管理 |
-| **📈 总计**       | **176** | **✅ 100%** | **覆盖企业应用核心功能**          |
+| **📈 总计**       | **276+**| **✅ 100%** | **覆盖企业应用核心功能**          |
+
+### 🎯 v0.11.0 招聘管理系统亮点
+
+- **6大核心服务模块** 招聘配置、候选人获取、候选人管理、生态对接、内推账户、附件管理
+- **100+ API接口** 覆盖招聘全流程，从职位发布到候选人入职
+- **200+ 数据结构** 类型安全的数据模型定义，充分利用Rust类型系统
+- **企业级特性** 模块化设计、异步支持、错误处理、国际化支持、分页查询
+- **完整文档示例** 详细的API文档、完整的功能演示、技术实现报告
 
 ### 🎯 v0.6.0 企业级错误处理系统亮点
 
@@ -491,6 +612,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ## 📚 文档和资源
 
+### 招聘管理系统文档
+
+- **[招聘系统实现报告](reports/hire_v1_implementation_report.md)** - 详细的技术架构和功能说明
+- **[hire_v1_example.rs](examples/api/hire_v1_example.rs)** - 完整的招聘系统功能演示
+
 ### 错误处理系统文档
 
 - **[错误处理最佳实践](docs/ERROR_HANDLING_BEST_PRACTICES.md)** (62页) - 完整的开发指导和最佳实践
@@ -499,6 +625,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ### 示例程序
 
+- **[hire_v1_example.rs](examples/api/hire_v1_example.rs)** - 招聘管理系统完整演示
 - **[comprehensive_error_codes_demo.rs](examples/api/comprehensive_error_codes_demo.rs)** - 扩展错误码系统演示
 - **[enhanced_error_handling.rs](examples/api/enhanced_error_handling.rs)** - 增强错误处理演示
 - **[permission_owned_demo.rs](examples/api/permission_owned_demo.rs)** - owned参数模式演示
@@ -506,9 +633,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### API文档
 
 - **[API参考文档](https://docs.rs/open-lark)** - 完整的API文档
-- **[示例代码集合](examples/)** - 24个完整的演示程序
+- **[示例代码集合](examples/)** - 30+个完整的演示程序
 
 ## 🚀 特性优势
+
+### 企业级招聘管理
+
+- **全流程覆盖** - 从职位发布到候选人入职的完整业务流程
+- **多渠道集成** - 内推、官网、猎头、外部系统等多种人才来源
+- **智能化管理** - 人才库管理、标签系统、搜索筛选、评估体系
+- **模块化设计** - 清晰的功能分层和服务组织，易于扩展
 
 ### 企业级错误处理
 
@@ -527,6 +661,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### 开发体验
 
 - **用户友好** - 智能错误分析，自动生成修复建议
-- **完整文档** - 62页最佳实践指南，24个示例程序
+- **完整文档** - 技术架构文档，30+个示例程序
 - **类型提示** - 完整的类型定义和IDE支持
-- **测试覆盖** - 24个错误处理测试，100%通过率
+- **测试覆盖** - 全面的测试覆盖，确保代码质量
+
+## 📋 TODO
+
+目前主要功能模块均已完成，后续计划：
+
+- [ ] 更多AI能力集成
+- [ ] 更多事件处理器支持
+- [ ] 性能优化和缓存策略
+- [ ] 更多示例和文档
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+## 📄 许可证
+
+MIT OR Apache-2.0
