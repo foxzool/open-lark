@@ -1,4 +1,6 @@
 // 核心服务模块
+pub mod ai;
+pub mod apass;
 pub mod application;
 pub mod approval;
 pub mod attendance;
@@ -29,6 +31,8 @@ pub use cloud_docs::docx as docs; // docs -> docx 兼容
 pub use cloud_docs::{assistant, bitable, board, comments, drive, permission, sheets, wiki};
 
 // 核心服务 re-export
+pub use ai::AiService;
+pub use apass::ApassService;
 pub use application::ApplicationService;
 pub use approval::ApprovalService;
 pub use bot::BotService;
