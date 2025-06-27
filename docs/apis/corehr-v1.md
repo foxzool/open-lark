@@ -380,6 +380,7 @@
 [撤销异动](https://open.feishu.cn/document/corehr-v1/job_change/revoke)
 
 ### 事件
+
 [异动状态变更](https://open.feishu.cn/document/corehr-v1/job_change/job-change-events/status_updated)
 [异动信息变更](https://open.feishu.cn/document/corehr-v1/job_change/job-change-events/updated-2)
 [员工完成异动](https://open.feishu.cn/document/server-docs/corehr-v1/job_change/changed)
@@ -391,3 +392,67 @@
 [编辑离职信息](https://open.feishu.cn/document/corehr-v1/offboarding/edit)
 [撤销离职](https://open.feishu.cn/document/corehr-v1/offboarding/revoke)
 [搜索离职信息](https://open.feishu.cn/document/server-docs/corehr-v1/offboarding/search)
+
+### 事件
+
+[离职信息变更](https://open.feishu.cn/document/corehr-v1/offboarding/resignation-events/updated)
+[离职申请状态变更](https://open.feishu.cn/document/corehr-v1/offboarding/resignation-events/status_updated)
+[离职流转状态变更](https://open.feishu.cn/document/corehr-v1/offboarding/resignation-events/checklist_updated)
+
+## 合同
+
+[合同概述](https://open.feishu.cn/document/corehr-v1/contract/guide)
+[新建合同](https://open.feishu.cn/document/server-docs/corehr-v1/contract/create)
+[更新合同](https://open.feishu.cn/document/server-docs/corehr-v1/contract/patch)
+[删除合同](https://open.feishu.cn/document/server-docs/corehr-v1/contract/delete)
+[查询单个合同](https://open.feishu.cn/document/server-docs/corehr-v1/contract/get)
+[批量查询合同](https://open.feishu.cn/document/server-docs/corehr-v1/contract/list)
+[搜索合同](https://open.feishu.cn/document/corehr-v1/contract/search)
+
+### 事件
+
+[合同创建](https://open.feishu.cn/document/server-docs/corehr-v1/contract/created)
+[合同删除](https://open.feishu.cn/document/corehr-v1/contract/contract-events/deleted)
+[合同更新](https://open.feishu.cn/document/corehr-v1/contract/contract-events/updated)
+
+## 编制规划
+
+[批量修改填报行/明细行错误码](https://open.feishu.cn/document/corehr-v1/workforce_plan/the-full-set-of-error-codes)
+[批量创建/更新明细行](https://open.feishu.cn/document/corehr-v1/workforce_plan/batchSave)
+[批量删除明细行](https://open.feishu.cn/document/corehr-v1/workforce_plan/batchDelete-2)
+[批量创建/更新填报行](https://open.feishu.cn/document/corehr-v1/workforce_plan/batchSave-2)
+[批量删除填报行](https://open.feishu.cn/document/corehr-v1/workforce_plan/batchDelete)
+[查询编制规划方案](https://open.feishu.cn/document/corehr-v1/workforce_plan/list)
+[查询编制规划明细信息（不支持自定义组织）](https://open.feishu.cn/document/corehr-v1/workforce_plan/batch)
+[查询编制规划明细信息（支持自定义组织）](https://open.feishu.cn/document/corehr-v1/workforce_plan/batch_v2)
+
+## 休假
+
+[休假概述](https://open.feishu.cn/document/corehr-v1/leave/overview)
+[创建假期发放记录](https://open.feishu.cn/document/server-docs/corehr-v1/leave/create)
+[删除假期发放记录](https://open.feishu.cn/document/server-docs/corehr-v1/leave/delete)
+[获取假期类型列表](https://open.feishu.cn/document/server-docs/corehr-v1/leave/leave_types)
+[批量查询员工假期余额](https://open.feishu.cn/document/server-docs/corehr-v1/leave/leave_balances)
+[批量查询员工请假记录](https://open.feishu.cn/document/server-docs/corehr-v1/leave/leave_request_history)
+[获取工作日历](https://open.feishu.cn/document/corehr-v1/leave/work_calendar)
+[根据适用条件获取工作日历 ID](https://open.feishu.cn/document/corehr-v1/leave/calendar_by_scope)
+[获取工作日历日期详情](https://open.feishu.cn/document/corehr-v1/leave/work_calendar_date)
+
+## 权限
+
+[人事权限概述](https://open.feishu.cn/document/corehr-v1/authorization/overview)
+[批量查询用户授权](https://open.feishu.cn/document/corehr-v1/authorization/query-2)
+[查询单个用户授权](https://open.feishu.cn/document/corehr-v1/authorization/get_by_param)
+[批量获取角色列表](https://open.feishu.cn/document/server-docs/corehr-v1/authorization/list)
+[为用户授权角色](https://open.feishu.cn/document/corehr-v1/authorization/add_role_assign)
+[更新用户被授权的数据范围](https://open.feishu.cn/document/corehr-v1/authorization/update_role_assign)
+[移除用户被授权的角色](https://open.feishu.cn/document/corehr-v1/authorization/remove_role_assign)
+[查询员工 HRBP / 属地 BP](https://open.feishu.cn/document/corehr-v1/authorization/batch_get)
+[查询部门 HRBP](https://open.feishu.cn/document/corehr-v1/authorization/get_by_department)
+[查询部门 / 地点的 HRBP / 属地 BP](https://open.feishu.cn/document/server-docs/corehr-v1/authorization/query)
+[获取 HRBP 列表](https://open.feishu.cn/document/corehr-v1/authorization/list-2)
+[获取组织类角色授权列表](https://open.feishu.cn/document/server-docs/corehr-v1/authorization/search)
+
+### 事件
+
+[【事件】组织角色授权变更](https://open.feishu.cn/document/server-docs/corehr-v1/authorization/updated)
