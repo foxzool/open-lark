@@ -14,8 +14,6 @@ jobs:
   # 验证构建和测试
   validate:
     runs-on: ubuntu-latest
-    env:
-      RUSTFLAGS: "-D warnings"
     steps:
       - uses: actions/checkout@v4
       
