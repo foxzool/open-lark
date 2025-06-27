@@ -150,18 +150,18 @@ impl LarkAPIError {
                 {
                     error_code.detailed_description().to_string()
                 } else {
-                    format!("API调用失败: {} (错误码: {})", message, code)
+                    format!("API调用失败: {message} (错误码: {code})")
                 }
             }
             Self::MissingAccessToken => "缺少访问令牌，请检查认证配置".to_string(),
-            Self::IllegalParamError(msg) => format!("参数错误: {}", msg),
+            Self::IllegalParamError(msg) => format!("参数错误: {msg}"),
             Self::RequestError(req_err) => {
                 if req_err.contains("timeout") || req_err.contains("timed out") {
                     "请求超时，请检查网络连接".to_string()
                 } else if req_err.contains("connect") || req_err.contains("connection") {
                     "连接失败，请检查网络设置".to_string()
                 } else {
-                    format!("网络请求失败: {}", req_err)
+                    format!("网络请求失败: {req_err}")
                 }
             }
             _ => self.to_string(),

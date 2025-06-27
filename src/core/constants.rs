@@ -34,7 +34,7 @@ impl Display for AccessTokenType {
             AccessTokenType::Tenant => String::from("tenant_access_token"),
             AccessTokenType::User => String::from("user_access_token"),
         };
-        write!(f, "{}", str)
+        write!(f, "{str}")
     }
 }
 

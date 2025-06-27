@@ -247,12 +247,12 @@ impl<T> BaseResponse<T> {
         if !help_links.is_empty() {
             println!("\n🔗 相关链接:");
             for (name, url) in help_links {
-                println!("   {}: {}", name, url);
+                println!("   {name}: {url}");
             }
         }
 
         if let Some(delay) = self.suggested_retry_delay() {
-            println!("\n⏱️ 建议重试延迟: {}秒", delay);
+            println!("\n⏱️ 建议重试延迟: {delay}秒");
         }
     }
 }
