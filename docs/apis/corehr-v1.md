@@ -254,5 +254,63 @@
 [删除成本中心](https://open.feishu.cn/document/corehr-v1/organization-management/cost_center/events/deleted)
 
 ## 组织架构调整
+
 [根据流程 ID 查询组织架构调整记录](https://open.feishu.cn/document/corehr-v1/approval_groups/get)
 [批量查询部门调整内容](https://open.feishu.cn/document/corehr-v1/approval_groups/open_query_department_change_list_by_ids)
+[批量查询人员调整内容](https://open.feishu.cn/document/corehr-v1/approval_groups/open_query_job_change_list_by_ids)
+
+### 事件
+
+[组织架构调整状态变更事件](https://open.feishu.cn/document/corehr-v1/approval_groups/events/updated)
+
+## 岗职务管理
+
+### 序列
+
+[创建序列](https://open.feishu.cn/document/server-docs/corehr-v1/job-management/job_family/create)
+[更新序列](https://open.feishu.cn/document/server-docs/corehr-v1/job-management/job_family/patch)
+[查询单个序列](https://open.feishu.cn/document/server-docs/corehr-v1/job-management/job_family/get)
+[批量查询序列](https://open.feishu.cn/document/server-docs/corehr-v1/job-management/job_family/list)
+[查询当前生效信息发生变更的序列](https://open.feishu.cn/document/corehr-v1/job-management/job_family/query_recent_change)
+[通过序列 ID 批量获取序列信息](https://open.feishu.cn/document/corehr-v1/job-management/job_family/batch_get)
+[删除序列](https://open.feishu.cn/document/server-docs/corehr-v1/job-management/job_family/delete)
+
+#### 事件
+
+[创建序列](https://open.feishu.cn/document/corehr-v1/job-management/job_family/events/created)
+[更新序列](https://open.feishu.cn/document/corehr-v1/job-management/job_family/events/updated)
+[删除序列](https://open.feishu.cn/document/corehr-v1/job-management/job_family/events/deleted)
+
+### 职级
+
+[新建职级](https://open.feishu.cn/document/server-docs/corehr-v1/job-management/job_level/create)
+[更新单个职级](https://open.feishu.cn/document/server-docs/corehr-v1/job-management/job_level/patch)
+[查询单个职级](https://open.feishu.cn/document/server-docs/corehr-v1/job-management/job_level/get)
+[批量查询职级](https://open.feishu.cn/document/server-docs/corehr-v1/job-management/job_level/list)
+[查询当前生效信息发生变更的职级](https://open.feishu.cn/document/corehr-v1/job-management/job_level/query_recent_change)
+[通过职级 ID 批量获取职级信息](https://open.feishu.cn/document/corehr-v1/job-management/job_level/batch_get)
+[删除职级](https://open.feishu.cn/document/server-docs/corehr-v1/job-management/job_level/delete)
+
+#### 事件
+
+[创建职级](https://open.feishu.cn/document/corehr-v1/job-management/job_level/events/created)
+[更新职级](https://open.feishu.cn/document/corehr-v1/job-management/job_level/events/updated)
+[删除职级](https://open.feishu.cn/document/corehr-v1/job-management/job_level/events/deleted)
+
+### 职等
+
+[创建职等](https://open.feishu.cn/document/corehr-v1/job-management/job_grade/create)
+[更新职等](https://open.feishu.cn/document/corehr-v1/job-management/job_grade/patch)
+[查询职等](https://open.feishu.cn/document/corehr-v1/job-management/job_grade/query)
+[查询当前生效信息发生变更的职等](https://open.feishu.cn/document/corehr-v1/job-management/job_grade/query_recent_change)
+[删除职等](https://open.feishu.cn/document/corehr-v1/job-management/job_grade/delete)
+
+#### 事件
+
+[创建职等](https://open.feishu.cn/document/corehr-v1/job-management/job_grade/events/created)
+[更新职等](https://open.feishu.cn/document/corehr-v1/job-management/job_grade/events/updated)
+[删除职等](https://open.feishu.cn/document/corehr-v1/job-management/job_grade/events/deleted)
+
+### 职务
+
+[创建职务](https://open.feishu.cn/document/server-docs/corehr-v1/job-management/job/create)
