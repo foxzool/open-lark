@@ -456,3 +456,61 @@
 ### 事件
 
 [【事件】组织角色授权变更](https://open.feishu.cn/document/server-docs/corehr-v1/authorization/updated)
+
+## 流程
+
+[流程概述](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/overview)
+[接入指南](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/access-guide)
+[常见问题](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/frequently-asked-questions)
+
+### 流程实例
+
+[流程实例资源介绍](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/process-instance/resource-introduction)
+[查询流程实例列表](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/process-instance/list)
+[获取单个流程详情](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/process-instance/get)
+[获取流程表单数据](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/process-instance/get-2)
+[撤销流程](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/process-instance/update-2)
+[撤回流程](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/process-instance/update)
+
+### 审批任务
+
+[审批任务资源介绍](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/approver-task/resource-introduce)
+[获取指定人员审批任务列表](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/approver-task/list)
+[通过/拒绝审批任务](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/approver-task/update)
+[加签审批任务](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/approver-task/update-3
+[转交审批任务](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/approver-task/update-2)
+
+### 流程事件
+
+[流程事件功能介绍](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/events/function-introduction)
+[流程实例状态变化](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/events/update)
+[流程实例信息变更](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/events/updated)
+[流程节点状态变更](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/events/updated-4)
+[审批任务状态变更](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/events/updated-2)
+[抄送单据状态变更](https://open.feishu.cn/document/corehr-v1/process-form_variable_data/events/updated-3)
+
+## 基础薪酬
+
+### 概述
+
+[基础薪酬概述](https://open.feishu.cn/document/corehr-v1/basic-compensation/introduction/compensation-introduction)
+
+### 薪资档案
+
+[批量查询员工薪资档案](https://open.feishu.cn/document/corehr-v1/basic-compensation/archive/query)
+
+### 薪资项/统计指标
+
+[批量查询薪资项](https://open.feishu.cn/document/corehr-v1/basic-compensation/compensation-component-and-metric/list-2)
+[批量查询薪资统计指标](https://open.feishu.cn/document/corehr-v1/basic-compensation/compensation-component-and-metric/list-3)
+[批量获取薪资项分类信息](https://open.feishu.cn/document/corehr-v1/basic-compensation/compensation-component-and-metric/list)
+
+### 薪资标准
+
+[获取员工薪资标准](https://open.feishu.cn/document/server-docs/corehr-v1/compensation_standard/match)
+
+### 薪酬方案
+
+[批量查询薪资方案](https://open.feishu.cn/document/corehr-v1/basic-compensation/plan/list)
+[批量查询定调薪原因](https://open.feishu.cn/document/corehr-v1/basic-compensation/compensation-setting-and-adjustment/list)
+
