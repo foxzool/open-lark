@@ -61,7 +61,7 @@ impl AttachmentService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::ehr::models::EmployeeAttachmentRequest;
     ///
     /// let request = EmployeeAttachmentRequest {

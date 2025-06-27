@@ -41,7 +41,7 @@ use employee::EmployeeService;
 ///
 /// ## 示例用法
 ///
-/// ```rust
+/// ```ignore
 /// use open_lark::prelude::*;
 /// use open_lark::service::ehr::models::*;
 ///

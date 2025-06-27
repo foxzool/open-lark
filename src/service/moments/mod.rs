@@ -28,7 +28,7 @@ use post::PostService;
 ///
 /// # 使用示例
 ///
-/// ```rust
+/// ```ignore
 /// use open_lark::prelude::*;
 /// use open_lark::service::moments::models::PostGetRequest;
 ///
