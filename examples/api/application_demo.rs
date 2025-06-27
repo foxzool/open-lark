@@ -1,5 +1,8 @@
 use dotenvy::dotenv;
-use open_lark::{prelude::*, service::application::models::{UserIdType, DepartmentIdType}};
+use open_lark::{
+    prelude::*,
+    service::application::models::{DepartmentIdType, UserIdType},
+};
 
 /// Application v6 API 功能演示
 ///
@@ -191,10 +194,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Ok(response) => {
             if let Some(data) = response.data {
                 println!("✅ 获取应用可用范围成功");
-                println!(
-                    "   对所有人可用: {:?}",
-                    data.availability.is_visible_to_all
-                );
+                println!("   对所有人可用: {:?}", data.availability.is_visible_to_all);
             }
         }
         Err(e) => println!("❌ 获取应用可用范围失败: {:?}", e),
