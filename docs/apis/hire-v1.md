@@ -209,3 +209,21 @@
 
 [添加笔试结果](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/exam/create)
 [获取笔试列表](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/exam/search)
+
+#### 面试
+
+[获取面试信息](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/interview/list)
+[获取人才面试信息](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/interview/get_by_talent)
+[获取面试评价详细信息（新版）](https://open.feishu.cn/document/hire-v1/candidate-management/delivery-process-management/interview/get-3)
+[批量获取面试评价详细信息（新版）](https://open.feishu.cn/document/hire-v1/candidate-management/delivery-process-management/interview/list-4)
+[获取面试记录附件](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/interview/get-2)
+[获取面试速记明细](https://open.feishu.cn/document/hire-v1/candidate-management/delivery-process-management/interview/get-4)
+[获取面试满意度问卷列表](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/interview/list-2)
+
+#### Offer
+
+[创建 Offer](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/offer/create)
+[更新 Offer 信息](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/offer/update)
+[获取 Offer 信息](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/offer/offer)
+[获取 Offer 详情](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/offer/get)
+[获取 Offer 列表](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/offer/list)
