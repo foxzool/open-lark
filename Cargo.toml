@@ -10,7 +10,7 @@ categories = ["api-bindings"]
 documentation = "https://docs.rs/open-lark"
 repository = "https://github.com/foxzool/open-lark"
 homepage = "https://github.com/foxzool/open-lark"
-license = "MIT OR Apache-2.0"
+license = "Apache-2.0"
 
 [features]
 websocket = ["tokio-tungstenite", "prost", "lark-websocket-protobuf"]
