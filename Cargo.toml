@@ -271,6 +271,10 @@ path = "examples/api/aily_v1_example.rs"
 name = "admin_demo"
 path = "examples/api/admin_demo.rs"
 
+[[example]]
+name = "moments_demo"
+path = "examples/api/moments_demo.rs"
+
 # ===========================================
 # Benchmarks
 # ===========================================
