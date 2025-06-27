@@ -275,6 +275,10 @@ path = "examples/api/admin_demo.rs"
 name = "moments_demo"
 path = "examples/api/moments_demo.rs"
 
+[[example]]
+name = "ehr_demo"
+path = "examples/api/ehr_demo.rs"
+
 # ===========================================
 # Benchmarks
 # ===========================================
