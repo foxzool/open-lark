@@ -208,6 +208,10 @@ name = "tenant_tag_demo"
 path = "examples/api/tenant_tag_demo.rs"
 
 [[example]]
+name = "tenant_v2_query"
+path = "examples/api/tenant_v2_query.rs"
+
+[[example]]
 name = "vc_v1"
 path = "examples/api/vc_v1.rs"
 

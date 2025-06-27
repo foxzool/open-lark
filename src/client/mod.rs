@@ -19,6 +19,7 @@ use crate::{
         minutes::MinutesService,
         search::SearchService,
         task::TaskV2Service,
+        tenant::TenantService,
         tenant_tag::TenantTagService,
         vc::VcService,
         // 向后兼容的导入
@@ -56,6 +57,7 @@ pub struct LarkClient {
     pub minutes: MinutesService,
     pub search: SearchService,
     pub task: TaskV2Service,
+    pub tenant: TenantService,
     pub tenant_tag: TenantTagService,
     pub vc: VcService,
     // 云文档服务聚合
@@ -134,6 +136,7 @@ impl LarkClientBuilder {
             minutes: MinutesService::new((*config).clone()),
             search: SearchService::new(Arc::clone(&config)),
             task: TaskV2Service::new((*config).clone()),
+            tenant: TenantService::new((*config).clone()),
             tenant_tag: TenantTagService::new((*config).clone()),
             vc: VcService::new((*config).clone()),
             // 云文档服务聚合
