@@ -235,6 +235,10 @@ path = "examples/api/task_demo.rs"
 name = "mail_demo"
 path = "examples/api/mail_demo.rs"
 
+[[example]]
+name = "application_demo"
+path = "examples/api/application_demo.rs"
+
 # ===========================================
 # Benchmarks
 # ===========================================
