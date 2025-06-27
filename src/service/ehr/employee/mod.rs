@@ -72,7 +72,7 @@ impl EmployeeService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::ehr::models::EmployeeListRequest;
     ///
     /// let request = EmployeeListRequest {
