@@ -261,6 +261,7 @@ impl SectionService {
     }
 
     /// 获取自定义分组任务列表
+    #[allow(clippy::too_many_arguments)]
     pub async fn tasks(
         &self,
         section_guid: &str,

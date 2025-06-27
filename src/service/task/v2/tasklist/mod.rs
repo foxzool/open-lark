@@ -327,6 +327,7 @@ impl TasklistService {
     }
 
     /// 获取清单任务列表
+    #[allow(clippy::too_many_arguments)]
     pub async fn tasks(
         &self,
         tasklist_guid: &str,
