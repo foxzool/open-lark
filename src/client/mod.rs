@@ -22,6 +22,7 @@ use crate::{
         tenant::TenantService,
         tenant_tag::TenantTagService,
         vc::VcService,
+        verification::VerificationService,
         // 向后兼容的导入
         AssistantService,
         BitableService,
@@ -60,6 +61,7 @@ pub struct LarkClient {
     pub tenant: TenantService,
     pub tenant_tag: TenantTagService,
     pub vc: VcService,
+    pub verification: VerificationService,
     // 云文档服务聚合
     pub cloud_docs: CloudDocsService,
     // 向后兼容的字段
@@ -139,6 +141,7 @@ impl LarkClientBuilder {
             tenant: TenantService::new((*config).clone()),
             tenant_tag: TenantTagService::new((*config).clone()),
             vc: VcService::new((*config).clone()),
+            verification: VerificationService::new((*config).clone()),
             // 云文档服务聚合
             cloud_docs,
             // 向后兼容的字段（重新创建实例）

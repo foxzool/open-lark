@@ -212,6 +212,10 @@ name = "tenant_v2_query"
 path = "examples/api/tenant_v2_query.rs"
 
 [[example]]
+name = "verification_v1_get"
+path = "examples/api/verification_v1_get.rs"
+
+[[example]]
 name = "vc_v1"
 path = "examples/api/vc_v1.rs"
 

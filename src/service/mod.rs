@@ -18,6 +18,7 @@ pub mod task;
 pub mod tenant;
 pub mod tenant_tag;
 pub mod vc;
+pub mod verification;
 
 // 云文档服务模块
 pub mod cloud_docs;
@@ -41,6 +42,7 @@ pub use task::TaskV2Service;
 pub use tenant::TenantService;
 pub use tenant_tag::TenantTagService;
 pub use vc::VcService;
+pub use verification::VerificationService;
 
 // 服务类型 re-export
 pub use cloud_docs::{
