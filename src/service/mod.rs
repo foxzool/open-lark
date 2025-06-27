@@ -12,6 +12,7 @@ pub mod helpdesk;
 pub mod im;
 pub mod minutes;
 pub mod search;
+pub mod task;
 pub mod tenant_tag;
 pub mod vc;
 
@@ -31,6 +32,7 @@ pub use directory::DirectoryService;
 pub use group::GroupService;
 pub use helpdesk::HelpdeskService;
 pub use minutes::MinutesService;
+pub use task::TaskV2Service;
 pub use tenant_tag::TenantTagService;
 pub use vc::VcService;
 
