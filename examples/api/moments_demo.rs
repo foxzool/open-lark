@@ -4,10 +4,9 @@ use open_lark::{
     prelude::*,
     service::moments::{
         events::{
-            DefaultMomentsEventHandler, MomentsEvent, MomentsEventDispatcher,
-            MomentsEventHandler,
+            DefaultMomentsEventHandler, MomentsEvent, MomentsEventDispatcher, MomentsEventHandler,
         },
-        models::{PostGetRequest, CommentEvent, PostEvent, PostStatisticsEvent, ReactionEvent},
+        models::{CommentEvent, PostEvent, PostGetRequest, PostStatisticsEvent, ReactionEvent},
     },
 };
 
