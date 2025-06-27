@@ -2,7 +2,7 @@ use dotenvy::dotenv;
 use log::{error, info};
 use open_lark::{
     prelude::*,
-    service::ehr::models::{EmployeeListRequest, EmployeeAttachmentRequest},
+    service::ehr::models::{EmployeeAttachmentRequest, EmployeeListRequest},
 };
 
 #[tokio::main]
@@ -44,7 +44,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         ]),
     };
 
-    match client.ehr.employee.list_employees(basic_request, None).await {
+    match client
+        .ehr
+        .employee
+        .list_employees(basic_request, None)
+        .await
+    {
         Ok(response) => {
             println!("✅ 获取员工列表成功");
             if let Some(data) = &response.data {
@@ -131,17 +136,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         ]),
     };
 
-    match client.ehr.employee.list_employees(advanced_request, None).await {
+    match client
+        .ehr
+        .employee
+        .list_employees(advanced_request, None)
+        .await
+    {
         Ok(response) => {
             println!("✅ 获取详细员工信息成功");
             if let Some(data) = &response.data {
                 if let Some(employees) = &data.employees.items {
                     println!("查询到员工数: {}", employees.len());
-                    
+
                     // 展示第一个员工的详细信息
                     if let Some(employee) = employees.first() {
                         println!("\n📋 员工详细档案:");
-                        
+
                         // 基本信息
                         println!("基本信息:");
                         if let Some(name) = &employee.name {
@@ -156,7 +166,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         if let Some(birthday) = &employee.birthday {
                             println!("  生日: {}", birthday);
                         }
-                        
+
                         // 入职信息
                         if let Some(hire_info) = &employee.hire_info {
                             println!("入职信息:");
@@ -167,7 +177,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                 println!("  合同类型: {}", contract_type);
                             }
                         }
-                        
+
                         // 个人信息
                         if let Some(personal_info) = &employee.personal_info {
                             println!("个人信息:");
@@ -181,7 +191,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                 println!("  最高学历: {}", highest_education);
                             }
                         }
-                        
+
                         // 教育经历
                         if let Some(education_info) = &employee.education_info {
                             if !education_info.is_empty() {
@@ -200,7 +210,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                 }
                             }
                         }
-                        
+
                         // 工作经历
                         if let Some(work_experience) = &employee.work_experience {
                             if !work_experience.is_empty() {
@@ -256,9 +266,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
                 if let Some(file_content) = &data.attachment.file_content {
                     println!("  文件内容长度: {} chars (base64编码)", file_content.len());
-                    println!("  文件内容预览: {}...", 
-                        file_content.chars().take(50).collect::<String>());
-                    
+                    println!(
+                        "  文件内容预览: {}...",
+                        file_content.chars().take(50).collect::<String>()
+                    );
+
                     // 实际应用中，这里可以将base64内容解码并保存到文件
                     info!("💾 提示: 在实际应用中，可以使用base64解码保存文件");
                 }
@@ -360,17 +372,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         ]),
     };
 
-    match client.ehr.employee.list_employees(department_request, None).await {
+    match client
+        .ehr
+        .employee
+        .list_employees(department_request, None)
+        .await
+    {
         Ok(response) => {
             println!("✅ 查询部门员工成功");
             if let Some(data) = &response.data {
                 if let Some(employees) = &data.employees.items {
                     println!("部门员工统计:");
-                    
+
                     let mut active_count = 0;
                     let mut inactive_count = 0;
                     let mut other_count = 0;
-                    
+
                     for employee in employees {
                         if let Some(status) = &employee.status {
                             if let Some(status_text) = &status.status {
@@ -382,7 +399,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             }
                         }
                     }
-                    
+
                     println!("  在职员工: {} 人", active_count);
                     println!("  离职员工: {} 人", inactive_count);
                     println!("  其他状态: {} 人", other_count);
@@ -402,6 +419,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("- 在生产环境中请使用真实的员工ID和附件ID");
     println!("- 下载的附件内容为base64编码，需要解码后使用");
     println!("- 建议对敏感的人事数据进行加密存储和传输");
-    
+
     Ok(())
 }

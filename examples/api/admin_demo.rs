@@ -133,7 +133,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     {
         Ok(response) => {
             println!("✅ 创建勋章成功");
-            let badge_id = response.data.as_ref()
+            let badge_id = response
+                .data
+                .as_ref()
                 .and_then(|data| data.badge.badge_id.clone())
                 .unwrap_or_default();
             println!("勋章ID: {}", badge_id);
