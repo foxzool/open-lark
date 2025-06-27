@@ -287,6 +287,10 @@ path = "examples/api/corehr_demo.rs"
 name = "payroll_demo"
 path = "examples/api/payroll_demo.rs"
 
+[[example]]
+name = "hire_v1_example"
+path = "examples/api/hire_v1_example.rs"
+
 # ===========================================
 # Benchmarks
 # ===========================================
