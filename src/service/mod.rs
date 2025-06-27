@@ -2,6 +2,7 @@
 pub mod approval;
 pub mod attendance;
 pub mod authentication;
+pub mod bot;
 pub mod calendar;
 pub mod cardkit;
 pub mod directory;
@@ -22,6 +23,7 @@ pub use cloud_docs::{assistant, bitable, board, comments, drive, permission, she
 
 // 核心服务 re-export
 pub use approval::ApprovalService;
+pub use bot::BotService;
 pub use calendar::CalendarService;
 pub use cardkit::CardkitService;
 pub use directory::DirectoryService;
