@@ -245,3 +245,6 @@
 [创建成本中心版本](https://open.feishu.cn/document/server-docs/corehr-v1/organization-management/cost_center/cost_center-version/create)
 [更正成本中心版本](https://open.feishu.cn/document/server-docs/corehr-v1/organization-management/cost_center/cost_center-version/patch)
 [撤销成本中心版本](https://open.feishu.cn/document/server-docs/corehr-v1/organization-management/cost_center/cost_center-version/delete)
+#### 事件
+[创建成本中心](https://open.feishu.cn/document/corehr-v1/organization-management/cost_center/events/created)
+[更新成本中心](https://open.feishu.cn/document/corehr-v1/organization-management/cost_center/events/updated)
