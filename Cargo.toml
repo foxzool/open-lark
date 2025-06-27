@@ -263,6 +263,10 @@ path = "examples/api/application_demo.rs"
 name = "ai_comprehensive"
 path = "examples/api/ai_comprehensive.rs"
 
+[[example]]
+name = "aily_v1_example"
+path = "examples/api/aily_v1_example.rs"
+
 # ===========================================
 # Benchmarks
 # ===========================================

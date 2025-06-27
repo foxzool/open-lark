@@ -4,6 +4,7 @@ use crate::{
     core::{config::Config, constants::AppType},
     service::{
         ai::AiService,
+        aily::AilyService,
         apass::ApassService,
         application::ApplicationService,
         approval::ApprovalService,
@@ -47,6 +48,7 @@ pub struct LarkClient {
     pub config: Config,
     // 核心服务
     pub ai: AiService,
+    pub aily: AilyService,
     pub apass: ApassService,
     pub application: ApplicationService,
     pub approval: ApprovalService,
@@ -130,6 +132,7 @@ impl LarkClientBuilder {
             config: self.config.clone(),
             // 核心服务
             ai: AiService::new((*config).clone()),
+            aily: AilyService::new((*config).clone()),
             apass: ApassService::new((*config).clone()),
             application: ApplicationService::new((*config).clone()),
             approval: ApprovalService::new((*config).clone()),

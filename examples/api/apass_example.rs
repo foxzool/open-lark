@@ -1,9 +1,9 @@
 use open_lark::{
     prelude::*,
     service::apass::models::{
-        AuditLogListRequest, FlowExecuteRequest, FunctionInvokeRequest, RecordSearchRequest,
-        RecordQueryRequest, SeatActivityListRequest, SeatAssignmentListRequest, UserTaskQueryRequest,
-        EnvironmentVariableQueryRequest,
+        AuditLogListRequest, EnvironmentVariableQueryRequest, FlowExecuteRequest,
+        FunctionInvokeRequest, RecordQueryRequest, RecordSearchRequest, SeatActivityListRequest,
+        SeatAssignmentListRequest, UserTaskQueryRequest,
     },
 };
 use serde_json::json;
