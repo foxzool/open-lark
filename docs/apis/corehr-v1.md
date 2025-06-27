@@ -314,3 +314,80 @@
 ### 职务
 
 [创建职务](https://open.feishu.cn/document/server-docs/corehr-v1/job-management/job/create)
+[删除职务](https://open.feishu.cn/document/server-docs/corehr-v1/job-management/job/delete)
+[更新职务](https://open.feishu.cn/document/server-docs/corehr-v1/job-management/job/patch)
+[查询单个职务](https://open.feishu.cn/document/corehr-v1/job-management/job/get)
+[批量查询职务](https://open.feishu.cn/document/corehr-v1/job-management/job/list)
+[查询当前生效信息发生变更的职务](https://open.feishu.cn/document/corehr-v1/job-management/job/query_recent_change)
+
+#### 事件
+
+[创建职务](https://open.feishu.cn/document/corehr-v1/job-management/job/events/created)
+[更新职务](https://open.feishu.cn/document/corehr-v1/job-management/job/events/updated)
+[删除职务](https://open.feishu.cn/document/corehr-v1/job-management/job/events/deleted)
+
+## 入职
+
+[概览](https://open.feishu.cn/document/corehr-v1/pre_hire/guide)
+[撤销入职](https://open.feishu.cn/document/corehr-v1/pre_hire/withdraw_onboarding)
+[恢复入职](https://open.feishu.cn/document/corehr-v1/pre_hire/restore_flow_instance)
+[直接创建待入职](https://open.feishu.cn/document/server-docs/corehr-v1/pre_hire/create)
+[更新待入职信息](https://open.feishu.cn/document/corehr-v1/pre_hire/patch)
+[删除待入职信息](https://open.feishu.cn/document/corehr-v1/pre_hire/delete)
+[查询待入职信息](https://open.feishu.cn/document/corehr-v1/pre_hire/query)
+[搜索待入职信息](https://open.feishu.cn/document/corehr-v1/pre_hire/search)
+[获取入职流程列表](https://open.feishu.cn/document/corehr-v1/pre_hire/onboarding-flow)
+[流转入职任务](https://open.feishu.cn/document/corehr-v1/pre_hire/transit_task)
+[操作员工完成入职](https://open.feishu.cn/document/corehr-v1/pre_hire/complete)
+
+### 扫码入职
+
+[创建入职二维码](https://open.feishu.cn/document/corehr-v1/pre_hire/onboarding-qr-code/create-onboarding-qr-code)
+[获取入职二维码维度](https://open.feishu.cn/document/corehr-v1/pre_hire/onboarding-qr-code/onboarding-qr-code-dimension)
+
+#### 事件
+
+[入职二维码失效](https://open.feishu.cn/document/corehr-v1/pre_hire/onboarding-qr-code/event/onboarding-qr-code-inactive)
+
+### 事件
+
+[入职流程状态变更](https://open.feishu.cn/document/corehr-v1/pre_hire/pre-hire-events/onboarding_task_changed)
+[入职信息变更](https://open.feishu.cn/document/corehr-v1/pre_hire/pre-hire-events/updated)
+[员工完成入职](https://open.feishu.cn/document/server-docs/corehr-v1/pre_hire/employed)
+
+## 试用期
+
+[新增试用期考核信息](https://open.feishu.cn/document/corehr-v1/probation/create)
+[启用/停用试用期考核功能](https://open.feishu.cn/document/corehr-v1/probation/enable_disable_assessment)
+[更新试用期考核信息](https://open.feishu.cn/document/corehr-v1/probation/patch)
+[搜索试用期信息](https://open.feishu.cn/document/corehr-v1/probation/search)
+[删除试用期考核信息](https://open.feishu.cn/document/corehr-v1/probation/delete)
+[发起转正](https://open.feishu.cn/document/corehr-v1/probation/submit)
+[撤销转正](https://open.feishu.cn/document/corehr-v1/probation/withdraw)
+
+### 事件
+
+[员工完成转正](https://open.feishu.cn/document/server-docs/corehr-v1/probation/converted)
+[试用期状态变更](https://open.feishu.cn/document/corehr-v1/probation/probation-events/updated)
+
+## 异动
+
+[发起异动错误校验](https://open.feishu.cn/document/corehr-v1/job_change/job_change_error_msg)
+[发起员工异动](https://open.feishu.cn/document/corehr-v1/job_change/create-2)
+[获取异动类型列表](https://open.feishu.cn/document/server-docs/corehr-v1/job_change/query)
+[获取异动原因列表](https://open.feishu.cn/document/server-docs/corehr-v1/job_change/query-2)
+[搜索员工异动信息](https://open.feishu.cn/document/server-docs/corehr-v1/job_change/search)
+[撤销异动](https://open.feishu.cn/document/corehr-v1/job_change/revoke)
+
+### 事件
+[异动状态变更](https://open.feishu.cn/document/corehr-v1/job_change/job-change-events/status_updated)
+[异动信息变更](https://open.feishu.cn/document/corehr-v1/job_change/job-change-events/updated-2)
+[员工完成异动](https://open.feishu.cn/document/server-docs/corehr-v1/job_change/changed)
+
+## 离职
+
+[查询员工离职原因列表](https://open.feishu.cn/document/server-docs/corehr-v1/offboarding/query)
+[操作员工离职](https://open.feishu.cn/document/corehr-v1/offboarding/submit_v2)
+[编辑离职信息](https://open.feishu.cn/document/corehr-v1/offboarding/edit)
+[撤销离职](https://open.feishu.cn/document/corehr-v1/offboarding/revoke)
+[搜索离职信息](https://open.feishu.cn/document/server-docs/corehr-v1/offboarding/search)

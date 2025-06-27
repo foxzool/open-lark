@@ -15,6 +15,7 @@ pub mod mail;
 pub mod minutes;
 pub mod search;
 pub mod task;
+pub mod tenant;
 pub mod tenant_tag;
 pub mod vc;
 
@@ -37,6 +38,7 @@ pub use helpdesk::HelpdeskService;
 pub use mail::MailService;
 pub use minutes::MinutesService;
 pub use task::TaskV2Service;
+pub use tenant::TenantService;
 pub use tenant_tag::TenantTagService;
 pub use vc::VcService;
 
