@@ -1,5 +1,6 @@
 // 核心服务模块
 pub mod ai;
+pub mod aily;
 pub mod apass;
 pub mod application;
 pub mod approval;
@@ -32,6 +33,7 @@ pub use cloud_docs::{assistant, bitable, board, comments, drive, permission, she
 
 // 核心服务 re-export
 pub use ai::AiService;
+pub use aily::AilyService;
 pub use apass::ApassService;
 pub use application::ApplicationService;
 pub use approval::ApprovalService;

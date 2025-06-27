@@ -18,7 +18,7 @@ docs/apis 目录下是接口文档链接地址
 
 生成代码后, 先格式化, 再代码检查
 
-examples 需要用 dotenv 读取 本地.env配置
+examples 需要用 dotenvy 读取 本地.env配置
 
 在 examples/api目录下, 建立每个接口的单独example
 

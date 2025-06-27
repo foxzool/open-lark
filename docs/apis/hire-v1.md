@@ -227,3 +227,115 @@
 [获取 Offer 信息](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/offer/offer)
 [获取 Offer 详情](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/offer/get)
 [获取 Offer 列表](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/offer/list)
+[更新 Offer 状态](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/offer/offer_status)
+[更新实习 Offer 入/离职状态](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/offer/intern_offer_status)
+
+##### 事件
+
+[Offer 状态变更](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/offer/events/status_changed)
+
+#### 背调
+
+[获取背调信息列表](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/background_check_order/list)
+
+#### 三方协议
+
+[创建三方协议](https://open.feishu.cn/document/hire-v1/candidate-management/delivery-process-management/tripartite_agreement/create)
+[获取三方协议](https://open.feishu.cn/document/hire-v1/candidate-management/delivery-process-management/tripartite_agreement/list)
+[更新三方协议](https://open.feishu.cn/document/hire-v1/candidate-management/delivery-process-management/tripartite_agreement/update)
+[删除三方协议](https://open.feishu.cn/document/hire-v1/candidate-management/delivery-process-management/tripartite_agreement/delete)
+
+#### 入职
+
+[更新 e-HR 导入任务结果](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/onboard/patch-2)
+[操作候选人入职](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/onboard/transfer_onboard)
+[取消候选人入职](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/onboard/cancel_onboard)
+[更新员工状态](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/onboard/patch)
+[通过投递 ID 获取入职信息](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/onboard/get_by_application)
+[通过员工 ID 获取入职信息](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/onboard/get)
+
+##### 事件
+
+[导入 e-HR](https://open.feishu.cn/document/hire-v1/candidate-management/delivery-process-management/onboard/events/imported-2)
+[导入 e-HR（实习 Offer）](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/delivery-process-management/onboard/events/imported)
+
+### 招聘进程跟进
+
+[批量获取待办事项](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/recruitment-process-follow-up/list)
+[获取简历评估任务列表](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/recruitment-process-follow-up/list-3)
+[获取笔试阅卷任务列表](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/recruitment-process-follow-up/list-2)
+[获取面试任务列表](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/recruitment-process-follow-up/list-4)
+
+### 备注
+
+[创建备注](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/note/create)
+[更新备注](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/note/patch)
+[获取备注](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/note/get)
+[获取备注列表](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/note/list)
+[删除备注](https://open.feishu.cn/document/hire-v1/candidate-management/note/delete)
+
+#### 简历来源
+
+[获取简历来源列表](https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/resume_source/list)
+
+## 生态对接
+
+[背调/笔试生态接入概览文档](https://open.feishu.cn/document/hire-v1/ecological-docking/summary)
+
+### 账号
+
+[创建账号自定义字段](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_account_custom_field/create)
+[更新账号自定义字段](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_account_custom_field/batch_update)
+[删除账号自定义字段](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_account_custom_field/batch_delete)
+
+#### 事件
+
+[账号绑定](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_account/events/created)
+
+### 背调
+
+[创建背调自定义字段](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_background_check_custom_field/create)
+[更新背调自定义字段](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_background_check_custom_field/batch_update)
+[删除背调自定义字段](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_background_check_custom_field/batch_delete)
+[创建背调套餐和附加调查项](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_background_check_package/create)
+[更新背调套餐和附加调查项](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_background_check_package/batch_update)
+[删除背调套餐和附加调查项](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_background_check_package/batch_delete)
+[更新背调订单进度](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_background_check/update_progress)
+[回传背调订单的最终结果](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_background_check/update_result)
+[终止背调订单](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_background_check/cancel)
+
+#### 事件
+
+[创建背调](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_background_check/events/created)
+[终止背调](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_background_check/events/canceled)
+
+### 笔试
+
+[创建试卷列表](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_exam_paper/create)
+[更新试卷列表](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_exam_paper/batch_update)
+[删除试卷列表](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_exam_paper/batch_delete)
+[回传笔试安排结果](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_exam/login_info)
+[回传笔试结果](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_exam/update_result)
+
+#### 事件
+
+[创建笔试](https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/eco_exam/events/created)
+
+## 内推账户
+
+[启用内推账户](https://open.feishu.cn/document/hire-v1/referral_account/enable)
+[查询内推账户](https://open.feishu.cn/document/hire-v1/referral_account/get_account_assets)
+[注册内推账户](https://open.feishu.cn/document/hire-v1/referral_account/create)
+[停用内推账户](https://open.feishu.cn/document/hire-v1/referral_account/deactivate)
+[全额提取内推账户余额](https://open.feishu.cn/document/hire-v1/referral_account/withdraw)
+[内推账户提现数据对账](https://open.feishu.cn/document/hire-v1/referral_account/reconciliation)
+
+### 事件
+
+[内推账户余额变更](https://open.feishu.cn/document/hire-v1/referral_account/events/assets_update)
+
+## 附件
+
+[创建附件](https://open.feishu.cn/document/server-docs/hire-v1/attachment/create_attachment)
+[获取附件信息](https://open.feishu.cn/document/server-docs/hire-v1/attachment/get)
+[获取附件 PDF 格式下载链接](https://open.feishu.cn/document/server-docs/hire-v1/attachment/preview)
