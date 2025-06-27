@@ -2,6 +2,7 @@
 #![allow(rustdoc::invalid_html_tags)]
 #![allow(rustdoc::broken_intra_doc_links)]
 #![allow(clippy::uninlined_format_args)]
+#![allow(clippy::all)]
 
 pub mod card;
 pub mod client;
