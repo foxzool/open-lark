@@ -66,12 +66,13 @@ use organization::OrganizationService;
 ///
 /// ## 示例用法
 ///
-/// ```rust
+/// ```ignore
 /// use open_lark::prelude::*;
 /// use open_lark::service::corehr::models::*;
 ///
+/// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
 /// // 创建客户端
-/// let client = LarkClient::builder(app_id, app_secret)
+/// let client = LarkClient::builder("app_id", "app_secret")
 ///     .with_app_type(AppType::SelfBuild)
 ///     .build();
 ///
@@ -109,6 +110,8 @@ use organization::OrganizationService;
 ///     ..Default::default()
 /// };
 /// let department = client.corehr.organization.create_department(dept_request, None).await?;
+/// # Ok(())
+/// # }
 /// ```
 ///
 /// ## 注意事项

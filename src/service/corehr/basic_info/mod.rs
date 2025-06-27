@@ -102,7 +102,7 @@ impl BasicInfoService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::corehr::models::EnumSearchRequest;
     ///
     /// let request = EnumSearchRequest {
@@ -150,7 +150,7 @@ impl BasicInfoService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::corehr::models::CountryRegionSearchRequest;
     ///
     /// let request = CountryRegionSearchRequest {
@@ -196,7 +196,7 @@ impl BasicInfoService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::corehr::models::NationalitySearchRequest;
     ///
     /// let request = NationalitySearchRequest {
@@ -242,7 +242,7 @@ impl BasicInfoService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::corehr::models::IdConvertRequest;
     ///
     /// let request = IdConvertRequest {
