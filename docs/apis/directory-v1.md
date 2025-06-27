@@ -1,4 +1,4 @@
-# 组织架构模块
+# 组织架构
 
 [组织架构概述](https://open.feishu.cn/document/directory-v1/overview)
 [字段枚举](https://open.feishu.cn/document/directory-v1/field-enumeration)

@@ -12,6 +12,8 @@ open-lark 是飞书开放平台的非官方 Rust SDK，支持自定义机器人�
 
 ### Building and Testing
 
+docs/apis 目录下是接口文档链接地址
+
 编写接口前, 参考之前的api写法
 
 生成代码后, 先格式化, 再代码检查
@@ -19,6 +21,8 @@ open-lark 是飞书开放平台的非官方 Rust SDK，支持自定义机器人�
 examples 需要用 dotenv 读取 本地.env配置
 
 在 examples/api目录下, 建立每个接口的单独example
+
+发布版本前, 要更新Changelog 和 README
 
 ```bash
 # Build the project

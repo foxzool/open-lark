@@ -1,4 +1,4 @@
-# 任务模块
+# 任务
 
 [任务概述](https://open.feishu.cn/document/task-v2/overview)
 [常见问题](https://open.feishu.cn/document/task-v2/faq)
@@ -72,3 +72,18 @@
 [删除自定义分组](https://open.feishu.cn/document/task-v2/section/delete)
 [获取自定义分组列表](https://open.feishu.cn/document/task-v2/section/list)
 [获取自定义分组任务列表](https://open.feishu.cn/document/task-v2/section/tasks)
+
+## 自定义字段
+
+[自定义字段概述](https://open.feishu.cn/document/task-v2/custom_field/custom-field-overview)
+[创建自定义字段](https://open.feishu.cn/document/task-v2/custom_field/create)
+[获取自定义字段](https://open.feishu.cn/document/task-v2/custom_field/get)
+[更新自定义字段](https://open.feishu.cn/document/task-v2/custom_field/patch)
+[列取自定义字段](https://open.feishu.cn/document/task-v2/custom_field/list)
+[将自定义字段加入资源](https://open.feishu.cn/document/task-v2/custom_field/add)
+[将自定义字段移出资源](https://open.feishu.cn/document/task-v2/custom_field/remove)
+
+## 自定义字段选项
+
+[创建自定义任务选项](https://open.feishu.cn/document/task-v2/custom_field-option/create)
+[更新自定义字段选项](https://open.feishu.cn/document/task-v2/custom_field-option/patch)

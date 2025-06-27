@@ -1,4 +1,4 @@
-# 群组模块
+# 群组
 
 [群组概述](https://open.feishu.cn/document/server-docs/group/overview)
 

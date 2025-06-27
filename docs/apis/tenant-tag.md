@@ -1,4 +1,4 @@
-# 企业自定义群标签模块
+# 企业自定义群标签
 
 [查询实体与标签的绑定关系](https://open.feishu.cn/document/tenant-tag/get)
 [创建标签](https://open.feishu.cn/document/tenant-tag/create)
