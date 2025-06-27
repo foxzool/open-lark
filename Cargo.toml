@@ -223,6 +223,10 @@ path = "examples/api/approval_demo.rs"
 name = "bot_demo"
 path = "examples/api/bot_demo.rs"
 
+[[example]]
+name = "helpdesk_demo"
+path = "examples/api/helpdesk_demo.rs"
+
 # ===========================================
 # Benchmarks
 # ===========================================
