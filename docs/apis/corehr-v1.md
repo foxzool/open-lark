@@ -253,3 +253,6 @@
 [更新成本中心](https://open.feishu.cn/document/corehr-v1/organization-management/cost_center/events/updated)
 [删除成本中心](https://open.feishu.cn/document/corehr-v1/organization-management/cost_center/events/deleted)
 
+## 组织架构调整
+[根据流程 ID 查询组织架构调整记录](https://open.feishu.cn/document/corehr-v1/approval_groups/get)
+[批量查询部门调整内容](https://open.feishu.cn/document/corehr-v1/approval_groups/open_query_department_change_list_by_ids)

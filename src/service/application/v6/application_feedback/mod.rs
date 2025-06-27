@@ -57,6 +57,7 @@ impl ApplicationFeedbackService {
     }
 
     /// 获取应用反馈列表
+    #[allow(clippy::too_many_arguments)]
     pub async fn list(
         &self,
         app_id: &str,
