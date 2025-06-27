@@ -68,6 +68,10 @@ name = "client_setup"
 path = "examples/basic/client_setup.rs"
 
 [[example]]
+name = "apass_example"
+path = "examples/api/apass_example.rs"
+
+[[example]]
 name = "send_message"
 path = "examples/api/send_message.rs"
 
@@ -254,6 +258,10 @@ path = "examples/api/mail_demo.rs"
 [[example]]
 name = "application_demo"
 path = "examples/api/application_demo.rs"
+
+[[example]]
+name = "ai_comprehensive"
+path = "examples/api/ai_comprehensive.rs"
 
 # ===========================================
 # Benchmarks
