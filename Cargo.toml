@@ -216,6 +216,10 @@ name = "verification_v1_get"
 path = "examples/api/verification_v1_get.rs"
 
 [[example]]
+name = "personal_settings_v1_system_status"
+path = "examples/api/personal_settings_v1_system_status.rs"
+
+[[example]]
 name = "vc_v1"
 path = "examples/api/vc_v1.rs"
 
