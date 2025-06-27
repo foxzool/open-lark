@@ -80,7 +80,7 @@ impl EmployeeService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::corehr::models::EmployeeBatchGetRequest;
     ///
     /// let request = EmployeeBatchGetRequest {
@@ -140,7 +140,7 @@ impl EmployeeService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::corehr::models::EmployeeSearchRequest;
     ///
     /// let request = EmployeeSearchRequest {

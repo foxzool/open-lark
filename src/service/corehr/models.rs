@@ -4,7 +4,7 @@ use serde_json::Value;
 // ============ 通用结构 ============
 
 /// 多语言文本
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct I18nText {
     /// 中文
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -72,7 +72,7 @@ pub struct EnumInfo {
 }
 
 /// 查询国家/地区信息请求
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct CountryRegionSearchRequest {
     /// 分页大小
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -103,7 +103,7 @@ pub struct CountryRegion {
 }
 
 /// 查询国籍信息请求
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct NationalitySearchRequest {
     /// 分页大小
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -130,7 +130,7 @@ pub struct Nationality {
 // ============ 员工信息相关结构 ============
 
 /// 批量查询员工信息请求
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct EmployeeBatchGetRequest {
     /// 员工ID列表
     pub employee_ids: Vec<String>,
@@ -149,7 +149,7 @@ pub struct EmployeeBatchGetRequest {
 }
 
 /// 搜索员工信息请求
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct EmployeeSearchRequest {
     /// 分页大小
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -800,7 +800,7 @@ pub struct PreHireCreateRequest {
 }
 
 /// 待入职信息搜索请求
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct PreHireSearchRequest {
     /// 分页大小
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -880,7 +880,7 @@ pub struct JobChangeCreateRequest {
 }
 
 /// 异动搜索请求
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct JobChangeSearchRequest {
     /// 分页大小
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -964,7 +964,7 @@ pub struct OffboardingCreateRequest {
 }
 
 /// 离职搜索请求
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct OffboardingSearchRequest {
     /// 分页大小
     #[serde(skip_serializing_if = "Option::is_none")]

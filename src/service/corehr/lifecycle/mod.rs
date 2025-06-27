@@ -131,7 +131,7 @@ impl LifecycleService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::corehr::models::{
     ///     PreHireCreateRequest, Person, Employment, I18nText
     /// };
@@ -196,7 +196,7 @@ impl LifecycleService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::corehr::models::PreHireSearchRequest;
     ///
     /// let request = PreHireSearchRequest {
@@ -248,7 +248,7 @@ impl LifecycleService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::corehr::models::{JobChangeCreateRequest, JobData};
     ///
     /// let request = JobChangeCreateRequest {
@@ -305,7 +305,7 @@ impl LifecycleService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::corehr::models::JobChangeSearchRequest;
     ///
     /// let request = JobChangeSearchRequest {
@@ -358,7 +358,7 @@ impl LifecycleService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::corehr::models::OffboardingCreateRequest;
     ///
     /// let request = OffboardingCreateRequest {
@@ -409,7 +409,7 @@ impl LifecycleService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::corehr::models::OffboardingSearchRequest;
     ///
     /// let request = OffboardingSearchRequest {

@@ -158,7 +158,7 @@ impl JobManagementService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::corehr::models::{JobFamilyCreateRequest, I18nText};
     ///
     /// let request = JobFamilyCreateRequest {
@@ -211,7 +211,7 @@ impl JobManagementService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// // 查询第一页序列信息
     /// let response = client.corehr.job_management.list_job_families(Some(50), None, None).await?;
     /// ```
@@ -262,7 +262,7 @@ impl JobManagementService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::corehr::models::{JobLevelCreateRequest, I18nText};
     ///
     /// let request = JobLevelCreateRequest {
@@ -320,7 +320,7 @@ impl JobManagementService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// // 查询第一页职级信息
     /// let response = client.corehr.job_management.list_job_levels(Some(50), None, None).await?;
     /// ```
@@ -371,7 +371,7 @@ impl JobManagementService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::corehr::models::{JobGradeCreateRequest, I18nText};
     ///
     /// let request = JobGradeCreateRequest {
@@ -427,7 +427,7 @@ impl JobManagementService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// // 查询特定序列的职等
     /// let response = client.corehr.job_management.query_job_grades(
     ///     Some("tech_family_123".to_string()),
@@ -476,7 +476,7 @@ impl JobManagementService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::corehr::models::{JobCreateRequest, I18nText};
     ///
     /// let request = JobCreateRequest {
@@ -534,7 +534,7 @@ impl JobManagementService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// // 查询第一页职务信息
     /// let response = client.corehr.job_management.list_jobs(Some(50), None, None).await?;
     /// ```

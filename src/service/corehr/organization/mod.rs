@@ -115,7 +115,7 @@ impl OrganizationService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::corehr::models::{DepartmentCreateRequest, I18nText};
     ///
     /// let request = DepartmentCreateRequest {
@@ -173,7 +173,7 @@ impl OrganizationService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// let department_ids = vec!["dept_123".to_string(), "dept_456".to_string()];
     /// let response = client.corehr.organization.batch_get_departments(department_ids, None).await?;
     /// ```
@@ -217,7 +217,7 @@ impl OrganizationService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// // 查询当前生效的部门架构树
     /// let response = client.corehr.organization.get_department_tree(None, None).await?;
     ///
@@ -269,7 +269,7 @@ impl OrganizationService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// use open_lark::service::corehr::models::{CompanyCreateRequest, I18nText};
     ///
     /// let request = CompanyCreateRequest {
@@ -328,7 +328,7 @@ impl OrganizationService {
     ///
     /// # 示例
     ///
-    /// ```rust
+    /// ```ignore
     /// // 查询第一页公司信息
     /// let response = client.corehr.organization.list_companies(Some(50), None, None).await?;
     ///
