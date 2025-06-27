@@ -1,4 +1,4 @@
-# 消息流模块
+# 消息流
 
 [消息流概述](https://open.feishu.cn/document/im-v2/overview)
 

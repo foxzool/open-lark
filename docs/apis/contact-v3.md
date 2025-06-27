@@ -1,4 +1,4 @@
-# 通讯录模块
+# 通讯录
 
 [通讯录概述](https://open.feishu.cn/document/server-docs/contact-v3/resources)
 

@@ -1,4 +1,4 @@
-# 妙记模块
+# 妙记
 
 ## 妙记音视频文件
 [下载妙记音视频文件](https://open.feishu.cn/document/minutes-v1/minute-media/get)

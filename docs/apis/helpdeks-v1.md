@@ -1,4 +1,4 @@
-# 服务台模块
+# 服务台
 
 [服务台概述](https://open.feishu.cn/document/server-docs/helpdesk-v1/overview)
 [服务台接入指南](https://open.feishu.cn/document/server-docs/helpdesk-v1/access-guide)

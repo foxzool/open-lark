@@ -1,4 +1,4 @@
-# 视频会议模块
+# 视频会议
 
 [视频会议概述](https://open.feishu.cn/document/server-docs/vc-v1/video-conferencing-overview)
 

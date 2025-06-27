@@ -1,4 +1,4 @@
-# 消息模块
+# 消息
 
 [消息概述](https://open.feishu.cn/document/server-docs/im-v1/introduction)
 

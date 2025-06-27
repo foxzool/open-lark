@@ -1,4 +1,4 @@
-# 飞书卡片模块
+# 飞书卡片
 
 [飞书卡片资源概述](https://open.feishu.cn/document/cardkit-v1/feishu-card-resource-overview)
 [卡片回传交互回调](https://open.feishu.cn/document/feishu-cards/card-callback-communication)
