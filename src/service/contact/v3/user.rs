@@ -203,6 +203,36 @@ impl UserService {
         let resp = Transport::<ResurrectUserResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
     }
+
+    /// 获取用户列表
+    pub async fn list(&self, req: &ListUsersRequest) -> crate::core::SDKResult<ListUsersResponse> {
+        let mut query_params = std::collections::HashMap::new();
+
+        if let Some(page_size) = req.page_size {
+            query_params.insert("page_size".to_string(), page_size.to_string());
+        }
+        if let Some(page_token) = &req.page_token {
+            query_params.insert("page_token".to_string(), page_token.clone());
+        }
+        if let Some(user_id_type) = &req.user_id_type {
+            query_params.insert("user_id_type".to_string(), user_id_type.clone());
+        }
+        if let Some(department_id_type) = &req.department_id_type {
+            query_params.insert("department_id_type".to_string(), department_id_type.clone());
+        }
+
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: "/open-apis/contact/v3/users".to_string(),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            body: Vec::new(),
+            query_params,
+            ..Default::default()
+        };
+
+        let resp = Transport::<ListUsersResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
+    }
 }
 
 // 请求/响应结构体定义
@@ -566,6 +596,52 @@ impl Default for ResurrectUserResponse {
     fn default() -> Self {
         Self {
             user: User::default(),
+        }
+    }
+}
+
+/// 获取用户列表请求
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct ListUsersRequest {
+    /// 分页大小
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i32>,
+    /// 分页标记
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// 用户 ID 类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id_type: Option<String>,
+    /// 部门 ID 类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub department_id_type: Option<String>,
+}
+
+/// 获取用户列表响应
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ListUsersResponse {
+    /// 用户列表
+    pub items: Vec<User>,
+    /// 是否还有更多项目
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub has_more: Option<bool>,
+    /// 分页标记
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+impl ApiResponseTrait for ListUsersResponse {
+    fn data_format() -> crate::core::api_resp::ResponseFormat {
+        crate::core::api_resp::ResponseFormat::Data
+    }
+}
+
+impl Default for ListUsersResponse {
+    fn default() -> Self {
+        Self {
+            items: Vec::new(),
+            has_more: None,
+            page_token: None,
         }
     }
 }

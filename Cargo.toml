@@ -208,6 +208,10 @@ name = "directory_v1_department_extended"
 path = "examples/api/directory_v1_department_extended.rs"
 
 [[example]]
+name = "contact_v3_comprehensive"
+path = "examples/api/contact_v3_comprehensive.rs"
+
+[[example]]
 name = "group_demo"
 path = "examples/api/group_demo.rs"
 
@@ -378,6 +382,14 @@ path = "examples/api/security_and_compliance_openapi_log.rs"
 [[example]]
 name = "security_and_compliance_audit_log"
 path = "examples/api/security_and_compliance_audit_log.rs"
+
+[[example]]
+name = "contact_v3_user_list"
+path = "examples/api/contact_v3_user_list.rs"
+
+[[example]]
+name = "contact_v3_group_detail"
+path = "examples/api/contact_v3_group_detail.rs"
 
 
 # ===========================================
