@@ -340,24 +340,65 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // ========== 角色管理演示 ==========
     println!("\n👑 9. 角色管理");
 
+    // 9.1 获取角色列表 (新增功能)
     match client
         .contact
         .v3
-        .functional_role_member
-        .list(
-            "example_role_id",
-            &GetRoleMembersRequest {
-                page_size: Some(10),
-                ..Default::default()
-            },
-        )
+        .functional_role
+        .list(&ListFunctionalRolesRequest {
+            page_size: Some(10),
+            page_token: None,
+        })
         .await
     {
         Ok(response) => {
-            println!("✅ 角色成员列表获取成功:");
-            println!("   - 角色成员数量: {}", response.items.len());
+            println!("✅ 角色列表获取成功:");
+            println!("   - 角色数量: {}", response.roles.len());
+
+            // 9.2 如果有角色，获取角色详情 (新增功能)
+            if let Some(role) = response.roles.first() {
+                if let Some(role_id) = &role.role_id {
+                    match client.contact.v3.functional_role.get(role_id).await {
+                        Ok(detail_response) => {
+                            println!("✅ 角色详情获取成功:");
+                            let role_detail = &detail_response.role;
+                            println!(
+                                "   - 角色名称: {}",
+                                role_detail.role_name.as_deref().unwrap_or("未知")
+                            );
+
+                            // 9.3 获取角色成员列表
+                            match client
+                                .contact
+                                .v3
+                                .functional_role_member
+                                .list(
+                                    role_id,
+                                    &ListRoleMembersRequest {
+                                        page_size: Some(10),
+                                        ..Default::default()
+                                    },
+                                )
+                                .await
+                            {
+                                Ok(members_response) => {
+                                    println!("✅ 角色成员列表获取成功:");
+                                    println!("   - 成员数量: {}", members_response.members.len());
+                                    for member in &members_response.members {
+                                        if let Some(member_id) = &member.member_id {
+                                            println!("     - 成员ID: {}", member_id);
+                                        }
+                                    }
+                                }
+                                Err(e) => println!("❌ 角色成员列表获取失败: {:?}", e),
+                            }
+                        }
+                        Err(e) => println!("❌ 角色详情获取失败: {:?}", e),
+                    }
+                }
+            }
         }
-        Err(e) => println!("❌ 角色成员列表获取失败: {:?}", e),
+        Err(e) => println!("❌ 角色列表获取失败: {:?}", e),
     }
 
     println!("\n🎉 Contact v3 通讯录 API 综合演示完成!");

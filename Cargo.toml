@@ -395,6 +395,10 @@ path = "examples/api/contact_v3_user_list.rs"
 name = "contact_v3_group_detail"
 path = "examples/api/contact_v3_group_detail.rs"
 
+[[example]]
+name = "contact_v3_role_management"
+path = "examples/api/contact_v3_role_management.rs"
+
 
 # ===========================================
 # Benchmarks
