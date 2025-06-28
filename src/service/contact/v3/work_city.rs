@@ -1,0 +1,104 @@
+use crate::{
+    core::{
+        api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
+        constants::AccessTokenType, http::Transport,
+    },
+    service::contact::models::*,
+};
+use serde::{Deserialize, Serialize};
+
+/// 工作城市服务
+pub struct WorkCityService {
+    config: Config,
+}
+
+impl WorkCityService {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+
+    /// 获取单个工作城市信息
+    pub async fn get(&self, work_city_id: &str) -> crate::core::SDKResult<GetWorkCityResponse> {
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: format!("/open-apis/contact/v3/work_cities/{}", work_city_id),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
+            ..Default::default()
+        };
+
+        let resp = Transport::<GetWorkCityResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
+    }
+
+    /// 获取租户工作城市列表
+    pub async fn list(
+        &self,
+        _req: &ListWorkCitiesRequest,
+    ) -> crate::core::SDKResult<ListWorkCitiesResponse> {
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: "/open-apis/contact/v3/work_cities".to_string(),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
+            query_params: std::collections::HashMap::new(),
+            ..Default::default()
+        };
+
+        let resp =
+            Transport::<ListWorkCitiesResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetWorkCityResponse {
+    pub work_city: WorkCity,
+}
+
+impl ApiResponseTrait for GetWorkCityResponse {
+    fn data_format() -> crate::core::api_resp::ResponseFormat {
+        crate::core::api_resp::ResponseFormat::Data
+    }
+}
+
+impl Default for GetWorkCityResponse {
+    fn default() -> Self {
+        Self {
+            work_city: WorkCity::default(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct ListWorkCitiesRequest {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ListWorkCitiesResponse {
+    pub items: Vec<WorkCity>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub has_more: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+impl ApiResponseTrait for ListWorkCitiesResponse {
+    fn data_format() -> crate::core::api_resp::ResponseFormat {
+        crate::core::api_resp::ResponseFormat::Data
+    }
+}
+
+impl Default for ListWorkCitiesResponse {
+    fn default() -> Self {
+        Self {
+            items: Vec::new(),
+            has_more: None,
+            page_token: None,
+        }
+    }
+}
