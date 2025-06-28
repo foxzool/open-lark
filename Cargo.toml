@@ -343,6 +343,18 @@ path = "examples/api/mdm_country_region.rs"
 name = "mdm_user_data_relation"
 path = "examples/api/mdm_user_data_relation.rs"
 
+[[example]]
+name = "report_v1_query_rules"
+path = "examples/api/report_v1_query_rules.rs"
+
+[[example]]
+name = "report_v1_query_tasks"
+path = "examples/api/report_v1_query_tasks.rs"
+
+[[example]]
+name = "report_v1_remove_rule_view"
+path = "examples/api/report_v1_remove_rule_view.rs"
+
 
 # ===========================================
 # Benchmarks
