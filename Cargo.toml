@@ -335,6 +335,14 @@ path = "examples/api/workplace_access_data.rs"
 name = "workplace_app_recommend"
 path = "examples/api/workplace_app_recommend.rs"
 
+[[example]]
+name = "mdm_country_region"
+path = "examples/api/mdm_country_region.rs"
+
+[[example]]
+name = "mdm_user_data_relation"
+path = "examples/api/mdm_user_data_relation.rs"
+
 
 # ===========================================
 # Benchmarks
