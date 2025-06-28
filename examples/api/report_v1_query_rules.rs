@@ -39,19 +39,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("规则总数: {}", data.rules.items.len());
 
             for (index, rule) in data.rules.items.iter().enumerate() {
-            println!("\n规则 {}:", index + 1);
-            println!("  - 规则ID: {}", rule.rule_id);
-            println!("  - 规则名称: {}", rule.name);
-            if let Some(description) = &rule.description {
-                println!("  - 描述: {}", description);
+                println!("\n规则 {}:", index + 1);
+                println!("  - 规则ID: {}", rule.rule_id);
+                println!("  - 规则名称: {}", rule.name);
+                if let Some(description) = &rule.description {
+                    println!("  - 描述: {}", description);
+                }
+                if let Some(rule_type) = &rule.rule_type {
+                    println!("  - 类型: {}", rule_type);
+                }
+                if let Some(status) = &rule.status {
+                    println!("  - 状态: {}", status);
+                }
             }
-            if let Some(rule_type) = &rule.rule_type {
-                println!("  - 类型: {}", rule_type);
-            }
-            if let Some(status) = &rule.status {
-                println!("  - 状态: {}", status);
-            }
-        }
 
             if let Some(has_more) = data.rules.has_more {
                 if has_more {
@@ -90,7 +90,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     } else {
         eprintln!(
             "按状态查询失败: {} - {}",
-            filtered_response.code(), filtered_response.msg()
+            filtered_response.code(),
+            filtered_response.msg()
         );
     }
 
