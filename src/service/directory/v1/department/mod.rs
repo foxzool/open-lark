@@ -9,12 +9,11 @@ pub mod search;
 
 // 重新导出所有请求和响应类型
 pub use create::*;
-// TODO: 以下功能尚未实现，暂时注释
-// pub use patch::*;
-// pub use delete::*;
-// pub use mget::*;
-// pub use filter::*;
-// pub use search::*;
+pub use delete::*;
+pub use filter::*;
+pub use mget::*;
+pub use patch::*;
+pub use search::*;
 
 /// 部门管理服务
 ///

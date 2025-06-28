@@ -200,6 +200,14 @@ name = "directory_demo"
 path = "examples/api/directory_demo.rs"
 
 [[example]]
+name = "directory_v1_employee_extended"
+path = "examples/api/directory_v1_employee_extended.rs"
+
+[[example]]
+name = "directory_v1_department_extended"
+path = "examples/api/directory_v1_department_extended.rs"
+
+[[example]]
 name = "group_demo"
 path = "examples/api/group_demo.rs"
 
