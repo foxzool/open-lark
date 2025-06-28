@@ -41,36 +41,36 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                 // 如果有词库，获取分类列表
                 if let Some(first_repo) = repo_data.repos.items.first() {
-                println!("=== 获取分类列表 ===");
-                let classification_request = ClassificationListRequest {
-                    repo_id: Some(first_repo.id.clone()),
-                    page_size: Some(10),
-                    ..Default::default()
-                };
+                    println!("=== 获取分类列表 ===");
+                    let classification_request = ClassificationListRequest {
+                        repo_id: Some(first_repo.id.clone()),
+                        page_size: Some(10),
+                        ..Default::default()
+                    };
 
-                match client
-                    .lingo
-                    .classification
-                    .list_classifications(classification_request, None)
-                    .await
-                {
-                    Ok(response) => {
-                        println!("获取分类列表成功：");
-                        if let Some(classification_data) = response.data {
-                            for classification in &classification_data.classifications.items {
-                            println!("  - 分类ID: {}", classification.id);
-                            println!("    分类名称: {}", classification.name);
-                            if let Some(father_id) = &classification.father_id {
-                                println!("    父分类ID: {}", father_id);
+                    match client
+                        .lingo
+                        .classification
+                        .list_classifications(classification_request, None)
+                        .await
+                    {
+                        Ok(response) => {
+                            println!("获取分类列表成功：");
+                            if let Some(classification_data) = response.data {
+                                for classification in &classification_data.classifications.items {
+                                    println!("  - 分类ID: {}", classification.id);
+                                    println!("    分类名称: {}", classification.name);
+                                    if let Some(father_id) = &classification.father_id {
+                                        println!("    父分类ID: {}", father_id);
+                                    }
+                                    println!();
+                                }
                             }
-                            println!();
                         }
+                        Err(e) => {
+                            eprintln!("获取分类列表失败: {:?}", e);
                         }
                     }
-                    Err(e) => {
-                        eprintln!("获取分类列表失败: {:?}", e);
-                    }
-                }
                 }
             }
         }
@@ -96,13 +96,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("获取全部分类成功：");
             if let Some(classification_data) = response.data {
                 for classification in &classification_data.classifications.items {
-                println!("  - 分类ID: {}", classification.id);
-                println!("    分类名称: {}", classification.name);
-                if let Some(father_id) = &classification.father_id {
-                    println!("    父分类ID: {}", father_id);
+                    println!("  - 分类ID: {}", classification.id);
+                    println!("    分类名称: {}", classification.name);
+                    if let Some(father_id) = &classification.father_id {
+                        println!("    父分类ID: {}", father_id);
+                    }
+                    println!();
                 }
-                println!();
-            }
             }
         }
         Err(e) => {

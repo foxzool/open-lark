@@ -32,6 +32,7 @@ pub mod search;
 pub mod task;
 pub mod tenant;
 pub mod tenant_tag;
+pub mod trust_party;
 pub mod vc;
 pub mod verification;
 
@@ -71,6 +72,7 @@ pub use personal_settings::PersonalSettingsService;
 pub use task::TaskV2Service;
 pub use tenant::TenantService;
 pub use tenant_tag::TenantTagService;
+pub use trust_party::TrustPartyService;
 pub use vc::VcService;
 pub use verification::VerificationService;
 

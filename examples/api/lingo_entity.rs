@@ -25,14 +25,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(entity_data) = response.data {
                 println!("获取词条列表成功：");
                 for entity in &entity_data.entities.items {
-                println!("  - 词条ID: {}", entity.id);
-                println!("    主名称: {:?}", entity.main_keys);
-                let description_preview: String = entity.description.chars().take(50).collect();
-                if !description_preview.is_empty() {
-                    println!("    描述: {}...", description_preview);
+                    println!("  - 词条ID: {}", entity.id);
+                    println!("    主名称: {:?}", entity.main_keys);
+                    let description_preview: String = entity.description.chars().take(50).collect();
+                    if !description_preview.is_empty() {
+                        println!("    描述: {}...", description_preview);
+                    }
+                    println!();
                 }
-                println!();
-            }
             }
         }
         Err(e) => {
@@ -58,13 +58,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(search_data) = response.data {
                 println!("搜索词条成功：");
                 for result in &search_data.results.items {
-                println!("  - 词条ID: {}", result.entity.id);
-                println!("    主名称: {:?}", result.entity.main_keys);
-                if let Some(score) = result.score {
-                    println!("    匹配分数: {}", score);
+                    println!("  - 词条ID: {}", result.entity.id);
+                    println!("    主名称: {:?}", result.entity.main_keys);
+                    if let Some(score) = result.score {
+                        println!("    匹配分数: {}", score);
+                    }
+                    println!();
                 }
-                println!();
-            }
             }
         }
         Err(e) => {
@@ -89,11 +89,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(match_data) = response.data {
                 println!("精准匹配成功：");
                 for result in &match_data.results {
-                println!("  - 词条ID: {}", result.entity.id);
-                println!("    主名称: {:?}", result.entity.main_keys);
-                println!("    匹配词: {}", result.matched_word);
-                println!();
-            }
+                    println!("  - 词条ID: {}", result.entity.id);
+                    println!("    主名称: {:?}", result.entity.main_keys);
+                    println!("    匹配词: {}", result.matched_word);
+                    println!();
+                }
             }
         }
         Err(e) => {
@@ -120,11 +120,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("  原始文本: {}", highlight_data.result.text);
                 println!("  高亮范围:");
                 for range in &highlight_data.result.ranges {
-                println!(
-                    "    - 位置: {} - {}, 词条ID: {}",
-                    range.start, range.end, range.entity_id
-                );
-            }
+                    println!(
+                        "    - 位置: {} - {}, 词条ID: {}",
+                        range.start, range.end, range.entity_id
+                    );
+                }
             }
         }
         Err(e) => {
