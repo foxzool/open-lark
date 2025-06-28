@@ -1,4 +1,5 @@
 // 核心服务模块
+pub mod acs;
 pub mod admin;
 pub mod ai;
 pub mod aily;
@@ -40,6 +41,7 @@ pub use cloud_docs::docx as docs; // docs -> docx 兼容
 pub use cloud_docs::{assistant, bitable, board, comments, drive, permission, sheets, wiki};
 
 // 核心服务 re-export
+pub use acs::AcsService;
 pub use admin::AdminService;
 pub use ai::AiService;
 pub use aily::AilyService;

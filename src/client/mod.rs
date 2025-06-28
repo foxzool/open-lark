@@ -3,6 +3,7 @@ use std::{sync::Arc, time::Duration};
 use crate::{
     core::{config::Config, constants::AppType},
     service::{
+        acs::AcsService,
         admin::AdminService,
         ai::AiService,
         aily::AilyService,
@@ -55,6 +56,7 @@ pub mod ws_client;
 pub struct LarkClient {
     pub config: Config,
     // 核心服务
+    pub acs: AcsService,
     pub admin: AdminService,
     pub ai: AiService,
     pub aily: AilyService,
@@ -147,6 +149,7 @@ impl LarkClientBuilder {
         LarkClient {
             config: self.config.clone(),
             // 核心服务
+            acs: AcsService::new((*config).clone()),
             admin: AdminService::new((*config).clone()),
             ai: AiService::new((*config).clone()),
             aily: AilyService::new((*config).clone()),
