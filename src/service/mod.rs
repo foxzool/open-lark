@@ -35,6 +35,7 @@ pub mod tenant_tag;
 pub mod trust_party;
 pub mod vc;
 pub mod verification;
+pub mod workplace;
 
 // 云文档服务模块
 pub mod cloud_docs;
@@ -75,6 +76,7 @@ pub use tenant_tag::TenantTagService;
 pub use trust_party::TrustPartyService;
 pub use vc::VcService;
 pub use verification::VerificationService;
+pub use workplace::WorkplaceService;
 
 // 服务类型 re-export
 pub use cloud_docs::{

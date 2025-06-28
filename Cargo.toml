@@ -327,6 +327,14 @@ path = "examples/api/trust_party_organization.rs"
 name = "trust_party_rules"
 path = "examples/api/trust_party_rules.rs"
 
+[[example]]
+name = "workplace_access_data"
+path = "examples/api/workplace_access_data.rs"
+
+[[example]]
+name = "workplace_app_recommend"
+path = "examples/api/workplace_app_recommend.rs"
+
 
 # ===========================================
 # Benchmarks
