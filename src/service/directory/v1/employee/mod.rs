@@ -12,15 +12,14 @@ pub mod to_be_resigned;
 
 // 重新导出所有请求和响应类型
 pub use create::*;
+pub use delete::*;
 pub use filter::*;
-// TODO: 以下功能尚未实现，暂时注释
-// pub use patch::*;
-// pub use delete::*;
-// pub use resurrect::*;
-// pub use to_be_resigned::*;
-// pub use regular::*;
-// pub use mget::*;
-// pub use search::*;
+pub use mget::*;
+pub use patch::*;
+pub use regular::*;
+pub use resurrect::*;
+pub use search::*;
+pub use to_be_resigned::*;
 
 /// 员工管理服务
 ///
