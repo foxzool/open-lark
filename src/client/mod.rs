@@ -39,6 +39,7 @@ use crate::{
         trust_party::TrustPartyService,
         vc::VcService,
         verification::VerificationService,
+        workplace::WorkplaceService,
         // 向后兼容的导入
         AssistantService,
         BitableService,
@@ -94,6 +95,7 @@ pub struct LarkClient {
     pub trust_party: TrustPartyService,
     pub vc: VcService,
     pub verification: VerificationService,
+    pub workplace: WorkplaceService,
     // 云文档服务聚合
     pub cloud_docs: CloudDocsService,
     // 向后兼容的字段
@@ -190,6 +192,7 @@ impl LarkClientBuilder {
             trust_party: TrustPartyService::new((*config).clone()),
             vc: VcService::new((*config).clone()),
             verification: VerificationService::new((*config).clone()),
+            workplace: WorkplaceService::new((*config).clone()),
             // 云文档服务聚合
             cloud_docs,
             // 向后兼容的字段（重新创建实例）
