@@ -158,6 +158,50 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
+### 快速开始 - 组织架构管理
+
+```rust,ignore
+use open_lark::prelude::*;
+use open_lark::service::directory::v1::*;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = LarkClient::builder("your_app_id", "your_app_secret")
+        .with_app_type(AppType::SelfBuild)
+        .build();
+
+    // 创建部门
+    let dept_request = CreateDepartmentRequest::builder()
+        .name("技术部")
+        .en_name("Technology Department")
+        .user_id_type(UserIdType::UserId)
+        .department_id_type(DepartmentIdType::DepartmentId)
+        .build();
+    let dept = client.directory.v1.department.create(dept_request, None).await?;
+    println!("创建部门: {:?}", dept.data);
+
+    // 创建员工
+    let emp_request = CreateEmployeeRequest::builder()
+        .name("张三")
+        .email("zhangsan@example.com")
+        .job_title("软件工程师")
+        .user_id_type(UserIdType::UserId)
+        .build();
+    let emp = client.directory.v1.employee.create(emp_request, None).await?;
+    println!("创建员工: {:?}", emp.data);
+
+    // 搜索员工
+    let search_request = SearchEmployeeRequest::builder("张")
+        .page_size(10)
+        .user_id_type(UserIdType::UserId)
+        .build();
+    let employees = client.directory.v1.employee.search(search_request, None).await?;
+    println!("搜索结果: {:?}", employees.data);
+
+    Ok(())
+}
+```
+
 ### 快速开始 - 考勤模块
 
 ```rust,ignore
@@ -351,6 +395,26 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 - 用户
     - [x] 搜索用户
+
+#### 组织架构 (Directory v1) 🎉 v0.12.0 新增
+
+- 员工管理
+    - [x] 创建员工
+    - [x] 更新员工信息 
+    - [x] 获取员工列表
+    - [x] 批量获取员工信息
+    - [x] 搜索员工
+    - [x] 设置员工为待离职
+    - [x] 恢复员工为在职状态
+    - [x] 恢复离职员工
+    - [x] 离职员工
+- 部门管理  
+    - [x] 创建部门
+    - [x] 更新部门信息
+    - [x] 获取部门列表
+    - [x] 批量获取部门信息
+    - [x] 搜索部门
+    - [x] 删除部门
 
 ### 飞书卡片
 
@@ -576,6 +640,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 | **📊 云文档-电子表格** | 33      | ✅ 100%     | 完整表格操作功能                |
 | **📋 云文档-多维表格** | 6       | ✅ 100%     | 数据表操作                   |
 | **👥 通讯录**      | 1       | ✅ 100%     | 用户搜索                    |
+| **🏢 组织架构**     | 15      | ✅ 100%     | **v0.12.0 新增** - 完整员工与部门管理 |
 | **🎨 飞书卡片**     | 25      | ✅ 100%     | 完整卡片组件系统                |
 | **💬 消息**       | 4       | ✅ 100%     | 消息发送与接收                 |
 | **👥 群组**       | 1       | ✅ 100%     | 群组管理                    |
@@ -585,7 +650,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 | **🤖 AI能力**      | 22      | ✅ 100%     | **v0.8.0 新增** - 智能文档处理、OCR、语音识别、机器翻译 |
 | **🎯 招聘管理**     | **100+**| ✅ 100%     | **v0.11.0 新增** - 完整招聘管理系统 |
 | **🛡️ 错误处理系统**  | 5       | ✅ 100%     | **v0.6.0 新增** - 企业级错误管理 |
-| **📈 总计**       | **276+**| **✅ 100%** | **覆盖企业应用核心功能**          |
+| **📈 总计**       | **291+**| **✅ 100%** | **覆盖企业应用核心功能**          |
 
 ### 🎯 v0.11.0 招聘管理系统亮点
 
@@ -620,7 +685,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### 错误处理系统文档
 
 - **[错误处理最佳实践](docs/ERROR_HANDLING_BEST_PRACTICES.md)** (62页) - 完整的开发指导和最佳实践
-- **[错误处理功能介绍](ERROR_HANDLING_FEATURES.md)** - 快速上手指南和功能概览
+- **[错误处理功能介绍](docs/ERROR_HANDLING_FEATURES.md)** - 快速上手指南和功能概览
 - **[项目完成报告](reports/project_completion_summary.md)** - 详细的技术架构和成果总结
 
 ### 示例程序
