@@ -1,8 +1,5 @@
 use dotenvy::dotenv;
-use open_lark::{
-    prelude::*,
-    service::workplace::workplace_access_data::*,
-};
+use open_lark::{prelude::*, service::workplace::workplace_access_data::*};
 use std::env;
 
 #[tokio::main]
