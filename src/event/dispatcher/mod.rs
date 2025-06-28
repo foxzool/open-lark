@@ -13,6 +13,15 @@ use crate::{
             p2_im_message_read_v1::{P2ImMessageReadV1, P2ImMessageReadV1ProcessorImpl},
             p2_im_message_receive_v1::{P2ImMessageReceiveV1, P2ImMessageReceiveV1ProcessorImpl},
         },
+        payroll::v1::{
+            p2_payroll_payment_activity_approved_v1::{
+                P2PayrollPaymentActivityApprovedV1, P2PayrollPaymentActivityApprovedV1ProcessorImpl,
+            },
+            p2_payroll_payment_activity_status_changed_v1::{
+                P2PayrollPaymentActivityStatusChangedV1,
+                P2PayrollPaymentActivityStatusChangedV1ProcessorImpl,
+            },
+        },
     },
 };
 use log::debug;
@@ -152,6 +161,43 @@ impl EventDispatcherHandlerBuilder {
             return Err(format!("processor already registered, type: {}", key));
         }
         let processor = P2AttendanceUserTaskStatusChangeV1ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    /// 注册发薪活动状态变更事件处理器
+    pub fn register_p2_payroll_payment_activity_status_changed_v1<F>(
+        mut self,
+        f: F,
+    ) -> Result<Self, String>
+    where
+        F: Fn(P2PayrollPaymentActivityStatusChangedV1) -> anyhow::Result<()>
+            + 'static
+            + Sync
+            + Send,
+    {
+        let key = "p2.payroll.payment_activity.status_changed_v1".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {}", key));
+        }
+        let processor = P2PayrollPaymentActivityStatusChangedV1ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    /// 注册发薪活动封存事件处理器
+    pub fn register_p2_payroll_payment_activity_approved_v1<F>(
+        mut self,
+        f: F,
+    ) -> Result<Self, String>
+    where
+        F: Fn(P2PayrollPaymentActivityApprovedV1) -> anyhow::Result<()> + 'static + Sync + Send,
+    {
+        let key = "p2.payroll.payment_activity.approved_v1".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {}", key));
+        }
+        let processor = P2PayrollPaymentActivityApprovedV1ProcessorImpl::new(f);
         self.processor_map.insert(key, Box::new(processor));
         Ok(self)
     }
