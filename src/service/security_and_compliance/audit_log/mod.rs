@@ -2,13 +2,8 @@ use reqwest::Method;
 
 use crate::{
     core::{
-        api_req::ApiRequest,
-        api_resp::BaseResponse,
-        config::Config,
-        constants::AccessTokenType,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
+        api_req::ApiRequest, api_resp::BaseResponse, config::Config, constants::AccessTokenType,
+        http::Transport, req_option::RequestOption, SDKResult,
     },
     service::security_and_compliance::models::{AuditLogGetRequest, AuditLogGetResponse},
 };

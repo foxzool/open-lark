@@ -2,13 +2,8 @@ use reqwest::Method;
 
 use crate::{
     core::{
-        api_req::ApiRequest,
-        api_resp::BaseResponse,
-        config::Config,
-        constants::AccessTokenType,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
+        api_req::ApiRequest, api_resp::BaseResponse, config::Config, constants::AccessTokenType,
+        http::Transport, req_option::RequestOption, SDKResult,
     },
     service::security_and_compliance::models::{OpenapiLogListRequest, OpenapiLogListResponse},
 };
@@ -73,9 +68,7 @@ impl OpenapiLogService {
         }
 
         if let Some(app_ids) = request.app_ids {
-            api_req
-                .query_params
-                .insert("app_ids".to_string(), app_ids);
+            api_req.query_params.insert("app_ids".to_string(), app_ids);
         }
 
         if let Some(apis) = request.apis {

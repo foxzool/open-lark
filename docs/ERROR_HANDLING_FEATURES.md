@@ -138,7 +138,7 @@ report.print();
 
 ## 📚 完整文档
 
-- **[错误处理最佳实践](docs/ERROR_HANDLING_BEST_PRACTICES.md)** - 完整的使用指南
+- **[错误处理最佳实践](ERROR_HANDLING_BEST_PRACTICES.md)** - 完整的使用指南
 - **[API文档](https://docs.rs/open-lark)** - 详细的API参考
 - **[示例代码](examples/api/)** - 5个完整的演示程序
 
