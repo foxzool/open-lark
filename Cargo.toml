@@ -291,6 +291,10 @@ path = "examples/api/payroll_demo.rs"
 name = "hire_v1_example"
 path = "examples/api/hire_v1_example.rs"
 
+[[example]]
+name = "okr_example"
+path = "examples/api/okr_example.rs"
+
 
 # ===========================================
 # Benchmarks
