@@ -1,3 +1,4 @@
+pub mod application;
 pub mod auth;
 pub mod interview_settings;
 pub mod job;
@@ -9,6 +10,7 @@ pub mod subject;
 
 use crate::core::config::Config;
 
+use application::ApplicationConfigService;
 use auth::AuthService;
 use interview_settings::InterviewSettingsService;
 use job::JobService;
@@ -21,7 +23,7 @@ use subject::SubjectService;
 /// 招聘相关配置服务
 ///
 /// 提供招聘系统的基础配置功能，包括地址管理、权限设置、
-/// 职位管理、招聘需求、流程配置等核心配置服务。
+/// 职位管理、招聘需求、流程配置、候选人配置等核心配置服务。
 pub struct RecruitmentConfigService {
     /// 地址服务
     pub location: LocationService,
@@ -35,6 +37,8 @@ pub struct RecruitmentConfigService {
     pub job_process: JobProcessService,
     /// 项目服务
     pub subject: SubjectService,
+    /// 候选人配置服务
+    pub application: ApplicationConfigService,
     /// 面试设置服务
     pub interview_settings: InterviewSettingsService,
     /// Offer设置服务
@@ -50,6 +54,7 @@ impl RecruitmentConfigService {
             job_requirement: JobRequirementService::new(config.clone()),
             job_process: JobProcessService::new(config.clone()),
             subject: SubjectService::new(config.clone()),
+            application: ApplicationConfigService::new(config.clone()),
             interview_settings: InterviewSettingsService::new(config.clone()),
             offer_settings: OfferSettingsService::new(config),
         }

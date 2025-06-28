@@ -40,6 +40,32 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Err(e) => println!("❌ 获取职位列表失败: {:?}", e),
     }
 
+    // 1.1 人才标签管理示例
+    println!("\n🏷️  1.1 获取人才标签列表");
+    match client
+        .hire
+        .recruitment_config
+        .application
+        .list_talent_tags(Default::default(), None)
+        .await
+    {
+        Ok(response) => {
+            if let Some(data) = &response.data {
+                println!("✅ 获取人才标签成功，共 {} 个标签", data.tags.items.len());
+                for tag in data.tags.items.iter().take(5) {
+                    println!(
+                        "  - 标签: {} ({})",
+                        tag.name.as_deref().unwrap_or("未知"),
+                        tag.tag_id
+                    );
+                }
+            } else {
+                println!("✅ 人才标签API调用成功，但暂无数据");
+            }
+        }
+        Err(e) => println!("❌ 获取人才标签失败: {:?}", e),
+    }
+
     // 2. 人才库管理示例
     println!("\n📚 2. 人才库管理");
     match client

@@ -5,6 +5,7 @@ pub mod get_candidates;
 pub mod models;
 pub mod recruitment_config;
 pub mod referral_account;
+pub mod v1;
 
 use crate::core::config::Config;
 
