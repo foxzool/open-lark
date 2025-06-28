@@ -63,7 +63,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(data) = response.data {
                 println!("✅ 查询到 {} 个周期", data.periods.items.len());
                 for period in data.periods.items.iter().take(3) {
-                    let name = period.name.as_ref()
+                    let name = period
+                        .name
+                        .as_ref()
                         .and_then(|n| n.zh_cn.as_ref())
                         .map(|s| s.as_str())
                         .unwrap_or("未命名");

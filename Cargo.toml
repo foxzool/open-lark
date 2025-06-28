@@ -292,6 +292,10 @@ name = "hire_v1_example"
 path = "examples/api/hire_v1_example.rs"
 
 [[example]]
+name = "human_authentication_example"
+path = "examples/api/human_authentication_example.rs"
+
+[[example]]
 name = "okr_example"
 path = "examples/api/okr_example.rs"
 
