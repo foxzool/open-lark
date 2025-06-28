@@ -7,6 +7,7 @@ pub mod models;
 pub mod paygroup;
 pub mod payment_activity;
 pub mod payment_detail;
+pub mod v1;
 
 use crate::core::config::Config;
 
