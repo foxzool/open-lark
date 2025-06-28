@@ -319,6 +319,14 @@ path = "examples/api/okr_example.rs"
 name = "performance_example"
 path = "examples/api/performance_example.rs"
 
+[[example]]
+name = "trust_party_organization"
+path = "examples/api/trust_party_organization.rs"
+
+[[example]]
+name = "trust_party_rules"
+path = "examples/api/trust_party_rules.rs"
+
 
 # ===========================================
 # Benchmarks

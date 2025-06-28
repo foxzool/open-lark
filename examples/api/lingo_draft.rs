@@ -32,16 +32,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(draft_data) = response.data {
                 println!("创建草稿成功：");
                 let draft = &draft_data.draft;
-            println!("  草稿ID: {}", draft.draft_id);
-            println!("  主名称: {:?}", draft.main_keys);
-            if let Some(aliases) = &draft.aliases {
-                println!("  别名: {:?}", aliases);
-            }
-            println!("  描述: {}", draft.description);
+                println!("  草稿ID: {}", draft.draft_id);
+                println!("  主名称: {:?}", draft.main_keys);
+                if let Some(aliases) = &draft.aliases {
+                    println!("  别名: {:?}", aliases);
+                }
+                println!("  描述: {}", draft.description);
 
-            // 更新草稿
-            println!("\n=== 更新草稿 ===");
-            let update_request = DraftUpdateRequest {
+                // 更新草稿
+                println!("\n=== 更新草稿 ===");
+                let update_request = DraftUpdateRequest {
                 main_keys: Some(vec!["API接口".to_string(), "应用程序接口".to_string()]),
                 aliases: Some(vec!["API".to_string(), "程序接口".to_string()]),
                 description: Some("应用程序编程接口（Application Programming Interface，简称API）是一套定义、协议和工具的集合，用于构建软件应用程序。".to_string()),
@@ -50,28 +50,28 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 related_meta: None,
             };
 
-            match client
-                .lingo
-                .draft
-                .update_draft(&draft.draft_id, update_request, None)
-                .await
-            {
-                Ok(update_response) => {
-                    if let Some(update_data) = update_response.data {
-                        println!("更新草稿成功：");
-                        let updated_draft = &update_data.draft;
-                    println!("  草稿ID: {}", updated_draft.draft_id);
-                    println!("  主名称: {:?}", updated_draft.main_keys);
-                    if let Some(aliases) = &updated_draft.aliases {
-                        println!("  别名: {:?}", aliases);
+                match client
+                    .lingo
+                    .draft
+                    .update_draft(&draft.draft_id, update_request, None)
+                    .await
+                {
+                    Ok(update_response) => {
+                        if let Some(update_data) = update_response.data {
+                            println!("更新草稿成功：");
+                            let updated_draft = &update_data.draft;
+                            println!("  草稿ID: {}", updated_draft.draft_id);
+                            println!("  主名称: {:?}", updated_draft.main_keys);
+                            if let Some(aliases) = &updated_draft.aliases {
+                                println!("  别名: {:?}", aliases);
+                            }
+                            println!("  描述: {}", updated_draft.description);
+                        }
                     }
-                    println!("  描述: {}", updated_draft.description);
+                    Err(e) => {
+                        eprintln!("更新草稿失败: {:?}", e);
                     }
                 }
-                Err(e) => {
-                    eprintln!("更新草稿失败: {:?}", e);
-                }
-            }
             }
         }
         Err(e) => {
