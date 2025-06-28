@@ -1,198 +1,197 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+本文件为 Claude Code (claude.ai/code) 在此代码库中工作提供指导。
 
-和我交互使用中文, git 注释使用中文, 报告生成到 reports 目录
+与我交互使用中文，git 提交信息使用英文，报告生成到 reports 目录
 
-## Project Overview
+## 项目概述
 
-open-lark 是飞书开放平台的非官方 Rust SDK，支持自定义机器人、长连接机器人、云文档、飞书卡片、消息、群组等 API 调用。
+open-lark 是飞书开放平台的非官方 Rust SDK，支持自定义机器人、长连接机器人、云文档、飞书卡片、消息、群组、招聘管理等 API 调用。
 
-## Development Commands
+## 开发命令
 
-### Building and Testing
+### 构建和测试
 
 docs/apis 目录下是接口文档链接地址
 
-编写接口前, 参考之前的api写法
+编写接口前，参考之前的 API 写法
 
-生成代码后, 先格式化, 再代码检查
+生成代码后，先格式化，再代码检查
 
-examples 需要用 dotenvy 读取 本地.env配置
+examples 需要用 dotenvy 读取本地 .env 配置
 
-在 examples/api目录下, 建立每个接口的单独example
+在 examples/api 目录下，建立每个接口的单独 example
 
-发布版本前, 要更新Changelog 和 README
+发布版本前，要更新 Changelog 和 README
 
 ```bash
-# Build the project
+# 构建项目
 just build
-# or: cargo build --all-features
+# 或者: cargo build --all-features
 
-# Build release version
+# 构建发布版本
 just build-release
 
-# Run tests
+# 运行测试
 just test
-# or: cargo test --all-features
+# 或者: cargo test --all-features
 
-# Run a specific test
+# 运行特定测试
 cargo test test_name
 
-# Run tests with output
+# 运行测试并显示输出
 cargo test -- --nocapture
 
-# Lint the code
+# 代码检查
 just lint
 
-# Format code
+# 格式化代码
 just fmt
 
-# Check code formatting
+# 检查代码格式
 just fmt-check
 
-# Generate documentation
+# 生成文档
 just docs
 
-# Run all pre-release checks
+# 运行所有发布前检查
 just check-all
 
-# Show all available commands
+# 显示所有可用命令
 just help
 ```
 
-### Release Process
+### 发布流程
 
 ```bash
-# Release a new version (e.g., 0.4.0)
-just release 0.4.0
+# 发布新版本 (例如: 0.11.0)
+just release 0.11.0
 
-# This will:
-# 1. Check if on main branch and working directory is clean
-# 2. Pull latest changes
-# 3. Verify version matches Cargo.toml
-# 4. Run all pre-release checks (format, lint, test, build, docs)
-# 5. Check if CHANGELOG.md has entry for the version
-# 6. Create and push git tag
-# 7. Trigger GitHub Actions for automated release
+# 这将会:
+# 1. 检查是否在 main 分支且工作目录干净
+# 2. 拉取最新更改
+# 3. 验证版本是否匹配 Cargo.toml
+# 4. 运行所有发布前检查 (格式化, 检查, 测试, 构建, 文档)
+# 5. 检查 CHANGELOG.md 是否有该版本条目
+# 6. 创建并推送 git 标签
+# 7. 触发 GitHub Actions 自动发布
 ```
 
-### Running Examples
+### 运行示例
 
 ```bash
-# Run specific example (requires .env file with API credentials)
+# 运行特定示例 (需要 .env 文件配置 API 凭据)
 cargo run --example create_message
 cargo run --example ws_client --features websocket
 
-# List all available examples
+# 列出所有可用示例
 cargo build --examples
 ```
 
-## Architecture Overview
+## 架构概述
 
-### Core Components
+### 核心组件
 
-- **LarkClient**: Main client class that aggregates all service modules
-- **Transport Layer**: Unified HTTP request/response handling in `core/http.rs`
-- **Token Management**: Automatic access token caching and refresh in `core/token_manager.rs`
-- **Config**: Centralized configuration management in `core/config.rs`
+- **LarkClient**: 聚合所有服务模块的主客户端类
+- **传输层**: 在 `core/http.rs` 中统一处理 HTTP 请求/响应
+- **令牌管理**: 在 `core/token_manager.rs` 中自动缓存和刷新访问令牌
+- **配置**: 在 `core/config.rs` 中集中配置管理
 
-### Service Organization
+### 服务组织
 
-Services are organized by functional domain under `src/service/`:
+服务按功能域组织在 `src/service/` 下:
 
-- `authentication/`: User authentication (v1)
-- `bitable/`: Multi-dimensional tables (v1)
-- `drive/`: Cloud drive files (v1, v2)
-- `im/`: Instant messaging (v1, v2)
-- `search/`: Search functionality (v1)
-- `sheets/`: Spreadsheets (v2, v3)
+- `authentication/`: 用户认证 (v1)
+- `bitable/`: 多维表格 (v1)
+- `drive/`: 云盘文件 (v1, v2)
+- `hire/`: 招聘管理 (v1)
+- `im/`: 即时消息 (v1, v2)
+- `search/`: 搜索功能 (v1)
+- `sheets/`: 电子表格 (v2, v3)
 
-Each service follows version-based API organization (v1, v2, v3) with standardized request/response patterns.
+每个服务遵循基于版本的 API 组织 (v1, v2, v3)，具有标准化的请求/响应模式。
 
-### Event System
+### 事件系统
 
-- **EventDispatcherHandler**: Central event dispatcher in `src/event/dispatcher/mod.rs`
-- **Builder Pattern**: Used for registering event handlers with `.register_p2_im_message_receive_v1()` etc.
-- **Version Support**: Handles both v1 (p1) and v2 (p2) event formats automatically
-- **Type Safety**: Uses traits and generics for compile-time safety
-- **WebSocket Support**: Real-time event handling via WebSocket connection (optional feature)
+- **EventDispatcherHandler**: 在 `src/event/dispatcher/mod.rs` 中的中央事件分发器
+- **构建器模式**: 用于注册事件处理器，如 `.register_p2_im_message_receive_v1()` 等
+- **版本支持**: 自动处理 v1 (p1) 和 v2 (p2) 事件格式
+- **类型安全**: 使用特征和泛型实现编译时安全
+- **WebSocket 支持**: 通过 WebSocket 连接进行实时事件处理 (可选功能)
 
-### Authentication Flow
+### 认证流程
 
-- Supports multiple token types: App Access Token, Tenant Access Token, User Access Token
-- Automatic token caching and refresh mechanism
-- Configurable authentication options via `Config` struct
+- 支持多种令牌类型: App Access Token, Tenant Access Token, User Access Token
+- 自动令牌缓存和刷新机制
+- 通过 `Config` 结构体进行可配置的认证选项
 
-### Key Design Patterns
+### 关键设计模式
 
-- **Transport Pattern**: All API requests go through `Transport<T>` for consistent handling
-- **Builder Pattern**: Used for client configuration and event handler registration
-- **Type Safety**: Extensive use of Rust's type system and traits
-- **Async/Await**: Full async support throughout the codebase
-- **Error Handling**: Unified `LarkAPIError` and `SDKResult<T>` types
+- **传输模式**: 所有 API 请求通过 `Transport<T>` 进行一致处理
+- **构建器模式**: 用于客户端配置和事件处理器注册
+- **类型安全**: 广泛使用 Rust 的类型系统和特征
+- **异步/等待**: 整个代码库的完全异步支持
+- **错误处理**: 统一的 `LarkAPIError` 和 `SDKResult<T>` 类型
 
-## Configuration
+## 配置
 
-Create a `.env` file based on `.env-example` with your API credentials:
+基于 `.env-example` 创建 `.env` 文件，配置你的 API 凭据:
 
 ```
 APP_ID=your_app_id
 APP_SECRET=your_app_secret
-USER_ACCESS_TOKEN=your_user_access_token  # Optional: for user-specific operations
+USER_ACCESS_TOKEN=your_user_access_token  # 可选: 用于用户特定操作
 ```
 
-## Features
+## 功能特性
 
-- Default: Basic API functionality
-- `websocket`: Enables WebSocket support for real-time events (required for `ws_client` example)
+- 默认: 基本 API 功能
+- `websocket`: 启用 WebSocket 支持以进行实时事件处理 (`ws_client` 示例需要)
 
-## Working with Examples
+## 使用示例
 
-Examples are extensively documented and located in `examples/` directory. They are organized by:
+示例具有详尽的文档，位于 `examples/` 目录中。它们按以下方式组织:
 
-- `api/`: API usage examples by service and version
-- `card/`: Lark card component examples
-- Root level: High-level integration examples
+- `api/`: 按服务和版本的 API 使用示例
+- `card/`: 飞书卡片组件示例
+- 根目录: 高级集成示例
 
-When adding new examples, follow the existing naming convention and add corresponding `[[example]]` entries to
-`Cargo.toml`.
+添加新示例时，遵循现有的命名约定，并在 `Cargo.toml` 中添加相应的 `[[example]]` 条目。
 
-## Client Usage Patterns
+## 客户端使用模式
 
-### Basic Client Setup
+### 基本客户端设置
 
 ``` norun
 use open_lark::prelude::*;
 
 let client = LarkClient::builder(app_id, app_secret)
-    .with_app_type(AppType::SelfBuilt)  // or AppType::Marketplace
+    .with_app_type(AppType::SelfBuilt)  // 或者 AppType::Marketplace
     .with_enable_token_cache(true)
     .build();
 ```
 
-### Error Handling
+### 错误处理
 
-All API calls return `SDKResult<T>` which wraps `Result<T, LarkAPIError>`. Always handle errors appropriately:
+所有 API 调用返回 `SDKResult<T>`，它包装了 `Result<T, LarkAPIError>`。始终适当地处理错误:
 
 ``` norun
 match client.im.create_message(&req).await {
-    Ok(response) => println!("Success: {:?}", response),
-    Err(e) => eprintln!("Error: {:?}", e),
+    Ok(response) => println!("成功: {:?}", response),
+    Err(e) => eprintln!("错误: {:?}", e),
 }
 ```
 
-### Event Handling
+### 事件处理
 
 ``` norun
 let handler = EventDispatcherHandler::builder()
     .register_p2_im_message_receive_v1(|event| {
-        println!("Received message: {:?}", event);
+        println!("收到消息: {:?}", event);
     })
     .build();
 ```
 
-## Protobuf Integration
+## Protobuf 集成
 
-The project includes protobuf definitions in `crates/protobuf/` for WebSocket communication. Build scripts automatically
-generate Rust code from `.proto` files.
+项目在 `crates/protobuf/` 中包含用于 WebSocket 通信的 protobuf 定义。构建脚本自动从 `.proto` 文件生成 Rust 代码。
