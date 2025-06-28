@@ -355,6 +355,14 @@ path = "examples/api/report_v1_query_tasks.rs"
 name = "report_v1_remove_rule_view"
 path = "examples/api/report_v1_remove_rule_view.rs"
 
+[[example]]
+name = "elearning_v2_course_registration"
+path = "examples/api/elearning_v2_course_registration.rs"
+
+[[example]]
+name = "elearning_v2_management"
+path = "examples/api/elearning_v2_management.rs"
+
 
 # ===========================================
 # Benchmarks
