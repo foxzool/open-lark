@@ -42,130 +42,137 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 );
                 if !data.semesters.items.is_empty() {
                     let first_semester = &data.semesters.items[0];
-                println!(
-                    "    📊 第一个周期: {} (ID: {})",
-                    first_semester.name, first_semester.semester_id
-                );
+                    println!(
+                        "    📊 第一个周期: {} (ID: {})",
+                        first_semester.name, first_semester.semester_id
+                    );
 
-                // 使用第一个周期获取项目列表
-                println!("  1.2 获取项目列表");
-                let activity_request = review_config::ActivityQueryRequest {
-                    semester_id: Some(first_semester.semester_id.clone()),
-                    page_size: Some(10),
-                    ..Default::default()
-                };
+                    // 使用第一个周期获取项目列表
+                    println!("  1.2 获取项目列表");
+                    let activity_request = review_config::ActivityQueryRequest {
+                        semester_id: Some(first_semester.semester_id.clone()),
+                        page_size: Some(10),
+                        ..Default::default()
+                    };
 
-                match client
-                    .performance
-                    .review_config
-                    .query_activities(activity_request, None)
-                    .await
-                {
-                    Ok(response) => {
-                        if let Some(data) = response.data {
-                            println!(
-                                "    ✅ 获取项目列表成功，数量: {}",
-                                data.activities.items.len()
-                            );
-                            if !data.activities.items.is_empty() {
-                                let first_activity = &data.activities.items[0];
-                            println!(
-                                "    📈 第一个项目: {} (ID: {})",
-                                first_activity.name, first_activity.activity_id
-                            );
+                    match client
+                        .performance
+                        .review_config
+                        .query_activities(activity_request, None)
+                        .await
+                    {
+                        Ok(response) => {
+                            if let Some(data) = response.data {
+                                println!(
+                                    "    ✅ 获取项目列表成功，数量: {}",
+                                    data.activities.items.len()
+                                );
+                                if !data.activities.items.is_empty() {
+                                    let first_activity = &data.activities.items[0];
+                                    println!(
+                                        "    📈 第一个项目: {} (ID: {})",
+                                        first_activity.name, first_activity.activity_id
+                                    );
 
-                            // 获取被评估人信息
-                            println!("  1.3 获取被评估人信息");
-                            let reviewee_request = review_config::RevieweeQueryRequest {
-                                activity_id: first_activity.activity_id.clone(),
-                                user_ids: None,
-                            };
+                                    // 获取被评估人信息
+                                    println!("  1.3 获取被评估人信息");
+                                    let reviewee_request = review_config::RevieweeQueryRequest {
+                                        activity_id: first_activity.activity_id.clone(),
+                                        user_ids: None,
+                                    };
 
-                            match client
-                                .performance
-                                .review_config
-                                .query_reviewees(reviewee_request, None)
-                                .await
-                            {
-                                Ok(response) => {
-                                    if let Some(data) = response.data {
-                                        println!(
-                                            "    ✅ 获取被评估人信息成功，数量: {}",
-                                            data.reviewees.len()
-                                        );
+                                    match client
+                                        .performance
+                                        .review_config
+                                        .query_reviewees(reviewee_request, None)
+                                        .await
+                                    {
+                                        Ok(response) => {
+                                            if let Some(data) = response.data {
+                                                println!(
+                                                    "    ✅ 获取被评估人信息成功，数量: {}",
+                                                    data.reviewees.len()
+                                                );
+                                            }
+                                        }
+                                        Err(e) => {
+                                            println!("    ❌ 获取被评估人信息失败: {:?}", e);
+                                        }
                                     }
-                                }
-                                Err(e) => {
-                                    println!("    ❌ 获取被评估人信息失败: {:?}", e);
-                                }
-                            }
 
-                            // 获取评估模板配置
-                            println!("  1.4 获取评估模板配置");
-                            let template_request = review_config::ReviewTemplateQueryRequest {
-                                activity_id: first_activity.activity_id.clone(),
-                                template_type: None,
-                            };
-
-                            match client
-                                .performance
-                                .review_config
-                                .query_review_templates(template_request, None)
-                                .await
-                            {
-                                Ok(response) => {
-                                    if let Some(data) = response.data {
-                                        println!(
-                                            "    ✅ 获取评估模板成功，数量: {}",
-                                            data.review_templates.len()
-                                        );
-
-                                        // 如果有评估模板，获取评估项
-                                        if !data.review_templates.is_empty() {
-                                            let first_template = &data.review_templates[0];
-                                        println!("  1.5 获取评估项列表");
-                                        let item_request = review_config::ReviewItemQueryRequest {
-                                            template_id: first_template.template_id.clone(),
+                                    // 获取评估模板配置
+                                    println!("  1.4 获取评估模板配置");
+                                    let template_request =
+                                        review_config::ReviewTemplateQueryRequest {
+                                            activity_id: first_activity.activity_id.clone(),
+                                            template_type: None,
                                         };
 
-                                        match client
-                                            .performance
-                                            .review_config
-                                            .query_review_items(item_request, None)
-                                            .await
-                                        {
-                                            Ok(response) => {
-                                                if let Some(data) = response.data {
-                                                    println!(
+                                    match client
+                                        .performance
+                                        .review_config
+                                        .query_review_templates(template_request, None)
+                                        .await
+                                    {
+                                        Ok(response) => {
+                                            if let Some(data) = response.data {
+                                                println!(
+                                                    "    ✅ 获取评估模板成功，数量: {}",
+                                                    data.review_templates.len()
+                                                );
+
+                                                // 如果有评估模板，获取评估项
+                                                if !data.review_templates.is_empty() {
+                                                    let first_template = &data.review_templates[0];
+                                                    println!("  1.5 获取评估项列表");
+                                                    let item_request =
+                                                        review_config::ReviewItemQueryRequest {
+                                                            template_id: first_template
+                                                                .template_id
+                                                                .clone(),
+                                                        };
+
+                                                    match client
+                                                        .performance
+                                                        .review_config
+                                                        .query_review_items(item_request, None)
+                                                        .await
+                                                    {
+                                                        Ok(response) => {
+                                                            if let Some(data) = response.data {
+                                                                println!(
                                                         "    ✅ 获取评估项成功，数量: {}",
                                                         data.review_items.len()
                                                     );
+                                                            }
+                                                        }
+                                                        Err(e) => {
+                                                            println!(
+                                                                "    ❌ 获取评估项失败: {:?}",
+                                                                e
+                                                            );
+                                                        }
+                                                    }
                                                 }
                                             }
-                                            Err(e) => {
-                                                println!("    ❌ 获取评估项失败: {:?}", e);
-                                            }
                                         }
+                                        Err(e) => {
+                                            println!("    ❌ 获取评估模板失败: {:?}", e);
                                         }
                                     }
                                 }
-                                Err(e) => {
-                                    println!("    ❌ 获取评估模板失败: {:?}", e);
-                                }
-                            }
                             }
                         }
+                        Err(e) => {
+                            println!("    ❌ 获取项目列表失败: {:?}", e);
+                        }
                     }
-                    Err(e) => {
-                        println!("    ❌ 获取项目列表失败: {:?}", e);
-                    }
+                } else {
+                    println!("    ⚠️  未获取到项目数据");
                 }
             } else {
-                println!("    ⚠️  未获取到项目数据");
+                println!("    ⚠️  未获取到周期数据");
             }
-        } else {
-            println!("    ⚠️  未获取到周期数据");
-        }
         }
         Err(e) => {
             println!("    ❌ 获取周期列表失败: {:?}", e);
@@ -190,10 +197,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     {
         Ok(response) => {
             if let Some(data) = response.data {
-                println!(
-                    "    ✅ 获取指标列表成功，数量: {}",
-                    data.metrics.len()
-                );
+                println!("    ✅ 获取指标列表成功，数量: {}", data.metrics.len());
             }
         }
         Err(e) => {
@@ -245,10 +249,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     {
         Ok(response) => {
             if let Some(data) = response.data {
-                println!(
-                    "    ✅ 获取任务列表成功，数量: {}",
-                    data.tasks.items.len()
-                );
+                println!("    ✅ 获取任务列表成功，数量: {}", data.tasks.items.len());
             }
         }
         Err(e) => {

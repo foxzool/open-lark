@@ -300,6 +300,18 @@ name = "human_authentication_example"
 path = "examples/api/human_authentication_example.rs"
 
 [[example]]
+name = "lingo_classification_repo"
+path = "examples/api/lingo_classification_repo.rs"
+
+[[example]]
+name = "lingo_draft"
+path = "examples/api/lingo_draft.rs"
+
+[[example]]
+name = "lingo_entity"
+path = "examples/api/lingo_entity.rs"
+
+[[example]]
 name = "okr_example"
 path = "examples/api/okr_example.rs"
 
