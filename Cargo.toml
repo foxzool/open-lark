@@ -363,6 +363,14 @@ path = "examples/api/elearning_v2_course_registration.rs"
 name = "elearning_v2_management"
 path = "examples/api/elearning_v2_management.rs"
 
+[[example]]
+name = "security_and_compliance_openapi_log"
+path = "examples/api/security_and_compliance_openapi_log.rs"
+
+[[example]]
+name = "security_and_compliance_audit_log"
+path = "examples/api/security_and_compliance_audit_log.rs"
+
 
 # ===========================================
 # Benchmarks

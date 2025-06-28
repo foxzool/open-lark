@@ -39,22 +39,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("任务总数: {}", data.tasks.items.len());
 
             for (index, task) in data.tasks.items.iter().enumerate() {
-            println!("\n任务 {}:", index + 1);
-            println!("  - 任务ID: {}", task.task_id);
-            println!("  - 规则ID: {}", task.rule_id);
-            if let Some(name) = &task.name {
-                println!("  - 任务名称: {}", name);
+                println!("\n任务 {}:", index + 1);
+                println!("  - 任务ID: {}", task.task_id);
+                println!("  - 规则ID: {}", task.rule_id);
+                if let Some(name) = &task.name {
+                    println!("  - 任务名称: {}", name);
+                }
+                if let Some(status) = &task.status {
+                    println!("  - 状态: {}", status);
+                }
+                if let Some(task_type) = &task.task_type {
+                    println!("  - 类型: {}", task_type);
+                }
+                if let Some(reporter_id) = &task.reporter_id {
+                    println!("  - 汇报者ID: {}", reporter_id);
+                }
             }
-            if let Some(status) = &task.status {
-                println!("  - 状态: {}", status);
-            }
-            if let Some(task_type) = &task.task_type {
-                println!("  - 类型: {}", task_type);
-            }
-            if let Some(reporter_id) = &task.reporter_id {
-                println!("  - 汇报者ID: {}", reporter_id);
-            }
-        }
 
             if let Some(has_more) = data.tasks.has_more {
                 if has_more {
@@ -84,10 +84,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     if filtered_response.code() == 0 {
         println!("按规则ID查询成功！");
         if let Some(data) = filtered_response.data {
-            println!(
-                "指定规则的任务数: {}",
-                data.tasks.items.len()
-            );
+            println!("指定规则的任务数: {}", data.tasks.items.len());
 
             for task in &data.tasks.items {
                 println!("  - 任务ID: {} (状态: {:?})", task.task_id, task.status);
@@ -96,7 +93,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     } else {
         eprintln!(
             "按规则ID查询失败: {} - {}",
-            filtered_response.code(), filtered_response.msg()
+            filtered_response.code(),
+            filtered_response.msg()
         );
     }
 
@@ -131,7 +129,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     } else {
         eprintln!(
             "按状态查询失败: {} - {}",
-            status_response.code(), status_response.msg()
+            status_response.code(),
+            status_response.msg()
         );
     }
 
