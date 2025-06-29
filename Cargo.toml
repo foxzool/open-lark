@@ -399,6 +399,10 @@ path = "examples/api/contact_v3_group_detail.rs"
 name = "contact_v3_role_management"
 path = "examples/api/contact_v3_role_management.rs"
 
+[[example]]
+name = "unified_builder_pattern"
+path = "examples/api/unified_builder_pattern.rs"
+
 
 # ===========================================
 # Benchmarks

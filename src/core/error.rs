@@ -30,6 +30,18 @@ pub enum LarkAPIError {
 
     #[error("Bad request: {0}")]
     BadRequest(String),
+
+    /// 数据处理错误
+    #[error("Data error: {0}")]
+    DataError(String),
+
+    /// 标准API响应错误，包含完整的错误信息
+    #[error("API error: {msg} (code: {code})")]
+    APIError {
+        code: i32,
+        msg: String,
+        error: Option<String>,
+    },
 }
 
 impl Clone for LarkAPIError {
@@ -51,6 +63,12 @@ impl Clone for LarkAPIError {
             },
             Self::MissingAccessToken => Self::MissingAccessToken,
             Self::BadRequest(msg) => Self::BadRequest(msg.clone()),
+            Self::DataError(msg) => Self::DataError(msg.clone()),
+            Self::APIError { code, msg, error } => Self::APIError {
+                code: *code,
+                msg: msg.clone(),
+                error: error.clone(),
+            },
         }
     }
 }
