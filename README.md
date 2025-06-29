@@ -299,6 +299,110 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
+## 🏗️ 统一Builder模式 - API接口设计最佳实践
+
+从v0.11.0开始，我们引入了统一的Builder模式，提供更一致、更友好的API使用体验。新的Builder模式支持链式调用、类型安全验证，并与传统API模式完全兼容。
+
+### 特性
+
+- **🔗 链式调用**: 提供更流畅的编程体验
+- **🛡️ 类型安全**: 编译时参数验证，减少运行时错误
+- **📦 统一错误处理**: 新的`StandardResponse`机制提供详细错误信息
+- **🔄 向后兼容**: 传统API调用方式仍然完全支持
+- **🎯 可选参数**: 更优雅地处理可选参数和条件构建
+
+### 使用示例
+
+#### 传统方式 (仍然支持)
+```rust,ignore
+let request = CreateUserRequest {
+    user: user.clone(),
+    user_id_type: Some("open_id".to_string()),
+    department_id_type: Some("open_department_id".to_string()),
+};
+
+let response = client.contact.v3.user.create(&request).await?;
+```
+
+#### 新Builder模式 (推荐)
+```rust,ignore
+use open_lark::core::trait_system::ExecutableBuilder;
+
+let response = client
+    .contact
+    .v3
+    .user
+    .create_user_builder()
+    .user(user.clone())
+    .user_id_type("open_id")
+    .department_id_type("open_department_id")
+    .execute(&client.contact.v3.user)
+    .await?;
+```
+
+#### 高级用法 - 条件构建
+```rust,ignore
+let mut builder = client
+    .contact
+    .v3
+    .user
+    .create_user_builder()
+    .user(user.clone());
+
+// 条件性添加参数
+if use_open_id {
+    builder = builder.user_id_type("open_id");
+}
+
+if include_department {
+    builder = builder.department_id_type("open_department_id");
+}
+
+let response = builder.execute(&client.contact.v3.user).await?;
+```
+
+### 错误处理改进
+
+新的错误处理机制提供更详细的错误信息和处理建议：
+
+```rust,ignore
+use open_lark::core::error::LarkAPIError;
+
+match result {
+    Ok(response) => {
+        println!("Success: {:?}", response);
+    }
+    Err(e) => {
+        match &e {
+            LarkAPIError::APIError { code, msg, .. } => {
+                println!("API错误 - 代码: {}, 消息: {}", code, msg);
+                
+                // 根据错误码提供具体建议
+                match *code {
+                    429 => println!("建议: 请求频率过高，建议稍后重试"),
+                    403 => println!("建议: 权限不足，请检查应用权限配置"),
+                    _ => {}
+                }
+            }
+            LarkAPIError::DataError(msg) => {
+                println!("数据错误: {}", msg);
+            }
+            _ => {
+                println!("其他错误: {}", e);
+            }
+        }
+    }
+}
+```
+
+### 完整示例
+
+查看 `examples/api/unified_builder_pattern.rs` 了解完整的使用示例，包括：
+- 传统模式和Builder模式的对比
+- 高级Builder用法演示
+- 错误处理最佳实践
+- 迁移指南和最佳实践总结
+
 ## 已完成
 
 ### 认证与授权

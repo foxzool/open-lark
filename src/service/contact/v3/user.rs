@@ -1,10 +1,13 @@
 use crate::{
     core::{
         api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
-        constants::AccessTokenType, http::Transport,
+        constants::AccessTokenType, http::Transport, req_option::RequestOption,
+        standard_response::StandardResponse, trait_system::executable_builder::ExecutableBuilder,
+        SDKResult,
     },
     service::contact::models::*,
 };
+use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 
 /// 用户管理服务
@@ -38,7 +41,7 @@ impl UserService {
         };
 
         let resp = Transport::<CreateUserResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        resp.into_result()
     }
 
     /// 修改用户部分信息
@@ -56,7 +59,7 @@ impl UserService {
         };
 
         let resp = Transport::<PatchUserResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        resp.into_result()
     }
 
     /// 更新用户 ID
@@ -74,7 +77,7 @@ impl UserService {
         };
 
         let resp = Transport::<UpdateUserIdResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        resp.into_result()
     }
 
     /// 获取单个用户信息
@@ -93,7 +96,7 @@ impl UserService {
         };
 
         let resp = Transport::<GetUserResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        resp.into_result()
     }
 
     /// 批量获取用户信息
@@ -110,7 +113,7 @@ impl UserService {
         };
 
         let resp = Transport::<BatchGetUsersResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        resp.into_result()
     }
 
     /// 获取部门直属用户列表
@@ -129,7 +132,7 @@ impl UserService {
 
         let resp = Transport::<FindUsersByDepartmentResponse>::request(api_req, &self.config, None)
             .await?;
-        Ok(resp.data.unwrap_or_default())
+        resp.into_result()
     }
 
     /// 通过手机号或邮箱获取用户 ID
@@ -147,7 +150,7 @@ impl UserService {
 
         let resp =
             Transport::<BatchGetUserIdResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        resp.into_result()
     }
 
     /// 搜索用户
@@ -164,7 +167,7 @@ impl UserService {
         };
 
         let resp = Transport::<SearchUsersResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        resp.into_result()
     }
 
     /// 删除用户
@@ -183,7 +186,7 @@ impl UserService {
         };
 
         let resp = Transport::<DeleteUserResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        resp.into_result()
     }
 
     /// 恢复已删除用户
@@ -201,7 +204,7 @@ impl UserService {
         };
 
         let resp = Transport::<ResurrectUserResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        resp.into_result()
     }
 
     /// 获取用户列表
@@ -231,7 +234,76 @@ impl UserService {
         };
 
         let resp = Transport::<ListUsersResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
+        resp.into_result()
+    }
+
+    /// 创建用户 - Builder模式 (推荐)
+    ///
+    /// 提供更现代化的Builder接口，支持链式调用和统一的执行模式
+    pub fn create_user_builder(&self) -> CreateUserBuilder {
+        CreateUserBuilder::new()
+    }
+}
+
+/// 创建用户的Builder
+#[derive(Default)]
+pub struct CreateUserBuilder {
+    user: Option<User>,
+    user_id_type: Option<String>,
+    department_id_type: Option<String>,
+}
+
+impl CreateUserBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 设置用户信息
+    pub fn user(mut self, user: User) -> Self {
+        self.user = Some(user);
+        self
+    }
+
+    /// 设置用户ID类型
+    pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
+        self.user_id_type = Some(user_id_type.to_string());
+        self
+    }
+
+    /// 设置部门ID类型
+    pub fn department_id_type(mut self, department_id_type: impl ToString) -> Self {
+        self.department_id_type = Some(department_id_type.to_string());
+        self
+    }
+
+    pub fn build(self) -> CreateUserRequest {
+        CreateUserRequest {
+            user: self.user.unwrap_or_default(),
+            user_id_type: self.user_id_type,
+            department_id_type: self.department_id_type,
+        }
+    }
+}
+
+#[async_trait]
+impl ExecutableBuilder<UserService, CreateUserRequest, CreateUserResponse> for CreateUserBuilder {
+    fn build(self) -> CreateUserRequest {
+        self.build()
+    }
+
+    async fn execute(self, service: &UserService) -> SDKResult<CreateUserResponse> {
+        let req = self.build();
+        service.create(&req).await
+    }
+
+    async fn execute_with_options(
+        self,
+        service: &UserService,
+        _option: RequestOption,
+    ) -> SDKResult<CreateUserResponse> {
+        // 目前简单实现，后续可以支持传递option到service方法
+        let req = self.build();
+        service.create(&req).await
     }
 }
 
