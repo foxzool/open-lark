@@ -9,6 +9,7 @@ use crate::{
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
+        standard_response::StandardResponse,
         SDKResult,
     },
     impl_executable_builder_owned,
@@ -104,20 +105,31 @@ impl FilesService {
         Self { config }
     }
 
+    /// 创建上传文件Builder
+    pub fn upload_all_builder(&self) -> UploadAllRequestBuilder {
+        UploadAllRequestBuilder::default()
+    }
+
+    /// 创建下载文件Builder  
+    pub fn download_builder(&self) -> DownloadRequestBuilder {
+        DownloadRequestBuilder::default()
+    }
+
     /// 上传文件
     pub async fn upload_all(
         &self,
         upload_all_request: UploadAllRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UploadAllResponse>> {
+    ) -> SDKResult<UploadAllResponse> {
         let mut api_req = upload_all_request.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/drive/v1/files/upload_all".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
+        let api_resp: BaseResponse<UploadAllResponse> =
+            Transport::request(api_req, &self.config, option).await?;
 
-        Ok(api_resp)
+        api_resp.into_result()
     }
 
     /// 下载文件
@@ -125,15 +137,16 @@ impl FilesService {
         &self,
         request: DownloadRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<BinaryResponse>> {
+    ) -> SDKResult<BinaryResponse> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = format!("/open-apis/drive/v1/files/{}/download", request.file_token);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
+        let api_resp: BaseResponse<BinaryResponse> =
+            Transport::request(api_req, &self.config, option).await?;
 
-        Ok(api_resp)
+        api_resp.into_result()
     }
 }
 
@@ -189,7 +202,7 @@ impl_executable_builder_owned!(
     UploadAllRequestBuilder,
     FilesService,
     UploadAllRequest,
-    BaseResponse<UploadAllResponse>,
+    UploadAllResponse,
     upload_all
 );
 
@@ -197,6 +210,6 @@ impl_executable_builder_owned!(
     DownloadRequestBuilder,
     FilesService,
     DownloadRequest,
-    BaseResponse<BinaryResponse>,
+    BinaryResponse,
     download
 );
