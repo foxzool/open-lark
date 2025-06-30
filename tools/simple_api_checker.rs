@@ -14,7 +14,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let service_dir = "src/service";
     let mut results = HashMap::new();
 
-    println!("🔍 扫描服务目录: {}", service_dir);
+    println!("🔍 扫描服务目录: {service_dir}");
 
     for entry in WalkDir::new(service_dir)
         .into_iter()
@@ -56,7 +56,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     println!("🎯 总结统计:");
-    println!("   总方法数: {}", total_methods);
+    println!("   总方法数: {total_methods}");
     println!(
         "   Builder模式覆盖率: {:.1}%",
         if total_methods > 0 {
@@ -85,7 +85,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 生成简化报告
     let report_path = "reports/simple_api_consistency_report.md";
     generate_simple_report(&results, report_path)?;
-    println!("\n📄 报告已生成: {}", report_path);
+    println!("\n📄 报告已生成: {report_path}");
 
     Ok(())
 }
@@ -143,14 +143,13 @@ fn generate_simple_report(
     let total_docs: u32 = results.values().map(|a| a.documentation_count).sum();
 
     report.push_str("## 📊 总体统计\n\n");
-    report.push_str(&format!("- 检查的服务文件数: {}\n", total_files));
-    report.push_str(&format!("- 总方法数: {}\n", total_methods));
-    report.push_str(&format!("- Builder模式数: {}\n", total_builders));
+    report.push_str(&format!("- 检查的服务文件数: {total_files}\n"));
+    report.push_str(&format!("- 总方法数: {total_methods}\n"));
+    report.push_str(&format!("- Builder模式数: {total_builders}\n"));
     report.push_str(&format!(
-        "- StandardResponse使用数: {}\n",
-        total_standard_response
+        "- StandardResponse使用数: {total_standard_response}\n"
     ));
-    report.push_str(&format!("- 文档注释数: {}\n\n", total_docs));
+    report.push_str(&format!("- 文档注释数: {total_docs}\n\n"));
 
     // 覆盖率统计
     report.push_str("## 📈 覆盖率分析\n\n");
@@ -159,12 +158,9 @@ fn generate_simple_report(
         let response_rate = (total_standard_response as f32 / total_methods as f32) * 100.0;
         let doc_rate = (total_docs as f32 / total_methods as f32) * 100.0;
 
-        report.push_str(&format!("- Builder模式覆盖率: {:.1}%\n", builder_rate));
-        report.push_str(&format!(
-            "- StandardResponse覆盖率: {:.1}%\n",
-            response_rate
-        ));
-        report.push_str(&format!("- 文档覆盖率: {:.1}%\n\n", doc_rate));
+        report.push_str(&format!("- Builder模式覆盖率: {builder_rate:.1}%\n"));
+        report.push_str(&format!("- StandardResponse覆盖率: {response_rate:.1}%\n"));
+        report.push_str(&format!("- 文档覆盖率: {doc_rate:.1}%\n\n"));
 
         // 评级
         let avg_rate = (builder_rate + response_rate + doc_rate) / 3.0;
@@ -182,7 +178,7 @@ fn generate_simple_report(
     report.push_str("## 📋 文件详细分析\n\n");
     for (file_path, analysis) in results {
         let file_name = file_path.split('/').next_back().unwrap_or(file_path);
-        report.push_str(&format!("### {}\n", file_name));
+        report.push_str(&format!("### {file_name}\n"));
         report.push_str(&format!("- 方法数: {}\n", analysis.method_count));
         report.push_str(&format!("- Builder模式: {}\n", analysis.builder_patterns));
         report.push_str(&format!(
