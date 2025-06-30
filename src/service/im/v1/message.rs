@@ -12,6 +12,7 @@ use crate::core::{
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
+    standard_response::StandardResponse,
     SDKResult,
 };
 
@@ -30,15 +31,16 @@ impl MessageService {
         &self,
         create_message_request: CreateMessageRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<Message>> {
+    ) -> SDKResult<Message> {
         let mut api_req = create_message_request.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
+        let api_resp: BaseResponse<Message> =
+            Transport::request(api_req, &self.config, option).await?;
 
-        Ok(api_resp)
+        api_resp.into_result()
     }
 
     /// 获取会话历史消息
@@ -50,15 +52,16 @@ impl MessageService {
         &self,
         list_message_request: ListMessageRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ListMessageRespData>> {
+    ) -> SDKResult<ListMessageRespData> {
         let mut api_req = list_message_request.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/im/v1/messages".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
+        let api_resp: BaseResponse<ListMessageRespData> =
+            Transport::request(api_req, &self.config, option).await?;
 
-        Ok(api_resp)
+        api_resp.into_result()
     }
 
     pub fn list_iter(
@@ -92,23 +95,20 @@ impl ListMessageIterator<'_> {
             .list(self.req.clone(), self.option.clone())
             .await
         {
-            Ok(resp) => match resp.data {
-                Some(data) => {
-                    self.has_more = data.has_more;
-                    if data.has_more {
-                        self.req
-                            .api_req
-                            .query_params
-                            .insert("page_token".to_string(), data.page_token.unwrap());
-                        Some(data.items)
-                    } else if data.items.is_empty() {
-                        None
-                    } else {
-                        Some(data.items)
-                    }
+            Ok(data) => {
+                self.has_more = data.has_more;
+                if data.has_more {
+                    self.req
+                        .api_req
+                        .query_params
+                        .insert("page_token".to_string(), data.page_token.unwrap());
+                    Some(data.items)
+                } else if data.items.is_empty() {
+                    None
+                } else {
+                    Some(data.items)
                 }
-                None => None,
-            },
+            }
             Err(e) => {
                 error!("Error: {:?}", e);
                 None
@@ -157,7 +157,7 @@ crate::impl_executable_builder_owned!(
     CreateMessageRequestBuilder,
     MessageService,
     CreateMessageRequest,
-    BaseResponse<Message>,
+    Message,
     create
 );
 
@@ -452,7 +452,7 @@ crate::impl_executable_builder_owned!(
     ListMessageRequestBuilder,
     MessageService,
     ListMessageRequest,
-    BaseResponse<ListMessageRespData>,
+    ListMessageRespData,
     list
 );
 
