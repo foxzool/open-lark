@@ -20,8 +20,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .into_iter()
         .filter_map(|e| e.ok())
         .filter(|e| e.path().extension().map_or(false, |ext| ext == "rs"))
-        .take(20)
-    // 限制检查文件数量避免超时
+    // 移除文件数量限制以确保扫描所有服务文件
     {
         let path = entry.path();
         if let Ok(content) = fs::read_to_string(path) {
@@ -97,23 +96,21 @@ struct FileAnalysis {
 }
 
 fn analyze_file(content: &str, _path: &Path) -> FileAnalysis {
-    let mut method_count = 0;
-    let mut builder_patterns = 0;
-    let mut standard_response_usage = 0;
-    let mut documentation_count = 0;
-
-    // 计算方法数（简单统计 pub fn）
-    method_count =
+    // 计算方法数（统计 pub fn 和 pub async fn）
+    let method_count =
         content.matches("pub fn").count() as u32 + content.matches("pub async fn").count() as u32;
 
-    // 计算Builder模式（寻找 Builder 结构体）
-    builder_patterns = content.matches("Builder {").count() as u32;
+    // 计算Builder模式（寻找 Builder 结构体和Builder方法）
+    let builder_patterns = content.matches("Builder {").count() as u32
+        + content.matches("Builder::").count() as u32
+        + content.matches("_builder()").count() as u32;
 
-    // 计算StandardResponse使用
-    standard_response_usage = content.matches(".into_result()").count() as u32;
+    // 计算StandardResponse使用（寻找 into_result 调用和 StandardResponse import）
+    let standard_response_usage = content.matches(".into_result()").count() as u32
+        + content.matches("StandardResponse").count() as u32;
 
     // 计算文档注释
-    documentation_count = content.matches("///").count() as u32;
+    let documentation_count = content.matches("///").count() as u32;
 
     FileAnalysis {
         method_count,
