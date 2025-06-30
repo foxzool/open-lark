@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.0] - 2025-06-30
+
+### Added - 🏗️ 现代化Builder模式与统一错误处理系统
+
+#### ✨ Builder模式完整实现 - 现代化API调用体验
+- **🏗️ ExecutableBuilder特征系统** - 统一Builder接口，支持类型安全的链式调用
+  - Contact v3用户服务完整Builder模式支持
+  - IM v1消息、文件、图片服务Builder模式实现
+  - Drive v1文件服务Builder模式支持
+- **⚡ 现代化异步执行** - `.execute()`方法提供一致的异步调用体验
+- **🔗 流畅链式调用** - 支持参数链式设置，提高代码可读性
+- **✅ 完全向后兼容** - 新旧API并存，渐进式迁移
+
+#### 🛡️ 统一错误处理系统
+- **📦 StandardResponse特征** - 统一的`.into_result()`错误处理机制
+- **🎯 智能错误信息** - 详细错误分析和操作建议
+- **🔄 一致性保证** - 所有服务使用统一的错误处理模式
+
+#### 🔧 API设计优化
+- **📊 API一致性检查工具** - 自动化API设计质量监控
+- **📚 完整设计规范** - API_DESIGN_GUIDELINES.md提供标准化开发指南
+- **🧪 综合示例代码** - 展示传统vs现代API调用方式
+
+#### 📝 文档与示例完善
+- **📋 综合示例** - unified_builder_pattern.rs展示完整功能
+- **🎯 专项示例** - IM、Contact、Drive服务的Builder模式示例
+- **📚 最佳实践** - 详细的使用指南和代码规范
+
 ### Added - ✅ Contact v3 通讯录API 100%完成
 
 #### 🎯 Contact v3 API 最终补全 - 企业级通讯录管理达到完全覆盖

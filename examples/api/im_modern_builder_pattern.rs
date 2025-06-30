@@ -142,7 +142,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("展示: 条件构建、消息类型多样性、批量操作\n");
 
     // 模拟不同类型的消息
-    let message_types = vec![
+    let message_types = [
         ("text", "这是文本消息"),
         ("text", "这是另一条文本消息 📝"),
         ("text", "最后一条测试消息 🎉"),
