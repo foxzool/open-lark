@@ -156,22 +156,18 @@ async fn demo_image_upload(client: &LarkClient) -> Result<(), Box<dyn std::error
     // 上传图片
     match client.im.v1.image.create("png", image_data, None).await {
         Ok(response) => {
-            if let Some(data) = response.data {
-                println!("  ✅ 图片上传成功: {}", data.image_key);
+            println!("  ✅ 图片上传成功: {}", response.image_key);
 
-                // 下载图片
-                match client.im.v1.image.get(&data.image_key, None).await {
-                    Ok(download_response) => {
-                        if let Some(download_data) = download_response.data {
-                            println!(
-                                "  📥 图片下载成功，大小: {} bytes",
-                                download_data.data.len()
-                            );
-                        }
-                    }
-                    Err(e) => {
-                        println!("  ❌ 图片下载失败: {:?}", e);
-                    }
+            // 下载图片
+            match client.im.v1.image.get(&response.image_key, None).await {
+                Ok(download_response) => {
+                    println!(
+                        "  📥 图片下载成功，大小: {} bytes",
+                        download_response.data.len()
+                    );
+                }
+                Err(e) => {
+                    println!("  ❌ 图片下载失败: {:?}", e);
                 }
             }
         }

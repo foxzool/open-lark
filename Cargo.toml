@@ -1,6 +1,6 @@
 [package]
 name = "open-lark"
-version = "0.11.0"
+version = "0.12.0"
 edition = "2021"
 authors = ["ZoOL <zhooul@gmail.com>"]
 readme = "README.md"
@@ -90,10 +90,6 @@ name = "apass_example"
 path = "examples/api/apass_example.rs"
 
 [[example]]
-name = "send_message"
-path = "examples/api/send_message.rs"
-
-[[example]]
 name = "websocket_client"
 path = "examples/basic/websocket_client.rs"
 required-features = ["websocket"]
@@ -112,46 +108,25 @@ name = "enterprise_scenario_with_enhanced_builder"
 path = "examples/api/enterprise_scenario_with_enhanced_builder.rs"
 
 [[example]]
-name = "data_processing_with_enhanced_builder"
-path = "examples/api/data_processing_with_enhanced_builder.rs"
-
-[[example]]
 name = "multi_service_integration_enhanced"
 path = "examples/api/multi_service_integration_enhanced.rs"
-
-[[example]]
-name = "token_performance_monitoring"
-path = "examples/api/token_performance_monitoring.rs"
-
-[[example]]
-name = "background_token_preheating"
-path = "examples/api/background_token_preheating.rs"
 
 [[example]]
 name = "enhanced_error_handling"
 path = "examples/api/enhanced_error_handling.rs"
 
-[[example]]
-name = "response_handling_patterns"
-path = "examples/api/response_handling_patterns.rs"
-
-
-[[example]]
-name = "simple_error_demo"
-path = "examples/api/simple_error_demo.rs"
-
 # Core API Examples
-[[example]]
-name = "core_send_message"
-path = "examples/core/send_message.rs"
+# [[example]]
+# name = "core_send_message"
+# path = "examples/core/send_message.rs"
 
 [[example]]
 name = "core_get_chat_history"
 path = "examples/core/get_chat_history.rs"
 
-[[example]]
-name = "core_upload_file"
-path = "examples/core/upload_file.rs"
+# [[example]]
+# name = "core_upload_file"
+# path = "examples/core/upload_file.rs"
 
 [[example]]
 name = "core_download_file"
@@ -197,9 +172,6 @@ path = "examples/core/refresh_token.rs"
 name = "permission_owned_demo"
 path = "examples/api/permission_owned_demo.rs"
 
-[[example]]
-name = "comprehensive_error_codes_demo"
-path = "examples/api/comprehensive_error_codes_demo.rs"
 
 [[example]]
 name = "calendar_demo"
@@ -221,9 +193,9 @@ path = "examples/api/directory_v1_employee_extended.rs"
 name = "directory_v1_department_extended"
 path = "examples/api/directory_v1_department_extended.rs"
 
-[[example]]
-name = "contact_v3_comprehensive"
-path = "examples/api/contact_v3_comprehensive.rs"
+# [[example]]
+# name = "contact_v3_comprehensive"
+# path = "examples/api/contact_v3_comprehensive.rs"
 
 [[example]]
 name = "group_demo"

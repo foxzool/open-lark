@@ -19,7 +19,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     for entry in WalkDir::new(service_dir)
         .into_iter()
         .filter_map(|e| e.ok())
-        .filter(|e| e.path().extension().map_or(false, |ext| ext == "rs"))
+        .filter(|e| e.path().extension().is_some_and(|ext| ext == "rs"))
     // 移除文件数量限制以确保扫描所有服务文件
     {
         let path = entry.path();
@@ -39,7 +39,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut documented_count = 0;
 
     for (file_path, analysis) in &results {
-        println!("📁 {}", file_path.split('/').last().unwrap_or(file_path));
+        println!(
+            "📁 {}",
+            file_path.split('/').next_back().unwrap_or(file_path)
+        );
         println!("   方法数: {}", analysis.method_count);
         println!("   Builder支持: {}", analysis.builder_patterns);
         println!("   StandardResponse: {}", analysis.standard_response_usage);
@@ -178,7 +181,7 @@ fn generate_simple_report(
     // 详细文件分析
     report.push_str("## 📋 文件详细分析\n\n");
     for (file_path, analysis) in results {
-        let file_name = file_path.split('/').last().unwrap_or(file_path);
+        let file_name = file_path.split('/').next_back().unwrap_or(file_path);
         report.push_str(&format!("### {}\n", file_name));
         report.push_str(&format!("- 方法数: {}\n", analysis.method_count));
         report.push_str(&format!("- Builder模式: {}\n", analysis.builder_patterns));

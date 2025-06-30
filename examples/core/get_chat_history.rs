@@ -57,37 +57,35 @@ async fn get_recent_messages(
         .await
     {
         Ok(response) => {
-            if let Some(data) = &response.data {
-                println!("✅ 消息获取成功!");
-                println!("   消息总数: {}", data.items.len());
-                println!("   是否有更多: {}", data.has_more);
+            println!("✅ 消息获取成功!");
+            println!("   消息总数: {}", response.items.len());
+            println!("   是否有更多: {}", response.has_more);
 
-                if !data.items.is_empty() {
-                    println!("\n📝 消息列表:");
-                    for (index, message) in data.items.iter().enumerate() {
-                        println!(
-                            "   {}. [{}] {} - {}",
-                            index + 1,
-                            format_timestamp(&message.create_time),
-                            message.msg_type,
-                            format_sender(&message.sender)
-                        );
+            if !response.items.is_empty() {
+                println!("\n📝 消息列表:");
+                for (index, message) in response.items.iter().enumerate() {
+                    println!(
+                        "   {}. [{}] {} - {}",
+                        index + 1,
+                        format_timestamp(&message.create_time),
+                        message.msg_type,
+                        format_sender(&message.sender)
+                    );
 
-                        // 显示消息内容预览（前50个字符）
-                        if let Some(content) = extract_text_content(&message.body.content) {
-                            let preview = if content.len() > 50 {
-                                format!("{}...", &content[..50])
-                            } else {
-                                content
-                            };
-                            println!("      内容: {}", preview);
-                        }
+                    // 显示消息内容预览（前50个字符）
+                    if let Some(content) = extract_text_content(&message.body.content) {
+                        let preview = if content.len() > 50 {
+                            format!("{}...", &content[..50])
+                        } else {
+                            content
+                        };
+                        println!("      内容: {}", preview);
                     }
                 }
 
-                if data.has_more {
+                if response.has_more {
                     println!("\n💡 提示: 还有更多消息可以通过分页获取");
-                    if let Some(page_token) = &data.page_token {
+                    if let Some(page_token) = &response.page_token {
                         println!("   下一页token: {}", page_token);
                     }
                 }
@@ -131,37 +129,35 @@ async fn get_messages_by_timerange(
         .await
     {
         Ok(response) => {
-            if let Some(data) = &response.data {
-                println!("✅ 时间段消息获取成功!");
-                println!(
-                    "   时间范围: {} - {}",
-                    format_timestamp(&yesterday.to_string()),
-                    format_timestamp(&now.to_string())
-                );
-                println!("   消息数量: {}", data.items.len());
+            println!("✅ 时间段消息获取成功!");
+            println!(
+                "   时间范围: {} - {}",
+                format_timestamp(&yesterday.to_string()),
+                format_timestamp(&now.to_string())
+            );
+            println!("   消息数量: {}", response.items.len());
 
-                if !data.items.is_empty() {
-                    // 按消息类型统计
-                    let mut type_stats = std::collections::HashMap::new();
-                    for message in &data.items {
-                        *type_stats.entry(&message.msg_type).or_insert(0) += 1;
-                    }
+            if !response.items.is_empty() {
+                // 按消息类型统计
+                let mut type_stats = std::collections::HashMap::new();
+                for message in &response.items {
+                    *type_stats.entry(&message.msg_type).or_insert(0) += 1;
+                }
 
-                    println!("\n📊 消息类型统计:");
-                    for (msg_type, count) in type_stats {
-                        println!("   {}: {} 条", msg_type, count);
-                    }
+                println!("\n📊 消息类型统计:");
+                for (msg_type, count) in type_stats {
+                    println!("   {}: {} 条", msg_type, count);
+                }
 
-                    // 显示最近几条消息
-                    println!("\n📝 最近的消息:");
-                    for message in data.items.iter().take(5) {
-                        println!(
-                            "   [{}] {} - {}",
-                            format_timestamp(&message.create_time),
-                            message.msg_type,
-                            format_sender(&message.sender)
-                        );
-                    }
+                // 显示最近几条消息
+                println!("\n📝 最近的消息:");
+                for message in response.items.iter().take(5) {
+                    println!(
+                        "   [{}] {} - {}",
+                        format_timestamp(&message.create_time),
+                        message.msg_type,
+                        format_sender(&message.sender)
+                    );
                 }
             } else {
                 println!("⚠️ 请求成功，但未返回消息数据");

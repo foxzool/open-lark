@@ -85,9 +85,9 @@ pub enum Severity {
 pub struct ApiConsistencyChecker {
     service_dir: PathBuf,
     analyses: Vec<ApiAnalysis>,
-    builder_pattern: Regex,
+    _builder_pattern: Regex,
     standard_response_pattern: Regex,
-    doc_comment_pattern: Regex,
+    _doc_comment_pattern: Regex,
     error_unwrap_pattern: Regex,
 }
 
@@ -101,9 +101,9 @@ impl ApiConsistencyChecker {
         Self {
             service_dir: service_dir.as_ref().to_path_buf(),
             analyses: Vec::new(),
-            builder_pattern,
+            _builder_pattern: builder_pattern,
             standard_response_pattern,
-            doc_comment_pattern,
+            _doc_comment_pattern: doc_comment_pattern,
             error_unwrap_pattern,
         }
     }
@@ -114,7 +114,7 @@ impl ApiConsistencyChecker {
         for entry in WalkDir::new(&self.service_dir)
             .into_iter()
             .filter_map(|e| e.ok())
-            .filter(|e| e.path().extension().map_or(false, |ext| ext == "rs"))
+            .filter(|e| e.path().extension().is_some_and(|ext| ext == "rs"))
         {
             if let Some(analysis) = self.analyze_service_file(entry.path())? {
                 self.analyses.push(analysis);
@@ -261,7 +261,7 @@ impl ApiConsistencyChecker {
 
     fn check_consistency_issues(
         &self,
-        content: &str,
+        _content: &str,
         methods: &[ApiMethod],
     ) -> Vec<ConsistencyIssue> {
         let mut issues = Vec::new();
@@ -385,7 +385,7 @@ impl ApiConsistencyChecker {
         for analysis in &self.analyses {
             services_by_name
                 .entry(analysis.service_name.clone())
-                .or_insert_with(Vec::new)
+                .or_default()
                 .push(analysis);
         }
 
