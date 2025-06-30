@@ -287,18 +287,8 @@ async fn enhanced_api_call_example() -> Result<(), Box<dyn std::error::Error>> {
         .await
     {
         Ok(response) => {
-            // 使用BaseResponse的新方法处理响应
-            if response.success() {
-                if let Some(data) = &response.data {
-                    println!("✅ 消息发送成功: {}", data.message_id);
-                } else {
-                    println!("⚠️ 响应成功但数据为空");
-                }
-            } else {
-                println!("⚠️ 响应失败");
-                // 打印详细错误信息
-                response.print_error_details();
-            }
+            // 处理响应
+            println!("✅ 消息发送成功: {}", response.message_id);
         }
         Err(error) => {
             println!("❌ API调用失败");

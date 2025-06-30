@@ -124,27 +124,23 @@ async fn download_file(
         .await
     {
         Ok(response) => {
-            if let Some(data) = &response.data {
-                println!("✅ 文件下载成功!");
+            println!("✅ 文件下载成功!");
 
-                // 获取文件数据
-                let file_data = &data.body;
-                println!("   下载大小: {} 字节", file_data.len());
+            // 获取文件数据
+            let file_data = &response.body;
+            println!("   下载大小: {} 字节", file_data.len());
 
-                // 生成本地文件名（使用时间戳避免冲突）
-                let timestamp = std::time::SystemTime::now()
-                    .duration_since(std::time::UNIX_EPOCH)?
-                    .as_secs();
-                let local_filename = format!("downloaded_file_{}.bin", timestamp);
+            // 生成本地文件名（使用时间戳避免冲突）
+            let timestamp = std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)?
+                .as_secs();
+            let local_filename = format!("downloaded_file_{}.bin", timestamp);
 
-                // 保存到本地文件
-                save_file_to_local(&local_filename, file_data).await?;
+            // 保存到本地文件
+            save_file_to_local(&local_filename, file_data).await?;
 
-                // 尝试检测文件类型并提供更好的文件名
-                detect_and_rename_file(&local_filename, file_data).await?;
-            } else {
-                println!("⚠️ 下载请求成功，但未返回文件数据");
-            }
+            // 尝试检测文件类型并提供更好的文件名
+            detect_and_rename_file(&local_filename, file_data).await?;
         }
         Err(e) => {
             println!("❌ 文件下载失败: {:?}", e);
