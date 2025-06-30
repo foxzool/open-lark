@@ -52,12 +52,26 @@ url = { version = "2.5.0", features = ["serde"] }
 tokio-tungstenite = { version = "0.23", features = [
     "rustls-tls-native-roots",
 ], optional = true }
+walkdir = "2.4"
+regex = "1.10"
 
 
 [dev-dependencies]
 dotenvy = "0.15.7"
 env_logger = "0.11.3"
 uuid = { version = "1.8.0", features = ["v4"] }
+
+# ===========================================
+# Tools
+# ===========================================
+
+[[bin]]
+name = "api_consistency_checker"
+path = "tools/api_consistency_checker.rs"
+
+[[bin]]
+name = "simple_api_checker"
+path = "tools/simple_api_checker.rs"
 
 # ===========================================
 # Examples
@@ -402,6 +416,10 @@ path = "examples/api/contact_v3_role_management.rs"
 [[example]]
 name = "unified_builder_pattern"
 path = "examples/api/unified_builder_pattern.rs"
+
+[[example]]
+name = "drive_builder_pattern"
+path = "examples/api/drive_builder_pattern.rs"
 
 
 # ===========================================
