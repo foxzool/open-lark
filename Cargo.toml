@@ -421,6 +421,14 @@ path = "examples/api/unified_builder_pattern.rs"
 name = "drive_builder_pattern"
 path = "examples/api/drive_builder_pattern.rs"
 
+[[example]]
+name = "im_modern_builder_pattern"
+path = "examples/api/im_modern_builder_pattern.rs"
+
+[[example]]
+name = "im_file_image_builder_pattern"
+path = "examples/api/im_file_image_builder_pattern.rs"
+
 
 # ===========================================
 # Benchmarks
