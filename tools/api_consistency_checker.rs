@@ -376,8 +376,8 @@ impl ApiConsistencyChecker {
         let total_issues: usize = self.analyses.iter().map(|a| a.issues.len()).sum();
 
         report.push_str("## 📊 总体统计\n\n");
-        report.push_str(&format!("- 检查的服务文件数: {}\n", total_services));
-        report.push_str(&format!("- 平均一致性得分: {}%\n", avg_score));
+        report.push_str(&format!("- 检查的服务文件数: {total_services}\n"));
+        report.push_str(&format!("- 平均一致性得分: {avg_score}%\n"));
         report.push_str(&format!("- 发现的问题总数: {}\n\n", total_issues));
 
         // 按服务分类的详细报告
