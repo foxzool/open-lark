@@ -308,7 +308,7 @@ impl AttachmentService {
     ) -> SDKResult<BaseResponse<AttachmentDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/attachments/{}", attachment_id),
+            api_path: format!("/open-apis/hire/v1/attachments/{attachment_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -464,7 +464,7 @@ impl AttachmentService {
     ) -> SDKResult<BaseResponse<AttachmentOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/attachments/{}", attachment_id),
+            api_path: format!("/open-apis/hire/v1/attachments/{attachment_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -496,7 +496,7 @@ impl AttachmentService {
     ) -> SDKResult<BaseResponse<AttachmentOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/hire/v1/attachments/{}", attachment_id),
+            api_path: format!("/open-apis/hire/v1/attachments/{attachment_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -528,7 +528,7 @@ impl AttachmentService {
     ) -> SDKResult<BaseResponse<serde_json::Value>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/attachments/{}/download", attachment_id),
+            api_path: format!("/open-apis/hire/v1/attachments/{attachment_id}/download"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -560,7 +560,7 @@ impl AttachmentService {
     ) -> SDKResult<BaseResponse<serde_json::Value>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/attachments/{}/preview", attachment_id),
+            api_path: format!("/open-apis/hire/v1/attachments/{attachment_id}/preview"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

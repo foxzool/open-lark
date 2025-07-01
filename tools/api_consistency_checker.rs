@@ -378,7 +378,7 @@ impl ApiConsistencyChecker {
         report.push_str("## 📊 总体统计\n\n");
         report.push_str(&format!("- 检查的服务文件数: {total_services}\n"));
         report.push_str(&format!("- 平均一致性得分: {avg_score}%\n"));
-        report.push_str(&format!("- 发现的问题总数: {}\n\n", total_issues));
+        report.push_str(&format!("- 发现的问题总数: {total_issues}\n\n"));
 
         // 按服务分类的详细报告
         let mut services_by_name: HashMap<String, Vec<&ApiAnalysis>> = HashMap::new();
@@ -392,7 +392,7 @@ impl ApiConsistencyChecker {
         report.push_str("## 🔍 服务详细分析\n\n");
 
         for (service_name, analyses) in services_by_name {
-            report.push_str(&format!("### {} 服务\n\n", service_name));
+            report.push_str(&format!("### {service_name} 服务\n\n"));
 
             for analysis in analyses {
                 report.push_str(&format!(
@@ -510,7 +510,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let report_path = "reports/api_consistency_report.md";
     checker.save_report(report_path)?;
 
-    println!("📄 报告已生成: {}", report_path);
+    println!("📄 报告已生成: {report_path}");
     println!("\n🎯 总结:");
 
     let total_files = checker.analyses.len();
@@ -525,8 +525,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         0
     };
 
-    println!("   - 检查了 {} 个服务文件", total_files);
-    println!("   - 平均一致性得分: {}%", avg_score);
+    println!("   - 检查了 {total_files} 个服务文件");
+    println!("   - 平均一致性得分: {avg_score}%");
 
     if avg_score >= 80 {
         println!("   ✅ API设计一致性良好!");

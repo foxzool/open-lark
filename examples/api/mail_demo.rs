@@ -89,7 +89,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         .await
                     {
                         Ok(response) => println!("✓ 文件夹修改成功: {:?}", response.data),
-                        Err(e) => println!("✗ 文件夹修改失败: {:?}", e),
+                        Err(e) => println!("✗ 文件夹修改失败: {e:?}"),
                     }
 
                     // 删除文件夹
@@ -102,12 +102,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         .await
                     {
                         Ok(_) => println!("✓ 文件夹删除成功"),
-                        Err(e) => println!("✗ 文件夹删除失败: {:?}", e),
+                        Err(e) => println!("✗ 文件夹删除失败: {e:?}"),
                     }
                 }
             }
         }
-        Err(e) => println!("✗ 文件夹创建失败: {:?}", e),
+        Err(e) => println!("✗ 文件夹创建失败: {e:?}"),
     }
 
     // 列出邮箱文件夹
@@ -129,7 +129,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             "✓ 获取文件夹列表成功: {} 个文件夹",
             response.data.map(|d| d.folders.len()).unwrap_or(0)
         ),
-        Err(e) => println!("✗ 获取文件夹列表失败: {:?}", e),
+        Err(e) => println!("✗ 获取文件夹列表失败: {e:?}"),
     }
 
     // 2. 用户邮件管理演示
@@ -183,11 +183,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .await
                 {
                     Ok(response) => println!("✓ 获取邮件详情成功: {:?}", response.data),
-                    Err(e) => println!("✗ 获取邮件详情失败: {:?}", e),
+                    Err(e) => println!("✗ 获取邮件详情失败: {e:?}"),
                 }
             }
         }
-        Err(e) => println!("✗ 邮件发送失败: {:?}", e),
+        Err(e) => println!("✗ 邮件发送失败: {e:?}"),
     }
 
     // 列出邮件
@@ -210,7 +210,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             "✓ 获取邮件列表成功: {} 封邮件",
             response.data.map(|d| d.messages.len()).unwrap_or(0)
         ),
-        Err(e) => println!("✗ 获取邮件列表失败: {:?}", e),
+        Err(e) => println!("✗ 获取邮件列表失败: {e:?}"),
     }
 
     // 3. 邮箱联系人管理演示
@@ -237,7 +237,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await
     {
         Ok(response) => println!("✓ 联系人创建成功: {:?}", response.data),
-        Err(e) => println!("✗ 联系人创建失败: {:?}", e),
+        Err(e) => println!("✗ 联系人创建失败: {e:?}"),
     }
 
     // 列出邮箱联系人
@@ -259,7 +259,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             "✓ 获取联系人列表成功: {} 个联系人",
             response.data.map(|d| d.contacts.len()).unwrap_or(0)
         ),
-        Err(e) => println!("✗ 获取联系人列表失败: {:?}", e),
+        Err(e) => println!("✗ 获取联系人列表失败: {e:?}"),
     }
 
     // 4. 收信规则管理演示
@@ -296,7 +296,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await
     {
         Ok(response) => println!("✓ 收信规则创建成功: {:?}", response.data),
-        Err(e) => println!("✗ 收信规则创建失败: {:?}", e),
+        Err(e) => println!("✗ 收信规则创建失败: {e:?}"),
     }
 
     // 列出收信规则
@@ -318,7 +318,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             "✓ 获取收信规则列表成功: {} 条规则",
             response.data.map(|d| d.rules.len()).unwrap_or(0)
         ),
-        Err(e) => println!("✗ 获取收信规则列表失败: {:?}", e),
+        Err(e) => println!("✗ 获取收信规则列表失败: {e:?}"),
     }
 
     // 5. 邮件组管理演示
@@ -355,12 +355,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         .await
                     {
                         Ok(response) => println!("✓ 获取邮件组详情成功: {:?}", response.data),
-                        Err(e) => println!("✗ 获取邮件组详情失败: {:?}", e),
+                        Err(e) => println!("✗ 获取邮件组详情失败: {e:?}"),
                     }
                 }
             }
         }
-        Err(e) => println!("✗ 邮件组创建失败: {:?}", e),
+        Err(e) => println!("✗ 邮件组创建失败: {e:?}"),
     }
 
     // 列出邮件组
@@ -376,7 +376,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             "✓ 获取邮件组列表成功: {} 个邮件组",
             response.data.map(|d| d.mailgroups.len()).unwrap_or(0)
         ),
-        Err(e) => println!("✗ 获取邮件组列表失败: {:?}", e),
+        Err(e) => println!("✗ 获取邮件组列表失败: {e:?}"),
     }
 
     // 6. 事件订阅管理演示
@@ -402,7 +402,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await
     {
         Ok(response) => println!("✓ 事件订阅成功: {:?}", response.data),
-        Err(e) => println!("✗ 事件订阅失败: {:?}", e),
+        Err(e) => println!("✗ 事件订阅失败: {e:?}"),
     }
 
     // 获取订阅状态
@@ -415,7 +415,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await
     {
         Ok(response) => println!("✓ 获取订阅状态成功: {:?}", response.data),
-        Err(e) => println!("✗ 获取订阅状态失败: {:?}", e),
+        Err(e) => println!("✗ 获取订阅状态失败: {e:?}"),
     }
 
     println!("\n=== 邮箱服务演示完成 ===");

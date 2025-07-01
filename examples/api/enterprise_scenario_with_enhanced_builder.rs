@@ -55,7 +55,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("\n📁 创建项目文档夹:");
     println!("```rust");
     println!("let project_folder = CreateFolderRequest::builder()");
-    println!("    .name(\"{}\")", project_name);
+    println!("    .name(\"{project_name}\")");
     println!("    .parent_token(\"root_folder_token\")");
     println!("    .execute(&client.drive.v1.folder)");
     println!("    .await?;");
@@ -65,7 +65,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("\n📊 创建项目进度跟踪表:");
     println!("```rust");
     println!("let spreadsheet = CreateSpreadsheetRequest::builder()");
-    println!("    .title(\"{} - 进度跟踪\")", project_name);
+    println!("    .title(\"{project_name} - 进度跟踪\")");
     println!("    .folder_token(&project_folder.data.token)");
     println!("    .execute(&client.sheets.v3.spreadsheet)");
     println!("    .await?;");
@@ -105,7 +105,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("\n📚 创建项目知识库:");
     println!("```rust");
     println!("let wiki_space = CreateSpaceRequest::builder()");
-    println!("    .name(\"{} - 知识库\")", project_name);
+    println!("    .name(\"{project_name} - 知识库\")");
     println!("    .description(\"项目文档、规范和最佳实践\")");
     println!("    .execute(&client.wiki.v2.space)");
     println!("    .await?;");
@@ -117,13 +117,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 2.1 批量添加项目成员权限
     println!("\n👥 批量添加项目成员:");
     for (user_id, role, permission) in &project_members {
-        println!("\n  添加 {} ({}):", role, user_id);
+        println!("\n  添加 {role} ({user_id}):");
         println!("  ```rust");
         println!("  CreatePermissionMemberRequest::builder()");
         println!("      .token(&spreadsheet.data.spreadsheet_token)");
         println!("      .as_sheet()");
-        println!("      .user(\"{}\"))", user_id);
-        println!("      .permission(Permission::{:?})", permission);
+        println!("      .user(\"{user_id}\"))");
+        println!("      .permission(Permission::{permission:?})");
         println!("      .with_notification()");
         println!("      .execute(&client.permission)");
         println!("      .await?;");
@@ -212,7 +212,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("let card_content = CardMessageBuilder::new()");
     println!("    .config(Config::new(true, true))");
     println!("    .header(");
-    println!("        Header::new(\"🚀 {} 正式启动！\")", project_name);
+    println!("        Header::new(\"🚀 {project_name} 正式启动！\")");
     println!("            .template(TemplateColor::Blue)");
     println!("    )");
     println!("    .element(DivElement::new()");

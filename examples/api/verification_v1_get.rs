@@ -30,7 +30,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     if let Some(scopes) = &verification.scopes {
                         println!("权限范围:");
                         for scope in scopes {
-                            println!("  - {}", scope);
+                            println!("  - {scope}");
                         }
                     }
 
@@ -47,7 +47,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("错误码: {}", response.code());
                 println!("错误信息: {}", response.msg());
                 if let Some(err) = response.err() {
-                    println!("详细错误: {:?}", err);
+                    println!("详细错误: {err:?}");
                 }
 
                 // 展示详细错误处理信息
@@ -55,7 +55,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(e) => {
-            println!("❌ 请求失败: {:?}", e);
+            println!("❌ 请求失败: {e:?}");
         }
     }
 

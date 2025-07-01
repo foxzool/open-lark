@@ -49,7 +49,7 @@ async fn basic_user_search(
     println!("\n👤 基础用户搜索...");
 
     let search_query = "张"; // 搜索姓张的用户
-    println!("   搜索关键词: \"{}\"", search_query);
+    println!("   搜索关键词: \"{search_query}\"");
 
     let request_option = open_lark::core::req_option::RequestOption::builder()
         .user_access_token(user_access_token)
@@ -80,7 +80,7 @@ async fn basic_user_search(
                         println!("      用户ID: {}", user.open_id);
 
                         if let Some(user_id) = &user.user_id {
-                            println!("      员工ID: {}", user_id);
+                            println!("      员工ID: {user_id}");
                         }
 
                         if !user.department_ids.is_empty() {
@@ -101,7 +101,7 @@ async fn basic_user_search(
                 if data.has_more {
                     if let Some(page_token) = &data.page_token {
                         println!("💡 提示: 还有更多用户可以通过分页获取");
-                        println!("   下一页Token: {}", page_token);
+                        println!("   下一页Token: {page_token}");
                     }
                 }
             } else {
@@ -109,7 +109,7 @@ async fn basic_user_search(
             }
         }
         Err(e) => {
-            println!("❌ 用户搜索失败: {:?}", e);
+            println!("❌ 用户搜索失败: {e:?}");
             println!("\n💡 常见错误解决方案:");
             println!("   1. 检查USER_ACCESS_TOKEN是否有效");
             println!("   2. 确认应用有用户搜索权限");
@@ -130,7 +130,7 @@ async fn paginated_search(
     println!("\n📄 分页搜索演示...");
 
     let search_query = "李"; // 搜索姓李的用户
-    println!("   搜索关键词: \"{}\"", search_query);
+    println!("   搜索关键词: \"{search_query}\"");
     println!("   每页大小: 3");
 
     let request_option = open_lark::core::req_option::RequestOption::builder()
@@ -161,7 +161,7 @@ async fn paginated_search(
         {
             Ok(response) => {
                 if let Some(data) = &response.data {
-                    println!("\n📋 第{}页结果:", page_number);
+                    println!("\n📋 第{page_number}页结果:");
                     println!("   本页用户数: {}", data.users.len());
 
                     for (index, user) in data.users.iter().enumerate() {
@@ -181,16 +181,16 @@ async fn paginated_search(
                             break;
                         }
                     } else {
-                        println!("\n✅ 搜索完成，共{}页，{}个用户", page_number, total_users);
+                        println!("\n✅ 搜索完成，共{page_number}页，{total_users}个用户");
                         break;
                     }
                 } else {
-                    println!("⚠️ 第{}页请求成功，但未返回数据", page_number);
+                    println!("⚠️ 第{page_number}页请求成功，但未返回数据");
                     break;
                 }
             }
             Err(e) => {
-                println!("❌ 第{}页搜索失败: {:?}", page_number, e);
+                println!("❌ 第{page_number}页搜索失败: {e:?}");
                 break;
             }
         }
@@ -217,7 +217,7 @@ async fn advanced_search_demo(
         .build();
 
     for (query, description) in search_queries {
-        println!("\n🔍 {}: \"{}\"", description, query);
+        println!("\n🔍 {description}: \"{query}\"");
 
         let request = open_lark::service::search::v1::user::SearchUserRequest::builder()
             .query(query)
@@ -255,7 +255,7 @@ async fn advanced_search_demo(
                 }
             }
             Err(e) => {
-                println!("   错误: {:?}", e);
+                println!("   错误: {e:?}");
             }
         }
     }
@@ -302,7 +302,7 @@ async fn display_user_details(
                     println!("   OpenID: {}", user.open_id);
 
                     if let Some(user_id) = &user.user_id {
-                        println!("   用户ID: {}", user_id);
+                        println!("   用户ID: {user_id}");
                     }
 
                     println!("   部门数量: {}", user.department_ids.len());
@@ -322,7 +322,7 @@ async fn display_user_details(
             }
         }
         Err(e) => {
-            println!("❌ 获取用户详细信息失败: {:?}", e);
+            println!("❌ 获取用户详细信息失败: {e:?}");
         }
     }
 

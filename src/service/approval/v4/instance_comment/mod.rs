@@ -83,10 +83,7 @@ impl InstanceCommentService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/approval/v4/instances/{}/comments",
-                instance_code
-            ),
+            api_path: format!("/open-apis/approval/v4/instances/{instance_code}/comments"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -115,8 +112,7 @@ impl InstanceCommentService {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: format!(
-                "/open-apis/approval/v4/instances/{}/comments/{}",
-                instance_code, comment_id
+                "/open-apis/approval/v4/instances/{instance_code}/comments/{comment_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -143,10 +139,7 @@ impl InstanceCommentService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!(
-                "/open-apis/approval/v4/instances/{}/comments",
-                instance_code
-            ),
+            api_path: format!("/open-apis/approval/v4/instances/{instance_code}/comments"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -180,10 +173,7 @@ impl InstanceCommentService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/approval/v4/instances/{}/comments",
-                instance_code
-            ),
+            api_path: format!("/open-apis/approval/v4/instances/{instance_code}/comments"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

@@ -314,19 +314,19 @@ impl SubscriptionDetail {
         parts.push(format!("状态: {}", self.status.description()));
 
         if let Some(start) = self.start_time_formatted() {
-            parts.push(format!("开始时间: {}", start));
+            parts.push(format!("开始时间: {start}"));
         }
 
         if let Some(end) = self.end_time_formatted() {
-            parts.push(format!("结束时间: {}", end));
+            parts.push(format!("结束时间: {end}"));
         }
 
         if let Some(days) = self.duration_days() {
-            parts.push(format!("持续时间: {:.1} 天", days));
+            parts.push(format!("持续时间: {days:.1} 天"));
         }
 
         if let Some(ref subscriber_id) = self.subscriber_id {
-            parts.push(format!("订阅者: {}", subscriber_id));
+            parts.push(format!("订阅者: {subscriber_id}"));
         }
 
         parts.join(" | ")

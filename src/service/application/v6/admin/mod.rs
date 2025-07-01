@@ -91,10 +91,7 @@ impl AdminService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/application/v6/admin/user_available_apps/{}",
-                user_id
-            ),
+            api_path: format!("/open-apis/application/v6/admin/user_available_apps/{user_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -128,8 +125,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/application/v6/admin/apps/{}/contacts_range_configuration",
-                app_id
+                "/open-apis/application/v6/admin/apps/{app_id}/contacts_range_configuration"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -165,8 +161,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: format!(
-                "/open-apis/application/v6/admin/apps/{}/contacts_range_configuration",
-                app_id
+                "/open-apis/application/v6/admin/apps/{app_id}/contacts_range_configuration"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -201,7 +196,7 @@ impl AdminService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/admin/apps/{}/visibility", app_id),
+            api_path: format!("/open-apis/application/v6/admin/apps/{app_id}/visibility"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -236,8 +231,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: format!(
-                "/open-apis/application/v6/admin/apps/{}/check_white_black_list",
-                app_id
+                "/open-apis/application/v6/admin/apps/{app_id}/check_white_black_list"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -273,7 +267,7 @@ impl AdminService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/application/v6/admin/apps/{}/visibility", app_id),
+            api_path: format!("/open-apis/application/v6/admin/apps/{app_id}/visibility"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -292,7 +286,7 @@ impl AdminService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/application/v6/admin/apps/{}/enable", app_id),
+            api_path: format!("/open-apis/application/v6/admin/apps/{app_id}/enable"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -326,7 +320,7 @@ impl AdminService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/admin/apps/{}/admins", app_id),
+            api_path: format!("/open-apis/application/v6/admin/apps/{app_id}/admins"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -361,8 +355,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/application/v6/admin/apps/{}/admins/{}/management_permissions",
-                app_id, user_id
+                "/open-apis/application/v6/admin/apps/{app_id}/admins/{user_id}/management_permissions"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -391,8 +384,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/application/v6/admin/apps/{}/admins/{}/verify",
-                app_id, user_id
+                "/open-apis/application/v6/admin/apps/{app_id}/admins/{user_id}/verify"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,

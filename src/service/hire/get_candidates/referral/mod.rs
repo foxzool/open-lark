@@ -297,7 +297,7 @@ impl ReferralService {
     ) -> SDKResult<BaseResponse<ReferralDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/referrals/{}", referral_id),
+            api_path: format!("/open-apis/hire/v1/referrals/{referral_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -492,7 +492,7 @@ impl ReferralService {
     ) -> SDKResult<BaseResponse<ReferralAccountDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/referral_accounts/{}", user_id),
+            api_path: format!("/open-apis/hire/v1/referral_accounts/{user_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -547,7 +547,7 @@ impl ReferralService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/referrals/{}/grant_reward", referral_id),
+            api_path: format!("/open-apis/hire/v1/referrals/{referral_id}/grant_reward"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()

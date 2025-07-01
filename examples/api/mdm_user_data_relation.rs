@@ -39,42 +39,42 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("  - 用户ID: {}", relation.user_id);
                     println!("  - 数据维度ID: {}", relation.data_dimension_id);
                     if let Some(relation_id) = &relation.relation_id {
-                        println!("  - 关系ID: {}", relation_id);
+                        println!("  - 关系ID: {relation_id}");
                     }
                     if let Some(data_dimension_name) = &relation.data_dimension_name {
-                        println!("  - 数据维度名称: {}", data_dimension_name);
+                        println!("  - 数据维度名称: {data_dimension_name}");
                     }
                     if let Some(bind_type) = &relation.bind_type {
-                        println!("  - 绑定类型: {}", bind_type);
+                        println!("  - 绑定类型: {bind_type}");
                     }
                     if let Some(permission_level) = &relation.permission_level {
-                        println!("  - 权限级别: {}", permission_level);
+                        println!("  - 权限级别: {permission_level}");
                     }
                     if let Some(status) = &relation.status {
-                        println!("  - 状态: {}", status);
+                        println!("  - 状态: {status}");
                     }
                     if let Some(effective_start_time) = relation.effective_start_time {
-                        println!("  - 生效开始时间: {}", effective_start_time);
+                        println!("  - 生效开始时间: {effective_start_time}");
                     }
                     if let Some(effective_end_time) = relation.effective_end_time {
-                        println!("  - 生效结束时间: {}", effective_end_time);
+                        println!("  - 生效结束时间: {effective_end_time}");
                     }
                     if let Some(creator) = &relation.creator {
-                        println!("  - 创建者: {}", creator);
+                        println!("  - 创建者: {creator}");
                     }
                     if let Some(created_at) = relation.created_at {
-                        println!("  - 创建时间: {}", created_at);
+                        println!("  - 创建时间: {created_at}");
                     }
                 } else {
                     println!("用户数据维度绑定失败");
                     if let Some(error_message) = &bind_data.error_message {
-                        println!("  错误信息: {}", error_message);
+                        println!("  错误信息: {error_message}");
                     }
                 }
             }
         }
         Err(e) => {
-            eprintln!("用户数据维度绑定失败: {:?}", e);
+            eprintln!("用户数据维度绑定失败: {e:?}");
         }
     }
 
@@ -97,18 +97,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 if unbind_data.success {
                     println!("用户数据维度解绑成功：");
                     if let Some(relation_id) = &unbind_data.relation_id {
-                        println!("  - 解绑的关系ID: {}", relation_id);
+                        println!("  - 解绑的关系ID: {relation_id}");
                     }
                 } else {
                     println!("用户数据维度解绑失败");
                     if let Some(error_message) = &unbind_data.error_message {
-                        println!("  错误信息: {}", error_message);
+                        println!("  错误信息: {error_message}");
                     }
                 }
             }
         }
         Err(e) => {
-            eprintln!("用户数据维度解绑失败: {:?}", e);
+            eprintln!("用户数据维度解绑失败: {e:?}");
         }
     }
 
@@ -128,7 +128,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             permission_level: Some("limited".to_string()),
             effective_start_time: Some(1640995200),
             effective_end_time: Some(1672531199),
-            remark: Some(format!("为用户绑定{}", dimension_name)),
+            remark: Some(format!("为用户绑定{dimension_name}")),
         };
 
         match client
@@ -140,17 +140,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             Ok(response) => {
                 if let Some(bind_data) = response.data {
                     if bind_data.success {
-                        println!("  ✓ {} 绑定成功", dimension_name);
+                        println!("  ✓ {dimension_name} 绑定成功");
                     } else {
-                        println!("  ✗ {} 绑定失败", dimension_name);
+                        println!("  ✗ {dimension_name} 绑定失败");
                         if let Some(error_message) = &bind_data.error_message {
-                            println!("    错误信息: {}", error_message);
+                            println!("    错误信息: {error_message}");
                         }
                     }
                 }
             }
             Err(e) => {
-                eprintln!("  ✗ {} 绑定失败: {:?}", dimension_name, e);
+                eprintln!("  ✗ {dimension_name} 绑定失败: {e:?}");
             }
         }
     }
@@ -165,13 +165,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     for (user_suffix, permission, description) in permission_examples {
         let permission_bind_request = UserDataRelationBindRequest {
-            user_id: format!("user_{}", user_suffix),
+            user_id: format!("user_{user_suffix}"),
             data_dimension_id: "dimension_test_001".to_string(),
             bind_type: Some("role_based".to_string()),
             permission_level: Some(permission.to_string()),
             effective_start_time: Some(1640995200),
             effective_end_time: None, // 永久有效
-            remark: Some(format!("测试{}绑定", description)),
+            remark: Some(format!("测试{description}绑定")),
         };
 
         match client
@@ -183,14 +183,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             Ok(response) => {
                 if let Some(bind_data) = response.data {
                     if bind_data.success {
-                        println!("  ✓ {} 绑定成功", description);
+                        println!("  ✓ {description} 绑定成功");
                     } else {
-                        println!("  ✗ {} 绑定失败", description);
+                        println!("  ✗ {description} 绑定失败");
                     }
                 }
             }
             Err(e) => {
-                eprintln!("  ✗ {} 绑定失败: {:?}", description, e);
+                eprintln!("  ✗ {description} 绑定失败: {e:?}");
             }
         }
     }

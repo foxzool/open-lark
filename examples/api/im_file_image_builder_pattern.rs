@@ -53,12 +53,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("   文件大小: {} 字节", file_data.data.len());
                 }
                 Err(e) => {
-                    println!("❌ 传统方式文件下载失败: {}", e);
+                    println!("❌ 传统方式文件下载失败: {e}");
                 }
             }
         }
         Err(e) => {
-            println!("❌ 传统方式文件上传失败: {}", e);
+            println!("❌ 传统方式文件上传失败: {e}");
             println!("   这可能是因为权限问题或测试环境限制");
         }
     }
@@ -109,12 +109,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                 }
                 Err(e) => {
-                    println!("❌ Builder模式文件下载失败: {}", e);
+                    println!("❌ Builder模式文件下载失败: {e}");
                 }
             }
         }
         Err(e) => {
-            println!("❌ Builder模式文件上传失败: {}", e);
+            println!("❌ Builder模式文件上传失败: {e}");
             println!("   这可能是因为权限问题或测试环境限制");
         }
     }
@@ -151,12 +151,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("   图片大小: {} 字节", image_data.data.len());
                 }
                 Err(e) => {
-                    println!("❌ 传统方式图片下载失败: {}", e);
+                    println!("❌ 传统方式图片下载失败: {e}");
                 }
             }
         }
         Err(e) => {
-            println!("❌ 传统方式图片上传失败: {}", e);
+            println!("❌ 传统方式图片上传失败: {e}");
             println!("   这可能是因为权限问题或测试环境限制");
         }
     }
@@ -206,12 +206,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                 }
                 Err(e) => {
-                    println!("❌ Builder模式图片下载失败: {}", e);
+                    println!("❌ Builder模式图片下载失败: {e}");
                 }
             }
         }
         Err(e) => {
-            println!("❌ Builder模式图片上传失败: {}", e);
+            println!("❌ Builder模式图片上传失败: {e}");
             println!("   这可能是因为权限问题或测试环境限制");
         }
     }
@@ -278,14 +278,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         Err(e) => {
             println!("❌ 预期错误示例:");
-            println!("   错误信息: {}", e);
+            println!("   错误信息: {e}");
 
             // 使用新的错误处理方法
             use open_lark::core::error::LarkAPIError;
             match &e {
                 LarkAPIError::APIError { code, msg, .. } => {
-                    println!("   错误码: {}", code);
-                    println!("   错误消息: {}", msg);
+                    println!("   错误码: {code}");
+                    println!("   错误消息: {msg}");
 
                     // 根据错误码决定处理策略
                     match *code {
@@ -304,7 +304,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                 }
                 LarkAPIError::DataError(msg) => {
-                    println!("   数据错误: {}", msg);
+                    println!("   数据错误: {msg}");
                     println!("   💡 建议: 检查文件内容和格式");
                 }
                 _ => {

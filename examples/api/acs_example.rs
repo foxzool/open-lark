@@ -42,12 +42,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         user.user_id, user.name, user.user_type
                     );
                     if let Some(department) = &user.department {
-                        println!("    部门: {}", department);
+                        println!("    部门: {department}");
                     }
                 }
             }
         }
-        Err(e) => println!("❌ 查询用户列表失败: {:?}", e),
+        Err(e) => println!("❌ 查询用户列表失败: {e:?}"),
     }
 
     // 2. 修改用户信息
@@ -73,7 +73,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("   电话: {:?}", data.user.phone);
             }
         }
-        Err(e) => println!("❌ 修改用户信息失败: {:?}", e),
+        Err(e) => println!("❌ 修改用户信息失败: {e:?}"),
     }
 
     // 3. 上传人脸图片
@@ -96,11 +96,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(data) = response.data {
                 println!("✅ 成功上传人脸图片: {}", data.success);
                 if let Some(image_id) = data.image_id {
-                    println!("   图片ID: {}", image_id);
+                    println!("   图片ID: {image_id}");
                 }
             }
         }
-        Err(e) => println!("❌ 上传人脸图片失败: {:?}", e),
+        Err(e) => println!("❌ 上传人脸图片失败: {e:?}"),
     }
 
     // 4. 创建权限组
@@ -150,11 +150,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             println!("   权限组ID列表: {:?}", data.rule_ids);
                         }
                     }
-                    Err(e) => println!("❌ 设备绑定权限组失败: {:?}", e),
+                    Err(e) => println!("❌ 设备绑定权限组失败: {e:?}"),
                 }
             }
         }
-        Err(e) => println!("❌ 创建权限组失败: {:?}", e),
+        Err(e) => println!("❌ 创建权限组失败: {e:?}"),
     }
 
     // 6. 添加访客
@@ -195,7 +195,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("   接待人: {:?}", data.visitor.host_name);
             }
         }
-        Err(e) => println!("❌ 添加访客失败: {:?}", e),
+        Err(e) => println!("❌ 添加访客失败: {e:?}"),
     }
 
     // 7. 获取门禁设备列表
@@ -216,12 +216,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         device.device_id, device.name, device.status
                     );
                     if let Some(location) = &device.location {
-                        println!("    位置: {}", location);
+                        println!("    位置: {location}");
                     }
                 }
             }
         }
-        Err(e) => println!("❌ 查询设备列表失败: {:?}", e),
+        Err(e) => println!("❌ 查询设备列表失败: {e:?}"),
     }
 
     // 8. 获取门禁访问记录
@@ -266,7 +266,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
         }
-        Err(e) => println!("❌ 查询访问记录失败: {:?}", e),
+        Err(e) => println!("❌ 查询访问记录失败: {e:?}"),
     }
 
     println!("\n=== 智能门禁服务示例完成 ===");

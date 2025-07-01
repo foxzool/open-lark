@@ -22,7 +22,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 要移除的看板ID（替换为实际的看板ID）
     let view_id = "view_123456";
 
-    println!("正在移除看板: {}", view_id);
+    println!("正在移除看板: {view_id}");
 
     let response = client
         .report
@@ -38,13 +38,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("看板移除操作已完成");
 
                 if let Some(removed_view_id) = &data.view_id {
-                    println!("被移除的看板ID: {}", removed_view_id);
+                    println!("被移除的看板ID: {removed_view_id}");
                 }
             } else {
                 println!("看板移除操作失败");
 
                 if let Some(error_msg) = &data.error_message {
-                    println!("错误信息: {}", error_msg);
+                    println!("错误信息: {error_msg}");
                 }
             }
         }
@@ -83,7 +83,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 if response.code() == 0 {
                     if let Some(data) = response.data {
                         if data.success {
-                            println!("✓ 看板 {} 移除成功", view_id);
+                            println!("✓ 看板 {view_id} 移除成功");
                         } else {
                             println!("✗ 看板 {} 移除失败: {:?}", view_id, data.error_message);
                         }
@@ -93,7 +93,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
             Err(e) => {
-                eprintln!("✗ 看板 {} 移除出错: {}", view_id, e);
+                eprintln!("✗ 看板 {view_id} 移除出错: {e}");
             }
         }
 

@@ -388,7 +388,7 @@ impl OfferService {
     ) -> SDKResult<BaseResponse<OfferDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/offers/{}", offer_id),
+            api_path: format!("/open-apis/hire/v1/offers/{offer_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -546,7 +546,7 @@ impl OfferService {
     ) -> SDKResult<BaseResponse<OfferOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/offers/{}", offer_id),
+            api_path: format!("/open-apis/hire/v1/offers/{offer_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -601,7 +601,7 @@ impl OfferService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/offers/{}/send", offer_id),
+            api_path: format!("/open-apis/hire/v1/offers/{offer_id}/send"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -646,7 +646,7 @@ impl OfferService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/offers/{}/withdraw", offer_id),
+            api_path: format!("/open-apis/hire/v1/offers/{offer_id}/withdraw"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -814,8 +814,7 @@ impl OfferService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: format!(
-                "/open-apis/hire/v1/onboardings/{}/progress/{}",
-                onboarding_id, progress_id
+                "/open-apis/hire/v1/onboardings/{onboarding_id}/progress/{progress_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),

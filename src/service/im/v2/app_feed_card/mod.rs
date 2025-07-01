@@ -106,7 +106,7 @@ impl AppFeedCardService {
     ) -> SDKResult<BaseResponse<UpdateAppFeedCardResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: format!("/open-apis/im/v2/app_feed_card/{}", card_id),
+            api_path: format!("/open-apis/im/v2/app_feed_card/{card_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -123,7 +123,7 @@ impl AppFeedCardService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/im/v2/app_feed_card/{}", card_id),
+            api_path: format!("/open-apis/im/v2/app_feed_card/{card_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };

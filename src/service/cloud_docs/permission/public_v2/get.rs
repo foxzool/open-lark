@@ -316,11 +316,11 @@ impl PublicSettingsV2 {
         let mut features = Vec::new();
 
         if let Some(access_setting) = &self.access_setting {
-            features.push(format!("访问设置: {}", access_setting));
+            features.push(format!("访问设置: {access_setting}"));
         }
 
         if let Some(watermark) = &self.watermark_setting {
-            features.push(format!("水印: {}", watermark));
+            features.push(format!("水印: {watermark}"));
         }
 
         if self.comment_entity.is_some() {
@@ -414,17 +414,17 @@ impl GetPermissionPublicV2Response {
     pub fn expiration_status(&self) -> String {
         if let Some(expire_time) = self.permission_public.expire_time_formatted() {
             if self.permission_public.is_expired() {
-                format!("已过期: {}", expire_time)
+                format!("已过期: {expire_time}")
             } else if let Some(remaining) = self.permission_public.remaining_valid_time() {
                 let days = remaining / 86400;
                 let hours = (remaining % 86400) / 3600;
                 if days > 0 {
-                    format!("剩余: {}天{}小时 (过期时间: {})", days, hours, expire_time)
+                    format!("剩余: {days}天{hours}小时 (过期时间: {expire_time})")
                 } else {
-                    format!("剩余: {}小时 (过期时间: {})", hours, expire_time)
+                    format!("剩余: {hours}小时 (过期时间: {expire_time})")
                 }
             } else {
-                format!("过期时间: {}", expire_time)
+                format!("过期时间: {expire_time}")
             }
         } else {
             "永久有效".to_string()

@@ -144,7 +144,7 @@ impl PeriodService {
     ) -> SDKResult<BaseResponse<PeriodStatusUpdateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/okr/v1/periods/{}", period_id),
+            api_path: format!("/open-apis/okr/v1/periods/{period_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -182,7 +182,7 @@ impl PeriodService {
         if let Some(status) = request.status {
             api_req
                 .query_params
-                .insert("status".to_string(), format!("{:?}", status));
+                .insert("status".to_string(), format!("{status:?}"));
         }
 
         if let Some(page_token) = request.page_token {

@@ -166,7 +166,7 @@ impl CustomFieldService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/task/v2/custom_fields/{}", custom_field_guid),
+            api_path: format!("/open-apis/task/v2/custom_fields/{custom_field_guid}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -193,7 +193,7 @@ impl CustomFieldService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/task/v2/custom_fields/{}", custom_field_guid),
+            api_path: format!("/open-apis/task/v2/custom_fields/{custom_field_guid}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -262,7 +262,7 @@ impl CustomFieldService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/task/v2/custom_fields/{}/add", custom_field_guid),
+            api_path: format!("/open-apis/task/v2/custom_fields/{custom_field_guid}/add"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -290,10 +290,7 @@ impl CustomFieldService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/task/v2/custom_fields/{}/remove",
-                custom_field_guid
-            ),
+            api_path: format!("/open-apis/task/v2/custom_fields/{custom_field_guid}/remove"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,

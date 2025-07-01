@@ -107,7 +107,7 @@ impl MessageService {
         &self,
         list_message_request: ListMessageRequest,
         option: Option<RequestOption>,
-    ) -> ListMessageIterator {
+    ) -> ListMessageIterator<'_> {
         ListMessageIterator {
             service: self,
             req: list_message_request,
@@ -149,7 +149,7 @@ impl ListMessageIterator<'_> {
                 }
             }
             Err(e) => {
-                error!("Error: {:?}", e);
+                error!("Error: {e:?}");
                 None
             }
         }
@@ -673,7 +673,7 @@ impl MessageText {
     /// # 参数
     /// - `user_id`: 用户的ID（open_id、user_id或union_id）
     pub fn at_user(mut self, user_id: &str) -> Self {
-        self.text = self.text + &format!("<at user_id=\"{}\"></at>", user_id);
+        self.text = self.text + &format!("<at user_id=\"{user_id}\"></at>");
         self
     }
 

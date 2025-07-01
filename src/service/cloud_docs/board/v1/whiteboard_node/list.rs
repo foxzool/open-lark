@@ -241,11 +241,11 @@ pub async fn list_whiteboard_nodes(
     let mut query_params = Vec::new();
 
     if let Some(page_size) = request.page_size {
-        query_params.push(format!("page_size={}", page_size));
+        query_params.push(format!("page_size={page_size}"));
     }
 
     if let Some(ref page_token) = request.page_token {
-        query_params.push(format!("page_token={}", page_token));
+        query_params.push(format!("page_token={page_token}"));
     }
 
     if !query_params.is_empty() {
@@ -364,15 +364,15 @@ impl NodeStyle {
         let mut summary = Vec::new();
 
         if let Some(ref color) = self.color {
-            summary.push(format!("颜色: {}", color));
+            summary.push(format!("颜色: {color}"));
         }
 
         if let Some(ref fill_color) = self.fill_color {
-            summary.push(format!("填充: {}", fill_color));
+            summary.push(format!("填充: {fill_color}"));
         }
 
         if let Some(font_size) = self.font_size {
-            summary.push(format!("字体: {:.0}px", font_size));
+            summary.push(format!("字体: {font_size:.0}px"));
         }
 
         if let Some(opacity) = self.opacity {
@@ -380,7 +380,7 @@ impl NodeStyle {
         }
 
         if let Some(stroke_width) = self.stroke_width {
-            summary.push(format!("线宽: {:.0}px", stroke_width));
+            summary.push(format!("线宽: {stroke_width:.0}px"));
         }
 
         summary
@@ -413,12 +413,12 @@ impl NodeContent {
             } else {
                 text.clone()
             };
-            parts.push(format!("文本: \"{}\"", preview));
+            parts.push(format!("文本: \"{preview}\""));
         }
 
         if self.has_image() {
             if let Some(size) = self.image_size {
-                parts.push(format!("图片: {}字节", size));
+                parts.push(format!("图片: {size}字节"));
             } else {
                 parts.push("图片".to_string());
             }
@@ -529,7 +529,7 @@ impl WhiteboardNode {
         }
 
         if let Some(z_index) = self.z_index {
-            status.push(format!("层级: {}", z_index));
+            status.push(format!("层级: {z_index}"));
         }
 
         status
@@ -657,11 +657,11 @@ impl ListWhiteboardNodesResponse {
         }
 
         if locked_count > 0 {
-            summary.push(format!("锁定节点: {}", locked_count));
+            summary.push(format!("锁定节点: {locked_count}"));
         }
 
         if hidden_count > 0 {
-            summary.push(format!("隐藏节点: {}", hidden_count));
+            summary.push(format!("隐藏节点: {hidden_count}"));
         }
 
         if self.has_more {
@@ -684,7 +684,7 @@ impl ListWhiteboardNodesResponse {
                 format!("当前页: {}个节点，还有更多", self.node_count())
             }
         } else if let Some(total) = self.total {
-            format!("全部{}个节点已加载完成", total)
+            format!("全部{total}个节点已加载完成")
         } else {
             format!("全部{}个节点已加载完成", self.node_count())
         }

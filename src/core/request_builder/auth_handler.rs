@@ -74,6 +74,6 @@ impl AuthHandler {
 
     /// 添加 Authorization 头
     fn add_auth_header(req_builder: RequestBuilder, token: &str) -> RequestBuilder {
-        req_builder.header("Authorization", format!("Bearer {}", token))
+        req_builder.header("Authorization", format!("Bearer {token}"))
     }
 }

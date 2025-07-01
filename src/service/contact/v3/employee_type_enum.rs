@@ -43,7 +43,7 @@ impl EmployeeTypeEnumService {
     ) -> crate::core::SDKResult<UpdateEmployeeTypeResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PUT,
-            api_path: format!("/open-apis/contact/v3/employee_type_enums/{}", enum_id),
+            api_path: format!("/open-apis/contact/v3/employee_type_enums/{enum_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -80,7 +80,7 @@ impl EmployeeTypeEnumService {
     ) -> crate::core::SDKResult<DeleteEmployeeTypeResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/contact/v3/employee_type_enums/{}", enum_id),
+            api_path: format!("/open-apis/contact/v3/employee_type_enums/{enum_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             ..Default::default()

@@ -37,7 +37,7 @@ impl<T> StandardResponse<T> for BaseResponse<T> {
             Err(LarkAPIError::APIError {
                 code: self.code(),
                 msg: self.msg().to_string(),
-                error: self.err().map(|e| format!("{:?}", e)),
+                error: self.err().map(|e| format!("{e:?}")),
             })
         }
     }

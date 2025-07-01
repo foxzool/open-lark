@@ -99,7 +99,7 @@ impl RecordingService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/meetings/{}/recording/start", meeting_id),
+            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/recording/start"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -126,7 +126,7 @@ impl RecordingService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/meetings/{}/recording/stop", meeting_id),
+            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/recording/stop"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -152,7 +152,7 @@ impl RecordingService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/vc/v1/meetings/{}/recording", meeting_id),
+            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/recording"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -179,10 +179,7 @@ impl RecordingService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!(
-                "/open-apis/vc/v1/meetings/{}/recording/set_permission",
-                meeting_id
-            ),
+            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/recording/set_permission"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,

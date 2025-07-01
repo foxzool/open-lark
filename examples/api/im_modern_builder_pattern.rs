@@ -56,7 +56,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("   消息类型: {}", message.msg_type);
         }
         Err(e) => {
-            println!("❌ 传统方式发送失败: {}", e);
+            println!("❌ 传统方式发送失败: {e}");
             println!("   这可能是因为权限问题或测试环境限制");
         }
     }
@@ -123,12 +123,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                 }
                 Err(e) => {
-                    println!("❌ 消息历史查询失败: {}", e);
+                    println!("❌ 消息历史查询失败: {e}");
                 }
             }
         }
         Err(e) => {
-            println!("❌ Builder模式发送失败: {}", e);
+            println!("❌ Builder模式发送失败: {e}");
             println!("   这可能是因为权限问题或测试环境限制");
         }
     }
@@ -157,7 +157,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .receive_id("test_chat_id")
             .msg_type(text_msg.msg_type())
             .content(text_msg.content())
-            .uuid(format!("demo-batch-{}", i))
+            .uuid(format!("demo-batch-{i}"))
             .build();
 
         let message_builder = open_lark::service::im::v1::message::CreateMessageRequest::builder()
@@ -209,14 +209,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         Err(e) => {
             println!("❌ 预期错误示例:");
-            println!("   错误信息: {}", e);
+            println!("   错误信息: {e}");
 
             // 使用新的错误处理方法
             use open_lark::core::error::LarkAPIError;
             match &e {
                 LarkAPIError::APIError { code, msg, .. } => {
-                    println!("   错误码: {}", code);
-                    println!("   错误消息: {}", msg);
+                    println!("   错误码: {code}");
+                    println!("   错误消息: {msg}");
 
                     // 根据错误码决定处理策略
                     match *code {
@@ -235,7 +235,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                 }
                 LarkAPIError::DataError(msg) => {
-                    println!("   数据错误: {}", msg);
+                    println!("   数据错误: {msg}");
                     println!("   💡 建议: 检查消息内容和格式");
                 }
                 _ => {

@@ -44,7 +44,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("  - 课程ID: {}", registration.course_id);
             println!("  - 用户ID: {}", registration.user_id);
             if let Some(status) = &registration.status {
-                println!("  - 状态: {}", status);
+                println!("  - 状态: {status}");
             }
         }
     } else {
@@ -81,13 +81,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("  - 课程ID: {}", registration.course_id);
                 println!("  - 用户ID: {}", registration.user_id);
                 if let Some(status) = &registration.status {
-                    println!("  - 状态: {}", status);
+                    println!("  - 状态: {status}");
                 }
                 if let Some(progress) = registration.progress {
-                    println!("  - 进度: {:.1}%", progress);
+                    println!("  - 进度: {progress:.1}%");
                 }
                 if let Some(score) = registration.score {
-                    println!("  - 成绩: {:.1}", score);
+                    println!("  - 成绩: {score:.1}");
                 }
             }
 
@@ -170,10 +170,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             let registration = &data.registration;
             println!("  - 记录ID: {}", registration.registration_id);
             if let Some(progress) = registration.progress {
-                println!("  - 新进度: {:.1}%", progress);
+                println!("  - 新进度: {progress:.1}%");
             }
             if let Some(score) = registration.score {
-                println!("  - 新成绩: {:.1}", score);
+                println!("  - 新成绩: {score:.1}");
             }
         }
     } else {
@@ -203,16 +203,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         if let Some(data) = stats_response.data {
             let stats = &data.statistics;
             if let Some(total) = stats.total_courses {
-                println!("  - 总课程数: {}", total);
+                println!("  - 总课程数: {total}");
             }
             if let Some(completed) = stats.completed_courses {
-                println!("  - 已完成课程数: {}", completed);
+                println!("  - 已完成课程数: {completed}");
             }
             if let Some(avg_progress) = stats.average_progress {
-                println!("  - 平均进度: {:.1}%", avg_progress);
+                println!("  - 平均进度: {avg_progress:.1}%");
             }
             if let Some(avg_score) = stats.average_score {
-                println!("  - 平均成绩: {:.1}", avg_score);
+                println!("  - 平均成绩: {avg_score:.1}");
             }
         }
     } else {

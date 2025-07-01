@@ -39,23 +39,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("  - 用户ID: {}", registration.user_id);
 
             if let Some(status) = &registration.status {
-                println!("  - 状态: {}", status);
+                println!("  - 状态: {status}");
             }
 
             if let Some(progress) = registration.progress {
-                println!("  - 学习进度: {:.1}%", progress);
+                println!("  - 学习进度: {progress:.1}%");
             }
 
             if let Some(total_duration) = registration.total_duration {
-                println!("  - 总课程时长: {} 秒", total_duration);
+                println!("  - 总课程时长: {total_duration} 秒");
             }
 
             if let Some(studied_duration) = registration.studied_duration {
-                println!("  - 已学时长: {} 秒", studied_duration);
+                println!("  - 已学时长: {studied_duration} 秒");
             }
 
             if let Some(score) = registration.score {
-                println!("  - 学习成绩: {:.1}", score);
+                println!("  - 学习成绩: {score:.1}");
             }
 
             if let Some(passed) = registration.passed {
@@ -66,13 +66,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(course_info) = &registration.course_info {
                 println!("\n  课程信息:");
                 if let Some(name) = &course_info.course_name {
-                    println!("    - 课程名称: {}", name);
+                    println!("    - 课程名称: {name}");
                 }
                 if let Some(category) = &course_info.category {
-                    println!("    - 课程分类: {}", category);
+                    println!("    - 课程分类: {category}");
                 }
                 if let Some(difficulty) = &course_info.difficulty {
-                    println!("    - 难度等级: {}", difficulty);
+                    println!("    - 难度等级: {difficulty}");
                 }
             }
 
@@ -80,10 +80,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(user_info) = &registration.user_info {
                 println!("\n  用户信息:");
                 if let Some(name) = &user_info.name {
-                    println!("    - 用户姓名: {}", name);
+                    println!("    - 用户姓名: {name}");
                 }
                 if let Some(department) = &user_info.department {
-                    println!("    - 所属部门: {}", department);
+                    println!("    - 所属部门: {department}");
                 }
             }
         }
@@ -201,21 +201,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             println!("部门学习统计数据:");
             if let Some(total) = stats.total_courses {
-                println!("  - 参与课程总数: {}", total);
+                println!("  - 参与课程总数: {total}");
             }
             if let Some(completed) = stats.completed_courses {
-                println!("  - 完成课程数: {}", completed);
+                println!("  - 完成课程数: {completed}");
             }
             if let Some(in_progress) = stats.in_progress_courses {
-                println!("  - 进行中课程数: {}", in_progress);
+                println!("  - 进行中课程数: {in_progress}");
             }
             if let Some(total_time) = stats.total_study_time {
                 let hours = total_time / 3600;
                 let minutes = (total_time % 3600) / 60;
-                println!("  - 总学习时长: {}小时{}分钟", hours, minutes);
+                println!("  - 总学习时长: {hours}小时{minutes}分钟");
             }
             if let Some(avg_progress) = stats.average_progress {
-                println!("  - 平均学习进度: {:.1}%", avg_progress);
+                println!("  - 平均学习进度: {avg_progress:.1}%");
             }
             if let Some(pass_rate) = stats.pass_rate {
                 println!("  - 通过率: {:.1}%", pass_rate * 100.0);
@@ -234,7 +234,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 注意：这是演示删除操作，实际使用时请谨慎
     let delete_registration_id = "registration_to_delete";
 
-    println!("准备删除学习记录: {}", delete_registration_id);
+    println!("准备删除学习记录: {delete_registration_id}");
     println!("注意：这将永久删除学习记录！");
 
     // 在实际应用中，你可能想要添加确认步骤
@@ -258,12 +258,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if data.success {
                 println!("  ✓ 学习记录删除成功");
                 if let Some(deleted_id) = &data.registration_id {
-                    println!("  - 被删除的记录ID: {}", deleted_id);
+                    println!("  - 被删除的记录ID: {deleted_id}");
                 }
             } else {
                 println!("  ✗ 学习记录删除失败");
                 if let Some(error_msg) = &data.error_message {
-                    println!("  - 错误信息: {}", error_msg);
+                    println!("  - 错误信息: {error_msg}");
                 }
             }
         }

@@ -42,7 +42,7 @@ impl GroupService {
     ) -> crate::core::SDKResult<PatchGroupResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: format!("/open-apis/contact/v3/groups/{}", group_id),
+            api_path: format!("/open-apis/contact/v3/groups/{group_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -60,7 +60,7 @@ impl GroupService {
     ) -> crate::core::SDKResult<GetGroupResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/contact/v3/groups/{}", group_id),
+            api_path: format!("/open-apis/contact/v3/groups/{group_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -111,7 +111,7 @@ impl GroupService {
     pub async fn delete(&self, group_id: &str) -> crate::core::SDKResult<DeleteGroupResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/contact/v3/groups/{}", group_id),
+            api_path: format!("/open-apis/contact/v3/groups/{group_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             ..Default::default()
@@ -141,7 +141,7 @@ impl GroupService {
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/contact/v3/groups/{}/detail", group_id),
+            api_path: format!("/open-apis/contact/v3/groups/{group_id}/detail"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,

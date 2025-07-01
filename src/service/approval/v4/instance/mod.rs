@@ -201,7 +201,7 @@ impl InstanceService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/instances/{}/cancel", instance_code),
+            api_path: format!("/open-apis/approval/v4/instances/{instance_code}/cancel"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -228,7 +228,7 @@ impl InstanceService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/instances/{}/cc", instance_code),
+            api_path: format!("/open-apis/approval/v4/instances/{instance_code}/cc"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -289,7 +289,7 @@ impl InstanceService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/approval/v4/instances/{}", instance_code),
+            api_path: format!("/open-apis/approval/v4/instances/{instance_code}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

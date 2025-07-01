@@ -154,7 +154,7 @@ impl NotificationService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/helpdesk/v1/notifications/{}", notification_id),
+            api_path: format!("/open-apis/helpdesk/v1/notifications/{notification_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -181,7 +181,7 @@ impl NotificationService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/helpdesk/v1/notifications/{}", notification_id),
+            api_path: format!("/open-apis/helpdesk/v1/notifications/{notification_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -207,10 +207,7 @@ impl NotificationService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/helpdesk/v1/notifications/{}/preview",
-                notification_id
-            ),
+            api_path: format!("/open-apis/helpdesk/v1/notifications/{notification_id}/preview"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -237,8 +234,7 @@ impl NotificationService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: format!(
-                "/open-apis/helpdesk/v1/notifications/{}/submit_approve",
-                notification_id
+                "/open-apis/helpdesk/v1/notifications/{notification_id}/submit_approve"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -266,8 +262,7 @@ impl NotificationService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: format!(
-                "/open-apis/helpdesk/v1/notifications/{}/cancel_approve",
-                notification_id
+                "/open-apis/helpdesk/v1/notifications/{notification_id}/cancel_approve"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -295,8 +290,7 @@ impl NotificationService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: format!(
-                "/open-apis/helpdesk/v1/notifications/{}/execute_send",
-                notification_id
+                "/open-apis/helpdesk/v1/notifications/{notification_id}/execute_send"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -323,10 +317,7 @@ impl NotificationService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/helpdesk/v1/notifications/{}/cancel_send",
-                notification_id
-            ),
+            api_path: format!("/open-apis/helpdesk/v1/notifications/{notification_id}/cancel_send"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

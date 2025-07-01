@@ -135,8 +135,7 @@ impl PermissionService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/apaas/v1/application/{}/permission/role/{}/member/{}",
-                app_id, role_api_name, user_id
+                "/open-apis/apaas/v1/application/{app_id}/permission/role/{role_api_name}/member/{user_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],

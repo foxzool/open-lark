@@ -446,7 +446,7 @@ impl ReferralAccountService {
     ) -> SDKResult<BaseResponse<ReferralAccountBalanceResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/referral_accounts/{}/balance", user_id),
+            api_path: format!("/open-apis/hire/v1/referral_accounts/{user_id}/balance"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -751,10 +751,7 @@ impl ReferralAccountService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/hire/v1/referral_withdrawals/{}/approve",
-                withdrawal_id
-            ),
+            api_path: format!("/open-apis/hire/v1/referral_withdrawals/{withdrawal_id}/approve"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -786,7 +783,7 @@ impl ReferralAccountService {
     ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/referral_accounts/{}/enable", user_id),
+            api_path: format!("/open-apis/hire/v1/referral_accounts/{user_id}/enable"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -831,7 +828,7 @@ impl ReferralAccountService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/referral_accounts/{}/disable", user_id),
+            api_path: format!("/open-apis/hire/v1/referral_accounts/{user_id}/disable"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()

@@ -33,13 +33,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("  - 组织ID: {}", org.org_id);
                     println!("    组织名称: {}", org.org_name);
                     if let Some(org_type) = &org.org_type {
-                        println!("    组织类型: {}", org_type);
+                        println!("    组织类型: {org_type}");
                     }
                     if let Some(status) = &org.status {
-                        println!("    状态: {}", status);
+                        println!("    状态: {status}");
                     }
                     if let Some(domain) = &org.domain {
-                        println!("    域名: {}", domain);
+                        println!("    域名: {domain}");
                     }
                     println!();
                 }
@@ -60,15 +60,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                 println!("  组织ID: {}", org.org_id);
                                 println!("  组织名称: {}", org.org_name);
                                 if let Some(description) = &org.description {
-                                    println!("  描述: {}", description);
+                                    println!("  描述: {description}");
                                 }
                                 if let Some(created_at) = org.created_at {
-                                    println!("  创建时间: {}", created_at);
+                                    println!("  创建时间: {created_at}");
                                 }
                             }
                         }
                         Err(e) => {
-                            eprintln!("获取组织详情失败: {:?}", e);
+                            eprintln!("获取组织详情失败: {e:?}");
                         }
                     }
 
@@ -111,7 +111,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             }
                         }
                         Err(e) => {
-                            eprintln!("获取组织架构失败: {:?}", e);
+                            eprintln!("获取组织架构失败: {e:?}");
                         }
                     }
 
@@ -135,7 +135,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                 {
                                     println!("  {}. 共享范围:", i + 1);
                                     if let Some(scope_type) = &scope.scope_type {
-                                        println!("    类型: {}", scope_type);
+                                        println!("    类型: {scope_type}");
                                     }
                                     if let Some(dept_ids) = &scope.department_ids {
                                         println!("    部门数量: {}", dept_ids.len());
@@ -147,14 +147,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             }
                         }
                         Err(e) => {
-                            eprintln!("获取共享成员范围失败: {:?}", e);
+                            eprintln!("获取共享成员范围失败: {e:?}");
                         }
                     }
                 }
             }
         }
         Err(e) => {
-            eprintln!("获取关联组织列表失败: {:?}", e);
+            eprintln!("获取关联组织列表失败: {e:?}");
         }
     }
 
@@ -178,14 +178,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("  - 组织ID: {}", org.org_id);
                     println!("    组织名称: {}", org.org_name);
                     if let Some(status) = &org.status {
-                        println!("    状态: {}", status);
+                        println!("    状态: {status}");
                     }
                     println!();
                 }
             }
         }
         Err(e) => {
-            eprintln!("管理员获取组织列表失败: {:?}", e);
+            eprintln!("管理员获取组织列表失败: {e:?}");
         }
     }
 

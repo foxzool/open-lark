@@ -73,7 +73,7 @@ async fn demo_message_reactions(client: &LarkClient) -> Result<(), Box<dyn std::
             println!("  ✅ 添加表情回复成功: {:?}", response.code());
         }
         Err(e) => {
-            println!("  ❌ 添加表情回复失败: {:?}", e);
+            println!("  ❌ 添加表情回复失败: {e:?}");
         }
     }
 
@@ -91,7 +91,7 @@ async fn demo_message_reactions(client: &LarkClient) -> Result<(), Box<dyn std::
             }
         }
         Err(e) => {
-            println!("  ❌ 获取表情回复失败: {:?}", e);
+            println!("  ❌ 获取表情回复失败: {e:?}");
         }
     }
 
@@ -120,7 +120,7 @@ async fn demo_pin_messages(client: &LarkClient) -> Result<(), Box<dyn std::error
             }
         }
         Err(e) => {
-            println!("  ❌ Pin消息失败: {:?}", e);
+            println!("  ❌ Pin消息失败: {e:?}");
         }
     }
 
@@ -138,7 +138,7 @@ async fn demo_pin_messages(client: &LarkClient) -> Result<(), Box<dyn std::error
             }
         }
         Err(e) => {
-            println!("  ❌ 获取Pin消息失败: {:?}", e);
+            println!("  ❌ 获取Pin消息失败: {e:?}");
         }
     }
 
@@ -167,12 +167,12 @@ async fn demo_image_upload(client: &LarkClient) -> Result<(), Box<dyn std::error
                     );
                 }
                 Err(e) => {
-                    println!("  ❌ 图片下载失败: {:?}", e);
+                    println!("  ❌ 图片下载失败: {e:?}");
                 }
             }
         }
         Err(e) => {
-            println!("  ❌ 图片上传失败: {:?}", e);
+            println!("  ❌ 图片上传失败: {e:?}");
         }
     }
 
@@ -225,13 +225,13 @@ async fn demo_batch_messages(client: &LarkClient) -> Result<(), Box<dyn std::err
                         }
                     }
                     Err(e) => {
-                        println!("  ❌ 查询进度失败: {:?}", e);
+                        println!("  ❌ 查询进度失败: {e:?}");
                     }
                 }
             }
         }
         Err(e) => {
-            println!("  ❌ 批量消息发送失败: {:?}", e);
+            println!("  ❌ 批量消息发送失败: {e:?}");
         }
     }
 
@@ -274,7 +274,7 @@ async fn demo_message_cards(client: &LarkClient) -> Result<(), Box<dyn std::erro
             println!("  ✅ 消息卡片更新成功: {:?}", response.code());
         }
         Err(e) => {
-            println!("  ❌ 消息卡片更新失败: {:?}", e);
+            println!("  ❌ 消息卡片更新失败: {e:?}");
         }
     }
 
@@ -308,7 +308,7 @@ async fn demo_urgent_messages(client: &LarkClient) -> Result<(), Box<dyn std::er
             }
         }
         Err(e) => {
-            println!("  ❌ 应用内加急发送失败: {:?}", e);
+            println!("  ❌ 应用内加急发送失败: {e:?}");
         }
     }
 
@@ -343,7 +343,7 @@ async fn demo_url_preview(client: &LarkClient) -> Result<(), Box<dyn std::error:
             println!("  ✅ URL预览更新成功: {:?}", response.code());
         }
         Err(e) => {
-            println!("  ❌ URL预览更新失败: {:?}", e);
+            println!("  ❌ URL预览更新失败: {e:?}");
         }
     }
 

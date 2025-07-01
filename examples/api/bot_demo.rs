@@ -33,26 +33,26 @@ async fn demo_get_bot_info(client: &LarkClient) -> Result<(), Box<dyn std::error
                 println!("  ✅ 机器人信息获取成功:");
 
                 if let Some(app_name) = &data.bot.app_name {
-                    println!("    📱 机器人名称: {}", app_name);
+                    println!("    📱 机器人名称: {app_name}");
                 }
 
                 if let Some(avatar_url) = &data.bot.avatar_url {
-                    println!("    🖼️  头像URL: {}", avatar_url);
+                    println!("    🖼️  头像URL: {avatar_url}");
                 }
 
                 if let Some(open_id) = &data.bot.open_id {
-                    println!("    🆔 Open ID: {}", open_id);
+                    println!("    🆔 Open ID: {open_id}");
                 }
 
                 if let Some(app_status) = &data.bot.app_status {
-                    println!("    📊 应用状态: {:?}", app_status);
+                    println!("    📊 应用状态: {app_status:?}");
                 }
 
                 if let Some(ip_white_list) = &data.bot.ip_white_list {
                     if !ip_white_list.is_empty() {
                         println!("    🔒 IP白名单:");
                         for ip in ip_white_list {
-                            println!("      - {}", ip);
+                            println!("      - {ip}");
                         }
                     } else {
                         println!("    🔒 IP白名单: 未设置");
@@ -63,7 +63,7 @@ async fn demo_get_bot_info(client: &LarkClient) -> Result<(), Box<dyn std::error
             }
         }
         Err(e) => {
-            println!("  ❌ 机器人信息获取失败: {:?}", e);
+            println!("  ❌ 机器人信息获取失败: {e:?}");
         }
     }
 

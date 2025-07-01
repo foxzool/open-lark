@@ -359,7 +359,7 @@ impl InterviewService {
     ) -> SDKResult<BaseResponse<InterviewDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/interviews/{}", interview_id),
+            api_path: format!("/open-apis/hire/v1/interviews/{interview_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -607,7 +607,7 @@ impl InterviewService {
     ) -> SDKResult<BaseResponse<InterviewEvaluationListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/interviews/{}/evaluations", interview_id),
+            api_path: format!("/open-apis/hire/v1/interviews/{interview_id}/evaluations"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -669,7 +669,7 @@ impl InterviewService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/interviews/{}/cancel", interview_id),
+            api_path: format!("/open-apis/hire/v1/interviews/{interview_id}/cancel"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -724,7 +724,7 @@ impl InterviewService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/interviews/{}/reschedule", interview_id),
+            api_path: format!("/open-apis/hire/v1/interviews/{interview_id}/reschedule"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()

@@ -127,7 +127,7 @@ impl AgentScheduleService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/helpdesk/v1/agents/{}/agent_schedules", agent_id),
+            api_path: format!("/open-apis/helpdesk/v1/agents/{agent_id}/agent_schedules"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -156,8 +156,7 @@ impl AgentScheduleService {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: format!(
-                "/open-apis/helpdesk/v1/agents/{}/agent_schedules/{}",
-                agent_id, schedule_id
+                "/open-apis/helpdesk/v1/agents/{agent_id}/agent_schedules/{schedule_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -187,8 +186,7 @@ impl AgentScheduleService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: format!(
-                "/open-apis/helpdesk/v1/agents/{}/agent_schedules/{}",
-                agent_id, schedule_id
+                "/open-apis/helpdesk/v1/agents/{agent_id}/agent_schedules/{schedule_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -218,8 +216,7 @@ impl AgentScheduleService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/helpdesk/v1/agents/{}/agent_schedules/{}",
-                agent_id, schedule_id
+                "/open-apis/helpdesk/v1/agents/{agent_id}/agent_schedules/{schedule_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -254,7 +251,7 @@ impl AgentScheduleService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/helpdesk/v1/agents/{}/agent_schedules", agent_id),
+            api_path: format!("/open-apis/helpdesk/v1/agents/{agent_id}/agent_schedules"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

@@ -139,7 +139,7 @@ impl TagService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/tenant-tag/v1/tags/{}", tag_id),
+            api_path: format!("/open-apis/tenant-tag/v1/tags/{tag_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             body: serde_json::to_vec(&request)?,

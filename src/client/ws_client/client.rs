@@ -58,7 +58,7 @@ impl LarkWsClient {
         // 开始连接状态转换
         let mut state_machine = WebSocketStateMachine::new();
         if let Err(e) = state_machine.handle_event(StateMachineEvent::StartConnection) {
-            error!("Failed to transition to connecting state: {}", e);
+            error!("Failed to transition to connecting state: {e}");
         }
 
         let (conn, _response) = connect_async(conn_url).await?;
@@ -66,7 +66,7 @@ impl LarkWsClient {
 
         // 连接成功状态转换
         if let Err(e) = state_machine.handle_event(StateMachineEvent::ConnectionEstablished) {
-            error!("Failed to transition to connected state: {}", e);
+            error!("Failed to transition to connected state: {e}");
         }
         let (frame_tx, frame_rx) = mpsc::unbounded_channel();
         let (event_tx, event_rx) = mpsc::unbounded_channel();
@@ -97,7 +97,7 @@ impl LarkWsClient {
                     .state_machine
                     .handle_event(StateMachineEvent::DataReceived)
                 {
-                    error!("Failed to handle DataReceived event: {}", e);
+                    error!("Failed to handle DataReceived event: {e}");
                 }
 
                 // 检查是否可以处理数据
@@ -122,7 +122,7 @@ impl LarkWsClient {
                     FrameHandler::handle_frame(frame, &event_handler, &temp_tx).await
                 {
                     if let Err(e) = self.frame_tx.send(response_frame) {
-                        error!("Failed to send response frame: {:?}", e);
+                        error!("Failed to send response frame: {e:?}");
                     }
                 }
 
@@ -371,7 +371,7 @@ impl<'a> Context<'a> {
                             service_id
                         );
                         if let Err(e) = self.sink.send(msg).await {
-                            error!("Failed to send ping message: {:?}", e);
+                            error!("Failed to send ping message: {e:?}");
                             return Err(WsClientError::WsError(Box::new(e)));
                         }
 
@@ -395,7 +395,7 @@ impl<'a> Context<'a> {
             }
             Message::Binary(data) => {
                 let frame = Frame::decode(&*data)?;
-                trace!("Received frame: {:?}", frame);
+                trace!("Received frame: {frame:?}");
 
                 match frame.method {
                     // FrameTypeControl
@@ -406,7 +406,7 @@ impl<'a> Context<'a> {
                     // FrameTypeData
                     1 => {
                         if let Err(e) = self.event_sender.send(WsEvent::Data(frame)) {
-                            error!("Failed to send data event: {:?}", e);
+                            error!("Failed to send data event: {e:?}");
                         }
                     }
                     _ => {}
@@ -435,7 +435,7 @@ impl<'a> Context<'a> {
             .map(|h| h.value.as_str())
             .unwrap_or("");
 
-        trace!("Received control frame: {}", frame_type);
+        trace!("Received control frame: {frame_type}");
 
         if frame_type == "pong" {
             self.handle_pong_frame_direct(frame)?;
@@ -454,7 +454,7 @@ impl<'a> Context<'a> {
         let config = match serde_json::from_slice::<ClientConfig>(&payload) {
             Ok(cfg) => cfg,
             Err(e) => {
-                error!("Failed to parse ClientConfig: {:?}", e);
+                error!("Failed to parse ClientConfig: {e:?}");
                 return Ok(());
             }
         };
@@ -466,16 +466,13 @@ impl<'a> Context<'a> {
             .reset_after(Duration::from_secs(ping_interval as u64));
         self.client_config = config;
 
-        debug!(
-            "Updated ping interval from pong response: {}s",
-            ping_interval
-        );
+        debug!("Updated ping interval from pong response: {ping_interval}s");
 
         Ok(())
     }
 
     async fn handle_send_frame(&mut self, frame: Frame) -> WsClientResult<()> {
-        trace!("send frame: {:?}", frame);
+        trace!("send frame: {frame:?}");
         let msg = Message::Binary(frame.encode_to_vec());
 
         self.sink.send(msg).await?;

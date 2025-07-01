@@ -84,7 +84,7 @@ async fn demo_task_management(client: &LarkClient) -> Result<(), Box<dyn std::er
                             let subtask = response.data.unwrap().task;
                             println!("✅ 子任务创建成功: {:?}", subtask.summary);
                         }
-                        Err(e) => println!("❌ 子任务创建失败: {:?}", e),
+                        Err(e) => println!("❌ 子任务创建失败: {e:?}"),
                     }
 
                     // 4. 添加任务评论
@@ -105,7 +105,7 @@ async fn demo_task_management(client: &LarkClient) -> Result<(), Box<dyn std::er
                             let comment = response.data.unwrap().comment;
                             println!("✅ 评论添加成功: {:?}", comment.content);
                         }
-                        Err(e) => println!("❌ 评论添加失败: {:?}", e),
+                        Err(e) => println!("❌ 评论添加失败: {e:?}"),
                     }
 
                     // 5. 创建自定义分组
@@ -126,7 +126,7 @@ async fn demo_task_management(client: &LarkClient) -> Result<(), Box<dyn std::er
                             let section = response.data.unwrap().section;
                             println!("✅ 分组创建成功: {:?}", section.name);
                         }
-                        Err(e) => println!("❌ 分组创建失败: {:?}", e),
+                        Err(e) => println!("❌ 分组创建失败: {e:?}"),
                     }
 
                     // 6. 创建活动订阅
@@ -148,7 +148,7 @@ async fn demo_task_management(client: &LarkClient) -> Result<(), Box<dyn std::er
                             let subscription = response.data.unwrap().subscription;
                             println!("✅ 订阅创建成功: {:?}", subscription.name);
                         }
-                        Err(e) => println!("❌ 订阅创建失败: {:?}", e),
+                        Err(e) => println!("❌ 订阅创建失败: {e:?}"),
                     }
 
                     // 7. 获取任务列表
@@ -179,7 +179,7 @@ async fn demo_task_management(client: &LarkClient) -> Result<(), Box<dyn std::er
                                 println!("  - {}", task.summary.unwrap_or_default());
                             }
                         }
-                        Err(e) => println!("❌ 获取任务列表失败: {:?}", e),
+                        Err(e) => println!("❌ 获取任务列表失败: {e:?}"),
                     }
 
                     // 8. 获取任务详情
@@ -194,7 +194,7 @@ async fn demo_task_management(client: &LarkClient) -> Result<(), Box<dyn std::er
                             println!("  描述: {:?}", task.description);
                             println!("  状态: {:?}", task.status);
                         }
-                        Err(e) => println!("❌ 获取任务详情失败: {:?}", e),
+                        Err(e) => println!("❌ 获取任务详情失败: {e:?}"),
                     }
 
                     // 9. 更新任务
@@ -220,15 +220,15 @@ async fn demo_task_management(client: &LarkClient) -> Result<(), Box<dyn std::er
                             let updated_task = response.data.unwrap().task;
                             println!("✅ 任务更新成功: {:?}", updated_task.summary);
                         }
-                        Err(e) => println!("❌ 任务更新失败: {:?}", e),
+                        Err(e) => println!("❌ 任务更新失败: {e:?}"),
                     }
 
                     println!("\n🎉 Task v2 API 演示完成!");
                 }
-                Err(e) => println!("❌ 任务创建失败: {:?}", e),
+                Err(e) => println!("❌ 任务创建失败: {e:?}"),
             }
         }
-        Err(e) => println!("❌ 清单创建失败: {:?}", e),
+        Err(e) => println!("❌ 清单创建失败: {e:?}"),
     }
 
     Ok(())

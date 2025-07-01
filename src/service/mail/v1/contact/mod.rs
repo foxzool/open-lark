@@ -114,10 +114,7 @@ impl ContactService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{}/mail_contacts",
-                user_mailbox_id
-            ),
+            api_path: format!("/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/mail_contacts"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -146,8 +143,7 @@ impl ContactService {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{}/mail_contacts/{}",
-                user_mailbox_id, contact_id
+                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/mail_contacts/{contact_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -177,8 +173,7 @@ impl ContactService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{}/mail_contacts/{}",
-                user_mailbox_id, contact_id
+                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/mail_contacts/{contact_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -214,10 +209,7 @@ impl ContactService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{}/mail_contacts",
-                user_mailbox_id
-            ),
+            api_path: format!("/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/mail_contacts"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

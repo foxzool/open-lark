@@ -35,7 +35,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("  草稿ID: {}", draft.draft_id);
                 println!("  主名称: {:?}", draft.main_keys);
                 if let Some(aliases) = &draft.aliases {
-                    println!("  别名: {:?}", aliases);
+                    println!("  别名: {aliases:?}");
                 }
                 println!("  描述: {}", draft.description);
 
@@ -63,19 +63,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             println!("  草稿ID: {}", updated_draft.draft_id);
                             println!("  主名称: {:?}", updated_draft.main_keys);
                             if let Some(aliases) = &updated_draft.aliases {
-                                println!("  别名: {:?}", aliases);
+                                println!("  别名: {aliases:?}");
                             }
                             println!("  描述: {}", updated_draft.description);
                         }
                     }
                     Err(e) => {
-                        eprintln!("更新草稿失败: {:?}", e);
+                        eprintln!("更新草稿失败: {e:?}");
                     }
                 }
             }
         }
         Err(e) => {
-            eprintln!("创建草稿失败: {:?}", e);
+            eprintln!("创建草稿失败: {e:?}");
         }
     }
 

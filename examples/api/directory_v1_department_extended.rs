@@ -44,7 +44,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         if let Some(data) = response.data {
             if let Some(dept_id) = &data.data.department.department_id {
                 department_id = dept_id.clone();
-                println!("   新部门ID: {}", department_id);
+                println!("   新部门ID: {department_id}");
                 println!(
                     "   部门名称: {}",
                     data.data
@@ -149,7 +149,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("   找到 {} 个部门", data.data.departments.len());
             println!("   是否还有更多: {}", data.data.has_more.unwrap_or(false));
             if let Some(page_token) = &data.data.page_token {
-                println!("   下一页Token: {}", page_token);
+                println!("   下一页Token: {page_token}");
             }
 
             for (index, department) in data.data.departments.iter().enumerate() {
@@ -188,7 +188,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("   找到 {} 个匹配部门", data.data.departments.len());
             println!("   是否还有更多: {}", data.data.has_more.unwrap_or(false));
             if let Some(page_token) = &data.data.page_token {
-                println!("   下一页Token: {}", page_token);
+                println!("   下一页Token: {page_token}");
             }
 
             for (index, department) in data.data.departments.iter().enumerate() {

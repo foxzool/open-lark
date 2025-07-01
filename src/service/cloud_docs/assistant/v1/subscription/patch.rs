@@ -154,7 +154,7 @@ impl PatchSubscriptionRequestBuilder {
             self.changes
                 .push(format!("通知频率: 每{:.0}分钟", hours * 60.0));
         } else {
-            self.changes.push(format!("通知频率: 每{:.1}小时", hours));
+            self.changes.push(format!("通知频率: 每{hours:.1}小时"));
         }
         self.request.config = Some(config);
         self
@@ -219,7 +219,7 @@ impl PatchSubscriptionRequestBuilder {
         let mut tags = config.tags.unwrap_or_default();
         if !tags.contains(&tag_str) {
             tags.push(tag_str.clone());
-            self.changes.push(format!("添加标签: {}", tag_str));
+            self.changes.push(format!("添加标签: {tag_str}"));
         }
         config.tags = Some(tags);
         self.request.config = Some(config);
@@ -233,7 +233,7 @@ impl PatchSubscriptionRequestBuilder {
         let mut tags = config.tags.unwrap_or_default();
         if let Some(pos) = tags.iter().position(|t| t == &tag_str) {
             tags.remove(pos);
-            self.changes.push(format!("移除标签: {}", tag_str));
+            self.changes.push(format!("移除标签: {tag_str}"));
         }
         config.tags = Some(tags);
         self.request.config = Some(config);
@@ -420,11 +420,11 @@ impl PatchSubscriptionResponse {
         ];
 
         if let Some(ref subscription_id) = self.subscription_id {
-            parts.push(format!("订阅ID: {}", subscription_id));
+            parts.push(format!("订阅ID: {subscription_id}"));
         }
 
         if let Some(update_time) = self.update_time_formatted() {
-            parts.push(format!("更新时间: {}", update_time));
+            parts.push(format!("更新时间: {update_time}"));
         }
 
         let updated_fields = self.get_updated_fields();

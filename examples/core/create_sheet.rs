@@ -57,14 +57,14 @@ async fn create_new_spreadsheet(client: &LarkClient) -> Result<String, Box<dyn s
     let timestamp = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)?
         .as_secs();
-    let title = format!("SDK创建的表格_{}", timestamp);
+    let title = format!("SDK创建的表格_{timestamp}");
 
-    println!("   表格标题: {}", title);
+    println!("   表格标题: {title}");
 
     // 获取文件夹token（如果指定）
     let folder_token = std::env::var("FOLDER_TOKEN").ok();
     if let Some(ref folder) = folder_token {
-        println!("   目标文件夹: {}", folder);
+        println!("   目标文件夹: {folder}");
     } else {
         println!("   目标文件夹: 根目录");
     }
@@ -93,7 +93,7 @@ async fn create_new_spreadsheet(client: &LarkClient) -> Result<String, Box<dyn s
             }
         }
         Err(e) => {
-            println!("❌ 创建电子表格失败: {:?}", e);
+            println!("❌ 创建电子表格失败: {e:?}");
             println!("\n💡 常见错误解决方案:");
             println!("   1. 检查用户访问令牌权限");
             println!("   2. 确认是否有创建文档的权限");
@@ -132,7 +132,7 @@ async fn get_spreadsheet_info(
             }
         }
         Err(e) => {
-            println!("❌ 获取表格信息失败: {:?}", e);
+            println!("❌ 获取表格信息失败: {e:?}");
             return Err(e.into());
         }
     }
@@ -158,7 +158,7 @@ async fn initialize_spreadsheet_data(
     ]];
 
     let range = "Sheet1!A1:F1";
-    println!("   写入表头范围: {}", range);
+    println!("   写入表头范围: {range}");
 
     match open_lark::service::sheets::v3::data_operation::AppendDataRequest::builder()
         .spreadsheet_token(spreadsheet_token)
@@ -176,7 +176,7 @@ async fn initialize_spreadsheet_data(
             }
         }
         Err(e) => {
-            println!("❌ 初始化表格数据失败: {:?}", e);
+            println!("❌ 初始化表格数据失败: {e:?}");
             return Err(e.into());
         }
     }
@@ -236,7 +236,7 @@ async fn add_sample_data(
     ];
 
     let range = "Sheet1!A2:F6";
-    println!("   写入数据范围: {}", range);
+    println!("   写入数据范围: {range}");
     println!("   员工记录数: {}", employee_data.len());
 
     match open_lark::service::sheets::v3::data_operation::AppendDataRequest::builder()
@@ -259,7 +259,7 @@ async fn add_sample_data(
             }
         }
         Err(e) => {
-            println!("❌ 添加员工数据失败: {:?}", e);
+            println!("❌ 添加员工数据失败: {e:?}");
             return Err(e.into());
         }
     }
@@ -332,7 +332,7 @@ async fn add_statistics_data(
             println!("✅ 统计信息添加成功!");
         }
         Err(e) => {
-            println!("⚠️ 添加统计信息失败: {:?}", e);
+            println!("⚠️ 添加统计信息失败: {e:?}");
         }
     }
 
@@ -370,7 +370,7 @@ async fn display_final_result(
                         print!("   表头: ");
                     } else if row_index <= 6 {
                         // 数据行
-                        print!("   数据{}: ", row_index);
+                        print!("   数据{row_index}: ");
                     } else {
                         // 统计行
                         print!("   统计: ");
@@ -385,7 +385,7 @@ async fn display_final_result(
             }
         }
         Err(e) => {
-            println!("❌ 读取最终结果失败: {:?}", e);
+            println!("❌ 读取最终结果失败: {e:?}");
         }
     }
 

@@ -60,15 +60,15 @@ async fn demo_agent_management(client: &LarkClient) -> Result<(), Box<dyn std::e
             if let Some(data) = response.data {
                 println!("  ✅ 客服信息更新成功");
                 if let Some(name) = data.agent.agent_name {
-                    println!("    📱 客服名称: {}", name);
+                    println!("    📱 客服名称: {name}");
                 }
                 if let Some(status) = data.agent.status {
-                    println!("    📊 客服状态: {:?}", status);
+                    println!("    📊 客服状态: {status:?}");
                 }
             }
         }
         Err(e) => {
-            println!("  ❌ 客服信息更新失败: {:?}", e);
+            println!("  ❌ 客服信息更新失败: {e:?}");
         }
     }
 
@@ -86,7 +86,7 @@ async fn demo_agent_management(client: &LarkClient) -> Result<(), Box<dyn std::e
             }
         }
         Err(e) => {
-            println!("  ❌ 客服邮箱获取失败: {:?}", e);
+            println!("  ❌ 客服邮箱获取失败: {e:?}");
         }
     }
 
@@ -117,18 +117,18 @@ async fn demo_agent_schedule(client: &LarkClient) -> Result<(), Box<dyn std::err
             if let Some(data) = response.data {
                 println!("  ✅ 工作日程创建成功");
                 if let Some(schedule_id) = data.schedule.schedule_id {
-                    println!("    🆔 日程ID: {}", schedule_id);
+                    println!("    🆔 日程ID: {schedule_id}");
                 }
                 if let Some(start_time) = data.schedule.start_time {
-                    println!("    ⏰ 开始时间: {}", start_time);
+                    println!("    ⏰ 开始时间: {start_time}");
                 }
                 if let Some(end_time) = data.schedule.end_time {
-                    println!("    ⏰ 结束时间: {}", end_time);
+                    println!("    ⏰ 结束时间: {end_time}");
                 }
             }
         }
         Err(e) => {
-            println!("  ❌ 工作日程创建失败: {:?}", e);
+            println!("  ❌ 工作日程创建失败: {e:?}");
         }
     }
 
@@ -148,13 +148,13 @@ async fn demo_agent_schedule(client: &LarkClient) -> Result<(), Box<dyn std::err
                 );
                 for schedule in data.schedules.iter() {
                     if let Some(schedule_id) = &schedule.schedule_id {
-                        println!("    📅 日程ID: {}", schedule_id);
+                        println!("    📅 日程ID: {schedule_id}");
                     }
                 }
             }
         }
         Err(e) => {
-            println!("  ❌ 工作日程查询失败: {:?}", e);
+            println!("  ❌ 工作日程查询失败: {e:?}");
         }
     }
 
@@ -182,15 +182,15 @@ async fn demo_agent_skill(client: &LarkClient) -> Result<(), Box<dyn std::error:
             if let Some(data) = response.data {
                 println!("  ✅ 客服技能创建成功");
                 if let Some(skill_name) = data.skill.skill_name {
-                    println!("    🎯 技能名称: {}", skill_name);
+                    println!("    🎯 技能名称: {skill_name}");
                 }
                 if let Some(description) = data.skill.description {
-                    println!("    📝 技能描述: {}", description);
+                    println!("    📝 技能描述: {description}");
                 }
             }
         }
         Err(e) => {
-            println!("  ❌ 客服技能创建失败: {:?}", e);
+            println!("  ❌ 客服技能创建失败: {e:?}");
         }
     }
 
@@ -207,13 +207,13 @@ async fn demo_agent_skill(client: &LarkClient) -> Result<(), Box<dyn std::error:
                 println!("  ✅ 客服技能查询成功，找到 {} 个技能", data.skills.len());
                 for skill in data.skills.iter() {
                     if let Some(skill_name) = &skill.skill_name {
-                        println!("    🎯 技能: {}", skill_name);
+                        println!("    🎯 技能: {skill_name}");
                     }
                 }
             }
         }
         Err(e) => {
-            println!("  ❌ 客服技能查询失败: {:?}", e);
+            println!("  ❌ 客服技能查询失败: {e:?}");
         }
     }
 
@@ -244,16 +244,16 @@ async fn demo_ticket_management(client: &LarkClient) -> Result<(), Box<dyn std::
                 println!("    💬 聊天群ID: {}", data.chat_id);
                 if let Some(ticket) = data.ticket {
                     if let Some(ticket_id) = ticket.ticket_id {
-                        println!("    🎫 工单ID: {}", ticket_id);
+                        println!("    🎫 工单ID: {ticket_id}");
                     }
                     if let Some(title) = ticket.title {
-                        println!("    📋 工单标题: {}", title);
+                        println!("    📋 工单标题: {title}");
                     }
                 }
             }
         }
         Err(e) => {
-            println!("  ❌ 服务台对话创建失败: {:?}", e);
+            println!("  ❌ 服务台对话创建失败: {e:?}");
         }
     }
 
@@ -270,19 +270,19 @@ async fn demo_ticket_management(client: &LarkClient) -> Result<(), Box<dyn std::
                 println!("  ✅ 工单查询成功，找到 {} 个工单", data.tickets.len());
                 for ticket in data.tickets.iter() {
                     if let Some(ticket_id) = &ticket.ticket_id {
-                        println!("    🎫 工单ID: {}", ticket_id);
+                        println!("    🎫 工单ID: {ticket_id}");
                     }
                     if let Some(status) = &ticket.status {
-                        println!("    📊 状态: {:?}", status);
+                        println!("    📊 状态: {status:?}");
                     }
                     if let Some(priority) = &ticket.priority {
-                        println!("    🚨 优先级: {:?}", priority);
+                        println!("    🚨 优先级: {priority:?}");
                     }
                 }
             }
         }
         Err(e) => {
-            println!("  ❌ 工单查询失败: {:?}", e);
+            println!("  ❌ 工单查询失败: {e:?}");
         }
     }
 

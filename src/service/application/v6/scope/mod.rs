@@ -34,10 +34,7 @@ impl ScopeService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/application/v6/applications/{}/scope/apply",
-                app_id
-            ),
+            api_path: format!("/open-apis/application/v6/applications/{app_id}/scope/apply"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -60,7 +57,7 @@ impl ScopeService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/applications/{}/scope", app_id),
+            api_path: format!("/open-apis/application/v6/applications/{app_id}/scope"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

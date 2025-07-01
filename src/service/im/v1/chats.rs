@@ -38,7 +38,7 @@ impl ChatsService {
         &self,
         list_chat_request: ListChatRequest,
         option: Option<RequestOption>,
-    ) -> ListChatIterator {
+    ) -> ListChatIterator<'_> {
         ListChatIterator {
             service: self,
             request: list_chat_request,

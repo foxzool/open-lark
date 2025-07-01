@@ -19,7 +19,7 @@ impl ErrorHelper {
                 if let Some(error_code) = LarkErrorCode::from_code(*code) {
                     advice = Self::handle_api_error(error_code, message);
                 } else {
-                    advice.message = format!("未知API错误: {} (错误码: {})", message, code);
+                    advice.message = format!("未知API错误: {message} (错误码: {code})");
                     advice.category = ErrorHandlingCategory::Unknown;
                 }
             }
@@ -33,13 +33,13 @@ impl ErrorHelper {
                 advice.is_recoverable = true;
             }
             LarkAPIError::IllegalParamError(msg) => {
-                advice.message = format!("参数错误: {}", msg);
+                advice.message = format!("参数错误: {msg}");
                 advice.category = ErrorHandlingCategory::ClientError;
                 advice.actions.push("检查请求参数格式和内容".to_string());
                 advice.is_recoverable = true;
             }
             _ => {
-                advice.message = format!("系统错误: {}", error);
+                advice.message = format!("系统错误: {error}");
                 advice.category = ErrorHandlingCategory::SystemError;
             }
         }
@@ -134,7 +134,7 @@ impl ErrorHelper {
             advice.message = "请求构建失败".to_string();
             advice.actions.push("检查请求参数格式".to_string());
         } else {
-            advice.message = format!("网络错误: {}", req_err);
+            advice.message = format!("网络错误: {req_err}");
             advice.actions.push("检查网络连接和服务状态".to_string());
         }
 
@@ -206,7 +206,7 @@ impl ErrorHelper {
                 if let Some(error_code) = LarkErrorCode::from_code(*code) {
                     error_code.detailed_description().to_string()
                 } else {
-                    format!("API调用失败，错误码: {}", code)
+                    format!("API调用失败，错误码: {code}")
                 }
             }
             _ => error.user_friendly_message(),
@@ -372,7 +372,7 @@ impl ErrorContext {
         }
 
         if let Some(url) = &self.help_url {
-            println!("\n🔗 帮助文档: {}", url);
+            println!("\n🔗 帮助文档: {url}");
         }
     }
 }

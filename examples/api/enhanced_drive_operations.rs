@@ -57,13 +57,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             println!("❌ 响应数据为空");
                         }
                     }
-                    Err(e) => println!("❌ 获取文件列表失败: {}", e),
+                    Err(e) => println!("❌ 获取文件列表失败: {e}"),
                 }
             } else {
                 println!("❌ 根文件夹数据为空");
             }
         }
-        Err(e) => println!("❌ 获取根文件夹信息失败: {}", e),
+        Err(e) => println!("❌ 获取根文件夹信息失败: {e}"),
     }
 
     // 对比传统方式的调用量

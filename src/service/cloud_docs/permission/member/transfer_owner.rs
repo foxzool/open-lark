@@ -216,10 +216,10 @@ pub async fn transfer_owner(
     // 添加其他查询参数
     let mut query_params = Vec::new();
     if let Some(remove_old_owner) = request.remove_old_owner {
-        query_params.push(format!("remove_old_owner={}", remove_old_owner));
+        query_params.push(format!("remove_old_owner={remove_old_owner}"));
     }
     if let Some(need_notification) = request.need_notification {
-        query_params.push(format!("need_notification={}", need_notification));
+        query_params.push(format!("need_notification={need_notification}"));
     }
 
     if !query_params.is_empty() {
@@ -246,7 +246,7 @@ impl TransferResult {
     /// 获取转移时间的格式化字符串
     pub fn transfer_time_formatted(&self) -> Option<String> {
         self.transfer_time
-            .map(|timestamp| format!("转移时间: {}", timestamp))
+            .map(|timestamp| format!("转移时间: {timestamp}"))
     }
 
     /// 获取新所有者信息
@@ -257,7 +257,7 @@ impl TransferResult {
     /// 获取原所有者信息
     pub fn old_owner_info(&self) -> Option<String> {
         if let (Some(old_type), Some(old_id)) = (&self.old_owner_type, &self.old_owner_id) {
-            Some(format!("原所有者: {} ({})", old_id, old_type))
+            Some(format!("原所有者: {old_id} ({old_type})"))
         } else {
             None
         }

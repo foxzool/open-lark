@@ -169,11 +169,11 @@ impl WikiSearchItem {
         self.obj_token
             .as_ref()
             .map(|token| match self.obj_type.as_deref() {
-                Some("doc") => format!("https://feishu.cn/docs/{}", token),
-                Some("sheet") => format!("https://feishu.cn/sheets/{}", token),
-                Some("bitable") => format!("https://feishu.cn/base/{}", token),
-                Some("mindnote") => format!("https://feishu.cn/mindnote/{}", token),
-                _ => format!("https://feishu.cn/wiki/{}", token),
+                Some("doc") => format!("https://feishu.cn/docs/{token}"),
+                Some("sheet") => format!("https://feishu.cn/sheets/{token}"),
+                Some("bitable") => format!("https://feishu.cn/base/{token}"),
+                Some("mindnote") => format!("https://feishu.cn/mindnote/{token}"),
+                _ => format!("https://feishu.cn/wiki/{token}"),
             })
     }
 

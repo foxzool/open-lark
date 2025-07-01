@@ -40,7 +40,7 @@ impl FunctionalRoleService {
     ) -> crate::core::SDKResult<UpdateFunctionalRoleResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PUT,
-            api_path: format!("/open-apis/contact/v3/functional_roles/{}", role_id),
+            api_path: format!("/open-apis/contact/v3/functional_roles/{role_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -55,7 +55,7 @@ impl FunctionalRoleService {
     pub async fn get(&self, role_id: &str) -> crate::core::SDKResult<GetFunctionalRoleResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/contact/v3/functional_roles/{}", role_id),
+            api_path: format!("/open-apis/contact/v3/functional_roles/{role_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             ..Default::default()
@@ -103,7 +103,7 @@ impl FunctionalRoleService {
     ) -> crate::core::SDKResult<DeleteFunctionalRoleResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/contact/v3/functional_roles/{}", role_id),
+            api_path: format!("/open-apis/contact/v3/functional_roles/{role_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             ..Default::default()

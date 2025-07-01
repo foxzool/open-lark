@@ -128,10 +128,7 @@ impl ExternalInstanceService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/approval/v4/external_instances/{}/check",
-                instance_code
-            ),
+            api_path: format!("/open-apis/approval/v4/external_instances/{instance_code}/check"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,

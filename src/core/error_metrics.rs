@@ -213,7 +213,7 @@ impl ErrorStatistics {
         );
 
         if let Some(category) = self.most_common_category() {
-            println!("   最常见类别: {:?}", category);
+            println!("   最常见类别: {category:?}");
         }
 
         if let Some(severity) = self.highest_severity() {
@@ -221,7 +221,7 @@ impl ErrorStatistics {
         }
 
         if let Some(avg_time) = self.average_processing_time {
-            println!("   平均处理时间: {:?}", avg_time);
+            println!("   平均处理时间: {avg_time:?}");
         }
     }
 
@@ -232,7 +232,7 @@ impl ErrorStatistics {
         println!("\n📈 错误分类统计:");
         for (category, count) in &self.errors_by_category {
             let percentage = (*count as f64 / self.total_errors as f64) * 100.0;
-            println!("   {:?}: {} ({:.1}%)", category, count, percentage);
+            println!("   {category:?}: {count} ({percentage:.1}%)");
         }
 
         println!("\n🔢 错误码统计:");
@@ -240,7 +240,7 @@ impl ErrorStatistics {
         sorted_codes.sort_by(|a, b| b.1.cmp(a.1));
         for (code, count) in sorted_codes.iter().take(10) {
             let percentage = (**count as f64 / self.total_errors as f64) * 100.0;
-            println!("   {}: {} ({:.1}%)", code, count, percentage);
+            println!("   {code}: {count} ({percentage:.1}%)");
         }
 
         println!("\n⚠️ 严重级别统计:");
@@ -443,7 +443,7 @@ impl ErrorMonitor {
             if *critical_count >= self.config.alert_thresholds.critical_errors_count {
                 self.trigger_alert(
                     AlertType::CriticalErrors,
-                    format!("严重错误过多: {} 个", critical_count),
+                    format!("严重错误过多: {critical_count} 个"),
                 );
             }
         }
@@ -451,7 +451,7 @@ impl ErrorMonitor {
 
     /// 触发告警
     fn trigger_alert(&self, alert_type: AlertType, message: String) {
-        println!("🚨 告警 [{:?}]: {}", alert_type, message);
+        println!("🚨 告警 [{alert_type:?}]: {message}");
         // 这里可以集成外部告警系统
     }
 

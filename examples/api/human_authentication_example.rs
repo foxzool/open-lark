@@ -97,7 +97,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                         }
                                     }
                                 }
-                                Err(e) => println!("❌ 裁剪人脸图片失败: {:?}", e),
+                                Err(e) => println!("❌ 裁剪人脸图片失败: {e:?}"),
                             }
 
                             // 4. 查询认证结果
@@ -116,15 +116,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                         match data.status {
                                             AuthenticationStatus::Success => {
                                                 if let Some(score) = data.confidence_score {
-                                                    println!("   置信度分数: {:.2}", score);
+                                                    println!("   置信度分数: {score:.2}");
                                                 }
                                                 if let Some(completed_at) = data.completed_at {
-                                                    println!("   完成时间: {}", completed_at);
+                                                    println!("   完成时间: {completed_at}");
                                                 }
                                             }
                                             AuthenticationStatus::Failed => {
                                                 if let Some(error) = data.error_message {
-                                                    println!("   失败原因: {}", error);
+                                                    println!("   失败原因: {error}");
                                                 }
                                             }
                                             AuthenticationStatus::Processing => {
@@ -139,15 +139,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                         }
                                     }
                                 }
-                                Err(e) => println!("❌ 查询认证结果失败: {:?}", e),
+                                Err(e) => println!("❌ 查询认证结果失败: {e:?}"),
                             }
                         }
                     }
-                    Err(e) => println!("❌ 上传人脸图片失败: {:?}", e),
+                    Err(e) => println!("❌ 上传人脸图片失败: {e:?}"),
                 }
             }
         }
-        Err(e) => println!("❌ 录入身份信息失败: {:?}", e),
+        Err(e) => println!("❌ 录入身份信息失败: {e:?}"),
     }
 
     println!("\n=== 实名认证服务示例完成 ===");

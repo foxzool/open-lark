@@ -104,7 +104,7 @@ impl ExplorerService {
         &self,
         req: ListFolderRequest,
         option: Option<RequestOption>,
-    ) -> ListFolderIterator {
+    ) -> ListFolderIterator<'_> {
         ListFolderIterator {
             explorer_service: self,
             req,
@@ -150,7 +150,7 @@ impl ListFolderIterator<'_> {
                 None => None,
             },
             Err(e) => {
-                error!("Error: {:?}", e);
+                error!("Error: {e:?}");
                 None
             }
         }

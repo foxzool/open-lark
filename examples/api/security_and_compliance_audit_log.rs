@@ -59,25 +59,25 @@ async fn main() -> Result<()> {
                     println!("  - 操作详情: {}", item.operation_detail);
 
                     if let Some(object_id) = &item.object_id {
-                        println!("  - 被操作对象 ID: {}", object_id);
+                        println!("  - 被操作对象 ID: {object_id}");
                     }
                     if let Some(object_name) = &item.object_name {
-                        println!("  - 被操作对象名称: {}", object_name);
+                        println!("  - 被操作对象名称: {object_name}");
                     }
                     if let Some(ip) = &item.ip {
-                        println!("  - IP 地址: {}", ip);
+                        println!("  - IP 地址: {ip}");
                     }
                     if let Some(device_info) = &item.device_info {
-                        println!("  - 设备信息: {}", device_info);
+                        println!("  - 设备信息: {device_info}");
                     }
                     if let Some(extend_info) = &item.extend_info {
-                        println!("  - 扩展信息: {}", extend_info);
+                        println!("  - 扩展信息: {extend_info}");
                     }
                 }
             }
         }
         Err(e) => {
-            eprintln!("获取行为审计日志失败: {}", e);
+            eprintln!("获取行为审计日志失败: {e}");
         }
     }
 

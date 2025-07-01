@@ -60,7 +60,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("✅ 创建系统状态成功，但未返回详细信息");
             }
         }
-        Err(e) => println!("❌ 创建系统状态失败: {:?}", e),
+        Err(e) => println!("❌ 创建系统状态失败: {e:?}"),
     }
 
     // 示例2: 获取系统状态列表
@@ -97,12 +97,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("✅ 获取系统状态列表成功，但未返回数据");
             }
         }
-        Err(e) => println!("❌ 获取系统状态列表失败: {:?}", e),
+        Err(e) => println!("❌ 获取系统状态列表失败: {e:?}"),
     }
 
     // 示例3: 更新系统状态（如果有创建的状态）
     let system_status_id = "your_system_status_id"; // 实际使用时需要替换为真实的ID
-    println!("\n3. 更新系统状态 (ID: {})", system_status_id);
+    println!("\n3. 更新系统状态 (ID: {system_status_id})");
     let update_req = UpdateSystemStatusRequest {
         title: Some("更新后的工作状态".to_string()),
         i18n_title: Some(I18nContent {
@@ -137,7 +137,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("✅ 更新系统状态成功，但未返回详细信息");
             }
         }
-        Err(e) => println!("❌ 更新系统状态失败: {:?}", e),
+        Err(e) => println!("❌ 更新系统状态失败: {e:?}"),
     }
 
     // 示例4: 批量开启系统状态
@@ -154,7 +154,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await
     {
         Ok(_) => println!("✅ 批量开启系统状态成功"),
-        Err(e) => println!("❌ 批量开启系统状态失败: {:?}", e),
+        Err(e) => println!("❌ 批量开启系统状态失败: {e:?}"),
     }
 
     // 示例5: 批量关闭系统状态
@@ -171,11 +171,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await
     {
         Ok(_) => println!("✅ 批量关闭系统状态成功"),
-        Err(e) => println!("❌ 批量关闭系统状态失败: {:?}", e),
+        Err(e) => println!("❌ 批量关闭系统状态失败: {e:?}"),
     }
 
     // 示例6: 删除系统状态
-    println!("\n6. 删除系统状态 (ID: {})", system_status_id);
+    println!("\n6. 删除系统状态 (ID: {system_status_id})");
     match client
         .personal_settings
         .v1
@@ -184,7 +184,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await
     {
         Ok(_) => println!("✅ 删除系统状态成功"),
-        Err(e) => println!("❌ 删除系统状态失败: {:?}", e),
+        Err(e) => println!("❌ 删除系统状态失败: {e:?}"),
     }
 
     println!("\n=== 个人设置系统状态管理示例完成 ===");

@@ -142,10 +142,7 @@ impl MessageService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{}/messages",
-                user_mailbox_id
-            ),
+            api_path: format!("/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -189,8 +186,7 @@ impl MessageService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{}/messages/{}",
-                user_mailbox_id, message_id
+                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages/{message_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -246,10 +242,7 @@ impl MessageService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{}/messages",
-                user_mailbox_id
-            ),
+            api_path: format!("/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -303,8 +296,7 @@ impl MessageService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{}/messages/get_by_card",
-                user_mailbox_id
+                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages/get_by_card"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,

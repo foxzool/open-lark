@@ -204,7 +204,7 @@ impl TasklistService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/task/v2/tasklists/{}", tasklist_guid),
+            api_path: format!("/open-apis/task/v2/tasklists/{tasklist_guid}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -231,7 +231,7 @@ impl TasklistService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/task/v2/tasklists/{}", tasklist_guid),
+            api_path: format!("/open-apis/task/v2/tasklists/{tasklist_guid}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -258,7 +258,7 @@ impl TasklistService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/task/v2/tasklists/{}", tasklist_guid),
+            api_path: format!("/open-apis/task/v2/tasklists/{tasklist_guid}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -285,7 +285,7 @@ impl TasklistService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/task/v2/tasklists/{}/add_members", tasklist_guid),
+            api_path: format!("/open-apis/task/v2/tasklists/{tasklist_guid}/add_members"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -313,10 +313,7 @@ impl TasklistService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/task/v2/tasklists/{}/remove_members",
-                tasklist_guid
-            ),
+            api_path: format!("/open-apis/task/v2/tasklists/{tasklist_guid}/remove_members"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -380,7 +377,7 @@ impl TasklistService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/task/v2/tasklists/{}/tasks", tasklist_guid),
+            api_path: format!("/open-apis/task/v2/tasklists/{tasklist_guid}/tasks"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

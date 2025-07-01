@@ -94,7 +94,7 @@ async fn demo_create_approval(client: &LarkClient) -> Result<(), Box<dyn std::er
             }
         }
         Err(e) => {
-            println!("  ❌ 审批定义创建失败: {:?}", e);
+            println!("  ❌ 审批定义创建失败: {e:?}");
         }
     }
 
@@ -136,7 +136,7 @@ async fn demo_create_instance(client: &LarkClient) -> Result<(), Box<dyn std::er
             }
         }
         Err(e) => {
-            println!("  ❌ 审批实例创建失败: {:?}", e);
+            println!("  ❌ 审批实例创建失败: {e:?}");
         }
     }
 
@@ -166,7 +166,7 @@ async fn demo_task_operations(client: &LarkClient) -> Result<(), Box<dyn std::er
             println!("  ✅ 任务同意操作成功");
         }
         Err(e) => {
-            println!("  ❌ 任务同意操作失败: {:?}", e);
+            println!("  ❌ 任务同意操作失败: {e:?}");
         }
     }
 
@@ -191,7 +191,7 @@ async fn demo_file_upload(client: &LarkClient) -> Result<(), Box<dyn std::error:
             }
         }
         Err(e) => {
-            println!("  ❌ 文件上传失败: {:?}", e);
+            println!("  ❌ 文件上传失败: {e:?}");
         }
     }
 
@@ -222,7 +222,7 @@ async fn demo_comments(client: &LarkClient) -> Result<(), Box<dyn std::error::Er
             }
         }
         Err(e) => {
-            println!("  ❌ 评论创建失败: {:?}", e);
+            println!("  ❌ 评论创建失败: {e:?}");
         }
     }
 
@@ -259,7 +259,7 @@ async fn demo_external_approval(client: &LarkClient) -> Result<(), Box<dyn std::
             }
         }
         Err(e) => {
-            println!("  ❌ 三方审批创建失败: {:?}", e);
+            println!("  ❌ 三方审批创建失败: {e:?}");
         }
     }
 
@@ -290,7 +290,7 @@ async fn demo_search(client: &LarkClient) -> Result<(), Box<dyn std::error::Erro
             }
         }
         Err(e) => {
-            println!("  ❌ 实例查询失败: {:?}", e);
+            println!("  ❌ 实例查询失败: {e:?}");
         }
     }
 
@@ -311,7 +311,7 @@ async fn demo_search(client: &LarkClient) -> Result<(), Box<dyn std::error::Erro
             }
         }
         Err(e) => {
-            println!("  ❌ 审批ID查询失败: {:?}", e);
+            println!("  ❌ 审批ID查询失败: {e:?}");
         }
     }
 

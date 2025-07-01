@@ -666,7 +666,7 @@ impl AgencyService {
     ) -> SDKResult<BaseResponse<AgencyConsultantListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/agencies/{}/consultants", agency_id),
+            api_path: format!("/open-apis/hire/v1/agencies/{agency_id}/consultants"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -727,8 +727,7 @@ impl AgencyService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: format!(
-                "/open-apis/hire/v1/agency_recommendations/{}/confirm",
-                recommendation_id
+                "/open-apis/hire/v1/agency_recommendations/{recommendation_id}/confirm"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
@@ -785,8 +784,7 @@ impl AgencyService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: format!(
-                "/open-apis/hire/v1/agency_recommendations/{}/reject",
-                recommendation_id
+                "/open-apis/hire/v1/agency_recommendations/{recommendation_id}/reject"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),

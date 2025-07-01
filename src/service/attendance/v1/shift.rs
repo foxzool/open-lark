@@ -167,7 +167,7 @@ impl ShiftService {
         });
 
         api_req.body = serde_json::to_vec(&body).map_err(|e| {
-            log::error!("序列化请求体失败: {:?}", e);
+            log::error!("序列化请求体失败: {e:?}");
             e
         })?;
 

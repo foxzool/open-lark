@@ -362,7 +362,7 @@ impl PermissionMemberUpdated {
     /// 获取更新时间的格式化字符串
     pub fn update_time_formatted(&self) -> Option<String> {
         self.update_time
-            .map(|timestamp| format!("更新时间: {}", timestamp))
+            .map(|timestamp| format!("更新时间: {timestamp}"))
     }
 
     /// 获取成员类型描述

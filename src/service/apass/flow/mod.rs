@@ -402,8 +402,7 @@ impl FlowService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/apaas/v1/application/{}/flow/user_task/{}/rollback_points",
-                app_id, task_id
+                "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/rollback_points"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],

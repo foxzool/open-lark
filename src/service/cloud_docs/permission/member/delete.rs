@@ -291,7 +291,7 @@ impl PermissionMemberDeleted {
     /// 获取删除时间的格式化字符串
     pub fn delete_time_formatted(&self) -> Option<String> {
         self.delete_time
-            .map(|timestamp| format!("删除时间: {}", timestamp))
+            .map(|timestamp| format!("删除时间: {timestamp}"))
     }
 
     /// 获取成员类型描述
@@ -320,7 +320,7 @@ impl PermissionMemberDeleted {
         )];
 
         if let Some(old_perm_desc) = self.old_permission_description() {
-            parts.push(format!("原权限: {}", old_perm_desc));
+            parts.push(format!("原权限: {old_perm_desc}"));
         }
 
         if let Some(time) = self.delete_time_formatted() {

@@ -490,7 +490,7 @@ impl BackgroundCheckService {
     ) -> SDKResult<BaseResponse<BackgroundCheckOrderDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/background_check_orders/{}", order_id),
+            api_path: format!("/open-apis/hire/v1/background_check_orders/{order_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -632,10 +632,7 @@ impl BackgroundCheckService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/hire/v1/background_check_orders/{}/cancel",
-                order_id
-            ),
+            api_path: format!("/open-apis/hire/v1/background_check_orders/{order_id}/cancel"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -667,10 +664,7 @@ impl BackgroundCheckService {
     ) -> SDKResult<BaseResponse<serde_json::Value>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/hire/v1/background_check_orders/{}/report",
-                order_id
-            ),
+            api_path: format!("/open-apis/hire/v1/background_check_orders/{order_id}/report"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

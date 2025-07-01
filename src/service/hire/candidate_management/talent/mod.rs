@@ -216,7 +216,7 @@ impl TalentService {
     ) -> SDKResult<BaseResponse<TalentDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/talents/{}", talent_id),
+            api_path: format!("/open-apis/hire/v1/talents/{talent_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -390,7 +390,7 @@ impl TalentService {
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/talents/{}", talent_id),
+            api_path: format!("/open-apis/hire/v1/talents/{talent_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -422,7 +422,7 @@ impl TalentService {
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/hire/v1/talents/{}", talent_id),
+            api_path: format!("/open-apis/hire/v1/talents/{talent_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -476,7 +476,7 @@ impl TalentService {
     ) -> SDKResult<BaseResponse<TalentApplicationHistoryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/talents/{}/applications", talent_id),
+            api_path: format!("/open-apis/hire/v1/talents/{talent_id}/applications"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

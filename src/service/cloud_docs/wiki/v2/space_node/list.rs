@@ -155,13 +155,13 @@ pub async fn list_space_node(
     // 构建查询参数
     let mut query_params = Vec::new();
     if let Some(page_size) = request.page_size {
-        query_params.push(format!("page_size={}", page_size));
+        query_params.push(format!("page_size={page_size}"));
     }
     if let Some(page_token) = request.page_token {
-        query_params.push(format!("page_token={}", page_token));
+        query_params.push(format!("page_token={page_token}"));
     }
     if let Some(parent_node_token) = request.parent_node_token {
-        query_params.push(format!("parent_node_token={}", parent_node_token));
+        query_params.push(format!("parent_node_token={parent_node_token}"));
     }
 
     if !query_params.is_empty() {

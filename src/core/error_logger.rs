@@ -186,7 +186,7 @@ impl LogFormatter for SimpleFormatter {
             if let Ok(duration) = entry.timestamp.duration_since(SystemTime::UNIX_EPOCH) {
                 let seconds = duration.as_secs();
                 let millis = duration.subsec_millis();
-                output.push_str(&format!("[{}.{:03}] ", seconds, millis));
+                output.push_str(&format!("[{seconds}.{millis:03}] "));
             }
         }
 
@@ -198,12 +198,12 @@ impl LogFormatter for SimpleFormatter {
 
         // 添加错误信息
         if let Some(ref error) = entry.error {
-            output.push_str(&format!(" | 错误: {}", error));
+            output.push_str(&format!(" | 错误: {error}"));
         }
 
         // 添加错误码
         if let Some(code) = entry.error_code {
-            output.push_str(&format!(" | 错误码: {}", code));
+            output.push_str(&format!(" | 错误码: {code}"));
         }
 
         // 添加上下文
@@ -213,14 +213,14 @@ impl LogFormatter for SimpleFormatter {
                 if i > 0 {
                     output.push_str(", ");
                 }
-                output.push_str(&format!("{}={}", key, value));
+                output.push_str(&format!("{key}={value}"));
             }
             output.push('}');
         }
 
         // 添加调用者信息
         if let Some(ref caller) = entry.caller {
-            output.push_str(&format!(" | 调用者: {}", caller));
+            output.push_str(&format!(" | 调用者: {caller}"));
         }
 
         // 重置颜色
@@ -268,7 +268,7 @@ impl LogFormatter for JsonFormatter {
         if let Some(category) = entry.category {
             json_entry.insert(
                 "category".to_string(),
-                Value::String(format!("{:?}", category)),
+                Value::String(format!("{category:?}")),
             );
         }
 
@@ -492,10 +492,10 @@ impl ErrorLogger {
     fn output_log(&self, formatted: &str) {
         match &self.config.output {
             OutputTarget::Stdout => {
-                println!("{}", formatted);
+                println!("{formatted}");
             }
             OutputTarget::Stderr => {
-                eprintln!("{}", formatted);
+                eprintln!("{formatted}");
             }
             OutputTarget::File(path) => {
                 self.write_to_file(path, formatted);
@@ -518,7 +518,7 @@ impl ErrorLogger {
         use std::{fs::OpenOptions, io::Write};
 
         if let Ok(mut file) = OpenOptions::new().create(true).append(true).open(path) {
-            let _ = writeln!(file, "{}", content);
+            let _ = writeln!(file, "{content}");
         }
     }
 }

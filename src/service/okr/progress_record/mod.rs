@@ -164,7 +164,7 @@ impl ProgressRecordService {
     ) -> SDKResult<BaseResponse<ProgressRecordDeleteResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/okr/v1/progress_records/{}", progress_id),
+            api_path: format!("/open-apis/okr/v1/progress_records/{progress_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -194,7 +194,7 @@ impl ProgressRecordService {
     ) -> SDKResult<BaseResponse<ProgressRecordUpdateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: format!("/open-apis/okr/v1/progress_records/{}", progress_id),
+            api_path: format!("/open-apis/okr/v1/progress_records/{progress_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -222,7 +222,7 @@ impl ProgressRecordService {
     ) -> SDKResult<BaseResponse<ProgressRecordGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/okr/v1/progress_records/{}", progress_id),
+            api_path: format!("/open-apis/okr/v1/progress_records/{progress_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

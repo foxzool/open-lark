@@ -128,7 +128,7 @@ impl ApprovalService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/approval/v4/approvals/{}", approval_code),
+            api_path: format!("/open-apis/approval/v4/approvals/{approval_code}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

@@ -192,13 +192,13 @@ impl PasswordResult {
     /// 获取创建时间格式化字符串
     pub fn create_time_formatted(&self) -> Option<String> {
         self.create_time
-            .map(|timestamp| format!("创建时间: {}", timestamp))
+            .map(|timestamp| format!("创建时间: {timestamp}"))
     }
 
     /// 获取过期时间格式化字符串
     pub fn expire_time_formatted(&self) -> Option<String> {
         self.expire_time
-            .map(|timestamp| format!("过期时间: {}", timestamp))
+            .map(|timestamp| format!("过期时间: {timestamp}"))
     }
 
     /// 密码强度评估

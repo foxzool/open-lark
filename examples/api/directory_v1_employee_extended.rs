@@ -159,7 +159,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("   找到 {} 个员工", data.data.employees.len());
             println!("   是否还有更多: {}", data.data.has_more);
             if let Some(page_token) = &data.data.page_token {
-                println!("   下一页Token: {}", page_token);
+                println!("   下一页Token: {page_token}");
             }
 
             for (index, employee) in data.data.employees.iter().enumerate() {

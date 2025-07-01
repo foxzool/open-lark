@@ -68,39 +68,39 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     for (i, employee) in items.iter().take(5).enumerate() {
                         println!("\n   {}. 员工信息:", i + 1);
                         if let Some(name) = &employee.name {
-                            println!("      姓名: {}", name);
+                            println!("      姓名: {name}");
                         }
                         if let Some(employee_number) = &employee.employee_number {
-                            println!("      工号: {}", employee_number);
+                            println!("      工号: {employee_number}");
                         }
                         if let Some(email) = &employee.email {
-                            println!("      邮箱: {}", email);
+                            println!("      邮箱: {email}");
                         }
                         if let Some(mobile) = &employee.mobile {
-                            println!("      手机: {}", mobile);
+                            println!("      手机: {mobile}");
                         }
 
                         // 显示部门信息
                         if let Some(dept_info) = &employee.department_info {
                             if let Some(dept_name) = &dept_info.department_name {
-                                println!("      部门: {}", dept_name);
+                                println!("      部门: {dept_name}");
                             }
                         }
 
                         // 显示职位信息
                         if let Some(job_info) = &employee.job_info {
                             if let Some(job_title) = &job_info.job_title {
-                                println!("      职位: {}", job_title);
+                                println!("      职位: {job_title}");
                             }
                             if let Some(supervisor_name) = &job_info.supervisor_name {
-                                println!("      上级: {}", supervisor_name);
+                                println!("      上级: {supervisor_name}");
                             }
                         }
 
                         // 显示入职信息
                         if let Some(hire_info) = &employee.hire_info {
                             if let Some(hire_date) = &hire_info.hire_date {
-                                println!("      入职日期: {}", hire_date);
+                                println!("      入职日期: {hire_date}");
                             }
                         }
                     }
@@ -109,7 +109,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
         }
-        Err(e) => println!("❌ 员工花名册获取失败: {:?}", e),
+        Err(e) => println!("❌ 员工花名册获取失败: {e:?}"),
     }
 
     // 1.2 按部门筛选员工
@@ -145,10 +145,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("   - 部门员工数量: {}", items.len());
                     for employee in items {
                         if let Some(name) = &employee.name {
-                            print!("   - {}", name);
+                            print!("   - {name}");
                             if let Some(job_info) = &employee.job_info {
                                 if let Some(job_title) = &job_info.job_title {
-                                    print!(" ({})", job_title);
+                                    print!(" ({job_title})");
                                 }
                             }
                             println!();
@@ -159,7 +159,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
         }
-        Err(e) => println!("❌ 部门员工查询失败: {:?}", e),
+        Err(e) => println!("❌ 部门员工查询失败: {e:?}"),
     }
 
     // 1.3 获取详细员工信息（包含个人信息、教育经历等）
@@ -198,17 +198,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     for (i, employee) in items.iter().enumerate() {
                         println!("\n   {}. 员工档案:", i + 1);
                         if let Some(name) = &employee.name {
-                            println!("      姓名: {}", name);
+                            println!("      姓名: {name}");
                         }
 
                         // 个人信息
                         if let Some(personal) = &employee.personal_info {
                             println!("      个人信息:");
                             if let Some(nationality) = &personal.nationality {
-                                println!("        国籍: {}", nationality);
+                                println!("        国籍: {nationality}");
                             }
                             if let Some(highest_education) = &personal.highest_education {
-                                println!("        最高学历: {}", highest_education);
+                                println!("        最高学历: {highest_education}");
                             }
                         }
 
@@ -219,7 +219,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                 for edu in educations.iter().take(2) {
                                     if let Some(school) = &edu.school_name {
                                         if let Some(major) = &edu.major {
-                                            println!("        - {} {}", school, major);
+                                            println!("        - {school} {major}");
                                         }
                                     }
                                 }
@@ -233,7 +233,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                 for exp in experiences.iter().take(2) {
                                     if let Some(company) = &exp.company_name {
                                         if let Some(position) = &exp.position {
-                                            println!("        - {} {}", company, position);
+                                            println!("        - {company} {position}");
                                         }
                                     }
                                 }
@@ -243,7 +243,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
         }
-        Err(e) => println!("❌ 详细员工档案获取失败: {:?}", e),
+        Err(e) => println!("❌ 详细员工档案获取失败: {e:?}"),
     }
 
     // ========== 人员附件管理演示 ==========
@@ -266,13 +266,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("✅ 员工附件下载成功:");
             if let Some(data) = &response.data {
                 if let Some(file_name) = &data.attachment.file_name {
-                    println!("   - 文件名: {}", file_name);
+                    println!("   - 文件名: {file_name}");
                 }
                 if let Some(content_type) = &data.attachment.content_type {
-                    println!("   - 文件类型: {}", content_type);
+                    println!("   - 文件类型: {content_type}");
                 }
                 if let Some(file_size) = &data.attachment.file_size {
-                    println!("   - 文件大小: {} 字节", file_size);
+                    println!("   - 文件大小: {file_size} 字节");
                 }
                 if let Some(file_content) = &data.attachment.file_content {
                     println!("   - 文件内容: base64编码 ({} 字符)", file_content.len());
@@ -282,10 +282,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
         }
-        Err(e) => println!(
-            "❌ 员工附件下载失败: {:?} (这是正常的，因为使用了示例ID)",
-            e
-        ),
+        Err(e) => println!("❌ 员工附件下载失败: {e:?} (这是正常的，因为使用了示例ID)"),
     }
 
     println!("\n🎉 飞书人事(标准版) v1 API 综合演示完成!");

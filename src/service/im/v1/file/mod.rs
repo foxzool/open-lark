@@ -85,7 +85,7 @@ impl FileService {
     ) -> SDKResult<GetFileResponse> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/im/v1/files/{}", file_key),
+            api_path: format!("/open-apis/im/v1/files/{file_key}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };

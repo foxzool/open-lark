@@ -40,12 +40,12 @@ impl FrameHandler {
         let headers = &frame.headers;
         let frame_type = Self::get_header_value(headers, "type")?;
 
-        trace!("Received control frame: {}", frame_type);
+        trace!("Received control frame: {frame_type}");
 
         match frame_type.as_str() {
             "pong" => Self::handle_pong_frame(frame),
             _ => {
-                debug!("Unhandled control frame type: {}", frame_type);
+                debug!("Unhandled control frame type: {frame_type}");
                 None
             }
         }
@@ -57,12 +57,12 @@ impl FrameHandler {
 
         match serde_json::from_slice::<ClientConfig>(payload) {
             Ok(config) => {
-                debug!("Received pong with config: {:?}", config);
+                debug!("Received pong with config: {config:?}");
                 // 返回配置信息供上层处理
                 Some(frame)
             }
             Err(e) => {
-                error!("Failed to parse ClientConfig from pong frame: {:?}", e);
+                error!("Failed to parse ClientConfig from pong frame: {e:?}");
                 None
             }
         }
@@ -87,8 +87,7 @@ impl FrameHandler {
         };
 
         debug!(
-            "Received data frame - type: {}, message_id: {}, trace_id: {}",
-            msg_type, msg_id, trace_id
+            "Received data frame - type: {msg_type}, message_id: {msg_id}, trace_id: {trace_id}"
         );
 
         match msg_type.as_str() {
@@ -105,7 +104,7 @@ impl FrameHandler {
 
                 // 序列化响应
                 frame.payload = Some(serde_json::to_vec(&response).unwrap_or_else(|e| {
-                    error!("Failed to serialize response: {:?}", e);
+                    error!("Failed to serialize response: {e:?}");
                     vec![]
                 }));
 
@@ -117,7 +116,7 @@ impl FrameHandler {
                 None
             }
             _ => {
-                debug!("Unknown data frame type: {}", msg_type);
+                debug!("Unknown data frame type: {msg_type}");
                 None
             }
         }
@@ -140,7 +139,7 @@ impl FrameHandler {
                 response
             }
             Err(err) => {
-                error!("Failed to handle event: {:?}", err);
+                error!("Failed to handle event: {err:?}");
                 NewWsResponse::error()
             }
         }

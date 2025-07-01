@@ -94,10 +94,7 @@ impl SchemaService {
     ) -> SDKResult<BaseResponse<CreateSchemaResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/search/v2/data_sources/{}/schemas",
-                data_source_id
-            ),
+            api_path: format!("/open-apis/search/v2/data_sources/{data_source_id}/schemas"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -124,8 +121,7 @@ impl SchemaService {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: format!(
-                "/open-apis/search/v2/data_sources/{}/schemas/{}",
-                data_source_id, schema_id
+                "/open-apis/search/v2/data_sources/{data_source_id}/schemas/{schema_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
@@ -154,8 +150,7 @@ impl SchemaService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: format!(
-                "/open-apis/search/v2/data_sources/{}/schemas/{}",
-                data_source_id, schema_id
+                "/open-apis/search/v2/data_sources/{data_source_id}/schemas/{schema_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
@@ -183,8 +178,7 @@ impl SchemaService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/search/v2/data_sources/{}/schemas/{}",
-                data_source_id, schema_id
+                "/open-apis/search/v2/data_sources/{data_source_id}/schemas/{schema_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()

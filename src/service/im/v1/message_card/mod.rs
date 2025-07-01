@@ -75,7 +75,7 @@ impl MessageCardService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/im/v1/messages/{}", message_id),
+            api_path: format!("/open-apis/im/v1/messages/{message_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -93,7 +93,7 @@ impl MessageCardService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/im/v1/messages/{}/delay_update", message_id),
+            api_path: format!("/open-apis/im/v1/messages/{message_id}/delay_update"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -111,7 +111,7 @@ impl MessageCardService {
     ) -> SDKResult<BaseResponse<SendVisibleMessageCardResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/im/v1/messages/{}/urgent_app", message_id),
+            api_path: format!("/open-apis/im/v1/messages/{message_id}/urgent_app"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -133,7 +133,7 @@ impl MessageCardService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/im/v1/messages/{}/urgent_app", message_id),
+            api_path: format!("/open-apis/im/v1/messages/{message_id}/urgent_app"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

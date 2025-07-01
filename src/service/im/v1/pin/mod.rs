@@ -115,7 +115,7 @@ impl PinService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/im/v1/pins/{}", pin_id),
+            api_path: format!("/open-apis/im/v1/pins/{pin_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

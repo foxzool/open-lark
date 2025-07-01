@@ -47,7 +47,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("✅ 成功创建周期: ID={}", data.period.period_id);
             }
         }
-        Err(e) => println!("❌ 创建周期失败: {:?}", e),
+        Err(e) => println!("❌ 创建周期失败: {e:?}"),
     }
 
     // 2. 查询周期列表
@@ -76,7 +76,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
         }
-        Err(e) => println!("❌ 查询周期失败: {:?}", e),
+        Err(e) => println!("❌ 查询周期失败: {e:?}"),
     }
 
     // 3. 查询周期规则
@@ -100,7 +100,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
         }
-        Err(e) => println!("❌ 查询周期规则失败: {:?}", e),
+        Err(e) => println!("❌ 查询周期规则失败: {e:?}"),
     }
 
     // 4. 查询用户 OKR
@@ -124,7 +124,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
         }
-        Err(e) => println!("❌ 查询 OKR 失败: {:?}", e),
+        Err(e) => println!("❌ 查询 OKR 失败: {e:?}"),
     }
 
     // 5. 创建进展记录
@@ -151,7 +151,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 );
             }
         }
-        Err(e) => println!("❌ 创建进展记录失败: {:?}", e),
+        Err(e) => println!("❌ 创建进展记录失败: {e:?}"),
     }
 
     // 6. 查询复盘信息
@@ -172,7 +172,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
         }
-        Err(e) => println!("❌ 查询复盘失败: {:?}", e),
+        Err(e) => println!("❌ 查询复盘失败: {e:?}"),
     }
 
     println!("\n=== OKR 服务示例完成 ===");

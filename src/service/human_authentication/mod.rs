@@ -297,10 +297,7 @@ impl HumanAuthenticationService {
     ) -> SDKResult<BaseResponse<AuthenticationResultResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/human_authentication/v1/identities/{}/result",
-                identity_id
-            ),
+            api_path: format!("/open-apis/human_authentication/v1/identities/{identity_id}/result"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

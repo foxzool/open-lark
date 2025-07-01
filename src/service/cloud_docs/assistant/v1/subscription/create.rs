@@ -392,7 +392,7 @@ impl SubscriptionConfig {
             if interval < 1.0 {
                 parts.push(format!("通知: 每{:.0}分钟", interval * 60.0));
             } else {
-                parts.push(format!("通知: 每{:.1}小时", interval));
+                parts.push(format!("通知: 每{interval:.1}小时"));
             }
         } else {
             parts.push("通知: 已禁用".to_string());
@@ -444,11 +444,11 @@ impl CreateSubscriptionResponse {
         ];
 
         if let Some(ref subscription_id) = self.subscription_id {
-            parts.push(format!("订阅ID: {}", subscription_id));
+            parts.push(format!("订阅ID: {subscription_id}"));
         }
 
         if let Some(create_time) = self.create_time_formatted() {
-            parts.push(format!("创建时间: {}", create_time));
+            parts.push(format!("创建时间: {create_time}"));
         }
 
         parts.join(" | ")

@@ -34,10 +34,7 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!(
-                "/open-apis/application/v6/applications/{}/transfer_owner",
-                app_id
-            ),
+            api_path: format!("/open-apis/application/v6/applications/{app_id}/transfer_owner"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -55,10 +52,7 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!(
-                "/open-apis/application/v6/applications/{}/collaborators",
-                app_id
-            ),
+            api_path: format!("/open-apis/application/v6/applications/{app_id}/collaborators"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -84,10 +78,7 @@ impl ApplicationService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/application/v6/applications/{}/collaborators",
-                app_id
-            ),
+            api_path: format!("/open-apis/application/v6/applications/{app_id}/collaborators"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -110,7 +101,7 @@ impl ApplicationService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/applications/{}", app_id),
+            api_path: format!("/open-apis/application/v6/applications/{app_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -135,8 +126,7 @@ impl ApplicationService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/application/v6/applications/{}/versions/{}",
-                app_id, version_id
+                "/open-apis/application/v6/applications/{app_id}/versions/{version_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -168,7 +158,7 @@ impl ApplicationService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/applications/{}/versions", app_id),
+            api_path: format!("/open-apis/application/v6/applications/{app_id}/versions"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -193,8 +183,7 @@ impl ApplicationService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/application/v6/applications/{}/versions/{}/contacts_range_suggest",
-                app_id, version_id
+                "/open-apis/application/v6/applications/{app_id}/versions/{version_id}/contacts_range_suggest"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -243,7 +232,7 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/application/v6/applications/{}/audit", app_id),
+            api_path: format!("/open-apis/application/v6/applications/{app_id}/audit"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -261,7 +250,7 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/application/v6/applications/{}/group", app_id),
+            api_path: format!("/open-apis/application/v6/applications/{app_id}/group"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

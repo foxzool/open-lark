@@ -31,14 +31,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match client.vc.v1.reserve.apply(reserve_req, None, None).await {
         Ok(response) => {
-            println!("预约成功: {:?}", response);
+            println!("预约成功: {response:?}");
             let reserve_id = &response.data.as_ref().unwrap().reserve.id;
 
             // 2. 获取预约详情
             println!("\n2. 获取预约详情");
             match client.vc.v1.reserve.get(reserve_id, None, None).await {
-                Ok(get_response) => println!("预约详情: {:?}", get_response),
-                Err(e) => eprintln!("获取预约详情失败: {:?}", e),
+                Ok(get_response) => println!("预约详情: {get_response:?}"),
+                Err(e) => eprintln!("获取预约详情失败: {e:?}"),
             }
 
             // 3. 获取活跃会议
@@ -51,7 +51,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .await
             {
                 Ok(meeting_response) => {
-                    println!("活跃会议: {:?}", meeting_response);
+                    println!("活跃会议: {meeting_response:?}");
                     let meeting_id = &meeting_response.data.as_ref().unwrap().meeting.id;
 
                     // 4. 邀请参会人
@@ -67,8 +67,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         .invite(meeting_id, invite_req, None, None)
                         .await
                     {
-                        Ok(invite_response) => println!("邀请结果: {:?}", invite_response),
-                        Err(e) => eprintln!("邀请失败: {:?}", e),
+                        Ok(invite_response) => println!("邀请结果: {invite_response:?}"),
+                        Err(e) => eprintln!("邀请失败: {e:?}"),
                     }
 
                     // 5. 开始录制
@@ -86,22 +86,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         .await
                     {
                         Ok(recording_response) => {
-                            println!("录制开始: {:?}", recording_response);
+                            println!("录制开始: {recording_response:?}");
 
                             // 6. 停止录制
                             println!("\n6. 停止录制");
                             match client.vc.v1.recording.stop(meeting_id, None, None).await {
-                                Ok(stop_response) => println!("录制停止: {:?}", stop_response),
-                                Err(e) => eprintln!("停止录制失败: {:?}", e),
+                                Ok(stop_response) => println!("录制停止: {stop_response:?}"),
+                                Err(e) => eprintln!("停止录制失败: {e:?}"),
                             }
                         }
-                        Err(e) => eprintln!("开始录制失败: {:?}", e),
+                        Err(e) => eprintln!("开始录制失败: {e:?}"),
                     }
                 }
-                Err(e) => eprintln!("获取活跃会议失败: {:?}", e),
+                Err(e) => eprintln!("获取活跃会议失败: {e:?}"),
             }
         }
-        Err(e) => eprintln!("预约会议失败: {:?}", e),
+        Err(e) => eprintln!("预约会议失败: {e:?}"),
     }
 
     // 7. 会议室管理
@@ -117,16 +117,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match client.vc.v1.room.create(create_room_req, None, None).await {
         Ok(room_response) => {
-            println!("会议室创建成功: {:?}", room_response);
+            println!("会议室创建成功: {room_response:?}");
             let room_id = &room_response.data.as_ref().unwrap().room.room_id;
 
             // 获取会议室详情
             match client.vc.v1.room.get(room_id, None, None, None).await {
-                Ok(get_room_response) => println!("会议室详情: {:?}", get_room_response),
-                Err(e) => eprintln!("获取会议室详情失败: {:?}", e),
+                Ok(get_room_response) => println!("会议室详情: {get_room_response:?}"),
+                Err(e) => eprintln!("获取会议室详情失败: {e:?}"),
             }
         }
-        Err(e) => eprintln!("创建会议室失败: {:?}", e),
+        Err(e) => eprintln!("创建会议室失败: {e:?}"),
     }
 
     // 8. 搜索会议室
@@ -140,8 +140,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         user_id_type: None,
     };
     match client.vc.v1.room.search(Some(search_params), None).await {
-        Ok(search_response) => println!("搜索结果: {:?}", search_response),
-        Err(e) => eprintln!("搜索会议室失败: {:?}", e),
+        Ok(search_response) => println!("搜索结果: {search_response:?}"),
+        Err(e) => eprintln!("搜索会议室失败: {e:?}"),
     }
 
     // 9. 获取会议列表
@@ -164,8 +164,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         )
         .await
     {
-        Ok(list_response) => println!("会议列表: {:?}", list_response),
-        Err(e) => eprintln!("获取会议列表失败: {:?}", e),
+        Ok(list_response) => println!("会议列表: {list_response:?}"),
+        Err(e) => eprintln!("获取会议列表失败: {e:?}"),
     }
 
     println!("\n=== VC API v1 示例执行完成 ===");

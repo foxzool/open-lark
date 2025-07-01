@@ -126,7 +126,7 @@ impl OkrContentService {
         if let Some(status) = request.status {
             api_req
                 .query_params
-                .insert("status".to_string(), format!("{:?}", status));
+                .insert("status".to_string(), format!("{status:?}"));
         }
 
         if let Some(page_token) = request.page_token {

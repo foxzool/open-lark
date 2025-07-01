@@ -202,9 +202,9 @@ impl PermissionAuth {
         };
 
         if self.is_permitted {
-            format!("有{}权限", checked)
+            format!("有{checked}权限")
         } else {
-            format!("无{}权限", checked)
+            format!("无{checked}权限")
         }
     }
 
@@ -274,7 +274,7 @@ impl AuthPermissionResponse {
                     "view" => "阅读者",
                     _ => "未知",
                 };
-                parts.push(format!("实际权限: {}", actual_desc));
+                parts.push(format!("实际权限: {actual_desc}"));
             }
         }
 

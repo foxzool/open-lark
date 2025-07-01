@@ -36,13 +36,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("  - 规则ID: {}", rule.rule_id);
                     println!("    规则名称: {}", rule.name);
                     if let Some(description) = &rule.description {
-                        println!("    描述: {}", description);
+                        println!("    描述: {description}");
                     }
                     if let Some(rule_type) = &rule.rule_type {
-                        println!("    类型: {}", rule_type);
+                        println!("    类型: {rule_type}");
                     }
                     if let Some(status) = &rule.status {
-                        println!("    状态: {}", status);
+                        println!("    状态: {status}");
                     }
                     println!();
                 }
@@ -80,22 +80,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                 println!("  规则ID: {}", rule.rule_id);
                                 println!("  规则名称: {}", rule.name);
                                 if let Some(description) = &rule.description {
-                                    println!("  描述: {}", description);
+                                    println!("  描述: {description}");
                                 }
                                 if let Some(updated_at) = rule.updated_at {
-                                    println!("  更新时间: {}", updated_at);
+                                    println!("  更新时间: {updated_at}");
                                 }
                             }
                         }
                         Err(e) => {
-                            eprintln!("更新规则失败: {:?}", e);
+                            eprintln!("更新规则失败: {e:?}");
                         }
                     }
                 }
             }
         }
         Err(e) => {
-            eprintln!("查询规则列表失败: {:?}", e);
+            eprintln!("查询规则列表失败: {e:?}");
         }
     }
 
@@ -134,16 +134,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("  规则ID: {}", rule.rule_id);
                 println!("  规则名称: {}", rule.name);
                 if let Some(description) = &rule.description {
-                    println!("  描述: {}", description);
+                    println!("  描述: {description}");
                 }
                 if let Some(rule_type) = &rule.rule_type {
-                    println!("  类型: {}", rule_type);
+                    println!("  类型: {rule_type}");
                 }
                 if let Some(org_id) = &rule.org_id {
-                    println!("  组织ID: {}", org_id);
+                    println!("  组织ID: {org_id}");
                 }
                 if let Some(created_at) = rule.created_at {
-                    println!("  创建时间: {}", created_at);
+                    println!("  创建时间: {created_at}");
                 }
 
                 // 演示删除操作（可选）
@@ -171,7 +171,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(e) => {
-            eprintln!("创建规则失败: {:?}", e);
+            eprintln!("创建规则失败: {e:?}");
         }
     }
 
@@ -197,17 +197,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("  - 规则ID: {}", rule.rule_id);
                     println!("    规则名称: {}", rule.name);
                     if let Some(rule_type) = &rule.rule_type {
-                        println!("    类型: {}", rule_type);
+                        println!("    类型: {rule_type}");
                     }
                     if let Some(status) = &rule.status {
-                        println!("    状态: {}", status);
+                        println!("    状态: {status}");
                     }
                     println!();
                 }
             }
         }
         Err(e) => {
-            eprintln!("按条件查询规则失败: {:?}", e);
+            eprintln!("按条件查询规则失败: {e:?}");
         }
     }
 
