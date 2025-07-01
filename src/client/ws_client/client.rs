@@ -274,6 +274,9 @@ pub struct ClientConfig {
 pub type WsClientResult<T> = Result<T, WsClientError>;
 
 #[derive(Debug, thiserror::Error)]
+/// WebSocket客户端错误类型
+///
+/// 定义WebSocket连接和通信过程中可能出现的各种错误
 pub enum WsClientError {
     #[error("unexpected response")]
     UnexpectedResponse,
@@ -505,6 +508,9 @@ async fn client_loop(
 }
 
 #[derive(Debug)]
+/// WebSocket事件类型
+///
+/// 定义WebSocket连接中可能接收到的各种事件
 pub enum WsEvent {
     Error(WsClientError),
     Data(Frame),

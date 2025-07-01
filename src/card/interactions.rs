@@ -1,11 +1,17 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+/// 卡片交互行为类型
+///
+/// 定义卡片组件支持的各种交互行为
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum Behaviors {
+    /// 跳转URL行为
     OpenUrl(OpenUrlBehavior),
+    /// 回调行为
     Callback(CallbackBehavior),
+    /// 表单行为
     Form(FormBehavior),
 }
 
