@@ -53,6 +53,7 @@ pub struct GetScopeRequest {
 
 /// 获取权限范围响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct GetScopeResponse {
     /// 权限范围列表
     pub scopes: Vec<Scope>,
@@ -70,15 +71,6 @@ impl ApiResponseTrait for GetScopeResponse {
     }
 }
 
-impl Default for GetScopeResponse {
-    fn default() -> Self {
-        Self {
-            scopes: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}
 
 /// 权限范围
 #[derive(Debug, Clone, Serialize, Deserialize)]

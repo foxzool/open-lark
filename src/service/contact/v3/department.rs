@@ -237,6 +237,7 @@ pub struct CreateDepartmentRequest {
 
 /// 创建部门响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct CreateDepartmentResponse {
     /// 部门信息
     pub department: Department,
@@ -248,13 +249,6 @@ impl ApiResponseTrait for CreateDepartmentResponse {
     }
 }
 
-impl Default for CreateDepartmentResponse {
-    fn default() -> Self {
-        Self {
-            department: Department::default(),
-        }
-    }
-}
 
 /// 修改部门请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -271,6 +265,7 @@ pub struct PatchDepartmentRequest {
 
 /// 修改部门响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct PatchDepartmentResponse {
     /// 部门信息
     pub department: Department,
@@ -282,13 +277,6 @@ impl ApiResponseTrait for PatchDepartmentResponse {
     }
 }
 
-impl Default for PatchDepartmentResponse {
-    fn default() -> Self {
-        Self {
-            department: Department::default(),
-        }
-    }
-}
 
 /// 更新部门请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -305,6 +293,7 @@ pub struct UpdateDepartmentRequest {
 
 /// 更新部门响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct UpdateDepartmentResponse {
     /// 部门信息
     pub department: Department,
@@ -316,13 +305,6 @@ impl ApiResponseTrait for UpdateDepartmentResponse {
     }
 }
 
-impl Default for UpdateDepartmentResponse {
-    fn default() -> Self {
-        Self {
-            department: Department::default(),
-        }
-    }
-}
 
 /// 更新部门ID请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -336,6 +318,7 @@ pub struct UpdateDepartmentIdRequest {
 
 /// 更新部门ID响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct UpdateDepartmentIdResponse {}
 
 impl ApiResponseTrait for UpdateDepartmentIdResponse {
@@ -344,11 +327,6 @@ impl ApiResponseTrait for UpdateDepartmentIdResponse {
     }
 }
 
-impl Default for UpdateDepartmentIdResponse {
-    fn default() -> Self {
-        Self {}
-    }
-}
 
 /// 获取部门请求
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -363,6 +341,7 @@ pub struct GetDepartmentRequest {
 
 /// 获取部门响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct GetDepartmentResponse {
     /// 部门信息
     pub department: Department,
@@ -374,13 +353,6 @@ impl ApiResponseTrait for GetDepartmentResponse {
     }
 }
 
-impl Default for GetDepartmentResponse {
-    fn default() -> Self {
-        Self {
-            department: Department::default(),
-        }
-    }
-}
 
 /// 批量获取部门请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -397,6 +369,7 @@ pub struct BatchGetDepartmentsRequest {
 
 /// 批量获取部门响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct BatchGetDepartmentsResponse {
     /// 部门列表
     pub items: Vec<Department>,
@@ -408,11 +381,6 @@ impl ApiResponseTrait for BatchGetDepartmentsResponse {
     }
 }
 
-impl Default for BatchGetDepartmentsResponse {
-    fn default() -> Self {
-        Self { items: Vec::new() }
-    }
-}
 
 /// 获取子部门列表请求
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -439,6 +407,7 @@ pub struct GetChildrenDepartmentsRequest {
 
 /// 获取子部门列表响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct GetChildrenDepartmentsResponse {
     /// 部门列表
     pub items: Vec<Department>,
@@ -456,15 +425,6 @@ impl ApiResponseTrait for GetChildrenDepartmentsResponse {
     }
 }
 
-impl Default for GetChildrenDepartmentsResponse {
-    fn default() -> Self {
-        Self {
-            items: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}
 
 /// 获取父部门请求
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -482,6 +442,7 @@ pub struct GetParentDepartmentRequest {
 
 /// 获取父部门响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct GetParentDepartmentResponse {
     /// 部门列表
     pub items: Vec<Department>,
@@ -493,11 +454,6 @@ impl ApiResponseTrait for GetParentDepartmentResponse {
     }
 }
 
-impl Default for GetParentDepartmentResponse {
-    fn default() -> Self {
-        Self { items: Vec::new() }
-    }
-}
 
 /// 搜索部门请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -520,6 +476,7 @@ pub struct SearchDepartmentsRequest {
 
 /// 搜索部门响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct SearchDepartmentsResponse {
     /// 部门列表
     pub items: Vec<Department>,
@@ -537,15 +494,6 @@ impl ApiResponseTrait for SearchDepartmentsResponse {
     }
 }
 
-impl Default for SearchDepartmentsResponse {
-    fn default() -> Self {
-        Self {
-            items: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}
 
 /// 删除部门请求
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -557,6 +505,7 @@ pub struct DeleteDepartmentRequest {
 
 /// 删除部门响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct DeleteDepartmentResponse {}
 
 impl ApiResponseTrait for DeleteDepartmentResponse {
@@ -565,8 +514,3 @@ impl ApiResponseTrait for DeleteDepartmentResponse {
     }
 }
 
-impl Default for DeleteDepartmentResponse {
-    fn default() -> Self {
-        Self {}
-    }
-}
