@@ -160,6 +160,7 @@ pub struct CreateGroupRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct CreateGroupResponse {
     pub group: Group,
 }
@@ -170,13 +171,6 @@ impl ApiResponseTrait for CreateGroupResponse {
     }
 }
 
-impl Default for CreateGroupResponse {
-    fn default() -> Self {
-        Self {
-            group: Group::default(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PatchGroupRequest {
@@ -184,6 +178,7 @@ pub struct PatchGroupRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct PatchGroupResponse {
     pub group: Group,
 }
@@ -194,13 +189,6 @@ impl ApiResponseTrait for PatchGroupResponse {
     }
 }
 
-impl Default for PatchGroupResponse {
-    fn default() -> Self {
-        Self {
-            group: Group::default(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct GetGroupRequest {
@@ -211,6 +199,7 @@ pub struct GetGroupRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct GetGroupResponse {
     pub group: Group,
 }
@@ -221,13 +210,6 @@ impl ApiResponseTrait for GetGroupResponse {
     }
 }
 
-impl Default for GetGroupResponse {
-    fn default() -> Self {
-        Self {
-            group: Group::default(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListGroupsRequest {
@@ -242,6 +224,7 @@ pub struct ListGroupsRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct ListGroupsResponse {
     pub groups: Vec<Group>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -256,15 +239,6 @@ impl ApiResponseTrait for ListGroupsResponse {
     }
 }
 
-impl Default for ListGroupsResponse {
-    fn default() -> Self {
-        Self {
-            groups: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct GetUserGroupsRequest {
@@ -279,6 +253,7 @@ pub struct GetUserGroupsRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct GetUserGroupsResponse {
     pub group_list: Vec<Group>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -293,17 +268,9 @@ impl ApiResponseTrait for GetUserGroupsResponse {
     }
 }
 
-impl Default for GetUserGroupsResponse {
-    fn default() -> Self {
-        Self {
-            group_list: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct DeleteGroupResponse {}
 
 impl ApiResponseTrait for DeleteGroupResponse {
@@ -312,11 +279,6 @@ impl ApiResponseTrait for DeleteGroupResponse {
     }
 }
 
-impl Default for DeleteGroupResponse {
-    fn default() -> Self {
-        Self {}
-    }
-}
 
 /// 获取用户组详细信息请求
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -334,6 +296,7 @@ pub struct GetGroupDetailRequest {
 
 /// 获取用户组详细信息响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct GetGroupDetailResponse {
     /// 用户组信息
     pub group: GroupDetail,
@@ -345,13 +308,6 @@ impl ApiResponseTrait for GetGroupDetailResponse {
     }
 }
 
-impl Default for GetGroupDetailResponse {
-    fn default() -> Self {
-        Self {
-            group: GroupDetail::default(),
-        }
-    }
-}
 
 /// 用户组详细信息
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]

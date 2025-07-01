@@ -52,6 +52,7 @@ impl WorkCityService {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct GetWorkCityResponse {
     pub work_city: WorkCity,
 }
@@ -62,13 +63,6 @@ impl ApiResponseTrait for GetWorkCityResponse {
     }
 }
 
-impl Default for GetWorkCityResponse {
-    fn default() -> Self {
-        Self {
-            work_city: WorkCity::default(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListWorkCitiesRequest {
@@ -79,6 +73,7 @@ pub struct ListWorkCitiesRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct ListWorkCitiesResponse {
     pub items: Vec<WorkCity>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -93,12 +88,3 @@ impl ApiResponseTrait for ListWorkCitiesResponse {
     }
 }
 
-impl Default for ListWorkCitiesResponse {
-    fn default() -> Self {
-        Self {
-            items: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}

@@ -112,6 +112,7 @@ pub struct CreateJobFamilyRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct CreateJobFamilyResponse {
     pub job_family: JobFamily,
 }
@@ -122,13 +123,6 @@ impl ApiResponseTrait for CreateJobFamilyResponse {
     }
 }
 
-impl Default for CreateJobFamilyResponse {
-    fn default() -> Self {
-        Self {
-            job_family: JobFamily::default(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateJobFamilyRequest {
@@ -136,6 +130,7 @@ pub struct UpdateJobFamilyRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct UpdateJobFamilyResponse {
     pub job_family: JobFamily,
 }
@@ -146,15 +141,9 @@ impl ApiResponseTrait for UpdateJobFamilyResponse {
     }
 }
 
-impl Default for UpdateJobFamilyResponse {
-    fn default() -> Self {
-        Self {
-            job_family: JobFamily::default(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct GetJobFamilyResponse {
     pub job_family: JobFamily,
 }
@@ -165,13 +154,6 @@ impl ApiResponseTrait for GetJobFamilyResponse {
     }
 }
 
-impl Default for GetJobFamilyResponse {
-    fn default() -> Self {
-        Self {
-            job_family: JobFamily::default(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListJobFamiliesRequest {
@@ -182,6 +164,7 @@ pub struct ListJobFamiliesRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct ListJobFamiliesResponse {
     pub items: Vec<JobFamily>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -196,17 +179,9 @@ impl ApiResponseTrait for ListJobFamiliesResponse {
     }
 }
 
-impl Default for ListJobFamiliesResponse {
-    fn default() -> Self {
-        Self {
-            items: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct DeleteJobFamilyResponse {}
 
 impl ApiResponseTrait for DeleteJobFamilyResponse {
@@ -215,8 +190,3 @@ impl ApiResponseTrait for DeleteJobFamilyResponse {
     }
 }
 
-impl Default for DeleteJobFamilyResponse {
-    fn default() -> Self {
-        Self {}
-    }
-}

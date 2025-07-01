@@ -46,6 +46,7 @@ pub struct ListCustomAttrsRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct ListCustomAttrsResponse {
     pub items: Vec<CustomAttr>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -60,12 +61,3 @@ impl ApiResponseTrait for ListCustomAttrsResponse {
     }
 }
 
-impl Default for ListCustomAttrsResponse {
-    fn default() -> Self {
-        Self {
-            items: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}

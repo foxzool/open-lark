@@ -121,6 +121,7 @@ pub struct CreateFunctionalRoleRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct CreateFunctionalRoleResponse {
     pub role_id: String,
 }
@@ -131,13 +132,6 @@ impl ApiResponseTrait for CreateFunctionalRoleResponse {
     }
 }
 
-impl Default for CreateFunctionalRoleResponse {
-    fn default() -> Self {
-        Self {
-            role_id: String::new(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateFunctionalRoleRequest {
@@ -145,6 +139,7 @@ pub struct UpdateFunctionalRoleRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct UpdateFunctionalRoleResponse {}
 
 impl ApiResponseTrait for UpdateFunctionalRoleResponse {
@@ -153,13 +148,9 @@ impl ApiResponseTrait for UpdateFunctionalRoleResponse {
     }
 }
 
-impl Default for UpdateFunctionalRoleResponse {
-    fn default() -> Self {
-        Self {}
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct GetFunctionalRoleResponse {
     pub role: FunctionalRole,
 }
@@ -170,13 +161,6 @@ impl ApiResponseTrait for GetFunctionalRoleResponse {
     }
 }
 
-impl Default for GetFunctionalRoleResponse {
-    fn default() -> Self {
-        Self {
-            role: FunctionalRole::default(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListFunctionalRolesRequest {
@@ -189,6 +173,7 @@ pub struct ListFunctionalRolesRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct ListFunctionalRolesResponse {
     pub roles: Vec<FunctionalRole>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -203,17 +188,9 @@ impl ApiResponseTrait for ListFunctionalRolesResponse {
     }
 }
 
-impl Default for ListFunctionalRolesResponse {
-    fn default() -> Self {
-        Self {
-            roles: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct FunctionalRole {
     /// 角色ID
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -223,16 +200,9 @@ pub struct FunctionalRole {
     pub role_name: Option<String>,
 }
 
-impl Default for FunctionalRole {
-    fn default() -> Self {
-        Self {
-            role_id: None,
-            role_name: None,
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct DeleteFunctionalRoleResponse {}
 
 impl ApiResponseTrait for DeleteFunctionalRoleResponse {
@@ -241,8 +211,3 @@ impl ApiResponseTrait for DeleteFunctionalRoleResponse {
     }
 }
 
-impl Default for DeleteFunctionalRoleResponse {
-    fn default() -> Self {
-        Self {}
-    }
-}

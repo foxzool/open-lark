@@ -98,7 +98,7 @@ impl SessionService {
     ) -> SDKResult<BaseResponse<SessionCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/aily/v1/sessions"),
+            api_path: "/open-apis/aily/v1/sessions".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
                 "app_id": request.app_id,

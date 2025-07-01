@@ -51,6 +51,7 @@ impl JobTitleService {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct GetJobTitleResponse {
     pub job_title: JobTitle,
 }
@@ -61,13 +62,6 @@ impl ApiResponseTrait for GetJobTitleResponse {
     }
 }
 
-impl Default for GetJobTitleResponse {
-    fn default() -> Self {
-        Self {
-            job_title: JobTitle::default(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListJobTitlesRequest {
@@ -78,6 +72,7 @@ pub struct ListJobTitlesRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct ListJobTitlesResponse {
     pub items: Vec<JobTitle>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -92,12 +87,3 @@ impl ApiResponseTrait for ListJobTitlesResponse {
     }
 }
 
-impl Default for ListJobTitlesResponse {
-    fn default() -> Self {
-        Self {
-            items: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}
