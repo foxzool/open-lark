@@ -21,7 +21,51 @@ pub mod icon;
 pub mod interactions;
 pub mod text;
 
-/// 飞书卡片
+/// 飞书消息卡片
+///
+/// 用于创建和发送交互式消息卡片。支持多语言、富文本、交互组件等丰富功能。
+/// 卡片可以包含文本、图片、按钮、表单等多种组件，提供丰富的用户交互体验。
+///
+/// # 主要特性
+///
+/// - 🌐 多语言支持
+/// - 🎨 丰富的UI组件
+/// - 🔄 交互式操作
+/// - 📱 响应式布局
+/// - 🔧 高度可定制
+///
+/// # 支持的组件
+///
+/// - **文本组件**: 纯文本、富文本、标题
+/// - **媒体组件**: 图片、视频
+/// - **交互组件**: 按钮、输入框、选择器
+/// - **布局组件**: 分栏、折叠面板
+/// - **数据组件**: 表格、图表
+///
+/// # 示例
+///
+/// ```rust
+/// use open_lark::card::{FeishuCard, FeishuCardConfig};
+/// use open_lark::card::components::content_components::title::FeishuCardTitle;
+/// use open_lark::card::components::content_components::plain_text::PlainText;
+/// use open_lark::card::components::CardElement;
+///
+/// // 创建简单卡片
+/// let card = FeishuCard::new()
+///     .config(
+///         FeishuCardConfig::new()
+///             .enable_forward(true)
+///             .update_multi(false)
+///     )
+///     .header("zh_cn",
+///         FeishuCardTitle::new()
+///             .title(PlainText::new("欢迎使用飞书卡片"))
+///     )?
+///     .elements("zh_cn", vec![
+///         // 添加卡片元素
+///     ])?;
+/// # Ok::<(), open_lark::core::error::LarkAPIError>(())
+/// ```
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct FeishuCard {
     /// config 用于配置卡片的全局行为，包括是否允许被转发、是否为共享卡片等。
@@ -44,6 +88,9 @@ impl SendMessageTrait for FeishuCard {
 }
 
 impl FeishuCard {
+    /// 创建新的飞书卡片
+    ///
+    /// 默认使用中文语言环境，创建包含默认标题和空元素列表的卡片。
     pub fn new() -> Self {
         let lng = FeishuCardLanguage::ZhCN;
         let mut header = HashMap::new();

@@ -16,7 +16,46 @@ use crate::core::{
     SDKResult,
 };
 
+/// 消息服务
+///
+/// 提供消息的创建、发送、获取等核心功能。支持多种消息类型和格式。
+///
+/// # 支持的消息类型
+///
+/// - **text**: 纯文本消息
+/// - **post**: 富文本消息
+/// - **image**: 图片消息
+/// - **file**: 文件消息
+/// - **audio**: 音频消息
+/// - **media**: 视频消息
+/// - **sticker**: 表情包消息
+/// - **interactive**: 交互式卡片消息
+/// - **share_chat**: 群名片消息
+/// - **share_user**: 个人名片消息
+///
+/// # 示例
+///
+/// ```rust
+/// use open_lark::prelude::*;
+///
+/// // 通过客户端访问消息服务
+/// let client = LarkClient::builder("app_id", "app_secret").build();
+/// let message_service = &client.im.v1.message;
+///
+/// // 创建文本消息
+/// let request = CreateMessageRequest::builder()
+///     .receive_id_type("open_id")
+///     .request_body(
+///         CreateMessageRequestBody::builder()
+///             .receive_id("ou_xxx")
+///             .msg_type("text")
+///             .content("{\"text\":\"Hello!\"}")
+///             .build()
+///     )
+///     .build();
+/// ```
 pub struct MessageService {
+    /// 服务配置
     pub config: Config,
 }
 
@@ -117,23 +156,56 @@ impl ListMessageIterator<'_> {
     }
 }
 
+/// 创建消息请求
+///
+/// 用于构建发送消息的请求参数，包含消息接收者类型和消息内容。
+///
+/// # 示例
+///
+/// ```rust
+/// use open_lark::service::im::v1::message::{CreateMessageRequest, CreateMessageRequestBody};
+///
+/// let request = CreateMessageRequest::builder()
+///     .receive_id_type("open_id")
+///     .request_body(
+///         CreateMessageRequestBody::builder()
+///             .receive_id("ou_xxx")
+///             .msg_type("text")
+///             .content("{\"text\":\"Hello!\"}")
+///             .build()
+///     )
+///     .build();
+/// ```
 #[derive(Default, Clone)]
 pub struct CreateMessageRequest {
     api_req: ApiRequest,
 }
 
 impl CreateMessageRequest {
+    /// 创建请求构建器
     pub fn builder() -> CreateMessageRequestBuilder {
         CreateMessageRequestBuilder::default()
     }
 }
 
+/// 创建消息请求构建器
+///
+/// 用于逐步构建创建消息的请求参数。
 #[derive(Default)]
 pub struct CreateMessageRequestBuilder {
     request: CreateMessageRequest,
 }
 
 impl CreateMessageRequestBuilder {
+    /// 设置消息接收者ID类型
+    ///
+    /// # 参数
+    /// - `receive_id_type`: 接收者ID类型，可选值：
+    ///   - `"open_id"`: Open ID（推荐）
+    ///   - `"user_id"`: User ID
+    ///   - `"union_id"`: Union ID
+    ///   - `"email"`: 邮箱地址
+    ///   - `"chat_id"`: 群聊ID
     pub fn receive_id_type(mut self, receive_id_type: impl ToString) -> Self {
         self.request
             .api_req
@@ -142,11 +214,16 @@ impl CreateMessageRequestBuilder {
         self
     }
 
+    /// 设置消息请求体
+    ///
+    /// # 参数
+    /// - `body`: 包含接收者ID、消息类型和内容的请求体
     pub fn request_body(mut self, body: CreateMessageRequestBody) -> Self {
         self.request.api_req.body = serde_json::to_vec(&body).unwrap();
         self
     }
 
+    /// 构建最终的请求对象
     pub fn build(self) -> CreateMessageRequest {
         self.request
     }
@@ -260,7 +337,27 @@ pub struct CreateMessageResp {
     pub data: Message,
 }
 
-/// 消息类型
+/// 飞书消息
+///
+/// 表示一条完整的飞书消息，包含消息ID、类型、内容、发送者等所有信息。
+///
+/// # 字段说明
+///
+/// - `message_id`: 消息的唯一标识符
+/// - `msg_type`: 消息类型（text、post、image等）
+/// - `sender`: 消息发送者信息
+/// - `body`: 消息具体内容
+/// - `chat_id`: 所属会话ID
+/// - `create_time`/`update_time`: 创建和更新时间戳
+///
+/// # 示例
+///
+/// ```rust
+/// // 通常通过API调用获得Message实例
+/// // let message = client.im.v1.message.create(request, None).await?;
+/// // println!("消息ID: {}", message.message_id);
+/// // println!("消息类型: {}", message.msg_type);
+/// ```
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Message {
     /// 消息id
@@ -504,43 +601,89 @@ pub trait SendMessageTrait {
     fn content(&self) -> String;
 }
 
-/// 文本 text
+/// 文本消息
+///
+/// 用于发送纯文本消息，支持@用户、换行等功能。
+/// 是最常用的消息类型之一。
+///
+/// # 特殊功能
+///
+/// - 支持@用户：`<at user_id="xxx"></at>`
+/// - 支持@所有人：`<at user_id="all">name="全体成员"</at>`
+/// - 支持换行：使用`\n`或调用`line()`方法
+///
+/// # 示例
+///
+/// ```rust
+/// use open_lark::service::im::v1::message::{MessageText, SendMessageTrait};
+///
+/// // 创建简单文本消息
+/// let msg = MessageText::new("Hello, World!");
+/// assert_eq!(msg.msg_type(), "text");
+///
+/// // 创建包含@用户和换行的消息
+/// let msg = MessageText::new("")
+///     .add_text("欢迎新成员 ")
+///     .at_user("ou_xxx")
+///     .text_line("!")
+///     .add_text("请大家多多关照")
+///     .build();
+/// ```
 pub struct MessageText {
     text: String,
 }
 
 impl MessageText {
+    /// 创建新的文本消息
+    ///
+    /// # 参数
+    /// - `text`: 初始文本内容
     pub fn new(text: &str) -> Self {
         Self {
             text: text.to_string(),
         }
     }
 
+    /// 追加文本内容
+    ///
+    /// # 参数
+    /// - `text`: 要追加的文本
     pub fn add_text(mut self, text: &str) -> Self {
         self.text += text;
         self
     }
 
+    /// 添加一行文本（自动添加换行符）
+    ///
+    /// # 参数
+    /// - `text`: 要添加的文本行
     pub fn text_line(mut self, text: &str) -> Self {
         self.text = self.text + text + "\n";
         self
     }
 
+    /// 添加换行符
     pub fn line(mut self) -> Self {
         self.text += "\n";
         self
     }
 
+    /// @指定用户
+    ///
+    /// # 参数
+    /// - `user_id`: 用户的ID（open_id、user_id或union_id）
     pub fn at_user(mut self, user_id: &str) -> Self {
         self.text = self.text + &format!("<at user_id=\"{}\"></at>", user_id);
         self
     }
 
+    /// @所有人
     pub fn at_all(mut self) -> Self {
         self.text += "<at user_id=\"all\">name=\"全体成员\"</at>";
         self
     }
 
+    /// 构建最终的文本消息
     pub fn build(self) -> MessageText {
         MessageText { text: self.text }
     }
