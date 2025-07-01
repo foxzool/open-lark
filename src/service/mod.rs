@@ -60,22 +60,22 @@
 //!
 //! # 使用示例
 //!
-//! ```rust
+//! ```no_run
 //! use open_lark::prelude::*;
 //!
+//! # #[tokio::main]
+//! # async fn main() -> Result<(), Box<dyn std::error::Error>> {
 //! // 创建客户端
 //! let client = LarkClient::builder("app_id", "app_secret")
-//!     .with_app_type(AppType::SelfBuilt)
+//!     .with_app_type(AppType::SelfBuild)
 //!     .build();
 //!
-//! // 使用即时通讯服务
-//! let message = client.im.v1.message.create(message_request, None).await?;
-//!
-//! // 使用云文档服务
-//! let document = client.cloud_docs.drive.v1.file.create(file_request, None).await?;
-//!
-//! // 使用人力资源服务
-//! let employee = client.contact.v3.user.get(user_request, None).await?;
+//! // 服务调用示例（需要相应的请求对象）
+//! // let message = client.im.v1.message.create(message_request, None).await?;
+//! // let document = client.cloud_docs.drive.v1.file.create_file(file_request, None).await?;
+//! // let employee = client.contact.v3.user.get(user_request, None).await?;
+//! # Ok(())
+//! # }
 //! ```
 //!
 //! # 设计原则

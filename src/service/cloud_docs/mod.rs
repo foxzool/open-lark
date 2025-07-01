@@ -74,7 +74,7 @@
 //! use open_lark::prelude::*;
 //!
 //! let client = LarkClient::builder("app_id", "app_secret")
-//!     .with_app_type(AppType::SelfBuilt)
+//!     .with_app_type(AppType::SelfBuild)
 //!     .build();
 //!
 //! // 获取云文档服务

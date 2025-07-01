@@ -39,15 +39,14 @@
 //!
 //! # 使用示例
 //!
-//! ```rust
+//! ```no_run
 //! use open_lark::prelude::*;
 //!
 //! let client = LarkClient::builder("app_id", "app_secret")
-//!     .with_app_type(AppType::SelfBuilt)
+//!     .with_app_type(AppType::SelfBuild)
 //!     .build();
 //!
-//! // 获取认证服务
-//! let auth = &client.authentication;
+//! // 认证服务通过核心配置处理，无需直接访问
 //!
 //! // 获取App Access Token
 //! // let app_token_request = GetAppAccessTokenRequest::builder()
