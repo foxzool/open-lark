@@ -18,6 +18,9 @@ pub const TENANT_ACCESS_TOKEN_URL_PATH: &str = "/open-apis/auth/v3/tenant_access
 pub const APPLY_APP_TICKET_PATH: &str = "/open-apis/auth/v3/app_ticket/resend";
 
 #[derive(Default, Hash, Eq, PartialEq, Debug, Copy, Clone)]
+/// 访问令牌类型
+///
+/// 定义不同的访问令牌类型，用于API认证
 pub enum AccessTokenType {
     #[default]
     None,

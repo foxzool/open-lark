@@ -22,6 +22,9 @@ pub struct OperateSheetsRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+/// 表格操作请求元素类型
+///
+/// 定义对表格进行操作的不同请求类型
 pub enum OperateSheetsRequestElem {
     /// 增加工作表。
     #[serde(rename = "addSheet")]
@@ -177,6 +180,9 @@ impl ApiResponseTrait for OperateSheetResponse {
 }
 
 #[derive(Deserialize, Debug)]
+/// 表格操作响应类型
+///
+/// 定义表格操作请求的响应结果类型
 pub enum OperateSheetReply {
     /// 新增工作表的属性
     #[serde(rename = "addSheet")]
