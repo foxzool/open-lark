@@ -17,7 +17,7 @@ pub struct WriteImageRequest {
     api_request: ApiRequest,
     #[serde(skip)]
     spreadsheet_token: String,
-    /// 查询范围 range=<sheetId>!<开始格子>:<结束格子>
+    /// 查询范围 range=`<sheetId>!<开始格子>:<结束格子>`
     /// 如：xxxx!A1:D5，详见在线表格开发指南。此处限定为一个格子，如: xxxx!A1:A1
     range: String,
     /// 需要写入的图片二进制流，支持 "PNG", "JPEG", "JPG", "GIF", "BMP", "JFIF", "EXIF", "TIFF",
