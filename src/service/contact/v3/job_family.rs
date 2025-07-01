@@ -111,8 +111,7 @@ pub struct CreateJobFamilyRequest {
     pub job_family: JobFamily,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CreateJobFamilyResponse {
     pub job_family: JobFamily,
 }
@@ -123,14 +122,12 @@ impl ApiResponseTrait for CreateJobFamilyResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateJobFamilyRequest {
     pub job_family: JobFamily,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UpdateJobFamilyResponse {
     pub job_family: JobFamily,
 }
@@ -141,9 +138,7 @@ impl ApiResponseTrait for UpdateJobFamilyResponse {
     }
 }
 
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetJobFamilyResponse {
     pub job_family: JobFamily,
 }
@@ -154,7 +149,6 @@ impl ApiResponseTrait for GetJobFamilyResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListJobFamiliesRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -163,8 +157,7 @@ pub struct ListJobFamiliesRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ListJobFamiliesResponse {
     pub items: Vec<JobFamily>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -179,9 +172,7 @@ impl ApiResponseTrait for ListJobFamiliesResponse {
     }
 }
 
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DeleteJobFamilyResponse {}
 
 impl ApiResponseTrait for DeleteJobFamilyResponse {
@@ -189,4 +180,3 @@ impl ApiResponseTrait for DeleteJobFamilyResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-

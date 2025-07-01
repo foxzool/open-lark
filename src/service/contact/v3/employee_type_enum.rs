@@ -97,8 +97,7 @@ pub struct CreateEmployeeTypeRequest {
     pub employee_type_enum: EmployeeTypeEnum,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CreateEmployeeTypeResponse {
     pub employee_type_enum: EmployeeTypeEnum,
 }
@@ -109,14 +108,12 @@ impl ApiResponseTrait for CreateEmployeeTypeResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateEmployeeTypeRequest {
     pub employee_type_enum: EmployeeTypeEnum,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UpdateEmployeeTypeResponse {
     pub employee_type_enum: EmployeeTypeEnum,
 }
@@ -127,7 +124,6 @@ impl ApiResponseTrait for UpdateEmployeeTypeResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListEmployeeTypesRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -136,8 +132,7 @@ pub struct ListEmployeeTypesRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ListEmployeeTypesResponse {
     pub items: Vec<EmployeeTypeEnum>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -152,9 +147,7 @@ impl ApiResponseTrait for ListEmployeeTypesResponse {
     }
 }
 
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DeleteEmployeeTypeResponse {}
 
 impl ApiResponseTrait for DeleteEmployeeTypeResponse {
@@ -162,4 +155,3 @@ impl ApiResponseTrait for DeleteEmployeeTypeResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-

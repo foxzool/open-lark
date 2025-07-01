@@ -159,8 +159,7 @@ pub struct CreateUnitRequest {
     pub unit: Unit,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CreateUnitResponse {
     pub unit: Unit,
 }
@@ -171,14 +170,12 @@ impl ApiResponseTrait for CreateUnitResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PatchUnitRequest {
     pub unit: Unit,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct PatchUnitResponse {
     pub unit: Unit,
 }
@@ -189,7 +186,6 @@ impl ApiResponseTrait for PatchUnitResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BindDepartmentRequest {
     pub department_id: String,
@@ -197,8 +193,7 @@ pub struct BindDepartmentRequest {
     pub department_id_type: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BindDepartmentResponse {}
 
 impl ApiResponseTrait for BindDepartmentResponse {
@@ -207,7 +202,6 @@ impl ApiResponseTrait for BindDepartmentResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UnbindDepartmentRequest {
     pub department_id: String,
@@ -215,8 +209,7 @@ pub struct UnbindDepartmentRequest {
     pub department_id_type: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UnbindDepartmentResponse {}
 
 impl ApiResponseTrait for UnbindDepartmentResponse {
@@ -224,7 +217,6 @@ impl ApiResponseTrait for UnbindDepartmentResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListUnitDepartmentsRequest {
@@ -236,8 +228,7 @@ pub struct ListUnitDepartmentsRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ListUnitDepartmentsResponse {
     pub department_list: Vec<Department>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -252,9 +243,7 @@ impl ApiResponseTrait for ListUnitDepartmentsResponse {
     }
 }
 
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetUnitResponse {
     pub unit: Unit,
 }
@@ -265,7 +254,6 @@ impl ApiResponseTrait for GetUnitResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListUnitsRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -274,8 +262,7 @@ pub struct ListUnitsRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ListUnitsResponse {
     pub items: Vec<Unit>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -290,9 +277,7 @@ impl ApiResponseTrait for ListUnitsResponse {
     }
 }
 
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DeleteUnitResponse {}
 
 impl ApiResponseTrait for DeleteUnitResponse {
@@ -300,4 +285,3 @@ impl ApiResponseTrait for DeleteUnitResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-

@@ -50,8 +50,7 @@ impl JobTitleService {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetJobTitleResponse {
     pub job_title: JobTitle,
 }
@@ -62,7 +61,6 @@ impl ApiResponseTrait for GetJobTitleResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListJobTitlesRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -71,8 +69,7 @@ pub struct ListJobTitlesRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ListJobTitlesResponse {
     pub items: Vec<JobTitle>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -86,4 +83,3 @@ impl ApiResponseTrait for ListJobTitlesResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-

@@ -155,8 +155,7 @@ pub struct CreateRoleMemberRequest {
     pub department_id_type: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CreateRoleMemberResponse {
     pub member_id: String,
 }
@@ -167,7 +166,6 @@ impl ApiResponseTrait for CreateRoleMemberResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchCreateRoleMembersRequest {
     pub members: Vec<RoleMemberInfo>,
@@ -177,8 +175,7 @@ pub struct BatchCreateRoleMembersRequest {
     pub department_id_type: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchCreateRoleMembersResponse {
     pub results: Vec<RoleMemberResult>,
 }
@@ -189,7 +186,6 @@ impl ApiResponseTrait for BatchCreateRoleMembersResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SetRoleMemberScopesRequest {
     pub members: Vec<RoleMemberScope>,
@@ -199,8 +195,7 @@ pub struct SetRoleMemberScopesRequest {
     pub department_id_type: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct SetRoleMemberScopesResponse {}
 
 impl ApiResponseTrait for SetRoleMemberScopesResponse {
@@ -208,7 +203,6 @@ impl ApiResponseTrait for SetRoleMemberScopesResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct GetRoleMemberRequest {
@@ -218,8 +212,7 @@ pub struct GetRoleMemberRequest {
     pub department_id_type: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetRoleMemberResponse {
     pub member: RoleMember,
 }
@@ -229,7 +222,6 @@ impl ApiResponseTrait for GetRoleMemberResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListRoleMembersRequest {
@@ -243,8 +235,7 @@ pub struct ListRoleMembersRequest {
     pub department_id_type: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ListRoleMembersResponse {
     pub members: Vec<RoleMember>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -259,7 +250,6 @@ impl ApiResponseTrait for ListRoleMembersResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchDeleteRoleMembersRequest {
     pub member_ids: Vec<String>,
@@ -267,8 +257,7 @@ pub struct BatchDeleteRoleMembersRequest {
     pub user_id_type: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchDeleteRoleMembersResponse {
     pub results: Vec<RoleMemberResult>,
 }
@@ -279,11 +268,9 @@ impl ApiResponseTrait for BatchDeleteRoleMembersResponse {
     }
 }
 
-
 // 公共数据结构
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct RoleMemberInfo {
     /// 成员ID
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -296,9 +283,7 @@ pub struct RoleMemberInfo {
     pub scope: Option<String>,
 }
 
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct RoleMember {
     /// 成员ID
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -314,9 +299,7 @@ pub struct RoleMember {
     pub scopes: Option<Vec<String>>,
 }
 
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct RoleMemberDetail {
     /// 成员名称
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -325,7 +308,6 @@ pub struct RoleMemberDetail {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
 }
-
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RoleMemberScope {
