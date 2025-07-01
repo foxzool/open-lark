@@ -1,4 +1,5 @@
 pub mod models;
+#[allow(clippy::module_inception)]
 pub mod okr;
 pub mod period;
 pub mod period_rule;

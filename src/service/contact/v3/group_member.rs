@@ -134,6 +134,7 @@ pub struct AddGroupMemberRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct AddGroupMemberResponse {}
 
 impl ApiResponseTrait for AddGroupMemberResponse {
@@ -142,11 +143,6 @@ impl ApiResponseTrait for AddGroupMemberResponse {
     }
 }
 
-impl Default for AddGroupMemberResponse {
-    fn default() -> Self {
-        Self {}
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchAddGroupMembersRequest {
@@ -154,6 +150,7 @@ pub struct BatchAddGroupMembersRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct BatchAddGroupMembersResponse {
     pub results: Vec<GroupMemberResult>,
 }
@@ -164,13 +161,6 @@ impl ApiResponseTrait for BatchAddGroupMembersResponse {
     }
 }
 
-impl Default for BatchAddGroupMembersResponse {
-    fn default() -> Self {
-        Self {
-            results: Vec::new(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListGroupMembersRequest {
@@ -185,6 +175,7 @@ pub struct ListGroupMembersRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct ListGroupMembersResponse {
     pub memberlist: Vec<GroupMember>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -199,15 +190,6 @@ impl ApiResponseTrait for ListGroupMembersResponse {
     }
 }
 
-impl Default for ListGroupMembersResponse {
-    fn default() -> Self {
-        Self {
-            memberlist: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RemoveGroupMemberRequest {
@@ -219,6 +201,7 @@ pub struct RemoveGroupMemberRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct RemoveGroupMemberResponse {}
 
 impl ApiResponseTrait for RemoveGroupMemberResponse {
@@ -227,11 +210,6 @@ impl ApiResponseTrait for RemoveGroupMemberResponse {
     }
 }
 
-impl Default for RemoveGroupMemberResponse {
-    fn default() -> Self {
-        Self {}
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchRemoveGroupMembersRequest {
@@ -239,6 +217,7 @@ pub struct BatchRemoveGroupMembersRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct BatchRemoveGroupMembersResponse {
     pub results: Vec<GroupMemberResult>,
 }
@@ -249,10 +228,3 @@ impl ApiResponseTrait for BatchRemoveGroupMembersResponse {
     }
 }
 
-impl Default for BatchRemoveGroupMembersResponse {
-    fn default() -> Self {
-        Self {
-            results: Vec::new(),
-        }
-    }
-}

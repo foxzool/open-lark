@@ -111,6 +111,7 @@ pub struct CreateJobLevelRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct CreateJobLevelResponse {
     pub job_level: JobLevel,
 }
@@ -121,13 +122,6 @@ impl ApiResponseTrait for CreateJobLevelResponse {
     }
 }
 
-impl Default for CreateJobLevelResponse {
-    fn default() -> Self {
-        Self {
-            job_level: JobLevel::default(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateJobLevelRequest {
@@ -135,6 +129,7 @@ pub struct UpdateJobLevelRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct UpdateJobLevelResponse {
     pub job_level: JobLevel,
 }
@@ -145,15 +140,9 @@ impl ApiResponseTrait for UpdateJobLevelResponse {
     }
 }
 
-impl Default for UpdateJobLevelResponse {
-    fn default() -> Self {
-        Self {
-            job_level: JobLevel::default(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct GetJobLevelResponse {
     pub job_level: JobLevel,
 }
@@ -164,13 +153,6 @@ impl ApiResponseTrait for GetJobLevelResponse {
     }
 }
 
-impl Default for GetJobLevelResponse {
-    fn default() -> Self {
-        Self {
-            job_level: JobLevel::default(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListJobLevelsRequest {
@@ -181,6 +163,7 @@ pub struct ListJobLevelsRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct ListJobLevelsResponse {
     pub items: Vec<JobLevel>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -195,17 +178,9 @@ impl ApiResponseTrait for ListJobLevelsResponse {
     }
 }
 
-impl Default for ListJobLevelsResponse {
-    fn default() -> Self {
-        Self {
-            items: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct DeleteJobLevelResponse {}
 
 impl ApiResponseTrait for DeleteJobLevelResponse {
@@ -214,8 +189,3 @@ impl ApiResponseTrait for DeleteJobLevelResponse {
     }
 }
 
-impl Default for DeleteJobLevelResponse {
-    fn default() -> Self {
-        Self {}
-    }
-}

@@ -160,6 +160,7 @@ pub struct CreateUnitRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct CreateUnitResponse {
     pub unit: Unit,
 }
@@ -170,13 +171,6 @@ impl ApiResponseTrait for CreateUnitResponse {
     }
 }
 
-impl Default for CreateUnitResponse {
-    fn default() -> Self {
-        Self {
-            unit: Unit::default(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PatchUnitRequest {
@@ -184,6 +178,7 @@ pub struct PatchUnitRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct PatchUnitResponse {
     pub unit: Unit,
 }
@@ -194,13 +189,6 @@ impl ApiResponseTrait for PatchUnitResponse {
     }
 }
 
-impl Default for PatchUnitResponse {
-    fn default() -> Self {
-        Self {
-            unit: Unit::default(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BindDepartmentRequest {
@@ -210,6 +198,7 @@ pub struct BindDepartmentRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct BindDepartmentResponse {}
 
 impl ApiResponseTrait for BindDepartmentResponse {
@@ -218,11 +207,6 @@ impl ApiResponseTrait for BindDepartmentResponse {
     }
 }
 
-impl Default for BindDepartmentResponse {
-    fn default() -> Self {
-        Self {}
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UnbindDepartmentRequest {
@@ -232,6 +216,7 @@ pub struct UnbindDepartmentRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct UnbindDepartmentResponse {}
 
 impl ApiResponseTrait for UnbindDepartmentResponse {
@@ -240,11 +225,6 @@ impl ApiResponseTrait for UnbindDepartmentResponse {
     }
 }
 
-impl Default for UnbindDepartmentResponse {
-    fn default() -> Self {
-        Self {}
-    }
-}
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListUnitDepartmentsRequest {
@@ -257,6 +237,7 @@ pub struct ListUnitDepartmentsRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct ListUnitDepartmentsResponse {
     pub department_list: Vec<Department>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -271,17 +252,9 @@ impl ApiResponseTrait for ListUnitDepartmentsResponse {
     }
 }
 
-impl Default for ListUnitDepartmentsResponse {
-    fn default() -> Self {
-        Self {
-            department_list: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct GetUnitResponse {
     pub unit: Unit,
 }
@@ -292,13 +265,6 @@ impl ApiResponseTrait for GetUnitResponse {
     }
 }
 
-impl Default for GetUnitResponse {
-    fn default() -> Self {
-        Self {
-            unit: Unit::default(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListUnitsRequest {
@@ -309,6 +275,7 @@ pub struct ListUnitsRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct ListUnitsResponse {
     pub items: Vec<Unit>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -323,17 +290,9 @@ impl ApiResponseTrait for ListUnitsResponse {
     }
 }
 
-impl Default for ListUnitsResponse {
-    fn default() -> Self {
-        Self {
-            items: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct DeleteUnitResponse {}
 
 impl ApiResponseTrait for DeleteUnitResponse {
@@ -342,8 +301,3 @@ impl ApiResponseTrait for DeleteUnitResponse {
     }
 }
 
-impl Default for DeleteUnitResponse {
-    fn default() -> Self {
-        Self {}
-    }
-}

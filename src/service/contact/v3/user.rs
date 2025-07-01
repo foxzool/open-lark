@@ -324,6 +324,7 @@ pub struct CreateUserRequest {
 
 /// 创建用户响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct CreateUserResponse {
     /// 用户信息
     pub user: User,
@@ -335,13 +336,6 @@ impl ApiResponseTrait for CreateUserResponse {
     }
 }
 
-impl Default for CreateUserResponse {
-    fn default() -> Self {
-        Self {
-            user: User::default(),
-        }
-    }
-}
 
 /// 修改用户请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -358,6 +352,7 @@ pub struct PatchUserRequest {
 
 /// 修改用户响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct PatchUserResponse {
     /// 用户信息
     pub user: User,
@@ -369,13 +364,6 @@ impl ApiResponseTrait for PatchUserResponse {
     }
 }
 
-impl Default for PatchUserResponse {
-    fn default() -> Self {
-        Self {
-            user: User::default(),
-        }
-    }
-}
 
 /// 更新用户ID请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -389,6 +377,7 @@ pub struct UpdateUserIdRequest {
 
 /// 更新用户ID响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct UpdateUserIdResponse {}
 
 impl ApiResponseTrait for UpdateUserIdResponse {
@@ -397,11 +386,6 @@ impl ApiResponseTrait for UpdateUserIdResponse {
     }
 }
 
-impl Default for UpdateUserIdResponse {
-    fn default() -> Self {
-        Self {}
-    }
-}
 
 /// 获取用户请求
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -416,6 +400,7 @@ pub struct GetUserRequest {
 
 /// 获取用户响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct GetUserResponse {
     /// 用户信息
     pub user: User,
@@ -427,13 +412,6 @@ impl ApiResponseTrait for GetUserResponse {
     }
 }
 
-impl Default for GetUserResponse {
-    fn default() -> Self {
-        Self {
-            user: User::default(),
-        }
-    }
-}
 
 /// 批量获取用户请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -450,6 +428,7 @@ pub struct BatchGetUsersRequest {
 
 /// 批量获取用户响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct BatchGetUsersResponse {
     /// 用户列表
     pub items: Vec<User>,
@@ -461,11 +440,6 @@ impl ApiResponseTrait for BatchGetUsersResponse {
     }
 }
 
-impl Default for BatchGetUsersResponse {
-    fn default() -> Self {
-        Self { items: Vec::new() }
-    }
-}
 
 /// 按部门查找用户请求
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -489,6 +463,7 @@ pub struct FindUsersByDepartmentRequest {
 
 /// 按部门查找用户响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct FindUsersByDepartmentResponse {
     /// 用户列表
     pub items: Vec<User>,
@@ -506,15 +481,6 @@ impl ApiResponseTrait for FindUsersByDepartmentResponse {
     }
 }
 
-impl Default for FindUsersByDepartmentResponse {
-    fn default() -> Self {
-        Self {
-            items: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}
 
 /// 批量获取用户ID请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -532,6 +498,7 @@ pub struct BatchGetUserIdRequest {
 
 /// 批量获取用户ID响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct BatchGetUserIdResponse {
     /// 用户列表
     pub user_list: Vec<UserIdInfo>,
@@ -543,13 +510,6 @@ impl ApiResponseTrait for BatchGetUserIdResponse {
     }
 }
 
-impl Default for BatchGetUserIdResponse {
-    fn default() -> Self {
-        Self {
-            user_list: Vec::new(),
-        }
-    }
-}
 
 /// 用户ID信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -586,6 +546,7 @@ pub struct SearchUsersRequest {
 
 /// 搜索用户响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct SearchUsersResponse {
     /// 用户列表
     pub items: Vec<User>,
@@ -603,15 +564,6 @@ impl ApiResponseTrait for SearchUsersResponse {
     }
 }
 
-impl Default for SearchUsersResponse {
-    fn default() -> Self {
-        Self {
-            items: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}
 
 /// 删除用户请求
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -626,6 +578,7 @@ pub struct DeleteUserRequest {
 
 /// 删除用户响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct DeleteUserResponse {}
 
 impl ApiResponseTrait for DeleteUserResponse {
@@ -634,11 +587,6 @@ impl ApiResponseTrait for DeleteUserResponse {
     }
 }
 
-impl Default for DeleteUserResponse {
-    fn default() -> Self {
-        Self {}
-    }
-}
 
 /// 恢复用户请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -653,6 +601,7 @@ pub struct ResurrectUserRequest {
 
 /// 恢复用户响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct ResurrectUserResponse {
     /// 用户信息
     pub user: User,
@@ -664,13 +613,6 @@ impl ApiResponseTrait for ResurrectUserResponse {
     }
 }
 
-impl Default for ResurrectUserResponse {
-    fn default() -> Self {
-        Self {
-            user: User::default(),
-        }
-    }
-}
 
 /// 获取用户列表请求
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -691,6 +633,7 @@ pub struct ListUsersRequest {
 
 /// 获取用户列表响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct ListUsersResponse {
     /// 用户列表
     pub items: Vec<User>,
@@ -708,12 +651,3 @@ impl ApiResponseTrait for ListUsersResponse {
     }
 }
 
-impl Default for ListUsersResponse {
-    fn default() -> Self {
-        Self {
-            items: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}

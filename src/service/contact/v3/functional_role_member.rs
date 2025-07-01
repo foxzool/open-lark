@@ -156,6 +156,7 @@ pub struct CreateRoleMemberRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct CreateRoleMemberResponse {
     pub member_id: String,
 }
@@ -166,13 +167,6 @@ impl ApiResponseTrait for CreateRoleMemberResponse {
     }
 }
 
-impl Default for CreateRoleMemberResponse {
-    fn default() -> Self {
-        Self {
-            member_id: String::new(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchCreateRoleMembersRequest {
@@ -184,6 +178,7 @@ pub struct BatchCreateRoleMembersRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct BatchCreateRoleMembersResponse {
     pub results: Vec<RoleMemberResult>,
 }
@@ -194,13 +189,6 @@ impl ApiResponseTrait for BatchCreateRoleMembersResponse {
     }
 }
 
-impl Default for BatchCreateRoleMembersResponse {
-    fn default() -> Self {
-        Self {
-            results: Vec::new(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SetRoleMemberScopesRequest {
@@ -212,6 +200,7 @@ pub struct SetRoleMemberScopesRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct SetRoleMemberScopesResponse {}
 
 impl ApiResponseTrait for SetRoleMemberScopesResponse {
@@ -220,11 +209,6 @@ impl ApiResponseTrait for SetRoleMemberScopesResponse {
     }
 }
 
-impl Default for SetRoleMemberScopesResponse {
-    fn default() -> Self {
-        Self {}
-    }
-}
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct GetRoleMemberRequest {
@@ -235,6 +219,7 @@ pub struct GetRoleMemberRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct GetRoleMemberResponse {
     pub member: RoleMember,
 }
@@ -245,13 +230,6 @@ impl ApiResponseTrait for GetRoleMemberResponse {
     }
 }
 
-impl Default for GetRoleMemberResponse {
-    fn default() -> Self {
-        Self {
-            member: RoleMember::default(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListRoleMembersRequest {
@@ -266,6 +244,7 @@ pub struct ListRoleMembersRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct ListRoleMembersResponse {
     pub members: Vec<RoleMember>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -280,15 +259,6 @@ impl ApiResponseTrait for ListRoleMembersResponse {
     }
 }
 
-impl Default for ListRoleMembersResponse {
-    fn default() -> Self {
-        Self {
-            members: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchDeleteRoleMembersRequest {
@@ -298,6 +268,7 @@ pub struct BatchDeleteRoleMembersRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct BatchDeleteRoleMembersResponse {
     pub results: Vec<RoleMemberResult>,
 }
@@ -308,17 +279,11 @@ impl ApiResponseTrait for BatchDeleteRoleMembersResponse {
     }
 }
 
-impl Default for BatchDeleteRoleMembersResponse {
-    fn default() -> Self {
-        Self {
-            results: Vec::new(),
-        }
-    }
-}
 
 // 公共数据结构
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct RoleMemberInfo {
     /// 成员ID
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -331,17 +296,9 @@ pub struct RoleMemberInfo {
     pub scope: Option<String>,
 }
 
-impl Default for RoleMemberInfo {
-    fn default() -> Self {
-        Self {
-            member_id: None,
-            member_type: None,
-            scope: None,
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct RoleMember {
     /// 成员ID
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -357,18 +314,9 @@ pub struct RoleMember {
     pub scopes: Option<Vec<String>>,
 }
 
-impl Default for RoleMember {
-    fn default() -> Self {
-        Self {
-            member_id: None,
-            member_type: None,
-            member_info: None,
-            scopes: None,
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct RoleMemberDetail {
     /// 成员名称
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -378,14 +326,6 @@ pub struct RoleMemberDetail {
     pub email: Option<String>,
 }
 
-impl Default for RoleMemberDetail {
-    fn default() -> Self {
-        Self {
-            name: None,
-            email: None,
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RoleMemberScope {

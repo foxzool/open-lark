@@ -98,6 +98,7 @@ pub struct CreateEmployeeTypeRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct CreateEmployeeTypeResponse {
     pub employee_type_enum: EmployeeTypeEnum,
 }
@@ -108,13 +109,6 @@ impl ApiResponseTrait for CreateEmployeeTypeResponse {
     }
 }
 
-impl Default for CreateEmployeeTypeResponse {
-    fn default() -> Self {
-        Self {
-            employee_type_enum: EmployeeTypeEnum::default(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateEmployeeTypeRequest {
@@ -122,6 +116,7 @@ pub struct UpdateEmployeeTypeRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct UpdateEmployeeTypeResponse {
     pub employee_type_enum: EmployeeTypeEnum,
 }
@@ -132,13 +127,6 @@ impl ApiResponseTrait for UpdateEmployeeTypeResponse {
     }
 }
 
-impl Default for UpdateEmployeeTypeResponse {
-    fn default() -> Self {
-        Self {
-            employee_type_enum: EmployeeTypeEnum::default(),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListEmployeeTypesRequest {
@@ -149,6 +137,7 @@ pub struct ListEmployeeTypesRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct ListEmployeeTypesResponse {
     pub items: Vec<EmployeeTypeEnum>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -163,17 +152,9 @@ impl ApiResponseTrait for ListEmployeeTypesResponse {
     }
 }
 
-impl Default for ListEmployeeTypesResponse {
-    fn default() -> Self {
-        Self {
-            items: Vec::new(),
-            has_more: None,
-            page_token: None,
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct DeleteEmployeeTypeResponse {}
 
 impl ApiResponseTrait for DeleteEmployeeTypeResponse {
@@ -182,8 +163,3 @@ impl ApiResponseTrait for DeleteEmployeeTypeResponse {
     }
 }
 
-impl Default for DeleteEmployeeTypeResponse {
-    fn default() -> Self {
-        Self {}
-    }
-}
