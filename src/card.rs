@@ -15,10 +15,29 @@ use crate::{
     service::im::v1::message::SendMessageTrait,
 };
 
+/// 卡片组件模块
+/// 
+/// 提供各种卡片UI组件，包括内容组件、交互组件、布局组件等
 pub mod components;
+
+/// 链接处理模块
+/// 
+/// 处理卡片中的链接和跳转逻辑
 pub mod href;
+
+/// 图标管理模块
+/// 
+/// 管理卡片中使用的各种图标资源
 pub mod icon;
+
+/// 交互处理模块
+/// 
+/// 处理卡片的用户交互事件和回调
 pub mod interactions;
+
+/// 文本样式模块
+/// 
+/// 定义卡片中文本的样式和格式化
 pub mod text;
 
 /// 飞书消息卡片
@@ -104,11 +123,20 @@ impl FeishuCard {
         }
     }
 
+    /// 设置卡片全局配置
+    /// 
+    /// # 参数
+    /// * `config` - 卡片配置对象
     pub fn config(mut self, config: FeishuCardConfig) -> Self {
         self.config = Some(config);
         self
     }
 
+    /// 设置卡片标题
+    /// 
+    /// # 参数  
+    /// * `lng` - 语言代码 (如 "zh_cn", "en_us")
+    /// * `header` - 卡片标题对象
     pub fn header(
         mut self,
         lng: &str,
@@ -125,7 +153,11 @@ impl FeishuCard {
         Ok(self)
     }
 
-    /// 添加组件
+    /// 添加卡片组件
+    /// 
+    /// # 参数
+    /// * `lng` - 语言代码 (如 "zh_cn", "en_us") 
+    /// * `elements` - 卡片组件列表
     pub fn elements(
         mut self,
         lng: &str,
@@ -180,35 +212,60 @@ pub struct FeishuCardConfig {
 }
 
 impl FeishuCardConfig {
+    /// 创建新的卡片配置
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// 设置是否允许转发卡片
+    /// 
+    /// # 参数
+    /// * `enable_forward` - true为允许转发，false为不允许
     pub fn enable_forward(mut self, enable_forward: bool) -> Self {
         self.enable_forward = Some(enable_forward);
         self
     }
 
+    /// 设置是否为共享卡片
+    /// 
+    /// # 参数  
+    /// * `update_multi` - true为共享卡片，false为独享卡片
     pub fn update_multi(mut self, update_multi: bool) -> Self {
         self.update_multi = Some(update_multi);
         self
     }
 
+    /// 设置卡片宽度模式
+    /// 
+    /// # 参数
+    /// * `width_mode` - 宽度模式：默认宽度或自适应屏幕宽度
     pub fn width_mode(mut self, width_mode: FeishuCardWidthMode) -> Self {
         self.width_mode = Some(width_mode);
         self
     }
 
+    /// 设置是否使用自定义翻译数据
+    /// 
+    /// # 参数
+    /// * `use_custom_translation` - true为使用自定义翻译，false为使用机器翻译
     pub fn use_custom_translation(mut self, use_custom_translation: bool) -> Self {
         self.use_custom_translation = Some(use_custom_translation);
         self
     }
 
+    /// 设置转发的卡片是否仍然支持回传交互
+    /// 
+    /// # 参数
+    /// * `enable_forward_interaction` - true为支持交互，false为不支持
     pub fn enable_forward_interaction(mut self, enable_forward_interaction: bool) -> Self {
         self.enable_forward_interaction = Some(enable_forward_interaction);
         self
     }
 
+    /// 设置卡片样式
+    /// 
+    /// # 参数
+    /// * `style` - 卡片样式配置，包括字号和颜色
     pub fn style(mut self, style: FeishuCardStyle) -> Self {
         self.style = Some(style);
         self
@@ -226,6 +283,9 @@ pub enum FeishuCardWidthMode {
     Fill,
 }
 
+/// 卡片样式配置
+/// 
+/// 用于定义卡片的字号和颜色样式，支持为不同主题和设备定制样式
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FeishuCardStyle {
     /// 分别为移动端和桌面端添加自定义字号。用于在普通文本组件和富文本组件 JSON
@@ -238,17 +298,25 @@ pub struct FeishuCardStyle {
     color: Option<HashMap<String, String>>,
 }
 
+/// 飞书卡片支持的语言类型
+/// 
+/// 用于卡片的多语言支持，可为不同语言环境提供相应的内容
 #[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq, Hash, Clone, Copy)]
 pub enum FeishuCardLanguage {
+    /// 简体中文
     #[serde(rename = "zh_cn")]
     #[default]
     ZhCN,
+    /// 英文（美国）
     #[serde(rename = "en_us")]
     EnUS,
+    /// 日文
     #[serde(rename = "ja_jp")]
     JaJP,
+    /// 繁体中文（香港）
     #[serde(rename = "zh_hk")]
     ZhHK,
+    /// 繁体中文（台湾）
     #[serde(rename = "zh_tw")]
     ZhTW,
 }
@@ -291,15 +359,24 @@ impl Default for TextTag {
 }
 
 impl TextTag {
+    /// 创建新的文本标签
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// 设置标签文本内容
+    /// 
+    /// # 参数
+    /// * `text` - 标签的文本内容
     pub fn text(mut self, text: PlainText) -> Self {
         self.text = Some(text);
         self
     }
 
+    /// 设置标签颜色
+    /// 
+    /// # 参数
+    /// * `color` - 标签的颜色值
     pub fn color(mut self, color: &str) -> Self {
         self.color = Some(color.to_string());
         self
