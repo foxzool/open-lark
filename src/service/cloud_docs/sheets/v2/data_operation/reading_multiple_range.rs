@@ -18,7 +18,7 @@ pub struct ReadingMultipleRangeRequest {
     spreadsheet_token: String,
     /// 多个查询范围，范围之间使用逗号分隔，如range1,range2。其中 range 包含 sheetId
     /// 与单元格范围两部分，目前支持四种索引方式，详见 在线表格开发指南
-    /// 。若查询范围中使用形如<sheetId>!<开始单元格>:<结束列>的范围时，仅支持获取100列数据
+    /// 。若查询范围中使用形如`<sheetId>!<开始单元格>:<结束列>`的范围时，仅支持获取100列数据
     ranges: String,
     /// 指定单元格数据的格式。可选值为如下所示。当参数缺省时，默认不进行公式计算，返回公式本身；
     /// 数值不进行数字格式化。
@@ -65,7 +65,7 @@ impl ReadingMultiRangesRequestBuilder {
 
     /// 多个查询范围，范围之间使用逗号分隔，如range1,range2。⁣其中 range 包含 sheetId
     /// 与单元格范围两部分，目前支持四种索引方式，详见 在线表格开发指南
-    /// 。若查询范围中使用形如<sheetId>!<开始单元格>:<结束列>的范围时，仅支持获取100列数据。
+    /// 。若查询范围中使用形如`<sheetId>!<开始单元格>:<结束列>`的范围时，仅支持获取100列数据。
     pub fn ranges(mut self, ranges: impl ToString) -> Self {
         self.request.ranges = ranges.to_string();
         self.request
