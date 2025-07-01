@@ -20,21 +20,19 @@
 //!
 //! # 快速开始
 //!
-//! ```rust
+//! ```no_run
 //! use open_lark::event::dispatcher::EventDispatcherHandler;
 //!
 //! // 创建事件处理器
 //! let handler = EventDispatcherHandler::builder()
 //!     .register_p2_im_message_receive_v1(|event| {
-//!         println!("收到消息: {:?}", event.message);
-//!     })
-//!     .register_p2_im_message_read_v1(|event| {
-//!         println!("消息已读: {:?}", event.message_id_list);
-//!     })
+//!         println!("收到消息: {:?}", event.event.message);
+//!     })?
 //!     .build();
 //!
 //! // 处理接收到的事件
 //! // handler.handle_event(event_data).await?;
+//! # Ok::<(), Box<dyn std::error::Error>>(())
 //! ```
 
 /// 事件上下文相关
