@@ -30,6 +30,7 @@
 //! ```rust,no_run
 //! use open_lark::prelude::*;
 //! use open_lark::service::human_authentication::*;
+//! use open_lark::service::human_authentication::models::{IdType, ImageType};
 //!
 //! #[tokio::main]
 //! async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -109,6 +110,7 @@ impl HumanAuthenticationService {
     /// ```rust,no_run
     /// use open_lark::prelude::*;
     /// use open_lark::service::human_authentication::*;
+    /// use open_lark::service::human_authentication::models::IdType;
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -161,6 +163,7 @@ impl HumanAuthenticationService {
     /// ```rust,no_run
     /// use open_lark::prelude::*;
     /// use open_lark::service::human_authentication::*;
+    /// use open_lark::service::human_authentication::models::ImageType;
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -213,6 +216,7 @@ impl HumanAuthenticationService {
     /// ```rust,no_run
     /// use open_lark::prelude::*;
     /// use open_lark::service::human_authentication::*;
+    /// use open_lark::service::human_authentication::models::CropParameters;
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Box<dyn std::error::Error>> {

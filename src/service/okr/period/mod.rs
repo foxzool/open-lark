@@ -83,6 +83,7 @@ impl PeriodService {
     /// ```rust,no_run
     /// use open_lark::prelude::*;
     /// use open_lark::service::okr::period::*;
+    /// use open_lark::service::okr::models::I18nText;
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Box<dyn std::error::Error>> {

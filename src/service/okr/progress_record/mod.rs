@@ -108,6 +108,7 @@ impl ProgressRecordService {
     /// ```rust,no_run
     /// use open_lark::prelude::*;
     /// use open_lark::service::okr::progress_record::*;
+    /// use open_lark::service::okr::models::ProgressRecordType;
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -119,6 +120,7 @@ impl ProgressRecordService {
     ///         content: "本周完成了核心功能开发，目标完成度达到80%".to_string(),
     ///         progress_rate: Some(80.0),
     ///         record_type: Some(ProgressRecordType::Detail),
+    ///         attachment_ids: Some(vec![]),
     ///     };
     ///
     ///     let response = client.okr.progress_record.create_progress_record(request, None).await?;

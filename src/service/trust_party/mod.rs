@@ -35,7 +35,10 @@
 //!     let rule = client.trust_party.searchable_visible_rules.create_rule(
 //!         searchable_visible_rules::RuleCreateRequest {
 //!             name: "示例规则".to_string(),
-//!             ..Default::default()
+//!             description: Some("示例描述".to_string()),
+//!             rule_type: Some("1".to_string()),
+//!             org_id: Some("org_123".to_string()),
+//!             config: None,
 //!         }, None
 //!     ).await?;
 //!     
