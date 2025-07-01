@@ -135,7 +135,7 @@ impl UpdatePasswordRequestBuilder {
 
         let base = base_password.to_string();
         let suffix: u32 = thread_rng().gen_range(10..100);
-        self.request.password = format!("{}@{}", base, suffix);
+        self.request.password = format!("{base}@{suffix}");
         self
     }
 
@@ -209,13 +209,13 @@ impl PasswordUpdateResult {
     /// 获取更新时间格式化字符串
     pub fn update_time_formatted(&self) -> Option<String> {
         self.update_time
-            .map(|timestamp| format!("更新时间: {}", timestamp))
+            .map(|timestamp| format!("更新时间: {timestamp}"))
     }
 
     /// 获取过期时间格式化字符串
     pub fn expire_time_formatted(&self) -> Option<String> {
         self.expire_time
-            .map(|timestamp| format!("过期时间: {}", timestamp))
+            .map(|timestamp| format!("过期时间: {timestamp}"))
     }
 
     /// 密码强度评估
@@ -275,7 +275,7 @@ impl PasswordUpdateResult {
         info.push(format!("类型: {}", self.password_type()));
 
         if let Some(ref hint) = self.previous_password_hint {
-            info.push(format!("原密码: {}", hint));
+            info.push(format!("原密码: {hint}"));
         }
 
         info.join(", ")

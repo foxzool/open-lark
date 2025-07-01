@@ -49,7 +49,7 @@ async fn query_pending_leave_requests(
     let end_date = chrono::Utc::now().date_naive();
     let start_date = end_date - chrono::Duration::days(30);
 
-    println!("   查询时间范围: {} 到 {}", start_date, end_date);
+    println!("   查询时间范围: {start_date} 到 {end_date}");
 
     let request = open_lark::service::attendance::v1::models::QueryUserApprovalRequest {
         api_req: Default::default(),
@@ -84,7 +84,7 @@ async fn query_pending_leave_requests(
                         println!("      请假结束: {}", approval.end_time);
 
                         if let Some(duration) = &approval.duration {
-                            println!("      请假时长: {}小时", duration);
+                            println!("      请假时长: {duration}小时");
                         }
 
                         if let Some(reason) = &approval.reason {
@@ -93,7 +93,7 @@ async fn query_pending_leave_requests(
                             } else {
                                 reason.clone()
                             };
-                            println!("      请假原因: {}", display_reason);
+                            println!("      请假原因: {display_reason}");
                         }
 
                         let type_name = match approval.approval_type {
@@ -104,7 +104,7 @@ async fn query_pending_leave_requests(
                             5 => "调休",
                             _ => "其他",
                         };
-                        println!("      申请类型: {}", type_name);
+                        println!("      申请类型: {type_name}");
 
                         println!(); // 空行分隔
                     }
@@ -116,7 +116,7 @@ async fn query_pending_leave_requests(
             }
         }
         Err(e) => {
-            println!("❌ 查询待审批请假申请失败: {:?}", e);
+            println!("❌ 查询待审批请假申请失败: {e:?}");
             println!("\n💡 常见错误解决方案:");
             println!("   1. 检查应用是否有审批数据访问权限");
             println!("   2. 确认应用访问令牌权限");
@@ -138,8 +138,8 @@ async fn create_leave_request(client: &LarkClient) -> Result<(), Box<dyn std::er
     let start_date = chrono::Utc::now().date_naive() + chrono::Duration::days(1);
     let end_date = start_date + chrono::Duration::days(1);
 
-    println!("   申请人: {}", user_id);
-    println!("   请假时间: {} 到 {}", start_date, end_date);
+    println!("   申请人: {user_id}");
+    println!("   请假时间: {start_date} 到 {end_date}");
     println!("   请假类型: 年假");
     println!("   请假原因: 家庭事务处理");
 
@@ -148,7 +148,7 @@ async fn create_leave_request(client: &LarkClient) -> Result<(), Box<dyn std::er
     println!("   这里演示的是审批处理流程，而非申请创建流程");
 
     // 演示审批处理请求结构（通过已存在的审批ID）
-    let approval_id = format!("demo_approval_{}", user_id);
+    let approval_id = format!("demo_approval_{user_id}");
     let request = open_lark::service::attendance::v1::models::CreateUserApprovalRequest {
         api_req: Default::default(),
         employee_type: "employee_id".to_string(),
@@ -180,7 +180,7 @@ async fn create_leave_request(client: &LarkClient) -> Result<(), Box<dyn std::er
             }
         }
         Err(e) => {
-            println!("❌ 创建请假申请失败: {:?}", e);
+            println!("❌ 创建请假申请失败: {e:?}");
             println!("\n💡 这是演示模式，实际的创建请假申请可能需要:");
             println!("   1. 不同的API端点");
             println!("   2. 特定的权限配置");
@@ -203,7 +203,7 @@ async fn demonstrate_approval_process(
     let approval_action = "approve"; // approve 或 reject
     let approval_comment = "同意请假申请，注意工作交接";
 
-    println!("   审批ID: {}", approval_id);
+    println!("   审批ID: {approval_id}");
     println!(
         "   审批动作: {}",
         if approval_action == "approve" {
@@ -212,7 +212,7 @@ async fn demonstrate_approval_process(
             "拒绝"
         }
     );
-    println!("   审批意见: {}", approval_comment);
+    println!("   审批意见: {approval_comment}");
 
     // 演示处理审批请求
     let action_code = match approval_action {
@@ -264,7 +264,7 @@ async fn demonstrate_approval_process(
             }
         }
         Err(e) => {
-            println!("❌ 审批处理失败: {:?}", e);
+            println!("❌ 审批处理失败: {e:?}");
             println!("\n💡 这是演示模式，实际的审批处理需要:");
             println!("   1. 有效的审批ID");
             println!("   2. 审批权限");
@@ -330,16 +330,16 @@ async fn show_approval_statistics(client: &LarkClient) -> Result<(), Box<dyn std
         }
     }
 
-    println!("   统计时间范围: {} 到 {}", start_date, end_date);
-    println!("   总申请数: {}", total_approvals);
-    println!("   待审批: {}", pending_count);
-    println!("   已通过: {}", approved_count);
-    println!("   已拒绝: {}", rejected_count);
+    println!("   统计时间范围: {start_date} 到 {end_date}");
+    println!("   总申请数: {total_approvals}");
+    println!("   待审批: {pending_count}");
+    println!("   已通过: {approved_count}");
+    println!("   已拒绝: {rejected_count}");
 
     if total_approvals > 0 {
         let approval_rate =
             (approved_count as f64 / (approved_count + rejected_count) as f64) * 100.0;
-        println!("   通过率: {:.1}%", approval_rate);
+        println!("   通过率: {approval_rate:.1}%");
     }
 
     Ok(())
@@ -395,7 +395,7 @@ async fn batch_approval_processing(client: &LarkClient) -> Result<(), Box<dyn st
             }
         }
         Err(e) => {
-            println!("   查询失败: {:?}", e);
+            println!("   查询失败: {e:?}");
         }
     }
 

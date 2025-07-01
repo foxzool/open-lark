@@ -83,7 +83,7 @@ impl CustomBot<'_> {
 
     /// 计算签名
     fn sign(timestamp: i64, secret: &str) -> String {
-        let string_to_sign = format!("{}\n{}", timestamp, secret);
+        let string_to_sign = format!("{timestamp}\n{secret}");
         let hmac: Hmac<Sha256> = Hmac::new_from_slice(string_to_sign.as_bytes()).unwrap();
         let hmac_code = hmac.finalize().into_bytes();
         BASE64_STANDARD.encode(hmac_code)

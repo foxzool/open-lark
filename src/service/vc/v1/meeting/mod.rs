@@ -150,7 +150,7 @@ impl MeetingService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/meetings/{}/invite", meeting_id),
+            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/invite"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -178,7 +178,7 @@ impl MeetingService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/meetings/{}/kickout", meeting_id),
+            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/kickout"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -206,7 +206,7 @@ impl MeetingService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/meetings/{}/set_host", meeting_id),
+            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/set_host"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -233,7 +233,7 @@ impl MeetingService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/meetings/{}/end", meeting_id),
+            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/end"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -259,7 +259,7 @@ impl MeetingService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/vc/v1/meetings/{}", meeting_id),
+            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

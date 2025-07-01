@@ -66,7 +66,7 @@ impl MessageReactionService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/im/v1/messages/{}/reactions", message_id),
+            api_path: format!("/open-apis/im/v1/messages/{message_id}/reactions"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&CreateReactionRequest {
@@ -103,7 +103,7 @@ impl MessageReactionService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/im/v1/messages/{}/reactions", message_id),
+            api_path: format!("/open-apis/im/v1/messages/{message_id}/reactions"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -130,10 +130,7 @@ impl MessageReactionService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!(
-                "/open-apis/im/v1/messages/{}/reactions/{}",
-                message_id, reaction_id
-            ),
+            api_path: format!("/open-apis/im/v1/messages/{message_id}/reactions/{reaction_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

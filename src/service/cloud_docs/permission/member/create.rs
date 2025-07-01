@@ -329,7 +329,7 @@ impl PermissionMemberCreated {
     /// 获取创建时间的格式化字符串
     pub fn create_time_formatted(&self) -> Option<String> {
         self.create_time
-            .map(|timestamp| format!("创建时间: {}", timestamp))
+            .map(|timestamp| format!("创建时间: {timestamp}"))
     }
 
     /// 获取成员类型描述

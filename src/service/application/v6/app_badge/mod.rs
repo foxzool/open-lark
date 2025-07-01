@@ -44,10 +44,7 @@ impl AppBadgeService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!(
-                "/open-apis/application/v6/app_badge/{}/users/{}/set",
-                app_id, user_id
-            ),
+            api_path: format!("/open-apis/application/v6/app_badge/{app_id}/users/{user_id}/set"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,

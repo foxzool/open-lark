@@ -50,7 +50,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("   应用状态: {:?}", data.application.status);
             }
         }
-        Err(e) => println!("❌ 获取应用信息失败: {:?}", e),
+        Err(e) => println!("❌ 获取应用信息失败: {e:?}"),
     }
 
     // 获取应用版本列表
@@ -74,7 +74,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
         }
-        Err(e) => println!("❌ 获取应用版本列表失败: {:?}", e),
+        Err(e) => println!("❌ 获取应用版本列表失败: {e:?}"),
     }
 
     // 获取应用协作者列表
@@ -91,7 +91,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("   协作者数量: {}", data.collaborators.len());
             }
         }
-        Err(e) => println!("❌ 获取应用协作者列表失败: {:?}", e),
+        Err(e) => println!("❌ 获取应用协作者列表失败: {e:?}"),
     }
 
     println!();
@@ -121,7 +121,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
         }
-        Err(e) => println!("❌ 查询租户授权状态失败: {:?}", e),
+        Err(e) => println!("❌ 查询租户授权状态失败: {e:?}"),
     }
 
     println!();
@@ -158,7 +158,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
         }
-        Err(e) => println!("❌ 获取企业安装的应用失败: {:?}", e),
+        Err(e) => println!("❌ 获取企业安装的应用失败: {e:?}"),
     }
 
     // 查询应用管理员列表
@@ -175,7 +175,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("   管理员数量: {}", data.admins.len());
             }
         }
-        Err(e) => println!("❌ 查询应用管理员列表失败: {:?}", e),
+        Err(e) => println!("❌ 查询应用管理员列表失败: {e:?}"),
     }
 
     // 获取应用在企业内的可用范围
@@ -197,7 +197,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("   对所有人可用: {:?}", data.availability.is_visible_to_all);
             }
         }
-        Err(e) => println!("❌ 获取应用可用范围失败: {:?}", e),
+        Err(e) => println!("❌ 获取应用可用范围失败: {e:?}"),
     }
 
     // 获取应用通讯录权限范围配置
@@ -219,7 +219,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("   范围类型: {:?}", data.contacts_range.range_type);
             }
         }
-        Err(e) => println!("❌ 获取通讯录权限范围配置失败: {:?}", e),
+        Err(e) => println!("❌ 获取通讯录权限范围配置失败: {e:?}"),
     }
 
     println!();
@@ -250,7 +250,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
         }
-        Err(e) => println!("❌ 查询租户付费方案失败: {:?}", e),
+        Err(e) => println!("❌ 查询租户付费方案失败: {e:?}"),
     }
 
     println!();
@@ -283,7 +283,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
         }
-        Err(e) => println!("❌ 获取应用使用概览失败: {:?}", e),
+        Err(e) => println!("❌ 获取应用使用概览失败: {e:?}"),
     }
 
     // 获取消息推送概览
@@ -300,7 +300,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("   推送数据条数: {}", data.usage_data.len());
             }
         }
-        Err(e) => println!("❌ 获取消息推送概览失败: {:?}", e),
+        Err(e) => println!("❌ 获取消息推送概览失败: {e:?}"),
     }
 
     // 获取多部门应用使用概览
@@ -324,7 +324,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("   部门数据条数: {}", data.departments.len());
             }
         }
-        Err(e) => println!("❌ 获取部门使用概览失败: {:?}", e),
+        Err(e) => println!("❌ 获取部门使用概览失败: {e:?}"),
     }
 
     println!();
@@ -362,7 +362,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
         }
-        Err(e) => println!("❌ 获取应用反馈列表失败: {:?}", e),
+        Err(e) => println!("❌ 获取应用反馈列表失败: {e:?}"),
     }
 
     println!();
@@ -393,7 +393,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
         }
-        Err(e) => println!("❌ 获取待审核应用列表失败: {:?}", e),
+        Err(e) => println!("❌ 获取待审核应用列表失败: {e:?}"),
     }
 
     println!();

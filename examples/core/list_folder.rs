@@ -47,7 +47,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 async fn get_target_folder(client: &LarkClient) -> Result<String, Box<dyn std::error::Error>> {
     // 优先使用环境变量指定的文件夹
     if let Ok(folder_token) = std::env::var("FOLDER_TOKEN") {
-        println!("📂 使用指定文件夹: {}", folder_token);
+        println!("📂 使用指定文件夹: {folder_token}");
         return Ok(folder_token);
     }
 
@@ -64,7 +64,7 @@ async fn get_target_folder(client: &LarkClient) -> Result<String, Box<dyn std::e
             }
         }
         Err(e) => {
-            println!("❌ 获取根文件夹失败: {:?}", e);
+            println!("❌ 获取根文件夹失败: {e:?}");
             Err(e.into())
         }
     }
@@ -76,7 +76,7 @@ async fn list_folder_contents(
     folder_token: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n📋 获取文件夹内容...");
-    println!("   文件夹Token: {}", folder_token);
+    println!("   文件夹Token: {folder_token}");
 
     // 使用增强Builder模式列出文件
     match open_lark::service::cloud_docs::drive::v1::folder::ListFilesRequest::builder()
@@ -118,10 +118,10 @@ async fn list_folder_contents(
 
                         println!("      Token: {}", file.token);
                         if let Some(created_time) = &file.created_time {
-                            println!("      创建时间: {}", created_time);
+                            println!("      创建时间: {created_time}");
                         }
                         if let Some(modified_time) = &file.modified_time {
-                            println!("      修改时间: {}", modified_time);
+                            println!("      修改时间: {modified_time}");
                         }
 
                         if file.file_type != "folder" {
@@ -131,7 +131,7 @@ async fn list_folder_contents(
                         }
 
                         if let Some(owner) = &file.owner_id {
-                            println!("      所有者: {}", owner);
+                            println!("      所有者: {owner}");
                         }
 
                         println!(); // 空行分隔
@@ -143,7 +143,7 @@ async fn list_folder_contents(
                 if data.has_more {
                     println!("💡 提示: 还有更多文件可以通过分页获取");
                     if let Some(next_page_token) = &data.page_token {
-                        println!("   下一页Token: {}", next_page_token);
+                        println!("   下一页Token: {next_page_token}");
                     }
                 }
             } else {
@@ -151,7 +151,7 @@ async fn list_folder_contents(
             }
         }
         Err(e) => {
-            println!("❌ 获取文件列表失败: {:?}", e);
+            println!("❌ 获取文件列表失败: {e:?}");
             println!("\n💡 常见错误解决方案:");
             println!("   1. 检查用户访问令牌权限");
             println!("   2. 确认文件夹Token是否正确");
@@ -176,7 +176,7 @@ async fn list_folder_with_pagination(
 
     loop {
         page_count += 1;
-        println!("\n📄 获取第 {} 页...", page_count);
+        println!("\n📄 获取第 {page_count} 页...");
 
         let mut request_builder =
             open_lark::service::cloud_docs::drive::v1::folder::ListFilesRequest::builder()
@@ -196,8 +196,8 @@ async fn list_folder_with_pagination(
                     let page_files = data.files.len();
                     total_files += page_files;
 
-                    println!("   本页文件数: {}", page_files);
-                    println!("   累计文件数: {}", total_files);
+                    println!("   本页文件数: {page_files}");
+                    println!("   累计文件数: {total_files}");
 
                     // 显示本页文件名
                     for file in &data.files {
@@ -231,15 +231,15 @@ async fn list_folder_with_pagination(
                 }
             }
             Err(e) => {
-                println!("   ❌ 第{}页获取失败: {:?}", page_count, e);
+                println!("   ❌ 第{page_count}页获取失败: {e:?}");
                 break;
             }
         }
     }
 
     println!("\n📊 分页获取总结:");
-    println!("   总页数: {}", page_count);
-    println!("   总文件数: {}", total_files);
+    println!("   总页数: {page_count}");
+    println!("   总文件数: {total_files}");
 
     Ok(())
 }

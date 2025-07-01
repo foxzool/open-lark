@@ -67,7 +67,7 @@ async fn seat_management_examples(client: &LarkClient, _app_id: &str) {
                 }
             }
         }
-        Err(e) => println!("查询席位分配失败: {:?}", e),
+        Err(e) => println!("查询席位分配失败: {e:?}"),
     }
 
     // 查询席位活跃
@@ -90,7 +90,7 @@ async fn seat_management_examples(client: &LarkClient, _app_id: &str) {
                 }
             }
         }
-        Err(e) => println!("查询席位活跃失败: {:?}", e),
+        Err(e) => println!("查询席位活跃失败: {e:?}"),
     }
 }
 
@@ -118,7 +118,7 @@ async fn audit_log_examples(client: &LarkClient, app_id: &str) {
                 }
             }
         }
-        Err(e) => println!("查询审计日志失败: {:?}", e),
+        Err(e) => println!("查询审计日志失败: {e:?}"),
     }
 }
 
@@ -139,7 +139,7 @@ async fn permission_management_examples(client: &LarkClient, app_id: &str) {
         Ok(response) => {
             println!("角色成员信息: {:?}", response.data.unwrap().role_member);
         }
-        Err(e) => println!("查询角色成员失败: {:?}", e),
+        Err(e) => println!("查询角色成员失败: {e:?}"),
     }
 }
 
@@ -163,7 +163,7 @@ async fn object_operation_examples(client: &LarkClient, app_id: &str) {
                 }
             }
         }
-        Err(e) => println!("记录搜索失败: {:?}", e),
+        Err(e) => println!("记录搜索失败: {e:?}"),
     }
 
     // 获取记录详情
@@ -178,7 +178,7 @@ async fn object_operation_examples(client: &LarkClient, app_id: &str) {
         Ok(response) => {
             println!("记录详情: {:?}", response.data.unwrap().record);
         }
-        Err(e) => println!("获取记录详情失败: {:?}", e),
+        Err(e) => println!("获取记录详情失败: {e:?}"),
     }
 }
 
@@ -198,7 +198,7 @@ async fn function_execution_examples(client: &LarkClient, app_id: &str) {
         Ok(response) => {
             println!("函数执行结果: {:?}", response.data.unwrap().invoke_result);
         }
-        Err(e) => println!("函数执行失败: {:?}", e),
+        Err(e) => println!("函数执行失败: {e:?}"),
     }
 }
 
@@ -225,7 +225,7 @@ async fn environment_variable_examples(client: &LarkClient, app_id: &str) {
                 }
             }
         }
-        Err(e) => println!("查询环境变量失败: {:?}", e),
+        Err(e) => println!("查询环境变量失败: {e:?}"),
     }
 }
 
@@ -245,7 +245,7 @@ async fn flow_management_examples(client: &LarkClient, app_id: &str) {
         Ok(response) => {
             println!("流程执行结果: {:?}", response.data.unwrap().execute_result);
         }
-        Err(e) => println!("流程执行失败: {:?}", e),
+        Err(e) => println!("流程执行失败: {e:?}"),
     }
 
     // 查询人工任务
@@ -265,6 +265,6 @@ async fn flow_management_examples(client: &LarkClient, app_id: &str) {
                 }
             }
         }
-        Err(e) => println!("查询人工任务失败: {:?}", e),
+        Err(e) => println!("查询人工任务失败: {e:?}"),
     }
 }

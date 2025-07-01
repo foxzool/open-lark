@@ -126,10 +126,7 @@ impl RuleService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{}/rules",
-                user_mailbox_id
-            ),
+            api_path: format!("/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -158,8 +155,7 @@ impl RuleService {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{}/rules/{}",
-                user_mailbox_id, rule_id
+                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules/{rule_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -189,8 +185,7 @@ impl RuleService {
         let api_req = ApiRequest {
             http_method: Method::PUT,
             api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{}/rules/{}",
-                user_mailbox_id, rule_id
+                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules/{rule_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -226,10 +221,7 @@ impl RuleService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{}/rules",
-                user_mailbox_id
-            ),
+            api_path: format!("/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -256,10 +248,7 @@ impl RuleService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{}/rules/reorder",
-                user_mailbox_id
-            ),
+            api_path: format!("/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules/reorder"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,

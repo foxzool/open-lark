@@ -28,7 +28,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build();
 
     println!("📋 飞书聊天历史获取示例");
-    println!("目标会话: {}", chat_id);
+    println!("目标会话: {chat_id}");
     println!("{}", "=".repeat(50));
 
     // 获取最近的聊天记录
@@ -79,14 +79,14 @@ async fn get_recent_messages(
                         } else {
                             content
                         };
-                        println!("      内容: {}", preview);
+                        println!("      内容: {preview}");
                     }
                 }
 
                 if response.has_more {
                     println!("\n💡 提示: 还有更多消息可以通过分页获取");
                     if let Some(page_token) = &response.page_token {
-                        println!("   下一页token: {}", page_token);
+                        println!("   下一页token: {page_token}");
                     }
                 }
             } else {
@@ -94,7 +94,7 @@ async fn get_recent_messages(
             }
         }
         Err(e) => {
-            println!("❌ 获取聊天历史失败: {:?}", e);
+            println!("❌ 获取聊天历史失败: {e:?}");
             println!("\n💡 常见错误解决方案:");
             println!("   1. 检查APP_ID和APP_SECRET是否正确");
             println!("   2. 确认应用有读取消息的权限");
@@ -146,7 +146,7 @@ async fn get_messages_by_timerange(
 
                 println!("\n📊 消息类型统计:");
                 for (msg_type, count) in type_stats {
-                    println!("   {}: {} 条", msg_type, count);
+                    println!("   {msg_type}: {count} 条");
                 }
 
                 // 显示最近几条消息
@@ -164,7 +164,7 @@ async fn get_messages_by_timerange(
             }
         }
         Err(e) => {
-            println!("❌ 获取时间段消息失败: {:?}", e);
+            println!("❌ 获取时间段消息失败: {e:?}");
             return Err(e.into());
         }
     }
@@ -187,7 +187,7 @@ fn format_timestamp(timestamp_str: &str) -> String {
             .checked_add(std::time::Duration::from_secs(timestamp_secs as u64))
         {
             // 这里简化处理，实际项目中可以使用chrono库进行更好的时间格式化
-            format!("时间戳: {}", timestamp_secs)
+            format!("时间戳: {timestamp_secs}")
         } else {
             timestamp_str.to_string()
         }
@@ -215,7 +215,7 @@ fn extract_text_content(content: &str) -> Option<String> {
         if let Some(post) = json_value.get("post") {
             if let Some(zh_cn) = post.get("zh_cn") {
                 if let Some(title) = zh_cn.get("title").and_then(|t| t.as_str()) {
-                    return Some(format!("[富文本] {}", title));
+                    return Some(format!("[富文本] {title}"));
                 }
             }
         }

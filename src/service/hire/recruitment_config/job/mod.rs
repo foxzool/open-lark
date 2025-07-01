@@ -218,7 +218,7 @@ impl JobService {
     ) -> SDKResult<BaseResponse<JobDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/jobs/{}/get_detail", job_id),
+            api_path: format!("/open-apis/hire/v1/jobs/{job_id}/get_detail"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -354,7 +354,7 @@ impl JobService {
     ) -> SDKResult<BaseResponse<JobOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/jobs/{}/close", job_id),
+            api_path: format!("/open-apis/hire/v1/jobs/{job_id}/close"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -386,7 +386,7 @@ impl JobService {
     ) -> SDKResult<BaseResponse<JobOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/jobs/{}/open", job_id),
+            api_path: format!("/open-apis/hire/v1/jobs/{job_id}/open"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

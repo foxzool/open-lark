@@ -45,7 +45,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 async fn get_target_file(client: &LarkClient) -> Result<String, Box<dyn std::error::Error>> {
     // 优先使用环境变量指定的文件
     if let Ok(file_token) = std::env::var("FILE_TOKEN") {
-        println!("📄 使用指定文件: {}", file_token);
+        println!("📄 使用指定文件: {file_token}");
         return Ok(file_token);
     }
 
@@ -103,7 +103,7 @@ async fn get_target_file(client: &LarkClient) -> Result<String, Box<dyn std::err
             }
         }
         Err(e) => {
-            println!("❌ 获取文件列表失败: {:?}", e);
+            println!("❌ 获取文件列表失败: {e:?}");
             Err("请通过 FILE_TOKEN 环境变量指定要下载的文件".into())
         }
     }
@@ -115,7 +115,7 @@ async fn download_file(
     file_token: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n⬇️ 下载文件...");
-    println!("   文件Token: {}", file_token);
+    println!("   文件Token: {file_token}");
 
     // 使用增强Builder模式下载文件
     match open_lark::service::cloud_docs::drive::v1::files::DownloadRequest::builder()
@@ -134,7 +134,7 @@ async fn download_file(
             let timestamp = std::time::SystemTime::now()
                 .duration_since(std::time::UNIX_EPOCH)?
                 .as_secs();
-            let local_filename = format!("downloaded_file_{}.bin", timestamp);
+            let local_filename = format!("downloaded_file_{timestamp}.bin");
 
             // 保存到本地文件
             save_file_to_local(&local_filename, file_data).await?;
@@ -143,7 +143,7 @@ async fn download_file(
             detect_and_rename_file(&local_filename, file_data).await?;
         }
         Err(e) => {
-            println!("❌ 文件下载失败: {:?}", e);
+            println!("❌ 文件下载失败: {e:?}");
             println!("\n💡 常见错误解决方案:");
             println!("   1. 检查用户访问令牌权限");
             println!("   2. 确认文件Token是否正确");
@@ -162,7 +162,7 @@ async fn save_file_to_local(filename: &str, data: &[u8]) -> Result<(), Box<dyn s
     file.write_all(data)?;
     file.flush()?;
 
-    println!("   💾 文件已保存到: {}", filename);
+    println!("   💾 文件已保存到: {filename}");
     println!(
         "   📁 当前目录: {}",
         std::env::current_dir()?.to_string_lossy()
@@ -180,14 +180,14 @@ async fn detect_and_rename_file(
     let (extension, file_type) = detect_file_type(data);
 
     if !extension.is_empty() {
-        let new_filename = original_filename.replace(".bin", &format!(".{}", extension));
+        let new_filename = original_filename.replace(".bin", &format!(".{extension}"));
 
         // 重命名文件
         if let Err(e) = fs::rename(original_filename, &new_filename) {
-            println!("   ⚠️ 重命名文件失败: {}", e);
+            println!("   ⚠️ 重命名文件失败: {e}");
         } else {
-            println!("   🔄 文件已重命名为: {}", new_filename);
-            println!("   📄 检测到文件类型: {}", file_type);
+            println!("   🔄 文件已重命名为: {new_filename}");
+            println!("   📄 检测到文件类型: {file_type}");
         }
     }
 

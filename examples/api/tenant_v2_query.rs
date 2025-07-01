@@ -36,12 +36,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("错误码: {}", response.code());
                 println!("错误信息: {}", response.msg());
                 if let Some(err) = response.err() {
-                    println!("详细错误: {:?}", err);
+                    println!("详细错误: {err:?}");
                 }
             }
         }
         Err(e) => {
-            println!("❌ 请求失败: {:?}", e);
+            println!("❌ 请求失败: {e:?}");
         }
     }
 
@@ -75,12 +75,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("错误码: {}", response.code());
                 println!("错误信息: {}", response.msg());
                 if let Some(err) = response.err() {
-                    println!("详细错误: {:?}", err);
+                    println!("详细错误: {err:?}");
                 }
             }
         }
         Err(e) => {
-            println!("❌ 请求失败: {:?}", e);
+            println!("❌ 请求失败: {e:?}");
         }
     }
 

@@ -43,7 +43,7 @@ async fn query_attendance_stats(client: &LarkClient) -> Result<(), Box<dyn std::
     let end_date = chrono::Utc::now().date_naive();
     let start_date = end_date - chrono::Duration::days(7);
 
-    println!("   查询时间范围: {} 到 {}", start_date, end_date);
+    println!("   查询时间范围: {start_date} 到 {end_date}");
 
     // 构建查询请求
     let request = open_lark::service::attendance::v1::models::QueryUserStatsDataRequest {
@@ -79,12 +79,12 @@ async fn query_attendance_stats(client: &LarkClient) -> Result<(), Box<dyn std::
                         println!("   {}. 用户ID: {}", index + 1, stats.user_id);
 
                         if let Some(user_name) = &stats.user_name {
-                            println!("      用户姓名: {}", user_name);
+                            println!("      用户姓名: {user_name}");
                         }
 
                         // 显示统计字段数据
                         for (field_name, field_value) in &stats.datas {
-                            println!("      {}: {}", field_name, field_value);
+                            println!("      {field_name}: {field_value}");
                         }
 
                         println!(); // 空行分隔
@@ -101,7 +101,7 @@ async fn query_attendance_stats(client: &LarkClient) -> Result<(), Box<dyn std::
             }
         }
         Err(e) => {
-            println!("❌ 查询考勤统计数据失败: {:?}", e);
+            println!("❌ 查询考勤统计数据失败: {e:?}");
             println!("\n💡 常见错误解决方案:");
             println!("   1. 检查应用是否有考勤数据访问权限");
             println!("   2. 确认时间范围格式是否正确 (YYYY-MM-DD)");
@@ -122,7 +122,7 @@ async fn query_approval_data(client: &LarkClient) -> Result<(), Box<dyn std::err
     let end_date = chrono::Utc::now().date_naive();
     let start_date = end_date - chrono::Duration::days(30);
 
-    println!("   查询时间范围: {} 到 {}", start_date, end_date);
+    println!("   查询时间范围: {start_date} 到 {end_date}");
 
     // 构建查询请求
     let request = open_lark::service::attendance::v1::models::QueryUserApprovalRequest {
@@ -161,7 +161,7 @@ async fn query_approval_data(client: &LarkClient) -> Result<(), Box<dyn std::err
 
                         println!("   {}. 审批ID: {}", index + 1, approval.approval_id);
                         println!("      用户ID: {}", approval.user_id);
-                        println!("      状态: {}", status_text);
+                        println!("      状态: {status_text}");
 
                         println!("      开始时间: {}", approval.start_time);
                         println!("      结束时间: {}", approval.end_time);
@@ -172,7 +172,7 @@ async fn query_approval_data(client: &LarkClient) -> Result<(), Box<dyn std::err
                             } else {
                                 reason.clone()
                             };
-                            println!("      申请原因: {}", display_reason);
+                            println!("      申请原因: {display_reason}");
                         }
 
                         println!(); // 空行分隔
@@ -184,7 +184,7 @@ async fn query_approval_data(client: &LarkClient) -> Result<(), Box<dyn std::err
                 if data.has_more {
                     println!("💡 提示: 还有更多审批记录可以通过分页获取");
                     if let Some(next_page_token) = &data.page_token {
-                        println!("   下一页Token: {}", next_page_token);
+                        println!("   下一页Token: {next_page_token}");
                     }
                 }
             } else {
@@ -192,7 +192,7 @@ async fn query_approval_data(client: &LarkClient) -> Result<(), Box<dyn std::err
             }
         }
         Err(e) => {
-            println!("❌ 查询审批数据失败: {:?}", e);
+            println!("❌ 查询审批数据失败: {e:?}");
             println!("\n💡 常见错误解决方案:");
             println!("   1. 检查应用是否有审批数据访问权限");
             println!("   2. 确认时间范围格式是否正确");
@@ -233,7 +233,7 @@ async fn query_stats_fields(client: &LarkClient) -> Result<(), Box<dyn std::erro
             }
         }
         Err(e) => {
-            println!("❌ 查询统计字段失败: {:?}", e);
+            println!("❌ 查询统计字段失败: {e:?}");
         }
     }
 

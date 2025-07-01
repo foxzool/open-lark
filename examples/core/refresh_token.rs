@@ -65,19 +65,19 @@ async fn get_current_user_info(
                 // 联系方式
                 println!("\n📞 联系方式:");
                 if let Some(email) = &user_info.email {
-                    println!("   个人邮箱: {}", email);
+                    println!("   个人邮箱: {email}");
                 } else {
                     println!("   个人邮箱: 未设置");
                 }
 
                 if let Some(enterprise_email) = &user_info.enterprise_email {
-                    println!("   企业邮箱: {}", enterprise_email);
+                    println!("   企业邮箱: {enterprise_email}");
                 } else {
                     println!("   企业邮箱: 未设置");
                 }
 
                 if let Some(mobile) = &user_info.mobile {
-                    println!("   手机号: {}", mobile);
+                    println!("   手机号: {mobile}");
                 } else {
                     println!("   手机号: 未设置");
                 }
@@ -96,7 +96,7 @@ async fn get_current_user_info(
             }
         }
         Err(e) => {
-            println!("❌ 获取用户信息失败: {:?}", e);
+            println!("❌ 获取用户信息失败: {e:?}");
             println!("\n💡 常见错误解决方案:");
             println!("   1. 检查USER_ACCESS_TOKEN是否有效");
             println!("   2. 确认用户访问令牌未过期");
@@ -162,7 +162,7 @@ async fn validate_user_info(
     if !warnings.is_empty() {
         println!("⚠️ 注意事项:");
         for warning in warnings {
-            println!("   - {}", warning);
+            println!("   - {warning}");
         }
     }
 
@@ -177,9 +177,9 @@ async fn validate_user_info(
 
     for (name, url) in avatar_urls {
         if url.starts_with("http") {
-            println!("   ✅ {}: URL格式正确", name);
+            println!("   ✅ {name}: URL格式正确");
         } else {
-            println!("   ⚠️ {}: URL格式异常", name);
+            println!("   ⚠️ {name}: URL格式异常");
         }
     }
 
@@ -352,7 +352,7 @@ async fn demonstrate_error_handling(
     ];
 
     for (error_type, description) in error_scenarios {
-        println!("   🔍 {}: {}", error_type, description);
+        println!("   🔍 {error_type}: {description}");
 
         match error_type {
             "无效令牌" => {

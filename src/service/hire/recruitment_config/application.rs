@@ -84,7 +84,7 @@ impl ApplicationConfigService {
         if let Some(tag_type) = request.tag_type {
             api_req
                 .query_params
-                .insert("tag_type".to_string(), format!("{:?}", tag_type));
+                .insert("tag_type".to_string(), format!("{tag_type:?}"));
         }
 
         if let Some(page_token) = request.page_token {
@@ -131,7 +131,7 @@ impl ApplicationConfigService {
         if let Some(form_type) = request.form_type {
             api_req
                 .query_params
-                .insert("form_type".to_string(), format!("{:?}", form_type));
+                .insert("form_type".to_string(), format!("{form_type:?}"));
         }
 
         if let Some(page_token) = request.page_token {

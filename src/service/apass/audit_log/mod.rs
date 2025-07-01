@@ -167,10 +167,7 @@ impl AuditLogService {
     ) -> SDKResult<BaseResponse<AuditLogGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/audit_log/{}",
-                app_id, log_id
-            ),
+            api_path: format!("/open-apis/apaas/v1/application/{app_id}/audit_log/{log_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -241,8 +238,7 @@ impl AuditLogService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/apaas/v1/application/{}/audit_log/data_change_log/{}",
-                app_id, log_id
+                "/open-apis/apaas/v1/application/{app_id}/audit_log/data_change_log/{log_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -267,10 +263,7 @@ impl AuditLogService {
     ) -> SDKResult<BaseResponse<AuditEventListResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/audit_log/audit_events",
-                app_id
-            ),
+            api_path: format!("/open-apis/apaas/v1/application/{app_id}/audit_log/audit_events"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

@@ -50,13 +50,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("性别选项:");
                     for enum_info in enums {
                         if let Some(enum_value) = &enum_info.enum_value {
-                            print!("  - 值: {}", enum_value);
+                            print!("  - 值: {enum_value}");
                             if let Some(content) = &enum_info.content {
                                 if let Some(zh_cn) = &content.zh_cn {
-                                    print!(" ({})", zh_cn);
+                                    print!(" ({zh_cn})");
                                 }
                                 if let Some(en_us) = &content.en_us {
-                                    print!(" [{}]", en_us);
+                                    print!(" [{en_us}]");
                                 }
                             }
                             println!();
@@ -66,7 +66,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(err) => {
-            error!("❌ 查询枚举信息失败: {:?}", err);
+            error!("❌ 查询枚举信息失败: {err:?}");
         }
     }
 
@@ -90,17 +90,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     for country in countries.iter().take(3) {
                         if let Some(name) = &country.name {
                             if let Some(zh_cn) = &name.zh_cn {
-                                print!("  - {}", zh_cn);
+                                print!("  - {zh_cn}");
                             }
                             if let Some(en_us) = &name.en_us {
-                                print!(" ({})", en_us);
+                                print!(" ({en_us})");
                             }
                         }
                         if let Some(code) = &country.code {
-                            print!(" [{}]", code);
+                            print!(" [{code}]");
                         }
                         if let Some(time_zone) = &country.time_zone {
-                            print!(" 时区: {}", time_zone);
+                            print!(" 时区: {time_zone}");
                         }
                         println!();
                     }
@@ -108,7 +108,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(err) => {
-            error!("❌ 查询国家/地区信息失败: {:?}", err);
+            error!("❌ 查询国家/地区信息失败: {err:?}");
         }
     }
 
@@ -132,14 +132,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     for nationality in nationalities.iter().take(3) {
                         if let Some(name) = &nationality.name {
                             if let Some(zh_cn) = &name.zh_cn {
-                                print!("  - {}", zh_cn);
+                                print!("  - {zh_cn}");
                             }
                             if let Some(en_us) = &name.en_us {
-                                print!(" ({})", en_us);
+                                print!(" ({en_us})");
                             }
                         }
                         if let Some(code) = &nationality.code {
-                            print!(" [{}]", code);
+                            print!(" [{code}]");
                         }
                         println!();
                     }
@@ -147,7 +147,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(err) => {
-            error!("❌ 查询国籍信息失败: {:?}", err);
+            error!("❌ 查询国籍信息失败: {err:?}");
         }
     }
 
@@ -172,7 +172,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     for item in items {
                         if let Some(source) = &item.source_id {
                             if let Some(target) = &item.target_id {
-                                println!("  {} -> {}", source, target);
+                                println!("  {source} -> {target}");
                             }
                         }
                     }
@@ -180,7 +180,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(err) => {
-            error!("❌ ID转换失败: {:?}", err);
+            error!("❌ ID转换失败: {err:?}");
             println!("注意: 这可能是因为使用了示例ID");
         }
     }
@@ -220,13 +220,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     for (index, employee) in employees.iter().enumerate().take(3) {
                         println!("\n员工 #{}:", index + 1);
                         if let Some(employee_id) = &employee.employee_id {
-                            println!("  员工ID: {}", employee_id);
+                            println!("  员工ID: {employee_id}");
                         }
                         if let Some(employee_number) = &employee.employee_number {
-                            println!("  工号: {}", employee_number);
+                            println!("  工号: {employee_number}");
                         }
                         if let Some(status) = &employee.employment_status {
-                            println!("  状态: {}", status);
+                            println!("  状态: {status}");
                         }
 
                         // 个人信息
@@ -234,17 +234,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             println!("  个人信息:");
                             if let Some(name) = &person.name {
                                 if let Some(zh_cn) = &name.zh_cn {
-                                    println!("    姓名: {}", zh_cn);
+                                    println!("    姓名: {zh_cn}");
                                 }
                             }
                             if let Some(english_name) = &person.english_name {
-                                println!("    英文名: {}", english_name);
+                                println!("    英文名: {english_name}");
                             }
                             if let Some(gender) = &person.gender {
-                                println!("    性别: {}", gender);
+                                println!("    性别: {gender}");
                             }
                             if let Some(email) = &person.email {
-                                println!("    邮箱: {}", email);
+                                println!("    邮箱: {email}");
                             }
                         }
 
@@ -252,13 +252,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         if let Some(employment) = &employee.employment {
                             println!("  雇佣信息:");
                             if let Some(hire_date) = &employment.hire_date {
-                                println!("    入职日期: {}", hire_date);
+                                println!("    入职日期: {hire_date}");
                             }
                             if let Some(employment_type) = &employment.employment_type {
-                                println!("    雇佣类型: {}", employment_type);
+                                println!("    雇佣类型: {employment_type}");
                             }
                             if let Some(work_email) = &employment.work_email {
-                                println!("    工作邮箱: {}", work_email);
+                                println!("    工作邮箱: {work_email}");
                             }
                         }
 
@@ -268,13 +268,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                 println!("  任职信息:");
                                 for job_data in job_datas.iter().take(2) {
                                     if let Some(department_id) = &job_data.department_id {
-                                        println!("    部门ID: {}", department_id);
+                                        println!("    部门ID: {department_id}");
                                     }
                                     if let Some(job_id) = &job_data.job_id {
-                                        println!("    职务ID: {}", job_id);
+                                        println!("    职务ID: {job_id}");
                                     }
                                     if let Some(effective_time) = &job_data.effective_time {
-                                        println!("    生效时间: {}", effective_time);
+                                        println!("    生效时间: {effective_time}");
                                     }
                                 }
                             }
@@ -285,15 +285,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 // 分页信息
                 if let Some(has_more) = data.employees.has_more {
                     println!("\n分页信息:");
-                    println!("  是否有更多数据: {}", has_more);
+                    println!("  是否有更多数据: {has_more}");
                     if let Some(page_token) = &data.employees.page_token {
-                        println!("  下一页标记: {}", page_token);
+                        println!("  下一页标记: {page_token}");
                     }
                 }
             }
         }
         Err(err) => {
-            error!("❌ 搜索员工信息失败: {:?}", err);
+            error!("❌ 搜索员工信息失败: {err:?}");
         }
     }
 
@@ -325,7 +325,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         if let Some(person) = &employee.person {
                             if let Some(name) = &person.name {
                                 if let Some(zh_cn) = &name.zh_cn {
-                                    println!("  - {}", zh_cn);
+                                    println!("  - {zh_cn}");
                                 }
                             }
                         }
@@ -334,7 +334,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(err) => {
-            error!("❌ 批量查询员工信息失败: {:?}", err);
+            error!("❌ 批量查询员工信息失败: {err:?}");
             println!("注意: 这可能是因为使用了示例员工ID");
         }
     }
@@ -371,21 +371,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(data) = &response.data {
                 if let Some(department) = &data.department {
                     if let Some(dept_id) = &department.department_id {
-                        println!("部门ID: {}", dept_id);
+                        println!("部门ID: {dept_id}");
                     }
                     if let Some(name) = &department.name {
                         if let Some(zh_cn) = &name.zh_cn {
-                            println!("部门名称: {}", zh_cn);
+                            println!("部门名称: {zh_cn}");
                         }
                     }
                     if let Some(code) = &department.code {
-                        println!("部门编码: {}", code);
+                        println!("部门编码: {code}");
                     }
                 }
             }
         }
         Err(err) => {
-            error!("❌ 创建部门失败: {:?}", err);
+            error!("❌ 创建部门失败: {err:?}");
             println!("注意: 这可能是因为使用了示例的上级部门ID或负责人ID");
         }
     }
@@ -405,11 +405,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     for dept in departments.iter().take(3) {
                         if let Some(name) = &dept.name {
                             if let Some(zh_cn) = &name.zh_cn {
-                                print!("  - {}", zh_cn);
+                                print!("  - {zh_cn}");
                             }
                         }
                         if let Some(code) = &dept.code {
-                            print!(" [{}]", code);
+                            print!(" [{code}]");
                         }
                         if let Some(active) = dept.active {
                             print!(" ({})", if active { "启用" } else { "停用" });
@@ -421,7 +421,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             for child in children.iter().take(2) {
                                 if let Some(child_name) = &child.name {
                                     if let Some(zh_cn) = &child_name.zh_cn {
-                                        println!("    └─ {}", zh_cn);
+                                        println!("    └─ {zh_cn}");
                                     }
                                 }
                             }
@@ -431,7 +431,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(err) => {
-            error!("❌ 查询部门架构树失败: {:?}", err);
+            error!("❌ 查询部门架构树失败: {err:?}");
         }
     }
 
@@ -463,21 +463,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(data) = &response.data {
                 if let Some(company) = &data.company {
                     if let Some(company_id) = &company.company_id {
-                        println!("公司ID: {}", company_id);
+                        println!("公司ID: {company_id}");
                     }
                     if let Some(name) = &company.name {
                         if let Some(zh_cn) = &name.zh_cn {
-                            println!("公司名称: {}", zh_cn);
+                            println!("公司名称: {zh_cn}");
                         }
                     }
                     if let Some(code) = &company.code {
-                        println!("公司编码: {}", code);
+                        println!("公司编码: {code}");
                     }
                 }
             }
         }
         Err(err) => {
-            error!("❌ 创建公司失败: {:?}", err);
+            error!("❌ 创建公司失败: {err:?}");
             println!("注意: 这可能是因为使用了示例的地点ID");
         }
     }
@@ -497,14 +497,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     for company in companies.iter().take(3) {
                         if let Some(name) = &company.name {
                             if let Some(zh_cn) = &name.zh_cn {
-                                print!("  - {}", zh_cn);
+                                print!("  - {zh_cn}");
                             }
                         }
                         if let Some(code) = &company.code {
-                            print!(" [{}]", code);
+                            print!(" [{code}]");
                         }
                         if let Some(company_type) = &company.company_type {
-                            print!(" 类型: {}", company_type);
+                            print!(" 类型: {company_type}");
                         }
                         if let Some(active) = company.active {
                             print!(" ({})", if active { "启用" } else { "停用" });
@@ -515,12 +515,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                 // 分页信息
                 if let Some(has_more) = data.companies.has_more {
-                    println!("是否有更多数据: {}", has_more);
+                    println!("是否有更多数据: {has_more}");
                 }
             }
         }
         Err(err) => {
-            error!("❌ 查询公司列表失败: {:?}", err);
+            error!("❌ 查询公司列表失败: {err:?}");
         }
     }
 
@@ -550,18 +550,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(data) = &response.data {
                 if let Some(job_family) = &data.job_family {
                     if let Some(job_family_id) = &job_family.job_family_id {
-                        println!("序列ID: {}", job_family_id);
+                        println!("序列ID: {job_family_id}");
                     }
                     if let Some(name) = &job_family.name {
                         if let Some(zh_cn) = &name.zh_cn {
-                            println!("序列名称: {}", zh_cn);
+                            println!("序列名称: {zh_cn}");
                         }
                     }
                 }
             }
         }
         Err(err) => {
-            error!("❌ 创建技术序列失败: {:?}", err);
+            error!("❌ 创建技术序列失败: {err:?}");
             println!("注意: 这可能是因为序列已存在或权限不足");
         }
     }
@@ -594,17 +594,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 if let Some(job_level) = &data.job_level {
                     if let Some(name) = &job_level.name {
                         if let Some(zh_cn) = &name.zh_cn {
-                            println!("职级名称: {}", zh_cn);
+                            println!("职级名称: {zh_cn}");
                         }
                     }
                     if let Some(order) = job_level.order {
-                        println!("职级顺序: {}", order);
+                        println!("职级顺序: {order}");
                     }
                 }
             }
         }
         Err(err) => {
-            error!("❌ 创建职级失败: {:?}", err);
+            error!("❌ 创建职级失败: {err:?}");
         }
     }
 
@@ -650,12 +650,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(data) = &response.data {
                 if let Some(pre_hire) = &data.pre_hire {
                     if let Some(pre_hire_id) = &pre_hire.pre_hire_id {
-                        println!("待入职ID: {}", pre_hire_id);
+                        println!("待入职ID: {pre_hire_id}");
                     }
                     if let Some(person) = &pre_hire.person {
                         if let Some(name) = &person.name {
                             if let Some(zh_cn) = &name.zh_cn {
-                                println!("候选人姓名: {}", zh_cn);
+                                println!("候选人姓名: {zh_cn}");
                             }
                         }
                     }
@@ -663,7 +663,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(err) => {
-            error!("❌ 创建待入职失败: {:?}", err);
+            error!("❌ 创建待入职失败: {err:?}");
             println!("注意: 这可能是因为使用了示例的流程ID或部门ID");
         }
     }
@@ -695,16 +695,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(data) = &response.data {
                 if let Some(job_change) = &data.job_change {
                     if let Some(job_change_id) = &job_change.job_change_id {
-                        println!("异动ID: {}", job_change_id);
+                        println!("异动ID: {job_change_id}");
                     }
                     if let Some(effective_date) = &job_change.effective_date {
-                        println!("生效日期: {}", effective_date);
+                        println!("生效日期: {effective_date}");
                     }
                 }
             }
         }
         Err(err) => {
-            error!("❌ 发起异动失败: {:?}", err);
+            error!("❌ 发起异动失败: {err:?}");
             println!("注意: 这可能是因为使用了示例的员工ID");
         }
     }

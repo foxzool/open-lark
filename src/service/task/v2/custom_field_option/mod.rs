@@ -90,10 +90,7 @@ impl CustomFieldOptionService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/task/v2/custom_fields/{}/options",
-                custom_field_guid
-            ),
+            api_path: format!("/open-apis/task/v2/custom_fields/{custom_field_guid}/options"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -123,8 +120,7 @@ impl CustomFieldOptionService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: format!(
-                "/open-apis/task/v2/custom_fields/{}/options/{}",
-                custom_field_guid, option_guid
+                "/open-apis/task/v2/custom_fields/{custom_field_guid}/options/{option_guid}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,

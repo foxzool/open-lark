@@ -77,8 +77,7 @@ impl AttachmentService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{}/messages/{}/attachments/{}/download_url",
-                user_mailbox_id, message_id, attachment_id
+                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages/{message_id}/attachments/{attachment_id}/download_url"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,

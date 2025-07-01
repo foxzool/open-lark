@@ -69,7 +69,7 @@ impl BuzzMessagesService {
     ) -> SDKResult<BaseResponse<UrgentResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/im/v1/messages/{}/urgent_app", message_id),
+            api_path: format!("/open-apis/im/v1/messages/{message_id}/urgent_app"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params: HashMap::from([(
                 "user_id_type".to_string(),
@@ -92,7 +92,7 @@ impl BuzzMessagesService {
     ) -> SDKResult<BaseResponse<UrgentResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/im/v1/messages/{}/urgent_sms", message_id),
+            api_path: format!("/open-apis/im/v1/messages/{message_id}/urgent_sms"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params: HashMap::from([(
                 "user_id_type".to_string(),
@@ -115,7 +115,7 @@ impl BuzzMessagesService {
     ) -> SDKResult<BaseResponse<UrgentResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/im/v1/messages/{}/urgent_phone", message_id),
+            api_path: format!("/open-apis/im/v1/messages/{message_id}/urgent_phone"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params: HashMap::from([(
                 "user_id_type".to_string(),

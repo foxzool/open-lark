@@ -33,8 +33,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build();
 
     println!("🗃️ 飞书多维表格记录查询示例");
-    println!("应用Token: {}", app_token);
-    println!("表格ID: {}", table_id);
+    println!("应用Token: {app_token}");
+    println!("表格ID: {table_id}");
     println!("{}", "=".repeat(50));
 
     // 基础查询
@@ -81,10 +81,10 @@ async fn query_all_records(
                             record.record_id.as_ref().unwrap_or(&"N/A".to_string())
                         );
                         if let Some(created_time) = &record.created_time {
-                            println!("      创建时间: {}", created_time);
+                            println!("      创建时间: {created_time}");
                         }
                         if let Some(modified_time) = &record.last_modified_time {
-                            println!("      修改时间: {}", modified_time);
+                            println!("      修改时间: {modified_time}");
                         }
 
                         // 显示字段数据
@@ -93,7 +93,7 @@ async fn query_all_records(
                             for (field_name, value) in &record.fields {
                                 // 简化值显示（实际使用中可以根据字段类型格式化）
                                 let display_value = format_field_value(value);
-                                println!("        {}: {}", field_name, display_value);
+                                println!("        {field_name}: {display_value}");
                             }
                         }
                         println!(); // 空行分隔
@@ -105,7 +105,7 @@ async fn query_all_records(
                 if data.has_more {
                     println!("💡 提示: 还有更多记录可以通过分页获取");
                     if let Some(page_token) = &data.page_token {
-                        println!("   下一页Token: {}", page_token);
+                        println!("   下一页Token: {page_token}");
                     }
                 }
             } else {
@@ -113,7 +113,7 @@ async fn query_all_records(
             }
         }
         Err(e) => {
-            println!("❌ 查询记录失败: {:?}", e);
+            println!("❌ 查询记录失败: {e:?}");
             println!("\n💡 常见错误解决方案:");
             println!("   1. 检查APP_ID和APP_SECRET是否正确");
             println!("   2. 确认APP_TOKEN是否为有效的多维表格应用token");
@@ -177,7 +177,7 @@ async fn query_with_filter(
             }
         }
         Err(e) => {
-            println!("❌ 筛选查询失败: {:?}", e);
+            println!("❌ 筛选查询失败: {e:?}");
             println!("   注意: 筛选字段名需要与实际表格字段匹配");
         }
     }
@@ -204,7 +204,7 @@ async fn query_with_sort_and_pagination(
 
     loop {
         page_count += 1;
-        println!("\n📄 获取第 {} 页...", page_count);
+        println!("\n📄 获取第 {page_count} 页...");
 
         let mut request_builder = SearchRecordRequest::builder()
             .app_token(app_token)
@@ -257,14 +257,14 @@ async fn query_with_sort_and_pagination(
                 }
             }
             Err(e) => {
-                println!("   ❌ 第{}页获取失败: {:?}", page_count, e);
+                println!("   ❌ 第{page_count}页获取失败: {e:?}");
                 break;
             }
         }
     }
 
     println!("\n📈 分页查询总结:");
-    println!("   总页数: {}", page_count);
+    println!("   总页数: {page_count}");
 
     Ok(())
 }

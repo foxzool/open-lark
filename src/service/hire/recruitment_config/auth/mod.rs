@@ -88,7 +88,7 @@ impl AuthService {
     ) -> SDKResult<BaseResponse<RoleDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/roles/{}", role_id),
+            api_path: format!("/open-apis/hire/v1/roles/{role_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -171,7 +171,7 @@ impl AuthService {
     ) -> SDKResult<BaseResponse<UserRoleListResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/users/{}/roles", user_id),
+            api_path: format!("/open-apis/hire/v1/users/{user_id}/roles"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

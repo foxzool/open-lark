@@ -52,10 +52,7 @@ impl AppUsageService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/application/v6/app_usage/{}/department_overview",
-                app_id
-            ),
+            api_path: format!("/open-apis/application/v6/app_usage/{app_id}/department_overview"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -78,10 +75,7 @@ impl AppUsageService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/application/v6/app_usage/{}/message_push_overview",
-                app_id
-            ),
+            api_path: format!("/open-apis/application/v6/app_usage/{app_id}/message_push_overview"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -104,7 +98,7 @@ impl AppUsageService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/app_usage/{}/overview", app_id),
+            api_path: format!("/open-apis/application/v6/app_usage/{app_id}/overview"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

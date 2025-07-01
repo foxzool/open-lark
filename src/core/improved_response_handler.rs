@@ -33,7 +33,7 @@ impl ImprovedResponseHandler {
         response: reqwest::Response,
     ) -> SDKResult<BaseResponse<T>> {
         let response_text = response.text().await?;
-        debug!("Raw response: {}", response_text);
+        debug!("Raw response: {response_text}");
 
         // 尝试直接解析为BaseResponse<T>
         match serde_json::from_str::<BaseResponse<T>>(&response_text) {
@@ -69,7 +69,7 @@ impl ImprovedResponseHandler {
         response: reqwest::Response,
     ) -> SDKResult<BaseResponse<T>> {
         let response_text = response.text().await?;
-        debug!("Raw response: {}", response_text);
+        debug!("Raw response: {response_text}");
 
         let raw_value: Value = serde_json::from_str(&response_text)?;
 
@@ -81,7 +81,7 @@ impl ImprovedResponseHandler {
             match serde_json::from_value::<T>(raw_value) {
                 Ok(parsed_data) => Some(parsed_data),
                 Err(e) => {
-                    debug!("Failed to parse data for flatten response: {}", e);
+                    debug!("Failed to parse data for flatten response: {e}");
                     None
                 }
             }
@@ -306,7 +306,7 @@ mod tests {
 
         for (input, expected) in cases {
             let result = ImprovedResponseHandler::extract_filename(input);
-            assert_eq!(result, expected, "Failed for input: {}", input);
+            assert_eq!(result, expected, "Failed for input: {input}");
         }
     }
 
@@ -325,8 +325,8 @@ mod tests {
         let _result: Result<OptimizedBaseResponse<TestData>, _> = serde_json::from_value(_value);
         let double_parse_time = start.elapsed();
 
-        println!("Direct parse time: {:?}", direct_parse_time);
-        println!("Double parse time: {:?}", double_parse_time);
+        println!("Direct parse time: {direct_parse_time:?}");
+        println!("Double parse time: {double_parse_time:?}");
 
         // 直接解析应该更快（虽然在微基准测试中差异可能很小）
         // 这里主要是为了展示概念

@@ -278,19 +278,19 @@ pub async fn list_comments(
     // 构建查询参数
     let mut query_params = Vec::new();
     if let Some(is_whole) = request.is_whole {
-        query_params.push(format!("is_whole={}", is_whole));
+        query_params.push(format!("is_whole={is_whole}"));
     }
     if let Some(is_solved) = request.is_solved {
-        query_params.push(format!("is_solved={}", is_solved));
+        query_params.push(format!("is_solved={is_solved}"));
     }
     if let Some(page_size) = request.page_size {
-        query_params.push(format!("page_size={}", page_size));
+        query_params.push(format!("page_size={page_size}"));
     }
     if let Some(page_token) = request.page_token {
-        query_params.push(format!("page_token={}", page_token));
+        query_params.push(format!("page_token={page_token}"));
     }
     if let Some(user_id_type) = request.user_id_type {
-        query_params.push(format!("user_id_type={}", user_id_type));
+        query_params.push(format!("user_id_type={user_id_type}"));
     }
 
     if !query_params.is_empty() {

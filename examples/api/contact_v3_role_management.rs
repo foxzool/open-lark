@@ -73,7 +73,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                 role.role_name.as_deref().unwrap_or("未知")
                             );
                         }
-                        Err(e) => println!("❌ 角色详情获取失败: {:?}", e),
+                        Err(e) => println!("❌ 角色详情获取失败: {e:?}"),
                     }
 
                     // ========== 2. 角色成员管理 ==========
@@ -150,17 +150,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                                 }
                                             }
                                         }
-                                        Err(e) => println!("❌ 成员详情获取失败: {:?}", e),
+                                        Err(e) => println!("❌ 成员详情获取失败: {e:?}"),
                                     }
                                 }
                             }
                         }
-                        Err(e) => println!("❌ 角色成员列表获取失败: {:?}", e),
+                        Err(e) => println!("❌ 角色成员列表获取失败: {e:?}"),
                     }
                 }
             }
         }
-        Err(e) => println!("❌ 角色列表获取失败: {:?}", e),
+        Err(e) => println!("❌ 角色列表获取失败: {e:?}"),
     }
 
     // ========== 3. 演示创建操作 (仅演示，不实际执行) ==========

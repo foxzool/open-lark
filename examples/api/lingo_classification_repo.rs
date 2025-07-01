@@ -31,10 +31,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("  - 词库ID: {}", repo.id);
                     println!("    词库名称: {}", repo.name);
                     if let Some(description) = &repo.description {
-                        println!("    描述: {}", description);
+                        println!("    描述: {description}");
                     }
                     if let Some(repo_type) = &repo.repo_type {
-                        println!("    类型: {}", repo_type);
+                        println!("    类型: {repo_type}");
                     }
                     println!();
                 }
@@ -61,21 +61,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                     println!("  - 分类ID: {}", classification.id);
                                     println!("    分类名称: {}", classification.name);
                                     if let Some(father_id) = &classification.father_id {
-                                        println!("    父分类ID: {}", father_id);
+                                        println!("    父分类ID: {father_id}");
                                     }
                                     println!();
                                 }
                             }
                         }
                         Err(e) => {
-                            eprintln!("获取分类列表失败: {:?}", e);
+                            eprintln!("获取分类列表失败: {e:?}");
                         }
                     }
                 }
             }
         }
         Err(e) => {
-            eprintln!("获取词库列表失败: {:?}", e);
+            eprintln!("获取词库列表失败: {e:?}");
         }
     }
 
@@ -99,14 +99,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("  - 分类ID: {}", classification.id);
                     println!("    分类名称: {}", classification.name);
                     if let Some(father_id) = &classification.father_id {
-                        println!("    父分类ID: {}", father_id);
+                        println!("    父分类ID: {father_id}");
                     }
                     println!();
                 }
             }
         }
         Err(e) => {
-            eprintln!("获取全部分类失败: {:?}", e);
+            eprintln!("获取全部分类失败: {e:?}");
         }
     }
 

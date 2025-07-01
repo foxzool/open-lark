@@ -80,7 +80,7 @@ async fn demo_tag_management(client: &LarkClient) -> Result<(), Box<dyn std::err
                         }
                     }
                     Err(e) => {
-                        println!("  ❌ 标签修改失败: {:?}", e);
+                        println!("  ❌ 标签修改失败: {e:?}");
                     }
                 }
 
@@ -106,13 +106,13 @@ async fn demo_tag_management(client: &LarkClient) -> Result<(), Box<dyn std::err
                         }
                     }
                     Err(e) => {
-                        println!("  ❌ 查询标签列表失败: {:?}", e);
+                        println!("  ❌ 查询标签列表失败: {e:?}");
                     }
                 }
             }
         }
         Err(e) => {
-            println!("  ❌ 标签创建失败: {:?}", e);
+            println!("  ❌ 标签创建失败: {e:?}");
         }
     }
 
@@ -149,7 +149,7 @@ async fn demo_tag_binding(client: &LarkClient) -> Result<(), Box<dyn std::error:
             }
         }
         Err(e) => {
-            println!("  ❌ 查询绑定关系失败: {:?}", e);
+            println!("  ❌ 查询绑定关系失败: {e:?}");
         }
     }
 
@@ -182,7 +182,7 @@ async fn demo_tag_binding(client: &LarkClient) -> Result<(), Box<dyn std::error:
             }
         }
         Err(e) => {
-            println!("  ❌ 标签绑定失败: {:?}", e);
+            println!("  ❌ 标签绑定失败: {e:?}");
         }
     }
 
@@ -215,7 +215,7 @@ async fn demo_tag_binding(client: &LarkClient) -> Result<(), Box<dyn std::error:
             }
         }
         Err(e) => {
-            println!("  ❌ 标签解绑失败: {:?}", e);
+            println!("  ❌ 标签解绑失败: {e:?}");
         }
     }
 

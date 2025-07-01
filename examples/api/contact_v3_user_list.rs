@@ -25,25 +25,25 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("用户数量: {}", resp.items.len());
             for user in resp.items {
                 if let Some(name) = &user.name {
-                    println!("- 用户姓名: {}", name);
+                    println!("- 用户姓名: {name}");
                 }
                 if let Some(email) = &user.email {
-                    println!("  邮箱: {}", email);
+                    println!("  邮箱: {email}");
                 }
                 if let Some(user_id) = &user.user_id {
-                    println!("  用户ID: {}", user_id);
+                    println!("  用户ID: {user_id}");
                 }
                 println!("---");
             }
 
             if let Some(has_more) = resp.has_more {
-                println!("是否还有更多数据: {}", has_more);
+                println!("是否还有更多数据: {has_more}");
             }
             if let Some(page_token) = &resp.page_token {
-                println!("下一页标记: {}", page_token);
+                println!("下一页标记: {page_token}");
             }
         }
-        Err(e) => eprintln!("获取用户列表失败: {:?}", e),
+        Err(e) => eprintln!("获取用户列表失败: {e:?}"),
     }
 
     Ok(())

@@ -43,7 +43,7 @@ impl JobFamilyService {
     ) -> crate::core::SDKResult<UpdateJobFamilyResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PUT,
-            api_path: format!("/open-apis/contact/v3/job_families/{}", job_family_id),
+            api_path: format!("/open-apis/contact/v3/job_families/{job_family_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -58,7 +58,7 @@ impl JobFamilyService {
     pub async fn get(&self, job_family_id: &str) -> crate::core::SDKResult<GetJobFamilyResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/contact/v3/job_families/{}", job_family_id),
+            api_path: format!("/open-apis/contact/v3/job_families/{job_family_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             ..Default::default()
@@ -94,7 +94,7 @@ impl JobFamilyService {
     ) -> crate::core::SDKResult<DeleteJobFamilyResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/contact/v3/job_families/{}", job_family_id),
+            api_path: format!("/open-apis/contact/v3/job_families/{job_family_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             ..Default::default()

@@ -21,7 +21,7 @@ impl WorkCityService {
     pub async fn get(&self, work_city_id: &str) -> crate::core::SDKResult<GetWorkCityResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/contact/v3/work_cities/{}", work_city_id),
+            api_path: format!("/open-apis/contact/v3/work_cities/{work_city_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             ..Default::default()

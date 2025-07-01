@@ -42,10 +42,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     {
         Ok(response) => {
             println!("✅ 密码重置成功");
-            println!("响应: {:?}", response);
+            println!("响应: {response:?}");
         }
         Err(err) => {
-            error!("❌ 密码重置失败: {:?}", err);
+            error!("❌ 密码重置失败: {err:?}");
         }
     }
 
@@ -74,7 +74,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("报表数据: {:?}", response.data);
         }
         Err(err) => {
-            error!("❌ 获取部门数据报表失败: {:?}", err);
+            error!("❌ 获取部门数据报表失败: {err:?}");
         }
     }
 
@@ -101,7 +101,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("报表数据: {:?}", response.data);
         }
         Err(err) => {
-            error!("❌ 获取用户数据报表失败: {:?}", err);
+            error!("❌ 获取用户数据报表失败: {err:?}");
         }
     }
 
@@ -138,11 +138,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .as_ref()
                 .and_then(|data| data.badge.badge_id.clone())
                 .unwrap_or_default();
-            println!("勋章ID: {}", badge_id);
+            println!("勋章ID: {badge_id}");
             badge_id
         }
         Err(err) => {
-            error!("❌ 创建勋章失败: {:?}", err);
+            error!("❌ 创建勋章失败: {err:?}");
             "example_badge_id".to_string()
         }
     };
@@ -167,14 +167,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("勋章数量: {}", badges.len());
                     for badge in badges {
                         if let Some(name) = &badge.name {
-                            println!("- 勋章: {}", name);
+                            println!("- 勋章: {name}");
                         }
                     }
                 }
             }
         }
         Err(err) => {
-            error!("❌ 获取勋章列表失败: {:?}", err);
+            error!("❌ 获取勋章列表失败: {err:?}");
         }
     }
 
@@ -191,7 +191,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(err) => {
-            error!("❌ 获取勋章详情失败: {:?}", err);
+            error!("❌ 获取勋章详情失败: {err:?}");
         }
     }
 
@@ -238,7 +238,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(err) => {
-            error!("❌ 创建授予名单失败: {:?}", err);
+            error!("❌ 创建授予名单失败: {err:?}");
         }
     }
 

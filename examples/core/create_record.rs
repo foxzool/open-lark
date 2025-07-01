@@ -35,8 +35,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build();
 
     println!("📝 飞书多维表格创建记录示例");
-    println!("应用Token: {}", app_token);
-    println!("表格ID: {}", table_id);
+    println!("应用Token: {app_token}");
+    println!("表格ID: {table_id}");
     println!("{}", "=".repeat(50));
 
     // 创建简单记录
@@ -78,12 +78,12 @@ async fn create_simple_record(
             if let Some(data) = &response.data {
                 println!("✅ 简单记录创建成功!");
                 if let Some(record_id) = &data.record.record_id {
-                    println!("   记录ID: {}", record_id);
+                    println!("   记录ID: {record_id}");
                 }
                 if let Some(created_time) = &data.record.created_time {
-                    println!("   创建时间: {}", created_time);
+                    println!("   创建时间: {created_time}");
                 }
-                println!("   客户端Token: {}", client_token);
+                println!("   客户端Token: {client_token}");
 
                 // 显示创建的字段
                 println!("   创建的字段:");
@@ -95,7 +95,7 @@ async fn create_simple_record(
             }
         }
         Err(e) => {
-            println!("❌ 创建记录失败: {:?}", e);
+            println!("❌ 创建记录失败: {e:?}");
             println!("\n💡 常见错误解决方案:");
             println!("   1. 检查APP_ID和APP_SECRET是否正确");
             println!("   2. 确认APP_TOKEN是否为有效的多维表格应用token");
@@ -185,7 +185,7 @@ async fn create_complex_record(
             if let Some(data) = &response.data {
                 println!("✅ 复杂记录创建成功!");
                 if let Some(record_id) = &data.record.record_id {
-                    println!("   记录ID: {}", record_id);
+                    println!("   记录ID: {record_id}");
                 }
                 println!("   字段数量: {}", data.record.fields.len());
 
@@ -203,7 +203,7 @@ async fn create_complex_record(
             }
         }
         Err(e) => {
-            println!("❌ 创建复杂记录失败: {:?}", e);
+            println!("❌ 创建复杂记录失败: {e:?}");
             return Err(e.into());
         }
     }
@@ -251,7 +251,7 @@ async fn create_multiple_records(
                 }
             }
             Err(e) => {
-                println!("   ❌ 记录 {} 创建失败: {:?}", title, e);
+                println!("   ❌ 记录 {title} 创建失败: {e:?}");
             }
         }
 

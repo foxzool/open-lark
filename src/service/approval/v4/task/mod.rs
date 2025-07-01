@@ -107,7 +107,7 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/tasks/{}/approve", task_id),
+            api_path: format!("/open-apis/approval/v4/tasks/{task_id}/approve"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -135,7 +135,7 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/tasks/{}/reject", task_id),
+            api_path: format!("/open-apis/approval/v4/tasks/{task_id}/reject"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -163,7 +163,7 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/tasks/{}/transfer", task_id),
+            api_path: format!("/open-apis/approval/v4/tasks/{task_id}/transfer"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -191,10 +191,7 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/approval/v4/tasks/{}/specified_rollback",
-                task_id
-            ),
+            api_path: format!("/open-apis/approval/v4/tasks/{task_id}/specified_rollback"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -222,7 +219,7 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/tasks/{}/add_sign", task_id),
+            api_path: format!("/open-apis/approval/v4/tasks/{task_id}/add_sign"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -250,7 +247,7 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/tasks/{}/resubmit", task_id),
+            api_path: format!("/open-apis/approval/v4/tasks/{task_id}/resubmit"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,

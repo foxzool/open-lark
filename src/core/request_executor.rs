@@ -222,7 +222,7 @@ impl RequestExecutor {
         // 替换路径参数
         let mut path = path_template.to_string();
         for (key, value) in path_params {
-            path = path.replace(&format!("{{{}}}", key), value);
+            path = path.replace(&format!("{{{key}}}"), value);
         }
 
         Self::execute(
@@ -336,7 +336,7 @@ mod tests {
         // 测试路径参数替换
         let mut path = path_template.to_string();
         for (key, value) in path_params {
-            path = path.replace(&format!("{{{}}}", key), value);
+            path = path.replace(&format!("{{{key}}}"), value);
         }
 
         assert_eq!(path, expected_path);

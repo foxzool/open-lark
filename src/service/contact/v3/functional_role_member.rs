@@ -22,7 +22,7 @@ impl FunctionalRoleMemberService {
     ) -> crate::core::SDKResult<CreateRoleMemberResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/contact/v3/functional_roles/{}/members", role_id),
+            api_path: format!("/open-apis/contact/v3/functional_roles/{role_id}/members"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -42,8 +42,7 @@ impl FunctionalRoleMemberService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
             api_path: format!(
-                "/open-apis/contact/v3/functional_roles/{}/members/batch_create",
-                role_id
+                "/open-apis/contact/v3/functional_roles/{role_id}/members/batch_create"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
@@ -64,10 +63,7 @@ impl FunctionalRoleMemberService {
     ) -> crate::core::SDKResult<SetRoleMemberScopesResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!(
-                "/open-apis/contact/v3/functional_roles/{}/members/scopes",
-                role_id
-            ),
+            api_path: format!("/open-apis/contact/v3/functional_roles/{role_id}/members/scopes"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -88,8 +84,7 @@ impl FunctionalRoleMemberService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
             api_path: format!(
-                "/open-apis/contact/v3/functional_roles/{}/members/{}",
-                role_id, member_id
+                "/open-apis/contact/v3/functional_roles/{role_id}/members/{member_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
@@ -109,7 +104,7 @@ impl FunctionalRoleMemberService {
     ) -> crate::core::SDKResult<ListRoleMembersResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/contact/v3/functional_roles/{}/members", role_id),
+            api_path: format!("/open-apis/contact/v3/functional_roles/{role_id}/members"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -130,8 +125,7 @@ impl FunctionalRoleMemberService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
             api_path: format!(
-                "/open-apis/contact/v3/functional_roles/{}/members/batch_delete",
-                role_id
+                "/open-apis/contact/v3/functional_roles/{role_id}/members/batch_delete"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,

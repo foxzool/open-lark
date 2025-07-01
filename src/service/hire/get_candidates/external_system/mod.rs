@@ -721,8 +721,7 @@ impl ExternalSystemService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: format!(
-                "/open-apis/hire/v1/external_systems/candidates/{}/convert",
-                external_candidate_id
+                "/open-apis/hire/v1/external_systems/candidates/{external_candidate_id}/convert"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
@@ -759,8 +758,7 @@ impl ExternalSystemService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: format!(
-                "/open-apis/hire/v1/external_systems/{}/test_connection",
-                system_config_id
+                "/open-apis/hire/v1/external_systems/{system_config_id}/test_connection"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],

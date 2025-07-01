@@ -89,8 +89,7 @@ impl CollaborationOrganizationService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/trust_party/v1/collaboration_organizations/{}/visible_organization",
-                org_id
+                "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/visible_organization"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -119,10 +118,7 @@ impl CollaborationOrganizationService {
     ) -> SDKResult<BaseResponse<OrganizationGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/trust_party/v1/collaboration_organizations/{}",
-                org_id
-            ),
+            api_path: format!("/open-apis/trust_party/v1/collaboration_organizations/{org_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -153,8 +149,7 @@ impl CollaborationOrganizationService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/trust_party/v1/collaboration_organizations/{}/users/{}",
-                org_id, user_id
+                "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/users/{user_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -186,8 +181,7 @@ impl CollaborationOrganizationService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/trust_party/v1/collaboration_organizations/{}/departments/{}",
-                org_id, department_id
+                "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/departments/{department_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -219,8 +213,7 @@ impl CollaborationOrganizationService {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/trust_party/v1/collaboration_organizations/{}/shared_member_scopes",
-                org_id
+                "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/shared_member_scopes"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],

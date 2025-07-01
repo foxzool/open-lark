@@ -247,7 +247,7 @@ impl PatchCommentResponse {
     pub fn solved_time_formatted(&self) -> Option<String> {
         self.solved_time.map(|timestamp| {
             // 这里可以根据需要格式化时间戳
-            format!("解决时间: {}", timestamp)
+            format!("解决时间: {timestamp}")
         })
     }
 }
