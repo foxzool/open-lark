@@ -61,7 +61,55 @@ use crate::{
 #[cfg(feature = "websocket")]
 pub mod ws_client;
 
-/// 飞书开放平台SDK client
+/// 飞书开放平台SDK主客户端
+///
+/// 提供对所有飞书开放平台API的统一访问接口。支持自建应用和商店应用两种类型，
+/// 自动处理认证、令牌管理、请求重试等核心功能。
+///
+/// # 主要功能
+///
+/// - 🔐 自动令牌管理和刷新
+/// - 🚀 支持所有飞书开放平台API
+/// - 🔄 内置请求重试机制
+/// - 📡 WebSocket长连接支持（需开启websocket特性）
+/// - 🎯 类型安全的API调用
+///
+/// # 快速开始
+///
+/// ```rust
+/// use open_lark::prelude::*;
+///
+/// // 创建自建应用客户端
+/// let client = LarkClient::builder("your_app_id", "your_app_secret")
+///     .with_app_type(AppType::SelfBuilt)
+///     .with_enable_token_cache(true)
+///     .build();
+///
+/// // 发送文本消息
+/// let message = CreateMessageRequestBody::builder()
+///     .receive_id("ou_xxx")
+///     .msg_type("text")
+///     .content("{\"text\":\"Hello from Rust!\"}")
+///     .build();
+///
+/// let request = CreateMessageRequest::builder()
+///     .receive_id_type("open_id")
+///     .request_body(message)
+///     .build();
+///
+/// // let result = client.im.message.create(request, None).await?;
+/// ```
+///
+/// # 服务模块
+///
+/// 客户端包含以下主要服务模块：
+/// - `im`: 即时消息
+/// - `drive`: 云盘文件
+/// - `sheets`: 电子表格
+/// - `calendar`: 日历
+/// - `contact`: 通讯录
+/// - `hire`: 招聘
+/// - 更多服务请参考各字段文档
 pub struct LarkClient {
     pub config: Config,
     // 核心服务
@@ -120,36 +168,71 @@ pub struct LarkClient {
     pub board: BoardService,
 }
 
+/// 飞书客户端构建器
+///
+/// 使用构建器模式配置和创建LarkClient实例。支持链式调用配置各种选项。
+///
+/// # 示例
+///
+/// ```rust
+/// use open_lark::prelude::*;
+///
+/// let client = LarkClient::builder("app_id", "app_secret")
+///     .with_app_type(AppType::SelfBuilt)
+///     .with_enable_token_cache(true)
+///     .with_req_timeout(Some(30.0))
+///     .build();
+/// ```
 pub struct LarkClientBuilder {
     config: Config,
 }
 
 impl LarkClientBuilder {
+    /// 设置应用类型
+    ///
+    /// # 参数
+    /// - `app_type`: 应用类型，`AppType::SelfBuilt`（自建应用）或`AppType::Marketplace`（商店应用）
     pub fn with_app_type(mut self, app_type: AppType) -> Self {
         self.config.app_type = app_type;
         self
     }
 
+    /// 设置为商店应用（等同于 `with_app_type(AppType::Marketplace)`）
     pub fn with_marketplace_app(mut self) -> Self {
         self.config.app_type = AppType::Marketplace;
         self
     }
 
+    /// 设置自定义API基础URL
+    ///
+    /// # 参数
+    /// - `base_url`: 自定义的API基础URL，默认为官方地址
     pub fn with_open_base_url(mut self, base_url: String) -> Self {
         self.config.base_url = base_url;
         self
     }
 
+    /// 启用或禁用令牌缓存
+    ///
+    /// # 参数
+    /// - `enable`: 是否启用令牌缓存，建议启用以提高性能
     pub fn with_enable_token_cache(mut self, enable: bool) -> Self {
         self.config.enable_token_cache = enable;
         self
     }
 
+    /// 设置请求超时时间
+    ///
+    /// # 参数
+    /// - `timeout`: 超时时间（秒），None表示使用默认值
     pub fn with_req_timeout(mut self, timeout: Option<f32>) -> Self {
         self.config.req_timeout = timeout.map(Duration::from_secs_f32);
         self
     }
 
+    /// 构建LarkClient实例
+    ///
+    /// 根据配置的参数创建最终的客户端实例。
     pub fn build(mut self) -> LarkClient {
         if let Some(req_timeout) = self.config.req_timeout {
             self.config.http_client = reqwest::Client::builder()
@@ -225,6 +308,20 @@ impl LarkClientBuilder {
 }
 
 impl LarkClient {
+    /// 创建客户端构建器
+    ///
+    /// # 参数
+    /// - `app_id`: 应用ID，从飞书开放平台获取
+    /// - `app_secret`: 应用密钥，从飞书开放平台获取
+    ///
+    /// # 示例
+    /// ```rust
+    /// use open_lark::prelude::*;
+    ///
+    /// let client = LarkClient::builder("cli_xxx", "xxx")
+    ///     .with_app_type(AppType::SelfBuilt)
+    ///     .build();
+    /// ```
     pub fn builder(app_id: &str, app_secret: &str) -> LarkClientBuilder {
         LarkClientBuilder {
             config: Config {
