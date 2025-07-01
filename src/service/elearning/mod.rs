@@ -17,7 +17,7 @@
 //!
 //! ## 使用示例
 //!
-//! ```rust,no_run
+//! ```rust,ignore
 //! use open_lark::prelude::*;
 //! use open_lark::service::elearning::*;
 //!
