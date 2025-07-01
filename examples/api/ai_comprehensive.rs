@@ -57,7 +57,7 @@ async fn demonstrate_document_ai(client: &LarkClient) -> Result<(), Box<dyn std:
         .await
     {
         Ok(response) => println!("✓ 简历解析成功: {:?}", response.data),
-        Err(e) => println!("✗ 简历解析失败: {:?}", e),
+        Err(e) => println!("✗ 简历解析失败: {e:?}"),
     }
 
     // 身份证识别示例
@@ -72,7 +72,7 @@ async fn demonstrate_document_ai(client: &LarkClient) -> Result<(), Box<dyn std:
         .await
     {
         Ok(response) => println!("✓ 身份证识别成功: {:?}", response.data),
-        Err(e) => println!("✗ 身份证识别失败: {:?}", e),
+        Err(e) => println!("✗ 身份证识别失败: {e:?}"),
     }
 
     // 驾驶证识别示例
@@ -87,7 +87,7 @@ async fn demonstrate_document_ai(client: &LarkClient) -> Result<(), Box<dyn std:
         .await
     {
         Ok(response) => println!("✓ 驾驶证识别成功: {:?}", response.data),
-        Err(e) => println!("✗ 驾驶证识别失败: {:?}", e),
+        Err(e) => println!("✗ 驾驶证识别失败: {e:?}"),
     }
 
     // 银行卡识别示例
@@ -102,7 +102,7 @@ async fn demonstrate_document_ai(client: &LarkClient) -> Result<(), Box<dyn std:
         .await
     {
         Ok(response) => println!("✓ 银行卡识别成功: {:?}", response.data),
-        Err(e) => println!("✗ 银行卡识别失败: {:?}", e),
+        Err(e) => println!("✗ 银行卡识别失败: {e:?}"),
     }
 
     // 营业执照识别示例
@@ -117,7 +117,7 @@ async fn demonstrate_document_ai(client: &LarkClient) -> Result<(), Box<dyn std:
         .await
     {
         Ok(response) => println!("✓ 营业执照识别成功: {:?}", response.data),
-        Err(e) => println!("✗ 营业执照识别失败: {:?}", e),
+        Err(e) => println!("✗ 营业执照识别失败: {e:?}"),
     }
 
     // 增值税发票识别示例
@@ -132,7 +132,7 @@ async fn demonstrate_document_ai(client: &LarkClient) -> Result<(), Box<dyn std:
         .await
     {
         Ok(response) => println!("✓ 增值税发票识别成功: {:?}", response.data),
-        Err(e) => println!("✗ 增值税发票识别失败: {:?}", e),
+        Err(e) => println!("✗ 增值税发票识别失败: {e:?}"),
     }
 
     // 合同字段提取示例
@@ -147,7 +147,7 @@ async fn demonstrate_document_ai(client: &LarkClient) -> Result<(), Box<dyn std:
         .await
     {
         Ok(response) => println!("✓ 合同字段提取成功: {:?}", response.data),
-        Err(e) => println!("✗ 合同字段提取失败: {:?}", e),
+        Err(e) => println!("✗ 合同字段提取失败: {e:?}"),
     }
 
     // 名片识别示例
@@ -162,7 +162,7 @@ async fn demonstrate_document_ai(client: &LarkClient) -> Result<(), Box<dyn std:
         .await
     {
         Ok(response) => println!("✓ 名片识别成功: {:?}", response.data),
-        Err(e) => println!("✗ 名片识别失败: {:?}", e),
+        Err(e) => println!("✗ 名片识别失败: {e:?}"),
     }
 
     Ok(())
@@ -182,7 +182,7 @@ async fn demonstrate_ocr(client: &LarkClient) -> Result<(), Box<dyn std::error::
         .await
     {
         Ok(response) => println!("✓ OCR文字识别成功: {:?}", response.data),
-        Err(e) => println!("✗ OCR文字识别失败: {:?}", e),
+        Err(e) => println!("✗ OCR文字识别失败: {e:?}"),
     }
 
     Ok(())
@@ -211,7 +211,7 @@ async fn demonstrate_speech_recognition(
         .await
     {
         Ok(response) => println!("✓ 语音文件识别成功: {:?}", response.data),
-        Err(e) => println!("✗ 语音文件识别失败: {:?}", e),
+        Err(e) => println!("✗ 语音文件识别失败: {e:?}"),
     }
 
     Ok(())
@@ -227,7 +227,7 @@ async fn demonstrate_translation(client: &LarkClient) -> Result<(), Box<dyn std:
 
     match client.ai.translation.detect(detect_request, None).await {
         Ok(response) => println!("✓ 语种检测成功: {:?}", response.data),
-        Err(e) => println!("✗ 语种检测失败: {:?}", e),
+        Err(e) => println!("✗ 语种检测失败: {e:?}"),
     }
 
     // 文本翻译示例
@@ -244,7 +244,7 @@ async fn demonstrate_translation(client: &LarkClient) -> Result<(), Box<dyn std:
         .await
     {
         Ok(response) => println!("✓ 文本翻译成功: {:?}", response.data),
-        Err(e) => println!("✗ 文本翻译失败: {:?}", e),
+        Err(e) => println!("✗ 文本翻译失败: {e:?}"),
     }
 
     Ok(())

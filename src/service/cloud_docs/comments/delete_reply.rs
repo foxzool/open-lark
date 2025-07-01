@@ -214,19 +214,19 @@ impl DeletedReply {
     /// 获取删除时间的格式化字符串
     pub fn delete_time_formatted(&self) -> Option<String> {
         self.delete_time
-            .map(|timestamp| format!("删除时间: {}", timestamp))
+            .map(|timestamp| format!("删除时间: {timestamp}"))
     }
 
     /// 获取删除摘要信息
     pub fn summary(&self) -> String {
         let delete_info = if let Some(time) = self.delete_time {
-            format!("删除时间: {}", time)
+            format!("删除时间: {time}")
         } else {
             "删除时间: 未知".to_string()
         };
 
         let deleter_info = if let Some(deleter) = &self.deleter_user_id {
-            format!("删除者: {}", deleter)
+            format!("删除者: {deleter}")
         } else {
             "删除者: 未知".to_string()
         };

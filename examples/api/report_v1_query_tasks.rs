@@ -43,16 +43,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("  - 任务ID: {}", task.task_id);
                 println!("  - 规则ID: {}", task.rule_id);
                 if let Some(name) = &task.name {
-                    println!("  - 任务名称: {}", name);
+                    println!("  - 任务名称: {name}");
                 }
                 if let Some(status) = &task.status {
-                    println!("  - 状态: {}", status);
+                    println!("  - 状态: {status}");
                 }
                 if let Some(task_type) = &task.task_type {
-                    println!("  - 类型: {}", task_type);
+                    println!("  - 类型: {task_type}");
                 }
                 if let Some(reporter_id) = &task.reporter_id {
-                    println!("  - 汇报者ID: {}", reporter_id);
+                    println!("  - 汇报者ID: {reporter_id}");
                 }
             }
 

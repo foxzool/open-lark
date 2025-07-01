@@ -110,7 +110,7 @@ async fn demo_app_feed_card(client: &LarkClient) -> Result<(), Box<dyn std::erro
                         }
                     }
                     Err(e) => {
-                        println!("  ❌ 消息流卡片更新失败: {:?}", e);
+                        println!("  ❌ 消息流卡片更新失败: {e:?}");
                     }
                 }
 
@@ -120,13 +120,13 @@ async fn demo_app_feed_card(client: &LarkClient) -> Result<(), Box<dyn std::erro
                         println!("  ✅ 消息流卡片删除成功");
                     }
                     Err(e) => {
-                        println!("  ❌ 消息流卡片删除失败: {:?}", e);
+                        println!("  ❌ 消息流卡片删除失败: {e:?}");
                     }
                 }
             }
         }
         Err(e) => {
-            println!("  ❌ 消息流卡片创建失败: {:?}", e);
+            println!("  ❌ 消息流卡片创建失败: {e:?}");
         }
     }
 
@@ -196,13 +196,13 @@ async fn demo_groups_bots(client: &LarkClient) -> Result<(), Box<dyn std::error:
                         }
                     }
                     Err(e) => {
-                        println!("  ❌ 消息流按钮更新失败: {:?}", e);
+                        println!("  ❌ 消息流按钮更新失败: {e:?}");
                     }
                 }
             }
         }
         Err(e) => {
-            println!("  ❌ 机器人即时提醒发送失败: {:?}", e);
+            println!("  ❌ 机器人即时提醒发送失败: {e:?}");
         }
     }
 
@@ -235,7 +235,7 @@ async fn demo_groups_bots(client: &LarkClient) -> Result<(), Box<dyn std::error:
             }
         }
         Err(e) => {
-            println!("  ❌ 即时提醒发送失败: {:?}", e);
+            println!("  ❌ 即时提醒发送失败: {e:?}");
         }
     }
 

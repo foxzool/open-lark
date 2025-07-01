@@ -55,7 +55,7 @@ impl StatisticsService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/minutes/v1/{}/statistics", minute_token),
+            api_path: format!("/open-apis/minutes/v1/{minute_token}/statistics"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

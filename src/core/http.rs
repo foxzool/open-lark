@@ -51,9 +51,9 @@ impl<T: ApiResponseTrait> Transport<T> {
     ) -> SDKResult<BaseResponse<T>> {
         let req =
             ReqTranslator::translate(&mut http_req, access_token_type, config, &option).await?;
-        debug!("Req:{:?}", req);
+        debug!("Req:{req:?}");
         let resp = Self::do_send(req, http_req.body, !http_req.file.is_empty()).await?;
-        debug!("Res:{:?}", resp);
+        debug!("Res:{resp:?}");
 
         if !resp.success() && resp.raw_response.code == ERR_CODE_APP_TICKET_INVALID {
             apply_app_ticket(config).await?;
@@ -79,7 +79,7 @@ impl<T: ApiResponseTrait> Transport<T> {
                 ImprovedResponseHandler::handle_response(response).await
             }
             Err(err) => {
-                debug!("Request error: {:?}", err);
+                debug!("Request error: {err:?}");
                 Err(LarkAPIError::RequestError(err.to_string()))
             }
         }
@@ -201,14 +201,12 @@ fn validate(
 
     if option.header.contains_key(HTTP_HEADER_KEY_REQUEST_ID) {
         return Err(LarkAPIError::IllegalParamError(format!(
-            "use {} as header key is not allowed",
-            HTTP_HEADER_KEY_REQUEST_ID
+            "use {HTTP_HEADER_KEY_REQUEST_ID} as header key is not allowed"
         )));
     }
     if option.header.contains_key(HTTP_HEADER_REQUEST_ID) {
         return Err(LarkAPIError::IllegalParamError(format!(
-            "use {} as header key is not allowed",
-            HTTP_HEADER_REQUEST_ID
+            "use {HTTP_HEADER_REQUEST_ID} as header key is not allowed"
         )));
     }
 

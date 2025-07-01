@@ -51,7 +51,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 async fn get_spreadsheet_token(client: &LarkClient) -> Result<String, Box<dyn std::error::Error>> {
     // 优先使用环境变量指定的表格
     if let Ok(spreadsheet_token) = std::env::var("SPREADSHEET_TOKEN") {
-        println!("📋 使用指定表格: {}", spreadsheet_token);
+        println!("📋 使用指定表格: {spreadsheet_token}");
         return Ok(spreadsheet_token);
     }
 
@@ -75,7 +75,7 @@ async fn get_spreadsheet_token(client: &LarkClient) -> Result<String, Box<dyn st
             }
         }
         Err(e) => {
-            println!("❌ 创建表格失败: {:?}", e);
+            println!("❌ 创建表格失败: {e:?}");
             println!("\n💡 请通过 SPREADSHEET_TOKEN 环境变量指定一个现有表格");
             Err(e.into())
         }
@@ -88,11 +88,11 @@ async fn read_sheet_data(
     spreadsheet_token: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("\n📖 读取表格数据...");
-    println!("   表格Token: {}", spreadsheet_token);
+    println!("   表格Token: {spreadsheet_token}");
 
     // 读取A1:D10范围的数据
     let range = "Sheet1!A1:D10";
-    println!("   读取范围: {}", range);
+    println!("   读取范围: {range}");
 
     match open_lark::service::sheets::v3::data_operation::ReadingSingleRangeRequest::builder()
         .spreadsheet_token(spreadsheet_token)
@@ -129,7 +129,7 @@ async fn read_sheet_data(
             }
         }
         Err(e) => {
-            println!("❌ 读取表格数据失败: {:?}", e);
+            println!("❌ 读取表格数据失败: {e:?}");
             println!("\n💡 常见错误解决方案:");
             println!("   1. 检查用户访问令牌权限");
             println!("   2. 确认表格Token是否正确");
@@ -181,7 +181,7 @@ async fn write_sheet_data(
     ];
 
     let range = "Sheet1!A1:D4";
-    println!("   写入范围: {}", range);
+    println!("   写入范围: {range}");
     println!("   写入行数: {}", data_to_append.len());
 
     match open_lark::service::sheets::v3::data_operation::AppendDataRequest::builder()
@@ -210,7 +210,7 @@ async fn write_sheet_data(
             }
         }
         Err(e) => {
-            println!("❌ 写入表格数据失败: {:?}", e);
+            println!("❌ 写入表格数据失败: {e:?}");
             println!("\n💡 常见错误解决方案:");
             println!("   1. 检查用户访问令牌权限");
             println!("   2. 确认是否有表格编辑权限");
@@ -281,7 +281,7 @@ async fn verify_data_update(
             }
         }
         Err(e) => {
-            println!("❌ 验证数据更新失败: {:?}", e);
+            println!("❌ 验证数据更新失败: {e:?}");
         }
     }
 
@@ -310,7 +310,7 @@ async fn advanced_sheet_operations(
 
     // 读取多个范围
     let ranges = vec!["Sheet1!A1:B2", "Sheet1!D1:D5"];
-    println!("   演示读取多个范围: {:?}", ranges);
+    println!("   演示读取多个范围: {ranges:?}");
 
     // 这里可以添加批量读取、条件格式设置等高级操作
     // 具体实现取决于API的可用性

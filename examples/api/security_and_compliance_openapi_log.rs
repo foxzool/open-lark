@@ -51,20 +51,20 @@ async fn main() -> Result<()> {
                     println!("  - 响应时间: {} ms", item.response_time);
 
                     if let Some(user_id) = &item.user_id {
-                        println!("  - 用户 ID: {}", user_id);
+                        println!("  - 用户 ID: {user_id}");
                     }
                     if let Some(ip) = &item.ip {
-                        println!("  - IP 地址: {}", ip);
+                        println!("  - IP 地址: {ip}");
                     }
                 }
 
                 if let Some(next_token) = data.page_token {
-                    println!("\n下一页令牌: {}", next_token);
+                    println!("\n下一页令牌: {next_token}");
                 }
             }
         }
         Err(e) => {
-            eprintln!("获取审计日志失败: {}", e);
+            eprintln!("获取审计日志失败: {e}");
         }
     }
 

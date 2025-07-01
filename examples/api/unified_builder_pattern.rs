@@ -52,7 +52,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("   用户名: {:?}", response.user.name);
         }
         Err(e) => {
-            println!("❌ 传统方式调用失败: {}", e);
+            println!("❌ 传统方式调用失败: {e}");
             println!("   这可能是因为权限问题或测试环境限制");
         }
     }
@@ -84,7 +84,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("   用户名: {:?}", response.user.name);
         }
         Err(e) => {
-            println!("❌ Builder模式调用失败: {}", e);
+            println!("❌ Builder模式调用失败: {e}");
             println!("   这可能是因为权限问题或测试环境限制");
         }
     }
@@ -124,7 +124,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("   用户名: {:?}", response.user.name);
         }
         Err(e) => {
-            println!("❌ 高级Builder调用失败: {}", e);
+            println!("❌ 高级Builder调用失败: {e}");
             println!("   这可能是因为权限问题或测试环境限制");
         }
     }
@@ -160,14 +160,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         Err(e) => {
             println!("❌ 预期错误示例:");
-            println!("   错误信息: {}", e);
+            println!("   错误信息: {e}");
 
             // 使用新的错误处理方法
             use open_lark::core::error::LarkAPIError;
             match &e {
                 LarkAPIError::APIError { code, msg, .. } => {
-                    println!("   错误码: {}", code);
-                    println!("   错误消息: {}", msg);
+                    println!("   错误码: {code}");
+                    println!("   错误消息: {msg}");
 
                     // 根据错误码决定是否重试
                     if *code == 429 {
@@ -177,7 +177,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                 }
                 LarkAPIError::DataError(msg) => {
-                    println!("   数据错误: {}", msg);
+                    println!("   数据错误: {msg}");
                 }
                 _ => {
                     println!("   其他错误类型");

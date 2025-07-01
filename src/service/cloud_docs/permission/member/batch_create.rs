@@ -295,11 +295,11 @@ impl MemberResult {
     /// 获取错误信息
     pub fn error_message(&self) -> Option<String> {
         if let (Some(code), Some(msg)) = (self.code, &self.msg) {
-            Some(format!("错误码: {}, 错误信息: {}", code, msg))
+            Some(format!("错误码: {code}, 错误信息: {msg}"))
         } else if let Some(msg) = &self.msg {
             Some(msg.clone())
         } else {
-            self.code.map(|code| format!("错误码: {}", code))
+            self.code.map(|code| format!("错误码: {code}"))
         }
     }
 }

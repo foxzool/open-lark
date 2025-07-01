@@ -43,13 +43,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("  - 规则ID: {}", rule.rule_id);
                 println!("  - 规则名称: {}", rule.name);
                 if let Some(description) = &rule.description {
-                    println!("  - 描述: {}", description);
+                    println!("  - 描述: {description}");
                 }
                 if let Some(rule_type) = &rule.rule_type {
-                    println!("  - 类型: {}", rule_type);
+                    println!("  - 类型: {rule_type}");
                 }
                 if let Some(status) = &rule.status {
-                    println!("  - 状态: {}", status);
+                    println!("  - 状态: {status}");
                 }
             }
 

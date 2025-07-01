@@ -50,7 +50,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(e) => {
-            println!("❌ 请求失败: {:?}", e);
+            println!("❌ 请求失败: {e:?}");
         }
     }
 
@@ -77,7 +77,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(e) => {
-            println!("❌ 请求失败: {:?}", e);
+            println!("❌ 请求失败: {e:?}");
         }
     }
 

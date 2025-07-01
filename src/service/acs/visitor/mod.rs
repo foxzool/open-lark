@@ -72,7 +72,7 @@ impl VisitorService {
     ) -> SDKResult<BaseResponse<VisitorDeleteResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/acs/v1/visitors/{}", visitor_id),
+            api_path: format!("/open-apis/acs/v1/visitors/{visitor_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

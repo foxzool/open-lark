@@ -79,8 +79,7 @@ impl EventService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{}/events/subscribe",
-                user_mailbox_id
+                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/events/subscribe"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -109,8 +108,7 @@ impl EventService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{}/events/subscription",
-                user_mailbox_id
+                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/events/subscription"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -138,8 +136,7 @@ impl EventService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{}/events/unsubscribe",
-                user_mailbox_id
+                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/events/unsubscribe"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,

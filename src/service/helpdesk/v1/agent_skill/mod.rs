@@ -124,7 +124,7 @@ impl AgentSkillService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/helpdesk/v1/agent_skills/{}", skill_id),
+            api_path: format!("/open-apis/helpdesk/v1/agent_skills/{skill_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -150,7 +150,7 @@ impl AgentSkillService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/helpdesk/v1/agent_skills/{}", skill_id),
+            api_path: format!("/open-apis/helpdesk/v1/agent_skills/{skill_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

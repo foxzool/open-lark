@@ -50,7 +50,7 @@ impl DepartmentService {
     ) -> crate::core::SDKResult<PatchDepartmentResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: format!("/open-apis/contact/v3/departments/{}", department_id),
+            api_path: format!("/open-apis/contact/v3/departments/{department_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -69,7 +69,7 @@ impl DepartmentService {
     ) -> crate::core::SDKResult<UpdateDepartmentResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PUT,
-            api_path: format!("/open-apis/contact/v3/departments/{}", department_id),
+            api_path: format!("/open-apis/contact/v3/departments/{department_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -89,8 +89,7 @@ impl DepartmentService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
             api_path: format!(
-                "/open-apis/contact/v3/departments/{}/update_department_id",
-                department_id
+                "/open-apis/contact/v3/departments/{department_id}/update_department_id"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
@@ -110,7 +109,7 @@ impl DepartmentService {
     ) -> crate::core::SDKResult<GetDepartmentResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/contact/v3/departments/{}", department_id),
+            api_path: format!("/open-apis/contact/v3/departments/{department_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -204,7 +203,7 @@ impl DepartmentService {
     ) -> crate::core::SDKResult<DeleteDepartmentResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/contact/v3/departments/{}", department_id),
+            api_path: format!("/open-apis/contact/v3/departments/{department_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),

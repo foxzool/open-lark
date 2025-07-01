@@ -170,7 +170,7 @@ impl PasswordDeletionResult {
     /// 获取删除时间格式化字符串
     pub fn delete_time_formatted(&self) -> Option<String> {
         self.delete_time
-            .map(|timestamp| format!("删除时间: {}", timestamp))
+            .map(|timestamp| format!("删除时间: {timestamp}"))
     }
 
     /// 是否删除成功
@@ -194,11 +194,11 @@ impl PasswordDeletionResult {
         info.push(self.deletion_status().to_string());
 
         if let Some(ref hint) = self.previous_password_hint {
-            info.push(format!("原密码: {}", hint));
+            info.push(format!("原密码: {hint}"));
         }
 
         if let Some(ref op_id) = self.operation_id {
-            info.push(format!("操作ID: {}", op_id));
+            info.push(format!("操作ID: {op_id}"));
         }
 
         info.join(", ")
@@ -299,7 +299,7 @@ impl DeletePasswordResponse {
         }
 
         if let Some(ref op_id) = self.password_deletion.operation_id {
-            log_parts.push(format!("操作ID: {}", op_id));
+            log_parts.push(format!("操作ID: {op_id}"));
         }
 
         log_parts.join(", ")

@@ -218,7 +218,7 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<ApplicationDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/applications/{}", application_id),
+            api_path: format!("/open-apis/hire/v1/applications/{application_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -424,7 +424,7 @@ impl ApplicationService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/applications/{}/reject", application_id),
+            api_path: format!("/open-apis/hire/v1/applications/{application_id}/reject"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -478,10 +478,7 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<InterviewListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/hire/v1/applications/{}/interviews",
-                application_id
-            ),
+            api_path: format!("/open-apis/hire/v1/applications/{application_id}/interviews"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -584,7 +581,7 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<OfferDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/applications/{}/offer", application_id),
+            api_path: format!("/open-apis/hire/v1/applications/{application_id}/offer"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

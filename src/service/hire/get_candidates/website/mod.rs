@@ -415,7 +415,7 @@ impl WebsiteService {
     ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/website/jobs/{}/unpublish", job_id),
+            api_path: format!("/open-apis/hire/v1/website/jobs/{job_id}/unpublish"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -675,8 +675,7 @@ impl WebsiteService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: format!(
-                "/open-apis/hire/v1/website/applications/{}/convert",
-                website_application_id
+                "/open-apis/hire/v1/website/applications/{website_application_id}/convert"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],

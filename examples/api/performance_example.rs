@@ -96,7 +96,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                             }
                                         }
                                         Err(e) => {
-                                            println!("    ❌ 获取被评估人信息失败: {:?}", e);
+                                            println!("    ❌ 获取被评估人信息失败: {e:?}");
                                         }
                                     }
 
@@ -148,8 +148,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                                         }
                                                         Err(e) => {
                                                             println!(
-                                                                "    ❌ 获取评估项失败: {:?}",
-                                                                e
+                                                                "    ❌ 获取评估项失败: {e:?}"
                                                             );
                                                         }
                                                     }
@@ -157,14 +156,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                             }
                                         }
                                         Err(e) => {
-                                            println!("    ❌ 获取评估模板失败: {:?}", e);
+                                            println!("    ❌ 获取评估模板失败: {e:?}");
                                         }
                                     }
                                 }
                             }
                         }
                         Err(e) => {
-                            println!("    ❌ 获取项目列表失败: {:?}", e);
+                            println!("    ❌ 获取项目列表失败: {e:?}");
                         }
                     }
                 } else {
@@ -175,7 +174,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(e) => {
-            println!("    ❌ 获取周期列表失败: {:?}", e);
+            println!("    ❌ 获取周期列表失败: {e:?}");
         }
     }
 
@@ -201,7 +200,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(e) => {
-            println!("    ❌ 获取指标列表失败: {:?}", e);
+            println!("    ❌ 获取指标列表失败: {e:?}");
         }
     }
 
@@ -227,7 +226,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(e) => {
-            println!("    ❌ 获取指标标签失败: {:?}", e);
+            println!("    ❌ 获取指标标签失败: {e:?}");
         }
     }
 
@@ -253,7 +252,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(e) => {
-            println!("    ❌ 获取任务列表失败: {:?}", e);
+            println!("    ❌ 获取任务列表失败: {e:?}");
         }
     }
 
@@ -284,7 +283,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(e) => {
-            println!("    ⚠️  查询指标详情失败（可能是示例ID不存在）: {:?}", e);
+            println!("    ⚠️  查询指标详情失败（可能是示例ID不存在）: {e:?}");
         }
     }
 
@@ -313,7 +312,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(e) => {
-            println!("    ❌ 获取绩效结果失败: {:?}", e);
+            println!("    ❌ 获取绩效结果失败: {e:?}");
         }
     }
 
@@ -342,7 +341,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(e) => {
-            println!("    ⚠️  查询补充信息失败（可能是示例ID不存在）: {:?}", e);
+            println!("    ⚠️  查询补充信息失败（可能是示例ID不存在）: {e:?}");
         }
     }
 

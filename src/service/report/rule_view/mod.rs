@@ -41,7 +41,7 @@ impl RuleViewService {
     ) -> SDKResult<BaseResponse<RuleViewRemoveResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/report/v1/rule-views/{}", view_id),
+            api_path: format!("/open-apis/report/v1/rule-views/{view_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

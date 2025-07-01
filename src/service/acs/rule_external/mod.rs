@@ -72,7 +72,7 @@ impl RuleExternalService {
     ) -> SDKResult<BaseResponse<RuleGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/acs/v1/rule_external/{}", rule_id),
+            api_path: format!("/open-apis/acs/v1/rule_external/{rule_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -100,7 +100,7 @@ impl RuleExternalService {
     ) -> SDKResult<BaseResponse<RuleDeleteResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/acs/v1/rule_external/{}", rule_id),
+            api_path: format!("/open-apis/acs/v1/rule_external/{rule_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

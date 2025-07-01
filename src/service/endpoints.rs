@@ -73,7 +73,7 @@ impl EndpointHelper {
     pub fn replace_path_params(path: &str, params: &[(&str, &str)]) -> String {
         let mut result = path.to_string();
         for (key, value) in params {
-            let placeholder = format!("{{{}}}", key);
+            let placeholder = format!("{{{key}}}");
             result = result.replace(&placeholder, value);
         }
         result

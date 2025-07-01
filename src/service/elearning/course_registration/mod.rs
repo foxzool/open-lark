@@ -145,10 +145,7 @@ impl CourseRegistrationService {
     ) -> SDKResult<BaseResponse<CourseRegistrationGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/elearning/v2/course_registrations/{}",
-                registration_id
-            ),
+            api_path: format!("/open-apis/elearning/v2/course_registrations/{registration_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -178,10 +175,7 @@ impl CourseRegistrationService {
     ) -> SDKResult<BaseResponse<CourseRegistrationUpdateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: format!(
-                "/open-apis/elearning/v2/course_registrations/{}",
-                registration_id
-            ),
+            api_path: format!("/open-apis/elearning/v2/course_registrations/{registration_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -209,10 +203,7 @@ impl CourseRegistrationService {
     ) -> SDKResult<BaseResponse<CourseRegistrationDeleteResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!(
-                "/open-apis/elearning/v2/course_registrations/{}",
-                registration_id
-            ),
+            api_path: format!("/open-apis/elearning/v2/course_registrations/{registration_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

@@ -57,14 +57,14 @@ impl EventDispatcherHandler {
         if let Some(handler) = self.processor_map.get(event) {
             handler.handle(payload)
         } else {
-            log::warn!("No event processor found for event: {}", event);
+            log::warn!("No event processor found for event: {event}");
             Err(anyhow::anyhow!("event processor {} not found", event))
         }
     }
 
     pub fn do_without_validation(&self, payload: Vec<u8>) -> anyhow::Result<()> {
         let mut context = serde_json::from_slice::<EventContext>(&payload)?;
-        debug!("{:?}", context);
+        debug!("{context:?}");
         if context.schema.is_some() {
             // 解析 v2 事件
             context.schema = Some("p2".to_string());
@@ -114,7 +114,7 @@ impl EventDispatcherHandlerBuilder {
     {
         let key = "p2.im.message.receive_v1".to_string();
         if self.processor_map.contains_key(&key) {
-            return Err(format!("processor already registered, type: {}", key));
+            return Err(format!("processor already registered, type: {key}"));
         }
         let processor = P2ImMessageReceiveV1ProcessorImpl::new(f);
         self.processor_map.insert(key, Box::new(processor));
@@ -127,7 +127,7 @@ impl EventDispatcherHandlerBuilder {
     {
         let key = "p2.im.message.message_read_v1".to_string();
         if self.processor_map.contains_key(&key) {
-            return Err(format!("processor already registered, type: {}", key));
+            return Err(format!("processor already registered, type: {key}"));
         }
         let processor = P2ImMessageReadV1ProcessorImpl::new(f);
         self.processor_map.insert(key, Box::new(processor));
@@ -141,7 +141,7 @@ impl EventDispatcherHandlerBuilder {
     {
         let key = "p2.attendance.user_task.updated_v1".to_string();
         if self.processor_map.contains_key(&key) {
-            return Err(format!("processor already registered, type: {}", key));
+            return Err(format!("processor already registered, type: {key}"));
         }
         let processor = P2AttendanceUserTaskUpdatedV1ProcessorImpl::new(f);
         self.processor_map.insert(key, Box::new(processor));
@@ -158,7 +158,7 @@ impl EventDispatcherHandlerBuilder {
     {
         let key = "p2.attendance.user_task.status_change_v1".to_string();
         if self.processor_map.contains_key(&key) {
-            return Err(format!("processor already registered, type: {}", key));
+            return Err(format!("processor already registered, type: {key}"));
         }
         let processor = P2AttendanceUserTaskStatusChangeV1ProcessorImpl::new(f);
         self.processor_map.insert(key, Box::new(processor));
@@ -178,7 +178,7 @@ impl EventDispatcherHandlerBuilder {
     {
         let key = "p2.payroll.payment_activity.status_changed_v1".to_string();
         if self.processor_map.contains_key(&key) {
-            return Err(format!("processor already registered, type: {}", key));
+            return Err(format!("processor already registered, type: {key}"));
         }
         let processor = P2PayrollPaymentActivityStatusChangedV1ProcessorImpl::new(f);
         self.processor_map.insert(key, Box::new(processor));
@@ -195,7 +195,7 @@ impl EventDispatcherHandlerBuilder {
     {
         let key = "p2.payroll.payment_activity.approved_v1".to_string();
         if self.processor_map.contains_key(&key) {
-            return Err(format!("processor already registered, type: {}", key));
+            return Err(format!("processor already registered, type: {key}"));
         }
         let processor = P2PayrollPaymentActivityApprovedV1ProcessorImpl::new(f);
         self.processor_map.insert(key, Box::new(processor));

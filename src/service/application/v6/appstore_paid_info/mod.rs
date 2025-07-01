@@ -45,8 +45,7 @@ impl AppstorePaidInfoService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/application/v6/appstore_paid_info/{}/users/{}/pricing_plans/{}/check",
-                app_id, user_id, pricing_plan_id
+                "/open-apis/application/v6/appstore_paid_info/{app_id}/users/{user_id}/pricing_plans/{pricing_plan_id}/check"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -75,8 +74,7 @@ impl AppstorePaidInfoService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/application/v6/appstore_paid_info/{}/pricing_plans",
-                app_id
+                "/open-apis/application/v6/appstore_paid_info/{app_id}/pricing_plans"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -96,8 +94,7 @@ impl AppstorePaidInfoService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/application/v6/appstore_paid_info/{}/orders/{}",
-                app_id, order_id
+                "/open-apis/application/v6/appstore_paid_info/{app_id}/orders/{order_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()

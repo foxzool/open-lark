@@ -59,7 +59,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("```rust");
     println!("// 使用增强Builder创建表格");
     println!("let requirements_sheet = CreateSpreadsheetRequest::builder()");
-    println!("    .title(\"{} - 需求分析表\")", product_name);
+    println!("    .title(\"{product_name} - 需求分析表\")");
     println!("    .folder_token(\"product_docs_folder_token\")");
     println!("    .execute(&client.sheets.v3.spreadsheet)");
     println!("    .await?;");
@@ -157,7 +157,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("```rust");
     println!("// 创建产品设计文档");
     println!("let design_doc = CreateDocumentRequest::builder()");
-    println!("    .title(\"{} - 产品设计文档\")", product_name);
+    println!("    .title(\"{product_name} - 产品设计文档\")");
     println!("    .folder_token(\"product_docs_folder_token\")");
     println!("    .execute(&client.docs.v1.document)");
     println!("    .await?;");
@@ -168,7 +168,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("```rust");
     println!("// 创建产品知识库空间");
     println!("let wiki_space = CreateSpaceRequest::builder()");
-    println!("    .name(\"{} - 产品知识库\")", product_name);
+    println!("    .name(\"{product_name} - 产品知识库\")");
     println!("    .description(\"产品开发过程中的所有文档、规范和最佳实践\")");
     println!("    .execute(&client.wiki.v2.space)");
     println!("    .await?;");
@@ -200,7 +200,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("```rust");
     println!("// 创建项目看板");
     println!("let project_board = CreateBoardRequest::builder()");
-    println!("    .title(\"{} - 任务看板\")", product_name);
+    println!("    .title(\"{product_name} - 任务看板\")");
     println!("    .description(\"产品开发任务管理和进度跟踪\")");
     println!("    .execute(&client.board.v1.board)");
     println!("    .await?;");
@@ -358,10 +358,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("        \"header\": {{");
     println!("            \"title\": {{");
     println!("                \"tag\": \"plain_text\",");
-    println!(
-        "                \"content\": \"🚀 {} 项目正式启动！\"",
-        product_name
-    );
+    println!("                \"content\": \"🚀 {product_name} 项目正式启动！\"");
     println!("            }},");
     println!("            \"template\": \"blue\"");
     println!("        }},");
@@ -458,8 +455,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("// 创建搜索策略，让项目相关内容更容易被找到");
     println!("// 为表格设置搜索标签");
     println!("let search_tags = vec![");
-    println!("    \"{}\",", product_name);
-    println!("    \"{}\",", project_code);
+    println!("    \"{product_name}\",");
+    println!("    \"{project_code}\",");
     println!("    \"产品需求\",");
     println!("    \"敏捷开发\",");
     println!("    \"AI平台\"");

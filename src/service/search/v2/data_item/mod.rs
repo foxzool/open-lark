@@ -97,7 +97,7 @@ impl DataItemService {
     ) -> SDKResult<BaseResponse<CreateDataItemResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/search/v2/data_sources/{}/items", data_source_id),
+            api_path: format!("/open-apis/search/v2/data_sources/{data_source_id}/items"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -128,8 +128,7 @@ impl DataItemService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: format!(
-                "/open-apis/search/v2/data_sources/{}/items/batch_create",
-                data_source_id
+                "/open-apis/search/v2/data_sources/{data_source_id}/items/batch_create"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
@@ -157,8 +156,7 @@ impl DataItemService {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: format!(
-                "/open-apis/search/v2/data_sources/{}/items/{}",
-                data_source_id, data_item_id
+                "/open-apis/search/v2/data_sources/{data_source_id}/items/{data_item_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
@@ -185,8 +183,7 @@ impl DataItemService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/search/v2/data_sources/{}/items/{}",
-                data_source_id, data_item_id
+                "/open-apis/search/v2/data_sources/{data_source_id}/items/{data_item_id}"
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()

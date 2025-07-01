@@ -164,7 +164,7 @@ impl AttachmentService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/task/v2/attachments/{}", attachment_guid),
+            api_path: format!("/open-apis/task/v2/attachments/{attachment_guid}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -190,7 +190,7 @@ impl AttachmentService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/task/v2/attachments/{}", attachment_guid),
+            api_path: format!("/open-apis/task/v2/attachments/{attachment_guid}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

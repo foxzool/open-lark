@@ -29,14 +29,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("    主名称: {:?}", entity.main_keys);
                     let description_preview: String = entity.description.chars().take(50).collect();
                     if !description_preview.is_empty() {
-                        println!("    描述: {}...", description_preview);
+                        println!("    描述: {description_preview}...");
                     }
                     println!();
                 }
             }
         }
         Err(e) => {
-            eprintln!("获取词条列表失败: {:?}", e);
+            eprintln!("获取词条列表失败: {e:?}");
         }
     }
 
@@ -61,14 +61,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("  - 词条ID: {}", result.entity.id);
                     println!("    主名称: {:?}", result.entity.main_keys);
                     if let Some(score) = result.score {
-                        println!("    匹配分数: {}", score);
+                        println!("    匹配分数: {score}");
                     }
                     println!();
                 }
             }
         }
         Err(e) => {
-            eprintln!("搜索词条失败: {:?}", e);
+            eprintln!("搜索词条失败: {e:?}");
         }
     }
 
@@ -97,7 +97,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(e) => {
-            eprintln!("精准匹配失败: {:?}", e);
+            eprintln!("精准匹配失败: {e:?}");
         }
     }
 
@@ -128,7 +128,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(e) => {
-            eprintln!("词条高亮失败: {:?}", e);
+            eprintln!("词条高亮失败: {e:?}");
         }
     }
 

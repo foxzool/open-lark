@@ -437,7 +437,7 @@ impl PermissionUpdateResultV2 {
     /// 获取更新时间格式化字符串
     pub fn update_time_formatted(&self) -> Option<String> {
         self.update_time
-            .map(|timestamp| format!("更新时间: {}", timestamp))
+            .map(|timestamp| format!("更新时间: {timestamp}"))
     }
 
     /// 获取过期时间格式化字符串
@@ -511,11 +511,11 @@ impl PermissionUpdateResultV2 {
         }
 
         if let Some(ref access) = self.access_setting {
-            changes.push(format!("访问设置: {}", access));
+            changes.push(format!("访问设置: {access}"));
         }
 
         if let Some(ref scope) = self.share_scope {
-            changes.push(format!("分享范围: {}", scope));
+            changes.push(format!("分享范围: {scope}"));
         }
 
         if let Some(expire_time) = self.expire_time {

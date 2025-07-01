@@ -142,7 +142,7 @@ impl BatchMessageService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/im/v1/batch_messages/{}", batch_message_id),
+            api_path: format!("/open-apis/im/v1/batch_messages/{batch_message_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
@@ -158,10 +158,7 @@ impl BatchMessageService {
     ) -> SDKResult<BaseResponse<GetBatchProgressResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/im/v1/batch_messages/{}/get_progress",
-                batch_message_id
-            ),
+            api_path: format!("/open-apis/im/v1/batch_messages/{batch_message_id}/get_progress"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
@@ -194,10 +191,7 @@ impl BatchMessageService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/im/v1/batch_messages/{}/read_user",
-                batch_message_id
-            ),
+            api_path: format!("/open-apis/im/v1/batch_messages/{batch_message_id}/read_user"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

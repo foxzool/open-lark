@@ -46,7 +46,7 @@ impl UserService {
     ) -> SDKResult<BaseResponse<UserPatchResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/acs/v1/users/{}", user_id),
+            api_path: format!("/open-apis/acs/v1/users/{user_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -74,7 +74,7 @@ impl UserService {
     ) -> SDKResult<BaseResponse<UserGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/acs/v1/users/{}", user_id),
+            api_path: format!("/open-apis/acs/v1/users/{user_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -163,7 +163,7 @@ impl UserService {
     ) -> SDKResult<BaseResponse<FaceImageUploadResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: format!("/open-apis/acs/v1/users/{}/face_image", user_id),
+            api_path: format!("/open-apis/acs/v1/users/{user_id}/face_image"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -191,7 +191,7 @@ impl UserService {
     ) -> SDKResult<BaseResponse<FaceImageDownloadResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/acs/v1/users/{}/face_image", user_id),
+            api_path: format!("/open-apis/acs/v1/users/{user_id}/face_image"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

@@ -491,7 +491,7 @@ impl ExamService {
     ) -> SDKResult<BaseResponse<ExamRecordDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/exam_records/{}", record_id),
+            api_path: format!("/open-apis/hire/v1/exam_records/{record_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -691,7 +691,7 @@ impl ExamService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/exam_records/{}/cancel", record_id),
+            api_path: format!("/open-apis/hire/v1/exam_records/{record_id}/cancel"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -746,7 +746,7 @@ impl ExamService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/exam_records/{}/reschedule", record_id),
+            api_path: format!("/open-apis/hire/v1/exam_records/{record_id}/reschedule"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()

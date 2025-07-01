@@ -42,7 +42,7 @@ impl UnitService {
     ) -> crate::core::SDKResult<PatchUnitResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: format!("/open-apis/contact/v3/units/{}", unit_id),
+            api_path: format!("/open-apis/contact/v3/units/{unit_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -60,7 +60,7 @@ impl UnitService {
     ) -> crate::core::SDKResult<BindDepartmentResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/contact/v3/units/{}/bind_department", unit_id),
+            api_path: format!("/open-apis/contact/v3/units/{unit_id}/bind_department"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -79,7 +79,7 @@ impl UnitService {
     ) -> crate::core::SDKResult<UnbindDepartmentResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/contact/v3/units/{}/unbind_department", unit_id),
+            api_path: format!("/open-apis/contact/v3/units/{unit_id}/unbind_department"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -98,7 +98,7 @@ impl UnitService {
     ) -> crate::core::SDKResult<ListUnitDepartmentsResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/contact/v3/units/{}/list_department", unit_id),
+            api_path: format!("/open-apis/contact/v3/units/{unit_id}/list_department"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -114,7 +114,7 @@ impl UnitService {
     pub async fn get(&self, unit_id: &str) -> crate::core::SDKResult<GetUnitResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/contact/v3/units/{}", unit_id),
+            api_path: format!("/open-apis/contact/v3/units/{unit_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             ..Default::default()
@@ -143,7 +143,7 @@ impl UnitService {
     pub async fn delete(&self, unit_id: &str) -> crate::core::SDKResult<DeleteUnitResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/contact/v3/units/{}", unit_id),
+            api_path: format!("/open-apis/contact/v3/units/{unit_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             ..Default::default()

@@ -78,7 +78,7 @@ async fn demonstrate_api_error_handling() {
     ];
 
     for (code, message, description) in api_errors {
-        println!("\n🔍 {}: ", description);
+        println!("\n🔍 {description}: ");
         let error = LarkAPIError::api_error(code, message, Some("req_123456".to_string()));
 
         // 使用ErrorHelper分析错误
@@ -94,13 +94,13 @@ async fn demonstrate_api_error_handling() {
         );
 
         if let Some(delay) = advice.retry_delay {
-            println!("   建议延迟: {}秒", delay);
+            println!("   建议延迟: {delay}秒");
         }
 
         if !advice.actions.is_empty() {
             println!("   建议操作:");
             for action in &advice.actions {
-                println!("     - {}", action);
+                println!("     - {action}");
             }
         }
     }
@@ -158,7 +158,7 @@ async fn demonstrate_response_analysis() {
     ];
 
     for (code, message, description) in mock_responses {
-        println!("\n🔍 分析{}: ", description);
+        println!("\n🔍 分析{description}: ");
 
         // 创建模拟响应
         let raw_response = open_lark::core::api_resp::RawResponse {
@@ -179,14 +179,14 @@ async fn demonstrate_response_analysis() {
             println!("   ❌ 请求失败");
 
             if let Some(error_code) = response.error_code() {
-                println!("   错误码: {} ({})", error_code, code);
+                println!("   错误码: {error_code} ({code})");
                 println!("   详细描述: {}", error_code.detailed_description());
                 println!("   错误分类: {:?}", error_code.category());
             }
 
             // 获取用户友好的错误信息
             if let Some(friendly_error) = response.user_friendly_error() {
-                println!("   用户友好错误: {}", friendly_error);
+                println!("   用户友好错误: {friendly_error}");
             }
 
             // 获取解决方案建议
@@ -194,14 +194,14 @@ async fn demonstrate_response_analysis() {
             if !solutions.is_empty() {
                 println!("   解决方案:");
                 for solution in solutions {
-                    println!("     - {}", solution);
+                    println!("     - {solution}");
                 }
             }
 
             // 检查重试建议
             if response.is_retryable() {
                 if let Some(delay) = response.suggested_retry_delay() {
-                    println!("   ⏱️ 建议重试延迟: {}秒", delay);
+                    println!("   ⏱️ 建议重试延迟: {delay}秒");
                 }
             }
 
@@ -210,7 +210,7 @@ async fn demonstrate_response_analysis() {
             if !help_links.is_empty() {
                 println!("   📚 相关文档:");
                 for (name, url) in help_links {
-                    println!("     {}: {}", name, url);
+                    println!("     {name}: {url}");
                 }
             }
         }
@@ -223,7 +223,7 @@ fn handle_error_with_enhanced_features(error: &LarkAPIError) {
 
     // 1. 获取用户友好的错误消息
     let user_message = ErrorHelper::format_user_error(error);
-    println!("   用户消息: {}", user_message);
+    println!("   用户消息: {user_message}");
 
     // 2. 创建完整的错误上下文
     let context = ErrorHelper::create_error_context(error);
@@ -255,7 +255,7 @@ fn handle_error_with_enhanced_features(error: &LarkAPIError) {
 
     // 5. 展示帮助链接
     if let Some(help_url) = &context.help_url {
-        println!("   帮助文档: {}", help_url);
+        println!("   帮助文档: {help_url}");
     }
 
     // 6. 使用便利方法打印详细信息

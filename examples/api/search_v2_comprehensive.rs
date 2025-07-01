@@ -63,7 +63,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("✅ 搜索消息成功，但未返回数据");
             }
         }
-        Err(e) => println!("❌ 搜索消息失败: {:?}", e),
+        Err(e) => println!("❌ 搜索消息失败: {e:?}"),
     }
 
     // 示例2: 搜索应用
@@ -97,7 +97,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("✅ 搜索应用成功，但未返回数据");
             }
         }
-        Err(e) => println!("❌ 搜索应用失败: {:?}", e),
+        Err(e) => println!("❌ 搜索应用失败: {e:?}"),
     }
 
     // === 搜索连接器示例 ===
@@ -127,7 +127,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(data) = response.data {
                 println!("✅ 创建数据源成功");
                 let ds_id = data.data_source.id.clone().unwrap_or_default();
-                println!("数据源ID: {}", ds_id);
+                println!("数据源ID: {ds_id}");
                 println!("数据源名称: {}", data.data_source.name.unwrap_or_default());
                 ds_id
             } else {
@@ -136,7 +136,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(e) => {
-            println!("❌ 创建数据源失败: {:?}", e);
+            println!("❌ 创建数据源失败: {e:?}");
             "demo_data_source_id".to_string()
         }
     };
@@ -165,7 +165,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("✅ 获取数据源列表成功，但未返回数据");
             }
         }
-        Err(e) => println!("❌ 获取数据源列表失败: {:?}", e),
+        Err(e) => println!("❌ 获取数据源列表失败: {e:?}"),
     }
 
     // 示例4: 数据范式管理
@@ -196,7 +196,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(data) = response.data {
                 println!("✅ 创建数据范式成功");
                 let s_id = data.schema.id.clone().unwrap_or_default();
-                println!("范式ID: {}", s_id);
+                println!("范式ID: {s_id}");
                 println!("范式名称: {}", data.schema.name.unwrap_or_default());
                 s_id
             } else {
@@ -205,7 +205,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(e) => {
-            println!("❌ 创建数据范式失败: {:?}", e);
+            println!("❌ 创建数据范式失败: {e:?}");
             "demo_schema_id".to_string()
         }
     };
@@ -242,7 +242,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("✅ 创建数据项成功，但未返回详细信息");
             }
         }
-        Err(e) => println!("❌ 创建数据项失败: {:?}", e),
+        Err(e) => println!("❌ 创建数据项失败: {e:?}"),
     }
 
     // 批量创建数据项
@@ -287,7 +287,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("✅ 批量创建数据项成功，但未返回详细信息");
             }
         }
-        Err(e) => println!("❌ 批量创建数据项失败: {:?}", e),
+        Err(e) => println!("❌ 批量创建数据项失败: {e:?}"),
     }
 
     // 示例6: 更新操作
@@ -315,7 +315,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("✅ 更新数据源成功，但未返回详细信息");
             }
         }
-        Err(e) => println!("❌ 更新数据源失败: {:?}", e),
+        Err(e) => println!("❌ 更新数据源失败: {e:?}"),
     }
 
     // 更新数据范式
@@ -349,7 +349,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("✅ 更新数据范式成功，但未返回详细信息");
             }
         }
-        Err(e) => println!("❌ 更新数据范式失败: {:?}", e),
+        Err(e) => println!("❌ 更新数据范式失败: {e:?}"),
     }
 
     // 示例7: 查询操作
@@ -373,7 +373,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("✅ 获取数据源详情成功，但未返回数据");
             }
         }
-        Err(e) => println!("❌ 获取数据源详情失败: {:?}", e),
+        Err(e) => println!("❌ 获取数据源详情失败: {e:?}"),
     }
 
     // 获取数据项详情
@@ -401,7 +401,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("✅ 获取数据项详情成功，但未返回数据");
             }
         }
-        Err(e) => println!("❌ 获取数据项详情失败: {:?}", e),
+        Err(e) => println!("❌ 获取数据项详情失败: {e:?}"),
     }
 
     // 获取数据范式详情
@@ -422,7 +422,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("✅ 获取数据范式详情成功，但未返回数据");
             }
         }
-        Err(e) => println!("❌ 获取数据范式详情失败: {:?}", e),
+        Err(e) => println!("❌ 获取数据范式详情失败: {e:?}"),
     }
 
     // === 清理资源示例 ===
@@ -437,7 +437,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await
     {
         Ok(_) => println!("✅ 删除数据项成功"),
-        Err(e) => println!("❌ 删除数据项失败: {:?}", e),
+        Err(e) => println!("❌ 删除数据项失败: {e:?}"),
     }
 
     // 删除数据范式
@@ -449,7 +449,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await
     {
         Ok(_) => println!("✅ 删除数据范式成功"),
-        Err(e) => println!("❌ 删除数据范式失败: {:?}", e),
+        Err(e) => println!("❌ 删除数据范式失败: {e:?}"),
     }
 
     // 删除数据源
@@ -461,7 +461,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await
     {
         Ok(_) => println!("✅ 删除数据源成功"),
-        Err(e) => println!("❌ 删除数据源失败: {:?}", e),
+        Err(e) => println!("❌ 删除数据源失败: {e:?}"),
     }
 
     println!("\n=== 搜索 v2 API 综合示例完成 ===");

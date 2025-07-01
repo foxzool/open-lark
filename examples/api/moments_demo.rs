@@ -41,10 +41,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(data) = &response.data {
                 println!("帖子详情:");
                 if let Some(title) = &data.post.title {
-                    println!("  标题: {}", title);
+                    println!("  标题: {title}");
                 }
                 if let Some(author_name) = &data.post.author_name {
-                    println!("  作者: {}", author_name);
+                    println!("  作者: {author_name}");
                 }
                 if let Some(content) = &data.post.content {
                     println!(
@@ -55,13 +55,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 if let Some(statistics) = &data.post.statistics {
                     println!("  统计数据:");
                     if let Some(comment_count) = statistics.comment_count {
-                        println!("    评论数: {}", comment_count);
+                        println!("    评论数: {comment_count}");
                     }
                     if let Some(like_count) = statistics.like_count {
-                        println!("    点赞数: {}", like_count);
+                        println!("    点赞数: {like_count}");
                     }
                     if let Some(view_count) = statistics.view_count {
-                        println!("    阅读数: {}", view_count);
+                        println!("    阅读数: {view_count}");
                     }
                 }
                 if let Some(media_list) = &data.post.media_list {
@@ -70,7 +70,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(err) => {
-            error!("❌ 获取帖子信息失败: {:?}", err);
+            error!("❌ 获取帖子信息失败: {err:?}");
         }
     }
 
@@ -86,10 +86,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             info!("🎉 收到帖子发布事件");
             if let Some(post) = &event.post {
                 if let Some(title) = &post.title {
-                    info!("  新帖子标题: {}", title);
+                    info!("  新帖子标题: {title}");
                 }
                 if let Some(author_name) = &post.author_name {
-                    info!("  发布者: {}", author_name);
+                    info!("  发布者: {author_name}");
                 }
             }
         }
@@ -98,7 +98,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             info!("🗑️ 收到帖子删除事件");
             if let Some(post) = &event.post {
                 if let Some(post_id) = &post.post_id {
-                    info!("  删除的帖子ID: {}", post_id);
+                    info!("  删除的帖子ID: {post_id}");
                 }
             }
         }
@@ -109,10 +109,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             info!("💬 收到评论发布事件");
             if let Some(comment) = &event.comment {
                 if let Some(content) = &comment.content {
-                    info!("  评论内容: {}", content);
+                    info!("  评论内容: {content}");
                 }
                 if let Some(author_name) = &comment.author_name {
-                    info!("  评论者: {}", author_name);
+                    info!("  评论者: {author_name}");
                 }
             }
         }
@@ -121,7 +121,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             info!("🗑️ 收到评论删除事件");
             if let Some(comment) = &event.comment {
                 if let Some(comment_id) = &comment.comment_id {
-                    info!("  删除的评论ID: {}", comment_id);
+                    info!("  删除的评论ID: {comment_id}");
                 }
             }
         }
@@ -132,10 +132,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             info!("👍 收到表情互动事件");
             if let Some(reaction) = &event.reaction {
                 if let Some(reaction_type) = &reaction.reaction_type {
-                    info!("  表情类型: {}", reaction_type);
+                    info!("  表情类型: {reaction_type}");
                 }
                 if let Some(user_name) = &reaction.user_name {
-                    info!("  互动用户: {}", user_name);
+                    info!("  互动用户: {user_name}");
                 }
             }
         }
@@ -144,7 +144,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             info!("👎 收到取消表情互动事件");
             if let Some(reaction) = &event.reaction {
                 if let Some(reaction_type) = &reaction.reaction_type {
-                    info!("  取消的表情类型: {}", reaction_type);
+                    info!("  取消的表情类型: {reaction_type}");
                 }
             }
         }
@@ -154,14 +154,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         fn handle_post_statistics_updated(&self, event: PostStatisticsEvent) {
             info!("📊 收到帖子统计数据变更事件");
             if let Some(post_id) = &event.post_id {
-                info!("  帖子ID: {}", post_id);
+                info!("  帖子ID: {post_id}");
             }
             if let Some(statistics) = &event.statistics {
                 if let Some(comment_count) = statistics.comment_count {
-                    info!("  当前评论数: {}", comment_count);
+                    info!("  当前评论数: {comment_count}");
                 }
                 if let Some(like_count) = statistics.like_count {
-                    info!("  当前点赞数: {}", like_count);
+                    info!("  当前点赞数: {like_count}");
                 }
             }
         }

@@ -43,7 +43,7 @@ impl UserService {
         &self,
         search_user_request: SearchUserRequest,
         option: Option<RequestOption>,
-    ) -> SearchUserIterator {
+    ) -> SearchUserIterator<'_> {
         SearchUserIterator {
             user_service: self,
             request: search_user_request,
@@ -194,7 +194,7 @@ impl SearchUserIterator<'_> {
                 None => None,
             },
             Err(e) => {
-                error!("Error: {:?}", e);
+                error!("Error: {e:?}");
                 None
             }
         }

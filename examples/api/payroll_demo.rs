@@ -25,63 +25,63 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("\n📋 1. 查询薪资组列表");
     match query_paygroups(&client).await {
         Ok(_) => println!("✅ 薪资组查询成功"),
-        Err(e) => println!("❌ 薪资组查询失败: {}", e),
+        Err(e) => println!("❌ 薪资组查询失败: {e}"),
     }
 
     // 2. 查询算薪项列表
     println!("\n💰 2. 查询算薪项列表");
     match query_acct_items(&client).await {
         Ok(_) => println!("✅ 算薪项查询成功"),
-        Err(e) => println!("❌ 算薪项查询失败: {}", e),
+        Err(e) => println!("❌ 算薪项查询失败: {e}"),
     }
 
     // 3. 查询发薪活动列表
     println!("\n📊 3. 查询发薪活动列表");
     match query_payment_activities(&client).await {
         Ok(_) => println!("✅ 发薪活动查询成功"),
-        Err(e) => println!("❌ 发薪活动查询失败: {}", e),
+        Err(e) => println!("❌ 发薪活动查询失败: {e}"),
     }
 
     // 4. 查询发薪明细
     println!("\n📄 4. 查询发薪明细");
     match query_payment_details(&client).await {
         Ok(_) => println!("✅ 发薪明细查询成功"),
-        Err(e) => println!("❌ 发薪明细查询失败: {}", e),
+        Err(e) => println!("❌ 发薪明细查询失败: {e}"),
     }
 
     // 5. 查询外部数据源配置
     println!("\n🔗 5. 查询外部数据源配置");
     match query_datasources(&client).await {
         Ok(_) => println!("✅ 外部数据源查询成功"),
-        Err(e) => println!("❌ 外部数据源查询失败: {}", e),
+        Err(e) => println!("❌ 外部数据源查询失败: {e}"),
     }
 
     // 6. 创建外部算薪数据
     println!("\n📝 6. 创建外部算薪数据");
     match create_datasource_records(&client).await {
         Ok(_) => println!("✅ 外部算薪数据创建成功"),
-        Err(e) => println!("❌ 外部算薪数据创建失败: {}", e),
+        Err(e) => println!("❌ 外部算薪数据创建失败: {e}"),
     }
 
     // 7. 查询成本分摊方案
     println!("\n📈 7. 查询成本分摊方案");
     match query_cost_allocation_plans(&client).await {
         Ok(_) => println!("✅ 成本分摊方案查询成功"),
-        Err(e) => println!("❌ 成本分摊方案查询失败: {}", e),
+        Err(e) => println!("❌ 成本分摊方案查询失败: {e}"),
     }
 
     // 8. 查询成本分摊报表
     println!("\n📋 8. 查询成本分摊报表");
     match query_cost_allocation_reports(&client).await {
         Ok(_) => println!("✅ 成本分摊报表查询成功"),
-        Err(e) => println!("❌ 成本分摊报表查询失败: {}", e),
+        Err(e) => println!("❌ 成本分摊报表查询失败: {e}"),
     }
 
     // 9. 封存发薪活动演示
     println!("\n🗃️ 9. 封存发薪活动演示");
     match archive_payment_activity(&client).await {
         Ok(_) => println!("✅ 发薪活动封存演示成功"),
-        Err(e) => println!("❌ 发薪活动封存演示失败: {}", e),
+        Err(e) => println!("❌ 发薪活动封存演示失败: {e}"),
     }
 
     println!("\n🎉 发薪系统 API 演示完成！");
@@ -111,11 +111,11 @@ async fn query_paygroups(client: &LarkClient) -> Result<(), Box<dyn std::error::
             println!("       类型: {}", paygroup.paygroup_type);
             println!("       状态: {}", paygroup.status);
             if let Some(count) = paygroup.employee_count {
-                println!("       员工数: {}", count);
+                println!("       员工数: {count}");
             }
             if let Some(desc) = &paygroup.description {
                 if let Some(desc_text) = &desc.zh_cn {
-                    println!("       描述: {}", desc_text);
+                    println!("       描述: {desc_text}");
                 }
             }
             println!();
@@ -148,7 +148,7 @@ async fn query_acct_items(client: &LarkClient) -> Result<(), Box<dyn std::error:
             println!("       名称: {:?}", item.item_name.zh_cn);
             println!("       类型: {}", item.item_type);
             if let Some(category) = &item.category {
-                println!("       分类: {}", category);
+                println!("       分类: {category}");
             }
             println!("       个税相关: {}", item.tax_related);
             println!("       社保相关: {}", item.social_security_related);
@@ -189,7 +189,7 @@ async fn query_payment_activities(client: &LarkClient) -> Result<(), Box<dyn std
                 activity.period_start, activity.period_end
             );
             if let Some(count) = activity.employee_count {
-                println!("       员工数: {}", count);
+                println!("       员工数: {count}");
             }
             if let Some(amount) = &activity.total_amount {
                 println!(
@@ -234,7 +234,7 @@ async fn query_payment_details(client: &LarkClient) -> Result<(), Box<dyn std::e
                         println!("       姓名: {:?}", name.zh_cn);
                     }
                     if let Some(number) = &detail.employee_number {
-                        println!("       工号: {}", number);
+                        println!("       工号: {number}");
                     }
                     if let Some(total) = &detail.total_amount {
                         println!(
@@ -261,7 +261,7 @@ async fn query_payment_details(client: &LarkClient) -> Result<(), Box<dyn std::e
             }
         }
         Err(e) => {
-            println!("  ⚠️ 发薪明细查询失败 (可能是示例活动ID不存在): {}", e);
+            println!("  ⚠️ 发薪明细查询失败 (可能是示例活动ID不存在): {e}");
         }
     }
 
@@ -353,7 +353,7 @@ async fn create_datasource_records(client: &LarkClient) -> Result<(), Box<dyn st
             if let Some(data) = &response.data {
                 println!("  ✅ 保存结果: {}", data.success);
                 if let Some(count) = data.record_count {
-                    println!("  📊 成功保存记录数: {}", count);
+                    println!("  📊 成功保存记录数: {count}");
                 }
                 if let Some(failed) = &data.failed_records {
                     println!("  ❌ 失败记录数: {}", failed.len());
@@ -367,7 +367,7 @@ async fn create_datasource_records(client: &LarkClient) -> Result<(), Box<dyn st
             }
         }
         Err(e) => {
-            println!("  ⚠️ 外部算薪数据创建失败 (可能是示例ID不存在): {}", e);
+            println!("  ⚠️ 外部算薪数据创建失败 (可能是示例ID不存在): {e}");
         }
     }
 
@@ -399,7 +399,7 @@ async fn query_cost_allocation_plans(
             println!("       类型: {}", plan.plan_type);
             println!("       状态: {}", plan.status);
             if let Some(effective) = &plan.effective_date {
-                println!("       生效日期: {}", effective);
+                println!("       生效日期: {effective}");
             }
             println!("       分摊规则数: {}", plan.allocation_rules.len());
             for (j, rule) in plan.allocation_rules.iter().enumerate() {
@@ -493,15 +493,15 @@ async fn archive_payment_activity(client: &LarkClient) -> Result<(), Box<dyn std
             if let Some(data) = &response.data {
                 println!("  ✅ 封存结果: {}", data.success);
                 if let Some(time) = &data.archived_time {
-                    println!("  📅 封存时间: {}", time);
+                    println!("  📅 封存时间: {time}");
                 }
                 if let Some(msg) = &data.message {
-                    println!("  💬 消息: {}", msg);
+                    println!("  💬 消息: {msg}");
                 }
             }
         }
         Err(e) => {
-            println!("  ⚠️ 发薪活动封存失败 (可能是示例活动ID不存在): {}", e);
+            println!("  ⚠️ 发薪活动封存失败 (可能是示例活动ID不存在): {e}");
         }
     }
 

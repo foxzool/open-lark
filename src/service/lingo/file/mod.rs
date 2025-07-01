@@ -72,7 +72,7 @@ impl FileService {
     ) -> SDKResult<BaseResponse<FileDownloadResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/lingo/v1/file/download/{}", file_token),
+            api_path: format!("/open-apis/lingo/v1/file/download/{file_token}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

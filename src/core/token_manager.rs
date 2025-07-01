@@ -237,7 +237,7 @@ impl TokenManager {
                 )
                 .await
                 {
-                    log::warn!("⚠️ Token预热过程中发生错误: {:?}", e);
+                    log::warn!("⚠️ Token预热过程中发生错误: {e:?}");
                     // 记录错误但继续运行
                 }
             }
@@ -288,7 +288,7 @@ impl TokenManager {
         {
             log::info!("🔄 开始预热 app access token");
             if let Err(e) = Self::preheat_app_token(cache, config, app_ticket_manager).await {
-                log::warn!("❌ App token预热失败: {:?}", e);
+                log::warn!("❌ App token预热失败: {e:?}");
                 metrics.refresh_failures.fetch_add(1, Ordering::Relaxed);
             } else {
                 log::info!("✅ App token预热成功");
@@ -312,15 +312,15 @@ impl TokenManager {
                 )
                 .await
                 {
-                    log::info!("🔄 开始预热 tenant access token: {}", tenant_key);
+                    log::info!("🔄 开始预热 tenant access token: {tenant_key}");
                     if let Err(e) =
                         Self::preheat_tenant_token(cache, config, &tenant_key, app_ticket_manager)
                             .await
                     {
-                        log::warn!("❌ Tenant token预热失败 ({}): {:?}", tenant_key, e);
+                        log::warn!("❌ Tenant token预热失败 ({tenant_key}): {e:?}");
                         metrics.refresh_failures.fetch_add(1, Ordering::Relaxed);
                     } else {
-                        log::info!("✅ Tenant token预热成功: {}", tenant_key);
+                        log::info!("✅ Tenant token预热成功: {tenant_key}");
                         metrics.refresh_success.fetch_add(1, Ordering::Relaxed);
                         preheated_count += 1;
                     }
@@ -329,7 +329,7 @@ impl TokenManager {
         }
 
         if preheated_count > 0 {
-            log::info!("🎯 本轮预热完成，共刷新了 {} 个token", preheated_count);
+            log::info!("🎯 本轮预热完成，共刷新了 {preheated_count} 个token");
         } else {
             log::debug!("✨ 所有token状态良好，无需预热");
         }
@@ -355,7 +355,7 @@ impl TokenManager {
 
         // 如果token不存在，需要预热
         if cache_read.get(key).is_none_or(|token| token.is_empty()) {
-            log::debug!("🔍 Token {} 不存在，需要预热", key);
+            log::debug!("🔍 Token {key} 不存在，需要预热");
             return true;
         }
 
@@ -365,10 +365,7 @@ impl TokenManager {
             // 如果剩余时间少于阈值，需要预热
             if remaining_seconds < threshold_seconds {
                 log::debug!(
-                    "🔍 Token {} 将在{}秒后过期，阈值{}秒，需要预热",
-                    key,
-                    remaining_seconds,
-                    threshold_seconds
+                    "🔍 Token {key} 将在{remaining_seconds}秒后过期，阈值{threshold_seconds}秒，需要预热"
                 );
                 return true;
             }
@@ -788,11 +785,11 @@ impl TokenManager {
 }
 
 fn app_access_token_key(app_id: &str) -> String {
-    format!("{}-{}", APP_ACCESS_TOKEN_KEY_PREFIX, app_id)
+    format!("{APP_ACCESS_TOKEN_KEY_PREFIX}-{app_id}")
 }
 
 fn tenant_access_token_key(app_id: &str, tenant_key: &str) -> String {
-    format!("{}-{}-{}", APP_ACCESS_TOKEN_KEY_PREFIX, app_id, tenant_key)
+    format!("{APP_ACCESS_TOKEN_KEY_PREFIX}-{app_id}-{tenant_key}")
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -867,7 +864,7 @@ mod tests {
     fn test_app_access_token_key_generation() {
         let app_id = "test_app_id";
         let key = app_access_token_key(app_id);
-        assert_eq!(key, format!("{}-{}", APP_ACCESS_TOKEN_KEY_PREFIX, app_id));
+        assert_eq!(key, format!("{APP_ACCESS_TOKEN_KEY_PREFIX}-{app_id}"));
     }
 
     #[test]
@@ -877,7 +874,7 @@ mod tests {
         let key = tenant_access_token_key(app_id, tenant_key);
         assert_eq!(
             key,
-            format!("{}-{}-{}", APP_ACCESS_TOKEN_KEY_PREFIX, app_id, tenant_key)
+            format!("{APP_ACCESS_TOKEN_KEY_PREFIX}-{app_id}-{tenant_key}")
         );
     }
 
@@ -922,11 +919,10 @@ mod tests {
 
         // 这里我们期望的是网络错误或API错误，而不是"cache error"
         if let Err(error) = result {
-            let error_msg = format!("{:?}", error);
+            let error_msg = format!("{error:?}");
             assert!(
                 !error_msg.contains("cache error"),
-                "应该不再出现'cache error'，而是实际的API调用错误: {}",
-                error_msg
+                "应该不再出现'cache error'，而是实际的API调用错误: {error_msg}"
             );
         }
     }

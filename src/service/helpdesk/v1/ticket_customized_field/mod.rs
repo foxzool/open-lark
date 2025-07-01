@@ -190,10 +190,7 @@ impl TicketCustomizedFieldService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!(
-                "/open-apis/helpdesk/v1/ticket_customized_fields/{}",
-                field_id
-            ),
+            api_path: format!("/open-apis/helpdesk/v1/ticket_customized_fields/{field_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -235,10 +232,7 @@ impl TicketCustomizedFieldService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!(
-                "/open-apis/helpdesk/v1/ticket_customized_fields/{}",
-                field_id
-            ),
+            api_path: format!("/open-apis/helpdesk/v1/ticket_customized_fields/{field_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -279,10 +273,7 @@ impl TicketCustomizedFieldService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/helpdesk/v1/ticket_customized_fields/{}",
-                field_id
-            ),
+            api_path: format!("/open-apis/helpdesk/v1/ticket_customized_fields/{field_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

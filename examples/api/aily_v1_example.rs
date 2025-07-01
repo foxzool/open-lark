@@ -34,7 +34,7 @@ async fn main() -> SDKResult<()> {
         .await
     {
         Ok(response) => {
-            println!("创建会话成功: {:?}", response);
+            println!("创建会话成功: {response:?}");
             let session_id = "demo_session_id".to_string(); // 使用示例会话ID
 
             // 2. 消息管理示例
@@ -54,7 +54,7 @@ async fn main() -> SDKResult<()> {
                 .await
             {
                 Ok(msg_response) => {
-                    println!("发送消息成功: {:?}", msg_response);
+                    println!("发送消息成功: {msg_response:?}");
 
                     // 3. 运行管理示例
                     println!("\n3. 创建智能伙伴运行");
@@ -69,7 +69,7 @@ async fn main() -> SDKResult<()> {
 
                     match client.aily.run.create_run(run_request, None).await {
                         Ok(run_response) => {
-                            println!("创建运行成功: {:?}", run_response);
+                            println!("创建运行成功: {run_response:?}");
                             let _run_id = "demo_run_id".to_string(); // 使用示例运行ID
 
                             // 4. 技能管理示例
@@ -88,10 +88,10 @@ async fn main() -> SDKResult<()> {
                                 .await
                             {
                                 Ok(skills_response) => {
-                                    println!("技能列表查询成功: {:?}", skills_response);
+                                    println!("技能列表查询成功: {skills_response:?}");
                                 }
                                 Err(e) => {
-                                    println!("技能列表查询失败: {:?}", e);
+                                    println!("技能列表查询失败: {e:?}");
                                 }
                             }
 
@@ -113,10 +113,10 @@ async fn main() -> SDKResult<()> {
                                 .await
                             {
                                 Ok(knowledge_response) => {
-                                    println!("知识问答成功: {:?}", knowledge_response);
+                                    println!("知识问答成功: {knowledge_response:?}");
                                 }
                                 Err(e) => {
-                                    println!("知识问答失败: {:?}", e);
+                                    println!("知识问答失败: {e:?}");
                                 }
                             }
 
@@ -135,25 +135,25 @@ async fn main() -> SDKResult<()> {
                                 .await
                             {
                                 Ok(session_response) => {
-                                    println!("查询会话成功: {:?}", session_response);
+                                    println!("查询会话成功: {session_response:?}");
                                 }
                                 Err(e) => {
-                                    println!("查询会话失败: {:?}", e);
+                                    println!("查询会话失败: {e:?}");
                                 }
                             }
                         }
                         Err(e) => {
-                            println!("创建运行失败: {:?}", e);
+                            println!("创建运行失败: {e:?}");
                         }
                     }
                 }
                 Err(e) => {
-                    println!("发送消息失败: {:?}", e);
+                    println!("发送消息失败: {e:?}");
                 }
             }
         }
         Err(e) => {
-            println!("创建会话失败: {:?}", e);
+            println!("创建会话失败: {e:?}");
         }
     }
 
