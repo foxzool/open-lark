@@ -1,4 +1,25 @@
-// 预定义模块，导出最常用的类型和 trait，方便用户通过 `use open_lark::prelude::*;` 一次性导入
+//! 预定义模块，导出最常用的类型和trait
+//!
+//! 通过 `use open_lark::prelude::*;` 可以一次性导入所有常用的类型和trait，
+//! 包括客户端、配置、错误类型、消息类型和事件类型等。
+//!
+//! # 示例
+//!
+//! ```rust
+//! use open_lark::prelude::*;
+//!
+//! // 创建客户端
+//! let client = LarkClient::builder("app_id", "app_secret")
+//!     .with_app_type(AppType::SelfBuilt)
+//!     .build();
+//!
+//! // 创建消息
+//! let message = CreateMessageRequestBody::builder()
+//!     .receive_id("user_id")
+//!     .msg_type("text")
+//!     .content("{\"text\":\"Hello, World!\"}")
+//!     .build();
+//! ```
 
 pub use crate::{
     client::{LarkClient, LarkClientBuilder},

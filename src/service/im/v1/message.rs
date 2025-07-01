@@ -471,8 +471,36 @@ impl ApiResponseTrait for ListMessageRespData {
     }
 }
 
+/// 发送消息的通用trait
+///
+/// 所有可以作为消息内容发送的类型都应该实现此trait。
+/// 它定义了获取消息类型和内容的标准接口。
+///
+/// # 实现
+///
+/// - `MessageText`: 文本消息
+/// - `MessagePost`: 富文本消息  
+/// - `MessageImage`: 图片消息
+/// - `MessageCardTemplate`: 卡片模板消息
+///
+/// # 示例
+///
+/// ```rust
+/// use open_lark::service::im::v1::message::{MessageText, SendMessageTrait};
+///
+/// let text_msg = MessageText::new("Hello, World!");
+/// assert_eq!(text_msg.msg_type(), "text");
+/// assert_eq!(text_msg.content(), "{\"text\":\"Hello, World!\"}");
+/// ```
 pub trait SendMessageTrait {
+    /// 获取消息类型
+    ///
+    /// 返回消息的类型标识，如 "text"、"post"、"image" 等
     fn msg_type(&self) -> String;
+
+    /// 获取消息内容
+    ///
+    /// 返回序列化后的消息内容JSON字符串
     fn content(&self) -> String;
 }
 
