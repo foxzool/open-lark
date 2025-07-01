@@ -133,8 +133,7 @@ pub struct AddGroupMemberRequest {
     pub member_type: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct AddGroupMemberResponse {}
 
 impl ApiResponseTrait for AddGroupMemberResponse {
@@ -143,14 +142,12 @@ impl ApiResponseTrait for AddGroupMemberResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchAddGroupMembersRequest {
     pub members: Vec<GroupMemberInfo>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchAddGroupMembersResponse {
     pub results: Vec<GroupMemberResult>,
 }
@@ -160,7 +157,6 @@ impl ApiResponseTrait for BatchAddGroupMembersResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListGroupMembersRequest {
@@ -174,8 +170,7 @@ pub struct ListGroupMembersRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ListGroupMembersResponse {
     pub memberlist: Vec<GroupMember>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -190,7 +185,6 @@ impl ApiResponseTrait for ListGroupMembersResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RemoveGroupMemberRequest {
     pub member_id: String,
@@ -200,8 +194,7 @@ pub struct RemoveGroupMemberRequest {
     pub member_type: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct RemoveGroupMemberResponse {}
 
 impl ApiResponseTrait for RemoveGroupMemberResponse {
@@ -210,14 +203,12 @@ impl ApiResponseTrait for RemoveGroupMemberResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchRemoveGroupMembersRequest {
     pub members: Vec<GroupMemberInfo>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchRemoveGroupMembersResponse {
     pub results: Vec<GroupMemberResult>,
 }
@@ -227,4 +218,3 @@ impl ApiResponseTrait for BatchRemoveGroupMembersResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-

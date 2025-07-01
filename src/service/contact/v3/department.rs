@@ -236,8 +236,7 @@ pub struct CreateDepartmentRequest {
 }
 
 /// 创建部门响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CreateDepartmentResponse {
     /// 部门信息
     pub department: Department,
@@ -248,7 +247,6 @@ impl ApiResponseTrait for CreateDepartmentResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 /// 修改部门请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -264,8 +262,7 @@ pub struct PatchDepartmentRequest {
 }
 
 /// 修改部门响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct PatchDepartmentResponse {
     /// 部门信息
     pub department: Department,
@@ -276,7 +273,6 @@ impl ApiResponseTrait for PatchDepartmentResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 /// 更新部门请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -292,8 +288,7 @@ pub struct UpdateDepartmentRequest {
 }
 
 /// 更新部门响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UpdateDepartmentResponse {
     /// 部门信息
     pub department: Department,
@@ -304,7 +299,6 @@ impl ApiResponseTrait for UpdateDepartmentResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 /// 更新部门ID请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -317,8 +311,7 @@ pub struct UpdateDepartmentIdRequest {
 }
 
 /// 更新部门ID响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UpdateDepartmentIdResponse {}
 
 impl ApiResponseTrait for UpdateDepartmentIdResponse {
@@ -326,7 +319,6 @@ impl ApiResponseTrait for UpdateDepartmentIdResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 /// 获取部门请求
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -340,8 +332,7 @@ pub struct GetDepartmentRequest {
 }
 
 /// 获取部门响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetDepartmentResponse {
     /// 部门信息
     pub department: Department,
@@ -352,7 +343,6 @@ impl ApiResponseTrait for GetDepartmentResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 /// 批量获取部门请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -368,8 +358,7 @@ pub struct BatchGetDepartmentsRequest {
 }
 
 /// 批量获取部门响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchGetDepartmentsResponse {
     /// 部门列表
     pub items: Vec<Department>,
@@ -380,7 +369,6 @@ impl ApiResponseTrait for BatchGetDepartmentsResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 /// 获取子部门列表请求
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -406,8 +394,7 @@ pub struct GetChildrenDepartmentsRequest {
 }
 
 /// 获取子部门列表响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetChildrenDepartmentsResponse {
     /// 部门列表
     pub items: Vec<Department>,
@@ -425,7 +412,6 @@ impl ApiResponseTrait for GetChildrenDepartmentsResponse {
     }
 }
 
-
 /// 获取父部门请求
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct GetParentDepartmentRequest {
@@ -441,8 +427,7 @@ pub struct GetParentDepartmentRequest {
 }
 
 /// 获取父部门响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetParentDepartmentResponse {
     /// 部门列表
     pub items: Vec<Department>,
@@ -453,7 +438,6 @@ impl ApiResponseTrait for GetParentDepartmentResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 /// 搜索部门请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -475,8 +459,7 @@ pub struct SearchDepartmentsRequest {
 }
 
 /// 搜索部门响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct SearchDepartmentsResponse {
     /// 部门列表
     pub items: Vec<Department>,
@@ -494,7 +477,6 @@ impl ApiResponseTrait for SearchDepartmentsResponse {
     }
 }
 
-
 /// 删除部门请求
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct DeleteDepartmentRequest {
@@ -504,8 +486,7 @@ pub struct DeleteDepartmentRequest {
 }
 
 /// 删除部门响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DeleteDepartmentResponse {}
 
 impl ApiResponseTrait for DeleteDepartmentResponse {
@@ -513,4 +494,3 @@ impl ApiResponseTrait for DeleteDepartmentResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-

@@ -110,8 +110,7 @@ pub struct CreateJobLevelRequest {
     pub job_level: JobLevel,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CreateJobLevelResponse {
     pub job_level: JobLevel,
 }
@@ -122,14 +121,12 @@ impl ApiResponseTrait for CreateJobLevelResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateJobLevelRequest {
     pub job_level: JobLevel,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UpdateJobLevelResponse {
     pub job_level: JobLevel,
 }
@@ -140,9 +137,7 @@ impl ApiResponseTrait for UpdateJobLevelResponse {
     }
 }
 
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetJobLevelResponse {
     pub job_level: JobLevel,
 }
@@ -153,7 +148,6 @@ impl ApiResponseTrait for GetJobLevelResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListJobLevelsRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -162,8 +156,7 @@ pub struct ListJobLevelsRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ListJobLevelsResponse {
     pub items: Vec<JobLevel>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -178,9 +171,7 @@ impl ApiResponseTrait for ListJobLevelsResponse {
     }
 }
 
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DeleteJobLevelResponse {}
 
 impl ApiResponseTrait for DeleteJobLevelResponse {
@@ -188,4 +179,3 @@ impl ApiResponseTrait for DeleteJobLevelResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-

@@ -323,8 +323,7 @@ pub struct CreateUserRequest {
 }
 
 /// 创建用户响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CreateUserResponse {
     /// 用户信息
     pub user: User,
@@ -335,7 +334,6 @@ impl ApiResponseTrait for CreateUserResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 /// 修改用户请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -351,8 +349,7 @@ pub struct PatchUserRequest {
 }
 
 /// 修改用户响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct PatchUserResponse {
     /// 用户信息
     pub user: User,
@@ -363,7 +360,6 @@ impl ApiResponseTrait for PatchUserResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 /// 更新用户ID请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -376,8 +372,7 @@ pub struct UpdateUserIdRequest {
 }
 
 /// 更新用户ID响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UpdateUserIdResponse {}
 
 impl ApiResponseTrait for UpdateUserIdResponse {
@@ -385,7 +380,6 @@ impl ApiResponseTrait for UpdateUserIdResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 /// 获取用户请求
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -399,8 +393,7 @@ pub struct GetUserRequest {
 }
 
 /// 获取用户响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetUserResponse {
     /// 用户信息
     pub user: User,
@@ -411,7 +404,6 @@ impl ApiResponseTrait for GetUserResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 /// 批量获取用户请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -427,8 +419,7 @@ pub struct BatchGetUsersRequest {
 }
 
 /// 批量获取用户响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchGetUsersResponse {
     /// 用户列表
     pub items: Vec<User>,
@@ -439,7 +430,6 @@ impl ApiResponseTrait for BatchGetUsersResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 /// 按部门查找用户请求
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -462,8 +452,7 @@ pub struct FindUsersByDepartmentRequest {
 }
 
 /// 按部门查找用户响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct FindUsersByDepartmentResponse {
     /// 用户列表
     pub items: Vec<User>,
@@ -481,7 +470,6 @@ impl ApiResponseTrait for FindUsersByDepartmentResponse {
     }
 }
 
-
 /// 批量获取用户ID请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BatchGetUserIdRequest {
@@ -497,8 +485,7 @@ pub struct BatchGetUserIdRequest {
 }
 
 /// 批量获取用户ID响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BatchGetUserIdResponse {
     /// 用户列表
     pub user_list: Vec<UserIdInfo>,
@@ -509,7 +496,6 @@ impl ApiResponseTrait for BatchGetUserIdResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 /// 用户ID信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -545,8 +531,7 @@ pub struct SearchUsersRequest {
 }
 
 /// 搜索用户响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct SearchUsersResponse {
     /// 用户列表
     pub items: Vec<User>,
@@ -564,7 +549,6 @@ impl ApiResponseTrait for SearchUsersResponse {
     }
 }
 
-
 /// 删除用户请求
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct DeleteUserRequest {
@@ -577,8 +561,7 @@ pub struct DeleteUserRequest {
 }
 
 /// 删除用户响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DeleteUserResponse {}
 
 impl ApiResponseTrait for DeleteUserResponse {
@@ -586,7 +569,6 @@ impl ApiResponseTrait for DeleteUserResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 /// 恢复用户请求
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -600,8 +582,7 @@ pub struct ResurrectUserRequest {
 }
 
 /// 恢复用户响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ResurrectUserResponse {
     /// 用户信息
     pub user: User,
@@ -612,7 +593,6 @@ impl ApiResponseTrait for ResurrectUserResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 /// 获取用户列表请求
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -632,8 +612,7 @@ pub struct ListUsersRequest {
 }
 
 /// 获取用户列表响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ListUsersResponse {
     /// 用户列表
     pub items: Vec<User>,
@@ -650,4 +629,3 @@ impl ApiResponseTrait for ListUsersResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
