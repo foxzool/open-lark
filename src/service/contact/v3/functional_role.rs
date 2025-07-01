@@ -120,8 +120,7 @@ pub struct CreateFunctionalRoleRequest {
     pub role_name: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CreateFunctionalRoleResponse {
     pub role_id: String,
 }
@@ -132,14 +131,12 @@ impl ApiResponseTrait for CreateFunctionalRoleResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateFunctionalRoleRequest {
     pub role_name: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UpdateFunctionalRoleResponse {}
 
 impl ApiResponseTrait for UpdateFunctionalRoleResponse {
@@ -148,9 +145,7 @@ impl ApiResponseTrait for UpdateFunctionalRoleResponse {
     }
 }
 
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetFunctionalRoleResponse {
     pub role: FunctionalRole,
 }
@@ -160,7 +155,6 @@ impl ApiResponseTrait for GetFunctionalRoleResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListFunctionalRolesRequest {
@@ -172,8 +166,7 @@ pub struct ListFunctionalRolesRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ListFunctionalRolesResponse {
     pub roles: Vec<FunctionalRole>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -188,9 +181,7 @@ impl ApiResponseTrait for ListFunctionalRolesResponse {
     }
 }
 
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct FunctionalRole {
     /// 角色ID
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -200,9 +191,7 @@ pub struct FunctionalRole {
     pub role_name: Option<String>,
 }
 
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DeleteFunctionalRoleResponse {}
 
 impl ApiResponseTrait for DeleteFunctionalRoleResponse {
@@ -210,4 +199,3 @@ impl ApiResponseTrait for DeleteFunctionalRoleResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-

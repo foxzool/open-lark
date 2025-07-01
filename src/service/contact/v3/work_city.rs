@@ -51,8 +51,7 @@ impl WorkCityService {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetWorkCityResponse {
     pub work_city: WorkCity,
 }
@@ -63,7 +62,6 @@ impl ApiResponseTrait for GetWorkCityResponse {
     }
 }
 
-
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ListWorkCitiesRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -72,8 +70,7 @@ pub struct ListWorkCitiesRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ListWorkCitiesResponse {
     pub items: Vec<WorkCity>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -87,4 +84,3 @@ impl ApiResponseTrait for ListWorkCitiesResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-

@@ -52,8 +52,7 @@ pub struct GetScopeRequest {
 }
 
 /// 获取权限范围响应
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GetScopeResponse {
     /// 权限范围列表
     pub scopes: Vec<Scope>,
@@ -70,7 +69,6 @@ impl ApiResponseTrait for GetScopeResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
 
 /// 权限范围
 #[derive(Debug, Clone, Serialize, Deserialize)]

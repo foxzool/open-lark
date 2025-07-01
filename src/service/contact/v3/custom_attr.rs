@@ -45,8 +45,7 @@ pub struct ListCustomAttrsRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ListCustomAttrsResponse {
     pub items: Vec<CustomAttr>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -60,4 +59,3 @@ impl ApiResponseTrait for ListCustomAttrsResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
-
