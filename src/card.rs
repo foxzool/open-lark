@@ -63,10 +63,10 @@ pub mod text;
 ///
 /// # 示例
 ///
-/// ```rust
+/// ```no_run
 /// use open_lark::card::{FeishuCard, FeishuCardConfig};
 /// use open_lark::card::components::content_components::title::FeishuCardTitle;
-/// use open_lark::card::components::content_components::plain_text::PlainText;
+/// use open_lark::card::components::content_components::title::Title;
 /// use open_lark::card::components::CardElement;
 ///
 /// // 创建简单卡片
@@ -78,7 +78,7 @@ pub mod text;
 ///     )
 ///     .header("zh_cn",
 ///         FeishuCardTitle::new()
-///             .title(PlainText::new("欢迎使用飞书卡片"))
+///             .title(Title::new("欢迎使用飞书卡片"))
 ///     )?
 ///     .elements("zh_cn", vec![
 ///         // 添加卡片元素

@@ -32,7 +32,7 @@
 //! use open_lark::prelude::*;
 //!
 //! let client = LarkClient::builder("app_id", "app_secret")
-//!     .with_app_type(AppType::SelfBuilt)
+//!     .with_app_type(AppType::SelfBuild)
 //!     .build();
 //!
 //! // V3 版本 - 创建电子表格

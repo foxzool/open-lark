@@ -81,7 +81,7 @@ pub mod ws_client;
 ///
 /// // 创建自建应用客户端
 /// let client = LarkClient::builder("your_app_id", "your_app_secret")
-///     .with_app_type(AppType::SelfBuilt)
+///     .with_app_type(AppType::SelfBuild)
 ///     .with_enable_token_cache(true)
 ///     .build();
 ///
@@ -178,7 +178,7 @@ pub struct LarkClient {
 /// use open_lark::prelude::*;
 ///
 /// let client = LarkClient::builder("app_id", "app_secret")
-///     .with_app_type(AppType::SelfBuilt)
+///     .with_app_type(AppType::SelfBuild)
 ///     .with_enable_token_cache(true)
 ///     .with_req_timeout(Some(30.0))
 ///     .build();
@@ -191,7 +191,7 @@ impl LarkClientBuilder {
     /// 设置应用类型
     ///
     /// # 参数
-    /// - `app_type`: 应用类型，`AppType::SelfBuilt`（自建应用）或`AppType::Marketplace`（商店应用）
+    /// - `app_type`: 应用类型，`AppType::SelfBuild`（自建应用）或`AppType::Marketplace`（商店应用）
     pub fn with_app_type(mut self, app_type: AppType) -> Self {
         self.config.app_type = app_type;
         self
@@ -319,7 +319,7 @@ impl LarkClient {
     /// use open_lark::prelude::*;
     ///
     /// let client = LarkClient::builder("cli_xxx", "xxx")
-    ///     .with_app_type(AppType::SelfBuilt)
+    ///     .with_app_type(AppType::SelfBuild)
     ///     .build();
     /// ```
     pub fn builder(app_id: &str, app_secret: &str) -> LarkClientBuilder {
