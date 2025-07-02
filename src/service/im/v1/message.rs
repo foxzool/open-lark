@@ -352,11 +352,11 @@ pub struct CreateMessageResp {
 ///
 /// # 示例
 ///
-/// ```rust
+/// ```ignore
 /// // 通常通过API调用获得Message实例
-/// // let message = client.im.v1.message.create(request, None).await?;
-/// // println!("消息ID: {}", message.message_id);
-/// // println!("消息类型: {}", message.msg_type);
+/// let message = client.im.v1.message.create(request, None).await?;
+/// println!("消息ID: {}", message.message_id);
+/// println!("消息类型: {}", message.msg_type);
 /// ```
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Message {
