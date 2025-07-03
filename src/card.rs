@@ -4,14 +4,12 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use strum_macros::EnumString;
 
-use crate::{
-    card::{
-        components::{
-            content_components::{plain_text::PlainText, title::FeishuCardTitle},
-            CardElement,
-        },
-        text::CustomTextSize,
+use crate::card::{
+    components::{
+        content_components::{plain_text::PlainText, title::FeishuCardTitle},
+        CardElement,
     },
+    text::CustomTextSize,
 };
 
 #[cfg(feature = "im")]
