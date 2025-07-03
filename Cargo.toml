@@ -142,6 +142,7 @@ path = "examples/basic/client_setup.rs"
 [[example]]
 name = "acs_example"
 path = "examples/api/acs_example.rs"
+required-features = ["acs"]
 
 [[example]]
 name = "apass_example"
@@ -157,22 +158,27 @@ required-features = ["websocket"]
 [[example]]
 name = "enhanced_drive_operations"
 path = "examples/api/enhanced_drive_operations.rs"
+required-features = ["cloud-docs"]
 
 [[example]]
 name = "drive_builder_execute_demo"
 path = "examples/api/drive_builder_execute_demo.rs"
+required-features = ["cloud-docs"]
 
 [[example]]
 name = "enterprise_scenario_with_enhanced_builder"
 path = "examples/api/enterprise_scenario_with_enhanced_builder.rs"
+required-features = ["cloud-docs"]
 
 [[example]]
 name = "multi_service_integration_enhanced"
 path = "examples/api/multi_service_integration_enhanced.rs"
+required-features = ["cloud-docs", "im", "contact"]
 
 [[example]]
 name = "enhanced_error_handling"
 path = "examples/api/enhanced_error_handling.rs"
+required-features = ["im"]
 
 # Core API Examples
 # [[example]]
@@ -182,6 +188,7 @@ path = "examples/api/enhanced_error_handling.rs"
 [[example]]
 name = "core_get_chat_history"
 path = "examples/core/get_chat_history.rs"
+required-features = ["im"]
 
 # [[example]]
 # name = "core_upload_file"
@@ -190,14 +197,17 @@ path = "examples/core/get_chat_history.rs"
 [[example]]
 name = "core_download_file"
 path = "examples/core/download_file.rs"
+required-features = ["cloud-docs"]
 
 [[example]]
 name = "core_list_folder"
 path = "examples/core/list_folder.rs"
+required-features = ["cloud-docs"]
 
 [[example]]
 name = "core_query_records"
 path = "examples/core/query_records.rs"
+required-features = ["cloud-docs"]
 
 [[example]]
 name = "core_create_record"
@@ -207,10 +217,12 @@ required-features = ["cloud-docs"]
 [[example]]
 name = "core_read_write_sheet"
 path = "examples/core/read_write_sheet.rs"
+required-features = ["cloud-docs"]
 
 [[example]]
 name = "core_create_sheet"
 path = "examples/core/create_sheet.rs"
+required-features = ["cloud-docs"]
 
 [[example]]
 name = "core_query_attendance"
@@ -220,10 +232,12 @@ required-features = ["attendance"]
 [[example]]
 name = "core_process_leave_approval"
 path = "examples/core/process_leave_approval.rs"
+required-features = ["attendance"]
 
 [[example]]
 name = "core_search_user"
 path = "examples/core/search_user.rs"
+required-features = ["search"]
 
 [[example]]
 name = "core_refresh_token"
@@ -233,15 +247,18 @@ required-features = ["authentication"]
 [[example]]
 name = "permission_owned_demo"
 path = "examples/api/permission_owned_demo.rs"
+required-features = ["cloud-docs"]
 
 
 [[example]]
 name = "calendar_demo"
 path = "examples/api/calendar_demo.rs"
+required-features = ["calendar"]
 
 [[example]]
 name = "cardkit_demo"
 path = "examples/api/cardkit_demo.rs"
+required-features = ["cardkit"]
 
 [[example]]
 name = "directory_demo"
@@ -251,10 +268,12 @@ required-features = ["directory"]
 [[example]]
 name = "directory_v1_employee_extended"
 path = "examples/api/directory_v1_employee_extended.rs"
+required-features = ["directory"]
 
 [[example]]
 name = "directory_v1_department_extended"
 path = "examples/api/directory_v1_department_extended.rs"
+required-features = ["directory"]
 
 # [[example]]
 # name = "contact_v3_comprehensive"
@@ -263,26 +282,32 @@ path = "examples/api/directory_v1_department_extended.rs"
 [[example]]
 name = "group_demo"
 path = "examples/api/group_demo.rs"
+required-features = ["group"]
 
 [[example]]
 name = "im_v1_demo"
 path = "examples/api/im_v1_demo.rs"
+required-features = ["im"]
 
 [[example]]
 name = "im_v2_demo"
 path = "examples/api/im_v2_demo.rs"
+required-features = ["im"]
 
 [[example]]
 name = "tenant_tag_demo"
 path = "examples/api/tenant_tag_demo.rs"
+required-features = ["tenant-tag"]
 
 [[example]]
 name = "tenant_v2_query"
 path = "examples/api/tenant_v2_query.rs"
+required-features = ["tenant"]
 
 [[example]]
 name = "verification_v1_get"
 path = "examples/api/verification_v1_get.rs"
+required-features = ["verification"]
 
 [[example]]
 name = "personal_settings_v1_system_status"
@@ -292,22 +317,27 @@ required-features = ["personal-settings"]
 [[example]]
 name = "search_v2_comprehensive"
 path = "examples/api/search_v2_comprehensive.rs"
+required-features = ["search"]
 
 [[example]]
 name = "vc_v1"
 path = "examples/api/vc_v1.rs"
+required-features = ["vc"]
 
 [[example]]
 name = "minutes_v1"
 path = "examples/api/minutes_v1.rs"
+required-features = ["minutes"]
 
 [[example]]
 name = "approval_demo"
 path = "examples/api/approval_demo.rs"
+required-features = ["approval"]
 
 [[example]]
 name = "bot_demo"
 path = "examples/api/bot_demo.rs"
+required-features = ["bot"]
 
 [[example]]
 name = "helpdesk_demo"
@@ -317,14 +347,17 @@ required-features = ["helpdesk"]
 [[example]]
 name = "task_demo"
 path = "examples/api/task_demo.rs"
+required-features = ["task"]
 
 [[example]]
 name = "mail_demo"
 path = "examples/api/mail_demo.rs"
+required-features = ["mail"]
 
 [[example]]
 name = "application_demo"
 path = "examples/api/application_demo.rs"
+required-features = ["application"]
 
 [[example]]
 name = "ai_comprehensive"
@@ -334,6 +367,7 @@ required-features = ["ai"]
 [[example]]
 name = "aily_v1_example"
 path = "examples/api/aily_v1_example.rs"
+required-features = ["aily"]
 
 [[example]]
 name = "admin_demo"
@@ -343,58 +377,72 @@ required-features = ["admin"]
 [[example]]
 name = "moments_demo"
 path = "examples/api/moments_demo.rs"
+required-features = ["moments"]
 
 [[example]]
 name = "ehr_demo"
 path = "examples/api/ehr_demo.rs"
+required-features = ["ehr"]
 
 [[example]]
 name = "ehr_v1_demo"
 path = "examples/api/ehr_v1_demo.rs"
+required-features = ["ehr"]
 
 [[example]]
 name = "corehr_demo"
 path = "examples/api/corehr_demo.rs"
+required-features = ["corehr"]
 
 [[example]]
 name = "payroll_demo"
 path = "examples/api/payroll_demo.rs"
+required-features = ["payroll"]
 
 [[example]]
 name = "hire_v1_example"
 path = "examples/api/hire_v1_example.rs"
+required-features = ["hire"]
 
 [[example]]
 name = "human_authentication_example"
 path = "examples/api/human_authentication_example.rs"
+required-features = ["human-authentication"]
 
 [[example]]
 name = "lingo_classification_repo"
 path = "examples/api/lingo_classification_repo.rs"
+required-features = ["lingo"]
 
 [[example]]
 name = "lingo_draft"
 path = "examples/api/lingo_draft.rs"
+required-features = ["lingo"]
 
 [[example]]
 name = "lingo_entity"
 path = "examples/api/lingo_entity.rs"
+required-features = ["lingo"]
 
 [[example]]
 name = "okr_example"
 path = "examples/api/okr_example.rs"
+required-features = ["okr"]
 
 [[example]]
 name = "performance_example"
 path = "examples/api/performance_example.rs"
+required-features = ["performance"]
 
 [[example]]
 name = "trust_party_organization"
 path = "examples/api/trust_party_organization.rs"
+required-features = ["trust-party"]
 
 [[example]]
 name = "trust_party_rules"
 path = "examples/api/trust_party_rules.rs"
+required-features = ["trust-party"]
 
 [[example]]
 name = "workplace_access_data"
@@ -419,30 +467,37 @@ required-features = ["mdm"]
 [[example]]
 name = "report_v1_query_rules"
 path = "examples/api/report_v1_query_rules.rs"
+required-features = ["report"]
 
 [[example]]
 name = "report_v1_query_tasks"
 path = "examples/api/report_v1_query_tasks.rs"
+required-features = ["report"]
 
 [[example]]
 name = "report_v1_remove_rule_view"
 path = "examples/api/report_v1_remove_rule_view.rs"
+required-features = ["report"]
 
 [[example]]
 name = "elearning_v2_course_registration"
 path = "examples/api/elearning_v2_course_registration.rs"
+required-features = ["elearning"]
 
 [[example]]
 name = "elearning_v2_management"
 path = "examples/api/elearning_v2_management.rs"
+required-features = ["elearning"]
 
 [[example]]
 name = "security_and_compliance_openapi_log"
 path = "examples/api/security_and_compliance_openapi_log.rs"
+required-features = ["security-and-compliance"]
 
 [[example]]
 name = "security_and_compliance_audit_log"
 path = "examples/api/security_and_compliance_audit_log.rs"
+required-features = ["security-and-compliance"]
 
 [[example]]
 name = "contact_v3_user_list"
@@ -462,18 +517,22 @@ required-features = ["contact"]
 [[example]]
 name = "unified_builder_pattern"
 path = "examples/api/unified_builder_pattern.rs"
+required-features = ["contact"]
 
 [[example]]
 name = "drive_builder_pattern"
 path = "examples/api/drive_builder_pattern.rs"
+required-features = ["cloud-docs"]
 
 [[example]]
 name = "im_modern_builder_pattern"
 path = "examples/api/im_modern_builder_pattern.rs"
+required-features = ["im"]
 
 [[example]]
 name = "im_file_image_builder_pattern"
 path = "examples/api/im_file_image_builder_pattern.rs"
+required-features = ["im"]
 
 
 # ===========================================
