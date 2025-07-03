@@ -146,6 +146,7 @@ path = "examples/api/acs_example.rs"
 [[example]]
 name = "apass_example"
 path = "examples/api/apass_example.rs"
+required-features = ["apass"]
 
 [[example]]
 name = "websocket_client"
@@ -201,6 +202,7 @@ path = "examples/core/query_records.rs"
 [[example]]
 name = "core_create_record"
 path = "examples/core/create_record.rs"
+required-features = ["cloud-docs"]
 
 [[example]]
 name = "core_read_write_sheet"
@@ -213,6 +215,7 @@ path = "examples/core/create_sheet.rs"
 [[example]]
 name = "core_query_attendance"
 path = "examples/core/query_attendance.rs"
+required-features = ["attendance"]
 
 [[example]]
 name = "core_process_leave_approval"
@@ -225,6 +228,7 @@ path = "examples/core/search_user.rs"
 [[example]]
 name = "core_refresh_token"
 path = "examples/core/refresh_token.rs"
+required-features = ["authentication"]
 
 [[example]]
 name = "permission_owned_demo"
@@ -242,6 +246,7 @@ path = "examples/api/cardkit_demo.rs"
 [[example]]
 name = "directory_demo"
 path = "examples/api/directory_demo.rs"
+required-features = ["directory"]
 
 [[example]]
 name = "directory_v1_employee_extended"
@@ -282,6 +287,7 @@ path = "examples/api/verification_v1_get.rs"
 [[example]]
 name = "personal_settings_v1_system_status"
 path = "examples/api/personal_settings_v1_system_status.rs"
+required-features = ["personal-settings"]
 
 [[example]]
 name = "search_v2_comprehensive"
@@ -306,6 +312,7 @@ path = "examples/api/bot_demo.rs"
 [[example]]
 name = "helpdesk_demo"
 path = "examples/api/helpdesk_demo.rs"
+required-features = ["helpdesk"]
 
 [[example]]
 name = "task_demo"
@@ -322,6 +329,7 @@ path = "examples/api/application_demo.rs"
 [[example]]
 name = "ai_comprehensive"
 path = "examples/api/ai_comprehensive.rs"
+required-features = ["ai"]
 
 [[example]]
 name = "aily_v1_example"
@@ -330,6 +338,7 @@ path = "examples/api/aily_v1_example.rs"
 [[example]]
 name = "admin_demo"
 path = "examples/api/admin_demo.rs"
+required-features = ["admin"]
 
 [[example]]
 name = "moments_demo"
@@ -390,18 +399,22 @@ path = "examples/api/trust_party_rules.rs"
 [[example]]
 name = "workplace_access_data"
 path = "examples/api/workplace_access_data.rs"
+required-features = ["workplace"]
 
 [[example]]
 name = "workplace_app_recommend"
 path = "examples/api/workplace_app_recommend.rs"
+required-features = ["workplace"]
 
 [[example]]
 name = "mdm_country_region"
 path = "examples/api/mdm_country_region.rs"
+required-features = ["mdm"]
 
 [[example]]
 name = "mdm_user_data_relation"
 path = "examples/api/mdm_user_data_relation.rs"
+required-features = ["mdm"]
 
 [[example]]
 name = "report_v1_query_rules"
@@ -434,14 +447,17 @@ path = "examples/api/security_and_compliance_audit_log.rs"
 [[example]]
 name = "contact_v3_user_list"
 path = "examples/api/contact_v3_user_list.rs"
+required-features = ["contact"]
 
 [[example]]
 name = "contact_v3_group_detail"
 path = "examples/api/contact_v3_group_detail.rs"
+required-features = ["contact"]
 
 [[example]]
 name = "contact_v3_role_management"
 path = "examples/api/contact_v3_role_management.rs"
+required-features = ["contact"]
 
 [[example]]
 name = "unified_builder_pattern"
