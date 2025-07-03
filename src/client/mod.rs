@@ -1,4 +1,4 @@
-use std::{sync::Arc, time::Duration};
+use std::time::Duration;
 
 use crate::core::{config::Config, constants::AppType};
 
@@ -329,116 +329,113 @@ impl LarkClientBuilder {
                 .expect("Failed to build HTTP client with timeout")
         }
 
-        // 创建单个 Arc<Config> 并在所有服务间共享
-        let config = Arc::new(self.config.clone());
-
         LarkClient {
             config: self.config.clone(),
             // 核心服务 - 使用条件编译
             #[cfg(feature = "acs")]
-            acs: AcsService::new((*config).clone()),
+            acs: AcsService::new(self.config.clone()),
             #[cfg(feature = "admin")]
-            admin: AdminService::new((*config).clone()),
+            admin: AdminService::new(self.config.clone()),
             #[cfg(feature = "ai")]
-            ai: AiService::new((*config).clone()),
+            ai: AiService::new(self.config.clone()),
             #[cfg(feature = "aily")]
-            aily: AilyService::new((*config).clone()),
+            aily: AilyService::new(self.config.clone()),
             #[cfg(feature = "apass")]
-            apass: ApassService::new((*config).clone()),
+            apass: ApassService::new(self.config.clone()),
             #[cfg(feature = "application")]
-            application: ApplicationService::new((*config).clone()),
+            application: ApplicationService::new(self.config.clone()),
             #[cfg(feature = "approval")]
-            approval: ApprovalService::new((*config).clone()),
+            approval: ApprovalService::new(self.config.clone()),
             #[cfg(feature = "attendance")]
-            attendance: AttendanceService::new(Arc::clone(&config)),
+            attendance: AttendanceService::new(Arc::new(self.config.clone())),
             #[cfg(feature = "authentication")]
-            auth: AuthenService::new(Arc::clone(&config)),
+            auth: AuthenService::new(Arc::new(self.config.clone())),
             #[cfg(feature = "bot")]
-            bot: BotService::new((*config).clone()),
+            bot: BotService::new(self.config.clone()),
             #[cfg(feature = "calendar")]
-            calendar: CalendarService::new((*config).clone()),
+            calendar: CalendarService::new(self.config.clone()),
             #[cfg(feature = "cardkit")]
-            cardkit: CardkitService::new((*config).clone()),
+            cardkit: CardkitService::new(self.config.clone()),
             #[cfg(feature = "contact")]
-            contact: ContactService::new((*config).clone()),
+            contact: ContactService::new(self.config.clone()),
             #[cfg(feature = "corehr")]
-            corehr: CoreHRService::new((*config).clone()),
+            corehr: CoreHRService::new(self.config.clone()),
             #[cfg(feature = "directory")]
-            directory: DirectoryService::new((*config).clone()),
+            directory: DirectoryService::new(self.config.clone()),
             #[cfg(feature = "ehr")]
-            ehr: EhrService::new((*config).clone()),
+            ehr: EhrService::new(self.config.clone()),
             #[cfg(feature = "elearning")]
-            elearning: ELearningService::new((*config).clone()),
+            elearning: ELearningService::new(self.config.clone()),
             #[cfg(feature = "group")]
-            group: GroupService::new((*config).clone()),
+            group: GroupService::new(self.config.clone()),
             #[cfg(feature = "helpdesk")]
-            helpdesk: HelpdeskService::new((*config).clone()),
+            helpdesk: HelpdeskService::new(self.config.clone()),
             #[cfg(feature = "hire")]
-            hire: HireService::new((*config).clone()),
+            hire: HireService::new(self.config.clone()),
             #[cfg(feature = "human-authentication")]
-            human_authentication: HumanAuthenticationService::new((*config).clone()),
+            human_authentication: HumanAuthenticationService::new(self.config.clone()),
             #[cfg(feature = "im")]
-            im: ImService::new(Arc::clone(&config)),
+            im: ImService::new(Arc::new(self.config.clone())),
             #[cfg(feature = "lingo")]
-            lingo: LingoService::new((*config).clone()),
+            lingo: LingoService::new(self.config.clone()),
             #[cfg(feature = "mail")]
-            mail: MailService::new((*config).clone()),
+            mail: MailService::new(self.config.clone()),
             #[cfg(feature = "mdm")]
-            mdm: MdmService::new((*config).clone()),
+            mdm: MdmService::new(self.config.clone()),
             #[cfg(feature = "minutes")]
-            minutes: MinutesService::new((*config).clone()),
+            minutes: MinutesService::new(self.config.clone()),
             #[cfg(feature = "moments")]
-            moments: MomentsService::new((*config).clone()),
+            moments: MomentsService::new(self.config.clone()),
             #[cfg(feature = "okr")]
-            okr: OkrService::new((*config).clone()),
+            okr: OkrService::new(self.config.clone()),
             #[cfg(feature = "payroll")]
-            payroll: PayrollService::new((*config).clone()),
+            payroll: PayrollService::new(self.config.clone()),
             #[cfg(feature = "performance")]
-            performance: PerformanceService::new((*config).clone()),
+            performance: PerformanceService::new(self.config.clone()),
             #[cfg(feature = "personal-settings")]
-            personal_settings: PersonalSettingsService::new((*config).clone()),
+            personal_settings: PersonalSettingsService::new(self.config.clone()),
             #[cfg(feature = "report")]
-            report: ReportService::new((*config).clone()),
+            report: ReportService::new(self.config.clone()),
             #[cfg(feature = "search")]
-            search: SearchService::new(Arc::clone(&config)),
+            search: SearchService::new(Arc::new(self.config.clone())),
             #[cfg(feature = "security-and-compliance")]
-            security_and_compliance: SecurityAndComplianceService::new((*config).clone()),
+            security_and_compliance: SecurityAndComplianceService::new(self.config.clone()),
             #[cfg(feature = "task")]
-            task: TaskV2Service::new((*config).clone()),
+            task: TaskV2Service::new(self.config.clone()),
             #[cfg(feature = "tenant")]
-            tenant: TenantService::new((*config).clone()),
+            tenant: TenantService::new(self.config.clone()),
             #[cfg(feature = "tenant-tag")]
-            tenant_tag: TenantTagService::new((*config).clone()),
+            tenant_tag: TenantTagService::new(self.config.clone()),
             #[cfg(feature = "trust-party")]
-            trust_party: TrustPartyService::new((*config).clone()),
+            trust_party: TrustPartyService::new(self.config.clone()),
             #[cfg(feature = "vc")]
-            vc: VcService::new((*config).clone()),
+            vc: VcService::new(self.config.clone()),
             #[cfg(feature = "verification")]
-            verification: VerificationService::new((*config).clone()),
+            verification: VerificationService::new(self.config.clone()),
             #[cfg(feature = "workplace")]
-            workplace: WorkplaceService::new((*config).clone()),
+            workplace: WorkplaceService::new(self.config.clone()),
             // 云文档服务聚合
             #[cfg(feature = "cloud-docs")]
-            cloud_docs: CloudDocsService::new(Arc::clone(&config)),
+            cloud_docs: CloudDocsService::new(Arc::new(self.config.clone())),
             // 向后兼容的字段（重新创建实例）
             #[cfg(feature = "cloud-docs")]
-            assistant: AssistantService::new(Arc::clone(&config)),
+            assistant: AssistantService::new(Arc::new(self.config.clone())),
             #[cfg(feature = "cloud-docs")]
-            docs: DocsService::new(Arc::clone(&config)),
+            docs: DocsService::new(Arc::new(self.config.clone())),
             #[cfg(feature = "cloud-docs")]
-            drive: DriveService::new(Arc::clone(&config)),
+            drive: DriveService::new(Arc::new(self.config.clone())),
             #[cfg(feature = "cloud-docs")]
-            sheets: SheetsService::new(Arc::clone(&config)),
+            sheets: SheetsService::new(Arc::new(self.config.clone())),
             #[cfg(feature = "cloud-docs")]
-            bitable: BitableService::new(Arc::clone(&config)),
+            bitable: BitableService::new(Arc::new(self.config.clone())),
             #[cfg(feature = "cloud-docs")]
-            wiki: WikiService::new(Arc::clone(&config)),
+            wiki: WikiService::new(Arc::new(self.config.clone())),
             #[cfg(feature = "cloud-docs")]
-            comments: CommentsService::new(Arc::clone(&config)),
+            comments: CommentsService::new(Arc::new(self.config.clone())),
             #[cfg(feature = "cloud-docs")]
-            permission: PermissionService::new(Arc::clone(&config)),
+            permission: PermissionService::new(Arc::new(self.config.clone())),
             #[cfg(feature = "cloud-docs")]
-            board: BoardService::new(Arc::clone(&config)),
+            board: BoardService::new(Arc::new(self.config.clone())),
         }
     }
 }

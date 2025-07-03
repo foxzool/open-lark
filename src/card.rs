@@ -1,6 +1,7 @@
 use std::{collections::HashMap, str::FromStr};
 
 use serde::{Deserialize, Serialize};
+#[cfg(feature = "im")]
 use serde_json::json;
 use strum_macros::EnumString;
 
