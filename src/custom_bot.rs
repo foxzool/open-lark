@@ -3,12 +3,10 @@ use hmac::{Hmac, Mac};
 use serde_json::{json, Value};
 use sha2::Sha256;
 
-use crate::{
-    core::{
-        api_resp::{BaseResponse, RawResponse},
-        http::Transport,
-        SDKResult,
-    },
+use crate::core::{
+    api_resp::{BaseResponse, RawResponse},
+    http::Transport,
+    SDKResult,
 };
 
 #[cfg(feature = "im")]
