@@ -12,8 +12,10 @@ use crate::{
         },
         text::CustomTextSize,
     },
-    service::im::v1::message::SendMessageTrait,
 };
+
+#[cfg(feature = "im")]
+use crate::service::im::v1::message::SendMessageTrait;
 
 /// 卡片组件模块
 ///
@@ -96,6 +98,7 @@ pub struct FeishuCard {
     pub i18n_elements: HashMap<FeishuCardLanguage, Vec<CardElement>>,
 }
 
+#[cfg(feature = "im")]
 impl SendMessageTrait for FeishuCard {
     fn msg_type(&self) -> String {
         "interactive".to_string()

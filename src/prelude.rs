@@ -31,7 +31,8 @@ pub use crate::{
     event::dispatcher::EventDispatcherHandler,
 };
 
-// 导出常用的消息相关类型
+// 导出常用的消息相关类型 - 需要 im feature
+#[cfg(feature = "im")]
 pub use crate::service::im::v1::message::{
     CreateMessageRequest, CreateMessageRequestBody, SendMessageTrait,
 };
@@ -39,7 +40,8 @@ pub use crate::service::im::v1::message::{
 // 导出常用的卡片类型
 pub use crate::card::{FeishuCard, FeishuCardConfig, FeishuCardLanguage};
 
-// 导出常用的事件类型
+// 导出常用的事件类型 - 需要 im feature
+#[cfg(feature = "im")]
 pub use crate::service::im::v1::{
     p2_im_message_read_v1::P2ImMessageReadV1, p2_im_message_receive_v1::P2ImMessageReceiveV1,
 };

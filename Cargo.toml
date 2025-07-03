@@ -13,6 +13,64 @@ homepage = "https://github.com/foxzool/open-lark"
 license = "Apache-2.0"
 
 [features]
+default = ["im", "cloud-docs", "contact", "group", "authentication", "search"]
+full = [
+    "acs", "admin", "ai", "aily", "apass", "application", "approval", "attendance",
+    "authentication", "bot", "calendar", "cardkit", "cloud-docs", "contact", 
+    "corehr", "directory", "ehr", "elearning", "group", "helpdesk", "hire",
+    "human-authentication", "im", "lingo", "mail", "mdm", "minutes", "moments",
+    "okr", "payroll", "performance", "personal-settings", "report", "search",
+    "security-and-compliance", "task", "tenant", "tenant-tag", "trust-party",
+    "vc", "verification", "workplace"
+]
+
+# Core services - most commonly used
+im = []
+cloud-docs = []
+contact = []
+group = []
+authentication = []
+search = []
+
+# Advanced services
+acs = []
+admin = []
+ai = []
+aily = []
+apass = []
+application = []
+approval = []
+attendance = []
+bot = []
+calendar = []
+cardkit = []
+corehr = []
+directory = []
+ehr = []
+elearning = []
+helpdesk = []
+hire = []
+human-authentication = []
+lingo = []
+mail = []
+mdm = []
+minutes = []
+moments = []
+okr = []
+payroll = []
+performance = []
+personal-settings = []
+report = []
+security-and-compliance = []
+task = []
+tenant = []
+tenant-tag = []
+trust-party = []
+vc = []
+verification = []
+workplace = []
+
+# WebSocket support
 websocket = ["tokio-tungstenite", "prost", "lark-websocket-protobuf"]
 
 [workspace]

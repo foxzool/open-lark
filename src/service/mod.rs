@@ -86,97 +86,181 @@
 //! - **异步支持**: 全面支持异步编程模式
 //! - **错误处理**: 统一的错误类型和处理机制
 
-// 核心服务模块
+// 核心服务模块 - 使用条件编译
+#[cfg(feature = "acs")]
 pub mod acs;
+#[cfg(feature = "admin")]
 pub mod admin;
+#[cfg(feature = "ai")]
 pub mod ai;
+#[cfg(feature = "aily")]
 pub mod aily;
+#[cfg(feature = "apass")]
 pub mod apass;
+#[cfg(feature = "application")]
 pub mod application;
+#[cfg(feature = "approval")]
 pub mod approval;
+#[cfg(feature = "attendance")]
 pub mod attendance;
+#[cfg(feature = "authentication")]
 pub mod authentication;
+#[cfg(feature = "bot")]
 pub mod bot;
+#[cfg(feature = "calendar")]
 pub mod calendar;
+#[cfg(feature = "cardkit")]
 pub mod cardkit;
+#[cfg(feature = "contact")]
 pub mod contact;
+#[cfg(feature = "corehr")]
 pub mod corehr;
+#[cfg(feature = "directory")]
 pub mod directory;
+#[cfg(feature = "ehr")]
 pub mod ehr;
+#[cfg(feature = "elearning")]
 pub mod elearning;
 pub mod endpoints;
+#[cfg(feature = "group")]
 pub mod group;
+#[cfg(feature = "helpdesk")]
 pub mod helpdesk;
+#[cfg(feature = "hire")]
 pub mod hire;
+#[cfg(feature = "human-authentication")]
 pub mod human_authentication;
+#[cfg(feature = "im")]
 pub mod im;
+#[cfg(feature = "lingo")]
 pub mod lingo;
+#[cfg(feature = "mail")]
 pub mod mail;
+#[cfg(feature = "mdm")]
 pub mod mdm;
+#[cfg(feature = "minutes")]
 pub mod minutes;
+#[cfg(feature = "moments")]
 pub mod moments;
+#[cfg(feature = "okr")]
 pub mod okr;
+#[cfg(feature = "payroll")]
 pub mod payroll;
+#[cfg(feature = "performance")]
 pub mod performance;
+#[cfg(feature = "personal-settings")]
 pub mod personal_settings;
+#[cfg(feature = "report")]
 pub mod report;
+#[cfg(feature = "search")]
 pub mod search;
+#[cfg(feature = "security-and-compliance")]
 pub mod security_and_compliance;
+#[cfg(feature = "task")]
 pub mod task;
+#[cfg(feature = "tenant")]
 pub mod tenant;
+#[cfg(feature = "tenant-tag")]
 pub mod tenant_tag;
+#[cfg(feature = "trust-party")]
 pub mod trust_party;
+#[cfg(feature = "vc")]
 pub mod vc;
+#[cfg(feature = "verification")]
 pub mod verification;
+#[cfg(feature = "workplace")]
 pub mod workplace;
 
 // 云文档服务模块
+#[cfg(feature = "cloud-docs")]
 pub mod cloud_docs;
 
-// 向后兼容的 re-export
+// 向后兼容的 re-export - 使用条件编译
+#[cfg(feature = "cloud-docs")]
 pub use cloud_docs::docx as docs; // docs -> docx 兼容
+#[cfg(feature = "cloud-docs")]
 pub use cloud_docs::{assistant, bitable, board, comments, drive, permission, sheets, wiki};
 
-// 核心服务 re-export
+// 核心服务 re-export - 使用条件编译
+#[cfg(feature = "acs")]
 pub use acs::AcsService;
+#[cfg(feature = "admin")]
 pub use admin::AdminService;
+#[cfg(feature = "ai")]
 pub use ai::AiService;
+#[cfg(feature = "aily")]
 pub use aily::AilyService;
+#[cfg(feature = "apass")]
 pub use apass::ApassService;
+#[cfg(feature = "application")]
 pub use application::ApplicationService;
+#[cfg(feature = "approval")]
 pub use approval::ApprovalService;
+#[cfg(feature = "bot")]
 pub use bot::BotService;
+#[cfg(feature = "calendar")]
 pub use calendar::CalendarService;
+#[cfg(feature = "cardkit")]
 pub use cardkit::CardkitService;
+#[cfg(feature = "contact")]
 pub use contact::ContactService;
+#[cfg(feature = "corehr")]
 pub use corehr::CoreHRService;
+#[cfg(feature = "directory")]
 pub use directory::DirectoryService;
+#[cfg(feature = "ehr")]
 pub use ehr::EhrService;
+#[cfg(feature = "elearning")]
 pub use elearning::ELearningService;
+#[cfg(feature = "group")]
 pub use group::GroupService;
+#[cfg(feature = "helpdesk")]
 pub use helpdesk::HelpdeskService;
+#[cfg(feature = "hire")]
 pub use hire::HireService;
+#[cfg(feature = "human-authentication")]
 pub use human_authentication::HumanAuthenticationService;
+#[cfg(feature = "lingo")]
 pub use lingo::LingoService;
+#[cfg(feature = "mail")]
 pub use mail::MailService;
+#[cfg(feature = "mdm")]
 pub use mdm::MdmService;
+#[cfg(feature = "minutes")]
 pub use minutes::MinutesService;
+#[cfg(feature = "moments")]
 pub use moments::MomentsService;
+#[cfg(feature = "okr")]
 pub use okr::OkrService;
+#[cfg(feature = "payroll")]
 pub use payroll::PayrollService;
+#[cfg(feature = "performance")]
 pub use performance::PerformanceService;
+#[cfg(feature = "personal-settings")]
 pub use personal_settings::PersonalSettingsService;
+#[cfg(feature = "report")]
 pub use report::ReportService;
+#[cfg(feature = "search")]
+pub use search::SearchService;
+#[cfg(feature = "security-and-compliance")]
 pub use security_and_compliance::SecurityAndComplianceService;
+#[cfg(feature = "task")]
 pub use task::TaskV2Service;
+#[cfg(feature = "tenant")]
 pub use tenant::TenantService;
+#[cfg(feature = "tenant-tag")]
 pub use tenant_tag::TenantTagService;
+#[cfg(feature = "trust-party")]
 pub use trust_party::TrustPartyService;
+#[cfg(feature = "vc")]
 pub use vc::VcService;
+#[cfg(feature = "verification")]
 pub use verification::VerificationService;
+#[cfg(feature = "workplace")]
 pub use workplace::WorkplaceService;
 
-// 服务类型 re-export
+// 服务类型 re-export - 使用条件编译
+#[cfg(feature = "cloud-docs")]
 pub use cloud_docs::{
     AssistantService, BitableService, BoardService, CloudDocsService, CommentsService,
     DocxService as DocsService, DriveService, PermissionService, SheetsService, WikiService,

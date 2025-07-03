@@ -1,27 +1,29 @@
-use crate::{
-    event::context::EventContext,
-    service::{
-        attendance::v1::{
-            p2_attendance_user_task_status_change_v1::{
-                P2AttendanceUserTaskStatusChangeV1, P2AttendanceUserTaskStatusChangeV1ProcessorImpl,
-            },
-            p2_attendance_user_task_updated_v1::{
-                P2AttendanceUserTaskUpdatedV1, P2AttendanceUserTaskUpdatedV1ProcessorImpl,
-            },
-        },
-        im::v1::{
-            p2_im_message_read_v1::{P2ImMessageReadV1, P2ImMessageReadV1ProcessorImpl},
-            p2_im_message_receive_v1::{P2ImMessageReceiveV1, P2ImMessageReceiveV1ProcessorImpl},
-        },
-        payroll::v1::{
-            p2_payroll_payment_activity_approved_v1::{
-                P2PayrollPaymentActivityApprovedV1, P2PayrollPaymentActivityApprovedV1ProcessorImpl,
-            },
-            p2_payroll_payment_activity_status_changed_v1::{
-                P2PayrollPaymentActivityStatusChangedV1,
-                P2PayrollPaymentActivityStatusChangedV1ProcessorImpl,
-            },
-        },
+use crate::event::context::EventContext;
+
+#[cfg(feature = "attendance")]
+use crate::service::attendance::v1::{
+    p2_attendance_user_task_status_change_v1::{
+        P2AttendanceUserTaskStatusChangeV1, P2AttendanceUserTaskStatusChangeV1ProcessorImpl,
+    },
+    p2_attendance_user_task_updated_v1::{
+        P2AttendanceUserTaskUpdatedV1, P2AttendanceUserTaskUpdatedV1ProcessorImpl,
+    },
+};
+
+#[cfg(feature = "im")]
+use crate::service::im::v1::{
+    p2_im_message_read_v1::{P2ImMessageReadV1, P2ImMessageReadV1ProcessorImpl},
+    p2_im_message_receive_v1::{P2ImMessageReceiveV1, P2ImMessageReceiveV1ProcessorImpl},
+};
+
+#[cfg(feature = "payroll")]
+use crate::service::payroll::v1::{
+    p2_payroll_payment_activity_approved_v1::{
+        P2PayrollPaymentActivityApprovedV1, P2PayrollPaymentActivityApprovedV1ProcessorImpl,
+    },
+    p2_payroll_payment_activity_status_changed_v1::{
+        P2PayrollPaymentActivityStatusChangedV1,
+        P2PayrollPaymentActivityStatusChangedV1ProcessorImpl,
     },
 };
 use log::debug;
@@ -108,6 +110,7 @@ impl EventDispatcherHandlerBuilder {
 }
 
 impl EventDispatcherHandlerBuilder {
+    #[cfg(feature = "im")]
     pub fn register_p2_im_message_receive_v1<F>(mut self, f: F) -> Result<Self, String>
     where
         F: Fn(P2ImMessageReceiveV1) + 'static + Sync + Send,
@@ -121,6 +124,7 @@ impl EventDispatcherHandlerBuilder {
         Ok(self)
     }
 
+    #[cfg(feature = "im")]
     pub fn register_p2_im_message_read_v1<F>(mut self, f: F) -> Result<Self, String>
     where
         F: Fn(P2ImMessageReadV1) + 'static + Sync + Send,
@@ -135,6 +139,7 @@ impl EventDispatcherHandlerBuilder {
     }
 
     /// 注册考勤打卡流水事件处理器
+    #[cfg(feature = "attendance")]
     pub fn register_p2_attendance_user_task_updated_v1<F>(mut self, f: F) -> Result<Self, String>
     where
         F: Fn(P2AttendanceUserTaskUpdatedV1) + 'static + Sync + Send,
@@ -149,6 +154,7 @@ impl EventDispatcherHandlerBuilder {
     }
 
     /// 注册考勤用户任务状态变更事件处理器
+    #[cfg(feature = "attendance")]
     pub fn register_p2_attendance_user_task_status_change_v1<F>(
         mut self,
         f: F,
@@ -166,6 +172,7 @@ impl EventDispatcherHandlerBuilder {
     }
 
     /// 注册发薪活动状态变更事件处理器
+    #[cfg(feature = "payroll")]
     pub fn register_p2_payroll_payment_activity_status_changed_v1<F>(
         mut self,
         f: F,
@@ -186,6 +193,7 @@ impl EventDispatcherHandlerBuilder {
     }
 
     /// 注册发薪活动封存事件处理器
+    #[cfg(feature = "payroll")]
     pub fn register_p2_payroll_payment_activity_approved_v1<F>(
         mut self,
         f: F,
