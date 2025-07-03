@@ -7,7 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.0] - 2025-01-03
+
 ### Added - 📚 全面文档完善与质量提升
+
+### Fixed - 🔧 CI/CD 流水线优化与构建修复
+
+#### 🚀 CI 构建流程完全修复
+- **✅ 无默认特性构建支持** - 修复 `--no-default-features` 构建错误
+  - 条件编译 Arc 导入，避免未使用警告
+  - 40+ 示例文件添加 `required-features` 配置
+  - 确保示例只在相应特性启用时编译
+- **🎯 Clippy 警告清零** - 解决所有 clippy 警告和编译错误
+  - 修复特性门控制的服务访问错误
+  - 统一条件编译模式和导入规范
+  - 代码格式标准化，提升可读性
+- **⚡ CI 性能优化** - GitHub Actions 流水线稳定性提升
+  - 双重构建验证：`--no-default-features` 和 `--all-features`
+  - 示例编译错误完全消除
+  - 测试覆盖率和文档生成流程优化
 
 #### ✨ 服务模块文档完整化 - 企业级文档标准
 - **📝 43个服务模块完整文档** - 为所有主要服务模块添加详细中文文档
