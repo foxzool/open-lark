@@ -9,8 +9,10 @@ use crate::{
         http::Transport,
         SDKResult,
     },
-    service::im::v1::message::{MessageCardTemplate, SendMessageTrait},
 };
+
+#[cfg(feature = "im")]
+use crate::service::im::v1::message::{MessageCardTemplate, SendMessageTrait};
 
 /// 自定义机器人
 ///
@@ -34,6 +36,7 @@ impl<'a> CustomBot<'a> {
 }
 
 impl CustomBot<'_> {
+    #[cfg(feature = "im")]
     pub async fn send_message<T>(&self, message: T) -> SDKResult<BaseResponse<RawResponse>>
     where
         T: SendMessageTrait,
@@ -52,6 +55,7 @@ impl CustomBot<'_> {
     }
 
     /// 发送飞书卡片消息， 因为自定义机器人发送飞书卡片消息的格式比较特殊，所以单独提供一个方法
+    #[cfg(feature = "im")]
     pub async fn send_card(
         &self,
         message: MessageCardTemplate,

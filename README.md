@@ -33,6 +33,54 @@
 - **智能分析**: 错误自动分析、重试机制、实时监控
 - **完整重构**: 68个文件优化，消除2000+个clone调用
 
+## 功能特性 (Feature Flags)
+
+从 v0.12.0 开始，open-lark 支持按需编译，你可以只启用需要的服务模块，显著减少编译时间和二进制文件大小。
+
+### 默认功能
+```toml
+[dependencies]
+open-lark = "0.12.0"  # 包含: im, cloud-docs, contact, group, authentication, search
+```
+
+### 仅使用云文档 API
+```toml
+[dependencies]
+open-lark = { version = "0.12.0", default-features = false, features = ["cloud-docs"] }
+```
+
+### 仅使用消息 API  
+```toml
+[dependencies]
+open-lark = { version = "0.12.0", default-features = false, features = ["im"] }
+```
+
+### 启用所有功能
+```toml
+[dependencies]
+open-lark = { version = "0.12.0", features = ["full"] }
+```
+
+### 可用的功能模块
+
+#### 核心服务 (默认启用)
+- `im` - 即时消息
+- `cloud-docs` - 云文档 (包含 drive, sheets, bitable 等)
+- `contact` - 通讯录
+- `group` - 群组管理
+- `authentication` - 认证服务
+- `search` - 搜索功能
+
+#### 高级服务 (按需启用)
+- `hire` - 招聘管理
+- `calendar` - 日历服务
+- `approval` - 审批流程
+- `attendance` - 考勤管理
+- `vc` - 视频会议
+- `ai` - AI 服务
+- `helpdesk` - 服务台
+- 更多服务请参考 `Cargo.toml`
+
 ## 使用
 
 将`.env-example`文件重命名为`.env`，并填写相关配置。
