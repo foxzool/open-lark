@@ -1,6 +1,12 @@
-use std::time::Duration;
-#[cfg(any(feature = "attendance", feature = "authentication", feature = "im", feature = "search", feature = "cloud-docs"))]
+#[cfg(any(
+    feature = "attendance",
+    feature = "authentication",
+    feature = "im",
+    feature = "search",
+    feature = "cloud-docs"
+))]
 use std::sync::Arc;
+use std::time::Duration;
 
 use crate::core::{config::Config, constants::AppType};
 
