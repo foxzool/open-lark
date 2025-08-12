@@ -10,6 +10,11 @@
 
 ## 🎉 最新更新
 
+### v0.13.1 WebSocket 关键修复 🔧
+- **🐛 关键问题修复**: 修复 WebSocket frame payload 解析回归问题
+- **📡 完整示例**: websocket_client.rs 添加完整的连接和事件处理功能
+- **🧪 测试覆盖**: 完整的单包和多包消息处理测试
+
 ### v0.12.0+ 全面文档完善与质量提升 📚
 - **📝 完整中文文档**: 43个服务模块100%文档覆盖，企业级文档标准
 - **✅ 文档测试保证**: 72个文档测试100%通过，确保示例代码正确性
@@ -40,25 +45,25 @@
 ### 默认功能
 ```toml
 [dependencies]
-open-lark = "0.12.0"  # 包含: im, cloud-docs, contact, group, authentication, search
+open-lark = "0.13.1"  # 包含: im, cloud-docs, contact, group, authentication, search
 ```
 
 ### 仅使用云文档 API
 ```toml
 [dependencies]
-open-lark = { version = "0.12.0", default-features = false, features = ["cloud-docs"] }
+open-lark = { version = "0.13.1", default-features = false, features = ["cloud-docs"] }
 ```
 
 ### 仅使用消息 API  
 ```toml
 [dependencies]
-open-lark = { version = "0.12.0", default-features = false, features = ["im"] }
+open-lark = { version = "0.13.1", default-features = false, features = ["im"] }
 ```
 
 ### 启用所有功能
 ```toml
 [dependencies]
-open-lark = { version = "0.12.0", features = ["full"] }
+open-lark = { version = "0.13.1", features = ["full"] }
 ```
 
 ### 可用的功能模块
