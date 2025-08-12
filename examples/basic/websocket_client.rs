@@ -55,8 +55,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             Ok(builder) => builder.build(),
             Err(e) => {
                 eprintln!("❌ Failed to register event handler: {e}");
-                return Err(Box::new(std::io::Error::other(e))
-                    as Box<dyn std::error::Error>);
+                return Err(Box::new(std::io::Error::other(e)) as Box<dyn std::error::Error>);
             }
         };
 
