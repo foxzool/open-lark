@@ -43,7 +43,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         // 创建事件处理器
         let event_handler = match EventDispatcherHandler::builder()
             .register_p2_im_message_receive_v1(|event| {
-                info!("📩 收到消息事件: {:?}", event);
+                info!("📩 收到消息事件: {event:?}");
                 println!("📩 收到新消息:");
                 println!("  - 消息ID: {:?}", event.header.event_id);
                 println!("  - 消息类型: {:?}", event.event.message.message_type);
@@ -54,8 +54,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }) {
             Ok(builder) => builder.build(),
             Err(e) => {
-                eprintln!("❌ Failed to register event handler: {}", e);
-                return Err(Box::new(std::io::Error::new(std::io::ErrorKind::Other, e))
+                eprintln!("❌ Failed to register event handler: {e}");
+                return Err(Box::new(std::io::Error::other(e))
                     as Box<dyn std::error::Error>);
             }
         };
@@ -68,8 +68,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         // 启动 WebSocket 客户端
         if let Err(e) = LarkWsClient::open(config, event_handler).await {
-            eprintln!("❌ WebSocket 连接失败: {:?}", e);
-            return Err(format!("WebSocket connection failed: {:?}", e).into());
+            eprintln!("❌ WebSocket 连接失败: {e:?}");
+            return Err(format!("WebSocket connection failed: {e:?}").into());
         }
 
         println!("✅ WebSocket 连接已建立并正常运行");
