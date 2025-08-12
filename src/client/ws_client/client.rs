@@ -37,6 +37,19 @@ pub struct LarkWsClient {
 }
 
 impl LarkWsClient {
+    #[cfg(test)]
+    pub fn new_for_test() -> Self {
+        let (frame_tx, _frame_rx) = mpsc::unbounded_channel();
+        let (_event_tx, event_rx) = mpsc::unbounded_channel();
+
+        Self {
+            frame_tx,
+            event_rx,
+            cache: QuickCache::new(),
+            state_machine: WebSocketStateMachine::new(),
+        }
+    }
+
     pub async fn open(
         config: std::sync::Arc<crate::core::config::Config>,
         event_handler: EventDispatcherHandler,
@@ -110,7 +123,7 @@ impl LarkWsClient {
                 }
 
                 // 处理分包逻辑
-                let processed_frame = self.process_frame_packages(frame).await;
+                let processed_frame = self.process_frame_packages_internal(frame).await;
                 let Some(frame) = processed_frame else {
                     continue;
                 };
@@ -135,7 +148,13 @@ impl LarkWsClient {
     }
 
     /// 处理分包的 Frame，如果需要组合多个包则返回组合后的结果
-    async fn process_frame_packages(&mut self, mut frame: Frame) -> Option<Frame> {
+    #[cfg(test)]
+    pub async fn process_frame_packages(&mut self, frame: Frame) -> Option<Frame> {
+        self.process_frame_packages_internal(frame).await
+    }
+
+    /// 内部处理分包的 Frame，如果需要组合多个包则返回组合后的结果
+    async fn process_frame_packages_internal(&mut self, mut frame: Frame) -> Option<Frame> {
         let headers: &[Header] = frame.headers.as_ref();
 
         // 拆包数, 未拆包为1
@@ -174,6 +193,9 @@ impl LarkWsClient {
                     return None; // 还没收齐所有包
                 }
             }
+        } else {
+            // 对于单包消息，需要将payload重新设置回frame
+            frame.payload = Some(payload);
         }
 
         Some(frame)
