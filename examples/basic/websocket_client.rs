@@ -1,5 +1,5 @@
-use open_lark::prelude::*;
 use log::info;
+use open_lark::prelude::*;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -37,12 +37,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .with_app_type(AppType::SelfBuild)
             .with_enable_token_cache(true)
             .build();
-        
+
         let config = Arc::new(client.config);
 
         // 创建事件处理器
         let event_handler = match EventDispatcherHandler::builder()
-            .register_p2_im_message_receive_v1(|event| {˚
+            .register_p2_im_message_receive_v1(|event| {
                 info!("📩 收到消息事件: {:?}", event);
                 println!("📩 收到新消息:");
                 println!("  - 消息ID: {:?}", event.header.event_id);
@@ -52,25 +52,26 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
                 println!("  - 发送者: {:?}", event.event.sender);
             }) {
-                Ok(builder) => builder.build(),
-                Err(e) => {
-                    eprintln!("❌ Failed to register event handler: {}", e);
-                    return Err(Box::new(std::io::Error::new(std::io::ErrorKind::Other, e)) as Box<dyn std::error::Error>);
-                }
-            };
+            Ok(builder) => builder.build(),
+            Err(e) => {
+                eprintln!("❌ Failed to register event handler: {}", e);
+                return Err(Box::new(std::io::Error::new(std::io::ErrorKind::Other, e))
+                    as Box<dyn std::error::Error>);
+            }
+        };
 
         println!("📡 事件处理器已注册，支持的事件类型:");
         println!("  - 消息接收事件 (im.message.receive_v1)");
         println!("  - 消息已读事件 (im.message.message_read_v1)");
-        
+
         println!("\n🚀 启动 WebSocket 连接...");
-        
+
         // 启动 WebSocket 客户端
         if let Err(e) = LarkWsClient::open(config, event_handler).await {
             eprintln!("❌ WebSocket 连接失败: {:?}", e);
             return Err(format!("WebSocket connection failed: {:?}", e).into());
         }
-        
+
         println!("✅ WebSocket 连接已建立并正常运行");
     }
 
