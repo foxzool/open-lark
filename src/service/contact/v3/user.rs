@@ -86,12 +86,20 @@ impl UserService {
         user_id: &str,
         _req: &GetUserRequest,
     ) -> crate::core::SDKResult<GetUserResponse> {
+        let mut query_params = std::collections::HashMap::new();
+        if let Some(user_id_type) = &_req.user_id_type {
+            query_params.insert("user_id_type".to_string(), user_id_type.clone());
+        }
+        if let Some(department_id_type) = &_req.department_id_type {
+            query_params.insert("department_id_type".to_string(), department_id_type.clone());
+        }
+
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
             api_path: format!("/open-apis/contact/v3/users/{user_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
+            query_params: query_params,
             ..Default::default()
         };
 
