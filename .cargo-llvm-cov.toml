@@ -1,0 +1,41 @@
+# cargo-llvm-cov configuration
+# See: https://github.com/taiki-e/cargo-llvm-cov
+
+[coverage]
+# Minimum coverage threshold (percentage)
+# Set to 65% initially, can be increased gradually
+min-total = 65.0
+min-per-crate = 60.0
+
+[report]
+# Report formats to generate
+formats = ["html", "lcov", "text"]
+
+# Output directory for HTML reports
+html-dir = "target/llvm-cov/html"
+
+# LCOV output file (for CI integration)
+lcov-file = "target/llvm-cov/lcov.info"
+
+[ignore]
+# Ignore test files from coverage
+patterns = [
+    "tests/*",
+    "benches/*", 
+    "examples/*",
+    "tools/*",
+    "src/bin/*",
+    # Ignore generated protobuf code
+    "crates/protobuf/src/*.rs",
+]
+
+[workspace]
+# Include all workspace members
+include-all-members = true
+
+# Exclude specific crates if needed
+exclude = []
+
+[test]
+# Test execution settings
+features = ["full"]  # Run coverage with all features

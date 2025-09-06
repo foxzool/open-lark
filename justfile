@@ -33,8 +33,78 @@ docs:
   @echo "📚 Generating documentation..."
   cargo doc --all-features --no-deps
 
-# Run all pre-release checks
-check-all: fmt-check lint test build-release docs
+# Run coverage tests (requires cargo-llvm-cov)
+coverage:
+  @echo "📊 Running coverage analysis..."
+  cargo llvm-cov clean --workspace
+  cargo llvm-cov test --all-features --workspace \
+    --lcov --output-path target/llvm-cov/lcov.info \
+    --html --output-dir target/llvm-cov/html
+  @echo "📋 Coverage report generated:"
+  @echo "  - HTML: target/llvm-cov/html/index.html"
+  @echo "  - LCOV: target/llvm-cov/lcov.info"
+
+# Run coverage with threshold check
+coverage-check:
+  @echo "📊 Running coverage with threshold check..."
+  just coverage
+  @echo "🔍 Checking coverage threshold..."
+  @COVERAGE=$$(cargo llvm-cov report --summary-only | grep -oP 'Total.*?(\d+\.\d+)%' | grep -oP '\d+\.\d+' || echo "0.0"); \
+  MIN_COVERAGE=65.0; \
+  echo "Total coverage: $${COVERAGE}%"; \
+  if (( $$(echo "$${COVERAGE} < $${MIN_COVERAGE}" | bc -l 2>/dev/null || echo "1") )); then \
+    echo "❌ Coverage $${COVERAGE}% is below minimum threshold $${MIN_COVERAGE}%"; \
+    exit 1; \
+  else \
+    echo "✅ Coverage $${COVERAGE}% meets minimum threshold $${MIN_COVERAGE}%"; \
+  fi
+
+# Run security audit
+audit:
+  @echo "🔒 Running security audit..."
+  @echo "Checking for security vulnerabilities..."
+  cargo audit
+  @echo "Checking licenses and supply chain..."
+  cargo deny check
+  @echo "✅ Security audit completed!"
+
+# Update security databases
+update-audit-db:
+  @echo "🔄 Updating security advisory database..."
+  cargo audit --update
+  @echo "✅ Security database updated!"
+
+# Test feature combinations (requires cargo-hack)
+test-features:
+  @echo "🧪 Testing feature combinations..."
+  @echo "Testing each feature individually (excluding heavy features)..."
+  cargo hack test --each-feature --exclude-features websocket --lib
+  @echo "Testing core feature combinations..."
+  cargo hack test --feature-powerset --depth 2 \
+    --features "im,cloud-docs,contact,group,authentication,search" --lib
+  @echo "✅ Feature matrix testing completed!"
+
+# Quick feature combination test (most common combinations)
+test-features-quick:
+  @echo "🧪 Quick feature combination testing..."
+  @echo "Testing no features..."
+  cargo test --no-default-features --lib
+  @echo "Testing default features..."
+  cargo test --lib
+  @echo "Testing all features..."
+  cargo test --all-features --lib
+  @echo "Testing websocket feature..."
+  cargo test --no-default-features --features websocket --lib
+  @echo "✅ Quick feature testing completed!"
+
+# Install development tools
+install-dev-tools:
+  @echo "🛠️ Installing development tools..."
+  cargo install cargo-llvm-cov cargo-audit cargo-deny cargo-hack
+  @echo "✅ Development tools installed!"
+
+# Run all pre-release checks including coverage and security
+check-all: fmt-check lint test coverage-check audit build-release docs
   @echo "✅ All checks passed!"
 
 # Release a new version
@@ -117,9 +187,16 @@ help:
   @echo "  fmt-check    - Check code formatting"
   @echo "  lint         - Lint code with clippy"
   @echo "  test         - Run tests"
+  @echo "  test-features - Test all feature combinations (slow)"
+  @echo "  test-features-quick - Test common feature combinations"
   @echo "  build        - Build project"
   @echo "  build-release - Build release version"
   @echo "  docs         - Generate documentation"
-  @echo "  check-all    - Run all pre-release checks"
+  @echo "  coverage     - Run coverage analysis"
+  @echo "  coverage-check - Run coverage with threshold check"
+  @echo "  audit        - Run security audit"
+  @echo "  update-audit-db - Update security advisory database"
+  @echo "  install-dev-tools - Install development tools"
+  @echo "  check-all    - Run all pre-release checks (includes coverage & security)"
   @echo "  release VERSION - Release a new version (e.g., just release 0.4.0)"
   @echo "  help         - Show this help message"

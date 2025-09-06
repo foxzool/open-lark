@@ -1,0 +1,85 @@
+# cargo-deny configuration
+# See: https://embarkstudios.github.io/cargo-deny/
+
+# Lint level for when dependencies are used which require advisory databases
+# and this is checked for vulnerabilities
+[advisories]
+version = 2
+ignore = []
+# List of crates that are vulnerable
+database-path = "~/.cargo/advisory-db"
+database-urls = ["https://github.com/rustsec/advisory-db"]
+# If set, unsound crates are treated as if they have a security vulnerability
+unsound = "warn"
+# If set, yanked crates are treated as if they have a security vulnerability  
+yanked = "warn"
+
+# Lint level for when multiple sources are used for the same crate
+[sources]
+unknown-registry = "warn"
+unknown-git = "warn"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+
+# The licenses configuration controls how cargo-deny handles license information
+[licenses]
+version = 2
+# List of acceptable licenses, anything not in this list will be denied
+allow = [
+    # Common permissive licenses
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "BSL-1.0",
+    "ISC",
+    "Zlib",
+    "Unlicense",
+    # Common copyleft licenses (be careful with these in proprietary projects)
+    "MPL-2.0",
+    # Unicode-DFS license (common in unicode-related crates)
+    "Unicode-DFS-2016",
+]
+# List of licenses to deny
+deny = [
+    "GPL-2.0",
+    "GPL-3.0", 
+    "AGPL-1.0",
+    "AGPL-3.0",
+    # Old BSD licenses with advertising clause
+    "BSD-4-Clause",
+]
+# Ignore certain crates (useful for dev dependencies)
+exceptions = [
+    # If any crate needs special licensing handling, add here
+]
+
+# Ban configuration allows denying certain crates
+[bans]
+multiple-versions = "warn"
+wildcards = "allow"
+highlight = "all"
+workspace-default-features = "allow"
+external-default-features = "allow"
+
+# Skip certain crates from being checked for multiple versions
+skip = [
+    # Common crates that often have multiple versions in dependency tree
+    # Add specific crates here if they cause unavoidable version conflicts
+]
+
+# Skip duplicate dependency checks for certain crates
+skip-tree = [
+    # Add crates here if their entire dependency tree should be ignored
+]
+
+# List of crates that are banned
+deny = [
+    # Add crates that should never be used
+    # For security reasons, you might want to ban certain crates
+]
+
+# Allow certain crates even if they would otherwise be banned
+allow = [
+    # Add exceptions here
+]

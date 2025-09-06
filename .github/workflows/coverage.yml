@@ -1,0 +1,104 @@
+name: Coverage
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_TOOLCHAIN: stable
+  CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.CARGO_TOOLCHAIN }}
+          components: llvm-tools-preview
+          
+      - name: Install cargo-llvm-cov
+        uses: taiki-e/install-action@cargo-llvm-cov
+        
+      - name: Cache Cargo registry
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-registry-
+            
+      - name: Cache Cargo index
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-index-
+            
+      - name: Cache target directory
+        uses: actions/cache@v4
+        with:
+          path: target
+          key: ${{ runner.os }}-target-cov-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-target-cov-
+            ${{ runner.os }}-target-
+            
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Run coverage tests
+        run: |
+          cargo llvm-cov clean --workspace
+          cargo llvm-cov test --all-features --workspace \
+            --lcov --output-path target/llvm-cov/lcov.info \
+            --html --output-dir target/llvm-cov/html
+            
+      - name: Generate coverage summary
+        run: |
+          echo "## Coverage Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          cargo llvm-cov report --summary-only >> $GITHUB_STEP_SUMMARY
+          
+      - name: Upload coverage to Codecov (optional)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: codecov/codecov-action@v3
+        with:
+          file: target/llvm-cov/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+          
+      - name: Upload HTML coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: target/llvm-cov/html/
+          retention-days: 30
+          
+      - name: Check coverage threshold
+        run: |
+          # Extract total coverage percentage
+          COVERAGE=$(cargo llvm-cov report --summary-only | grep -oP 'Total.*?(\d+\.\d+)%' | grep -oP '\d+\.\d+')
+          echo "Total coverage: ${COVERAGE}%"
+          
+          # Define minimum threshold
+          MIN_COVERAGE=65.0
+          
+          # Compare coverage with threshold (bash arithmetic doesn't support floats, so we use bc)
+          if (( $(echo "${COVERAGE} < ${MIN_COVERAGE}" | bc -l) )); then
+            echo "❌ Coverage ${COVERAGE}% is below minimum threshold ${MIN_COVERAGE}%"
+            exit 1
+          else
+            echo "✅ Coverage ${COVERAGE}% meets minimum threshold ${MIN_COVERAGE}%"
+          fi
