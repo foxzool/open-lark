@@ -1,0 +1,181 @@
+name: Feature Matrix Testing
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    # Run feature matrix testing weekly on Sundays at 00:00 UTC
+    - cron: '0 0 * * 0'
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_TOOLCHAIN: stable
+  CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
+
+jobs:
+  # Test core feature combinations
+  feature-combinations:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        features:
+          # Individual core features
+          - "im"
+          - "cloud-docs"
+          - "contact"
+          - "group"
+          - "authentication"
+          - "search"
+          - "websocket"
+          
+          # Important combinations
+          - "im,authentication"
+          - "cloud-docs,authentication"
+          - "im,cloud-docs"
+          - "contact,group"
+          - "im,websocket"
+          - "search,contact"
+          
+          # Advanced service sampling (high-value features)
+          - "attendance"
+          - "approval"
+          - "calendar"
+          - "hire"
+          - "bot"
+          - "task"
+          - "admin"
+          - "ai"
+          
+          # Edge cases
+          - "" # no features
+          - "full" # all features
+          
+    steps:
+      - uses: actions/checkout@v4
+        
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.CARGO_TOOLCHAIN }}
+          
+      - name: Cache Cargo registry
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-registry-
+            
+      - name: Cache Cargo index
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-index-
+            
+      - name: Cache target directory
+        uses: actions/cache@v4
+        with:
+          path: target
+          key: ${{ runner.os }}-target-feat-${{ matrix.features }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-target-feat-${{ matrix.features }}-
+            ${{ runner.os }}-target-
+            
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Build with feature combination
+        run: |
+          echo "Testing feature combination: ${{ matrix.features }}"
+          if [ -z "${{ matrix.features }}" ]; then
+            echo "Building with no features (minimal build)"
+            cargo build --no-default-features
+          elif [ "${{ matrix.features }}" = "full" ]; then
+            echo "Building with all features"
+            cargo build --all-features
+          else
+            echo "Building with features: ${{ matrix.features }}"
+            cargo build --no-default-features --features "${{ matrix.features }}"
+          fi
+          
+      - name: Test with feature combination
+        run: |
+          if [ -z "${{ matrix.features }}" ]; then
+            echo "Testing with no features"
+            cargo test --no-default-features --lib
+          elif [ "${{ matrix.features }}" = "full" ]; then
+            echo "Testing with all features"
+            cargo test --all-features --lib
+          else
+            echo "Testing with features: ${{ matrix.features }}"
+            cargo test --no-default-features --features "${{ matrix.features }}" --lib
+          fi
+
+  # Advanced feature matrix testing using cargo-hack
+  cargo-hack-testing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.CARGO_TOOLCHAIN }}
+          
+      - name: Install cargo-hack
+        uses: taiki-e/install-action@cargo-hack
+        
+      - name: Cache Cargo registry
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-registry-
+            
+      - name: Cache target directory
+        uses: actions/cache@v4
+        with:
+          path: target
+          key: ${{ runner.os }}-target-hack-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-target-hack-
+            ${{ runner.os }}-target-
+            
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          
+      # Test each feature individually
+      - name: Test each feature individually
+        run: |
+          echo "## Feature Testing Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Test each feature individually (excluding websocket due to heavy dependencies)
+          cargo hack test --each-feature --exclude-features websocket --lib \
+            || echo "❌ Some individual feature tests failed" >> $GITHUB_STEP_SUMMARY
+            
+      # Test feature combinations that are likely to be used together
+      - name: Test core feature combinations
+        run: |
+          echo "### Core Feature Combinations" >> $GITHUB_STEP_SUMMARY
+          
+          # Test combinations of core features
+          CORE_FEATURES="im,cloud-docs,contact,group,authentication,search"
+          echo "Testing core features: $CORE_FEATURES" >> $GITHUB_STEP_SUMMARY
+          
+          if cargo hack test --feature-powerset --depth 2 \
+            --features "$CORE_FEATURES" --lib; then
+            echo "✅ Core feature combinations passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Some core feature combinations failed" >> $GITHUB_STEP_SUMMARY
+          fi

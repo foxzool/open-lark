@@ -1,0 +1,92 @@
+# Feature Matrix Testing Configuration
+# This file documents important feature combinations to test
+
+[core]
+# Core features that are most commonly used together
+features = ["im", "cloud-docs", "contact", "group", "authentication", "search"]
+description = "Core functionality that most users will need"
+
+[api_modules]
+# Individual API modules that should work independently
+modules = [
+    "acs", "admin", "ai", "aily", "apass", "application", "approval",
+    "attendance", "bot", "calendar", "cardkit", "corehr", "directory",
+    "ehr", "elearning", "helpdesk", "hire", "human-authentication",
+    "lingo", "mail", "mdm", "minutes", "moments", "okr", "payroll",
+    "performance", "personal-settings", "report", "search",
+    "security-and-compliance", "task", "tenant", "tenant-tag",
+    "trust-party", "vc", "verification", "workplace"
+]
+
+[important_combinations]
+# Feature combinations that are likely to be used together in practice
+
+[[important_combinations.messaging]]
+features = ["im", "authentication"]
+description = "Basic messaging with authentication"
+
+[[important_combinations.documents]]
+features = ["cloud-docs", "authentication"]  
+description = "Document operations with authentication"
+
+[[important_combinations.messaging_docs]]
+features = ["im", "cloud-docs", "authentication"]
+description = "Messaging and document sharing"
+
+[[important_combinations.hr_suite]]
+features = ["contact", "group", "attendance", "hire"]
+description = "HR management suite"
+
+[[important_combinations.realtime]]
+features = ["im", "websocket"]
+description = "Real-time messaging"
+
+[[important_combinations.search_contact]]
+features = ["search", "contact", "group"]
+description = "Contact and group search functionality"
+
+[[important_combinations.approval_workflow]]
+features = ["approval", "task", "authentication"]
+description = "Approval workflow system"
+
+[[important_combinations.calendar_meeting]]
+features = ["calendar", "vc", "minutes"]
+description = "Meeting and calendar management"
+
+[edge_cases]
+# Edge cases to test
+
+[[edge_cases.minimal]]
+features = []
+description = "Minimal build with no optional features"
+
+[[edge_cases.maximal]]
+features = ["full"]
+description = "Build with all features enabled"
+
+[[edge_cases.websocket_only]]
+features = ["websocket"]
+description = "Only WebSocket functionality"
+
+[[edge_cases.auth_only]]
+features = ["authentication"]
+description = "Only authentication functionality"
+
+[test_strategy]
+# Testing strategy configuration
+
+# Features to exclude from individual testing due to heavy dependencies
+exclude_individual = ["websocket"]
+
+# Maximum depth for feature combination testing (to avoid exponential explosion)
+max_depth = 2
+
+# Features to always include in combination testing
+always_include = ["authentication"]
+
+# Priority levels for different test scenarios
+priority_individual = "high"    # Test each feature individually
+priority_core = "high"          # Test core combinations
+priority_important = "medium"   # Test important combinations  
+priority_edge = "low"           # Test edge cases
+priority_exhaustive = "low"     # Exhaustive combination testing
