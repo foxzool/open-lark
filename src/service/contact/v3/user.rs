@@ -99,7 +99,7 @@ impl UserService {
             api_path: format!("/open-apis/contact/v3/users/{user_id}"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
-            query_params: query_params,
+            query_params,
             ..Default::default()
         };
 
