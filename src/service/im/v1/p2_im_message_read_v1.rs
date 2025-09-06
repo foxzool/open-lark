@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     event::{context::EventHeader, dispatcher::EventHandler},
-    service::im::v1::p2_im_message_receive_v1::{EventMessage, EventSender},
+    service::im::v1::p2_im_message_receive_v1::UserId,
 };
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -12,11 +12,24 @@ pub struct P2ImMessageReadV1 {
     pub event: P2ImMessageMessageReadV1Data,
 }
 
-/// 事件
+/// 消息已读事件数据
 #[derive(Debug, Serialize, Deserialize)]
 pub struct P2ImMessageMessageReadV1Data {
-    pub sender: EventSender,
-    pub message: EventMessage,
+    /// 消息阅读者信息
+    pub reader: EventReader,
+    /// 已读消息ID列表
+    pub message_id_list: Vec<String>,
+}
+
+/// 消息阅读者信息
+#[derive(Debug, Serialize, Deserialize)]
+pub struct EventReader {
+    /// 阅读时间戳（毫秒）
+    pub read_time: String,
+    /// 阅读者ID信息
+    pub reader_id: UserId,
+    /// tenant key，为租户在飞书上的唯一标识
+    pub tenant_key: String,
 }
 
 pub struct P2ImMessageReadV1ProcessorImpl<F>
