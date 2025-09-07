@@ -1,0 +1,124 @@
+name: Quality
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  fmt:
+    name: Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: cargo fmt --check
+        run: cargo fmt --all -- --check
+
+  clippy:
+    name: Clippy Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: cargo clippy (all targets/features)
+        run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: cargo test
+        run: cargo test --workspace --all-features --no-fail-fast
+
+  features:
+    name: Feature Matrix
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-hack
+      - uses: Swatinem/rust-cache@v2
+      - name: cargo hack each-feature
+        run: |
+          cargo hack check --workspace --each-feature --no-dev-deps --locked
+      - name: cargo hack powerset (depth 2)
+        run: |
+          cargo hack check --workspace --feature-powerset --depth 2 --no-dev-deps --locked
+
+  coverage:
+    name: Coverage (llvm-cov)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: llvm-tools-preview
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-llvm-cov
+      - uses: Swatinem/rust-cache@v2
+      - name: Run llvm-cov
+        run: |
+          cargo llvm-cov --workspace --all-features --lcov --output-path lcov.info
+      - name: Enforce coverage threshold
+        env:
+          MIN_COVERAGE: "65.0"
+        run: |
+          set -euo pipefail
+          summary=$(cargo llvm-cov report --summary-only)
+          echo "$summary"
+          cov=$(echo "$summary" | awk '/Total/ {for (i=1;i<=NF;i++) if ($i ~ /%$/) { gsub(/%/, "", $i); print $i; exit }}')
+          echo "Total coverage: ${cov}%"
+          awk -v cov="$cov" -v min="$MIN_COVERAGE" 'BEGIN { if (cov+0 < min+0) { printf("Coverage %.2f%% < threshold %.2f%%\n", cov, min); exit 1 } }'
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lcov.info
+          path: lcov.info
+
+  docs:
+    name: Docs Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: cargo doc (no-deps, deny warnings)
+        env:
+          RUSTDOCFLAGS: "-D warnings"
+        run: cargo doc --all-features --no-deps
+
+  security:
+    name: Security (audit/deny)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-audit,cargo-deny
+      - name: cargo audit
+        run: cargo audit --deny warnings
+      - name: cargo deny (advisories)
+        run: cargo deny check advisories
+      - name: cargo deny (bans)
+        run: cargo deny check bans
+      - name: cargo deny (licenses)
+        run: cargo deny check licenses
+      - name: cargo deny (sources)
+        run: cargo deny check sources

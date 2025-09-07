@@ -14,6 +14,9 @@ license = "Apache-2.0"
 
 [features]
 default = ["im", "cloud-docs", "contact", "group", "authentication", "search"]
+benchmarks = []
+dev-tests = []
+integration-tests = []
 full = [
     "acs", "admin", "ai", "aily", "apass", "application", "approval", "attendance",
     "authentication", "bot", "calendar", "cardkit", "cloud-docs", "contact", 
@@ -118,6 +121,29 @@ regex = "1.10"
 dotenvy = "0.15.7"
 env_logger = "0.11.3"
 uuid = { version = "1.8.0", features = ["v4"] }
+criterion = { version = "0.5", features = ["html_reports", "async_tokio"] }
+rstest = "0.18"
+proptest = "1"
+serial_test = "3"
+tempfile = "3"
+test-log = { version = "0.2", features = ["trace"] }
+wiremock = "0.6"
+once_cell = "1.19"
+mockall = "0.12"
+
+# -------------------------------------------
+# Benches
+# -------------------------------------------
+
+[[bench]]
+name = "json_parsing_bench"
+harness = false
+required-features = ["benchmarks"]
+
+[[bench]]
+name = "websocket_frame_bench"
+harness = false
+required-features = ["benchmarks", "websocket"]
 
 # ===========================================
 # Tools

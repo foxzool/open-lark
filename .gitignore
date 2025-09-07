@@ -5,3 +5,10 @@
 crates/*/target
 **/*.rs.bk
 Cargo.lock
+
+# Local configs (do not commit)
+/.config/
+/.test-config.toml
+
+# Generated reports (CI/local analysis artifacts)
+/reports/
