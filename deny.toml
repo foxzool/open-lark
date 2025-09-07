@@ -16,7 +16,12 @@ allow = [
   "MIT",
   "BSD-2-Clause",
   "BSD-3-Clause",
+  "BSD-4-Clause",
   "ISC",
+  "BSL-1.0",
+  "Zlib",
+  "MPL-2.0",
+  "OpenSSL",
   "Unicode-DFS-2016",
 ]
 exceptions = []
@@ -36,4 +41,3 @@ allow-git = []
 allow-registry = [
   "https://github.com/rust-lang/crates.io-index",
 ]
-
