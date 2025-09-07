@@ -23,7 +23,7 @@
 ### 📦 安装依赖
 ```toml
 [dependencies]
-open-lark = "0.12.0"
+open-lark = "0.13.2"
 tokio = { version = "1.0", features = ["full"] }
 ```
 

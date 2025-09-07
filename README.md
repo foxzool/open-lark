@@ -45,25 +45,25 @@
 ### 默认功能
 ```toml
 [dependencies]
-open-lark = "0.13.1"  # 包含: im, cloud-docs, contact, group, authentication, search
+open-lark = "0.13.2"  # 包含: im, cloud-docs, contact, group, authentication, search
 ```
 
 ### 仅使用云文档 API
 ```toml
 [dependencies]
-open-lark = { version = "0.13.1", default-features = false, features = ["cloud-docs"] }
+open-lark = { version = "0.13.2", default-features = false, features = ["cloud-docs"] }
 ```
 
 ### 仅使用消息 API  
 ```toml
 [dependencies]
-open-lark = { version = "0.13.1", default-features = false, features = ["im"] }
+open-lark = { version = "0.13.2", default-features = false, features = ["im"] }
 ```
 
 ### 启用所有功能
 ```toml
 [dependencies]
-open-lark = { version = "0.13.1", features = ["full"] }
+open-lark = { version = "0.13.2", features = ["full"] }
 ```
 
 ### 可用的功能模块
