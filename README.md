@@ -1,6 +1,6 @@
 [![crates.io](https://img.shields.io/crates/v/open-lark)](https://crates.io/crates/open-lark)
 [![MIT/Apache 2.0](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)](https://github.com/Seldom-SE/seldom_pixel#license)
-[![CI](https://github.com/foxzool/open-lark/workflows/CI/badge.svg)](https://github.com/foxzool/open-lark/actions)
+[![Quality](https://github.com/foxzool/open-lark/actions/workflows/quality.yml/badge.svg)](https://github.com/foxzool/open-lark/actions/workflows/quality.yml)
 [![Documentation](https://docs.rs/open-lark/badge.svg)](https://docs.rs/open-lark)
 ![Discord Shield](https://discord.com/api/guilds/1319490473060073532/widget.png?style=shield)
 
