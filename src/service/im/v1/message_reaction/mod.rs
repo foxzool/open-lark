@@ -10,6 +10,7 @@ use crate::{
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
+        standard_response::StandardResponse,
         SDKResult,
     },
     service::im::v1::models::{MessageReaction, UserIdType},
@@ -55,7 +56,7 @@ impl MessageReactionService {
         emoji_type: &str,
         user_id_type: Option<UserIdType>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<EmptyResponse>> {
+    ) -> SDKResult<EmptyResponse> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert(
@@ -75,7 +76,9 @@ impl MessageReactionService {
             ..Default::default()
         };
 
-        Transport::request(api_req, &self.config, option).await
+        let api_resp: BaseResponse<EmptyResponse> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 获取消息表情回复
@@ -86,7 +89,7 @@ impl MessageReactionService {
         page_size: Option<i32>,
         page_token: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ListReactionResponse>> {
+    ) -> SDKResult<ListReactionResponse> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert(
@@ -109,7 +112,9 @@ impl MessageReactionService {
             ..Default::default()
         };
 
-        Transport::request(api_req, &self.config, option).await
+        let api_resp: BaseResponse<ListReactionResponse> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 删除消息表情回复
@@ -119,7 +124,7 @@ impl MessageReactionService {
         reaction_id: &str,
         user_id_type: Option<UserIdType>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<EmptyResponse>> {
+    ) -> SDKResult<EmptyResponse> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert(
@@ -136,6 +141,8 @@ impl MessageReactionService {
             ..Default::default()
         };
 
-        Transport::request(api_req, &self.config, option).await
+        let api_resp: BaseResponse<EmptyResponse> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 }

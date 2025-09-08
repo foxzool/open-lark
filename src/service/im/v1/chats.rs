@@ -8,6 +8,7 @@ use crate::core::{
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
+    standard_response::StandardResponse,
     SDKResult,
 };
 
@@ -23,15 +24,15 @@ impl ChatsService {
         &self,
         list_chat_request: ListChatRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ListChatRespData>> {
+    ) -> SDKResult<ListChatRespData> {
         let mut api_req = list_chat_request.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/im/v1/chats".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-
-        Ok(api_resp)
+        let api_resp: BaseResponse<ListChatRespData> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     pub fn list_iter(
@@ -65,22 +66,19 @@ impl ListChatIterator<'_> {
             .list(self.request.clone(), self.option.clone())
             .await
         {
-            Ok(resp) => match resp.data {
-                Some(data) => {
-                    self.has_more = data.has_more;
-                    if data.has_more {
-                        self.request
-                            .api_req
-                            .query_params
-                            .insert("page_token".to_string(), data.page_token.to_string());
-                        Some(data.items)
-                    } else if data.items.is_empty() {
-                        None
-                    } else {
-                        Some(data.items)
-                    }
+            Ok(data) => {
+                self.has_more = data.has_more;
+                if data.has_more {
+                    self.request
+                        .api_req
+                        .query_params
+                        .insert("page_token".to_string(), data.page_token.to_string());
+                    Some(data.items)
+                } else if data.items.is_empty() {
+                    None
+                } else {
+                    Some(data.items)
                 }
-                None => None,
             },
             Err(_) => None,
         }
@@ -153,7 +151,7 @@ crate::impl_executable_builder_owned!(
     ListChatRequestBuilder,
     ChatsService,
     ListChatRequest,
-    BaseResponse<ListChatRespData>,
+    ListChatRespData,
     list
 );
 

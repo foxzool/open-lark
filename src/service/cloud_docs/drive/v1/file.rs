@@ -9,6 +9,7 @@ use crate::{
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
+        standard_response::StandardResponse,
         SDKResult,
     },
     impl_executable_builder_owned,
@@ -33,7 +34,7 @@ impl FileService {
         &self,
         request: GetFileMetaRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<GetFileMetaRespData>> {
+    ) -> SDKResult<GetFileMetaRespData> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: "/open-apis/drive/v1/metas/batch_query".to_string(),
@@ -42,8 +43,9 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-        Ok(api_resp)
+        let api_resp: BaseResponse<GetFileMetaRespData> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 获取文件统计信息
@@ -55,7 +57,7 @@ impl FileService {
         &self,
         request: GetFileStatisticsRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<GetFileStatisticsRespData>> {
+    ) -> SDKResult<GetFileStatisticsRespData> {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
@@ -66,8 +68,9 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-        Ok(api_resp)
+        let api_resp: BaseResponse<GetFileStatisticsRespData> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 获取文件访问记录
@@ -79,7 +82,7 @@ impl FileService {
         &self,
         request: ListFileViewRecordsRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ListFileViewRecordsRespData>> {
+    ) -> SDKResult<ListFileViewRecordsRespData> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
@@ -102,8 +105,9 @@ impl FileService {
                 .insert("page_size".to_string(), page_size.to_string());
         }
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-        Ok(api_resp)
+        let api_resp: BaseResponse<ListFileViewRecordsRespData> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 新建文件
@@ -115,7 +119,7 @@ impl FileService {
         &self,
         request: CreateFileRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CreateFileRespData>> {
+    ) -> SDKResult<CreateFileRespData> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: "/open-apis/drive/v1/files".to_string(),
@@ -124,8 +128,9 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-        Ok(api_resp)
+        let api_resp: BaseResponse<CreateFileRespData> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 复制文件
@@ -137,7 +142,7 @@ impl FileService {
         &self,
         request: CopyFileRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CopyFileRespData>> {
+    ) -> SDKResult<CopyFileRespData> {
         // 构建请求体
         let body = serde_json::json!({
             "name": request.name,
@@ -153,8 +158,9 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-        Ok(api_resp)
+        let api_resp: BaseResponse<CopyFileRespData> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 删除文件
@@ -166,7 +172,7 @@ impl FileService {
         &self,
         request: DeleteFileRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<DeleteFileRespData>> {
+    ) -> SDKResult<DeleteFileRespData> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: format!("/open-apis/drive/v1/files/{}", request.file_token),
@@ -174,8 +180,9 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-        Ok(api_resp)
+        let api_resp: BaseResponse<DeleteFileRespData> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 创建文件快捷方式
@@ -187,7 +194,7 @@ impl FileService {
         &self,
         request: CreateFileShortcutRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CreateFileShortcutRespData>> {
+    ) -> SDKResult<CreateFileShortcutRespData> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: "/open-apis/drive/v1/files/create_shortcut".to_string(),
@@ -196,8 +203,9 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-        Ok(api_resp)
+        let api_resp: BaseResponse<CreateFileShortcutRespData> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 搜索文件
@@ -209,7 +217,7 @@ impl FileService {
         &self,
         request: SearchFilesRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<SearchFilesRespData>> {
+    ) -> SDKResult<SearchFilesRespData> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
             api_path: "/open-apis/drive/v1/files/search".to_string(),
@@ -237,8 +245,9 @@ impl FileService {
                 .insert("owner_ids".to_string(), owner_ids.join(","));
         }
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-        Ok(api_resp)
+        let api_resp: BaseResponse<SearchFilesRespData> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 分片上传文件-预上传
@@ -250,7 +259,7 @@ impl FileService {
         &self,
         request: FileUploadPrepareRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<FileUploadPrepareRespData>> {
+    ) -> SDKResult<FileUploadPrepareRespData> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: "/open-apis/drive/v1/files/upload_prepare".to_string(),
@@ -259,8 +268,9 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-        Ok(api_resp)
+        let api_resp: BaseResponse<FileUploadPrepareRespData> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 分片上传文件-上传分片
@@ -272,14 +282,15 @@ impl FileService {
         &self,
         request: FileUploadPartRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<FileUploadPartRespData>> {
+    ) -> SDKResult<FileUploadPartRespData> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = "/open-apis/drive/v1/files/upload_part".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-        Ok(api_resp)
+        let api_resp: BaseResponse<FileUploadPartRespData> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 分片上传文件-完成上传
@@ -291,7 +302,7 @@ impl FileService {
         &self,
         request: FileUploadFinishRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<FileUploadFinishRespData>> {
+    ) -> SDKResult<FileUploadFinishRespData> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: "/open-apis/drive/v1/files/upload_finish".to_string(),
@@ -300,8 +311,9 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-        Ok(api_resp)
+        let api_resp: BaseResponse<FileUploadFinishRespData> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 创建导入任务
@@ -313,7 +325,7 @@ impl FileService {
         &self,
         request: CreateImportTaskRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CreateImportTaskRespData>> {
+    ) -> SDKResult<CreateImportTaskRespData> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: "/open-apis/drive/v1/import_tasks".to_string(),
@@ -322,8 +334,9 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-        Ok(api_resp)
+        let api_resp: BaseResponse<CreateImportTaskRespData> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 查询导入任务结果
@@ -335,7 +348,7 @@ impl FileService {
         &self,
         request: GetImportTaskRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<GetImportTaskRespData>> {
+    ) -> SDKResult<GetImportTaskRespData> {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!("/open-apis/drive/v1/import_tasks/{}", request.ticket),
@@ -343,8 +356,9 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-        Ok(api_resp)
+        let api_resp: BaseResponse<GetImportTaskRespData> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 }
 
@@ -858,7 +872,7 @@ impl_executable_builder_owned!(
     FileUploadPartRequestBuilder,
     FileService,
     FileUploadPartRequest,
-    BaseResponse<FileUploadPartRespData>,
+    FileUploadPartRespData,
     upload_part
 );
 
