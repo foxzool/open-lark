@@ -5,6 +5,7 @@ use crate::core::{
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
+    standard_response::StandardResponse,
     SDKResult,
 };
 use serde::Deserialize;
@@ -21,7 +22,7 @@ impl UserInfoService {
     /// 获取登录用户信息
     ///
     /// <https://open.feishu.cn/document/server-docs/authentication-v1/user/get>
-    pub async fn get(&self, user_access_token: impl ToString) -> SDKResult<BaseResponse<UserInfo>> {
+    pub async fn get(&self, user_access_token: impl ToString) -> SDKResult<UserInfo> {
         let api_req = ApiRequest {
             api_path: "/open-apis/authen/v1/user_info".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
@@ -31,9 +32,9 @@ impl UserInfoService {
         let option = RequestOption::builder()
             .user_access_token(user_access_token)
             .build();
-        let api_resp = Transport::request(api_req, &self.config, Some(option)).await?;
-
-        Ok(api_resp)
+        let api_resp: BaseResponse<UserInfo> = 
+            Transport::request(api_req, &self.config, Some(option)).await?;
+        api_resp.into_result()
     }
 }
 

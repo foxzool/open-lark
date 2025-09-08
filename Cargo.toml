@@ -157,6 +157,13 @@ path = "tools/api_consistency_checker.rs"
 name = "simple_api_checker"
 path = "tools/simple_api_checker.rs"
 
+[[bin]]
+name = "enhanced_api_checker"
+path = "tools/enhanced_api_checker.rs"
+[[bin]]
+name = "api_compatibility_tester"
+path = "tools/api_compatibility_tester.rs"
+
 # ===========================================
 # Examples
 # ===========================================

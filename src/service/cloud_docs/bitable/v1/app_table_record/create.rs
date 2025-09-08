@@ -10,6 +10,7 @@ use crate::{
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
+        standard_response::StandardResponse,
         SDKResult,
     },
     service::bitable::v1::Record,
@@ -119,7 +120,7 @@ crate::impl_executable_builder_owned!(
     CreateRecordRequestBuilder,
     super::AppTableRecordService,
     CreateRecordRequest,
-    BaseResponse<CreateRecordResponse>,
+    CreateRecordResponse,
     create
 );
 
@@ -143,7 +144,7 @@ pub async fn create_record(
     request: CreateRecordRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<CreateRecordResponse>> {
+) -> SDKResult<CreateRecordResponse> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::POST;
     api_req.api_path = format!(
@@ -153,8 +154,9 @@ pub async fn create_record(
     );
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-    let api_resp = Transport::request(api_req, config, option).await?;
-    Ok(api_resp)
+    let api_resp: BaseResponse<CreateRecordResponse> = 
+        Transport::request(api_req, config, option).await?;
+    api_resp.into_result()
 }
 
 #[cfg(test)]
