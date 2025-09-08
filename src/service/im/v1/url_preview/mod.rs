@@ -9,6 +9,7 @@ use crate::core::{
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
+    standard_response::StandardResponse,
     SDKResult,
 };
 
@@ -54,7 +55,7 @@ impl UrlPreviewService {
         message_id: &str,
         request: BatchUpdateUrlPreviewRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<EmptyResponse>> {
+    ) -> SDKResult<EmptyResponse> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: format!("/open-apis/im/v1/messages/{message_id}/url_preview/batch_update"),
@@ -63,6 +64,8 @@ impl UrlPreviewService {
             ..Default::default()
         };
 
-        Transport::request(api_req, &self.config, option).await
+        let api_resp: BaseResponse<EmptyResponse> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 }

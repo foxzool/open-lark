@@ -10,6 +10,7 @@ use crate::{
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
+        standard_response::StandardResponse,
         SDKResult,
     },
     service::im::v1::models::UserIdType,
@@ -66,7 +67,7 @@ impl BuzzMessagesService {
         user_id_type: UserIdType,
         request: UrgentAppRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UrgentResponse>> {
+    ) -> SDKResult<UrgentResponse> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: format!("/open-apis/im/v1/messages/{message_id}/urgent_app"),
@@ -79,7 +80,9 @@ impl BuzzMessagesService {
             ..Default::default()
         };
 
-        Transport::request(api_req, &self.config, option).await
+        let api_resp: BaseResponse<UrgentResponse> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 发送短信加急
@@ -89,7 +92,7 @@ impl BuzzMessagesService {
         user_id_type: UserIdType,
         request: UrgentSmsRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UrgentResponse>> {
+    ) -> SDKResult<UrgentResponse> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: format!("/open-apis/im/v1/messages/{message_id}/urgent_sms"),
@@ -102,7 +105,9 @@ impl BuzzMessagesService {
             ..Default::default()
         };
 
-        Transport::request(api_req, &self.config, option).await
+        let api_resp: BaseResponse<UrgentResponse> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 发送电话加急
@@ -112,7 +117,7 @@ impl BuzzMessagesService {
         user_id_type: UserIdType,
         request: UrgentPhoneRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<UrgentResponse>> {
+    ) -> SDKResult<UrgentResponse> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: format!("/open-apis/im/v1/messages/{message_id}/urgent_phone"),
@@ -125,6 +130,8 @@ impl BuzzMessagesService {
             ..Default::default()
         };
 
-        Transport::request(api_req, &self.config, option).await
+        let api_resp: BaseResponse<UrgentResponse> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 }
