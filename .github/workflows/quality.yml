@@ -37,7 +37,7 @@ jobs:
           include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: cargo clippy (all targets/features)
-        run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+        run: timeout 10m cargo clippy --workspace --all-targets --all-features -- -D warnings
 
   test:
     name: Tests
@@ -73,12 +73,12 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: cargo hack each-feature
         run: |
-          cargo hack check --workspace --each-feature --no-dev-deps
+          timeout 12m cargo hack check --workspace --each-feature --no-dev-deps
       # 收敛组合规模，减少误报；后续可再放开
       - name: cargo hack powerset (depth 2)
         continue-on-error: true
         run: |
-          cargo hack check --workspace --feature-powerset --depth 2 --no-dev-deps
+          timeout 8m cargo hack check --workspace --feature-powerset --depth 2 --no-dev-deps
 
   coverage:
     name: Coverage (llvm-cov)

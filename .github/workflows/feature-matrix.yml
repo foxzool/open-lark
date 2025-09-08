@@ -18,6 +18,7 @@ jobs:
   # Test core feature combinations
   feature-combinations:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -121,6 +122,7 @@ jobs:
   # Advanced feature matrix testing using cargo-hack
   cargo-hack-testing:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         
@@ -161,7 +163,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           
           # Test each feature individually (excluding websocket due to heavy dependencies)
-          cargo hack test --each-feature --exclude-features websocket --lib \
+          timeout 15m cargo hack test --each-feature --exclude-features websocket --lib \
             || echo "❌ Some individual feature tests failed" >> $GITHUB_STEP_SUMMARY
             
       # Test feature combinations that are likely to be used together
@@ -173,7 +175,7 @@ jobs:
           CORE_FEATURES="im,cloud-docs,contact,group,authentication,search"
           echo "Testing core features: $CORE_FEATURES" >> $GITHUB_STEP_SUMMARY
           
-          if cargo hack test --feature-powerset --depth 2 \
+          if timeout 10m cargo hack test --feature-powerset --depth 2 \
             --features "$CORE_FEATURES" --lib; then
             echo "✅ Core feature combinations passed" >> $GITHUB_STEP_SUMMARY
           else
