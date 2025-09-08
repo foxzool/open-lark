@@ -115,8 +115,14 @@ jobs:
           set -euo pipefail
           summary=$(cargo llvm-cov report --summary-only)
           echo "$summary"
-          cov=$(echo "$summary" | awk '/Total/ {for (i=1;i<=NF;i++) if ($i ~ /%$/) { gsub(/%/, "", $i); print $i; exit }}')
+          cov=$(echo "$summary" | awk '/TOTAL/ {for (i=1;i<=NF;i++) if ($i ~ /%$/) { gsub(/%/, "", $i); print $i; exit }}')
           echo "Total coverage: ${cov}%"
+          if [ -z "$cov" ]; then
+            echo "Error: Could not parse coverage from summary"
+            echo "Summary output:"
+            echo "$summary"
+            exit 1
+          fi
           awk -v cov="$cov" -v min="$MIN_COVERAGE" 'BEGIN { if (cov+0 < min+0) { printf("Coverage %.2f%% < threshold %.2f%%\n", cov, min); exit 1 } }'
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
