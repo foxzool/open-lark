@@ -63,16 +63,23 @@ jobs:
           version: 23.4
           include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Run coverage tests
         continue-on-error: true
         run: |
           cargo llvm-cov clean --workspace
+          echo "Running coverage tests..."
           # 仅运行库覆盖率，避免 doc-tests & 集成示例导致失败
-          cargo llvm-cov --all-features --workspace --lib \
+          if cargo llvm-cov --all-features --workspace --lib \
             --lcov --output-path target/llvm-cov/lcov.info \
-            --html --output-dir target/llvm-cov/html
+            --html --output-dir target/llvm-cov/html; then
+            echo "Coverage tests completed successfully"
+          else
+            echo "Coverage tests failed, exit code: $?"
+            echo "Checking target directory..."
+            ls -la target/ || true
+            ls -la target/llvm-cov-target/ || true
+          fi
             
       - name: Generate coverage summary
         if: always()
@@ -102,5 +109,5 @@ jobs:
         run: |
           summary=$(cargo llvm-cov report --summary-only)
           echo "$summary"
-          cov=$(echo "$summary" | awk '/Total/ {for (i=1;i<=NF;i++) if ($i ~ /%$/) { gsub(/%/, "", $i); print $i; exit }}')
+          cov=$(echo "$summary" | awk '/TOTAL/ {for (i=1;i<=NF;i++) if ($i ~ /%$/) { gsub(/%/, "", $i); print $i; exit }}')
           echo "Total coverage: ${cov}% (report-only, not enforced)"
