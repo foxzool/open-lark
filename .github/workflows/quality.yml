@@ -74,6 +74,10 @@ jobs:
         with:
           tool: cargo-llvm-cov
       - uses: Swatinem/rust-cache@v2
+      - name: Set higher coverage threshold on main
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "MIN_COVERAGE=65.0" >> $GITHUB_ENV
       - name: Run llvm-cov
         run: |
           cargo llvm-cov --workspace --all-features \
@@ -81,6 +85,7 @@ jobs:
             --lcov --output-path lcov.info
       - name: Enforce coverage threshold
         env:
+          # 默认阈值（PR 使用）；如为 push 到 main，上一步会将其覆盖为 65.0
           MIN_COVERAGE: "55.0"
         run: |
           set -euo pipefail
@@ -102,13 +107,17 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
+      - name: Deny rustdoc warnings on main
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: echo "RUSTDOCFLAGS=-D warnings" >> $GITHUB_ENV
       - name: cargo doc (no-deps)
         run: cargo doc --all-features --no-deps
 
   security:
     name: Security (audit/deny)
     runs-on: ubuntu-latest
-    continue-on-error: true
+    # PR 软失败，push 到 main 严格失败
+    continue-on-error: ${{ github.event_name == 'pull_request' }}
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -116,12 +125,12 @@ jobs:
         with:
           tool: cargo-audit,cargo-deny
       - name: cargo audit
-        run: cargo audit --deny warnings || true
+        run: cargo audit --deny warnings
       - name: cargo deny (advisories)
-        run: cargo deny check advisories || true
+        run: cargo deny check advisories
       - name: cargo deny (bans)
-        run: cargo deny check bans || true
+        run: cargo deny check bans
       - name: cargo deny (licenses)
-        run: cargo deny check licenses || true
+        run: cargo deny check licenses
       - name: cargo deny (sources)
-        run: cargo deny check sources || true
+        run: cargo deny check sources
