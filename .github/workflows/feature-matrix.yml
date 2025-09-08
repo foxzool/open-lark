@@ -18,7 +18,7 @@ jobs:
   # Test core feature combinations
   feature-combinations:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -97,26 +97,26 @@ jobs:
           echo "Testing feature combination: ${{ matrix.features }}"
           if [ -z "${{ matrix.features }}" ]; then
             echo "Building with no features (minimal build)"
-            cargo build --no-default-features
+            timeout 8m cargo build --no-default-features
           elif [ "${{ matrix.features }}" = "full" ]; then
             echo "Building with all features"
-            cargo build --all-features
+            timeout 10m cargo build --all-features
           else
             echo "Building with features: ${{ matrix.features }}"
-            cargo build --no-default-features --features "${{ matrix.features }}"
+            timeout 8m cargo build --no-default-features --features "${{ matrix.features }}"
           fi
           
       - name: Test with feature combination
         run: |
           if [ -z "${{ matrix.features }}" ]; then
             echo "Testing with no features"
-            cargo test --no-default-features --lib
+            timeout 5m cargo test --no-default-features --lib
           elif [ "${{ matrix.features }}" = "full" ]; then
             echo "Testing with all features"
-            cargo test --all-features --lib
+            timeout 8m cargo test --all-features --lib
           else
             echo "Testing with features: ${{ matrix.features }}"
-            cargo test --no-default-features --features "${{ matrix.features }}" --lib
+            timeout 5m cargo test --no-default-features --features "${{ matrix.features }}" --lib
           fi
 
   # Advanced feature matrix testing using cargo-hack
