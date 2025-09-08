@@ -36,7 +36,6 @@ jobs:
           version: 23.4
           include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: cargo clippy (all targets/features)
         run: cargo clippy --workspace --all-targets --all-features -- -D warnings
 
@@ -53,7 +52,6 @@ jobs:
           version: 23.4
           include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: cargo test
         run: cargo test --workspace --all-features --no-fail-fast
 
@@ -73,7 +71,6 @@ jobs:
           version: 23.4
           include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: cargo hack each-feature
         run: |
           cargo hack check --workspace --each-feature --no-dev-deps
@@ -101,7 +98,6 @@ jobs:
           version: 23.4
           include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Set higher coverage threshold on main
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
@@ -141,7 +137,6 @@ jobs:
           version: 23.4
           include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Deny rustdoc warnings on main
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: echo "RUSTDOCFLAGS=-D warnings" >> $GITHUB_ENV
