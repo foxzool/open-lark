@@ -9,6 +9,7 @@ use crate::core::{
     constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
+    standard_response::StandardResponse,
     SDKResult,
 };
 
@@ -28,15 +29,29 @@ impl UserService {
         &self,
         search_user_request: SearchUserRequest,
         option: Option<RequestOption>,
+    ) -> SDKResult<SearchUserResponse> {
+        let mut api_req = search_user_request.api_request;
+        api_req.http_method = Method::GET;
+        api_req.api_path = "/open-apis/search/v1/user".to_string();
+        api_req.supported_access_token_types = vec![AccessTokenType::User];
+
+        let api_resp: BaseResponse<SearchUserResponse> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
+    }
+    
+    /// 搜索用户 (返回BaseResponse供迭代器使用)
+    async fn search_user_with_base_response(
+        &self,
+        search_user_request: SearchUserRequest,
+        option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SearchUserResponse>> {
         let mut api_req = search_user_request.api_request;
         api_req.http_method = Method::GET;
         api_req.api_path = "/open-apis/search/v1/user".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
-
-        Ok(api_resp)
+        Transport::request(api_req, &self.config, option).await
     }
 
     pub fn search_user_iter(
@@ -108,7 +123,7 @@ crate::impl_executable_builder_owned!(
     SearchUserRequestBuilder,
     UserService,
     SearchUserRequest,
-    BaseResponse<SearchUserResponse>,
+    SearchUserResponse,
     search_user
 );
 
@@ -173,18 +188,24 @@ impl SearchUserIterator<'_> {
 
         match self
             .user_service
-            .search_user(self.request.clone(), self.option.clone())
+            .search_user_with_base_response(self.request.clone(), self.option.clone())
             .await
         {
             Ok(resp) => match resp.data {
                 Some(data) => {
                     self.has_more = data.has_more;
                     if data.has_more {
-                        self.request
-                            .api_request
-                            .query_params
-                            .insert("page_token".to_string(), data.page_token.unwrap());
-                        Some(data.users)
+                        if let Some(token) = data.page_token {
+                            self.request
+                                .api_request
+                                .query_params
+                                .insert("page_token".to_string(), token);
+                            Some(data.users)
+                        } else {
+                            // has_more is true but no page_token. Stop iterating to avoid panic.
+                            self.has_more = false;
+                            Some(data.users)
+                        }
                     } else if data.users.is_empty() {
                         None
                     } else {
