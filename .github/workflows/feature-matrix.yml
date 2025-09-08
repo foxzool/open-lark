@@ -82,7 +82,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: target
-          key: ${{ runner.os }}-target-feat-${{ hashFiles('**/Cargo.lock') }}-${{ replace(matrix.features || 'none', ',', '-') }}
+          key: ${{ runner.os }}-target-feat-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-target-feat-
             ${{ runner.os }}-target-
