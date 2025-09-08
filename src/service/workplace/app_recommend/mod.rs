@@ -9,6 +9,7 @@ use crate::{
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
+        standard_response::StandardResponse,
         SDKResult,
     },
     service::workplace::models::{AppRecommendRule, FavouriteApp, PageResponse, RecommendedApp},
@@ -41,7 +42,7 @@ impl AppRecommendService {
         &self,
         request: FavouriteAppsRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<FavouriteAppsResponse>> {
+    ) -> SDKResult<FavouriteAppsResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
             api_path: "/open-apis/workplace/v1/app_recommend_rule/favourite".to_string(),
@@ -67,7 +68,9 @@ impl AppRecommendService {
             api_req.query_params.insert("user_id".to_string(), user_id);
         }
 
-        Transport::request(api_req, &self.config, option).await
+        let api_resp: BaseResponse<FavouriteAppsResponse> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 获取管理员推荐的应用
@@ -86,7 +89,7 @@ impl AppRecommendService {
         &self,
         request: RecommendedAppsRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<RecommendedAppsResponse>> {
+    ) -> SDKResult<RecommendedAppsResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
             api_path: "/open-apis/workplace/v1/app_recommend_rule/recommend".to_string(),
@@ -118,7 +121,9 @@ impl AppRecommendService {
                 .insert("department_id".to_string(), department_id);
         }
 
-        Transport::request(api_req, &self.config, option).await
+        let api_resp: BaseResponse<RecommendedAppsResponse> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 获取当前设置的推荐规则列表
@@ -137,7 +142,7 @@ impl AppRecommendService {
         &self,
         request: RecommendRulesListRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<RecommendRulesListResponse>> {
+    ) -> SDKResult<RecommendRulesListResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
             api_path: "/open-apis/workplace/v1/app_recommend_rule/list".to_string(),
@@ -169,7 +174,9 @@ impl AppRecommendService {
             api_req.query_params.insert("status".to_string(), status);
         }
 
-        Transport::request(api_req, &self.config, option).await
+        let api_resp: BaseResponse<RecommendRulesListResponse> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 }
 
@@ -218,6 +225,57 @@ pub struct RecommendedAppsRequest {
     pub department_id: Option<String>,
 }
 
+impl RecommendedAppsRequest {
+    /// 创建Builder实例
+    pub fn builder() -> RecommendedAppsRequestBuilder {
+        RecommendedAppsRequestBuilder::default()
+    }
+}
+
+/// 推荐应用查询请求Builder
+#[derive(Default)]
+pub struct RecommendedAppsRequestBuilder {
+    inner: RecommendedAppsRequest,
+}
+
+impl RecommendedAppsRequestBuilder {
+    /// 设置页面令牌
+    pub fn page_token(mut self, token: impl Into<String>) -> Self {
+        self.inner.page_token = Some(token.into());
+        self
+    }
+    
+    /// 设置页面大小
+    pub fn page_size(mut self, size: i32) -> Self {
+        self.inner.page_size = Some(size);
+        self
+    }
+    
+    /// 设置分页参数（复合方法）
+    pub fn pagination(mut self, page_token: Option<String>, page_size: Option<i32>) -> Self {
+        self.inner.page_token = page_token;
+        self.inner.page_size = page_size;
+        self
+    }
+    
+    /// 设置用户ID筛选
+    pub fn user_filter(mut self, user_id: impl Into<String>) -> Self {
+        self.inner.user_id = Some(user_id.into());
+        self
+    }
+    
+    /// 设置部门ID筛选
+    pub fn department_filter(mut self, department_id: impl Into<String>) -> Self {
+        self.inner.department_id = Some(department_id.into());
+        self
+    }
+    
+    /// 构建请求对象
+    pub fn build(self) -> RecommendedAppsRequest {
+        self.inner
+    }
+}
+
 /// 推荐应用查询响应
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RecommendedAppsResponse {
@@ -247,6 +305,57 @@ pub struct RecommendRulesListRequest {
     /// 规则状态筛选
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+}
+
+impl RecommendRulesListRequest {
+    /// 创建Builder实例
+    pub fn builder() -> RecommendRulesListRequestBuilder {
+        RecommendRulesListRequestBuilder::default()
+    }
+}
+
+/// 推荐规则列表查询请求Builder
+#[derive(Default)]
+pub struct RecommendRulesListRequestBuilder {
+    inner: RecommendRulesListRequest,
+}
+
+impl RecommendRulesListRequestBuilder {
+    /// 设置页面令牌
+    pub fn page_token(mut self, token: impl Into<String>) -> Self {
+        self.inner.page_token = Some(token.into());
+        self
+    }
+    
+    /// 设置页面大小
+    pub fn page_size(mut self, size: i32) -> Self {
+        self.inner.page_size = Some(size);
+        self
+    }
+    
+    /// 设置分页参数（复合方法）
+    pub fn pagination(mut self, page_token: Option<String>, page_size: Option<i32>) -> Self {
+        self.inner.page_token = page_token;
+        self.inner.page_size = page_size;
+        self
+    }
+    
+    /// 设置规则类型筛选
+    pub fn rule_type_filter(mut self, rule_type: impl Into<String>) -> Self {
+        self.inner.rule_type = Some(rule_type.into());
+        self
+    }
+    
+    /// 设置规则状态筛选
+    pub fn status_filter(mut self, status: impl Into<String>) -> Self {
+        self.inner.status = Some(status.into());
+        self
+    }
+    
+    /// 构建请求对象
+    pub fn build(self) -> RecommendRulesListRequest {
+        self.inner
+    }
 }
 
 /// 推荐规则列表查询响应

@@ -35,7 +35,7 @@ impl AppTableRecordService {
         &self,
         request: CreateRecordRequest,
         option: Option<crate::core::req_option::RequestOption>,
-    ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<CreateRecordResponse>> {
+    ) -> crate::core::SDKResult<CreateRecordResponse> {
         create::create_record(request, &self.config, option).await
     }
 

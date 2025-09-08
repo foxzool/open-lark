@@ -10,6 +10,7 @@ use crate::{
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
+        standard_response::StandardResponse,
         SDKResult,
     },
     service::im::v1::models::{BatchMessageStatus, ReceiveIdType, UserIdType},
@@ -118,7 +119,7 @@ impl BatchMessageService {
         receive_id_type: ReceiveIdType,
         request: BatchSendMessageRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<BatchSendMessageResponse>> {
+    ) -> SDKResult<BatchSendMessageResponse> {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: "/open-apis/im/v1/batch_messages".to_string(),
@@ -131,7 +132,9 @@ impl BatchMessageService {
             ..Default::default()
         };
 
-        Transport::request(api_req, &self.config, option).await
+        let api_resp: BaseResponse<BatchSendMessageResponse> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 批量撤回消息
@@ -139,7 +142,7 @@ impl BatchMessageService {
         &self,
         batch_message_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<EmptyResponse>> {
+    ) -> SDKResult<EmptyResponse> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: format!("/open-apis/im/v1/batch_messages/{batch_message_id}"),
@@ -147,7 +150,9 @@ impl BatchMessageService {
             ..Default::default()
         };
 
-        Transport::request(api_req, &self.config, option).await
+        let api_resp: BaseResponse<EmptyResponse> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 查询批量消息整体进度
@@ -155,7 +160,7 @@ impl BatchMessageService {
         &self,
         batch_message_id: &str,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<GetBatchProgressResponse>> {
+    ) -> SDKResult<GetBatchProgressResponse> {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!("/open-apis/im/v1/batch_messages/{batch_message_id}/get_progress"),
@@ -163,7 +168,9 @@ impl BatchMessageService {
             ..Default::default()
         };
 
-        Transport::request(api_req, &self.config, option).await
+        let api_resp: BaseResponse<GetBatchProgressResponse> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 查询批量消息推送和阅读人数
@@ -174,7 +181,7 @@ impl BatchMessageService {
         page_size: Option<i32>,
         page_token: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<GetBatchReadUserResponse>> {
+    ) -> SDKResult<GetBatchReadUserResponse> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
             query_params.insert(
@@ -197,6 +204,8 @@ impl BatchMessageService {
             ..Default::default()
         };
 
-        Transport::request(api_req, &self.config, option).await
+        let api_resp: BaseResponse<GetBatchReadUserResponse> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 }

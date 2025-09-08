@@ -10,6 +10,7 @@ use crate::{
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
+        standard_response::StandardResponse,
         SDKResult,
     },
     service::im::v1::models::{Pin, UserIdType},
@@ -76,7 +77,7 @@ impl PinService {
         message_id: &str,
         user_id_type: Option<UserIdType>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<CreatePinResponse>> {
+    ) -> SDKResult<CreatePinResponse> {
         let mut query_params = HashMap::new();
         query_params.insert("message_id".to_string(), message_id.to_string());
         if let Some(user_id_type) = user_id_type {
@@ -94,7 +95,9 @@ impl PinService {
             ..Default::default()
         };
 
-        Transport::request(api_req, &self.config, option).await
+        let api_resp: BaseResponse<CreatePinResponse> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 移除Pin消息
@@ -103,7 +106,7 @@ impl PinService {
         pin_id: &str,
         user_id_type: Option<UserIdType>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<EmptyResponse>> {
+    ) -> SDKResult<EmptyResponse> {
         let query_params = if let Some(user_id_type) = user_id_type {
             HashMap::from([(
                 "user_id_type".to_string(),
@@ -121,7 +124,9 @@ impl PinService {
             ..Default::default()
         };
 
-        Transport::request(api_req, &self.config, option).await
+        let api_resp: BaseResponse<EmptyResponse> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 
     /// 获取群内Pin消息
@@ -132,7 +137,7 @@ impl PinService {
         page_size: Option<i32>,
         page_token: Option<String>,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ListPinResponse>> {
+    ) -> SDKResult<ListPinResponse> {
         let mut query_params = HashMap::new();
         query_params.insert("chat_id".to_string(), chat_id.to_string());
         if let Some(user_id_type) = user_id_type {
@@ -156,6 +161,8 @@ impl PinService {
             ..Default::default()
         };
 
-        Transport::request(api_req, &self.config, option).await
+        let api_resp: BaseResponse<ListPinResponse> = 
+            Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 }
