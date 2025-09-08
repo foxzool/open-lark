@@ -132,11 +132,21 @@
 ## 🚀 快速开始
 
 ### 1. 环境配置
-复制 `.env-example` 到 `.env` 并填入您的应用凭据：
+复制 `.env-example` 到 `.env` 并填入您的应用凭据（`.env` 已在 `.gitignore` 中，切勿提交）：
 ```bash
 APP_ID=your_app_id
 APP_SECRET=your_app_secret
 USER_ACCESS_TOKEN=your_user_access_token  # 某些操作需要
+```
+
+常见可选变量（按需）:
+```bash
+RECEIVE_ID=target_user_open_id_or_chat_id
+RUST_LOG=info
+SPREADSHEET_TOKEN=...
+TABLE_ID=...
+FILE_TOKEN=...
+FOLDER_TOKEN=...
 ```
 
 ### 2. 运行示例
@@ -150,6 +160,23 @@ cargo run --example hire_v1_example
 # 运行基础入门示例
 cargo run --example client_setup
 ```
+
+### 2.1 按功能启用 features
+部分示例依赖特性开关。默认启用的特性为 `im, cloud-docs, contact, group, authentication, search`；
+如需运行其它服务示例，请显式启用对应 feature：
+
+```bash
+# WebSocket 示例
+cargo run --example websocket_client --features websocket
+
+# 招聘（hire）示例
+cargo run --example hire_v1_example --features hire
+
+# 全量启用（构建时间较长，不推荐常用）
+cargo run --example directory_v1_management --features full
+```
+
+特性列表详见项目根目录 `Cargo.toml` 的 `[features]` 段，按需选择能显著提升编译速度与体验。
 
 ### 3. 选择适合的示例
 - **新手开发者**: 从 `basic/` 和 `core/` 目录开始
