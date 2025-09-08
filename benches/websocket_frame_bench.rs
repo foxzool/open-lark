@@ -289,8 +289,8 @@ fn header_processing_benchmark(c: &mut Criterion) {
     for &count in &header_counts {
         let headers: Vec<Header> = (0..count)
             .map(|i| Header {
-                key: format!("header_key_{}", i),
-                value: format!("header_value_{}", i),
+                key: format!("header_key_{i}"),
+                value: format!("header_value_{i}"),
             })
             .collect();
 

@@ -2,42 +2,57 @@
 # cargo-deny 配置
 ###############################
 
+[graph]
+all-features = false
+no-default-features = false
+
 [advisories]
-vulnerability = "deny"
-unmaintained = "deny"
-yanked = "deny"
-notice = "warn"
+# 忽略的安全建议
 ignore = []
 
 [licenses]
-unlicensed = "deny"
+# 允许的许可证列表
 allow = [
   "Apache-2.0",
-  "MIT",
+  "MIT", 
   "BSD-2-Clause",
   "BSD-3-Clause",
-  "BSD-4-Clause",
   "ISC",
-  "BSL-1.0",
+  "BSL-1.0", 
   "Zlib",
-  "MPL-2.0",
-  "OpenSSL",
-  "Unicode-DFS-2016",
+  "Unicode-3.0",
+  "CDLA-Permissive-2.0",
 ]
-exceptions = []
+# 许可证检测置信度阈值
 confidence-threshold = 0.8
+# 特定包的许可证例外
+exceptions = []
+
+[licenses.private]
+ignore = false
+registries = []
 
 [bans]
+# 多版本检测级别
 multiple-versions = "warn"
+# 通配符依赖检测级别
 wildcards = "deny"
+# 允许的包（小心使用）
+allow = []
+# 禁止的包
 deny = []
+# 跳过检查的包
 skip = []
 skip-tree = []
 
 [sources]
-unknown-registry = "deny"
+# 未知注册表检测级别
+unknown-registry = "deny" 
+# 未知 Git 仓库检测级别
 unknown-git = "deny"
-allow-git = []
+# 允许的注册表
 allow-registry = [
   "https://github.com/rust-lang/crates.io-index",
 ]
+# 允许的 Git 仓库
+allow-git = []
