@@ -1,5 +1,5 @@
 //! API兼容性测试工具
-//! 
+//!
 //! 此工具验证API改进后的向后兼容性，确保现有用户代码不会因为我们的
 //! StandardResponse和Builder模式改进而中断。
 
@@ -90,28 +90,28 @@ impl ApiCompatibilityTester {
     /// 运行所有兼容性测试
     pub fn run_all_tests(&mut self) -> Result<(), Box<dyn std::error::Error>> {
         println!("🔍 开始API兼容性测试...");
-        
+
         // 创建测试目录
         self.create_test_directory()?;
-        
+
         // 1. 生成参考测试用例
         self.generate_reference_test_cases()?;
-        
+
         // 2. 测试返回类型兼容性
         self.test_return_type_compatibility()?;
-        
-        // 3. 测试API签名兼容性  
+
+        // 3. 测试API签名兼容性
         self.test_signature_compatibility()?;
-        
+
         // 4. 测试Builder模式兼容性
         self.test_builder_compatibility()?;
-        
+
         // 5. 测试错误处理兼容性
         self.test_error_handling_compatibility()?;
-        
+
         // 6. 生成兼容性报告
         self.generate_compatibility_report()?;
-        
+
         println!("✅ API兼容性测试完成");
         Ok(())
     }
@@ -119,16 +119,16 @@ impl ApiCompatibilityTester {
     /// 创建测试目录结构
     fn create_test_directory(&self) -> Result<(), Box<dyn std::error::Error>> {
         let test_dir = &self.config.test_directory;
-        
+
         // 创建主测试目录
         fs::create_dir_all(test_dir)?;
-        
+
         // 创建子目录
         fs::create_dir_all(test_dir.join("reference"))?;
         fs::create_dir_all(test_dir.join("before"))?;
         fs::create_dir_all(test_dir.join("after"))?;
         fs::create_dir_all(test_dir.join("reports"))?;
-        
+
         println!("📁 已创建测试目录结构: {:?}", test_dir);
         Ok(())
     }
@@ -136,27 +136,18 @@ impl ApiCompatibilityTester {
     /// 生成参考测试用例
     fn generate_reference_test_cases(&mut self) -> Result<(), Box<dyn std::error::Error>> {
         let reference_dir = self.config.test_directory.join("reference");
-        
+
         // 生成workplace模块的参考测试用例
         let workplace_test = self.create_workplace_reference_test();
-        fs::write(
-            reference_dir.join("workplace_reference.rs"),
-            workplace_test
-        )?;
+        fs::write(reference_dir.join("workplace_reference.rs"), workplace_test)?;
 
         // 生成通用API使用模式测试
         let generic_test = self.create_generic_api_test();
-        fs::write(
-            reference_dir.join("generic_api_reference.rs"),
-            generic_test
-        )?;
+        fs::write(reference_dir.join("generic_api_reference.rs"), generic_test)?;
 
         // 生成Builder模式参考测试
         let builder_test = self.create_builder_reference_test();
-        fs::write(
-            reference_dir.join("builder_reference.rs"), 
-            builder_test
-        )?;
+        fs::write(reference_dir.join("builder_reference.rs"), builder_test)?;
 
         println!("📝 已生成参考测试用例");
         Ok(())
@@ -270,7 +261,8 @@ fn create_test_client() -> LarkClient {
         .with_app_type(AppType::SelfBuild)
         .build()
 }
-"#.to_string()
+"#
+        .to_string()
     }
 
     /// 创建通用API测试
@@ -357,7 +349,8 @@ fn create_message_request() -> String {
 fn process_message_data(data: String) -> String {
     format!("processed: {}", data)
 }
-"#.to_string()
+"#
+        .to_string()
     }
 
     /// 创建Builder模式参考测试
@@ -463,7 +456,8 @@ async fn test_builder_type_conversions() {
     assert_eq!(request1.user_id, Some("string_literal".to_string()));
     assert_eq!(request2.user_id, Some("owned_string".to_string()));
 }
-"#.to_string()
+"#
+        .to_string()
     }
 
     /// 测试返回类型兼容性
@@ -505,8 +499,12 @@ async fn test_builder_type_conversions() {
 
         // 所有workplace方法的签名兼容性
         let workplace_methods = vec![
-            "search", "search_custom", "search_custom_widget",
-            "get_favourite_apps", "get_recommended_apps", "list_recommend_rules"
+            "search",
+            "search_custom",
+            "search_custom_widget",
+            "get_favourite_apps",
+            "get_recommended_apps",
+            "list_recommend_rules",
         ];
 
         for method in workplace_methods {
@@ -555,7 +553,8 @@ async fn test_builder_type_conversions() {
             method_name: "错误类型".to_string(),
             test_type: CompatibilityTestType::ErrorHandlingCompatibility,
             status: TestStatus::Compatible,
-            details: "SDKResult<T>和LarkAPIError类型保持完全不变，用户的错误处理代码无需修改".to_string(),
+            details: "SDKResult<T>和LarkAPIError类型保持完全不变，用户的错误处理代码无需修改"
+                .to_string(),
         });
 
         self.add_test_result(CompatibilityTestResult {
@@ -571,31 +570,64 @@ async fn test_builder_type_conversions() {
 
     /// 生成兼容性报告
     fn generate_compatibility_report(&self) -> Result<(), Box<dyn std::error::Error>> {
-        let report_path = self.config.test_directory.join("reports").join("compatibility_report.md");
-        
+        let report_path = self
+            .config
+            .test_directory
+            .join("reports")
+            .join("compatibility_report.md");
+
         let mut report = String::new();
-        
+
         // 报告标题和摘要
         report.push_str("# API兼容性测试报告\n\n");
-        report.push_str(&format!("生成时间: {}\n\n", chrono::Utc::now().format("%Y-%m-%d %H:%M:%S UTC")));
-        
+        report.push_str(&format!(
+            "生成时间: {}\n\n",
+            chrono::Utc::now().format("%Y-%m-%d %H:%M:%S UTC")
+        ));
+
         // 测试摘要
         let total_tests = self.results.len();
-        let compatible_tests = self.results.iter().filter(|r| r.status == TestStatus::Compatible).count();
-        let warning_tests = self.results.iter().filter(|r| r.status == TestStatus::CompatibleWithWarnings).count();
-        let incompatible_tests = self.results.iter().filter(|r| r.status == TestStatus::Incompatible).count();
-        
+        let compatible_tests = self
+            .results
+            .iter()
+            .filter(|r| r.status == TestStatus::Compatible)
+            .count();
+        let warning_tests = self
+            .results
+            .iter()
+            .filter(|r| r.status == TestStatus::CompatibleWithWarnings)
+            .count();
+        let incompatible_tests = self
+            .results
+            .iter()
+            .filter(|r| r.status == TestStatus::Incompatible)
+            .count();
+
         report.push_str("## 📊 测试摘要\n\n");
         report.push_str(&format!("- **总测试数**: {}\n", total_tests));
-        report.push_str(&format!("- **完全兼容**: {} ({}%)\n", compatible_tests, compatible_tests * 100 / total_tests));
-        report.push_str(&format!("- **有警告**: {} ({}%)\n", warning_tests, warning_tests * 100 / total_tests));
-        report.push_str(&format!("- **不兼容**: {} ({}%)\n", incompatible_tests, incompatible_tests * 100 / total_tests));
+        report.push_str(&format!(
+            "- **完全兼容**: {} ({}%)\n",
+            compatible_tests,
+            compatible_tests * 100 / total_tests
+        ));
+        report.push_str(&format!(
+            "- **有警告**: {} ({}%)\n",
+            warning_tests,
+            warning_tests * 100 / total_tests
+        ));
+        report.push_str(&format!(
+            "- **不兼容**: {} ({}%)\n",
+            incompatible_tests,
+            incompatible_tests * 100 / total_tests
+        ));
         report.push_str("\n");
 
         // 兼容性状态
         if incompatible_tests == 0 {
             report.push_str("## ✅ 兼容性状态：良好\n\n");
-            report.push_str("所有测试显示API改进保持向后兼容性。现有用户代码无需修改即可受益于新的改进。\n\n");
+            report.push_str(
+                "所有测试显示API改进保持向后兼容性。现有用户代码无需修改即可受益于新的改进。\n\n",
+            );
         } else {
             report.push_str("## ⚠️ 兼容性状态：需要注意\n\n");
             report.push_str("发现一些兼容性问题，需要在实施前解决。\n\n");
@@ -619,12 +651,17 @@ async fn test_builder_type_conversions() {
 
             report.push_str(&format!("## 🧪 {}\n\n", type_name));
 
-            let type_results: Vec<_> = self.results.iter()
+            let type_results: Vec<_> = self
+                .results
+                .iter()
                 .filter(|r| r.test_type == test_type)
                 .collect();
 
             for result in type_results {
-                report.push_str(&format!("### {} - {}\n\n", result.status, result.method_name));
+                report.push_str(&format!(
+                    "### {} - {}\n\n",
+                    result.status, result.method_name
+                ));
                 report.push_str(&format!("**模块**: `{}`\n\n", result.module_path));
                 report.push_str(&format!("**详情**: {}\n\n", result.details));
             }
@@ -632,7 +669,7 @@ async fn test_builder_type_conversions() {
 
         // 改进建议
         report.push_str("## 💡 改进建议\n\n");
-        
+
         if warning_tests > 0 {
             report.push_str("### 针对警告项\n\n");
             report.push_str("1. **返回类型变化**: 虽然向后兼容，但建议在文档中明确说明改进后的数据访问方式更简洁\n");
@@ -664,7 +701,7 @@ async fn test_builder_type_conversions() {
         report.push_str("5. 🧪 **运行测试**: 在实施后运行这些兼容性测试验证\n\n");
 
         fs::write(report_path, report)?;
-        
+
         println!("📋 兼容性测试报告已生成");
         Ok(())
     }
@@ -677,12 +714,12 @@ async fn test_builder_type_conversions() {
     /// 获取测试结果摘要
     pub fn get_summary(&self) -> HashMap<TestStatus, usize> {
         let mut summary = HashMap::new();
-        
+
         for result in &self.results {
             let count = summary.entry(result.status.clone()).or_insert(0);
             *count += 1;
         }
-        
+
         summary
     }
 }
@@ -691,20 +728,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config = CompatibilityTestConfig {
         test_directory: PathBuf::from("tests/compatibility"),
         include_experimental: true,
-        strict_mode: false,  // 宽松模式，关注向后兼容性而非严格性
+        strict_mode: false, // 宽松模式，关注向后兼容性而非严格性
     };
 
     let mut tester = ApiCompatibilityTester::new(config);
-    
+
     tester.run_all_tests()?;
-    
+
     let summary = tester.get_summary();
-    
+
     println!("\n🏆 兼容性测试完成！");
     println!("📊 结果摘要:");
     for (status, count) in summary {
         println!("   {} = {} 项", status, count);
     }
-    
+
     Ok(())
 }

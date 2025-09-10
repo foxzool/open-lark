@@ -1,3 +1,4 @@
+use log::error;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
@@ -43,7 +44,7 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<GetFileMetaRespData> = 
+        let api_resp: BaseResponse<GetFileMetaRespData> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -68,7 +69,7 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<GetFileStatisticsRespData> = 
+        let api_resp: BaseResponse<GetFileStatisticsRespData> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -105,7 +106,7 @@ impl FileService {
                 .insert("page_size".to_string(), page_size.to_string());
         }
 
-        let api_resp: BaseResponse<ListFileViewRecordsRespData> = 
+        let api_resp: BaseResponse<ListFileViewRecordsRespData> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -128,7 +129,7 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<CreateFileRespData> = 
+        let api_resp: BaseResponse<CreateFileRespData> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -158,7 +159,7 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<CopyFileRespData> = 
+        let api_resp: BaseResponse<CopyFileRespData> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -180,7 +181,7 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<DeleteFileRespData> = 
+        let api_resp: BaseResponse<DeleteFileRespData> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -203,7 +204,7 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<CreateFileShortcutRespData> = 
+        let api_resp: BaseResponse<CreateFileShortcutRespData> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -245,7 +246,7 @@ impl FileService {
                 .insert("owner_ids".to_string(), owner_ids.join(","));
         }
 
-        let api_resp: BaseResponse<SearchFilesRespData> = 
+        let api_resp: BaseResponse<SearchFilesRespData> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -268,7 +269,7 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<FileUploadPrepareRespData> = 
+        let api_resp: BaseResponse<FileUploadPrepareRespData> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -288,7 +289,7 @@ impl FileService {
         api_req.api_path = "/open-apis/drive/v1/files/upload_part".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
-        let api_resp: BaseResponse<FileUploadPartRespData> = 
+        let api_resp: BaseResponse<FileUploadPartRespData> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -311,7 +312,7 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<FileUploadFinishRespData> = 
+        let api_resp: BaseResponse<FileUploadFinishRespData> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -334,7 +335,7 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<CreateImportTaskRespData> = 
+        let api_resp: BaseResponse<CreateImportTaskRespData> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -356,7 +357,7 @@ impl FileService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<GetImportTaskRespData> = 
+        let api_resp: BaseResponse<GetImportTaskRespData> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -863,7 +864,15 @@ impl FileUploadPartRequestBuilder {
     }
 
     pub fn build(mut self) -> FileUploadPartRequest {
-        self.request.api_req.body = serde_json::to_vec(&self.request).unwrap();
+        match serde_json::to_vec(&self.request) {
+            Ok(bytes) => {
+                self.request.api_req.body = bytes;
+            }
+            Err(e) => {
+                error!("Failed to serialize file upload part request: {}", e);
+                self.request.api_req.body = Vec::new();
+            }
+        }
         self.request
     }
 }

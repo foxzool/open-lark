@@ -95,7 +95,7 @@ impl PinService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<CreatePinResponse> = 
+        let api_resp: BaseResponse<CreatePinResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -124,7 +124,7 @@ impl PinService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<EmptyResponse> = 
+        let api_resp: BaseResponse<EmptyResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -161,7 +161,7 @@ impl PinService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<ListPinResponse> = 
+        let api_resp: BaseResponse<ListPinResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }

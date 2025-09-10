@@ -1,3 +1,4 @@
+use log::error;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -110,7 +111,15 @@ impl CreateRecordRequestBuilder {
                 .query_params
                 .insert("client_token".to_string(), client_token.clone());
         }
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
+        match serde_json::to_vec(&self.request) {
+            Ok(bytes) => {
+                self.request.api_request.body = bytes;
+            }
+            Err(e) => {
+                error!("Failed to serialize create record request: {}", e);
+                self.request.api_request.body = Vec::new();
+            }
+        }
         self.request
     }
 }
@@ -154,7 +163,7 @@ pub async fn create_record(
     );
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-    let api_resp: BaseResponse<CreateRecordResponse> = 
+    let api_resp: BaseResponse<CreateRecordResponse> =
         Transport::request(api_req, config, option).await?;
     api_resp.into_result()
 }

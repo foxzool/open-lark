@@ -32,7 +32,7 @@ impl UserInfoService {
         let option = RequestOption::builder()
             .user_access_token(user_access_token)
             .build();
-        let api_resp: BaseResponse<UserInfo> = 
+        let api_resp: BaseResponse<UserInfo> =
             Transport::request(api_req, &self.config, Some(option)).await?;
         api_resp.into_result()
     }
@@ -96,7 +96,8 @@ fn test_user_info() {
 		"employee_no": "111222333"
     }"#;
 
-    let user_info: UserInfo = serde_json::from_str(json_str).unwrap();
+    let user_info: UserInfo =
+        serde_json::from_str(json_str).expect("Failed to parse test user info JSON");
 
     assert_eq!(user_info.name, "zhangsan")
 }

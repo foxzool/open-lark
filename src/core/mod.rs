@@ -22,5 +22,6 @@ pub mod standard_response;
 pub mod token_manager;
 pub mod trait_system;
 pub mod utils;
+pub mod validation;
 
 pub type SDKResult<T> = Result<T, LarkAPIError>;

@@ -76,7 +76,7 @@ impl MessageReactionService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<EmptyResponse> = 
+        let api_resp: BaseResponse<EmptyResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -112,7 +112,7 @@ impl MessageReactionService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<ListReactionResponse> = 
+        let api_resp: BaseResponse<ListReactionResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -141,7 +141,7 @@ impl MessageReactionService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<EmptyResponse> = 
+        let api_resp: BaseResponse<EmptyResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }

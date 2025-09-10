@@ -80,7 +80,7 @@ impl BuzzMessagesService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<UrgentResponse> = 
+        let api_resp: BaseResponse<UrgentResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -105,7 +105,7 @@ impl BuzzMessagesService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<UrgentResponse> = 
+        let api_resp: BaseResponse<UrgentResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -130,7 +130,7 @@ impl BuzzMessagesService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<UrgentResponse> = 
+        let api_resp: BaseResponse<UrgentResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }

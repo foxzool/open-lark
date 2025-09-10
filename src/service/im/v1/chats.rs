@@ -30,7 +30,7 @@ impl ChatsService {
         api_req.api_path = "/open-apis/im/v1/chats".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp: BaseResponse<ListChatRespData> = 
+        let api_resp: BaseResponse<ListChatRespData> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -79,7 +79,7 @@ impl ListChatIterator<'_> {
                 } else {
                     Some(data.items)
                 }
-            },
+            }
             Err(_) => None,
         }
     }

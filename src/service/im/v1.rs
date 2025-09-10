@@ -11,6 +11,7 @@ use crate::{
 // 现有模块
 pub mod chats;
 pub mod message;
+pub mod message_service;
 pub mod p2_im_message_read_v1;
 pub mod p2_im_message_receive_v1;
 
