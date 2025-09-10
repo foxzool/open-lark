@@ -64,7 +64,7 @@ impl UrlPreviewService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<EmptyResponse> = 
+        let api_resp: BaseResponse<EmptyResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }

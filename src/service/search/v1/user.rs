@@ -10,6 +10,7 @@ use crate::core::{
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
+    validation::{self, ValidationResult},
     SDKResult,
 };
 
@@ -35,11 +36,11 @@ impl UserService {
         api_req.api_path = "/open-apis/search/v1/user".to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::User];
 
-        let api_resp: BaseResponse<SearchUserResponse> = 
+        let api_resp: BaseResponse<SearchUserResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
-    
+
     /// 搜索用户 (返回BaseResponse供迭代器使用)
     async fn search_user_with_base_response(
         &self,
@@ -65,6 +66,24 @@ impl UserService {
             option,
             has_more: true,
         }
+    }
+
+    /// 使用分页验证搜索用户
+    ///
+    /// 提供一个更安全的方式来搜索用户，自动验证分页参数
+    pub async fn search_user_with_validated_pagination(
+        &self,
+        query: impl ToString,
+        page_size: Option<u32>,
+        page_token: Option<String>,
+        option: Option<RequestOption>,
+    ) -> SDKResult<SearchUserResponse> {
+        // 创建请求构建器
+        let builder = SearchUserRequest::builder()
+            .query(query)
+            .with_pagination(page_size, page_token)?;
+
+        self.search_user(builder.build(), option).await
     }
 }
 
@@ -96,7 +115,19 @@ impl SearchUserRequestBuilder {
     }
 
     /// 分页大小，最小为 1，最大为 200，默认为 20。
+    ///
+    /// # 验证规则
+    ///
+    /// 分页大小必须在 1-200 之间（搜索服务限制），推荐值为 20
     pub fn page_size(mut self, page_size: i32) -> Self {
+        // 搜索服务的分页大小限制更严格（1-200）
+        if !(1..=200).contains(&page_size) {
+            log::warn!(
+                "Page size {} is out of valid range (1-200) for search service",
+                page_size
+            );
+        }
+
         self.search_user_request
             .api_request
             .query_params
@@ -107,15 +138,69 @@ impl SearchUserRequestBuilder {
     /// 分页标识，获取首页不需要填写，获取下一页时传入上一页返回的分页标识值。
     /// 请注意此字段的值并没有特殊含义，请使用每次请求所返回的标识值。
     pub fn page_token(mut self, page_token: impl ToString) -> Self {
+        let token = page_token.to_string();
+
+        // 验证分页标记格式
+        match validation::validate_page_token(&token, "page_token") {
+            ValidationResult::Valid => {}
+            ValidationResult::Warning(msg) => {
+                log::warn!("Page token validation warning: {}", msg);
+            }
+            ValidationResult::Invalid(msg) => {
+                log::error!("Invalid page token: {}", msg);
+            }
+        }
+
         self.search_user_request
             .api_request
             .query_params
-            .insert("page_token".to_string(), page_token.to_string());
+            .insert("page_token".to_string(), token);
         self
     }
 
     pub fn build(self) -> SearchUserRequest {
         self.search_user_request
+    }
+
+    /// 使用分页验证构建器设置分页参数
+    ///
+    /// 这个方法提供了一个更安全的分页参数设置方式，会自动验证参数的有效性
+    /// 搜索服务的分页大小限制为 1-200
+    pub fn with_pagination(
+        mut self,
+        page_size: Option<u32>,
+        page_token: Option<String>,
+    ) -> SDKResult<Self> {
+        let mut pagination_builder =
+            validation::pagination::PaginationRequestBuilder::<SearchUserResponse>::new();
+
+        if let Some(size) = page_size {
+            // 搜索服务有更严格的分页大小限制（1-200）
+            if size > 200 {
+                return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                    "Page size {} exceeds maximum limit of 200 for search service",
+                    size
+                )));
+            }
+            pagination_builder = pagination_builder.with_page_size(size);
+        }
+
+        if let Some(token) = page_token {
+            pagination_builder = pagination_builder.with_page_token(token);
+        }
+
+        // 构建分页参数
+        let params = pagination_builder.build()?;
+
+        // 应用到请求中
+        for (key, value) in params {
+            self.search_user_request
+                .api_request
+                .query_params
+                .insert(key, value);
+        }
+
+        Ok(self)
     }
 }
 

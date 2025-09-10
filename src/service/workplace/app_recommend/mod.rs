@@ -68,7 +68,7 @@ impl AppRecommendService {
             api_req.query_params.insert("user_id".to_string(), user_id);
         }
 
-        let api_resp: BaseResponse<FavouriteAppsResponse> = 
+        let api_resp: BaseResponse<FavouriteAppsResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -121,7 +121,7 @@ impl AppRecommendService {
                 .insert("department_id".to_string(), department_id);
         }
 
-        let api_resp: BaseResponse<RecommendedAppsResponse> = 
+        let api_resp: BaseResponse<RecommendedAppsResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -174,7 +174,7 @@ impl AppRecommendService {
             api_req.query_params.insert("status".to_string(), status);
         }
 
-        let api_resp: BaseResponse<RecommendRulesListResponse> = 
+        let api_resp: BaseResponse<RecommendRulesListResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -244,32 +244,32 @@ impl RecommendedAppsRequestBuilder {
         self.inner.page_token = Some(token.into());
         self
     }
-    
+
     /// 设置页面大小
     pub fn page_size(mut self, size: i32) -> Self {
         self.inner.page_size = Some(size);
         self
     }
-    
+
     /// 设置分页参数（复合方法）
     pub fn pagination(mut self, page_token: Option<String>, page_size: Option<i32>) -> Self {
         self.inner.page_token = page_token;
         self.inner.page_size = page_size;
         self
     }
-    
+
     /// 设置用户ID筛选
     pub fn user_filter(mut self, user_id: impl Into<String>) -> Self {
         self.inner.user_id = Some(user_id.into());
         self
     }
-    
+
     /// 设置部门ID筛选
     pub fn department_filter(mut self, department_id: impl Into<String>) -> Self {
         self.inner.department_id = Some(department_id.into());
         self
     }
-    
+
     /// 构建请求对象
     pub fn build(self) -> RecommendedAppsRequest {
         self.inner
@@ -326,32 +326,32 @@ impl RecommendRulesListRequestBuilder {
         self.inner.page_token = Some(token.into());
         self
     }
-    
+
     /// 设置页面大小
     pub fn page_size(mut self, size: i32) -> Self {
         self.inner.page_size = Some(size);
         self
     }
-    
+
     /// 设置分页参数（复合方法）
     pub fn pagination(mut self, page_token: Option<String>, page_size: Option<i32>) -> Self {
         self.inner.page_token = page_token;
         self.inner.page_size = page_size;
         self
     }
-    
+
     /// 设置规则类型筛选
     pub fn rule_type_filter(mut self, rule_type: impl Into<String>) -> Self {
         self.inner.rule_type = Some(rule_type.into());
         self
     }
-    
+
     /// 设置规则状态筛选
     pub fn status_filter(mut self, status: impl Into<String>) -> Self {
         self.inner.status = Some(status.into());
         self
     }
-    
+
     /// 构建请求对象
     pub fn build(self) -> RecommendRulesListRequest {
         self.inner
