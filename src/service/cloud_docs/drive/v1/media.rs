@@ -9,10 +9,12 @@ use crate::{
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
+        validation::{validate_file_name, validate_upload_file, ValidateBuilder, ValidationResult},
         SDKResult,
     },
     impl_executable_builder_owned,
 };
+use log;
 
 /// 素材服务
 pub struct MediaService {
@@ -22,6 +24,21 @@ pub struct MediaService {
 impl MediaService {
     pub fn new(config: Config) -> Self {
         Self { config }
+    }
+
+    /// 创建上传素材Builder
+    pub fn upload_all_builder(&self) -> UploadMediaRequestBuilder {
+        UploadMediaRequestBuilder::default()
+    }
+
+    /// 使用Builder上传素材（带验证）
+    pub async fn upload_all_with_builder(
+        &self,
+        builder_result: SDKResult<UploadMediaRequest>,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<UploadMediaRespData>> {
+        let request = builder_result?;
+        self.upload_all(request, option).await
     }
 
     /// 上传素材
@@ -212,8 +229,119 @@ impl UploadMediaRequestBuilder {
     }
 
     pub fn build(mut self) -> UploadMediaRequest {
-        self.request.api_req.body = serde_json::to_vec(&self.request).unwrap();
+        // 验证必填字段
+        if self.request.file_name.is_empty() {
+            log::error!("file_name is required for media upload");
+            return UploadMediaRequest {
+                api_req: ApiRequest {
+                    body: Vec::new(),
+                    ..Default::default()
+                },
+                ..self.request
+            };
+        }
+
+        if self.request.parent_token.is_empty() {
+            log::error!("parent_token is required for media upload");
+            return UploadMediaRequest {
+                api_req: ApiRequest {
+                    body: Vec::new(),
+                    ..Default::default()
+                },
+                ..self.request
+            };
+        }
+
+        if self.request.size <= 0 {
+            log::error!("file size must be greater than 0");
+            return UploadMediaRequest {
+                api_req: ApiRequest {
+                    body: Vec::new(),
+                    ..Default::default()
+                },
+                ..self.request
+            };
+        }
+
+        // 验证文件名
+        let (_, name_result) = validate_file_name(&self.request.file_name);
+        if !name_result.is_valid() {
+            log::error!(
+                "Invalid file_name: {}",
+                name_result.error().unwrap_or("unknown error")
+            );
+            return UploadMediaRequest {
+                api_req: ApiRequest {
+                    body: Vec::new(),
+                    ..Default::default()
+                },
+                ..self.request
+            };
+        }
+
+        // 验证文件数据（如果有）
+        if !self.request.api_req.file.is_empty() {
+            let upload_result =
+                validate_upload_file(&self.request.api_req.file, &self.request.file_name, false);
+            if !upload_result.is_valid() {
+                log::error!(
+                    "File validation failed: {}",
+                    upload_result.error().unwrap_or("unknown error")
+                );
+                return UploadMediaRequest {
+                    api_req: ApiRequest {
+                        body: Vec::new(),
+                        ..Default::default()
+                    },
+                    ..self.request
+                };
+            }
+        }
+
+        self.request.api_req.body = match serde_json::to_vec(&self.request) {
+            Ok(body) => body,
+            Err(e) => {
+                log::error!("Failed to serialize upload media request: {}", e);
+                return UploadMediaRequest {
+                    api_req: ApiRequest {
+                        body: Vec::new(),
+                        ..Default::default()
+                    },
+                    ..self.request
+                };
+            }
+        };
         self.request
+    }
+}
+
+impl ValidateBuilder for UploadMediaRequestBuilder {
+    fn validate(&self) -> ValidationResult {
+        // 验证必填字段
+        if self.request.file_name.is_empty() {
+            return ValidationResult::Invalid("file_name is required".to_string());
+        }
+
+        if self.request.parent_token.is_empty() {
+            return ValidationResult::Invalid("parent_token is required".to_string());
+        }
+
+        if self.request.size <= 0 {
+            return ValidationResult::Invalid("file size must be greater than 0".to_string());
+        }
+
+        // 验证文件名
+        let (_, name_result) = validate_file_name(&self.request.file_name);
+        if !name_result.is_valid() {
+            return name_result;
+        }
+
+        // 验证文件数据（如果有）
+        if !self.request.api_req.file.is_empty() {
+            validate_upload_file(&self.request.api_req.file, &self.request.file_name, false)
+        } else {
+            ValidationResult::Valid
+        }
     }
 }
 

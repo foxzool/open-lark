@@ -132,7 +132,7 @@ impl BatchMessageService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<BatchSendMessageResponse> = 
+        let api_resp: BaseResponse<BatchSendMessageResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -150,7 +150,7 @@ impl BatchMessageService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<EmptyResponse> = 
+        let api_resp: BaseResponse<EmptyResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -168,7 +168,7 @@ impl BatchMessageService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<GetBatchProgressResponse> = 
+        let api_resp: BaseResponse<GetBatchProgressResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -204,7 +204,7 @@ impl BatchMessageService {
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<GetBatchReadUserResponse> = 
+        let api_resp: BaseResponse<GetBatchReadUserResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }

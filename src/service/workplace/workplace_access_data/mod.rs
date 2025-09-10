@@ -95,7 +95,7 @@ impl WorkplaceAccessDataService {
                 .insert("access_type".to_string(), access_type);
         }
 
-        let api_resp: BaseResponse<AccessDataSearchResponse> = 
+        let api_resp: BaseResponse<AccessDataSearchResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -160,7 +160,7 @@ impl WorkplaceAccessDataService {
                 .insert("custom_workplace_id".to_string(), custom_workplace_id);
         }
 
-        let api_resp: BaseResponse<CustomAccessDataSearchResponse> = 
+        let api_resp: BaseResponse<CustomAccessDataSearchResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -232,7 +232,7 @@ impl WorkplaceAccessDataService {
                 .insert("widget_id".to_string(), widget_id);
         }
 
-        let api_resp: BaseResponse<CustomWidgetAccessDataSearchResponse> = 
+        let api_resp: BaseResponse<CustomWidgetAccessDataSearchResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -283,57 +283,57 @@ impl AccessDataSearchRequestBuilder {
         self.inner.page_token = Some(token.into());
         self
     }
-    
+
     /// 设置页面大小
     pub fn page_size(mut self, size: i32) -> Self {
         self.inner.page_size = Some(size);
         self
     }
-    
+
     /// 设置开始时间戳
     pub fn start_time(mut self, timestamp: i64) -> Self {
         self.inner.start_time = Some(timestamp);
         self
     }
-    
+
     /// 设置结束时间戳  
     pub fn end_time(mut self, timestamp: i64) -> Self {
         self.inner.end_time = Some(timestamp);
         self
     }
-    
+
     /// 设置时间范围（复合方法）
     pub fn time_range(mut self, start_time: i64, end_time: i64) -> Self {
         self.inner.start_time = Some(start_time);
         self.inner.end_time = Some(end_time);
         self
     }
-    
+
     /// 设置分页参数（复合方法）
     pub fn pagination(mut self, page_token: Option<String>, page_size: Option<i32>) -> Self {
         self.inner.page_token = page_token;
         self.inner.page_size = page_size;
         self
     }
-    
+
     /// 设置用户ID筛选
     pub fn user_filter(mut self, user_id: impl Into<String>) -> Self {
         self.inner.user_id = Some(user_id.into());
         self
     }
-    
+
     /// 设置部门ID筛选
     pub fn department_filter(mut self, department_id: impl Into<String>) -> Self {
         self.inner.department_id = Some(department_id.into());
         self
     }
-    
+
     /// 设置访问类型筛选
     pub fn access_type_filter(mut self, access_type: impl Into<String>) -> Self {
         self.inner.access_type = Some(access_type.into());
         self
     }
-    
+
     /// 构建请求对象
     pub fn build(self) -> AccessDataSearchRequest {
         self.inner
@@ -436,57 +436,57 @@ impl CustomWidgetAccessDataSearchRequestBuilder {
         self.inner.page_token = Some(token.into());
         self
     }
-    
+
     /// 设置页面大小
     pub fn page_size(mut self, size: i32) -> Self {
         self.inner.page_size = Some(size);
         self
     }
-    
+
     /// 设置开始时间戳
     pub fn start_time(mut self, timestamp: i64) -> Self {
         self.inner.start_time = Some(timestamp);
         self
     }
-    
+
     /// 设置结束时间戳  
     pub fn end_time(mut self, timestamp: i64) -> Self {
         self.inner.end_time = Some(timestamp);
         self
     }
-    
+
     /// 设置时间范围（复合方法）
     pub fn time_range(mut self, start_time: i64, end_time: i64) -> Self {
         self.inner.start_time = Some(start_time);
         self.inner.end_time = Some(end_time);
         self
     }
-    
+
     /// 设置分页参数（复合方法）
     pub fn pagination(mut self, page_token: Option<String>, page_size: Option<i32>) -> Self {
         self.inner.page_token = page_token;
         self.inner.page_size = page_size;
         self
     }
-    
+
     /// 设置用户ID筛选
     pub fn user_filter(mut self, user_id: impl Into<String>) -> Self {
         self.inner.user_id = Some(user_id.into());
         self
     }
-    
+
     /// 设置定制工作台ID筛选
     pub fn custom_workplace_filter(mut self, custom_workplace_id: impl Into<String>) -> Self {
         self.inner.custom_workplace_id = Some(custom_workplace_id.into());
         self
     }
-    
+
     /// 设置小组件ID筛选
     pub fn widget_filter(mut self, widget_id: impl Into<String>) -> Self {
         self.inner.widget_id = Some(widget_id.into());
         self
     }
-    
+
     /// 构建请求对象
     pub fn build(self) -> CustomWidgetAccessDataSearchRequest {
         self.inner
