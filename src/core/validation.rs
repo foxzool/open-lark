@@ -1215,7 +1215,7 @@ pub fn sanitize_tags(tags: &[String]) -> Vec<String> {
     for tag in tags {
         let sanitized = tag
             .trim()
-           .replace(['_', '-'], "_") // 统一替换为下划线
+            .replace(['_', '-'], "_") // 统一替换为下划线
             .to_lowercase();
 
         if !sanitized.is_empty() && !result.contains(&sanitized) {
@@ -1474,12 +1474,49 @@ pub fn validate_pagination_params(
 /// 清理后的标签
 pub fn sanitize_tag(tag: &str) -> String {
     tag.trim()
-       .replace(['_', '-'], "_") // 统一替换为下划线
+        .replace(['_', '-'], "_") // 统一替换为下划线
         .to_lowercase()
 }
+
+/// Sheets 验证模块
+pub mod sheets;
+
+/// IM（即时消息）验证模块
+pub mod im;
+
+/// 招聘服务验证模块
+pub mod hire;
+
+/// 日历服务验证模块
+pub mod calendar;
+/// Drive（云文档/文件）服务验证模块
+pub mod drive;
 
 /// 分页验证模块
 pub mod pagination;
 
 /// 重新导出分页相关的公共接口
 pub use pagination::{PaginatedResponse, PaginationIterator, PaginationRequestBuilder};
+
+/// 重新导出 Sheets 验证的公共接口
+pub use sheets::{
+    validate_cell_range, validate_data_matrix_consistency, validate_date_time_render_option,
+    validate_find_options, validate_merge_range, validate_value_render_option,
+};
+
+/// 重新导出 IM 验证的公共接口
+pub use im::{
+    validate_file_upload, validate_message_content, validate_message_forward,
+    validate_message_reaction, validate_message_read_status, validate_message_recall,
+    validate_message_receivers, validate_message_template, validate_message_type,
+    validate_receiver_id, validate_uuid, ValidateImBuilder,
+};
+
+/// 重新导出招聘验证的公共接口
+pub use hire::{
+    validate_birthday as validate_hire_birthday, validate_candidate_basic_info,
+    validate_candidate_tags, validate_education_background, validate_hiring_requirement,
+    validate_hiring_status_transition, validate_interview_arrangement, validate_interview_feedback,
+    validate_job_position, validate_offer_info, validate_salary_range,
+    validate_work_experience as validate_hire_work_experience, ValidateHireBuilder,
+};

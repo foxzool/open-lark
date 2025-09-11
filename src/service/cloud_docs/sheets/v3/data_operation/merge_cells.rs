@@ -8,6 +8,7 @@ use crate::{
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
+        validation::{self, ValidationResult},
         SDKResult,
     },
     impl_executable_builder_owned,
@@ -54,6 +55,47 @@ impl MergeCellsRequest {
     pub fn builder() -> MergeCellsRequestBuilder {
         MergeCellsRequestBuilder::default()
     }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> SDKResult<()> {
+        // 验证必需字段
+        if self.spreadsheet_token.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "spreadsheet_token cannot be empty".to_string(),
+            ));
+        }
+
+        if self.sheet_id.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "sheet_id cannot be empty".to_string(),
+            ));
+        }
+
+        if self.range.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "range cannot be empty".to_string(),
+            ));
+        }
+
+        // 验证合并范围格式
+        if let ValidationResult::Invalid(msg) = validation::validate_merge_range(&self.range) {
+            return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                "Invalid merge range '{}': {}",
+                self.range, msg
+            )));
+        }
+
+        // 验证合并类型
+        let valid_merge_types = ["MERGE_ALL", "MERGE_COLUMNS", "MERGE_ROWS"];
+        if !valid_merge_types.contains(&self.merge_type.as_str()) {
+            return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                "Invalid merge_type '{}'. Must be one of: MERGE_ALL, MERGE_COLUMNS, MERGE_ROWS",
+                self.merge_type
+            )));
+        }
+
+        Ok(())
+    }
 }
 
 #[derive(Default)]
@@ -86,9 +128,53 @@ impl MergeCellsRequestBuilder {
         self
     }
 
-    pub fn build(mut self) -> MergeCellsRequest {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        self.request
+    pub fn build(self) -> MergeCellsRequest {
+        let mut request = self.request;
+        request.api_request.body = serde_json::to_vec(&request).unwrap();
+        request
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> SDKResult<()> {
+        // 验证必需字段
+        if self.request.spreadsheet_token.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "spreadsheet_token cannot be empty".to_string(),
+            ));
+        }
+
+        if self.request.sheet_id.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "sheet_id cannot be empty".to_string(),
+            ));
+        }
+
+        if self.request.range.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "range cannot be empty".to_string(),
+            ));
+        }
+
+        // 验证合并范围格式
+        if let ValidationResult::Invalid(msg) =
+            validation::validate_merge_range(&self.request.range)
+        {
+            return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                "Invalid merge range '{}': {}",
+                self.request.range, msg
+            )));
+        }
+
+        // 验证合并类型
+        let valid_merge_types = ["MERGE_ALL", "MERGE_COLUMNS", "MERGE_ROWS"];
+        if !valid_merge_types.contains(&self.request.merge_type.as_str()) {
+            return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                "Invalid merge_type '{}'. Must be one of: MERGE_ALL, MERGE_COLUMNS, MERGE_ROWS",
+                self.request.merge_type
+            )));
+        }
+
+        Ok(())
     }
 }
 

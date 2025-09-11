@@ -8,6 +8,7 @@ use crate::{
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
+        validation::{self, ValidationResult},
         SDKResult,
     },
     impl_executable_builder_owned,
@@ -60,6 +61,61 @@ impl ReadingMultipleRangesRequest {
     pub fn builder() -> ReadingMultipleRangesRequestBuilder {
         ReadingMultipleRangesRequestBuilder::default()
     }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> SDKResult<()> {
+        // 验证必需字段
+        if self.spreadsheet_token.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "spreadsheet_token cannot be empty".to_string(),
+            ));
+        }
+
+        if self.ranges.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "ranges cannot be empty".to_string(),
+            ));
+        }
+
+        // 验证范围数量限制
+        if self.ranges.len() > 500 {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "Too many ranges. Maximum 500 ranges allowed".to_string(),
+            ));
+        }
+
+        // 验证每个单元格范围格式
+        for (i, range) in self.ranges.iter().enumerate() {
+            if let ValidationResult::Invalid(msg) = validation::validate_cell_range(range) {
+                return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                    "Invalid cell range at index {}: '{}': {}",
+                    i, range, msg
+                )));
+            }
+        }
+
+        // 验证值渲染选项
+        if let ValidationResult::Invalid(msg) =
+            validation::validate_value_render_option(&self.value_render_option)
+        {
+            return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                "Invalid valueRenderOption: {}",
+                msg
+            )));
+        }
+
+        // 验证日期时间渲染选项
+        if let ValidationResult::Invalid(msg) =
+            validation::validate_date_time_render_option(&self.date_time_render_option)
+        {
+            return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                "Invalid dateTimeRenderOption: {}",
+                msg
+            )));
+        }
+
+        Ok(())
+    }
 }
 
 #[derive(Default)]
@@ -79,23 +135,39 @@ impl ReadingMultipleRangesRequestBuilder {
     }
 
     pub fn value_render_option(mut self, value_render_option: impl ToString) -> Self {
-        self.request.value_render_option = Some(value_render_option.to_string());
+        let value = value_render_option.to_string();
+        self.request.value_render_option = Some(value.clone());
+        self.request
+            .api_request
+            .query_params
+            .insert("valueRenderOption".to_string(), value);
         self
     }
 
     pub fn date_time_render_option(mut self, date_time_render_option: impl ToString) -> Self {
-        self.request.date_time_render_option = Some(date_time_render_option.to_string());
+        let value = date_time_render_option.to_string();
+        self.request.date_time_render_option = Some(value.clone());
+        self.request
+            .api_request
+            .query_params
+            .insert("dateTimeRenderOption".to_string(), value);
         self
     }
 
     pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
-        self.request.user_id_type = Some(user_id_type.to_string());
+        let value = user_id_type.to_string();
+        self.request.user_id_type = Some(value.clone());
+        self.request
+            .api_request
+            .query_params
+            .insert("user_id_type".to_string(), value);
         self
     }
 
-    pub fn build(mut self) -> ReadingMultipleRangesRequest {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        self.request
+    pub fn build(self) -> ReadingMultipleRangesRequest {
+        let mut request = self.request;
+        request.api_request.body = serde_json::to_vec(&request).unwrap();
+        request
     }
 }
 
