@@ -1,4 +1,5 @@
 use reqwest::Method;
+use std::sync::Arc;
 use serde_json::json;
 
 use crate::{
@@ -17,7 +18,7 @@ use super::models::{
 
 /// 用户统计数据服务
 pub struct UserStatsDataService {
-    pub config: Config,
+    pub config: Arc<Config>,
 }
 
 impl UserStatsDataService {

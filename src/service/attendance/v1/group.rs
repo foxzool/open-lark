@@ -1,5 +1,6 @@
 use reqwest::Method;
 use serde_json::json;
+use std::sync::Arc;
 
 use crate::core::{
     api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
@@ -14,7 +15,7 @@ use super::models::{
 
 /// 考勤组服务
 pub struct GroupService {
-    pub config: Config,
+    pub config: Arc<Config>,
 }
 
 impl GroupService {

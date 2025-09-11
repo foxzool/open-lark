@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use crate::{
     core::config::Config,
     service::attendance::v1::{
@@ -40,39 +42,41 @@ pub struct V1 {
 }
 
 impl V1 {
-    pub fn new(config: Config) -> Self {
+    pub fn new(config: Arc<Config>) -> Self {
         Self {
             shift: ShiftService {
-                config: config.clone(),
+                config: Arc::clone(&config),
             },
             user_daily_shift: UserDailyShiftService {
-                config: config.clone(),
+                config: Arc::clone(&config),
             },
             group: GroupService {
-                config: config.clone(),
+                config: Arc::clone(&config),
             },
             user_setting: UserSettingService {
-                config: config.clone(),
+                config: Arc::clone(&config),
             },
             user_stats_data: UserStatsDataService {
-                config: config.clone(),
+                config: Arc::clone(&config),
             },
             user_approval: UserApprovalService {
-                config: config.clone(),
+                config: Arc::clone(&config),
             },
             user_task: UserTaskService {
-                config: config.clone(),
+                config: Arc::clone(&config),
             },
             user_task_remedy: UserTaskRemedyService {
-                config: config.clone(),
+                config: Arc::clone(&config),
             },
             archive_rule: ArchiveRuleService {
-                config: config.clone(),
+                config: Arc::clone(&config),
             },
             leave_employ_expire_record: LeaveEmployExpireRecordService {
-                config: config.clone(),
+                config: Arc::clone(&config),
             },
-            leave_accrual_record: LeaveAccrualRecordService { config },
+            leave_accrual_record: LeaveAccrualRecordService { 
+                config: Arc::clone(&config) 
+            },
         }
     }
 }

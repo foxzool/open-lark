@@ -1,4 +1,5 @@
 use reqwest::Method;
+use std::sync::Arc;
 use serde_json::json;
 
 use crate::{
@@ -16,7 +17,7 @@ use super::models::{
 
 /// 用户补卡服务
 pub struct UserTaskRemedyService {
-    pub config: Config,
+    pub config: Arc<Config>,
 }
 
 impl UserTaskRemedyService {
