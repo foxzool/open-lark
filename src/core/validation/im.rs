@@ -231,7 +231,7 @@ pub fn validate_file_upload(file_name: &str, file_size: u64, file_type: &str) ->
         _ => return ValidationResult::Invalid(format!("Unsupported file type: {}", file_type)),
     };
 
-    let file_ext = file_name.split('.').last().unwrap_or("").to_lowercase();
+    let file_ext = file_name.split('.').next_back().unwrap_or("").to_lowercase();
     if !allowed_types.contains(&file_ext.as_str()) {
         return ValidationResult::Invalid(format!(
             "File type '.{}' is not allowed for {} files",
@@ -453,7 +453,7 @@ pub fn validate_message_template(template_content: &str, template_id: &str) -> V
     }
 
     // 验证模板内容格式（JSON格式）
-    if let Err(_) = serde_json::from_str::<Value>(template_content) {
+    if serde_json::from_str::<Value>(template_content).is_err() {
         return ValidationResult::Invalid("Template content must be valid JSON".to_string());
     }
 

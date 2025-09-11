@@ -43,13 +43,12 @@ pub fn validate_cell_range(range: &str) -> ValidationResult {
         }
 
         // 检查是否被引号正确包围（如果包含引号）
-        if sheet.starts_with('\'') {
-            if !sheet.ends_with('\'') || sheet.len() < 2 {
+        if sheet.starts_with('\'') 
+            && (!sheet.ends_with('\'') || sheet.len() < 2) {
                 return ValidationResult::Invalid(
                     "Invalid quoted sheet name. Must start and end with single quotes".to_string(),
                 );
             }
-        }
 
         (Some(sheet.to_string()), cell_ref)
     } else {
