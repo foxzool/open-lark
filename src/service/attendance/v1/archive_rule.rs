@@ -1,5 +1,6 @@
 use reqwest::Method;
 use serde_json::json;
+use std::sync::Arc;
 
 use crate::{
     core::{
@@ -17,7 +18,7 @@ use super::models::{
 
 /// 归档报表服务
 pub struct ArchiveRuleService {
-    pub config: Config,
+    pub config: Arc<Config>,
 }
 
 impl ArchiveRuleService {

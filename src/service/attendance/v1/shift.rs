@@ -1,5 +1,6 @@
 use reqwest::Method;
 use serde_json::json;
+use std::sync::Arc;
 
 use crate::{
     core::{
@@ -15,7 +16,7 @@ use super::models::{
 };
 
 pub struct ShiftService {
-    pub config: Config,
+    pub config: Arc<Config>,
 }
 
 impl ShiftService {

@@ -1,5 +1,5 @@
 use reqwest::Method;
-
+use std::sync::Arc;
 use crate::{
     core::{
         api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
@@ -12,7 +12,7 @@ use super::models::{GetLeaveEmployExpireRecordRequest, GetLeaveEmployExpireRecor
 
 /// 休假获取过期发放记录服务
 pub struct LeaveEmployExpireRecordService {
-    pub config: Config,
+    pub config: Arc<Config>,
 }
 
 impl LeaveEmployExpireRecordService {
