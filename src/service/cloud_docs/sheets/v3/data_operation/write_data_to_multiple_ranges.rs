@@ -8,6 +8,7 @@ use crate::{
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
+        validation::{self, ValidationResult},
         SDKResult,
     },
     impl_executable_builder_owned,
@@ -51,6 +52,79 @@ impl WriteDataToMultipleRangesRequest {
     pub fn builder() -> WriteDataToMultipleRangesRequestBuilder {
         WriteDataToMultipleRangesRequestBuilder::default()
     }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> SDKResult<()> {
+        // 验证必需字段
+        if self.spreadsheet_token.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "spreadsheet_token cannot be empty".to_string(),
+            ));
+        }
+
+        if self.value_ranges.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "value_ranges cannot be empty".to_string(),
+            ));
+        }
+
+        // 验证数据范围数量限制
+        if self.value_ranges.len() > 500 {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "Too many value ranges. Maximum 500 ranges allowed".to_string(),
+            ));
+        }
+
+        // 验证每个范围的数据
+        for (i, range_data) in self.value_ranges.iter().enumerate() {
+            // 验证单元格范围格式
+            if let ValidationResult::Invalid(msg) =
+                validation::validate_cell_range(&range_data.range)
+            {
+                return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                    "Invalid cell range at index {}: '{}': {}",
+                    i, range_data.range, msg
+                )));
+            }
+
+            // 验证数据矩阵一致性
+            if let ValidationResult::Invalid(msg) =
+                validation::validate_data_matrix_consistency(&range_data.values)
+            {
+                return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                    "Invalid data matrix at index {}: {}",
+                    i, msg
+                )));
+            }
+
+            // 验证数据大小限制（最多 50,000 个单元格）
+            let total_cells: usize = range_data.values.iter().map(|row| row.len()).sum();
+            if total_cells > 50000 {
+                return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                    "Too many cells at index {}. Maximum 50,000 cells allowed per range",
+                    i
+                )));
+            }
+
+            // 验证行数限制（最多 10,000 行）
+            if range_data.values.len() > 10000 {
+                return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                    "Too many rows at index {}. Maximum 10,000 rows allowed per range",
+                    i
+                )));
+            }
+
+            // 验证列数限制（最多 10,000 列）
+            if !range_data.values.is_empty() && range_data.values[0].len() > 10000 {
+                return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                    "Too many columns at index {}. Maximum 10,000 columns allowed per range",
+                    i
+                )));
+            }
+        }
+
+        Ok(())
+    }
 }
 
 #[derive(Default)]
@@ -81,9 +155,10 @@ impl WriteDataToMultipleRangesRequestBuilder {
         self
     }
 
-    pub fn build(mut self) -> WriteDataToMultipleRangesRequest {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        self.request
+    pub fn build(self) -> WriteDataToMultipleRangesRequest {
+        let mut request = self.request;
+        request.api_request.body = serde_json::to_vec(&request).unwrap();
+        request
     }
 }
 

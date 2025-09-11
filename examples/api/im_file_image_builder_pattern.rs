@@ -362,15 +362,15 @@ mod tests {
 
         // 测试文件上传Builder创建
         let builder = client.im.v1.file.upload_builder();
-        let (file_type, file_name, file_data) = builder
+        let request = builder
             .file_type("txt")
             .file_name("test.txt")
             .file_data(b"test content".to_vec())
-            .build();
+            .build_unvalidated();
 
-        assert_eq!(file_type, "txt");
-        assert_eq!(file_name, "test.txt");
-        assert_eq!(file_data, b"test content".to_vec());
+        assert_eq!(request.file_type, "txt");
+        assert_eq!(request.file_name, "test.txt");
+        assert_eq!(request.file_data, b"test content".to_vec());
     }
 
     #[test]
