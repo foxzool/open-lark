@@ -240,7 +240,7 @@ pub fn validate_birthday(birthday: &str) -> ValidationResult {
 
     // 验证年龄（通常在18-70岁之间）
     let age = today.year() - date.year();
-    if age < 18 || age > 70 {
+    if !(18..=70).contains(&age) {
         return ValidationResult::Invalid("Age must be between 18 and 70 years".to_string());
     }
 
@@ -352,7 +352,7 @@ pub fn validate_interview_arrangement(
     }
 
     // 验证面试时长
-    if duration < 15 || duration > 480 {
+    if !(15..=480).contains(&duration) {
         return ValidationResult::Invalid(
             "Interview duration must be between 15 and 480 minutes".to_string(),
         );
@@ -512,7 +512,7 @@ pub fn validate_hiring_requirement(headcount: u32, priority: u8) -> ValidationRe
         return ValidationResult::Invalid("Headcount cannot exceed 100".to_string());
     }
 
-    if priority < 1 || priority > 5 {
+    if !(1..=5).contains(&priority) {
         return ValidationResult::Invalid("Priority must be between 1 and 5".to_string());
     }
 
@@ -589,7 +589,7 @@ pub fn validate_interview_feedback(
     }
 
     // 验证评分
-    if rating < 1 || rating > 5 {
+    if !(1..=5).contains(&rating) {
         return ValidationResult::Invalid("Rating must be between 1 and 5".to_string());
     }
 

@@ -478,8 +478,9 @@ pub fn validate_image_file(file_data: &[u8], file_name: &str) -> ValidationResul
         return ext_result;
     }
 
-    // TODO: 可以添加图片文件头的验证
-    // 检查文件签名以确认文件类型
+    // ENHANCEMENT: 可增强图片文件头验证（Magic Number 检查）
+    // 通过检查文件签名防止文件扩展名伪造攻击，增强安全性
+    // 可考虑使用 `infer` crate 或手动实现常见格式的文件头检查
 
     ValidationResult::Valid
 }

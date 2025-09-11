@@ -156,12 +156,12 @@ pub fn validate_time_format(time_str: &str) -> ValidationResult {
     }
 
     // 尝试解析RFC3339格式
-    if let Ok(_) = DateTime::parse_from_rfc3339(time_str) {
+    if DateTime::parse_from_rfc3339(time_str).is_ok() {
         return ValidationResult::Valid;
     }
 
     // 尝试解析日期格式（全天日程）
-    if let Ok(_) = NaiveDate::parse_from_str(time_str, "%Y-%m-%d") {
+    if NaiveDate::parse_from_str(time_str, "%Y-%m-%d").is_ok() {
         return ValidationResult::Valid;
     }
 
@@ -287,7 +287,7 @@ pub fn validate_recurrence_rule(rule: &str) -> ValidationResult {
         rest.find(';')
             .or_else(|| rest.find(','))
             .map(|end| &rest[..end])
-            .or_else(|| Some(rest))
+            .or(Some(rest))
     });
 
     if let Some(freq) = freq_match {
@@ -310,13 +310,12 @@ pub fn validate_recurrence_rule(rule: &str) -> ValidationResult {
             .next()
             .unwrap_or(until_part);
 
-        if let Err(_) = NaiveDate::parse_from_str(until_value, "%Y%m%d") {
-            if let Err(_) = DateTime::parse_from_rfc3339(&format!("{}T000000Z", until_value)) {
+        if NaiveDate::parse_from_str(until_value, "%Y%m%d").is_err()
+            && DateTime::parse_from_rfc3339(&format!("{}T000000Z", until_value)).is_err() {
                 return ValidationResult::Invalid(
                     "UNTIL参数格式无效，请使用YYYYMMDD格式".to_string(),
                 );
             }
-        }
     }
 
     // 检查COUNT参数（如果有）
@@ -330,7 +329,7 @@ pub fn validate_recurrence_rule(rule: &str) -> ValidationResult {
             .unwrap_or(count_str);
 
         if let Ok(count) = count_value.parse::<i32>() {
-            if count < 1 || count > 999 {
+            if !(1..=999).contains(&count) {
                 return ValidationResult::Invalid("重复次数必须在1-999之间".to_string());
             }
         }
@@ -510,7 +509,7 @@ pub fn validate_calendar_pagination_params(
     page_token: Option<&str>,
 ) -> ValidationResult {
     if let Some(size) = page_size {
-        if size < 1 || size > 500 {
+        if !(1..=500).contains(&size) {
             return ValidationResult::Invalid("每页数量必须在1-500之间".to_string());
         }
     }
@@ -606,7 +605,7 @@ pub fn validate_calendar_search_params(query: &str, max_results: Option<i32>) ->
     }
 
     if let Some(max) = max_results {
-        if max < 1 || max > 100 {
+        if !(1..=100).contains(&max) {
             return ValidationResult::Invalid("最大结果数必须在1-100之间".to_string());
         }
     }

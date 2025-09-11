@@ -285,7 +285,7 @@ pub fn validate_member_id(member_type: &str, member_id: &str) -> ValidationResul
                 return ValidationResult::Invalid("部门ID应以'od_'开头".to_string());
             }
 
-            if member_id.len() < 1 || member_id.len() > 64 {
+            if member_id.is_empty() || member_id.len() > 64 {
                 return ValidationResult::Invalid("部门ID长度无效".to_string());
             }
         }
