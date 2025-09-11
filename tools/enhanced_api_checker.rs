@@ -48,6 +48,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 struct EnhancedFileAnalysis {
     file_path: String,
     method_count: u32,
@@ -63,6 +64,7 @@ struct EnhancedFileAnalysis {
 }
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 struct MethodInfo {
     name: String,
     line_number: usize,
@@ -76,7 +78,7 @@ struct MethodInfo {
 
 #[derive(Debug, Clone)]
 enum APIPattern {
-    CRUD,
+    Crud,
     Query,
     Upload,
     Batch,
@@ -102,6 +104,7 @@ struct Issue {
 }
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 enum IssueType {
     MissingStandardResponse,
     MissingBuilderPattern,
@@ -205,7 +208,7 @@ fn parse_method_signature(line: &str, line_number: usize, lines: &[&str]) -> Met
     let has_builder = line.contains("builder")
         || lines
             .iter()
-            .any(|l| l.contains(&format!("{}Builder", name.to_string())));
+            .any(|l| l.contains(&format!("{}Builder", name)));
 
     // 检查是否使用StandardResponse
     let uses_standard_response = lines
@@ -224,7 +227,7 @@ fn parse_method_signature(line: &str, line_number: usize, lines: &[&str]) -> Met
     let has_documentation = line_number > 1
         && lines
             .get(line_number.saturating_sub(2))
-            .map_or(false, |prev_line| prev_line.trim_start().starts_with("///"));
+            .is_some_and(|prev_line| prev_line.trim_start().starts_with("///"));
 
     MethodInfo {
         name: name.to_string(),
@@ -301,7 +304,7 @@ fn identify_api_patterns(content: &str, path: &Path) -> Vec<APIPattern> {
     // 根据文件名和内容识别API模式
     if path_str.contains("create") || content.contains("pub fn create") || content.contains("POST")
     {
-        patterns.push(APIPattern::CRUD);
+        patterns.push(APIPattern::Crud);
     }
 
     if path_str.contains("list")
@@ -352,7 +355,7 @@ fn calculate_complexity_score(methods: &[MethodInfo], content: &str) -> u32 {
 fn determine_priority(
     method_count: u32,
     standard_response_usage: u32,
-    methods: &[MethodInfo],
+    _methods: &[MethodInfo],
 ) -> Priority {
     let sr_coverage = if method_count > 0 {
         (standard_response_usage as f32 / method_count as f32) * 100.0
@@ -379,7 +382,7 @@ fn determine_priority(
 fn identify_issues(results: &HashMap<String, EnhancedFileAnalysis>) -> Vec<Issue> {
     let mut issues = Vec::new();
 
-    for (_, analysis) in results {
+    for analysis in results.values() {
         // 检查StandardResponse使用情况
         if analysis.method_count > 0 {
             let sr_coverage =
@@ -691,10 +694,10 @@ fn generate_issues_section(report: &mut String, issues: &[Issue]) {
                 .to_string_lossy();
 
             report.push_str(&format!(
-                "{}. **{}** ({})\n",
+                "{}. **{}** ({:?})\n",
                 i + 1,
                 file_name,
-                format!("{:?}", issue.severity)
+                issue.severity
             ));
             report.push_str(&format!("   - 问题: {}\n", issue.description));
             report.push_str(&format!("   - 建议: {}\n", issue.suggestion));
@@ -716,7 +719,7 @@ fn generate_issues_section(report: &mut String, issues: &[Issue]) {
 fn generate_roadmap_section(
     report: &mut String,
     results: &HashMap<String, EnhancedFileAnalysis>,
-    issues: &[Issue],
+    _issues: &[Issue],
 ) {
     report.push_str("根据分析结果，建议按以下顺序进行改进:\n\n");
 
@@ -743,7 +746,7 @@ fn generate_roadmap_section(
                 .to_string_lossy();
             report.push_str(&format!("- {}\n", file_name));
         }
-        report.push_str("\n");
+        report.push('\n');
     }
 
     if !high_files.is_empty() {
@@ -755,7 +758,7 @@ fn generate_roadmap_section(
                 .to_string_lossy();
             report.push_str(&format!("- {}\n", file_name));
         }
-        report.push_str("\n");
+        report.push('\n');
     }
 
     if !medium_files.is_empty() {

@@ -41,10 +41,12 @@ impl MessageService {
     ///
     /// <https://open.feishu.cn/document/server-docs/im-v1/message/delete>
     pub async fn delete(&self, message_id: &str, option: Option<RequestOption>) -> SDKResult<()> {
-        let mut api_req = crate::core::api_req::ApiRequest::default();
-        api_req.http_method = Method::DELETE;
-        api_req.api_path = format!("/open-apis/im/v1/messages/{}", message_id);
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        let api_req = crate::core::api_req::ApiRequest {
+            http_method: Method::DELETE,
+            api_path: format!("/open-apis/im/v1/messages/{}", message_id),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            ..Default::default()
+        };
 
         let api_resp: BaseResponse<serde_json::Value> =
             Transport::request(api_req, &self.config, option).await?;

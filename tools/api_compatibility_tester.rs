@@ -620,7 +620,7 @@ async fn test_builder_type_conversions() {
             incompatible_tests,
             incompatible_tests * 100 / total_tests
         ));
-        report.push_str("\n");
+        report.push('\n');
 
         // 兼容性状态
         if incompatible_tests == 0 {
