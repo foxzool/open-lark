@@ -205,21 +205,21 @@ async fn demo_batch_messages(client: &LarkClient) -> Result<(), Box<dyn std::err
                 .v1
                 .batch_message
                 .get_progress(&response.batch_message_id, None)
-                    .await
-                {
-                    Ok(progress_response) => {
-                        println!(
-                            "  📊 批量消息进度: 总数{}, 成功{}, 失败{}",
-                            progress_response.batch_message_progress.total_count,
-                            progress_response.batch_message_progress.success_count,
-                            progress_response.batch_message_progress.fail_count
-                        );
-                    }
-                    Err(e) => {
-                        println!("  ❌ 查询进度失败: {e:?}");
-                    }
+                .await
+            {
+                Ok(progress_response) => {
+                    println!(
+                        "  📊 批量消息进度: 总数{}, 成功{}, 失败{}",
+                        progress_response.batch_message_progress.total_count,
+                        progress_response.batch_message_progress.success_count,
+                        progress_response.batch_message_progress.fail_count
+                    );
+                }
+                Err(e) => {
+                    println!("  ❌ 查询进度失败: {e:?}");
                 }
             }
+        }
         Err(e) => {
             println!("  ❌ 批量消息发送失败: {e:?}");
         }

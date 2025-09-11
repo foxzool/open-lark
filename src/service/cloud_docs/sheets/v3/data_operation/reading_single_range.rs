@@ -8,6 +8,7 @@ use crate::{
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
+        validation::{self, ValidationResult},
         SDKResult,
     },
     impl_executable_builder_owned,
@@ -57,6 +58,52 @@ pub struct ReadingSingleRangeRequest {
 impl ReadingSingleRangeRequest {
     pub fn builder() -> ReadingSingleRangeRequestBuilder {
         ReadingSingleRangeRequestBuilder::default()
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> SDKResult<()> {
+        // 验证必需字段
+        if self.spreadsheet_token.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "spreadsheet_token cannot be empty".to_string(),
+            ));
+        }
+
+        if self.range.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "range cannot be empty".to_string(),
+            ));
+        }
+
+        // 验证单元格范围格式
+        if let ValidationResult::Invalid(msg) = validation::validate_cell_range(&self.range) {
+            return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                "Invalid cell range '{}': {}",
+                self.range, msg
+            )));
+        }
+
+        // 验证值渲染选项
+        if let ValidationResult::Invalid(msg) =
+            validation::validate_value_render_option(&self.value_render_option)
+        {
+            return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                "Invalid valueRenderOption: {}",
+                msg
+            )));
+        }
+
+        // 验证日期时间渲染选项
+        if let ValidationResult::Invalid(msg) =
+            validation::validate_date_time_render_option(&self.date_time_render_option)
+        {
+            return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                "Invalid dateTimeRenderOption: {}",
+                msg
+            )));
+        }
+
+        Ok(())
     }
 }
 

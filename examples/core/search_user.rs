@@ -68,44 +68,40 @@ async fn basic_user_search(
         .await
     {
         Ok(response) => {
-            if let Some(data) = &response.data {
-                println!("✅ 用户搜索成功!");
-                println!("   找到用户数: {}", data.users.len());
-                println!("   是否有更多: {}", data.has_more);
+            println!("✅ 用户搜索成功!");
+            println!("   找到用户数: {}", response.users.len());
+            println!("   是否有更多: {}", response.has_more);
 
-                if !data.users.is_empty() {
-                    println!("\n📋 搜索结果:");
-                    for (index, user) in data.users.iter().enumerate() {
-                        println!("   {}. {}", index + 1, user.name);
-                        println!("      用户ID: {}", user.open_id);
+            if !response.users.is_empty() {
+                println!("\n📋 搜索结果:");
+                for (index, user) in response.users.iter().enumerate() {
+                    println!("   {}. {}", index + 1, user.name);
+                    println!("      用户ID: {}", user.open_id);
 
-                        if let Some(user_id) = &user.user_id {
-                            println!("      员工ID: {user_id}");
-                        }
-
-                        if !user.department_ids.is_empty() {
-                            println!("      部门数量: {}", user.department_ids.len());
-                        }
-
-                        println!("      头像URL: {}", user.avatar.avatar_72);
-                        println!(); // 空行分隔
+                    if let Some(user_id) = &user.user_id {
+                        println!("      员工ID: {user_id}");
                     }
-                } else {
-                    println!("📭 没有找到匹配的用户");
-                    println!("💡 建议:");
-                    println!("   1. 尝试使用更短的关键词");
-                    println!("   2. 检查关键词拼写");
-                    println!("   3. 确认用户在当前企业内");
-                }
 
-                if data.has_more {
-                    if let Some(page_token) = &data.page_token {
-                        println!("💡 提示: 还有更多用户可以通过分页获取");
-                        println!("   下一页Token: {page_token}");
+                    if !user.department_ids.is_empty() {
+                        println!("      部门数量: {}", user.department_ids.len());
                     }
+
+                    println!("      头像URL: {}", user.avatar.avatar_72);
+                    println!(); // 空行分隔
                 }
             } else {
-                println!("⚠️ 搜索请求成功，但未返回数据");
+                println!("📭 没有找到匹配的用户");
+                println!("💡 建议:");
+                println!("   1. 尝试使用更短的关键词");
+                println!("   2. 检查关键词拼写");
+                println!("   3. 确认用户在当前企业内");
+            }
+
+            if response.has_more {
+                if let Some(page_token) = &response.page_token {
+                    println!("💡 提示: 还有更多用户可以通过分页获取");
+                    println!("   下一页Token: {page_token}");
+                }
             }
         }
         Err(e) => {
@@ -160,32 +156,27 @@ async fn paginated_search(
             .await
         {
             Ok(response) => {
-                if let Some(data) = &response.data {
-                    println!("\n📋 第{page_number}页结果:");
-                    println!("   本页用户数: {}", data.users.len());
+                println!("\n📋 第{page_number}页结果:");
+                println!("   本页用户数: {}", response.users.len());
 
-                    for (index, user) in data.users.iter().enumerate() {
-                        println!("   {}. {} ({})", index + 1, user.name, user.open_id);
-                    }
+                for (index, user) in response.users.iter().enumerate() {
+                    println!("   {}. {} ({})", index + 1, user.name, user.open_id);
+                }
 
-                    total_users += data.users.len();
+                total_users += response.users.len();
 
-                    if data.has_more {
-                        page_token = data.page_token.clone();
-                        page_number += 1;
+                if response.has_more {
+                    page_token = response.page_token.clone();
+                    page_number += 1;
 
-                        if page_number > 3 {
-                            // 限制演示页数
-                            println!("\n💡 演示限制: 只显示前3页结果");
-                            println!("   实际还有更多页面可以获取");
-                            break;
-                        }
-                    } else {
-                        println!("\n✅ 搜索完成，共{page_number}页，{total_users}个用户");
+                    if page_number > 3 {
+                        // 限制演示页数
+                        println!("\n💡 演示限制: 只显示前3页结果");
+                        println!("   实际还有更多页面可以获取");
                         break;
                     }
                 } else {
-                    println!("⚠️ 第{page_number}页请求成功，但未返回数据");
+                    println!("\n✅ 搜索完成，共{page_number}页，{total_users}个用户");
                     break;
                 }
             }
@@ -232,26 +223,22 @@ async fn advanced_search_demo(
             .await
         {
             Ok(response) => {
-                if let Some(data) = &response.data {
-                    println!("   结果: 找到{}个用户", data.users.len());
+                println!("   结果: 找到{}个用户", response.users.len());
 
-                    if !data.users.is_empty() {
-                        // 显示用户的详细信息
-                        for user in &data.users {
-                            println!(
-                                "     - {} ({}) 部门数:{}",
-                                user.name,
-                                user.open_id,
-                                user.department_ids.len()
-                            );
-                        }
-
-                        if data.has_more {
-                            println!("     + 还有更多结果...");
-                        }
+                if !response.users.is_empty() {
+                    // 显示用户的详细信息
+                    for user in &response.users {
+                        println!(
+                            "     - {} ({}) 部门数:{}",
+                            user.name,
+                            user.open_id,
+                            user.department_ids.len()
+                        );
                     }
-                } else {
-                    println!("   结果: 无数据返回");
+
+                    if response.has_more {
+                        println!("     + 还有更多结果...");
+                    }
                 }
             }
             Err(e) => {
@@ -295,30 +282,28 @@ async fn display_user_details(
         .await
     {
         Ok(response) => {
-            if let Some(data) = &response.data {
-                if let Some(user) = data.users.first() {
-                    println!("📋 用户详细信息:");
-                    println!("   姓名: {}", user.name);
-                    println!("   OpenID: {}", user.open_id);
+            if let Some(user) = response.users.first() {
+                println!("📋 用户详细信息:");
+                println!("   姓名: {}", user.name);
+                println!("   OpenID: {}", user.open_id);
 
-                    if let Some(user_id) = &user.user_id {
-                        println!("   用户ID: {user_id}");
-                    }
-
-                    println!("   部门数量: {}", user.department_ids.len());
-                    if !user.department_ids.is_empty() {
-                        println!("   部门ID列表:");
-                        for (index, dept_id) in user.department_ids.iter().enumerate() {
-                            println!("     {}. {}", index + 1, dept_id);
-                        }
-                    }
-
-                    println!("   头像信息:");
-                    println!("     72x72: {}", user.avatar.avatar_72);
-                    println!("     240x240: {}", user.avatar.avatar_240);
-                    println!("     640x640: {}", user.avatar.avatar_640);
-                    println!("     原始尺寸: {}", user.avatar.avatar_origin);
+                if let Some(user_id) = &user.user_id {
+                    println!("   用户ID: {user_id}");
                 }
+
+                println!("   部门数量: {}", user.department_ids.len());
+                if !user.department_ids.is_empty() {
+                    println!("   部门ID列表:");
+                    for (index, dept_id) in user.department_ids.iter().enumerate() {
+                        println!("     {}. {}", index + 1, dept_id);
+                    }
+                }
+
+                println!("   头像信息:");
+                println!("     72x72: {}", user.avatar.avatar_72);
+                println!("     240x240: {}", user.avatar.avatar_240);
+                println!("     640x640: {}", user.avatar.avatar_640);
+                println!("     原始尺寸: {}", user.avatar.avatar_origin);
             }
         }
         Err(e) => {

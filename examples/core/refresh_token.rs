@@ -49,51 +49,47 @@ async fn get_current_user_info(
     println!("\n👤 获取当前用户信息...");
 
     match client.auth.v1.user_info.get(user_access_token).await {
-        Ok(response) => {
-            if let Some(user_info) = &response.data {
-                println!("✅ 用户信息获取成功!");
+        Ok(user_info) => {
+            println!("✅ 用户信息获取成功!");
 
-                println!("\n📋 用户详细信息:");
-                println!("   姓名: {}", user_info.name);
-                println!("   英文名: {}", user_info.en_name);
-                println!("   员工工号: {}", user_info.employee_no);
-                println!("   用户ID: {}", user_info.user_id);
-                println!("   OpenID: {}", user_info.open_id);
-                println!("   UnionID: {}", user_info.union_id);
-                println!("   企业标识: {}", user_info.tenant_key);
+            println!("\n📋 用户详细信息:");
+            println!("   姓名: {}", user_info.name);
+            println!("   英文名: {}", user_info.en_name);
+            println!("   员工工号: {}", user_info.employee_no);
+            println!("   用户ID: {}", user_info.user_id);
+            println!("   OpenID: {}", user_info.open_id);
+            println!("   UnionID: {}", user_info.union_id);
+            println!("   企业标识: {}", user_info.tenant_key);
 
-                // 联系方式
-                println!("\n📞 联系方式:");
-                if let Some(email) = &user_info.email {
-                    println!("   个人邮箱: {email}");
-                } else {
-                    println!("   个人邮箱: 未设置");
-                }
-
-                if let Some(enterprise_email) = &user_info.enterprise_email {
-                    println!("   企业邮箱: {enterprise_email}");
-                } else {
-                    println!("   企业邮箱: 未设置");
-                }
-
-                if let Some(mobile) = &user_info.mobile {
-                    println!("   手机号: {mobile}");
-                } else {
-                    println!("   手机号: 未设置");
-                }
-
-                // 头像信息
-                println!("\n🖼️ 头像信息:");
-                println!("   头像URL: {}", user_info.avatar_url);
-                println!("   头像(72x72): {}", user_info.avatar_thumb);
-                println!("   头像(240x240): {}", user_info.avatar_middle);
-                println!("   头像(640x640): {}", user_info.avatar_big);
-
-                // 验证用户身份信息完整性
-                validate_user_info(user_info).await?;
+            // 联系方式
+            println!("\n📞 联系方式:");
+            if let Some(email) = &user_info.email {
+                println!("   个人邮箱: {email}");
             } else {
-                println!("⚠️ 请求成功，但未返回用户信息");
+                println!("   个人邮箱: 未设置");
             }
+
+            if let Some(enterprise_email) = &user_info.enterprise_email {
+                println!("   企业邮箱: {enterprise_email}");
+            } else {
+                println!("   企业邮箱: 未设置");
+            }
+
+            if let Some(mobile) = &user_info.mobile {
+                println!("   手机号: {mobile}");
+            } else {
+                println!("   手机号: 未设置");
+            }
+
+            // 头像信息
+            println!("\n🖼️ 头像信息:");
+            println!("   头像URL: {}", user_info.avatar_url);
+            println!("   头像(72x72): {}", user_info.avatar_thumb);
+            println!("   头像(240x240): {}", user_info.avatar_middle);
+            println!("   头像(640x640): {}", user_info.avatar_big);
+
+            // 验证用户身份信息完整性
+            validate_user_info(&user_info).await?;
         }
         Err(e) => {
             println!("❌ 获取用户信息失败: {e:?}");
