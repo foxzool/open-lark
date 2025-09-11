@@ -102,7 +102,7 @@ impl<T> BaseResponse<T> {
             Err(LarkAPIError::api_error(
                 self.code(),
                 self.msg(),
-                None, // TODO: 可以从响应头中提取request_id
+                None, // FUTURE: 可从响应头中提取request_id以增强调试支持
             ))
         }
     }

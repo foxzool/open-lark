@@ -6,6 +6,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
         req_option,
+        standard_response::StandardResponse,
         validation::{self, ValidationResult},
         SDKResult,
     },
@@ -212,7 +213,7 @@ impl_executable_builder_owned!(
     FindCellsRequestBuilder,
     SpreadsheetSheetService,
     FindCellsRequest,
-    BaseResponse<FindCellsResponse>,
+    FindCellsResponse,
     find_cells
 );
 
@@ -235,7 +236,7 @@ impl SpreadsheetSheetService {
         &self,
         request: FindCellsRequest,
         option: Option<req_option::RequestOption>,
-    ) -> SDKResult<BaseResponse<FindCellsResponse>> {
+    ) -> SDKResult<FindCellsResponse> {
         let mut api_req = request.api_request;
         api_req.api_path = format!(
             "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/find",
@@ -245,8 +246,8 @@ impl SpreadsheetSheetService {
         api_req.http_method = reqwest::Method::POST;
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::App];
 
-        let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
+        let api_resp: BaseResponse<FindCellsResponse> = crate::core::http::Transport::request(api_req, &self.config, option).await?;
 
-        Ok(api_resp)
+        api_resp.into_result()
     }
 }
