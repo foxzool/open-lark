@@ -41,6 +41,12 @@ pub struct PaginationRequestBuilder<T> {
     _marker: PhantomData<T>,
 }
 
+impl<T> Default for PaginationRequestBuilder<T> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T> PaginationRequestBuilder<T> {
     /// 创建新的分页请求构建器
     ///
