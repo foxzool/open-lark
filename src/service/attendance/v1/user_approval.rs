@@ -1,4 +1,5 @@
 use reqwest::Method;
+use std::sync::Arc;
 use serde_json::json;
 
 use crate::core::{
@@ -13,7 +14,7 @@ use super::models::{
 
 /// 用户审批服务
 pub struct UserApprovalService {
-    pub config: Config,
+    pub config: Arc<Config>,
 }
 
 impl UserApprovalService {

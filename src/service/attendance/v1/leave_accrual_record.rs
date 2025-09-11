@@ -1,4 +1,5 @@
 use reqwest::Method;
+use std::sync::Arc;
 use serde_json::json;
 
 use crate::{
@@ -13,7 +14,7 @@ use super::models::{PatchLeaveAccrualRecordRequest, PatchLeaveAccrualRecordRespD
 
 /// 休假发放记录服务
 pub struct LeaveAccrualRecordService {
-    pub config: Config,
+    pub config: Arc<Config>,
 }
 
 impl LeaveAccrualRecordService {
