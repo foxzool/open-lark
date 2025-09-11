@@ -954,7 +954,7 @@ pub fn validate_birthday(birthday: &Option<String>, field_name: &str) -> Validat
         }
 
         // 验证日期有效性
-        if let Err(_) = chrono::NaiveDate::parse_from_str(bday, "%Y-%m-%d") {
+        if chrono::NaiveDate::parse_from_str(bday, "%Y-%m-%d").is_err() {
             return ValidationResult::Invalid(format!(
                 "{} must be a valid date in YYYY-MM-DD format",
                 field_name
@@ -1215,7 +1215,7 @@ pub fn sanitize_tags(tags: &[String]) -> Vec<String> {
     for tag in tags {
         let sanitized = tag
             .trim()
-            .replace(|c| c == '_' || c == '-', "_") // 统一替换为下划线
+           .replace(['_', '-'], "_") // 统一替换为下划线
             .to_lowercase();
 
         if !sanitized.is_empty() && !result.contains(&sanitized) {
@@ -1474,7 +1474,7 @@ pub fn validate_pagination_params(
 /// 清理后的标签
 pub fn sanitize_tag(tag: &str) -> String {
     tag.trim()
-        .replace(|c| c == '_' || c == '-', "_") // 统一替换为下划线
+       .replace(['_', '-'], "_") // 统一替换为下划线
         .to_lowercase()
 }
 
