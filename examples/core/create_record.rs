@@ -239,7 +239,11 @@ async fn create_multiple_records(
                 println!(
                     "   ✅ 记录 {} 创建成功 (ID: {})",
                     title,
-                    response.record.record_id.as_ref().unwrap_or(&"N/A".to_string())
+                    response
+                        .record
+                        .record_id
+                        .as_ref()
+                        .unwrap_or(&"N/A".to_string())
                 );
             }
             Err(e) => {
