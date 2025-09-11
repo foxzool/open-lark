@@ -84,14 +84,16 @@ pub struct ApiRequest {
     /// ```
     pub query_params: HashMap<String, String>,
 
-    /// URL路径参数（当前未使用）
+    /// URL路径参数（保留字段）
     ///
-    /// 原设计意图可能是用于路径模板替换，如将 `/files/{id}` 中的 `{id}` 替换。
-    /// 但当前实现中，路径参数都是通过 `format!` 宏直接嵌入到 `api_path` 中。
-    ///
-    /// # TODO
-    ///
-    /// 考虑移除此字段或实现路径模板功能以保持设计一致性。
+    /// 该字段为未来的路径模板功能保留。目前在现有架构中：
+    /// 
+    /// - **当前做法**: 路径参数通过 `format!` 宏直接嵌入 `api_path`
+    /// - **替代方案**: 可使用 `RequestExecutor::execute_with_path_params()` 进行路径参数替换
+    /// - **设计考虑**: 保留该字段可为未来的模板系统升级提供支持
+    /// 
+    /// 关于路径参数处理，参考 `crate::service::endpoints::EndpointHelper::replace_path_params`
+    /// 和 `crate::core::request_executor::RequestExecutor::execute_with_path_params`。
     pub path_params: HashMap<String, Vec<String>>,
 
     /// 支持的访问令牌类型
