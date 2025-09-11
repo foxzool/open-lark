@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod tests {
+mod talent_tests {
     use crate::core::validation::ValidateBuilder;
     use crate::service::hire::candidate_management::talent::{
         TalentCreateRequestBuilder, TalentListRequestBuilder,

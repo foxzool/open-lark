@@ -186,8 +186,11 @@ impl<'a> ListMessageIterator<'a> {
         }
     }
 
-    // TODO: Implement async iterator or stream for paginated results
-    // The Iterator trait cannot be async, so we need a different approach
+    // FUTURE: 实现异步迭代器或流式处理分页结果
+    // 标准 Iterator trait 不支持异步，可考虑：
+    // 1. 使用 futures::Stream trait
+    // 2. 使用 async-stream crate 
+    // 3. 实现自定义的 AsyncIterator trait
 }
 
 impl<'a> std::fmt::Debug for ListMessageIterator<'a> {
