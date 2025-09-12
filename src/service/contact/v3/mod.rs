@@ -1,4 +1,6 @@
 /// Contact v3 API 实现
+use std::sync::Arc;
+
 use crate::core::config::Config;
 
 pub mod custom_attr;
@@ -64,21 +66,21 @@ pub struct V3 {
 }
 
 impl V3 {
-    pub fn new(config: Config) -> Self {
+    pub fn new(config: Arc<Config>) -> Self {
         Self {
-            scope: ScopeService::new(config.clone()),
-            user: UserService::new(config.clone()),
-            group: GroupService::new(config.clone()),
-            custom_attr: CustomAttrService::new(config.clone()),
-            employee_type_enum: EmployeeTypeEnumService::new(config.clone()),
-            department: DepartmentService::new(config.clone()),
-            unit: UnitService::new(config.clone()),
-            group_member: GroupMemberService::new(config.clone()),
-            functional_role: FunctionalRoleService::new(config.clone()),
-            functional_role_member: FunctionalRoleMemberService::new(config.clone()),
-            job_level: JobLevelService::new(config.clone()),
-            job_family: JobFamilyService::new(config.clone()),
-            job_title: JobTitleService::new(config.clone()),
+            scope: ScopeService::new(Arc::clone(&config)),
+            user: UserService::new(Arc::clone(&config)),
+            group: GroupService::new(Arc::clone(&config)),
+            custom_attr: CustomAttrService::new(Arc::clone(&config)),
+            employee_type_enum: EmployeeTypeEnumService::new(Arc::clone(&config)),
+            department: DepartmentService::new(Arc::clone(&config)),
+            unit: UnitService::new(Arc::clone(&config)),
+            group_member: GroupMemberService::new(Arc::clone(&config)),
+            functional_role: FunctionalRoleService::new(Arc::clone(&config)),
+            functional_role_member: FunctionalRoleMemberService::new(Arc::clone(&config)),
+            job_level: JobLevelService::new(Arc::clone(&config)),
+            job_family: JobFamilyService::new(Arc::clone(&config)),
+            job_title: JobTitleService::new(Arc::clone(&config)),
             work_city: WorkCityService::new(config),
         }
     }
