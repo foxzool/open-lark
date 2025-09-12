@@ -1,5 +1,4 @@
 use reqwest::Method;
-use std::sync::Arc;
 use serde_json::json;
 
 use crate::{
@@ -14,7 +13,7 @@ use super::models::{PatchLeaveAccrualRecordRequest, PatchLeaveAccrualRecordRespD
 
 /// 休假发放记录服务
 pub struct LeaveAccrualRecordService {
-    pub config: Arc<Config>,
+    pub config: Config,
 }
 
 impl LeaveAccrualRecordService {
@@ -40,7 +39,7 @@ impl LeaveAccrualRecordService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         // 构建请求体
         let body = json!({

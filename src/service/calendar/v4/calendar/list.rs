@@ -75,28 +75,28 @@ impl ListCalendarRequestBuilder {
             self.request
                 .api_req
                 .query_params
-                .insert("user_id_type".to_string(), user_id_type.to_string());
+                .insert("user_id_type", user_id_type.to_string());
         }
 
         if let Some(page_size) = self.request.page_size {
             self.request
                 .api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(ref page_token) = self.request.page_token {
             self.request
                 .api_req
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
 
         if let Some(sync_events) = self.request.sync_events {
             self.request
                 .api_req
                 .query_params
-                .insert("sync_events".to_string(), sync_events.to_string());
+                .insert("sync_events", sync_events.to_string());
         }
 
         self.request

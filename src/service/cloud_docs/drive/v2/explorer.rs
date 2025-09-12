@@ -139,7 +139,7 @@ impl ListFolderIterator<'_> {
                         self.req
                             .api_req
                             .query_params
-                            .insert("page_token".to_string(), data.next_page_token.unwrap());
+                            .insert("page_token", data.next_page_token.unwrap());
                         Some(data.files)
                     } else if data.files.is_empty() {
                         None
@@ -281,7 +281,7 @@ impl ListFolderRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("page_size".to_string(), page_size.to_string());
+            .insert("page_size", page_size.to_string());
         self
     }
 
@@ -293,7 +293,7 @@ impl ListFolderRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("page_token".to_string(), page_token.to_string());
+            .insert("page_token", page_token.to_string());
         self
     }
 
@@ -304,7 +304,7 @@ impl ListFolderRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("folder_token".to_string(), fold_token.to_string());
+            .insert("folder_token", fold_token.to_string());
         self
     }
 
@@ -322,7 +322,7 @@ impl ListFolderRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("order_by".to_string(), order_by.to_string());
+            .insert("order_by", order_by.to_string());
         self
     }
 
@@ -338,7 +338,7 @@ impl ListFolderRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("direction".to_string(), direction.to_string());
+            .insert("direction", direction.to_string());
         self
     }
 
@@ -360,7 +360,7 @@ impl ListFolderRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("user_id_type".to_string(), user_id_type.to_string());
+            .insert("user_id_type", user_id_type.to_string());
         self
     }
 

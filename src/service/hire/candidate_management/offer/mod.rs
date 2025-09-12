@@ -462,45 +462,43 @@ impl OfferService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(talent_id) = request.talent_id {
             api_req
                 .query_params
-                .insert("talent_id".to_string(), talent_id);
+                .insert("talent_id", talent_id);
         }
 
         if let Some(job_id) = request.job_id {
-            api_req.query_params.insert("job_id".to_string(), job_id);
+            api_req.query_params.insert("job_id", job_id);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(approval_status) = request.approval_status {
             api_req
                 .query_params
-                .insert("approval_status".to_string(), approval_status);
+                .insert("approval_status", approval_status);
         }
 
         if let Some(created_start_time) = request.created_start_time {
             api_req
                 .query_params
-                .insert("created_start_time".to_string(), created_start_time);
+                .insert("created_start_time", created_start_time);
         }
 
         if let Some(created_end_time) = request.created_end_time {
             api_req
                 .query_params
-                .insert("created_end_time".to_string(), created_end_time);
+                .insert("created_end_time", created_end_time);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -744,23 +742,21 @@ impl OfferService {
         if let Some(page_size) = page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(status) = status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(department) = department {
             api_req
                 .query_params
-                .insert("department".to_string(), department);
+                .insert("department", department);
         }
 
         Transport::request(api_req, &self.config, option).await

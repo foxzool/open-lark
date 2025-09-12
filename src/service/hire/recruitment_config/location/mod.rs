@@ -83,25 +83,21 @@ impl LocationService {
         if let Some(location_type) = request.location_type {
             api_req
                 .query_params
-                .insert("location_type".to_string(), location_type);
+                .insert("location_type", location_type);
         }
 
         if let Some(parent_id) = request.parent_id {
-            api_req
-                .query_params
-                .insert("parent_id".to_string(), parent_id);
+            api_req.query_params.insert("parent_id", parent_id);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await

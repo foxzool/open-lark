@@ -80,12 +80,10 @@ impl SeatService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -116,22 +114,16 @@ impl SeatService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
         if let Some(start_time) = request.start_time {
-            api_req
-                .query_params
-                .insert("start_time".to_string(), start_time);
+            api_req.query_params.insert("start_time", start_time);
         }
         if let Some(end_time) = request.end_time {
-            api_req
-                .query_params
-                .insert("end_time".to_string(), end_time);
+            api_req.query_params.insert("end_time", end_time);
         }
 
         Transport::request(api_req, &self.config, option).await

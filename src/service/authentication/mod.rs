@@ -79,8 +79,6 @@
 //! - 权限不足
 //! - 网络连接问题
 
-use std::sync::Arc;
-
 /// 身份认证服务 v1 版本
 pub mod v1;
 
@@ -129,9 +127,9 @@ impl AuthenService {
     ///
     /// # 返回值
     /// 配置完成的身份认证服务实例
-    pub fn new(config: Arc<crate::core::config::Config>) -> Self {
+    pub fn new(config: crate::core::config::Config) -> Self {
         Self {
-            v1: v1::V1::new((*config).clone()),
+            v1: v1::V1::new(config.clone()),
         }
     }
 }

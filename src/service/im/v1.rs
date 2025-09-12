@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use crate::{
     core::config::Config,
     service::im::v1::{
@@ -45,24 +43,24 @@ pub struct V1 {
 }
 
 impl V1 {
-    pub fn new(config: Arc<Config>) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
             // 现有服务
             chats: ChatsService {
-                config: Arc::clone(&config),
+                config: config.clone(),
             },
             message: MessageService {
-                config: Arc::clone(&config),
+                config: config.clone(),
             },
 
             // 新增服务
-            batch_message: BatchMessageService::new(Arc::clone(&config)),
-            image: ImageService::new(Arc::clone(&config)),
-            file: FileService::new(Arc::clone(&config)),
-            message_reaction: MessageReactionService::new(Arc::clone(&config)),
-            pin: PinService::new(Arc::clone(&config)),
-            message_card: MessageCardService::new(Arc::clone(&config)),
-            buzz_messages: BuzzMessagesService::new(Arc::clone(&config)),
+            batch_message: BatchMessageService::new(config.clone()),
+            image: ImageService::new(config.clone()),
+            file: FileService::new(config.clone()),
+            message_reaction: MessageReactionService::new(config.clone()),
+            pin: PinService::new(config.clone()),
+            message_card: MessageCardService::new(config.clone()),
+            buzz_messages: BuzzMessagesService::new(config.clone()),
             url_preview: UrlPreviewService::new(config),
         }
     }

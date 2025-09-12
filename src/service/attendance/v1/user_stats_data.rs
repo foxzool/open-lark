@@ -1,5 +1,4 @@
 use reqwest::Method;
-use std::sync::Arc;
 use serde_json::json;
 
 use crate::{
@@ -18,7 +17,7 @@ use super::models::{
 
 /// 用户统计数据服务
 pub struct UserStatsDataService {
-    pub config: Arc<Config>,
+    pub config: Config,
 }
 
 impl UserStatsDataService {
@@ -40,7 +39,7 @@ impl UserStatsDataService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         // 构建请求体
         let body = json!({
@@ -71,7 +70,7 @@ impl UserStatsDataService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -95,10 +94,10 @@ impl UserStatsDataService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         if let Some(locale) = request.locale {
-            api_req.query_params.insert("locale".to_string(), locale);
+            api_req.query_params.insert("locale", locale);
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -123,10 +122,10 @@ impl UserStatsDataService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         if let Some(locale) = request.locale {
-            api_req.query_params.insert("locale".to_string(), locale);
+            api_req.query_params.insert("locale", locale);
         }
 
         // 构建请求体

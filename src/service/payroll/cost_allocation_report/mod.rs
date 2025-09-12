@@ -100,40 +100,34 @@ impl CostAllocationReportService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("start_date".to_string(), request.start_date);
+            .insert("start_date", request.start_date);
 
-        api_req
-            .query_params
-            .insert("end_date".to_string(), request.end_date);
+        api_req.query_params.insert("end_date", request.end_date);
 
         if let Some(cost_center_id) = request.cost_center_id {
             api_req
                 .query_params
-                .insert("cost_center_id".to_string(), cost_center_id);
+                .insert("cost_center_id", cost_center_id);
         }
 
         if let Some(department_id) = request.department_id {
-            api_req
-                .query_params
-                .insert("department_id".to_string(), department_id);
+            api_req.query_params.insert("department_id", department_id);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(report_type) = request.report_type {
             api_req
                 .query_params
-                .insert("report_type".to_string(), report_type);
+                .insert("report_type", report_type);
         }
 
         Transport::request(api_req, &self.config, option).await

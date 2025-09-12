@@ -96,29 +96,27 @@ impl AcctItemService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(item_type) = request.item_type {
             api_req
                 .query_params
-                .insert("item_type".to_string(), item_type);
+                .insert("item_type", item_type);
         }
 
         if let Some(paygroup_id) = request.paygroup_id {
             api_req
                 .query_params
-                .insert("paygroup_id".to_string(), paygroup_id);
+                .insert("paygroup_id", paygroup_id);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         Transport::request(api_req, &self.config, option).await

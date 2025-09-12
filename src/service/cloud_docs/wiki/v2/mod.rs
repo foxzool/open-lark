@@ -36,7 +36,7 @@ impl V2 {
             space_node: SpaceNodeService::new(config.clone()),
             space_setting: SpaceSettingService::new(config.clone()),
             task: TaskService::new(config.clone()),
-            config,
+            config: config.clone(),
         }
     }
 

@@ -160,14 +160,11 @@ impl InstanceService {
     ) -> SDKResult<BaseResponse<CreateInstanceResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(department_id_type) = department_id_type {
             query_params.insert(
-                "department_id_type".to_string(),
+                "department_id_type",
                 department_id_type.as_str().to_string(),
             );
         }
@@ -193,10 +190,7 @@ impl InstanceService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -220,10 +214,7 @@ impl InstanceService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -248,14 +239,11 @@ impl InstanceService {
     ) -> SDKResult<BaseResponse<PreviewInstanceResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(department_id_type) = department_id_type {
             query_params.insert(
-                "department_id_type".to_string(),
+                "department_id_type",
                 department_id_type.as_str().to_string(),
             );
         }
@@ -281,10 +269,7 @@ impl InstanceService {
     ) -> SDKResult<BaseResponse<GetInstanceResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -307,25 +292,22 @@ impl InstanceService {
         let mut query_params = HashMap::new();
         if let Some(params) = params {
             if let Some(page_size) = params.page_size {
-                query_params.insert("page_size".to_string(), page_size.to_string());
+                query_params.insert("page_size", page_size.to_string());
             }
             if let Some(page_token) = params.page_token {
-                query_params.insert("page_token".to_string(), page_token);
+                query_params.insert("page_token", page_token);
             }
             if let Some(approval_code) = params.approval_code {
-                query_params.insert("approval_code".to_string(), approval_code);
+                query_params.insert("approval_code", approval_code);
             }
             if let Some(instance_status) = params.instance_status {
-                query_params.insert("instance_status".to_string(), instance_status);
+                query_params.insert("instance_status", instance_status);
             }
             if let Some(user_id) = params.user_id {
-                query_params.insert("user_id".to_string(), user_id);
+                query_params.insert("user_id", user_id);
             }
             if let Some(user_id_type) = params.user_id_type {
-                query_params.insert(
-                    "user_id_type".to_string(),
-                    user_id_type.as_str().to_string(),
-                );
+                query_params.insert("user_id_type", user_id_type.as_str().to_string());
             }
         }
 

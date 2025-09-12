@@ -33,7 +33,8 @@ impl DataOperationService {
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp: BaseResponse<ReadingMultipleRangesResponseData> = Transport::request(api_req, &self.config, option).await?;
+        let api_resp: BaseResponse<ReadingMultipleRangesResponseData> =
+            Transport::request(api_req, &self.config, option).await?;
 
         api_resp.into_result()
     }
@@ -141,7 +142,7 @@ impl ReadingMultipleRangesRequestBuilder {
         self.request
             .api_request
             .query_params
-            .insert("valueRenderOption".to_string(), value);
+            .insert("valueRenderOption", value);
         self
     }
 
@@ -151,7 +152,7 @@ impl ReadingMultipleRangesRequestBuilder {
         self.request
             .api_request
             .query_params
-            .insert("dateTimeRenderOption".to_string(), value);
+            .insert("dateTimeRenderOption", value);
         self
     }
 
@@ -161,7 +162,7 @@ impl ReadingMultipleRangesRequestBuilder {
         self.request
             .api_request
             .query_params
-            .insert("user_id_type".to_string(), value);
+            .insert("user_id_type", value);
         self
     }
 

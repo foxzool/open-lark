@@ -1,6 +1,5 @@
 use reqwest::Method;
 use serde_json::json;
-use std::sync::Arc;
 
 use crate::{
     core::{
@@ -16,7 +15,7 @@ use super::models::{
 };
 
 pub struct ShiftService {
-    pub config: Arc<Config>,
+    pub config: Config,
 }
 
 impl ShiftService {
@@ -38,7 +37,7 @@ impl ShiftService {
         // 添加必需的查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         // 构建请求体
         let mut body = json!({
@@ -158,10 +157,10 @@ impl ShiftService {
         // 添加必需的查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type.clone());
+            .insert("employee_type", request.employee_type.clone());
         api_req
             .query_params
-            .insert("shift_name".to_string(), request.shift_name.clone());
+            .insert("shift_name", request.shift_name.clone());
 
         let body = json!({
             "shift_name": request.shift_name
@@ -205,12 +204,10 @@ impl ShiftService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

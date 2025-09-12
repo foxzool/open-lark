@@ -104,8 +104,6 @@ pub mod models;
 /// 密码管理功能
 pub mod password;
 
-use std::sync::Arc;
-
 use crate::core::config::Config;
 use badge::BadgeService;
 use badge_grant::BadgeGrantService;
@@ -167,11 +165,11 @@ impl AdminService {
     ///
     /// # 返回值
     /// 配置完成的管理后台服务实例
-    pub fn new(config: Arc<Config>) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            password: PasswordService::new(Arc::clone(&config)),
-            data_report: DataReportService::new(Arc::clone(&config)),
-            badge: BadgeService::new(Arc::clone(&config)),
+            password: PasswordService::new(config.clone()),
+            data_report: DataReportService::new(config.clone()),
+            badge: BadgeService::new(config.clone()),
             badge_grant: BadgeGrantService::new(config),
         }
     }

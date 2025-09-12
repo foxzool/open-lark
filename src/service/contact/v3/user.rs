@@ -1,9 +1,9 @@
 use crate::{
     core::{
         api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
-        constants::AccessTokenType, http::Transport, req_option::RequestOption,
-        standard_response::StandardResponse, trait_system::executable_builder::ExecutableBuilder,
-        SDKResult,
+        constants::AccessTokenType, endpoints::Endpoints, http::Transport,
+        req_option::RequestOption, standard_response::StandardResponse,
+        trait_system::executable_builder::ExecutableBuilder, SDKResult,
     },
     service::contact::models::*,
 };
@@ -34,7 +34,7 @@ impl UserService {
     ) -> crate::core::SDKResult<CreateUserResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: "/open-apis/contact/v3/users".to_string(),
+            api_path: Endpoints::CONTACT_V3_USERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -88,10 +88,10 @@ impl UserService {
     ) -> crate::core::SDKResult<GetUserResponse> {
         let mut query_params = std::collections::HashMap::new();
         if let Some(user_id_type) = &_req.user_id_type {
-            query_params.insert("user_id_type".to_string(), user_id_type.clone());
+            query_params.insert("user_id_type", user_id_type.clone());
         }
         if let Some(department_id_type) = &_req.department_id_type {
-            query_params.insert("department_id_type".to_string(), department_id_type.clone());
+            query_params.insert("department_id_type", department_id_type.clone());
         }
 
         let api_req = ApiRequest {
@@ -114,7 +114,7 @@ impl UserService {
     ) -> crate::core::SDKResult<BatchGetUsersResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: "/open-apis/contact/v3/users/batch".to_string(),
+            api_path: Endpoints::CONTACT_V3_USERS_BATCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -131,7 +131,7 @@ impl UserService {
     ) -> crate::core::SDKResult<FindUsersByDepartmentResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: "/open-apis/contact/v3/users/find_by_department".to_string(),
+            api_path: Endpoints::CONTACT_V3_USERS_FIND_BY_DEPARTMENT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -150,7 +150,7 @@ impl UserService {
     ) -> crate::core::SDKResult<BatchGetUserIdResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: "/open-apis/contact/v3/users/batch_get_id".to_string(),
+            api_path: Endpoints::CONTACT_V3_USERS_BATCH_GET_ID.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -168,7 +168,7 @@ impl UserService {
     ) -> crate::core::SDKResult<SearchUsersResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: "/open-apis/contact/v3/users/search".to_string(),
+            api_path: Endpoints::CONTACT_V3_USERS_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -220,21 +220,21 @@ impl UserService {
         let mut query_params = std::collections::HashMap::new();
 
         if let Some(page_size) = req.page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = &req.page_token {
-            query_params.insert("page_token".to_string(), page_token.clone());
+            query_params.insert("page_token", page_token.clone());
         }
         if let Some(user_id_type) = &req.user_id_type {
-            query_params.insert("user_id_type".to_string(), user_id_type.clone());
+            query_params.insert("user_id_type", user_id_type.clone());
         }
         if let Some(department_id_type) = &req.department_id_type {
-            query_params.insert("department_id_type".to_string(), department_id_type.clone());
+            query_params.insert("department_id_type", department_id_type.clone());
         }
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: "/open-apis/contact/v3/users".to_string(),
+            api_path: Endpoints::CONTACT_V3_USERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params,

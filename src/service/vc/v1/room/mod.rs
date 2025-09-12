@@ -151,10 +151,7 @@ impl RoomService {
     ) -> SDKResult<BaseResponse<CreateRoomResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -181,15 +178,12 @@ impl RoomService {
         let mut query_params = HashMap::new();
         if let Some(room_id_type) = room_id_type {
             query_params.insert(
-                "room_id_type".to_string(),
+                "room_id_type",
                 room_id_type.as_str().to_string(),
             );
         }
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -215,15 +209,12 @@ impl RoomService {
         let mut query_params = HashMap::new();
         if let Some(room_id_type) = room_id_type {
             query_params.insert(
-                "room_id_type".to_string(),
+                "room_id_type",
                 room_id_type.as_str().to_string(),
             );
         }
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -248,15 +239,12 @@ impl RoomService {
         let mut query_params = HashMap::new();
         if let Some(room_id_type) = room_id_type {
             query_params.insert(
-                "room_id_type".to_string(),
+                "room_id_type",
                 room_id_type.as_str().to_string(),
             );
         }
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -281,22 +269,19 @@ impl RoomService {
     ) -> SDKResult<BaseResponse<ListRoomsResponse>> {
         let mut query_params = HashMap::new();
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
         if let Some(room_id_type) = room_id_type {
             query_params.insert(
-                "room_id_type".to_string(),
+                "room_id_type",
                 room_id_type.as_str().to_string(),
             );
         }
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -319,28 +304,25 @@ impl RoomService {
         let mut query_params = HashMap::new();
         if let Some(params) = params {
             if let Some(keyword) = params.keyword {
-                query_params.insert("keyword".to_string(), keyword);
+                query_params.insert("keyword", keyword);
             }
             if let Some(room_ids) = params.room_ids {
-                query_params.insert("room_ids".to_string(), room_ids.join(","));
+                query_params.insert("room_ids", room_ids.join(","));
             }
             if let Some(page_size) = params.page_size {
-                query_params.insert("page_size".to_string(), page_size.to_string());
+                query_params.insert("page_size", page_size.to_string());
             }
             if let Some(page_token) = params.page_token {
-                query_params.insert("page_token".to_string(), page_token);
+                query_params.insert("page_token", page_token);
             }
             if let Some(room_id_type) = params.room_id_type {
                 query_params.insert(
-                    "room_id_type".to_string(),
+                    "room_id_type",
                     room_id_type.as_str().to_string(),
                 );
             }
             if let Some(user_id_type) = params.user_id_type {
-                query_params.insert(
-                    "user_id_type".to_string(),
-                    user_id_type.as_str().to_string(),
-                );
+                query_params.insert("user_id_type", user_id_type.as_str().to_string());
             }
         }
 

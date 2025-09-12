@@ -311,11 +311,10 @@ pub fn validate_recurrence_rule(rule: &str) -> ValidationResult {
             .unwrap_or(until_part);
 
         if NaiveDate::parse_from_str(until_value, "%Y%m%d").is_err()
-            && DateTime::parse_from_rfc3339(&format!("{}T000000Z", until_value)).is_err() {
-                return ValidationResult::Invalid(
-                    "UNTIL参数格式无效，请使用YYYYMMDD格式".to_string(),
-                );
-            }
+            && DateTime::parse_from_rfc3339(&format!("{}T000000Z", until_value)).is_err()
+        {
+            return ValidationResult::Invalid("UNTIL参数格式无效，请使用YYYYMMDD格式".to_string());
+        }
     }
 
     // 检查COUNT参数（如果有）

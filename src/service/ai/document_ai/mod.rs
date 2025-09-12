@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -170,7 +171,7 @@ impl DocumentAiService {
     ) -> SDKResult<BaseResponse<ResumeParseResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/document_ai/v1/resume/parse".to_string(),
+            api_path: Endpoints::DOCUMENT_AI_RESUME_PARSE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -194,7 +195,7 @@ impl DocumentAiService {
     ) -> SDKResult<BaseResponse<IdCardRecognizeResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/document_ai/v1/id_card/recognize".to_string(),
+            api_path: Endpoints::DOCUMENT_AI_ID_CARD_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -218,7 +219,7 @@ impl DocumentAiService {
     ) -> SDKResult<BaseResponse<DrivingLicenseRecognizeResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/document_ai/v1/driving_license/recognize".to_string(),
+            api_path: Endpoints::DOCUMENT_AI_DRIVING_LICENSE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -242,7 +243,7 @@ impl DocumentAiService {
     ) -> SDKResult<BaseResponse<BankCardRecognizeResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/document_ai/v1/bank_card/recognize".to_string(),
+            api_path: Endpoints::DOCUMENT_AI_BANK_CARD_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -266,7 +267,7 @@ impl DocumentAiService {
     ) -> SDKResult<BaseResponse<BusinessLicenseRecognizeResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/document_ai/v1/business_license/recognize".to_string(),
+            api_path: Endpoints::DOCUMENT_AI_BUSINESS_LICENSE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -290,7 +291,7 @@ impl DocumentAiService {
     ) -> SDKResult<BaseResponse<VatInvoiceRecognizeResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/document_ai/v1/vat_invoice/recognize".to_string(),
+            api_path: Endpoints::DOCUMENT_AI_VAT_INVOICE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -314,7 +315,7 @@ impl DocumentAiService {
     ) -> SDKResult<BaseResponse<ContractFieldExtractionResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/document_ai/v1/contract/field_extraction".to_string(),
+            api_path: Endpoints::DOCUMENT_AI_CONTRACT_FIELD_EXTRACTION.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -338,7 +339,7 @@ impl DocumentAiService {
     ) -> SDKResult<BaseResponse<BusinessCardRecognizeResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/document_ai/v1/business_card/recognize".to_string(),
+            api_path: Endpoints::DOCUMENT_AI_BUSINESS_CARD_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -362,7 +363,7 @@ impl DocumentAiService {
     ) -> SDKResult<BaseResponse<GenericDocumentResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/document_ai/v1/vehicle_invoice/recognize".to_string(),
+            api_path: Endpoints::DOCUMENT_AI_VEHICLE_INVOICE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -386,7 +387,7 @@ impl DocumentAiService {
     ) -> SDKResult<BaseResponse<GenericDocumentResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/document_ai/v1/health_certificate/recognize".to_string(),
+            api_path: Endpoints::DOCUMENT_AI_HEALTH_CERTIFICATE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -410,7 +411,7 @@ impl DocumentAiService {
     ) -> SDKResult<BaseResponse<GenericDocumentResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/document_ai/v1/hkm_mainland_travel_permit/recognize".to_string(),
+            api_path: Endpoints::DOCUMENT_AI_HKM_MAINLAND_TRAVEL_PERMIT_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -434,7 +435,7 @@ impl DocumentAiService {
     ) -> SDKResult<BaseResponse<GenericDocumentResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/document_ai/v1/tw_mainland_travel_permit/recognize".to_string(),
+            api_path: Endpoints::DOCUMENT_AI_TW_MAINLAND_TRAVEL_PERMIT_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -458,7 +459,7 @@ impl DocumentAiService {
     ) -> SDKResult<BaseResponse<GenericDocumentResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/document_ai/v1/chinese_passport/recognize".to_string(),
+            api_path: Endpoints::DOCUMENT_AI_CHINESE_PASSPORT_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -482,7 +483,7 @@ impl DocumentAiService {
     ) -> SDKResult<BaseResponse<GenericDocumentResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/document_ai/v1/vehicle_license/recognize".to_string(),
+            api_path: Endpoints::DOCUMENT_AI_VEHICLE_LICENSE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -506,7 +507,7 @@ impl DocumentAiService {
     ) -> SDKResult<BaseResponse<GenericDocumentResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/document_ai/v1/train_invoice/recognize".to_string(),
+            api_path: Endpoints::DOCUMENT_AI_TRAIN_INVOICE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -530,7 +531,7 @@ impl DocumentAiService {
     ) -> SDKResult<BaseResponse<GenericDocumentResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/document_ai/v1/taxi_invoice/recognize".to_string(),
+            api_path: Endpoints::DOCUMENT_AI_TAXI_INVOICE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -554,7 +555,7 @@ impl DocumentAiService {
     ) -> SDKResult<BaseResponse<GenericDocumentResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/document_ai/v1/food_produce_license/recognize".to_string(),
+            api_path: Endpoints::DOCUMENT_AI_FOOD_PRODUCE_LICENSE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -578,7 +579,7 @@ impl DocumentAiService {
     ) -> SDKResult<BaseResponse<GenericDocumentResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/document_ai/v1/food_manage_license/recognize".to_string(),
+            api_path: Endpoints::DOCUMENT_AI_FOOD_MANAGE_LICENSE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

@@ -47,7 +47,7 @@ impl MigrationExamples {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<MessageData>> {
         let mut query_params = HashMap::new();
-        query_params.insert("receive_id_type".to_string(), receive_id_type.to_string());
+        query_params.insert("receive_id_type", receive_id_type.to_string());
 
         // 使用 RequestExecutor - 所有重复代码都被抽象了
         RequestExecutor::execute(

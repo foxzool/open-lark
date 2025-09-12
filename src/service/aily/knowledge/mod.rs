@@ -239,9 +239,7 @@ impl KnowledgeService {
         };
 
         // 添加查询参数
-        api_req
-            .query_params
-            .insert("app_id".to_string(), request.app_id);
+        api_req.query_params.insert("app_id", request.app_id);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -268,9 +266,7 @@ impl KnowledgeService {
         };
 
         // 添加查询参数
-        api_req
-            .query_params
-            .insert("app_id".to_string(), request.app_id);
+        api_req.query_params.insert("app_id", request.app_id);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -297,27 +293,21 @@ impl KnowledgeService {
         };
 
         // 添加查询参数
-        api_req
-            .query_params
-            .insert("app_id".to_string(), request.app_id);
+        api_req.query_params.insert("app_id", request.app_id);
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
         if let Some(category_id) = request.category_id {
-            api_req
-                .query_params
-                .insert("category_id".to_string(), category_id);
+            api_req.query_params.insert("category_id", category_id);
         }
         if let Some(keyword) = request.keyword {
-            api_req.query_params.insert("keyword".to_string(), keyword);
+            api_req.query_params.insert("keyword", keyword);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -345,19 +335,15 @@ impl KnowledgeService {
         };
 
         // 添加查询参数
-        api_req
-            .query_params
-            .insert("app_id".to_string(), request.app_id);
+        api_req.query_params.insert("app_id", request.app_id);
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await

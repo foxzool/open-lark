@@ -110,29 +110,25 @@ impl SearchableVisibleRulesService {
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(org_id) = request.org_id {
-            api_req.query_params.insert("org_id".to_string(), org_id);
+            api_req.query_params.insert("org_id", org_id);
         }
 
         if let Some(rule_type) = request.rule_type {
-            api_req
-                .query_params
-                .insert("rule_type".to_string(), rule_type);
+            api_req.query_params.insert("rule_type", rule_type);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         Transport::request(api_req, &self.config, option).await

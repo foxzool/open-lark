@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use crate::core::config::Config;
 
 /// 数据操作功能
@@ -66,9 +64,9 @@ impl V2 {
     ///
     /// # 返回值
     /// 配置完成的V2服务实例，包含基础的服务模块
-    pub fn new(config: Arc<Config>) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            spreadsheet: SpreadsheetService::new(Arc::clone(&config)),
+            spreadsheet: SpreadsheetService::new(config.clone()),
             spreadsheet_sheet: SpreadsheetSheetService::new(config),
         }
     }

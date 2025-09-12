@@ -32,7 +32,8 @@ impl DataOperationService {
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp: BaseResponse<BatchSetCellStyleResponseData> = Transport::request(api_req, &self.config, option).await?;
+        let api_resp: BaseResponse<BatchSetCellStyleResponseData> =
+            Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
 }

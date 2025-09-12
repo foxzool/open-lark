@@ -1,5 +1,4 @@
 use reqwest::Method;
-use std::sync::Arc;
 use serde_json::json;
 
 use crate::{
@@ -17,7 +16,7 @@ use super::models::{
 
 /// 用户补卡服务
 pub struct UserTaskRemedyService {
-    pub config: Arc<Config>,
+    pub config: Config,
 }
 
 impl UserTaskRemedyService {
@@ -39,7 +38,7 @@ impl UserTaskRemedyService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         // 构建请求体
         let body = json!({
@@ -76,19 +75,17 @@ impl UserTaskRemedyService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
-        api_req
-            .query_params
-            .insert("user_id".to_string(), request.user_id);
+            .insert("employee_type", request.employee_type);
+        api_req.query_params.insert("user_id", request.user_id);
 
         if let Some(date_from) = request.date_from {
             api_req
                 .query_params
-                .insert("date_from".to_string(), date_from);
+                .insert("date_from", date_from);
         }
 
         if let Some(date_to) = request.date_to {
-            api_req.query_params.insert("date_to".to_string(), date_to);
+            api_req.query_params.insert("date_to", date_to);
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -113,40 +110,34 @@ impl UserTaskRemedyService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         if let Some(user_ids) = request.user_ids {
-            api_req
-                .query_params
-                .insert("user_ids".to_string(), user_ids.join(","));
+            api_req.query_params.insert("user_ids", user_ids.join(","));
         }
 
         if let Some(date_from) = request.date_from {
             api_req
                 .query_params
-                .insert("date_from".to_string(), date_from);
+                .insert("date_from", date_from);
         }
 
         if let Some(date_to) = request.date_to {
-            api_req.query_params.insert("date_to".to_string(), date_to);
+            api_req.query_params.insert("date_to", date_to);
         }
 
         if let Some(status) = request.status {
-            api_req
-                .query_params
-                .insert("status".to_string(), status.to_string());
+            api_req.query_params.insert("status", status.to_string());
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

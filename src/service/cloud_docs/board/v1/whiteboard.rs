@@ -43,17 +43,13 @@ impl WhiteboardService {
 
         // 添加查询参数
         if let Some(format) = request.format {
-            api_req.query_params.insert("format".to_string(), format);
+            api_req.query_params.insert("format", format);
         }
         if let Some(width) = request.width {
-            api_req
-                .query_params
-                .insert("width".to_string(), width.to_string());
+            api_req.query_params.insert("width", width.to_string());
         }
         if let Some(height) = request.height {
-            api_req
-                .query_params
-                .insert("height".to_string(), height.to_string());
+            api_req.query_params.insert("height", height.to_string());
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

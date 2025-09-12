@@ -105,19 +105,19 @@ impl BatchGetRecordRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("user_id_type".to_string(), user_id_type.clone());
+                .insert("user_id_type", user_id_type.clone());
         }
         if let Some(automatic) = &self.request.automatic {
             self.request
                 .api_request
                 .query_params
-                .insert("automatic".to_string(), automatic.to_string());
+                .insert("automatic", automatic.to_string());
         }
         if let Some(with_shared_url) = &self.request.with_shared_url {
             self.request
                 .api_request
                 .query_params
-                .insert("with_shared_url".to_string(), with_shared_url.to_string());
+                .insert("with_shared_url", with_shared_url.to_string());
         }
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request

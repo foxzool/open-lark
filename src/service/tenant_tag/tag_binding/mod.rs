@@ -114,23 +114,20 @@ impl TagBindingService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetTagBindingResponse>> {
         let mut query_params = HashMap::new();
-        query_params.insert("entity_id".to_string(), request.entity_id);
-        query_params.insert("entity_type".to_string(), request.entity_type);
+        query_params.insert("entity_id", request.entity_id);
+        query_params.insert("entity_type", request.entity_type);
 
         if let Some(tag_id) = request.tag_id {
-            query_params.insert("tag_id".to_string(), tag_id);
+            query_params.insert("tag_id", tag_id);
         }
         if let Some(page_size) = request.page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
         if let Some(user_id_type) = request.user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -153,10 +150,7 @@ impl TagBindingService {
     ) -> SDKResult<BaseResponse<CreateTagBindingResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -180,10 +174,7 @@ impl TagBindingService {
     ) -> SDKResult<BaseResponse<UpdateTagBindingResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {

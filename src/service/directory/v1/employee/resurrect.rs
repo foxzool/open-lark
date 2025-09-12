@@ -107,14 +107,14 @@ impl ResurrectEmployeeRequestBuilder {
             self.request
                 .api_req
                 .query_params
-                .insert("user_id_type".to_string(), user_id_type.to_string());
+                .insert("user_id_type", user_id_type.to_string());
         }
 
         if let Some(department_id_type) = &self.request.department_id_type {
-            self.request.api_req.query_params.insert(
-                "department_id_type".to_string(),
-                department_id_type.to_string(),
-            );
+            self.request
+                .api_req
+                .query_params
+                .insert("department_id_type", department_id_type.to_string());
         }
 
         // 构建请求体
@@ -182,7 +182,7 @@ impl EmployeeService {
     /// let response = client.directory.v1.employee.resurrect(
     ///     ResurrectEmployeeRequest::builder("employee_id")
     ///         .leader_id("leader_id")
-    ///         .department_ids(vec!["department_id".to_string()])
+    ///         .department_ids(vec!["department_id"])
     ///         .build(),
     ///     None
     /// ).await?;
