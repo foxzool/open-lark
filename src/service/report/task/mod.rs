@@ -52,47 +52,45 @@ impl TaskService {
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(rule_id) = request.rule_id {
-            api_req.query_params.insert("rule_id".to_string(), rule_id);
+            api_req.query_params.insert("rule_id", rule_id);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(task_type) = request.task_type {
             api_req
                 .query_params
-                .insert("task_type".to_string(), task_type);
+                .insert("task_type", task_type);
         }
 
         if let Some(reporter_id) = request.reporter_id {
             api_req
                 .query_params
-                .insert("reporter_id".to_string(), reporter_id);
+                .insert("reporter_id", reporter_id);
         }
 
         if let Some(start_time) = request.start_time {
             api_req
                 .query_params
-                .insert("start_time".to_string(), start_time.to_string());
+                .insert("start_time", start_time.to_string());
         }
 
         if let Some(end_time) = request.end_time {
             api_req
                 .query_params
-                .insert("end_time".to_string(), end_time.to_string());
+                .insert("end_time", end_time.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await

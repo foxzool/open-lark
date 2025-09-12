@@ -100,25 +100,25 @@ impl ListFieldRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("view_id".to_string(), view_id.clone());
+                .insert("view_id", view_id.clone());
         }
         if let Some(text_field_as_array) = &self.request.text_field_as_array {
-            self.request.api_request.query_params.insert(
-                "text_field_as_array".to_string(),
-                text_field_as_array.to_string(),
-            );
+            self.request
+                .api_request
+                .query_params
+                .insert("text_field_as_array", text_field_as_array.to_string());
         }
         if let Some(page_token) = &self.request.page_token {
             self.request
                 .api_request
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
         if let Some(page_size) = &self.request.page_size {
             self.request
                 .api_request
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         self.request
     }

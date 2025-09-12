@@ -54,37 +54,35 @@ impl AccessRecordService {
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(user_id) = request.user_id {
-            api_req.query_params.insert("user_id".to_string(), user_id);
+            api_req.query_params.insert("user_id", user_id);
         }
 
         if let Some(device_id) = request.device_id {
             api_req
                 .query_params
-                .insert("device_id".to_string(), device_id);
+                .insert("device_id", device_id);
         }
 
         if let Some(access_type) = request.access_type {
             api_req.query_params.insert(
-                "access_type".to_string(),
+                "access_type",
                 serde_json::to_string(&access_type)?,
             );
         }
 
         if let Some(access_method) = request.access_method {
             api_req.query_params.insert(
-                "access_method".to_string(),
+                "access_method",
                 serde_json::to_string(&access_method)?,
             );
         }
@@ -92,19 +90,19 @@ impl AccessRecordService {
         if let Some(result) = request.result {
             api_req
                 .query_params
-                .insert("result".to_string(), serde_json::to_string(&result)?);
+                .insert("result", serde_json::to_string(&result)?);
         }
 
         if let Some(start_time) = request.start_time {
             api_req
                 .query_params
-                .insert("start_time".to_string(), start_time.to_string());
+                .insert("start_time", start_time.to_string());
         }
 
         if let Some(end_time) = request.end_time {
             api_req
                 .query_params
-                .insert("end_time".to_string(), end_time.to_string());
+                .insert("end_time", end_time.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await

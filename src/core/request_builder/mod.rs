@@ -57,7 +57,7 @@ impl UnifiedRequestBuilder {
         let query_params = req
             .query_params
             .iter()
-            .map(|(k, v)| (k.as_str(), v.as_str()))
+            .map(|(k, v)| (*k, v.as_str()))
             .collect::<Vec<_>>();
         Ok(url::Url::parse_with_params(&path, query_params)?)
     }

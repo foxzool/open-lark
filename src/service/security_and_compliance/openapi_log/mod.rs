@@ -44,41 +44,39 @@ impl OpenapiLogService {
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(start_time) = request.start_time {
             api_req
                 .query_params
-                .insert("start_time".to_string(), start_time.to_string());
+                .insert("start_time", start_time.to_string());
         }
 
         if let Some(end_time) = request.end_time {
             api_req
                 .query_params
-                .insert("end_time".to_string(), end_time.to_string());
+                .insert("end_time", end_time.to_string());
         }
 
         if let Some(app_ids) = request.app_ids {
-            api_req.query_params.insert("app_ids".to_string(), app_ids);
+            api_req.query_params.insert("app_ids", app_ids);
         }
 
         if let Some(apis) = request.apis {
-            api_req.query_params.insert("apis".to_string(), apis);
+            api_req.query_params.insert("apis", apis);
         }
 
         if let Some(response_codes) = request.response_codes {
             api_req
                 .query_params
-                .insert("response_codes".to_string(), response_codes);
+                .insert("response_codes", response_codes);
         }
 
         Transport::request(api_req, &self.config, option).await

@@ -115,31 +115,25 @@ impl PaymentDetailService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(employee_id) = request.employee_id {
-            api_req
-                .query_params
-                .insert("employee_id".to_string(), employee_id);
+            api_req.query_params.insert("employee_id", employee_id);
         }
 
         if let Some(user_id_type) = request.user_id_type {
-            api_req
-                .query_params
-                .insert("user_id_type".to_string(), user_id_type);
+            api_req.query_params.insert("user_id_type", user_id_type);
         }
 
         if let Some(department_id_type) = request.department_id_type {
             api_req
                 .query_params
-                .insert("department_id_type".to_string(), department_id_type);
+                .insert("department_id_type", department_id_type);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -208,9 +202,7 @@ impl PaymentDetailService {
 
         // 添加查询参数
         if let Some(user_id_type) = request.user_id_type {
-            api_req
-                .query_params
-                .insert("user_id_type".to_string(), user_id_type);
+            api_req.query_params.insert("user_id_type", user_id_type);
         }
 
         Transport::request(api_req, &self.config, option).await

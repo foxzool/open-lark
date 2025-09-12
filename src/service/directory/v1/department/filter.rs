@@ -91,19 +91,19 @@ impl FilterDepartmentRequestBuilder {
             self.request
                 .api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(ref page_token) = self.request.page_token {
             self.request
                 .api_req
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
 
         if let Some(ref parent_department_id) = self.request.parent_department_id {
             self.request.api_req.query_params.insert(
-                "parent_department_id".to_string(),
+                "parent_department_id",
                 parent_department_id.clone(),
             );
         }
@@ -112,21 +112,21 @@ impl FilterDepartmentRequestBuilder {
             self.request
                 .api_req
                 .query_params
-                .insert("fetch_deleted".to_string(), fetch_deleted.to_string());
+                .insert("fetch_deleted", fetch_deleted.to_string());
         }
 
         if let Some(user_id_type) = &self.request.user_id_type {
             self.request
                 .api_req
                 .query_params
-                .insert("user_id_type".to_string(), user_id_type.to_string());
+                .insert("user_id_type", user_id_type.to_string());
         }
 
         if let Some(department_id_type) = &self.request.department_id_type {
-            self.request.api_req.query_params.insert(
-                "department_id_type".to_string(),
-                department_id_type.to_string(),
-            );
+            self.request
+                .api_req
+                .query_params
+                .insert("department_id_type", department_id_type.to_string());
         }
 
         self.request

@@ -371,45 +371,43 @@ impl ReferralService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(referrer_id) = request.referrer_id {
             api_req
                 .query_params
-                .insert("referrer_id".to_string(), referrer_id);
+                .insert("referrer_id", referrer_id);
         }
 
         if let Some(job_id) = request.job_id {
-            api_req.query_params.insert("job_id".to_string(), job_id);
+            api_req.query_params.insert("job_id", job_id);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(reward_status) = request.reward_status {
             api_req
                 .query_params
-                .insert("reward_status".to_string(), reward_status);
+                .insert("reward_status", reward_status);
         }
 
         if let Some(referral_start_time) = request.referral_start_time {
             api_req
                 .query_params
-                .insert("referral_start_time".to_string(), referral_start_time);
+                .insert("referral_start_time", referral_start_time);
         }
 
         if let Some(referral_end_time) = request.referral_end_time {
             api_req
                 .query_params
-                .insert("referral_end_time".to_string(), referral_end_time);
+                .insert("referral_end_time", referral_end_time);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -645,13 +643,11 @@ impl ReferralService {
         if let Some(page_size) = page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await

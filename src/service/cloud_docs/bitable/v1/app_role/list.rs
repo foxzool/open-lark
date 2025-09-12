@@ -72,13 +72,13 @@ impl ListAppRoleRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
         if let Some(page_size) = &self.request.page_size {
             self.request
                 .api_request
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         self.request
     }

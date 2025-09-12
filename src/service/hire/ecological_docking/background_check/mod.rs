@@ -351,23 +351,21 @@ impl BackgroundCheckService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(vendor) = request.vendor {
-            api_req.query_params.insert("vendor".to_string(), vendor);
+            api_req.query_params.insert("vendor", vendor);
         }
 
         if let Some(enabled) = request.enabled {
             api_req
                 .query_params
-                .insert("enabled".to_string(), enabled.to_string());
+                .insert("enabled", enabled.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -562,35 +560,33 @@ impl BackgroundCheckService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(talent_id) = request.talent_id {
             api_req
                 .query_params
-                .insert("talent_id".to_string(), talent_id);
+                .insert("talent_id", talent_id);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(created_start_time) = request.created_start_time {
             api_req
                 .query_params
-                .insert("created_start_time".to_string(), created_start_time);
+                .insert("created_start_time", created_start_time);
         }
 
         if let Some(created_end_time) = request.created_end_time {
             api_req
                 .query_params
-                .insert("created_end_time".to_string(), created_end_time);
+                .insert("created_end_time", created_end_time);
         }
 
         Transport::request(api_req, &self.config, option).await

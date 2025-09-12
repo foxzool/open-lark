@@ -83,12 +83,12 @@ impl FunctionalRoleService {
         if let Some(page_size) = req.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = &req.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
 
         let resp =

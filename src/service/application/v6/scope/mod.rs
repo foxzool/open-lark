@@ -52,7 +52,7 @@ impl ScopeService {
     ) -> SDKResult<BaseResponse<ListScopeResponse>> {
         let mut query_params = HashMap::new();
         if let Some(lang) = lang {
-            query_params.insert("lang".to_string(), lang);
+            query_params.insert("lang", lang);
         }
 
         let api_req = ApiRequest {

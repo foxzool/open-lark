@@ -124,27 +124,21 @@ impl AuditLogService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
         if let Some(start_time) = request.start_time {
-            api_req
-                .query_params
-                .insert("start_time".to_string(), start_time);
+            api_req.query_params.insert("start_time", start_time);
         }
         if let Some(end_time) = request.end_time {
-            api_req
-                .query_params
-                .insert("end_time".to_string(), end_time);
+            api_req.query_params.insert("end_time", end_time);
         }
         if let Some(operation_type) = request.operation_type {
             api_req
                 .query_params
-                .insert("operation_type".to_string(), operation_type);
+                .insert("operation_type", operation_type);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -204,17 +198,15 @@ impl AuditLogService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
         if let Some(object_api_name) = request.object_api_name {
             api_req
                 .query_params
-                .insert("object_api_name".to_string(), object_api_name);
+                .insert("object_api_name", object_api_name);
         }
 
         Transport::request(api_req, &self.config, option).await

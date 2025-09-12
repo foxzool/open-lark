@@ -40,7 +40,7 @@ impl CreateMessageRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("receive_id".to_string(), receive_id.to_string());
+            .insert("receive_id", receive_id.to_string());
         self
     }
 
@@ -52,7 +52,7 @@ impl CreateMessageRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("msg_type".to_string(), msg_type.to_string());
+            .insert("msg_type", msg_type.to_string());
         self
     }
 
@@ -64,7 +64,7 @@ impl CreateMessageRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("content".to_string(), content.to_string());
+            .insert("content", content.to_string());
         self
     }
 
@@ -81,7 +81,7 @@ impl CreateMessageRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("receive_id_type".to_string(), receive_id_type.to_string());
+            .insert("receive_id_type", receive_id_type.to_string());
         self
     }
 
@@ -268,7 +268,7 @@ impl UpdateMessageRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("content".to_string(), content.to_string());
+            .insert("content", content.to_string());
         self
     }
 
@@ -284,16 +284,12 @@ impl CreateMessageRequest {
         let mut api_req = ApiRequest::default();
         api_req
             .query_params
-            .insert("receive_id".to_string(), receive_id.to_string());
+            .insert("receive_id", receive_id.to_string());
+        api_req.query_params.insert("msg_type", msg.msg_type());
+        api_req.query_params.insert("content", msg.content());
         api_req
             .query_params
-            .insert("msg_type".to_string(), msg.msg_type());
-        api_req
-            .query_params
-            .insert("content".to_string(), msg.content());
-        api_req
-            .query_params
-            .insert("receive_id_type".to_string(), receive_id_type.to_string());
+            .insert("receive_id_type", receive_id_type.to_string());
 
         Self { api_req }
     }

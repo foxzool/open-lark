@@ -94,8 +94,6 @@ pub mod referral_account;
 /// 招聘服务 v1 版本
 pub mod v1;
 
-use std::sync::Arc;
-
 use crate::core::config::Config;
 
 use attachment::AttachmentService;
@@ -166,13 +164,13 @@ impl HireService {
     ///
     /// # 返回值
     /// 配置完成的招聘服务实例，包含所有子服务模块
-    pub fn new(config: Arc<Config>) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            recruitment_config: RecruitmentConfigService::new(Arc::clone(&config)),
-            get_candidates: GetCandidatesService::new(Arc::clone(&config)),
-            candidate_management: CandidateManagementService::new(Arc::clone(&config)),
-            ecological_docking: EcologicalDockingService::new(Arc::clone(&config)),
-            referral_account: ReferralAccountService::new(Arc::clone(&config)),
+            recruitment_config: RecruitmentConfigService::new(config.clone()),
+            get_candidates: GetCandidatesService::new(config.clone()),
+            candidate_management: CandidateManagementService::new(config.clone()),
+            ecological_docking: EcologicalDockingService::new(config.clone()),
+            referral_account: ReferralAccountService::new(config.clone()),
             attachment: AttachmentService::new(config),
         }
     }

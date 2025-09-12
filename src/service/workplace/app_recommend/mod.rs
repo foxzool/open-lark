@@ -7,7 +7,9 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
+        query_params::QueryParams,
         req_option::RequestOption,
         standard_response::StandardResponse,
         SDKResult,
@@ -45,7 +47,7 @@ impl AppRecommendService {
     ) -> SDKResult<FavouriteAppsResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/workplace/v1/app_recommend_rule/favourite".to_string(),
+            api_path: Endpoints::WORKPLACE_APP_RECOMMEND_FAVOURITE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -55,17 +57,17 @@ impl AppRecommendService {
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         if let Some(user_id) = request.user_id {
-            api_req.query_params.insert("user_id".to_string(), user_id);
+            api_req.query_params.insert(QueryParams::USER_ID, user_id);
         }
 
         let api_resp: BaseResponse<FavouriteAppsResponse> =
@@ -92,7 +94,7 @@ impl AppRecommendService {
     ) -> SDKResult<RecommendedAppsResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/workplace/v1/app_recommend_rule/recommend".to_string(),
+            api_path: Endpoints::WORKPLACE_APP_RECOMMEND_RECOMMEND.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -102,23 +104,23 @@ impl AppRecommendService {
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         if let Some(user_id) = request.user_id {
-            api_req.query_params.insert("user_id".to_string(), user_id);
+            api_req.query_params.insert(QueryParams::USER_ID, user_id);
         }
 
         if let Some(department_id) = request.department_id {
             api_req
                 .query_params
-                .insert("department_id".to_string(), department_id);
+                .insert(QueryParams::DEPARTMENT_ID, department_id);
         }
 
         let api_resp: BaseResponse<RecommendedAppsResponse> =
@@ -145,7 +147,7 @@ impl AppRecommendService {
     ) -> SDKResult<RecommendRulesListResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/workplace/v1/app_recommend_rule/list".to_string(),
+            api_path: Endpoints::WORKPLACE_APP_RECOMMEND_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -155,23 +157,23 @@ impl AppRecommendService {
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         if let Some(rule_type) = request.rule_type {
             api_req
                 .query_params
-                .insert("rule_type".to_string(), rule_type);
+                .insert(QueryParams::RULE_TYPE, rule_type);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert(QueryParams::STATUS, status);
         }
 
         let api_resp: BaseResponse<RecommendRulesListResponse> =

@@ -142,10 +142,7 @@ impl MeetingService {
     ) -> SDKResult<BaseResponse<InviteMeetingResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -170,10 +167,7 @@ impl MeetingService {
     ) -> SDKResult<BaseResponse<KickoutMeetingResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -198,10 +192,7 @@ impl MeetingService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -225,10 +216,7 @@ impl MeetingService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -251,10 +239,7 @@ impl MeetingService {
     ) -> SDKResult<BaseResponse<GetMeetingResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -278,22 +263,19 @@ impl MeetingService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListMeetingsByNoResponse>> {
         let mut query_params = HashMap::new();
-        query_params.insert("meeting_no".to_string(), meeting_no.to_string());
-        query_params.insert("start_time".to_string(), start_time.to_string());
-        query_params.insert("end_time".to_string(), end_time.to_string());
+        query_params.insert("meeting_no", meeting_no.to_string());
+        query_params.insert("start_time", start_time.to_string());
+        query_params.insert("end_time", end_time.to_string());
 
         if let Some(params) = params {
             if let Some(page_size) = params.page_size {
-                query_params.insert("page_size".to_string(), page_size.to_string());
+                query_params.insert("page_size", page_size.to_string());
             }
             if let Some(page_token) = params.page_token {
-                query_params.insert("page_token".to_string(), page_token);
+                query_params.insert("page_token", page_token);
             }
             if let Some(user_id_type) = params.user_id_type {
-                query_params.insert(
-                    "user_id_type".to_string(),
-                    user_id_type.as_str().to_string(),
-                );
+                query_params.insert("user_id_type", user_id_type.as_str().to_string());
             }
         }
 

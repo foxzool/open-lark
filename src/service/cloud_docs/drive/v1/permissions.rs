@@ -118,7 +118,7 @@ impl GetPermissionRequestBuilder {
         self.request
             .api_request
             .query_params
-            .insert("type".to_string(), r#type.to_string());
+            .insert("type", r#type.to_string());
         self
     }
 
@@ -323,7 +323,7 @@ impl PatchPermissionRequestBuilder {
         self.request
             .api_request
             .query_params
-            .insert("type".to_string(), r#type.to_string());
+            .insert("type", r#type.to_string());
         self
     }
 

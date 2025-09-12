@@ -802,7 +802,10 @@ mod tests {
 
     #[test]
     fn test_validate_batch_operation() {
-        let tokens = vec!["doccnABC123DEF456GHI789JKL012MN".to_string(), "doccnXYZ789ABC456DEF789GHI012JK".to_string()];
+        let tokens = vec![
+            "doccnABC123DEF456GHI789JKL012MN".to_string(),
+            "doccnXYZ789ABC456DEF789GHI012JK".to_string(),
+        ];
         assert!(matches!(
             validate_batch_operation(&tokens, 10),
             ValidationResult::Valid

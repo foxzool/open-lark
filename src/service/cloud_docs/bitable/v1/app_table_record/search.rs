@@ -162,19 +162,19 @@ impl SearchRecordRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("user_id_type".to_string(), user_id_type.clone());
+                .insert("user_id_type", user_id_type.clone());
         }
         if let Some(page_token) = &self.request.page_token {
             self.request
                 .api_request
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
         if let Some(page_size) = &self.request.page_size {
             self.request
                 .api_request
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request

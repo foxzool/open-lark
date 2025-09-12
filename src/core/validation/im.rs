@@ -231,7 +231,11 @@ pub fn validate_file_upload(file_name: &str, file_size: u64, file_type: &str) ->
         _ => return ValidationResult::Invalid(format!("Unsupported file type: {}", file_type)),
     };
 
-    let file_ext = file_name.split('.').next_back().unwrap_or("").to_lowercase();
+    let file_ext = file_name
+        .split('.')
+        .next_back()
+        .unwrap_or("")
+        .to_lowercase();
     if !allowed_types.contains(&file_ext.as_str()) {
         return ValidationResult::Invalid(format!(
             "File type '.{}' is not allowed for {} files",

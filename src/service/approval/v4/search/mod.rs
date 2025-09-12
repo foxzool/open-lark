@@ -145,31 +145,28 @@ impl SearchService {
         let mut query_params = HashMap::new();
         if let Some(params) = params {
             if let Some(page_size) = params.page_size {
-                query_params.insert("page_size".to_string(), page_size.to_string());
+                query_params.insert("page_size", page_size.to_string());
             }
             if let Some(page_token) = params.page_token {
-                query_params.insert("page_token".to_string(), page_token);
+                query_params.insert("page_token", page_token);
             }
             if let Some(approval_code) = params.approval_code {
-                query_params.insert("approval_code".to_string(), approval_code);
+                query_params.insert("approval_code", approval_code);
             }
             if let Some(instance_status) = params.instance_status {
-                query_params.insert("instance_status".to_string(), instance_status);
+                query_params.insert("instance_status", instance_status);
             }
             if let Some(start_time) = params.start_time {
-                query_params.insert("start_time".to_string(), start_time);
+                query_params.insert("start_time", start_time);
             }
             if let Some(end_time) = params.end_time {
-                query_params.insert("end_time".to_string(), end_time);
+                query_params.insert("end_time", end_time);
             }
             if let Some(user_id) = params.user_id {
-                query_params.insert("user_id".to_string(), user_id);
+                query_params.insert("user_id", user_id);
             }
             if let Some(user_id_type) = params.user_id_type {
-                query_params.insert(
-                    "user_id_type".to_string(),
-                    user_id_type.as_str().to_string(),
-                );
+                query_params.insert("user_id_type", user_id_type.as_str().to_string());
             }
         }
 
@@ -193,34 +190,31 @@ impl SearchService {
         let mut query_params = HashMap::new();
         if let Some(params) = params {
             if let Some(page_size) = params.page_size {
-                query_params.insert("page_size".to_string(), page_size.to_string());
+                query_params.insert("page_size", page_size.to_string());
             }
             if let Some(page_token) = params.page_token {
-                query_params.insert("page_token".to_string(), page_token);
+                query_params.insert("page_token", page_token);
             }
             if let Some(approval_code) = params.approval_code {
-                query_params.insert("approval_code".to_string(), approval_code);
+                query_params.insert("approval_code", approval_code);
             }
             if let Some(instance_code) = params.instance_code {
-                query_params.insert("instance_code".to_string(), instance_code);
+                query_params.insert("instance_code", instance_code);
             }
             if let Some(task_status) = params.task_status {
-                query_params.insert("task_status".to_string(), task_status);
+                query_params.insert("task_status", task_status);
             }
             if let Some(start_time) = params.start_time {
-                query_params.insert("start_time".to_string(), start_time);
+                query_params.insert("start_time", start_time);
             }
             if let Some(end_time) = params.end_time {
-                query_params.insert("end_time".to_string(), end_time);
+                query_params.insert("end_time", end_time);
             }
             if let Some(user_id) = params.user_id {
-                query_params.insert("user_id".to_string(), user_id);
+                query_params.insert("user_id", user_id);
             }
             if let Some(user_id_type) = params.user_id_type {
-                query_params.insert(
-                    "user_id_type".to_string(),
-                    user_id_type.as_str().to_string(),
-                );
+                query_params.insert("user_id_type", user_id_type.as_str().to_string());
             }
         }
 
@@ -244,25 +238,22 @@ impl SearchService {
         let mut query_params = HashMap::new();
         if let Some(params) = params {
             if let Some(page_size) = params.page_size {
-                query_params.insert("page_size".to_string(), page_size.to_string());
+                query_params.insert("page_size", page_size.to_string());
             }
             if let Some(page_token) = params.page_token {
-                query_params.insert("page_token".to_string(), page_token);
+                query_params.insert("page_token", page_token);
             }
             if let Some(approval_code) = params.approval_code {
-                query_params.insert("approval_code".to_string(), approval_code);
+                query_params.insert("approval_code", approval_code);
             }
             if let Some(instance_code) = params.instance_code {
-                query_params.insert("instance_code".to_string(), instance_code);
+                query_params.insert("instance_code", instance_code);
             }
             if let Some(user_id) = params.user_id {
-                query_params.insert("user_id".to_string(), user_id);
+                query_params.insert("user_id", user_id);
             }
             if let Some(user_id_type) = params.user_id_type {
-                query_params.insert(
-                    "user_id_type".to_string(),
-                    user_id_type.as_str().to_string(),
-                );
+                query_params.insert("user_id_type", user_id_type.as_str().to_string());
             }
         }
 
@@ -286,13 +277,10 @@ impl SearchService {
     ) -> SDKResult<BaseResponse<SearchApprovalIdResponse>> {
         let mut query_params = HashMap::new();
         if let Some(approval_name) = approval_name {
-            query_params.insert("approval_name".to_string(), approval_name.to_string());
+            query_params.insert("approval_name", approval_name.to_string());
         }
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -314,32 +302,29 @@ impl SearchService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SearchTasksResponse>> {
         let mut query_params = HashMap::new();
-        query_params.insert("user_id".to_string(), user_id.to_string());
+        query_params.insert("user_id", user_id.to_string());
 
         if let Some(params) = params {
             if let Some(page_size) = params.page_size {
-                query_params.insert("page_size".to_string(), page_size.to_string());
+                query_params.insert("page_size", page_size.to_string());
             }
             if let Some(page_token) = params.page_token {
-                query_params.insert("page_token".to_string(), page_token);
+                query_params.insert("page_token", page_token);
             }
             if let Some(approval_code) = params.approval_code {
-                query_params.insert("approval_code".to_string(), approval_code);
+                query_params.insert("approval_code", approval_code);
             }
             if let Some(task_status) = params.task_status {
-                query_params.insert("task_status".to_string(), task_status);
+                query_params.insert("task_status", task_status);
             }
             if let Some(start_time) = params.start_time {
-                query_params.insert("start_time".to_string(), start_time);
+                query_params.insert("start_time", start_time);
             }
             if let Some(end_time) = params.end_time {
-                query_params.insert("end_time".to_string(), end_time);
+                query_params.insert("end_time", end_time);
             }
             if let Some(user_id_type) = params.user_id_type {
-                query_params.insert(
-                    "user_id_type".to_string(),
-                    user_id_type.as_str().to_string(),
-                );
+                query_params.insert("user_id_type", user_id_type.as_str().to_string());
             }
         }
 

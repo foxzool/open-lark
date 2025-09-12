@@ -387,25 +387,23 @@ impl ExternalSystemService {
         if let Some(page_size) = page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(system_type) = system_type {
             api_req
                 .query_params
-                .insert("system_type".to_string(), system_type);
+                .insert("system_type", system_type);
         }
 
         if let Some(enabled) = enabled {
             api_req
                 .query_params
-                .insert("enabled".to_string(), enabled.to_string());
+                .insert("enabled", enabled.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -520,29 +518,27 @@ impl ExternalSystemService {
         if let Some(system_config_id) = system_config_id {
             api_req
                 .query_params
-                .insert("system_config_id".to_string(), system_config_id);
+                .insert("system_config_id", system_config_id);
         }
 
         if let Some(sync_type) = sync_type {
             api_req
                 .query_params
-                .insert("sync_type".to_string(), sync_type);
+                .insert("sync_type", sync_type);
         }
 
         if let Some(status) = status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(page_size) = page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -666,29 +662,27 @@ impl ExternalSystemService {
         if let Some(system_config_id) = system_config_id {
             api_req
                 .query_params
-                .insert("system_config_id".to_string(), system_config_id);
+                .insert("system_config_id", system_config_id);
         }
 
         if let Some(sync_status) = sync_status {
             api_req
                 .query_params
-                .insert("sync_status".to_string(), sync_status);
+                .insert("sync_status", sync_status);
         }
 
         if let Some(skills) = skills {
-            api_req.query_params.insert("skills".to_string(), skills);
+            api_req.query_params.insert("skills", skills);
         }
 
         if let Some(page_size) = page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await

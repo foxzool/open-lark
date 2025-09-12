@@ -71,7 +71,7 @@ impl ReadingMultiRangesRequestBuilder {
         self.request
             .api_request
             .query_params
-            .insert("ranges".to_string(), ranges.to_string());
+            .insert("ranges", ranges.to_string());
         self
     }
 
@@ -84,10 +84,10 @@ impl ReadingMultiRangesRequestBuilder {
     /// - valueRenderOption=UnformattedValue：计算但不对单元格进行格式化
     pub fn value_render_option(mut self, value_render_option: impl ToString) -> Self {
         self.request.value_render_option = Some(value_render_option.to_string());
-        self.request.api_request.query_params.insert(
-            "valueRenderOption".to_string(),
-            value_render_option.to_string(),
-        );
+        self.request
+            .api_request
+            .query_params
+            .insert("valueRenderOption", value_render_option.to_string());
         self
     }
 
@@ -101,10 +101,10 @@ impl ReadingMultiRangesRequestBuilder {
     ///   但不会对数字进行格式化。将返回格式化后的字符串。详见电子表格常见问题
     pub fn date_time_render_option(mut self, date_time_render_option: impl ToString) -> Self {
         self.request.date_time_render_option = Some(date_time_render_option.to_string());
-        self.request.api_request.query_params.insert(
-            "dateTimeRenderOption".to_string(),
-            date_time_render_option.to_string(),
-        );
+        self.request
+            .api_request
+            .query_params
+            .insert("dateTimeRenderOption", date_time_render_option.to_string());
         self
     }
 
@@ -119,7 +119,7 @@ impl ReadingMultiRangesRequestBuilder {
         self.request
             .api_request
             .query_params
-            .insert("user_id_type".to_string(), user_id_type.to_string());
+            .insert("user_id_type", user_id_type.to_string());
         self
     }
 

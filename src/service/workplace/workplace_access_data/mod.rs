@@ -7,7 +7,9 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
+        query_params::QueryParams,
         req_option::RequestOption,
         standard_response::StandardResponse,
         SDKResult,
@@ -48,7 +50,7 @@ impl WorkplaceAccessDataService {
     ) -> SDKResult<AccessDataSearchResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/workplace/v1/workplace_access_data/search".to_string(),
+            api_path: Endpoints::WORKPLACE_ACCESS_DATA_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -58,41 +60,41 @@ impl WorkplaceAccessDataService {
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         if let Some(start_time) = request.start_time {
             api_req
                 .query_params
-                .insert("start_time".to_string(), start_time.to_string());
+                .insert(QueryParams::START_TIME, start_time.to_string());
         }
 
         if let Some(end_time) = request.end_time {
             api_req
                 .query_params
-                .insert("end_time".to_string(), end_time.to_string());
+                .insert(QueryParams::END_TIME, end_time.to_string());
         }
 
         if let Some(user_id) = request.user_id {
-            api_req.query_params.insert("user_id".to_string(), user_id);
+            api_req.query_params.insert(QueryParams::USER_ID, user_id);
         }
 
         if let Some(department_id) = request.department_id {
             api_req
                 .query_params
-                .insert("department_id".to_string(), department_id);
+                .insert(QueryParams::DEPARTMENT_ID, department_id);
         }
 
         if let Some(access_type) = request.access_type {
             api_req
                 .query_params
-                .insert("access_type".to_string(), access_type);
+                .insert(QueryParams::ACCESS_TYPE, access_type);
         }
 
         let api_resp: BaseResponse<AccessDataSearchResponse> =
@@ -119,7 +121,7 @@ impl WorkplaceAccessDataService {
     ) -> SDKResult<CustomAccessDataSearchResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/workplace/v1/custom_workplace_access_data/search".to_string(),
+            api_path: Endpoints::WORKPLACE_CUSTOM_ACCESS_DATA_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -129,35 +131,36 @@ impl WorkplaceAccessDataService {
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         if let Some(start_time) = request.start_time {
             api_req
                 .query_params
-                .insert("start_time".to_string(), start_time.to_string());
+                .insert(QueryParams::START_TIME, start_time.to_string());
         }
 
         if let Some(end_time) = request.end_time {
             api_req
                 .query_params
-                .insert("end_time".to_string(), end_time.to_string());
+                .insert(QueryParams::END_TIME, end_time.to_string());
         }
 
         if let Some(user_id) = request.user_id {
-            api_req.query_params.insert("user_id".to_string(), user_id);
+            api_req.query_params.insert(QueryParams::USER_ID, user_id);
         }
 
         if let Some(custom_workplace_id) = request.custom_workplace_id {
-            api_req
-                .query_params
-                .insert("custom_workplace_id".to_string(), custom_workplace_id);
+            api_req.query_params.insert(
+                QueryParams::CUSTOM_WORKPLACE_ID,
+                custom_workplace_id,
+            );
         }
 
         let api_resp: BaseResponse<CustomAccessDataSearchResponse> =
@@ -184,8 +187,7 @@ impl WorkplaceAccessDataService {
     ) -> SDKResult<CustomWidgetAccessDataSearchResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/workplace/v1/custom_workplace_widget_access_data/search"
-                .to_string(),
+            api_path: Endpoints::WORKPLACE_WIDGET_ACCESS_DATA_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -195,41 +197,42 @@ impl WorkplaceAccessDataService {
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         if let Some(start_time) = request.start_time {
             api_req
                 .query_params
-                .insert("start_time".to_string(), start_time.to_string());
+                .insert(QueryParams::START_TIME, start_time.to_string());
         }
 
         if let Some(end_time) = request.end_time {
             api_req
                 .query_params
-                .insert("end_time".to_string(), end_time.to_string());
+                .insert(QueryParams::END_TIME, end_time.to_string());
         }
 
         if let Some(user_id) = request.user_id {
-            api_req.query_params.insert("user_id".to_string(), user_id);
+            api_req.query_params.insert(QueryParams::USER_ID, user_id);
         }
 
         if let Some(custom_workplace_id) = request.custom_workplace_id {
-            api_req
-                .query_params
-                .insert("custom_workplace_id".to_string(), custom_workplace_id);
+            api_req.query_params.insert(
+                QueryParams::CUSTOM_WORKPLACE_ID,
+                custom_workplace_id,
+            );
         }
 
         if let Some(widget_id) = request.widget_id {
             api_req
                 .query_params
-                .insert("widget_id".to_string(), widget_id);
+                .insert(QueryParams::WIDGET_ID, widget_id);
         }
 
         let api_resp: BaseResponse<CustomWidgetAccessDataSearchResponse> =

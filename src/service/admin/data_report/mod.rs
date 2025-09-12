@@ -78,30 +78,24 @@ impl DataReportService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("start_date".to_string(), request.start_date);
-        api_req
-            .query_params
-            .insert("end_date".to_string(), request.end_date);
+            .insert("start_date", request.start_date);
+        api_req.query_params.insert("end_date", request.end_date);
 
         if let Some(department_id_type) = request.department_id_type {
             api_req
                 .query_params
-                .insert("department_id_type".to_string(), department_id_type);
+                .insert("department_id_type", department_id_type);
         }
         if let Some(department_id) = request.department_id {
-            api_req
-                .query_params
-                .insert("department_id".to_string(), department_id);
+            api_req.query_params.insert("department_id", department_id);
         }
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -131,40 +125,30 @@ impl DataReportService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("start_date".to_string(), request.start_date);
-        api_req
-            .query_params
-            .insert("end_date".to_string(), request.end_date);
+            .insert("start_date", request.start_date);
+        api_req.query_params.insert("end_date", request.end_date);
 
         if let Some(user_id_type) = request.user_id_type {
-            api_req
-                .query_params
-                .insert("user_id_type".to_string(), user_id_type);
+            api_req.query_params.insert("user_id_type", user_id_type);
         }
         if let Some(user_ids) = request.user_ids {
-            api_req
-                .query_params
-                .insert("user_ids".to_string(), user_ids.join(","));
+            api_req.query_params.insert("user_ids", user_ids.join(","));
         }
         if let Some(department_id_type) = request.department_id_type {
             api_req
                 .query_params
-                .insert("department_id_type".to_string(), department_id_type);
+                .insert("department_id_type", department_id_type);
         }
         if let Some(department_id) = request.department_id {
-            api_req
-                .query_params
-                .insert("department_id".to_string(), department_id);
+            api_req.query_params.insert("department_id", department_id);
         }
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await

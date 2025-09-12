@@ -110,7 +110,7 @@ impl SearchUserRequestBuilder {
         self.search_user_request
             .api_request
             .query_params
-            .insert("query".to_string(), query.to_string());
+            .insert("query", query.to_string());
         self
     }
 
@@ -131,7 +131,7 @@ impl SearchUserRequestBuilder {
         self.search_user_request
             .api_request
             .query_params
-            .insert("page_size".to_string(), page_size.to_string());
+            .insert("page_size", page_size.to_string());
         self
     }
 
@@ -154,7 +154,7 @@ impl SearchUserRequestBuilder {
         self.search_user_request
             .api_request
             .query_params
-            .insert("page_token".to_string(), token);
+            .insert("page_token", token);
         self
     }
 
@@ -284,7 +284,7 @@ impl SearchUserIterator<'_> {
                             self.request
                                 .api_request
                                 .query_params
-                                .insert("page_token".to_string(), token);
+                                .insert("page_token", token);
                             Some(data.users)
                         } else {
                             // has_more is true but no page_token. Stop iterating to avoid panic.

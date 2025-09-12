@@ -99,39 +99,37 @@ impl ReviewService {
         if let Some(period_id) = request.period_id {
             api_req
                 .query_params
-                .insert("period_id".to_string(), period_id);
+                .insert("period_id", period_id);
         }
 
         if let Some(user_id) = request.user_id {
-            api_req.query_params.insert("user_id".to_string(), user_id);
+            api_req.query_params.insert("user_id", user_id);
         }
 
         if let Some(okr_id) = request.okr_id {
-            api_req.query_params.insert("okr_id".to_string(), okr_id);
+            api_req.query_params.insert("okr_id", okr_id);
         }
 
         if let Some(min_score) = request.min_score {
             api_req
                 .query_params
-                .insert("min_score".to_string(), min_score.to_string());
+                .insert("min_score", min_score.to_string());
         }
 
         if let Some(max_score) = request.max_score {
             api_req
                 .query_params
-                .insert("max_score".to_string(), max_score.to_string());
+                .insert("max_score", max_score.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await

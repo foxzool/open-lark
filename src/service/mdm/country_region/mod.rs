@@ -80,29 +80,27 @@ impl CountryRegionService {
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(region_type) = request.region_type {
             api_req
                 .query_params
-                .insert("region_type".to_string(), region_type);
+                .insert("region_type", region_type);
         }
 
         if let Some(name) = request.name {
-            api_req.query_params.insert("name".to_string(), name);
+            api_req.query_params.insert("name", name);
         }
 
         Transport::request(api_req, &self.config, option).await

@@ -1,5 +1,4 @@
 use reqwest::Method;
-use std::sync::Arc;
 use serde_json::json;
 
 use crate::core::{
@@ -19,7 +18,7 @@ use super::models::{
 
 /// 用户设置服务
 pub struct UserSettingService {
-    pub config: Arc<Config>,
+    pub config: Config,
 }
 
 impl UserSettingService {
@@ -44,7 +43,7 @@ impl UserSettingService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         // 构建请求体
         let mut body = json!({});
@@ -86,7 +85,7 @@ impl UserSettingService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         // 构建请求体
         let body = json!({
@@ -120,7 +119,7 @@ impl UserSettingService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         // 保存 photo_name 以避免借用问题
         let photo_name = request.photo_name.clone();
@@ -166,10 +165,10 @@ impl UserSettingService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
         api_req
             .query_params
-            .insert("face_key".to_string(), request.face_key);
+            .insert("face_key", request.face_key);
 
         // 对于文件下载，我们需要直接获取响应体字节数据
         // 这里暂时返回一个模拟的照片数据，实际实现时需要从 HTTP 响应中获取

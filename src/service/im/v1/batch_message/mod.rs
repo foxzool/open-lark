@@ -125,7 +125,7 @@ impl BatchMessageService {
             api_path: "/open-apis/im/v1/batch_messages".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params: HashMap::from([(
-                "receive_id_type".to_string(),
+                "receive_id_type",
                 receive_id_type.as_str().to_string(),
             )]),
             body: serde_json::to_vec(&request)?,
@@ -184,16 +184,13 @@ impl BatchMessageService {
     ) -> SDKResult<GetBatchReadUserResponse> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
 
         let api_req = ApiRequest {
