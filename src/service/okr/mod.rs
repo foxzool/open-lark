@@ -105,6 +105,8 @@ pub mod progress_record;
 /// 复盘管理功能
 pub mod review;
 
+use std::sync::Arc;
+
 use crate::core::config::Config;
 
 use okr::OkrContentService;
@@ -213,12 +215,12 @@ pub struct OkrService {
 }
 
 impl OkrService {
-    pub fn new(config: Config) -> Self {
+    pub fn new(config: Arc<Config>) -> Self {
         Self {
-            period: PeriodService::new(config.clone()),
-            period_rule: PeriodRuleService::new(config.clone()),
-            okr: OkrContentService::new(config.clone()),
-            progress_record: ProgressRecordService::new(config.clone()),
+            period: PeriodService::new(Arc::clone(&config)),
+            period_rule: PeriodRuleService::new(Arc::clone(&config)),
+            okr: OkrContentService::new(Arc::clone(&config)),
+            progress_record: ProgressRecordService::new(Arc::clone(&config)),
             review: ReviewService::new(config),
         }
     }
