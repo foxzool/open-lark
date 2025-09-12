@@ -70,7 +70,7 @@ impl DeleteSpaceMemberRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("member_type".to_string(), member_type.clone());
+                .insert("member_type", member_type.clone());
         }
         self.request
     }

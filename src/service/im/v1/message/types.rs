@@ -189,7 +189,7 @@ impl<'a> ListMessageIterator<'a> {
     // FUTURE: 实现异步迭代器或流式处理分页结果
     // 标准 Iterator trait 不支持异步，可考虑：
     // 1. 使用 futures::Stream trait
-    // 2. 使用 async-stream crate 
+    // 2. 使用 async-stream crate
     // 3. 实现自定义的 AsyncIterator trait
 }
 

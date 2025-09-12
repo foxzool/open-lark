@@ -79,12 +79,9 @@ impl PinService {
         option: Option<RequestOption>,
     ) -> SDKResult<CreatePinResponse> {
         let mut query_params = HashMap::new();
-        query_params.insert("message_id".to_string(), message_id.to_string());
+        query_params.insert("message_id", message_id.to_string());
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -108,10 +105,7 @@ impl PinService {
         option: Option<RequestOption>,
     ) -> SDKResult<EmptyResponse> {
         let query_params = if let Some(user_id_type) = user_id_type {
-            HashMap::from([(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            )])
+            HashMap::from([("user_id_type", user_id_type.as_str().to_string())])
         } else {
             HashMap::new()
         };
@@ -139,18 +133,15 @@ impl PinService {
         option: Option<RequestOption>,
     ) -> SDKResult<ListPinResponse> {
         let mut query_params = HashMap::new();
-        query_params.insert("chat_id".to_string(), chat_id.to_string());
+        query_params.insert("chat_id", chat_id.to_string());
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
 
         let api_req = ApiRequest {

@@ -72,13 +72,13 @@ impl ListDashboardRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
         if let Some(page_size) = &self.request.page_size {
             self.request
                 .api_request
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         self.request
     }
@@ -144,10 +144,10 @@ impl DashboardService {
 /// 列出仪表盘 (向后兼容的函数)
 pub async fn list_dashboard(
     request: ListDashboardRequest,
-    config: &Config,
+    config: Config,
     option: Option<RequestOption>,
 ) -> SDKResult<BaseResponse<ListDashboardResponse>> {
-    let service = DashboardService::new(config.clone());
+    let service = DashboardService::new(config);
     service.list(request, option).await
 }
 

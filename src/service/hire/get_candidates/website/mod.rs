@@ -308,31 +308,29 @@ impl WebsiteService {
         if let Some(page_size) = page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(publish_status) = publish_status {
             api_req
                 .query_params
-                .insert("publish_status".to_string(), publish_status);
+                .insert("publish_status", publish_status);
         }
 
         if let Some(job_type) = job_type {
             api_req
                 .query_params
-                .insert("job_type".to_string(), job_type);
+                .insert("job_type", job_type);
         }
 
         if let Some(location) = location {
             api_req
                 .query_params
-                .insert("location".to_string(), location);
+                .insert("location", location);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -490,45 +488,43 @@ impl WebsiteService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(job_id) = request.job_id {
-            api_req.query_params.insert("job_id".to_string(), job_id);
+            api_req.query_params.insert("job_id", job_id);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(candidate_name) = request.candidate_name {
             api_req
                 .query_params
-                .insert("candidate_name".to_string(), candidate_name);
+                .insert("candidate_name", candidate_name);
         }
 
         if let Some(candidate_email) = request.candidate_email {
             api_req
                 .query_params
-                .insert("candidate_email".to_string(), candidate_email);
+                .insert("candidate_email", candidate_email);
         }
 
         if let Some(apply_start_time) = request.apply_start_time {
             api_req
                 .query_params
-                .insert("apply_start_time".to_string(), apply_start_time);
+                .insert("apply_start_time", apply_start_time);
         }
 
         if let Some(apply_end_time) = request.apply_end_time {
             api_req
                 .query_params
-                .insert("apply_end_time".to_string(), apply_end_time);
+                .insert("apply_end_time", apply_end_time);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -728,19 +724,15 @@ impl WebsiteService {
 
         // 添加查询参数
         if let Some(job_id) = job_id {
-            api_req.query_params.insert("job_id".to_string(), job_id);
+            api_req.query_params.insert("job_id", job_id);
         }
 
         if let Some(start_date) = start_date {
-            api_req
-                .query_params
-                .insert("start_date".to_string(), start_date);
+            api_req.query_params.insert("start_date", start_date);
         }
 
         if let Some(end_date) = end_date {
-            api_req
-                .query_params
-                .insert("end_date".to_string(), end_date);
+            api_req.query_params.insert("end_date", end_date);
         }
 
         Transport::request(api_req, &self.config, option).await

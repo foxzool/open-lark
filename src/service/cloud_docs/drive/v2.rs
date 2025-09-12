@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use crate::{
     core::config::Config,
     service::drive::{v1::permissions::PermissionsService, v2::explorer::ExplorerService},
@@ -13,9 +11,9 @@ pub struct V2 {
 }
 
 impl V2 {
-    pub fn new(config: Arc<Config>) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            explorer: ExplorerService::new(Arc::clone(&config)),
+            explorer: ExplorerService::new(config.clone()),
             permission: PermissionsService::new(config),
         }
     }

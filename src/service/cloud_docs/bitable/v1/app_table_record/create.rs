@@ -103,13 +103,13 @@ impl CreateRecordRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("user_id_type".to_string(), user_id_type.clone());
+                .insert("user_id_type", user_id_type.clone());
         }
         if let Some(client_token) = &self.request.client_token {
             self.request
                 .api_request
                 .query_params
-                .insert("client_token".to_string(), client_token.clone());
+                .insert("client_token", client_token.clone());
         }
         match serde_json::to_vec(&self.request) {
             Ok(bytes) => {

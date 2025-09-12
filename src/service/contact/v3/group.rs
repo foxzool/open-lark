@@ -130,13 +130,13 @@ impl GroupService {
         let mut query_params = std::collections::HashMap::new();
 
         if let Some(user_id_type) = &req.user_id_type {
-            query_params.insert("user_id_type".to_string(), user_id_type.clone());
+            query_params.insert("user_id_type", user_id_type.clone());
         }
         if let Some(department_id_type) = &req.department_id_type {
-            query_params.insert("department_id_type".to_string(), department_id_type.clone());
+            query_params.insert("department_id_type", department_id_type.clone());
         }
         if let Some(include_members) = req.include_members {
-            query_params.insert("include_members".to_string(), include_members.to_string());
+            query_params.insert("include_members", include_members.to_string());
         }
 
         let api_req = ApiRequest {

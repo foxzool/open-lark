@@ -89,7 +89,7 @@ impl BatchDeleteRoleMemberRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("user_id_type".to_string(), user_id_type.clone());
+                .insert("user_id_type", user_id_type.clone());
         }
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request

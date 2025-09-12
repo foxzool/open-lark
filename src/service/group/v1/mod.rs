@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use crate::core::config::Config;
 
 pub mod chat;
@@ -21,12 +19,12 @@ pub struct V1 {
 }
 
 impl V1 {
-    pub fn new(config: Arc<Config>) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            chat: chat::ChatService::new(Arc::clone(&config)),
-            chat_member: chat_member::ChatMemberService::new(Arc::clone(&config)),
-            chat_announcement: chat_announcement::ChatAnnouncementService::new(Arc::clone(&config)),
-            chat_tab: chat_tab::ChatTabService::new(Arc::clone(&config)),
+            chat: chat::ChatService::new(config.clone()),
+            chat_member: chat_member::ChatMemberService::new(config.clone()),
+            chat_announcement: chat_announcement::ChatAnnouncementService::new(config.clone()),
+            chat_tab: chat_tab::ChatTabService::new(config.clone()),
             chat_menu_tree: chat_menu_tree::ChatMenuTreeService::new(config),
         }
     }

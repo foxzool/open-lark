@@ -105,7 +105,7 @@ impl<T> PaginationRequestBuilder<T> {
     ///
     /// - 分页大小：1-500 之间，推荐 50
     /// - 分页标记：必须是有效的 Base64 字符串，长度不超过 1024
-    pub fn build(self) -> SDKResult<std::collections::HashMap<String, String>> {
+    pub fn build(self) -> SDKResult<std::collections::HashMap<&'static str, String>> {
         let mut params = std::collections::HashMap::new();
 
         // 1. 验证并添加分页大小
@@ -122,7 +122,7 @@ impl<T> PaginationRequestBuilder<T> {
                     )));
                 }
             }
-            params.insert("page_size".to_string(), page_size.to_string());
+            params.insert("page_size", page_size.to_string());
         }
 
         // 2. 验证并添加分页标记
@@ -144,7 +144,7 @@ impl<T> PaginationRequestBuilder<T> {
                     )));
                 }
             }
-            params.insert("page_token".to_string(), page_token.clone());
+            params.insert("page_token", page_token.clone());
         }
 
         Ok(params)
@@ -153,7 +153,9 @@ impl<T> PaginationRequestBuilder<T> {
     /// 构建分页请求参数并添加到现有的 ApiRequest
     pub fn build_to_api_request(self, mut api_req: ApiRequest) -> SDKResult<ApiRequest> {
         let params = self.build()?;
-        api_req.query_params.extend(params);
+        for (key, value) in params {
+            api_req.query_params.insert(key, value);
+        }
         Ok(api_req)
     }
 

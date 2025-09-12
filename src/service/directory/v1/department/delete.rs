@@ -60,10 +60,10 @@ impl DeleteDepartmentRequestBuilder {
     pub fn build(mut self) -> DeleteDepartmentRequest {
         // 构建查询参数
         if let Some(department_id_type) = &self.request.department_id_type {
-            self.request.api_req.query_params.insert(
-                "department_id_type".to_string(),
-                department_id_type.to_string(),
-            );
+            self.request
+                .api_req
+                .query_params
+                .insert("department_id_type", department_id_type.to_string());
         }
 
         self.request

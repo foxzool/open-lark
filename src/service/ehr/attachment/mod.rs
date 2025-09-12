@@ -104,9 +104,7 @@ impl AttachmentService {
 
         // 添加查询参数
         if let Some(user_id_type) = request.user_id_type {
-            api_req
-                .query_params
-                .insert("user_id_type".to_string(), user_id_type);
+            api_req.query_params.insert("user_id_type", user_id_type);
         }
 
         Transport::request(api_req, &self.config, option).await

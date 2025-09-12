@@ -429,35 +429,33 @@ impl AgencyService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(cooperation_mode) = request.cooperation_mode {
             api_req
                 .query_params
-                .insert("cooperation_mode".to_string(), cooperation_mode);
+                .insert("cooperation_mode", cooperation_mode);
         }
 
         if let Some(specialty) = request.specialty {
             api_req
                 .query_params
-                .insert("specialty".to_string(), specialty);
+                .insert("specialty", specialty);
         }
 
         if let Some(service_area) = request.service_area {
             api_req
                 .query_params
-                .insert("service_area".to_string(), service_area);
+                .insert("service_area", service_area);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -556,39 +554,37 @@ impl AgencyService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(agency_id) = request.agency_id {
             api_req
                 .query_params
-                .insert("agency_id".to_string(), agency_id);
+                .insert("agency_id", agency_id);
         }
 
         if let Some(job_id) = request.job_id {
-            api_req.query_params.insert("job_id".to_string(), job_id);
+            api_req.query_params.insert("job_id", job_id);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(recommendation_start_time) = request.recommendation_start_time {
             api_req.query_params.insert(
-                "recommendation_start_time".to_string(),
+                "recommendation_start_time",
                 recommendation_start_time,
             );
         }
 
         if let Some(recommendation_end_time) = request.recommendation_end_time {
             api_req.query_params.insert(
-                "recommendation_end_time".to_string(),
+                "recommendation_end_time",
                 recommendation_end_time,
             );
         }
@@ -676,13 +672,11 @@ impl AgencyService {
         if let Some(page_size) = page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await

@@ -72,10 +72,7 @@ impl BuzzMessagesService {
             http_method: Method::PATCH,
             api_path: format!("/open-apis/im/v1/messages/{message_id}/urgent_app"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params: HashMap::from([(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            )]),
+            query_params: HashMap::from([("user_id_type", user_id_type.as_str().to_string())]),
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
@@ -97,10 +94,7 @@ impl BuzzMessagesService {
             http_method: Method::PATCH,
             api_path: format!("/open-apis/im/v1/messages/{message_id}/urgent_sms"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params: HashMap::from([(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            )]),
+            query_params: HashMap::from([("user_id_type", user_id_type.as_str().to_string())]),
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
@@ -122,10 +116,7 @@ impl BuzzMessagesService {
             http_method: Method::PATCH,
             api_path: format!("/open-apis/im/v1/messages/{message_id}/urgent_phone"),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params: HashMap::from([(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            )]),
+            query_params: HashMap::from([("user_id_type", user_id_type.as_str().to_string())]),
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };

@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
@@ -15,7 +13,7 @@ use crate::core::{
 };
 
 pub struct ChatsService {
-    pub config: Arc<Config>,
+    pub config: Config,
 }
 
 impl ChatsService {
@@ -74,7 +72,7 @@ impl ListChatIterator<'_> {
                     self.request
                         .api_req
                         .query_params
-                        .insert("page_token".to_string(), data.page_token.to_string());
+                        .insert("page_token", data.page_token.to_string());
                     Some(data.items)
                 } else if data.items.is_empty() {
                     None
@@ -109,7 +107,7 @@ impl ListChatRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("user_id_type".to_string(), user_id_type.to_string());
+            .insert("user_id_type", user_id_type.to_string());
         self
     }
 
@@ -118,7 +116,7 @@ impl ListChatRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("sort_type".to_string(), sort_type.to_string());
+            .insert("sort_type", sort_type.to_string());
         self
     }
 
@@ -130,7 +128,7 @@ impl ListChatRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("page_token".to_string(), page_token.to_string());
+            .insert("page_token", page_token.to_string());
         self
     }
 
@@ -139,7 +137,7 @@ impl ListChatRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("page_size".to_string(), page_size.to_string());
+            .insert("page_size", page_size.to_string());
         self
     }
 

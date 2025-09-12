@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use crate::core::config::Config;
 
 pub mod event;
@@ -23,15 +21,15 @@ pub struct V1 {
 }
 
 impl V1 {
-    pub fn new(config: Arc<Config>) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            event: event::EventService::new(Arc::clone(&config)),
-            file: file::FileService::new(Arc::clone(&config)),
-            file_version: file_version::FileVersionService::new(Arc::clone(&config)),
-            files: files::FilesService::new(Arc::clone(&config)),
-            folder: folder::FolderService::new(Arc::clone(&config)),
-            like: like::LikeService::new(Arc::clone(&config)),
-            media: media::MediaService::new(Arc::clone(&config)),
+            event: event::EventService::new(config.clone()),
+            file: file::FileService::new(config.clone()),
+            file_version: file_version::FileVersionService::new(config.clone()),
+            files: files::FilesService::new(config.clone()),
+            folder: folder::FolderService::new(config.clone()),
+            like: like::LikeService::new(config.clone()),
+            media: media::MediaService::new(config.clone()),
             permissions: permissions::PermissionsService::new(config),
         }
     }

@@ -52,19 +52,17 @@ impl ClassificationService {
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(repo_id) = request.repo_id {
-            api_req.query_params.insert("repo_id".to_string(), repo_id);
+            api_req.query_params.insert("repo_id", repo_id);
         }
 
         Transport::request(api_req, &self.config, option).await

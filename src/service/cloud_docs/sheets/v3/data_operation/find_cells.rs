@@ -246,7 +246,8 @@ impl SpreadsheetSheetService {
         api_req.http_method = reqwest::Method::POST;
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::App];
 
-        let api_resp: BaseResponse<FindCellsResponse> = crate::core::http::Transport::request(api_req, &self.config, option).await?;
+        let api_resp: BaseResponse<FindCellsResponse> =
+            crate::core::http::Transport::request(api_req, &self.config, option).await?;
 
         api_resp.into_result()
     }

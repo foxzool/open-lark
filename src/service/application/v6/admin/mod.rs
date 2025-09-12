@@ -36,19 +36,16 @@ impl AdminService {
     ) -> SDKResult<BaseResponse<ListInstalledAppsResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(lang) = lang {
-            query_params.insert("lang".to_string(), lang);
+            query_params.insert("lang", lang);
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
 
         let api_req = ApiRequest {
@@ -74,19 +71,16 @@ impl AdminService {
     ) -> SDKResult<BaseResponse<GetUserAvailableAppsResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(lang) = lang {
-            query_params.insert("lang".to_string(), lang);
+            query_params.insert("lang", lang);
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
 
         let api_req = ApiRequest {
@@ -111,15 +105,12 @@ impl AdminService {
         let mut query_params = HashMap::new();
         if let Some(department_id_type) = department_id_type {
             query_params.insert(
-                "department_id_type".to_string(),
+                "department_id_type",
                 department_id_type.as_str().to_string(),
             );
         }
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -147,15 +138,12 @@ impl AdminService {
         let mut query_params = HashMap::new();
         if let Some(department_id_type) = department_id_type {
             query_params.insert(
-                "department_id_type".to_string(),
+                "department_id_type",
                 department_id_type.as_str().to_string(),
             );
         }
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -182,14 +170,11 @@ impl AdminService {
     ) -> SDKResult<BaseResponse<GetAppAvailabilityResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(department_id_type) = department_id_type {
             query_params.insert(
-                "department_id_type".to_string(),
+                "department_id_type",
                 department_id_type.as_str().to_string(),
             );
         }
@@ -216,14 +201,11 @@ impl AdminService {
     ) -> SDKResult<BaseResponse<CheckWhiteBlackListResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(department_id_type) = department_id_type {
             query_params.insert(
-                "department_id_type".to_string(),
+                "department_id_type",
                 department_id_type.as_str().to_string(),
             );
         }
@@ -253,14 +235,11 @@ impl AdminService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(department_id_type) = department_id_type {
             query_params.insert(
-                "department_id_type".to_string(),
+                "department_id_type",
                 department_id_type.as_str().to_string(),
             );
         }
@@ -306,16 +285,13 @@ impl AdminService {
     ) -> SDKResult<BaseResponse<ListAppAdminsResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
 
         let api_req = ApiRequest {
@@ -340,14 +316,11 @@ impl AdminService {
     ) -> SDKResult<BaseResponse<GetAppAdminPermissionsResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(department_id_type) = department_id_type {
             query_params.insert(
-                "department_id_type".to_string(),
+                "department_id_type",
                 department_id_type.as_str().to_string(),
             );
         }
@@ -375,10 +348,7 @@ impl AdminService {
     ) -> SDKResult<BaseResponse<VerifyAppAdminResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {

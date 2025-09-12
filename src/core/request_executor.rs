@@ -23,7 +23,7 @@ impl RequestExecutor {
         config: &Config,
         path: &str,
         supported_tokens: Vec<AccessTokenType>,
-        query_params: Option<HashMap<String, String>>,
+        query_params: Option<HashMap<&'static str, String>>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<T>> {
         Self::execute(
@@ -160,7 +160,7 @@ impl RequestExecutor {
         method: Method,
         path: &str,
         supported_tokens: Vec<AccessTokenType>,
-        query_params: Option<HashMap<String, String>>,
+        query_params: Option<HashMap<&'static str, String>>,
         body: Option<B>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<T>> {
@@ -215,7 +215,7 @@ impl RequestExecutor {
         path_template: &str,
         path_params: HashMap<&str, &str>,
         supported_tokens: Vec<AccessTokenType>,
-        query_params: Option<HashMap<String, String>>,
+        query_params: Option<HashMap<&'static str, String>>,
         body: Option<B>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<T>> {
@@ -277,7 +277,7 @@ impl RequestExecutor {
     /// ```rust,ignore
     /// // 获取消息列表
     /// let mut query_params = HashMap::new();
-    /// query_params.insert("container_id".to_string(), chat_id);
+    /// query_params.insert("container_id", chat_id);
     /// let response = RequestExecutor::query_request::<MessageListResponse>(
     ///     &config,
     ///     "/open-apis/im/v1/messages",
@@ -288,7 +288,7 @@ impl RequestExecutor {
     pub async fn query_request<T: ApiResponseTrait>(
         config: &Config,
         path: &str,
-        query_params: Option<HashMap<String, String>>,
+        query_params: Option<HashMap<&'static str, String>>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<T>> {
         Self::get(

@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use crate::core::config::Config;
 
 /// 条件格式化功能
@@ -80,14 +78,14 @@ impl V3 {
     ///
     /// # 返回值
     /// 配置完成的V3服务实例，包含所有子服务模块
-    pub fn new(config: Arc<Config>) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            spreadsheet: SpreadsheetService::new(Arc::clone(&config)),
-            spreadsheet_sheet: SpreadsheetSheetService::new(Arc::clone(&config)),
-            spreadsheet_sheet_filter: SpreadsheetSheetFilterService::new(Arc::clone(&config)),
-            spreadsheet_sheet_filter_view: SpreadsheetSheetFilterViewService::new(Arc::clone(&config)),
-            data_operation: DataOperationService::new(Arc::clone(&config)),
-            sheet_row_col: SheetRowColService::new(config),
+            spreadsheet: SpreadsheetService::new(config.clone()),
+            spreadsheet_sheet: SpreadsheetSheetService::new(config.clone()),
+            spreadsheet_sheet_filter: SpreadsheetSheetFilterService::new(config.clone()),
+            spreadsheet_sheet_filter_view: SpreadsheetSheetFilterViewService::new(config.clone()),
+            data_operation: DataOperationService::new(config.clone()),
+            sheet_row_col: SheetRowColService::new(config.clone()),
         }
     }
 }
@@ -122,7 +120,9 @@ impl SpreadsheetService {
     /// # 参数
     /// - `config`: 客户端配置
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self {
+            config: config.clone(),
+        }
     }
 }
 
@@ -157,7 +157,9 @@ impl SpreadsheetSheetService {
     /// # 参数
     /// - `config`: 客户端配置
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self {
+            config: config.clone(),
+        }
     }
 }
 
@@ -198,7 +200,9 @@ impl SpreadsheetSheetFilterService {
     /// # 参数
     /// - `config`: 客户端配置
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self {
+            config: config.clone(),
+        }
     }
 }
 
@@ -241,7 +245,9 @@ impl SpreadsheetSheetFilterViewService {
     /// # 参数
     /// - `config`: 客户端配置
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self {
+            config: config.clone(),
+        }
     }
 }
 
@@ -295,7 +301,9 @@ impl DataOperationService {
     /// # 参数
     /// - `config`: 客户端配置
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self {
+            config: config.clone(),
+        }
     }
 }
 
@@ -344,6 +352,8 @@ impl SheetRowColService {
     /// # 参数
     /// - `config`: 客户端配置
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self {
+            config: config.clone(),
+        }
     }
 }

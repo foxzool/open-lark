@@ -433,41 +433,39 @@ impl InterviewService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(application_id) = request.application_id {
             api_req
                 .query_params
-                .insert("application_id".to_string(), application_id);
+                .insert("application_id", application_id);
         }
 
         if let Some(interviewer_id) = request.interviewer_id {
             api_req
                 .query_params
-                .insert("interviewer_id".to_string(), interviewer_id);
+                .insert("interviewer_id", interviewer_id);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(start_time_from) = request.start_time_from {
             api_req
                 .query_params
-                .insert("start_time_from".to_string(), start_time_from);
+                .insert("start_time_from", start_time_from);
         }
 
         if let Some(start_time_to) = request.start_time_to {
             api_req
                 .query_params
-                .insert("start_time_to".to_string(), start_time_to);
+                .insert("start_time_to", start_time_to);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -617,13 +615,11 @@ impl InterviewService {
         if let Some(page_size) = page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await

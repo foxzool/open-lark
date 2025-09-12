@@ -1,6 +1,5 @@
 use reqwest::Method;
 use serde_json::json;
-use std::sync::Arc;
 
 use crate::core::{
     api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
@@ -15,7 +14,7 @@ use super::models::{
 
 /// 考勤组服务
 pub struct GroupService {
-    pub config: Arc<Config>,
+    pub config: Config,
 }
 
 impl GroupService {
@@ -37,24 +36,24 @@ impl GroupService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type.clone());
+            .insert("employee_type", request.employee_type.clone());
 
         if let Some(dept_type) = &request.dept_type {
             api_req
                 .query_params
-                .insert("dept_type".to_string(), dept_type.clone());
+                .insert("dept_type", dept_type.clone());
         }
 
         if let Some(page_size) = &request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = &request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -79,12 +78,12 @@ impl GroupService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type.clone());
+            .insert("employee_type", request.employee_type.clone());
 
         if let Some(dept_type) = &request.dept_type {
             api_req
                 .query_params
-                .insert("dept_type".to_string(), dept_type.clone());
+                .insert("dept_type", dept_type.clone());
         }
 
         // 构建请求体
@@ -166,12 +165,12 @@ impl GroupService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         if let Some(dept_type) = request.dept_type {
             api_req
                 .query_params
-                .insert("dept_type".to_string(), dept_type);
+                .insert("dept_type", dept_type);
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -196,12 +195,12 @@ impl GroupService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         if let Some(dept_type) = request.dept_type {
             api_req
                 .query_params
-                .insert("dept_type".to_string(), dept_type);
+                .insert("dept_type", dept_type);
         }
 
         // 构建请求体
@@ -233,24 +232,22 @@ impl GroupService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         if let Some(dept_type) = request.dept_type {
             api_req
                 .query_params
-                .insert("dept_type".to_string(), dept_type);
+                .insert("dept_type", dept_type);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

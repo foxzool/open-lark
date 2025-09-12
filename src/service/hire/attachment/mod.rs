@@ -382,49 +382,47 @@ impl AttachmentService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(object_type) = request.object_type {
             api_req
                 .query_params
-                .insert("object_type".to_string(), object_type);
+                .insert("object_type", object_type);
         }
 
         if let Some(object_id) = request.object_id {
             api_req
                 .query_params
-                .insert("object_id".to_string(), object_id);
+                .insert("object_id", object_id);
         }
 
         if let Some(attachment_type) = request.attachment_type {
             api_req
                 .query_params
-                .insert("attachment_type".to_string(), attachment_type);
+                .insert("attachment_type", attachment_type);
         }
 
         if let Some(uploader_id) = request.uploader_id {
             api_req
                 .query_params
-                .insert("uploader_id".to_string(), uploader_id);
+                .insert("uploader_id", uploader_id);
         }
 
         if let Some(created_start_time) = request.created_start_time {
             api_req
                 .query_params
-                .insert("created_start_time".to_string(), created_start_time);
+                .insert("created_start_time", created_start_time);
         }
 
         if let Some(created_end_time) = request.created_end_time {
             api_req
                 .query_params
-                .insert("created_end_time".to_string(), created_end_time);
+                .insert("created_end_time", created_end_time);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -712,19 +710,15 @@ impl AttachmentService {
         if let Some(object_type) = object_type {
             api_req
                 .query_params
-                .insert("object_type".to_string(), object_type);
+                .insert("object_type", object_type);
         }
 
         if let Some(start_date) = start_date {
-            api_req
-                .query_params
-                .insert("start_date".to_string(), start_date);
+            api_req.query_params.insert("start_date", start_date);
         }
 
         if let Some(end_date) = end_date {
-            api_req
-                .query_params
-                .insert("end_date".to_string(), end_date);
+            api_req.query_params.insert("end_date", end_date);
         }
 
         Transport::request(api_req, &self.config, option).await

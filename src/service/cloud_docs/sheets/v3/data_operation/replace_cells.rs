@@ -5,8 +5,9 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
-        req_option, SDKResult,
+        req_option,
         standard_response::StandardResponse,
+        SDKResult,
     },
     impl_executable_builder_owned,
     service::sheets::v3::{
@@ -142,7 +143,8 @@ impl SpreadsheetSheetService {
         api_req.http_method = reqwest::Method::POST;
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::App];
 
-        let api_resp: BaseResponse<ReplaceCellsResponse> = crate::core::http::Transport::request(api_req, &self.config, option).await?;
+        let api_resp: BaseResponse<ReplaceCellsResponse> =
+            crate::core::http::Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
 }

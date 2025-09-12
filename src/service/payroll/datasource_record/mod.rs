@@ -101,8 +101,8 @@ impl DatasourceRecordService {
     /// use std::collections::HashMap;
     ///
     /// let mut field_values = HashMap::new();
-    /// field_values.insert("base_salary".to_string(), serde_json::Value::Number(serde_json::Number::from(10000)));
-    /// field_values.insert("overtime_hours".to_string(), serde_json::Value::Number(serde_json::Number::from(20)));
+    /// field_values.insert("base_salary", serde_json::Value::Number(serde_json::Number::from(10000)));
+    /// field_values.insert("overtime_hours", serde_json::Value::Number(serde_json::Number::from(20)));
     ///
     /// let record = DatasourceRecord {
     ///     record_id: None,
@@ -141,9 +141,7 @@ impl DatasourceRecordService {
 
         // 添加查询参数
         if let Some(user_id_type) = request.user_id_type {
-            api_req
-                .query_params
-                .insert("user_id_type".to_string(), user_id_type);
+            api_req.query_params.insert("user_id_type", user_id_type);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -212,21 +210,17 @@ impl DatasourceRecordService {
 
         // 添加查询参数
         if let Some(user_id_type) = request.user_id_type {
-            api_req
-                .query_params
-                .insert("user_id_type".to_string(), user_id_type);
+            api_req.query_params.insert("user_id_type", user_id_type);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await

@@ -84,19 +84,17 @@ impl ApplicationConfigService {
         if let Some(tag_type) = request.tag_type {
             api_req
                 .query_params
-                .insert("tag_type".to_string(), format!("{tag_type:?}"));
+                .insert("tag_type", format!("{tag_type:?}"));
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -131,19 +129,17 @@ impl ApplicationConfigService {
         if let Some(form_type) = request.form_type {
             api_req
                 .query_params
-                .insert("form_type".to_string(), format!("{form_type:?}"));
+                .insert("form_type", format!("{form_type:?}"));
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await

@@ -62,8 +62,8 @@ impl FileService {
         option: Option<RequestOption>,
     ) -> SDKResult<CreateFileResponse> {
         let mut query_params = HashMap::new();
-        query_params.insert("file_type".to_string(), file_type.to_string());
-        query_params.insert("file_name".to_string(), file_name.to_string());
+        query_params.insert("file_type", file_type.to_string());
+        query_params.insert("file_name", file_name.to_string());
 
         let api_req = ApiRequest {
             http_method: Method::POST,

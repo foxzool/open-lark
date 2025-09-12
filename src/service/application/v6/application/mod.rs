@@ -70,10 +70,7 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<GetCollaboratorsResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
@@ -96,7 +93,7 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<GetApplicationResponse>> {
         let mut query_params = HashMap::new();
         if let Some(lang) = lang {
-            query_params.insert("lang".to_string(), lang);
+            query_params.insert("lang", lang);
         }
 
         let api_req = ApiRequest {
@@ -120,7 +117,7 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<GetAppVersionResponse>> {
         let mut query_params = HashMap::new();
         if let Some(lang) = lang {
-            query_params.insert("lang".to_string(), lang);
+            query_params.insert("lang", lang);
         }
 
         let api_req = ApiRequest {
@@ -147,13 +144,13 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<ListAppVersionsResponse>> {
         let mut query_params = HashMap::new();
         if let Some(lang) = lang {
-            query_params.insert("lang".to_string(), lang);
+            query_params.insert("lang", lang);
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
 
         let api_req = ApiRequest {
@@ -177,7 +174,7 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<ContactsRangeSuggestResponse>> {
         let mut query_params = HashMap::new();
         if let Some(lang) = lang {
-            query_params.insert("lang".to_string(), lang);
+            query_params.insert("lang", lang);
         }
 
         let api_req = ApiRequest {
@@ -203,13 +200,13 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<UnderauditListResponse>> {
         let mut query_params = HashMap::new();
         if let Some(lang) = lang {
-            query_params.insert("lang".to_string(), lang);
+            query_params.insert("lang", lang);
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
 
         let api_req = ApiRequest {

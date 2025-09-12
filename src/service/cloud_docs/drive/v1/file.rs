@@ -96,14 +96,12 @@ impl FileService {
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         let api_resp: BaseResponse<ListFileViewRecordsRespData> =
@@ -229,21 +227,17 @@ impl FileService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("search_key".to_string(), request.search_key);
+            .insert("search_key", request.search_key);
         if let Some(count) = request.count {
-            api_req
-                .query_params
-                .insert("count".to_string(), count.to_string());
+            api_req.query_params.insert("count", count.to_string());
         }
         if let Some(offset) = request.offset {
-            api_req
-                .query_params
-                .insert("offset".to_string(), offset.to_string());
+            api_req.query_params.insert("offset", offset.to_string());
         }
         if let Some(owner_ids) = request.owner_ids {
             api_req
                 .query_params
-                .insert("owner_ids".to_string(), owner_ids.join(","));
+                .insert("owner_ids", owner_ids.join(","));
         }
 
         let api_resp: BaseResponse<SearchFilesRespData> =

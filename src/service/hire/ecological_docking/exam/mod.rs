@@ -358,37 +358,35 @@ impl ExamService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(paper_type) = request.paper_type {
             api_req
                 .query_params
-                .insert("paper_type".to_string(), paper_type);
+                .insert("paper_type", paper_type);
         }
 
         if let Some(difficulty_level) = request.difficulty_level {
             api_req
                 .query_params
-                .insert("difficulty_level".to_string(), difficulty_level);
+                .insert("difficulty_level", difficulty_level);
         }
 
         if let Some(skill_tag) = request.skill_tag {
             api_req
                 .query_params
-                .insert("skill_tag".to_string(), skill_tag);
+                .insert("skill_tag", skill_tag);
         }
 
         if let Some(enabled) = request.enabled {
             api_req
                 .query_params
-                .insert("enabled".to_string(), enabled.to_string());
+                .insert("enabled", enabled.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -565,41 +563,39 @@ impl ExamService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(talent_id) = request.talent_id {
             api_req
                 .query_params
-                .insert("talent_id".to_string(), talent_id);
+                .insert("talent_id", talent_id);
         }
 
         if let Some(paper_id) = request.paper_id {
             api_req
                 .query_params
-                .insert("paper_id".to_string(), paper_id);
+                .insert("paper_id", paper_id);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(start_time_from) = request.start_time_from {
             api_req
                 .query_params
-                .insert("start_time_from".to_string(), start_time_from);
+                .insert("start_time_from", start_time_from);
         }
 
         if let Some(start_time_to) = request.start_time_to {
             api_req
                 .query_params
-                .insert("start_time_to".to_string(), start_time_to);
+                .insert("start_time_to", start_time_to);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -800,19 +796,15 @@ impl ExamService {
         if let Some(paper_id) = paper_id {
             api_req
                 .query_params
-                .insert("paper_id".to_string(), paper_id);
+                .insert("paper_id", paper_id);
         }
 
         if let Some(start_date) = start_date {
-            api_req
-                .query_params
-                .insert("start_date".to_string(), start_date);
+            api_req.query_params.insert("start_date", start_date);
         }
 
         if let Some(end_date) = end_date {
-            api_req
-                .query_params
-                .insert("end_date".to_string(), end_date);
+            api_req.query_params.insert("end_date", end_date);
         }
 
         Transport::request(api_req, &self.config, option).await

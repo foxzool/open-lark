@@ -163,9 +163,7 @@ impl MediaService {
 
         // 添加查询参数
         let file_tokens = request.file_tokens.join(",");
-        api_req
-            .query_params
-            .insert("file_tokens".to_string(), file_tokens);
+        api_req.query_params.insert("file_tokens", file_tokens);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)

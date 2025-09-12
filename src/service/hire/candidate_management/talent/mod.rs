@@ -302,61 +302,59 @@ impl TalentService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(name_keyword) = request.name_keyword {
             api_req
                 .query_params
-                .insert("name_keyword".to_string(), name_keyword);
+                .insert("name_keyword", name_keyword);
         }
 
         if let Some(email_keyword) = request.email_keyword {
             api_req
                 .query_params
-                .insert("email_keyword".to_string(), email_keyword);
+                .insert("email_keyword", email_keyword);
         }
 
         if let Some(phone_keyword) = request.phone_keyword {
             api_req
                 .query_params
-                .insert("phone_keyword".to_string(), phone_keyword);
+                .insert("phone_keyword", phone_keyword);
         }
 
         if let Some(work_experience) = request.work_experience {
             api_req
                 .query_params
-                .insert("work_experience".to_string(), work_experience.to_string());
+                .insert("work_experience", work_experience.to_string());
         }
 
         if let Some(education) = request.education {
             api_req
                 .query_params
-                .insert("education".to_string(), education);
+                .insert("education", education);
         }
 
         if !request.tags.is_empty() {
             api_req
                 .query_params
-                .insert("tags".to_string(), request.tags.join(","));
+                .insert("tags", request.tags.join(","));
         }
 
         if let Some(created_start_time) = request.created_start_time {
             api_req
                 .query_params
-                .insert("created_start_time".to_string(), created_start_time);
+                .insert("created_start_time", created_start_time);
         }
 
         if let Some(created_end_time) = request.created_end_time {
             api_req
                 .query_params
-                .insert("created_end_time".to_string(), created_end_time);
+                .insert("created_end_time", created_end_time);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -495,13 +493,11 @@ impl TalentService {
         if let Some(page_size) = page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await

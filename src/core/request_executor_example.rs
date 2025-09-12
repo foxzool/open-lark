@@ -33,7 +33,7 @@ impl ModernMessageService {
     ) -> SDKResult<BaseResponse<Message>> {
         // 构建查询参数
         let mut query_params = HashMap::new();
-        query_params.insert("receive_id_type".to_string(), receive_id_type.to_string());
+        query_params.insert("receive_id_type", receive_id_type.to_string());
 
         // 使用RequestExecutor执行请求 - 所有重复代码都被抽象了
         RequestExecutor::execute(
@@ -76,20 +76,20 @@ impl ModernMessageService {
     ) -> SDKResult<BaseResponse<ListMessageRespData>> {
         // 构建查询参数
         let mut query_params = HashMap::new();
-        query_params.insert("container_id".to_string(), container_id.to_string());
-        query_params.insert("container_id_type".to_string(), container_id_type.to_string());
+        query_params.insert("container_id", container_id.to_string());
+        query_params.insert("container_id_type", container_id_type.to_string());
         
         if let Some(start) = start_time {
-            query_params.insert("start_time".to_string(), start.to_string());
+            query_params.insert("start_time", start.to_string());
         }
         if let Some(end) = end_time {
-            query_params.insert("end_time".to_string(), end.to_string());
+            query_params.insert("end_time", end.to_string());
         }
         if let Some(token) = page_token {
-            query_params.insert("page_token".to_string(), token.to_string());
+            query_params.insert("page_token", token.to_string());
         }
         if let Some(size) = page_size {
-            query_params.insert("page_size".to_string(), size.to_string());
+            query_params.insert("page_size", size.to_string());
         }
 
         // 使用查询请求执行器
@@ -291,7 +291,7 @@ impl BulkMessageOperations {
         
         for (receive_id_type, body) in messages {
             let mut query_params = HashMap::new();
-            query_params.insert("receive_id_type".to_string(), receive_id_type);
+            query_params.insert("receive_id_type", receive_id_type);
 
             let result = RequestExecutor::execute(
                 config,

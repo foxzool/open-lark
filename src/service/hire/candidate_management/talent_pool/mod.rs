@@ -347,29 +347,27 @@ impl TalentPoolService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(pool_type) = request.pool_type {
             api_req
                 .query_params
-                .insert("pool_type".to_string(), pool_type);
+                .insert("pool_type", pool_type);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(owner_id) = request.owner_id {
             api_req
                 .query_params
-                .insert("owner_id".to_string(), owner_id);
+                .insert("owner_id", owner_id);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -439,31 +437,29 @@ impl TalentPoolService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if !request.tags.is_empty() {
             api_req
                 .query_params
-                .insert("tags".to_string(), request.tags.join(","));
+                .insert("tags", request.tags.join(","));
         }
 
         if let Some(work_experience) = request.work_experience {
             api_req
                 .query_params
-                .insert("work_experience".to_string(), work_experience.to_string());
+                .insert("work_experience", work_experience.to_string());
         }
 
         if let Some(education) = request.education {
             api_req
                 .query_params
-                .insert("education".to_string(), education);
+                .insert("education", education);
         }
 
         Transport::request(api_req, &self.config, option).await

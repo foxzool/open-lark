@@ -1,6 +1,5 @@
 use reqwest::Method;
 use serde_json::json;
-use std::sync::Arc;
 
 use crate::{
     core::{
@@ -18,7 +17,7 @@ use super::models::{
 
 /// 归档报表服务
 pub struct ArchiveRuleService {
-    pub config: Arc<Config>,
+    pub config: Config,
 }
 
 impl ArchiveRuleService {
@@ -43,7 +42,7 @@ impl ArchiveRuleService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -70,7 +69,7 @@ impl ArchiveRuleService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         // 构建请求体
         let body = json!({
@@ -104,7 +103,7 @@ impl ArchiveRuleService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         // 构建请求体
         let body = json!({
@@ -135,18 +134,16 @@ impl ArchiveRuleService {
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

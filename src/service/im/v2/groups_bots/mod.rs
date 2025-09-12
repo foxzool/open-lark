@@ -122,7 +122,7 @@ impl GroupsBotsService {
             api_path: "/open-apis/im/v2/groups-bots/bot_time_sentive".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params: HashMap::from([(
-                "receive_id_type".to_string(),
+                "receive_id_type",
                 receive_id_type.as_str().to_string(),
             )]),
             body: serde_json::to_vec(&request)?,
@@ -162,7 +162,7 @@ impl GroupsBotsService {
             api_path: "/open-apis/im/v2/groups-bots/patch".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params: HashMap::from([(
-                "receive_id_type".to_string(),
+                "receive_id_type",
                 receive_id_type.as_str().to_string(),
             )]),
             body: serde_json::to_vec(&request)?,

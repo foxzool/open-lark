@@ -244,7 +244,7 @@ impl OrganizationService {
         if let Some(date) = effective_date {
             api_req
                 .query_params
-                .insert("effective_date".to_string(), date);
+                .insert("effective_date", date);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -355,13 +355,11 @@ impl OrganizationService {
 
         // 添加查询参数
         if let Some(size) = page_size {
-            api_req
-                .query_params
-                .insert("page_size".to_string(), size.to_string());
+            api_req.query_params.insert("page_size", size.to_string());
         }
 
         if let Some(token) = page_token {
-            api_req.query_params.insert("page_token".to_string(), token);
+            api_req.query_params.insert("page_token", token);
         }
 
         Transport::request(api_req, &self.config, option).await

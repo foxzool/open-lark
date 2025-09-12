@@ -66,24 +66,18 @@ impl FolderService {
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(order_by) = request.order_by {
-            api_req
-                .query_params
-                .insert("order_by".to_string(), order_by);
+            api_req.query_params.insert("order_by", order_by);
         }
         if let Some(direction) = request.direction {
-            api_req
-                .query_params
-                .insert("direction".to_string(), direction);
+            api_req.query_params.insert("direction", direction);
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

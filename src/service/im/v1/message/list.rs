@@ -39,10 +39,10 @@ impl ListMessageRequestBuilder {
     ///
     /// 示例值：chat
     pub fn container_id_type(mut self, container_id_type: impl ToString) -> Self {
-        self.request.api_req.query_params.insert(
-            "container_id_type".to_string(),
-            container_id_type.to_string(),
-        );
+        self.request
+            .api_req
+            .query_params
+            .insert("container_id_type", container_id_type.to_string());
         self
     }
 
@@ -53,7 +53,7 @@ impl ListMessageRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("container_id".to_string(), container_id.to_string());
+            .insert("container_id", container_id.to_string());
         self
     }
 
@@ -64,7 +64,7 @@ impl ListMessageRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("start_time".to_string(), start_time.to_string());
+            .insert("start_time", start_time.to_string());
         self
     }
 
@@ -75,7 +75,7 @@ impl ListMessageRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("end_time".to_string(), end_time.to_string());
+            .insert("end_time", end_time.to_string());
         self
     }
 
@@ -86,7 +86,7 @@ impl ListMessageRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("sort_type".to_string(), sort_type.to_string());
+            .insert("sort_type", sort_type.to_string());
         self
     }
 
@@ -96,7 +96,7 @@ impl ListMessageRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("page_token".to_string(), page_token.to_string());
+            .insert("page_token", page_token.to_string());
         self
     }
 
@@ -122,7 +122,7 @@ impl ListMessageRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("page_size".to_string(), page_size.to_string());
+            .insert("page_size", page_size.to_string());
         self
     }
 

@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use crate::core::config::Config;
 
 pub use v2::V2;
@@ -12,9 +10,9 @@ pub struct WikiService {
 }
 
 impl WikiService {
-    pub fn new(config: Arc<Config>) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            v2: V2::new((*config).clone()),
+            v2: V2::new(config.clone()),
         }
     }
 }

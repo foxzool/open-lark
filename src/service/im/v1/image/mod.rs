@@ -62,7 +62,7 @@ impl ImageService {
             http_method: Method::POST,
             api_path: "/open-apis/im/v1/images".to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params: HashMap::from([("image_type".to_string(), image_type.to_string())]),
+            query_params: HashMap::from([("image_type", image_type.to_string())]),
             body: image_data,
             ..Default::default()
         };

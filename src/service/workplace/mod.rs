@@ -44,8 +44,6 @@ pub mod app_recommend;
 pub mod models;
 pub mod workplace_access_data;
 
-use std::sync::Arc;
-
 use crate::{
     core::config::Config,
     service::workplace::{
@@ -65,9 +63,9 @@ pub struct WorkplaceService {
 
 impl WorkplaceService {
     /// 创建工作台服务实例
-    pub fn new(config: Arc<Config>) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            workplace_access_data: WorkplaceAccessDataService::new(Arc::clone(&config)),
+            workplace_access_data: WorkplaceAccessDataService::new(config.clone()),
             app_recommend: AppRecommendService::new(config),
         }
     }
