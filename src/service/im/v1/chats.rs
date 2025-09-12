@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
@@ -13,7 +15,7 @@ use crate::core::{
 };
 
 pub struct ChatsService {
-    pub config: Config,
+    pub config: Arc<Config>,
 }
 
 impl ChatsService {
