@@ -4,6 +4,8 @@ pub mod models;
 pub mod schema;
 pub mod suite_search;
 
+use std::sync::Arc;
+
 use crate::core::config::Config;
 
 /// Search API v2版本服务
@@ -19,11 +21,11 @@ pub struct V2 {
 }
 
 impl V2 {
-    pub fn new(config: Config) -> Self {
+    pub fn new(config: Arc<Config>) -> Self {
         Self {
-            suite_search: suite_search::SuiteSearchService::new(config.clone()),
-            data_source: data_source::DataSourceService::new(config.clone()),
-            data_item: data_item::DataItemService::new(config.clone()),
+            suite_search: suite_search::SuiteSearchService::new(Arc::clone(&config)),
+            data_source: data_source::DataSourceService::new(Arc::clone(&config)),
+            data_item: data_item::DataItemService::new(Arc::clone(&config)),
             schema: schema::SchemaService::new(config),
         }
     }

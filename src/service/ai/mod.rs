@@ -98,6 +98,8 @@
 //! - 灵活的API调用方式
 //! - 完善的错误处理机制
 
+use std::sync::Arc;
+
 use crate::core::config::Config;
 
 /// 智能文档处理功能
@@ -171,11 +173,11 @@ impl AiService {
     ///
     /// # 返回值
     /// 配置完成的AI服务实例，包含所有AI能力子服务
-    pub fn new(config: Config) -> Self {
+    pub fn new(config: Arc<Config>) -> Self {
         Self {
-            document_ai: DocumentAiService::new(config.clone()),
-            optical_char_recognition: OpticalCharRecognitionService::new(config.clone()),
-            speech_to_text: SpeechToTextService::new(config.clone()),
+            document_ai: DocumentAiService::new(Arc::clone(&config)),
+            optical_char_recognition: OpticalCharRecognitionService::new(Arc::clone(&config)),
+            speech_to_text: SpeechToTextService::new(Arc::clone(&config)),
             translation: TranslationService::new(config),
         }
     }
