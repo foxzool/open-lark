@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use crate::core::config::Config;
 
 // 子模块声明
@@ -52,17 +54,17 @@ pub struct V4 {
 }
 
 impl V4 {
-    pub fn new(config: Config) -> Self {
+    pub fn new(config: Arc<Config>) -> Self {
         Self {
-            calendar: CalendarManagementService::new(config.clone()),
-            calendar_acl: CalendarAclService::new(config.clone()),
-            calendar_event: CalendarEventService::new(config.clone()),
-            meeting_chat: MeetingChatService::new(config.clone()),
-            meeting_minute: MeetingMinuteService::new(config.clone()),
-            timeoff_event: TimeoffEventService::new(config.clone()),
-            meeting_room_event: MeetingRoomEventService::new(config.clone()),
-            attendee: AttendeeService::new(config.clone()),
-            setting: SettingService::new(config.clone()),
+            calendar: CalendarManagementService::new(Arc::clone(&config)),
+            calendar_acl: CalendarAclService::new(Arc::clone(&config)),
+            calendar_event: CalendarEventService::new(Arc::clone(&config)),
+            meeting_chat: MeetingChatService::new(Arc::clone(&config)),
+            meeting_minute: MeetingMinuteService::new(Arc::clone(&config)),
+            timeoff_event: TimeoffEventService::new(Arc::clone(&config)),
+            meeting_room_event: MeetingRoomEventService::new(Arc::clone(&config)),
+            attendee: AttendeeService::new(Arc::clone(&config)),
+            setting: SettingService::new(Arc::clone(&config)),
             exchange_binding: ExchangeBindingService::new(config),
         }
     }
