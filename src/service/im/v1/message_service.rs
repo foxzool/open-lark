@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use crate::core::config::Config;
 
 /// Message service
@@ -8,12 +10,12 @@ use crate::core::config::Config;
 #[derive(Debug, Clone)]
 pub struct MessageService {
     /// Service configuration
-    pub config: Config,
+    pub config: Arc<Config>,
 }
 
 impl MessageService {
     /// Create a new message service instance
-    pub fn new(config: Config) -> Self {
+    pub fn new(config: Arc<Config>) -> Self {
         Self { config }
     }
 }

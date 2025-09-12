@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use crate::core::config::Config;
 
 pub mod app_feed_card;
@@ -16,9 +18,9 @@ pub struct V2 {
 }
 
 impl V2 {
-    pub fn new(config: Config) -> Self {
+    pub fn new(config: Arc<Config>) -> Self {
         Self {
-            app_feed_card: AppFeedCardService::new(config.clone()),
+            app_feed_card: AppFeedCardService::new(Arc::clone(&config)),
             groups_bots: GroupsBotsService::new(config),
         }
     }
