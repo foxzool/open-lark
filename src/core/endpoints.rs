@@ -580,6 +580,298 @@ impl Endpoints {
 
     /// 功能角色管理
     pub const CONTACT_V3_FUNCTIONAL_ROLES: &'static str = "/open-apis/contact/v3/functional_roles";
+
+    // ==================== CloudDocs 云文档相关端点 ====================
+    
+    // Assistant 助手服务
+    /// 文档订阅
+    pub const ASSISTANT_V1_FILE_SUBSCRIPTION: &'static str = "/open-apis/assistant/v1/file/{}/{}/subscription";
+
+    // Bitable 多维表格服务
+    /// 多维表格应用管理
+    pub const BITABLE_V1_APPS: &'static str = "/open-apis/bitable/v1/apps";
+    pub const BITABLE_V1_APP_GET: &'static str = "/open-apis/bitable/v1/apps/{}";
+    pub const BITABLE_V1_APP_CREATE: &'static str = "/open-apis/bitable/v1/apps";
+    pub const BITABLE_V1_APP_UPDATE: &'static str = "/open-apis/bitable/v1/apps/{}";
+    pub const BITABLE_V1_APP_COPY: &'static str = "/open-apis/bitable/v1/apps/{}/copy";
+
+    /// 多维表格数据表管理
+    pub const BITABLE_V1_TABLES: &'static str = "/open-apis/bitable/v1/apps/{}/tables";
+    pub const BITABLE_V1_TABLE_GET: &'static str = "/open-apis/bitable/v1/apps/{}/tables/{}";
+    pub const BITABLE_V1_TABLE_CREATE: &'static str = "/open-apis/bitable/v1/apps/{}/tables";
+    pub const BITABLE_V1_TABLE_PATCH: &'static str = "/open-apis/bitable/v1/apps/{}/tables/{}";
+    pub const BITABLE_V1_TABLE_DELETE: &'static str = "/open-apis/bitable/v1/apps/{}/tables/{}";
+    pub const BITABLE_V1_TABLES_BATCH_CREATE: &'static str = "/open-apis/bitable/v1/apps/{}/tables/batch_create";
+    pub const BITABLE_V1_TABLES_BATCH_DELETE: &'static str = "/open-apis/bitable/v1/apps/{}/tables/batch_delete";
+
+    /// 多维表格记录管理
+    pub const BITABLE_V1_RECORDS: &'static str = "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records";
+    pub const BITABLE_V1_RECORD_GET: &'static str = "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/{record_id}";
+    pub const BITABLE_V1_RECORD_CREATE: &'static str = "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records";
+    pub const BITABLE_V1_RECORD_UPDATE: &'static str = "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/{record_id}";
+    pub const BITABLE_V1_RECORD_DELETE: &'static str = "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/{record_id}";
+    pub const BITABLE_V1_RECORDS_BATCH_CREATE: &'static str = "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/batch_create";
+    pub const BITABLE_V1_RECORDS_BATCH_UPDATE: &'static str = "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/batch_update";
+    pub const BITABLE_V1_RECORDS_BATCH_GET: &'static str = "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/batch_get";
+    pub const BITABLE_V1_RECORDS_BATCH_DELETE: &'static str = "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/batch_delete";
+    pub const BITABLE_V1_RECORDS_SEARCH: &'static str = "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/search";
+
+    /// 多维表格字段管理
+    pub const BITABLE_V1_FIELDS: &'static str = "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/fields";
+    pub const BITABLE_V1_FIELD_GET: &'static str = "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/fields/{field_id}";
+    pub const BITABLE_V1_FIELD_CREATE: &'static str = "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/fields";
+    pub const BITABLE_V1_FIELD_UPDATE: &'static str = "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/fields/{field_id}";
+    pub const BITABLE_V1_FIELD_DELETE: &'static str = "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/fields/{field_id}";
+
+    /// 多维表格视图管理
+    pub const BITABLE_V1_VIEWS: &'static str = "/open-apis/bitable/v1/apps/{}/tables/{}/views";
+    pub const BITABLE_V1_VIEW_GET: &'static str = "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}";
+    pub const BITABLE_V1_VIEW_CREATE: &'static str = "/open-apis/bitable/v1/apps/{}/tables/{}/views";
+    pub const BITABLE_V1_VIEW_PATCH: &'static str = "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}";
+    pub const BITABLE_V1_VIEW_DELETE: &'static str = "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}";
+
+    /// 多维表格仪表板管理
+    pub const BITABLE_V1_DASHBOARDS: &'static str = "/open-apis/bitable/v1/apps/{app_token}/dashboards";
+    pub const BITABLE_V1_DASHBOARD_COPY: &'static str = "/open-apis/bitable/v1/apps/{app_token}/dashboards/{block_id}/copy";
+
+    /// 多维表格角色管理
+    pub const BITABLE_V1_ROLES: &'static str = "/open-apis/bitable/v1/apps/{app_token}/roles";
+    pub const BITABLE_V1_ROLE_GET: &'static str = "/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}";
+    pub const BITABLE_V1_ROLE_CREATE: &'static str = "/open-apis/bitable/v1/apps/{app_token}/roles";
+    pub const BITABLE_V1_ROLE_UPDATE: &'static str = "/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}";
+    pub const BITABLE_V1_ROLE_DELETE: &'static str = "/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}";
+
+    /// 多维表格角色成员管理
+    pub const BITABLE_V1_ROLE_MEMBERS: &'static str = "/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}/members";
+    pub const BITABLE_V1_ROLE_MEMBER_CREATE: &'static str = "/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}/members";
+    pub const BITABLE_V1_ROLE_MEMBER_DELETE: &'static str = "/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}/members/{member_id}";
+    pub const BITABLE_V1_ROLE_MEMBERS_BATCH_CREATE: &'static str = "/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}/members/batch_create";
+    pub const BITABLE_V1_ROLE_MEMBERS_BATCH_DELETE: &'static str = "/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}/members/batch_delete";
+
+    /// 多维表格表单管理
+    pub const BITABLE_V1_FORMS: &'static str = "/open-apis/bitable/v1/apps/{app_token}/forms";
+    pub const BITABLE_V1_FORM_GET: &'static str = "/open-apis/bitable/v1/apps/{app_token}/forms/{form_id}";
+    pub const BITABLE_V1_FORM_PATCH: &'static str = "/open-apis/bitable/v1/apps/{app_token}/forms/{form_id}";
+    pub const BITABLE_V1_FORM_PATCH_META: &'static str = "/open-apis/bitable/v1/apps/{app_token}/forms/{form_id}/questions";
+
+    /// 多维表格工作流管理
+    pub const BITABLE_V1_WORKFLOWS: &'static str = "/open-apis/bitable/v1/apps/{app_token}/workflows";
+    pub const BITABLE_V1_WORKFLOW_UPDATE: &'static str = "/open-apis/bitable/v1/apps/{app_token}/workflows/{workflow_id}";
+
+    // Board 白板服务
+    /// 白板管理
+    pub const BOARD_V1_WHITEBOARD_THUMBNAIL: &'static str = "/open-apis/whiteboard/v1/whiteboards/{}/thumbnail";
+    pub const BOARD_V1_WHITEBOARD_NODES: &'static str = "/open-apis/board/v1/whiteboards/{}/nodes";
+
+    // Comments 评论服务
+    /// 评论管理
+    pub const COMMENT_V1_COMMENTS: &'static str = "/open-apis/comment/v1/comments";
+    pub const COMMENT_V1_COMMENT_GET: &'static str = "/open-apis/comment/v1/comments/{}";
+    pub const COMMENT_V1_COMMENT_CREATE: &'static str = "/open-apis/comment/v1/comments";
+    pub const COMMENT_V1_COMMENT_PATCH: &'static str = "/open-apis/comment/v1/comments/{}";
+    pub const COMMENT_V1_COMMENTS_BATCH_QUERY: &'static str = "/open-apis/comment/v1/comments/batch_query";
+
+    /// 评论回复管理
+    pub const COMMENT_V1_COMMENT_REPLIES: &'static str = "/open-apis/comment/v1/comments/{}/replies";
+    pub const COMMENT_V1_COMMENT_REPLY_UPDATE: &'static str = "/open-apis/comment/v1/comments/{}/replies/{}";
+    pub const COMMENT_V1_COMMENT_REPLY_DELETE: &'static str = "/open-apis/comment/v1/comments/{}/replies/{}";
+
+    // Docx 文档服务
+    /// 文档管理
+    pub const DOCX_V1_DOCUMENTS: &'static str = "/open-apis/docx/v1/documents";
+    pub const DOCX_V1_DOCUMENT_GET: &'static str = "/open-apis/docx/v1/documents/{}";
+    pub const DOCX_V1_DOCUMENT_RAW_CONTENT: &'static str = "/open-apis/docx/v1/documents/{}/raw_content";
+    pub const DOCX_V1_DOCUMENT_CONVERT: &'static str = "/open-apis/docx/v1/documents/{}/convert";
+
+    /// 文档块管理
+    pub const DOCX_V1_DOCUMENT_BLOCKS: &'static str = "/open-apis/docx/v1/documents/{}/blocks";
+    pub const DOCX_V1_DOCUMENT_BLOCK_GET: &'static str = "/open-apis/docx/v1/documents/{}/blocks/{}";
+    pub const DOCX_V1_DOCUMENT_BLOCK_CHILDREN: &'static str = "/open-apis/docx/v1/documents/{}/blocks/{}/children";
+    pub const DOCX_V1_DOCUMENT_BLOCKS_BATCH_UPDATE: &'static str = "/open-apis/docx/v1/documents/{}/blocks/batch_update";
+    pub const DOCX_V1_DOCUMENT_BLOCKS_BATCH_DELETE: &'static str = "/open-apis/docx/v1/documents/{}/blocks/batch_delete";
+
+    // Drive 云盘服务
+    /// 文件管理
+    pub const DRIVE_V1_FILES: &'static str = "/open-apis/drive/v1/files";
+    pub const DRIVE_V1_FILE_GET: &'static str = "/open-apis/drive/v1/files/{}";
+    pub const DRIVE_V1_FILE_COPY: &'static str = "/open-apis/drive/v1/files/{}/copy";
+    pub const DRIVE_V1_FILE_DOWNLOAD: &'static str = "/open-apis/drive/v1/files/{}/download";
+    pub const DRIVE_V1_FILE_STATISTICS: &'static str = "/open-apis/drive/v1/files/{}/statistics";
+    pub const DRIVE_V1_FILE_VIEW_RECORDS: &'static str = "/open-apis/drive/v1/files/{}/view_records";
+    pub const DRIVE_V1_FILE_LIKE_RECORDS: &'static str = "/open-apis/drive/v1/files/{}/like_records";
+    pub const DRIVE_V1_FILES_CREATE_FOLDER: &'static str = "/open-apis/drive/v1/files/create_folder";
+    pub const DRIVE_V1_FILES_CREATE_SHORTCUT: &'static str = "/open-apis/drive/v1/files/create_shortcut";
+    pub const DRIVE_V1_FILES_SEARCH: &'static str = "/open-apis/drive/v1/files/search";
+    pub const DRIVE_V1_FILES_SUBSCRIBE: &'static str = "/open-apis/drive/v1/files/subscribe";
+
+    /// 文件版本管理
+    pub const DRIVE_V1_FILE_VERSIONS: &'static str = "/open-apis/drive/v1/files/{}/versions";
+    pub const DRIVE_V1_FILE_VERSION_GET: &'static str = "/open-apis/drive/v1/files/{}/versions/{}";
+
+    /// 文件订阅管理
+    pub const DRIVE_V1_FILE_SUBSCRIPTIONS: &'static str = "/open-apis/drive/v1/files/{}/subscriptions/{}";
+
+    /// 文件夹管理
+    pub const DRIVE_V1_FOLDERS: &'static str = "/open-apis/drive/v1/folders";
+    pub const DRIVE_V1_FOLDER_GET: &'static str = "/open-apis/drive/v1/folders/{}";
+    pub const DRIVE_V1_FOLDER_CHILDREN: &'static str = "/open-apis/drive/v1/folders/{}/children";
+    pub const DRIVE_V1_FOLDER_MOVE: &'static str = "/open-apis/drive/v1/folders/{}/move";
+    pub const DRIVE_V1_FOLDERS_ROOT_FOLDER_META: &'static str = "/open-apis/drive/v1/folders/root_folder_meta";
+
+    /// 文件上传管理
+    pub const DRIVE_V1_FILES_UPLOAD_ALL: &'static str = "/open-apis/drive/v1/files/upload_all";
+    pub const DRIVE_V1_FILES_UPLOAD_PREPARE: &'static str = "/open-apis/drive/v1/files/upload_prepare";
+    pub const DRIVE_V1_FILES_UPLOAD_PART: &'static str = "/open-apis/drive/v1/files/upload_part";
+    pub const DRIVE_V1_FILES_UPLOAD_FINISH: &'static str = "/open-apis/drive/v1/files/upload_finish";
+
+    /// 媒体文件管理
+    pub const DRIVE_V1_MEDIAS_UPLOAD_ALL: &'static str = "/open-apis/drive/v1/medias/upload_all";
+    pub const DRIVE_V1_MEDIAS_UPLOAD_PREPARE: &'static str = "/open-apis/drive/v1/medias/upload_prepare";
+    pub const DRIVE_V1_MEDIAS_UPLOAD_PART: &'static str = "/open-apis/drive/v1/medias/upload_part";
+    pub const DRIVE_V1_MEDIAS_UPLOAD_FINISH: &'static str = "/open-apis/drive/v1/medias/upload_finish";
+    pub const DRIVE_V1_MEDIAS_DOWNLOAD: &'static str = "/open-apis/drive/v1/medias/{}/download";
+    pub const DRIVE_V1_MEDIAS_BATCH_GET_TMP_DOWNLOAD_URL: &'static str = "/open-apis/drive/v1/medias/batch_get_tmp_download_url";
+
+    /// 导入任务管理
+    pub const DRIVE_V1_IMPORT_TASKS: &'static str = "/open-apis/drive/v1/import_tasks";
+    pub const DRIVE_V1_IMPORT_TASK_GET: &'static str = "/open-apis/drive/v1/import_tasks/{}";
+
+    /// 元信息管理
+    pub const DRIVE_V1_METAS_BATCH_QUERY: &'static str = "/open-apis/drive/v1/metas/batch_query";
+
+    /// 任务管理
+    pub const DRIVE_V1_TASK_GET: &'static str = "/open-apis/drive/v1/tasks/{}";
+
+    /// 权限管理
+    pub const DRIVE_V1_PERMISSIONS_MEMBERS: &'static str = "/open-apis/drive/v1/permissions/{}/members";
+    pub const DRIVE_V1_PERMISSIONS_MEMBER_GET: &'static str = "/open-apis/drive/v1/permissions/{}/members/{}";
+    pub const DRIVE_V1_PERMISSIONS_MEMBERS_BATCH_CREATE: &'static str = "/open-apis/drive/v1/permissions/{}/members/batch_create";
+    pub const DRIVE_V1_PERMISSIONS_MEMBERS_AUTH: &'static str = "/open-apis/drive/v1/permissions/{}/members/auth";
+    pub const DRIVE_V1_PERMISSIONS_MEMBERS_TRANSFER_OWNER: &'static str = "/open-apis/drive/v1/permissions/{}/members/transfer_owner";
+    pub const DRIVE_V1_PERMISSIONS_PUBLIC: &'static str = "/open-apis/drive/v1/permissions/{}/public";
+    pub const DRIVE_V1_PERMISSIONS_PUBLIC_PASSWORD: &'static str = "/open-apis/drive/v1/permissions/{}/public/password";
+
+    /// Drive v2 权限管理
+    pub const DRIVE_V2_PERMISSIONS_PUBLIC: &'static str = "/open-apis/drive/v2/permissions/{}/public";
+
+    /// Drive Explorer
+    pub const DRIVE_EXPLORER_V2_ROOT_FOLDER_META: &'static str = "/open-apis/drive/explorer/v2/root_folder/meta";
+    pub const DRIVE_EXPLORER_V2_FOLDER_META: &'static str = "/open-apis/drive/explorer/v2/folder/{folder_token}/meta";
+
+    // Sheets 电子表格服务
+    /// 电子表格管理 - v3
+    pub const SHEETS_V3_SPREADSHEETS: &'static str = "/open-apis/sheets/v3/spreadsheets";
+    pub const SHEETS_V3_SPREADSHEET_GET: &'static str = "/open-apis/sheets/v3/spreadsheets/{}";
+    pub const SHEETS_V3_SPREADSHEET_CREATE: &'static str = "/open-apis/sheets/v3/spreadsheets";
+    pub const SHEETS_V3_SPREADSHEET_PATCH: &'static str = "/open-apis/sheets/v3/spreadsheets/{}";
+
+    /// 电子表格工作表管理 - v3
+    pub const SHEETS_V3_SPREADSHEET_SHEETS_QUERY: &'static str = "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/query";
+    pub const SHEETS_V3_SPREADSHEET_SHEET_GET: &'static str = "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}";
+
+    /// 电子表格数据操作 - v3
+    pub const SHEETS_V3_SPREADSHEET_VALUES_GET: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/values/{}";
+    pub const SHEETS_V3_SPREADSHEET_VALUES_BATCH_GET: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/values/batch_get";
+    pub const SHEETS_V3_SPREADSHEET_VALUES_BATCH_UPDATE: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/values/batch_update";
+    pub const SHEETS_V3_SPREADSHEET_VALUES_APPEND: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/values/{}/append";
+    pub const SHEETS_V3_SPREADSHEET_VALUES_PREPEND: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/values/{}/prepend";
+    pub const SHEETS_V3_SPREADSHEET_VALUES_IMAGE: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/values_image";
+
+    /// 电子表格查找替换 - v3
+    pub const SHEETS_V3_SPREADSHEET_SHEET_FIND: &'static str = "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/find";
+    pub const SHEETS_V3_SPREADSHEET_SHEET_REPLACE: &'static str = "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/replace";
+
+    /// 电子表格合并拆分单元格 - v3
+    pub const SHEETS_V3_SPREADSHEET_MERGE_CELLS: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/merge_cells";
+    pub const SHEETS_V3_SPREADSHEET_UNMERGE_CELLS: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/unmerge_cells";
+
+    /// 电子表格样式管理 - v3
+    pub const SHEETS_V3_SPREADSHEET_STYLE: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/style";
+    pub const SHEETS_V3_SPREADSHEET_STYLES_BATCH_UPDATE: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/styles/batch_update";
+
+    /// 电子表格行列管理 - v3
+    pub const SHEETS_V3_SPREADSHEET_DIMENSION_RANGE: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/dimension_range";
+    pub const SHEETS_V3_SPREADSHEET_DIMENSION_RANGE_INSERT: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/dimension_range:insert";
+    pub const SHEETS_V3_SPREADSHEET_MOVE_DIMENSION: &'static str = "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/move_dimension";
+
+    /// 电子表格条件格式 - v3
+    pub const SHEETS_V3_SPREADSHEET_CONDITION_FORMAT: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/conditionFormat";
+
+    /// 电子表格数据验证 - v3
+    pub const SHEETS_V3_SPREADSHEET_DATA_VALIDATION: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/dataValidation";
+    pub const SHEETS_V3_SPREADSHEET_DATA_VALIDATION_GET: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/dataValidation/{}";
+
+    /// 电子表格保护范围 - v3
+    pub const SHEETS_V3_SPREADSHEET_PROTECT_RANGE: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/protect_range";
+    pub const SHEETS_V3_SPREADSHEET_PROTECT_RANGE_GET: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/protect_range/{}";
+
+    /// 电子表格筛选器 - v3
+    pub const SHEETS_V3_SPREADSHEET_FILTER: &'static str = "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/filter";
+
+    /// 电子表格筛选视图 - v3
+    pub const SHEETS_V3_SPREADSHEET_FILTER_VIEWS: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views";
+    pub const SHEETS_V3_SPREADSHEET_FILTER_VIEW_GET: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}";
+
+    /// 电子表格筛选视图条件 - v3
+    pub const SHEETS_V3_SPREADSHEET_FILTER_VIEW_CONDITIONS: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions";
+    pub const SHEETS_V3_SPREADSHEET_FILTER_VIEW_CONDITION_GET: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}/conditions/{}";
+
+    /// 电子表格浮动图片 - v3
+    pub const SHEETS_V3_SPREADSHEET_FLOAT_IMAGES: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images";
+    pub const SHEETS_V3_SPREADSHEET_FLOAT_IMAGE_GET: &'static str = "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/float_images/{}";
+
+    /// 电子表格管理 - v2
+    pub const SHEETS_V2_SPREADSHEET_VALUES: &'static str = "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values";
+    pub const SHEETS_V2_SPREADSHEET_VALUES_RANGE: &'static str = "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values/{range}";
+    pub const SHEETS_V2_SPREADSHEET_VALUES_APPEND: &'static str = "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_append";
+    pub const SHEETS_V2_SPREADSHEET_VALUES_PREPEND: &'static str = "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_prepend";
+    pub const SHEETS_V2_SPREADSHEET_VALUES_BATCH_GET: &'static str = "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_batch_get";
+    pub const SHEETS_V2_SPREADSHEET_VALUES_BATCH_UPDATE: &'static str = "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_batch_update";
+    pub const SHEETS_V2_SPREADSHEET_VALUES_IMAGE: &'static str = "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/values_image";
+
+    /// 电子表格样式管理 - v2
+    pub const SHEETS_V2_SPREADSHEET_STYLE: &'static str = "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/style";
+    pub const SHEETS_V2_SPREADSHEET_STYLES_BATCH_UPDATE: &'static str = "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/styles_batch_update";
+
+    /// 电子表格合并拆分单元格 - v2
+    pub const SHEETS_V2_SPREADSHEET_MERGE_CELLS: &'static str = "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/merge_cells";
+    pub const SHEETS_V2_SPREADSHEET_UNMERGE_CELLS: &'static str = "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/unmerge_cells";
+
+    /// 电子表格行列管理 - v2
+    pub const SHEETS_V2_SPREADSHEET_DIMENSION_RANGE: &'static str = "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/dimension_range";
+    pub const SHEETS_V2_SPREADSHEET_INSERT_DIMENSION_RANGE: &'static str = "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/insert_dimension_range";
+
+    /// 电子表格工作表管理 - v2
+    pub const SHEETS_V2_SPREADSHEET_SHEETS_BATCH_UPDATE: &'static str = "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/sheets_batch_update";
+
+    // Wiki 知识库服务
+    /// 知识库空间管理
+    pub const WIKI_V2_SPACES: &'static str = "/open-apis/wiki/v2/spaces";
+    pub const WIKI_V2_SPACE_GET: &'static str = "/open-apis/wiki/v2/spaces/{}";
+    pub const WIKI_V2_SPACE_CREATE: &'static str = "/open-apis/wiki/v2/spaces";
+
+    /// 知识库空间成员管理
+    pub const WIKI_V2_SPACE_MEMBERS: &'static str = "/open-apis/wiki/v2/spaces/{}/members";
+    pub const WIKI_V2_SPACE_MEMBER_CREATE: &'static str = "/open-apis/wiki/v2/spaces/{}/members";
+    pub const WIKI_V2_SPACE_MEMBER_DELETE: &'static str = "/open-apis/wiki/v2/spaces/{}/members/{}";
+
+    /// 知识库节点管理
+    pub const WIKI_V2_SPACE_NODES: &'static str = "/open-apis/wiki/v2/spaces/{}/nodes";
+    pub const WIKI_V2_SPACE_NODE_GET: &'static str = "/open-apis/wiki/v2/spaces/{}/nodes/{}";
+    pub const WIKI_V2_SPACE_NODE_CREATE: &'static str = "/open-apis/wiki/v2/spaces/{}/nodes";
+    pub const WIKI_V2_SPACE_NODE_COPY: &'static str = "/open-apis/wiki/v2/spaces/{}/nodes/{}/copy";
+    pub const WIKI_V2_SPACE_NODE_MOVE: &'static str = "/open-apis/wiki/v2/spaces/{}/nodes/{}/move";
+    pub const WIKI_V2_SPACE_NODE_UPDATE_TITLE: &'static str = "/open-apis/wiki/v2/spaces/{}/nodes/{}/update_title";
+
+    /// 知识库设置管理
+    pub const WIKI_V2_SPACE_SETTING_UPDATE: &'static str = "/open-apis/wiki/v2/spaces/{}/setting";
+
+    /// 知识库搜索
+    pub const WIKI_V2_SEARCH: &'static str = "/open-apis/wiki/v2/search";
+
+    /// 知识库任务管理
+    pub const WIKI_V2_TASKS_MOVE_DOCS_TO_WIKI: &'static str = "/open-apis/wiki/v2/tasks/move_docs_to_wiki";
+    pub const WIKI_V2_TASK_GET: &'static str = "/open-apis/wiki/v2/tasks/{}";
 }
 
 /// API端点构建辅助函数

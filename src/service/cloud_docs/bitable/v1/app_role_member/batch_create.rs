@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -138,11 +139,9 @@ pub async fn batch_create_role_members(
 ) -> SDKResult<BaseResponse<BatchCreateRoleMemberResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::POST;
-    api_req.api_path = format!(
-        "/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}/members/batch_create",
-        app_token = request.app_token,
-        role_id = request.role_id
-    );
+    api_req.api_path = Endpoints::BITABLE_V1_ROLE_MEMBERS_BATCH_CREATE
+        .replace("{app_token}", &request.app_token)
+        .replace("{role_id}", &request.role_id);
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
     let api_resp = Transport::request(api_req, config, option).await?;

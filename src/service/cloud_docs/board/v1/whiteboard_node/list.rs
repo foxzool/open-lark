@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -232,10 +233,7 @@ pub async fn list_whiteboard_nodes(
     let mut api_req = request.api_request;
     api_req.http_method = Method::GET;
 
-    let mut path = format!(
-        "/open-apis/board/v1/whiteboards/{}/nodes",
-        request.whiteboard_token
-    );
+    let mut path = Endpoints::BOARD_V1_WHITEBOARD_NODES.replace("{}", &request.whiteboard_token);
 
     // 添加查询参数
     let mut query_params = Vec::new();
@@ -249,7 +247,8 @@ pub async fn list_whiteboard_nodes(
     }
 
     if !query_params.is_empty() {
-        path = format!("{}?{}", path, query_params.join("&"));
+        path.push('?');
+        path.push_str(&query_params.join("&"));
     }
 
     api_req.api_path = path;

@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -36,7 +37,7 @@ impl EventService {
     ) -> SDKResult<BaseResponse<SubscribeFileEventsRespData>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/drive/v1/files/subscribe".to_string(),
+            api_path: Endpoints::DRIVE_V1_FILES_SUBSCRIBE.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

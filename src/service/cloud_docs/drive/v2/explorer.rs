@@ -10,6 +10,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -35,7 +36,7 @@ impl ExplorerService {
     ) -> SDKResult<BaseResponse<ExplorerRootMeta>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/drive/explorer/v2/root_folder/meta".to_string(),
+            api_path: Endpoints::DRIVE_EXPLORER_V2_ROOT_FOLDER_META.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
