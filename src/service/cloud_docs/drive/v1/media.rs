@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, BinaryResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         validation::{validate_file_name, validate_upload_file, ValidateBuilder, ValidationResult},
@@ -72,7 +73,7 @@ impl MediaService {
     ) -> SDKResult<BaseResponse<UploadPrepareRespData>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/drive/v1/medias/upload_prepare".to_string(),
+            api_path: Endpoints::DRIVE_V1_MEDIAS_UPLOAD_PREPARE.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -113,7 +114,7 @@ impl MediaService {
     ) -> SDKResult<BaseResponse<UploadFinishRespData>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/drive/v1/medias/upload_finish".to_string(),
+            api_path: Endpoints::DRIVE_V1_MEDIAS_UPLOAD_FINISH.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -135,7 +136,7 @@ impl MediaService {
     ) -> SDKResult<BaseResponse<BinaryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/drive/v1/medias/{}/download", request.file_token),
+            api_path: Endpoints::DRIVE_V1_MEDIAS_DOWNLOAD.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
@@ -156,7 +157,7 @@ impl MediaService {
     ) -> SDKResult<BaseResponse<BatchGetTmpDownloadUrlRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/drive/v1/medias/batch_get_tmp_download_url".to_string(),
+            api_path: Endpoints::DRIVE_V1_MEDIAS_BATCH_GET_TMP_DOWNLOAD_URL.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };

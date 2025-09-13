@@ -7,6 +7,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    endpoints::Endpoints,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -35,7 +36,7 @@ impl DocumentBlockService {
     ) -> SDKResult<BaseResponse<CreateBlockRespData>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/docx/v1/documents/{}/blocks", document_id.into()),
+            api_path: Endpoints::DOCX_V1_DOCUMENT_BLOCKS.replace("{}", &document_id.into()),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

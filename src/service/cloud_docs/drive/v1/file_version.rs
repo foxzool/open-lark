@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -36,7 +37,7 @@ impl FileVersionService {
     ) -> SDKResult<BaseResponse<CreateVersionRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/drive/v1/files/{}/versions", request.file_token),
+            api_path: Endpoints::DRIVE_V1_FILE_VERSIONS.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
@@ -63,10 +64,9 @@ impl FileVersionService {
     ) -> SDKResult<BaseResponse<DeleteVersionRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!(
-                "/open-apis/drive/v1/files/{}/versions/{}",
-                request.file_token, request.version_id
-            ),
+            api_path: Endpoints::DRIVE_V1_FILE_VERSION_GET
+                .replace("{}", &request.file_token)
+                .replace("{}", &request.version_id),
             ..Default::default()
         };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
@@ -87,10 +87,9 @@ impl FileVersionService {
     ) -> SDKResult<BaseResponse<GetVersionRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/drive/v1/files/{}/versions/{}",
-                request.file_token, request.version_id
-            ),
+            api_path: Endpoints::DRIVE_V1_FILE_VERSION_GET
+                .replace("{}", &request.file_token)
+                .replace("{}", &request.version_id),
             ..Default::default()
         };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
@@ -111,7 +110,7 @@ impl FileVersionService {
     ) -> SDKResult<BaseResponse<ListVersionsRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/drive/v1/files/{}/versions", request.file_token),
+            api_path: Endpoints::DRIVE_V1_FILE_VERSIONS.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
