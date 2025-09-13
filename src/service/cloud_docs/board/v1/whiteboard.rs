@@ -6,6 +6,7 @@ use crate::core::{
     api_resp::{BaseResponse, BinaryResponse},
     config::Config,
     constants::AccessTokenType,
+    endpoints::Endpoints,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -33,10 +34,8 @@ impl WhiteboardService {
     ) -> SDKResult<BaseResponse<BinaryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/whiteboard/v1/whiteboards/{}/thumbnail",
-                request.whiteboard_token
-            ),
+            api_path: Endpoints::BOARD_V1_WHITEBOARD_THUMBNAIL
+                .replace("{}", &request.whiteboard_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };

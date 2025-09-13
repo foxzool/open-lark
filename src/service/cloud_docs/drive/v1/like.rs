@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -36,10 +37,8 @@ impl LikeService {
     ) -> SDKResult<BaseResponse<ListFileLikesRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/drive/v1/files/{}/like_records",
-                request.file_token
-            ),
+            api_path: Endpoints::DRIVE_V1_FILE_LIKE_RECORDS
+                .replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };

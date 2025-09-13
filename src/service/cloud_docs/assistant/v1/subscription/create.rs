@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -277,10 +278,9 @@ pub async fn create_subscription(
     let mut api_req = request.api_request;
     api_req.http_method = Method::POST;
 
-    api_req.api_path = format!(
-        "/open-apis/assistant/v1/file/{}/{}/subscription",
-        request.file_type, request.file_token
-    );
+    api_req.api_path = Endpoints::ASSISTANT_V1_FILE_SUBSCRIPTION
+        .replace("{}", &request.file_type)
+        .replace("{}", &request.file_token);
 
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
