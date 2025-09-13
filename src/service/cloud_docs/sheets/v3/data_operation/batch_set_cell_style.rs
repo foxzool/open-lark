@@ -6,6 +6,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
@@ -26,10 +27,9 @@ impl DataOperationService {
     ) -> SDKResult<BatchSetCellStyleResponseData> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::PUT;
-        api_req.api_path = format!(
-            "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/styles/batch_update",
-            request.spreadsheet_token, request.sheet_id
-        );
+        api_req.api_path = Endpoints::SHEETS_V3_SPREADSHEET_STYLES_BATCH_UPDATE
+            .replace("{}", &request.spreadsheet_token)
+            .replace("{}", &request.sheet_id);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp: BaseResponse<BatchSetCellStyleResponseData> =

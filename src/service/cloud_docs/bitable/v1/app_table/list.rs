@@ -5,7 +5,7 @@ use crate::core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     constants::AccessTokenType,
-        endpoints::Endpoints,
+    endpoints::Endpoints,
     http::Transport,
     req_option::RequestOption,
     SDKResult,

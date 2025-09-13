@@ -94,9 +94,7 @@ impl CountryRegionService {
         }
 
         if let Some(region_type) = request.region_type {
-            api_req
-                .query_params
-                .insert("region_type", region_type);
+            api_req.query_params.insert("region_type", region_type);
         }
 
         if let Some(name) = request.name {

@@ -104,15 +104,11 @@ impl AcctItemService {
         }
 
         if let Some(item_type) = request.item_type {
-            api_req
-                .query_params
-                .insert("item_type", item_type);
+            api_req.query_params.insert("item_type", item_type);
         }
 
         if let Some(paygroup_id) = request.paygroup_id {
-            api_req
-                .query_params
-                .insert("paygroup_id", paygroup_id);
+            api_req.query_params.insert("paygroup_id", paygroup_id);
         }
 
         if let Some(status) = request.status {

@@ -132,9 +132,7 @@ impl UserService {
         }
 
         if let Some(department) = request.department {
-            api_req
-                .query_params
-                .insert("department", department);
+            api_req.query_params.insert("department", department);
         }
 
         Transport::request(api_req, &self.config, option).await

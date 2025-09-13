@@ -102,10 +102,10 @@ impl FilterDepartmentRequestBuilder {
         }
 
         if let Some(ref parent_department_id) = self.request.parent_department_id {
-            self.request.api_req.query_params.insert(
-                "parent_department_id",
-                parent_department_id.clone(),
-            );
+            self.request
+                .api_req
+                .query_params
+                .insert("parent_department_id", parent_department_id.clone());
         }
 
         if let Some(fetch_deleted) = self.request.fetch_deleted {

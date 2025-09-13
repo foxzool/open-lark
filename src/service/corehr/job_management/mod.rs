@@ -446,9 +446,7 @@ impl JobManagementService {
 
         // 添加查询参数
         if let Some(family_id) = job_family_id {
-            api_req
-                .query_params
-                .insert("job_family_id", family_id);
+            api_req.query_params.insert("job_family_id", family_id);
         }
 
         Transport::request(api_req, &self.config, option).await

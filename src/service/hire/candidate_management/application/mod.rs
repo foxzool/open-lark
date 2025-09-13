@@ -309,9 +309,7 @@ impl ApplicationService {
         }
 
         if let Some(stage_id) = request.stage_id {
-            api_req
-                .query_params
-                .insert("stage_id", stage_id);
+            api_req.query_params.insert("stage_id", stage_id);
         }
 
         if let Some(source) = request.source {

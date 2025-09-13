@@ -62,8 +62,7 @@ impl FileService {
     ) -> SDKResult<GetFileStatisticsRespData> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::DRIVE_V1_FILE_STATISTICS
-                .replace("{}", &request.file_token),
+            api_path: Endpoints::DRIVE_V1_FILE_STATISTICS.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
@@ -85,8 +84,7 @@ impl FileService {
     ) -> SDKResult<ListFileViewRecordsRespData> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::DRIVE_V1_FILE_VIEW_RECORDS
-                .replace("{}", &request.file_token),
+            api_path: Endpoints::DRIVE_V1_FILE_VIEW_RECORDS.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
@@ -277,7 +275,7 @@ impl FileService {
     ) -> SDKResult<FileUploadPartRespData> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/drive/v1/files/upload_part".to_string();
+        api_req.api_path = Endpoints::DRIVE_V1_FILES_UPLOAD_PART.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
         let api_resp: BaseResponse<FileUploadPartRespData> =

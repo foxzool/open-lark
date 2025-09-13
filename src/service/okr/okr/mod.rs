@@ -118,9 +118,7 @@ impl OkrContentService {
         }
 
         if let Some(period_id) = request.period_id {
-            api_req
-                .query_params
-                .insert("period_id", period_id);
+            api_req.query_params.insert("period_id", period_id);
         }
 
         if let Some(status) = request.status {

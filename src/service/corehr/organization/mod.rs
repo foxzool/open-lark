@@ -242,9 +242,7 @@ impl OrganizationService {
 
         // 添加查询参数
         if let Some(date) = effective_date {
-            api_req
-                .query_params
-                .insert("effective_date", date);
+            api_req.query_params.insert("effective_date", date);
         }
 
         Transport::request(api_req, &self.config, option).await

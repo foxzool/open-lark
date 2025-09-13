@@ -128,21 +128,15 @@ impl PaymentActivityService {
         }
 
         if let Some(paygroup_id) = request.paygroup_id {
-            api_req
-                .query_params
-                .insert("paygroup_id", paygroup_id);
+            api_req.query_params.insert("paygroup_id", paygroup_id);
         }
 
         if let Some(period_start) = request.period_start {
-            api_req
-                .query_params
-                .insert("period_start", period_start);
+            api_req.query_params.insert("period_start", period_start);
         }
 
         if let Some(period_end) = request.period_end {
-            api_req
-                .query_params
-                .insert("period_end", period_end);
+            api_req.query_params.insert("period_end", period_end);
         }
 
         Transport::request(api_req, &self.config, option).await

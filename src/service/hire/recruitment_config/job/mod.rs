@@ -307,9 +307,7 @@ impl JobService {
         }
 
         if let Some(job_type) = request.job_type {
-            api_req
-                .query_params
-                .insert("job_type", job_type);
+            api_req.query_params.insert("job_type", job_type);
         }
 
         if let Some(created_start_time) = request.created_start_time {

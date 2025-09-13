@@ -366,9 +366,7 @@ impl ExamService {
         }
 
         if let Some(paper_type) = request.paper_type {
-            api_req
-                .query_params
-                .insert("paper_type", paper_type);
+            api_req.query_params.insert("paper_type", paper_type);
         }
 
         if let Some(difficulty_level) = request.difficulty_level {
@@ -378,15 +376,11 @@ impl ExamService {
         }
 
         if let Some(skill_tag) = request.skill_tag {
-            api_req
-                .query_params
-                .insert("skill_tag", skill_tag);
+            api_req.query_params.insert("skill_tag", skill_tag);
         }
 
         if let Some(enabled) = request.enabled {
-            api_req
-                .query_params
-                .insert("enabled", enabled.to_string());
+            api_req.query_params.insert("enabled", enabled.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -571,15 +565,11 @@ impl ExamService {
         }
 
         if let Some(talent_id) = request.talent_id {
-            api_req
-                .query_params
-                .insert("talent_id", talent_id);
+            api_req.query_params.insert("talent_id", talent_id);
         }
 
         if let Some(paper_id) = request.paper_id {
-            api_req
-                .query_params
-                .insert("paper_id", paper_id);
+            api_req.query_params.insert("paper_id", paper_id);
         }
 
         if let Some(status) = request.status {
@@ -593,9 +583,7 @@ impl ExamService {
         }
 
         if let Some(start_time_to) = request.start_time_to {
-            api_req
-                .query_params
-                .insert("start_time_to", start_time_to);
+            api_req.query_params.insert("start_time_to", start_time_to);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -794,9 +782,7 @@ impl ExamService {
 
         // 添加查询参数
         if let Some(paper_id) = paper_id {
-            api_req
-                .query_params
-                .insert("paper_id", paper_id);
+            api_req.query_params.insert("paper_id", paper_id);
         }
 
         if let Some(start_date) = start_date {

@@ -2,8 +2,13 @@ use reqwest::Method;
 use serde_json::json;
 
 use crate::core::{
-    api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
-    req_option::RequestOption, SDKResult,
+    api_resp::BaseResponse,
+    config::Config,
+    constants::AccessTokenType,
+    endpoints::{EndpointBuilder, Endpoints},
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
 
 use super::models::{
@@ -39,9 +44,7 @@ impl GroupService {
             .insert("employee_type", request.employee_type.clone());
 
         if let Some(dept_type) = &request.dept_type {
-            api_req
-                .query_params
-                .insert("dept_type", dept_type.clone());
+            api_req.query_params.insert("dept_type", dept_type.clone());
         }
 
         if let Some(page_size) = &request.page_size {
@@ -81,9 +84,7 @@ impl GroupService {
             .insert("employee_type", request.employee_type.clone());
 
         if let Some(dept_type) = &request.dept_type {
-            api_req
-                .query_params
-                .insert("dept_type", dept_type.clone());
+            api_req.query_params.insert("dept_type", dept_type.clone());
         }
 
         // 构建请求体
@@ -168,9 +169,7 @@ impl GroupService {
             .insert("employee_type", request.employee_type);
 
         if let Some(dept_type) = request.dept_type {
-            api_req
-                .query_params
-                .insert("dept_type", dept_type);
+            api_req.query_params.insert("dept_type", dept_type);
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -198,9 +197,7 @@ impl GroupService {
             .insert("employee_type", request.employee_type);
 
         if let Some(dept_type) = request.dept_type {
-            api_req
-                .query_params
-                .insert("dept_type", dept_type);
+            api_req.query_params.insert("dept_type", dept_type);
         }
 
         // 构建请求体
@@ -235,9 +232,7 @@ impl GroupService {
             .insert("employee_type", request.employee_type);
 
         if let Some(dept_type) = request.dept_type {
-            api_req
-                .query_params
-                .insert("dept_type", dept_type);
+            api_req.query_params.insert("dept_type", dept_type);
         }
 
         if let Some(page_size) = request.page_size {

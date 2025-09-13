@@ -426,9 +426,7 @@ impl OfferSettingsService {
         }
 
         if let Some(job_type) = request.job_type {
-            api_req
-                .query_params
-                .insert("job_type", job_type);
+            api_req.query_params.insert("job_type", job_type);
         }
 
         if let Some(status) = request.status {

@@ -322,15 +322,11 @@ impl WebsiteService {
         }
 
         if let Some(job_type) = job_type {
-            api_req
-                .query_params
-                .insert("job_type", job_type);
+            api_req.query_params.insert("job_type", job_type);
         }
 
         if let Some(location) = location {
-            api_req
-                .query_params
-                .insert("location", location);
+            api_req.query_params.insert("location", location);
         }
 
         Transport::request(api_req, &self.config, option).await

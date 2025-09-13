@@ -62,10 +62,9 @@ impl DeviceService {
         }
 
         if let Some(device_type) = request.device_type {
-            api_req.query_params.insert(
-                "device_type",
-                serde_json::to_string(&device_type)?,
-            );
+            api_req
+                .query_params
+                .insert("device_type", serde_json::to_string(&device_type)?);
         }
 
         if let Some(status) = request.status {
@@ -75,9 +74,7 @@ impl DeviceService {
         }
 
         if let Some(location) = request.location {
-            api_req
-                .query_params
-                .insert("location", location);
+            api_req.query_params.insert("location", location);
         }
 
         Transport::request(api_req, &self.config, option).await

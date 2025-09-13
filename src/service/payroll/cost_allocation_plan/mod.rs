@@ -107,9 +107,7 @@ impl CostAllocationPlanService {
         }
 
         if let Some(plan_type) = request.plan_type {
-            api_req
-                .query_params
-                .insert("plan_type", plan_type);
+            api_req.query_params.insert("plan_type", plan_type);
         }
 
         Transport::request(api_req, &self.config, option).await

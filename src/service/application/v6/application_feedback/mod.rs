@@ -74,10 +74,7 @@ impl ApplicationFeedbackService {
             );
         }
         if let Some(status) = status {
-            query_params.insert(
-                "status",
-                serde_json::to_string(&status).unwrap_or_default(),
-            );
+            query_params.insert("status", serde_json::to_string(&status).unwrap_or_default());
         }
         if let Some(page_size) = page_size {
             query_params.insert("page_size", page_size.to_string());

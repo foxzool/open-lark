@@ -463,9 +463,7 @@ impl InterviewService {
         }
 
         if let Some(start_time_to) = request.start_time_to {
-            api_req
-                .query_params
-                .insert("start_time_to", start_time_to);
+            api_req.query_params.insert("start_time_to", start_time_to);
         }
 
         Transport::request(api_req, &self.config, option).await

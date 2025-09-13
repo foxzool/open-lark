@@ -131,8 +131,8 @@ impl DashboardService {
     ) -> SDKResult<BaseResponse<ListDashboardResponse>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::GET;
-        api_req.api_path = Endpoints::BITABLE_V1_DASHBOARDS
-        .replace("{app_token}", &request.app_token);
+        api_req.api_path =
+            Endpoints::BITABLE_V1_DASHBOARDS.replace("{app_token}", &request.app_token);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

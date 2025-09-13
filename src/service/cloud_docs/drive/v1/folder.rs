@@ -57,8 +57,7 @@ impl FolderService {
     ) -> SDKResult<BaseResponse<ListFilesRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::DRIVE_V1_FOLDER_CHILDREN
-                .replace("{}", &request.folder_token),
+            api_path: Endpoints::DRIVE_V1_FOLDER_CHILDREN.replace("{}", &request.folder_token),
             ..Default::default()
         };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];

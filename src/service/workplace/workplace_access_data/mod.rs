@@ -157,10 +157,9 @@ impl WorkplaceAccessDataService {
         }
 
         if let Some(custom_workplace_id) = request.custom_workplace_id {
-            api_req.query_params.insert(
-                QueryParams::CUSTOM_WORKPLACE_ID,
-                custom_workplace_id,
-            );
+            api_req
+                .query_params
+                .insert(QueryParams::CUSTOM_WORKPLACE_ID, custom_workplace_id);
         }
 
         let api_resp: BaseResponse<CustomAccessDataSearchResponse> =
@@ -223,10 +222,9 @@ impl WorkplaceAccessDataService {
         }
 
         if let Some(custom_workplace_id) = request.custom_workplace_id {
-            api_req.query_params.insert(
-                QueryParams::CUSTOM_WORKPLACE_ID,
-                custom_workplace_id,
-            );
+            api_req
+                .query_params
+                .insert(QueryParams::CUSTOM_WORKPLACE_ID, custom_workplace_id);
         }
 
         if let Some(widget_id) = request.widget_id {

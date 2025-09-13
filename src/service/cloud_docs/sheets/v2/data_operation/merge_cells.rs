@@ -1,3 +1,4 @@
+use crate::core::endpoints::Endpoints;
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -82,10 +83,8 @@ impl SpreadsheetService {
         option: Option<req_option::RequestOption>,
     ) -> SDKResult<BaseResponse<MergeCellsResponse>> {
         let mut api_req = request.api_request;
-        api_req.api_path = format!(
-            "/open-apis/sheets/v2/spreadsheets/{spreadsheet_token}/merge_cells",
-            spreadsheet_token = request.spreadsheet_token
-        );
+        api_req.api_path =
+            Endpoints::SHEETS_V2_SPREADSHEET_MERGE_CELLS.replace("{}", &request.spreadsheet_token);
         api_req.http_method = reqwest::Method::POST;
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::App];
 

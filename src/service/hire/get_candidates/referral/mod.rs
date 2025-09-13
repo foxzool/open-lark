@@ -379,9 +379,7 @@ impl ReferralService {
         }
 
         if let Some(referrer_id) = request.referrer_id {
-            api_req
-                .query_params
-                .insert("referrer_id", referrer_id);
+            api_req.query_params.insert("referrer_id", referrer_id);
         }
 
         if let Some(job_id) = request.job_id {
@@ -393,9 +391,7 @@ impl ReferralService {
         }
 
         if let Some(reward_status) = request.reward_status {
-            api_req
-                .query_params
-                .insert("reward_status", reward_status);
+            api_req.query_params.insert("reward_status", reward_status);
         }
 
         if let Some(referral_start_time) = request.referral_start_time {

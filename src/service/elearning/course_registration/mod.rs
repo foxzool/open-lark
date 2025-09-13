@@ -90,9 +90,7 @@ impl CourseRegistrationService {
         }
 
         if let Some(course_id) = request.course_id {
-            api_req
-                .query_params
-                .insert("course_id", course_id);
+            api_req.query_params.insert("course_id", course_id);
         }
 
         if let Some(user_id) = request.user_id {
@@ -241,9 +239,7 @@ impl CourseRegistrationService {
         }
 
         if let Some(course_id) = request.course_id {
-            api_req
-                .query_params
-                .insert("course_id", course_id);
+            api_req.query_params.insert("course_id", course_id);
         }
 
         if let Some(department_id) = request.department_id {
