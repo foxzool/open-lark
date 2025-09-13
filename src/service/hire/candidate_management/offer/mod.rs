@@ -470,9 +470,7 @@ impl OfferService {
         }
 
         if let Some(talent_id) = request.talent_id {
-            api_req
-                .query_params
-                .insert("talent_id", talent_id);
+            api_req.query_params.insert("talent_id", talent_id);
         }
 
         if let Some(job_id) = request.job_id {
@@ -754,9 +752,7 @@ impl OfferService {
         }
 
         if let Some(department) = department {
-            api_req
-                .query_params
-                .insert("department", department);
+            api_req.query_params.insert("department", department);
         }
 
         Transport::request(api_req, &self.config, option).await

@@ -330,9 +330,7 @@ impl SubjectService {
         }
 
         if let Some(subject_type) = request.subject_type {
-            api_req
-                .query_params
-                .insert("subject_type", subject_type);
+            api_req.query_params.insert("subject_type", subject_type);
         }
 
         if let Some(status) = request.status {
@@ -340,9 +338,7 @@ impl SubjectService {
         }
 
         if let Some(owner_id) = request.owner_id {
-            api_req
-                .query_params
-                .insert("owner_id", owner_id);
+            api_req.query_params.insert("owner_id", owner_id);
         }
 
         Transport::request(api_req, &self.config, option).await

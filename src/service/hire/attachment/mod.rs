@@ -390,15 +390,11 @@ impl AttachmentService {
         }
 
         if let Some(object_type) = request.object_type {
-            api_req
-                .query_params
-                .insert("object_type", object_type);
+            api_req.query_params.insert("object_type", object_type);
         }
 
         if let Some(object_id) = request.object_id {
-            api_req
-                .query_params
-                .insert("object_id", object_id);
+            api_req.query_params.insert("object_id", object_id);
         }
 
         if let Some(attachment_type) = request.attachment_type {
@@ -408,9 +404,7 @@ impl AttachmentService {
         }
 
         if let Some(uploader_id) = request.uploader_id {
-            api_req
-                .query_params
-                .insert("uploader_id", uploader_id);
+            api_req.query_params.insert("uploader_id", uploader_id);
         }
 
         if let Some(created_start_time) = request.created_start_time {
@@ -708,9 +702,7 @@ impl AttachmentService {
 
         // 添加查询参数
         if let Some(object_type) = object_type {
-            api_req
-                .query_params
-                .insert("object_type", object_type);
+            api_req.query_params.insert("object_type", object_type);
         }
 
         if let Some(start_date) = start_date {

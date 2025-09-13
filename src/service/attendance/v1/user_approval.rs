@@ -42,9 +42,7 @@ impl UserApprovalService {
         }
 
         if let Some(date_from) = request.date_from {
-            api_req
-                .query_params
-                .insert("date_from", date_from);
+            api_req.query_params.insert("date_from", date_from);
         }
 
         if let Some(date_to) = request.date_to {

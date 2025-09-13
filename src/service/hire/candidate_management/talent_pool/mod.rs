@@ -355,9 +355,7 @@ impl TalentPoolService {
         }
 
         if let Some(pool_type) = request.pool_type {
-            api_req
-                .query_params
-                .insert("pool_type", pool_type);
+            api_req.query_params.insert("pool_type", pool_type);
         }
 
         if let Some(status) = request.status {
@@ -365,9 +363,7 @@ impl TalentPoolService {
         }
 
         if let Some(owner_id) = request.owner_id {
-            api_req
-                .query_params
-                .insert("owner_id", owner_id);
+            api_req.query_params.insert("owner_id", owner_id);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -445,9 +441,7 @@ impl TalentPoolService {
         }
 
         if !request.tags.is_empty() {
-            api_req
-                .query_params
-                .insert("tags", request.tags.join(","));
+            api_req.query_params.insert("tags", request.tags.join(","));
         }
 
         if let Some(work_experience) = request.work_experience {
@@ -457,9 +451,7 @@ impl TalentPoolService {
         }
 
         if let Some(education) = request.education {
-            api_req
-                .query_params
-                .insert("education", education);
+            api_req.query_params.insert("education", education);
         }
 
         Transport::request(api_req, &self.config, option).await

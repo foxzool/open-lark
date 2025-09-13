@@ -54,7 +54,7 @@ impl MediaService {
     ) -> SDKResult<BaseResponse<UploadMediaRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/drive/v1/medias/upload_all".to_string();
+        api_req.api_path = Endpoints::DRIVE_V1_MEDIAS_UPLOAD_ALL.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -95,7 +95,7 @@ impl MediaService {
     ) -> SDKResult<BaseResponse<UploadPartRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/drive/v1/medias/upload_part".to_string();
+        api_req.api_path = Endpoints::DRIVE_V1_MEDIAS_UPLOAD_PART.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

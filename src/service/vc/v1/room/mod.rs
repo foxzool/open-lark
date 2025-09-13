@@ -177,10 +177,7 @@ impl RoomService {
     ) -> SDKResult<BaseResponse<UpdateRoomResponse>> {
         let mut query_params = HashMap::new();
         if let Some(room_id_type) = room_id_type {
-            query_params.insert(
-                "room_id_type",
-                room_id_type.as_str().to_string(),
-            );
+            query_params.insert("room_id_type", room_id_type.as_str().to_string());
         }
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
@@ -208,10 +205,7 @@ impl RoomService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(room_id_type) = room_id_type {
-            query_params.insert(
-                "room_id_type",
-                room_id_type.as_str().to_string(),
-            );
+            query_params.insert("room_id_type", room_id_type.as_str().to_string());
         }
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
@@ -238,10 +232,7 @@ impl RoomService {
     ) -> SDKResult<BaseResponse<GetRoomResponse>> {
         let mut query_params = HashMap::new();
         if let Some(room_id_type) = room_id_type {
-            query_params.insert(
-                "room_id_type",
-                room_id_type.as_str().to_string(),
-            );
+            query_params.insert("room_id_type", room_id_type.as_str().to_string());
         }
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
@@ -275,10 +266,7 @@ impl RoomService {
             query_params.insert("page_token", page_token);
         }
         if let Some(room_id_type) = room_id_type {
-            query_params.insert(
-                "room_id_type",
-                room_id_type.as_str().to_string(),
-            );
+            query_params.insert("room_id_type", room_id_type.as_str().to_string());
         }
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
@@ -316,10 +304,7 @@ impl RoomService {
                 query_params.insert("page_token", page_token);
             }
             if let Some(room_id_type) = params.room_id_type {
-                query_params.insert(
-                    "room_id_type",
-                    room_id_type.as_str().to_string(),
-                );
+                query_params.insert("room_id_type", room_id_type.as_str().to_string());
             }
             if let Some(user_id_type) = params.user_id_type {
                 query_params.insert("user_id_type", user_id_type.as_str().to_string());

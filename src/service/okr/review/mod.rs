@@ -97,9 +97,7 @@ impl ReviewService {
 
         // 添加查询参数
         if let Some(period_id) = request.period_id {
-            api_req
-                .query_params
-                .insert("period_id", period_id);
+            api_req.query_params.insert("period_id", period_id);
         }
 
         if let Some(user_id) = request.user_id {

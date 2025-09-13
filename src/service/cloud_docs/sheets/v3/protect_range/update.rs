@@ -6,6 +6,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -24,10 +25,9 @@ impl SpreadsheetService {
     ) -> SDKResult<BaseResponse<UpdateProtectRangeResponseData>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::PUT;
-        api_req.api_path = format!(
-            "/open-apis/sheets/v3/spreadsheets/{}/protect_range/{}",
-            request.spreadsheet_token, request.protect_id
-        );
+        api_req.api_path = Endpoints::SHEETS_V3_SPREADSHEET_PROTECT_RANGE_GET
+            .replace("{}", &request.spreadsheet_token)
+            .replace("{}", &request.protect_id);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

@@ -310,21 +310,15 @@ impl TalentService {
         }
 
         if let Some(name_keyword) = request.name_keyword {
-            api_req
-                .query_params
-                .insert("name_keyword", name_keyword);
+            api_req.query_params.insert("name_keyword", name_keyword);
         }
 
         if let Some(email_keyword) = request.email_keyword {
-            api_req
-                .query_params
-                .insert("email_keyword", email_keyword);
+            api_req.query_params.insert("email_keyword", email_keyword);
         }
 
         if let Some(phone_keyword) = request.phone_keyword {
-            api_req
-                .query_params
-                .insert("phone_keyword", phone_keyword);
+            api_req.query_params.insert("phone_keyword", phone_keyword);
         }
 
         if let Some(work_experience) = request.work_experience {
@@ -334,15 +328,11 @@ impl TalentService {
         }
 
         if let Some(education) = request.education {
-            api_req
-                .query_params
-                .insert("education", education);
+            api_req.query_params.insert("education", education);
         }
 
         if !request.tags.is_empty() {
-            api_req
-                .query_params
-                .insert("tags", request.tags.join(","));
+            api_req.query_params.insert("tags", request.tags.join(","));
         }
 
         if let Some(created_start_time) = request.created_start_time {

@@ -5,6 +5,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
+        endpoints::Endpoints,
         req_option,
         standard_response::StandardResponse,
         validation::{self, ValidationResult},
@@ -238,11 +239,9 @@ impl SpreadsheetSheetService {
         option: Option<req_option::RequestOption>,
     ) -> SDKResult<FindCellsResponse> {
         let mut api_req = request.api_request;
-        api_req.api_path = format!(
-            "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/find",
-            spreadsheet_token = request.spreadsheet_token,
-            sheet_id = request.sheet_id
-        );
+        api_req.api_path = Endpoints::SHEETS_V3_SPREADSHEET_SHEET_FIND
+            .replace("{}", &request.spreadsheet_token)
+            .replace("{}", &request.sheet_id);
         api_req.http_method = reqwest::Method::POST;
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::App];
 
