@@ -81,9 +81,7 @@ impl LocationService {
 
         // 添加查询参数
         if let Some(location_type) = request.location_type {
-            api_req
-                .query_params
-                .insert("location_type", location_type);
+            api_req.query_params.insert("location_type", location_type);
         }
 
         if let Some(parent_id) = request.parent_id {

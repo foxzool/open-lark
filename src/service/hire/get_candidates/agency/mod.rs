@@ -447,15 +447,11 @@ impl AgencyService {
         }
 
         if let Some(specialty) = request.specialty {
-            api_req
-                .query_params
-                .insert("specialty", specialty);
+            api_req.query_params.insert("specialty", specialty);
         }
 
         if let Some(service_area) = request.service_area {
-            api_req
-                .query_params
-                .insert("service_area", service_area);
+            api_req.query_params.insert("service_area", service_area);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -562,9 +558,7 @@ impl AgencyService {
         }
 
         if let Some(agency_id) = request.agency_id {
-            api_req
-                .query_params
-                .insert("agency_id", agency_id);
+            api_req.query_params.insert("agency_id", agency_id);
         }
 
         if let Some(job_id) = request.job_id {
@@ -576,17 +570,15 @@ impl AgencyService {
         }
 
         if let Some(recommendation_start_time) = request.recommendation_start_time {
-            api_req.query_params.insert(
-                "recommendation_start_time",
-                recommendation_start_time,
-            );
+            api_req
+                .query_params
+                .insert("recommendation_start_time", recommendation_start_time);
         }
 
         if let Some(recommendation_end_time) = request.recommendation_end_time {
-            api_req.query_params.insert(
-                "recommendation_end_time",
-                recommendation_end_time,
-            );
+            api_req
+                .query_params
+                .insert("recommendation_end_time", recommendation_end_time);
         }
 
         Transport::request(api_req, &self.config, option).await

@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -34,7 +35,11 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/application/v6/applications/{app_id}/transfer_owner"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_APP_TRANSFER_OWNER,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

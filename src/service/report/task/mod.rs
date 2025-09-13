@@ -70,15 +70,11 @@ impl TaskService {
         }
 
         if let Some(task_type) = request.task_type {
-            api_req
-                .query_params
-                .insert("task_type", task_type);
+            api_req.query_params.insert("task_type", task_type);
         }
 
         if let Some(reporter_id) = request.reporter_id {
-            api_req
-                .query_params
-                .insert("reporter_id", reporter_id);
+            api_req.query_params.insert("reporter_id", reporter_id);
         }
 
         if let Some(start_time) = request.start_time {

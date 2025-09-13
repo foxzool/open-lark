@@ -68,23 +68,19 @@ impl AccessRecordService {
         }
 
         if let Some(device_id) = request.device_id {
-            api_req
-                .query_params
-                .insert("device_id", device_id);
+            api_req.query_params.insert("device_id", device_id);
         }
 
         if let Some(access_type) = request.access_type {
-            api_req.query_params.insert(
-                "access_type",
-                serde_json::to_string(&access_type)?,
-            );
+            api_req
+                .query_params
+                .insert("access_type", serde_json::to_string(&access_type)?);
         }
 
         if let Some(access_method) = request.access_method {
-            api_req.query_params.insert(
-                "access_method",
-                serde_json::to_string(&access_method)?,
-            );
+            api_req
+                .query_params
+                .insert("access_method", serde_json::to_string(&access_method)?);
         }
 
         if let Some(result) = request.result {

@@ -3,8 +3,8 @@ use serde_json::json;
 
 use crate::{
     core::{
-        api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
-        req_option::RequestOption, SDKResult,
+        api_resp::BaseResponse, config::Config, constants::AccessTokenType, endpoints::Endpoints,
+        http::Transport, req_option::RequestOption, SDKResult,
     },
     impl_executable_builder_owned,
 };
@@ -32,7 +32,7 @@ impl UserTaskRemedyService {
     ) -> SDKResult<BaseResponse<CreateUserTaskRemedyRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/attendance/v1/user_task_remedys".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_TASK_REMEDYS.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
@@ -79,9 +79,7 @@ impl UserTaskRemedyService {
         api_req.query_params.insert("user_id", request.user_id);
 
         if let Some(date_from) = request.date_from {
-            api_req
-                .query_params
-                .insert("date_from", date_from);
+            api_req.query_params.insert("date_from", date_from);
         }
 
         if let Some(date_to) = request.date_to {
@@ -104,7 +102,7 @@ impl UserTaskRemedyService {
     ) -> SDKResult<BaseResponse<QueryUserTaskRemedyRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/attendance/v1/user_task_remedys".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_TASK_REMEDYS.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
@@ -117,9 +115,7 @@ impl UserTaskRemedyService {
         }
 
         if let Some(date_from) = request.date_from {
-            api_req
-                .query_params
-                .insert("date_from", date_from);
+            api_req.query_params.insert("date_from", date_from);
         }
 
         if let Some(date_to) = request.date_to {

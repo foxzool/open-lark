@@ -395,15 +395,11 @@ impl ExternalSystemService {
         }
 
         if let Some(system_type) = system_type {
-            api_req
-                .query_params
-                .insert("system_type", system_type);
+            api_req.query_params.insert("system_type", system_type);
         }
 
         if let Some(enabled) = enabled {
-            api_req
-                .query_params
-                .insert("enabled", enabled.to_string());
+            api_req.query_params.insert("enabled", enabled.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -522,9 +518,7 @@ impl ExternalSystemService {
         }
 
         if let Some(sync_type) = sync_type {
-            api_req
-                .query_params
-                .insert("sync_type", sync_type);
+            api_req.query_params.insert("sync_type", sync_type);
         }
 
         if let Some(status) = status {
@@ -666,9 +660,7 @@ impl ExternalSystemService {
         }
 
         if let Some(sync_status) = sync_status {
-            api_req
-                .query_params
-                .insert("sync_status", sync_status);
+            api_req.query_params.insert("sync_status", sync_status);
         }
 
         if let Some(skills) = skills {

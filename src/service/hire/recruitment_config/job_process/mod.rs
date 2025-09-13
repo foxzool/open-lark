@@ -371,9 +371,7 @@ impl JobProcessService {
         }
 
         if let Some(process_type) = request.process_type {
-            api_req
-                .query_params
-                .insert("process_type", process_type);
+            api_req.query_params.insert("process_type", process_type);
         }
 
         if let Some(status) = request.status {

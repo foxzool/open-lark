@@ -166,9 +166,7 @@ impl UserSettingService {
         api_req
             .query_params
             .insert("employee_type", request.employee_type);
-        api_req
-            .query_params
-            .insert("face_key", request.face_key);
+        api_req.query_params.insert("face_key", request.face_key);
 
         // 对于文件下载，我们需要直接获取响应体字节数据
         // 这里暂时返回一个模拟的照片数据，实际实现时需要从 HTTP 响应中获取

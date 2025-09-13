@@ -125,9 +125,7 @@ impl CostAllocationReportService {
         }
 
         if let Some(report_type) = request.report_type {
-            api_req
-                .query_params
-                .insert("report_type", report_type);
+            api_req.query_params.insert("report_type", report_type);
         }
 
         Transport::request(api_req, &self.config, option).await

@@ -202,9 +202,7 @@ impl BadgeGrantService {
 
         // 添加查询参数
         if let Some(badge_id) = request.badge_id {
-            api_req
-                .query_params
-                .insert("badge_id", badge_id);
+            api_req.query_params.insert("badge_id", badge_id);
         }
         if let Some(page_size) = request.page_size {
             api_req

@@ -59,10 +59,9 @@ impl EventService {
     ) -> SDKResult<BaseResponse<GetFileSubscriptionRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/drive/v1/files/{}/subscriptions/{}",
-                request.file_token, request.subscription_id
-            ),
+            api_path: Endpoints::DRIVE_V1_FILE_SUBSCRIPTIONS
+                .replace("{}", &request.file_token)
+                .replace("{}", &request.subscription_id),
             ..Default::default()
         };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
@@ -83,10 +82,9 @@ impl EventService {
     ) -> SDKResult<BaseResponse<UnsubscribeFileEventsRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!(
-                "/open-apis/drive/v1/files/{}/subscriptions/{}",
-                request.file_token, request.subscription_id
-            ),
+            api_path: Endpoints::DRIVE_V1_FILE_SUBSCRIPTIONS
+                .replace("{}", &request.file_token)
+                .replace("{}", &request.subscription_id),
             ..Default::default()
         };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
