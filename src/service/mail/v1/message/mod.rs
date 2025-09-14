@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -139,7 +140,11 @@ impl MessageService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_USER_MAILBOX_MESSAGES,
+                "user_mailbox_id",
+                user_mailbox_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -179,8 +184,14 @@ impl MessageService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages/{message_id}"
+            api_path: EndpointBuilder::replace_param(
+                &EndpointBuilder::replace_param(
+                    Endpoints::MAIL_V1_USER_MAILBOX_MESSAGE,
+                    "user_mailbox_id",
+                    user_mailbox_id,
+                ),
+                "message_id",
+                message_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -233,7 +244,11 @@ impl MessageService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_USER_MAILBOX_MESSAGES,
+                "user_mailbox_id",
+                user_mailbox_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -283,8 +298,10 @@ impl MessageService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages/get_by_card"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_USER_MAILBOX_MESSAGES_GET_BY_CARD,
+                "user_mailbox_id",
+                user_mailbox_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,

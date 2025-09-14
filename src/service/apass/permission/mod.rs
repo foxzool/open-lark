@@ -75,7 +75,10 @@ impl PermissionService {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_PERMISSION_ROLE_MEMBERS_BATCH_REMOVE,
-                &[("app_id", &request.app_id), ("role_api_name", &request.role_api_name)]
+                &[
+                    ("app_id", &request.app_id),
+                    ("role_api_name", &request.role_api_name),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -104,7 +107,10 @@ impl PermissionService {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_PERMISSION_ROLE_MEMBERS_BATCH_CREATE,
-                &[("app_id", &request.app_id), ("role_api_name", &request.role_api_name)]
+                &[
+                    ("app_id", &request.app_id),
+                    ("role_api_name", &request.role_api_name),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -137,7 +143,11 @@ impl PermissionService {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_PERMISSION_ROLE_MEMBER_GET,
-                &[("app_id", app_id), ("role_api_name", role_api_name), ("user_id", user_id)]
+                &[
+                    ("app_id", &app_id),
+                    ("role_api_name", &role_api_name),
+                    ("user_id", &user_id),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -164,7 +174,13 @@ impl PermissionService {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_PERMISSION_RECORD_MEMBERS_BATCH_REMOVE,
-                &[("app_id", &request.app_id), ("record_permission_api_name", &request.record_permission_api_name)]
+                &[
+                    ("app_id", &request.app_id),
+                    (
+                        "record_permission_api_name",
+                        &request.record_permission_api_name,
+                    ),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -194,7 +210,13 @@ impl PermissionService {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_PERMISSION_RECORD_MEMBERS_BATCH_CREATE,
-                &[("app_id", &request.app_id), ("record_permission_api_name", &request.record_permission_api_name)]
+                &[
+                    ("app_id", &request.app_id),
+                    (
+                        "record_permission_api_name",
+                        &request.record_permission_api_name,
+                    ),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({

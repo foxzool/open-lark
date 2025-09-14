@@ -8,6 +8,10 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{
+            EndpointBuilder, VC_MEETING_END, VC_MEETING_GET, VC_MEETING_INVITE, VC_MEETING_KICKOUT,
+            VC_MEETING_LIST_BY_NO, VC_MEETING_SET_HOST,
+        },
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -147,7 +151,7 @@ impl MeetingService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/invite"),
+            api_path: EndpointBuilder::replace_param(VC_MEETING_INVITE, "{meeting_id}", meeting_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -172,7 +176,11 @@ impl MeetingService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/kickout"),
+            api_path: EndpointBuilder::replace_param(
+                VC_MEETING_KICKOUT,
+                "{meeting_id}",
+                meeting_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -197,7 +205,11 @@ impl MeetingService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/set_host"),
+            api_path: EndpointBuilder::replace_param(
+                VC_MEETING_SET_HOST,
+                "{meeting_id}",
+                meeting_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -221,7 +233,7 @@ impl MeetingService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/end"),
+            api_path: EndpointBuilder::replace_param(VC_MEETING_END, "{meeting_id}", meeting_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -244,7 +256,7 @@ impl MeetingService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}"),
+            api_path: EndpointBuilder::replace_param(VC_MEETING_GET, "{meeting_id}", meeting_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -281,7 +293,7 @@ impl MeetingService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/vc/v1/meetings/list_by_no".to_string(),
+            api_path: VC_MEETING_LIST_BY_NO.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

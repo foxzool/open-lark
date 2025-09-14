@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -171,7 +172,7 @@ impl InstanceService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/approval/v4/instances".to_string(),
+            api_path: Endpoints::APPROVAL_V4_INSTANCES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -195,7 +196,11 @@ impl InstanceService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/instances/{instance_code}/cancel"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPROVAL_V4_INSTANCE_CANCEL,
+                "instance_code",
+                instance_code,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -219,7 +224,11 @@ impl InstanceService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/instances/{instance_code}/cc"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPROVAL_V4_INSTANCE_CC,
+                "instance_code",
+                instance_code,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -250,7 +259,7 @@ impl InstanceService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/approval/v4/instances/preview".to_string(),
+            api_path: Endpoints::APPROVAL_V4_INSTANCE_PREVIEW.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -274,7 +283,11 @@ impl InstanceService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/approval/v4/instances/{instance_code}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPROVAL_V4_INSTANCE_GET,
+                "instance_code",
+                instance_code,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -313,7 +326,7 @@ impl InstanceService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/approval/v4/instances".to_string(),
+            api_path: Endpoints::APPROVAL_V4_INSTANCES_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

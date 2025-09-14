@@ -179,7 +179,8 @@ pub async fn batch_query_comments(
     api_req.api_path = format!(
         "{}?file_type={}&file_token={}",
         Endpoints::COMMENT_V1_COMMENTS_BATCH_QUERY,
-        request.file_type, request.file_token
+        request.file_type,
+        request.file_token
     );
 
     // 添加用户ID类型查询参数

@@ -161,7 +161,11 @@ impl CustomFieldService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_CUSTOM_FIELD_GET, "custom_field_guid", custom_field_guid),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_CUSTOM_FIELD_GET,
+                "custom_field_guid",
+                custom_field_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -185,7 +189,11 @@ impl CustomFieldService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_CUSTOM_FIELD_GET, "custom_field_guid", custom_field_guid),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_CUSTOM_FIELD_GET,
+                "custom_field_guid",
+                custom_field_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -248,7 +256,11 @@ impl CustomFieldService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_CUSTOM_FIELD_ADD, "custom_field_guid", custom_field_guid),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_CUSTOM_FIELD_ADD,
+                "custom_field_guid",
+                custom_field_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -273,7 +285,11 @@ impl CustomFieldService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_CUSTOM_FIELD_REMOVE, "custom_field_guid", custom_field_guid),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_CUSTOM_FIELD_REMOVE,
+                "custom_field_guid",
+                custom_field_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,

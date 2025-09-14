@@ -273,7 +273,9 @@ pub async fn list_comments(
     api_req.http_method = Method::GET;
     api_req.api_path = format!(
         "{}?file_type={}&file_token={}",
-        Endpoints::COMMENT_V1_COMMENTS, request.file_type, request.file_token
+        Endpoints::COMMENT_V1_COMMENTS,
+        request.file_type,
+        request.file_token
     );
 
     // 构建查询参数

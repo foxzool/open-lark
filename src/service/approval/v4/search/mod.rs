@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -172,7 +173,7 @@ impl SearchService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/approval/v4/instances/search".to_string(),
+            api_path: Endpoints::APPROVAL_V4_INSTANCES_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -220,7 +221,7 @@ impl SearchService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/approval/v4/tasks/search".to_string(),
+            api_path: Endpoints::APPROVAL_V4_TASKS_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -259,7 +260,7 @@ impl SearchService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/approval/v4/instances/search_cc".to_string(),
+            api_path: Endpoints::APPROVAL_V4_INSTANCES_SEARCH_CC.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -285,7 +286,7 @@ impl SearchService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/approval/v4/approvals/search".to_string(),
+            api_path: Endpoints::APPROVAL_V4_APPROVALS_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -330,7 +331,7 @@ impl SearchService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/approval/v4/tasks/query".to_string(),
+            api_path: Endpoints::APPROVAL_V4_TASKS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

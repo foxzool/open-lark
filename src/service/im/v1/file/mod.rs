@@ -88,7 +88,11 @@ impl FileService {
     ) -> SDKResult<GetFileResponse> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_DOWNLOAD_FILE, "file_key", file_key),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::IM_V1_DOWNLOAD_FILE,
+                "file_key",
+                file_key,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };

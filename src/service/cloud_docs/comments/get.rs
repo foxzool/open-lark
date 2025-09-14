@@ -166,7 +166,8 @@ pub async fn get_comment(
     api_req.api_path = format!(
         "{}?file_type={}&file_token={}",
         Endpoints::COMMENT_V1_COMMENT_GET.replace("{}", &request.comment_id),
-        request.file_type, request.file_token
+        request.file_type,
+        request.file_token
     );
 
     // 添加用户ID类型查询参数

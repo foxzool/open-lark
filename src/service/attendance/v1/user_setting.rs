@@ -5,6 +5,7 @@ use crate::core::{
     api_resp::{BaseResponse, EmptyResponse},
     config::Config,
     constants::AccessTokenType,
+    endpoints::{EndpointBuilder, Endpoints},
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -34,9 +35,10 @@ impl UserSettingService {
     ) -> SDKResult<BaseResponse<ModifyUserSettingRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = format!(
-            "/open-apis/attendance/v1/user_settings/{}/modify",
-            request.user_id
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::ATTENDANCE_V1_USER_SETTINGS_MODIFY,
+            "user_id",
+            &request.user_id,
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
@@ -79,7 +81,7 @@ impl UserSettingService {
     ) -> SDKResult<BaseResponse<QueryUserSettingRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/attendance/v1/user_settings/query".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_SETTINGS_QUERY.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
@@ -110,9 +112,10 @@ impl UserSettingService {
     ) -> SDKResult<BaseResponse<UploadUserPhotoRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = format!(
-            "/open-apis/attendance/v1/user_settings/{}/upload",
-            request.user_id
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::ATTENDANCE_V1_USER_SETTINGS_UPLOAD,
+            "user_id",
+            &request.user_id,
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
@@ -156,9 +159,10 @@ impl UserSettingService {
     ) -> SDKResult<Vec<u8>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/attendance/v1/user_settings/{}/download",
-            request.user_id
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::ATTENDANCE_V1_USER_SETTINGS_DOWNLOAD,
+            "user_id",
+            &request.user_id,
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 

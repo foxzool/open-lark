@@ -1,7 +1,7 @@
 use crate::{
     core::{
-        api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
-        req_option::RequestOption, SDKResult,
+        api_resp::BaseResponse, config::Config, constants::AccessTokenType, endpoints::Endpoints,
+        http::Transport, req_option::RequestOption, SDKResult,
     },
     impl_executable_builder_owned,
 };
@@ -28,7 +28,7 @@ impl LeaveEmployExpireRecordService {
     ) -> SDKResult<BaseResponse<GetLeaveEmployExpireRecordRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/attendance/v1/leave_employ_expire_records".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_LEAVE_EMPLOY_EXPIRE_RECORDS.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
