@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -123,7 +124,11 @@ impl RuleService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_USER_MAILBOX_RULES,
+                "user_mailbox_id",
+                user_mailbox_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -148,8 +153,14 @@ impl RuleService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules/{rule_id}"
+            api_path: EndpointBuilder::replace_param(
+                &EndpointBuilder::replace_param(
+                    Endpoints::MAIL_V1_USER_MAILBOX_RULE,
+                    "user_mailbox_id",
+                    user_mailbox_id,
+                ),
+                "rule_id",
+                rule_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -175,8 +186,14 @@ impl RuleService {
 
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules/{rule_id}"
+            api_path: EndpointBuilder::replace_param(
+                &EndpointBuilder::replace_param(
+                    Endpoints::MAIL_V1_USER_MAILBOX_RULE,
+                    "user_mailbox_id",
+                    user_mailbox_id,
+                ),
+                "rule_id",
+                rule_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -209,7 +226,11 @@ impl RuleService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_USER_MAILBOX_RULES,
+                "user_mailbox_id",
+                user_mailbox_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -233,7 +254,11 @@ impl RuleService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules/reorder"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_USER_MAILBOX_RULES_REORDER,
+                "user_mailbox_id",
+                user_mailbox_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,

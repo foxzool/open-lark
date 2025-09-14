@@ -59,11 +59,9 @@ impl DocumentBlockService {
     ) -> SDKResult<BaseResponse<GetBlockRespData>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                crate::core::endpoints::DOCX_V1_DOCUMENT_BLOCK_GET,
-                document_id.into(),
-                block_id.into()
-            ),
+            api_path: crate::core::endpoints::Endpoints::DOCX_V1_DOCUMENT_BLOCK_GET
+                .replace("{document_id}", &document_id.into())
+                .replace("{block_id}", &block_id.into()),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
@@ -86,11 +84,9 @@ impl DocumentBlockService {
     ) -> SDKResult<BaseResponse<PatchBlockRespData>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!(
-                crate::core::endpoints::DOCX_V1_DOCUMENT_BLOCK_GET,
-                document_id.into(),
-                block_id.into()
-            ),
+            api_path: crate::core::endpoints::Endpoints::DOCX_V1_DOCUMENT_BLOCK_GET
+                .replace("{document_id}", &document_id.into())
+                .replace("{block_id}", &block_id.into()),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -113,10 +109,8 @@ impl DocumentBlockService {
     ) -> SDKResult<BaseResponse<BatchUpdateBlockRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!(
-                crate::core::endpoints::DOCX_V1_DOCUMENT_BLOCKS_BATCH_UPDATE,
-                document_id.into()
-            ),
+            api_path: crate::core::endpoints::Endpoints::DOCX_V1_DOCUMENT_BLOCKS_BATCH_UPDATE
+                .replace("{document_id}", &document_id.into()),
             ..Default::default()
         };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];

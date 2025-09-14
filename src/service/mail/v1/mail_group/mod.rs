@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -126,7 +127,7 @@ impl MailGroupService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/mail/v1/mailgroups".to_string(),
+            api_path: Endpoints::MAIL_V1_MAILGROUPS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -150,7 +151,11 @@ impl MailGroupService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/mail/v1/mailgroups/{mailgroup_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_MAILGROUP,
+                "mailgroup_id",
+                mailgroup_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             ..Default::default()
@@ -174,7 +179,11 @@ impl MailGroupService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/mail/v1/mailgroups/{mailgroup_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_MAILGROUP,
+                "mailgroup_id",
+                mailgroup_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -199,7 +208,11 @@ impl MailGroupService {
 
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: format!("/open-apis/mail/v1/mailgroups/{mailgroup_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_MAILGROUP,
+                "mailgroup_id",
+                mailgroup_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -223,7 +236,11 @@ impl MailGroupService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/mail/v1/mailgroups/{mailgroup_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_MAILGROUP,
+                "mailgroup_id",
+                mailgroup_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             ..Default::default()
@@ -253,7 +270,7 @@ impl MailGroupService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/mail/v1/mailgroups".to_string(),
+            api_path: Endpoints::MAIL_V1_MAILGROUPS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             ..Default::default()

@@ -163,7 +163,11 @@ pub async fn list_permission_members(
     api_req.http_method = Method::GET;
     api_req.api_path = format!(
         "{}?type={}",
-        EndpointBuilder::replace_param(Endpoints::DRIVE_V1_PERMISSIONS_MEMBERS, "token", &request.token),
+        EndpointBuilder::replace_param(
+            Endpoints::DRIVE_V1_PERMISSIONS_MEMBERS,
+            "token",
+            &request.token
+        ),
         request.obj_type
     );
 

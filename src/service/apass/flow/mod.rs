@@ -123,7 +123,10 @@ impl FlowService {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_EXECUTE,
-                &[("app_id", &request.app_id), ("flow_api_name", &request.flow_api_name)]
+                &[
+                    ("app_id", &request.app_id),
+                    ("flow_api_name", &request.flow_api_name),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -153,7 +156,7 @@ impl FlowService {
             api_path: EndpointBuilder::replace_param(
                 Endpoints::APASS_V1_FLOW_USER_TASK_QUERY,
                 "app_id",
-                &request.app_id
+                &request.app_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -193,7 +196,7 @@ impl FlowService {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_AGREE,
-                &[("app_id", &request.app_id), ("task_id", &request.task_id)]
+                &[("app_id", &request.app_id), ("task_id", &request.task_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -223,7 +226,7 @@ impl FlowService {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_REJECT,
-                &[("app_id", &request.app_id), ("task_id", &request.task_id)]
+                &[("app_id", &request.app_id), ("task_id", &request.task_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -253,7 +256,7 @@ impl FlowService {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_TRANSFER,
-                &[("app_id", &request.app_id), ("task_id", &request.task_id)]
+                &[("app_id", &request.app_id), ("task_id", &request.task_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -283,7 +286,7 @@ impl FlowService {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_ADD_ASSIGNEE,
-                &[("app_id", &request.app_id), ("task_id", &request.task_id)]
+                &[("app_id", &request.app_id), ("task_id", &request.task_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -313,7 +316,7 @@ impl FlowService {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_CC,
-                &[("app_id", &request.app_id), ("task_id", &request.task_id)]
+                &[("app_id", &request.app_id), ("task_id", &request.task_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -343,7 +346,7 @@ impl FlowService {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_EXPEDITING,
-                &[("app_id", &request.app_id), ("task_id", &request.task_id)]
+                &[("app_id", &request.app_id), ("task_id", &request.task_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -372,7 +375,7 @@ impl FlowService {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_CANCEL,
-                &[("app_id", &request.app_id), ("task_id", &request.task_id)]
+                &[("app_id", &request.app_id), ("task_id", &request.task_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -403,7 +406,7 @@ impl FlowService {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_ROLLBACK_POINTS,
-                &[("app_id", app_id), ("task_id", task_id)]
+                &[("app_id", &app_id), ("task_id", &task_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -430,7 +433,7 @@ impl FlowService {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_ROLLBACK,
-                &[("app_id", &request.app_id), ("task_id", &request.task_id)]
+                &[("app_id", &request.app_id), ("task_id", &request.task_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -460,7 +463,7 @@ impl FlowService {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_FLOW_USER_TASK_CHAT_GROUP,
-                &[("app_id", &request.app_id), ("task_id", &request.task_id)]
+                &[("app_id", &request.app_id), ("task_id", &request.task_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({

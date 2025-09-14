@@ -8,6 +8,7 @@ use crate::{
         api_resp::{BaseResponse, EmptyResponse},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -104,7 +105,11 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/tasks/{task_id}/approve"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPROVAL_V4_TASK_APPROVE,
+                "task_id",
+                task_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -129,7 +134,11 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/tasks/{task_id}/reject"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPROVAL_V4_TASK_REJECT,
+                "task_id",
+                task_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -154,7 +163,11 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/tasks/{task_id}/transfer"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPROVAL_V4_TASK_TRANSFER,
+                "task_id",
+                task_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -179,7 +192,11 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/tasks/{task_id}/specified_rollback"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPROVAL_V4_TASK_SPECIFIED_ROLLBACK,
+                "task_id",
+                task_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -204,7 +221,11 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/tasks/{task_id}/add_sign"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPROVAL_V4_TASK_ADD_SIGN,
+                "task_id",
+                task_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -229,7 +250,11 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/tasks/{task_id}/resubmit"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPROVAL_V4_TASK_RESUBMIT,
+                "task_id",
+                task_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,

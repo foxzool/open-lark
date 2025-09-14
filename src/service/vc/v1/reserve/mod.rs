@@ -8,6 +8,10 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{
+            EndpointBuilder, VC_RESERVE_CREATE, VC_RESERVE_DELETE, VC_RESERVE_GET,
+            VC_RESERVE_GET_ACTIVE_MEETING, VC_RESERVE_UPDATE,
+        },
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -133,7 +137,7 @@ impl ReserveService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/vc/v1/reserves".to_string(),
+            api_path: VC_RESERVE_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -157,7 +161,7 @@ impl ReserveService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/vc/v1/reserves/{reserve_id}"),
+            api_path: EndpointBuilder::replace_param(VC_RESERVE_DELETE, "{reserve_id}", reserve_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -181,7 +185,7 @@ impl ReserveService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/reserves/{reserve_id}"),
+            api_path: EndpointBuilder::replace_param(VC_RESERVE_UPDATE, "{reserve_id}", reserve_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -205,7 +209,7 @@ impl ReserveService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/vc/v1/reserves/{reserve_id}"),
+            api_path: EndpointBuilder::replace_param(VC_RESERVE_GET, "{reserve_id}", reserve_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -228,7 +232,11 @@ impl ReserveService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/vc/v1/reserves/{reserve_id}/get_active_meeting"),
+            api_path: EndpointBuilder::replace_param(
+                VC_RESERVE_GET_ACTIVE_MEETING,
+                "{reserve_id}",
+                reserve_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

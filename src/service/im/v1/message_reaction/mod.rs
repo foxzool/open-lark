@@ -65,7 +65,11 @@ impl MessageReactionService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_MESSAGE_REACTIONS, "message_id", message_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::IM_V1_MESSAGE_REACTIONS,
+                "message_id",
+                message_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&CreateReactionRequest {
@@ -101,7 +105,11 @@ impl MessageReactionService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_MESSAGE_REACTIONS, "message_id", message_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::IM_V1_MESSAGE_REACTIONS,
+                "message_id",
+                message_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -127,7 +135,10 @@ impl MessageReactionService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_params_from_array(Endpoints::IM_V1_DELETE_MESSAGE_REACTION, &[("message_id", message_id), ("reaction_id", reaction_id)]),
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::IM_V1_DELETE_MESSAGE_REACTION,
+                &[("message_id", message_id), ("reaction_id", reaction_id)],
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

@@ -69,7 +69,7 @@ impl UserTaskRemedyService {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path =
-            "/open-apis/attendance/v1/user_task_remedys/query_user_allowed_remedys".to_string();
+            Endpoints::ATTENDANCE_V1_USER_TASK_REMEDYS_QUERY_USER_ALLOWED_REMEDYS.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数

@@ -18,7 +18,7 @@ async fn test_single_package_payload_preservation() {
                 value: "event".to_string(),
             },
             Header {
-                key: "message_id",
+                key: "message_id".to_string(),
                 value: "test_msg_001".to_string(),
             },
             // 没有 sum 和 seq 头部，应该默认为单包
@@ -59,7 +59,7 @@ async fn test_multi_package_payload_combination() {
                 value: "event".to_string(),
             },
             Header {
-                key: "message_id",
+                key: "message_id".to_string(),
                 value: "test_msg_002".to_string(),
             },
             Header {
@@ -93,7 +93,7 @@ async fn test_multi_package_payload_combination() {
                 value: "event".to_string(),
             },
             Header {
-                key: "message_id",
+                key: "message_id".to_string(),
                 value: "test_msg_002".to_string(),
             },
             Header {

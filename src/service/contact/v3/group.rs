@@ -1,7 +1,11 @@
 use crate::{
     core::{
-        api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
-        constants::AccessTokenType, endpoints::{EndpointBuilder, Endpoints}, http::Transport,
+        api_req::ApiRequest,
+        api_resp::ApiResponseTrait,
+        config::Config,
+        constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
+        http::Transport,
     },
     service::contact::models::*,
 };
@@ -42,7 +46,11 @@ impl GroupService {
     ) -> crate::core::SDKResult<PatchGroupResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_GROUP_GET, "group_id", group_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::CONTACT_V3_GROUP_GET,
+                "group_id",
+                group_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -60,7 +68,11 @@ impl GroupService {
     ) -> crate::core::SDKResult<GetGroupResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_GROUP_GET, "group_id", group_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::CONTACT_V3_GROUP_GET,
+                "group_id",
+                group_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -111,7 +123,11 @@ impl GroupService {
     pub async fn delete(&self, group_id: &str) -> crate::core::SDKResult<DeleteGroupResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_GROUP_GET, "group_id", group_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::CONTACT_V3_GROUP_GET,
+                "group_id",
+                group_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             ..Default::default()
@@ -141,7 +157,11 @@ impl GroupService {
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_GROUP_DETAIL, "group_id", group_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::CONTACT_V3_GROUP_DETAIL,
+                "group_id",
+                group_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,

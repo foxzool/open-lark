@@ -3,8 +3,13 @@ use serde_json::json;
 
 use crate::{
     core::{
-        api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
-        req_option::RequestOption, SDKResult,
+        api_resp::BaseResponse,
+        config::Config,
+        constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
     },
     impl_executable_builder_owned,
 };
@@ -33,9 +38,10 @@ impl ArchiveRuleService {
     ) -> SDKResult<BaseResponse<QueryArchiveStatsFieldsRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/attendance/v1/archive_rules/{}/user_stats_fields",
-            request.archive_rule_id
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::ATTENDANCE_V1_ARCHIVE_RULE_USER_STATS_FIELDS,
+            "archive_rule_id",
+            &request.archive_rule_id,
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
@@ -60,9 +66,10 @@ impl ArchiveRuleService {
     ) -> SDKResult<BaseResponse<UploadArchiveReportRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = format!(
-            "/open-apis/attendance/v1/archive_rules/{}/upload_report",
-            request.archive_rule_id
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::ATTENDANCE_V1_ARCHIVE_RULE_UPLOAD_REPORT,
+            "archive_rule_id",
+            &request.archive_rule_id,
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
@@ -94,9 +101,10 @@ impl ArchiveRuleService {
     ) -> SDKResult<BaseResponse<DelArchiveReportRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = format!(
-            "/open-apis/attendance/v1/archive_rules/{}/del_report",
-            request.archive_rule_id
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::ATTENDANCE_V1_ARCHIVE_RULE_DEL_REPORT,
+            "archive_rule_id",
+            &request.archive_rule_id,
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
@@ -128,7 +136,7 @@ impl ArchiveRuleService {
     ) -> SDKResult<BaseResponse<ListArchiveRulesRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/attendance/v1/archive_rules".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_ARCHIVE_RULES.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数

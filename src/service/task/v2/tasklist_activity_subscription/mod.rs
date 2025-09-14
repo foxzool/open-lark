@@ -126,7 +126,11 @@ impl TasklistActivitySubscriptionService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTIONS, "tasklist_guid", tasklist_guid),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTIONS,
+                "tasklist_guid",
+                tasklist_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -152,9 +156,13 @@ impl TasklistActivitySubscriptionService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                &EndpointBuilder::replace_param(Endpoints::TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTION_GET, "tasklist_guid", tasklist_guid),
-                "activity_subscription_guid", 
-                activity_subscription_guid
+                &EndpointBuilder::replace_param(
+                    Endpoints::TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTION_GET,
+                    "tasklist_guid",
+                    tasklist_guid,
+                ),
+                "activity_subscription_guid",
+                activity_subscription_guid,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -186,7 +194,11 @@ impl TasklistActivitySubscriptionService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTIONS, "tasklist_guid", tasklist_guid),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTIONS,
+                "tasklist_guid",
+                tasklist_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -212,9 +224,13 @@ impl TasklistActivitySubscriptionService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                &EndpointBuilder::replace_param(Endpoints::TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTION_GET, "tasklist_guid", tasklist_guid),
-                "activity_subscription_guid", 
-                activity_subscription_guid
+                &EndpointBuilder::replace_param(
+                    Endpoints::TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTION_GET,
+                    "tasklist_guid",
+                    tasklist_guid,
+                ),
+                "activity_subscription_guid",
+                activity_subscription_guid,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -241,9 +257,13 @@ impl TasklistActivitySubscriptionService {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
-                &EndpointBuilder::replace_param(Endpoints::TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTION_GET, "tasklist_guid", tasklist_guid),
-                "activity_subscription_guid", 
-                activity_subscription_guid
+                &EndpointBuilder::replace_param(
+                    Endpoints::TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTION_GET,
+                    "tasklist_guid",
+                    tasklist_guid,
+                ),
+                "activity_subscription_guid",
+                activity_subscription_guid,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,

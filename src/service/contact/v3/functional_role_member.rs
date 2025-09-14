@@ -1,6 +1,10 @@
 use crate::core::{
-    api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config, constants::AccessTokenType,
-    endpoints::{EndpointBuilder, Endpoints}, http::Transport,
+    api_req::ApiRequest,
+    api_resp::ApiResponseTrait,
+    config::Config,
+    constants::AccessTokenType,
+    endpoints::{EndpointBuilder, Endpoints},
+    http::Transport,
 };
 use serde::{Deserialize, Serialize};
 
@@ -22,7 +26,11 @@ impl FunctionalRoleMemberService {
     ) -> crate::core::SDKResult<CreateRoleMemberResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS, "role_id", role_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS,
+                "role_id",
+                role_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -41,7 +49,11 @@ impl FunctionalRoleMemberService {
     ) -> crate::core::SDKResult<BatchCreateRoleMembersResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_CREATE, "role_id", role_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_CREATE,
+                "role_id",
+                role_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -61,7 +73,11 @@ impl FunctionalRoleMemberService {
     ) -> crate::core::SDKResult<SetRoleMemberScopesResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_SCOPES, "role_id", role_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_SCOPES,
+                "role_id",
+                role_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -82,7 +98,11 @@ impl FunctionalRoleMemberService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
             api_path: {
-                let path = EndpointBuilder::replace_param(Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_MEMBER_GET, "role_id", role_id);
+                let path = EndpointBuilder::replace_param(
+                    Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_MEMBER_GET,
+                    "role_id",
+                    role_id,
+                );
                 EndpointBuilder::replace_param(&path, "member_id", member_id)
             },
             supported_access_token_types: vec![AccessTokenType::Tenant],
@@ -103,7 +123,11 @@ impl FunctionalRoleMemberService {
     ) -> crate::core::SDKResult<ListRoleMembersResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS, "role_id", role_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS,
+                "role_id",
+                role_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -123,7 +147,11 @@ impl FunctionalRoleMemberService {
     ) -> crate::core::SDKResult<BatchDeleteRoleMembersResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_DELETE, "role_id", role_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_DELETE,
+                "role_id",
+                role_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()

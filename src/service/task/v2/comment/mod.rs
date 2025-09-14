@@ -116,7 +116,11 @@ impl CommentService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_COMMENTS, "task_guid", task_guid),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_TASK_COMMENTS,
+                "task_guid",
+                task_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -139,11 +143,17 @@ impl CommentService {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
+        let temp_path = EndpointBuilder::replace_param(
+            Endpoints::TASK_V2_TASK_COMMENT_GET,
+            "task_guid",
+            &task_guid,
+        );
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_COMMENT_GET, "task_guid", task_guid),
-                "comment_id", comment_id
+                &temp_path,
+                "comment_id",
+                &comment_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -167,11 +177,17 @@ impl CommentService {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
+        let temp_path2 = EndpointBuilder::replace_param(
+            Endpoints::TASK_V2_TASK_COMMENT_GET,
+            "task_guid",
+            &task_guid,
+        );
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_COMMENT_GET, "task_guid", task_guid),
-                "comment_id", comment_id
+                &temp_path2,
+                "comment_id",
+                &comment_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -195,11 +211,17 @@ impl CommentService {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
+        let temp_path3 = EndpointBuilder::replace_param(
+            Endpoints::TASK_V2_TASK_COMMENT_GET,
+            "task_guid",
+            &task_guid,
+        );
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
-                EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_COMMENT_GET, "task_guid", task_guid),
-                "comment_id", comment_id
+                &temp_path3,
+                "comment_id",
+                &comment_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -231,7 +253,11 @@ impl CommentService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_COMMENTS, "task_guid", task_guid),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_TASK_COMMENTS,
+                "task_guid",
+                task_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

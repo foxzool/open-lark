@@ -2,8 +2,13 @@ use reqwest::Method;
 use serde_json::json;
 
 use crate::core::{
-    api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
-    req_option::RequestOption, SDKResult,
+    api_resp::BaseResponse,
+    config::Config,
+    constants::AccessTokenType,
+    endpoints::{EndpointBuilder, Endpoints},
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
 
 use super::models::{
@@ -30,7 +35,7 @@ impl UserTaskService {
     ) -> SDKResult<BaseResponse<BatchCreateUserTaskRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/attendance/v1/user_tasks/batch_create".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_TASKS_BATCH_CREATE.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
@@ -61,9 +66,10 @@ impl UserTaskService {
     ) -> SDKResult<BaseResponse<GetUserTaskRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/attendance/v1/user_tasks/{}/get",
-            request.user_id
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::ATTENDANCE_V1_USER_TASK_GET,
+            "user_id",
+            &request.user_id,
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
@@ -91,7 +97,7 @@ impl UserTaskService {
     ) -> SDKResult<BaseResponse<QueryUserTaskRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/attendance/v1/user_tasks/query".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_TASKS_QUERY.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
@@ -145,7 +151,7 @@ impl UserTaskService {
     ) -> SDKResult<BaseResponse<BatchDelUserTaskRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/attendance/v1/user_tasks/batch_del".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_TASKS_BATCH_DELETE.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
@@ -176,7 +182,7 @@ impl UserTaskService {
     ) -> SDKResult<BaseResponse<QueryUserTaskResultRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/attendance/v1/user_task_results/query".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_TASK_RESULTS_QUERY.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数

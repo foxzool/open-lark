@@ -189,10 +189,8 @@ pub async fn delete_reply(
     let mut params = HashMap::new();
     params.insert("comment_id".to_string(), request.comment_id.clone());
     params.insert("reply_id".to_string(), request.reply_id.clone());
-    let endpoint = EndpointBuilder::replace_params(
-        Endpoints::COMMENT_V1_COMMENT_REPLY_DELETE,
-        &params
-    );
+    let endpoint =
+        EndpointBuilder::replace_params(Endpoints::COMMENT_V1_COMMENT_REPLY_DELETE, &params);
     api_req.api_path = format!(
         "{}?file_type={}&file_token={}",
         endpoint, request.file_type, request.file_token

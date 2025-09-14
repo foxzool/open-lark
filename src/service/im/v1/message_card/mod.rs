@@ -76,7 +76,11 @@ impl MessageCardService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_UPDATE_MESSAGE, "message_id", message_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::IM_V1_UPDATE_MESSAGE,
+                "message_id",
+                message_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -94,7 +98,11 @@ impl MessageCardService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_MESSAGE_DELAY_UPDATE, "message_id", message_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::IM_V1_MESSAGE_DELAY_UPDATE,
+                "message_id",
+                message_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -112,7 +120,11 @@ impl MessageCardService {
     ) -> SDKResult<BaseResponse<SendVisibleMessageCardResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_MESSAGE_URGENT_APP, "message_id", message_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::IM_V1_MESSAGE_URGENT_APP,
+                "message_id",
+                message_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -134,7 +146,11 @@ impl MessageCardService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_MESSAGE_URGENT_APP, "message_id", message_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::IM_V1_MESSAGE_URGENT_APP,
+                "message_id",
+                message_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

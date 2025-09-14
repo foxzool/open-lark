@@ -142,7 +142,11 @@ impl GroupsBotsService {
     ) -> SDKResult<BaseResponse<UpdateFeedCardButtonResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: EndpointBuilder::replace_param(Endpoints::IM_V2_GROUPS_BOTS_UPDATE, "message_id", message_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::IM_V2_GROUPS_BOTS_UPDATE,
+                "message_id",
+                message_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
