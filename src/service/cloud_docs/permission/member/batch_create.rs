@@ -228,7 +228,11 @@ pub async fn batch_create_permission_member(
     api_req.http_method = Method::POST;
     api_req.api_path = format!(
         "{}?type={}",
-        EndpointBuilder::replace_param(Endpoints::DRIVE_V1_PERMISSIONS_MEMBERS_BATCH_CREATE, "token", &request.token),
+        EndpointBuilder::replace_param(
+            Endpoints::DRIVE_V1_PERMISSIONS_MEMBERS_BATCH_CREATE,
+            "token",
+            &request.token
+        ),
         request.obj_type
     );
 

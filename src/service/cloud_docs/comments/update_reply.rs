@@ -201,11 +201,15 @@ pub async fn update_reply(
     api_req.http_method = Method::PUT;
     api_req.api_path = format!(
         "{}?file_type={}&file_token={}",
-        EndpointBuilder::replace_params(
+        EndpointBuilder::replace_params_from_array(
             Endpoints::COMMENT_V1_COMMENT_REPLY_UPDATE,
-            &[("comment_id", &request.comment_id), ("reply_id", &request.reply_id)]
+            &[
+                ("comment_id", &request.comment_id),
+                ("reply_id", &request.reply_id)
+            ]
         ),
-        request.file_type, request.file_token
+        request.file_type,
+        request.file_token
     );
 
     // 添加用户ID类型查询参数

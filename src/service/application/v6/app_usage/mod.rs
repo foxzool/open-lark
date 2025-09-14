@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -52,7 +53,11 @@ impl AppUsageService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/app_usage/{app_id}/department_overview"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_APP_USAGE_DEPARTMENT_OVERVIEW,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -75,7 +80,11 @@ impl AppUsageService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/app_usage/{app_id}/message_push_overview"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_APP_USAGE_MESSAGE_PUSH_OVERVIEW,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -98,7 +107,11 @@ impl AppUsageService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/app_usage/{app_id}/overview"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_APP_USAGE_OVERVIEW,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

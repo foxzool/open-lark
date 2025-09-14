@@ -81,7 +81,11 @@ impl ImageService {
     ) -> SDKResult<GetImageResponse> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_DOWNLOAD_IMAGE, "image_key", image_key),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::IM_V1_DOWNLOAD_IMAGE,
+                "image_key",
+                image_key,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };

@@ -188,7 +188,8 @@ pub async fn list_replies(
     api_req.api_path = format!(
         "{}?file_type={}&file_token={}",
         Endpoints::COMMENT_V1_COMMENT_REPLIES.replace("{}", &request.comment_id),
-        request.file_type, request.file_token
+        request.file_type,
+        request.file_token
     );
 
     // 构建查询参数

@@ -255,11 +255,12 @@ pub async fn update_permission_member(
     api_req.http_method = Method::PUT;
     api_req.api_path = format!(
         "{}?type={}&member_type={}",
-        EndpointBuilder::replace_params(
+        EndpointBuilder::replace_params_from_array(
             Endpoints::DRIVE_V1_PERMISSIONS_MEMBER_GET,
             &[("token", &request.token), ("member_id", &request.member_id)]
         ),
-        request.obj_type, request.member_type
+        request.obj_type,
+        request.member_type
     );
 
     // 添加通知参数

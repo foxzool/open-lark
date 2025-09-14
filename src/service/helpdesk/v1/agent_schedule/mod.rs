@@ -125,7 +125,11 @@ impl AgentScheduleService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(Endpoints::HELPDESK_V1_AGENT_SCHEDULES, "agent_id", agent_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_AGENT_SCHEDULES,
+                "agent_id",
+                agent_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -255,7 +259,11 @@ impl AgentScheduleService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(Endpoints::HELPDESK_V1_AGENT_SCHEDULES, "agent_id", agent_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_AGENT_SCHEDULES,
+                "agent_id",
+                agent_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

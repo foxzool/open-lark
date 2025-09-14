@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -34,7 +35,11 @@ impl ScopeService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/application/v6/applications/{app_id}/scope/apply"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_APP_SCOPE_APPLY,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -57,7 +62,11 @@ impl ScopeService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/applications/{app_id}/scope"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_APP_SCOPE_GET,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

@@ -337,17 +337,6 @@ impl Endpoints {
     /// 获取录制列表
     pub const VC_RECORDING_LIST: &'static str = "/open-apis/vc/v1/meetings/{meeting_id}/recordings";
 
-    /// 获取录制详情
-    pub const VC_RECORDING_GET: &'static str = "/open-apis/vc/v1/recordings/{recording_id}";
-
-    /// 开始录制
-    pub const VC_RECORDING_START: &'static str =
-        "/open-apis/vc/v1/meetings/{meeting_id}/recordings/start";
-
-    /// 停止录制
-    pub const VC_RECORDING_STOP: &'static str =
-        "/open-apis/vc/v1/meetings/{meeting_id}/recordings/stop";
-
     // 预约管理
     /// 获取预约列表
     pub const VC_RESERVE_LIST: &'static str = "/open-apis/vc/v1/reserves";
@@ -363,6 +352,90 @@ impl Endpoints {
 
     /// 删除预约
     pub const VC_RESERVE_DELETE: &'static str = "/open-apis/vc/v1/reserves/{reserve_id}";
+
+    // VC会议室搜索
+    /// 搜索会议室
+    pub const VC_ROOM_SEARCH: &'static str = "/open-apis/vc/v1/rooms/search";
+
+    // VC会议管理
+    /// 根据会议号获取会议列表
+    pub const VC_MEETING_LIST_BY_NO: &'static str = "/open-apis/vc/v1/meetings/list_by_no";
+
+    /// 设置会议主持人
+    pub const VC_MEETING_SET_HOST: &'static str = "/open-apis/vc/v1/meetings/{meeting_id}/set_host";
+
+    /// 开始录制
+    pub const VC_RECORDING_START: &'static str =
+        "/open-apis/vc/v1/meetings/{meeting_id}/recording/start";
+
+    /// 停止录制
+    pub const VC_RECORDING_STOP: &'static str =
+        "/open-apis/vc/v1/meetings/{meeting_id}/recording/stop";
+
+    /// 获取录制文件
+    pub const VC_RECORDING_GET: &'static str = "/open-apis/vc/v1/meetings/{meeting_id}/recording";
+
+    /// 设置录制权限
+    pub const VC_RECORDING_SET_PERMISSION: &'static str =
+        "/open-apis/vc/v1/meetings/{meeting_id}/recording/set_permission";
+
+    // VC预约管理
+    /// 获取活跃会议
+    pub const VC_RESERVE_GET_ACTIVE_MEETING: &'static str =
+        "/open-apis/vc/v1/reserves/{reserve_id}/get_active_meeting";
+
+    // ==================== Lingo 知识管理服务端点 ====================
+
+    // 分类管理
+    /// 获取词典分类
+    pub const LINGO_CLASSIFICATION_LIST: &'static str = "/open-apis/lingo/v1/classifications";
+
+    // 草稿管理
+    /// 创建草稿
+    pub const LINGO_DRAFT_CREATE: &'static str = "/open-apis/lingo/v1/drafts";
+
+    /// 更新草稿 (需要使用 EndpointBuilder::replace_param 替换 {draft_id})
+    pub const LINGO_DRAFT_UPDATE: &'static str = "/open-apis/lingo/v1/drafts/{draft_id}";
+
+    // 词条管理
+    /// 创建词条
+    pub const LINGO_ENTITY_CREATE: &'static str = "/open-apis/lingo/v1/entities";
+
+    /// 获取词条详情 (需要使用 EndpointBuilder::replace_param 替换 {entity_id})
+    pub const LINGO_ENTITY_GET: &'static str = "/open-apis/lingo/v1/entities/{entity_id}";
+
+    /// 更新词条 (需要使用 EndpointBuilder::replace_param 替换 {entity_id})
+    pub const LINGO_ENTITY_UPDATE: &'static str = "/open-apis/lingo/v1/entities/{entity_id}";
+
+    /// 搜索词条
+    pub const LINGO_ENTITY_SEARCH: &'static str = "/open-apis/lingo/v1/entities/search";
+
+    /// 词条匹配
+    pub const LINGO_ENTITY_MATCH: &'static str = "/open-apis/lingo/v1/entities/match";
+
+    /// 提取可能的词条
+    pub const LINGO_ENTITY_HIGHLIGHT: &'static str = "/open-apis/lingo/v1/entities/highlight";
+
+    // 文件管理
+    /// 上传文件
+    pub const LINGO_FILE_UPLOAD: &'static str = "/open-apis/lingo/v1/file/upload";
+
+    /// 下载文件 (需要使用 EndpointBuilder::replace_param 替换 {file_token})
+    pub const LINGO_FILE_DOWNLOAD: &'static str = "/open-apis/lingo/v1/file/download/{file_token}";
+
+    // 知识库管理
+    /// 获取知识库列表
+    pub const LINGO_REPO_LIST: &'static str = "/open-apis/lingo/v1/repos";
+
+    // ==================== 租户管理服务端点 ====================
+
+    // 租户信息
+    /// 查询租户信息
+    pub const TENANT_V2_QUERY: &'static str = "/open-apis/tenant/v2/tenant/query";
+
+    /// 查询租户产品配置信息
+    pub const TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY: &'static str =
+        "/open-apis/tenant/v2/tenant_product_assign_info/query";
 
     // ==================== 即时消息服务端点 ====================
 
@@ -415,37 +488,46 @@ impl Endpoints {
 
     // 消息表情回应
     /// 添加消息表情回应
-    pub const IM_V1_MESSAGE_REACTIONS: &'static str = "/open-apis/im/v1/messages/{message_id}/reactions";
+    pub const IM_V1_MESSAGE_REACTIONS: &'static str =
+        "/open-apis/im/v1/messages/{message_id}/reactions";
 
     /// 删除消息表情回应
-    pub const IM_V1_DELETE_MESSAGE_REACTION: &'static str = "/open-apis/im/v1/messages/{message_id}/reactions/{reaction_id}";
+    pub const IM_V1_DELETE_MESSAGE_REACTION: &'static str =
+        "/open-apis/im/v1/messages/{message_id}/reactions/{reaction_id}";
 
     // 批量消息
     /// 批量发送消息
     pub const IM_V1_BATCH_MESSAGES: &'static str = "/open-apis/im/v1/batch_messages";
 
     /// 批量撤回消息
-    pub const IM_V1_DELETE_BATCH_MESSAGE: &'static str = "/open-apis/im/v1/batch_messages/{batch_message_id}";
+    pub const IM_V1_DELETE_BATCH_MESSAGE: &'static str =
+        "/open-apis/im/v1/batch_messages/{batch_message_id}";
 
     /// 查询批量发送消息进度
-    pub const IM_V1_BATCH_MESSAGE_PROGRESS: &'static str = "/open-apis/im/v1/batch_messages/{batch_message_id}/get_progress";
+    pub const IM_V1_BATCH_MESSAGE_PROGRESS: &'static str =
+        "/open-apis/im/v1/batch_messages/{batch_message_id}/get_progress";
 
     /// 查询批量发送消息已读状态
-    pub const IM_V1_BATCH_MESSAGE_READ_USER: &'static str = "/open-apis/im/v1/batch_messages/{batch_message_id}/read_user";
+    pub const IM_V1_BATCH_MESSAGE_READ_USER: &'static str =
+        "/open-apis/im/v1/batch_messages/{batch_message_id}/read_user";
 
     // 紧急消息/消息加急
     /// 应用内加急
-    pub const IM_V1_MESSAGE_URGENT_APP: &'static str = "/open-apis/im/v1/messages/{message_id}/urgent_app";
+    pub const IM_V1_MESSAGE_URGENT_APP: &'static str =
+        "/open-apis/im/v1/messages/{message_id}/urgent_app";
 
     /// 短信加急
-    pub const IM_V1_MESSAGE_URGENT_SMS: &'static str = "/open-apis/im/v1/messages/{message_id}/urgent_sms";
+    pub const IM_V1_MESSAGE_URGENT_SMS: &'static str =
+        "/open-apis/im/v1/messages/{message_id}/urgent_sms";
 
     /// 电话加急
-    pub const IM_V1_MESSAGE_URGENT_PHONE: &'static str = "/open-apis/im/v1/messages/{message_id}/urgent_phone";
+    pub const IM_V1_MESSAGE_URGENT_PHONE: &'static str =
+        "/open-apis/im/v1/messages/{message_id}/urgent_phone";
 
     // 延时更新卡片
     /// 延时更新卡片
-    pub const IM_V1_MESSAGE_DELAY_UPDATE: &'static str = "/open-apis/im/v1/messages/{message_id}/delay_update";
+    pub const IM_V1_MESSAGE_DELAY_UPDATE: &'static str =
+        "/open-apis/im/v1/messages/{message_id}/delay_update";
 
     // Pin 消息
     /// 创建Pin消息
@@ -469,7 +551,21 @@ impl Endpoints {
 
     // URL预览
     /// 批量更新消息URL预览
-    pub const IM_V1_MESSAGE_URL_PREVIEW_BATCH_UPDATE: &'static str = "/open-apis/im/v1/messages/{message_id}/url_preview/batch_update";
+    pub const IM_V1_MESSAGE_URL_PREVIEW_BATCH_UPDATE: &'static str =
+        "/open-apis/im/v1/messages/{message_id}/url_preview/batch_update";
+    
+    // 基础消息操作
+    /// 获取消息详情 (需要使用 EndpointBuilder::replace_param 替换 {message_id})
+    pub const IM_V1_MESSAGE_GET: &'static str =
+        "/open-apis/im/v1/messages/{message_id}";
+        
+    /// 更新消息内容 (需要使用 EndpointBuilder::replace_param 替换 {message_id})
+    pub const IM_V1_MESSAGE_PATCH: &'static str =
+        "/open-apis/im/v1/messages/{message_id}";
+        
+    /// 删除消息 (需要使用 EndpointBuilder::replace_param 替换 {message_id})
+    pub const IM_V1_MESSAGE_DELETE: &'static str =
+        "/open-apis/im/v1/messages/{message_id}";
 
     // V2 API 端点
     // App feed card
@@ -484,10 +580,12 @@ impl Endpoints {
 
     // Groups bots
     /// 群机器人时间敏感性设置
-    pub const IM_V2_GROUPS_BOTS_TIME_SENSITIVE: &'static str = "/open-apis/im/v2/groups-bots/bot_time_sentive";
+    pub const IM_V2_GROUPS_BOTS_TIME_SENSITIVE: &'static str =
+        "/open-apis/im/v2/groups-bots/bot_time_sentive";
 
     /// 更新群机器人消息
-    pub const IM_V2_GROUPS_BOTS_UPDATE: &'static str = "/open-apis/im/v2/groups-bots/{message_id}/update";
+    pub const IM_V2_GROUPS_BOTS_UPDATE: &'static str =
+        "/open-apis/im/v2/groups-bots/{message_id}/update";
 
     /// 批量更新群机器人设置
     pub const IM_V2_GROUPS_BOTS_PATCH: &'static str = "/open-apis/im/v2/groups-bots/patch";
@@ -524,6 +622,144 @@ impl Endpoints {
 
     /// 分片上传文件-完成上传
     pub const DRIVE_V1_UPLOAD_FINISH: &'static str = "/open-apis/drive/v1/files/upload_finish";
+
+    // ==================== 审批服务端点 ====================
+
+    // ===== 审批管理端点 =====
+
+    /// 创建审批定义
+    pub const APPROVAL_V4_APPROVALS: &'static str = "/open-apis/approval/v4/approvals";
+
+    /// 获取审批定义 (需要使用 EndpointBuilder::replace_param 替换 {approval_code})
+    pub const APPROVAL_V4_APPROVAL_GET: &'static str =
+        "/open-apis/approval/v4/approvals/{approval_code}";
+
+    // ===== 外部审批端点 =====
+
+    /// 创建外部审批
+    pub const APPROVAL_V4_EXTERNAL_APPROVALS: &'static str =
+        "/open-apis/approval/v4/external_approvals";
+
+    /// 获取外部审批 (需要使用 EndpointBuilder::replace_param 替换 {approval_code})
+    pub const APPROVAL_V4_EXTERNAL_APPROVAL_GET: &'static str =
+        "/open-apis/approval/v4/external_approvals/{approval_code}";
+
+    // ===== 文件上传端点 =====
+
+    /// 上传文件
+    pub const APPROVAL_V4_FILE_UPLOAD: &'static str = "/open-apis/approval/v4/files/upload";
+
+    // ===== 实例管理端点 =====
+
+    /// 创建审批实例
+    pub const APPROVAL_V4_INSTANCES: &'static str = "/open-apis/approval/v4/instances";
+
+    /// 获取审批实例列表
+    pub const APPROVAL_V4_INSTANCES_LIST: &'static str = "/open-apis/approval/v4/instances";
+
+    /// 获取审批实例 (需要使用 EndpointBuilder::replace_param 替换 {instance_code})
+    pub const APPROVAL_V4_INSTANCE_GET: &'static str =
+        "/open-apis/approval/v4/instances/{instance_code}";
+
+    /// 取消审批实例 (需要使用 EndpointBuilder::replace_param 替换 {instance_code})
+    pub const APPROVAL_V4_INSTANCE_CANCEL: &'static str =
+        "/open-apis/approval/v4/instances/{instance_code}/cancel";
+
+    /// 抄送审批实例 (需要使用 EndpointBuilder::replace_param 替换 {instance_code})
+    pub const APPROVAL_V4_INSTANCE_CC: &'static str =
+        "/open-apis/approval/v4/instances/{instance_code}/cc";
+
+    /// 预览审批实例
+    pub const APPROVAL_V4_INSTANCE_PREVIEW: &'static str =
+        "/open-apis/approval/v4/instances/preview";
+
+    // ===== 实例评论端点 =====
+
+    /// 创建实例评论 (需要使用 EndpointBuilder::replace_param 替换 {instance_code})
+    pub const APPROVAL_V4_INSTANCE_COMMENTS_CREATE: &'static str =
+        "/open-apis/approval/v4/instances/{instance_code}/comments";
+
+    /// 删除实例评论 (需要使用 EndpointBuilder::replace_param 替换 {instance_code} 和 {comment_id})
+    pub const APPROVAL_V4_INSTANCE_COMMENT_DELETE: &'static str =
+        "/open-apis/approval/v4/instances/{instance_code}/comments/{comment_id}";
+
+    /// 获取实例评论列表 (需要使用 EndpointBuilder::replace_param 替换 {instance_code})
+    pub const APPROVAL_V4_INSTANCE_COMMENTS_LIST: &'static str =
+        "/open-apis/approval/v4/instances/{instance_code}/comments";
+
+    /// 回复实例评论 (需要使用 EndpointBuilder::replace_param 替换 {instance_code})
+    pub const APPROVAL_V4_INSTANCE_COMMENTS_REPLY: &'static str =
+        "/open-apis/approval/v4/instances/{instance_code}/comments";
+
+    // ===== 外部实例端点 =====
+
+    /// 创建外部实例
+    pub const APPROVAL_V4_EXTERNAL_INSTANCES: &'static str =
+        "/open-apis/approval/v4/external_instances";
+
+    /// 校验外部实例 (需要使用 EndpointBuilder::replace_param 替换 {instance_code})
+    pub const APPROVAL_V4_EXTERNAL_INSTANCE_CHECK: &'static str =
+        "/open-apis/approval/v4/external_instances/{instance_code}/check";
+
+    // ===== 外部任务端点 =====
+
+    /// 创建外部任务
+    pub const APPROVAL_V4_EXTERNAL_TASKS: &'static str = "/open-apis/approval/v4/external_tasks";
+
+    // ===== 消息管理端点 =====
+
+    /// 发送消息
+    pub const APPROVAL_V4_MESSAGES: &'static str = "/open-apis/approval/v4/messages";
+
+    /// 更新消息 (需要使用 EndpointBuilder::replace_param 替换 {message_id})
+    pub const APPROVAL_V4_MESSAGE_PATCH: &'static str =
+        "/open-apis/approval/v4/messages/{message_id}";
+
+    // ===== 搜索端点 =====
+
+    /// 搜索审批实例
+    pub const APPROVAL_V4_INSTANCES_SEARCH: &'static str =
+        "/open-apis/approval/v4/instances/search";
+
+    /// 搜索审批任务
+    pub const APPROVAL_V4_TASKS_SEARCH: &'static str = "/open-apis/approval/v4/tasks/search";
+
+    /// 搜索抄送实例
+    pub const APPROVAL_V4_INSTANCES_SEARCH_CC: &'static str =
+        "/open-apis/approval/v4/instances/search_cc";
+
+    /// 搜索审批定义
+    pub const APPROVAL_V4_APPROVALS_SEARCH: &'static str =
+        "/open-apis/approval/v4/approvals/search";
+
+    /// 查询任务
+    pub const APPROVAL_V4_TASKS_QUERY: &'static str = "/open-apis/approval/v4/tasks/query";
+
+    // ===== 任务处理端点 =====
+
+    /// 同意任务 (需要使用 EndpointBuilder::replace_param 替换 {task_id})
+    pub const APPROVAL_V4_TASK_APPROVE: &'static str =
+        "/open-apis/approval/v4/tasks/{task_id}/approve";
+
+    /// 拒绝任务 (需要使用 EndpointBuilder::replace_param 替换 {task_id})
+    pub const APPROVAL_V4_TASK_REJECT: &'static str =
+        "/open-apis/approval/v4/tasks/{task_id}/reject";
+
+    /// 转交任务 (需要使用 EndpointBuilder::replace_param 替换 {task_id})
+    pub const APPROVAL_V4_TASK_TRANSFER: &'static str =
+        "/open-apis/approval/v4/tasks/{task_id}/transfer";
+
+    /// 指定回退任务 (需要使用 EndpointBuilder::replace_param 替换 {task_id})
+    pub const APPROVAL_V4_TASK_SPECIFIED_ROLLBACK: &'static str =
+        "/open-apis/approval/v4/tasks/{task_id}/specified_rollback";
+
+    /// 加签任务 (需要使用 EndpointBuilder::replace_param 替换 {task_id})
+    pub const APPROVAL_V4_TASK_ADD_SIGN: &'static str =
+        "/open-apis/approval/v4/tasks/{task_id}/add_sign";
+
+    /// 重新提交任务 (需要使用 EndpointBuilder::replace_param 替换 {task_id})
+    pub const APPROVAL_V4_TASK_RESUBMIT: &'static str =
+        "/open-apis/approval/v4/tasks/{task_id}/resubmit";
 
     // ==================== 身份验证服务端点 ====================
 
@@ -601,6 +837,12 @@ impl Endpoints {
 
     /// 获取日历列表
     pub const CALENDAR_LIST: &'static str = "/open-apis/calendar/v4/calendars";
+    
+    /// 设置主日历
+    pub const CALENDAR_PRIMARY: &'static str = "/open-apis/calendar/v4/calendars/{calendar_id}/primary";
+    
+    /// 搜索日历
+    pub const CALENDAR_SEARCH: &'static str = "/open-apis/calendar/v4/calendars/{calendar_id}/search";
 
     // 日程管理
     /// 创建日程
@@ -622,6 +864,14 @@ impl Endpoints {
     /// 获取日程列表
     pub const CALENDAR_EVENT_LIST: &'static str =
         "/open-apis/calendar/v4/calendars/{calendar_id}/events";
+    
+    /// 回复日程邀请
+    pub const CALENDAR_EVENT_REPLY: &'static str =
+        "/open-apis/calendar/v4/calendars/{calendar_id}/events/{event_id}/reply";
+    
+    /// 搜索日程
+    pub const CALENDAR_EVENT_SEARCH: &'static str =
+        "/open-apis/calendar/v4/calendars/{calendar_id}/events/{event_id}/search";
 
     // ==================== AI Document AI 相关端点 ====================
     /// 简历解析
@@ -716,43 +966,54 @@ impl Endpoints {
 
     // 参数化端点常量
     /// 获取/更新/删除特定附件
-    pub const TASK_V2_ATTACHMENT_GET: &'static str = "/open-apis/task/v2/attachments/{attachment_guid}";
+    pub const TASK_V2_ATTACHMENT_GET: &'static str =
+        "/open-apis/task/v2/attachments/{attachment_guid}";
 
     /// 获取/更新/删除特定自定义字段
-    pub const TASK_V2_CUSTOM_FIELD_GET: &'static str = "/open-apis/task/v2/custom_fields/{custom_field_guid}";
+    pub const TASK_V2_CUSTOM_FIELD_GET: &'static str =
+        "/open-apis/task/v2/custom_fields/{custom_field_guid}";
 
     /// 添加自定义字段选项
-    pub const TASK_V2_CUSTOM_FIELD_ADD: &'static str = "/open-apis/task/v2/custom_fields/{custom_field_guid}/add";
+    pub const TASK_V2_CUSTOM_FIELD_ADD: &'static str =
+        "/open-apis/task/v2/custom_fields/{custom_field_guid}/add";
 
     /// 移除自定义字段选项
-    pub const TASK_V2_CUSTOM_FIELD_REMOVE: &'static str = "/open-apis/task/v2/custom_fields/{custom_field_guid}/remove";
+    pub const TASK_V2_CUSTOM_FIELD_REMOVE: &'static str =
+        "/open-apis/task/v2/custom_fields/{custom_field_guid}/remove";
 
     /// 自定义字段选项管理
-    pub const TASK_V2_CUSTOM_FIELD_OPTIONS: &'static str = "/open-apis/task/v2/custom_fields/{custom_field_guid}/options";
+    pub const TASK_V2_CUSTOM_FIELD_OPTIONS: &'static str =
+        "/open-apis/task/v2/custom_fields/{custom_field_guid}/options";
 
     /// 获取/更新/删除特定自定义字段选项
-    pub const TASK_V2_CUSTOM_FIELD_OPTION_GET: &'static str = "/open-apis/task/v2/custom_fields/{custom_field_guid}/options/{option_guid}";
+    pub const TASK_V2_CUSTOM_FIELD_OPTION_GET: &'static str =
+        "/open-apis/task/v2/custom_fields/{custom_field_guid}/options/{option_guid}";
 
     /// 获取/更新/删除特定分组
     pub const TASK_V2_SECTION_GET: &'static str = "/open-apis/task/v2/sections/{section_guid}";
 
     /// 分组任务管理
-    pub const TASK_V2_SECTION_TASKS: &'static str = "/open-apis/task/v2/sections/{section_guid}/tasks";
+    pub const TASK_V2_SECTION_TASKS: &'static str =
+        "/open-apis/task/v2/sections/{section_guid}/tasks";
 
     /// 获取/更新/删除特定任务清单
     pub const TASK_V2_TASKLIST_GET: &'static str = "/open-apis/task/v2/tasklists/{tasklist_guid}";
 
     /// 任务清单添加成员
-    pub const TASK_V2_TASKLIST_ADD_MEMBERS: &'static str = "/open-apis/task/v2/tasklists/{tasklist_guid}/add_members";
+    pub const TASK_V2_TASKLIST_ADD_MEMBERS: &'static str =
+        "/open-apis/task/v2/tasklists/{tasklist_guid}/add_members";
 
     /// 任务清单移除成员
-    pub const TASK_V2_TASKLIST_REMOVE_MEMBERS: &'static str = "/open-apis/task/v2/tasklists/{tasklist_guid}/remove_members";
+    pub const TASK_V2_TASKLIST_REMOVE_MEMBERS: &'static str =
+        "/open-apis/task/v2/tasklists/{tasklist_guid}/remove_members";
 
     /// 任务清单任务管理
-    pub const TASK_V2_TASKLIST_TASKS: &'static str = "/open-apis/task/v2/tasklists/{tasklist_guid}/tasks";
+    pub const TASK_V2_TASKLIST_TASKS: &'static str =
+        "/open-apis/task/v2/tasklists/{tasklist_guid}/tasks";
 
     /// 任务清单活动订阅
-    pub const TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTIONS: &'static str = "/open-apis/task/v2/tasklists/{tasklist_guid}/activity_subscriptions";
+    pub const TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTIONS: &'static str =
+        "/open-apis/task/v2/tasklists/{tasklist_guid}/activity_subscriptions";
 
     /// 获取/更新/删除特定活动订阅
     pub const TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTION_GET: &'static str = "/open-apis/task/v2/tasklists/{tasklist_guid}/activity_subscriptions/{activity_subscription_guid}";
@@ -761,69 +1022,90 @@ impl Endpoints {
     pub const TASK_V2_TASK_GET: &'static str = "/open-apis/task/v2/tasks/{task_guid}";
 
     /// 任务添加成员
-    pub const TASK_V2_TASK_ADD_MEMBERS: &'static str = "/open-apis/task/v2/tasks/{task_guid}/add_members";
+    pub const TASK_V2_TASK_ADD_MEMBERS: &'static str =
+        "/open-apis/task/v2/tasks/{task_guid}/add_members";
 
     /// 任务移除成员
-    pub const TASK_V2_TASK_REMOVE_MEMBERS: &'static str = "/open-apis/task/v2/tasks/{task_guid}/remove_members";
+    pub const TASK_V2_TASK_REMOVE_MEMBERS: &'static str =
+        "/open-apis/task/v2/tasks/{task_guid}/remove_members";
 
     /// 任务添加提醒
-    pub const TASK_V2_TASK_ADD_REMINDERS: &'static str = "/open-apis/task/v2/tasks/{task_guid}/add_reminders";
+    pub const TASK_V2_TASK_ADD_REMINDERS: &'static str =
+        "/open-apis/task/v2/tasks/{task_guid}/add_reminders";
 
     /// 任务移除提醒
-    pub const TASK_V2_TASK_REMOVE_REMINDERS: &'static str = "/open-apis/task/v2/tasks/{task_guid}/remove_reminders";
+    pub const TASK_V2_TASK_REMOVE_REMINDERS: &'static str =
+        "/open-apis/task/v2/tasks/{task_guid}/remove_reminders";
 
     /// 任务添加依赖
-    pub const TASK_V2_TASK_ADD_DEPENDENCIES: &'static str = "/open-apis/task/v2/tasks/{task_guid}/add_dependencies";
+    pub const TASK_V2_TASK_ADD_DEPENDENCIES: &'static str =
+        "/open-apis/task/v2/tasks/{task_guid}/add_dependencies";
 
     /// 任务移除依赖
-    pub const TASK_V2_TASK_REMOVE_DEPENDENCIES: &'static str = "/open-apis/task/v2/tasks/{task_guid}/remove_dependencies";
+    pub const TASK_V2_TASK_REMOVE_DEPENDENCIES: &'static str =
+        "/open-apis/task/v2/tasks/{task_guid}/remove_dependencies";
 
     /// 任务评论管理
     pub const TASK_V2_TASK_COMMENTS: &'static str = "/open-apis/task/v2/tasks/{task_guid}/comments";
 
     /// 获取/更新/删除特定任务评论
-    pub const TASK_V2_TASK_COMMENT_GET: &'static str = "/open-apis/task/v2/tasks/{task_guid}/comments/{comment_id}";
+    pub const TASK_V2_TASK_COMMENT_GET: &'static str =
+        "/open-apis/task/v2/tasks/{task_guid}/comments/{comment_id}";
 
     /// 任务子任务管理
     pub const TASK_V2_TASK_SUBTASKS: &'static str = "/open-apis/task/v2/tasks/{task_guid}/subtasks";
 
     // ==================== APaaS 平台即服务相关端点 ====================
-    
+
     // ===== 座位管理端点 =====
     /// 查询座位分配列表
-    pub const APASS_V1_SEAT_ASSIGNMENT_LIST: &'static str = "/open-apis/apaas/v1/seat_assignment/list";
+    pub const APASS_V1_SEAT_ASSIGNMENT_LIST: &'static str =
+        "/open-apis/apaas/v1/seat_assignment/list";
     /// 查询座位活动列表
     pub const APASS_V1_SEAT_ACTIVITY_LIST: &'static str = "/open-apis/apaas/v1/seat_activity/list";
 
     // ===== 流程管理端点 =====
     /// 执行流程
-    pub const APASS_V1_FLOW_EXECUTE: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/{flow_api_name}/execute";
+    pub const APASS_V1_FLOW_EXECUTE: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/flow/{flow_api_name}/execute";
     /// 查询用户任务
-    pub const APASS_V1_FLOW_USER_TASK_QUERY: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/query";
+    pub const APASS_V1_FLOW_USER_TASK_QUERY: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/flow/user_task/query";
     /// 同意用户任务
-    pub const APASS_V1_FLOW_USER_TASK_AGREE: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/agree";
+    pub const APASS_V1_FLOW_USER_TASK_AGREE: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/agree";
     /// 拒绝用户任务
-    pub const APASS_V1_FLOW_USER_TASK_REJECT: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/reject";
+    pub const APASS_V1_FLOW_USER_TASK_REJECT: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/reject";
     /// 转发用户任务
-    pub const APASS_V1_FLOW_USER_TASK_TRANSFER: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/transfer";
+    pub const APASS_V1_FLOW_USER_TASK_TRANSFER: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/transfer";
     /// 添加用户任务处理人
-    pub const APASS_V1_FLOW_USER_TASK_ADD_ASSIGNEE: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/add_assignee";
+    pub const APASS_V1_FLOW_USER_TASK_ADD_ASSIGNEE: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/add_assignee";
     /// 抄送用户任务
-    pub const APASS_V1_FLOW_USER_TASK_CC: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/cc";
+    pub const APASS_V1_FLOW_USER_TASK_CC: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/cc";
     /// 催办用户任务
-    pub const APASS_V1_FLOW_USER_TASK_EXPEDITING: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/expediting";
+    pub const APASS_V1_FLOW_USER_TASK_EXPEDITING: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/expediting";
     /// 取消用户任务
-    pub const APASS_V1_FLOW_USER_TASK_CANCEL: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/cancel";
+    pub const APASS_V1_FLOW_USER_TASK_CANCEL: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/cancel";
     /// 查询用户任务回退点
-    pub const APASS_V1_FLOW_USER_TASK_ROLLBACK_POINTS: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/rollback_points";
+    pub const APASS_V1_FLOW_USER_TASK_ROLLBACK_POINTS: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/rollback_points";
     /// 回退用户任务
-    pub const APASS_V1_FLOW_USER_TASK_ROLLBACK: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/rollback";
+    pub const APASS_V1_FLOW_USER_TASK_ROLLBACK: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/rollback";
     /// 获取用户任务群聊
-    pub const APASS_V1_FLOW_USER_TASK_CHAT_GROUP: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/chat_group";
+    pub const APASS_V1_FLOW_USER_TASK_CHAT_GROUP: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/chat_group";
 
     // ===== 函数管理端点 =====
     /// 调用函数
-    pub const APASS_V1_FUNCTION_INVOKE: &'static str = "/open-apis/apaas/v1/application/{app_id}/function/{function_name}/invoke";
+    pub const APASS_V1_FUNCTION_INVOKE: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/function/{function_name}/invoke";
 
     // ===== 权限管理端点 =====
     /// 批量移除角色成员
@@ -831,7 +1113,8 @@ impl Endpoints {
     /// 批量添加角色成员
     pub const APASS_V1_PERMISSION_ROLE_MEMBERS_BATCH_CREATE: &'static str = "/open-apis/apaas/v1/application/{app_id}/permission/role/{role_api_name}/members/batch_create";
     /// 获取角色成员
-    pub const APASS_V1_PERMISSION_ROLE_MEMBER_GET: &'static str = "/open-apis/apaas/v1/application/{app_id}/permission/role/{role_api_name}/member/{user_id}";
+    pub const APASS_V1_PERMISSION_ROLE_MEMBER_GET: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/permission/role/{role_api_name}/member/{user_id}";
     /// 批量移除记录权限成员
     pub const APASS_V1_PERMISSION_RECORD_MEMBERS_BATCH_REMOVE: &'static str = "/open-apis/apaas/v1/application/{app_id}/permission/record_permission/{record_permission_api_name}/members/batch_remove";
     /// 批量添加记录权限成员
@@ -839,43 +1122,60 @@ impl Endpoints {
 
     // ===== 对象管理端点 =====
     /// OQL 查询
-    pub const APASS_V1_OBJECT_OQL: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/oql";
+    pub const APASS_V1_OBJECT_OQL: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/object/oql";
     /// 搜索记录
-    pub const APASS_V1_OBJECT_RECORD_SEARCH: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/search";
+    pub const APASS_V1_OBJECT_RECORD_SEARCH: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/search";
     /// 获取记录
-    pub const APASS_V1_OBJECT_RECORD_GET: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/{record_id}";
+    pub const APASS_V1_OBJECT_RECORD_GET: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/{record_id}";
     /// 更新记录
-    pub const APASS_V1_OBJECT_RECORD_UPDATE: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/{record_id}";
+    pub const APASS_V1_OBJECT_RECORD_UPDATE: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/{record_id}";
     /// 删除记录
-    pub const APASS_V1_OBJECT_RECORD_DELETE: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/{record_id}";
+    pub const APASS_V1_OBJECT_RECORD_DELETE: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/{record_id}";
     /// 创建记录
-    pub const APASS_V1_OBJECT_RECORD_CREATE: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record";
+    pub const APASS_V1_OBJECT_RECORD_CREATE: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record";
     /// 批量更新记录
-    pub const APASS_V1_OBJECT_RECORD_BATCH_UPDATE: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/batch_update";
+    pub const APASS_V1_OBJECT_RECORD_BATCH_UPDATE: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/batch_update";
     /// 批量查询记录
-    pub const APASS_V1_OBJECT_RECORD_BATCH_QUERY: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/batch_query";
+    pub const APASS_V1_OBJECT_RECORD_BATCH_QUERY: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/batch_query";
     /// 批量删除记录
-    pub const APASS_V1_OBJECT_RECORD_BATCH_DELETE: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/batch_delete";
+    pub const APASS_V1_OBJECT_RECORD_BATCH_DELETE: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/batch_delete";
     /// 批量创建记录
-    pub const APASS_V1_OBJECT_RECORD_BATCH_CREATE: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/batch_create";
+    pub const APASS_V1_OBJECT_RECORD_BATCH_CREATE: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/batch_create";
 
     // ===== 环境变量管理端点 =====
     /// 查询环境变量
-    pub const APASS_V1_ENVIRONMENT_VARIABLE_QUERY: &'static str = "/open-apis/apaas/v1/application/{app_id}/environment_variable/query";
+    pub const APASS_V1_ENVIRONMENT_VARIABLE_QUERY: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/environment_variable/query";
     /// 获取环境变量
-    pub const APASS_V1_ENVIRONMENT_VARIABLE_GET: &'static str = "/open-apis/apaas/v1/application/{app_id}/environment_variable/{variable_name}";
+    pub const APASS_V1_ENVIRONMENT_VARIABLE_GET: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/environment_variable/{variable_name}";
 
     // ===== 审计日志管理端点 =====
     /// 审计日志列表
-    pub const APASS_V1_AUDIT_LOG_LIST: &'static str = "/open-apis/apaas/v1/application/{app_id}/audit_log/list";
+    pub const APASS_V1_AUDIT_LOG_LIST: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/audit_log/list";
     /// 获取审计日志
-    pub const APASS_V1_AUDIT_LOG_GET: &'static str = "/open-apis/apaas/v1/application/{app_id}/audit_log/{log_id}";
+    pub const APASS_V1_AUDIT_LOG_GET: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/audit_log/{log_id}";
     /// 数据变更日志列表
-    pub const APASS_V1_AUDIT_LOG_DATA_CHANGE_LOGS: &'static str = "/open-apis/apaas/v1/application/{app_id}/audit_log/data_change_logs";
+    pub const APASS_V1_AUDIT_LOG_DATA_CHANGE_LOGS: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/audit_log/data_change_logs";
     /// 获取数据变更日志
-    pub const APASS_V1_AUDIT_LOG_DATA_CHANGE_LOG_GET: &'static str = "/open-apis/apaas/v1/application/{app_id}/audit_log/data_change_log/{log_id}";
+    pub const APASS_V1_AUDIT_LOG_DATA_CHANGE_LOG_GET: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/audit_log/data_change_log/{log_id}";
     /// 审计事件列表
-    pub const APASS_V1_AUDIT_LOG_AUDIT_EVENTS: &'static str = "/open-apis/apaas/v1/application/{app_id}/audit_log/audit_events";
+    pub const APASS_V1_AUDIT_LOG_AUDIT_EVENTS: &'static str =
+        "/open-apis/apaas/v1/application/{app_id}/audit_log/audit_events";
 
     // ==================== Performance 绩效管理相关端点 ====================
     /// 绩效周期列表查询
@@ -1054,58 +1354,85 @@ impl Endpoints {
 
     /// 用户管理 - 带参数的端点
     pub const CONTACT_V3_USER_GET: &'static str = "/open-apis/contact/v3/users/{user_id}";
-    pub const CONTACT_V3_USER_UPDATE_ID: &'static str = "/open-apis/contact/v3/users/{user_id}/update_user_id";
-    pub const CONTACT_V3_USER_RESURRECT: &'static str = "/open-apis/contact/v3/users/{user_id}/resurrect";
+    pub const CONTACT_V3_USER_UPDATE_ID: &'static str =
+        "/open-apis/contact/v3/users/{user_id}/update_user_id";
+    pub const CONTACT_V3_USER_RESURRECT: &'static str =
+        "/open-apis/contact/v3/users/{user_id}/resurrect";
 
     /// 部门管理 - 带参数的端点
-    pub const CONTACT_V3_DEPARTMENT_GET: &'static str = "/open-apis/contact/v3/departments/{department_id}";
-    pub const CONTACT_V3_DEPARTMENT_UPDATE_ID: &'static str = "/open-apis/contact/v3/departments/{department_id}/update_department_id";
+    pub const CONTACT_V3_DEPARTMENT_GET: &'static str =
+        "/open-apis/contact/v3/departments/{department_id}";
+    pub const CONTACT_V3_DEPARTMENT_UPDATE_ID: &'static str =
+        "/open-apis/contact/v3/departments/{department_id}/update_department_id";
 
     /// 职务管理 - 带参数的端点
-    pub const CONTACT_V3_JOB_TITLE_GET: &'static str = "/open-apis/contact/v3/job_titles/{job_title_id}";
+    pub const CONTACT_V3_JOB_TITLE_GET: &'static str =
+        "/open-apis/contact/v3/job_titles/{job_title_id}";
 
     /// 职位族群管理 - 带参数的端点
-    pub const CONTACT_V3_JOB_FAMILY_GET: &'static str = "/open-apis/contact/v3/job_families/{job_family_id}";
+    pub const CONTACT_V3_JOB_FAMILY_GET: &'static str =
+        "/open-apis/contact/v3/job_families/{job_family_id}";
 
     /// 职级管理 - 带参数的端点
-    pub const CONTACT_V3_JOB_LEVEL_GET: &'static str = "/open-apis/contact/v3/job_levels/{job_level_id}";
+    pub const CONTACT_V3_JOB_LEVEL_GET: &'static str =
+        "/open-apis/contact/v3/job_levels/{job_level_id}";
 
     /// 功能角色管理 - 带参数的端点
-    pub const CONTACT_V3_FUNCTIONAL_ROLE_GET: &'static str = "/open-apis/contact/v3/functional_roles/{role_id}";
-    pub const CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS: &'static str = "/open-apis/contact/v3/functional_roles/{role_id}/members";
-    pub const CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_CREATE: &'static str = "/open-apis/contact/v3/functional_roles/{role_id}/members/batch_create";
-    pub const CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_DELETE: &'static str = "/open-apis/contact/v3/functional_roles/{role_id}/members/batch_delete";
-    pub const CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_SCOPES: &'static str = "/open-apis/contact/v3/functional_roles/{role_id}/members/scopes";
-    pub const CONTACT_V3_FUNCTIONAL_ROLE_MEMBER_GET: &'static str = "/open-apis/contact/v3/functional_roles/{role_id}/members/{member_id}";
+    pub const CONTACT_V3_FUNCTIONAL_ROLE_GET: &'static str =
+        "/open-apis/contact/v3/functional_roles/{role_id}";
+    pub const CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS: &'static str =
+        "/open-apis/contact/v3/functional_roles/{role_id}/members";
+    pub const CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_CREATE: &'static str =
+        "/open-apis/contact/v3/functional_roles/{role_id}/members/batch_create";
+    pub const CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_DELETE: &'static str =
+        "/open-apis/contact/v3/functional_roles/{role_id}/members/batch_delete";
+    pub const CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_SCOPES: &'static str =
+        "/open-apis/contact/v3/functional_roles/{role_id}/members/scopes";
+    pub const CONTACT_V3_FUNCTIONAL_ROLE_MEMBER_GET: &'static str =
+        "/open-apis/contact/v3/functional_roles/{role_id}/members/{member_id}";
 
     /// 群组管理
     pub const CONTACT_V3_GROUPS: &'static str = "/open-apis/contact/v3/groups";
-    pub const CONTACT_V3_GROUPS_SIMPLELIST: &'static str = "/open-apis/contact/v3/groups/simplelist";
-    pub const CONTACT_V3_GROUPS_MEMBER_BELONG: &'static str = "/open-apis/contact/v3/groups/member_belong";
+    pub const CONTACT_V3_GROUPS_SIMPLELIST: &'static str =
+        "/open-apis/contact/v3/groups/simplelist";
+    pub const CONTACT_V3_GROUPS_MEMBER_BELONG: &'static str =
+        "/open-apis/contact/v3/groups/member_belong";
     pub const CONTACT_V3_GROUP_GET: &'static str = "/open-apis/contact/v3/groups/{group_id}";
-    pub const CONTACT_V3_GROUP_DETAIL: &'static str = "/open-apis/contact/v3/groups/{group_id}/detail";
+    pub const CONTACT_V3_GROUP_DETAIL: &'static str =
+        "/open-apis/contact/v3/groups/{group_id}/detail";
 
     /// 群组成员管理
-    pub const CONTACT_V3_GROUP_MEMBERS_ADD: &'static str = "/open-apis/contact/v3/groups/{group_id}/members/add";
-    pub const CONTACT_V3_GROUP_MEMBERS_BATCH_ADD: &'static str = "/open-apis/contact/v3/groups/{group_id}/members/batch_add";
-    pub const CONTACT_V3_GROUP_MEMBERS_REMOVE: &'static str = "/open-apis/contact/v3/groups/{group_id}/members/remove";
-    pub const CONTACT_V3_GROUP_MEMBERS_BATCH_REMOVE: &'static str = "/open-apis/contact/v3/groups/{group_id}/members/batch_remove";
-    pub const CONTACT_V3_GROUP_MEMBERS_SIMPLELIST: &'static str = "/open-apis/contact/v3/groups/{group_id}/members/simplelist";
+    pub const CONTACT_V3_GROUP_MEMBERS_ADD: &'static str =
+        "/open-apis/contact/v3/groups/{group_id}/members/add";
+    pub const CONTACT_V3_GROUP_MEMBERS_BATCH_ADD: &'static str =
+        "/open-apis/contact/v3/groups/{group_id}/members/batch_add";
+    pub const CONTACT_V3_GROUP_MEMBERS_REMOVE: &'static str =
+        "/open-apis/contact/v3/groups/{group_id}/members/remove";
+    pub const CONTACT_V3_GROUP_MEMBERS_BATCH_REMOVE: &'static str =
+        "/open-apis/contact/v3/groups/{group_id}/members/batch_remove";
+    pub const CONTACT_V3_GROUP_MEMBERS_SIMPLELIST: &'static str =
+        "/open-apis/contact/v3/groups/{group_id}/members/simplelist";
 
     /// 单位管理
     pub const CONTACT_V3_UNITS: &'static str = "/open-apis/contact/v3/units";
     pub const CONTACT_V3_UNIT_GET: &'static str = "/open-apis/contact/v3/units/{unit_id}";
-    pub const CONTACT_V3_UNIT_BIND_DEPARTMENT: &'static str = "/open-apis/contact/v3/units/{unit_id}/bind_department";
-    pub const CONTACT_V3_UNIT_UNBIND_DEPARTMENT: &'static str = "/open-apis/contact/v3/units/{unit_id}/unbind_department";
-    pub const CONTACT_V3_UNIT_LIST_DEPARTMENT: &'static str = "/open-apis/contact/v3/units/{unit_id}/list_department";
+    pub const CONTACT_V3_UNIT_BIND_DEPARTMENT: &'static str =
+        "/open-apis/contact/v3/units/{unit_id}/bind_department";
+    pub const CONTACT_V3_UNIT_UNBIND_DEPARTMENT: &'static str =
+        "/open-apis/contact/v3/units/{unit_id}/unbind_department";
+    pub const CONTACT_V3_UNIT_LIST_DEPARTMENT: &'static str =
+        "/open-apis/contact/v3/units/{unit_id}/list_department";
 
     /// 工作城市管理
     pub const CONTACT_V3_WORK_CITIES: &'static str = "/open-apis/contact/v3/work_cities";
-    pub const CONTACT_V3_WORK_CITY_GET: &'static str = "/open-apis/contact/v3/work_cities/{work_city_id}";
+    pub const CONTACT_V3_WORK_CITY_GET: &'static str =
+        "/open-apis/contact/v3/work_cities/{work_city_id}";
 
     /// 员工类型枚举管理
-    pub const CONTACT_V3_EMPLOYEE_TYPE_ENUMS: &'static str = "/open-apis/contact/v3/employee_type_enums";
-    pub const CONTACT_V3_EMPLOYEE_TYPE_ENUM_GET: &'static str = "/open-apis/contact/v3/employee_type_enums/{enum_id}";
+    pub const CONTACT_V3_EMPLOYEE_TYPE_ENUMS: &'static str =
+        "/open-apis/contact/v3/employee_type_enums";
+    pub const CONTACT_V3_EMPLOYEE_TYPE_ENUM_GET: &'static str =
+        "/open-apis/contact/v3/employee_type_enums/{enum_id}";
 
     /// 自定义属性管理
     pub const CONTACT_V3_CUSTOM_ATTRS: &'static str = "/open-apis/contact/v3/custom_attrs";
@@ -1213,6 +1540,56 @@ impl Endpoints {
     // 归档规则管理
     /// 归档规则
     pub const ATTENDANCE_V1_ARCHIVE_RULES: &'static str = "/open-apis/attendance/v1/archive_rules";
+
+    /// 归档规则用户统计字段 (需要使用 EndpointBuilder::replace_param 替换 {archive_rule_id})
+    pub const ATTENDANCE_V1_ARCHIVE_RULE_USER_STATS_FIELDS: &'static str =
+        "/open-apis/attendance/v1/archive_rules/{archive_rule_id}/user_stats_fields";
+
+    /// 归档规则上传报表 (需要使用 EndpointBuilder::replace_param 替换 {archive_rule_id})
+    pub const ATTENDANCE_V1_ARCHIVE_RULE_UPLOAD_REPORT: &'static str =
+        "/open-apis/attendance/v1/archive_rules/{archive_rule_id}/upload_report";
+
+    /// 归档规则删除报表 (需要使用 EndpointBuilder::replace_param 替换 {archive_rule_id})
+    pub const ATTENDANCE_V1_ARCHIVE_RULE_DEL_REPORT: &'static str =
+        "/open-apis/attendance/v1/archive_rules/{archive_rule_id}/del_report";
+
+    // 用户设置管理
+    /// 用户设置修改 (需要使用 EndpointBuilder::replace_param 替换 {user_id})
+    pub const ATTENDANCE_V1_USER_SETTINGS_MODIFY: &'static str =
+        "/open-apis/attendance/v1/user_settings/{user_id}/modify";
+
+    /// 用户设置上传 (需要使用 EndpointBuilder::replace_param 替换 {user_id})
+    pub const ATTENDANCE_V1_USER_SETTINGS_UPLOAD: &'static str =
+        "/open-apis/attendance/v1/user_settings/{user_id}/upload";
+
+    /// 用户设置下载 (需要使用 EndpointBuilder::replace_param 替换 {user_id})
+    pub const ATTENDANCE_V1_USER_SETTINGS_DOWNLOAD: &'static str =
+        "/open-apis/attendance/v1/user_settings/{user_id}/download";
+
+    // 用户审批管理
+    /// 用户审批处理 (需要使用 EndpointBuilder::replace_param 替换 {approval_id})
+    pub const ATTENDANCE_V1_USER_APPROVAL_PROCESS: &'static str =
+        "/open-apis/attendance/v1/user_approvals/{approval_id}/process";
+
+    // 用户任务补救管理
+    /// 查询用户允许的补救
+    pub const ATTENDANCE_V1_USER_TASK_REMEDYS_QUERY_USER_ALLOWED_REMEDYS: &'static str =
+        "/open-apis/attendance/v1/user_task_remedys/query_user_allowed_remedys";
+
+    // 用户班表管理
+    /// 用户班表批量创建临时
+    pub const ATTENDANCE_V1_USER_DAILY_SHIFTS_BATCH_CREATE_TEMP: &'static str =
+        "/open-apis/attendance/v1/user_daily_shifts/batch_create_temp";
+
+    // 用户任务管理
+    /// 用户任务获取 (需要使用 EndpointBuilder::replace_param 替换 {user_id})
+    pub const ATTENDANCE_V1_USER_TASK_GET: &'static str =
+        "/open-apis/attendance/v1/user_tasks/{user_id}/get";
+
+    // 假期管理
+    /// 假期计提记录获取 (需要使用 EndpointBuilder::replace_param 替换 {leave_accrual_record_id})
+    pub const ATTENDANCE_V1_LEAVE_ACCRUAL_RECORD_GET: &'static str =
+        "/open-apis/attendance/v1/leave_accrual_records/{leave_accrual_record_id}";
 
     // ==================== 客服工具服务端点 ====================
 
@@ -1507,6 +1884,43 @@ impl Endpoints {
     pub const APPLICATION_V6_ADMIN_USER_AVAILABLE_APPS: &'static str =
         "/open-apis/application/v6/admin/user_available_apps/{user_id}";
 
+    /// 应用联系人范围配置查询
+    pub const APPLICATION_V6_ADMIN_APP_CONTACTS_RANGE_CONFIGURATION_GET: &'static str =
+        "/open-apis/application/v6/admin/apps/{app_id}/contacts_range_configuration";
+
+    /// 应用联系人范围配置设置
+    pub const APPLICATION_V6_ADMIN_APP_CONTACTS_RANGE_CONFIGURATION_SET: &'static str =
+        "/open-apis/application/v6/admin/apps/{app_id}/contacts_range_configuration";
+
+    /// 应用白黑名单检查
+    pub const APPLICATION_V6_ADMIN_APP_CHECK_WHITE_BLACK_LIST: &'static str =
+        "/open-apis/application/v6/admin/apps/{app_id}/check_white_black_list";
+
+    /// 应用管理员管理权限
+    pub const APPLICATION_V6_ADMIN_APP_ADMIN_MANAGEMENT_PERMISSIONS: &'static str =
+        "/open-apis/application/v6/admin/apps/{app_id}/admins/{user_id}/management_permissions";
+
+    /// 应用管理员验证
+    pub const APPLICATION_V6_ADMIN_APP_ADMIN_VERIFY: &'static str =
+        "/open-apis/application/v6/admin/apps/{app_id}/admins/{user_id}/verify";
+
+    /// 应用版本联系人范围建议
+    pub const APPLICATION_V6_APP_VERSION_CONTACTS_RANGE_SUGGEST: &'static str =
+        "/open-apis/application/v6/applications/{app_id}/versions/{version_id}/contacts_range_suggest";
+
+    // 应用商店付费信息
+    /// 应用商店定价计划检查
+    pub const APPLICATION_V6_APPSTORE_PAID_INFO_CHECK: &'static str =
+        "/open-apis/application/v6/appstore_paid_info/{app_id}/users/{user_id}/pricing_plans/{pricing_plan_id}/check";
+
+    /// 应用商店定价计划列表
+    pub const APPLICATION_V6_APPSTORE_PAID_INFO_PRICING_PLANS: &'static str =
+        "/open-apis/application/v6/appstore_paid_info/{app_id}/pricing_plans";
+
+    /// 应用商店订单详情
+    pub const APPLICATION_V6_APPSTORE_PAID_INFO_ORDER_GET: &'static str =
+        "/open-apis/application/v6/appstore_paid_info/{app_id}/orders/{order_id}";
+
     // ==================== CloudDocs 云文档相关端点 ====================
 
     // Assistant 助手服务
@@ -1517,21 +1931,24 @@ impl Endpoints {
     // Bitable 多维表格服务
     /// 多维表格应用管理
     pub const BITABLE_V1_APPS: &'static str = "/open-apis/bitable/v1/apps";
-    pub const BITABLE_V1_APP_GET: &'static str = "/open-apis/bitable/v1/apps/{}";
+    pub const BITABLE_V1_APP_GET: &'static str = "/open-apis/bitable/v1/apps/{app_token}";
     pub const BITABLE_V1_APP_CREATE: &'static str = "/open-apis/bitable/v1/apps";
-    pub const BITABLE_V1_APP_UPDATE: &'static str = "/open-apis/bitable/v1/apps/{}";
-    pub const BITABLE_V1_APP_COPY: &'static str = "/open-apis/bitable/v1/apps/{}/copy";
+    pub const BITABLE_V1_APP_UPDATE: &'static str = "/open-apis/bitable/v1/apps/{app_token}";
+    pub const BITABLE_V1_APP_COPY: &'static str = "/open-apis/bitable/v1/apps/{app_token}/copy";
 
     /// 多维表格数据表管理
-    pub const BITABLE_V1_TABLES: &'static str = "/open-apis/bitable/v1/apps/{}/tables";
+    pub const BITABLE_V1_TABLES: &'static str = "/open-apis/bitable/v1/apps/{app_token}/tables";
     pub const BITABLE_V1_TABLE_GET: &'static str = "/open-apis/bitable/v1/apps/{}/tables/{}";
-    pub const BITABLE_V1_TABLE_CREATE: &'static str = "/open-apis/bitable/v1/apps/{}/tables";
-    pub const BITABLE_V1_TABLE_PATCH: &'static str = "/open-apis/bitable/v1/apps/{}/tables/{}";
-    pub const BITABLE_V1_TABLE_DELETE: &'static str = "/open-apis/bitable/v1/apps/{}/tables/{}";
+    pub const BITABLE_V1_TABLE_CREATE: &'static str =
+        "/open-apis/bitable/v1/apps/{app_token}/tables";
+    pub const BITABLE_V1_TABLE_PATCH: &'static str =
+        "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}";
+    pub const BITABLE_V1_TABLE_DELETE: &'static str =
+        "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}";
     pub const BITABLE_V1_TABLES_BATCH_CREATE: &'static str =
-        "/open-apis/bitable/v1/apps/{}/tables/batch_create";
+        "/open-apis/bitable/v1/apps/{app_token}/tables/batch_create";
     pub const BITABLE_V1_TABLES_BATCH_DELETE: &'static str =
-        "/open-apis/bitable/v1/apps/{}/tables/batch_delete";
+        "/open-apis/bitable/v1/apps/{app_token}/tables/batch_delete";
 
     /// 多维表格记录管理
     pub const BITABLE_V1_RECORDS: &'static str =
@@ -1568,15 +1985,16 @@ impl Endpoints {
         "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/fields/{field_id}";
 
     /// 多维表格视图管理
-    pub const BITABLE_V1_VIEWS: &'static str = "/open-apis/bitable/v1/apps/{}/tables/{}/views";
+    pub const BITABLE_V1_VIEWS: &'static str =
+        "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/views";
     pub const BITABLE_V1_VIEW_GET: &'static str =
-        "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}";
+        "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/views/{view_id}";
     pub const BITABLE_V1_VIEW_CREATE: &'static str =
-        "/open-apis/bitable/v1/apps/{}/tables/{}/views";
+        "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/views";
     pub const BITABLE_V1_VIEW_PATCH: &'static str =
-        "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}";
+        "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/views/{view_id}";
     pub const BITABLE_V1_VIEW_DELETE: &'static str =
-        "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}";
+        "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/views/{view_id}";
 
     /// 多维表格仪表板管理
     pub const BITABLE_V1_DASHBOARDS: &'static str =
@@ -1657,11 +2075,11 @@ impl Endpoints {
     /// 文档块管理
     pub const DOCX_V1_DOCUMENT_BLOCKS: &'static str = "/open-apis/docx/v1/documents/{}/blocks";
     pub const DOCX_V1_DOCUMENT_BLOCK_GET: &'static str =
-        "/open-apis/docx/v1/documents/{}/blocks/{}";
+        "/open-apis/docx/v1/documents/{document_id}/blocks/{block_id}";
     pub const DOCX_V1_DOCUMENT_BLOCK_CHILDREN: &'static str =
         "/open-apis/docx/v1/documents/{}/blocks/{}/children";
     pub const DOCX_V1_DOCUMENT_BLOCKS_BATCH_UPDATE: &'static str =
-        "/open-apis/docx/v1/documents/{}/blocks/batch_update";
+        "/open-apis/docx/v1/documents/{document_id}/blocks/batch_update";
     pub const DOCX_V1_DOCUMENT_BLOCKS_BATCH_DELETE: &'static str =
         "/open-apis/docx/v1/documents/{}/blocks/batch_delete";
 
@@ -1914,6 +2332,89 @@ impl Endpoints {
         "/open-apis/wiki/v2/tasks/move_docs_to_wiki";
     pub const WIKI_V2_TASK_GET: &'static str = "/open-apis/wiki/v2/tasks/{}";
 
+    // ==================== 邮件服务端点 ====================
+
+    // 邮件组管理
+    /// 邮件组基础操作
+    pub const MAIL_V1_MAILGROUPS: &'static str = "/open-apis/mail/v1/mailgroups";
+
+    /// 邮件组详情操作 (需要使用 EndpointBuilder::replace_param 替换 {mailgroup_id})
+    pub const MAIL_V1_MAILGROUP: &'static str = "/open-apis/mail/v1/mailgroups/{mailgroup_id}";
+
+    // 邮件组管理员
+    /// 批量创建邮件组管理员 (需要使用 EndpointBuilder::replace_param 替换 {mailgroup_id})
+    pub const MAIL_V1_MAILGROUP_MANAGERS_BATCH_CREATE: &'static str =
+        "/open-apis/mail/v1/mailgroups/{mailgroup_id}/managers/batch_create";
+
+    /// 批量删除邮件组管理员 (需要使用 EndpointBuilder::replace_param 替换 {mailgroup_id})
+    pub const MAIL_V1_MAILGROUP_MANAGERS_BATCH_DELETE: &'static str =
+        "/open-apis/mail/v1/mailgroups/{mailgroup_id}/managers/batch_delete";
+
+    /// 获取邮件组管理员列表 (需要使用 EndpointBuilder::replace_param 替换 {mailgroup_id})
+    pub const MAIL_V1_MAILGROUP_MANAGERS: &'static str =
+        "/open-apis/mail/v1/mailgroups/{mailgroup_id}/managers";
+
+    // 用户邮箱事件
+    /// 订阅用户邮箱事件 (需要使用 EndpointBuilder::replace_param 替换 {user_mailbox_id})
+    pub const MAIL_V1_USER_MAILBOX_EVENTS_SUBSCRIBE: &'static str =
+        "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/events/subscribe";
+
+    /// 获取用户邮箱事件订阅状态 (需要使用 EndpointBuilder::replace_param 替换 {user_mailbox_id})
+    pub const MAIL_V1_USER_MAILBOX_EVENTS_SUBSCRIPTION: &'static str =
+        "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/events/subscription";
+
+    /// 取消订阅用户邮箱事件 (需要使用 EndpointBuilder::replace_param 替换 {user_mailbox_id})
+    pub const MAIL_V1_USER_MAILBOX_EVENTS_UNSUBSCRIBE: &'static str =
+        "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/events/unsubscribe";
+
+    // 用户邮箱文件夹
+    /// 用户邮箱文件夹操作 (需要使用 EndpointBuilder::replace_param 替换 {user_mailbox_id})
+    pub const MAIL_V1_USER_MAILBOX_FOLDERS: &'static str =
+        "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/folders";
+
+    /// 用户邮箱文件夹详情操作 (需要使用 EndpointBuilder::replace_param 替换 {user_mailbox_id} 和 {folder_id})
+    pub const MAIL_V1_USER_MAILBOX_FOLDER: &'static str =
+        "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/folders/{folder_id}";
+
+    // 用户邮箱消息
+    /// 用户邮箱消息操作 (需要使用 EndpointBuilder::replace_param 替换 {user_mailbox_id})
+    pub const MAIL_V1_USER_MAILBOX_MESSAGES: &'static str =
+        "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages";
+
+    /// 用户邮箱消息详情 (需要使用 EndpointBuilder::replace_param 替换 {user_mailbox_id} 和 {message_id})
+    pub const MAIL_V1_USER_MAILBOX_MESSAGE: &'static str =
+        "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages/{message_id}";
+
+    /// 通过卡片获取邮件消息 (需要使用 EndpointBuilder::replace_param 替换 {user_mailbox_id})
+    pub const MAIL_V1_USER_MAILBOX_MESSAGES_GET_BY_CARD: &'static str =
+        "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages/get_by_card";
+
+    // 用户邮箱规则
+    /// 用户邮箱规则操作 (需要使用 EndpointBuilder::replace_param 替换 {user_mailbox_id})
+    pub const MAIL_V1_USER_MAILBOX_RULES: &'static str =
+        "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules";
+
+    /// 用户邮箱规则详情 (需要使用 EndpointBuilder::replace_param 替换 {user_mailbox_id} 和 {rule_id})
+    pub const MAIL_V1_USER_MAILBOX_RULE: &'static str =
+        "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules/{rule_id}";
+
+    /// 重新排序用户邮箱规则 (需要使用 EndpointBuilder::replace_param 替换 {user_mailbox_id})
+    pub const MAIL_V1_USER_MAILBOX_RULES_REORDER: &'static str =
+        "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/rules/reorder";
+
+    // 用户邮箱联系人
+    /// 用户邮箱联系人操作 (需要使用 EndpointBuilder::replace_param 替换 {user_mailbox_id})
+    pub const MAIL_V1_USER_MAILBOX_MAIL_CONTACTS: &'static str =
+        "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/mail_contacts";
+
+    /// 用户邮箱联系人详情 (需要使用 EndpointBuilder::replace_param 替换 {user_mailbox_id} 和 {contact_id})
+    pub const MAIL_V1_USER_MAILBOX_MAIL_CONTACT: &'static str =
+        "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/mail_contacts/{contact_id}";
+
+    // 用户邮箱附件
+    /// 获取邮件附件下载链接 (需要使用 EndpointBuilder::replace_param 替换 {user_mailbox_id}, {message_id} 和 {attachment_id})
+    pub const MAIL_V1_USER_MAILBOX_MESSAGE_ATTACHMENT_DOWNLOAD_URL: &'static str =
+        "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages/{message_id}/attachments/{attachment_id}/download_url";
 }
 
 /// API端点构建辅助函数
@@ -1946,8 +2447,8 @@ impl EndpointBuilder {
     /// use std::collections::HashMap;
     /// use open_lark::core::endpoints::EndpointBuilder;
     /// let mut params = HashMap::new();
-    /// params.insert("calendar_id", "cal_123".to_string());
-    /// params.insert("event_id", "event_456".to_string());
+    /// params.insert("calendar_id".to_string(), "cal_123".to_string());
+    /// params.insert("event_id".to_string(), "event_456".to_string());
     /// let path = EndpointBuilder::replace_params(
     ///     "/open-apis/calendar/v4/calendars/{calendar_id}/events/{event_id}",
     ///     &params
@@ -1965,29 +2466,18 @@ impl EndpointBuilder {
         result
     }
 
-    /// Replace multiple parameters in an endpoint template using an array of key-value pairs.
+    /// 从字符串数组替换多个路径参数
     ///
-    /// This is a convenience method for replacing multiple parameters without creating a HashMap.
-    ///
-    /// # Arguments
-    ///
-    /// * `template` - The template string containing placeholders like `{param_name}`
-    /// * `params` - An array of tuples containing (key, value) pairs
-    ///
-    /// # Example
-    ///
+    /// # 示例
     /// ```rust
     /// use open_lark::core::endpoints::EndpointBuilder;
     /// let path = EndpointBuilder::replace_params_from_array(
-    ///     "/open-apis/apaas/v1/application/{app_id}/flow/{flow_api_name}/execute",
-    ///     &[("app_id", "app_123"), ("flow_api_name", "flow_456")]
+    ///     "/open-apis/vc/v1/rooms/{room_id}/members/{user_id}",
+    ///     &[("room_id", "room_123"), ("user_id", "user_456")]
     /// );
-    /// assert_eq!(path, "/open-apis/apaas/v1/application/app_123/flow/flow_456/execute");
+    /// assert_eq!(path, "/open-apis/vc/v1/rooms/room_123/members/user_456");
     /// ```
-    pub fn replace_params_from_array(
-        template: &str,
-        params: &[(&str, &str)],
-    ) -> String {
+    pub fn replace_params_from_array(template: &str, params: &[(&str, &str)]) -> String {
         let mut result = template.to_string();
         for (key, value) in params {
             result = result.replace(&format!("{{{}}}", key), value);
@@ -1995,79 +2485,157 @@ impl EndpointBuilder {
         result
     }
 
-    /// 构建VC会议室相关端点
-    pub fn vc_room(room_id: &str) -> VCRoomEndpoints {
-        VCRoomEndpoints {
-            room_id: room_id.to_string(),
-        }
-    }
-
-    /// 构建VC会议相关端点
-    pub fn vc_meeting(meeting_id: &str) -> VCMeetingEndpoints {
-        VCMeetingEndpoints {
-            meeting_id: meeting_id.to_string(),
-        }
-    }
-
-    /// 构建IM相关端点
-    pub fn im_message(message_id: &str) -> IMMessageEndpoints {
-        IMMessageEndpoints {
-            message_id: message_id.to_string(),
-        }
-    }
-
-    /// 构建Drive文件相关端点
-    pub fn drive_file(file_token: &str) -> DriveFileEndpoints {
-        DriveFileEndpoints {
-            file_token: file_token.to_string(),
-        }
-    }
-
-    /// 构建日历相关端点
-    pub fn calendar(calendar_id: &str) -> CalendarEndpoints {
-        CalendarEndpoints {
+    /// 创建日历端点构建器
+    pub fn calendar(calendar_id: &str) -> CalendarEndpointBuilder {
+        CalendarEndpointBuilder {
             calendar_id: calendar_id.to_string(),
         }
     }
 
-    /// 构建日程相关端点
-    pub fn calendar_event(calendar_id: &str, event_id: &str) -> CalendarEventEndpoints {
-        CalendarEventEndpoints {
+    /// 创建日历事件端点构建器
+    pub fn calendar_event(calendar_id: &str, event_id: &str) -> CalendarEventEndpointBuilder {
+        CalendarEventEndpointBuilder {
             calendar_id: calendar_id.to_string(),
             event_id: event_id.to_string(),
         }
     }
+
+    /// 创建即时消息端点构建器
+    pub fn im_message(message_id: &str) -> ImMessageEndpointBuilder {
+        ImMessageEndpointBuilder {
+            message_id: message_id.to_string(),
+        }
+    }
+
+    /// 创建VC会议端点构建器
+    pub fn vc_meeting(meeting_id: &str) -> VcMeetingEndpointBuilder {
+        VcMeetingEndpointBuilder {
+            meeting_id: meeting_id.to_string(),
+        }
+    }
+
+    /// 创建VC房间端点构建器
+    pub fn vc_room(room_id: &str) -> VcRoomEndpointBuilder {
+        VcRoomEndpointBuilder {
+            room_id: room_id.to_string(),
+        }
+    }
+
+    /// 创建工作台端点构建器
+    pub fn workplace() -> WorkplaceEndpointBuilder {
+        WorkplaceEndpointBuilder {}
+    }
 }
 
-/// VC会议室端点构建器
-pub struct VCRoomEndpoints {
-    room_id: String,
+/// 日历端点构建器
+pub struct CalendarEndpointBuilder {
+    calendar_id: String,
 }
 
-impl VCRoomEndpoints {
-    /// 获取会议室详情端点
+impl CalendarEndpointBuilder {
+    /// 获取日历详情端点
     pub fn get(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::VC_ROOM_GET, "room_id", &self.room_id)
+        EndpointBuilder::replace_param(Endpoints::CALENDAR_GET, "calendar_id", &self.calendar_id)
     }
 
-    /// 更新会议室端点
-    pub fn update(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::VC_ROOM_UPDATE, "room_id", &self.room_id)
+    /// 更新日历端点
+    pub fn patch(&self) -> String {
+        EndpointBuilder::replace_param(Endpoints::CALENDAR_UPDATE, "calendar_id", &self.calendar_id)
     }
 
-    /// 删除会议室端点
+    /// 删除日历端点
     pub fn delete(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::VC_ROOM_DELETE, "room_id", &self.room_id)
+        EndpointBuilder::replace_param(Endpoints::CALENDAR_DELETE, "calendar_id", &self.calendar_id)
+    }
+
+    /// 设置主日历端点
+    pub fn set_primary(&self) -> String {
+        EndpointBuilder::replace_param(Endpoints::CALENDAR_PRIMARY, "calendar_id", &self.calendar_id)
+    }
+
+    /// 搜索日历端点
+    pub fn search(&self) -> String {
+        EndpointBuilder::replace_param(Endpoints::CALENDAR_SEARCH, "calendar_id", &self.calendar_id)
+    }
+}
+
+/// 日历事件端点构建器
+pub struct CalendarEventEndpointBuilder {
+    calendar_id: String,
+    event_id: String,
+}
+
+impl CalendarEventEndpointBuilder {
+    /// 创建事件端点
+    pub fn create(&self) -> String {
+        EndpointBuilder::replace_param(Endpoints::CALENDAR_EVENT_CREATE, "calendar_id", &self.calendar_id)
+    }
+
+    /// 获取事件详情端点
+    pub fn get(&self) -> String {
+        let temp = EndpointBuilder::replace_param(Endpoints::CALENDAR_EVENT_GET, "calendar_id", &self.calendar_id);
+        EndpointBuilder::replace_param(&temp, "event_id", &self.event_id)
+    }
+
+    /// 更新事件端点
+    pub fn patch(&self) -> String {
+        let temp = EndpointBuilder::replace_param(Endpoints::CALENDAR_EVENT_UPDATE, "calendar_id", &self.calendar_id);
+        EndpointBuilder::replace_param(&temp, "event_id", &self.event_id)
+    }
+
+    /// 删除事件端点
+    pub fn delete(&self) -> String {
+        let temp = EndpointBuilder::replace_param(Endpoints::CALENDAR_EVENT_DELETE, "calendar_id", &self.calendar_id);
+        EndpointBuilder::replace_param(&temp, "event_id", &self.event_id)
+    }
+
+    /// 回复事件邀请端点
+    pub fn reply(&self) -> String {
+        let temp = EndpointBuilder::replace_param(Endpoints::CALENDAR_EVENT_REPLY, "calendar_id", &self.calendar_id);
+        EndpointBuilder::replace_param(&temp, "event_id", &self.event_id)
+    }
+
+    /// 搜索事件端点
+    pub fn search(&self) -> String {
+        let temp = EndpointBuilder::replace_param(Endpoints::CALENDAR_EVENT_SEARCH, "calendar_id", &self.calendar_id);
+        EndpointBuilder::replace_param(&temp, "event_id", &self.event_id)
+    }
+
+    /// 获取事件列表端点
+    pub fn list(&self) -> String {
+        EndpointBuilder::replace_param(Endpoints::CALENDAR_EVENT_LIST, "calendar_id", &self.calendar_id)
+    }
+}
+
+/// 即时消息端点构建器
+pub struct ImMessageEndpointBuilder {
+    message_id: String,
+}
+
+impl ImMessageEndpointBuilder {
+    /// 获取消息端点
+    pub fn get(&self) -> String {
+        EndpointBuilder::replace_param(Endpoints::IM_V1_MESSAGE_GET, "message_id", &self.message_id)
+    }
+
+    /// 更新消息端点
+    pub fn patch(&self) -> String {
+        EndpointBuilder::replace_param(Endpoints::IM_V1_MESSAGE_PATCH, "message_id", &self.message_id)
+    }
+
+    /// 删除消息端点
+    pub fn delete(&self) -> String {
+        EndpointBuilder::replace_param(Endpoints::IM_V1_MESSAGE_DELETE, "message_id", &self.message_id)
     }
 }
 
 /// VC会议端点构建器
-pub struct VCMeetingEndpoints {
+pub struct VcMeetingEndpointBuilder {
     meeting_id: String,
 }
 
-impl VCMeetingEndpoints {
-    /// 获取会议详情端点
+impl VcMeetingEndpointBuilder {
+    /// 获取会议端点
     pub fn get(&self) -> String {
         EndpointBuilder::replace_param(Endpoints::VC_MEETING_GET, "meeting_id", &self.meeting_id)
     }
@@ -2089,168 +2657,34 @@ impl VCMeetingEndpoints {
 
     /// 移除参会者端点
     pub fn kickout(&self) -> String {
-        EndpointBuilder::replace_param(
-            Endpoints::VC_MEETING_KICKOUT,
-            "meeting_id",
-            &self.meeting_id,
-        )
-    }
-
-    /// 获取录制列表端点
-    pub fn recording_list(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::VC_RECORDING_LIST, "meeting_id", &self.meeting_id)
-    }
-
-    /// 开始录制端点
-    pub fn recording_start(&self) -> String {
-        EndpointBuilder::replace_param(
-            Endpoints::VC_RECORDING_START,
-            "meeting_id",
-            &self.meeting_id,
-        )
-    }
-
-    /// 停止录制端点
-    pub fn recording_stop(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::VC_RECORDING_STOP, "meeting_id", &self.meeting_id)
+        EndpointBuilder::replace_param(Endpoints::VC_MEETING_KICKOUT, "meeting_id", &self.meeting_id)
     }
 }
 
-/// IM消息端点构建器
-pub struct IMMessageEndpoints {
-    message_id: String,
+/// VC房间端点构建器
+pub struct VcRoomEndpointBuilder {
+    room_id: String,
 }
 
-impl IMMessageEndpoints {
-    /// 获取消息详情端点
+impl VcRoomEndpointBuilder {
+    /// 获取房间详情端点
     pub fn get(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::IM_V1_GET_MESSAGE, "message_id", &self.message_id)
-    }
-
-    /// 更新消息端点
-    pub fn update(&self) -> String {
-        EndpointBuilder::replace_param(
-            Endpoints::IM_V1_UPDATE_MESSAGE,
-            "message_id",
-            &self.message_id,
-        )
-    }
-
-    /// 删除消息端点
-    pub fn delete(&self) -> String {
-        EndpointBuilder::replace_param(
-            Endpoints::IM_V1_DELETE_MESSAGE,
-            "message_id",
-            &self.message_id,
-        )
-    }
-
-    /// 消息已读回执端点
-    pub fn read_users(&self) -> String {
-        EndpointBuilder::replace_param(
-            Endpoints::IM_V1_READ_MESSAGE,
-            "message_id",
-            &self.message_id,
-        )
+        EndpointBuilder::replace_param(Endpoints::VC_ROOM_GET, "room_id", &self.room_id)
     }
 }
 
-/// Drive文件端点构建器
-pub struct DriveFileEndpoints {
-    file_token: String,
-}
+/// 工作台端点构建器
+pub struct WorkplaceEndpointBuilder {}
 
-impl DriveFileEndpoints {
-    /// 复制文件端点
-    pub fn copy(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::DRIVE_V1_COPY, "file_token", &self.file_token)
+impl WorkplaceEndpointBuilder {
+    /// 获取工作台访问数据端点
+    pub fn access_data(&self) -> String {
+        Endpoints::WORKPLACE_ACCESS_DATA_SEARCH.to_string()
     }
 
-    /// 移动文件端点
-    pub fn r#move(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::DRIVE_V1_MOVE, "file_token", &self.file_token)
-    }
-
-    /// 删除文件端点
-    pub fn delete(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::DRIVE_V1_DELETE, "file_token", &self.file_token)
-    }
-
-    /// 下载文件端点
-    pub fn download(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::DRIVE_V1_DOWNLOAD, "file_token", &self.file_token)
-    }
-}
-
-/// 日历端点构建器
-pub struct CalendarEndpoints {
-    calendar_id: String,
-}
-
-impl CalendarEndpoints {
-    /// 获取日历详情端点
-    pub fn get(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::CALENDAR_GET, "calendar_id", &self.calendar_id)
-    }
-
-    /// 更新日历端点
-    pub fn update(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::CALENDAR_UPDATE, "calendar_id", &self.calendar_id)
-    }
-
-    /// 删除日历端点
-    pub fn delete(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::CALENDAR_DELETE, "calendar_id", &self.calendar_id)
-    }
-
-    /// 创建日程端点
-    pub fn create_event(&self) -> String {
-        EndpointBuilder::replace_param(
-            Endpoints::CALENDAR_EVENT_CREATE,
-            "calendar_id",
-            &self.calendar_id,
-        )
-    }
-
-    /// 获取日程列表端点
-    pub fn event_list(&self) -> String {
-        EndpointBuilder::replace_param(
-            Endpoints::CALENDAR_EVENT_LIST,
-            "calendar_id",
-            &self.calendar_id,
-        )
-    }
-}
-
-/// 日程端点构建器
-pub struct CalendarEventEndpoints {
-    calendar_id: String,
-    event_id: String,
-}
-
-impl CalendarEventEndpoints {
-    /// 获取日程详情端点
-    pub fn get(&self) -> String {
-        let template = Endpoints::CALENDAR_EVENT_GET;
-        let mut result = EndpointBuilder::replace_param(template, "calendar_id", &self.calendar_id);
-        result = EndpointBuilder::replace_param(&result, "event_id", &self.event_id);
-        result
-    }
-
-    /// 更新日程端点
-    pub fn update(&self) -> String {
-        let template = Endpoints::CALENDAR_EVENT_UPDATE;
-        let mut result = EndpointBuilder::replace_param(template, "calendar_id", &self.calendar_id);
-        result = EndpointBuilder::replace_param(&result, "event_id", &self.event_id);
-        result
-    }
-
-    /// 删除日程端点
-    pub fn delete(&self) -> String {
-        let template = Endpoints::CALENDAR_EVENT_DELETE;
-        let mut result = EndpointBuilder::replace_param(template, "calendar_id", &self.calendar_id);
-        result = EndpointBuilder::replace_param(&result, "event_id", &self.event_id);
-        result
+    /// 获取应用推荐端点
+    pub fn app_recommend(&self) -> String {
+        Endpoints::WORKPLACE_APP_RECOMMEND_LIST.to_string()
     }
 }
 
@@ -2259,38 +2693,16 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_workplace_endpoints() {
-        assert_eq!(
-            Endpoints::WORKPLACE_ACCESS_DATA_SEARCH,
-            "/open-apis/workplace/v1/workplace_access_data/search"
-        );
-        assert_eq!(
-            Endpoints::WORKPLACE_APP_RECOMMEND_LIST,
-            "/open-apis/workplace/v1/app_recommend_rule/list"
-        );
-    }
-
-    #[test]
-    fn test_vc_endpoints() {
-        assert_eq!(Endpoints::VC_ROOM_LIST, "/open-apis/vc/v1/rooms");
-        assert_eq!(Endpoints::VC_MEETING_CREATE, "/open-apis/vc/v1/meetings");
-    }
-
-    #[test]
     fn test_endpoint_builder() {
-        let result = EndpointBuilder::replace_param(
-            "/open-apis/vc/v1/rooms/{room_id}",
-            "room_id",
-            "room_123",
-        );
-        assert_eq!(result, "/open-apis/vc/v1/rooms/room_123");
+        let result = EndpointBuilder::replace_param("/api/users/{user_id}", "user_id", "123");
+        assert_eq!(result, "/api/users/123");
     }
 
     #[test]
     fn test_multiple_params() {
         let mut params = std::collections::HashMap::new();
-        params.insert("calendar_id", "cal_123".to_string());
-        params.insert("event_id", "event_456".to_string());
+        params.insert("calendar_id".to_string(), "cal_123".to_string());
+        params.insert("event_id".to_string(), "event_456".to_string());
 
         let result = EndpointBuilder::replace_params(
             "/open-apis/calendar/v4/calendars/{calendar_id}/events/{event_id}",
@@ -2306,55 +2718,162 @@ mod tests {
     fn test_vc_room_endpoints_builder() {
         let room_endpoints = EndpointBuilder::vc_room("room_123");
         assert_eq!(room_endpoints.get(), "/open-apis/vc/v1/rooms/room_123");
-        assert_eq!(room_endpoints.update(), "/open-apis/vc/v1/rooms/room_123");
-        assert_eq!(room_endpoints.delete(), "/open-apis/vc/v1/rooms/room_123");
-    }
-
-    #[test]
-    fn test_im_message_endpoints_builder() {
-        let message_endpoints = EndpointBuilder::im_message("msg_123");
-        assert_eq!(message_endpoints.get(), "/open-apis/im/v1/messages/msg_123");
-        assert_eq!(
-            message_endpoints.update(),
-            "/open-apis/im/v1/messages/msg_123"
-        );
-        assert_eq!(
-            message_endpoints.delete(),
-            "/open-apis/im/v1/messages/msg_123"
-        );
     }
 
     #[test]
     fn test_calendar_endpoints_builder() {
-        let calendar_endpoints = EndpointBuilder::calendar("cal_123");
+        let calendar_endpoints = EndpointBuilder::calendar("calendar_456");
         assert_eq!(
             calendar_endpoints.get(),
-            "/open-apis/calendar/v4/calendars/cal_123"
+            "/open-apis/calendar/v4/calendars/calendar_456"
         );
         assert_eq!(
-            calendar_endpoints.update(),
-            "/open-apis/calendar/v4/calendars/cal_123"
+            calendar_endpoints.patch(),
+            "/open-apis/calendar/v4/calendars/calendar_456"
         );
         assert_eq!(
             calendar_endpoints.delete(),
-            "/open-apis/calendar/v4/calendars/cal_123"
+            "/open-apis/calendar/v4/calendars/calendar_456"
+        );
+        assert_eq!(
+            calendar_endpoints.set_primary(),
+            "/open-apis/calendar/v4/calendars/calendar_456/primary"
+        );
+        assert_eq!(
+            calendar_endpoints.search(),
+            "/open-apis/calendar/v4/calendars/calendar_456/search"
         );
     }
 
     #[test]
     fn test_calendar_event_endpoints_builder() {
-        let event_endpoints = EndpointBuilder::calendar_event("cal_123", "event_456");
+        let event_endpoints = EndpointBuilder::calendar_event("calendar_456", "event_789");
         assert_eq!(
-            event_endpoints.get(),
-            "/open-apis/calendar/v4/calendars/cal_123/events/event_456"
+            event_endpoints.create(),
+            "/open-apis/calendar/v4/calendars/calendar_456/events"
         );
         assert_eq!(
-            event_endpoints.update(),
-            "/open-apis/calendar/v4/calendars/cal_123/events/event_456"
+            event_endpoints.get(),
+            "/open-apis/calendar/v4/calendars/calendar_456/events/event_789"
+        );
+        assert_eq!(
+            event_endpoints.patch(),
+            "/open-apis/calendar/v4/calendars/calendar_456/events/event_789"
         );
         assert_eq!(
             event_endpoints.delete(),
-            "/open-apis/calendar/v4/calendars/cal_123/events/event_456"
+            "/open-apis/calendar/v4/calendars/calendar_456/events/event_789"
+        );
+        assert_eq!(
+            event_endpoints.reply(),
+            "/open-apis/calendar/v4/calendars/calendar_456/events/event_789/reply"
+        );
+        assert_eq!(
+            event_endpoints.search(),
+            "/open-apis/calendar/v4/calendars/calendar_456/events/event_789/search"
+        );
+        assert_eq!(
+            event_endpoints.list(),
+            "/open-apis/calendar/v4/calendars/calendar_456/events"
+        );
+    }
+
+    #[test]
+    fn test_im_message_endpoints_builder() {
+        let message_endpoints = EndpointBuilder::im_message("message_123");
+        assert_eq!(
+            message_endpoints.get(),
+            "/open-apis/im/v1/messages/message_123"
+        );
+        assert_eq!(
+            message_endpoints.patch(),
+            "/open-apis/im/v1/messages/message_123"
+        );
+        assert_eq!(
+            message_endpoints.delete(),
+            "/open-apis/im/v1/messages/message_123"
+        );
+    }
+
+    #[test]
+    fn test_vc_endpoints() {
+        let vc_endpoints = EndpointBuilder::vc_meeting("meeting_456");
+        assert_eq!(
+            vc_endpoints.get(),
+            "/open-apis/vc/v1/meetings/meeting_456"
+        );
+        assert_eq!(
+            vc_endpoints.update(),
+            "/open-apis/vc/v1/meetings/meeting_456"
+        );
+        assert_eq!(
+            vc_endpoints.end(),
+            "/open-apis/vc/v1/meetings/meeting_456/end"
+        );
+        assert_eq!(
+            vc_endpoints.invite(),
+            "/open-apis/vc/v1/meetings/meeting_456/invite"
+        );
+        assert_eq!(
+            vc_endpoints.kickout(),
+            "/open-apis/vc/v1/meetings/meeting_456/kickout"
+        );
+    }
+
+    #[test]
+    fn test_workplace_endpoints() {
+        let workplace_endpoints = EndpointBuilder::workplace();
+        assert_eq!(
+            workplace_endpoints.access_data(),
+            "/open-apis/workplace/v1/workplace_access_data/search"
+        );
+        assert_eq!(
+            workplace_endpoints.app_recommend(),
+            "/open-apis/workplace/v1/app_recommend_rule/list"
         );
     }
 }
+
+// Public re-exports for backward compatibility with direct imports
+// LINGO constants
+pub const LINGO_CLASSIFICATION_LIST: &str = Endpoints::LINGO_CLASSIFICATION_LIST;
+pub const LINGO_DRAFT_CREATE: &str = Endpoints::LINGO_DRAFT_CREATE;
+pub const LINGO_DRAFT_UPDATE: &str = Endpoints::LINGO_DRAFT_UPDATE;
+pub const LINGO_ENTITY_CREATE: &str = Endpoints::LINGO_ENTITY_CREATE;
+pub const LINGO_ENTITY_GET: &str = Endpoints::LINGO_ENTITY_GET;
+pub const LINGO_ENTITY_UPDATE: &str = Endpoints::LINGO_ENTITY_UPDATE;
+pub const LINGO_ENTITY_SEARCH: &str = Endpoints::LINGO_ENTITY_SEARCH;
+pub const LINGO_ENTITY_MATCH: &str = Endpoints::LINGO_ENTITY_MATCH;
+pub const LINGO_ENTITY_HIGHLIGHT: &str = Endpoints::LINGO_ENTITY_HIGHLIGHT;
+pub const LINGO_FILE_UPLOAD: &str = Endpoints::LINGO_FILE_UPLOAD;
+pub const LINGO_FILE_DOWNLOAD: &str = Endpoints::LINGO_FILE_DOWNLOAD;
+pub const LINGO_REPO_LIST: &str = Endpoints::LINGO_REPO_LIST;
+
+// VC constants
+pub const VC_MEETING_GET: &str = Endpoints::VC_MEETING_GET;
+pub const VC_MEETING_END: &str = Endpoints::VC_MEETING_END;
+pub const VC_MEETING_INVITE: &str = Endpoints::VC_MEETING_INVITE;
+pub const VC_MEETING_KICKOUT: &str = Endpoints::VC_MEETING_KICKOUT;
+pub const VC_MEETING_LIST_BY_NO: &str = Endpoints::VC_MEETING_LIST_BY_NO;
+pub const VC_MEETING_SET_HOST: &str = Endpoints::VC_MEETING_SET_HOST;
+pub const VC_MEETING_UPDATE: &str = Endpoints::VC_MEETING_UPDATE;
+pub const VC_ROOM_GET: &str = Endpoints::VC_ROOM_GET;
+pub const VC_ROOM_LIST: &str = Endpoints::VC_ROOM_LIST;
+pub const VC_ROOM_CREATE: &str = Endpoints::VC_ROOM_CREATE;
+pub const VC_ROOM_UPDATE: &str = Endpoints::VC_ROOM_UPDATE;
+pub const VC_ROOM_DELETE: &str = Endpoints::VC_ROOM_DELETE;
+pub const VC_ROOM_SEARCH: &str = Endpoints::VC_ROOM_SEARCH;
+pub const VC_RECORDING_GET: &str = Endpoints::VC_RECORDING_GET;
+pub const VC_RECORDING_START: &str = Endpoints::VC_RECORDING_START;
+pub const VC_RECORDING_STOP: &str = Endpoints::VC_RECORDING_STOP;
+pub const VC_RECORDING_SET_PERMISSION: &str = Endpoints::VC_RECORDING_SET_PERMISSION;
+pub const VC_RESERVE_GET: &str = Endpoints::VC_RESERVE_GET;
+pub const VC_RESERVE_CREATE: &str = Endpoints::VC_RESERVE_CREATE;
+pub const VC_RESERVE_UPDATE: &str = Endpoints::VC_RESERVE_UPDATE;
+pub const VC_RESERVE_DELETE: &str = Endpoints::VC_RESERVE_DELETE;
+pub const VC_RESERVE_GET_ACTIVE_MEETING: &str = Endpoints::VC_RESERVE_GET_ACTIVE_MEETING;
+
+// TENANT constants
+pub const TENANT_V2_QUERY: &str = Endpoints::TENANT_V2_QUERY;
+pub const TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY: &str = Endpoints::TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY;
+

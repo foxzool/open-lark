@@ -171,7 +171,7 @@ impl ObjectService {
             api_path: EndpointBuilder::replace_param(
                 Endpoints::APASS_V1_OBJECT_OQL,
                 "app_id",
-                &request.app_id
+                &request.app_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -201,7 +201,10 @@ impl ObjectService {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_OBJECT_RECORD_SEARCH,
-                &[("app_id", &request.app_id), ("object_api_name", &request.object_api_name)]
+                &[
+                    ("app_id", &request.app_id),
+                    ("object_api_name", &request.object_api_name),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -240,7 +243,11 @@ impl ObjectService {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_OBJECT_RECORD_GET,
-                &[("app_id", &request.app_id), ("object_api_name", &request.object_api_name), ("record_id", &request.record_id)]
+                &[
+                    ("app_id", &request.app_id),
+                    ("object_api_name", &request.object_api_name),
+                    ("record_id", &request.record_id),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -272,7 +279,11 @@ impl ObjectService {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_OBJECT_RECORD_UPDATE,
-                &[("app_id", &request.app_id), ("object_api_name", &request.object_api_name), ("record_id", &request.record_id)]
+                &[
+                    ("app_id", &request.app_id),
+                    ("object_api_name", &request.object_api_name),
+                    ("record_id", &request.record_id),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request.data)?,
@@ -299,7 +310,11 @@ impl ObjectService {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_OBJECT_RECORD_DELETE,
-                &[("app_id", &request.app_id), ("object_api_name", &request.object_api_name), ("record_id", &request.record_id)]
+                &[
+                    ("app_id", &request.app_id),
+                    ("object_api_name", &request.object_api_name),
+                    ("record_id", &request.record_id),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -326,7 +341,10 @@ impl ObjectService {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_OBJECT_RECORD_CREATE,
-                &[("app_id", &request.app_id), ("object_api_name", &request.object_api_name)]
+                &[
+                    ("app_id", &request.app_id),
+                    ("object_api_name", &request.object_api_name),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request.data)?,
@@ -353,7 +371,10 @@ impl ObjectService {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_OBJECT_RECORD_BATCH_UPDATE,
-                &[("app_id", &request.app_id), ("object_api_name", &request.object_api_name)]
+                &[
+                    ("app_id", &request.app_id),
+                    ("object_api_name", &request.object_api_name),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -382,7 +403,10 @@ impl ObjectService {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_OBJECT_RECORD_BATCH_QUERY,
-                &[("app_id", &request.app_id), ("object_api_name", &request.object_api_name)]
+                &[
+                    ("app_id", &request.app_id),
+                    ("object_api_name", &request.object_api_name),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -422,7 +446,10 @@ impl ObjectService {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_OBJECT_RECORD_BATCH_DELETE,
-                &[("app_id", &request.app_id), ("object_api_name", &request.object_api_name)]
+                &[
+                    ("app_id", &request.app_id),
+                    ("object_api_name", &request.object_api_name),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -451,7 +478,10 @@ impl ObjectService {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::APASS_V1_OBJECT_RECORD_BATCH_CREATE,
-                &[("app_id", &request.app_id), ("object_api_name", &request.object_api_name)]
+                &[
+                    ("app_id", &request.app_id),
+                    ("object_api_name", &request.object_api_name),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({

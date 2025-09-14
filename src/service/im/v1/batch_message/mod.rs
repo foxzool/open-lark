@@ -146,7 +146,11 @@ impl BatchMessageService {
     ) -> SDKResult<EmptyResponse> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_DELETE_BATCH_MESSAGE, "batch_message_id", batch_message_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::IM_V1_DELETE_BATCH_MESSAGE,
+                "batch_message_id",
+                batch_message_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
@@ -164,7 +168,11 @@ impl BatchMessageService {
     ) -> SDKResult<GetBatchProgressResponse> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_BATCH_MESSAGE_PROGRESS, "batch_message_id", batch_message_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::IM_V1_BATCH_MESSAGE_PROGRESS,
+                "batch_message_id",
+                batch_message_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
@@ -196,7 +204,11 @@ impl BatchMessageService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_BATCH_MESSAGE_READ_USER, "batch_message_id", batch_message_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::IM_V1_BATCH_MESSAGE_READ_USER,
+                "batch_message_id",
+                batch_message_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

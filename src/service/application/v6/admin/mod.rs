@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -50,7 +51,7 @@ impl AdminService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/application/v6/admin/apps".to_string(),
+            api_path: Endpoints::APPLICATION_V6_ADMIN_APPS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -85,7 +86,11 @@ impl AdminService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/admin/user_available_apps/{user_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_ADMIN_USER_AVAILABLE_APPS,
+                "user_id",
+                user_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -115,8 +120,10 @@ impl AdminService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/application/v6/admin/apps/{app_id}/contacts_range_configuration"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_ADMIN_APP_CONTACTS_RANGE_CONFIGURATION_GET,
+                "app_id",
+                app_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -148,8 +155,10 @@ impl AdminService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!(
-                "/open-apis/application/v6/admin/apps/{app_id}/contacts_range_configuration"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_ADMIN_APP_CONTACTS_RANGE_CONFIGURATION_SET,
+                "app_id",
+                app_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -181,7 +190,11 @@ impl AdminService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/admin/apps/{app_id}/visibility"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_ADMIN_APP_VISIBILITY,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -212,8 +225,10 @@ impl AdminService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/application/v6/admin/apps/{app_id}/check_white_black_list"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_ADMIN_APP_CHECK_WHITE_BLACK_LIST,
+                "app_id",
+                app_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -246,7 +261,11 @@ impl AdminService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/application/v6/admin/apps/{app_id}/visibility"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_ADMIN_APP_VISIBILITY_CREATE,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -265,7 +284,11 @@ impl AdminService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/application/v6/admin/apps/{app_id}/enable"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_ADMIN_APP_ENABLE,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -296,7 +319,11 @@ impl AdminService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/admin/apps/{app_id}/admins"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_ADMIN_APP_ADMINS,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -327,8 +354,9 @@ impl AdminService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/application/v6/admin/apps/{app_id}/admins/{user_id}/management_permissions"
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APPLICATION_V6_ADMIN_APP_ADMIN_MANAGEMENT_PERMISSIONS,
+                &[("app_id", app_id), ("user_id", user_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -353,8 +381,9 @@ impl AdminService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/application/v6/admin/apps/{app_id}/admins/{user_id}/verify"
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APPLICATION_V6_ADMIN_APP_ADMIN_VERIFY,
+                &[("app_id", app_id), ("user_id", user_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,

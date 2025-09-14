@@ -387,11 +387,7 @@ impl FaqService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                &EndpointBuilder::replace_param(
-                    Endpoints::HELPDESK_V1_FAQ_IMAGE,
-                    "faq_id",
-                    faq_id,
-                ),
+                &EndpointBuilder::replace_param(Endpoints::HELPDESK_V1_FAQ_IMAGE, "faq_id", faq_id),
                 "image_key",
                 image_key,
             ),

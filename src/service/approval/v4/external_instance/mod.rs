@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -97,7 +98,7 @@ impl ExternalInstanceService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/approval/v4/external_instances".to_string(),
+            api_path: Endpoints::APPROVAL_V4_EXTERNAL_INSTANCES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -122,7 +123,11 @@ impl ExternalInstanceService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/external_instances/{instance_code}/check"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPROVAL_V4_EXTERNAL_INSTANCE_CHECK,
+                "instance_code",
+                instance_code,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,

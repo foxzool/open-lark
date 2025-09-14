@@ -6,7 +6,6 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -25,10 +24,10 @@ impl AppTableViewService {
     ) -> SDKResult<BaseResponse<PatchViewResponse>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::PATCH;
-        api_req.api_path = format!(
-            crate::core::endpoints::BITABLE_V1_VIEW_PATCH,
-            request.app_token, request.table_id, request.view_id
-        );
+        api_req.api_path = crate::core::endpoints::Endpoints::BITABLE_V1_VIEW_PATCH
+            .replace("{app_token}", &request.app_token)
+            .replace("{table_id}", &request.table_id)
+            .replace("{view_id}", &request.view_id);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
         api_req.body = serde_json::to_vec(&PatchViewRequestBody {
             view_name: request.view_name,

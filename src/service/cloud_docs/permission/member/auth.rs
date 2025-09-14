@@ -167,8 +167,13 @@ pub async fn auth_permission(
     api_req.http_method = Method::GET;
     api_req.api_path = format!(
         "{}?type={}&perm={}",
-        EndpointBuilder::replace_param(Endpoints::DRIVE_V1_PERMISSIONS_MEMBERS_AUTH, "token", &request.token),
-        request.obj_type, request.perm
+        EndpointBuilder::replace_param(
+            Endpoints::DRIVE_V1_PERMISSIONS_MEMBERS_AUTH,
+            "token",
+            &request.token
+        ),
+        request.obj_type,
+        request.perm
     );
 
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];

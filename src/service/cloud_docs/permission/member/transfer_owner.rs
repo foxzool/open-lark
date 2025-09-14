@@ -211,7 +211,11 @@ pub async fn transfer_owner(
     api_req.http_method = Method::POST;
     api_req.api_path = format!(
         "{}?type={}",
-        EndpointBuilder::replace_param(Endpoints::DRIVE_V1_PERMISSIONS_MEMBERS_TRANSFER_OWNER, "token", &request.token),
+        EndpointBuilder::replace_param(
+            Endpoints::DRIVE_V1_PERMISSIONS_MEMBERS_TRANSFER_OWNER,
+            "token",
+            &request.token
+        ),
         request.obj_type
     );
 

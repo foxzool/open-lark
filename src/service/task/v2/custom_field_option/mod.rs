@@ -88,7 +88,11 @@ impl CustomFieldOptionService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_CUSTOM_FIELD_OPTIONS, "custom_field_guid", custom_field_guid),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_CUSTOM_FIELD_OPTIONS,
+                "custom_field_guid",
+                custom_field_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -112,11 +116,17 @@ impl CustomFieldOptionService {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
+        let temp_path = EndpointBuilder::replace_param(
+            Endpoints::TASK_V2_CUSTOM_FIELD_OPTION_GET,
+            "custom_field_guid",
+            &custom_field_guid,
+        );
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                EndpointBuilder::replace_param(Endpoints::TASK_V2_CUSTOM_FIELD_OPTION_GET, "custom_field_guid", custom_field_guid),
-                "option_guid", option_guid
+                &temp_path,
+                "option_guid",
+                &option_guid,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,

@@ -8,6 +8,10 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{
+            EndpointBuilder, VC_RECORDING_GET, VC_RECORDING_SET_PERMISSION, VC_RECORDING_START,
+            VC_RECORDING_STOP,
+        },
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -96,7 +100,11 @@ impl RecordingService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/recording/start"),
+            api_path: EndpointBuilder::replace_param(
+                VC_RECORDING_START,
+                "{meeting_id}",
+                meeting_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -120,7 +128,7 @@ impl RecordingService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/recording/stop"),
+            api_path: EndpointBuilder::replace_param(VC_RECORDING_STOP, "{meeting_id}", meeting_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -143,7 +151,7 @@ impl RecordingService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/recording"),
+            api_path: EndpointBuilder::replace_param(VC_RECORDING_GET, "{meeting_id}", meeting_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -167,7 +175,11 @@ impl RecordingService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/recording/set_permission"),
+            api_path: EndpointBuilder::replace_param(
+                VC_RECORDING_SET_PERMISSION,
+                "{meeting_id}",
+                meeting_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
