@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -111,9 +112,10 @@ impl AuditLogService {
     ) -> SDKResult<BaseResponse<AuditLogListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/audit_log/list",
-                request.app_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APASS_V1_AUDIT_LOG_LIST,
+                "app_id",
+                &request.app_id
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -161,7 +163,10 @@ impl AuditLogService {
     ) -> SDKResult<BaseResponse<AuditLogGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/apaas/v1/application/{app_id}/audit_log/{log_id}"),
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_AUDIT_LOG_GET,
+                &[("app_id", app_id), ("log_id", log_id)]
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -185,9 +190,10 @@ impl AuditLogService {
     ) -> SDKResult<BaseResponse<DataChangeLogListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/audit_log/data_change_logs",
-                request.app_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APASS_V1_AUDIT_LOG_DATA_CHANGE_LOGS,
+                "app_id",
+                &request.app_id
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -229,8 +235,9 @@ impl AuditLogService {
     ) -> SDKResult<BaseResponse<DataChangeLogDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{app_id}/audit_log/data_change_log/{log_id}"
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_AUDIT_LOG_DATA_CHANGE_LOG_GET,
+                &[("app_id", app_id), ("log_id", log_id)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -255,7 +262,11 @@ impl AuditLogService {
     ) -> SDKResult<BaseResponse<AuditEventListResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/apaas/v1/application/{app_id}/audit_log/audit_events"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APASS_V1_AUDIT_LOG_AUDIT_EVENTS,
+                "app_id",
+                app_id
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

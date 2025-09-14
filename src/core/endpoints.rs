@@ -49,12 +49,237 @@ impl Endpoints {
         "/open-apis/workplace/v1/custom_workplace_widget_access_data/search";
 
     // ==================== 招聘相关端点 ====================
+
+    // ===== 候选人管理端点 =====
+
+    /// 申请管理
+    pub const HIRE_V1_APPLICATIONS: &'static str = "/open-apis/hire/v1/applications";
+    pub const HIRE_V1_APPLICATION_GET: &'static str =
+        "/open-apis/hire/v1/applications/{application_id}";
+    pub const HIRE_V1_APPLICATION_REJECT: &'static str =
+        "/open-apis/hire/v1/applications/{application_id}/reject";
+    pub const HIRE_V1_APPLICATION_INTERVIEWS: &'static str =
+        "/open-apis/hire/v1/applications/{application_id}/interviews";
+    pub const HIRE_V1_APPLICATION_OFFER: &'static str =
+        "/open-apis/hire/v1/applications/{application_id}/offer";
+    pub const HIRE_V1_APPLICATION_ADVANCE: &'static str =
+        "/open-apis/hire/v1/applications/{application_id}/advance";
+    pub const HIRE_V1_APPLICATION_EVALUATIONS: &'static str =
+        "/open-apis/hire/v1/applications/{application_id}/evaluations";
+
+    /// 面试管理
+    pub const HIRE_V1_INTERVIEWS: &'static str = "/open-apis/hire/v1/interviews";
+    pub const HIRE_V1_INTERVIEW_GET: &'static str = "/open-apis/hire/v1/interviews/{interview_id}";
+    pub const HIRE_V1_INTERVIEW_CANCEL: &'static str =
+        "/open-apis/hire/v1/interviews/{interview_id}/cancel";
+    pub const HIRE_V1_INTERVIEW_RESCHEDULE: &'static str =
+        "/open-apis/hire/v1/interviews/{interview_id}/reschedule";
+    pub const HIRE_V1_INTERVIEW_EVALUATIONS: &'static str =
+        "/open-apis/hire/v1/interview_evaluations";
+    pub const HIRE_V1_INTERVIEW_EVALUATIONS_BY_ID: &'static str =
+        "/open-apis/hire/v1/interviews/{interview_id}/evaluations";
+    pub const HIRE_V1_INTERVIEW_ARRANGEMENTS: &'static str =
+        "/open-apis/hire/v1/interview_arrangements";
+
+    /// Offer 管理
+    pub const HIRE_V1_OFFERS: &'static str = "/open-apis/hire/v1/offers";
+    pub const HIRE_V1_OFFER_GET: &'static str = "/open-apis/hire/v1/offers/{offer_id}";
+    pub const HIRE_V1_OFFER_SEND: &'static str = "/open-apis/hire/v1/offers/{offer_id}/send";
+    pub const HIRE_V1_OFFER_WITHDRAW: &'static str =
+        "/open-apis/hire/v1/offers/{offer_id}/withdraw";
+
+    /// 人才管理
+    pub const HIRE_V1_TALENTS: &'static str = "/open-apis/hire/v1/talents";
+    pub const HIRE_V1_TALENT_GET: &'static str = "/open-apis/hire/v1/talents/{talent_id}";
+    pub const HIRE_V1_TALENT_APPLICATIONS: &'static str =
+        "/open-apis/hire/v1/talents/{talent_id}/applications";
+    pub const HIRE_V1_TALENTS_BATCH_IMPORT: &'static str =
+        "/open-apis/hire/v1/talents/batch_import";
+
+    /// 人才库管理
+    pub const HIRE_V1_TALENT_POOLS: &'static str = "/open-apis/hire/v1/talent_pools";
+    pub const HIRE_V1_TALENT_POOL_GET: &'static str = "/open-apis/hire/v1/talent_pools/{pool_id}";
+    pub const HIRE_V1_TALENT_POOL_TALENTS: &'static str =
+        "/open-apis/hire/v1/talent_pools/{pool_id}/talents";
+    pub const HIRE_V1_TALENT_POOL_TALENT_GET: &'static str =
+        "/open-apis/hire/v1/talent_pools/{pool_id}/talents/{talent_id}";
+
+    // ===== 招聘配置端点 =====
+
+    /// 职位管理
+    pub const HIRE_V1_JOBS: &'static str = "/open-apis/hire/v1/jobs";
+    pub const HIRE_V1_JOB_COMBINED_CREATE: &'static str = "/open-apis/hire/v1/jobs/combined_create";
+    pub const HIRE_V1_JOB_COMBINED_UPDATE: &'static str =
+        "/open-apis/hire/v1/jobs/{job_id}/combined_update";
+    pub const HIRE_V1_JOB_GET_DETAIL: &'static str = "/open-apis/hire/v1/jobs/{job_id}/get_detail";
+    pub const HIRE_V1_JOB_CLOSE: &'static str = "/open-apis/hire/v1/jobs/{job_id}/close";
+    pub const HIRE_V1_JOB_OPEN: &'static str = "/open-apis/hire/v1/jobs/{job_id}/open";
+
+    /// 招聘流程
+    pub const HIRE_V1_JOB_PROCESSES: &'static str = "/open-apis/hire/v1/job_processes";
+    pub const HIRE_V1_JOB_PROCESS_GET: &'static str =
+        "/open-apis/hire/v1/job_processes/{process_id}";
+
+    /// 地点管理
+    pub const HIRE_V1_LOCATIONS: &'static str = "/open-apis/hire/v1/locations";
+    pub const HIRE_V1_LOCATIONS_QUERY: &'static str = "/open-apis/hire/v1/locations/query";
+
+    /// Offer 设置
+    pub const HIRE_V1_OFFER_SETTINGS: &'static str = "/open-apis/hire/v1/offer_settings";
+    pub const HIRE_V1_OFFER_SETTING_GET: &'static str =
+        "/open-apis/hire/v1/offer_settings/{settings_id}";
+
+    /// 科目管理
+    pub const HIRE_V1_SUBJECTS: &'static str = "/open-apis/hire/v1/subjects";
+    pub const HIRE_V1_SUBJECT_GET: &'static str = "/open-apis/hire/v1/subjects/{subject_id}";
+    pub const HIRE_V1_SUBJECT_ENABLE: &'static str =
+        "/open-apis/hire/v1/subjects/{subject_id}/enable";
+    pub const HIRE_V1_SUBJECT_DISABLE: &'static str =
+        "/open-apis/hire/v1/subjects/{subject_id}/disable";
+
+    /// 职位要求
+    pub const HIRE_V1_JOB_REQUIREMENTS: &'static str = "/open-apis/hire/v1/job_requirements";
+    pub const HIRE_V1_JOB_REQUIREMENT_GET: &'static str =
+        "/open-apis/hire/v1/job_requirements/{requirement_id}";
+
+    /// 权限管理
+    pub const HIRE_V1_ROLES: &'static str = "/open-apis/hire/v1/roles";
+    pub const HIRE_V1_ROLE_GET: &'static str = "/open-apis/hire/v1/roles/{role_id}";
+    pub const HIRE_V1_USER_ROLES: &'static str = "/open-apis/hire/v1/users/{user_id}/roles";
+
+    /// 面试设置
+    pub const HIRE_V1_INTERVIEW_SETTINGS: &'static str = "/open-apis/hire/v1/interview_settings";
+    pub const HIRE_V1_INTERVIEW_SETTING_GET: &'static str =
+        "/open-apis/hire/v1/interview_settings/{settings_id}";
+
+    /// 应用配置
+    pub const HIRE_V1_TALENT_TAGS: &'static str = "/open-apis/hire/v1/talent_tags";
+    pub const HIRE_V1_REGISTRATION_FORMS: &'static str = "/open-apis/hire/v1/registration_forms";
+
+    // ===== 获取候选人端点 =====
+
+    /// 代理渠道
+    pub const HIRE_V1_AGENCIES: &'static str = "/open-apis/hire/v1/agencies";
+    pub const HIRE_V1_AGENCY_CONSULTANTS: &'static str = "/open-apis/hire/v1/agency_consultants";
+    pub const HIRE_V1_AGENCY_CONSULTANTS_BY_ID: &'static str =
+        "/open-apis/hire/v1/agencies/{agency_id}/consultants";
+    pub const HIRE_V1_AGENCY_RECOMMENDATIONS: &'static str =
+        "/open-apis/hire/v1/agency_recommendations";
+
+    /// 外部系统
+    pub const HIRE_V1_EXTERNAL_SYSTEMS: &'static str = "/open-apis/hire/v1/external_systems";
+    pub const HIRE_V1_EXTERNAL_SYSTEMS_SYNC_TASKS: &'static str =
+        "/open-apis/hire/v1/external_systems/sync_tasks";
+    pub const HIRE_V1_EXTERNAL_SYSTEMS_SYNC_RECORDS: &'static str =
+        "/open-apis/hire/v1/external_systems/sync_records";
+    pub const HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_IMPORT: &'static str =
+        "/open-apis/hire/v1/external_systems/candidates/import";
+    pub const HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES: &'static str =
+        "/open-apis/hire/v1/external_systems/candidates";
+
+    /// 内推渠道
+    pub const HIRE_V1_REFERRALS: &'static str = "/open-apis/hire/v1/referrals";
+    pub const HIRE_V1_REFERRAL_GET: &'static str = "/open-apis/hire/v1/referrals/{referral_id}";
+    pub const HIRE_V1_REFERRAL_GRANT_REWARD: &'static str =
+        "/open-apis/hire/v1/referrals/{referral_id}/grant_reward";
+    pub const HIRE_V1_REFERRAL_REWARD_SETTINGS: &'static str =
+        "/open-apis/hire/v1/referral_reward_settings";
+
     /// 内推账户相关端点
-    pub const HIRE_REFERRAL_ACCOUNTS: &'static str = "/open-apis/hire/v1/referral_accounts";
+    pub const HIRE_V1_REFERRAL_ACCOUNTS: &'static str = "/open-apis/hire/v1/referral_accounts";
+    pub const HIRE_V1_REFERRAL_ACCOUNT_GET: &'static str =
+        "/open-apis/hire/v1/referral_accounts/{user_id}";
+    pub const HIRE_REFERRAL_ACCOUNT_BALANCE: &'static str =
+        "/open-apis/hire/v1/referral_accounts/{user_id}/balance";
+    pub const HIRE_REFERRAL_ACCOUNT_ENABLE: &'static str =
+        "/open-apis/hire/v1/referral_accounts/{user_id}/enable";
+    pub const HIRE_REFERRAL_ACCOUNT_DISABLE: &'static str =
+        "/open-apis/hire/v1/referral_accounts/{user_id}/disable";
     pub const HIRE_REFERRAL_INCOME_RECORDS: &'static str =
         "/open-apis/hire/v1/referral_income_records";
     pub const HIRE_REFERRAL_WITHDRAWALS: &'static str = "/open-apis/hire/v1/referral_withdrawals";
+    pub const HIRE_REFERRAL_WITHDRAWAL_APPROVE: &'static str =
+        "/open-apis/hire/v1/referral_withdrawals/{withdrawal_id}/approve";
     pub const HIRE_REFERRAL_STATISTICS: &'static str = "/open-apis/hire/v1/referral_statistics";
+
+    /// 网站渠道
+    pub const HIRE_V1_WEBSITE_JOBS: &'static str = "/open-apis/hire/v1/website/jobs";
+    pub const HIRE_V1_WEBSITE_JOBS_PUBLISH: &'static str =
+        "/open-apis/hire/v1/website/jobs/publish";
+    pub const HIRE_V1_WEBSITE_JOB_UNPUBLISH: &'static str =
+        "/open-apis/hire/v1/website/jobs/{job_id}/unpublish";
+    pub const HIRE_V1_WEBSITE_APPLICATIONS: &'static str =
+        "/open-apis/hire/v1/website/applications";
+    pub const HIRE_V1_WEBSITE_CONFIGURATION: &'static str =
+        "/open-apis/hire/v1/website/configuration";
+    pub const HIRE_V1_WEBSITE_STATISTICS: &'static str = "/open-apis/hire/v1/website/statistics";
+    pub const HIRE_V1_WEBSITE_APPLICATION_CONVERT: &'static str =
+        "/open-apis/hire/v1/website/applications/{website_application_id}/convert";
+
+    // ===== 生态对接端点 =====
+
+    /// 背景调查
+    pub const HIRE_V1_BACKGROUND_CHECK_PACKAGES: &'static str =
+        "/open-apis/hire/v1/background_check_packages";
+    pub const HIRE_V1_BACKGROUND_CHECK_ORDERS: &'static str =
+        "/open-apis/hire/v1/background_check_orders";
+    pub const HIRE_V1_BACKGROUND_CHECK_ORDER_GET: &'static str =
+        "/open-apis/hire/v1/background_check_orders/{order_id}";
+    pub const HIRE_V1_BACKGROUND_CHECK_ORDER_CANCEL: &'static str =
+        "/open-apis/hire/v1/background_check_orders/{order_id}/cancel";
+    pub const HIRE_V1_BACKGROUND_CHECK_ORDER_REPORT: &'static str =
+        "/open-apis/hire/v1/background_check_orders/{order_id}/report";
+    pub const HIRE_V1_BACKGROUND_CHECK_ORDERS_BATCH: &'static str =
+        "/open-apis/hire/v1/background_check_orders/batch";
+
+    /// 考试管理
+    pub const HIRE_V1_EXAM_PAPERS: &'static str = "/open-apis/hire/v1/exam_papers";
+    pub const HIRE_V1_EXAM_ARRANGEMENTS: &'static str = "/open-apis/hire/v1/exam_arrangements";
+    pub const HIRE_V1_EXAM_RECORDS: &'static str = "/open-apis/hire/v1/exam_records";
+    pub const HIRE_V1_EXAM_RECORD_GET: &'static str = "/open-apis/hire/v1/exam_records/{record_id}";
+    pub const HIRE_V1_EXAM_RECORD_CANCEL: &'static str =
+        "/open-apis/hire/v1/exam_records/{record_id}/cancel";
+    pub const HIRE_V1_EXAM_RECORD_RESCHEDULE: &'static str =
+        "/open-apis/hire/v1/exam_records/{record_id}/reschedule";
+    pub const HIRE_V1_EXAM_SUBMISSIONS: &'static str = "/open-apis/hire/v1/exam_submissions";
+    pub const HIRE_V1_EXAM_STATISTICS: &'static str = "/open-apis/hire/v1/exam_statistics";
+
+    // ===== 其他模块端点 =====
+
+    /// 附件管理
+    pub const HIRE_V1_ATTACHMENTS: &'static str = "/open-apis/hire/v1/attachments";
+    pub const HIRE_V1_ATTACHMENT_GET: &'static str =
+        "/open-apis/hire/v1/attachments/{attachment_id}";
+    pub const HIRE_V1_ATTACHMENT_UPLOAD: &'static str = "/open-apis/hire/v1/attachments/upload";
+    pub const HIRE_V1_ATTACHMENT_DOWNLOAD: &'static str =
+        "/open-apis/hire/v1/attachments/{attachment_id}/download";
+    pub const HIRE_V1_ATTACHMENT_PREVIEW: &'static str =
+        "/open-apis/hire/v1/attachments/{attachment_id}/preview";
+    pub const HIRE_V1_ATTACHMENTS_BATCH_DOWNLOAD: &'static str =
+        "/open-apis/hire/v1/attachments/batch_download";
+    pub const HIRE_V1_ATTACHMENTS_BATCH_DELETE: &'static str =
+        "/open-apis/hire/v1/attachments/batch_delete";
+    pub const HIRE_V1_ATTACHMENT_STATISTICS: &'static str =
+        "/open-apis/hire/v1/attachment_statistics";
+
+    /// 入职管理
+    pub const HIRE_V1_ONBOARDINGS: &'static str = "/open-apis/hire/v1/onboardings";
+
+    /// 获取入职进度详情 (需要使用 EndpointBuilder::replace_param 替换 {onboarding_id} 和 {progress_id})
+    pub const HIRE_V1_ONBOARDING_PROGRESS: &'static str =
+        "/open-apis/hire/v1/onboardings/{onboarding_id}/progress/{progress_id}";
+
+    // 动态路径常量 - 用于 agency, external_system, referral 等模块
+    pub const HIRE_V1_AGENCIES_CONSULTANTS: &'static str =
+        "/open-apis/hire/v1/agencies/{agency_id}/consultants";
+    pub const HIRE_V1_AGENCY_RECOMMENDATION_CONFIRM: &'static str =
+        "/open-apis/hire/v1/agency_recommendations/{recommendation_id}/confirm";
+    pub const HIRE_V1_AGENCY_RECOMMENDATION_REJECT: &'static str =
+        "/open-apis/hire/v1/agency_recommendations/{recommendation_id}/reject";
+    pub const HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_CONVERT: &'static str =
+        "/open-apis/hire/v1/external_systems/candidates/{external_candidate_id}/convert";
+    pub const HIRE_V1_EXTERNAL_SYSTEMS_TEST_CONNECTION: &'static str =
+        "/open-apis/hire/v1/external_systems/{system_config_id}/test_connection";
 
     /// 获取收藏的推荐规则
     pub const WORKPLACE_APP_RECOMMEND_FAVOURITE: &'static str =
@@ -183,6 +408,89 @@ impl Endpoints {
     /// 将用户或机器人移出聊天
     pub const IM_CHAT_REMOVE_MEMBERS: &'static str =
         "/open-apis/im/v1/chats/{chat_id}/members/batch_delete";
+
+    // 回复消息
+    /// 回复消息
+    pub const IM_V1_REPLY_MESSAGE: &'static str = "/open-apis/im/v1/messages/{message_id}/reply";
+
+    // 消息表情回应
+    /// 添加消息表情回应
+    pub const IM_V1_MESSAGE_REACTIONS: &'static str = "/open-apis/im/v1/messages/{message_id}/reactions";
+
+    /// 删除消息表情回应
+    pub const IM_V1_DELETE_MESSAGE_REACTION: &'static str = "/open-apis/im/v1/messages/{message_id}/reactions/{reaction_id}";
+
+    // 批量消息
+    /// 批量发送消息
+    pub const IM_V1_BATCH_MESSAGES: &'static str = "/open-apis/im/v1/batch_messages";
+
+    /// 批量撤回消息
+    pub const IM_V1_DELETE_BATCH_MESSAGE: &'static str = "/open-apis/im/v1/batch_messages/{batch_message_id}";
+
+    /// 查询批量发送消息进度
+    pub const IM_V1_BATCH_MESSAGE_PROGRESS: &'static str = "/open-apis/im/v1/batch_messages/{batch_message_id}/get_progress";
+
+    /// 查询批量发送消息已读状态
+    pub const IM_V1_BATCH_MESSAGE_READ_USER: &'static str = "/open-apis/im/v1/batch_messages/{batch_message_id}/read_user";
+
+    // 紧急消息/消息加急
+    /// 应用内加急
+    pub const IM_V1_MESSAGE_URGENT_APP: &'static str = "/open-apis/im/v1/messages/{message_id}/urgent_app";
+
+    /// 短信加急
+    pub const IM_V1_MESSAGE_URGENT_SMS: &'static str = "/open-apis/im/v1/messages/{message_id}/urgent_sms";
+
+    /// 电话加急
+    pub const IM_V1_MESSAGE_URGENT_PHONE: &'static str = "/open-apis/im/v1/messages/{message_id}/urgent_phone";
+
+    // 延时更新卡片
+    /// 延时更新卡片
+    pub const IM_V1_MESSAGE_DELAY_UPDATE: &'static str = "/open-apis/im/v1/messages/{message_id}/delay_update";
+
+    // Pin 消息
+    /// 创建Pin消息
+    pub const IM_V1_PINS: &'static str = "/open-apis/im/v1/pins";
+
+    /// 删除Pin消息
+    pub const IM_V1_DELETE_PIN: &'static str = "/open-apis/im/v1/pins/{pin_id}";
+
+    // 文件和图片
+    /// 上传文件
+    pub const IM_V1_FILES: &'static str = "/open-apis/im/v1/files";
+
+    /// 下载文件
+    pub const IM_V1_DOWNLOAD_FILE: &'static str = "/open-apis/im/v1/files/{file_key}";
+
+    /// 上传图片
+    pub const IM_V1_IMAGES: &'static str = "/open-apis/im/v1/images";
+
+    /// 下载图片
+    pub const IM_V1_DOWNLOAD_IMAGE: &'static str = "/open-apis/im/v1/images/{image_key}";
+
+    // URL预览
+    /// 批量更新消息URL预览
+    pub const IM_V1_MESSAGE_URL_PREVIEW_BATCH_UPDATE: &'static str = "/open-apis/im/v1/messages/{message_id}/url_preview/batch_update";
+
+    // V2 API 端点
+    // App feed card
+    /// 应用信息流卡片
+    pub const IM_V2_APP_FEED_CARD: &'static str = "/open-apis/im/v2/app_feed_card";
+
+    /// 获取应用信息流卡片
+    pub const IM_V2_GET_APP_FEED_CARD: &'static str = "/open-apis/im/v2/app_feed_card/{card_id}";
+
+    /// 删除应用信息流卡片
+    pub const IM_V2_DELETE_APP_FEED_CARD: &'static str = "/open-apis/im/v2/app_feed_card/{card_id}";
+
+    // Groups bots
+    /// 群机器人时间敏感性设置
+    pub const IM_V2_GROUPS_BOTS_TIME_SENSITIVE: &'static str = "/open-apis/im/v2/groups-bots/bot_time_sentive";
+
+    /// 更新群机器人消息
+    pub const IM_V2_GROUPS_BOTS_UPDATE: &'static str = "/open-apis/im/v2/groups-bots/{message_id}/update";
+
+    /// 批量更新群机器人设置
+    pub const IM_V2_GROUPS_BOTS_PATCH: &'static str = "/open-apis/im/v2/groups-bots/patch";
 
     // ==================== 云盘服务端点 ====================
 
@@ -406,6 +714,169 @@ impl Endpoints {
     /// 任务清单管理
     pub const TASK_V2_TASKLISTS: &'static str = "/open-apis/task/v2/tasklists";
 
+    // 参数化端点常量
+    /// 获取/更新/删除特定附件
+    pub const TASK_V2_ATTACHMENT_GET: &'static str = "/open-apis/task/v2/attachments/{attachment_guid}";
+
+    /// 获取/更新/删除特定自定义字段
+    pub const TASK_V2_CUSTOM_FIELD_GET: &'static str = "/open-apis/task/v2/custom_fields/{custom_field_guid}";
+
+    /// 添加自定义字段选项
+    pub const TASK_V2_CUSTOM_FIELD_ADD: &'static str = "/open-apis/task/v2/custom_fields/{custom_field_guid}/add";
+
+    /// 移除自定义字段选项
+    pub const TASK_V2_CUSTOM_FIELD_REMOVE: &'static str = "/open-apis/task/v2/custom_fields/{custom_field_guid}/remove";
+
+    /// 自定义字段选项管理
+    pub const TASK_V2_CUSTOM_FIELD_OPTIONS: &'static str = "/open-apis/task/v2/custom_fields/{custom_field_guid}/options";
+
+    /// 获取/更新/删除特定自定义字段选项
+    pub const TASK_V2_CUSTOM_FIELD_OPTION_GET: &'static str = "/open-apis/task/v2/custom_fields/{custom_field_guid}/options/{option_guid}";
+
+    /// 获取/更新/删除特定分组
+    pub const TASK_V2_SECTION_GET: &'static str = "/open-apis/task/v2/sections/{section_guid}";
+
+    /// 分组任务管理
+    pub const TASK_V2_SECTION_TASKS: &'static str = "/open-apis/task/v2/sections/{section_guid}/tasks";
+
+    /// 获取/更新/删除特定任务清单
+    pub const TASK_V2_TASKLIST_GET: &'static str = "/open-apis/task/v2/tasklists/{tasklist_guid}";
+
+    /// 任务清单添加成员
+    pub const TASK_V2_TASKLIST_ADD_MEMBERS: &'static str = "/open-apis/task/v2/tasklists/{tasklist_guid}/add_members";
+
+    /// 任务清单移除成员
+    pub const TASK_V2_TASKLIST_REMOVE_MEMBERS: &'static str = "/open-apis/task/v2/tasklists/{tasklist_guid}/remove_members";
+
+    /// 任务清单任务管理
+    pub const TASK_V2_TASKLIST_TASKS: &'static str = "/open-apis/task/v2/tasklists/{tasklist_guid}/tasks";
+
+    /// 任务清单活动订阅
+    pub const TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTIONS: &'static str = "/open-apis/task/v2/tasklists/{tasklist_guid}/activity_subscriptions";
+
+    /// 获取/更新/删除特定活动订阅
+    pub const TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTION_GET: &'static str = "/open-apis/task/v2/tasklists/{tasklist_guid}/activity_subscriptions/{activity_subscription_guid}";
+
+    /// 获取/更新/删除特定任务
+    pub const TASK_V2_TASK_GET: &'static str = "/open-apis/task/v2/tasks/{task_guid}";
+
+    /// 任务添加成员
+    pub const TASK_V2_TASK_ADD_MEMBERS: &'static str = "/open-apis/task/v2/tasks/{task_guid}/add_members";
+
+    /// 任务移除成员
+    pub const TASK_V2_TASK_REMOVE_MEMBERS: &'static str = "/open-apis/task/v2/tasks/{task_guid}/remove_members";
+
+    /// 任务添加提醒
+    pub const TASK_V2_TASK_ADD_REMINDERS: &'static str = "/open-apis/task/v2/tasks/{task_guid}/add_reminders";
+
+    /// 任务移除提醒
+    pub const TASK_V2_TASK_REMOVE_REMINDERS: &'static str = "/open-apis/task/v2/tasks/{task_guid}/remove_reminders";
+
+    /// 任务添加依赖
+    pub const TASK_V2_TASK_ADD_DEPENDENCIES: &'static str = "/open-apis/task/v2/tasks/{task_guid}/add_dependencies";
+
+    /// 任务移除依赖
+    pub const TASK_V2_TASK_REMOVE_DEPENDENCIES: &'static str = "/open-apis/task/v2/tasks/{task_guid}/remove_dependencies";
+
+    /// 任务评论管理
+    pub const TASK_V2_TASK_COMMENTS: &'static str = "/open-apis/task/v2/tasks/{task_guid}/comments";
+
+    /// 获取/更新/删除特定任务评论
+    pub const TASK_V2_TASK_COMMENT_GET: &'static str = "/open-apis/task/v2/tasks/{task_guid}/comments/{comment_id}";
+
+    /// 任务子任务管理
+    pub const TASK_V2_TASK_SUBTASKS: &'static str = "/open-apis/task/v2/tasks/{task_guid}/subtasks";
+
+    // ==================== APaaS 平台即服务相关端点 ====================
+    
+    // ===== 座位管理端点 =====
+    /// 查询座位分配列表
+    pub const APASS_V1_SEAT_ASSIGNMENT_LIST: &'static str = "/open-apis/apaas/v1/seat_assignment/list";
+    /// 查询座位活动列表
+    pub const APASS_V1_SEAT_ACTIVITY_LIST: &'static str = "/open-apis/apaas/v1/seat_activity/list";
+
+    // ===== 流程管理端点 =====
+    /// 执行流程
+    pub const APASS_V1_FLOW_EXECUTE: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/{flow_api_name}/execute";
+    /// 查询用户任务
+    pub const APASS_V1_FLOW_USER_TASK_QUERY: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/query";
+    /// 同意用户任务
+    pub const APASS_V1_FLOW_USER_TASK_AGREE: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/agree";
+    /// 拒绝用户任务
+    pub const APASS_V1_FLOW_USER_TASK_REJECT: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/reject";
+    /// 转发用户任务
+    pub const APASS_V1_FLOW_USER_TASK_TRANSFER: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/transfer";
+    /// 添加用户任务处理人
+    pub const APASS_V1_FLOW_USER_TASK_ADD_ASSIGNEE: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/add_assignee";
+    /// 抄送用户任务
+    pub const APASS_V1_FLOW_USER_TASK_CC: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/cc";
+    /// 催办用户任务
+    pub const APASS_V1_FLOW_USER_TASK_EXPEDITING: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/expediting";
+    /// 取消用户任务
+    pub const APASS_V1_FLOW_USER_TASK_CANCEL: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/cancel";
+    /// 查询用户任务回退点
+    pub const APASS_V1_FLOW_USER_TASK_ROLLBACK_POINTS: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/rollback_points";
+    /// 回退用户任务
+    pub const APASS_V1_FLOW_USER_TASK_ROLLBACK: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/rollback";
+    /// 获取用户任务群聊
+    pub const APASS_V1_FLOW_USER_TASK_CHAT_GROUP: &'static str = "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/chat_group";
+
+    // ===== 函数管理端点 =====
+    /// 调用函数
+    pub const APASS_V1_FUNCTION_INVOKE: &'static str = "/open-apis/apaas/v1/application/{app_id}/function/{function_name}/invoke";
+
+    // ===== 权限管理端点 =====
+    /// 批量移除角色成员
+    pub const APASS_V1_PERMISSION_ROLE_MEMBERS_BATCH_REMOVE: &'static str = "/open-apis/apaas/v1/application/{app_id}/permission/role/{role_api_name}/members/batch_remove";
+    /// 批量添加角色成员
+    pub const APASS_V1_PERMISSION_ROLE_MEMBERS_BATCH_CREATE: &'static str = "/open-apis/apaas/v1/application/{app_id}/permission/role/{role_api_name}/members/batch_create";
+    /// 获取角色成员
+    pub const APASS_V1_PERMISSION_ROLE_MEMBER_GET: &'static str = "/open-apis/apaas/v1/application/{app_id}/permission/role/{role_api_name}/member/{user_id}";
+    /// 批量移除记录权限成员
+    pub const APASS_V1_PERMISSION_RECORD_MEMBERS_BATCH_REMOVE: &'static str = "/open-apis/apaas/v1/application/{app_id}/permission/record_permission/{record_permission_api_name}/members/batch_remove";
+    /// 批量添加记录权限成员
+    pub const APASS_V1_PERMISSION_RECORD_MEMBERS_BATCH_CREATE: &'static str = "/open-apis/apaas/v1/application/{app_id}/permission/record_permission/{record_permission_api_name}/members/batch_create";
+
+    // ===== 对象管理端点 =====
+    /// OQL 查询
+    pub const APASS_V1_OBJECT_OQL: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/oql";
+    /// 搜索记录
+    pub const APASS_V1_OBJECT_RECORD_SEARCH: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/search";
+    /// 获取记录
+    pub const APASS_V1_OBJECT_RECORD_GET: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/{record_id}";
+    /// 更新记录
+    pub const APASS_V1_OBJECT_RECORD_UPDATE: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/{record_id}";
+    /// 删除记录
+    pub const APASS_V1_OBJECT_RECORD_DELETE: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/{record_id}";
+    /// 创建记录
+    pub const APASS_V1_OBJECT_RECORD_CREATE: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record";
+    /// 批量更新记录
+    pub const APASS_V1_OBJECT_RECORD_BATCH_UPDATE: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/batch_update";
+    /// 批量查询记录
+    pub const APASS_V1_OBJECT_RECORD_BATCH_QUERY: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/batch_query";
+    /// 批量删除记录
+    pub const APASS_V1_OBJECT_RECORD_BATCH_DELETE: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/batch_delete";
+    /// 批量创建记录
+    pub const APASS_V1_OBJECT_RECORD_BATCH_CREATE: &'static str = "/open-apis/apaas/v1/application/{app_id}/object/{object_api_name}/record/batch_create";
+
+    // ===== 环境变量管理端点 =====
+    /// 查询环境变量
+    pub const APASS_V1_ENVIRONMENT_VARIABLE_QUERY: &'static str = "/open-apis/apaas/v1/application/{app_id}/environment_variable/query";
+    /// 获取环境变量
+    pub const APASS_V1_ENVIRONMENT_VARIABLE_GET: &'static str = "/open-apis/apaas/v1/application/{app_id}/environment_variable/{variable_name}";
+
+    // ===== 审计日志管理端点 =====
+    /// 审计日志列表
+    pub const APASS_V1_AUDIT_LOG_LIST: &'static str = "/open-apis/apaas/v1/application/{app_id}/audit_log/list";
+    /// 获取审计日志
+    pub const APASS_V1_AUDIT_LOG_GET: &'static str = "/open-apis/apaas/v1/application/{app_id}/audit_log/{log_id}";
+    /// 数据变更日志列表
+    pub const APASS_V1_AUDIT_LOG_DATA_CHANGE_LOGS: &'static str = "/open-apis/apaas/v1/application/{app_id}/audit_log/data_change_logs";
+    /// 获取数据变更日志
+    pub const APASS_V1_AUDIT_LOG_DATA_CHANGE_LOG_GET: &'static str = "/open-apis/apaas/v1/application/{app_id}/audit_log/data_change_log/{log_id}";
+    /// 审计事件列表
+    pub const APASS_V1_AUDIT_LOG_AUDIT_EVENTS: &'static str = "/open-apis/apaas/v1/application/{app_id}/audit_log/audit_events";
+
     // ==================== Performance 绩效管理相关端点 ====================
     /// 绩效周期列表查询
     pub const PERFORMANCE_SEMESTER_LIST: &'static str =
@@ -580,6 +1051,67 @@ impl Endpoints {
 
     /// 功能角色管理
     pub const CONTACT_V3_FUNCTIONAL_ROLES: &'static str = "/open-apis/contact/v3/functional_roles";
+
+    /// 用户管理 - 带参数的端点
+    pub const CONTACT_V3_USER_GET: &'static str = "/open-apis/contact/v3/users/{user_id}";
+    pub const CONTACT_V3_USER_UPDATE_ID: &'static str = "/open-apis/contact/v3/users/{user_id}/update_user_id";
+    pub const CONTACT_V3_USER_RESURRECT: &'static str = "/open-apis/contact/v3/users/{user_id}/resurrect";
+
+    /// 部门管理 - 带参数的端点
+    pub const CONTACT_V3_DEPARTMENT_GET: &'static str = "/open-apis/contact/v3/departments/{department_id}";
+    pub const CONTACT_V3_DEPARTMENT_UPDATE_ID: &'static str = "/open-apis/contact/v3/departments/{department_id}/update_department_id";
+
+    /// 职务管理 - 带参数的端点
+    pub const CONTACT_V3_JOB_TITLE_GET: &'static str = "/open-apis/contact/v3/job_titles/{job_title_id}";
+
+    /// 职位族群管理 - 带参数的端点
+    pub const CONTACT_V3_JOB_FAMILY_GET: &'static str = "/open-apis/contact/v3/job_families/{job_family_id}";
+
+    /// 职级管理 - 带参数的端点
+    pub const CONTACT_V3_JOB_LEVEL_GET: &'static str = "/open-apis/contact/v3/job_levels/{job_level_id}";
+
+    /// 功能角色管理 - 带参数的端点
+    pub const CONTACT_V3_FUNCTIONAL_ROLE_GET: &'static str = "/open-apis/contact/v3/functional_roles/{role_id}";
+    pub const CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS: &'static str = "/open-apis/contact/v3/functional_roles/{role_id}/members";
+    pub const CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_CREATE: &'static str = "/open-apis/contact/v3/functional_roles/{role_id}/members/batch_create";
+    pub const CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_DELETE: &'static str = "/open-apis/contact/v3/functional_roles/{role_id}/members/batch_delete";
+    pub const CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_SCOPES: &'static str = "/open-apis/contact/v3/functional_roles/{role_id}/members/scopes";
+    pub const CONTACT_V3_FUNCTIONAL_ROLE_MEMBER_GET: &'static str = "/open-apis/contact/v3/functional_roles/{role_id}/members/{member_id}";
+
+    /// 群组管理
+    pub const CONTACT_V3_GROUPS: &'static str = "/open-apis/contact/v3/groups";
+    pub const CONTACT_V3_GROUPS_SIMPLELIST: &'static str = "/open-apis/contact/v3/groups/simplelist";
+    pub const CONTACT_V3_GROUPS_MEMBER_BELONG: &'static str = "/open-apis/contact/v3/groups/member_belong";
+    pub const CONTACT_V3_GROUP_GET: &'static str = "/open-apis/contact/v3/groups/{group_id}";
+    pub const CONTACT_V3_GROUP_DETAIL: &'static str = "/open-apis/contact/v3/groups/{group_id}/detail";
+
+    /// 群组成员管理
+    pub const CONTACT_V3_GROUP_MEMBERS_ADD: &'static str = "/open-apis/contact/v3/groups/{group_id}/members/add";
+    pub const CONTACT_V3_GROUP_MEMBERS_BATCH_ADD: &'static str = "/open-apis/contact/v3/groups/{group_id}/members/batch_add";
+    pub const CONTACT_V3_GROUP_MEMBERS_REMOVE: &'static str = "/open-apis/contact/v3/groups/{group_id}/members/remove";
+    pub const CONTACT_V3_GROUP_MEMBERS_BATCH_REMOVE: &'static str = "/open-apis/contact/v3/groups/{group_id}/members/batch_remove";
+    pub const CONTACT_V3_GROUP_MEMBERS_SIMPLELIST: &'static str = "/open-apis/contact/v3/groups/{group_id}/members/simplelist";
+
+    /// 单位管理
+    pub const CONTACT_V3_UNITS: &'static str = "/open-apis/contact/v3/units";
+    pub const CONTACT_V3_UNIT_GET: &'static str = "/open-apis/contact/v3/units/{unit_id}";
+    pub const CONTACT_V3_UNIT_BIND_DEPARTMENT: &'static str = "/open-apis/contact/v3/units/{unit_id}/bind_department";
+    pub const CONTACT_V3_UNIT_UNBIND_DEPARTMENT: &'static str = "/open-apis/contact/v3/units/{unit_id}/unbind_department";
+    pub const CONTACT_V3_UNIT_LIST_DEPARTMENT: &'static str = "/open-apis/contact/v3/units/{unit_id}/list_department";
+
+    /// 工作城市管理
+    pub const CONTACT_V3_WORK_CITIES: &'static str = "/open-apis/contact/v3/work_cities";
+    pub const CONTACT_V3_WORK_CITY_GET: &'static str = "/open-apis/contact/v3/work_cities/{work_city_id}";
+
+    /// 员工类型枚举管理
+    pub const CONTACT_V3_EMPLOYEE_TYPE_ENUMS: &'static str = "/open-apis/contact/v3/employee_type_enums";
+    pub const CONTACT_V3_EMPLOYEE_TYPE_ENUM_GET: &'static str = "/open-apis/contact/v3/employee_type_enums/{enum_id}";
+
+    /// 自定义属性管理
+    pub const CONTACT_V3_CUSTOM_ATTRS: &'static str = "/open-apis/contact/v3/custom_attrs";
+
+    /// 权限范围管理
+    pub const CONTACT_V3_SCOPES: &'static str = "/open-apis/contact/v3/scopes";
 
     // ==================== 考勤服务端点 ====================
 
@@ -860,6 +1392,18 @@ impl Endpoints {
     pub const HELPDESK_V1_NOTIFICATION_UPDATE: &'static str =
         "/open-apis/helpdesk/v1/notifications/{notification_id}";
 
+    /// 通知提交审核
+    pub const HELPDESK_V1_NOTIFICATION_SUBMIT_APPROVE: &'static str =
+        "/open-apis/helpdesk/v1/notifications/{notification_id}/submit_approve";
+
+    /// 通知取消审核
+    pub const HELPDESK_V1_NOTIFICATION_CANCEL_APPROVE: &'static str =
+        "/open-apis/helpdesk/v1/notifications/{notification_id}/cancel_approve";
+
+    /// 通知执行推送
+    pub const HELPDESK_V1_NOTIFICATION_EXECUTE_SEND: &'static str =
+        "/open-apis/helpdesk/v1/notifications/{notification_id}/execute_send";
+
     /// 通知取消发送
     pub const HELPDESK_V1_NOTIFICATION_CANCEL_SEND: &'static str =
         "/open-apis/helpdesk/v1/notifications/{notification_id}/cancel_send";
@@ -1070,6 +1614,8 @@ impl Endpoints {
         "/open-apis/bitable/v1/apps/{app_token}/forms/{form_id}";
     pub const BITABLE_V1_FORM_PATCH_META: &'static str =
         "/open-apis/bitable/v1/apps/{app_token}/forms/{form_id}/questions";
+    pub const BITABLE_V1_FORM_QUESTION: &'static str =
+        "/open-apis/bitable/v1/apps/{app_token}/forms/{form_id}/questions/{question_id}";
 
     /// 多维表格工作流管理
     pub const BITABLE_V1_WORKFLOWS: &'static str =
@@ -1096,9 +1642,9 @@ impl Endpoints {
     pub const COMMENT_V1_COMMENT_REPLIES: &'static str =
         "/open-apis/comment/v1/comments/{}/replies";
     pub const COMMENT_V1_COMMENT_REPLY_UPDATE: &'static str =
-        "/open-apis/comment/v1/comments/{}/replies/{}";
+        "/open-apis/comment/v1/comments/{comment_id}/replies/{reply_id}";
     pub const COMMENT_V1_COMMENT_REPLY_DELETE: &'static str =
-        "/open-apis/comment/v1/comments/{}/replies/{}";
+        "/open-apis/comment/v1/comments/{comment_id}/replies/{reply_id}";
 
     // Docx 文档服务
     /// 文档管理
@@ -1367,6 +1913,7 @@ impl Endpoints {
     pub const WIKI_V2_TASKS_MOVE_DOCS_TO_WIKI: &'static str =
         "/open-apis/wiki/v2/tasks/move_docs_to_wiki";
     pub const WIKI_V2_TASK_GET: &'static str = "/open-apis/wiki/v2/tasks/{}";
+
 }
 
 /// API端点构建辅助函数
@@ -1410,6 +1957,36 @@ impl EndpointBuilder {
     pub fn replace_params(
         template: &str,
         params: &std::collections::HashMap<String, String>,
+    ) -> String {
+        let mut result = template.to_string();
+        for (key, value) in params {
+            result = result.replace(&format!("{{{}}}", key), value);
+        }
+        result
+    }
+
+    /// Replace multiple parameters in an endpoint template using an array of key-value pairs.
+    ///
+    /// This is a convenience method for replacing multiple parameters without creating a HashMap.
+    ///
+    /// # Arguments
+    ///
+    /// * `template` - The template string containing placeholders like `{param_name}`
+    /// * `params` - An array of tuples containing (key, value) pairs
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use open_lark::core::endpoints::EndpointBuilder;
+    /// let path = EndpointBuilder::replace_params_from_array(
+    ///     "/open-apis/apaas/v1/application/{app_id}/flow/{flow_api_name}/execute",
+    ///     &[("app_id", "app_123"), ("flow_api_name", "flow_456")]
+    /// );
+    /// assert_eq!(path, "/open-apis/apaas/v1/application/app_123/flow/flow_456/execute");
+    /// ```
+    pub fn replace_params_from_array(
+        template: &str,
+        params: &[(&str, &str)],
     ) -> String {
         let mut result = template.to_string();
         for (key, value) in params {

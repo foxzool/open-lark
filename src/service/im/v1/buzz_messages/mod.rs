@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
@@ -70,7 +71,7 @@ impl BuzzMessagesService {
     ) -> SDKResult<UrgentResponse> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/im/v1/messages/{message_id}/urgent_app"),
+            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_MESSAGE_URGENT_APP, "message_id", message_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params: HashMap::from([("user_id_type", user_id_type.as_str().to_string())]),
             body: serde_json::to_vec(&request)?,
@@ -92,7 +93,7 @@ impl BuzzMessagesService {
     ) -> SDKResult<UrgentResponse> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/im/v1/messages/{message_id}/urgent_sms"),
+            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_MESSAGE_URGENT_SMS, "message_id", message_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params: HashMap::from([("user_id_type", user_id_type.as_str().to_string())]),
             body: serde_json::to_vec(&request)?,
@@ -114,7 +115,7 @@ impl BuzzMessagesService {
     ) -> SDKResult<UrgentResponse> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/im/v1/messages/{message_id}/urgent_phone"),
+            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_MESSAGE_URGENT_PHONE, "message_id", message_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params: HashMap::from([("user_id_type", user_id_type.as_str().to_string())]),
             body: serde_json::to_vec(&request)?,

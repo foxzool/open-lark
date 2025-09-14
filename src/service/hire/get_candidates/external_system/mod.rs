@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -319,7 +320,7 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/external_systems".to_string(),
+            api_path: Endpoints::HIRE_V1_EXTERNAL_SYSTEMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -377,7 +378,7 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemConfigListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/external_systems".to_string(),
+            api_path: Endpoints::HIRE_V1_EXTERNAL_SYSTEMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -442,7 +443,7 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/external_systems/sync_tasks".to_string(),
+            api_path: Endpoints::HIRE_V1_EXTERNAL_SYSTEMS_SYNC_TASKS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -504,7 +505,7 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemSyncRecordListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/external_systems/sync_records".to_string(),
+            api_path: Endpoints::HIRE_V1_EXTERNAL_SYSTEMS_SYNC_RECORDS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -585,7 +586,7 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/external_systems/candidates/import".to_string(),
+            api_path: Endpoints::HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_IMPORT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -646,7 +647,7 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalCandidateListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/external_systems/candidates".to_string(),
+            api_path: Endpoints::HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -706,8 +707,10 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/hire/v1/external_systems/candidates/{external_candidate_id}/convert"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_CONVERT,
+                "external_candidate_id",
+                external_candidate_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
@@ -743,8 +746,10 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/hire/v1/external_systems/{system_config_id}/test_connection"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_EXTERNAL_SYSTEMS_TEST_CONNECTION,
+                "system_config_id",
+                system_config_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],

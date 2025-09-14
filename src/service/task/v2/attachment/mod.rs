@@ -8,7 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -156,7 +156,7 @@ impl AttachmentService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/task/v2/attachments/{attachment_guid}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_ATTACHMENT_GET, "attachment_guid", attachment_guid),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -179,7 +179,7 @@ impl AttachmentService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/task/v2/attachments/{attachment_guid}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_ATTACHMENT_GET, "attachment_guid", attachment_guid),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

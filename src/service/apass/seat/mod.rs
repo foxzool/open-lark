@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -70,7 +71,7 @@ impl SeatService {
     ) -> SDKResult<BaseResponse<SeatAssignmentListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/apaas/v1/seat_assignment/list".to_string(),
+            api_path: Endpoints::APASS_V1_SEAT_ASSIGNMENT_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -104,7 +105,7 @@ impl SeatService {
     ) -> SDKResult<BaseResponse<SeatActivityListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/apaas/v1/seat_activity/list".to_string(),
+            api_path: Endpoints::APASS_V1_SEAT_ACTIVITY_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

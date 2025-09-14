@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -120,9 +121,9 @@ impl FlowService {
     ) -> SDKResult<BaseResponse<FlowExecuteResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/flow/{}/execute",
-                request.app_id, request.flow_api_name
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_FLOW_EXECUTE,
+                &[("app_id", &request.app_id), ("flow_api_name", &request.flow_api_name)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -149,9 +150,10 @@ impl FlowService {
     ) -> SDKResult<BaseResponse<UserTaskQueryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/flow/user_task/query",
-                request.app_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APASS_V1_FLOW_USER_TASK_QUERY,
+                "app_id",
+                &request.app_id
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -189,9 +191,9 @@ impl FlowService {
     ) -> SDKResult<BaseResponse<UserTaskActionResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/flow/user_task/{}/agree",
-                request.app_id, request.task_id
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_FLOW_USER_TASK_AGREE,
+                &[("app_id", &request.app_id), ("task_id", &request.task_id)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -219,9 +221,9 @@ impl FlowService {
     ) -> SDKResult<BaseResponse<UserTaskActionResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/flow/user_task/{}/reject",
-                request.app_id, request.task_id
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_FLOW_USER_TASK_REJECT,
+                &[("app_id", &request.app_id), ("task_id", &request.task_id)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -249,9 +251,9 @@ impl FlowService {
     ) -> SDKResult<BaseResponse<UserTaskActionResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/flow/user_task/{}/transfer",
-                request.app_id, request.task_id
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_FLOW_USER_TASK_TRANSFER,
+                &[("app_id", &request.app_id), ("task_id", &request.task_id)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -279,9 +281,9 @@ impl FlowService {
     ) -> SDKResult<BaseResponse<UserTaskActionResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/flow/user_task/{}/add_assignee",
-                request.app_id, request.task_id
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_FLOW_USER_TASK_ADD_ASSIGNEE,
+                &[("app_id", &request.app_id), ("task_id", &request.task_id)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -309,9 +311,9 @@ impl FlowService {
     ) -> SDKResult<BaseResponse<UserTaskActionResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/flow/user_task/{}/cc",
-                request.app_id, request.task_id
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_FLOW_USER_TASK_CC,
+                &[("app_id", &request.app_id), ("task_id", &request.task_id)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -339,9 +341,9 @@ impl FlowService {
     ) -> SDKResult<BaseResponse<UserTaskActionResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/flow/user_task/{}/expediting",
-                request.app_id, request.task_id
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_FLOW_USER_TASK_EXPEDITING,
+                &[("app_id", &request.app_id), ("task_id", &request.task_id)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -368,9 +370,9 @@ impl FlowService {
     ) -> SDKResult<BaseResponse<UserTaskActionResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/flow/user_task/{}/cancel",
-                request.app_id, request.task_id
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_FLOW_USER_TASK_CANCEL,
+                &[("app_id", &request.app_id), ("task_id", &request.task_id)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -399,8 +401,9 @@ impl FlowService {
     ) -> SDKResult<BaseResponse<UserTaskRollbackPointsResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{app_id}/flow/user_task/{task_id}/rollback_points"
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_FLOW_USER_TASK_ROLLBACK_POINTS,
+                &[("app_id", app_id), ("task_id", task_id)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -425,9 +428,9 @@ impl FlowService {
     ) -> SDKResult<BaseResponse<UserTaskActionResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/flow/user_task/{}/rollback",
-                request.app_id, request.task_id
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_FLOW_USER_TASK_ROLLBACK,
+                &[("app_id", &request.app_id), ("task_id", &request.task_id)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -455,9 +458,9 @@ impl FlowService {
     ) -> SDKResult<BaseResponse<UserTaskChatGroupResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/flow/user_task/{}/chat_group",
-                request.app_id, request.task_id
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_FLOW_USER_TASK_CHAT_GROUP,
+                &[("app_id", &request.app_id), ("task_id", &request.task_id)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({

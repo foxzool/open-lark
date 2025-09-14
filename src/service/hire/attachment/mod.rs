@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -262,7 +263,7 @@ impl AttachmentService {
     ) -> SDKResult<BaseResponse<AttachmentUploadResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/attachments/upload".to_string(),
+            api_path: Endpoints::HIRE_V1_ATTACHMENT_UPLOAD.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -308,7 +309,11 @@ impl AttachmentService {
     ) -> SDKResult<BaseResponse<AttachmentDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/attachments/{attachment_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_ATTACHMENT_GET,
+                "attachment_id",
+                attachment_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -372,7 +377,7 @@ impl AttachmentService {
     ) -> SDKResult<BaseResponse<AttachmentListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/attachments".to_string(),
+            api_path: Endpoints::HIRE_V1_ATTACHMENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -456,7 +461,11 @@ impl AttachmentService {
     ) -> SDKResult<BaseResponse<AttachmentOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/attachments/{attachment_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_ATTACHMENT_GET,
+                "attachment_id",
+                attachment_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -488,7 +497,11 @@ impl AttachmentService {
     ) -> SDKResult<BaseResponse<AttachmentOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/hire/v1/attachments/{attachment_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_ATTACHMENT_GET,
+                "attachment_id",
+                attachment_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -520,7 +533,11 @@ impl AttachmentService {
     ) -> SDKResult<BaseResponse<serde_json::Value>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/attachments/{attachment_id}/download"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_ATTACHMENT_DOWNLOAD,
+                "attachment_id",
+                attachment_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -552,7 +569,11 @@ impl AttachmentService {
     ) -> SDKResult<BaseResponse<serde_json::Value>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/attachments/{attachment_id}/preview"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_ATTACHMENT_PREVIEW,
+                "attachment_id",
+                attachment_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -606,7 +627,7 @@ impl AttachmentService {
     ) -> SDKResult<BaseResponse<BatchDownloadResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/attachments/batch_download".to_string(),
+            api_path: Endpoints::HIRE_V1_ATTACHMENTS_BATCH_DOWNLOAD.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -650,7 +671,7 @@ impl AttachmentService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/attachments/batch_delete".to_string(),
+            api_path: Endpoints::HIRE_V1_ATTACHMENTS_BATCH_DELETE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -694,7 +715,7 @@ impl AttachmentService {
     ) -> SDKResult<BaseResponse<serde_json::Value>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/attachment_statistics".to_string(),
+            api_path: Endpoints::HIRE_V1_ATTACHMENT_STATISTICS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

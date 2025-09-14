@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -87,7 +88,7 @@ impl CustomFieldOptionService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/task/v2/custom_fields/{custom_field_guid}/options"),
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_CUSTOM_FIELD_OPTIONS, "custom_field_guid", custom_field_guid),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -113,8 +114,9 @@ impl CustomFieldOptionService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!(
-                "/open-apis/task/v2/custom_fields/{custom_field_guid}/options/{option_guid}"
+            api_path: EndpointBuilder::replace_param(
+                EndpointBuilder::replace_param(Endpoints::TASK_V2_CUSTOM_FIELD_OPTION_GET, "custom_field_guid", custom_field_guid),
+                "option_guid", option_guid
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,

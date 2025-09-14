@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
@@ -86,7 +87,7 @@ impl PinService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/im/v1/pins".to_string(),
+            api_path: Endpoints::IM_V1_PINS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -112,7 +113,7 @@ impl PinService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/im/v1/pins/{pin_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_DELETE_PIN, "pin_id", pin_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -146,7 +147,7 @@ impl PinService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/im/v1/pins".to_string(),
+            api_path: Endpoints::IM_V1_PINS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

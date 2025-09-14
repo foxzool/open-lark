@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -82,7 +83,7 @@ impl TaskSubtaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/task/v2/tasks/{task_guid}/subtasks"),
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_SUBTASKS, "task_guid", task_guid),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -114,7 +115,7 @@ impl TaskSubtaskService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/task/v2/tasks/{task_guid}/subtasks"),
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_SUBTASKS, "task_guid", task_guid),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

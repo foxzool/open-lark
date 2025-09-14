@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -73,7 +74,7 @@ impl LocationService {
     ) -> SDKResult<BaseResponse<LocationListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/locations/query".to_string(),
+            api_path: Endpoints::HIRE_V1_LOCATIONS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -121,7 +122,7 @@ impl LocationService {
     ) -> SDKResult<BaseResponse<LocationListResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/locations".to_string(),
+            api_path: Endpoints::HIRE_V1_LOCATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

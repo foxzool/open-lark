@@ -1,7 +1,7 @@
 use crate::{
     core::{
         api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
-        constants::AccessTokenType, http::Transport,
+        constants::AccessTokenType, endpoints::{EndpointBuilder, Endpoints}, http::Transport,
     },
     service::contact::models::*,
 };
@@ -24,7 +24,7 @@ impl EmployeeTypeEnumService {
     ) -> crate::core::SDKResult<CreateEmployeeTypeResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: "/open-apis/contact/v3/employee_type_enums".to_string(),
+            api_path: Endpoints::CONTACT_V3_EMPLOYEE_TYPE_ENUMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -43,7 +43,7 @@ impl EmployeeTypeEnumService {
     ) -> crate::core::SDKResult<UpdateEmployeeTypeResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PUT,
-            api_path: format!("/open-apis/contact/v3/employee_type_enums/{enum_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_EMPLOYEE_TYPE_ENUM_GET, "enum_id", enum_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -61,7 +61,7 @@ impl EmployeeTypeEnumService {
     ) -> crate::core::SDKResult<ListEmployeeTypesResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: "/open-apis/contact/v3/employee_type_enums".to_string(),
+            api_path: Endpoints::CONTACT_V3_EMPLOYEE_TYPE_ENUMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -80,7 +80,7 @@ impl EmployeeTypeEnumService {
     ) -> crate::core::SDKResult<DeleteEmployeeTypeResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/contact/v3/employee_type_enums/{enum_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_EMPLOYEE_TYPE_ENUM_GET, "enum_id", enum_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             ..Default::default()

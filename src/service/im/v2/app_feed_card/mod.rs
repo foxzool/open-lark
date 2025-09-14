@@ -7,6 +7,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    endpoints::{EndpointBuilder, Endpoints},
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -88,7 +89,7 @@ impl AppFeedCardService {
     ) -> SDKResult<BaseResponse<CreateAppFeedCardResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/im/v2/app_feed_card".to_string(),
+            api_path: Endpoints::IM_V2_APP_FEED_CARD.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -106,7 +107,7 @@ impl AppFeedCardService {
     ) -> SDKResult<BaseResponse<UpdateAppFeedCardResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: format!("/open-apis/im/v2/app_feed_card/{card_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::IM_V2_GET_APP_FEED_CARD, "card_id", card_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -123,7 +124,7 @@ impl AppFeedCardService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/im/v2/app_feed_card/{card_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::IM_V2_DELETE_APP_FEED_CARD, "card_id", card_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
