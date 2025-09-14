@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         error::LarkAPIError,
         http::Transport,
         req_option::RequestOption,
@@ -176,7 +177,7 @@ impl TalentService {
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/talents".to_string(),
+            api_path: Endpoints::HIRE_V1_TALENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -225,7 +226,11 @@ impl TalentService {
     ) -> SDKResult<BaseResponse<TalentDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/talents/{talent_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_TALENT_GET,
+                "talent_id",
+                talent_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -292,7 +297,7 @@ impl TalentService {
     ) -> SDKResult<BaseResponse<TalentListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/talents".to_string(),
+            api_path: Endpoints::HIRE_V1_TALENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -387,7 +392,11 @@ impl TalentService {
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/talents/{talent_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_TALENT_GET,
+                "talent_id",
+                talent_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -419,7 +428,11 @@ impl TalentService {
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/hire/v1/talents/{talent_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_TALENT_GET,
+                "talent_id",
+                talent_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -473,7 +486,11 @@ impl TalentService {
     ) -> SDKResult<BaseResponse<TalentApplicationHistoryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/talents/{talent_id}/applications"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_TALENT_APPLICATIONS,
+                "talent_id",
+                talent_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -539,7 +556,7 @@ impl TalentService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/talents/batch_import".to_string(),
+            api_path: Endpoints::HIRE_V1_TALENTS_BATCH_IMPORT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()

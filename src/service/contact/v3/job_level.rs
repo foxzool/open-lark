@@ -1,7 +1,7 @@
 use crate::{
     core::{
         api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
-        constants::AccessTokenType, http::Transport,
+        constants::AccessTokenType, endpoints::{EndpointBuilder, Endpoints}, http::Transport,
     },
     service::contact::models::*,
 };
@@ -24,7 +24,7 @@ impl JobLevelService {
     ) -> crate::core::SDKResult<CreateJobLevelResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: "/open-apis/contact/v3/job_levels".to_string(),
+            api_path: Endpoints::CONTACT_V3_JOB_LEVELS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -43,7 +43,7 @@ impl JobLevelService {
     ) -> crate::core::SDKResult<UpdateJobLevelResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PUT,
-            api_path: format!("/open-apis/contact/v3/job_levels/{job_level_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_JOB_LEVEL_GET, "job_level_id", job_level_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -58,7 +58,7 @@ impl JobLevelService {
     pub async fn get(&self, job_level_id: &str) -> crate::core::SDKResult<GetJobLevelResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/contact/v3/job_levels/{job_level_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_JOB_LEVEL_GET, "job_level_id", job_level_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             ..Default::default()
@@ -75,7 +75,7 @@ impl JobLevelService {
     ) -> crate::core::SDKResult<ListJobLevelsResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: "/open-apis/contact/v3/job_levels".to_string(),
+            api_path: Endpoints::CONTACT_V3_JOB_LEVELS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -93,7 +93,7 @@ impl JobLevelService {
     ) -> crate::core::SDKResult<DeleteJobLevelResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/contact/v3/job_levels/{job_level_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_JOB_LEVEL_GET, "job_level_id", job_level_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             ..Default::default()

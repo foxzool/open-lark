@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -82,7 +83,7 @@ impl EventService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/helpdesk/v1/events/subscribe".to_string(),
+            api_path: Endpoints::HELPDESK_V1_EVENTS_SUBSCRIBE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -120,7 +121,7 @@ impl EventService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/helpdesk/v1/events/unsubscribe".to_string(),
+            api_path: Endpoints::HELPDESK_V1_EVENTS_UNSUBSCRIBE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,

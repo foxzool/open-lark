@@ -119,7 +119,7 @@ pub async fn get_form(
     let mut api_req = request.api_request;
     api_req.http_method = Method::GET;
     api_req.api_path = format!(
-        "/open-apis/bitable/v1/apps/{app_token}/forms/{form_id}",
+        crate::core::endpoints::BITABLE_V1_FORM_GET,
         app_token = request.app_token,
         form_id = request.form_id
     );

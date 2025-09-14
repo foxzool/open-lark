@@ -6,6 +6,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    endpoints::{EndpointBuilder, Endpoints},
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -161,8 +162,9 @@ pub async fn list_permission_members(
     let mut api_req = request.api_request;
     api_req.http_method = Method::GET;
     api_req.api_path = format!(
-        "/open-apis/drive/v1/permissions/{}/members?type={}",
-        request.token, request.obj_type
+        "{}?type={}",
+        EndpointBuilder::replace_param(Endpoints::DRIVE_V1_PERMISSIONS_MEMBERS, "token", &request.token),
+        request.obj_type
     );
 
     // 构建查询参数

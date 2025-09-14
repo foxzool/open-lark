@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
@@ -122,7 +123,7 @@ impl BatchMessageService {
     ) -> SDKResult<BatchSendMessageResponse> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/im/v1/batch_messages".to_string(),
+            api_path: Endpoints::IM_V1_BATCH_MESSAGES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params: HashMap::from([(
                 "receive_id_type",
@@ -145,7 +146,7 @@ impl BatchMessageService {
     ) -> SDKResult<EmptyResponse> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/im/v1/batch_messages/{batch_message_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_DELETE_BATCH_MESSAGE, "batch_message_id", batch_message_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
@@ -163,7 +164,7 @@ impl BatchMessageService {
     ) -> SDKResult<GetBatchProgressResponse> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/im/v1/batch_messages/{batch_message_id}/get_progress"),
+            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_BATCH_MESSAGE_PROGRESS, "batch_message_id", batch_message_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
@@ -195,7 +196,7 @@ impl BatchMessageService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/im/v1/batch_messages/{batch_message_id}/read_user"),
+            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_BATCH_MESSAGE_READ_USER, "batch_message_id", batch_message_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

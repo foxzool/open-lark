@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -146,7 +147,7 @@ impl TicketCustomizedFieldService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/helpdesk/v1/ticket_customized_fields".to_string(),
+            api_path: Endpoints::HELPDESK_V1_TICKET_CUSTOMIZED_FIELDS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -184,7 +185,7 @@ impl TicketCustomizedFieldService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/helpdesk/v1/ticket_customized_fields/{field_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::HELPDESK_V1_TICKET_CUSTOMIZED_FIELD_DELETE, "field_id", field_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -223,7 +224,7 @@ impl TicketCustomizedFieldService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/helpdesk/v1/ticket_customized_fields/{field_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::HELPDESK_V1_TICKET_CUSTOMIZED_FIELD_UPDATE, "field_id", field_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -261,7 +262,7 @@ impl TicketCustomizedFieldService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/helpdesk/v1/ticket_customized_fields/{field_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::HELPDESK_V1_TICKET_CUSTOMIZED_FIELD_GET, "field_id", field_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -305,7 +306,7 @@ impl TicketCustomizedFieldService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/helpdesk/v1/ticket_customized_fields".to_string(),
+            api_path: Endpoints::HELPDESK_V1_TICKET_CUSTOMIZED_FIELDS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

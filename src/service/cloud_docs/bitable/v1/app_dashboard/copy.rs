@@ -113,7 +113,7 @@ pub async fn copy_dashboard(
     let mut api_req = request.api_request;
     api_req.http_method = Method::POST;
     api_req.api_path = format!(
-        "/open-apis/bitable/v1/apps/{app_token}/dashboards/{block_id}/copy",
+        crate::core::endpoints::BITABLE_V1_DASHBOARD_COPY,
         app_token = request.app_token,
         block_id = request.block_id
     );

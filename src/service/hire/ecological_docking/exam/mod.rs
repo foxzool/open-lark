@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -348,7 +349,7 @@ impl ExamService {
     ) -> SDKResult<BaseResponse<ExamPaperListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/exam_papers".to_string(),
+            api_path: Endpoints::HIRE_V1_EXAM_PAPERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -437,7 +438,7 @@ impl ExamService {
     ) -> SDKResult<BaseResponse<ExamOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/exam_arrangements".to_string(),
+            api_path: Endpoints::HIRE_V1_EXAM_ARRANGEMENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -483,7 +484,11 @@ impl ExamService {
     ) -> SDKResult<BaseResponse<ExamRecordDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/exam_records/{record_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_EXAM_RECORD_GET,
+                "record_id",
+                record_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -547,7 +552,7 @@ impl ExamService {
     ) -> SDKResult<BaseResponse<ExamRecordListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/exam_records".to_string(),
+            api_path: Endpoints::HIRE_V1_EXAM_RECORDS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -630,7 +635,7 @@ impl ExamService {
     ) -> SDKResult<BaseResponse<ExamOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/exam_submissions".to_string(),
+            api_path: Endpoints::HIRE_V1_EXAM_SUBMISSIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -675,7 +680,11 @@ impl ExamService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/exam_records/{record_id}/cancel"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_EXAM_RECORD_CANCEL,
+                "record_id",
+                record_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -730,7 +739,11 @@ impl ExamService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/exam_records/{record_id}/reschedule"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_EXAM_RECORD_RESCHEDULE,
+                "record_id",
+                record_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -774,7 +787,7 @@ impl ExamService {
     ) -> SDKResult<BaseResponse<serde_json::Value>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/exam_statistics".to_string(),
+            api_path: Endpoints::HIRE_V1_EXAM_STATISTICS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

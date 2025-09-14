@@ -7,6 +7,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    endpoints::{EndpointBuilder, Endpoints},
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
@@ -60,7 +61,7 @@ impl ImageService {
     ) -> SDKResult<CreateImageResponse> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/im/v1/images".to_string(),
+            api_path: Endpoints::IM_V1_IMAGES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params: HashMap::from([("image_type", image_type.to_string())]),
             body: image_data,
@@ -80,7 +81,7 @@ impl ImageService {
     ) -> SDKResult<GetImageResponse> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/im/v1/images/{image_key}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_DOWNLOAD_IMAGE, "image_key", image_key),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };

@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -70,9 +71,10 @@ impl EnvironmentVariableService {
     ) -> SDKResult<BaseResponse<EnvironmentVariableQueryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/environment_variable/query",
-                request.app_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APASS_V1_ENVIRONMENT_VARIABLE_QUERY,
+                "app_id",
+                &request.app_id
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -107,9 +109,9 @@ impl EnvironmentVariableService {
     ) -> SDKResult<BaseResponse<EnvironmentVariableGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/environment_variable/{}",
-                request.app_id, request.variable_name
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_ENVIRONMENT_VARIABLE_GET,
+                &[("app_id", &request.app_id), ("variable_name", &request.variable_name)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],

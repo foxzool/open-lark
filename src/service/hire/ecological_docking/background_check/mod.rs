@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -341,7 +342,7 @@ impl BackgroundCheckService {
     ) -> SDKResult<BaseResponse<BackgroundCheckPackageListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/background_check_packages".to_string(),
+            api_path: Endpoints::HIRE_V1_BACKGROUND_CHECK_PACKAGES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -440,7 +441,7 @@ impl BackgroundCheckService {
     ) -> SDKResult<BaseResponse<BackgroundCheckOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/background_check_orders".to_string(),
+            api_path: Endpoints::HIRE_V1_BACKGROUND_CHECK_ORDERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -486,7 +487,11 @@ impl BackgroundCheckService {
     ) -> SDKResult<BaseResponse<BackgroundCheckOrderDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/background_check_orders/{order_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_BACKGROUND_CHECK_ORDER_GET,
+                "order_id",
+                order_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -548,7 +553,7 @@ impl BackgroundCheckService {
     ) -> SDKResult<BaseResponse<BackgroundCheckOrderListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/background_check_orders".to_string(),
+            api_path: Endpoints::HIRE_V1_BACKGROUND_CHECK_ORDERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -624,7 +629,11 @@ impl BackgroundCheckService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/background_check_orders/{order_id}/cancel"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_BACKGROUND_CHECK_ORDER_CANCEL,
+                "order_id",
+                order_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -656,7 +665,11 @@ impl BackgroundCheckService {
     ) -> SDKResult<BaseResponse<serde_json::Value>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/background_check_orders/{order_id}/report"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_BACKGROUND_CHECK_ORDER_REPORT,
+                "order_id",
+                order_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -707,7 +720,7 @@ impl BackgroundCheckService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/background_check_orders/batch".to_string(),
+            api_path: Endpoints::HIRE_V1_BACKGROUND_CHECK_ORDERS_BATCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()

@@ -9,6 +9,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -119,7 +120,7 @@ impl GroupsBotsService {
     ) -> SDKResult<BaseResponse<BotTimeSentiveResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/im/v2/groups-bots/bot_time_sentive".to_string(),
+            api_path: Endpoints::IM_V2_GROUPS_BOTS_TIME_SENSITIVE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params: HashMap::from([(
                 "receive_id_type",
@@ -141,7 +142,7 @@ impl GroupsBotsService {
     ) -> SDKResult<BaseResponse<UpdateFeedCardButtonResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: format!("/open-apis/im/v2/groups-bots/{message_id}/update"),
+            api_path: EndpointBuilder::replace_param(Endpoints::IM_V2_GROUPS_BOTS_UPDATE, "message_id", message_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -159,7 +160,7 @@ impl GroupsBotsService {
     ) -> SDKResult<BaseResponse<TimelyReminderResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: "/open-apis/im/v2/groups-bots/patch".to_string(),
+            api_path: Endpoints::IM_V2_GROUPS_BOTS_PATCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params: HashMap::from([(
                 "receive_id_type",

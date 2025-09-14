@@ -6,6 +6,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse},
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
@@ -212,7 +213,7 @@ impl MessageService {
     ) -> SDKResult<ListMessageRespData> {
         let mut api_req = list_message_request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/im/v1/messages".to_string();
+        api_req.api_path = Endpoints::IM_V1_LIST_MESSAGE.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp: BaseResponse<ListMessageRespData> =

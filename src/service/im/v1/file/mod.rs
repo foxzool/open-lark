@@ -7,6 +7,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    endpoints::{EndpointBuilder, Endpoints},
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
@@ -67,7 +68,7 @@ impl FileService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/im/v1/files".to_string(),
+            api_path: Endpoints::IM_V1_FILES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: file_data,
@@ -87,7 +88,7 @@ impl FileService {
     ) -> SDKResult<GetFileResponse> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/im/v1/files/{file_key}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_DOWNLOAD_FILE, "file_key", file_key),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };

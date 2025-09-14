@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -298,7 +299,7 @@ impl WebsiteService {
     ) -> SDKResult<BaseResponse<WebsiteJobListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/website/jobs".to_string(),
+            api_path: Endpoints::HIRE_V1_WEBSITE_JOBS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -377,7 +378,7 @@ impl WebsiteService {
     ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/website/jobs/publish".to_string(),
+            api_path: Endpoints::HIRE_V1_WEBSITE_JOBS_PUBLISH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -409,7 +410,11 @@ impl WebsiteService {
     ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/website/jobs/{job_id}/unpublish"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_WEBSITE_JOB_UNPUBLISH,
+                "job_id",
+                job_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -474,7 +479,7 @@ impl WebsiteService {
     ) -> SDKResult<BaseResponse<WebsiteApplicationListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/website/applications".to_string(),
+            api_path: Endpoints::HIRE_V1_WEBSITE_APPLICATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -561,7 +566,7 @@ impl WebsiteService {
     ) -> SDKResult<BaseResponse<WebsiteConfigurationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/website/configuration".to_string(),
+            api_path: Endpoints::HIRE_V1_WEBSITE_CONFIGURATION.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -634,7 +639,7 @@ impl WebsiteService {
     ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/website/configuration".to_string(),
+            api_path: Endpoints::HIRE_V1_WEBSITE_CONFIGURATION.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -666,8 +671,10 @@ impl WebsiteService {
     ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/hire/v1/website/applications/{website_application_id}/convert"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_WEBSITE_APPLICATION_CONVERT,
+                "website_application_id",
+                &website_application_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
@@ -712,7 +719,7 @@ impl WebsiteService {
     ) -> SDKResult<BaseResponse<serde_json::Value>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/website/statistics".to_string(),
+            api_path: Endpoints::HIRE_V1_WEBSITE_STATISTICS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

@@ -8,7 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -342,7 +342,7 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/task/v2/tasks/{task_guid}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET, "task_guid", task_guid),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -366,7 +366,7 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/task/v2/tasks/{task_guid}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET, "task_guid", task_guid),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -389,7 +389,7 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/task/v2/tasks/{task_guid}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET, "task_guid", task_guid),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -472,7 +472,7 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/task/v2/tasks/{task_guid}/add_members"),
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_ADD_MEMBERS, "task_guid", task_guid),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -497,7 +497,7 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/task/v2/tasks/{task_guid}/remove_members"),
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_REMOVE_MEMBERS, "task_guid", task_guid),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -522,7 +522,7 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/task/v2/tasks/{task_guid}/add_reminders"),
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_ADD_REMINDERS, "task_guid", task_guid),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -547,7 +547,7 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/task/v2/tasks/{task_guid}/remove_reminders"),
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_REMOVE_REMINDERS, "task_guid", task_guid),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -572,7 +572,7 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/task/v2/tasks/{task_guid}/add_dependencies"),
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_ADD_DEPENDENCIES, "task_guid", task_guid),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -597,7 +597,7 @@ impl TaskService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/task/v2/tasks/{task_guid}/remove_dependencies"),
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_REMOVE_DEPENDENCIES, "task_guid", task_guid),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
