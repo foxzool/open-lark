@@ -60,7 +60,7 @@ impl DocumentBlockService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: format!(
-                "/open-apis/docx/v1/documents/{}/blocks/{}",
+                crate::core::endpoints::DOCX_V1_DOCUMENT_BLOCK_GET,
                 document_id.into(),
                 block_id.into()
             ),
@@ -87,7 +87,7 @@ impl DocumentBlockService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: format!(
-                "/open-apis/docx/v1/documents/{}/blocks/{}",
+                crate::core::endpoints::DOCX_V1_DOCUMENT_BLOCK_GET,
                 document_id.into(),
                 block_id.into()
             ),
@@ -114,7 +114,7 @@ impl DocumentBlockService {
         let mut api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: format!(
-                "/open-apis/docx/v1/documents/{}/blocks/batch_update",
+                crate::core::endpoints::DOCX_V1_DOCUMENT_BLOCKS_BATCH_UPDATE,
                 document_id.into()
             ),
             ..Default::default()

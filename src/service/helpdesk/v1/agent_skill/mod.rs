@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -94,7 +95,7 @@ impl AgentSkillService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/helpdesk/v1/agent_skills".to_string(),
+            api_path: Endpoints::HELPDESK_V1_AGENT_SKILL_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -118,7 +119,11 @@ impl AgentSkillService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/helpdesk/v1/agent_skills/{skill_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_AGENT_SKILL_DELETE,
+                "skill_id",
+                skill_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -141,7 +146,11 @@ impl AgentSkillService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/helpdesk/v1/agent_skills/{skill_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_AGENT_SKILL_GET,
+                "skill_id",
+                skill_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -171,7 +180,7 @@ impl AgentSkillService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/helpdesk/v1/agent_skills".to_string(),
+            api_path: Endpoints::HELPDESK_V1_AGENT_SKILLS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

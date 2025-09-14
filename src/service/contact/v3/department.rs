@@ -1,7 +1,7 @@
 use crate::{
     core::{
         api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
-        constants::AccessTokenType, http::Transport,
+        constants::AccessTokenType, endpoints::{EndpointBuilder, Endpoints}, http::Transport,
     },
     service::contact::models::*,
 };
@@ -31,7 +31,7 @@ impl DepartmentService {
     ) -> crate::core::SDKResult<CreateDepartmentResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: "/open-apis/contact/v3/departments".to_string(),
+            api_path: Endpoints::CONTACT_V3_DEPARTMENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -50,7 +50,7 @@ impl DepartmentService {
     ) -> crate::core::SDKResult<PatchDepartmentResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: format!("/open-apis/contact/v3/departments/{department_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_DEPARTMENT_GET, "department_id", department_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -69,7 +69,7 @@ impl DepartmentService {
     ) -> crate::core::SDKResult<UpdateDepartmentResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PUT,
-            api_path: format!("/open-apis/contact/v3/departments/{department_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_DEPARTMENT_GET, "department_id", department_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -88,9 +88,7 @@ impl DepartmentService {
     ) -> crate::core::SDKResult<UpdateDepartmentIdResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: format!(
-                "/open-apis/contact/v3/departments/{department_id}/update_department_id"
-            ),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_DEPARTMENT_UPDATE_ID, "department_id", department_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -109,7 +107,7 @@ impl DepartmentService {
     ) -> crate::core::SDKResult<GetDepartmentResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/contact/v3/departments/{department_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_DEPARTMENT_GET, "department_id", department_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -127,7 +125,7 @@ impl DepartmentService {
     ) -> crate::core::SDKResult<BatchGetDepartmentsResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: "/open-apis/contact/v3/departments/batch".to_string(),
+            api_path: Endpoints::CONTACT_V3_DEPARTMENTS_BATCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -145,7 +143,7 @@ impl DepartmentService {
     ) -> crate::core::SDKResult<GetChildrenDepartmentsResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: "/open-apis/contact/v3/departments/children".to_string(),
+            api_path: Endpoints::CONTACT_V3_DEPARTMENTS_CHILDREN.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -165,7 +163,7 @@ impl DepartmentService {
     ) -> crate::core::SDKResult<GetParentDepartmentResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: "/open-apis/contact/v3/departments/parent".to_string(),
+            api_path: Endpoints::CONTACT_V3_DEPARTMENTS_PARENT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -184,7 +182,7 @@ impl DepartmentService {
     ) -> crate::core::SDKResult<SearchDepartmentsResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: "/open-apis/contact/v3/departments/search".to_string(),
+            api_path: Endpoints::CONTACT_V3_DEPARTMENTS_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -203,7 +201,7 @@ impl DepartmentService {
     ) -> crate::core::SDKResult<DeleteDepartmentResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/contact/v3/departments/{department_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_DEPARTMENT_GET, "department_id", department_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),

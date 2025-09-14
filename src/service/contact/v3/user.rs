@@ -1,7 +1,7 @@
 use crate::{
     core::{
         api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
-        constants::AccessTokenType, endpoints::Endpoints, http::Transport,
+        constants::AccessTokenType, endpoints::{EndpointBuilder, Endpoints}, http::Transport,
         req_option::RequestOption, standard_response::StandardResponse,
         trait_system::executable_builder::ExecutableBuilder, SDKResult,
     },
@@ -52,7 +52,7 @@ impl UserService {
     ) -> crate::core::SDKResult<PatchUserResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: format!("/open-apis/contact/v3/users/{user_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_USER_GET, "user_id", user_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -70,7 +70,7 @@ impl UserService {
     ) -> crate::core::SDKResult<UpdateUserIdResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: format!("/open-apis/contact/v3/users/{user_id}/update_user_id"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_USER_UPDATE_ID, "user_id", user_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -96,7 +96,7 @@ impl UserService {
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/contact/v3/users/{user_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_USER_GET, "user_id", user_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params,
@@ -186,7 +186,7 @@ impl UserService {
     ) -> crate::core::SDKResult<DeleteUserResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/contact/v3/users/{user_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_USER_GET, "user_id", user_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -205,7 +205,7 @@ impl UserService {
     ) -> crate::core::SDKResult<ResurrectUserResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/contact/v3/users/{user_id}/resurrect"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_USER_RESURRECT, "user_id", user_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()

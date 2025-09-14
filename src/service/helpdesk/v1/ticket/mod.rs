@@ -151,7 +151,11 @@ impl TicketService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/helpdesk/v1/tickets/{ticket_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_TICKET_GET,
+                "ticket_id",
+                ticket_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -175,7 +179,11 @@ impl TicketService {
 
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: format!("/open-apis/helpdesk/v1/tickets/{ticket_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_TICKET_GET,
+                "ticket_id",
+                ticket_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,

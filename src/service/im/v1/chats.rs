@@ -6,6 +6,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    endpoints::Endpoints,
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
@@ -27,7 +28,7 @@ impl ChatsService {
     ) -> SDKResult<ListChatRespData> {
         let mut api_req = list_chat_request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/im/v1/chats".to_string();
+        api_req.api_path = Endpoints::IM_CHAT_CREATE.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp: BaseResponse<ListChatRespData> =

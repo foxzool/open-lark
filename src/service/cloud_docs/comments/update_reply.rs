@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -199,8 +200,12 @@ pub async fn update_reply(
     let mut api_req = request.api_request;
     api_req.http_method = Method::PUT;
     api_req.api_path = format!(
-        "/open-apis/comment/v1/comments/{}/replies/{}?file_type={}&file_token={}",
-        request.comment_id, request.reply_id, request.file_type, request.file_token
+        "{}?file_type={}&file_token={}",
+        EndpointBuilder::replace_params(
+            Endpoints::COMMENT_V1_COMMENT_REPLY_UPDATE,
+            &[("comment_id", &request.comment_id), ("reply_id", &request.reply_id)]
+        ),
+        request.file_type, request.file_token
     );
 
     // 添加用户ID类型查询参数

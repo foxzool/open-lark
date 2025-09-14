@@ -6,6 +6,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    endpoints::{EndpointBuilder, Endpoints},
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -206,8 +207,12 @@ pub async fn delete_permission_member(
     let mut api_req = request.api_request;
     api_req.http_method = Method::DELETE;
     api_req.api_path = format!(
-        "/open-apis/drive/v1/permissions/{}/members/{}?type={}&member_type={}",
-        request.token, request.member_id, request.obj_type, request.member_type
+        "{}?type={}&member_type={}",
+        EndpointBuilder::replace_params(
+            Endpoints::DRIVE_V1_PERMISSIONS_MEMBER_GET,
+            &[("token", &request.token), ("member_id", &request.member_id)]
+        ),
+        request.obj_type, request.member_type
     );
 
     // 添加通知参数

@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -250,7 +251,7 @@ impl ReferralService {
     ) -> SDKResult<BaseResponse<ReferralOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/referrals".to_string(),
+            api_path: Endpoints::HIRE_V1_REFERRALS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -297,7 +298,11 @@ impl ReferralService {
     ) -> SDKResult<BaseResponse<ReferralDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/referrals/{referral_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_REFERRAL_GET,
+                "referral_id",
+                &referral_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -361,7 +366,7 @@ impl ReferralService {
     ) -> SDKResult<BaseResponse<ReferralListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/referrals".to_string(),
+            api_path: Endpoints::HIRE_V1_REFERRALS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -440,7 +445,7 @@ impl ReferralService {
     ) -> SDKResult<BaseResponse<ReferralOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/referral_accounts".to_string(),
+            api_path: Endpoints::HIRE_V1_REFERRAL_ACCOUNTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -486,7 +491,11 @@ impl ReferralService {
     ) -> SDKResult<BaseResponse<ReferralAccountDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/referral_accounts/{user_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_REFERRAL_ACCOUNT_GET,
+                "user_id",
+                &user_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -541,7 +550,11 @@ impl ReferralService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/referrals/{referral_id}/grant_reward"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_REFERRAL_GRANT_REWARD,
+                "referral_id",
+                &referral_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -583,7 +596,7 @@ impl ReferralService {
     ) -> SDKResult<BaseResponse<ReferralOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/referral_reward_settings".to_string(),
+            api_path: Endpoints::HIRE_V1_REFERRAL_REWARD_SETTINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -629,7 +642,7 @@ impl ReferralService {
     ) -> SDKResult<BaseResponse<ReferralRewardSettingsListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/referral_reward_settings".to_string(),
+            api_path: Endpoints::HIRE_V1_REFERRAL_REWARD_SETTINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

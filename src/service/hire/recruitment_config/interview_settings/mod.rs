@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -271,7 +272,7 @@ impl InterviewSettingsService {
     ) -> SDKResult<BaseResponse<InterviewSettingsOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/interview_settings".to_string(),
+            api_path: Endpoints::HIRE_V1_INTERVIEW_SETTINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -319,7 +320,11 @@ impl InterviewSettingsService {
     ) -> SDKResult<BaseResponse<InterviewSettingsDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/interview_settings/{settings_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_INTERVIEW_SETTING_GET,
+                "settings_id",
+                settings_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -377,7 +382,7 @@ impl InterviewSettingsService {
     ) -> SDKResult<BaseResponse<InterviewSettingsListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/interview_settings".to_string(),
+            api_path: Endpoints::HIRE_V1_INTERVIEW_SETTINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -459,7 +464,11 @@ impl InterviewSettingsService {
     ) -> SDKResult<BaseResponse<InterviewSettingsOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/interview_settings/{settings_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_INTERVIEW_SETTING_GET,
+                "settings_id",
+                settings_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -491,7 +500,11 @@ impl InterviewSettingsService {
     ) -> SDKResult<BaseResponse<InterviewSettingsOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/hire/v1/interview_settings/{settings_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_INTERVIEW_SETTING_GET,
+                "settings_id",
+                settings_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

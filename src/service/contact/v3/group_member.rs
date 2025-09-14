@@ -1,7 +1,7 @@
 use crate::{
     core::{
         api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
-        constants::AccessTokenType, http::Transport,
+        constants::AccessTokenType, endpoints::{EndpointBuilder, Endpoints}, http::Transport,
     },
     service::contact::models::*,
 };
@@ -25,7 +25,7 @@ impl GroupMemberService {
     ) -> crate::core::SDKResult<AddGroupMemberResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/contact/v3/groups/{group_id}/members/add"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_GROUP_MEMBERS_ADD, "group_id", group_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -44,7 +44,7 @@ impl GroupMemberService {
     ) -> crate::core::SDKResult<BatchAddGroupMembersResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/contact/v3/groups/{group_id}/members/batch_add"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_GROUP_MEMBERS_BATCH_ADD, "group_id", group_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -63,7 +63,7 @@ impl GroupMemberService {
     ) -> crate::core::SDKResult<ListGroupMembersResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/contact/v3/groups/{group_id}/members/simplelist"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_GROUP_MEMBERS_SIMPLELIST, "group_id", group_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -83,7 +83,7 @@ impl GroupMemberService {
     ) -> crate::core::SDKResult<RemoveGroupMemberResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/contact/v3/groups/{group_id}/members/remove"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_GROUP_MEMBERS_REMOVE, "group_id", group_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -102,7 +102,7 @@ impl GroupMemberService {
     ) -> crate::core::SDKResult<BatchRemoveGroupMembersResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: format!("/open-apis/contact/v3/groups/{group_id}/members/batch_remove"),
+            api_path: EndpointBuilder::replace_param(Endpoints::CONTACT_V3_GROUP_MEMBERS_BATCH_REMOVE, "group_id", group_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()

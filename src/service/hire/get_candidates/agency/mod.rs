@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -357,7 +358,7 @@ impl AgencyService {
     ) -> SDKResult<BaseResponse<AgencyOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/agencies".to_string(),
+            api_path: Endpoints::HIRE_V1_AGENCIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -419,7 +420,7 @@ impl AgencyService {
     ) -> SDKResult<BaseResponse<AgencyListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/agencies".to_string(),
+            api_path: Endpoints::HIRE_V1_AGENCIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -497,7 +498,7 @@ impl AgencyService {
     ) -> SDKResult<BaseResponse<AgencyOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/agency_recommendations".to_string(),
+            api_path: Endpoints::HIRE_V1_AGENCY_RECOMMENDATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -540,7 +541,7 @@ impl AgencyService {
     ) -> SDKResult<BaseResponse<AgencyRecommendationListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/agency_recommendations".to_string(),
+            api_path: Endpoints::HIRE_V1_AGENCY_RECOMMENDATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -618,7 +619,7 @@ impl AgencyService {
     ) -> SDKResult<BaseResponse<AgencyOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/agency_consultants".to_string(),
+            api_path: Endpoints::HIRE_V1_AGENCY_CONSULTANTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -654,7 +655,11 @@ impl AgencyService {
     ) -> SDKResult<BaseResponse<AgencyConsultantListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/agencies/{agency_id}/consultants"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_AGENCIES_CONSULTANTS,
+                "agency_id",
+                agency_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -712,8 +717,10 @@ impl AgencyService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/hire/v1/agency_recommendations/{recommendation_id}/confirm"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_AGENCY_RECOMMENDATION_CONFIRM,
+                "recommendation_id",
+                recommendation_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
@@ -769,8 +776,10 @@ impl AgencyService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/hire/v1/agency_recommendations/{recommendation_id}/reject"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_AGENCY_RECOMMENDATION_REJECT,
+                "recommendation_id",
+                recommendation_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),

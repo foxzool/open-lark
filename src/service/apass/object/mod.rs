@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -167,9 +168,10 @@ impl ObjectService {
     ) -> SDKResult<BaseResponse<OqlQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/object/oql",
-                request.app_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APASS_V1_OBJECT_OQL,
+                "app_id",
+                &request.app_id
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -197,9 +199,9 @@ impl ObjectService {
     ) -> SDKResult<BaseResponse<RecordSearchResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/object/{}/record/search",
-                request.app_id, request.object_api_name
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_OBJECT_RECORD_SEARCH,
+                &[("app_id", &request.app_id), ("object_api_name", &request.object_api_name)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -236,9 +238,9 @@ impl ObjectService {
     ) -> SDKResult<BaseResponse<RecordQueryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/object/{}/record/{}",
-                request.app_id, request.object_api_name, request.record_id
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_OBJECT_RECORD_GET,
+                &[("app_id", &request.app_id), ("object_api_name", &request.object_api_name), ("record_id", &request.record_id)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -268,9 +270,9 @@ impl ObjectService {
     ) -> SDKResult<BaseResponse<RecordUpdateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/object/{}/record/{}",
-                request.app_id, request.object_api_name, request.record_id
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_OBJECT_RECORD_UPDATE,
+                &[("app_id", &request.app_id), ("object_api_name", &request.object_api_name), ("record_id", &request.record_id)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request.data)?,
@@ -295,9 +297,9 @@ impl ObjectService {
     ) -> SDKResult<BaseResponse<RecordDeleteResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/object/{}/record/{}",
-                request.app_id, request.object_api_name, request.record_id
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_OBJECT_RECORD_DELETE,
+                &[("app_id", &request.app_id), ("object_api_name", &request.object_api_name), ("record_id", &request.record_id)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -322,9 +324,9 @@ impl ObjectService {
     ) -> SDKResult<BaseResponse<RecordCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/object/{}/record",
-                request.app_id, request.object_api_name
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_OBJECT_RECORD_CREATE,
+                &[("app_id", &request.app_id), ("object_api_name", &request.object_api_name)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request.data)?,
@@ -349,9 +351,9 @@ impl ObjectService {
     ) -> SDKResult<BaseResponse<BatchRecordResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/object/{}/record/batch_update",
-                request.app_id, request.object_api_name
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_OBJECT_RECORD_BATCH_UPDATE,
+                &[("app_id", &request.app_id), ("object_api_name", &request.object_api_name)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -378,9 +380,9 @@ impl ObjectService {
     ) -> SDKResult<BaseResponse<BatchRecordQueryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/object/{}/record/batch_query",
-                request.app_id, request.object_api_name
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_OBJECT_RECORD_BATCH_QUERY,
+                &[("app_id", &request.app_id), ("object_api_name", &request.object_api_name)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -418,9 +420,9 @@ impl ObjectService {
     ) -> SDKResult<BaseResponse<BatchRecordResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/object/{}/record/batch_delete",
-                request.app_id, request.object_api_name
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_OBJECT_RECORD_BATCH_DELETE,
+                &[("app_id", &request.app_id), ("object_api_name", &request.object_api_name)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -447,9 +449,9 @@ impl ObjectService {
     ) -> SDKResult<BaseResponse<BatchRecordResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/object/{}/record/batch_create",
-                request.app_id, request.object_api_name
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_OBJECT_RECORD_BATCH_CREATE,
+                &[("app_id", &request.app_id), ("object_api_name", &request.object_api_name)]
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({

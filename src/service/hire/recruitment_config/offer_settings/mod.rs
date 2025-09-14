@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -266,8 +267,8 @@ impl OfferSettingsService {
     ///
     /// let request = OfferSettingsCreateRequest {
     ///     name: I18nText {
-    ///         zh_cn: Some("技术岗位Offer设置".to_string()),
-    ///         en_us: Some("Technical Position Offer Settings".to_string()),
+    ///         zh_cn: Some("技术岗位Offer设置".to_string(),
+    ///         en_us: Some("Technical Position Offer Settings".to_string(),
     ///         ja_jp: None,
     ///     },
     ///     applicable_job_types: vec!["software_engineer".to_string()],
@@ -301,7 +302,7 @@ impl OfferSettingsService {
     ) -> SDKResult<BaseResponse<OfferSettingsOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/offer_settings".to_string(),
+            api_path: Endpoints::HIRE_V1_OFFER_SETTINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -350,7 +351,11 @@ impl OfferSettingsService {
     ) -> SDKResult<BaseResponse<OfferSettingsDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/offer_settings/{settings_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_OFFER_SETTING_GET,
+                "settings_id",
+                settings_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -388,8 +393,8 @@ impl OfferSettingsService {
     /// let request = OfferSettingsListRequest {
     ///     page_size: Some(50),
     ///     page_token: None,
-    ///     job_type: Some("software_engineer".to_string()),
-    ///     status: Some("active".to_string()),
+    ///     job_type: Some("software_engineer".to_string(),
+    ///     status: Some("active".to_string(),
     /// };
     ///
     /// let response = client.hire.recruitment_config.offer_settings.list_settings(request, None).await?;
@@ -408,7 +413,7 @@ impl OfferSettingsService {
     ) -> SDKResult<BaseResponse<OfferSettingsListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/offer_settings".to_string(),
+            api_path: Endpoints::HIRE_V1_OFFER_SETTINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -458,8 +463,8 @@ impl OfferSettingsService {
     /// let settings_id = "settings_123456";
     /// let request = OfferSettingsCreateRequest {
     ///     name: I18nText {
-    ///         zh_cn: Some("高级技术岗位Offer设置".to_string()),
-    ///         en_us: Some("Senior Technical Position Offer Settings".to_string()),
+    ///         zh_cn: Some("高级技术岗位Offer设置".to_string(),
+    ///         en_us: Some("Senior Technical Position Offer Settings".to_string(),
     ///         ja_jp: None,
     ///     },
     ///     applicable_job_types: vec!["senior_engineer".to_string()],
@@ -482,7 +487,11 @@ impl OfferSettingsService {
     ) -> SDKResult<BaseResponse<OfferSettingsOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/offer_settings/{settings_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_OFFER_SETTING_GET,
+                "settings_id",
+                settings_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -514,7 +523,11 @@ impl OfferSettingsService {
     ) -> SDKResult<BaseResponse<OfferSettingsOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/hire/v1/offer_settings/{settings_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_OFFER_SETTING_GET,
+                "settings_id",
+                settings_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

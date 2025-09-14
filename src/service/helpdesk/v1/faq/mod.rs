@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, BinaryResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -165,7 +166,7 @@ impl FaqService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/helpdesk/v1/faqs".to_string(),
+            api_path: Endpoints::HELPDESK_V1_FAQ_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -203,7 +204,11 @@ impl FaqService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/helpdesk/v1/faqs/{faq_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_FAQ_DELETE,
+                "faq_id",
+                faq_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -242,7 +247,11 @@ impl FaqService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/helpdesk/v1/faqs/{faq_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_FAQ_UPDATE,
+                "faq_id",
+                faq_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -280,7 +289,11 @@ impl FaqService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/helpdesk/v1/faqs/{faq_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_FAQ_GET,
+                "faq_id",
+                faq_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -334,7 +347,7 @@ impl FaqService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/helpdesk/v1/faqs".to_string(),
+            api_path: Endpoints::HELPDESK_V1_FAQS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -373,7 +386,15 @@ impl FaqService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/helpdesk/v1/faqs/{faq_id}/image/{image_key}"),
+            api_path: EndpointBuilder::replace_param(
+                &EndpointBuilder::replace_param(
+                    Endpoints::HELPDESK_V1_FAQ_IMAGE,
+                    "faq_id",
+                    faq_id,
+                ),
+                "image_key",
+                image_key,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -425,7 +446,7 @@ impl FaqService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/helpdesk/v1/faqs/search".to_string(),
+            api_path: Endpoints::HELPDESK_V1_FAQS_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
