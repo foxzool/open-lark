@@ -8,6 +8,7 @@ use crate::core::{
     constants::AccessTokenType,
     endpoints::{EndpointBuilder, Endpoints},
     http::Transport,
+    query_params::QueryParams,
     req_option::RequestOption,
     SDKResult,
 };
@@ -149,11 +150,14 @@ pub async fn get_permission_public(
 ) -> SDKResult<BaseResponse<GetPermissionPublicResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::GET;
-    api_req.api_path = format!(
-        "{}?type={}",
-        EndpointBuilder::replace_param(Endpoints::DRIVE_V1_PERMISSIONS_PUBLIC, "token", &request.token),
-        request.obj_type
+    api_req.api_path = EndpointBuilder::replace_param(
+        Endpoints::DRIVE_V1_PERMISSIONS_PUBLIC,
+        "token",
+        &request.token
     );
+    
+    // 添加查询参数
+    api_req.query_params.insert(QueryParams::TYPE, request.obj_type);
 
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 

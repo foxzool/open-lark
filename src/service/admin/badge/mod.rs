@@ -7,7 +7,9 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{Endpoints, EndpointBuilder},
         http::Transport,
+        query_params::QueryParams,
         req_option::RequestOption,
         SDKResult,
     },
@@ -112,7 +114,7 @@ impl BadgeService {
     ) -> SDKResult<BaseResponse<BadgeCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/admin/v1/badges".to_string(),
+            api_path: Endpoints::ADMIN_V1_BADGES_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -136,7 +138,11 @@ impl BadgeService {
     ) -> SDKResult<BaseResponse<BadgeUpdateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: format!("/open-apis/admin/v1/badges/{}", request.badge_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::ADMIN_V1_BADGES_OPERATION,
+                "badge_id",
+                &request.badge_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&serde_json::json!({
                 "name": request.name,
@@ -169,7 +175,7 @@ impl BadgeService {
     ) -> SDKResult<BaseResponse<BadgeImageUploadResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/admin/v1/badges/image".to_string(),
+            api_path: Endpoints::ADMIN_V1_BADGES_IMAGE_UPLOAD.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -193,7 +199,7 @@ impl BadgeService {
     ) -> SDKResult<BaseResponse<BadgeListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/admin/v1/badges".to_string(),
+            api_path: Endpoints::ADMIN_V1_BADGES_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -203,13 +209,13 @@ impl BadgeService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size", page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req.query_params.insert("page_token", page_token);
+            api_req.query_params.insert(QueryParams::PAGE_TOKEN, page_token);
         }
         if let Some(name) = request.name {
-            api_req.query_params.insert("name", name);
+            api_req.query_params.insert(QueryParams::NAME, name);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -230,7 +236,11 @@ impl BadgeService {
     ) -> SDKResult<BaseResponse<BadgeGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/admin/v1/badges/{}", request.badge_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::ADMIN_V1_BADGES_OPERATION,
+                "badge_id",
+                &request.badge_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
