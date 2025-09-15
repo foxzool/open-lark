@@ -169,11 +169,9 @@ async fn initialize_spreadsheet_data(
         .await
     {
         Ok(response) => {
-            if let Some(data) = &response.data {
-                println!("✅ 表头创建成功!");
-                println!("   更新范围: {}", data.updates.updated_range);
-                println!("   更新单元格数: {}", data.updates.updated_cells);
-            }
+            println!("✅ 表头创建成功!");
+            println!("   更新范围: {}", response.updates.updated_range);
+            println!("   更新单元格数: {}", response.updates.updated_cells);
         }
         Err(e) => {
             println!("❌ 初始化表格数据失败: {e:?}");
@@ -248,15 +246,13 @@ async fn add_sample_data(
         .await
     {
         Ok(response) => {
-            if let Some(data) = &response.data {
-                println!("✅ 员工数据添加成功!");
-                println!("   更新行数: {}", data.updates.updated_rows);
-                println!("   更新列数: {}", data.updates.updated_columns);
-                println!("   总更新单元格数: {}", data.updates.updated_cells);
+            println!("✅ 员工数据添加成功!");
+            println!("   更新行数: {}", response.updates.updated_rows);
+            println!("   更新列数: {}", response.updates.updated_columns);
+            println!("   总更新单元格数: {}", response.updates.updated_cells);
 
-                // 添加统计信息
-                add_statistics_data(client, spreadsheet_token).await?;
-            }
+            // 添加统计信息
+            add_statistics_data(client, spreadsheet_token).await?;
         }
         Err(e) => {
             println!("❌ 添加员工数据失败: {e:?}");
@@ -356,33 +352,31 @@ async fn display_final_result(
         .await
     {
         Ok(response) => {
-            if let Some(data) = &response.data {
-                let value_range = &data.value_range;
-                println!("✅ 表格创建和数据填充完成!");
-                println!("   表格版本: {}", value_range.revision);
-                println!("   数据行数: {}", value_range.values.len());
+            let value_range = &response.value_range;
+            println!("✅ 表格创建和数据填充完成!");
+            println!("   表格版本: {}", value_range.revision);
+            println!("   数据行数: {}", value_range.values.len());
 
-                println!("\n📊 最终表格内容预览:");
+            println!("\n📊 最终表格内容预览:");
 
-                for (row_index, row) in value_range.values.iter().enumerate() {
-                    if row_index == 0 {
-                        // 表头行
-                        print!("   表头: ");
-                    } else if row_index <= 6 {
-                        // 数据行
-                        print!("   数据{row_index}: ");
-                    } else {
-                        // 统计行
-                        print!("   统计: ");
-                    }
-
-                    let row_text: Vec<String> = row.iter().map(format_cell_value).collect();
-                    println!("{}", row_text.join(" | "));
+            for (row_index, row) in value_range.values.iter().enumerate() {
+                if row_index == 0 {
+                    // 表头行
+                    print!("   表头: ");
+                } else if row_index <= 6 {
+                    // 数据行
+                    print!("   数据{row_index}: ");
+                } else {
+                    // 统计行
+                    print!("   统计: ");
                 }
 
-                println!("\n🎉 表格创建演示完成!");
-                println!("💡 您可以在飞书应用中查看和编辑这个表格");
+                let row_text: Vec<String> = row.iter().map(format_cell_value).collect();
+                println!("{}", row_text.join(" | "));
             }
+
+            println!("\n🎉 表格创建演示完成!");
+            println!("💡 您可以在飞书应用中查看和编辑这个表格");
         }
         Err(e) => {
             println!("❌ 读取最终结果失败: {e:?}");
