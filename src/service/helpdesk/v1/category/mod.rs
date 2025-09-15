@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -119,15 +120,12 @@ impl CategoryService {
     ) -> SDKResult<BaseResponse<CreateCategoryResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/helpdesk/v1/categories".to_string(),
+            api_path: Endpoints::HELPDESK_V1_CATEGORIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -146,15 +144,16 @@ impl CategoryService {
     ) -> SDKResult<BaseResponse<GetCategoryResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/helpdesk/v1/categories/{category_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_CATEGORY_GET,
+                "category_id",
+                category_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -173,15 +172,16 @@ impl CategoryService {
     ) -> SDKResult<BaseResponse<UpdateCategoryResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/helpdesk/v1/categories/{category_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_CATEGORY_GET,
+                "category_id",
+                category_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -200,15 +200,16 @@ impl CategoryService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/helpdesk/v1/categories/{category_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_CATEGORY_GET,
+                "category_id",
+                category_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -228,24 +229,21 @@ impl CategoryService {
     ) -> SDKResult<BaseResponse<ListCategoriesResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(parent_id) = parent_id {
-            query_params.insert("parent_id".to_string(), parent_id.to_string());
+            query_params.insert("parent_id", parent_id.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token.to_string());
+            query_params.insert("page_token", page_token.to_string());
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/helpdesk/v1/categories".to_string(),
+            api_path: Endpoints::HELPDESK_V1_CATEGORIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

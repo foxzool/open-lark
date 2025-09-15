@@ -76,8 +76,6 @@
 //! - 🔐 细粒度权限控制
 //! - 📊 丰富的搜索分析
 
-use std::sync::Arc;
-
 use crate::core::config::Config;
 
 /// 搜索服务 v1 版本
@@ -133,10 +131,10 @@ impl SearchService {
     ///
     /// # 返回值
     /// 配置完成的搜索服务实例，包含v1和v2版本API
-    pub fn new(config: Arc<Config>) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            v1: v1::V1::new((*config).clone()),
-            v2: v2::V2::new((*config).clone()),
+            v1: v1::V1::new(config.clone()),
+            v2: v2::V2::new(config.clone()),
         }
     }
 }

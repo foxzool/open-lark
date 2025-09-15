@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -176,8 +177,10 @@ pub async fn batch_query_comments(
     let mut api_req = request.api_request;
     api_req.http_method = Method::POST;
     api_req.api_path = format!(
-        "/open-apis/comment/v1/comments/batch_query?file_type={}&file_token={}",
-        request.file_type, request.file_token
+        "{}?file_type={}&file_token={}",
+        Endpoints::COMMENT_V1_COMMENTS_BATCH_QUERY,
+        request.file_type,
+        request.file_token
     );
 
     // 添加用户ID类型查询参数

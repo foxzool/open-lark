@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, LINGO_DRAFT_CREATE, LINGO_DRAFT_UPDATE},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -44,7 +45,7 @@ impl DraftService {
     ) -> SDKResult<BaseResponse<DraftCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/lingo/v1/drafts".to_string(),
+            api_path: LINGO_DRAFT_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -74,7 +75,7 @@ impl DraftService {
     ) -> SDKResult<BaseResponse<DraftUpdateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: format!("/open-apis/lingo/v1/drafts/{draft_id}"),
+            api_path: EndpointBuilder::replace_param(LINGO_DRAFT_UPDATE, "{draft_id}", draft_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

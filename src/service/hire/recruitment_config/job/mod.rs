@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -121,7 +122,7 @@ impl JobService {
     ) -> SDKResult<BaseResponse<JobOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/jobs/combined_create".to_string(),
+            api_path: Endpoints::HIRE_V1_JOB_COMBINED_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -170,7 +171,11 @@ impl JobService {
     ) -> SDKResult<BaseResponse<JobOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/jobs/{}/combined_update", request.job_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_JOB_COMBINED_UPDATE,
+                "job_id",
+                &request.job_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -218,7 +223,11 @@ impl JobService {
     ) -> SDKResult<BaseResponse<JobDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/jobs/{job_id}/get_detail"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_JOB_GET_DETAIL,
+                "job_id",
+                job_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -281,7 +290,7 @@ impl JobService {
     ) -> SDKResult<BaseResponse<JobListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/jobs".to_string(),
+            api_path: Endpoints::HIRE_V1_JOBS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -291,41 +300,35 @@ impl JobService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(department_id) = request.department_id {
-            api_req
-                .query_params
-                .insert("department_id".to_string(), department_id);
+            api_req.query_params.insert("department_id", department_id);
         }
 
         if let Some(job_type) = request.job_type {
-            api_req
-                .query_params
-                .insert("job_type".to_string(), job_type);
+            api_req.query_params.insert("job_type", job_type);
         }
 
         if let Some(created_start_time) = request.created_start_time {
             api_req
                 .query_params
-                .insert("created_start_time".to_string(), created_start_time);
+                .insert("created_start_time", created_start_time);
         }
 
         if let Some(created_end_time) = request.created_end_time {
             api_req
                 .query_params
-                .insert("created_end_time".to_string(), created_end_time);
+                .insert("created_end_time", created_end_time);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -354,7 +357,11 @@ impl JobService {
     ) -> SDKResult<BaseResponse<JobOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/jobs/{job_id}/close"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_JOB_CLOSE,
+                "job_id",
+                job_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -386,7 +393,7 @@ impl JobService {
     ) -> SDKResult<BaseResponse<JobOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/jobs/{job_id}/open"),
+            api_path: EndpointBuilder::replace_param(Endpoints::HIRE_V1_JOB_OPEN, "job_id", job_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

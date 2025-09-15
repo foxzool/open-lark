@@ -6,6 +6,7 @@ use crate::core::{
     api_resp::{BaseResponse, BinaryResponse},
     config::Config,
     constants::AccessTokenType,
+    endpoints::Endpoints,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -33,27 +34,21 @@ impl WhiteboardService {
     ) -> SDKResult<BaseResponse<BinaryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/whiteboard/v1/whiteboards/{}/thumbnail",
-                request.whiteboard_token
-            ),
+            api_path: Endpoints::BOARD_V1_WHITEBOARD_THUMBNAIL
+                .replace("{}", &request.whiteboard_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
 
         // 添加查询参数
         if let Some(format) = request.format {
-            api_req.query_params.insert("format".to_string(), format);
+            api_req.query_params.insert("format", format);
         }
         if let Some(width) = request.width {
-            api_req
-                .query_params
-                .insert("width".to_string(), width.to_string());
+            api_req.query_params.insert("width", width.to_string());
         }
         if let Some(height) = request.height {
-            api_req
-                .query_params
-                .insert("height".to_string(), height.to_string());
+            api_req.query_params.insert("height", height.to_string());
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

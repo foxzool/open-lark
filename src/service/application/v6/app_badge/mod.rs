@@ -8,6 +8,7 @@ use crate::{
         api_resp::{BaseResponse, EmptyResponse},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -36,15 +37,15 @@ impl AppBadgeService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/application/v6/app_badge/{app_id}/users/{user_id}/set"),
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APPLICATION_V6_APP_BADGE_SET,
+                &[("app_id", app_id), ("user_id", user_id)],
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,

@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -35,7 +36,7 @@ impl FolderService {
     ) -> SDKResult<BaseResponse<GetRootFolderMetaRespData>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/drive/v1/folders/root_folder_meta".to_string(),
+            api_path: Endpoints::DRIVE_V1_FOLDERS_ROOT_FOLDER_META.to_string(),
             supported_access_token_types: vec![AccessTokenType::User],
             ..Default::default()
         };
@@ -56,34 +57,25 @@ impl FolderService {
     ) -> SDKResult<BaseResponse<ListFilesRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/drive/v1/folders/{}/children",
-                request.folder_token
-            ),
+            api_path: Endpoints::DRIVE_V1_FOLDER_CHILDREN.replace("{}", &request.folder_token),
             ..Default::default()
         };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(order_by) = request.order_by {
-            api_req
-                .query_params
-                .insert("order_by".to_string(), order_by);
+            api_req.query_params.insert("order_by", order_by);
         }
         if let Some(direction) = request.direction {
-            api_req
-                .query_params
-                .insert("direction".to_string(), direction);
+            api_req.query_params.insert("direction", direction);
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -102,7 +94,7 @@ impl FolderService {
     ) -> SDKResult<BaseResponse<GetFolderMetaRespData>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/drive/v1/folders/{}", request.folder_token),
+            api_path: Endpoints::DRIVE_V1_FOLDER_GET.replace("{}", &request.folder_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
@@ -123,7 +115,7 @@ impl FolderService {
     ) -> SDKResult<BaseResponse<CreateFolderRespData>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/drive/v1/folders".to_string(),
+            api_path: Endpoints::DRIVE_V1_FOLDERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -145,7 +137,7 @@ impl FolderService {
     ) -> SDKResult<BaseResponse<MoveOrDeleteFolderRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/drive/v1/folders/{}/move", request.folder_token),
+            api_path: Endpoints::DRIVE_V1_FOLDER_MOVE.replace("{}", &request.folder_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
@@ -173,7 +165,7 @@ impl FolderService {
     ) -> SDKResult<BaseResponse<CheckAsyncTaskRespData>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/drive/v1/tasks/{}", request.task_id),
+            api_path: Endpoints::DRIVE_V1_TASK_GET.replace("{}", &request.task_id),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };

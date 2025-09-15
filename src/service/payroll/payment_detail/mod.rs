@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -102,9 +103,10 @@ impl PaymentDetailService {
     ) -> SDKResult<BaseResponse<PaymentDetailListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/payroll/v1/payment_activities/{}/payment_details",
-                request.payment_activity_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::PAYROLL_V1_PAYMENT_DETAILS,
+                "payment_activity_id",
+                &request.payment_activity_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
@@ -115,31 +117,25 @@ impl PaymentDetailService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(employee_id) = request.employee_id {
-            api_req
-                .query_params
-                .insert("employee_id".to_string(), employee_id);
+            api_req.query_params.insert("employee_id", employee_id);
         }
 
         if let Some(user_id_type) = request.user_id_type {
-            api_req
-                .query_params
-                .insert("user_id_type".to_string(), user_id_type);
+            api_req.query_params.insert("user_id_type", user_id_type);
         }
 
         if let Some(department_id_type) = request.department_id_type {
             api_req
                 .query_params
-                .insert("department_id_type".to_string(), department_id_type);
+                .insert("department_id_type", department_id_type);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -197,9 +193,10 @@ impl PaymentDetailService {
     ) -> SDKResult<BaseResponse<PaymentDetailQueryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/payroll/v1/payment_activities/{}/payment_details/query",
-                request.payment_activity_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::PAYROLL_V1_PAYMENT_DETAILS_QUERY,
+                "payment_activity_id",
+                &request.payment_activity_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
@@ -208,9 +205,7 @@ impl PaymentDetailService {
 
         // 添加查询参数
         if let Some(user_id_type) = request.user_id_type {
-            api_req
-                .query_params
-                .insert("user_id_type".to_string(), user_id_type);
+            api_req.query_params.insert("user_id_type", user_id_type);
         }
 
         Transport::request(api_req, &self.config, option).await

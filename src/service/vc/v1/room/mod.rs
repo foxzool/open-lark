@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, VC_ROOM_CREATE, VC_ROOM_LIST, VC_ROOM_SEARCH},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -151,15 +152,12 @@ impl RoomService {
     ) -> SDKResult<BaseResponse<CreateRoomResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/vc/v1/rooms".to_string(),
+            api_path: VC_ROOM_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -180,21 +178,19 @@ impl RoomService {
     ) -> SDKResult<BaseResponse<UpdateRoomResponse>> {
         let mut query_params = HashMap::new();
         if let Some(room_id_type) = room_id_type {
-            query_params.insert(
-                "room_id_type".to_string(),
-                room_id_type.as_str().to_string(),
-            );
+            query_params.insert("room_id_type", room_id_type.as_str().to_string());
         }
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/rooms/{room_id}"),
+            api_path: EndpointBuilder::replace_param(
+                crate::core::endpoints::VC_ROOM_UPDATE,
+                "{room_id}",
+                room_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -214,21 +210,19 @@ impl RoomService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(room_id_type) = room_id_type {
-            query_params.insert(
-                "room_id_type".to_string(),
-                room_id_type.as_str().to_string(),
-            );
+            query_params.insert("room_id_type", room_id_type.as_str().to_string());
         }
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/vc/v1/rooms/{room_id}"),
+            api_path: EndpointBuilder::replace_param(
+                crate::core::endpoints::VC_ROOM_DELETE,
+                "{room_id}",
+                room_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -247,21 +241,19 @@ impl RoomService {
     ) -> SDKResult<BaseResponse<GetRoomResponse>> {
         let mut query_params = HashMap::new();
         if let Some(room_id_type) = room_id_type {
-            query_params.insert(
-                "room_id_type".to_string(),
-                room_id_type.as_str().to_string(),
-            );
+            query_params.insert("room_id_type", room_id_type.as_str().to_string());
         }
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/vc/v1/rooms/{room_id}"),
+            api_path: EndpointBuilder::replace_param(
+                crate::core::endpoints::VC_ROOM_GET,
+                "{room_id}",
+                room_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -281,27 +273,21 @@ impl RoomService {
     ) -> SDKResult<BaseResponse<ListRoomsResponse>> {
         let mut query_params = HashMap::new();
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
         if let Some(room_id_type) = room_id_type {
-            query_params.insert(
-                "room_id_type".to_string(),
-                room_id_type.as_str().to_string(),
-            );
+            query_params.insert("room_id_type", room_id_type.as_str().to_string());
         }
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/vc/v1/rooms".to_string(),
+            api_path: VC_ROOM_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -319,34 +305,28 @@ impl RoomService {
         let mut query_params = HashMap::new();
         if let Some(params) = params {
             if let Some(keyword) = params.keyword {
-                query_params.insert("keyword".to_string(), keyword);
+                query_params.insert("keyword", keyword);
             }
             if let Some(room_ids) = params.room_ids {
-                query_params.insert("room_ids".to_string(), room_ids.join(","));
+                query_params.insert("room_ids", room_ids.join(","));
             }
             if let Some(page_size) = params.page_size {
-                query_params.insert("page_size".to_string(), page_size.to_string());
+                query_params.insert("page_size", page_size.to_string());
             }
             if let Some(page_token) = params.page_token {
-                query_params.insert("page_token".to_string(), page_token);
+                query_params.insert("page_token", page_token);
             }
             if let Some(room_id_type) = params.room_id_type {
-                query_params.insert(
-                    "room_id_type".to_string(),
-                    room_id_type.as_str().to_string(),
-                );
+                query_params.insert("room_id_type", room_id_type.as_str().to_string());
             }
             if let Some(user_id_type) = params.user_id_type {
-                query_params.insert(
-                    "user_id_type".to_string(),
-                    user_id_type.as_str().to_string(),
-                );
+                query_params.insert("user_id_type", user_id_type.as_str().to_string());
             }
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/vc/v1/rooms/search".to_string(),
+            api_path: VC_ROOM_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

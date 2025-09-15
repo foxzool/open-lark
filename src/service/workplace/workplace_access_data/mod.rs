@@ -7,7 +7,9 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
+        query_params::QueryParams,
         req_option::RequestOption,
         standard_response::StandardResponse,
         SDKResult,
@@ -48,7 +50,7 @@ impl WorkplaceAccessDataService {
     ) -> SDKResult<AccessDataSearchResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/workplace/v1/workplace_access_data/search".to_string(),
+            api_path: Endpoints::WORKPLACE_ACCESS_DATA_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -58,44 +60,44 @@ impl WorkplaceAccessDataService {
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         if let Some(start_time) = request.start_time {
             api_req
                 .query_params
-                .insert("start_time".to_string(), start_time.to_string());
+                .insert(QueryParams::START_TIME, start_time.to_string());
         }
 
         if let Some(end_time) = request.end_time {
             api_req
                 .query_params
-                .insert("end_time".to_string(), end_time.to_string());
+                .insert(QueryParams::END_TIME, end_time.to_string());
         }
 
         if let Some(user_id) = request.user_id {
-            api_req.query_params.insert("user_id".to_string(), user_id);
+            api_req.query_params.insert(QueryParams::USER_ID, user_id);
         }
 
         if let Some(department_id) = request.department_id {
             api_req
                 .query_params
-                .insert("department_id".to_string(), department_id);
+                .insert(QueryParams::DEPARTMENT_ID, department_id);
         }
 
         if let Some(access_type) = request.access_type {
             api_req
                 .query_params
-                .insert("access_type".to_string(), access_type);
+                .insert(QueryParams::ACCESS_TYPE, access_type);
         }
 
-        let api_resp: BaseResponse<AccessDataSearchResponse> = 
+        let api_resp: BaseResponse<AccessDataSearchResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -119,7 +121,7 @@ impl WorkplaceAccessDataService {
     ) -> SDKResult<CustomAccessDataSearchResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/workplace/v1/custom_workplace_access_data/search".to_string(),
+            api_path: Endpoints::WORKPLACE_CUSTOM_ACCESS_DATA_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -129,38 +131,38 @@ impl WorkplaceAccessDataService {
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         if let Some(start_time) = request.start_time {
             api_req
                 .query_params
-                .insert("start_time".to_string(), start_time.to_string());
+                .insert(QueryParams::START_TIME, start_time.to_string());
         }
 
         if let Some(end_time) = request.end_time {
             api_req
                 .query_params
-                .insert("end_time".to_string(), end_time.to_string());
+                .insert(QueryParams::END_TIME, end_time.to_string());
         }
 
         if let Some(user_id) = request.user_id {
-            api_req.query_params.insert("user_id".to_string(), user_id);
+            api_req.query_params.insert(QueryParams::USER_ID, user_id);
         }
 
         if let Some(custom_workplace_id) = request.custom_workplace_id {
             api_req
                 .query_params
-                .insert("custom_workplace_id".to_string(), custom_workplace_id);
+                .insert(QueryParams::CUSTOM_WORKPLACE_ID, custom_workplace_id);
         }
 
-        let api_resp: BaseResponse<CustomAccessDataSearchResponse> = 
+        let api_resp: BaseResponse<CustomAccessDataSearchResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -184,8 +186,7 @@ impl WorkplaceAccessDataService {
     ) -> SDKResult<CustomWidgetAccessDataSearchResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/workplace/v1/custom_workplace_widget_access_data/search"
-                .to_string(),
+            api_path: Endpoints::WORKPLACE_WIDGET_ACCESS_DATA_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -195,44 +196,44 @@ impl WorkplaceAccessDataService {
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         if let Some(start_time) = request.start_time {
             api_req
                 .query_params
-                .insert("start_time".to_string(), start_time.to_string());
+                .insert(QueryParams::START_TIME, start_time.to_string());
         }
 
         if let Some(end_time) = request.end_time {
             api_req
                 .query_params
-                .insert("end_time".to_string(), end_time.to_string());
+                .insert(QueryParams::END_TIME, end_time.to_string());
         }
 
         if let Some(user_id) = request.user_id {
-            api_req.query_params.insert("user_id".to_string(), user_id);
+            api_req.query_params.insert(QueryParams::USER_ID, user_id);
         }
 
         if let Some(custom_workplace_id) = request.custom_workplace_id {
             api_req
                 .query_params
-                .insert("custom_workplace_id".to_string(), custom_workplace_id);
+                .insert(QueryParams::CUSTOM_WORKPLACE_ID, custom_workplace_id);
         }
 
         if let Some(widget_id) = request.widget_id {
             api_req
                 .query_params
-                .insert("widget_id".to_string(), widget_id);
+                .insert(QueryParams::WIDGET_ID, widget_id);
         }
 
-        let api_resp: BaseResponse<CustomWidgetAccessDataSearchResponse> = 
+        let api_resp: BaseResponse<CustomWidgetAccessDataSearchResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -283,57 +284,57 @@ impl AccessDataSearchRequestBuilder {
         self.inner.page_token = Some(token.into());
         self
     }
-    
+
     /// 设置页面大小
     pub fn page_size(mut self, size: i32) -> Self {
         self.inner.page_size = Some(size);
         self
     }
-    
+
     /// 设置开始时间戳
     pub fn start_time(mut self, timestamp: i64) -> Self {
         self.inner.start_time = Some(timestamp);
         self
     }
-    
+
     /// 设置结束时间戳  
     pub fn end_time(mut self, timestamp: i64) -> Self {
         self.inner.end_time = Some(timestamp);
         self
     }
-    
+
     /// 设置时间范围（复合方法）
     pub fn time_range(mut self, start_time: i64, end_time: i64) -> Self {
         self.inner.start_time = Some(start_time);
         self.inner.end_time = Some(end_time);
         self
     }
-    
+
     /// 设置分页参数（复合方法）
     pub fn pagination(mut self, page_token: Option<String>, page_size: Option<i32>) -> Self {
         self.inner.page_token = page_token;
         self.inner.page_size = page_size;
         self
     }
-    
+
     /// 设置用户ID筛选
     pub fn user_filter(mut self, user_id: impl Into<String>) -> Self {
         self.inner.user_id = Some(user_id.into());
         self
     }
-    
+
     /// 设置部门ID筛选
     pub fn department_filter(mut self, department_id: impl Into<String>) -> Self {
         self.inner.department_id = Some(department_id.into());
         self
     }
-    
+
     /// 设置访问类型筛选
     pub fn access_type_filter(mut self, access_type: impl Into<String>) -> Self {
         self.inner.access_type = Some(access_type.into());
         self
     }
-    
+
     /// 构建请求对象
     pub fn build(self) -> AccessDataSearchRequest {
         self.inner
@@ -436,57 +437,57 @@ impl CustomWidgetAccessDataSearchRequestBuilder {
         self.inner.page_token = Some(token.into());
         self
     }
-    
+
     /// 设置页面大小
     pub fn page_size(mut self, size: i32) -> Self {
         self.inner.page_size = Some(size);
         self
     }
-    
+
     /// 设置开始时间戳
     pub fn start_time(mut self, timestamp: i64) -> Self {
         self.inner.start_time = Some(timestamp);
         self
     }
-    
+
     /// 设置结束时间戳  
     pub fn end_time(mut self, timestamp: i64) -> Self {
         self.inner.end_time = Some(timestamp);
         self
     }
-    
+
     /// 设置时间范围（复合方法）
     pub fn time_range(mut self, start_time: i64, end_time: i64) -> Self {
         self.inner.start_time = Some(start_time);
         self.inner.end_time = Some(end_time);
         self
     }
-    
+
     /// 设置分页参数（复合方法）
     pub fn pagination(mut self, page_token: Option<String>, page_size: Option<i32>) -> Self {
         self.inner.page_token = page_token;
         self.inner.page_size = page_size;
         self
     }
-    
+
     /// 设置用户ID筛选
     pub fn user_filter(mut self, user_id: impl Into<String>) -> Self {
         self.inner.user_id = Some(user_id.into());
         self
     }
-    
+
     /// 设置定制工作台ID筛选
     pub fn custom_workplace_filter(mut self, custom_workplace_id: impl Into<String>) -> Self {
         self.inner.custom_workplace_id = Some(custom_workplace_id.into());
         self
     }
-    
+
     /// 设置小组件ID筛选
     pub fn widget_filter(mut self, widget_id: impl Into<String>) -> Self {
         self.inner.widget_id = Some(widget_id.into());
         self
     }
-    
+
     /// 构建请求对象
     pub fn build(self) -> CustomWidgetAccessDataSearchRequest {
         self.inner

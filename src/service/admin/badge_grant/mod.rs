@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -115,7 +116,7 @@ impl BadgeGrantService {
     ) -> SDKResult<BaseResponse<BadgeGrantCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/admin/v1/badge_grants".to_string(),
+            api_path: Endpoints::ADMIN_V1_BADGE_GRANTS_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -139,7 +140,11 @@ impl BadgeGrantService {
     ) -> SDKResult<BaseResponse<BadgeGrantDeleteResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/admin/v1/badge_grants/{}", request.grant_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::ADMIN_V1_BADGE_GRANTS_OPERATION,
+                "grant_id",
+                &request.grant_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -163,7 +168,11 @@ impl BadgeGrantService {
     ) -> SDKResult<BaseResponse<BadgeGrantUpdateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: format!("/open-apis/admin/v1/badge_grants/{}", request.grant_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::ADMIN_V1_BADGE_GRANTS_OPERATION,
+                "grant_id",
+                &request.grant_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&serde_json::json!({
                 "name": request.name,
@@ -194,7 +203,7 @@ impl BadgeGrantService {
     ) -> SDKResult<BaseResponse<BadgeGrantListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/admin/v1/badge_grants".to_string(),
+            api_path: Endpoints::ADMIN_V1_BADGE_GRANTS_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -202,22 +211,18 @@ impl BadgeGrantService {
 
         // 添加查询参数
         if let Some(badge_id) = request.badge_id {
-            api_req
-                .query_params
-                .insert("badge_id".to_string(), badge_id);
+            api_req.query_params.insert("badge_id", badge_id);
         }
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
         if let Some(name) = request.name {
-            api_req.query_params.insert("name".to_string(), name);
+            api_req.query_params.insert("name", name);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -238,7 +243,11 @@ impl BadgeGrantService {
     ) -> SDKResult<BaseResponse<BadgeGrantGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/admin/v1/badge_grants/{}", request.grant_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::ADMIN_V1_BADGE_GRANTS_OPERATION,
+                "grant_id",
+                &request.grant_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

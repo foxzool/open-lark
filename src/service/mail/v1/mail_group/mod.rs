@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -121,15 +122,12 @@ impl MailGroupService {
     ) -> SDKResult<BaseResponse<CreateMailGroupResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/mail/v1/mailgroups".to_string(),
+            api_path: Endpoints::MAIL_V1_MAILGROUPS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -148,15 +146,16 @@ impl MailGroupService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/mail/v1/mailgroups/{mailgroup_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_MAILGROUP,
+                "mailgroup_id",
+                mailgroup_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             ..Default::default()
@@ -175,15 +174,16 @@ impl MailGroupService {
     ) -> SDKResult<BaseResponse<UpdateMailGroupResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/mail/v1/mailgroups/{mailgroup_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_MAILGROUP,
+                "mailgroup_id",
+                mailgroup_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -203,15 +203,16 @@ impl MailGroupService {
     ) -> SDKResult<BaseResponse<UpdateMailGroupResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: format!("/open-apis/mail/v1/mailgroups/{mailgroup_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_MAILGROUP,
+                "mailgroup_id",
+                mailgroup_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -230,15 +231,16 @@ impl MailGroupService {
     ) -> SDKResult<BaseResponse<GetMailGroupResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/mail/v1/mailgroups/{mailgroup_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_MAILGROUP,
+                "mailgroup_id",
+                mailgroup_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             ..Default::default()
@@ -257,21 +259,18 @@ impl MailGroupService {
     ) -> SDKResult<BaseResponse<ListMailGroupsResponse>> {
         let mut query_params = HashMap::new();
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/mail/v1/mailgroups".to_string(),
+            api_path: Endpoints::MAIL_V1_MAILGROUPS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             ..Default::default()

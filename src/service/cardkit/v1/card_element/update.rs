@@ -1,2 +1,8 @@
-// TODO: 实现更新组件功能
+//! # 更新卡片组件
+//!
+//! 更新卡片中的指定组件内容。
+//!
+//! ## 实现状态
+//!
+//! 🚧 **待实现** - 此功能尚未实现，敬请期待。
 // 参考: https://open.feishu.cn/document/cardkit-v1/card-element/update

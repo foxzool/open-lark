@@ -8,6 +8,10 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{
+            EndpointBuilder, VC_MEETING_END, VC_MEETING_GET, VC_MEETING_INVITE, VC_MEETING_KICKOUT,
+            VC_MEETING_LIST_BY_NO, VC_MEETING_SET_HOST,
+        },
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -142,15 +146,12 @@ impl MeetingService {
     ) -> SDKResult<BaseResponse<InviteMeetingResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/invite"),
+            api_path: EndpointBuilder::replace_param(VC_MEETING_INVITE, "{meeting_id}", meeting_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -170,15 +171,16 @@ impl MeetingService {
     ) -> SDKResult<BaseResponse<KickoutMeetingResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/kickout"),
+            api_path: EndpointBuilder::replace_param(
+                VC_MEETING_KICKOUT,
+                "{meeting_id}",
+                meeting_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -198,15 +200,16 @@ impl MeetingService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/set_host"),
+            api_path: EndpointBuilder::replace_param(
+                VC_MEETING_SET_HOST,
+                "{meeting_id}",
+                meeting_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -225,15 +228,12 @@ impl MeetingService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}/end"),
+            api_path: EndpointBuilder::replace_param(VC_MEETING_END, "{meeting_id}", meeting_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -251,15 +251,12 @@ impl MeetingService {
     ) -> SDKResult<BaseResponse<GetMeetingResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/vc/v1/meetings/{meeting_id}"),
+            api_path: EndpointBuilder::replace_param(VC_MEETING_GET, "{meeting_id}", meeting_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -278,28 +275,25 @@ impl MeetingService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListMeetingsByNoResponse>> {
         let mut query_params = HashMap::new();
-        query_params.insert("meeting_no".to_string(), meeting_no.to_string());
-        query_params.insert("start_time".to_string(), start_time.to_string());
-        query_params.insert("end_time".to_string(), end_time.to_string());
+        query_params.insert("meeting_no", meeting_no.to_string());
+        query_params.insert("start_time", start_time.to_string());
+        query_params.insert("end_time", end_time.to_string());
 
         if let Some(params) = params {
             if let Some(page_size) = params.page_size {
-                query_params.insert("page_size".to_string(), page_size.to_string());
+                query_params.insert("page_size", page_size.to_string());
             }
             if let Some(page_token) = params.page_token {
-                query_params.insert("page_token".to_string(), page_token);
+                query_params.insert("page_token", page_token);
             }
             if let Some(user_id_type) = params.user_id_type {
-                query_params.insert(
-                    "user_id_type".to_string(),
-                    user_id_type.as_str().to_string(),
-                );
+                query_params.insert("user_id_type", user_id_type.as_str().to_string());
             }
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/vc/v1/meetings/list_by_no".to_string(),
+            api_path: VC_MEETING_LIST_BY_NO.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

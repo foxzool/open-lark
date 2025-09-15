@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -36,24 +37,19 @@ impl LikeService {
     ) -> SDKResult<BaseResponse<ListFileLikesRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/drive/v1/files/{}/like_records",
-                request.file_token
-            ),
+            api_path: Endpoints::DRIVE_V1_FILE_LIKE_RECORDS.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

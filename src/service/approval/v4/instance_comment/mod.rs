@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -75,15 +76,16 @@ impl InstanceCommentService {
     ) -> SDKResult<BaseResponse<CreateCommentResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/instances/{instance_code}/comments"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPROVAL_V4_INSTANCE_COMMENTS_CREATE,
+                "instance_code",
+                instance_code,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -103,17 +105,19 @@ impl InstanceCommentService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!(
-                "/open-apis/approval/v4/instances/{instance_code}/comments/{comment_id}"
-            ),
+            api_path: {
+                let path = EndpointBuilder::replace_param(
+                    Endpoints::APPROVAL_V4_INSTANCE_COMMENT_DELETE,
+                    "instance_code",
+                    instance_code,
+                );
+                EndpointBuilder::replace_param(&path, "comment_id", comment_id)
+            },
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -131,15 +135,16 @@ impl InstanceCommentService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/approval/v4/instances/{instance_code}/comments"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPROVAL_V4_INSTANCE_COMMENTS_REPLY,
+                "instance_code",
+                instance_code,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -159,21 +164,22 @@ impl InstanceCommentService {
     ) -> SDKResult<BaseResponse<ListCommentsResponse>> {
         let mut query_params = HashMap::new();
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/approval/v4/instances/{instance_code}/comments"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPROVAL_V4_INSTANCE_COMMENTS_LIST,
+                "instance_code",
+                instance_code,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

@@ -1,7 +1,11 @@
 use crate::{
     core::{
-        api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
-        constants::AccessTokenType, http::Transport,
+        api_req::ApiRequest,
+        api_resp::ApiResponseTrait,
+        config::Config,
+        constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
+        http::Transport,
     },
     service::contact::models::*,
 };
@@ -21,7 +25,11 @@ impl WorkCityService {
     pub async fn get(&self, work_city_id: &str) -> crate::core::SDKResult<GetWorkCityResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/contact/v3/work_cities/{work_city_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::CONTACT_V3_WORK_CITY_GET,
+                "work_city_id",
+                work_city_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             ..Default::default()
@@ -38,7 +46,7 @@ impl WorkCityService {
     ) -> crate::core::SDKResult<ListWorkCitiesResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: "/open-apis/contact/v3/work_cities".to_string(),
+            api_path: Endpoints::CONTACT_V3_WORK_CITIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),

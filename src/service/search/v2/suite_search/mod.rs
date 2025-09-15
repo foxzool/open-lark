@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -72,7 +73,7 @@ impl SuiteSearchService {
     ) -> SDKResult<BaseResponse<SearchMessageResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/search/v2/message".to_string(),
+            api_path: Endpoints::SEARCH_V2_MESSAGE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -82,12 +83,12 @@ impl SuiteSearchService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = &request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -113,7 +114,7 @@ impl SuiteSearchService {
     ) -> SDKResult<BaseResponse<SearchAppResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/search/v2/app".to_string(),
+            api_path: Endpoints::SEARCH_V2_APP.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -123,12 +124,12 @@ impl SuiteSearchService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = &request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
 
         Transport::request(api_req, &self.config, option).await

@@ -40,8 +40,6 @@
 //! // let result = client.im.v1.message.create(request, None).await?;
 //! ```
 
-use std::sync::Arc;
-
 use crate::{
     core::config::Config,
     service::im::{v1::V1, v2::V2},
@@ -68,10 +66,10 @@ impl ImService {
     ///
     /// # 参数
     /// - `config`: 客户端配置
-    pub fn new(config: Arc<Config>) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            v1: V1::new((*config).clone()),
-            v2: V2::new((*config).clone()),
+            v1: V1::new(config.clone()),
+            v2: V2::new(config.clone()),
         }
     }
 }

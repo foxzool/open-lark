@@ -7,6 +7,7 @@ use crate::core::{
     api_resp::{BaseResponse, EmptyResponse},
     config::Config,
     constants::AccessTokenType,
+    endpoints::{EndpointBuilder, Endpoints},
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
@@ -58,13 +59,17 @@ impl UrlPreviewService {
     ) -> SDKResult<EmptyResponse> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/im/v1/messages/{message_id}/url_preview/batch_update"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::IM_V1_MESSAGE_URL_PREVIEW_BATCH_UPDATE,
+                "message_id",
+                message_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<EmptyResponse> = 
+        let api_resp: BaseResponse<EmptyResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }

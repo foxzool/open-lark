@@ -10,6 +10,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -35,7 +36,7 @@ impl ExplorerService {
     ) -> SDKResult<BaseResponse<ExplorerRootMeta>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/drive/explorer/v2/root_folder/meta".to_string(),
+            api_path: Endpoints::DRIVE_EXPLORER_V2_ROOT_FOLDER_META.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
@@ -55,7 +56,8 @@ impl ExplorerService {
     ) -> SDKResult<BaseResponse<ExplorerFolderMeta>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/drive/explorer/v2/folder/{folder_token}/meta"),
+            api_path: Endpoints::DRIVE_EXPLORER_V2_FOLDER_META
+                .replace("{folder_token}", folder_token),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
@@ -74,7 +76,7 @@ impl ExplorerService {
     ) -> SDKResult<BaseResponse<CreateFolderResponse>> {
         let mut api_req = create_folder_request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/drive/v1/files/create_folder".to_string();
+        api_req.api_path = Endpoints::DRIVE_V1_FILES_CREATE_FOLDER.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -92,7 +94,7 @@ impl ExplorerService {
     ) -> SDKResult<BaseResponse<ListFolderResponse>> {
         let mut api_req = list_folder_request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/drive/v1/files".to_string();
+        api_req.api_path = Endpoints::DRIVE_V1_FILES.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -139,7 +141,7 @@ impl ListFolderIterator<'_> {
                         self.req
                             .api_req
                             .query_params
-                            .insert("page_token".to_string(), data.next_page_token.unwrap());
+                            .insert("page_token", data.next_page_token.unwrap());
                         Some(data.files)
                     } else if data.files.is_empty() {
                         None
@@ -281,7 +283,7 @@ impl ListFolderRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("page_size".to_string(), page_size.to_string());
+            .insert("page_size", page_size.to_string());
         self
     }
 
@@ -293,7 +295,7 @@ impl ListFolderRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("page_token".to_string(), page_token.to_string());
+            .insert("page_token", page_token.to_string());
         self
     }
 
@@ -304,7 +306,7 @@ impl ListFolderRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("folder_token".to_string(), fold_token.to_string());
+            .insert("folder_token", fold_token.to_string());
         self
     }
 
@@ -322,7 +324,7 @@ impl ListFolderRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("order_by".to_string(), order_by.to_string());
+            .insert("order_by", order_by.to_string());
         self
     }
 
@@ -338,7 +340,7 @@ impl ListFolderRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("direction".to_string(), direction.to_string());
+            .insert("direction", direction.to_string());
         self
     }
 
@@ -360,7 +362,7 @@ impl ListFolderRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("user_id_type".to_string(), user_id_type.to_string());
+            .insert("user_id_type", user_id_type.to_string());
         self
     }
 

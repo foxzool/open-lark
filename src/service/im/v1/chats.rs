@@ -6,6 +6,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    endpoints::Endpoints,
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
@@ -27,10 +28,10 @@ impl ChatsService {
     ) -> SDKResult<ListChatRespData> {
         let mut api_req = list_chat_request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/im/v1/chats".to_string();
+        api_req.api_path = Endpoints::IM_CHAT_CREATE.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp: BaseResponse<ListChatRespData> = 
+        let api_resp: BaseResponse<ListChatRespData> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -72,14 +73,14 @@ impl ListChatIterator<'_> {
                     self.request
                         .api_req
                         .query_params
-                        .insert("page_token".to_string(), data.page_token.to_string());
+                        .insert("page_token", data.page_token.to_string());
                     Some(data.items)
                 } else if data.items.is_empty() {
                     None
                 } else {
                     Some(data.items)
                 }
-            },
+            }
             Err(_) => None,
         }
     }
@@ -107,7 +108,7 @@ impl ListChatRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("user_id_type".to_string(), user_id_type.to_string());
+            .insert("user_id_type", user_id_type.to_string());
         self
     }
 
@@ -116,7 +117,7 @@ impl ListChatRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("sort_type".to_string(), sort_type.to_string());
+            .insert("sort_type", sort_type.to_string());
         self
     }
 
@@ -128,7 +129,7 @@ impl ListChatRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("page_token".to_string(), page_token.to_string());
+            .insert("page_token", page_token.to_string());
         self
     }
 
@@ -137,7 +138,7 @@ impl ListChatRequestBuilder {
         self.request
             .api_req
             .query_params
-            .insert("page_size".to_string(), page_size.to_string());
+            .insert("page_size", page_size.to_string());
         self
     }
 

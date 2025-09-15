@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
@@ -79,23 +80,20 @@ impl PinService {
         option: Option<RequestOption>,
     ) -> SDKResult<CreatePinResponse> {
         let mut query_params = HashMap::new();
-        query_params.insert("message_id".to_string(), message_id.to_string());
+        query_params.insert("message_id", message_id.to_string());
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/im/v1/pins".to_string(),
+            api_path: Endpoints::IM_V1_PINS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<CreatePinResponse> = 
+        let api_resp: BaseResponse<CreatePinResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -108,23 +106,20 @@ impl PinService {
         option: Option<RequestOption>,
     ) -> SDKResult<EmptyResponse> {
         let query_params = if let Some(user_id_type) = user_id_type {
-            HashMap::from([(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            )])
+            HashMap::from([("user_id_type", user_id_type.as_str().to_string())])
         } else {
             HashMap::new()
         };
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/im/v1/pins/{pin_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_DELETE_PIN, "pin_id", pin_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<EmptyResponse> = 
+        let api_resp: BaseResponse<EmptyResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -139,29 +134,26 @@ impl PinService {
         option: Option<RequestOption>,
     ) -> SDKResult<ListPinResponse> {
         let mut query_params = HashMap::new();
-        query_params.insert("chat_id".to_string(), chat_id.to_string());
+        query_params.insert("chat_id", chat_id.to_string());
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/im/v1/pins".to_string(),
+            api_path: Endpoints::IM_V1_PINS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
         };
 
-        let api_resp: BaseResponse<ListPinResponse> = 
+        let api_resp: BaseResponse<ListPinResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }

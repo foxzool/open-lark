@@ -197,7 +197,7 @@ fn format_timestamp(timestamp_str: &str) -> String {
 }
 
 /// 格式化发送者信息
-fn format_sender(_sender: &open_lark::service::im::v1::message::Sender) -> String {
+fn format_sender(_sender: &open_lark::service::im::v1::message::types::Sender) -> String {
     // 由于Sender字段是私有的，我们只能使用可访问的信息
     // 在实际使用中，需要根据API响应的实际结构来调整
     "发送者: [ID信息]".to_string()

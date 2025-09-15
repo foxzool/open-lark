@@ -76,22 +76,28 @@ pub struct ApiRequest {
     /// 存储将被附加到URL末尾的查询参数。
     /// 例如：`?page_size=10&page_token=xxx`
     ///
-    /// # 示例
+    /// # 性能优化
+    ///
+    /// 键使用 `&'static str` 避免堆分配，配合 `QueryParams` 常量使用：
     ///
     /// ```rust,ignore
-    /// api_req.query_params.insert("page_size".to_string(), "10".to_string());
-    /// api_req.query_params.insert("page_token".to_string(), token);
+    /// api_req.query_params.insert(QueryParams::PAGE_SIZE, "10".to_string());
+    /// api_req.query_params.insert(QueryParams::PAGE_TOKEN, token);
     /// ```
-    pub query_params: HashMap<String, String>,
+    ///
+    /// 这种设计减少了每次API调用约8-16字节的内存分配。
+    pub query_params: HashMap<&'static str, String>,
 
-    /// URL路径参数（当前未使用）
+    /// URL路径参数（保留字段）
     ///
-    /// 原设计意图可能是用于路径模板替换，如将 `/files/{id}` 中的 `{id}` 替换。
-    /// 但当前实现中，路径参数都是通过 `format!` 宏直接嵌入到 `api_path` 中。
+    /// 该字段为未来的路径模板功能保留。目前在现有架构中：
     ///
-    /// # TODO
+    /// - **当前做法**: 路径参数通过 `format!` 宏直接嵌入 `api_path`
+    /// - **替代方案**: 可使用 `RequestExecutor::execute_with_path_params()` 进行路径参数替换
+    /// - **设计考虑**: 保留该字段可为未来的模板系统升级提供支持
     ///
-    /// 考虑移除此字段或实现路径模板功能以保持设计一致性。
+    /// 关于路径参数处理，参考 `crate::service::endpoints::EndpointHelper::replace_path_params`
+    /// 和 `crate::core::request_executor::RequestExecutor::execute_with_path_params`。
     pub path_params: HashMap<String, Vec<String>>,
 
     /// 支持的访问令牌类型

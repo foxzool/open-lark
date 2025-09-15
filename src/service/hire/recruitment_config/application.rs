@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -74,7 +75,7 @@ impl ApplicationConfigService {
     ) -> SDKResult<BaseResponse<TalentTagListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/talent_tags".to_string(),
+            api_path: Endpoints::HIRE_V1_TALENT_TAGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -84,19 +85,17 @@ impl ApplicationConfigService {
         if let Some(tag_type) = request.tag_type {
             api_req
                 .query_params
-                .insert("tag_type".to_string(), format!("{tag_type:?}"));
+                .insert("tag_type", format!("{tag_type:?}"));
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -121,7 +120,7 @@ impl ApplicationConfigService {
     ) -> SDKResult<BaseResponse<RegistrationFormListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/registration_forms".to_string(),
+            api_path: Endpoints::HIRE_V1_REGISTRATION_FORMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -131,19 +130,17 @@ impl ApplicationConfigService {
         if let Some(form_type) = request.form_type {
             api_req
                 .query_params
-                .insert("form_type".to_string(), format!("{form_type:?}"));
+                .insert("form_type", format!("{form_type:?}"));
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await

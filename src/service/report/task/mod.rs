@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -44,7 +45,7 @@ impl TaskService {
     ) -> SDKResult<BaseResponse<TaskQueryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/report/v1/tasks/query".to_string(),
+            api_path: Endpoints::REPORT_V1_TASKS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -52,47 +53,41 @@ impl TaskService {
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(rule_id) = request.rule_id {
-            api_req.query_params.insert("rule_id".to_string(), rule_id);
+            api_req.query_params.insert("rule_id", rule_id);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(task_type) = request.task_type {
-            api_req
-                .query_params
-                .insert("task_type".to_string(), task_type);
+            api_req.query_params.insert("task_type", task_type);
         }
 
         if let Some(reporter_id) = request.reporter_id {
-            api_req
-                .query_params
-                .insert("reporter_id".to_string(), reporter_id);
+            api_req.query_params.insert("reporter_id", reporter_id);
         }
 
         if let Some(start_time) = request.start_time {
             api_req
                 .query_params
-                .insert("start_time".to_string(), start_time.to_string());
+                .insert("start_time", start_time.to_string());
         }
 
         if let Some(end_time) = request.end_time {
             api_req
                 .query_params
-                .insert("end_time".to_string(), end_time.to_string());
+                .insert("end_time", end_time.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await

@@ -6,6 +6,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    endpoints::Endpoints,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -69,13 +70,13 @@ impl ListWorkflowRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = &self.request.page_token {
             self.request
                 .api_request
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
         self.request
     }
@@ -142,10 +143,7 @@ pub async fn list_workflows(
 ) -> SDKResult<BaseResponse<ListWorkflowResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::GET;
-    api_req.api_path = format!(
-        "/open-apis/bitable/v1/apps/{app_token}/workflows",
-        app_token = request.app_token
-    );
+    api_req.api_path = Endpoints::BITABLE_V1_WORKFLOWS.replace("{app_token}", &request.app_token);
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
     let api_resp = Transport::request(api_req, config, option).await?;

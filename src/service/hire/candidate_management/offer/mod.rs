@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -342,7 +343,7 @@ impl OfferService {
     ) -> SDKResult<BaseResponse<OfferOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/offers".to_string(),
+            api_path: Endpoints::HIRE_V1_OFFERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -388,7 +389,11 @@ impl OfferService {
     ) -> SDKResult<BaseResponse<OfferDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/offers/{offer_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_OFFER_GET,
+                "offer_id",
+                offer_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -452,7 +457,7 @@ impl OfferService {
     ) -> SDKResult<BaseResponse<OfferListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/offers".to_string(),
+            api_path: Endpoints::HIRE_V1_OFFERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -462,45 +467,41 @@ impl OfferService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(talent_id) = request.talent_id {
-            api_req
-                .query_params
-                .insert("talent_id".to_string(), talent_id);
+            api_req.query_params.insert("talent_id", talent_id);
         }
 
         if let Some(job_id) = request.job_id {
-            api_req.query_params.insert("job_id".to_string(), job_id);
+            api_req.query_params.insert("job_id", job_id);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(approval_status) = request.approval_status {
             api_req
                 .query_params
-                .insert("approval_status".to_string(), approval_status);
+                .insert("approval_status", approval_status);
         }
 
         if let Some(created_start_time) = request.created_start_time {
             api_req
                 .query_params
-                .insert("created_start_time".to_string(), created_start_time);
+                .insert("created_start_time", created_start_time);
         }
 
         if let Some(created_end_time) = request.created_end_time {
             api_req
                 .query_params
-                .insert("created_end_time".to_string(), created_end_time);
+                .insert("created_end_time", created_end_time);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -546,7 +547,11 @@ impl OfferService {
     ) -> SDKResult<BaseResponse<OfferOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/offers/{offer_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_OFFER_GET,
+                "offer_id",
+                offer_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -601,7 +606,11 @@ impl OfferService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/offers/{offer_id}/send"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_OFFER_SEND,
+                "offer_id",
+                offer_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -646,7 +655,11 @@ impl OfferService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/offers/{offer_id}/withdraw"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_OFFER_WITHDRAW,
+                "offer_id",
+                offer_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -691,7 +704,7 @@ impl OfferService {
     ) -> SDKResult<BaseResponse<OfferOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/onboardings".to_string(),
+            api_path: Endpoints::HIRE_V1_ONBOARDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -734,7 +747,7 @@ impl OfferService {
     ) -> SDKResult<BaseResponse<OnboardingListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/onboardings".to_string(),
+            api_path: Endpoints::HIRE_V1_ONBOARDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -744,23 +757,19 @@ impl OfferService {
         if let Some(page_size) = page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(status) = status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(department) = department {
-            api_req
-                .query_params
-                .insert("department".to_string(), department);
+            api_req.query_params.insert("department", department);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -813,9 +822,14 @@ impl OfferService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/hire/v1/onboardings/{onboarding_id}/progress/{progress_id}"
-            ),
+            api_path: {
+                let path = EndpointBuilder::replace_param(
+                    Endpoints::HIRE_V1_ONBOARDING_PROGRESS,
+                    "onboarding_id",
+                    onboarding_id,
+                );
+                EndpointBuilder::replace_param(&path, "progress_id", progress_id)
+            },
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()

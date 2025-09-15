@@ -5,7 +5,10 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
-        req_option, SDKResult,
+        endpoints::Endpoints,
+        req_option,
+        standard_response::StandardResponse,
+        SDKResult,
     },
     impl_executable_builder_owned,
     service::sheets::v3::{
@@ -104,7 +107,7 @@ impl_executable_builder_owned!(
     ReplaceCellsRequestBuilder,
     SpreadsheetSheetService,
     ReplaceCellsRequest,
-    BaseResponse<ReplaceCellsResponse>,
+    ReplaceCellsResponse,
     replace_cells
 );
 
@@ -131,18 +134,16 @@ impl SpreadsheetSheetService {
         &self,
         request: ReplaceCellsRequest,
         option: Option<req_option::RequestOption>,
-    ) -> SDKResult<BaseResponse<ReplaceCellsResponse>> {
+    ) -> SDKResult<ReplaceCellsResponse> {
         let mut api_req = request.api_request;
-        api_req.api_path = format!(
-            "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/replace",
-            spreadsheet_token = request.spreadsheet_token,
-            sheet_id = request.sheet_id
-        );
+        api_req.api_path = Endpoints::SHEETS_V3_SPREADSHEET_SHEET_REPLACE
+            .replace("{}", &request.spreadsheet_token)
+            .replace("{}", &request.sheet_id);
         api_req.http_method = reqwest::Method::POST;
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::App];
 
-        let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
-
-        Ok(api_resp)
+        let api_resp: BaseResponse<ReplaceCellsResponse> =
+            crate::core::http::Transport::request(api_req, &self.config, option).await?;
+        api_resp.into_result()
     }
 }

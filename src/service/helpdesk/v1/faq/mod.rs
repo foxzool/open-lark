@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, BinaryResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -160,15 +161,12 @@ impl FaqService {
     ) -> SDKResult<BaseResponse<CreateFaqResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/helpdesk/v1/faqs".to_string(),
+            api_path: Endpoints::HELPDESK_V1_FAQ_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -201,15 +199,16 @@ impl FaqService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/helpdesk/v1/faqs/{faq_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_FAQ_DELETE,
+                "faq_id",
+                faq_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -243,15 +242,16 @@ impl FaqService {
     ) -> SDKResult<BaseResponse<UpdateFaqResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/helpdesk/v1/faqs/{faq_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_FAQ_UPDATE,
+                "faq_id",
+                faq_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -284,15 +284,16 @@ impl FaqService {
     ) -> SDKResult<BaseResponse<GetFaqResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/helpdesk/v1/faqs/{faq_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_FAQ_GET,
+                "faq_id",
+                faq_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -329,27 +330,24 @@ impl FaqService {
     ) -> SDKResult<BaseResponse<ListFaqsResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(category_id) = category_id {
-            query_params.insert("category_id".to_string(), category_id.to_string());
+            query_params.insert("category_id", category_id.to_string());
         }
         if let Some(status) = status {
-            query_params.insert("status".to_string(), status.to_string());
+            query_params.insert("status", status.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token.to_string());
+            query_params.insert("page_token", page_token.to_string());
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/helpdesk/v1/faqs".to_string(),
+            api_path: Endpoints::HELPDESK_V1_FAQS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -383,15 +381,16 @@ impl FaqService {
     ) -> SDKResult<BaseResponse<BinaryResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/helpdesk/v1/faqs/{faq_id}/image/{image_key}"),
+            api_path: EndpointBuilder::replace_param(
+                &EndpointBuilder::replace_param(Endpoints::HELPDESK_V1_FAQ_IMAGE, "faq_id", faq_id),
+                "image_key",
+                image_key,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -427,26 +426,23 @@ impl FaqService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SearchFaqsResponse>> {
         let mut query_params = HashMap::new();
-        query_params.insert("query".to_string(), query.to_string());
+        query_params.insert("query", query.to_string());
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(category_id) = category_id {
-            query_params.insert("category_id".to_string(), category_id.to_string());
+            query_params.insert("category_id", category_id.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token.to_string());
+            query_params.insert("page_token", page_token.to_string());
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/helpdesk/v1/faqs/search".to_string(),
+            api_path: Endpoints::HELPDESK_V1_FAQS_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

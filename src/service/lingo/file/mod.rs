@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, LINGO_FILE_DOWNLOAD, LINGO_FILE_UPLOAD},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -44,7 +45,7 @@ impl FileService {
     ) -> SDKResult<BaseResponse<FileUploadResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/lingo/v1/file/upload".to_string(),
+            api_path: LINGO_FILE_UPLOAD.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -72,7 +73,11 @@ impl FileService {
     ) -> SDKResult<BaseResponse<FileDownloadResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/lingo/v1/file/download/{file_token}"),
+            api_path: EndpointBuilder::replace_param(
+                LINGO_FILE_DOWNLOAD,
+                "{file_token}",
+                file_token,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

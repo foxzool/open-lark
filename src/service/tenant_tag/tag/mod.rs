@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -103,15 +104,12 @@ impl TagService {
     ) -> SDKResult<BaseResponse<CreateTagResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/tenant-tag/v1/tags".to_string(),
+            api_path: Endpoints::TENANT_TAG_V1_TAGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -131,15 +129,16 @@ impl TagService {
     ) -> SDKResult<BaseResponse<PatchTagResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/tenant-tag/v1/tags/{tag_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TENANT_TAG_V1_TAG_OPERATION,
+                "tag_id",
+                tag_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -160,24 +159,21 @@ impl TagService {
     ) -> SDKResult<BaseResponse<ListTagResponse>> {
         let mut query_params = HashMap::new();
         if let Some(tag_type) = tag_type {
-            query_params.insert("tag_type".to_string(), tag_type.as_str().to_string());
+            query_params.insert("tag_type", tag_type.as_str().to_string());
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/tenant-tag/v1/tags".to_string(),
+            api_path: Endpoints::TENANT_TAG_V1_TAGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             ..Default::default()

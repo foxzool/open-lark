@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -119,15 +120,16 @@ impl AgentScheduleService {
     ) -> SDKResult<BaseResponse<CreateAgentScheduleResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/helpdesk/v1/agents/{agent_id}/agent_schedules"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_AGENT_SCHEDULES,
+                "agent_id",
+                agent_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -147,16 +149,19 @@ impl AgentScheduleService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!(
-                "/open-apis/helpdesk/v1/agents/{agent_id}/agent_schedules/{schedule_id}"
+            api_path: EndpointBuilder::replace_param(
+                &EndpointBuilder::replace_param(
+                    Endpoints::HELPDESK_V1_AGENT_SCHEDULE_DELETE,
+                    "agent_id",
+                    agent_id,
+                ),
+                "schedule_id",
+                schedule_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -177,16 +182,19 @@ impl AgentScheduleService {
     ) -> SDKResult<BaseResponse<UpdateAgentScheduleResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!(
-                "/open-apis/helpdesk/v1/agents/{agent_id}/agent_schedules/{schedule_id}"
+            api_path: EndpointBuilder::replace_param(
+                &EndpointBuilder::replace_param(
+                    Endpoints::HELPDESK_V1_AGENT_SCHEDULE_DELETE,
+                    "agent_id",
+                    agent_id,
+                ),
+                "schedule_id",
+                schedule_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -207,16 +215,19 @@ impl AgentScheduleService {
     ) -> SDKResult<BaseResponse<GetAgentScheduleResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/helpdesk/v1/agents/{agent_id}/agent_schedules/{schedule_id}"
+            api_path: EndpointBuilder::replace_param(
+                &EndpointBuilder::replace_param(
+                    Endpoints::HELPDESK_V1_AGENT_SCHEDULE_DELETE,
+                    "agent_id",
+                    agent_id,
+                ),
+                "schedule_id",
+                schedule_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -237,21 +248,22 @@ impl AgentScheduleService {
     ) -> SDKResult<BaseResponse<ListAgentSchedulesResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token.to_string());
+            query_params.insert("page_token", page_token.to_string());
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/helpdesk/v1/agents/{agent_id}/agent_schedules"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_AGENT_SCHEDULES,
+                "agent_id",
+                agent_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

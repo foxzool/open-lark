@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -84,7 +85,7 @@ impl DeleteRoleMemberRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("user_id_type".to_string(), user_id_type.clone());
+                .insert("user_id_type", user_id_type.clone());
         }
         self.request
     }
@@ -121,12 +122,10 @@ pub async fn delete_role_member(
 ) -> SDKResult<BaseResponse<DeleteRoleMemberResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::DELETE;
-    api_req.api_path = format!(
-        "/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}/members/{member_id}",
-        app_token = request.app_token,
-        role_id = request.role_id,
-        member_id = request.member_id
-    );
+    api_req.api_path = Endpoints::BITABLE_V1_ROLE_MEMBER_DELETE
+        .replace("{app_token}", &request.app_token)
+        .replace("{role_id}", &request.role_id)
+        .replace("{member_id}", &request.member_id);
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
     let api_resp = Transport::request(api_req, config, option).await?;

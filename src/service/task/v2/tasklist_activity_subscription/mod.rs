@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -120,16 +121,15 @@ impl TasklistActivitySubscriptionService {
     ) -> SDKResult<BaseResponse<CreateActivitySubscriptionResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/task/v2/tasklists/{tasklist_guid}/activity_subscriptions"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTIONS,
+                "tasklist_guid",
+                tasklist_guid,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -150,16 +150,19 @@ impl TasklistActivitySubscriptionService {
     ) -> SDKResult<BaseResponse<GetActivitySubscriptionResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/task/v2/tasklists/{tasklist_guid}/activity_subscriptions/{activity_subscription_guid}"
+            api_path: EndpointBuilder::replace_param(
+                &EndpointBuilder::replace_param(
+                    Endpoints::TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTION_GET,
+                    "tasklist_guid",
+                    tasklist_guid,
+                ),
+                "activity_subscription_guid",
+                activity_subscription_guid,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -180,22 +183,21 @@ impl TasklistActivitySubscriptionService {
     ) -> SDKResult<BaseResponse<ListActivitySubscriptionsResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token.to_string());
+            query_params.insert("page_token", page_token.to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/task/v2/tasklists/{tasklist_guid}/activity_subscriptions"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTIONS,
+                "tasklist_guid",
+                tasklist_guid,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -216,16 +218,19 @@ impl TasklistActivitySubscriptionService {
     ) -> SDKResult<BaseResponse<UpdateActivitySubscriptionResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!(
-                "/open-apis/task/v2/tasklists/{tasklist_guid}/activity_subscriptions/{activity_subscription_guid}"
+            api_path: EndpointBuilder::replace_param(
+                &EndpointBuilder::replace_param(
+                    Endpoints::TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTION_GET,
+                    "tasklist_guid",
+                    tasklist_guid,
+                ),
+                "activity_subscription_guid",
+                activity_subscription_guid,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -246,16 +251,19 @@ impl TasklistActivitySubscriptionService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!(
-                "/open-apis/task/v2/tasklists/{tasklist_guid}/activity_subscriptions/{activity_subscription_guid}"
+            api_path: EndpointBuilder::replace_param(
+                &EndpointBuilder::replace_param(
+                    Endpoints::TASK_V2_TASKLIST_ACTIVITY_SUBSCRIPTION_GET,
+                    "tasklist_guid",
+                    tasklist_guid,
+                ),
+                "activity_subscription_guid",
+                activity_subscription_guid,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,

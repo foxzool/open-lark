@@ -3,8 +3,13 @@ use serde_json::json;
 
 use crate::{
     core::{
-        api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
-        req_option::RequestOption, SDKResult,
+        api_resp::BaseResponse,
+        config::Config,
+        constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
     },
     impl_executable_builder_owned,
 };
@@ -30,16 +35,17 @@ impl LeaveAccrualRecordService {
     ) -> SDKResult<BaseResponse<PatchLeaveAccrualRecordRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::PATCH;
-        api_req.api_path = format!(
-            "/open-apis/attendance/v1/leave_accrual_records/{}",
-            request.leave_accrual_record_id
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::ATTENDANCE_V1_LEAVE_ACCRUAL_RECORD_GET,
+            "leave_accrual_record_id",
+            &request.leave_accrual_record_id,
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         // 构建请求体
         let body = json!({

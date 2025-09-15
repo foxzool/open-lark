@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -85,7 +86,7 @@ impl CostAllocationPlanService {
     ) -> SDKResult<BaseResponse<CostAllocationPlanListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/payroll/v1/cost_allocation_plans".to_string(),
+            api_path: Endpoints::PAYROLL_V1_COST_ALLOCATION_PLANS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -95,23 +96,19 @@ impl CostAllocationPlanService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(plan_type) = request.plan_type {
-            api_req
-                .query_params
-                .insert("plan_type".to_string(), plan_type);
+            api_req.query_params.insert("plan_type", plan_type);
         }
 
         Transport::request(api_req, &self.config, option).await

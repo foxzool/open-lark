@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -230,7 +231,7 @@ impl TalentPoolService {
     ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/talent_pools".to_string(),
+            api_path: Endpoints::HIRE_V1_TALENT_POOLS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -277,7 +278,11 @@ impl TalentPoolService {
     ) -> SDKResult<BaseResponse<TalentPoolDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/talent_pools/{pool_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_TALENT_POOL_GET,
+                "pool_id",
+                pool_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -337,7 +342,7 @@ impl TalentPoolService {
     ) -> SDKResult<BaseResponse<TalentPoolListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/talent_pools".to_string(),
+            api_path: Endpoints::HIRE_V1_TALENT_POOLS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -347,29 +352,23 @@ impl TalentPoolService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(pool_type) = request.pool_type {
-            api_req
-                .query_params
-                .insert("pool_type".to_string(), pool_type);
+            api_req.query_params.insert("pool_type", pool_type);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(owner_id) = request.owner_id {
-            api_req
-                .query_params
-                .insert("owner_id".to_string(), owner_id);
+            api_req.query_params.insert("owner_id", owner_id);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -429,7 +428,11 @@ impl TalentPoolService {
     ) -> SDKResult<BaseResponse<TalentPoolTalentListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/talent_pools/{pool_id}/talents"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_TALENT_POOL_TALENTS,
+                "pool_id",
+                pool_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -439,31 +442,25 @@ impl TalentPoolService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if !request.tags.is_empty() {
-            api_req
-                .query_params
-                .insert("tags".to_string(), request.tags.join(","));
+            api_req.query_params.insert("tags", request.tags.join(","));
         }
 
         if let Some(work_experience) = request.work_experience {
             api_req
                 .query_params
-                .insert("work_experience".to_string(), work_experience.to_string());
+                .insert("work_experience", work_experience.to_string());
         }
 
         if let Some(education) = request.education {
-            api_req
-                .query_params
-                .insert("education".to_string(), education);
+            api_req.query_params.insert("education", education);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -495,7 +492,15 @@ impl TalentPoolService {
     ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/talent_pools/{pool_id}/talents/{talent_id}"),
+            api_path: EndpointBuilder::replace_param(
+                &EndpointBuilder::replace_param(
+                    Endpoints::HIRE_V1_TALENT_POOL_TALENT_GET,
+                    "pool_id",
+                    pool_id,
+                ),
+                "talent_id",
+                talent_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -530,7 +535,15 @@ impl TalentPoolService {
     ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/hire/v1/talent_pools/{pool_id}/talents/{talent_id}"),
+            api_path: EndpointBuilder::replace_param(
+                &EndpointBuilder::replace_param(
+                    Endpoints::HIRE_V1_TALENT_POOL_TALENT_GET,
+                    "pool_id",
+                    pool_id,
+                ),
+                "talent_id",
+                talent_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -578,7 +591,11 @@ impl TalentPoolService {
     ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/talent_pools/{pool_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_TALENT_POOL_GET,
+                "pool_id",
+                pool_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -610,7 +627,11 @@ impl TalentPoolService {
     ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/hire/v1/talent_pools/{pool_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_TALENT_POOL_GET,
+                "pool_id",
+                pool_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

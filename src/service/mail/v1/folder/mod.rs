@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -116,15 +117,16 @@ impl FolderService {
     ) -> SDKResult<BaseResponse<CreateFolderResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/folders"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_USER_MAILBOX_FOLDERS,
+                "user_mailbox_id",
+                user_mailbox_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -159,16 +161,19 @@ impl FolderService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/folders/{folder_id}"
+            api_path: EndpointBuilder::replace_param(
+                &EndpointBuilder::replace_param(
+                    Endpoints::MAIL_V1_USER_MAILBOX_FOLDER,
+                    "user_mailbox_id",
+                    user_mailbox_id,
+                ),
+                "folder_id",
+                folder_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -205,16 +210,19 @@ impl FolderService {
     ) -> SDKResult<BaseResponse<UpdateFolderResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/folders/{folder_id}"
+            api_path: EndpointBuilder::replace_param(
+                &EndpointBuilder::replace_param(
+                    Endpoints::MAIL_V1_USER_MAILBOX_FOLDER,
+                    "user_mailbox_id",
+                    user_mailbox_id,
+                ),
+                "folder_id",
+                folder_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -252,21 +260,22 @@ impl FolderService {
     ) -> SDKResult<BaseResponse<ListFoldersResponse>> {
         let mut query_params = HashMap::new();
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/folders"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_USER_MAILBOX_FOLDERS,
+                "user_mailbox_id",
+                user_mailbox_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

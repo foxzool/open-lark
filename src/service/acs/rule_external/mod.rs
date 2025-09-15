@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -44,7 +45,7 @@ impl RuleExternalService {
     ) -> SDKResult<BaseResponse<RuleCreateOrUpdateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/acs/v1/rule_external".to_string(),
+            api_path: Endpoints::ACS_V1_RULE_EXTERNAL.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -72,7 +73,11 @@ impl RuleExternalService {
     ) -> SDKResult<BaseResponse<RuleGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/acs/v1/rule_external/{rule_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::ACS_V1_RULE_EXTERNAL_OPERATION,
+                "rule_id",
+                rule_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -100,7 +105,11 @@ impl RuleExternalService {
     ) -> SDKResult<BaseResponse<RuleDeleteResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/acs/v1/rule_external/{rule_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::ACS_V1_RULE_EXTERNAL_OPERATION,
+                "rule_id",
+                rule_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -128,7 +137,7 @@ impl RuleExternalService {
     ) -> SDKResult<BaseResponse<DeviceBindResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/acs/v1/rule_external/device_bind".to_string(),
+            api_path: Endpoints::ACS_V1_RULE_EXTERNAL_DEVICE_BIND.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

@@ -7,7 +7,9 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
+        query_params::QueryParams,
         req_option::RequestOption,
         SDKResult,
     },
@@ -46,7 +48,7 @@ impl AccessRecordService {
     ) -> SDKResult<BaseResponse<AccessRecordListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/acs/v1/access_records".to_string(),
+            api_path: Endpoints::ACS_V1_ACCESS_RECORDS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -56,35 +58,35 @@ impl AccessRecordService {
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         if let Some(user_id) = request.user_id {
-            api_req.query_params.insert("user_id".to_string(), user_id);
+            api_req.query_params.insert(QueryParams::USER_ID, user_id);
         }
 
         if let Some(device_id) = request.device_id {
             api_req
                 .query_params
-                .insert("device_id".to_string(), device_id);
+                .insert(QueryParams::DEVICE_ID, device_id);
         }
 
         if let Some(access_type) = request.access_type {
             api_req.query_params.insert(
-                "access_type".to_string(),
+                QueryParams::ACCESS_TYPE,
                 serde_json::to_string(&access_type)?,
             );
         }
 
         if let Some(access_method) = request.access_method {
             api_req.query_params.insert(
-                "access_method".to_string(),
+                QueryParams::ACCESS_METHOD,
                 serde_json::to_string(&access_method)?,
             );
         }
@@ -92,19 +94,19 @@ impl AccessRecordService {
         if let Some(result) = request.result {
             api_req
                 .query_params
-                .insert("result".to_string(), serde_json::to_string(&result)?);
+                .insert(QueryParams::RESULT, serde_json::to_string(&result)?);
         }
 
         if let Some(start_time) = request.start_time {
             api_req
                 .query_params
-                .insert("start_time".to_string(), start_time.to_string());
+                .insert(QueryParams::START_TIME, start_time.to_string());
         }
 
         if let Some(end_time) = request.end_time {
             api_req
                 .query_params
-                .insert("end_time".to_string(), end_time.to_string());
+                .insert(QueryParams::END_TIME, end_time.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -129,7 +131,11 @@ impl AccessRecordService {
     ) -> SDKResult<BaseResponse<AccessRecordFaceImageResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/acs/v1/access_records/{record_id}/face_image"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::ACS_V1_ACCESS_RECORD_FACE_IMAGE,
+                "record_id",
+                record_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -348,7 +349,7 @@ impl ExamService {
     ) -> SDKResult<BaseResponse<ExamPaperListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/exam_papers".to_string(),
+            api_path: Endpoints::HIRE_V1_EXAM_PAPERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -358,37 +359,29 @@ impl ExamService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(paper_type) = request.paper_type {
-            api_req
-                .query_params
-                .insert("paper_type".to_string(), paper_type);
+            api_req.query_params.insert("paper_type", paper_type);
         }
 
         if let Some(difficulty_level) = request.difficulty_level {
             api_req
                 .query_params
-                .insert("difficulty_level".to_string(), difficulty_level);
+                .insert("difficulty_level", difficulty_level);
         }
 
         if let Some(skill_tag) = request.skill_tag {
-            api_req
-                .query_params
-                .insert("skill_tag".to_string(), skill_tag);
+            api_req.query_params.insert("skill_tag", skill_tag);
         }
 
         if let Some(enabled) = request.enabled {
-            api_req
-                .query_params
-                .insert("enabled".to_string(), enabled.to_string());
+            api_req.query_params.insert("enabled", enabled.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -445,7 +438,7 @@ impl ExamService {
     ) -> SDKResult<BaseResponse<ExamOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/exam_arrangements".to_string(),
+            api_path: Endpoints::HIRE_V1_EXAM_ARRANGEMENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -491,7 +484,11 @@ impl ExamService {
     ) -> SDKResult<BaseResponse<ExamRecordDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/exam_records/{record_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_EXAM_RECORD_GET,
+                "record_id",
+                record_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -555,7 +552,7 @@ impl ExamService {
     ) -> SDKResult<BaseResponse<ExamRecordListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/exam_records".to_string(),
+            api_path: Endpoints::HIRE_V1_EXAM_RECORDS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -565,41 +562,33 @@ impl ExamService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(talent_id) = request.talent_id {
-            api_req
-                .query_params
-                .insert("talent_id".to_string(), talent_id);
+            api_req.query_params.insert("talent_id", talent_id);
         }
 
         if let Some(paper_id) = request.paper_id {
-            api_req
-                .query_params
-                .insert("paper_id".to_string(), paper_id);
+            api_req.query_params.insert("paper_id", paper_id);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(start_time_from) = request.start_time_from {
             api_req
                 .query_params
-                .insert("start_time_from".to_string(), start_time_from);
+                .insert("start_time_from", start_time_from);
         }
 
         if let Some(start_time_to) = request.start_time_to {
-            api_req
-                .query_params
-                .insert("start_time_to".to_string(), start_time_to);
+            api_req.query_params.insert("start_time_to", start_time_to);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -646,7 +635,7 @@ impl ExamService {
     ) -> SDKResult<BaseResponse<ExamOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/exam_submissions".to_string(),
+            api_path: Endpoints::HIRE_V1_EXAM_SUBMISSIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -691,7 +680,11 @@ impl ExamService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/exam_records/{record_id}/cancel"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_EXAM_RECORD_CANCEL,
+                "record_id",
+                record_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -746,7 +739,11 @@ impl ExamService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/exam_records/{record_id}/reschedule"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_EXAM_RECORD_RESCHEDULE,
+                "record_id",
+                record_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -790,7 +787,7 @@ impl ExamService {
     ) -> SDKResult<BaseResponse<serde_json::Value>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/exam_statistics".to_string(),
+            api_path: Endpoints::HIRE_V1_EXAM_STATISTICS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -798,21 +795,15 @@ impl ExamService {
 
         // 添加查询参数
         if let Some(paper_id) = paper_id {
-            api_req
-                .query_params
-                .insert("paper_id".to_string(), paper_id);
+            api_req.query_params.insert("paper_id", paper_id);
         }
 
         if let Some(start_date) = start_date {
-            api_req
-                .query_params
-                .insert("start_date".to_string(), start_date);
+            api_req.query_params.insert("start_date", start_date);
         }
 
         if let Some(end_date) = end_date {
-            api_req
-                .query_params
-                .insert("end_date".to_string(), end_date);
+            api_req.query_params.insert("end_date", end_date);
         }
 
         Transport::request(api_req, &self.config, option).await

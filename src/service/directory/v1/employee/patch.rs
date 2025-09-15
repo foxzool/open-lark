@@ -7,6 +7,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -147,14 +148,14 @@ impl PatchEmployeeRequestBuilder {
             self.request
                 .api_req
                 .query_params
-                .insert("user_id_type".to_string(), user_id_type.to_string());
+                .insert("user_id_type", user_id_type.to_string());
         }
 
         if let Some(department_id_type) = &self.request.department_id_type {
-            self.request.api_req.query_params.insert(
-                "department_id_type".to_string(),
-                department_id_type.to_string(),
-            );
+            self.request
+                .api_req
+                .query_params
+                .insert("department_id_type", department_id_type.to_string());
         }
 
         // 构建请求体
@@ -256,7 +257,11 @@ impl EmployeeService {
     ) -> SDKResult<BaseResponse<PatchEmployeeResponse>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::PATCH;
-        api_req.api_path = format!("/open-apis/directory/v1/employees/{}", request.employee_id);
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::DIRECTORY_V1_EMPLOYEE_GET,
+            "employee_id",
+            &request.employee_id,
+        );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

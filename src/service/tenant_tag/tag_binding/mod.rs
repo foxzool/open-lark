@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -114,28 +115,25 @@ impl TagBindingService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetTagBindingResponse>> {
         let mut query_params = HashMap::new();
-        query_params.insert("entity_id".to_string(), request.entity_id);
-        query_params.insert("entity_type".to_string(), request.entity_type);
+        query_params.insert("entity_id", request.entity_id);
+        query_params.insert("entity_type", request.entity_type);
 
         if let Some(tag_id) = request.tag_id {
-            query_params.insert("tag_id".to_string(), tag_id);
+            query_params.insert("tag_id", tag_id);
         }
         if let Some(page_size) = request.page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
         if let Some(user_id_type) = request.user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/tenant-tag/v1/tag_bindings".to_string(),
+            api_path: Endpoints::TENANT_TAG_V1_TAG_BINDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             ..Default::default()
@@ -153,15 +151,12 @@ impl TagBindingService {
     ) -> SDKResult<BaseResponse<CreateTagBindingResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/tenant-tag/v1/tag_bindings".to_string(),
+            api_path: Endpoints::TENANT_TAG_V1_TAG_BINDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -180,15 +175,12 @@ impl TagBindingService {
     ) -> SDKResult<BaseResponse<UpdateTagBindingResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: "/open-apis/tenant-tag/v1/tag_bindings".to_string(),
+            api_path: Endpoints::TENANT_TAG_V1_TAG_BINDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             body: serde_json::to_vec(&request)?,

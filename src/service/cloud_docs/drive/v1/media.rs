@@ -7,12 +7,15 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, BinaryResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
+        validation::{validate_file_name, validate_upload_file, ValidateBuilder, ValidationResult},
         SDKResult,
     },
     impl_executable_builder_owned,
 };
+use log;
 
 /// 素材服务
 pub struct MediaService {
@@ -22,6 +25,21 @@ pub struct MediaService {
 impl MediaService {
     pub fn new(config: Config) -> Self {
         Self { config }
+    }
+
+    /// 创建上传素材Builder
+    pub fn upload_all_builder(&self) -> UploadMediaRequestBuilder {
+        UploadMediaRequestBuilder::default()
+    }
+
+    /// 使用Builder上传素材（带验证）
+    pub async fn upload_all_with_builder(
+        &self,
+        builder_result: SDKResult<UploadMediaRequest>,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<UploadMediaRespData>> {
+        let request = builder_result?;
+        self.upload_all(request, option).await
     }
 
     /// 上传素材
@@ -36,7 +54,7 @@ impl MediaService {
     ) -> SDKResult<BaseResponse<UploadMediaRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/drive/v1/medias/upload_all".to_string();
+        api_req.api_path = Endpoints::DRIVE_V1_MEDIAS_UPLOAD_ALL.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -55,7 +73,7 @@ impl MediaService {
     ) -> SDKResult<BaseResponse<UploadPrepareRespData>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/drive/v1/medias/upload_prepare".to_string(),
+            api_path: Endpoints::DRIVE_V1_MEDIAS_UPLOAD_PREPARE.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -77,7 +95,7 @@ impl MediaService {
     ) -> SDKResult<BaseResponse<UploadPartRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/drive/v1/medias/upload_part".to_string();
+        api_req.api_path = Endpoints::DRIVE_V1_MEDIAS_UPLOAD_PART.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -96,7 +114,7 @@ impl MediaService {
     ) -> SDKResult<BaseResponse<UploadFinishRespData>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/drive/v1/medias/upload_finish".to_string(),
+            api_path: Endpoints::DRIVE_V1_MEDIAS_UPLOAD_FINISH.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -118,7 +136,7 @@ impl MediaService {
     ) -> SDKResult<BaseResponse<BinaryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/drive/v1/medias/{}/download", request.file_token),
+            api_path: Endpoints::DRIVE_V1_MEDIAS_DOWNLOAD.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
@@ -139,16 +157,14 @@ impl MediaService {
     ) -> SDKResult<BaseResponse<BatchGetTmpDownloadUrlRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/drive/v1/medias/batch_get_tmp_download_url".to_string(),
+            api_path: Endpoints::DRIVE_V1_MEDIAS_BATCH_GET_TMP_DOWNLOAD_URL.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
 
         // 添加查询参数
         let file_tokens = request.file_tokens.join(",");
-        api_req
-            .query_params
-            .insert("file_tokens".to_string(), file_tokens);
+        api_req.query_params.insert("file_tokens", file_tokens);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -212,8 +228,119 @@ impl UploadMediaRequestBuilder {
     }
 
     pub fn build(mut self) -> UploadMediaRequest {
-        self.request.api_req.body = serde_json::to_vec(&self.request).unwrap();
+        // 验证必填字段
+        if self.request.file_name.is_empty() {
+            log::error!("file_name is required for media upload");
+            return UploadMediaRequest {
+                api_req: ApiRequest {
+                    body: Vec::new(),
+                    ..Default::default()
+                },
+                ..self.request
+            };
+        }
+
+        if self.request.parent_token.is_empty() {
+            log::error!("parent_token is required for media upload");
+            return UploadMediaRequest {
+                api_req: ApiRequest {
+                    body: Vec::new(),
+                    ..Default::default()
+                },
+                ..self.request
+            };
+        }
+
+        if self.request.size <= 0 {
+            log::error!("file size must be greater than 0");
+            return UploadMediaRequest {
+                api_req: ApiRequest {
+                    body: Vec::new(),
+                    ..Default::default()
+                },
+                ..self.request
+            };
+        }
+
+        // 验证文件名
+        let (_, name_result) = validate_file_name(&self.request.file_name);
+        if !name_result.is_valid() {
+            log::error!(
+                "Invalid file_name: {}",
+                name_result.error().unwrap_or("unknown error")
+            );
+            return UploadMediaRequest {
+                api_req: ApiRequest {
+                    body: Vec::new(),
+                    ..Default::default()
+                },
+                ..self.request
+            };
+        }
+
+        // 验证文件数据（如果有）
+        if !self.request.api_req.file.is_empty() {
+            let upload_result =
+                validate_upload_file(&self.request.api_req.file, &self.request.file_name, false);
+            if !upload_result.is_valid() {
+                log::error!(
+                    "File validation failed: {}",
+                    upload_result.error().unwrap_or("unknown error")
+                );
+                return UploadMediaRequest {
+                    api_req: ApiRequest {
+                        body: Vec::new(),
+                        ..Default::default()
+                    },
+                    ..self.request
+                };
+            }
+        }
+
+        self.request.api_req.body = match serde_json::to_vec(&self.request) {
+            Ok(body) => body,
+            Err(e) => {
+                log::error!("Failed to serialize upload media request: {}", e);
+                return UploadMediaRequest {
+                    api_req: ApiRequest {
+                        body: Vec::new(),
+                        ..Default::default()
+                    },
+                    ..self.request
+                };
+            }
+        };
         self.request
+    }
+}
+
+impl ValidateBuilder for UploadMediaRequestBuilder {
+    fn validate(&self) -> ValidationResult {
+        // 验证必填字段
+        if self.request.file_name.is_empty() {
+            return ValidationResult::Invalid("file_name is required".to_string());
+        }
+
+        if self.request.parent_token.is_empty() {
+            return ValidationResult::Invalid("parent_token is required".to_string());
+        }
+
+        if self.request.size <= 0 {
+            return ValidationResult::Invalid("file size must be greater than 0".to_string());
+        }
+
+        // 验证文件名
+        let (_, name_result) = validate_file_name(&self.request.file_name);
+        if !name_result.is_valid() {
+            return name_result;
+        }
+
+        // 验证文件数据（如果有）
+        if !self.request.api_req.file.is_empty() {
+            validate_upload_file(&self.request.api_req.file, &self.request.file_name, false)
+        } else {
+            ValidationResult::Valid
+        }
     }
 }
 

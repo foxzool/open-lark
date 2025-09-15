@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -69,7 +70,7 @@ impl TranslationService {
     ) -> SDKResult<BaseResponse<DetectResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/translation/v1/text/detect".to_string(),
+            api_path: Endpoints::TRANSLATION_V1_TEXT_DETECT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -93,7 +94,7 @@ impl TranslationService {
     ) -> SDKResult<BaseResponse<TranslateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/translation/v1/text/translate".to_string(),
+            api_path: Endpoints::TRANSLATION_V1_TEXT_TRANSLATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
