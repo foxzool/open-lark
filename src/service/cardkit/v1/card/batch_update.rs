@@ -7,6 +7,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
+        endpoints::{Endpoints, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -143,10 +144,7 @@ impl CardService {
     ) -> SDKResult<BaseResponse<BatchUpdateCardResponse>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::PATCH;
-        api_req.api_path = format!(
-            "/open-apis/cardkit/v1/cards/{}/batch_update",
-            request.card_id
-        );
+        api_req.api_path = EndpointBuilder::replace_param(Endpoints::CARDKIT_V1_CARD_BATCH_UPDATE, "card_id", &request.card_id);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

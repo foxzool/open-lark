@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{Endpoints, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -98,7 +99,7 @@ impl SessionService {
     ) -> SDKResult<BaseResponse<SessionCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/aily/v1/sessions".to_string(),
+            api_path: Endpoints::AILY_V1_SESSIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
                 "app_id": request.app_id,
@@ -126,7 +127,7 @@ impl SessionService {
     ) -> SDKResult<BaseResponse<SessionUpdateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/aily/v1/sessions/{}", request.session_id),
+            api_path: EndpointBuilder::replace_param(Endpoints::AILY_V1_SESSION_OPERATION, "session_id", &request.session_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
                 "app_id": request.app_id,
@@ -154,7 +155,7 @@ impl SessionService {
     ) -> SDKResult<BaseResponse<SessionGetResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/aily/v1/sessions/{}", request.session_id),
+            api_path: EndpointBuilder::replace_param(Endpoints::AILY_V1_SESSION_OPERATION, "session_id", &request.session_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -181,7 +182,7 @@ impl SessionService {
     ) -> SDKResult<BaseResponse<SessionDeleteResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/aily/v1/sessions/{}", request.session_id),
+            api_path: EndpointBuilder::replace_param(Endpoints::AILY_V1_SESSION_OPERATION, "session_id", &request.session_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

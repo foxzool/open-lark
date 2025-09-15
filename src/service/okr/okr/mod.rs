@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -106,7 +107,7 @@ impl OkrContentService {
     ) -> SDKResult<BaseResponse<UserOkrListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/okr/v1/okrs".to_string(),
+            api_path: Endpoints::OKR_V1_OKRS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -157,7 +158,7 @@ impl OkrContentService {
     ) -> SDKResult<BaseResponse<BatchOkrResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/okr/v1/okrs/batch_get".to_string(),
+            api_path: Endpoints::OKR_V1_OKRS_BATCH_GET.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{Endpoints, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -101,7 +102,7 @@ impl DataSourceService {
     ) -> SDKResult<BaseResponse<CreateDataSourceResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/search/v2/data_sources".to_string(),
+            api_path: Endpoints::SEARCH_V2_DATA_SOURCES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -125,7 +126,7 @@ impl DataSourceService {
     ) -> SDKResult<BaseResponse<EmptyDataSourceResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/search/v2/data_sources/{data_source_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::SEARCH_V2_DATA_SOURCE_OPERATION, "data_source_id", data_source_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
@@ -150,7 +151,7 @@ impl DataSourceService {
     ) -> SDKResult<BaseResponse<UpdateDataSourceResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/search/v2/data_sources/{data_source_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::SEARCH_V2_DATA_SOURCE_OPERATION, "data_source_id", data_source_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -174,7 +175,7 @@ impl DataSourceService {
     ) -> SDKResult<BaseResponse<GetDataSourceResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/search/v2/data_sources/{data_source_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::SEARCH_V2_DATA_SOURCE_OPERATION, "data_source_id", data_source_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
@@ -197,7 +198,7 @@ impl DataSourceService {
     ) -> SDKResult<BaseResponse<ListDataSourceResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/search/v2/data_sources".to_string(),
+            api_path: Endpoints::SEARCH_V2_DATA_SOURCES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
