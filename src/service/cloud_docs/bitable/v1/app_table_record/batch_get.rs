@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -105,19 +106,19 @@ impl BatchGetRecordRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("user_id_type".to_string(), user_id_type.clone());
+                .insert("user_id_type", user_id_type.clone());
         }
         if let Some(automatic) = &self.request.automatic {
             self.request
                 .api_request
                 .query_params
-                .insert("automatic".to_string(), automatic.to_string());
+                .insert("automatic", automatic.to_string());
         }
         if let Some(with_shared_url) = &self.request.with_shared_url {
             self.request
                 .api_request
                 .query_params
-                .insert("with_shared_url".to_string(), with_shared_url.to_string());
+                .insert("with_shared_url", with_shared_url.to_string());
         }
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
@@ -154,11 +155,9 @@ pub async fn batch_get_record(
 ) -> SDKResult<BaseResponse<BatchGetRecordResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::POST;
-    api_req.api_path = format!(
-        "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/batch_get",
-        app_token = request.app_token,
-        table_id = request.table_id
-    );
+    api_req.api_path = Endpoints::BITABLE_V1_RECORDS_BATCH_GET
+        .replace("{app_token}", &request.app_token)
+        .replace("{table_id}", &request.table_id);
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
     let api_resp = Transport::request(api_req, config, option).await?;

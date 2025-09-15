@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -44,7 +45,7 @@ impl VisitorService {
     ) -> SDKResult<BaseResponse<VisitorCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/acs/v1/visitors".to_string(),
+            api_path: Endpoints::ACS_V1_VISITORS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -72,7 +73,11 @@ impl VisitorService {
     ) -> SDKResult<BaseResponse<VisitorDeleteResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/acs/v1/visitors/{visitor_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::ACS_V1_VISITOR_GET,
+                "visitor_id",
+                visitor_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

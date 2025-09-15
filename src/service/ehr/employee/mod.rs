@@ -111,48 +111,40 @@ impl EmployeeService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(department_id) = request.department_id {
-            api_req
-                .query_params
-                .insert("department_id".to_string(), department_id);
+            api_req.query_params.insert("department_id", department_id);
         }
 
         if let Some(user_id_type) = request.user_id_type {
-            api_req
-                .query_params
-                .insert("user_id_type".to_string(), user_id_type);
+            api_req.query_params.insert("user_id_type", user_id_type);
         }
 
         if let Some(department_id_type) = request.department_id_type {
             api_req
                 .query_params
-                .insert("department_id_type".to_string(), department_id_type);
+                .insert("department_id_type", department_id_type);
         }
 
         if let Some(include_resigned) = request.include_resigned {
             api_req
                 .query_params
-                .insert("include_resigned".to_string(), include_resigned.to_string());
+                .insert("include_resigned", include_resigned.to_string());
         }
 
         if let Some(fields) = request.fields {
             if !fields.is_empty() {
-                api_req
-                    .query_params
-                    .insert("fields".to_string(), fields.join(","));
+                api_req.query_params.insert("fields", fields.join(","));
             }
         }
 

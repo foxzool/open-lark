@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -83,7 +84,11 @@ impl SkillService {
     ) -> SDKResult<BaseResponse<SkillStartResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/aily/v1/skills/{}/start", request.skill_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::AILY_V1_SKILL_START,
+                "skill_id",
+                &request.skill_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
                 "app_id": request.app_id,
@@ -111,16 +116,18 @@ impl SkillService {
     ) -> SDKResult<BaseResponse<SkillGetResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/aily/v1/skills/{}", request.skill_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::AILY_V1_SKILL_GET,
+                "skill_id",
+                &request.skill_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
         };
 
         // 添加查询参数
-        api_req
-            .query_params
-            .insert("app_id".to_string(), request.app_id);
+        api_req.query_params.insert("app_id", request.app_id);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -140,26 +147,22 @@ impl SkillService {
     ) -> SDKResult<BaseResponse<SkillListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/aily/v1/skills".to_string(),
+            api_path: Endpoints::AILY_V1_SKILLS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
         };
 
         // 添加查询参数
-        api_req
-            .query_params
-            .insert("app_id".to_string(), request.app_id);
+        api_req.query_params.insert("app_id", request.app_id);
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await

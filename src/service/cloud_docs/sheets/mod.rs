@@ -50,8 +50,6 @@
 //! // client.sheets.v3.data_operation.write_data_to_multiple_ranges(write_request, None).await?;
 //! ```
 
-use std::sync::Arc;
-
 /// Sheets API v2版本
 pub mod v2;
 /// Sheets API v3版本
@@ -73,10 +71,10 @@ impl SheetsService {
     ///
     /// # 参数
     /// - `config`: 客户端配置
-    pub fn new(config: Arc<crate::core::config::Config>) -> Self {
+    pub fn new(config: crate::core::config::Config) -> Self {
         Self {
-            v2: v2::V2::new((*config).clone()),
-            v3: v3::V3::new((*config).clone()),
+            v2: v2::V2::new(config.clone()),
+            v3: v3::V3::new(config.clone()),
         }
     }
 }

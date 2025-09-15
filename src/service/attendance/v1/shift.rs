@@ -3,8 +3,14 @@ use serde_json::json;
 
 use crate::{
     core::{
-        api_req::ApiRequest, api_resp::BaseResponse, config::Config, constants::AccessTokenType,
-        http::Transport, req_option::RequestOption, SDKResult,
+        api_req::ApiRequest,
+        api_resp::BaseResponse,
+        config::Config,
+        constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
+        http::Transport,
+        req_option::RequestOption,
+        SDKResult,
     },
     impl_executable_builder_owned,
 };
@@ -31,13 +37,13 @@ impl ShiftService {
     ) -> SDKResult<BaseResponse<CreateShiftRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/attendance/v1/shifts".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_SHIFTS.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加必需的查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         // 构建请求体
         let mut body = json!({
@@ -113,7 +119,11 @@ impl ShiftService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::DELETE;
-        api_req.api_path = format!("/open-apis/attendance/v1/shifts/{}", request.shift_id);
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::ATTENDANCE_V1_SHIFT_DELETE,
+            "shift_id",
+            &request.shift_id,
+        );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -132,7 +142,11 @@ impl ShiftService {
     ) -> SDKResult<BaseResponse<Shift>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = format!("/open-apis/attendance/v1/shifts/{}", request.shift_id);
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::ATTENDANCE_V1_SHIFT_GET,
+            "shift_id",
+            &request.shift_id,
+        );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -151,16 +165,16 @@ impl ShiftService {
     ) -> SDKResult<BaseResponse<Shift>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/attendance/v1/shifts/query".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_SHIFTS_QUERY.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加必需的查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type.clone());
+            .insert("employee_type", request.employee_type.clone());
         api_req
             .query_params
-            .insert("shift_name".to_string(), request.shift_name.clone());
+            .insert("shift_name", request.shift_name.clone());
 
         let body = json!({
             "shift_name": request.shift_name
@@ -197,19 +211,17 @@ impl ShiftService {
     ) -> SDKResult<BaseResponse<ShiftListData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/attendance/v1/shifts".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_SHIFTS.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

@@ -2,8 +2,13 @@ use reqwest::Method;
 use serde_json::json;
 
 use crate::core::{
-    api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
-    req_option::RequestOption, SDKResult,
+    api_resp::BaseResponse,
+    config::Config,
+    constants::AccessTokenType,
+    endpoints::{EndpointBuilder, Endpoints},
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
 
 use super::models::{
@@ -30,30 +35,32 @@ impl GroupService {
     ) -> SDKResult<BaseResponse<ListGroupUserRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = format!("/open-apis/attendance/v1/groups/{}/users", request.group_id);
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::ATTENDANCE_V1_GROUP_USERS,
+            "group_id",
+            &request.group_id,
+        );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type.clone());
+            .insert("employee_type", request.employee_type.clone());
 
         if let Some(dept_type) = &request.dept_type {
-            api_req
-                .query_params
-                .insert("dept_type".to_string(), dept_type.clone());
+            api_req.query_params.insert("dept_type", dept_type.clone());
         }
 
         if let Some(page_size) = &request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = &request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -72,18 +79,16 @@ impl GroupService {
     ) -> SDKResult<BaseResponse<CreateGroupRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/attendance/v1/groups".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_GROUPS.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type.clone());
+            .insert("employee_type", request.employee_type.clone());
 
         if let Some(dept_type) = &request.dept_type {
-            api_req
-                .query_params
-                .insert("dept_type".to_string(), dept_type.clone());
+            api_req.query_params.insert("dept_type", dept_type.clone());
         }
 
         // 构建请求体
@@ -140,7 +145,11 @@ impl GroupService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::DELETE;
-        api_req.api_path = format!("/open-apis/attendance/v1/groups/{}", request.group_id);
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::ATTENDANCE_V1_GROUP_DELETE,
+            "group_id",
+            &request.group_id,
+        );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -159,18 +168,20 @@ impl GroupService {
     ) -> SDKResult<BaseResponse<Group>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = format!("/open-apis/attendance/v1/groups/{}", request.group_id);
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::ATTENDANCE_V1_GROUP_DELETE,
+            "group_id",
+            &request.group_id,
+        );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         if let Some(dept_type) = request.dept_type {
-            api_req
-                .query_params
-                .insert("dept_type".to_string(), dept_type);
+            api_req.query_params.insert("dept_type", dept_type);
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -189,18 +200,16 @@ impl GroupService {
     ) -> SDKResult<BaseResponse<SearchGroupRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/attendance/v1/groups/search".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_GROUPS_SEARCH.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         if let Some(dept_type) = request.dept_type {
-            api_req
-                .query_params
-                .insert("dept_type".to_string(), dept_type);
+            api_req.query_params.insert("dept_type", dept_type);
         }
 
         // 构建请求体
@@ -226,30 +235,26 @@ impl GroupService {
     ) -> SDKResult<BaseResponse<ListGroupRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/attendance/v1/groups".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_GROUPS.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         if let Some(dept_type) = request.dept_type {
-            api_req
-                .query_params
-                .insert("dept_type".to_string(), dept_type);
+            api_req.query_params.insert("dept_type", dept_type);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

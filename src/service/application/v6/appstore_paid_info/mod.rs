@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -36,16 +37,18 @@ impl AppstorePaidInfoService {
     ) -> SDKResult<BaseResponse<CheckUserAccessResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/application/v6/appstore_paid_info/{app_id}/users/{user_id}/pricing_plans/{pricing_plan_id}/check"
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APPLICATION_V6_APPSTORE_PAID_INFO_CHECK,
+                &[
+                    ("app_id", app_id),
+                    ("user_id", user_id),
+                    ("pricing_plan_id", pricing_plan_id),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -65,16 +68,18 @@ impl AppstorePaidInfoService {
     ) -> SDKResult<BaseResponse<ListTenantPaidPlansResponse>> {
         let mut query_params = HashMap::new();
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/application/v6/appstore_paid_info/{app_id}/pricing_plans"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_APPSTORE_PAID_INFO_PRICING_PLANS,
+                "app_id",
+                app_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -93,8 +98,9 @@ impl AppstorePaidInfoService {
     ) -> SDKResult<BaseResponse<GetOrderInfoResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/application/v6/appstore_paid_info/{app_id}/orders/{order_id}"
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APPLICATION_V6_APPSTORE_PAID_INFO_ORDER_GET,
+                &[("app_id", app_id), ("order_id", order_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()

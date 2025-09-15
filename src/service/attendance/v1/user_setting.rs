@@ -5,6 +5,7 @@ use crate::core::{
     api_resp::{BaseResponse, EmptyResponse},
     config::Config,
     constants::AccessTokenType,
+    endpoints::{EndpointBuilder, Endpoints},
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -34,16 +35,17 @@ impl UserSettingService {
     ) -> SDKResult<BaseResponse<ModifyUserSettingRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = format!(
-            "/open-apis/attendance/v1/user_settings/{}/modify",
-            request.user_id
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::ATTENDANCE_V1_USER_SETTINGS_MODIFY,
+            "user_id",
+            &request.user_id,
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         // 构建请求体
         let mut body = json!({});
@@ -79,13 +81,13 @@ impl UserSettingService {
     ) -> SDKResult<BaseResponse<QueryUserSettingRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/attendance/v1/user_settings/query".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_SETTINGS_QUERY.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         // 构建请求体
         let body = json!({
@@ -110,16 +112,17 @@ impl UserSettingService {
     ) -> SDKResult<BaseResponse<UploadUserPhotoRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = format!(
-            "/open-apis/attendance/v1/user_settings/{}/upload",
-            request.user_id
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::ATTENDANCE_V1_USER_SETTINGS_UPLOAD,
+            "user_id",
+            &request.user_id,
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         // 保存 photo_name 以避免借用问题
         let photo_name = request.photo_name.clone();
@@ -156,19 +159,18 @@ impl UserSettingService {
     ) -> SDKResult<Vec<u8>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/attendance/v1/user_settings/{}/download",
-            request.user_id
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::ATTENDANCE_V1_USER_SETTINGS_DOWNLOAD,
+            "user_id",
+            &request.user_id,
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
-        api_req
-            .query_params
-            .insert("face_key".to_string(), request.face_key);
+            .insert("employee_type", request.employee_type);
+        api_req.query_params.insert("face_key", request.face_key);
 
         // 对于文件下载，我们需要直接获取响应体字节数据
         // 这里暂时返回一个模拟的照片数据，实际实现时需要从 HTTP 响应中获取

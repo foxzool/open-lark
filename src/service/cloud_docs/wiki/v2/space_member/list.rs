@@ -6,6 +6,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    endpoints::{EndpointBuilder, Endpoints},
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -69,13 +70,13 @@ impl ListSpaceMemberRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = &self.request.page_token {
             self.request
                 .api_request
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
         self.request
     }
@@ -120,7 +121,11 @@ pub async fn list_space_members(
 ) -> SDKResult<BaseResponse<ListSpaceMemberResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::GET;
-    api_req.api_path = format!("/open-apis/wiki/v2/spaces/{}/members", request.space_id);
+    api_req.api_path = EndpointBuilder::replace_param(
+        Endpoints::WIKI_V2_SPACE_MEMBERS,
+        "space_id",
+        &request.space_id,
+    );
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
     let api_resp = Transport::request(api_req, config, option).await?;

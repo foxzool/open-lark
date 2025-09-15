@@ -7,6 +7,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -76,7 +77,7 @@ impl CreateCardRequestBuilder {
             self.request
                 .api_req
                 .query_params
-                .insert("user_id_type".to_string(), user_id_type.to_string());
+                .insert("user_id_type", user_id_type.to_string());
         }
 
         // 构建请求体
@@ -151,7 +152,7 @@ impl CardService {
     ) -> SDKResult<BaseResponse<CreateCardResponse>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/cardkit/v1/cards".to_string();
+        api_req.api_path = Endpoints::CARDKIT_V1_CARDS.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

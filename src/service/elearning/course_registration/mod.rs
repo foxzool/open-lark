@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -44,7 +45,7 @@ impl CourseRegistrationService {
     ) -> SDKResult<BaseResponse<CourseRegistrationCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/elearning/v2/course_registrations".to_string(),
+            api_path: Endpoints::ELEARNING_V2_COURSE_REGISTRATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -72,7 +73,7 @@ impl CourseRegistrationService {
     ) -> SDKResult<BaseResponse<CourseRegistrationListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/elearning/v2/course_registrations".to_string(),
+            api_path: Endpoints::ELEARNING_V2_COURSE_REGISTRATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -80,47 +81,43 @@ impl CourseRegistrationService {
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(course_id) = request.course_id {
-            api_req
-                .query_params
-                .insert("course_id".to_string(), course_id);
+            api_req.query_params.insert("course_id", course_id);
         }
 
         if let Some(user_id) = request.user_id {
-            api_req.query_params.insert("user_id".to_string(), user_id);
+            api_req.query_params.insert("user_id", user_id);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(registration_type) = request.registration_type {
             api_req
                 .query_params
-                .insert("registration_type".to_string(), registration_type);
+                .insert("registration_type", registration_type);
         }
 
         if let Some(start_time) = request.start_time {
             api_req
                 .query_params
-                .insert("start_time".to_string(), start_time.to_string());
+                .insert("start_time", start_time.to_string());
         }
 
         if let Some(end_time) = request.end_time {
             api_req
                 .query_params
-                .insert("end_time".to_string(), end_time.to_string());
+                .insert("end_time", end_time.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -145,7 +142,11 @@ impl CourseRegistrationService {
     ) -> SDKResult<BaseResponse<CourseRegistrationGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/elearning/v2/course_registrations/{registration_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::ELEARNING_V2_COURSE_REGISTRATION_OPERATION,
+                "registration_id",
+                registration_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -175,7 +176,11 @@ impl CourseRegistrationService {
     ) -> SDKResult<BaseResponse<CourseRegistrationUpdateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: format!("/open-apis/elearning/v2/course_registrations/{registration_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::ELEARNING_V2_COURSE_REGISTRATION_OPERATION,
+                "registration_id",
+                registration_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -203,7 +208,11 @@ impl CourseRegistrationService {
     ) -> SDKResult<BaseResponse<CourseRegistrationDeleteResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/elearning/v2/course_registrations/{registration_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::ELEARNING_V2_COURSE_REGISTRATION_OPERATION,
+                "registration_id",
+                registration_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -231,7 +240,7 @@ impl CourseRegistrationService {
     ) -> SDKResult<BaseResponse<CourseRegistrationStatisticsResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/elearning/v2/course_registrations/statistics".to_string(),
+            api_path: Endpoints::ELEARNING_V2_COURSE_REGISTRATIONS_STATISTICS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -239,31 +248,27 @@ impl CourseRegistrationService {
 
         // 添加查询参数
         if let Some(user_id) = request.user_id {
-            api_req.query_params.insert("user_id".to_string(), user_id);
+            api_req.query_params.insert("user_id", user_id);
         }
 
         if let Some(course_id) = request.course_id {
-            api_req
-                .query_params
-                .insert("course_id".to_string(), course_id);
+            api_req.query_params.insert("course_id", course_id);
         }
 
         if let Some(department_id) = request.department_id {
-            api_req
-                .query_params
-                .insert("department_id".to_string(), department_id);
+            api_req.query_params.insert("department_id", department_id);
         }
 
         if let Some(start_time) = request.start_time {
             api_req
                 .query_params
-                .insert("start_time".to_string(), start_time.to_string());
+                .insert("start_time", start_time.to_string());
         }
 
         if let Some(end_time) = request.end_time {
             api_req
                 .query_params
-                .insert("end_time".to_string(), end_time.to_string());
+                .insert("end_time", end_time.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await

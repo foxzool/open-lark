@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -106,7 +107,7 @@ impl PaymentActivityService {
     ) -> SDKResult<BaseResponse<PaymentActivityListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/payroll/v1/payment_activities".to_string(),
+            api_path: Endpoints::PAYROLL_V1_PAYMENT_ACTIVITIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -116,35 +117,27 @@ impl PaymentActivityService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(paygroup_id) = request.paygroup_id {
-            api_req
-                .query_params
-                .insert("paygroup_id".to_string(), paygroup_id);
+            api_req.query_params.insert("paygroup_id", paygroup_id);
         }
 
         if let Some(period_start) = request.period_start {
-            api_req
-                .query_params
-                .insert("period_start".to_string(), period_start);
+            api_req.query_params.insert("period_start", period_start);
         }
 
         if let Some(period_end) = request.period_end {
-            api_req
-                .query_params
-                .insert("period_end".to_string(), period_end);
+            api_req.query_params.insert("period_end", period_end);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -196,9 +189,10 @@ impl PaymentActivityService {
     ) -> SDKResult<BaseResponse<PaymentActivityArchiveResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/payroll/v1/payment_activities/{}/archive",
-                request.payment_activity_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::PAYROLL_V1_PAYMENT_ACTIVITY_ARCHIVE,
+                "payment_activity_id",
+                &request.payment_activity_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),

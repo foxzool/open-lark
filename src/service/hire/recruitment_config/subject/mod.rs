@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -179,20 +180,20 @@ impl SubjectService {
     ///
     /// let request = SubjectCreateRequest {
     ///     name: I18nText {
-    ///         zh_cn: Some("2024年春季校园招聘".to_string()),
-    ///         en_us: Some("2024 Spring Campus Recruitment".to_string()),
+    ///         zh_cn: Some("2024年春季校园招聘".to_string(),
+    ///         en_us: Some("2024 Spring Campus Recruitment".to_string(),
     ///         ja_jp: None,
     ///     },
     ///     subject_type: "campus_recruitment".to_string(),
     ///     description: Some(I18nText {
-    ///         zh_cn: Some("面向应届毕业生的春季招聘项目".to_string()),
-    ///         en_us: Some("Spring recruitment project for fresh graduates".to_string()),
+    ///         zh_cn: Some("面向应届毕业生的春季招聘项目".to_string(),
+    ///         en_us: Some("Spring recruitment project for fresh graduates".to_string(),
     ///         ja_jp: None,
     ///     }),
-    ///     owner_id: Some("user_123456".to_string()),
+    ///     owner_id: Some("user_123456".to_string(),
     ///     member_ids: vec!["user_789".to_string(), "user_456".to_string()],
-    ///     start_time: Some("2024-02-01T00:00:00Z".to_string()),
-    ///     end_time: Some("2024-05-31T23:59:59Z".to_string()),
+    ///     start_time: Some("2024-02-01T00:00:00Z".to_string(),
+    ///     end_time: Some("2024-05-31T23:59:59Z".to_string(),
     ///     ..Default::default()
     /// };
     ///
@@ -205,7 +206,7 @@ impl SubjectService {
     ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/subjects".to_string(),
+            api_path: Endpoints::HIRE_V1_SUBJECTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -252,7 +253,11 @@ impl SubjectService {
     ) -> SDKResult<BaseResponse<SubjectDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/subjects/{subject_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_SUBJECT_GET,
+                "subject_id",
+                subject_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -291,9 +296,9 @@ impl SubjectService {
     /// let request = SubjectListRequest {
     ///     page_size: Some(50),
     ///     page_token: None,
-    ///     subject_type: Some("campus_recruitment".to_string()),
-    ///     status: Some("active".to_string()),
-    ///     owner_id: Some("user_123456".to_string()),
+    ///     subject_type: Some("campus_recruitment".to_string(),
+    ///     status: Some("active".to_string(),
+    ///     owner_id: Some("user_123456".to_string(),
     /// };
     ///
     /// let response = client.hire.recruitment_config.subject.list_subjects(request, None).await?;
@@ -312,7 +317,7 @@ impl SubjectService {
     ) -> SDKResult<BaseResponse<SubjectListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/subjects".to_string(),
+            api_path: Endpoints::HIRE_V1_SUBJECTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -322,29 +327,23 @@ impl SubjectService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(subject_type) = request.subject_type {
-            api_req
-                .query_params
-                .insert("subject_type".to_string(), subject_type);
+            api_req.query_params.insert("subject_type", subject_type);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(owner_id) = request.owner_id {
-            api_req
-                .query_params
-                .insert("owner_id".to_string(), owner_id);
+            api_req.query_params.insert("owner_id", owner_id);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -370,8 +369,8 @@ impl SubjectService {
     /// let subject_id = "subject_123456";
     /// let request = SubjectCreateRequest {
     ///     name: I18nText {
-    ///         zh_cn: Some("2024年春季校园招聘(更新)".to_string()),
-    ///         en_us: Some("2024 Spring Campus Recruitment (Updated)".to_string()),
+    ///         zh_cn: Some("2024年春季校园招聘(更新)".to_string(),
+    ///         en_us: Some("2024 Spring Campus Recruitment (Updated)".to_string(),
     ///         ja_jp: None,
     ///     },
     ///     subject_type: "campus_recruitment".to_string(),
@@ -389,7 +388,11 @@ impl SubjectService {
     ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/subjects/{subject_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_SUBJECT_GET,
+                "subject_id",
+                subject_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -421,7 +424,11 @@ impl SubjectService {
     ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/hire/v1/subjects/{subject_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_SUBJECT_GET,
+                "subject_id",
+                subject_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -453,7 +460,11 @@ impl SubjectService {
     ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/subjects/{subject_id}/enable"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_SUBJECT_ENABLE,
+                "subject_id",
+                subject_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -485,7 +496,11 @@ impl SubjectService {
     ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/subjects/{subject_id}/disable"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_SUBJECT_DISABLE,
+                "subject_id",
+                subject_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

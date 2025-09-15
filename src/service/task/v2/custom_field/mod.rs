@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -131,15 +132,12 @@ impl CustomFieldService {
     ) -> SDKResult<BaseResponse<CreateCustomFieldResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/task/v2/custom_fields".to_string(),
+            api_path: Endpoints::TASK_V2_CUSTOM_FIELDS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -158,15 +156,16 @@ impl CustomFieldService {
     ) -> SDKResult<BaseResponse<GetCustomFieldResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/task/v2/custom_fields/{custom_field_guid}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_CUSTOM_FIELD_GET,
+                "custom_field_guid",
+                custom_field_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -185,15 +184,16 @@ impl CustomFieldService {
     ) -> SDKResult<BaseResponse<UpdateCustomFieldResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/task/v2/custom_fields/{custom_field_guid}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_CUSTOM_FIELD_GET,
+                "custom_field_guid",
+                custom_field_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -215,27 +215,24 @@ impl CustomFieldService {
     ) -> SDKResult<BaseResponse<ListCustomFieldsResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(resource_type) = resource_type {
-            query_params.insert("resource_type".to_string(), resource_type.to_string());
+            query_params.insert("resource_type", resource_type.to_string());
         }
         if let Some(resource_id) = resource_id {
-            query_params.insert("resource_id".to_string(), resource_id.to_string());
+            query_params.insert("resource_id", resource_id.to_string());
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token.to_string());
+            query_params.insert("page_token", page_token.to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/task/v2/custom_fields".to_string(),
+            api_path: Endpoints::TASK_V2_CUSTOM_FIELDS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -254,15 +251,16 @@ impl CustomFieldService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/task/v2/custom_fields/{custom_field_guid}/add"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_CUSTOM_FIELD_ADD,
+                "custom_field_guid",
+                custom_field_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -282,15 +280,16 @@ impl CustomFieldService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/task/v2/custom_fields/{custom_field_guid}/remove"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_CUSTOM_FIELD_REMOVE,
+                "custom_field_guid",
+                custom_field_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,

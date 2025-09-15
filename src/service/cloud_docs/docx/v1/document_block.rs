@@ -7,6 +7,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    endpoints::{EndpointBuilder, Endpoints},
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -35,7 +36,7 @@ impl DocumentBlockService {
     ) -> SDKResult<BaseResponse<CreateBlockRespData>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/docx/v1/documents/{}/blocks", document_id.into()),
+            api_path: Endpoints::DOCX_V1_DOCUMENT_BLOCKS.replace("{}", &document_id.into()),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -58,11 +59,9 @@ impl DocumentBlockService {
     ) -> SDKResult<BaseResponse<GetBlockRespData>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/docx/v1/documents/{}/blocks/{}",
-                document_id.into(),
-                block_id.into()
-            ),
+            api_path: crate::core::endpoints::Endpoints::DOCX_V1_DOCUMENT_BLOCK_GET
+                .replace("{document_id}", &document_id.into())
+                .replace("{block_id}", &block_id.into()),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
@@ -85,11 +84,9 @@ impl DocumentBlockService {
     ) -> SDKResult<BaseResponse<PatchBlockRespData>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!(
-                "/open-apis/docx/v1/documents/{}/blocks/{}",
-                document_id.into(),
-                block_id.into()
-            ),
+            api_path: crate::core::endpoints::Endpoints::DOCX_V1_DOCUMENT_BLOCK_GET
+                .replace("{document_id}", &document_id.into())
+                .replace("{block_id}", &block_id.into()),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -112,10 +109,8 @@ impl DocumentBlockService {
     ) -> SDKResult<BaseResponse<BatchUpdateBlockRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!(
-                "/open-apis/docx/v1/documents/{}/blocks/batch_update",
-                document_id.into()
-            ),
+            api_path: crate::core::endpoints::Endpoints::DOCX_V1_DOCUMENT_BLOCKS_BATCH_UPDATE
+                .replace("{document_id}", &document_id.into()),
             ..Default::default()
         };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
@@ -138,9 +133,10 @@ impl DocumentBlockService {
     ) -> SDKResult<BaseResponse<BatchDeleteBlockRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!(
-                "/open-apis/docx/v1/documents/{}/blocks/batch_delete",
-                document_id.into()
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::DOCX_V1_DOCUMENT_BLOCKS_BATCH_DELETE,
+                "document_id",
+                &document_id.into(),
             ),
             ..Default::default()
         };
@@ -163,12 +159,16 @@ impl DocumentBlockService {
         request: ListChildrenRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListChildrenRespData>> {
+        let document_id_str = document_id.into();
+        let block_id_str = block_id.into();
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/docx/v1/documents/{}/blocks/{}/children",
-                document_id.into(),
-                block_id.into()
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::DOCX_V1_DOCUMENT_BLOCK_CHILDREN,
+                &[
+                    ("document_id", &document_id_str),
+                    ("block_id", &block_id_str),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
@@ -178,12 +178,10 @@ impl DocumentBlockService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

@@ -7,7 +7,9 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
+        query_params::QueryParams,
         req_option::RequestOption,
         SDKResult,
     },
@@ -322,7 +324,7 @@ impl ReferralAccountService {
     ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/referral_accounts".to_string(),
+            api_path: Endpoints::HIRE_V1_REFERRAL_ACCOUNTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -380,7 +382,7 @@ impl ReferralAccountService {
     ) -> SDKResult<BaseResponse<ReferralAccountListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/referral_accounts".to_string(),
+            api_path: Endpoints::HIRE_V1_REFERRAL_ACCOUNTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -390,21 +392,21 @@ impl ReferralAccountService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert(QueryParams::STATUS, status);
         }
 
         if let Some(user_id) = request.user_id {
-            api_req.query_params.insert("user_id".to_string(), user_id);
+            api_req.query_params.insert(QueryParams::USER_ID, user_id);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -446,7 +448,11 @@ impl ReferralAccountService {
     ) -> SDKResult<BaseResponse<ReferralAccountBalanceResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/referral_accounts/{user_id}/balance"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_REFERRAL_ACCOUNT_BALANCE,
+                "user_id",
+                user_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -508,7 +514,7 @@ impl ReferralAccountService {
     ) -> SDKResult<BaseResponse<IncomeRecordListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/referral_income_records".to_string(),
+            api_path: Endpoints::HIRE_REFERRAL_INCOME_RECORDS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -518,35 +524,33 @@ impl ReferralAccountService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(user_id) = request.user_id {
-            api_req.query_params.insert("user_id".to_string(), user_id);
+            api_req.query_params.insert(QueryParams::USER_ID, user_id);
         }
 
         if let Some(income_type) = request.income_type {
             api_req
                 .query_params
-                .insert("income_type".to_string(), income_type);
+                .insert(QueryParams::INCOME_TYPE, income_type);
         }
 
         if let Some(start_time) = request.start_time {
             api_req
                 .query_params
-                .insert("start_time".to_string(), start_time);
+                .insert(QueryParams::START_TIME, start_time);
         }
 
         if let Some(end_time) = request.end_time {
-            api_req
-                .query_params
-                .insert("end_time".to_string(), end_time);
+            api_req.query_params.insert(QueryParams::END_TIME, end_time);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -604,7 +608,7 @@ impl ReferralAccountService {
     ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/referral_withdrawals".to_string(),
+            api_path: Endpoints::HIRE_REFERRAL_WITHDRAWALS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -666,7 +670,7 @@ impl ReferralAccountService {
     ) -> SDKResult<BaseResponse<WithdrawalRecordListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/referral_withdrawals".to_string(),
+            api_path: Endpoints::HIRE_REFERRAL_WITHDRAWALS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -676,33 +680,31 @@ impl ReferralAccountService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(user_id) = request.user_id {
-            api_req.query_params.insert("user_id".to_string(), user_id);
+            api_req.query_params.insert(QueryParams::USER_ID, user_id);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert(QueryParams::STATUS, status);
         }
 
         if let Some(start_time) = request.start_time {
             api_req
                 .query_params
-                .insert("start_time".to_string(), start_time);
+                .insert(QueryParams::START_TIME, start_time);
         }
 
         if let Some(end_time) = request.end_time {
-            api_req
-                .query_params
-                .insert("end_time".to_string(), end_time);
+            api_req.query_params.insert(QueryParams::END_TIME, end_time);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -751,7 +753,11 @@ impl ReferralAccountService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/referral_withdrawals/{withdrawal_id}/approve"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_REFERRAL_WITHDRAWAL_APPROVE,
+                "withdrawal_id",
+                withdrawal_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -783,7 +789,11 @@ impl ReferralAccountService {
     ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/referral_accounts/{user_id}/enable"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_REFERRAL_ACCOUNT_ENABLE,
+                "user_id",
+                user_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -828,7 +838,11 @@ impl ReferralAccountService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/referral_accounts/{user_id}/disable"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_REFERRAL_ACCOUNT_DISABLE,
+                "user_id",
+                user_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -868,7 +882,7 @@ impl ReferralAccountService {
     ) -> SDKResult<BaseResponse<serde_json::Value>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/referral_statistics".to_string(),
+            api_path: Endpoints::HIRE_REFERRAL_STATISTICS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -878,13 +892,11 @@ impl ReferralAccountService {
         if let Some(start_date) = start_date {
             api_req
                 .query_params
-                .insert("start_date".to_string(), start_date);
+                .insert(QueryParams::START_DATE, start_date);
         }
 
         if let Some(end_date) = end_date {
-            api_req
-                .query_params
-                .insert("end_date".to_string(), end_date);
+            api_req.query_params.insert(QueryParams::END_DATE, end_date);
         }
 
         Transport::request(api_req, &self.config, option).await

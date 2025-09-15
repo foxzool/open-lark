@@ -6,6 +6,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -24,10 +25,7 @@ impl AppRoleService {
     ) -> SDKResult<BaseResponse<CreateAppRoleResponse>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::POST;
-        api_req.api_path = format!(
-            "/open-apis/bitable/v1/apps/{app_token}/roles",
-            app_token = request.app_token
-        );
+        api_req.api_path = Endpoints::BITABLE_V1_ROLES.replace("{app_token}", &request.app_token);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

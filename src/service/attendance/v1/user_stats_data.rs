@@ -3,8 +3,8 @@ use serde_json::json;
 
 use crate::{
     core::{
-        api_resp::BaseResponse, config::Config, constants::AccessTokenType, http::Transport,
-        req_option::RequestOption, SDKResult,
+        api_resp::BaseResponse, config::Config, constants::AccessTokenType, endpoints::Endpoints,
+        http::Transport, req_option::RequestOption, SDKResult,
     },
     impl_executable_builder_owned,
 };
@@ -33,13 +33,13 @@ impl UserStatsDataService {
     ) -> SDKResult<BaseResponse<UpdateUserStatsDataRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/attendance/v1/user_stats_datas/update".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_STATS_DATAS_UPDATE.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         // 构建请求体
         let body = json!({
@@ -64,13 +64,13 @@ impl UserStatsDataService {
     ) -> SDKResult<BaseResponse<QueryStatsSettingsRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/attendance/v1/user_stats_datas/query".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_STATS_DATAS_QUERY.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -88,16 +88,16 @@ impl UserStatsDataService {
     ) -> SDKResult<BaseResponse<QueryStatsFieldsRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/attendance/v1/user_stats_datas/query_fields".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_STATS_DATAS_QUERY_FIELDS.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         if let Some(locale) = request.locale {
-            api_req.query_params.insert("locale".to_string(), locale);
+            api_req.query_params.insert("locale", locale);
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -116,16 +116,16 @@ impl UserStatsDataService {
     ) -> SDKResult<BaseResponse<QueryUserStatsDataRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = "/open-apis/attendance/v1/user_stats_datas/query_data".to_string();
+        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_STATS_DATAS_QUERY_DATA.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
         api_req
             .query_params
-            .insert("employee_type".to_string(), request.employee_type);
+            .insert("employee_type", request.employee_type);
 
         if let Some(locale) = request.locale {
-            api_req.query_params.insert("locale".to_string(), locale);
+            api_req.query_params.insert("locale", locale);
         }
 
         // 构建请求体

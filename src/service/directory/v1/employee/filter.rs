@@ -6,6 +6,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -91,19 +92,19 @@ impl FilterEmployeeRequestBuilder {
             self.request
                 .api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(ref page_token) = self.request.page_token {
             self.request
                 .api_req
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
 
         if let Some(ref status) = self.request.status {
             self.request.api_req.query_params.insert(
-                "status".to_string(),
+                "status",
                 serde_json::to_string(status)
                     .unwrap_or_default()
                     .trim_matches('"')
@@ -115,21 +116,21 @@ impl FilterEmployeeRequestBuilder {
             self.request
                 .api_req
                 .query_params
-                .insert("department_ids".to_string(), department_ids.join(","));
+                .insert("department_ids", department_ids.join(","));
         }
 
         if let Some(user_id_type) = &self.request.user_id_type {
             self.request
                 .api_req
                 .query_params
-                .insert("user_id_type".to_string(), user_id_type.to_string());
+                .insert("user_id_type", user_id_type.to_string());
         }
 
         if let Some(department_id_type) = &self.request.department_id_type {
-            self.request.api_req.query_params.insert(
-                "department_id_type".to_string(),
-                department_id_type.to_string(),
-            );
+            self.request
+                .api_req
+                .query_params
+                .insert("department_id_type", department_id_type.to_string());
         }
 
         self.request
@@ -191,7 +192,7 @@ impl EmployeeService {
     ) -> SDKResult<BaseResponse<FilterEmployeeResponse>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/directory/v1/employees/filter".to_string();
+        api_req.api_path = Endpoints::DIRECTORY_V1_EMPLOYEES_FILTER.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

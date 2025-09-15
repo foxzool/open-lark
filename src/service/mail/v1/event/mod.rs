@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -70,16 +71,15 @@ impl EventService {
     ) -> SDKResult<BaseResponse<SubscribeEventResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/events/subscribe"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_USER_MAILBOX_EVENTS_SUBSCRIBE,
+                "user_mailbox_id",
+                user_mailbox_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -99,16 +99,15 @@ impl EventService {
     ) -> SDKResult<BaseResponse<GetSubscriptionResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/events/subscription"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_USER_MAILBOX_EVENTS_SUBSCRIPTION,
+                "user_mailbox_id",
+                user_mailbox_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -127,16 +126,15 @@ impl EventService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/events/unsubscribe"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::MAIL_V1_USER_MAILBOX_EVENTS_UNSUBSCRIBE,
+                "user_mailbox_id",
+                user_mailbox_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,

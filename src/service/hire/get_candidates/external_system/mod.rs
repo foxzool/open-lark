@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -319,7 +320,7 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/external_systems".to_string(),
+            api_path: Endpoints::HIRE_V1_EXTERNAL_SYSTEMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -377,7 +378,7 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemConfigListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/external_systems".to_string(),
+            api_path: Endpoints::HIRE_V1_EXTERNAL_SYSTEMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -387,25 +388,19 @@ impl ExternalSystemService {
         if let Some(page_size) = page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(system_type) = system_type {
-            api_req
-                .query_params
-                .insert("system_type".to_string(), system_type);
+            api_req.query_params.insert("system_type", system_type);
         }
 
         if let Some(enabled) = enabled {
-            api_req
-                .query_params
-                .insert("enabled".to_string(), enabled.to_string());
+            api_req.query_params.insert("enabled", enabled.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -448,7 +443,7 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/external_systems/sync_tasks".to_string(),
+            api_path: Endpoints::HIRE_V1_EXTERNAL_SYSTEMS_SYNC_TASKS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -510,7 +505,7 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemSyncRecordListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/external_systems/sync_records".to_string(),
+            api_path: Endpoints::HIRE_V1_EXTERNAL_SYSTEMS_SYNC_RECORDS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -520,29 +515,25 @@ impl ExternalSystemService {
         if let Some(system_config_id) = system_config_id {
             api_req
                 .query_params
-                .insert("system_config_id".to_string(), system_config_id);
+                .insert("system_config_id", system_config_id);
         }
 
         if let Some(sync_type) = sync_type {
-            api_req
-                .query_params
-                .insert("sync_type".to_string(), sync_type);
+            api_req.query_params.insert("sync_type", sync_type);
         }
 
         if let Some(status) = status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(page_size) = page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -595,7 +586,7 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/external_systems/candidates/import".to_string(),
+            api_path: Endpoints::HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_IMPORT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -656,7 +647,7 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalCandidateListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/external_systems/candidates".to_string(),
+            api_path: Endpoints::HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -666,29 +657,25 @@ impl ExternalSystemService {
         if let Some(system_config_id) = system_config_id {
             api_req
                 .query_params
-                .insert("system_config_id".to_string(), system_config_id);
+                .insert("system_config_id", system_config_id);
         }
 
         if let Some(sync_status) = sync_status {
-            api_req
-                .query_params
-                .insert("sync_status".to_string(), sync_status);
+            api_req.query_params.insert("sync_status", sync_status);
         }
 
         if let Some(skills) = skills {
-            api_req.query_params.insert("skills".to_string(), skills);
+            api_req.query_params.insert("skills", skills);
         }
 
         if let Some(page_size) = page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -720,8 +707,10 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/hire/v1/external_systems/candidates/{external_candidate_id}/convert"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_CONVERT,
+                "external_candidate_id",
+                external_candidate_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
@@ -757,8 +746,10 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/hire/v1/external_systems/{system_config_id}/test_connection"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_EXTERNAL_SYSTEMS_TEST_CONNECTION,
+                "system_config_id",
+                system_config_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],

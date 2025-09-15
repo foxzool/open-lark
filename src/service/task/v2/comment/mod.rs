@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -110,15 +111,16 @@ impl CommentService {
     ) -> SDKResult<BaseResponse<CreateCommentResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/task/v2/tasks/{task_guid}/comments"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_TASK_COMMENTS,
+                "task_guid",
+                task_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -138,15 +140,17 @@ impl CommentService {
     ) -> SDKResult<BaseResponse<GetCommentResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
+        let temp_path = EndpointBuilder::replace_param(
+            Endpoints::TASK_V2_TASK_COMMENT_GET,
+            "task_guid",
+            task_guid,
+        );
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/task/v2/tasks/{task_guid}/comments/{comment_id}"),
+            api_path: EndpointBuilder::replace_param(&temp_path, "comment_id", comment_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -166,15 +170,17 @@ impl CommentService {
     ) -> SDKResult<BaseResponse<UpdateCommentResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
+        let temp_path2 = EndpointBuilder::replace_param(
+            Endpoints::TASK_V2_TASK_COMMENT_GET,
+            "task_guid",
+            task_guid,
+        );
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/task/v2/tasks/{task_guid}/comments/{comment_id}"),
+            api_path: EndpointBuilder::replace_param(&temp_path2, "comment_id", comment_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -194,15 +200,17 @@ impl CommentService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
+        let temp_path3 = EndpointBuilder::replace_param(
+            Endpoints::TASK_V2_TASK_COMMENT_GET,
+            "task_guid",
+            task_guid,
+        );
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/task/v2/tasks/{task_guid}/comments/{comment_id}"),
+            api_path: EndpointBuilder::replace_param(&temp_path3, "comment_id", comment_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -222,21 +230,22 @@ impl CommentService {
     ) -> SDKResult<BaseResponse<ListCommentsResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token.to_string());
+            query_params.insert("page_token", page_token.to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/task/v2/tasks/{task_guid}/comments"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_TASK_COMMENTS,
+                "task_guid",
+                task_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
