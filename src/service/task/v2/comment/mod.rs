@@ -150,11 +150,7 @@ impl CommentService {
         );
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                &temp_path,
-                "comment_id",
-                &comment_id,
-            ),
+            api_path: EndpointBuilder::replace_param(&temp_path, "comment_id", &comment_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -184,11 +180,7 @@ impl CommentService {
         );
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: EndpointBuilder::replace_param(
-                &temp_path2,
-                "comment_id",
-                &comment_id,
-            ),
+            api_path: EndpointBuilder::replace_param(&temp_path2, "comment_id", &comment_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -218,11 +210,7 @@ impl CommentService {
         );
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                &temp_path3,
-                "comment_id",
-                &comment_id,
-            ),
+            api_path: EndpointBuilder::replace_param(&temp_path3, "comment_id", &comment_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

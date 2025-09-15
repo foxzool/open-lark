@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         error::LarkAPIError,
         http::Transport,
         req_option::RequestOption,
@@ -59,7 +60,7 @@ impl PasswordService {
     ) -> SDKResult<BaseResponse<PasswordResetApiResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/admin/v1/password/reset".to_string(),
+            api_path: Endpoints::ADMIN_V1_PASSWORD_RESET.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: match serde_json::to_vec(&serde_json::json!({
                 "user_id": request.user_id,

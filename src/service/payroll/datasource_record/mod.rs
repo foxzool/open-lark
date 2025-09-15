@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{Endpoints, EndpointBuilder},
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -134,7 +134,7 @@ impl DatasourceRecordService {
             api_path: EndpointBuilder::replace_param(
                 Endpoints::PAYROLL_V1_DATASOURCE_RECORDS_SAVE,
                 "datasource_id",
-                &request.datasource_id
+                &request.datasource_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
@@ -204,7 +204,7 @@ impl DatasourceRecordService {
             api_path: EndpointBuilder::replace_param(
                 Endpoints::PAYROLL_V1_DATASOURCE_RECORDS_QUERY,
                 "datasource_id",
-                &request.datasource_id
+                &request.datasource_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),

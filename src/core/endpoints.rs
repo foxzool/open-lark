@@ -553,19 +553,16 @@ impl Endpoints {
     /// 批量更新消息URL预览
     pub const IM_V1_MESSAGE_URL_PREVIEW_BATCH_UPDATE: &'static str =
         "/open-apis/im/v1/messages/{message_id}/url_preview/batch_update";
-    
+
     // 基础消息操作
     /// 获取消息详情 (需要使用 EndpointBuilder::replace_param 替换 {message_id})
-    pub const IM_V1_MESSAGE_GET: &'static str =
-        "/open-apis/im/v1/messages/{message_id}";
-        
+    pub const IM_V1_MESSAGE_GET: &'static str = "/open-apis/im/v1/messages/{message_id}";
+
     /// 更新消息内容 (需要使用 EndpointBuilder::replace_param 替换 {message_id})
-    pub const IM_V1_MESSAGE_PATCH: &'static str =
-        "/open-apis/im/v1/messages/{message_id}";
-        
+    pub const IM_V1_MESSAGE_PATCH: &'static str = "/open-apis/im/v1/messages/{message_id}";
+
     /// 删除消息 (需要使用 EndpointBuilder::replace_param 替换 {message_id})
-    pub const IM_V1_MESSAGE_DELETE: &'static str =
-        "/open-apis/im/v1/messages/{message_id}";
+    pub const IM_V1_MESSAGE_DELETE: &'static str = "/open-apis/im/v1/messages/{message_id}";
 
     // V2 API 端点
     // App feed card
@@ -837,12 +834,14 @@ impl Endpoints {
 
     /// 获取日历列表
     pub const CALENDAR_LIST: &'static str = "/open-apis/calendar/v4/calendars";
-    
+
     /// 设置主日历
-    pub const CALENDAR_PRIMARY: &'static str = "/open-apis/calendar/v4/calendars/{calendar_id}/primary";
-    
+    pub const CALENDAR_PRIMARY: &'static str =
+        "/open-apis/calendar/v4/calendars/{calendar_id}/primary";
+
     /// 搜索日历
-    pub const CALENDAR_SEARCH: &'static str = "/open-apis/calendar/v4/calendars/{calendar_id}/search";
+    pub const CALENDAR_SEARCH: &'static str =
+        "/open-apis/calendar/v4/calendars/{calendar_id}/search";
 
     // 日程管理
     /// 创建日程
@@ -864,11 +863,11 @@ impl Endpoints {
     /// 获取日程列表
     pub const CALENDAR_EVENT_LIST: &'static str =
         "/open-apis/calendar/v4/calendars/{calendar_id}/events";
-    
+
     /// 回复日程邀请
     pub const CALENDAR_EVENT_REPLY: &'static str =
         "/open-apis/calendar/v4/calendars/{calendar_id}/events/{event_id}/reply";
-    
+
     /// 搜索日程
     pub const CALENDAR_EVENT_SEARCH: &'static str =
         "/open-apis/calendar/v4/calendars/{calendar_id}/events/{event_id}/search";
@@ -1058,7 +1057,8 @@ impl Endpoints {
     // ==================== Payroll 薪酬管理相关端点 ====================
 
     /// 成本分摊计划列表
-    pub const PAYROLL_V1_COST_ALLOCATION_PLANS: &'static str = "/open-apis/payroll/v1/cost_allocation_plans";
+    pub const PAYROLL_V1_COST_ALLOCATION_PLANS: &'static str =
+        "/open-apis/payroll/v1/cost_allocation_plans";
 
     /// 账套项目列表  
     pub const PAYROLL_V1_ACCT_ITEMS: &'static str = "/open-apis/payroll/v1/acct_items";
@@ -1067,25 +1067,32 @@ impl Endpoints {
     pub const PAYROLL_V1_DATASOURCES: &'static str = "/open-apis/payroll/v1/datasources";
 
     /// 数据源记录保存
-    pub const PAYROLL_V1_DATASOURCE_RECORDS_SAVE: &'static str = "/open-apis/payroll/v1/datasources/{datasource_id}/records/save";
+    pub const PAYROLL_V1_DATASOURCE_RECORDS_SAVE: &'static str =
+        "/open-apis/payroll/v1/datasources/{datasource_id}/records/save";
 
     /// 数据源记录查询
-    pub const PAYROLL_V1_DATASOURCE_RECORDS_QUERY: &'static str = "/open-apis/payroll/v1/datasources/{datasource_id}/records/query";
+    pub const PAYROLL_V1_DATASOURCE_RECORDS_QUERY: &'static str =
+        "/open-apis/payroll/v1/datasources/{datasource_id}/records/query";
 
     /// 薪酬活动详情查询
-    pub const PAYROLL_V1_PAYMENT_DETAILS: &'static str = "/open-apis/payroll/v1/payment_activities/{payment_activity_id}/payment_details";
+    pub const PAYROLL_V1_PAYMENT_DETAILS: &'static str =
+        "/open-apis/payroll/v1/payment_activities/{payment_activity_id}/payment_details";
 
     /// 薪酬活动详情查询（通过查询接口）
-    pub const PAYROLL_V1_PAYMENT_DETAILS_QUERY: &'static str = "/open-apis/payroll/v1/payment_activities/{payment_activity_id}/payment_details/query";
+    pub const PAYROLL_V1_PAYMENT_DETAILS_QUERY: &'static str =
+        "/open-apis/payroll/v1/payment_activities/{payment_activity_id}/payment_details/query";
 
     /// 薪酬活动列表
-    pub const PAYROLL_V1_PAYMENT_ACTIVITIES: &'static str = "/open-apis/payroll/v1/payment_activities";
+    pub const PAYROLL_V1_PAYMENT_ACTIVITIES: &'static str =
+        "/open-apis/payroll/v1/payment_activities";
 
     /// 薪酬活动归档
-    pub const PAYROLL_V1_PAYMENT_ACTIVITY_ARCHIVE: &'static str = "/open-apis/payroll/v1/payment_activities/{payment_activity_id}/archive";
+    pub const PAYROLL_V1_PAYMENT_ACTIVITY_ARCHIVE: &'static str =
+        "/open-apis/payroll/v1/payment_activities/{payment_activity_id}/archive";
 
     /// 成本分摊报表列表
-    pub const PAYROLL_V1_COST_ALLOCATION_REPORTS: &'static str = "/open-apis/payroll/v1/cost_allocation_reports";
+    pub const PAYROLL_V1_COST_ALLOCATION_REPORTS: &'static str =
+        "/open-apis/payroll/v1/cost_allocation_reports";
 
     /// 薪酬组列表
     pub const PAYROLL_V1_PAYGROUPS: &'static str = "/open-apis/payroll/v1/paygroups";
@@ -2458,38 +2465,48 @@ impl Endpoints {
     pub const DIRECTORY_V1_DEPARTMENTS: &'static str = "/open-apis/directory/v1/departments";
 
     /// 删除/更新部门 (需要使用 EndpointBuilder::replace_param 替换 {department_id})
-    pub const DIRECTORY_V1_DEPARTMENT_GET: &'static str = "/open-apis/directory/v1/departments/{department_id}";
+    pub const DIRECTORY_V1_DEPARTMENT_GET: &'static str =
+        "/open-apis/directory/v1/departments/{department_id}";
 
     /// 搜索部门
-    pub const DIRECTORY_V1_DEPARTMENTS_SEARCH: &'static str = "/open-apis/directory/v1/departments/search";
+    pub const DIRECTORY_V1_DEPARTMENTS_SEARCH: &'static str =
+        "/open-apis/directory/v1/departments/search";
 
     /// 筛选部门
-    pub const DIRECTORY_V1_DEPARTMENTS_FILTER: &'static str = "/open-apis/directory/v1/departments/filter";
+    pub const DIRECTORY_V1_DEPARTMENTS_FILTER: &'static str =
+        "/open-apis/directory/v1/departments/filter";
 
     /// 批量获取部门
-    pub const DIRECTORY_V1_DEPARTMENTS_MGET: &'static str = "/open-apis/directory/v1/departments/mget";
+    pub const DIRECTORY_V1_DEPARTMENTS_MGET: &'static str =
+        "/open-apis/directory/v1/departments/mget";
 
     // ===== 员工管理端点 =====
     /// 创建员工
     pub const DIRECTORY_V1_EMPLOYEES: &'static str = "/open-apis/directory/v1/employees";
 
     /// 删除/更新员工 (需要使用 EndpointBuilder::replace_param 替换 {employee_id})
-    pub const DIRECTORY_V1_EMPLOYEE_GET: &'static str = "/open-apis/directory/v1/employees/{employee_id}";
+    pub const DIRECTORY_V1_EMPLOYEE_GET: &'static str =
+        "/open-apis/directory/v1/employees/{employee_id}";
 
     /// 员工待离职 (需要使用 EndpointBuilder::replace_param 替换 {employee_id})
-    pub const DIRECTORY_V1_EMPLOYEE_TO_BE_RESIGNED: &'static str = "/open-apis/directory/v1/employees/{employee_id}/to_be_resigned";
+    pub const DIRECTORY_V1_EMPLOYEE_TO_BE_RESIGNED: &'static str =
+        "/open-apis/directory/v1/employees/{employee_id}/to_be_resigned";
 
     /// 员工转正 (需要使用 EndpointBuilder::replace_param 替换 {employee_id})
-    pub const DIRECTORY_V1_EMPLOYEE_REGULAR: &'static str = "/open-apis/directory/v1/employees/{employee_id}/regular";
+    pub const DIRECTORY_V1_EMPLOYEE_REGULAR: &'static str =
+        "/open-apis/directory/v1/employees/{employee_id}/regular";
 
     /// 员工复活 (需要使用 EndpointBuilder::replace_param 替换 {employee_id})
-    pub const DIRECTORY_V1_EMPLOYEE_RESURRECT: &'static str = "/open-apis/directory/v1/employees/{employee_id}/resurrect";
+    pub const DIRECTORY_V1_EMPLOYEE_RESURRECT: &'static str =
+        "/open-apis/directory/v1/employees/{employee_id}/resurrect";
 
     /// 搜索员工
-    pub const DIRECTORY_V1_EMPLOYEES_SEARCH: &'static str = "/open-apis/directory/v1/employees/search";
+    pub const DIRECTORY_V1_EMPLOYEES_SEARCH: &'static str =
+        "/open-apis/directory/v1/employees/search";
 
     /// 筛选员工
-    pub const DIRECTORY_V1_EMPLOYEES_FILTER: &'static str = "/open-apis/directory/v1/employees/filter";
+    pub const DIRECTORY_V1_EMPLOYEES_FILTER: &'static str =
+        "/open-apis/directory/v1/employees/filter";
 
     /// 批量获取员工
     pub const DIRECTORY_V1_EMPLOYEES_MGET: &'static str = "/open-apis/directory/v1/employees/mget";
@@ -2499,13 +2516,16 @@ impl Endpoints {
     pub const SEARCH_V1_USER: &'static str = "/open-apis/search/v1/user";
 
     /// 创建数据项
-    pub const SEARCH_V2_DATA_ITEM_CREATE: &'static str = "/open-apis/search/v2/data_sources/{data_source_id}/items";
+    pub const SEARCH_V2_DATA_ITEM_CREATE: &'static str =
+        "/open-apis/search/v2/data_sources/{data_source_id}/items";
 
     /// 批量创建数据项
-    pub const SEARCH_V2_DATA_ITEM_BATCH_CREATE: &'static str = "/open-apis/search/v2/data_sources/{data_source_id}/items/batch_create";
+    pub const SEARCH_V2_DATA_ITEM_BATCH_CREATE: &'static str =
+        "/open-apis/search/v2/data_sources/{data_source_id}/items/batch_create";
 
     /// 删除/获取数据项
-    pub const SEARCH_V2_DATA_ITEM_OPERATION: &'static str = "/open-apis/search/v2/data_sources/{data_source_id}/items/{data_item_id}";
+    pub const SEARCH_V2_DATA_ITEM_OPERATION: &'static str =
+        "/open-apis/search/v2/data_sources/{data_source_id}/items/{data_item_id}";
 
     /// 搜索消息
     pub const SEARCH_V2_MESSAGE: &'static str = "/open-apis/search/v2/message";
@@ -2517,13 +2537,16 @@ impl Endpoints {
     pub const SEARCH_V2_DATA_SOURCES: &'static str = "/open-apis/search/v2/data_sources";
 
     /// 数据源操作（删除/更新/获取）
-    pub const SEARCH_V2_DATA_SOURCE_OPERATION: &'static str = "/open-apis/search/v2/data_sources/{data_source_id}";
+    pub const SEARCH_V2_DATA_SOURCE_OPERATION: &'static str =
+        "/open-apis/search/v2/data_sources/{data_source_id}";
 
     /// 创建Schema
-    pub const SEARCH_V2_SCHEMA_CREATE: &'static str = "/open-apis/search/v2/data_sources/{data_source_id}/schemas";
+    pub const SEARCH_V2_SCHEMA_CREATE: &'static str =
+        "/open-apis/search/v2/data_sources/{data_source_id}/schemas";
 
     /// Schema操作（删除/更新/获取）
-    pub const SEARCH_V2_SCHEMA_OPERATION: &'static str = "/open-apis/search/v2/data_sources/{data_source_id}/schemas/{schema_id}";
+    pub const SEARCH_V2_SCHEMA_OPERATION: &'static str =
+        "/open-apis/search/v2/data_sources/{data_source_id}/schemas/{schema_id}";
 
     // ==================== OKR服务端点 ====================
     /// 查询评分列表
@@ -2548,26 +2571,31 @@ impl Endpoints {
     pub const OKR_V1_PROGRESS_RECORDS: &'static str = "/open-apis/okr/v1/progress_records";
 
     /// 进展记录操作（获取/更新/删除）
-    pub const OKR_V1_PROGRESS_RECORD_OPERATION: &'static str = "/open-apis/okr/v1/progress_records/{progress_id}";
+    pub const OKR_V1_PROGRESS_RECORD_OPERATION: &'static str =
+        "/open-apis/okr/v1/progress_records/{progress_id}";
 
     /// 进展记录上传
-    pub const OKR_V1_PROGRESS_RECORDS_UPLOAD: &'static str = "/open-apis/okr/v1/progress_records/upload";
+    pub const OKR_V1_PROGRESS_RECORDS_UPLOAD: &'static str =
+        "/open-apis/okr/v1/progress_records/upload";
 
     // ==================== Cardkit服务端点 ====================
     /// 创建卡片
     pub const CARDKIT_V1_CARDS: &'static str = "/open-apis/cardkit/v1/cards";
 
     /// 创建卡片元素
-    pub const CARDKIT_V1_CARD_ELEMENTS: &'static str = "/open-apis/cardkit/v1/cards/{card_id}/elements";
+    pub const CARDKIT_V1_CARD_ELEMENTS: &'static str =
+        "/open-apis/cardkit/v1/cards/{card_id}/elements";
 
     /// 卡片设置
-    pub const CARDKIT_V1_CARD_SETTINGS: &'static str = "/open-apis/cardkit/v1/cards/{card_id}/settings";
+    pub const CARDKIT_V1_CARD_SETTINGS: &'static str =
+        "/open-apis/cardkit/v1/cards/{card_id}/settings";
 
     /// 更新卡片
     pub const CARDKIT_V1_CARD_UPDATE: &'static str = "/open-apis/cardkit/v1/cards/{card_id}";
 
     /// 批量更新卡片
-    pub const CARDKIT_V1_CARD_BATCH_UPDATE: &'static str = "/open-apis/cardkit/v1/cards/{card_id}/batch_update";
+    pub const CARDKIT_V1_CARD_BATCH_UPDATE: &'static str =
+        "/open-apis/cardkit/v1/cards/{card_id}/batch_update";
 
     // ==================== Aily服务端点 ====================
     /// 会话列表/创建
@@ -2580,31 +2608,37 @@ impl Endpoints {
     pub const AILY_V1_RUNS: &'static str = "/open-apis/aily/v1/sessions/{session_id}/runs";
 
     /// 运行操作（获取）
-    pub const AILY_V1_RUN_GET: &'static str = "/open-apis/aily/v1/sessions/{session_id}/runs/{run_id}";
+    pub const AILY_V1_RUN_GET: &'static str =
+        "/open-apis/aily/v1/sessions/{session_id}/runs/{run_id}";
 
     /// 取消运行
-    pub const AILY_V1_RUN_CANCEL: &'static str = "/open-apis/aily/v1/sessions/{session_id}/runs/{run_id}/cancel";
+    pub const AILY_V1_RUN_CANCEL: &'static str =
+        "/open-apis/aily/v1/sessions/{session_id}/runs/{run_id}/cancel";
 
     /// 知识库问答
     pub const AILY_V1_DATA_KNOWLEDGE_ASK: &'static str = "/open-apis/aily/v1/data_knowledge/ask";
 
     /// 知识库文件上传
-    pub const AILY_V1_DATA_KNOWLEDGE_UPLOAD_FILE: &'static str = "/open-apis/aily/v1/data_knowledge/upload_file";
+    pub const AILY_V1_DATA_KNOWLEDGE_UPLOAD_FILE: &'static str =
+        "/open-apis/aily/v1/data_knowledge/upload_file";
 
     /// 知识库操作（创建/列表）
     pub const AILY_V1_DATA_KNOWLEDGE: &'static str = "/open-apis/aily/v1/data_knowledge";
 
     /// 知识库操作（获取/删除）
-    pub const AILY_V1_DATA_KNOWLEDGE_OPERATION: &'static str = "/open-apis/aily/v1/data_knowledge/{knowledge_id}";
+    pub const AILY_V1_DATA_KNOWLEDGE_OPERATION: &'static str =
+        "/open-apis/aily/v1/data_knowledge/{knowledge_id}";
 
     /// 知识库分类
-    pub const AILY_V1_DATA_KNOWLEDGE_CATEGORIES: &'static str = "/open-apis/aily/v1/data_knowledge/categories";
+    pub const AILY_V1_DATA_KNOWLEDGE_CATEGORIES: &'static str =
+        "/open-apis/aily/v1/data_knowledge/categories";
 
     /// 消息操作（创建/列表）
     pub const AILY_V1_MESSAGES: &'static str = "/open-apis/aily/v1/sessions/{session_id}/messages";
 
     /// 消息获取
-    pub const AILY_V1_MESSAGE_GET: &'static str = "/open-apis/aily/v1/sessions/{session_id}/messages/{message_id}";
+    pub const AILY_V1_MESSAGE_GET: &'static str =
+        "/open-apis/aily/v1/sessions/{session_id}/messages/{message_id}";
 
     /// 技能启动
     pub const AILY_V1_SKILL_START: &'static str = "/open-apis/aily/v1/skills/{skill_id}/start";
@@ -2629,16 +2663,19 @@ impl Endpoints {
     pub const ACS_V1_ACCESS_RECORDS: &'static str = "/open-apis/acs/v1/access_records";
 
     /// 门禁记录人脸图像
-    pub const ACS_V1_ACCESS_RECORD_FACE_IMAGE: &'static str = "/open-apis/acs/v1/access_records/{record_id}/face_image";
+    pub const ACS_V1_ACCESS_RECORD_FACE_IMAGE: &'static str =
+        "/open-apis/acs/v1/access_records/{record_id}/face_image";
 
     /// 外部规则操作（创建/列表）
     pub const ACS_V1_RULE_EXTERNAL: &'static str = "/open-apis/acs/v1/rule_external";
 
     /// 外部规则操作（获取/删除）
-    pub const ACS_V1_RULE_EXTERNAL_OPERATION: &'static str = "/open-apis/acs/v1/rule_external/{rule_id}";
+    pub const ACS_V1_RULE_EXTERNAL_OPERATION: &'static str =
+        "/open-apis/acs/v1/rule_external/{rule_id}";
 
     /// 外部规则设备绑定
-    pub const ACS_V1_RULE_EXTERNAL_DEVICE_BIND: &'static str = "/open-apis/acs/v1/rule_external/device_bind";
+    pub const ACS_V1_RULE_EXTERNAL_DEVICE_BIND: &'static str =
+        "/open-apis/acs/v1/rule_external/device_bind";
 
     /// 用户操作（获取/删除）
     pub const ACS_V1_USER_OPERATION: &'static str = "/open-apis/acs/v1/users/{user_id}";
@@ -2648,6 +2685,52 @@ impl Endpoints {
 
     /// 用户人脸图像（获取/上传）
     pub const ACS_V1_USER_FACE_IMAGE: &'static str = "/open-apis/acs/v1/users/{user_id}/face_image";
+
+    // ==================== 管理后台服务端点 ====================
+
+    /// 勋章管理 - 创建勋章
+    pub const ADMIN_V1_BADGES_CREATE: &'static str = "/open-apis/admin/v1/badges";
+
+    /// 勋章管理 - 获取勋章列表
+    pub const ADMIN_V1_BADGES_LIST: &'static str = "/open-apis/admin/v1/badges";
+
+    /// 勋章管理 - 操作勋章（获取/更新）
+    pub const ADMIN_V1_BADGES_OPERATION: &'static str = "/open-apis/admin/v1/badges/{badge_id}";
+
+    /// 勋章管理 - 上传勋章图片
+    pub const ADMIN_V1_BADGES_IMAGE_UPLOAD: &'static str = "/open-apis/admin/v1/badges/image";
+
+    /// 勋章授予名单 - 创建授予名单
+    pub const ADMIN_V1_BADGE_GRANTS_CREATE: &'static str = "/open-apis/admin/v1/badge_grants";
+
+    /// 勋章授予名单 - 获取授予名单列表
+    pub const ADMIN_V1_BADGE_GRANTS_LIST: &'static str = "/open-apis/admin/v1/badge_grants";
+
+    /// 勋章授予名单 - 操作授予名单（获取/更新/删除）
+    pub const ADMIN_V1_BADGE_GRANTS_OPERATION: &'static str = "/open-apis/admin/v1/badge_grants/{grant_id}";
+
+    /// 密码管理 - 重置密码
+    pub const ADMIN_V1_PASSWORD_RESET: &'static str = "/open-apis/admin/v1/password/reset";
+
+    /// 数据报表 - 部门维度数据
+    pub const ADMIN_V1_DATA_REPORT_DEPARTMENT: &'static str = "/open-apis/admin/v1/data_report/department";
+
+    /// 数据报表 - 用户维度数据
+    pub const ADMIN_V1_DATA_REPORT_USER: &'static str = "/open-apis/admin/v1/data_report/user";
+
+    // ==================== 妙记服务端点 ====================
+    
+    /// 获取妙记信息 (需要使用 EndpointBuilder::replace_param 替换 {minute_token})
+    pub const MINUTES_V1_MINUTE_GET: &'static str = "/open-apis/minutes/v1/{minute_token}";
+    
+    /// 获取妙记统计数据 (需要使用 EndpointBuilder::replace_param 替换 {minute_token})
+    pub const MINUTES_V1_STATISTICS_GET: &'static str = "/open-apis/minutes/v1/{minute_token}/statistics";
+    
+    /// 导出妙记文字记录 (需要使用 EndpointBuilder::replace_param 替换 {minute_token})
+    pub const MINUTES_V1_TRANSCRIPT_GET: &'static str = "/open-apis/minutes/v1/{minute_token}/transcript";
+    
+    /// 下载妙记音视频文件 (需要使用 EndpointBuilder::replace_param 替换 {minute_token})
+    pub const MINUTES_V1_MEDIA_GET: &'static str = "/open-apis/minutes/v1/{minute_token}/media";
 }
 
 /// API端点构建辅助函数
@@ -2783,7 +2866,11 @@ impl CalendarEndpointBuilder {
 
     /// 设置主日历端点
     pub fn set_primary(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::CALENDAR_PRIMARY, "calendar_id", &self.calendar_id)
+        EndpointBuilder::replace_param(
+            Endpoints::CALENDAR_PRIMARY,
+            "calendar_id",
+            &self.calendar_id,
+        )
     }
 
     /// 搜索日历端点
@@ -2801,42 +2888,70 @@ pub struct CalendarEventEndpointBuilder {
 impl CalendarEventEndpointBuilder {
     /// 创建事件端点
     pub fn create(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::CALENDAR_EVENT_CREATE, "calendar_id", &self.calendar_id)
+        EndpointBuilder::replace_param(
+            Endpoints::CALENDAR_EVENT_CREATE,
+            "calendar_id",
+            &self.calendar_id,
+        )
     }
 
     /// 获取事件详情端点
     pub fn get(&self) -> String {
-        let temp = EndpointBuilder::replace_param(Endpoints::CALENDAR_EVENT_GET, "calendar_id", &self.calendar_id);
+        let temp = EndpointBuilder::replace_param(
+            Endpoints::CALENDAR_EVENT_GET,
+            "calendar_id",
+            &self.calendar_id,
+        );
         EndpointBuilder::replace_param(&temp, "event_id", &self.event_id)
     }
 
     /// 更新事件端点
     pub fn patch(&self) -> String {
-        let temp = EndpointBuilder::replace_param(Endpoints::CALENDAR_EVENT_UPDATE, "calendar_id", &self.calendar_id);
+        let temp = EndpointBuilder::replace_param(
+            Endpoints::CALENDAR_EVENT_UPDATE,
+            "calendar_id",
+            &self.calendar_id,
+        );
         EndpointBuilder::replace_param(&temp, "event_id", &self.event_id)
     }
 
     /// 删除事件端点
     pub fn delete(&self) -> String {
-        let temp = EndpointBuilder::replace_param(Endpoints::CALENDAR_EVENT_DELETE, "calendar_id", &self.calendar_id);
+        let temp = EndpointBuilder::replace_param(
+            Endpoints::CALENDAR_EVENT_DELETE,
+            "calendar_id",
+            &self.calendar_id,
+        );
         EndpointBuilder::replace_param(&temp, "event_id", &self.event_id)
     }
 
     /// 回复事件邀请端点
     pub fn reply(&self) -> String {
-        let temp = EndpointBuilder::replace_param(Endpoints::CALENDAR_EVENT_REPLY, "calendar_id", &self.calendar_id);
+        let temp = EndpointBuilder::replace_param(
+            Endpoints::CALENDAR_EVENT_REPLY,
+            "calendar_id",
+            &self.calendar_id,
+        );
         EndpointBuilder::replace_param(&temp, "event_id", &self.event_id)
     }
 
     /// 搜索事件端点
     pub fn search(&self) -> String {
-        let temp = EndpointBuilder::replace_param(Endpoints::CALENDAR_EVENT_SEARCH, "calendar_id", &self.calendar_id);
+        let temp = EndpointBuilder::replace_param(
+            Endpoints::CALENDAR_EVENT_SEARCH,
+            "calendar_id",
+            &self.calendar_id,
+        );
         EndpointBuilder::replace_param(&temp, "event_id", &self.event_id)
     }
 
     /// 获取事件列表端点
     pub fn list(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::CALENDAR_EVENT_LIST, "calendar_id", &self.calendar_id)
+        EndpointBuilder::replace_param(
+            Endpoints::CALENDAR_EVENT_LIST,
+            "calendar_id",
+            &self.calendar_id,
+        )
     }
 }
 
@@ -2853,12 +2968,20 @@ impl ImMessageEndpointBuilder {
 
     /// 更新消息端点
     pub fn patch(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::IM_V1_MESSAGE_PATCH, "message_id", &self.message_id)
+        EndpointBuilder::replace_param(
+            Endpoints::IM_V1_MESSAGE_PATCH,
+            "message_id",
+            &self.message_id,
+        )
     }
 
     /// 删除消息端点
     pub fn delete(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::IM_V1_MESSAGE_DELETE, "message_id", &self.message_id)
+        EndpointBuilder::replace_param(
+            Endpoints::IM_V1_MESSAGE_DELETE,
+            "message_id",
+            &self.message_id,
+        )
     }
 }
 
@@ -2890,7 +3013,11 @@ impl VcMeetingEndpointBuilder {
 
     /// 移除参会者端点
     pub fn kickout(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::VC_MEETING_KICKOUT, "meeting_id", &self.meeting_id)
+        EndpointBuilder::replace_param(
+            Endpoints::VC_MEETING_KICKOUT,
+            "meeting_id",
+            &self.meeting_id,
+        )
     }
 }
 
@@ -3031,10 +3158,7 @@ mod tests {
     #[test]
     fn test_vc_endpoints() {
         let vc_endpoints = EndpointBuilder::vc_meeting("meeting_456");
-        assert_eq!(
-            vc_endpoints.get(),
-            "/open-apis/vc/v1/meetings/meeting_456"
-        );
+        assert_eq!(vc_endpoints.get(), "/open-apis/vc/v1/meetings/meeting_456");
         assert_eq!(
             vc_endpoints.update(),
             "/open-apis/vc/v1/meetings/meeting_456"
@@ -3108,7 +3232,8 @@ pub const VC_RESERVE_GET_ACTIVE_MEETING: &str = Endpoints::VC_RESERVE_GET_ACTIVE
 
 // TENANT constants
 pub const TENANT_V2_QUERY: &str = Endpoints::TENANT_V2_QUERY;
-pub const TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY: &str = Endpoints::TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY;
+pub const TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY: &str =
+    Endpoints::TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY;
 
 // DIRECTORY constants
 pub const DIRECTORY_V1_DEPARTMENTS: &str = Endpoints::DIRECTORY_V1_DEPARTMENTS;
@@ -3118,7 +3243,8 @@ pub const DIRECTORY_V1_DEPARTMENTS_FILTER: &str = Endpoints::DIRECTORY_V1_DEPART
 pub const DIRECTORY_V1_DEPARTMENTS_MGET: &str = Endpoints::DIRECTORY_V1_DEPARTMENTS_MGET;
 pub const DIRECTORY_V1_EMPLOYEES: &str = Endpoints::DIRECTORY_V1_EMPLOYEES;
 pub const DIRECTORY_V1_EMPLOYEE_GET: &str = Endpoints::DIRECTORY_V1_EMPLOYEE_GET;
-pub const DIRECTORY_V1_EMPLOYEE_TO_BE_RESIGNED: &str = Endpoints::DIRECTORY_V1_EMPLOYEE_TO_BE_RESIGNED;
+pub const DIRECTORY_V1_EMPLOYEE_TO_BE_RESIGNED: &str =
+    Endpoints::DIRECTORY_V1_EMPLOYEE_TO_BE_RESIGNED;
 pub const DIRECTORY_V1_EMPLOYEE_REGULAR: &str = Endpoints::DIRECTORY_V1_EMPLOYEE_REGULAR;
 pub const DIRECTORY_V1_EMPLOYEE_RESURRECT: &str = Endpoints::DIRECTORY_V1_EMPLOYEE_RESURRECT;
 pub const DIRECTORY_V1_EMPLOYEES_SEARCH: &str = Endpoints::DIRECTORY_V1_EMPLOYEES_SEARCH;
@@ -3130,11 +3256,13 @@ pub const PAYROLL_V1_COST_ALLOCATION_PLANS: &str = Endpoints::PAYROLL_V1_COST_AL
 pub const PAYROLL_V1_ACCT_ITEMS: &str = Endpoints::PAYROLL_V1_ACCT_ITEMS;
 pub const PAYROLL_V1_DATASOURCES: &str = Endpoints::PAYROLL_V1_DATASOURCES;
 pub const PAYROLL_V1_DATASOURCE_RECORDS_SAVE: &str = Endpoints::PAYROLL_V1_DATASOURCE_RECORDS_SAVE;
-pub const PAYROLL_V1_DATASOURCE_RECORDS_QUERY: &str = Endpoints::PAYROLL_V1_DATASOURCE_RECORDS_QUERY;
+pub const PAYROLL_V1_DATASOURCE_RECORDS_QUERY: &str =
+    Endpoints::PAYROLL_V1_DATASOURCE_RECORDS_QUERY;
 pub const PAYROLL_V1_PAYMENT_DETAILS: &str = Endpoints::PAYROLL_V1_PAYMENT_DETAILS;
 pub const PAYROLL_V1_PAYMENT_DETAILS_QUERY: &str = Endpoints::PAYROLL_V1_PAYMENT_DETAILS_QUERY;
 pub const PAYROLL_V1_PAYMENT_ACTIVITIES: &str = Endpoints::PAYROLL_V1_PAYMENT_ACTIVITIES;
-pub const PAYROLL_V1_PAYMENT_ACTIVITY_ARCHIVE: &str = Endpoints::PAYROLL_V1_PAYMENT_ACTIVITY_ARCHIVE;
+pub const PAYROLL_V1_PAYMENT_ACTIVITY_ARCHIVE: &str =
+    Endpoints::PAYROLL_V1_PAYMENT_ACTIVITY_ARCHIVE;
 pub const PAYROLL_V1_COST_ALLOCATION_REPORTS: &str = Endpoints::PAYROLL_V1_COST_ALLOCATION_REPORTS;
 pub const PAYROLL_V1_PAYGROUPS: &str = Endpoints::PAYROLL_V1_PAYGROUPS;
 
@@ -3197,4 +3325,3 @@ pub const ACS_V1_RULE_EXTERNAL_DEVICE_BIND: &str = Endpoints::ACS_V1_RULE_EXTERN
 pub const ACS_V1_USER_OPERATION: &str = Endpoints::ACS_V1_USER_OPERATION;
 pub const ACS_V1_USERS: &str = Endpoints::ACS_V1_USERS;
 pub const ACS_V1_USER_FACE_IMAGE: &str = Endpoints::ACS_V1_USER_FACE_IMAGE;
-
