@@ -2860,6 +2860,63 @@ impl Endpoints {
 
     /// 下载妙记音视频文件 (需要使用 EndpointBuilder::replace_param 替换 {minute_token})
     pub const MINUTES_V1_MEDIA_GET: &'static str = "/open-apis/minutes/v1/{minute_token}/media";
+
+    // ==================== 实名认证服务端点 ====================
+    /// 录入身份信息
+    pub const HUMAN_AUTHENTICATION_V1_IDENTITIES: &'static str =
+        "/open-apis/human_authentication/v1/identities";
+    /// 上传人脸基准图片
+    pub const HUMAN_AUTHENTICATION_V1_FACE_IMAGES: &'static str =
+        "/open-apis/human_authentication/v1/face_images";
+    /// 裁剪人脸图片
+    pub const HUMAN_AUTHENTICATION_V1_FACE_IMAGES_CROP: &'static str =
+        "/open-apis/human_authentication/v1/face_images/crop";
+    /// 查询人脸认证结果 (需要使用 EndpointBuilder::replace_param 替换 {identity_id})
+    pub const HUMAN_AUTHENTICATION_V1_IDENTITY_RESULT: &'static str =
+        "/open-apis/human_authentication/v1/identities/{identity_id}/result";
+
+    // ==================== MDM设备管理服务端点 ====================
+    /// 批量查询国家/地区
+    pub const MDM_V1_COUNTRY_REGIONS_BATCH_GET: &'static str =
+        "/open-apis/mdm/v1/country_regions/batch_get";
+    /// 分页查询国家/地区
+    pub const MDM_V1_COUNTRY_REGIONS: &'static str = "/open-apis/mdm/v1/country_regions";
+    /// 用户数据维度绑定
+    pub const MDM_V1_USER_AUTH_DATA_RELATIONS_BIND: &'static str =
+        "/open-apis/mdm/v1/user_auth_data_relations/bind";
+    /// 用户数据维度解绑
+    pub const MDM_V1_USER_AUTH_DATA_RELATIONS_UNBIND: &'static str =
+        "/open-apis/mdm/v1/user_auth_data_relations/unbind";
+
+    // ==================== Security and Compliance 安全与合规相关端点 ====================
+    /// 行为审计日志数据获取
+    pub const SECURITY_AND_COMPLIANCE_V1_AUDIT_DATAS: &'static str =
+        "/open-apis/security_and_compliance/v1/audit_datas";
+
+    /// OpenAPI 审计日志数据列表
+    pub const SECURITY_AND_COMPLIANCE_V1_OPENAPI_LOGS_LIST_DATA: &'static str =
+        "/open-apis/security_and_compliance/v1/openapi_logs/list_data";
+
+    // ==================== Report 汇报相关端点 ====================
+    /// 任务查询
+    pub const REPORT_V1_TASKS_QUERY: &'static str = "/open-apis/report/v1/tasks/query";
+
+    /// 规则查询
+    pub const REPORT_V1_RULES_QUERY: &'static str = "/open-apis/report/v1/rules/query";
+
+    /// 规则看板操作
+    pub const REPORT_V1_RULE_VIEWS_OPERATION: &'static str = "/open-apis/report/v1/rule-views/{view_id}";
+
+    // ==================== Authentication 用户认证相关端点 ====================
+    /// 获取用户信息
+    pub const AUTHEN_V1_USER_INFO: &'static str = "/open-apis/authen/v1/user_info";
+
+    // ==================== Calendar 日历相关端点 (补充) ====================
+    /// 日历管理
+    pub const CALENDAR_V4_CALENDARS: &'static str = "/open-apis/calendar/v4/calendars";
+
+    /// 日历详情操作
+    pub const CALENDAR_V4_CALENDAR_OPERATION: &'static str = "/open-apis/calendar/v4/calendars/{calendar_id}";
 }
 
 /// API端点构建辅助函数
@@ -3505,3 +3562,31 @@ pub const PERFORMANCE_V1_STAGE_TASK_FIND_BY_USER_LIST: &str = Endpoints::PERFORM
 pub const PERFORMANCE_V1_STAGE_TASK_FIND_BY_PAGE: &str = Endpoints::PERFORMANCE_V1_STAGE_TASK_FIND_BY_PAGE;
 pub const PERFORMANCE_V1_METRIC_DETAIL_QUERY: &str = Endpoints::PERFORMANCE_V1_METRIC_DETAIL_QUERY;
 pub const PERFORMANCE_V1_METRIC_DETAIL_IMPORT: &str = Endpoints::PERFORMANCE_V1_METRIC_DETAIL_IMPORT;
+
+// Human Authentication constants
+pub const HUMAN_AUTHENTICATION_V1_IDENTITIES: &str = Endpoints::HUMAN_AUTHENTICATION_V1_IDENTITIES;
+pub const HUMAN_AUTHENTICATION_V1_FACE_IMAGES: &str = Endpoints::HUMAN_AUTHENTICATION_V1_FACE_IMAGES;
+pub const HUMAN_AUTHENTICATION_V1_FACE_IMAGES_CROP: &str = Endpoints::HUMAN_AUTHENTICATION_V1_FACE_IMAGES_CROP;
+pub const HUMAN_AUTHENTICATION_V1_IDENTITY_RESULT: &str = Endpoints::HUMAN_AUTHENTICATION_V1_IDENTITY_RESULT;
+
+// MDM constants
+pub const MDM_V1_COUNTRY_REGIONS_BATCH_GET: &str = Endpoints::MDM_V1_COUNTRY_REGIONS_BATCH_GET;
+pub const MDM_V1_COUNTRY_REGIONS: &str = Endpoints::MDM_V1_COUNTRY_REGIONS;
+pub const MDM_V1_USER_AUTH_DATA_RELATIONS_BIND: &str = Endpoints::MDM_V1_USER_AUTH_DATA_RELATIONS_BIND;
+pub const MDM_V1_USER_AUTH_DATA_RELATIONS_UNBIND: &str = Endpoints::MDM_V1_USER_AUTH_DATA_RELATIONS_UNBIND;
+
+// Security and Compliance constants
+pub const SECURITY_AND_COMPLIANCE_V1_AUDIT_DATAS: &str = Endpoints::SECURITY_AND_COMPLIANCE_V1_AUDIT_DATAS;
+pub const SECURITY_AND_COMPLIANCE_V1_OPENAPI_LOGS_LIST_DATA: &str = Endpoints::SECURITY_AND_COMPLIANCE_V1_OPENAPI_LOGS_LIST_DATA;
+
+// Report constants
+pub const REPORT_V1_TASKS_QUERY: &str = Endpoints::REPORT_V1_TASKS_QUERY;
+pub const REPORT_V1_RULES_QUERY: &str = Endpoints::REPORT_V1_RULES_QUERY;
+pub const REPORT_V1_RULE_VIEWS_OPERATION: &str = Endpoints::REPORT_V1_RULE_VIEWS_OPERATION;
+
+// Authentication constants
+pub const AUTHEN_V1_USER_INFO: &str = Endpoints::AUTHEN_V1_USER_INFO;
+
+// Calendar constants (补充)
+pub const CALENDAR_V4_CALENDARS: &str = Endpoints::CALENDAR_V4_CALENDARS;
+pub const CALENDAR_V4_CALENDAR_OPERATION: &str = Endpoints::CALENDAR_V4_CALENDAR_OPERATION;

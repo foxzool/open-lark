@@ -6,6 +6,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    endpoints::{EndpointBuilder, Endpoints},
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -41,7 +42,11 @@ impl RuleViewService {
     ) -> SDKResult<BaseResponse<RuleViewRemoveResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/report/v1/rule-views/{view_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::REPORT_V1_RULE_VIEWS_OPERATION,
+                "view_id",
+                view_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
