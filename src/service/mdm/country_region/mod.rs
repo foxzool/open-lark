@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -44,7 +45,7 @@ impl CountryRegionService {
     ) -> SDKResult<BaseResponse<CountryRegionGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/mdm/v1/country_regions/batch_get".to_string(),
+            api_path: Endpoints::MDM_V1_COUNTRY_REGIONS_BATCH_GET.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -72,7 +73,7 @@ impl CountryRegionService {
     ) -> SDKResult<BaseResponse<CountryRegionListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/mdm/v1/country_regions".to_string(),
+            api_path: Endpoints::MDM_V1_COUNTRY_REGIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
