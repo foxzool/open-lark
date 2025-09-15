@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -102,9 +103,10 @@ impl PaymentDetailService {
     ) -> SDKResult<BaseResponse<PaymentDetailListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/payroll/v1/payment_activities/{}/payment_details",
-                request.payment_activity_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::PAYROLL_V1_PAYMENT_DETAILS,
+                "payment_activity_id",
+                &request.payment_activity_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
@@ -191,9 +193,10 @@ impl PaymentDetailService {
     ) -> SDKResult<BaseResponse<PaymentDetailQueryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/payroll/v1/payment_activities/{}/payment_details/query",
-                request.payment_activity_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::PAYROLL_V1_PAYMENT_DETAILS_QUERY,
+                "payment_activity_id",
+                &request.payment_activity_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),

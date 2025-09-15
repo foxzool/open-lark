@@ -7,6 +7,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -158,9 +159,10 @@ impl EmployeeService {
     ) -> SDKResult<BaseResponse<ToBeResignedEmployeeResponse>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = format!(
-            "/open-apis/directory/v1/employees/{}/to_be_resigned",
-            request.employee_id
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::DIRECTORY_V1_EMPLOYEE_TO_BE_RESIGNED,
+            "employee_id",
+            &request.employee_id,
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 

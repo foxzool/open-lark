@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{Endpoints, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -97,7 +98,7 @@ impl RunService {
     ) -> SDKResult<BaseResponse<RunCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/aily/v1/sessions/{}/runs", request.session_id),
+            api_path: EndpointBuilder::replace_param(Endpoints::AILY_V1_RUNS, "session_id", &request.session_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
                 "app_id": request.app_id,
@@ -127,9 +128,9 @@ impl RunService {
     ) -> SDKResult<BaseResponse<RunGetResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/aily/v1/sessions/{}/runs/{}",
-                request.session_id, request.run_id
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::AILY_V1_RUN_GET,
+                &[("session_id", &request.session_id), ("run_id", &request.run_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -157,7 +158,7 @@ impl RunService {
     ) -> SDKResult<BaseResponse<RunListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/aily/v1/sessions/{}/runs", request.session_id),
+            api_path: EndpointBuilder::replace_param(Endpoints::AILY_V1_RUNS, "session_id", &request.session_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -196,9 +197,9 @@ impl RunService {
     ) -> SDKResult<BaseResponse<RunCancelResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/aily/v1/sessions/{}/runs/{}/cancel",
-                request.session_id, request.run_id
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::AILY_V1_RUN_CANCEL,
+                &[("session_id", &request.session_id), ("run_id", &request.run_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
