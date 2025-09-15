@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{Endpoints, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -114,7 +115,7 @@ impl PeriodService {
     ) -> SDKResult<BaseResponse<PeriodCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/okr/v1/periods".to_string(),
+            api_path: Endpoints::OKR_V1_PERIODS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -144,7 +145,7 @@ impl PeriodService {
     ) -> SDKResult<BaseResponse<PeriodStatusUpdateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/okr/v1/periods/{period_id}"),
+            api_path: EndpointBuilder::replace_param(Endpoints::OKR_V1_PERIOD_GET, "period_id", period_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -172,7 +173,7 @@ impl PeriodService {
     ) -> SDKResult<BaseResponse<PeriodListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/okr/v1/periods".to_string(),
+            api_path: Endpoints::OKR_V1_PERIODS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

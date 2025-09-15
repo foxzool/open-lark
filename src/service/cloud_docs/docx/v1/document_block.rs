@@ -7,7 +7,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::Endpoints,
+    endpoints::{EndpointBuilder, Endpoints},
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -133,9 +133,10 @@ impl DocumentBlockService {
     ) -> SDKResult<BaseResponse<BatchDeleteBlockRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!(
-                "/open-apis/docx/v1/documents/{}/blocks/batch_delete",
-                document_id.into()
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::DOCX_V1_DOCUMENT_BLOCKS_BATCH_DELETE,
+                "document_id", 
+                &document_id.into()
             ),
             ..Default::default()
         };
@@ -158,12 +159,13 @@ impl DocumentBlockService {
         request: ListChildrenRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListChildrenRespData>> {
+        let document_id_str = document_id.into();
+        let block_id_str = block_id.into();
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/docx/v1/documents/{}/blocks/{}/children",
-                document_id.into(),
-                block_id.into()
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::DOCX_V1_DOCUMENT_BLOCK_CHILDREN,
+                &[("document_id", &document_id_str), ("block_id", &block_id_str)]
             ),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()

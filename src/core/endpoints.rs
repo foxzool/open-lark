@@ -1055,6 +1055,41 @@ impl Endpoints {
     /// 任务子任务管理
     pub const TASK_V2_TASK_SUBTASKS: &'static str = "/open-apis/task/v2/tasks/{task_guid}/subtasks";
 
+    // ==================== Payroll 薪酬管理相关端点 ====================
+
+    /// 成本分摊计划列表
+    pub const PAYROLL_V1_COST_ALLOCATION_PLANS: &'static str = "/open-apis/payroll/v1/cost_allocation_plans";
+
+    /// 账套项目列表  
+    pub const PAYROLL_V1_ACCT_ITEMS: &'static str = "/open-apis/payroll/v1/acct_items";
+
+    /// 数据源列表
+    pub const PAYROLL_V1_DATASOURCES: &'static str = "/open-apis/payroll/v1/datasources";
+
+    /// 数据源记录保存
+    pub const PAYROLL_V1_DATASOURCE_RECORDS_SAVE: &'static str = "/open-apis/payroll/v1/datasources/{datasource_id}/records/save";
+
+    /// 数据源记录查询
+    pub const PAYROLL_V1_DATASOURCE_RECORDS_QUERY: &'static str = "/open-apis/payroll/v1/datasources/{datasource_id}/records/query";
+
+    /// 薪酬活动详情查询
+    pub const PAYROLL_V1_PAYMENT_DETAILS: &'static str = "/open-apis/payroll/v1/payment_activities/{payment_activity_id}/payment_details";
+
+    /// 薪酬活动详情查询（通过查询接口）
+    pub const PAYROLL_V1_PAYMENT_DETAILS_QUERY: &'static str = "/open-apis/payroll/v1/payment_activities/{payment_activity_id}/payment_details/query";
+
+    /// 薪酬活动列表
+    pub const PAYROLL_V1_PAYMENT_ACTIVITIES: &'static str = "/open-apis/payroll/v1/payment_activities";
+
+    /// 薪酬活动归档
+    pub const PAYROLL_V1_PAYMENT_ACTIVITY_ARCHIVE: &'static str = "/open-apis/payroll/v1/payment_activities/{payment_activity_id}/archive";
+
+    /// 成本分摊报表列表
+    pub const PAYROLL_V1_COST_ALLOCATION_REPORTS: &'static str = "/open-apis/payroll/v1/cost_allocation_reports";
+
+    /// 薪酬组列表
+    pub const PAYROLL_V1_PAYGROUPS: &'static str = "/open-apis/payroll/v1/paygroups";
+
     // ==================== APaaS 平台即服务相关端点 ====================
 
     // ===== 座位管理端点 =====
@@ -2415,6 +2450,204 @@ impl Endpoints {
     /// 获取邮件附件下载链接 (需要使用 EndpointBuilder::replace_param 替换 {user_mailbox_id}, {message_id} 和 {attachment_id})
     pub const MAIL_V1_USER_MAILBOX_MESSAGE_ATTACHMENT_DOWNLOAD_URL: &'static str =
         "/open-apis/mail/v1/user_mailboxes/{user_mailbox_id}/messages/{message_id}/attachments/{attachment_id}/download_url";
+
+    // ==================== 目录服务相关端点 ====================
+
+    // ===== 部门管理端点 =====
+    /// 创建部门
+    pub const DIRECTORY_V1_DEPARTMENTS: &'static str = "/open-apis/directory/v1/departments";
+
+    /// 删除/更新部门 (需要使用 EndpointBuilder::replace_param 替换 {department_id})
+    pub const DIRECTORY_V1_DEPARTMENT_GET: &'static str = "/open-apis/directory/v1/departments/{department_id}";
+
+    /// 搜索部门
+    pub const DIRECTORY_V1_DEPARTMENTS_SEARCH: &'static str = "/open-apis/directory/v1/departments/search";
+
+    /// 筛选部门
+    pub const DIRECTORY_V1_DEPARTMENTS_FILTER: &'static str = "/open-apis/directory/v1/departments/filter";
+
+    /// 批量获取部门
+    pub const DIRECTORY_V1_DEPARTMENTS_MGET: &'static str = "/open-apis/directory/v1/departments/mget";
+
+    // ===== 员工管理端点 =====
+    /// 创建员工
+    pub const DIRECTORY_V1_EMPLOYEES: &'static str = "/open-apis/directory/v1/employees";
+
+    /// 删除/更新员工 (需要使用 EndpointBuilder::replace_param 替换 {employee_id})
+    pub const DIRECTORY_V1_EMPLOYEE_GET: &'static str = "/open-apis/directory/v1/employees/{employee_id}";
+
+    /// 员工待离职 (需要使用 EndpointBuilder::replace_param 替换 {employee_id})
+    pub const DIRECTORY_V1_EMPLOYEE_TO_BE_RESIGNED: &'static str = "/open-apis/directory/v1/employees/{employee_id}/to_be_resigned";
+
+    /// 员工转正 (需要使用 EndpointBuilder::replace_param 替换 {employee_id})
+    pub const DIRECTORY_V1_EMPLOYEE_REGULAR: &'static str = "/open-apis/directory/v1/employees/{employee_id}/regular";
+
+    /// 员工复活 (需要使用 EndpointBuilder::replace_param 替换 {employee_id})
+    pub const DIRECTORY_V1_EMPLOYEE_RESURRECT: &'static str = "/open-apis/directory/v1/employees/{employee_id}/resurrect";
+
+    /// 搜索员工
+    pub const DIRECTORY_V1_EMPLOYEES_SEARCH: &'static str = "/open-apis/directory/v1/employees/search";
+
+    /// 筛选员工
+    pub const DIRECTORY_V1_EMPLOYEES_FILTER: &'static str = "/open-apis/directory/v1/employees/filter";
+
+    /// 批量获取员工
+    pub const DIRECTORY_V1_EMPLOYEES_MGET: &'static str = "/open-apis/directory/v1/employees/mget";
+
+    // ==================== 搜索服务端点 ====================
+    /// 搜索用户 V1
+    pub const SEARCH_V1_USER: &'static str = "/open-apis/search/v1/user";
+
+    /// 创建数据项
+    pub const SEARCH_V2_DATA_ITEM_CREATE: &'static str = "/open-apis/search/v2/data_sources/{data_source_id}/items";
+
+    /// 批量创建数据项
+    pub const SEARCH_V2_DATA_ITEM_BATCH_CREATE: &'static str = "/open-apis/search/v2/data_sources/{data_source_id}/items/batch_create";
+
+    /// 删除/获取数据项
+    pub const SEARCH_V2_DATA_ITEM_OPERATION: &'static str = "/open-apis/search/v2/data_sources/{data_source_id}/items/{data_item_id}";
+
+    /// 搜索消息
+    pub const SEARCH_V2_MESSAGE: &'static str = "/open-apis/search/v2/message";
+
+    /// 搜索应用
+    pub const SEARCH_V2_APP: &'static str = "/open-apis/search/v2/app";
+
+    /// 数据源操作（创建/列表）
+    pub const SEARCH_V2_DATA_SOURCES: &'static str = "/open-apis/search/v2/data_sources";
+
+    /// 数据源操作（删除/更新/获取）
+    pub const SEARCH_V2_DATA_SOURCE_OPERATION: &'static str = "/open-apis/search/v2/data_sources/{data_source_id}";
+
+    /// 创建Schema
+    pub const SEARCH_V2_SCHEMA_CREATE: &'static str = "/open-apis/search/v2/data_sources/{data_source_id}/schemas";
+
+    /// Schema操作（删除/更新/获取）
+    pub const SEARCH_V2_SCHEMA_OPERATION: &'static str = "/open-apis/search/v2/data_sources/{data_source_id}/schemas/{schema_id}";
+
+    // ==================== OKR服务端点 ====================
+    /// 查询评分列表
+    pub const OKR_V1_REVIEWS_QUERY: &'static str = "/open-apis/okr/v1/reviews/query";
+
+    /// OKR列表
+    pub const OKR_V1_OKRS: &'static str = "/open-apis/okr/v1/okrs";
+
+    /// 批量获取OKR
+    pub const OKR_V1_OKRS_BATCH_GET: &'static str = "/open-apis/okr/v1/okrs/batch_get";
+
+    /// 周期规则列表
+    pub const OKR_V1_PERIOD_RULES: &'static str = "/open-apis/okr/v1/period_rules";
+
+    /// 周期列表
+    pub const OKR_V1_PERIODS: &'static str = "/open-apis/okr/v1/periods";
+
+    /// 周期详情
+    pub const OKR_V1_PERIOD_GET: &'static str = "/open-apis/okr/v1/periods/{period_id}";
+
+    /// 进展记录列表
+    pub const OKR_V1_PROGRESS_RECORDS: &'static str = "/open-apis/okr/v1/progress_records";
+
+    /// 进展记录操作（获取/更新/删除）
+    pub const OKR_V1_PROGRESS_RECORD_OPERATION: &'static str = "/open-apis/okr/v1/progress_records/{progress_id}";
+
+    /// 进展记录上传
+    pub const OKR_V1_PROGRESS_RECORDS_UPLOAD: &'static str = "/open-apis/okr/v1/progress_records/upload";
+
+    // ==================== Cardkit服务端点 ====================
+    /// 创建卡片
+    pub const CARDKIT_V1_CARDS: &'static str = "/open-apis/cardkit/v1/cards";
+
+    /// 创建卡片元素
+    pub const CARDKIT_V1_CARD_ELEMENTS: &'static str = "/open-apis/cardkit/v1/cards/{card_id}/elements";
+
+    /// 卡片设置
+    pub const CARDKIT_V1_CARD_SETTINGS: &'static str = "/open-apis/cardkit/v1/cards/{card_id}/settings";
+
+    /// 更新卡片
+    pub const CARDKIT_V1_CARD_UPDATE: &'static str = "/open-apis/cardkit/v1/cards/{card_id}";
+
+    /// 批量更新卡片
+    pub const CARDKIT_V1_CARD_BATCH_UPDATE: &'static str = "/open-apis/cardkit/v1/cards/{card_id}/batch_update";
+
+    // ==================== Aily服务端点 ====================
+    /// 会话列表/创建
+    pub const AILY_V1_SESSIONS: &'static str = "/open-apis/aily/v1/sessions";
+
+    /// 会话操作（获取/更新/删除）
+    pub const AILY_V1_SESSION_OPERATION: &'static str = "/open-apis/aily/v1/sessions/{session_id}";
+
+    /// 运行列表/创建
+    pub const AILY_V1_RUNS: &'static str = "/open-apis/aily/v1/sessions/{session_id}/runs";
+
+    /// 运行操作（获取）
+    pub const AILY_V1_RUN_GET: &'static str = "/open-apis/aily/v1/sessions/{session_id}/runs/{run_id}";
+
+    /// 取消运行
+    pub const AILY_V1_RUN_CANCEL: &'static str = "/open-apis/aily/v1/sessions/{session_id}/runs/{run_id}/cancel";
+
+    /// 知识库问答
+    pub const AILY_V1_DATA_KNOWLEDGE_ASK: &'static str = "/open-apis/aily/v1/data_knowledge/ask";
+
+    /// 知识库文件上传
+    pub const AILY_V1_DATA_KNOWLEDGE_UPLOAD_FILE: &'static str = "/open-apis/aily/v1/data_knowledge/upload_file";
+
+    /// 知识库操作（创建/列表）
+    pub const AILY_V1_DATA_KNOWLEDGE: &'static str = "/open-apis/aily/v1/data_knowledge";
+
+    /// 知识库操作（获取/删除）
+    pub const AILY_V1_DATA_KNOWLEDGE_OPERATION: &'static str = "/open-apis/aily/v1/data_knowledge/{knowledge_id}";
+
+    /// 知识库分类
+    pub const AILY_V1_DATA_KNOWLEDGE_CATEGORIES: &'static str = "/open-apis/aily/v1/data_knowledge/categories";
+
+    /// 消息操作（创建/列表）
+    pub const AILY_V1_MESSAGES: &'static str = "/open-apis/aily/v1/sessions/{session_id}/messages";
+
+    /// 消息获取
+    pub const AILY_V1_MESSAGE_GET: &'static str = "/open-apis/aily/v1/sessions/{session_id}/messages/{message_id}";
+
+    /// 技能启动
+    pub const AILY_V1_SKILL_START: &'static str = "/open-apis/aily/v1/skills/{skill_id}/start";
+
+    /// 技能获取
+    pub const AILY_V1_SKILL_GET: &'static str = "/open-apis/aily/v1/skills/{skill_id}";
+
+    /// 技能列表
+    pub const AILY_V1_SKILLS: &'static str = "/open-apis/aily/v1/skills";
+
+    // ==================== ACS服务端点 ====================
+    /// 设备列表
+    pub const ACS_V1_DEVICES: &'static str = "/open-apis/acs/v1/devices";
+
+    /// 访客操作（创建/列表）
+    pub const ACS_V1_VISITORS: &'static str = "/open-apis/acs/v1/visitors";
+
+    /// 访客获取
+    pub const ACS_V1_VISITOR_GET: &'static str = "/open-apis/acs/v1/visitors/{visitor_id}";
+
+    /// 门禁记录列表
+    pub const ACS_V1_ACCESS_RECORDS: &'static str = "/open-apis/acs/v1/access_records";
+
+    /// 门禁记录人脸图像
+    pub const ACS_V1_ACCESS_RECORD_FACE_IMAGE: &'static str = "/open-apis/acs/v1/access_records/{record_id}/face_image";
+
+    /// 外部规则操作（创建/列表）
+    pub const ACS_V1_RULE_EXTERNAL: &'static str = "/open-apis/acs/v1/rule_external";
+
+    /// 外部规则操作（获取/删除）
+    pub const ACS_V1_RULE_EXTERNAL_OPERATION: &'static str = "/open-apis/acs/v1/rule_external/{rule_id}";
+
+    /// 外部规则设备绑定
+    pub const ACS_V1_RULE_EXTERNAL_DEVICE_BIND: &'static str = "/open-apis/acs/v1/rule_external/device_bind";
+
+    /// 用户操作（获取/删除）
+    pub const ACS_V1_USER_OPERATION: &'static str = "/open-apis/acs/v1/users/{user_id}";
+
+    /// 用户列表
+    pub const ACS_V1_USERS: &'static str = "/open-apis/acs/v1/users";
+
+    /// 用户人脸图像（获取/上传）
+    pub const ACS_V1_USER_FACE_IMAGE: &'static str = "/open-apis/acs/v1/users/{user_id}/face_image";
 }
 
 /// API端点构建辅助函数
@@ -2876,4 +3109,92 @@ pub const VC_RESERVE_GET_ACTIVE_MEETING: &str = Endpoints::VC_RESERVE_GET_ACTIVE
 // TENANT constants
 pub const TENANT_V2_QUERY: &str = Endpoints::TENANT_V2_QUERY;
 pub const TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY: &str = Endpoints::TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY;
+
+// DIRECTORY constants
+pub const DIRECTORY_V1_DEPARTMENTS: &str = Endpoints::DIRECTORY_V1_DEPARTMENTS;
+pub const DIRECTORY_V1_DEPARTMENT_GET: &str = Endpoints::DIRECTORY_V1_DEPARTMENT_GET;
+pub const DIRECTORY_V1_DEPARTMENTS_SEARCH: &str = Endpoints::DIRECTORY_V1_DEPARTMENTS_SEARCH;
+pub const DIRECTORY_V1_DEPARTMENTS_FILTER: &str = Endpoints::DIRECTORY_V1_DEPARTMENTS_FILTER;
+pub const DIRECTORY_V1_DEPARTMENTS_MGET: &str = Endpoints::DIRECTORY_V1_DEPARTMENTS_MGET;
+pub const DIRECTORY_V1_EMPLOYEES: &str = Endpoints::DIRECTORY_V1_EMPLOYEES;
+pub const DIRECTORY_V1_EMPLOYEE_GET: &str = Endpoints::DIRECTORY_V1_EMPLOYEE_GET;
+pub const DIRECTORY_V1_EMPLOYEE_TO_BE_RESIGNED: &str = Endpoints::DIRECTORY_V1_EMPLOYEE_TO_BE_RESIGNED;
+pub const DIRECTORY_V1_EMPLOYEE_REGULAR: &str = Endpoints::DIRECTORY_V1_EMPLOYEE_REGULAR;
+pub const DIRECTORY_V1_EMPLOYEE_RESURRECT: &str = Endpoints::DIRECTORY_V1_EMPLOYEE_RESURRECT;
+pub const DIRECTORY_V1_EMPLOYEES_SEARCH: &str = Endpoints::DIRECTORY_V1_EMPLOYEES_SEARCH;
+pub const DIRECTORY_V1_EMPLOYEES_FILTER: &str = Endpoints::DIRECTORY_V1_EMPLOYEES_FILTER;
+pub const DIRECTORY_V1_EMPLOYEES_MGET: &str = Endpoints::DIRECTORY_V1_EMPLOYEES_MGET;
+
+// PAYROLL constants
+pub const PAYROLL_V1_COST_ALLOCATION_PLANS: &str = Endpoints::PAYROLL_V1_COST_ALLOCATION_PLANS;
+pub const PAYROLL_V1_ACCT_ITEMS: &str = Endpoints::PAYROLL_V1_ACCT_ITEMS;
+pub const PAYROLL_V1_DATASOURCES: &str = Endpoints::PAYROLL_V1_DATASOURCES;
+pub const PAYROLL_V1_DATASOURCE_RECORDS_SAVE: &str = Endpoints::PAYROLL_V1_DATASOURCE_RECORDS_SAVE;
+pub const PAYROLL_V1_DATASOURCE_RECORDS_QUERY: &str = Endpoints::PAYROLL_V1_DATASOURCE_RECORDS_QUERY;
+pub const PAYROLL_V1_PAYMENT_DETAILS: &str = Endpoints::PAYROLL_V1_PAYMENT_DETAILS;
+pub const PAYROLL_V1_PAYMENT_DETAILS_QUERY: &str = Endpoints::PAYROLL_V1_PAYMENT_DETAILS_QUERY;
+pub const PAYROLL_V1_PAYMENT_ACTIVITIES: &str = Endpoints::PAYROLL_V1_PAYMENT_ACTIVITIES;
+pub const PAYROLL_V1_PAYMENT_ACTIVITY_ARCHIVE: &str = Endpoints::PAYROLL_V1_PAYMENT_ACTIVITY_ARCHIVE;
+pub const PAYROLL_V1_COST_ALLOCATION_REPORTS: &str = Endpoints::PAYROLL_V1_COST_ALLOCATION_REPORTS;
+pub const PAYROLL_V1_PAYGROUPS: &str = Endpoints::PAYROLL_V1_PAYGROUPS;
+
+// SEARCH constants
+pub const SEARCH_V1_USER: &str = Endpoints::SEARCH_V1_USER;
+pub const SEARCH_V2_DATA_ITEM_CREATE: &str = Endpoints::SEARCH_V2_DATA_ITEM_CREATE;
+pub const SEARCH_V2_DATA_ITEM_BATCH_CREATE: &str = Endpoints::SEARCH_V2_DATA_ITEM_BATCH_CREATE;
+pub const SEARCH_V2_DATA_ITEM_OPERATION: &str = Endpoints::SEARCH_V2_DATA_ITEM_OPERATION;
+pub const SEARCH_V2_MESSAGE: &str = Endpoints::SEARCH_V2_MESSAGE;
+pub const SEARCH_V2_APP: &str = Endpoints::SEARCH_V2_APP;
+pub const SEARCH_V2_DATA_SOURCES: &str = Endpoints::SEARCH_V2_DATA_SOURCES;
+pub const SEARCH_V2_DATA_SOURCE_OPERATION: &str = Endpoints::SEARCH_V2_DATA_SOURCE_OPERATION;
+pub const SEARCH_V2_SCHEMA_CREATE: &str = Endpoints::SEARCH_V2_SCHEMA_CREATE;
+pub const SEARCH_V2_SCHEMA_OPERATION: &str = Endpoints::SEARCH_V2_SCHEMA_OPERATION;
+
+// OKR constants
+pub const OKR_V1_REVIEWS_QUERY: &str = Endpoints::OKR_V1_REVIEWS_QUERY;
+pub const OKR_V1_OKRS: &str = Endpoints::OKR_V1_OKRS;
+pub const OKR_V1_OKRS_BATCH_GET: &str = Endpoints::OKR_V1_OKRS_BATCH_GET;
+pub const OKR_V1_PERIOD_RULES: &str = Endpoints::OKR_V1_PERIOD_RULES;
+pub const OKR_V1_PERIODS: &str = Endpoints::OKR_V1_PERIODS;
+pub const OKR_V1_PERIOD_GET: &str = Endpoints::OKR_V1_PERIOD_GET;
+pub const OKR_V1_PROGRESS_RECORDS: &str = Endpoints::OKR_V1_PROGRESS_RECORDS;
+pub const OKR_V1_PROGRESS_RECORD_OPERATION: &str = Endpoints::OKR_V1_PROGRESS_RECORD_OPERATION;
+pub const OKR_V1_PROGRESS_RECORDS_UPLOAD: &str = Endpoints::OKR_V1_PROGRESS_RECORDS_UPLOAD;
+
+// CARDKIT constants
+pub const CARDKIT_V1_CARDS: &str = Endpoints::CARDKIT_V1_CARDS;
+pub const CARDKIT_V1_CARD_ELEMENTS: &str = Endpoints::CARDKIT_V1_CARD_ELEMENTS;
+pub const CARDKIT_V1_CARD_SETTINGS: &str = Endpoints::CARDKIT_V1_CARD_SETTINGS;
+pub const CARDKIT_V1_CARD_UPDATE: &str = Endpoints::CARDKIT_V1_CARD_UPDATE;
+pub const CARDKIT_V1_CARD_BATCH_UPDATE: &str = Endpoints::CARDKIT_V1_CARD_BATCH_UPDATE;
+
+// AILY constants
+pub const AILY_V1_SESSIONS: &str = Endpoints::AILY_V1_SESSIONS;
+pub const AILY_V1_SESSION_OPERATION: &str = Endpoints::AILY_V1_SESSION_OPERATION;
+pub const AILY_V1_RUNS: &str = Endpoints::AILY_V1_RUNS;
+pub const AILY_V1_RUN_GET: &str = Endpoints::AILY_V1_RUN_GET;
+pub const AILY_V1_RUN_CANCEL: &str = Endpoints::AILY_V1_RUN_CANCEL;
+pub const AILY_V1_DATA_KNOWLEDGE_ASK: &str = Endpoints::AILY_V1_DATA_KNOWLEDGE_ASK;
+pub const AILY_V1_DATA_KNOWLEDGE_UPLOAD_FILE: &str = Endpoints::AILY_V1_DATA_KNOWLEDGE_UPLOAD_FILE;
+pub const AILY_V1_DATA_KNOWLEDGE: &str = Endpoints::AILY_V1_DATA_KNOWLEDGE;
+pub const AILY_V1_DATA_KNOWLEDGE_OPERATION: &str = Endpoints::AILY_V1_DATA_KNOWLEDGE_OPERATION;
+pub const AILY_V1_DATA_KNOWLEDGE_CATEGORIES: &str = Endpoints::AILY_V1_DATA_KNOWLEDGE_CATEGORIES;
+pub const AILY_V1_MESSAGES: &str = Endpoints::AILY_V1_MESSAGES;
+pub const AILY_V1_MESSAGE_GET: &str = Endpoints::AILY_V1_MESSAGE_GET;
+pub const AILY_V1_SKILL_START: &str = Endpoints::AILY_V1_SKILL_START;
+pub const AILY_V1_SKILL_GET: &str = Endpoints::AILY_V1_SKILL_GET;
+pub const AILY_V1_SKILLS: &str = Endpoints::AILY_V1_SKILLS;
+
+// ACS constants
+pub const ACS_V1_DEVICES: &str = Endpoints::ACS_V1_DEVICES;
+pub const ACS_V1_VISITORS: &str = Endpoints::ACS_V1_VISITORS;
+pub const ACS_V1_VISITOR_GET: &str = Endpoints::ACS_V1_VISITOR_GET;
+pub const ACS_V1_ACCESS_RECORDS: &str = Endpoints::ACS_V1_ACCESS_RECORDS;
+pub const ACS_V1_ACCESS_RECORD_FACE_IMAGE: &str = Endpoints::ACS_V1_ACCESS_RECORD_FACE_IMAGE;
+pub const ACS_V1_RULE_EXTERNAL: &str = Endpoints::ACS_V1_RULE_EXTERNAL;
+pub const ACS_V1_RULE_EXTERNAL_OPERATION: &str = Endpoints::ACS_V1_RULE_EXTERNAL_OPERATION;
+pub const ACS_V1_RULE_EXTERNAL_DEVICE_BIND: &str = Endpoints::ACS_V1_RULE_EXTERNAL_DEVICE_BIND;
+pub const ACS_V1_USER_OPERATION: &str = Endpoints::ACS_V1_USER_OPERATION;
+pub const ACS_V1_USERS: &str = Endpoints::ACS_V1_USERS;
+pub const ACS_V1_USER_FACE_IMAGE: &str = Endpoints::ACS_V1_USER_FACE_IMAGE;
 

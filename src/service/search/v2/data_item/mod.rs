@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{Endpoints, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -97,7 +98,7 @@ impl DataItemService {
     ) -> SDKResult<BaseResponse<CreateDataItemResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/search/v2/data_sources/{data_source_id}/items"),
+            api_path: EndpointBuilder::replace_param(Endpoints::SEARCH_V2_DATA_ITEM_CREATE, "data_source_id", data_source_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -127,9 +128,7 @@ impl DataItemService {
     ) -> SDKResult<BaseResponse<BatchCreateDataItemResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/search/v2/data_sources/{data_source_id}/items/batch_create"
-            ),
+            api_path: EndpointBuilder::replace_param(Endpoints::SEARCH_V2_DATA_ITEM_BATCH_CREATE, "data_source_id", data_source_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -155,9 +154,10 @@ impl DataItemService {
     ) -> SDKResult<BaseResponse<EmptyDataItemResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!(
-                "/open-apis/search/v2/data_sources/{data_source_id}/items/{data_item_id}"
-            ),
+            api_path: EndpointBuilder::replace_params_from_array(Endpoints::SEARCH_V2_DATA_ITEM_OPERATION, &[
+                ("data_source_id", data_source_id),
+                ("data_item_id", data_item_id),
+            ]),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
@@ -182,9 +182,10 @@ impl DataItemService {
     ) -> SDKResult<BaseResponse<GetDataItemResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/search/v2/data_sources/{data_source_id}/items/{data_item_id}"
-            ),
+            api_path: EndpointBuilder::replace_params_from_array(Endpoints::SEARCH_V2_DATA_ITEM_OPERATION, &[
+                ("data_source_id", data_source_id),
+                ("data_item_id", data_item_id),
+            ]),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };

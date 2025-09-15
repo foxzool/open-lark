@@ -7,6 +7,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
     constants::AccessTokenType,
+    endpoints::Endpoints,
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
@@ -33,7 +34,7 @@ impl UserService {
     ) -> SDKResult<SearchUserResponse> {
         let mut api_req = search_user_request.api_request;
         api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/search/v1/user".to_string();
+        api_req.api_path = Endpoints::SEARCH_V1_USER.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::User];
 
         let api_resp: BaseResponse<SearchUserResponse> =
@@ -49,7 +50,7 @@ impl UserService {
     ) -> SDKResult<BaseResponse<SearchUserResponse>> {
         let mut api_req = search_user_request.api_request;
         api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/search/v1/user".to_string();
+        api_req.api_path = Endpoints::SEARCH_V1_USER.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::User];
 
         Transport::request(api_req, &self.config, option).await

@@ -6,6 +6,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    endpoints::{EndpointBuilder, Endpoints},
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -141,8 +142,9 @@ pub async fn delete_password(
     let mut api_req = request.api_request;
     api_req.http_method = Method::DELETE;
     api_req.api_path = format!(
-        "/open-apis/drive/v1/permissions/{}/public/password?type={}",
-        request.token, request.obj_type
+        "{}?type={}",
+        EndpointBuilder::replace_param(Endpoints::DRIVE_V1_PERMISSIONS_PUBLIC_PASSWORD, "token", &request.token),
+        request.obj_type
     );
 
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];

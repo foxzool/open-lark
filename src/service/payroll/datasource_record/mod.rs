@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{Endpoints, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -130,9 +131,10 @@ impl DatasourceRecordService {
     ) -> SDKResult<BaseResponse<DatasourceRecordSaveResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/payroll/v1/datasources/{}/records/save",
-                request.datasource_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::PAYROLL_V1_DATASOURCE_RECORDS_SAVE,
+                "datasource_id",
+                &request.datasource_id
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
@@ -199,9 +201,10 @@ impl DatasourceRecordService {
     ) -> SDKResult<BaseResponse<DatasourceRecordQueryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/payroll/v1/datasources/{}/records/query",
-                request.datasource_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::PAYROLL_V1_DATASOURCE_RECORDS_QUERY,
+                "datasource_id",
+                &request.datasource_id
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),

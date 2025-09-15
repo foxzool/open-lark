@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -106,7 +107,7 @@ impl PaymentActivityService {
     ) -> SDKResult<BaseResponse<PaymentActivityListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/payroll/v1/payment_activities".to_string(),
+            api_path: Endpoints::PAYROLL_V1_PAYMENT_ACTIVITIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -188,9 +189,10 @@ impl PaymentActivityService {
     ) -> SDKResult<BaseResponse<PaymentActivityArchiveResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/payroll/v1/payment_activities/{}/archive",
-                request.payment_activity_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::PAYROLL_V1_PAYMENT_ACTIVITY_ARCHIVE,
+                "payment_activity_id",
+                &request.payment_activity_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
