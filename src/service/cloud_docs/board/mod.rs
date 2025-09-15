@@ -5,22 +5,20 @@
 
 pub mod v1;
 
-use std::sync::Arc;
-
 use crate::core::{config::Config, req_option::RequestOption, SDKResult};
 
 use self::v1::*;
 
 /// 画板服务
 pub struct BoardService {
-    config: Arc<Config>,
+    config: Config,
     pub whiteboard: v1::whiteboard::WhiteboardService,
 }
 
 impl BoardService {
-    pub fn new(config: Arc<Config>) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            whiteboard: v1::whiteboard::WhiteboardService::new((*config).clone()),
+            whiteboard: v1::whiteboard::WhiteboardService::new(config.clone()),
             config,
         }
     }

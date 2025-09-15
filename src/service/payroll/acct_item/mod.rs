@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -86,7 +87,7 @@ impl AcctItemService {
     ) -> SDKResult<BaseResponse<AcctItemListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/payroll/v1/acct_items".to_string(),
+            api_path: Endpoints::PAYROLL_V1_ACCT_ITEMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -96,29 +97,23 @@ impl AcctItemService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(item_type) = request.item_type {
-            api_req
-                .query_params
-                .insert("item_type".to_string(), item_type);
+            api_req.query_params.insert("item_type", item_type);
         }
 
         if let Some(paygroup_id) = request.paygroup_id {
-            api_req
-                .query_params
-                .insert("paygroup_id".to_string(), paygroup_id);
+            api_req.query_params.insert("paygroup_id", paygroup_id);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         Transport::request(api_req, &self.config, option).await

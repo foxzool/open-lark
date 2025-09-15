@@ -69,8 +69,8 @@ async fn demo_message_reactions(client: &LarkClient) -> Result<(), Box<dyn std::
         .create(message_id, emoji_type, Some(UserIdType::OpenId), None)
         .await
     {
-        Ok(response) => {
-            println!("  ✅ 添加表情回复成功: {:?}", response.code());
+        Ok(_) => {
+            println!("  ✅ 添加表情回复成功");
         }
         Err(e) => {
             println!("  ❌ 添加表情回复失败: {e:?}");
@@ -86,9 +86,7 @@ async fn demo_message_reactions(client: &LarkClient) -> Result<(), Box<dyn std::
         .await
     {
         Ok(response) => {
-            if let Some(data) = response.data {
-                println!("  📋 获取到 {} 个表情回复", data.reactions.len());
-            }
+            println!("  📋 获取到 {} 个表情回复", response.reactions.len());
         }
         Err(e) => {
             println!("  ❌ 获取表情回复失败: {e:?}");
@@ -115,9 +113,7 @@ async fn demo_pin_messages(client: &LarkClient) -> Result<(), Box<dyn std::error
         .await
     {
         Ok(response) => {
-            if let Some(data) = response.data {
-                println!("  ✅ Pin消息成功: {}", data.pin.pin_id);
-            }
+            println!("  ✅ Pin消息成功: {}", response.pin.pin_id);
         }
         Err(e) => {
             println!("  ❌ Pin消息失败: {e:?}");
@@ -133,9 +129,7 @@ async fn demo_pin_messages(client: &LarkClient) -> Result<(), Box<dyn std::error
         .await
     {
         Ok(response) => {
-            if let Some(data) = response.data {
-                println!("  📋 获取到 {} 个Pin消息", data.pins.len());
-            }
+            println!("  📋 获取到 {} 个Pin消息", response.pins.len());
         }
         Err(e) => {
             println!("  ❌ 获取Pin消息失败: {e:?}");
@@ -203,30 +197,26 @@ async fn demo_batch_messages(client: &LarkClient) -> Result<(), Box<dyn std::err
         .await
     {
         Ok(response) => {
-            if let Some(data) = response.data {
-                println!("  ✅ 批量消息发送成功: {}", data.batch_message_id);
+            println!("  ✅ 批量消息发送成功: {}", response.batch_message_id);
 
-                // 查询批量消息进度
-                match client
-                    .im
-                    .v1
-                    .batch_message
-                    .get_progress(&data.batch_message_id, None)
-                    .await
-                {
-                    Ok(progress_response) => {
-                        if let Some(progress_data) = progress_response.data {
-                            println!(
-                                "  📊 批量消息进度: 总数{}, 成功{}, 失败{}",
-                                progress_data.batch_message_progress.total_count,
-                                progress_data.batch_message_progress.success_count,
-                                progress_data.batch_message_progress.fail_count
-                            );
-                        }
-                    }
-                    Err(e) => {
-                        println!("  ❌ 查询进度失败: {e:?}");
-                    }
+            // 查询批量消息进度
+            match client
+                .im
+                .v1
+                .batch_message
+                .get_progress(&response.batch_message_id, None)
+                .await
+            {
+                Ok(progress_response) => {
+                    println!(
+                        "  📊 批量消息进度: 总数{}, 成功{}, 失败{}",
+                        progress_response.batch_message_progress.total_count,
+                        progress_response.batch_message_progress.success_count,
+                        progress_response.batch_message_progress.fail_count
+                    );
+                }
+                Err(e) => {
+                    println!("  ❌ 查询进度失败: {e:?}");
                 }
             }
         }
@@ -270,8 +260,8 @@ async fn demo_message_cards(client: &LarkClient) -> Result<(), Box<dyn std::erro
         .patch(message_id, request, None)
         .await
     {
-        Ok(response) => {
-            println!("  ✅ 消息卡片更新成功: {:?}", response.code());
+        Ok(_) => {
+            println!("  ✅ 消息卡片更新成功");
         }
         Err(e) => {
             println!("  ❌ 消息卡片更新失败: {e:?}");
@@ -300,12 +290,10 @@ async fn demo_urgent_messages(client: &LarkClient) -> Result<(), Box<dyn std::er
         .await
     {
         Ok(response) => {
-            if let Some(data) = response.data {
-                println!(
-                    "  ✅ 应用内加急发送成功，无效用户数: {}",
-                    data.invalid_user_id_list.len()
-                );
-            }
+            println!(
+                "  ✅ 应用内加急发送成功，无效用户数: {}",
+                response.invalid_user_id_list.len()
+            );
         }
         Err(e) => {
             println!("  ❌ 应用内加急发送失败: {e:?}");
@@ -339,8 +327,8 @@ async fn demo_url_preview(client: &LarkClient) -> Result<(), Box<dyn std::error:
         .batch_update(message_id, request, None)
         .await
     {
-        Ok(response) => {
-            println!("  ✅ URL预览更新成功: {:?}", response.code());
+        Ok(_) => {
+            println!("  ✅ URL预览更新成功");
         }
         Err(e) => {
             println!("  ❌ URL预览更新失败: {e:?}");

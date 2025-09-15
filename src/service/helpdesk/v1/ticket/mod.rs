@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -121,15 +122,12 @@ impl TicketService {
     ) -> SDKResult<BaseResponse<StartServiceResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/helpdesk/v1/start_service".to_string(),
+            api_path: Endpoints::HELPDESK_V1_START_SERVICE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -148,15 +146,16 @@ impl TicketService {
     ) -> SDKResult<BaseResponse<GetTicketResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/helpdesk/v1/tickets/{ticket_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_TICKET_GET,
+                "ticket_id",
+                ticket_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -175,15 +174,16 @@ impl TicketService {
     ) -> SDKResult<BaseResponse<UpdateTicketResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: format!("/open-apis/helpdesk/v1/tickets/{ticket_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HELPDESK_V1_TICKET_GET,
+                "ticket_id",
+                ticket_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -203,21 +203,18 @@ impl TicketService {
     ) -> SDKResult<BaseResponse<ListTicketsResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token.to_string());
+            query_params.insert("page_token", page_token.to_string());
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/helpdesk/v1/tickets".to_string(),
+            api_path: Endpoints::HELPDESK_V1_TICKETS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -226,8 +223,15 @@ impl TicketService {
         Transport::request(api_req, &self.config, option).await
     }
 
-    // TODO: 实现其他工单相关接口
-    // - ticket_image: 获取工单内图像
-    // - answer_user_query: 回复用户在工单里的提问
-    // - customized_fields: 获取服务台自定义字段
+    /// 规划中的工单相关功能
+    ///
+    /// 以下功能将在未来版本中实现：
+    ///
+    /// - `ticket_image`: 获取工单内图像
+    /// - `answer_user_query`: 回复用户在工单里的提问
+    /// - `customized_fields`: 获取服务台自定义字段
+    ///
+    /// 🚧 **待实现** - 以上功能尚未实现，敬请期待。
+    fn _placeholder() { /* TODO: 实现以上功能 */
+    }
 }

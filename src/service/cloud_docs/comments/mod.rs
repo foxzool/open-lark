@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use crate::core::{config::Config, req_option::RequestOption, SDKResult};
 
 pub use batch_query::{
@@ -29,11 +27,11 @@ mod update_reply;
 
 /// 评论服务
 pub struct CommentsService {
-    config: Arc<Config>,
+    config: Config,
 }
 
 impl CommentsService {
-    pub fn new(config: Arc<Config>) -> Self {
+    pub fn new(config: Config) -> Self {
         Self { config }
     }
 

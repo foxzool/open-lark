@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -101,8 +102,8 @@ impl DatasourceRecordService {
     /// use std::collections::HashMap;
     ///
     /// let mut field_values = HashMap::new();
-    /// field_values.insert("base_salary".to_string(), serde_json::Value::Number(serde_json::Number::from(10000)));
-    /// field_values.insert("overtime_hours".to_string(), serde_json::Value::Number(serde_json::Number::from(20)));
+    /// field_values.insert("base_salary", serde_json::Value::Number(serde_json::Number::from(10000)));
+    /// field_values.insert("overtime_hours", serde_json::Value::Number(serde_json::Number::from(20)));
     ///
     /// let record = DatasourceRecord {
     ///     record_id: None,
@@ -130,9 +131,10 @@ impl DatasourceRecordService {
     ) -> SDKResult<BaseResponse<DatasourceRecordSaveResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/payroll/v1/datasources/{}/records/save",
-                request.datasource_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::PAYROLL_V1_DATASOURCE_RECORDS_SAVE,
+                "datasource_id",
+                &request.datasource_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
@@ -141,9 +143,7 @@ impl DatasourceRecordService {
 
         // 添加查询参数
         if let Some(user_id_type) = request.user_id_type {
-            api_req
-                .query_params
-                .insert("user_id_type".to_string(), user_id_type);
+            api_req.query_params.insert("user_id_type", user_id_type);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -201,9 +201,10 @@ impl DatasourceRecordService {
     ) -> SDKResult<BaseResponse<DatasourceRecordQueryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/payroll/v1/datasources/{}/records/query",
-                request.datasource_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::PAYROLL_V1_DATASOURCE_RECORDS_QUERY,
+                "datasource_id",
+                &request.datasource_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
@@ -212,21 +213,17 @@ impl DatasourceRecordService {
 
         // 添加查询参数
         if let Some(user_id_type) = request.user_id_type {
-            api_req
-                .query_params
-                .insert("user_id_type".to_string(), user_id_type);
+            api_req.query_params.insert("user_id_type", user_id_type);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await

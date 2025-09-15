@@ -7,10 +7,13 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    endpoints::{EndpointBuilder, Endpoints},
+    error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
     trait_system::executable_builder::ExecutableBuilder,
+    validation::{validate_file_name, validate_upload_file, ValidateBuilder, ValidationResult},
     SDKResult,
 };
 use async_trait::async_trait;
@@ -60,12 +63,12 @@ impl FileService {
         option: Option<RequestOption>,
     ) -> SDKResult<CreateFileResponse> {
         let mut query_params = HashMap::new();
-        query_params.insert("file_type".to_string(), file_type.to_string());
-        query_params.insert("file_name".to_string(), file_name.to_string());
+        query_params.insert("file_type", file_type.to_string());
+        query_params.insert("file_name", file_name.to_string());
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/im/v1/files".to_string(),
+            api_path: Endpoints::IM_V1_FILES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: file_data,
@@ -85,7 +88,11 @@ impl FileService {
     ) -> SDKResult<GetFileResponse> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/im/v1/files/{file_key}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::IM_V1_DOWNLOAD_FILE,
+                "file_key",
+                file_key,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
@@ -106,12 +113,21 @@ impl FileService {
     }
 }
 
+/// 文件上传请求结构
+#[derive(Debug, Clone, Default)]
+pub struct FileUploadRequest {
+    /// 文件类型
+    pub file_type: String,
+    /// 文件名
+    pub file_name: String,
+    /// 文件数据
+    pub file_data: Vec<u8>,
+}
+
 /// 文件上传Builder
 #[derive(Default)]
 pub struct FileUploadBuilder {
-    file_type: Option<String>,
-    file_name: Option<String>,
-    file_data: Option<Vec<u8>>,
+    request: FileUploadRequest,
 }
 
 impl FileUploadBuilder {
@@ -121,43 +137,108 @@ impl FileUploadBuilder {
 
     /// 设置文件类型
     pub fn file_type(mut self, file_type: impl ToString) -> Self {
-        self.file_type = Some(file_type.to_string());
+        self.request.file_type = file_type.to_string();
         self
     }
 
     /// 设置文件名
     pub fn file_name(mut self, file_name: impl ToString) -> Self {
-        self.file_name = Some(file_name.to_string());
+        self.request.file_name = file_name.to_string();
         self
     }
 
     /// 设置文件数据
     pub fn file_data(mut self, file_data: Vec<u8>) -> Self {
-        self.file_data = Some(file_data);
+        self.request.file_data = file_data;
         self
     }
 
-    pub fn build(self) -> (String, String, Vec<u8>) {
-        (
-            self.file_type.unwrap_or_default(),
-            self.file_name.unwrap_or_default(),
-            self.file_data.unwrap_or_default(),
-        )
+    /// 构建文件上传请求
+    pub fn build(self) -> SDKResult<FileUploadRequest> {
+        // 验证文件类型
+        if self.request.file_type.is_empty() {
+            return Err(LarkAPIError::illegal_param(
+                "file_type is required".to_string(),
+            ));
+        }
+
+        // 验证文件名
+        let (cleaned_name, name_result) = validate_file_name(&self.request.file_name);
+        if !name_result.is_valid() {
+            return Err(LarkAPIError::illegal_param(format!(
+                "Invalid file_name: {}",
+                name_result.error().unwrap_or("unknown error")
+            )));
+        }
+
+        // 验证文件数据
+        if self.request.file_data.is_empty() {
+            return Err(LarkAPIError::illegal_param(
+                "file_data cannot be empty".to_string(),
+            ));
+        }
+
+        // 验证上传文件（IM上传有更小的限制）
+        let upload_result = validate_upload_file(&self.request.file_data, &cleaned_name, true);
+        if !upload_result.is_valid() {
+            return Err(LarkAPIError::illegal_param(format!(
+                "File validation failed: {}",
+                upload_result.error().unwrap_or("unknown error")
+            )));
+        }
+
+        Ok(FileUploadRequest {
+            file_type: self.request.file_type,
+            file_name: cleaned_name,
+            file_data: self.request.file_data,
+        })
+    }
+
+    /// 构建文件上传请求（无验证，用于向后兼容）
+    pub fn build_unvalidated(self) -> FileUploadRequest {
+        self.request
+    }
+}
+
+impl ValidateBuilder for FileUploadBuilder {
+    fn validate(&self) -> ValidationResult {
+        // 验证文件类型
+        if self.request.file_type.is_empty() {
+            return ValidationResult::Invalid("file_type is required".to_string());
+        }
+
+        // 验证文件名
+        let (_, name_result) = validate_file_name(&self.request.file_name);
+        if !name_result.is_valid() {
+            return name_result;
+        }
+
+        // 验证文件数据
+        if self.request.file_data.is_empty() {
+            return ValidationResult::Invalid("file_data cannot be empty".to_string());
+        }
+
+        // 验证上传文件
+        validate_upload_file(&self.request.file_data, &self.request.file_name, true)
     }
 }
 
 #[async_trait]
-impl ExecutableBuilder<FileService, (String, String, Vec<u8>), CreateFileResponse>
-    for FileUploadBuilder
-{
-    fn build(self) -> (String, String, Vec<u8>) {
-        self.build()
+impl ExecutableBuilder<FileService, FileUploadRequest, CreateFileResponse> for FileUploadBuilder {
+    fn build(self) -> FileUploadRequest {
+        // Legacy build method - create request without validation for backward compatibility
+        self.build_unvalidated()
     }
 
     async fn execute(self, service: &FileService) -> SDKResult<CreateFileResponse> {
-        let (file_type, file_name, file_data) = self.build();
+        let request = self.build_unvalidated();
         service
-            .create(&file_type, &file_name, file_data, None)
+            .create(
+                &request.file_type,
+                &request.file_name,
+                request.file_data,
+                None,
+            )
             .await
     }
 
@@ -166,9 +247,14 @@ impl ExecutableBuilder<FileService, (String, String, Vec<u8>), CreateFileRespons
         service: &FileService,
         option: RequestOption,
     ) -> SDKResult<CreateFileResponse> {
-        let (file_type, file_name, file_data) = self.build();
+        let request = self.build_unvalidated();
         service
-            .create(&file_type, &file_name, file_data, Some(option))
+            .create(
+                &request.file_type,
+                &request.file_name,
+                request.file_data,
+                Some(option),
+            )
             .await
     }
 }

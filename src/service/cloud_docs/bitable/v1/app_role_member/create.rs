@@ -6,6 +6,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -24,11 +25,9 @@ impl AppRoleMemberService {
     ) -> SDKResult<BaseResponse<CreateRoleMemberResponse>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::POST;
-        api_req.api_path = format!(
-            "/open-apis/bitable/v1/apps/{app_token}/roles/{role_id}/members",
-            app_token = request.app_token,
-            role_id = request.role_id
-        );
+        api_req.api_path = Endpoints::BITABLE_V1_ROLE_MEMBERS
+            .replace("{app_token}", &request.app_token)
+            .replace("{role_id}", &request.role_id);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -118,7 +117,7 @@ impl CreateRoleMemberRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("user_id_type".to_string(), user_id_type.clone());
+                .insert("user_id_type", user_id_type.clone());
         }
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request

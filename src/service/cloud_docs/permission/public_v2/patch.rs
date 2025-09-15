@@ -6,7 +6,9 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    endpoints::Endpoints,
     http::Transport,
+    query_params::QueryParams,
     req_option::RequestOption,
     SDKResult,
 };
@@ -398,10 +400,12 @@ pub async fn patch_permission_public_v2(
 ) -> SDKResult<BaseResponse<PatchPermissionPublicV2Response>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::PATCH;
-    api_req.api_path = format!(
-        "/open-apis/drive/v2/permissions/{}/public?type={}",
-        request.token, request.obj_type
-    );
+    api_req.api_path = Endpoints::DRIVE_V2_PERMISSIONS_PUBLIC.replace("{}", &request.token);
+
+    // 添加查询参数
+    api_req
+        .query_params
+        .insert(QueryParams::TYPE, request.obj_type);
 
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 

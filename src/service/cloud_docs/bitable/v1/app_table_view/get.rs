@@ -24,10 +24,10 @@ impl AppTableViewService {
     ) -> SDKResult<BaseResponse<GetViewResponse>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/bitable/v1/apps/{}/tables/{}/views/{}",
-            request.app_token, request.table_id, request.view_id
-        );
+        api_req.api_path = crate::core::endpoints::Endpoints::BITABLE_V1_VIEW_GET
+            .replace("{app_token}", &request.app_token)
+            .replace("{table_id}", &request.table_id)
+            .replace("{view_id}", &request.view_id);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

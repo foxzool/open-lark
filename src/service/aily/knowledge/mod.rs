@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -142,7 +143,7 @@ impl KnowledgeService {
     ) -> SDKResult<BaseResponse<DataKnowledgeAskResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/aily/v1/data_knowledge/ask".to_string(),
+            api_path: Endpoints::AILY_V1_DATA_KNOWLEDGE_ASK.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
                 "app_id": request.app_id,
@@ -172,7 +173,7 @@ impl KnowledgeService {
     ) -> SDKResult<BaseResponse<DataKnowledgeFileUploadResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/aily/v1/data_knowledge/upload_file".to_string(),
+            api_path: Endpoints::AILY_V1_DATA_KNOWLEDGE_UPLOAD_FILE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
                 "app_id": request.app_id,
@@ -201,7 +202,7 @@ impl KnowledgeService {
     ) -> SDKResult<BaseResponse<DataKnowledgeCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/aily/v1/data_knowledge".to_string(),
+            api_path: Endpoints::AILY_V1_DATA_KNOWLEDGE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
                 "app_id": request.app_id,
@@ -232,16 +233,18 @@ impl KnowledgeService {
     ) -> SDKResult<BaseResponse<DataKnowledgeGetResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/aily/v1/data_knowledge/{}", request.knowledge_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::AILY_V1_DATA_KNOWLEDGE_OPERATION,
+                "knowledge_id",
+                &request.knowledge_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
         };
 
         // 添加查询参数
-        api_req
-            .query_params
-            .insert("app_id".to_string(), request.app_id);
+        api_req.query_params.insert("app_id", request.app_id);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -261,16 +264,18 @@ impl KnowledgeService {
     ) -> SDKResult<BaseResponse<DataKnowledgeDeleteResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/aily/v1/data_knowledge/{}", request.knowledge_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::AILY_V1_DATA_KNOWLEDGE_OPERATION,
+                "knowledge_id",
+                &request.knowledge_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
         };
 
         // 添加查询参数
-        api_req
-            .query_params
-            .insert("app_id".to_string(), request.app_id);
+        api_req.query_params.insert("app_id", request.app_id);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -290,34 +295,28 @@ impl KnowledgeService {
     ) -> SDKResult<BaseResponse<DataKnowledgeListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/aily/v1/data_knowledge".to_string(),
+            api_path: Endpoints::AILY_V1_DATA_KNOWLEDGE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
         };
 
         // 添加查询参数
-        api_req
-            .query_params
-            .insert("app_id".to_string(), request.app_id);
+        api_req.query_params.insert("app_id", request.app_id);
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
         if let Some(category_id) = request.category_id {
-            api_req
-                .query_params
-                .insert("category_id".to_string(), category_id);
+            api_req.query_params.insert("category_id", category_id);
         }
         if let Some(keyword) = request.keyword {
-            api_req.query_params.insert("keyword".to_string(), keyword);
+            api_req.query_params.insert("keyword", keyword);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -338,26 +337,22 @@ impl KnowledgeService {
     ) -> SDKResult<BaseResponse<DataKnowledgeCategoryListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/aily/v1/data_knowledge/categories".to_string(),
+            api_path: Endpoints::AILY_V1_DATA_KNOWLEDGE_CATEGORIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
         };
 
         // 添加查询参数
-        api_req
-            .query_params
-            .insert("app_id".to_string(), request.app_id);
+        api_req.query_params.insert("app_id", request.app_id);
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await

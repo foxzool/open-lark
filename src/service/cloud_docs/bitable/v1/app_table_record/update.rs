@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -105,7 +106,7 @@ impl UpdateRecordRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("user_id_type".to_string(), user_id_type.clone());
+                .insert("user_id_type", user_id_type.clone());
         }
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request
@@ -142,12 +143,10 @@ pub async fn update_record(
 ) -> SDKResult<BaseResponse<UpdateRecordResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::PUT;
-    api_req.api_path = format!(
-        "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/{record_id}",
-        app_token = request.app_token,
-        table_id = request.table_id,
-        record_id = request.record_id
-    );
+    api_req.api_path = Endpoints::BITABLE_V1_RECORD_UPDATE
+        .replace("{app_token}", &request.app_token)
+        .replace("{table_id}", &request.table_id)
+        .replace("{record_id}", &request.record_id);
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
     let api_resp = Transport::request(api_req, config, option).await?;

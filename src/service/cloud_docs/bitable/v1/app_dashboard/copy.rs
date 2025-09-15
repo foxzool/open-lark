@@ -111,11 +111,9 @@ pub async fn copy_dashboard(
 ) -> SDKResult<BaseResponse<CopyDashboardResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::POST;
-    api_req.api_path = format!(
-        "/open-apis/bitable/v1/apps/{app_token}/dashboards/{block_id}/copy",
-        app_token = request.app_token,
-        block_id = request.block_id
-    );
+    api_req.api_path = crate::core::endpoints::Endpoints::BITABLE_V1_DASHBOARD_COPY
+        .replace("{app_token}", &request.app_token)
+        .replace("{block_id}", &request.block_id);
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
     let api_resp = Transport::request(api_req, config, option).await?;

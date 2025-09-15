@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -73,7 +74,7 @@ impl LocationService {
     ) -> SDKResult<BaseResponse<LocationListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/locations/query".to_string(),
+            api_path: Endpoints::HIRE_V1_LOCATIONS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -81,27 +82,21 @@ impl LocationService {
 
         // 添加查询参数
         if let Some(location_type) = request.location_type {
-            api_req
-                .query_params
-                .insert("location_type".to_string(), location_type);
+            api_req.query_params.insert("location_type", location_type);
         }
 
         if let Some(parent_id) = request.parent_id {
-            api_req
-                .query_params
-                .insert("parent_id".to_string(), parent_id);
+            api_req.query_params.insert("parent_id", parent_id);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -127,7 +122,7 @@ impl LocationService {
     ) -> SDKResult<BaseResponse<LocationListResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/locations".to_string(),
+            api_path: Endpoints::HIRE_V1_LOCATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

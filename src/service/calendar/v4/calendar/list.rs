@@ -6,6 +6,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -75,28 +76,28 @@ impl ListCalendarRequestBuilder {
             self.request
                 .api_req
                 .query_params
-                .insert("user_id_type".to_string(), user_id_type.to_string());
+                .insert("user_id_type", user_id_type.to_string());
         }
 
         if let Some(page_size) = self.request.page_size {
             self.request
                 .api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(ref page_token) = self.request.page_token {
             self.request
                 .api_req
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
 
         if let Some(sync_events) = self.request.sync_events {
             self.request
                 .api_req
                 .query_params
-                .insert("sync_events".to_string(), sync_events.to_string());
+                .insert("sync_events", sync_events.to_string());
         }
 
         self.request
@@ -158,7 +159,7 @@ impl CalendarManagementService {
     ) -> SDKResult<BaseResponse<ListCalendarResponse>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/calendar/v4/calendars".to_string();
+        api_req.api_path = Endpoints::CALENDAR_V4_CALENDARS.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

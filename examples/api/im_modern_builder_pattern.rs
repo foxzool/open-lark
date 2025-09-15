@@ -71,12 +71,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 构建富文本消息
     let rich_text = MessageText::new("📢 现代Builder模式消息:")
-        .line()
-        .add_text("✨ 支持链式调用")
-        .line()
-        .add_text("🔄 统一错误处理")
-        .line()
-        .add_text("⚡ 类型安全保证")
+        .text_line("✨ 支持链式调用")
+        .text_line("🔄 统一错误处理")
+        .text_line("⚡ 类型安全保证")
         .at_user("all")
         .build();
 
@@ -314,8 +311,7 @@ mod tests {
         assert_eq!(text_msg.msg_type(), "text");
 
         let rich_text = MessageText::new("Rich text")
-            .line()
-            .add_text("with line break")
+            .text_line("with line break")
             .at_user("user123")
             .build();
         assert_eq!(rich_text.msg_type(), "text");

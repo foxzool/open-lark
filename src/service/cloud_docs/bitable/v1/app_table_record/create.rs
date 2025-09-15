@@ -1,3 +1,4 @@
+use log::error;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -8,6 +9,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
@@ -102,15 +104,23 @@ impl CreateRecordRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("user_id_type".to_string(), user_id_type.clone());
+                .insert("user_id_type", user_id_type.clone());
         }
         if let Some(client_token) = &self.request.client_token {
             self.request
                 .api_request
                 .query_params
-                .insert("client_token".to_string(), client_token.clone());
+                .insert("client_token", client_token.clone());
         }
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
+        match serde_json::to_vec(&self.request) {
+            Ok(bytes) => {
+                self.request.api_request.body = bytes;
+            }
+            Err(e) => {
+                error!("Failed to serialize create record request: {}", e);
+                self.request.api_request.body = Vec::new();
+            }
+        }
         self.request
     }
 }
@@ -147,14 +157,12 @@ pub async fn create_record(
 ) -> SDKResult<CreateRecordResponse> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::POST;
-    api_req.api_path = format!(
-        "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records",
-        app_token = request.app_token,
-        table_id = request.table_id
-    );
+    api_req.api_path = Endpoints::BITABLE_V1_RECORDS
+        .replace("{app_token}", &request.app_token)
+        .replace("{table_id}", &request.table_id);
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-    let api_resp: BaseResponse<CreateRecordResponse> = 
+    let api_resp: BaseResponse<CreateRecordResponse> =
         Transport::request(api_req, config, option).await?;
     api_resp.into_result()
 }

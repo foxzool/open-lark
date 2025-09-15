@@ -6,6 +6,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -24,10 +25,10 @@ impl SpreadsheetSheetFilterViewService {
     ) -> SDKResult<BaseResponse<GetFilterViewResponseData>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/sheets/v3/spreadsheets/{}/sheets/{}/filter_views/{}",
-            request.spreadsheet_token, request.sheet_id, request.filter_view_id
-        );
+        api_req.api_path = Endpoints::SHEETS_V3_SPREADSHEET_FILTER_VIEW_GET
+            .replace("{}", &request.spreadsheet_token)
+            .replace("{}", &request.sheet_id)
+            .replace("{}", &request.filter_view_id);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

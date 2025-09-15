@@ -31,6 +31,6 @@ impl AppDashboardService {
         request: ListDashboardRequest,
         option: Option<crate::core::req_option::RequestOption>,
     ) -> crate::core::SDKResult<crate::core::api_resp::BaseResponse<ListDashboardResponse>> {
-        list::list_dashboard(request, &self.config, option).await
+        list::list_dashboard(request, self.config.clone(), option).await
     }
 }

@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -160,21 +161,18 @@ impl InstanceService {
     ) -> SDKResult<BaseResponse<CreateInstanceResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(department_id_type) = department_id_type {
             query_params.insert(
-                "department_id_type".to_string(),
+                "department_id_type",
                 department_id_type.as_str().to_string(),
             );
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/approval/v4/instances".to_string(),
+            api_path: Endpoints::APPROVAL_V4_INSTANCES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -193,15 +191,16 @@ impl InstanceService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/instances/{instance_code}/cancel"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPROVAL_V4_INSTANCE_CANCEL,
+                "instance_code",
+                instance_code,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -220,15 +219,16 @@ impl InstanceService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/approval/v4/instances/{instance_code}/cc"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPROVAL_V4_INSTANCE_CC,
+                "instance_code",
+                instance_code,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -248,21 +248,18 @@ impl InstanceService {
     ) -> SDKResult<BaseResponse<PreviewInstanceResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(department_id_type) = department_id_type {
             query_params.insert(
-                "department_id_type".to_string(),
+                "department_id_type",
                 department_id_type.as_str().to_string(),
             );
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/approval/v4/instances/preview".to_string(),
+            api_path: Endpoints::APPROVAL_V4_INSTANCE_PREVIEW.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -281,15 +278,16 @@ impl InstanceService {
     ) -> SDKResult<BaseResponse<GetInstanceResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/approval/v4/instances/{instance_code}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPROVAL_V4_INSTANCE_GET,
+                "instance_code",
+                instance_code,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -307,31 +305,28 @@ impl InstanceService {
         let mut query_params = HashMap::new();
         if let Some(params) = params {
             if let Some(page_size) = params.page_size {
-                query_params.insert("page_size".to_string(), page_size.to_string());
+                query_params.insert("page_size", page_size.to_string());
             }
             if let Some(page_token) = params.page_token {
-                query_params.insert("page_token".to_string(), page_token);
+                query_params.insert("page_token", page_token);
             }
             if let Some(approval_code) = params.approval_code {
-                query_params.insert("approval_code".to_string(), approval_code);
+                query_params.insert("approval_code", approval_code);
             }
             if let Some(instance_status) = params.instance_status {
-                query_params.insert("instance_status".to_string(), instance_status);
+                query_params.insert("instance_status", instance_status);
             }
             if let Some(user_id) = params.user_id {
-                query_params.insert("user_id".to_string(), user_id);
+                query_params.insert("user_id", user_id);
             }
             if let Some(user_id_type) = params.user_id_type {
-                query_params.insert(
-                    "user_id_type".to_string(),
-                    user_id_type.as_str().to_string(),
-                );
+                query_params.insert("user_id_type", user_id_type.as_str().to_string());
             }
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/approval/v4/instances".to_string(),
+            api_path: Endpoints::APPROVAL_V4_INSTANCES_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

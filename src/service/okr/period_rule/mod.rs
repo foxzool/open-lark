@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -86,7 +87,7 @@ impl PeriodRuleService {
     ) -> SDKResult<BaseResponse<PeriodRuleListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/okr/v1/period_rules".to_string(),
+            api_path: Endpoints::OKR_V1_PERIOD_RULES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -94,27 +95,21 @@ impl PeriodRuleService {
 
         // 添加查询参数
         if let Some(period_id) = request.period_id {
-            api_req
-                .query_params
-                .insert("period_id".to_string(), period_id);
+            api_req.query_params.insert("period_id", period_id);
         }
 
         if let Some(rule_type) = request.rule_type {
-            api_req
-                .query_params
-                .insert("rule_type".to_string(), rule_type);
+            api_req.query_params.insert("rule_type", rule_type);
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await

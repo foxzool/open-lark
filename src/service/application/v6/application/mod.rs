@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -34,7 +35,11 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/application/v6/applications/{app_id}/transfer_owner"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_APP_TRANSFER_OWNER,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -52,7 +57,11 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/application/v6/applications/{app_id}/collaborators"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_APP_COLLABORATORS,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -70,15 +79,16 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<GetCollaboratorsResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/applications/{app_id}/collaborators"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_APP_COLLABORATORS,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -96,12 +106,16 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<GetApplicationResponse>> {
         let mut query_params = HashMap::new();
         if let Some(lang) = lang {
-            query_params.insert("lang".to_string(), lang);
+            query_params.insert("lang", lang);
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/applications/{app_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_APP_GET,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -120,13 +134,14 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<GetAppVersionResponse>> {
         let mut query_params = HashMap::new();
         if let Some(lang) = lang {
-            query_params.insert("lang".to_string(), lang);
+            query_params.insert("lang", lang);
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/application/v6/applications/{app_id}/versions/{version_id}"
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APPLICATION_V6_APP_VERSION_GET,
+                &[("app_id", app_id), ("version_id", version_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -147,18 +162,22 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<ListAppVersionsResponse>> {
         let mut query_params = HashMap::new();
         if let Some(lang) = lang {
-            query_params.insert("lang".to_string(), lang);
+            query_params.insert("lang", lang);
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/applications/{app_id}/versions"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_APP_VERSIONS,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -177,13 +196,14 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<ContactsRangeSuggestResponse>> {
         let mut query_params = HashMap::new();
         if let Some(lang) = lang {
-            query_params.insert("lang".to_string(), lang);
+            query_params.insert("lang", lang);
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/application/v6/applications/{app_id}/versions/{version_id}/contacts_range_suggest"
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APPLICATION_V6_APP_VERSION_CONTACTS_RANGE_SUGGEST,
+                &[("app_id", app_id), ("version_id", version_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -203,18 +223,18 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<UnderauditListResponse>> {
         let mut query_params = HashMap::new();
         if let Some(lang) = lang {
-            query_params.insert("lang".to_string(), lang);
+            query_params.insert("lang", lang);
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/application/v6/applications/underauditlist".to_string(),
+            api_path: Endpoints::APPLICATION_V6_APPS_UNDERAUDITLIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -232,7 +252,11 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/application/v6/applications/{app_id}/audit"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_APP_AUDIT,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -250,7 +274,11 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/application/v6/applications/{app_id}/group"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_APP_GROUP,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

@@ -5,6 +5,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
+        endpoints::Endpoints,
         req_option::RequestOption,
         SDKResult,
     },
@@ -30,10 +31,8 @@ impl SpreadsheetSheetService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<QuerySpreadsheetSheetResponse>> {
         let mut api_req = request.api_request;
-        api_req.api_path = format!(
-            "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/query",
-            spreadsheet_token = request.spreadsheet_token
-        );
+        api_req.api_path =
+            Endpoints::SHEETS_V3_SPREADSHEET_SHEETS_QUERY.replace("{}", &request.spreadsheet_token);
         api_req.http_method = reqwest::Method::GET;
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 

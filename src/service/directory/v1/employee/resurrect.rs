@@ -7,6 +7,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -107,14 +108,14 @@ impl ResurrectEmployeeRequestBuilder {
             self.request
                 .api_req
                 .query_params
-                .insert("user_id_type".to_string(), user_id_type.to_string());
+                .insert("user_id_type", user_id_type.to_string());
         }
 
         if let Some(department_id_type) = &self.request.department_id_type {
-            self.request.api_req.query_params.insert(
-                "department_id_type".to_string(),
-                department_id_type.to_string(),
-            );
+            self.request
+                .api_req
+                .query_params
+                .insert("department_id_type", department_id_type.to_string());
         }
 
         // 构建请求体
@@ -182,7 +183,7 @@ impl EmployeeService {
     /// let response = client.directory.v1.employee.resurrect(
     ///     ResurrectEmployeeRequest::builder("employee_id")
     ///         .leader_id("leader_id")
-    ///         .department_ids(vec!["department_id".to_string()])
+    ///         .department_ids(vec!["department_id"])
     ///         .build(),
     ///     None
     /// ).await?;
@@ -196,9 +197,10 @@ impl EmployeeService {
     ) -> SDKResult<BaseResponse<ResurrectEmployeeResponse>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::PUT;
-        api_req.api_path = format!(
-            "/open-apis/directory/v1/employees/{}/resurrect",
-            request.employee_id
+        api_req.api_path = EndpointBuilder::replace_param(
+            Endpoints::DIRECTORY_V1_EMPLOYEE_RESURRECT,
+            "employee_id",
+            &request.employee_id,
         );
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 

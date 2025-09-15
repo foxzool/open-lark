@@ -19,7 +19,7 @@ pub struct PageResponse<T> {
 // ============ 登录密码管理相关结构 ============
 
 /// 重置用户企业邮箱密码请求
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct PasswordResetRequest {
     /// 用户ID，ID类型与查询参数中的user_id_type对应
     pub user_id: String,

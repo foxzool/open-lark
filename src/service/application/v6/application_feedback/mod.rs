@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -35,15 +36,16 @@ impl ApplicationFeedbackService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/application/v6/application_feedback/{feedback_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_APPLICATION_FEEDBACK_GET,
+                "feedback_id",
+                feedback_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -66,35 +68,29 @@ impl ApplicationFeedbackService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListFeedbackResponse>> {
         let mut query_params = HashMap::new();
-        query_params.insert("app_id".to_string(), app_id.to_string());
+        query_params.insert("app_id", app_id.to_string());
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(feedback_type) = feedback_type {
             query_params.insert(
-                "feedback_type".to_string(),
+                "feedback_type",
                 serde_json::to_string(&feedback_type).unwrap_or_default(),
             );
         }
         if let Some(status) = status {
-            query_params.insert(
-                "status".to_string(),
-                serde_json::to_string(&status).unwrap_or_default(),
-            );
+            query_params.insert("status", serde_json::to_string(&status).unwrap_or_default());
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/application/v6/application_feedback".to_string(),
+            api_path: Endpoints::APPLICATION_V6_APPLICATION_FEEDBACK.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -169,15 +170,12 @@ impl TasklistService {
     ) -> SDKResult<BaseResponse<CreateTasklistResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/task/v2/tasklists".to_string(),
+            api_path: Endpoints::TASK_V2_TASKLISTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -196,15 +194,16 @@ impl TasklistService {
     ) -> SDKResult<BaseResponse<GetTasklistResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/task/v2/tasklists/{tasklist_guid}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_TASKLIST_GET,
+                "tasklist_guid",
+                tasklist_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -223,15 +222,16 @@ impl TasklistService {
     ) -> SDKResult<BaseResponse<UpdateTasklistResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/task/v2/tasklists/{tasklist_guid}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_TASKLIST_GET,
+                "tasklist_guid",
+                tasklist_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -250,15 +250,16 @@ impl TasklistService {
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/task/v2/tasklists/{tasklist_guid}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_TASKLIST_GET,
+                "tasklist_guid",
+                tasklist_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -277,15 +278,16 @@ impl TasklistService {
     ) -> SDKResult<BaseResponse<AddTasklistMembersResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/task/v2/tasklists/{tasklist_guid}/add_members"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_TASKLIST_ADD_MEMBERS,
+                "tasklist_guid",
+                tasklist_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -305,15 +307,16 @@ impl TasklistService {
     ) -> SDKResult<BaseResponse<RemoveTasklistMembersResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/task/v2/tasklists/{tasklist_guid}/remove_members"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_TASKLIST_REMOVE_MEMBERS,
+                "tasklist_guid",
+                tasklist_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -342,42 +345,43 @@ impl TasklistService {
     ) -> SDKResult<BaseResponse<TasklistTasksResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token.to_string());
+            query_params.insert("page_token", page_token.to_string());
         }
         if let Some(completed) = completed {
-            query_params.insert("completed".to_string(), completed.to_string());
+            query_params.insert("completed", completed.to_string());
         }
         if let Some(created_from) = created_from {
-            query_params.insert("created_from".to_string(), created_from.to_string());
+            query_params.insert("created_from", created_from.to_string());
         }
         if let Some(created_to) = created_to {
-            query_params.insert("created_to".to_string(), created_to.to_string());
+            query_params.insert("created_to", created_to.to_string());
         }
         if let Some(updated_from) = updated_from {
-            query_params.insert("updated_from".to_string(), updated_from.to_string());
+            query_params.insert("updated_from", updated_from.to_string());
         }
         if let Some(updated_to) = updated_to {
-            query_params.insert("updated_to".to_string(), updated_to.to_string());
+            query_params.insert("updated_to", updated_to.to_string());
         }
         if let Some(due_from) = due_from {
-            query_params.insert("due_from".to_string(), due_from.to_string());
+            query_params.insert("due_from", due_from.to_string());
         }
         if let Some(due_to) = due_to {
-            query_params.insert("due_to".to_string(), due_to.to_string());
+            query_params.insert("due_to", due_to.to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/task/v2/tasklists/{tasklist_guid}/tasks"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_TASKLIST_TASKS,
+                "tasklist_guid",
+                tasklist_guid,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -396,21 +400,18 @@ impl TasklistService {
     ) -> SDKResult<BaseResponse<ListTasklistsResponse>> {
         let mut query_params = HashMap::new();
         if let Some(user_id_type) = user_id_type {
-            query_params.insert(
-                "user_id_type".to_string(),
-                user_id_type.as_str().to_string(),
-            );
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token.to_string());
+            query_params.insert("page_token", page_token.to_string());
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/task/v2/tasklists".to_string(),
+            api_path: Endpoints::TASK_V2_TASKLISTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

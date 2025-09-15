@@ -85,7 +85,7 @@ impl V3 {
             spreadsheet_sheet_filter: SpreadsheetSheetFilterService::new(config.clone()),
             spreadsheet_sheet_filter_view: SpreadsheetSheetFilterViewService::new(config.clone()),
             data_operation: DataOperationService::new(config.clone()),
-            sheet_row_col: SheetRowColService::new(config),
+            sheet_row_col: SheetRowColService::new(config.clone()),
         }
     }
 }
@@ -120,7 +120,9 @@ impl SpreadsheetService {
     /// # 参数
     /// - `config`: 客户端配置
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self {
+            config: config.clone(),
+        }
     }
 }
 
@@ -155,7 +157,9 @@ impl SpreadsheetSheetService {
     /// # 参数
     /// - `config`: 客户端配置
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self {
+            config: config.clone(),
+        }
     }
 }
 
@@ -196,7 +200,9 @@ impl SpreadsheetSheetFilterService {
     /// # 参数
     /// - `config`: 客户端配置
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self {
+            config: config.clone(),
+        }
     }
 }
 
@@ -239,7 +245,9 @@ impl SpreadsheetSheetFilterViewService {
     /// # 参数
     /// - `config`: 客户端配置
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self {
+            config: config.clone(),
+        }
     }
 }
 
@@ -293,7 +301,9 @@ impl DataOperationService {
     /// # 参数
     /// - `config`: 客户端配置
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self {
+            config: config.clone(),
+        }
     }
 }
 
@@ -342,6 +352,8 @@ impl SheetRowColService {
     /// # 参数
     /// - `config`: 客户端配置
     pub fn new(config: Config) -> Self {
-        Self { config }
+        Self {
+            config: config.clone(),
+        }
     }
 }

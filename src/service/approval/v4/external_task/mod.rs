@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -63,34 +64,31 @@ impl ExternalTaskService {
         let mut query_params = HashMap::new();
         if let Some(params) = params {
             if let Some(page_size) = params.page_size {
-                query_params.insert("page_size".to_string(), page_size.to_string());
+                query_params.insert("page_size", page_size.to_string());
             }
             if let Some(page_token) = params.page_token {
-                query_params.insert("page_token".to_string(), page_token);
+                query_params.insert("page_token", page_token);
             }
             if let Some(approval_code) = params.approval_code {
-                query_params.insert("approval_code".to_string(), approval_code);
+                query_params.insert("approval_code", approval_code);
             }
             if let Some(instance_code) = params.instance_code {
-                query_params.insert("instance_code".to_string(), instance_code);
+                query_params.insert("instance_code", instance_code);
             }
             if let Some(user_id) = params.user_id {
-                query_params.insert("user_id".to_string(), user_id);
+                query_params.insert("user_id", user_id);
             }
             if let Some(task_status) = params.task_status {
-                query_params.insert("task_status".to_string(), task_status);
+                query_params.insert("task_status", task_status);
             }
             if let Some(user_id_type) = params.user_id_type {
-                query_params.insert(
-                    "user_id_type".to_string(),
-                    user_id_type.as_str().to_string(),
-                );
+                query_params.insert("user_id_type", user_id_type.as_str().to_string());
             }
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/approval/v4/external_tasks".to_string(),
+            api_path: Endpoints::APPROVAL_V4_EXTERNAL_TASKS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

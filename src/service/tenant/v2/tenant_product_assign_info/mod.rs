@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -55,7 +56,7 @@ impl TenantProductAssignInfoService {
     ) -> SDKResult<BaseResponse<GetTenantProductAssignInfoResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/tenant/v2/tenant_product_assign_info/query".to_string(),
+            api_path: TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             ..Default::default()
         };

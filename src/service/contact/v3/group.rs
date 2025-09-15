@@ -1,7 +1,11 @@
 use crate::{
     core::{
-        api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
-        constants::AccessTokenType, http::Transport,
+        api_req::ApiRequest,
+        api_resp::ApiResponseTrait,
+        config::Config,
+        constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
+        http::Transport,
     },
     service::contact::models::*,
 };
@@ -24,7 +28,7 @@ impl GroupService {
     ) -> crate::core::SDKResult<CreateGroupResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: "/open-apis/contact/v3/groups".to_string(),
+            api_path: Endpoints::CONTACT_V3_GROUPS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -42,7 +46,11 @@ impl GroupService {
     ) -> crate::core::SDKResult<PatchGroupResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
-            api_path: format!("/open-apis/contact/v3/groups/{group_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::CONTACT_V3_GROUP_GET,
+                "group_id",
+                group_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -60,7 +68,11 @@ impl GroupService {
     ) -> crate::core::SDKResult<GetGroupResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/contact/v3/groups/{group_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::CONTACT_V3_GROUP_GET,
+                "group_id",
+                group_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -78,7 +90,7 @@ impl GroupService {
     ) -> crate::core::SDKResult<ListGroupsResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: "/open-apis/contact/v3/groups/simplelist".to_string(),
+            api_path: Endpoints::CONTACT_V3_GROUPS_SIMPLELIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -96,7 +108,7 @@ impl GroupService {
     ) -> crate::core::SDKResult<GetUserGroupsResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: "/open-apis/contact/v3/groups/member_belong".to_string(),
+            api_path: Endpoints::CONTACT_V3_GROUPS_MEMBER_BELONG.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -111,7 +123,11 @@ impl GroupService {
     pub async fn delete(&self, group_id: &str) -> crate::core::SDKResult<DeleteGroupResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
-            api_path: format!("/open-apis/contact/v3/groups/{group_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::CONTACT_V3_GROUP_GET,
+                "group_id",
+                group_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             ..Default::default()
@@ -130,18 +146,22 @@ impl GroupService {
         let mut query_params = std::collections::HashMap::new();
 
         if let Some(user_id_type) = &req.user_id_type {
-            query_params.insert("user_id_type".to_string(), user_id_type.clone());
+            query_params.insert("user_id_type", user_id_type.clone());
         }
         if let Some(department_id_type) = &req.department_id_type {
-            query_params.insert("department_id_type".to_string(), department_id_type.clone());
+            query_params.insert("department_id_type", department_id_type.clone());
         }
         if let Some(include_members) = req.include_members {
-            query_params.insert("include_members".to_string(), include_members.to_string());
+            query_params.insert("include_members", include_members.to_string());
         }
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: format!("/open-apis/contact/v3/groups/{group_id}/detail"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::CONTACT_V3_GROUP_DETAIL,
+                "group_id",
+                group_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params,

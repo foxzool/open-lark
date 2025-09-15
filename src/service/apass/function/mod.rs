@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -53,9 +54,12 @@ impl FunctionService {
     ) -> SDKResult<BaseResponse<FunctionInvokeResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/apaas/v1/application/{}/function/{}/invoke",
-                request.app_id, request.function_api_name
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::APASS_V1_FUNCTION_INVOKE,
+                &[
+                    ("app_id", &request.app_id),
+                    ("function_name", &request.function_api_name),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({

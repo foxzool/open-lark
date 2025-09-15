@@ -6,8 +6,11 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
+        standard_response::StandardResponse,
+        validation::{self, ValidationResult},
         SDKResult,
     },
     impl_executable_builder_owned,
@@ -22,18 +25,18 @@ impl DataOperationService {
         &self,
         request: ReadingSingleRangeRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<ReadingSingleRangeResponseData>> {
+    ) -> SDKResult<ReadingSingleRangeResponseData> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/sheets/v3/spreadsheets/{}/values/{}",
-            request.spreadsheet_token, request.range
-        );
+        api_req.api_path = Endpoints::SHEETS_V3_SPREADSHEET_VALUES_GET
+            .replace("{}", &request.spreadsheet_token)
+            .replace("{}", &request.range);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
-        let api_resp = Transport::request(api_req, &self.config, option).await?;
+        let api_resp: BaseResponse<ReadingSingleRangeResponseData> =
+            Transport::request(api_req, &self.config, option).await?;
 
-        Ok(api_resp)
+        api_resp.into_result()
     }
 }
 
@@ -57,6 +60,52 @@ pub struct ReadingSingleRangeRequest {
 impl ReadingSingleRangeRequest {
     pub fn builder() -> ReadingSingleRangeRequestBuilder {
         ReadingSingleRangeRequestBuilder::default()
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> SDKResult<()> {
+        // 验证必需字段
+        if self.spreadsheet_token.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "spreadsheet_token cannot be empty".to_string(),
+            ));
+        }
+
+        if self.range.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "range cannot be empty".to_string(),
+            ));
+        }
+
+        // 验证单元格范围格式
+        if let ValidationResult::Invalid(msg) = validation::validate_cell_range(&self.range) {
+            return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                "Invalid cell range '{}': {}",
+                self.range, msg
+            )));
+        }
+
+        // 验证值渲染选项
+        if let ValidationResult::Invalid(msg) =
+            validation::validate_value_render_option(&self.value_render_option)
+        {
+            return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                "Invalid valueRenderOption: {}",
+                msg
+            )));
+        }
+
+        // 验证日期时间渲染选项
+        if let ValidationResult::Invalid(msg) =
+            validation::validate_date_time_render_option(&self.date_time_render_option)
+        {
+            return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                "Invalid dateTimeRenderOption: {}",
+                msg
+            )));
+        }
+
+        Ok(())
     }
 }
 
@@ -82,7 +131,7 @@ impl ReadingSingleRangeRequestBuilder {
         self.request
             .api_request
             .query_params
-            .insert("valueRenderOption".to_string(), value);
+            .insert("valueRenderOption", value);
         self
     }
 
@@ -92,7 +141,7 @@ impl ReadingSingleRangeRequestBuilder {
         self.request
             .api_request
             .query_params
-            .insert("dateTimeRenderOption".to_string(), value);
+            .insert("dateTimeRenderOption", value);
         self
     }
 
@@ -102,7 +151,7 @@ impl ReadingSingleRangeRequestBuilder {
         self.request
             .api_request
             .query_params
-            .insert("user_id_type".to_string(), value);
+            .insert("user_id_type", value);
         self
     }
 
@@ -116,7 +165,7 @@ impl_executable_builder_owned!(
     ReadingSingleRangeRequestBuilder,
     DataOperationService,
     ReadingSingleRangeRequest,
-    BaseResponse<ReadingSingleRangeResponseData>,
+    ReadingSingleRangeResponseData,
     reading_single_range
 );
 

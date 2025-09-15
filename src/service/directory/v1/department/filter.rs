@@ -6,6 +6,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -91,42 +92,42 @@ impl FilterDepartmentRequestBuilder {
             self.request
                 .api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(ref page_token) = self.request.page_token {
             self.request
                 .api_req
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
 
         if let Some(ref parent_department_id) = self.request.parent_department_id {
-            self.request.api_req.query_params.insert(
-                "parent_department_id".to_string(),
-                parent_department_id.clone(),
-            );
+            self.request
+                .api_req
+                .query_params
+                .insert("parent_department_id", parent_department_id.clone());
         }
 
         if let Some(fetch_deleted) = self.request.fetch_deleted {
             self.request
                 .api_req
                 .query_params
-                .insert("fetch_deleted".to_string(), fetch_deleted.to_string());
+                .insert("fetch_deleted", fetch_deleted.to_string());
         }
 
         if let Some(user_id_type) = &self.request.user_id_type {
             self.request
                 .api_req
                 .query_params
-                .insert("user_id_type".to_string(), user_id_type.to_string());
+                .insert("user_id_type", user_id_type.to_string());
         }
 
         if let Some(department_id_type) = &self.request.department_id_type {
-            self.request.api_req.query_params.insert(
-                "department_id_type".to_string(),
-                department_id_type.to_string(),
-            );
+            self.request
+                .api_req
+                .query_params
+                .insert("department_id_type", department_id_type.to_string());
         }
 
         self.request
@@ -189,7 +190,7 @@ impl DepartmentService {
     ) -> SDKResult<BaseResponse<FilterDepartmentResponse>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = "/open-apis/directory/v1/departments/filter".to_string();
+        api_req.api_path = Endpoints::DIRECTORY_V1_DEPARTMENTS_FILTER.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

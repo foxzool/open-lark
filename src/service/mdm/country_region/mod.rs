@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -44,7 +45,7 @@ impl CountryRegionService {
     ) -> SDKResult<BaseResponse<CountryRegionGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/mdm/v1/country_regions/batch_get".to_string(),
+            api_path: Endpoints::MDM_V1_COUNTRY_REGIONS_BATCH_GET.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -72,7 +73,7 @@ impl CountryRegionService {
     ) -> SDKResult<BaseResponse<CountryRegionListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/mdm/v1/country_regions".to_string(),
+            api_path: Endpoints::MDM_V1_COUNTRY_REGIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -80,29 +81,25 @@ impl CountryRegionService {
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(region_type) = request.region_type {
-            api_req
-                .query_params
-                .insert("region_type".to_string(), region_type);
+            api_req.query_params.insert("region_type", region_type);
         }
 
         if let Some(name) = request.name {
-            api_req.query_params.insert("name".to_string(), name);
+            api_req.query_params.insert("name", name);
         }
 
         Transport::request(api_req, &self.config, option).await

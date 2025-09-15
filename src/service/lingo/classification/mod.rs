@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::LINGO_CLASSIFICATION_LIST,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -44,7 +45,7 @@ impl ClassificationService {
     ) -> SDKResult<BaseResponse<ClassificationListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/lingo/v1/classifications".to_string(),
+            api_path: LINGO_CLASSIFICATION_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -52,19 +53,17 @@ impl ClassificationService {
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(repo_id) = request.repo_id {
-            api_req.query_params.insert("repo_id".to_string(), repo_id);
+            api_req.query_params.insert("repo_id", repo_id);
         }
 
         Transport::request(api_req, &self.config, option).await

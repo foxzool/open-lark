@@ -79,13 +79,13 @@ impl ListFormQuestionRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
         if let Some(page_size) = &self.request.page_size {
             self.request
                 .api_request
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         self.request
     }
@@ -148,11 +148,9 @@ pub async fn list_form_questions(
 ) -> SDKResult<BaseResponse<ListFormQuestionResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::GET;
-    api_req.api_path = format!(
-        "/open-apis/bitable/v1/apps/{app_token}/forms/{form_id}/questions",
-        app_token = request.app_token,
-        form_id = request.form_id
-    );
+    api_req.api_path = crate::core::endpoints::Endpoints::BITABLE_V1_FORM_PATCH_META
+        .replace("{app_token}", &request.app_token)
+        .replace("{form_id}", &request.form_id);
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
     let api_resp = Transport::request(api_req, config, option).await?;

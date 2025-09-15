@@ -72,7 +72,9 @@ impl V1 {
             leave_employ_expire_record: LeaveEmployExpireRecordService {
                 config: config.clone(),
             },
-            leave_accrual_record: LeaveAccrualRecordService { config },
+            leave_accrual_record: LeaveAccrualRecordService {
+                config: config.clone(),
+            },
         }
     }
 }

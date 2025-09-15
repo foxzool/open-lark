@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -47,8 +48,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<SemesterListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/performance/v1/review_config/semester_activity/semesters"
-                .to_string(),
+            api_path: Endpoints::PERFORMANCE_SEMESTER_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -56,15 +56,13 @@ impl ReviewConfigService {
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -89,8 +87,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<ActivityQueryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/performance/v1/review_config/semester_activity/activities"
-                .to_string(),
+            api_path: Endpoints::PERFORMANCE_ACTIVITIES_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -98,21 +95,17 @@ impl ReviewConfigService {
 
         // 添加查询参数
         if let Some(semester_id) = request.semester_id {
-            api_req
-                .query_params
-                .insert("semester_id".to_string(), semester_id);
+            api_req.query_params.insert("semester_id", semester_id);
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -137,7 +130,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<AdditionalInfoQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/performance/v1/review_config/semester_activity/additional_information/query".to_string(),
+            api_path: Endpoints::PERFORMANCE_ADDITIONAL_INFO_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -165,7 +158,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<AdditionalInfoImportResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/performance/v1/review_config/semester_activity/additional_information/import".to_string(),
+            api_path: Endpoints::PERFORMANCE_ADDITIONAL_INFO_IMPORT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -193,7 +186,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<AdditionalInfoDeleteResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/performance/v1/review_config/semester_activity/additional_information/delete".to_string(),
+            api_path: Endpoints::PERFORMANCE_ADDITIONAL_INFO_DELETE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -221,7 +214,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<UserGroupWriteResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/performance/v1/review_config/semester_activity/user_group_user_rel/write".to_string(),
+            api_path: Endpoints::PERFORMANCE_USER_GROUP_WRITE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -249,8 +242,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<RevieweeQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/performance/v1/review_config/semester_activity/reviewees/query"
-                .to_string(),
+            api_path: Endpoints::PERFORMANCE_REVIEWEES_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -278,7 +270,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<ReviewTemplateQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/performance/v1/review_config/review_templates/query".to_string(),
+            api_path: Endpoints::PERFORMANCE_REVIEW_TEMPLATES_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -306,7 +298,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<ReviewItemQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/performance/v1/review_config/review_items/query".to_string(),
+            api_path: Endpoints::PERFORMANCE_REVIEW_ITEMS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -334,7 +326,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<TagQuestionConfigQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/performance/v1/review_config/tag_questions/query".to_string(),
+            api_path: Endpoints::PERFORMANCE_TAG_QUESTIONS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -362,7 +354,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<MetricQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/performance/v1/review_config/metrics/query".to_string(),
+            api_path: Endpoints::PERFORMANCE_METRICS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -390,7 +382,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<MetricTemplateQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/performance/v1/review_config/metric_templates/query".to_string(),
+            api_path: Endpoints::PERFORMANCE_METRIC_TEMPLATES_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -418,7 +410,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<MetricFieldQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/performance/v1/review_config/metric_fields/query".to_string(),
+            api_path: Endpoints::PERFORMANCE_METRIC_FIELDS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -446,7 +438,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<MetricTagListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/performance/v1/review_config/metric_tags".to_string(),
+            api_path: Endpoints::PERFORMANCE_METRIC_TAGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -454,15 +446,13 @@ impl ReviewConfigService {
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await

@@ -90,8 +90,6 @@
 //! - 🔄 HR系统集成
 //! - 📊 组织架构联动
 
-use std::sync::Arc;
-
 use crate::core::config::Config;
 
 pub mod v1;
@@ -141,9 +139,9 @@ impl AttendanceService {
     ///
     /// # 返回值
     /// 配置完成的考勤服务实例
-    pub fn new(config: Arc<Config>) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            v1: v1::V1::new((*config).clone()),
+            v1: v1::V1::new(config),
         }
     }
 }

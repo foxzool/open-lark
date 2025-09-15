@@ -75,23 +75,19 @@ async fn create_simple_record(
         .await
     {
         Ok(response) => {
-            if let Some(data) = &response.data {
-                println!("✅ 简单记录创建成功!");
-                if let Some(record_id) = &data.record.record_id {
-                    println!("   记录ID: {record_id}");
-                }
-                if let Some(created_time) = &data.record.created_time {
-                    println!("   创建时间: {created_time}");
-                }
-                println!("   客户端Token: {client_token}");
+            println!("✅ 简单记录创建成功!");
+            if let Some(record_id) = &response.record.record_id {
+                println!("   记录ID: {record_id}");
+            }
+            if let Some(created_time) = &response.record.created_time {
+                println!("   创建时间: {created_time}");
+            }
+            println!("   客户端Token: {client_token}");
 
-                // 显示创建的字段
-                println!("   创建的字段:");
-                for (field_name, value) in &data.record.fields {
-                    println!("     {}: {}", field_name, format_field_value(value));
-                }
-            } else {
-                println!("⚠️ 请求成功，但未返回记录数据");
+            // 显示创建的字段
+            println!("   创建的字段:");
+            for (field_name, value) in &response.record.fields {
+                println!("     {}: {}", field_name, format_field_value(value));
             }
         }
         Err(e) => {
@@ -182,24 +178,22 @@ async fn create_complex_record(
         .await
     {
         Ok(response) => {
-            if let Some(data) = &response.data {
-                println!("✅ 复杂记录创建成功!");
-                if let Some(record_id) = &data.record.record_id {
-                    println!("   记录ID: {record_id}");
-                }
-                println!("   字段数量: {}", data.record.fields.len());
+            println!("✅ 复杂记录创建成功!");
+            if let Some(record_id) = &response.record.record_id {
+                println!("   记录ID: {record_id}");
+            }
+            println!("   字段数量: {}", response.record.fields.len());
 
-                // 分类显示字段
-                println!("   创建的字段详情:");
-                for (field_name, value) in &data.record.fields {
-                    let field_type = identify_field_type(value);
-                    println!(
-                        "     {} ({}): {}",
-                        field_name,
-                        field_type,
-                        format_field_value(value)
-                    );
-                }
+            // 分类显示字段
+            println!("   创建的字段详情:");
+            for (field_name, value) in &response.record.fields {
+                let field_type = identify_field_type(value);
+                println!(
+                    "     {} ({}): {}",
+                    field_name,
+                    field_type,
+                    format_field_value(value)
+                );
             }
         }
         Err(e) => {
@@ -242,13 +236,15 @@ async fn create_multiple_records(
             .await
         {
             Ok(response) => {
-                if let Some(data) = &response.data {
-                    println!(
-                        "   ✅ 记录 {} 创建成功 (ID: {})",
-                        title,
-                        data.record.record_id.as_ref().unwrap_or(&"N/A".to_string())
-                    );
-                }
+                println!(
+                    "   ✅ 记录 {} 创建成功 (ID: {})",
+                    title,
+                    response
+                        .record
+                        .record_id
+                        .as_ref()
+                        .unwrap_or(&"N/A".to_string())
+                );
             }
             Err(e) => {
                 println!("   ❌ 记录 {title} 创建失败: {e:?}");

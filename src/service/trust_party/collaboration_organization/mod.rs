@@ -7,7 +7,9 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
+        query_params::QueryParams,
         req_option::RequestOption,
         SDKResult,
     },
@@ -47,7 +49,7 @@ impl CollaborationOrganizationService {
     ) -> SDKResult<BaseResponse<OrganizationListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/trust_party/v1/collaboration_organizations".to_string(),
+            api_path: Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -57,13 +59,13 @@ impl CollaborationOrganizationService {
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -88,8 +90,10 @@ impl CollaborationOrganizationService {
     ) -> SDKResult<BaseResponse<OrganizationStructureResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/visible_organization"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_VISIBLE,
+                "org_id",
+                org_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -118,7 +122,11 @@ impl CollaborationOrganizationService {
     ) -> SDKResult<BaseResponse<OrganizationGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/trust_party/v1/collaboration_organizations/{org_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_GET,
+                "org_id",
+                org_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -148,8 +156,9 @@ impl CollaborationOrganizationService {
     ) -> SDKResult<BaseResponse<OrganizationUserGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/users/{user_id}"
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_USER_GET,
+                &[("org_id", org_id), ("user_id", user_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -180,8 +189,9 @@ impl CollaborationOrganizationService {
     ) -> SDKResult<BaseResponse<OrganizationDepartmentGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/departments/{department_id}"
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_DEPARTMENT_GET,
+                &[("org_id", org_id), ("department_id", department_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -212,8 +222,10 @@ impl CollaborationOrganizationService {
     ) -> SDKResult<BaseResponse<SharedMemberScopeListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/shared_member_scopes"
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_SHARED_MEMBER_SCOPES,
+                "org_id",
+                org_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -224,13 +236,13 @@ impl CollaborationOrganizationService {
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -255,7 +267,7 @@ impl CollaborationOrganizationService {
     ) -> SDKResult<BaseResponse<AdminOrganizationListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/trust_party/v1/collaboration_organizations/admin".to_string(),
+            api_path: Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS_ADMIN.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -265,17 +277,17 @@ impl CollaborationOrganizationService {
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert(QueryParams::STATUS, status);
         }
 
         Transport::request(api_req, &self.config, option).await

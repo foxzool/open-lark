@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -67,7 +68,7 @@ impl SpeechToTextService {
     ) -> SDKResult<BaseResponse<FileRecognizeResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/speech_to_text/v1/speech/file_recognize".to_string(),
+            api_path: Endpoints::SPEECH_TO_TEXT_V1_FILE_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -91,7 +92,7 @@ impl SpeechToTextService {
     ) -> SDKResult<BaseResponse<StreamRecognizeResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/speech_to_text/v1/speech/stream_recognize".to_string(),
+            api_path: Endpoints::SPEECH_TO_TEXT_V1_STREAM_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

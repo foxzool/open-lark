@@ -134,7 +134,6 @@
 //! - 📈 项目管理和跟踪
 
 use crate::core::config::Config;
-use std::sync::Arc;
 
 // 子模块声明
 pub mod assistant;
@@ -183,17 +182,17 @@ pub struct CloudDocsService {
 }
 
 impl CloudDocsService {
-    pub fn new(config: Arc<Config>) -> Self {
+    pub fn new(config: Config) -> Self {
         Self {
-            drive: DriveService::new(Arc::clone(&config)),
-            wiki: WikiService::new(Arc::clone(&config)),
-            docx: DocxService::new(Arc::clone(&config)),
-            sheets: SheetsService::new(Arc::clone(&config)),
-            bitable: BitableService::new(Arc::clone(&config)),
-            board: BoardService::new(Arc::clone(&config)),
-            permission: PermissionService::new(Arc::clone(&config)),
-            comments: CommentsService::new(Arc::clone(&config)),
-            assistant: AssistantService::new(Arc::clone(&config)),
+            drive: DriveService::new(config.clone()),
+            wiki: WikiService::new(config.clone()),
+            docx: DocxService::new(config.clone()),
+            sheets: SheetsService::new(config.clone()),
+            bitable: BitableService::new(config.clone()),
+            board: BoardService::new(config.clone()),
+            permission: PermissionService::new(config.clone()),
+            comments: CommentsService::new(config.clone()),
+            assistant: AssistantService::new(config.clone()),
         }
     }
 }

@@ -7,6 +7,8 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
+        error::LarkAPIError,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -16,13 +18,21 @@ use crate::{
     },
 };
 
+mod builders;
+
+// Re-export builders for easier access
+pub use builders::{TalentCreateRequestBuilder, TalentListRequestBuilder};
+
+#[cfg(test)]
+mod tests;
+
 /// 人才服务
 pub struct TalentService {
     pub config: Config,
 }
 
 /// 人才列表请求
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct TalentListRequest {
     /// 分页大小
     pub page_size: Option<u32>,
@@ -167,7 +177,7 @@ impl TalentService {
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/talents".to_string(),
+            api_path: Endpoints::HIRE_V1_TALENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -216,7 +226,11 @@ impl TalentService {
     ) -> SDKResult<BaseResponse<TalentDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/talents/{talent_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_TALENT_GET,
+                "talent_id",
+                talent_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -283,7 +297,7 @@ impl TalentService {
     ) -> SDKResult<BaseResponse<TalentListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/talents".to_string(),
+            api_path: Endpoints::HIRE_V1_TALENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -293,61 +307,49 @@ impl TalentService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(name_keyword) = request.name_keyword {
-            api_req
-                .query_params
-                .insert("name_keyword".to_string(), name_keyword);
+            api_req.query_params.insert("name_keyword", name_keyword);
         }
 
         if let Some(email_keyword) = request.email_keyword {
-            api_req
-                .query_params
-                .insert("email_keyword".to_string(), email_keyword);
+            api_req.query_params.insert("email_keyword", email_keyword);
         }
 
         if let Some(phone_keyword) = request.phone_keyword {
-            api_req
-                .query_params
-                .insert("phone_keyword".to_string(), phone_keyword);
+            api_req.query_params.insert("phone_keyword", phone_keyword);
         }
 
         if let Some(work_experience) = request.work_experience {
             api_req
                 .query_params
-                .insert("work_experience".to_string(), work_experience.to_string());
+                .insert("work_experience", work_experience.to_string());
         }
 
         if let Some(education) = request.education {
-            api_req
-                .query_params
-                .insert("education".to_string(), education);
+            api_req.query_params.insert("education", education);
         }
 
         if !request.tags.is_empty() {
-            api_req
-                .query_params
-                .insert("tags".to_string(), request.tags.join(","));
+            api_req.query_params.insert("tags", request.tags.join(","));
         }
 
         if let Some(created_start_time) = request.created_start_time {
             api_req
                 .query_params
-                .insert("created_start_time".to_string(), created_start_time);
+                .insert("created_start_time", created_start_time);
         }
 
         if let Some(created_end_time) = request.created_end_time {
             api_req
                 .query_params
-                .insert("created_end_time".to_string(), created_end_time);
+                .insert("created_end_time", created_end_time);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -390,7 +392,11 @@ impl TalentService {
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/talents/{talent_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_TALENT_GET,
+                "talent_id",
+                talent_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -422,7 +428,11 @@ impl TalentService {
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/hire/v1/talents/{talent_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_TALENT_GET,
+                "talent_id",
+                talent_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -476,7 +486,11 @@ impl TalentService {
     ) -> SDKResult<BaseResponse<TalentApplicationHistoryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/talents/{talent_id}/applications"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_TALENT_APPLICATIONS,
+                "talent_id",
+                talent_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -486,13 +500,11 @@ impl TalentService {
         if let Some(page_size) = page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -544,12 +556,258 @@ impl TalentService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/talents/batch_import".to_string(),
+            api_path: Endpoints::HIRE_V1_TALENTS_BATCH_IMPORT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
         };
 
         Transport::request(api_req, &self.config, option).await
+    }
+
+    /// 创建人才档案（使用构建器模式）
+    ///
+    /// 该接口使用构建器模式创建新的人才档案，提供链式调用和内置验证功能。
+    ///
+    /// # 参数
+    ///
+    /// - `builder_result`: 人才创建请求构建器的结果
+    /// - `option`: 可选的请求配置
+    ///
+    /// # 返回值
+    ///
+    /// 返回人才创建操作结果，包括：
+    /// - `success`: 创建是否成功
+    /// - `talent_id`: 创建的人才ID
+    /// - `message`: 操作结果消息
+    ///
+    /// # 示例
+    ///
+    /// ```ignore
+    /// let builder = client.hire.candidate_management.talent.create_talent_builder()
+    ///     .with_name("张三")
+    ///     .with_email("zhangsan@example.com")
+    ///     .with_phone("13800138000")
+    ///     .with_work_experience(5)
+    ///     .with_education("本科")
+    ///     .with_tags(vec!["Java".to_string(), "Spring".to_string()]);
+    ///
+    /// let response = client.hire.candidate_management.talent.create_talent_with_builder(builder.build(), None).await?;
+    /// ```
+    pub async fn create_talent_with_builder(
+        &self,
+        builder_result: SDKResult<TalentCreateRequest>,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
+        let request = builder_result?;
+        self.create_talent(request, option).await
+    }
+
+    /// 更新人才档案（使用构建器模式）
+    ///
+    /// 该接口使用构建器模式更新现有人才档案的信息，
+    /// 支持修改人才的基本信息、工作经历、技能标签等数据。
+    ///
+    /// # 参数
+    ///
+    /// - `talent_id`: 人才ID
+    /// - `builder_result`: 人才更新请求构建器的结果
+    /// - `option`: 可选的请求配置
+    ///
+    /// # 示例
+    ///
+    /// ```ignore
+    /// let builder = client.hire.candidate_management.talent.create_talent_builder()
+    ///     .with_name("张三")
+    ///     .with_work_experience(6)
+    ///     .with_current_company("新科技公司")
+    ///     .with_current_position("技术专家")
+    ///     .with_tags(vec!["Java".to_string(), "架构设计".to_string()]);
+    ///
+    /// let response = client.hire.candidate_management.talent.update_talent_with_builder(
+    ///     "talent_123456",
+    ///     builder.build(),
+    ///     None
+    /// ).await?;
+    /// ```
+    pub async fn update_talent_with_builder(
+        &self,
+        talent_id: &str,
+        builder_result: SDKResult<TalentCreateRequest>,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
+        let request = builder_result?;
+        self.update_talent(talent_id, request, option).await
+    }
+
+    /// 批量导入人才（使用构建器模式）
+    ///
+    /// 该接口使用构建器模式批量导入人才档案，支持一次性
+    /// 导入多个人才的基本信息，并提供验证功能。
+    ///
+    /// # 参数
+    ///
+    /// - `builder_results`: 人才创建请求构建器结果列表
+    /// - `option`: 可选的请求配置
+    ///
+    /// # 示例
+    ///
+    /// ```ignore
+    /// let builders = vec![
+    ///     client.hire.candidate_management.talent.create_talent_builder()
+    ///         .with_name("李四")
+    ///         .with_email("lisi@example.com"),
+    ///     client.hire.candidate_management.talent.create_talent_builder()
+    ///         .with_name("王五")
+    ///         .with_email("wangwu@example.com"),
+    /// ];
+    ///
+    /// let requests: Result<Vec<_>, _> = builders.into_iter().map(|b| b.build()).collect();
+    /// let response = client.hire.candidate_management.talent.batch_import_talents_with_builder(
+    ///     requests,
+    ///     None
+    /// ).await?;
+    /// ```
+    pub async fn batch_import_talents_with_builder(
+        &self,
+        builder_results: Result<Vec<TalentCreateRequest>, LarkAPIError>,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
+        let talents = builder_results?;
+        self.batch_import_talents(talents, option).await
+    }
+
+    /// 创建人才档案构建器
+    ///
+    /// 返回一个人才创建请求的构建器，支持链式调用设置各种属性。
+    ///
+    /// # 返回值
+    ///
+    /// 返回 `TalentCreateRequestBuilder` 实例，可用于链式调用
+    ///
+    /// # 示例
+    ///
+    /// ```ignore
+    /// let builder = client.hire.candidate_management.talent.create_talent_builder()
+    ///     .with_name("张三")
+    ///     .with_email("zhangsan@example.com")
+    ///     .with_phone("13800138000")
+    ///     .with_work_experience(5)
+    ///     .with_education("本科")
+    ///     .with_tags(vec!["Java".to_string(), "Spring".to_string()]);
+    ///
+    /// let request = builder.build()?;
+    /// ```
+    pub fn create_talent_builder(&self) -> TalentCreateRequestBuilder {
+        TalentCreateRequestBuilder::default()
+    }
+
+    /// 创建人才列表请求构建器
+    ///
+    /// 返回一个人才列表查询请求的构建器，支持链式调用设置筛选条件。
+    ///
+    /// # 返回值
+    ///
+    /// 返回 `TalentListRequestBuilder` 实例，可用于链式调用
+    ///
+    /// # 示例
+    ///
+    /// ```ignore
+    /// let builder = client.hire.candidate_management.talent.list_talents_builder()
+    ///     .with_page_size(50)
+    ///     .with_name_keyword("张")
+    ///     .with_work_experience(5)
+    ///     .with_tags(vec!["Java".to_string()]);
+    ///
+    /// let request = builder.build();
+    /// ```
+    pub fn list_talents_builder(&self) -> TalentListRequestBuilder {
+        TalentListRequestBuilder::default()
+    }
+
+    /// 获取人才列表（使用构建器模式）
+    ///
+    /// 该接口使用构建器模式获取企业的人才列表，支持按姓名、邮箱、
+    /// 电话、工作年限、学历、标签等条件筛选。
+    ///
+    /// # 参数
+    ///
+    /// - `request`: 人才列表查询请求
+    /// - `option`: 可选的请求配置
+    ///
+    /// # 返回值
+    ///
+    /// 返回分页的人才列表，包括：
+    /// - 人才基本信息列表
+    /// - 分页信息（是否有更多数据、下一页标记）
+    ///
+    /// # 示例
+    ///
+    /// ```ignore
+    /// let request = client.hire.candidate_management.talent.list_talents_builder()
+    ///     .with_page_size(50)
+    ///     .with_name_keyword("张")
+    ///     .with_work_experience(5)
+    ///     .with_tags(vec!["Java".to_string()])
+    ///     .build();
+    ///
+    /// let response = client.hire.candidate_management.talent.list_talents_with_builder(request, None).await?;
+    /// ```
+    pub async fn list_talents_with_builder(
+        &self,
+        request: TalentListRequest,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<TalentListResponse>> {
+        self.list_talents(request, option).await
+    }
+
+    /// 批量创建人才档案（使用构建器模式）
+    ///
+    /// 该接口使用构建器模式批量创建人才档案，每个请求都会经过验证。
+    ///
+    /// # 参数
+    ///
+    /// - `builder_results`: 人才创建请求构建器结果列表
+    /// - `option`: 可选的请求配置
+    ///
+    /// # 返回值
+    ///
+    /// 返回批量创建操作结果，包括每个人才的创建状态
+    ///
+    /// # 示例
+    ///
+    /// ```ignore
+    /// let builders = vec![
+    ///     client.hire.candidate_management.talent.create_talent_builder()
+    ///         .with_name("李四")
+    ///         .with_email("lisi@example.com"),
+    ///     client.hire.candidate_management.talent.create_talent_builder()
+    ///         .with_name("王五")
+    ///         .with_email("wangwu@example.com"),
+    /// ];
+    ///
+    /// let responses = client.hire.candidate_management.talent.batch_create_talents_with_builder(
+    ///     builders.into_iter().map(|b| b.build()).collect(),
+    ///     None
+    /// ).await?;
+    /// ```
+    pub async fn batch_create_talents_with_builder(
+        &self,
+        builder_results: Vec<SDKResult<TalentCreateRequest>>,
+        option: Option<RequestOption>,
+    ) -> Vec<SDKResult<BaseResponse<TalentOperationResponse>>> {
+        let mut results = Vec::new();
+
+        for builder_result in builder_results {
+            match builder_result {
+                Ok(request) => match self.create_talent(request, option.clone()).await {
+                    Ok(response) => results.push(Ok(response)),
+                    Err(e) => results.push(Err(e)),
+                },
+                Err(e) => results.push(Err(e)),
+            }
+        }
+
+        results
     }
 }

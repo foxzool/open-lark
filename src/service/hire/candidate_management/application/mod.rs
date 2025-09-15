@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -170,7 +171,7 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<ApplicationOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/applications".to_string(),
+            api_path: Endpoints::HIRE_V1_APPLICATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -218,7 +219,11 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<ApplicationDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/applications/{application_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_APPLICATION_GET,
+                "application_id",
+                application_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -283,7 +288,7 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<ApplicationListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/applications".to_string(),
+            api_path: Endpoints::HIRE_V1_APPLICATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -293,43 +298,39 @@ impl ApplicationService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(job_id) = request.job_id {
-            api_req.query_params.insert("job_id".to_string(), job_id);
+            api_req.query_params.insert("job_id", job_id);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(stage_id) = request.stage_id {
-            api_req
-                .query_params
-                .insert("stage_id".to_string(), stage_id);
+            api_req.query_params.insert("stage_id", stage_id);
         }
 
         if let Some(source) = request.source {
-            api_req.query_params.insert("source".to_string(), source);
+            api_req.query_params.insert("source", source);
         }
 
         if let Some(created_start_time) = request.created_start_time {
             api_req
                 .query_params
-                .insert("created_start_time".to_string(), created_start_time);
+                .insert("created_start_time", created_start_time);
         }
 
         if let Some(created_end_time) = request.created_end_time {
             api_req
                 .query_params
-                .insert("created_end_time".to_string(), created_end_time);
+                .insert("created_end_time", created_end_time);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -366,9 +367,10 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<ApplicationOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/hire/v1/applications/{}/advance",
-                request.application_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_APPLICATION_ADVANCE,
+                "application_id",
+                &request.application_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
@@ -424,7 +426,11 @@ impl ApplicationService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/applications/{application_id}/reject"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_APPLICATION_REJECT,
+                "application_id",
+                application_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -478,7 +484,11 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<InterviewListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/applications/{application_id}/interviews"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_APPLICATION_INTERVIEWS,
+                "application_id",
+                application_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -488,13 +498,11 @@ impl ApplicationService {
         if let Some(page_size) = page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -535,7 +543,7 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<ApplicationOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/offers".to_string(),
+            api_path: Endpoints::HIRE_V1_OFFERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -581,7 +589,11 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<OfferDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/applications/{application_id}/offer"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_APPLICATION_OFFER,
+                "application_id",
+                application_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -622,9 +634,10 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<ApplicationOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/hire/v1/applications/{}/evaluations",
-                request.application_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_APPLICATION_EVALUATIONS,
+                "application_id",
+                &request.application_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),

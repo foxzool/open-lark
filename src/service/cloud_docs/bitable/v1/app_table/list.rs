@@ -21,19 +21,18 @@ impl AppTableService {
     ) -> SDKResult<BaseResponse<ListTablesResponse>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::GET;
-        api_req.api_path = format!("/open-apis/bitable/v1/apps/{}/tables", request.app_token);
+        api_req.api_path = crate::core::endpoints::Endpoints::BITABLE_V1_TABLES
+            .replace("{app_token}", &request.app_token);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

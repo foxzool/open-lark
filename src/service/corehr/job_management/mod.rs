@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -180,7 +181,7 @@ impl JobManagementService {
     ) -> SDKResult<BaseResponse<JobFamilyCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/corehr/v1/job_families".to_string(),
+            api_path: Endpoints::COREHR_JOB_FAMILIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -223,7 +224,7 @@ impl JobManagementService {
     ) -> SDKResult<BaseResponse<JobFamilyListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/corehr/v1/job_families".to_string(),
+            api_path: Endpoints::COREHR_JOB_FAMILIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -231,13 +232,11 @@ impl JobManagementService {
 
         // 添加查询参数
         if let Some(size) = page_size {
-            api_req
-                .query_params
-                .insert("page_size".to_string(), size.to_string());
+            api_req.query_params.insert("page_size", size.to_string());
         }
 
         if let Some(token) = page_token {
-            api_req.query_params.insert("page_token".to_string(), token);
+            api_req.query_params.insert("page_token", token);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -289,7 +288,7 @@ impl JobManagementService {
     ) -> SDKResult<BaseResponse<JobLevelCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/corehr/v1/job_levels".to_string(),
+            api_path: Endpoints::COREHR_JOB_LEVELS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -332,7 +331,7 @@ impl JobManagementService {
     ) -> SDKResult<BaseResponse<JobLevelListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/corehr/v1/job_levels".to_string(),
+            api_path: Endpoints::COREHR_JOB_LEVELS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -340,13 +339,11 @@ impl JobManagementService {
 
         // 添加查询参数
         if let Some(size) = page_size {
-            api_req
-                .query_params
-                .insert("page_size".to_string(), size.to_string());
+            api_req.query_params.insert("page_size", size.to_string());
         }
 
         if let Some(token) = page_token {
-            api_req.query_params.insert("page_token".to_string(), token);
+            api_req.query_params.insert("page_token", token);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -398,7 +395,7 @@ impl JobManagementService {
     ) -> SDKResult<BaseResponse<JobGradeCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/corehr/v1/job_grades".to_string(),
+            api_path: Endpoints::COREHR_JOB_GRADES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -441,7 +438,7 @@ impl JobManagementService {
     ) -> SDKResult<BaseResponse<JobGradeQueryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/corehr/v1/job_grades/query".to_string(),
+            api_path: Endpoints::COREHR_JOB_GRADES_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -449,9 +446,7 @@ impl JobManagementService {
 
         // 添加查询参数
         if let Some(family_id) = job_family_id {
-            api_req
-                .query_params
-                .insert("job_family_id".to_string(), family_id);
+            api_req.query_params.insert("job_family_id", family_id);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -503,7 +498,7 @@ impl JobManagementService {
     ) -> SDKResult<BaseResponse<JobCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/corehr/v1/jobs".to_string(),
+            api_path: Endpoints::COREHR_JOBS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -546,7 +541,7 @@ impl JobManagementService {
     ) -> SDKResult<BaseResponse<JobListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/corehr/v1/jobs".to_string(),
+            api_path: Endpoints::COREHR_JOBS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -554,13 +549,11 @@ impl JobManagementService {
 
         // 添加查询参数
         if let Some(size) = page_size {
-            api_req
-                .query_params
-                .insert("page_size".to_string(), size.to_string());
+            api_req.query_params.insert("page_size", size.to_string());
         }
 
         if let Some(token) = page_token {
-            api_req.query_params.insert("page_token".to_string(), token);
+            api_req.query_params.insert("page_token", token);
         }
 
         Transport::request(api_req, &self.config, option).await

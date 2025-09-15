@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -72,13 +73,13 @@ impl ListDashboardRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
         if let Some(page_size) = &self.request.page_size {
             self.request
                 .api_request
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         self.request
     }
@@ -130,10 +131,8 @@ impl DashboardService {
     ) -> SDKResult<BaseResponse<ListDashboardResponse>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::GET;
-        api_req.api_path = format!(
-            "/open-apis/bitable/v1/apps/{app_token}/dashboards",
-            app_token = request.app_token
-        );
+        api_req.api_path =
+            Endpoints::BITABLE_V1_DASHBOARDS.replace("{app_token}", &request.app_token);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -144,10 +143,10 @@ impl DashboardService {
 /// 列出仪表盘 (向后兼容的函数)
 pub async fn list_dashboard(
     request: ListDashboardRequest,
-    config: &Config,
+    config: Config,
     option: Option<RequestOption>,
 ) -> SDKResult<BaseResponse<ListDashboardResponse>> {
-    let service = DashboardService::new(config.clone());
+    let service = DashboardService::new(config);
     service.list(request, option).await
 }
 

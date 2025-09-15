@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -166,7 +167,7 @@ impl LifecycleService {
     ) -> SDKResult<BaseResponse<PreHireCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/corehr/v1/pre_hires".to_string(),
+            api_path: Endpoints::COREHR_PRE_HIRES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -218,7 +219,7 @@ impl LifecycleService {
     ) -> SDKResult<BaseResponse<PreHireSearchResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/corehr/v1/pre_hires/search".to_string(),
+            api_path: Endpoints::COREHR_PRE_HIRES_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -275,7 +276,7 @@ impl LifecycleService {
     ) -> SDKResult<BaseResponse<JobChangeCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/corehr/v1/job_changes".to_string(),
+            api_path: Endpoints::COREHR_JOB_CHANGES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -328,7 +329,7 @@ impl LifecycleService {
     ) -> SDKResult<BaseResponse<JobChangeSearchResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/corehr/v1/job_changes/search".to_string(),
+            api_path: Endpoints::COREHR_JOB_CHANGES_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -379,7 +380,7 @@ impl LifecycleService {
     ) -> SDKResult<BaseResponse<OffboardingCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/corehr/v1/offboardings".to_string(),
+            api_path: Endpoints::COREHR_OFFBOARDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -432,7 +433,7 @@ impl LifecycleService {
     ) -> SDKResult<BaseResponse<OffboardingSearchResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/corehr/v1/offboardings/search".to_string(),
+            api_path: Endpoints::COREHR_OFFBOARDINGS_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()

@@ -5,7 +5,11 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
-        req_option, SDKResult,
+        endpoints::Endpoints,
+        req_option,
+        standard_response::StandardResponse,
+        validation::{self, ValidationResult},
+        SDKResult,
     },
     impl_executable_builder_owned,
     service::sheets::v3::{
@@ -37,6 +41,62 @@ pub struct FindCellsRequest {
 impl FindCellsRequest {
     pub fn builder() -> FindCellsRequestBuilder {
         FindCellsRequestBuilder::default()
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> SDKResult<()> {
+        // 验证必需字段
+        if self.spreadsheet_token.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "spreadsheet_token cannot be empty".to_string(),
+            ));
+        }
+
+        if self.sheet_id.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "sheet_id cannot be empty".to_string(),
+            ));
+        }
+
+        if self.find.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "find cannot be empty".to_string(),
+            ));
+        }
+
+        // 验证查找条件
+        if let ValidationResult::Invalid(msg) = validation::validate_find_options(
+            &self.find_condition.match_case,
+            &self.find_condition.match_entire_cell,
+            &self.find_condition.search_by_regex,
+            &self.find_condition.include_formulas,
+        ) {
+            return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                "Invalid find options: {}",
+                msg
+            )));
+        }
+
+        // 验证范围格式（如果指定了范围）
+        if !self.find_condition.range.is_empty() {
+            if let ValidationResult::Invalid(msg) =
+                validation::validate_cell_range(&self.find_condition.range)
+            {
+                return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                    "Invalid search range '{}': {}",
+                    self.find_condition.range, msg
+                )));
+            }
+        }
+
+        // 验证查找字符串长度
+        if self.find.len() > 1000 {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "find string too long. Maximum 1000 characters allowed".to_string(),
+            ));
+        }
+
+        Ok(())
     }
 }
 
@@ -86,9 +146,66 @@ impl FindCellsRequestBuilder {
         self
     }
 
-    pub fn build(mut self) -> FindCellsRequest {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        self.request
+    pub fn build(self) -> FindCellsRequest {
+        let mut request = self.request;
+        request.api_request.body = serde_json::to_vec(&request).unwrap();
+        request
+    }
+
+    /// 验证请求参数
+    pub fn validate(&self) -> SDKResult<()> {
+        // 验证必需字段
+        if self.request.spreadsheet_token.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "spreadsheet_token cannot be empty".to_string(),
+            ));
+        }
+
+        if self.request.sheet_id.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "sheet_id cannot be empty".to_string(),
+            ));
+        }
+
+        if self.request.find.is_empty() {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "find cannot be empty".to_string(),
+            ));
+        }
+
+        // 验证查找条件
+        if let ValidationResult::Invalid(msg) = validation::validate_find_options(
+            &self.request.find_condition.match_case,
+            &self.request.find_condition.match_entire_cell,
+            &self.request.find_condition.search_by_regex,
+            &self.request.find_condition.include_formulas,
+        ) {
+            return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                "Invalid find options: {}",
+                msg
+            )));
+        }
+
+        // 验证范围格式（如果指定了范围）
+        if !self.request.find_condition.range.is_empty() {
+            if let ValidationResult::Invalid(msg) =
+                validation::validate_cell_range(&self.request.find_condition.range)
+            {
+                return Err(crate::core::error::LarkAPIError::illegal_param(format!(
+                    "Invalid search range '{}': {}",
+                    self.request.find_condition.range, msg
+                )));
+            }
+        }
+
+        // 验证查找字符串长度
+        if self.request.find.len() > 1000 {
+            return Err(crate::core::error::LarkAPIError::illegal_param(
+                "find string too long. Maximum 1000 characters allowed".to_string(),
+            ));
+        }
+
+        Ok(())
     }
 }
 
@@ -97,7 +214,7 @@ impl_executable_builder_owned!(
     FindCellsRequestBuilder,
     SpreadsheetSheetService,
     FindCellsRequest,
-    BaseResponse<FindCellsResponse>,
+    FindCellsResponse,
     find_cells
 );
 
@@ -120,18 +237,17 @@ impl SpreadsheetSheetService {
         &self,
         request: FindCellsRequest,
         option: Option<req_option::RequestOption>,
-    ) -> SDKResult<BaseResponse<FindCellsResponse>> {
+    ) -> SDKResult<FindCellsResponse> {
         let mut api_req = request.api_request;
-        api_req.api_path = format!(
-            "/open-apis/sheets/v3/spreadsheets/{spreadsheet_token}/sheets/{sheet_id}/find",
-            spreadsheet_token = request.spreadsheet_token,
-            sheet_id = request.sheet_id
-        );
+        api_req.api_path = Endpoints::SHEETS_V3_SPREADSHEET_SHEET_FIND
+            .replace("{}", &request.spreadsheet_token)
+            .replace("{}", &request.sheet_id);
         api_req.http_method = reqwest::Method::POST;
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::App];
 
-        let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
+        let api_resp: BaseResponse<FindCellsResponse> =
+            crate::core::http::Transport::request(api_req, &self.config, option).await?;
 
-        Ok(api_resp)
+        api_resp.into_result()
     }
 }

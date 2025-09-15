@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -114,8 +115,8 @@ impl JobRequirementService {
     ///     name: "急招Java高级工程师".to_string(),
     ///     job_id: "job_123456".to_string(),
     ///     headcount: 3,
-    ///     description: Some("项目紧急需求，要求有微服务架构经验".to_string()),
-    ///     expected_entry_time: Some("2024-02-01".to_string()),
+    ///     description: Some("项目紧急需求，要求有微服务架构经验".to_string(),
+    ///     expected_entry_time: Some("2024-02-01".to_string(),
     /// };
     ///
     /// let response = client.hire.recruitment_config.job_requirement.create_requirement(request, None).await?;
@@ -127,7 +128,7 @@ impl JobRequirementService {
     ) -> SDKResult<BaseResponse<JobRequirementOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/job_requirements".to_string(),
+            api_path: Endpoints::HIRE_V1_JOB_REQUIREMENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -173,7 +174,11 @@ impl JobRequirementService {
     ) -> SDKResult<BaseResponse<JobRequirementDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/job_requirements/{requirement_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_JOB_REQUIREMENT_GET,
+                "requirement_id",
+                requirement_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -211,8 +216,8 @@ impl JobRequirementService {
     /// let request = JobRequirementListRequest {
     ///     page_size: Some(50),
     ///     page_token: None,
-    ///     job_id: Some("job_123456".to_string()),
-    ///     status: Some("active".to_string()),
+    ///     job_id: Some("job_123456".to_string(),
+    ///     status: Some("active".to_string(),
     /// };
     ///
     /// let response = client.hire.recruitment_config.job_requirement.list_requirements(request, None).await?;
@@ -231,7 +236,7 @@ impl JobRequirementService {
     ) -> SDKResult<BaseResponse<JobRequirementListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/job_requirements".to_string(),
+            api_path: Endpoints::HIRE_V1_JOB_REQUIREMENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -241,21 +246,19 @@ impl JobRequirementService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(job_id) = request.job_id {
-            api_req.query_params.insert("job_id".to_string(), job_id);
+            api_req.query_params.insert("job_id", job_id);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -282,8 +285,8 @@ impl JobRequirementService {
     ///     name: "急招Java架构师".to_string(),
     ///     job_id: "job_123456".to_string(),
     ///     headcount: 2,
-    ///     description: Some("项目技术难度较高，需要有分布式系统设计经验".to_string()),
-    ///     expected_entry_time: Some("2024-01-15".to_string()),
+    ///     description: Some("项目技术难度较高，需要有分布式系统设计经验".to_string(),
+    ///     expected_entry_time: Some("2024-01-15".to_string(),
     /// };
     ///
     /// let response = client.hire.recruitment_config.job_requirement.update_requirement(requirement_id, request, None).await?;
@@ -296,7 +299,11 @@ impl JobRequirementService {
     ) -> SDKResult<BaseResponse<JobRequirementOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/job_requirements/{requirement_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_JOB_REQUIREMENT_GET,
+                "requirement_id",
+                requirement_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -328,7 +335,11 @@ impl JobRequirementService {
     ) -> SDKResult<BaseResponse<JobRequirementOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/hire/v1/job_requirements/{requirement_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_JOB_REQUIREMENT_GET,
+                "requirement_id",
+                requirement_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

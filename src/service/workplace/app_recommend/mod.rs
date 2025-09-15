@@ -7,7 +7,9 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
+        query_params::QueryParams,
         req_option::RequestOption,
         standard_response::StandardResponse,
         SDKResult,
@@ -45,7 +47,7 @@ impl AppRecommendService {
     ) -> SDKResult<FavouriteAppsResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/workplace/v1/app_recommend_rule/favourite".to_string(),
+            api_path: Endpoints::WORKPLACE_APP_RECOMMEND_FAVOURITE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -55,20 +57,20 @@ impl AppRecommendService {
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         if let Some(user_id) = request.user_id {
-            api_req.query_params.insert("user_id".to_string(), user_id);
+            api_req.query_params.insert(QueryParams::USER_ID, user_id);
         }
 
-        let api_resp: BaseResponse<FavouriteAppsResponse> = 
+        let api_resp: BaseResponse<FavouriteAppsResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -92,7 +94,7 @@ impl AppRecommendService {
     ) -> SDKResult<RecommendedAppsResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/workplace/v1/app_recommend_rule/recommend".to_string(),
+            api_path: Endpoints::WORKPLACE_APP_RECOMMEND_RECOMMEND.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -102,26 +104,26 @@ impl AppRecommendService {
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         if let Some(user_id) = request.user_id {
-            api_req.query_params.insert("user_id".to_string(), user_id);
+            api_req.query_params.insert(QueryParams::USER_ID, user_id);
         }
 
         if let Some(department_id) = request.department_id {
             api_req
                 .query_params
-                .insert("department_id".to_string(), department_id);
+                .insert(QueryParams::DEPARTMENT_ID, department_id);
         }
 
-        let api_resp: BaseResponse<RecommendedAppsResponse> = 
+        let api_resp: BaseResponse<RecommendedAppsResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -145,7 +147,7 @@ impl AppRecommendService {
     ) -> SDKResult<RecommendRulesListResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/workplace/v1/app_recommend_rule/list".to_string(),
+            api_path: Endpoints::WORKPLACE_APP_RECOMMEND_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -155,26 +157,26 @@ impl AppRecommendService {
         if let Some(page_token) = request.page_token {
             api_req
                 .query_params
-                .insert("page_token".to_string(), page_token);
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         if let Some(rule_type) = request.rule_type {
             api_req
                 .query_params
-                .insert("rule_type".to_string(), rule_type);
+                .insert(QueryParams::RULE_TYPE, rule_type);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert(QueryParams::STATUS, status);
         }
 
-        let api_resp: BaseResponse<RecommendRulesListResponse> = 
+        let api_resp: BaseResponse<RecommendRulesListResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
@@ -244,32 +246,32 @@ impl RecommendedAppsRequestBuilder {
         self.inner.page_token = Some(token.into());
         self
     }
-    
+
     /// 设置页面大小
     pub fn page_size(mut self, size: i32) -> Self {
         self.inner.page_size = Some(size);
         self
     }
-    
+
     /// 设置分页参数（复合方法）
     pub fn pagination(mut self, page_token: Option<String>, page_size: Option<i32>) -> Self {
         self.inner.page_token = page_token;
         self.inner.page_size = page_size;
         self
     }
-    
+
     /// 设置用户ID筛选
     pub fn user_filter(mut self, user_id: impl Into<String>) -> Self {
         self.inner.user_id = Some(user_id.into());
         self
     }
-    
+
     /// 设置部门ID筛选
     pub fn department_filter(mut self, department_id: impl Into<String>) -> Self {
         self.inner.department_id = Some(department_id.into());
         self
     }
-    
+
     /// 构建请求对象
     pub fn build(self) -> RecommendedAppsRequest {
         self.inner
@@ -326,32 +328,32 @@ impl RecommendRulesListRequestBuilder {
         self.inner.page_token = Some(token.into());
         self
     }
-    
+
     /// 设置页面大小
     pub fn page_size(mut self, size: i32) -> Self {
         self.inner.page_size = Some(size);
         self
     }
-    
+
     /// 设置分页参数（复合方法）
     pub fn pagination(mut self, page_token: Option<String>, page_size: Option<i32>) -> Self {
         self.inner.page_token = page_token;
         self.inner.page_size = page_size;
         self
     }
-    
+
     /// 设置规则类型筛选
     pub fn rule_type_filter(mut self, rule_type: impl Into<String>) -> Self {
         self.inner.rule_type = Some(rule_type.into());
         self
     }
-    
+
     /// 设置规则状态筛选
     pub fn status_filter(mut self, status: impl Into<String>) -> Self {
         self.inner.status = Some(status.into());
         self
     }
-    
+
     /// 构建请求对象
     pub fn build(self) -> RecommendRulesListRequest {
         self.inner

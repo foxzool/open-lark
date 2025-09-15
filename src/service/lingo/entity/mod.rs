@@ -7,6 +7,10 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{
+            EndpointBuilder, LINGO_ENTITY_CREATE, LINGO_ENTITY_GET, LINGO_ENTITY_HIGHLIGHT,
+            LINGO_ENTITY_MATCH, LINGO_ENTITY_SEARCH, LINGO_ENTITY_UPDATE,
+        },
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -47,7 +51,7 @@ impl EntityService {
     ) -> SDKResult<BaseResponse<EntityCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/lingo/v1/entities".to_string(),
+            api_path: LINGO_ENTITY_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -77,7 +81,7 @@ impl EntityService {
     ) -> SDKResult<BaseResponse<EntityUpdateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: format!("/open-apis/lingo/v1/entities/{entity_id}"),
+            api_path: EndpointBuilder::replace_param(LINGO_ENTITY_UPDATE, "{entity_id}", entity_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -105,7 +109,7 @@ impl EntityService {
     ) -> SDKResult<BaseResponse<EntityDeleteResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/lingo/v1/entities/{entity_id}"),
+            api_path: EndpointBuilder::replace_param(LINGO_ENTITY_UPDATE, "{entity_id}", entity_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -133,7 +137,7 @@ impl EntityService {
     ) -> SDKResult<BaseResponse<EntityGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/lingo/v1/entities/{entity_id}"),
+            api_path: EndpointBuilder::replace_param(LINGO_ENTITY_GET, "{entity_id}", entity_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -161,7 +165,7 @@ impl EntityService {
     ) -> SDKResult<BaseResponse<EntityListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/lingo/v1/entities".to_string(),
+            api_path: LINGO_ENTITY_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -169,29 +173,27 @@ impl EntityService {
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(repo_id) = request.repo_id {
-            api_req.query_params.insert("repo_id".to_string(), repo_id);
+            api_req.query_params.insert("repo_id", repo_id);
         }
 
         if let Some(classification_id) = request.classification_id {
             api_req
                 .query_params
-                .insert("classification_id".to_string(), classification_id);
+                .insert("classification_id", classification_id);
         }
 
         if let Some(creator) = request.creator {
-            api_req.query_params.insert("creator".to_string(), creator);
+            api_req.query_params.insert("creator", creator);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -216,7 +218,7 @@ impl EntityService {
     ) -> SDKResult<BaseResponse<EntityMatchResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/lingo/v1/entities/match".to_string(),
+            api_path: LINGO_ENTITY_MATCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -244,7 +246,7 @@ impl EntityService {
     ) -> SDKResult<BaseResponse<EntitySearchResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/lingo/v1/entities/search".to_string(),
+            api_path: LINGO_ENTITY_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -272,7 +274,7 @@ impl EntityService {
     ) -> SDKResult<BaseResponse<EntityHighlightResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/lingo/v1/entities/highlight".to_string(),
+            api_path: LINGO_ENTITY_HIGHLIGHT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

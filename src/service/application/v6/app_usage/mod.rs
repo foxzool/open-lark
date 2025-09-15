@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -36,23 +37,27 @@ impl AppUsageService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<DepartmentOverviewResponse>> {
         let mut query_params = HashMap::new();
-        query_params.insert("date".to_string(), date.to_string());
+        query_params.insert("date", date.to_string());
         if let Some(department_id_type) = department_id_type {
             query_params.insert(
-                "department_id_type".to_string(),
+                "department_id_type",
                 department_id_type.as_str().to_string(),
             );
         }
         if let Some(page_size) = page_size {
-            query_params.insert("page_size".to_string(), page_size.to_string());
+            query_params.insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = page_token {
-            query_params.insert("page_token".to_string(), page_token);
+            query_params.insert("page_token", page_token);
         }
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/app_usage/{app_id}/department_overview"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_APP_USAGE_DEPARTMENT_OVERVIEW,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -70,12 +75,16 @@ impl AppUsageService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<MessagePushOverviewResponse>> {
         let mut query_params = HashMap::new();
-        query_params.insert("start_date".to_string(), start_date.to_string());
-        query_params.insert("end_date".to_string(), end_date.to_string());
+        query_params.insert("start_date", start_date.to_string());
+        query_params.insert("end_date", end_date.to_string());
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/app_usage/{app_id}/message_push_overview"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_APP_USAGE_MESSAGE_PUSH_OVERVIEW,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -93,12 +102,16 @@ impl AppUsageService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AppUsageOverviewResponse>> {
         let mut query_params = HashMap::new();
-        query_params.insert("start_date".to_string(), start_date.to_string());
-        query_params.insert("end_date".to_string(), end_date.to_string());
+        query_params.insert("start_date", start_date.to_string());
+        query_params.insert("end_date", end_date.to_string());
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/application/v6/app_usage/{app_id}/overview"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::APPLICATION_V6_APP_USAGE_OVERVIEW,
+                "app_id",
+                app_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

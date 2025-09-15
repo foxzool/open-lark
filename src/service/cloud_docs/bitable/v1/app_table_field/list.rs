@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -100,25 +101,25 @@ impl ListFieldRequestBuilder {
             self.request
                 .api_request
                 .query_params
-                .insert("view_id".to_string(), view_id.clone());
+                .insert("view_id", view_id.clone());
         }
         if let Some(text_field_as_array) = &self.request.text_field_as_array {
-            self.request.api_request.query_params.insert(
-                "text_field_as_array".to_string(),
-                text_field_as_array.to_string(),
-            );
+            self.request
+                .api_request
+                .query_params
+                .insert("text_field_as_array", text_field_as_array.to_string());
         }
         if let Some(page_token) = &self.request.page_token {
             self.request
                 .api_request
                 .query_params
-                .insert("page_token".to_string(), page_token.clone());
+                .insert("page_token", page_token.clone());
         }
         if let Some(page_size) = &self.request.page_size {
             self.request
                 .api_request
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
         self.request
     }
@@ -160,11 +161,9 @@ pub async fn list_field(
 ) -> SDKResult<BaseResponse<ListFieldResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::GET;
-    api_req.api_path = format!(
-        "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/fields",
-        app_token = request.app_token,
-        table_id = request.table_id
-    );
+    api_req.api_path = Endpoints::BITABLE_V1_FIELDS
+        .replace("{app_token}", &request.app_token)
+        .replace("{table_id}", &request.table_id);
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
     let api_resp = Transport::request(api_req, config, option).await?;

@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -341,7 +342,7 @@ impl BackgroundCheckService {
     ) -> SDKResult<BaseResponse<BackgroundCheckPackageListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/background_check_packages".to_string(),
+            api_path: Endpoints::HIRE_V1_BACKGROUND_CHECK_PACKAGES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -351,23 +352,19 @@ impl BackgroundCheckService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(vendor) = request.vendor {
-            api_req.query_params.insert("vendor".to_string(), vendor);
+            api_req.query_params.insert("vendor", vendor);
         }
 
         if let Some(enabled) = request.enabled {
-            api_req
-                .query_params
-                .insert("enabled".to_string(), enabled.to_string());
+            api_req.query_params.insert("enabled", enabled.to_string());
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -444,7 +441,7 @@ impl BackgroundCheckService {
     ) -> SDKResult<BaseResponse<BackgroundCheckOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/background_check_orders".to_string(),
+            api_path: Endpoints::HIRE_V1_BACKGROUND_CHECK_ORDERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -490,7 +487,11 @@ impl BackgroundCheckService {
     ) -> SDKResult<BaseResponse<BackgroundCheckOrderDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/background_check_orders/{order_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_BACKGROUND_CHECK_ORDER_GET,
+                "order_id",
+                order_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -552,7 +553,7 @@ impl BackgroundCheckService {
     ) -> SDKResult<BaseResponse<BackgroundCheckOrderListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/hire/v1/background_check_orders".to_string(),
+            api_path: Endpoints::HIRE_V1_BACKGROUND_CHECK_ORDERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -562,35 +563,31 @@ impl BackgroundCheckService {
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size".to_string(), page_size.to_string());
+                .insert("page_size", page_size.to_string());
         }
 
         if let Some(page_token) = request.page_token {
-            api_req
-                .query_params
-                .insert("page_token".to_string(), page_token);
+            api_req.query_params.insert("page_token", page_token);
         }
 
         if let Some(talent_id) = request.talent_id {
-            api_req
-                .query_params
-                .insert("talent_id".to_string(), talent_id);
+            api_req.query_params.insert("talent_id", talent_id);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status".to_string(), status);
+            api_req.query_params.insert("status", status);
         }
 
         if let Some(created_start_time) = request.created_start_time {
             api_req
                 .query_params
-                .insert("created_start_time".to_string(), created_start_time);
+                .insert("created_start_time", created_start_time);
         }
 
         if let Some(created_end_time) = request.created_end_time {
             api_req
                 .query_params
-                .insert("created_end_time".to_string(), created_end_time);
+                .insert("created_end_time", created_end_time);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -632,7 +629,11 @@ impl BackgroundCheckService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!("/open-apis/hire/v1/background_check_orders/{order_id}/cancel"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_BACKGROUND_CHECK_ORDER_CANCEL,
+                "order_id",
+                order_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -664,7 +665,11 @@ impl BackgroundCheckService {
     ) -> SDKResult<BaseResponse<serde_json::Value>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/hire/v1/background_check_orders/{order_id}/report"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HIRE_V1_BACKGROUND_CHECK_ORDER_REPORT,
+                "order_id",
+                order_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -715,7 +720,7 @@ impl BackgroundCheckService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/hire/v1/background_check_orders/batch".to_string(),
+            api_path: Endpoints::HIRE_V1_BACKGROUND_CHECK_ORDERS_BATCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()

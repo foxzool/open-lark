@@ -145,6 +145,16 @@ name = "websocket_frame_bench"
 harness = false
 required-features = ["benchmarks", "websocket"]
 
+[[bench]]
+name = "token_performance_bench"
+harness = false
+required-features = ["benchmarks"]
+
+[[bench]]
+name = "api_throughput_bench"
+harness = false
+required-features = ["benchmarks"]
+
 # ===========================================
 # Tools
 # ===========================================
