@@ -826,9 +826,9 @@ impl OfferService {
                 let path = EndpointBuilder::replace_param(
                     Endpoints::HIRE_V1_ONBOARDING_PROGRESS,
                     "onboarding_id",
-                    &onboarding_id,
+                    onboarding_id,
                 );
-                EndpointBuilder::replace_param(&path, "progress_id", &progress_id)
+                EndpointBuilder::replace_param(&path, "progress_id", progress_id)
             },
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),

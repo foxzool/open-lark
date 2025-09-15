@@ -114,9 +114,9 @@ impl InstanceCommentService {
                 let path = EndpointBuilder::replace_param(
                     Endpoints::APPROVAL_V4_INSTANCE_COMMENT_DELETE,
                     "instance_code",
-                    &instance_code,
+                    instance_code,
                 );
-                EndpointBuilder::replace_param(&path, "comment_id", &comment_id)
+                EndpointBuilder::replace_param(&path, "comment_id", comment_id)
             },
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,

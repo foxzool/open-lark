@@ -119,11 +119,11 @@ impl CustomFieldOptionService {
         let temp_path = EndpointBuilder::replace_param(
             Endpoints::TASK_V2_CUSTOM_FIELD_OPTION_GET,
             "custom_field_guid",
-            &custom_field_guid,
+            custom_field_guid,
         );
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: EndpointBuilder::replace_param(&temp_path, "option_guid", &option_guid),
+            api_path: EndpointBuilder::replace_param(&temp_path, "option_guid", option_guid),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,

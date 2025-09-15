@@ -301,7 +301,7 @@ impl ReferralService {
             api_path: EndpointBuilder::replace_param(
                 Endpoints::HIRE_V1_REFERRAL_GET,
                 "referral_id",
-                &referral_id,
+                referral_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
@@ -494,7 +494,7 @@ impl ReferralService {
             api_path: EndpointBuilder::replace_param(
                 Endpoints::HIRE_V1_REFERRAL_ACCOUNT_GET,
                 "user_id",
-                &user_id,
+                user_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
@@ -553,7 +553,7 @@ impl ReferralService {
             api_path: EndpointBuilder::replace_param(
                 Endpoints::HIRE_V1_REFERRAL_GRANT_REWARD,
                 "referral_id",
-                &referral_id,
+                referral_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
