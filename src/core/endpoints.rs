@@ -1344,21 +1344,21 @@ impl Endpoints {
         "/open-apis/performance/v1/review_config/semester_activity/reviewees/query";
 
     // ==================== Personal Settings 个人设置相关端点 ====================
-    
+
     /// 系统状态管理
-    pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUSES: &'static str = 
+    pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUSES: &'static str =
         "/open-apis/personal_settings/v1/system_statuses";
-    
+
     /// 系统状态操作
-    pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_OPERATION: &'static str = 
+    pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_OPERATION: &'static str =
         "/open-apis/personal_settings/v1/system_statuses/{system_status_id}";
-    
+
     /// 批量开启系统状态
-    pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_OPEN: &'static str = 
+    pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_OPEN: &'static str =
         "/open-apis/personal_settings/v1/system_statuses/batch_open";
-    
+
     /// 批量关闭系统状态
-    pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_CLOSE: &'static str = 
+    pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_CLOSE: &'static str =
         "/open-apis/personal_settings/v1/system_statuses/batch_close";
 
     // ==================== CoreHR 人力资源管理相关端点 ====================
@@ -2905,7 +2905,8 @@ impl Endpoints {
     pub const REPORT_V1_RULES_QUERY: &'static str = "/open-apis/report/v1/rules/query";
 
     /// 规则看板操作
-    pub const REPORT_V1_RULE_VIEWS_OPERATION: &'static str = "/open-apis/report/v1/rule-views/{view_id}";
+    pub const REPORT_V1_RULE_VIEWS_OPERATION: &'static str =
+        "/open-apis/report/v1/rule-views/{view_id}";
 
     // ==================== Authentication 用户认证相关端点 ====================
     /// 获取用户信息
@@ -2916,7 +2917,8 @@ impl Endpoints {
     pub const CALENDAR_V4_CALENDARS: &'static str = "/open-apis/calendar/v4/calendars";
 
     /// 日历详情操作
-    pub const CALENDAR_V4_CALENDAR_OPERATION: &'static str = "/open-apis/calendar/v4/calendars/{calendar_id}";
+    pub const CALENDAR_V4_CALENDAR_OPERATION: &'static str =
+        "/open-apis/calendar/v4/calendars/{calendar_id}";
 }
 
 /// API端点构建辅助函数
@@ -3234,150 +3236,9 @@ impl WorkplaceEndpointBuilder {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_endpoint_builder() {
-        let result = EndpointBuilder::replace_param("/api/users/{user_id}", "user_id", "123");
-        assert_eq!(result, "/api/users/123");
-    }
-
-    #[test]
-    fn test_multiple_params() {
-        let mut params = std::collections::HashMap::new();
-        params.insert("calendar_id".to_string(), "cal_123".to_string());
-        params.insert("event_id".to_string(), "event_456".to_string());
-
-        let result = EndpointBuilder::replace_params(
-            "/open-apis/calendar/v4/calendars/{calendar_id}/events/{event_id}",
-            &params,
-        );
-        assert_eq!(
-            result,
-            "/open-apis/calendar/v4/calendars/cal_123/events/event_456"
-        );
-    }
-
-    #[test]
-    fn test_vc_room_endpoints_builder() {
-        let room_endpoints = EndpointBuilder::vc_room("room_123");
-        assert_eq!(room_endpoints.get(), "/open-apis/vc/v1/rooms/room_123");
-    }
-
-    #[test]
-    fn test_calendar_endpoints_builder() {
-        let calendar_endpoints = EndpointBuilder::calendar("calendar_456");
-        assert_eq!(
-            calendar_endpoints.get(),
-            "/open-apis/calendar/v4/calendars/calendar_456"
-        );
-        assert_eq!(
-            calendar_endpoints.patch(),
-            "/open-apis/calendar/v4/calendars/calendar_456"
-        );
-        assert_eq!(
-            calendar_endpoints.delete(),
-            "/open-apis/calendar/v4/calendars/calendar_456"
-        );
-        assert_eq!(
-            calendar_endpoints.set_primary(),
-            "/open-apis/calendar/v4/calendars/calendar_456/primary"
-        );
-        assert_eq!(
-            calendar_endpoints.search(),
-            "/open-apis/calendar/v4/calendars/calendar_456/search"
-        );
-    }
-
-    #[test]
-    fn test_calendar_event_endpoints_builder() {
-        let event_endpoints = EndpointBuilder::calendar_event("calendar_456", "event_789");
-        assert_eq!(
-            event_endpoints.create(),
-            "/open-apis/calendar/v4/calendars/calendar_456/events"
-        );
-        assert_eq!(
-            event_endpoints.get(),
-            "/open-apis/calendar/v4/calendars/calendar_456/events/event_789"
-        );
-        assert_eq!(
-            event_endpoints.patch(),
-            "/open-apis/calendar/v4/calendars/calendar_456/events/event_789"
-        );
-        assert_eq!(
-            event_endpoints.delete(),
-            "/open-apis/calendar/v4/calendars/calendar_456/events/event_789"
-        );
-        assert_eq!(
-            event_endpoints.reply(),
-            "/open-apis/calendar/v4/calendars/calendar_456/events/event_789/reply"
-        );
-        assert_eq!(
-            event_endpoints.search(),
-            "/open-apis/calendar/v4/calendars/calendar_456/events/event_789/search"
-        );
-        assert_eq!(
-            event_endpoints.list(),
-            "/open-apis/calendar/v4/calendars/calendar_456/events"
-        );
-    }
-
-    #[test]
-    fn test_im_message_endpoints_builder() {
-        let message_endpoints = EndpointBuilder::im_message("message_123");
-        assert_eq!(
-            message_endpoints.get(),
-            "/open-apis/im/v1/messages/message_123"
-        );
-        assert_eq!(
-            message_endpoints.patch(),
-            "/open-apis/im/v1/messages/message_123"
-        );
-        assert_eq!(
-            message_endpoints.delete(),
-            "/open-apis/im/v1/messages/message_123"
-        );
-    }
-
-    #[test]
-    fn test_vc_endpoints() {
-        let vc_endpoints = EndpointBuilder::vc_meeting("meeting_456");
-        assert_eq!(vc_endpoints.get(), "/open-apis/vc/v1/meetings/meeting_456");
-        assert_eq!(
-            vc_endpoints.update(),
-            "/open-apis/vc/v1/meetings/meeting_456"
-        );
-        assert_eq!(
-            vc_endpoints.end(),
-            "/open-apis/vc/v1/meetings/meeting_456/end"
-        );
-        assert_eq!(
-            vc_endpoints.invite(),
-            "/open-apis/vc/v1/meetings/meeting_456/invite"
-        );
-        assert_eq!(
-            vc_endpoints.kickout(),
-            "/open-apis/vc/v1/meetings/meeting_456/kickout"
-        );
-    }
-
-    #[test]
-    fn test_workplace_endpoints() {
-        let workplace_endpoints = EndpointBuilder::workplace();
-        assert_eq!(
-            workplace_endpoints.access_data(),
-            "/open-apis/workplace/v1/workplace_access_data/search"
-        );
-        assert_eq!(
-            workplace_endpoints.app_recommend(),
-            "/open-apis/workplace/v1/app_recommend_rule/list"
-        );
-    }
-}
-
+// ==================== Public Re-exports 公共常量导出 ====================
 // Public re-exports for backward compatibility with direct imports
+
 // LINGO constants
 pub const LINGO_CLASSIFICATION_LIST: &str = Endpoints::LINGO_CLASSIFICATION_LIST;
 pub const LINGO_DRAFT_CREATE: &str = Endpoints::LINGO_DRAFT_CREATE;
@@ -3533,51 +3394,69 @@ pub const ACS_V1_USERS: &str = Endpoints::ACS_V1_USERS;
 pub const ACS_V1_USER_FACE_IMAGE: &str = Endpoints::ACS_V1_USER_FACE_IMAGE;
 
 // Personal Settings constants
-pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUSES: &str = Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUSES;
-pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_OPERATION: &str = Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUS_OPERATION;
-pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_OPEN: &str = Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_OPEN;
-pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_CLOSE: &str = Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_CLOSE;
+pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUSES: &str =
+    Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUSES;
+pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_OPERATION: &str =
+    Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUS_OPERATION;
+pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_OPEN: &str =
+    Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_OPEN;
+pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_CLOSE: &str =
+    Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_CLOSE;
 
 // AI Services constants
 pub const SPEECH_TO_TEXT_V1_FILE_RECOGNIZE: &str = Endpoints::SPEECH_TO_TEXT_V1_FILE_RECOGNIZE;
 pub const SPEECH_TO_TEXT_V1_STREAM_RECOGNIZE: &str = Endpoints::SPEECH_TO_TEXT_V1_STREAM_RECOGNIZE;
-pub const OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE: &str = Endpoints::OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE;
+pub const OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE: &str =
+    Endpoints::OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE;
 pub const TRANSLATION_V1_TEXT_DETECT: &str = Endpoints::TRANSLATION_V1_TEXT_DETECT;
 pub const TRANSLATION_V1_TEXT_TRANSLATE: &str = Endpoints::TRANSLATION_V1_TEXT_TRANSLATE;
 
 // E-Learning constants
 pub const ELEARNING_V2_COURSE_REGISTRATIONS: &str = Endpoints::ELEARNING_V2_COURSE_REGISTRATIONS;
-pub const ELEARNING_V2_COURSE_REGISTRATION_OPERATION: &str = Endpoints::ELEARNING_V2_COURSE_REGISTRATION_OPERATION;
-pub const ELEARNING_V2_COURSE_REGISTRATIONS_STATISTICS: &str = Endpoints::ELEARNING_V2_COURSE_REGISTRATIONS_STATISTICS;
+pub const ELEARNING_V2_COURSE_REGISTRATION_OPERATION: &str =
+    Endpoints::ELEARNING_V2_COURSE_REGISTRATION_OPERATION;
+pub const ELEARNING_V2_COURSE_REGISTRATIONS_STATISTICS: &str =
+    Endpoints::ELEARNING_V2_COURSE_REGISTRATIONS_STATISTICS;
 
 // Tenant Tag constants
 pub const TENANT_TAG_V1_TAGS: &str = Endpoints::TENANT_TAG_V1_TAGS;
 pub const TENANT_TAG_V1_TAG_OPERATION: &str = Endpoints::TENANT_TAG_V1_TAG_OPERATION;
 pub const TENANT_TAG_V1_TAG_BINDINGS: &str = Endpoints::TENANT_TAG_V1_TAG_BINDINGS;
 
-// Performance constants  
+// Performance constants
 pub const PERFORMANCE_V1_REVIEW_DATA_QUERY: &str = Endpoints::PERFORMANCE_V1_REVIEW_DATA_QUERY;
-pub const PERFORMANCE_V1_REVIEW_DATA_DETAILS_QUERY: &str = Endpoints::PERFORMANCE_V1_REVIEW_DATA_DETAILS_QUERY;
-pub const PERFORMANCE_V1_STAGE_TASK_FIND_BY_USER_LIST: &str = Endpoints::PERFORMANCE_V1_STAGE_TASK_FIND_BY_USER_LIST;
-pub const PERFORMANCE_V1_STAGE_TASK_FIND_BY_PAGE: &str = Endpoints::PERFORMANCE_V1_STAGE_TASK_FIND_BY_PAGE;
+pub const PERFORMANCE_V1_REVIEW_DATA_DETAILS_QUERY: &str =
+    Endpoints::PERFORMANCE_V1_REVIEW_DATA_DETAILS_QUERY;
+pub const PERFORMANCE_V1_STAGE_TASK_FIND_BY_USER_LIST: &str =
+    Endpoints::PERFORMANCE_V1_STAGE_TASK_FIND_BY_USER_LIST;
+pub const PERFORMANCE_V1_STAGE_TASK_FIND_BY_PAGE: &str =
+    Endpoints::PERFORMANCE_V1_STAGE_TASK_FIND_BY_PAGE;
 pub const PERFORMANCE_V1_METRIC_DETAIL_QUERY: &str = Endpoints::PERFORMANCE_V1_METRIC_DETAIL_QUERY;
-pub const PERFORMANCE_V1_METRIC_DETAIL_IMPORT: &str = Endpoints::PERFORMANCE_V1_METRIC_DETAIL_IMPORT;
+pub const PERFORMANCE_V1_METRIC_DETAIL_IMPORT: &str =
+    Endpoints::PERFORMANCE_V1_METRIC_DETAIL_IMPORT;
 
 // Human Authentication constants
 pub const HUMAN_AUTHENTICATION_V1_IDENTITIES: &str = Endpoints::HUMAN_AUTHENTICATION_V1_IDENTITIES;
-pub const HUMAN_AUTHENTICATION_V1_FACE_IMAGES: &str = Endpoints::HUMAN_AUTHENTICATION_V1_FACE_IMAGES;
-pub const HUMAN_AUTHENTICATION_V1_FACE_IMAGES_CROP: &str = Endpoints::HUMAN_AUTHENTICATION_V1_FACE_IMAGES_CROP;
-pub const HUMAN_AUTHENTICATION_V1_IDENTITY_RESULT: &str = Endpoints::HUMAN_AUTHENTICATION_V1_IDENTITY_RESULT;
+pub const HUMAN_AUTHENTICATION_V1_FACE_IMAGES: &str =
+    Endpoints::HUMAN_AUTHENTICATION_V1_FACE_IMAGES;
+pub const HUMAN_AUTHENTICATION_V1_FACE_IMAGES_CROP: &str =
+    Endpoints::HUMAN_AUTHENTICATION_V1_FACE_IMAGES_CROP;
+pub const HUMAN_AUTHENTICATION_V1_IDENTITY_RESULT: &str =
+    Endpoints::HUMAN_AUTHENTICATION_V1_IDENTITY_RESULT;
 
 // MDM constants
 pub const MDM_V1_COUNTRY_REGIONS_BATCH_GET: &str = Endpoints::MDM_V1_COUNTRY_REGIONS_BATCH_GET;
 pub const MDM_V1_COUNTRY_REGIONS: &str = Endpoints::MDM_V1_COUNTRY_REGIONS;
-pub const MDM_V1_USER_AUTH_DATA_RELATIONS_BIND: &str = Endpoints::MDM_V1_USER_AUTH_DATA_RELATIONS_BIND;
-pub const MDM_V1_USER_AUTH_DATA_RELATIONS_UNBIND: &str = Endpoints::MDM_V1_USER_AUTH_DATA_RELATIONS_UNBIND;
+pub const MDM_V1_USER_AUTH_DATA_RELATIONS_BIND: &str =
+    Endpoints::MDM_V1_USER_AUTH_DATA_RELATIONS_BIND;
+pub const MDM_V1_USER_AUTH_DATA_RELATIONS_UNBIND: &str =
+    Endpoints::MDM_V1_USER_AUTH_DATA_RELATIONS_UNBIND;
 
 // Security and Compliance constants
-pub const SECURITY_AND_COMPLIANCE_V1_AUDIT_DATAS: &str = Endpoints::SECURITY_AND_COMPLIANCE_V1_AUDIT_DATAS;
-pub const SECURITY_AND_COMPLIANCE_V1_OPENAPI_LOGS_LIST_DATA: &str = Endpoints::SECURITY_AND_COMPLIANCE_V1_OPENAPI_LOGS_LIST_DATA;
+pub const SECURITY_AND_COMPLIANCE_V1_AUDIT_DATAS: &str =
+    Endpoints::SECURITY_AND_COMPLIANCE_V1_AUDIT_DATAS;
+pub const SECURITY_AND_COMPLIANCE_V1_OPENAPI_LOGS_LIST_DATA: &str =
+    Endpoints::SECURITY_AND_COMPLIANCE_V1_OPENAPI_LOGS_LIST_DATA;
 
 // Report constants
 pub const REPORT_V1_TASKS_QUERY: &str = Endpoints::REPORT_V1_TASKS_QUERY;
@@ -3590,3 +3469,146 @@ pub const AUTHEN_V1_USER_INFO: &str = Endpoints::AUTHEN_V1_USER_INFO;
 // Calendar constants (补充)
 pub const CALENDAR_V4_CALENDARS: &str = Endpoints::CALENDAR_V4_CALENDARS;
 pub const CALENDAR_V4_CALENDAR_OPERATION: &str = Endpoints::CALENDAR_V4_CALENDAR_OPERATION;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_endpoint_builder() {
+        let result = EndpointBuilder::replace_param("/api/users/{user_id}", "user_id", "123");
+        assert_eq!(result, "/api/users/123");
+    }
+
+    #[test]
+    fn test_multiple_params() {
+        let mut params = std::collections::HashMap::new();
+        params.insert("calendar_id".to_string(), "cal_123".to_string());
+        params.insert("event_id".to_string(), "event_456".to_string());
+
+        let result = EndpointBuilder::replace_params(
+            "/open-apis/calendar/v4/calendars/{calendar_id}/events/{event_id}",
+            &params,
+        );
+        assert_eq!(
+            result,
+            "/open-apis/calendar/v4/calendars/cal_123/events/event_456"
+        );
+    }
+
+    #[test]
+    fn test_vc_room_endpoints_builder() {
+        let room_endpoints = EndpointBuilder::vc_room("room_123");
+        assert_eq!(room_endpoints.get(), "/open-apis/vc/v1/rooms/room_123");
+    }
+
+    #[test]
+    fn test_calendar_endpoints_builder() {
+        let calendar_endpoints = EndpointBuilder::calendar("calendar_456");
+        assert_eq!(
+            calendar_endpoints.get(),
+            "/open-apis/calendar/v4/calendars/calendar_456"
+        );
+        assert_eq!(
+            calendar_endpoints.patch(),
+            "/open-apis/calendar/v4/calendars/calendar_456"
+        );
+        assert_eq!(
+            calendar_endpoints.delete(),
+            "/open-apis/calendar/v4/calendars/calendar_456"
+        );
+        assert_eq!(
+            calendar_endpoints.set_primary(),
+            "/open-apis/calendar/v4/calendars/calendar_456/primary"
+        );
+        assert_eq!(
+            calendar_endpoints.search(),
+            "/open-apis/calendar/v4/calendars/calendar_456/search"
+        );
+    }
+
+    #[test]
+    fn test_calendar_event_endpoints_builder() {
+        let event_endpoints = EndpointBuilder::calendar_event("calendar_456", "event_789");
+        assert_eq!(
+            event_endpoints.create(),
+            "/open-apis/calendar/v4/calendars/calendar_456/events"
+        );
+        assert_eq!(
+            event_endpoints.get(),
+            "/open-apis/calendar/v4/calendars/calendar_456/events/event_789"
+        );
+        assert_eq!(
+            event_endpoints.patch(),
+            "/open-apis/calendar/v4/calendars/calendar_456/events/event_789"
+        );
+        assert_eq!(
+            event_endpoints.delete(),
+            "/open-apis/calendar/v4/calendars/calendar_456/events/event_789"
+        );
+        assert_eq!(
+            event_endpoints.reply(),
+            "/open-apis/calendar/v4/calendars/calendar_456/events/event_789/reply"
+        );
+        assert_eq!(
+            event_endpoints.search(),
+            "/open-apis/calendar/v4/calendars/calendar_456/events/event_789/search"
+        );
+        assert_eq!(
+            event_endpoints.list(),
+            "/open-apis/calendar/v4/calendars/calendar_456/events"
+        );
+    }
+
+    #[test]
+    fn test_im_message_endpoints_builder() {
+        let message_endpoints = EndpointBuilder::im_message("message_123");
+        assert_eq!(
+            message_endpoints.get(),
+            "/open-apis/im/v1/messages/message_123"
+        );
+        assert_eq!(
+            message_endpoints.patch(),
+            "/open-apis/im/v1/messages/message_123"
+        );
+        assert_eq!(
+            message_endpoints.delete(),
+            "/open-apis/im/v1/messages/message_123"
+        );
+    }
+
+    #[test]
+    fn test_vc_endpoints() {
+        let vc_endpoints = EndpointBuilder::vc_meeting("meeting_456");
+        assert_eq!(vc_endpoints.get(), "/open-apis/vc/v1/meetings/meeting_456");
+        assert_eq!(
+            vc_endpoints.update(),
+            "/open-apis/vc/v1/meetings/meeting_456"
+        );
+        assert_eq!(
+            vc_endpoints.end(),
+            "/open-apis/vc/v1/meetings/meeting_456/end"
+        );
+        assert_eq!(
+            vc_endpoints.invite(),
+            "/open-apis/vc/v1/meetings/meeting_456/invite"
+        );
+        assert_eq!(
+            vc_endpoints.kickout(),
+            "/open-apis/vc/v1/meetings/meeting_456/kickout"
+        );
+    }
+
+    #[test]
+    fn test_workplace_endpoints() {
+        let workplace_endpoints = EndpointBuilder::workplace();
+        assert_eq!(
+            workplace_endpoints.access_data(),
+            "/open-apis/workplace/v1/workplace_access_data/search"
+        );
+        assert_eq!(
+            workplace_endpoints.app_recommend(),
+            "/open-apis/workplace/v1/app_recommend_rule/list"
+        );
+    }
+}

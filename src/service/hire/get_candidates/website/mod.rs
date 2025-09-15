@@ -674,7 +674,7 @@ impl WebsiteService {
             api_path: EndpointBuilder::replace_param(
                 Endpoints::HIRE_V1_WEBSITE_APPLICATION_CONVERT,
                 "website_application_id",
-                &website_application_id,
+                website_application_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
