@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{Endpoints, EndpointBuilder},
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         query_params::QueryParams,
         req_option::RequestOption,
@@ -212,7 +212,9 @@ impl BadgeService {
                 .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req.query_params.insert(QueryParams::PAGE_TOKEN, page_token);
+            api_req
+                .query_params
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
         if let Some(name) = request.name {
             api_req.query_params.insert(QueryParams::NAME, name);

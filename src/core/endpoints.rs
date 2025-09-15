@@ -944,6 +944,49 @@ impl Endpoints {
     pub const DOCUMENT_AI_FOOD_MANAGE_LICENSE_RECOGNIZE: &'static str =
         "/open-apis/document_ai/v1/food_manage_license/recognize";
 
+    // ==================== AI Services AI服务相关端点 ====================
+    /// 语音文件识别
+    pub const SPEECH_TO_TEXT_V1_FILE_RECOGNIZE: &'static str =
+        "/open-apis/speech_to_text/v1/speech/file_recognize";
+
+    /// 流式语音识别
+    pub const SPEECH_TO_TEXT_V1_STREAM_RECOGNIZE: &'static str =
+        "/open-apis/speech_to_text/v1/speech/stream_recognize";
+
+    /// 光学字符识别
+    pub const OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE: &'static str =
+        "/open-apis/optical_char_recognition/v1/image/basic_recognize";
+
+    /// 语种检测
+    pub const TRANSLATION_V1_TEXT_DETECT: &'static str = "/open-apis/translation/v1/text/detect";
+
+    /// 文本翻译
+    pub const TRANSLATION_V1_TEXT_TRANSLATE: &'static str =
+        "/open-apis/translation/v1/text/translate";
+
+    // ==================== E-Learning 在线学习相关端点 ====================
+    /// 课程报名管理
+    pub const ELEARNING_V2_COURSE_REGISTRATIONS: &'static str =
+        "/open-apis/elearning/v2/course_registrations";
+
+    /// 课程报名操作
+    pub const ELEARNING_V2_COURSE_REGISTRATION_OPERATION: &'static str =
+        "/open-apis/elearning/v2/course_registrations/{registration_id}";
+
+    /// 课程报名统计
+    pub const ELEARNING_V2_COURSE_REGISTRATIONS_STATISTICS: &'static str =
+        "/open-apis/elearning/v2/course_registrations/statistics";
+
+    // ==================== Tenant Tag 租户标签相关端点 ====================
+    /// 标签管理
+    pub const TENANT_TAG_V1_TAGS: &'static str = "/open-apis/tenant-tag/v1/tags";
+
+    /// 标签操作
+    pub const TENANT_TAG_V1_TAG_OPERATION: &'static str = "/open-apis/tenant-tag/v1/tags/{tag_id}";
+
+    /// 标签绑定管理
+    pub const TENANT_TAG_V1_TAG_BINDINGS: &'static str = "/open-apis/tenant-tag/v1/tag_bindings";
+
     // ==================== Task v2 相关端点 ====================
     /// 任务附件上传
     pub const TASK_V2_ATTACHMENTS_UPLOAD: &'static str = "/open-apis/task/v2/attachments/upload";
@@ -1220,6 +1263,30 @@ impl Endpoints {
         "/open-apis/apaas/v1/application/{app_id}/audit_log/audit_events";
 
     // ==================== Performance 绩效管理相关端点 ====================
+    /// 评估数据查询
+    pub const PERFORMANCE_V1_REVIEW_DATA_QUERY: &'static str =
+        "/open-apis/performance/v1/review_data/query";
+
+    /// 评估详情数据查询
+    pub const PERFORMANCE_V1_REVIEW_DATA_DETAILS_QUERY: &'static str =
+        "/open-apis/performance/v1/review_data/details/query";
+
+    /// 阶段任务用户列表查询
+    pub const PERFORMANCE_V1_STAGE_TASK_FIND_BY_USER_LIST: &'static str =
+        "/open-apis/performance/v1/stage_task/find_by_user_list";
+
+    /// 阶段任务分页查询
+    pub const PERFORMANCE_V1_STAGE_TASK_FIND_BY_PAGE: &'static str =
+        "/open-apis/performance/v1/stage_task/find_by_page";
+
+    /// 指标详情查询
+    pub const PERFORMANCE_V1_METRIC_DETAIL_QUERY: &'static str =
+        "/open-apis/performance/v1/metric_detail/query";
+
+    /// 指标详情导入
+    pub const PERFORMANCE_V1_METRIC_DETAIL_IMPORT: &'static str =
+        "/open-apis/performance/v1/metric_detail/import";
+
     /// 绩效周期列表查询
     pub const PERFORMANCE_SEMESTER_LIST: &'static str =
         "/open-apis/performance/v1/review_config/semester_activity/semesters";
@@ -1275,6 +1342,24 @@ impl Endpoints {
     /// 被评估人查询
     pub const PERFORMANCE_REVIEWEES_QUERY: &'static str =
         "/open-apis/performance/v1/review_config/semester_activity/reviewees/query";
+
+    // ==================== Personal Settings 个人设置相关端点 ====================
+    
+    /// 系统状态管理
+    pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUSES: &'static str = 
+        "/open-apis/personal_settings/v1/system_statuses";
+    
+    /// 系统状态操作
+    pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_OPERATION: &'static str = 
+        "/open-apis/personal_settings/v1/system_statuses/{system_status_id}";
+    
+    /// 批量开启系统状态
+    pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_OPEN: &'static str = 
+        "/open-apis/personal_settings/v1/system_statuses/batch_open";
+    
+    /// 批量关闭系统状态
+    pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_CLOSE: &'static str = 
+        "/open-apis/personal_settings/v1/system_statuses/batch_close";
 
     // ==================== CoreHR 人力资源管理相关端点 ====================
     /// 公司信息管理
@@ -2578,6 +2663,46 @@ impl Endpoints {
     pub const OKR_V1_PROGRESS_RECORDS_UPLOAD: &'static str =
         "/open-apis/okr/v1/progress_records/upload";
 
+    // ==================== Trust Party 可信第三方服务端点 ====================
+
+    // === 关联组织管理端点 ===
+    /// 获取可见关联组织列表
+    pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS: &'static str =
+        "/open-apis/trust_party/v1/collaboration_organizations";
+
+    /// 获取关联组织的部门和成员信息 (需要使用 EndpointBuilder::replace_param 替换 {org_id})
+    pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_VISIBLE: &'static str =
+        "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/visible_organization";
+
+    /// 获取关联组织详情 (需要使用 EndpointBuilder::replace_param 替换 {org_id})
+    pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_GET: &'static str =
+        "/open-apis/trust_party/v1/collaboration_organizations/{org_id}";
+
+    /// 获取关联组织成员详情 (需要使用 EndpointBuilder::replace_params 替换 {org_id} 和 {user_id})
+    pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_USER_GET: &'static str =
+        "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/users/{user_id}";
+
+    /// 获取关联组织部门详情 (需要使用 EndpointBuilder::replace_params 替换 {org_id} 和 {department_id})
+    pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_DEPARTMENT_GET: &'static str =
+        "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/departments/{department_id}";
+
+    /// 获取关联组织双方共享成员范围 (需要使用 EndpointBuilder::replace_param 替换 {org_id})
+    pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_SHARED_MEMBER_SCOPES: &'static str =
+        "/open-apis/trust_party/v1/collaboration_organizations/{org_id}/shared_member_scopes";
+
+    /// 管理员获取所有关联组织列表
+    pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS_ADMIN: &'static str =
+        "/open-apis/trust_party/v1/collaboration_organizations/admin";
+
+    // === 可搜可见规则管理端点 ===
+    /// 可搜可见规则操作（创建/查询）
+    pub const TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULES: &'static str =
+        "/open-apis/trust_party/v1/searchable_and_visible_rules";
+
+    /// 可搜可见规则操作（更新/删除） (需要使用 EndpointBuilder::replace_param 替换 {rule_id})
+    pub const TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULE_OPERATION: &'static str =
+        "/open-apis/trust_party/v1/searchable_and_visible_rules/{rule_id}";
+
     // ==================== Cardkit服务端点 ====================
     /// 创建卡片
     pub const CARDKIT_V1_CARDS: &'static str = "/open-apis/cardkit/v1/cards";
@@ -2707,28 +2832,32 @@ impl Endpoints {
     pub const ADMIN_V1_BADGE_GRANTS_LIST: &'static str = "/open-apis/admin/v1/badge_grants";
 
     /// 勋章授予名单 - 操作授予名单（获取/更新/删除）
-    pub const ADMIN_V1_BADGE_GRANTS_OPERATION: &'static str = "/open-apis/admin/v1/badge_grants/{grant_id}";
+    pub const ADMIN_V1_BADGE_GRANTS_OPERATION: &'static str =
+        "/open-apis/admin/v1/badge_grants/{grant_id}";
 
     /// 密码管理 - 重置密码
     pub const ADMIN_V1_PASSWORD_RESET: &'static str = "/open-apis/admin/v1/password/reset";
 
     /// 数据报表 - 部门维度数据
-    pub const ADMIN_V1_DATA_REPORT_DEPARTMENT: &'static str = "/open-apis/admin/v1/data_report/department";
+    pub const ADMIN_V1_DATA_REPORT_DEPARTMENT: &'static str =
+        "/open-apis/admin/v1/data_report/department";
 
     /// 数据报表 - 用户维度数据
     pub const ADMIN_V1_DATA_REPORT_USER: &'static str = "/open-apis/admin/v1/data_report/user";
 
     // ==================== 妙记服务端点 ====================
-    
+
     /// 获取妙记信息 (需要使用 EndpointBuilder::replace_param 替换 {minute_token})
     pub const MINUTES_V1_MINUTE_GET: &'static str = "/open-apis/minutes/v1/{minute_token}";
-    
+
     /// 获取妙记统计数据 (需要使用 EndpointBuilder::replace_param 替换 {minute_token})
-    pub const MINUTES_V1_STATISTICS_GET: &'static str = "/open-apis/minutes/v1/{minute_token}/statistics";
-    
+    pub const MINUTES_V1_STATISTICS_GET: &'static str =
+        "/open-apis/minutes/v1/{minute_token}/statistics";
+
     /// 导出妙记文字记录 (需要使用 EndpointBuilder::replace_param 替换 {minute_token})
-    pub const MINUTES_V1_TRANSCRIPT_GET: &'static str = "/open-apis/minutes/v1/{minute_token}/transcript";
-    
+    pub const MINUTES_V1_TRANSCRIPT_GET: &'static str =
+        "/open-apis/minutes/v1/{minute_token}/transcript";
+
     /// 下载妙记音视频文件 (需要使用 EndpointBuilder::replace_param 替换 {minute_token})
     pub const MINUTES_V1_MEDIA_GET: &'static str = "/open-apis/minutes/v1/{minute_token}/media";
 }
@@ -3289,6 +3418,26 @@ pub const OKR_V1_PROGRESS_RECORDS: &str = Endpoints::OKR_V1_PROGRESS_RECORDS;
 pub const OKR_V1_PROGRESS_RECORD_OPERATION: &str = Endpoints::OKR_V1_PROGRESS_RECORD_OPERATION;
 pub const OKR_V1_PROGRESS_RECORDS_UPLOAD: &str = Endpoints::OKR_V1_PROGRESS_RECORDS_UPLOAD;
 
+// Trust Party constants
+pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS: &str =
+    Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS;
+pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_VISIBLE: &str =
+    Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_VISIBLE;
+pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_GET: &str =
+    Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_GET;
+pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_USER_GET: &str =
+    Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_USER_GET;
+pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_DEPARTMENT_GET: &str =
+    Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_DEPARTMENT_GET;
+pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_SHARED_MEMBER_SCOPES: &str =
+    Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_SHARED_MEMBER_SCOPES;
+pub const TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS_ADMIN: &str =
+    Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS_ADMIN;
+pub const TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULES: &str =
+    Endpoints::TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULES;
+pub const TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULE_OPERATION: &str =
+    Endpoints::TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULE_OPERATION;
+
 // CARDKIT constants
 pub const CARDKIT_V1_CARDS: &str = Endpoints::CARDKIT_V1_CARDS;
 pub const CARDKIT_V1_CARD_ELEMENTS: &str = Endpoints::CARDKIT_V1_CARD_ELEMENTS;
@@ -3325,3 +3474,34 @@ pub const ACS_V1_RULE_EXTERNAL_DEVICE_BIND: &str = Endpoints::ACS_V1_RULE_EXTERN
 pub const ACS_V1_USER_OPERATION: &str = Endpoints::ACS_V1_USER_OPERATION;
 pub const ACS_V1_USERS: &str = Endpoints::ACS_V1_USERS;
 pub const ACS_V1_USER_FACE_IMAGE: &str = Endpoints::ACS_V1_USER_FACE_IMAGE;
+
+// Personal Settings constants
+pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUSES: &str = Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUSES;
+pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_OPERATION: &str = Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUS_OPERATION;
+pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_OPEN: &str = Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_OPEN;
+pub const PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_CLOSE: &str = Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_CLOSE;
+
+// AI Services constants
+pub const SPEECH_TO_TEXT_V1_FILE_RECOGNIZE: &str = Endpoints::SPEECH_TO_TEXT_V1_FILE_RECOGNIZE;
+pub const SPEECH_TO_TEXT_V1_STREAM_RECOGNIZE: &str = Endpoints::SPEECH_TO_TEXT_V1_STREAM_RECOGNIZE;
+pub const OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE: &str = Endpoints::OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE;
+pub const TRANSLATION_V1_TEXT_DETECT: &str = Endpoints::TRANSLATION_V1_TEXT_DETECT;
+pub const TRANSLATION_V1_TEXT_TRANSLATE: &str = Endpoints::TRANSLATION_V1_TEXT_TRANSLATE;
+
+// E-Learning constants
+pub const ELEARNING_V2_COURSE_REGISTRATIONS: &str = Endpoints::ELEARNING_V2_COURSE_REGISTRATIONS;
+pub const ELEARNING_V2_COURSE_REGISTRATION_OPERATION: &str = Endpoints::ELEARNING_V2_COURSE_REGISTRATION_OPERATION;
+pub const ELEARNING_V2_COURSE_REGISTRATIONS_STATISTICS: &str = Endpoints::ELEARNING_V2_COURSE_REGISTRATIONS_STATISTICS;
+
+// Tenant Tag constants
+pub const TENANT_TAG_V1_TAGS: &str = Endpoints::TENANT_TAG_V1_TAGS;
+pub const TENANT_TAG_V1_TAG_OPERATION: &str = Endpoints::TENANT_TAG_V1_TAG_OPERATION;
+pub const TENANT_TAG_V1_TAG_BINDINGS: &str = Endpoints::TENANT_TAG_V1_TAG_BINDINGS;
+
+// Performance constants  
+pub const PERFORMANCE_V1_REVIEW_DATA_QUERY: &str = Endpoints::PERFORMANCE_V1_REVIEW_DATA_QUERY;
+pub const PERFORMANCE_V1_REVIEW_DATA_DETAILS_QUERY: &str = Endpoints::PERFORMANCE_V1_REVIEW_DATA_DETAILS_QUERY;
+pub const PERFORMANCE_V1_STAGE_TASK_FIND_BY_USER_LIST: &str = Endpoints::PERFORMANCE_V1_STAGE_TASK_FIND_BY_USER_LIST;
+pub const PERFORMANCE_V1_STAGE_TASK_FIND_BY_PAGE: &str = Endpoints::PERFORMANCE_V1_STAGE_TASK_FIND_BY_PAGE;
+pub const PERFORMANCE_V1_METRIC_DETAIL_QUERY: &str = Endpoints::PERFORMANCE_V1_METRIC_DETAIL_QUERY;
+pub const PERFORMANCE_V1_METRIC_DETAIL_IMPORT: &str = Endpoints::PERFORMANCE_V1_METRIC_DETAIL_IMPORT;

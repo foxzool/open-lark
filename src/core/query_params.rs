@@ -84,6 +84,9 @@ impl QueryParams {
     /// 部门ID类型参数 - 指定部门ID的类型格式
     pub const DEPARTMENT_ID_TYPE: &'static str = "department_id_type";
 
+    /// 组织ID参数 - 指定组织的唯一标识
+    pub const ORG_ID: &'static str = "org_id";
+
     /// 员工ID参数 - 指定员工的唯一标识
     pub const EMPLOYEE_ID: &'static str = "employee_id";
 
@@ -292,6 +295,12 @@ impl QueryParamsBuilder {
     pub fn department_id<S: ToString>(mut self, id: S) -> Self {
         self.params
             .insert(QueryParams::DEPARTMENT_ID, id.to_string());
+        self
+    }
+
+    /// 设置组织ID
+    pub fn org_id<S: ToString>(mut self, id: S) -> Self {
+        self.params.insert(QueryParams::ORG_ID, id.to_string());
         self
     }
 

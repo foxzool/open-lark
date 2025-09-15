@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -44,7 +45,7 @@ impl ReviewDataService {
     ) -> SDKResult<BaseResponse<ResultQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/performance/v1/review_data/query".to_string(),
+            api_path: Endpoints::PERFORMANCE_V1_REVIEW_DATA_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -72,7 +73,7 @@ impl ReviewDataService {
     ) -> SDKResult<BaseResponse<DetailQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/performance/v1/review_data/details/query".to_string(),
+            api_path: Endpoints::PERFORMANCE_V1_REVIEW_DATA_DETAILS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

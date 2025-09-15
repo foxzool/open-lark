@@ -56,7 +56,9 @@ impl AccessRecordService {
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req.query_params.insert(QueryParams::PAGE_TOKEN, page_token);
+            api_req
+                .query_params
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(page_size) = request.page_size {
@@ -70,19 +72,23 @@ impl AccessRecordService {
         }
 
         if let Some(device_id) = request.device_id {
-            api_req.query_params.insert(QueryParams::DEVICE_ID, device_id);
+            api_req
+                .query_params
+                .insert(QueryParams::DEVICE_ID, device_id);
         }
 
         if let Some(access_type) = request.access_type {
-            api_req
-                .query_params
-                .insert(QueryParams::ACCESS_TYPE, serde_json::to_string(&access_type)?);
+            api_req.query_params.insert(
+                QueryParams::ACCESS_TYPE,
+                serde_json::to_string(&access_type)?,
+            );
         }
 
         if let Some(access_method) = request.access_method {
-            api_req
-                .query_params
-                .insert(QueryParams::ACCESS_METHOD, serde_json::to_string(&access_method)?);
+            api_req.query_params.insert(
+                QueryParams::ACCESS_METHOD,
+                serde_json::to_string(&access_method)?,
+            );
         }
 
         if let Some(result) = request.result {
