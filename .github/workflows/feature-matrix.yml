@@ -132,7 +132,9 @@ jobs:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
           
       - name: Install cargo-hack
-        uses: taiki-e/install-action@cargo-hack
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-hack
         
       - name: Cache Cargo registry
         uses: actions/cache@v4
