@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{Endpoints, EndpointBuilder},
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -95,7 +95,11 @@ impl SchemaService {
     ) -> SDKResult<BaseResponse<CreateSchemaResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(Endpoints::SEARCH_V2_SCHEMA_CREATE, "data_source_id", data_source_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::SEARCH_V2_SCHEMA_CREATE,
+                "data_source_id",
+                data_source_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -121,10 +125,10 @@ impl SchemaService {
     ) -> SDKResult<BaseResponse<EmptySchemaResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_params_from_array(Endpoints::SEARCH_V2_SCHEMA_OPERATION, &[
-                ("data_source_id", data_source_id),
-                ("schema_id", schema_id),
-            ]),
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::SEARCH_V2_SCHEMA_OPERATION,
+                &[("data_source_id", data_source_id), ("schema_id", schema_id)],
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
@@ -151,10 +155,10 @@ impl SchemaService {
     ) -> SDKResult<BaseResponse<UpdateSchemaResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: EndpointBuilder::replace_params_from_array(Endpoints::SEARCH_V2_SCHEMA_OPERATION, &[
-                ("data_source_id", data_source_id),
-                ("schema_id", schema_id),
-            ]),
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::SEARCH_V2_SCHEMA_OPERATION,
+                &[("data_source_id", data_source_id), ("schema_id", schema_id)],
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -180,10 +184,10 @@ impl SchemaService {
     ) -> SDKResult<BaseResponse<GetSchemaResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: EndpointBuilder::replace_params_from_array(Endpoints::SEARCH_V2_SCHEMA_OPERATION, &[
-                ("data_source_id", data_source_id),
-                ("schema_id", schema_id),
-            ]),
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::SEARCH_V2_SCHEMA_OPERATION,
+                &[("data_source_id", data_source_id), ("schema_id", schema_id)],
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };

@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{Endpoints, EndpointBuilder},
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -165,7 +165,11 @@ impl ProgressRecordService {
     ) -> SDKResult<BaseResponse<ProgressRecordDeleteResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(Endpoints::OKR_V1_PROGRESS_RECORD_OPERATION, "progress_id", progress_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::OKR_V1_PROGRESS_RECORD_OPERATION,
+                "progress_id",
+                progress_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -195,7 +199,11 @@ impl ProgressRecordService {
     ) -> SDKResult<BaseResponse<ProgressRecordUpdateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: EndpointBuilder::replace_param(Endpoints::OKR_V1_PROGRESS_RECORD_OPERATION, "progress_id", progress_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::OKR_V1_PROGRESS_RECORD_OPERATION,
+                "progress_id",
+                progress_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -223,7 +231,11 @@ impl ProgressRecordService {
     ) -> SDKResult<BaseResponse<ProgressRecordGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(Endpoints::OKR_V1_PROGRESS_RECORD_OPERATION, "progress_id", progress_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::OKR_V1_PROGRESS_RECORD_OPERATION,
+                "progress_id",
+                progress_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

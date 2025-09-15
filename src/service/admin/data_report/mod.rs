@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -69,7 +70,7 @@ impl DataReportService {
     ) -> SDKResult<BaseResponse<DepartmentDataReportResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/admin/v1/data_report/department".to_string(),
+            api_path: Endpoints::ADMIN_V1_DATA_REPORT_DEPARTMENT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -116,7 +117,7 @@ impl DataReportService {
     ) -> SDKResult<BaseResponse<UserDataReportResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/admin/v1/data_report/user".to_string(),
+            api_path: Endpoints::ADMIN_V1_DATA_REPORT_USER.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

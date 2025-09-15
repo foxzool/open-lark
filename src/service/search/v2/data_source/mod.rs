@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{Endpoints, EndpointBuilder},
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -126,7 +126,11 @@ impl DataSourceService {
     ) -> SDKResult<BaseResponse<EmptyDataSourceResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(Endpoints::SEARCH_V2_DATA_SOURCE_OPERATION, "data_source_id", data_source_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::SEARCH_V2_DATA_SOURCE_OPERATION,
+                "data_source_id",
+                data_source_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
@@ -151,7 +155,11 @@ impl DataSourceService {
     ) -> SDKResult<BaseResponse<UpdateDataSourceResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: EndpointBuilder::replace_param(Endpoints::SEARCH_V2_DATA_SOURCE_OPERATION, "data_source_id", data_source_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::SEARCH_V2_DATA_SOURCE_OPERATION,
+                "data_source_id",
+                data_source_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -175,7 +183,11 @@ impl DataSourceService {
     ) -> SDKResult<BaseResponse<GetDataSourceResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(Endpoints::SEARCH_V2_DATA_SOURCE_OPERATION, "data_source_id", data_source_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::SEARCH_V2_DATA_SOURCE_OPERATION,
+                "data_source_id",
+                data_source_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };

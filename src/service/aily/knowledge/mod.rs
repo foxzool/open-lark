@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -142,7 +143,7 @@ impl KnowledgeService {
     ) -> SDKResult<BaseResponse<DataKnowledgeAskResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/aily/v1/data_knowledge/ask".to_string(),
+            api_path: Endpoints::AILY_V1_DATA_KNOWLEDGE_ASK.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
                 "app_id": request.app_id,
@@ -172,7 +173,7 @@ impl KnowledgeService {
     ) -> SDKResult<BaseResponse<DataKnowledgeFileUploadResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/aily/v1/data_knowledge/upload_file".to_string(),
+            api_path: Endpoints::AILY_V1_DATA_KNOWLEDGE_UPLOAD_FILE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
                 "app_id": request.app_id,
@@ -201,7 +202,7 @@ impl KnowledgeService {
     ) -> SDKResult<BaseResponse<DataKnowledgeCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/aily/v1/data_knowledge".to_string(),
+            api_path: Endpoints::AILY_V1_DATA_KNOWLEDGE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
                 "app_id": request.app_id,
@@ -232,7 +233,11 @@ impl KnowledgeService {
     ) -> SDKResult<BaseResponse<DataKnowledgeGetResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/aily/v1/data_knowledge/{}", request.knowledge_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::AILY_V1_DATA_KNOWLEDGE_OPERATION,
+                "knowledge_id",
+                &request.knowledge_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -259,7 +264,11 @@ impl KnowledgeService {
     ) -> SDKResult<BaseResponse<DataKnowledgeDeleteResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/aily/v1/data_knowledge/{}", request.knowledge_id),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::AILY_V1_DATA_KNOWLEDGE_OPERATION,
+                "knowledge_id",
+                &request.knowledge_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -286,7 +295,7 @@ impl KnowledgeService {
     ) -> SDKResult<BaseResponse<DataKnowledgeListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/aily/v1/data_knowledge".to_string(),
+            api_path: Endpoints::AILY_V1_DATA_KNOWLEDGE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -328,7 +337,7 @@ impl KnowledgeService {
     ) -> SDKResult<BaseResponse<DataKnowledgeCategoryListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/aily/v1/data_knowledge/categories".to_string(),
+            api_path: Endpoints::AILY_V1_DATA_KNOWLEDGE_CATEGORIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

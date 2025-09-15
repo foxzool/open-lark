@@ -175,6 +175,20 @@ impl QueryParams {
 
     /// 频道ID参数 - 频道的唯一标识
     pub const CHANNEL_ID: &'static str = "channel_id";
+
+    // ==================== 设备和访问参数 ====================
+    /// 设备ID参数 - 设备的唯一标识
+    pub const DEVICE_ID: &'static str = "device_id";
+
+    /// 访问方法参数 - 访问方式筛选
+    pub const ACCESS_METHOD: &'static str = "access_method";
+
+    /// 结果参数 - 访问结果筛选
+    pub const RESULT: &'static str = "result";
+
+    // ==================== 勋章相关参数 ====================
+    /// 勋章ID参数 - 勋章的唯一标识
+    pub const BADGE_ID: &'static str = "badge_id";
 }
 
 /// 查询参数构建器

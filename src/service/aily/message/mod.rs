@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -83,9 +84,10 @@ impl MessageService {
     ) -> SDKResult<BaseResponse<MessageCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: format!(
-                "/open-apis/aily/v1/sessions/{}/messages",
-                request.session_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::AILY_V1_MESSAGES,
+                "session_id",
+                &request.session_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&serde_json::json!({
@@ -115,9 +117,12 @@ impl MessageService {
     ) -> SDKResult<BaseResponse<MessageGetResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/aily/v1/sessions/{}/messages/{}",
-                request.session_id, request.message_id
+            api_path: EndpointBuilder::replace_params_from_array(
+                Endpoints::AILY_V1_MESSAGE_GET,
+                &[
+                    ("session_id", &request.session_id),
+                    ("message_id", &request.message_id),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
@@ -145,9 +150,10 @@ impl MessageService {
     ) -> SDKResult<BaseResponse<MessageListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!(
-                "/open-apis/aily/v1/sessions/{}/messages",
-                request.session_id
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::AILY_V1_MESSAGES,
+                "session_id",
+                &request.session_id,
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],

@@ -135,8 +135,8 @@ impl DocumentBlockService {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
                 Endpoints::DOCX_V1_DOCUMENT_BLOCKS_BATCH_DELETE,
-                "document_id", 
-                &document_id.into()
+                "document_id",
+                &document_id.into(),
             ),
             ..Default::default()
         };
@@ -165,7 +165,10 @@ impl DocumentBlockService {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
                 Endpoints::DOCX_V1_DOCUMENT_BLOCK_CHILDREN,
-                &[("document_id", &document_id_str), ("block_id", &block_id_str)]
+                &[
+                    ("document_id", &document_id_str),
+                    ("block_id", &block_id_str),
+                ],
             ),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
