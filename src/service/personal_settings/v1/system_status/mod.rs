@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{Endpoints, EndpointBuilder},
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -183,7 +183,9 @@ impl SystemStatusService {
                 api_req.query_params.insert("page", page.to_string());
             }
             if let Some(page_size) = req.page_size {
-                api_req.query_params.insert("page_size", page_size.to_string());
+                api_req
+                    .query_params
+                    .insert("page_size", page_size.to_string());
             }
         }
 
