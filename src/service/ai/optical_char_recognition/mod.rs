@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -53,7 +54,7 @@ impl OpticalCharRecognitionService {
     ) -> SDKResult<BaseResponse<OcrResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/optical_char_recognition/v1/image/basic_recognize".to_string(),
+            api_path: Endpoints::OPTICAL_CHAR_RECOGNITION_V1_BASIC_RECOGNIZE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
