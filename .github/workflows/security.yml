@@ -32,11 +32,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-registry-
             
-      - name: Install cargo-audit
-        uses: taiki-e/install-action@cargo-audit
-        
-      - name: Install cargo-deny
-        uses: taiki-e/install-action@cargo-deny
+      - name: Install cargo-audit and cargo-deny
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-audit,cargo-deny
         
       - name: Audit dependencies for security vulnerabilities
         run: |
