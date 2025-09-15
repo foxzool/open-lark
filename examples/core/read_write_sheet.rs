@@ -102,30 +102,26 @@ async fn read_sheet_data(
         .await
     {
         Ok(response) => {
-            if let Some(data) = &response.data {
-                let value_range = &data.value_range;
-                println!("✅ 数据读取成功!");
-                println!("   实际范围: {}", value_range.range);
-                println!("   版本号: {}", value_range.revision);
-                println!("   数据行数: {}", value_range.values.len());
+            let value_range = &response.value_range;
+            println!("✅ 数据读取成功!");
+            println!("   实际范围: {}", value_range.range);
+            println!("   版本号: {}", value_range.revision);
+            println!("   数据行数: {}", value_range.values.len());
 
-                if !value_range.values.is_empty() {
-                    println!("\n📄 表格内容:");
-                    for (row_index, row) in value_range.values.iter().enumerate() {
-                        print!("   行{}: ", row_index + 1);
-                        for (col_index, cell) in row.iter().enumerate() {
-                            if col_index > 0 {
-                                print!(" | ");
-                            }
-                            print!("{}", format_cell_value(cell));
+            if !value_range.values.is_empty() {
+                println!("\n📄 表格内容:");
+                for (row_index, row) in value_range.values.iter().enumerate() {
+                    print!("   行{}: ", row_index + 1);
+                    for (col_index, cell) in row.iter().enumerate() {
+                        if col_index > 0 {
+                            print!(" | ");
                         }
-                        println!();
+                        print!("{}", format_cell_value(cell));
                     }
-                } else {
-                    println!("📭 表格为空，没有数据");
+                    println!();
                 }
             } else {
-                println!("⚠️ 读取请求成功，但未返回数据");
+                println!("📭 表格为空，没有数据");
             }
         }
         Err(e) => {
@@ -193,21 +189,18 @@ async fn write_sheet_data(
         .await
     {
         Ok(response) => {
-            if let Some(data) = &response.data {
-                println!("✅ 数据写入成功!");
-                println!("   表格Token: {}", data.spreadsheet_token);
-                println!("   更新范围: {}", data.table_range);
-                println!("   版本号: {}", data.revision);
+            let data = &response;
+            println!("✅ 数据写入成功!");
+            println!("   表格Token: {}", data.spreadsheet_token);
+            println!("   更新范围: {}", data.table_range);
+            println!("   版本号: {}", data.revision);
 
-                let updates = &data.updates;
-                println!("   更新统计:");
-                println!("     更新范围: {}", updates.updated_range);
-                println!("     更新行数: {}", updates.updated_rows);
-                println!("     更新列数: {}", updates.updated_columns);
-                println!("     更新单元格数: {}", updates.updated_cells);
-            } else {
-                println!("⚠️ 写入请求成功，但未返回更新信息");
-            }
+            let updates = &data.updates;
+            println!("   更新统计:");
+            println!("     更新范围: {}", updates.updated_range);
+            println!("     更新行数: {}", updates.updated_rows);
+            println!("     更新列数: {}", updates.updated_columns);
+            println!("     更新单元格数: {}", updates.updated_cells);
         }
         Err(e) => {
             println!("❌ 写入表格数据失败: {e:?}");
@@ -243,41 +236,39 @@ async fn verify_data_update(
         .await
     {
         Ok(response) => {
-            if let Some(data) = &response.data {
-                let value_range = &data.value_range;
-                println!("✅ 数据验证成功!");
-                println!("   当前版本: {}", value_range.revision);
+            let value_range = &response.value_range;
+            println!("✅ 数据验证成功!");
+            println!("   当前版本: {}", value_range.revision);
 
-                if !value_range.values.is_empty() {
-                    println!("\n📊 更新后的表格内容:");
+            if !value_range.values.is_empty() {
+                println!("\n📊 更新后的表格内容:");
 
-                    // 显示表头
-                    if let Some(header_row) = value_range.values.first() {
-                        print!("   ");
-                        for (i, cell) in header_row.iter().enumerate() {
-                            if i > 0 {
-                                print!(" | ");
-                            }
-                            print!("{:12}", format_cell_value(cell));
+                // 显示表头
+                if let Some(header_row) = value_range.values.first() {
+                    print!("   ");
+                    for (i, cell) in header_row.iter().enumerate() {
+                        if i > 0 {
+                            print!(" | ");
                         }
-                        println!();
-                        println!("   {}", "-".repeat(60));
+                        print!("{:12}", format_cell_value(cell));
                     }
-
-                    // 显示数据行
-                    for row in value_range.values.iter().skip(1) {
-                        print!("   ");
-                        for (col_index, cell) in row.iter().enumerate() {
-                            if col_index > 0 {
-                                print!(" | ");
-                            }
-                            print!("{:12}", format_cell_value(cell));
-                        }
-                        println!();
-                    }
-
-                    println!("\n💡 提示: 数据已成功写入并验证完成");
+                    println!();
+                    println!("   {}", "-".repeat(60));
                 }
+
+                // 显示数据行
+                for row in value_range.values.iter().skip(1) {
+                    print!("   ");
+                    for (col_index, cell) in row.iter().enumerate() {
+                        if col_index > 0 {
+                            print!(" | ");
+                        }
+                        print!("{:12}", format_cell_value(cell));
+                    }
+                    println!();
+                }
+
+                println!("\n💡 提示: 数据已成功写入并验证完成");
             }
         }
         Err(e) => {
