@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -132,7 +133,7 @@ impl TagBindingService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/tenant-tag/v1/tag_bindings".to_string(),
+            api_path: Endpoints::TENANT_TAG_V1_TAG_BINDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             ..Default::default()
@@ -155,7 +156,7 @@ impl TagBindingService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/tenant-tag/v1/tag_bindings".to_string(),
+            api_path: Endpoints::TENANT_TAG_V1_TAG_BINDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -179,7 +180,7 @@ impl TagBindingService {
 
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: "/open-apis/tenant-tag/v1/tag_bindings".to_string(),
+            api_path: Endpoints::TENANT_TAG_V1_TAG_BINDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             body: serde_json::to_vec(&request)?,

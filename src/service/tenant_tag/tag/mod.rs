@@ -8,6 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{Endpoints, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -108,7 +109,7 @@ impl TagService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/tenant-tag/v1/tags".to_string(),
+            api_path: Endpoints::TENANT_TAG_V1_TAGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -133,7 +134,11 @@ impl TagService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/tenant-tag/v1/tags/{tag_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TENANT_TAG_V1_TAG_OPERATION,
+                "tag_id",
+                tag_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -168,7 +173,7 @@ impl TagService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/tenant-tag/v1/tags".to_string(),
+            api_path: Endpoints::TENANT_TAG_V1_TAGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             ..Default::default()

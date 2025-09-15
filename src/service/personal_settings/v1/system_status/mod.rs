@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{Endpoints, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -88,7 +89,7 @@ impl SystemStatusService {
     ) -> SDKResult<BaseResponse<CreateSystemStatusResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/personal_settings/v1/system_statuses".to_string(),
+            api_path: Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUSES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -112,7 +113,11 @@ impl SystemStatusService {
     ) -> SDKResult<BaseResponse<EmptySystemStatusResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/personal_settings/v1/system_statuses/{system_status_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUS_OPERATION,
+                "system_status_id",
+                system_status_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
@@ -137,7 +142,11 @@ impl SystemStatusService {
     ) -> SDKResult<BaseResponse<CreateSystemStatusResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: format!("/open-apis/personal_settings/v1/system_statuses/{system_status_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUS_OPERATION,
+                "system_status_id",
+                system_status_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -159,24 +168,22 @@ impl SystemStatusService {
         request: Option<ListSystemStatusRequest>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListSystemStatusResponse>> {
+        let api_path = Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUSES.to_string();
+
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/personal_settings/v1/system_statuses".to_string(),
+            api_path,
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
 
-        // 如果有查询参数，添加到URL中
+        // 添加查询参数
         if let Some(req) = request {
-            let mut query_params = Vec::new();
             if let Some(page) = req.page {
-                query_params.push(format!("page={page}"));
+                api_req.query_params.insert("page", page.to_string());
             }
             if let Some(page_size) = req.page_size {
-                query_params.push(format!("page_size={page_size}"));
-            }
-            if !query_params.is_empty() {
-                api_req.api_path = format!("{}?{}", api_req.api_path, query_params.join("&"));
+                api_req.query_params.insert("page_size", page_size.to_string());
             }
         }
 
@@ -198,7 +205,7 @@ impl SystemStatusService {
     ) -> SDKResult<BaseResponse<EmptySystemStatusResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/personal_settings/v1/system_statuses/batch_open".to_string(),
+            api_path: Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_OPEN.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -222,7 +229,7 @@ impl SystemStatusService {
     ) -> SDKResult<BaseResponse<EmptySystemStatusResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/personal_settings/v1/system_statuses/batch_close".to_string(),
+            api_path: Endpoints::PERSONAL_SETTINGS_V1_SYSTEM_STATUS_BATCH_CLOSE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

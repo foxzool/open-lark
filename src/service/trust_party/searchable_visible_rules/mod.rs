@@ -7,7 +7,9 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
+        query_params::QueryParams,
         req_option::RequestOption,
         SDKResult,
     },
@@ -44,7 +46,7 @@ impl SearchableVisibleRulesService {
     ) -> SDKResult<BaseResponse<RuleCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/trust_party/v1/searchable_and_visible_rules".to_string(),
+            api_path: Endpoints::TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -74,7 +76,11 @@ impl SearchableVisibleRulesService {
     ) -> SDKResult<BaseResponse<RuleUpdateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: format!("/open-apis/trust_party/v1/searchable_and_visible_rules/{rule_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULE_OPERATION,
+                "rule_id",
+                rule_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -102,7 +108,7 @@ impl SearchableVisibleRulesService {
     ) -> SDKResult<BaseResponse<RuleListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/trust_party/v1/searchable_and_visible_rules".to_string(),
+            api_path: Endpoints::TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -110,25 +116,29 @@ impl SearchableVisibleRulesService {
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
-            api_req.query_params.insert("page_token", page_token);
+            api_req
+                .query_params
+                .insert(QueryParams::PAGE_TOKEN, page_token);
         }
 
         if let Some(page_size) = request.page_size {
             api_req
                 .query_params
-                .insert("page_size", page_size.to_string());
+                .insert(QueryParams::PAGE_SIZE, page_size.to_string());
         }
 
         if let Some(org_id) = request.org_id {
-            api_req.query_params.insert("org_id", org_id);
+            api_req.query_params.insert(QueryParams::ORG_ID, org_id);
         }
 
         if let Some(rule_type) = request.rule_type {
-            api_req.query_params.insert("rule_type", rule_type);
+            api_req
+                .query_params
+                .insert(QueryParams::RULE_TYPE, rule_type);
         }
 
         if let Some(status) = request.status {
-            api_req.query_params.insert("status", status);
+            api_req.query_params.insert(QueryParams::STATUS, status);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -153,7 +163,11 @@ impl SearchableVisibleRulesService {
     ) -> SDKResult<BaseResponse<RuleDeleteResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/trust_party/v1/searchable_and_visible_rules/{rule_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULE_OPERATION,
+                "rule_id",
+                rule_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

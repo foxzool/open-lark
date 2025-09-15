@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{Endpoints, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -44,7 +45,7 @@ impl CourseRegistrationService {
     ) -> SDKResult<BaseResponse<CourseRegistrationCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/elearning/v2/course_registrations".to_string(),
+            api_path: Endpoints::ELEARNING_V2_COURSE_REGISTRATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -72,7 +73,7 @@ impl CourseRegistrationService {
     ) -> SDKResult<BaseResponse<CourseRegistrationListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/elearning/v2/course_registrations".to_string(),
+            api_path: Endpoints::ELEARNING_V2_COURSE_REGISTRATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -141,7 +142,11 @@ impl CourseRegistrationService {
     ) -> SDKResult<BaseResponse<CourseRegistrationGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/elearning/v2/course_registrations/{registration_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::ELEARNING_V2_COURSE_REGISTRATION_OPERATION,
+                "registration_id",
+                registration_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -171,7 +176,11 @@ impl CourseRegistrationService {
     ) -> SDKResult<BaseResponse<CourseRegistrationUpdateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PUT,
-            api_path: format!("/open-apis/elearning/v2/course_registrations/{registration_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::ELEARNING_V2_COURSE_REGISTRATION_OPERATION,
+                "registration_id",
+                registration_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -199,7 +208,11 @@ impl CourseRegistrationService {
     ) -> SDKResult<BaseResponse<CourseRegistrationDeleteResponse>> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: format!("/open-apis/elearning/v2/course_registrations/{registration_id}"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::ELEARNING_V2_COURSE_REGISTRATION_OPERATION,
+                "registration_id",
+                registration_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -227,7 +240,7 @@ impl CourseRegistrationService {
     ) -> SDKResult<BaseResponse<CourseRegistrationStatisticsResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: "/open-apis/elearning/v2/course_registrations/statistics".to_string(),
+            api_path: Endpoints::ELEARNING_V2_COURSE_REGISTRATIONS_STATISTICS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
