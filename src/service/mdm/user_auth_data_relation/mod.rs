@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -44,7 +45,7 @@ impl UserAuthDataRelationService {
     ) -> SDKResult<BaseResponse<UserDataRelationBindResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/mdm/v1/user_auth_data_relations/bind".to_string(),
+            api_path: Endpoints::MDM_V1_USER_AUTH_DATA_RELATIONS_BIND.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -72,7 +73,7 @@ impl UserAuthDataRelationService {
     ) -> SDKResult<BaseResponse<UserDataRelationUnbindResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/mdm/v1/user_auth_data_relations/unbind".to_string(),
+            api_path: Endpoints::MDM_V1_USER_AUTH_DATA_RELATIONS_UNBIND.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

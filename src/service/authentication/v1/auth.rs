@@ -3,6 +3,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
+    endpoints::Endpoints,
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
@@ -24,7 +25,7 @@ impl UserInfoService {
     /// <https://open.feishu.cn/document/server-docs/authentication-v1/user/get>
     pub async fn get(&self, user_access_token: impl ToString) -> SDKResult<UserInfo> {
         let api_req = ApiRequest {
-            api_path: "/open-apis/authen/v1/user_info".to_string(),
+            api_path: Endpoints::AUTHEN_V1_USER_INFO.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };

@@ -72,6 +72,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -136,7 +137,7 @@ impl HumanAuthenticationService {
     ) -> SDKResult<BaseResponse<IdentityCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/human_authentication/v1/identities".to_string(),
+            api_path: Endpoints::HUMAN_AUTHENTICATION_V1_IDENTITIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -189,7 +190,7 @@ impl HumanAuthenticationService {
     ) -> SDKResult<BaseResponse<FaceImageUploadResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/human_authentication/v1/face_images".to_string(),
+            api_path: Endpoints::HUMAN_AUTHENTICATION_V1_FACE_IMAGES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -246,7 +247,7 @@ impl HumanAuthenticationService {
     ) -> SDKResult<BaseResponse<FaceImageCropResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: "/open-apis/human_authentication/v1/face_images/crop".to_string(),
+            api_path: Endpoints::HUMAN_AUTHENTICATION_V1_FACE_IMAGES_CROP.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -297,7 +298,11 @@ impl HumanAuthenticationService {
     ) -> SDKResult<BaseResponse<AuthenticationResultResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: format!("/open-apis/human_authentication/v1/identities/{identity_id}/result"),
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::HUMAN_AUTHENTICATION_V1_IDENTITY_RESULT,
+                "identity_id",
+                identity_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
