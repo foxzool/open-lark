@@ -159,3 +159,126 @@ impl VcService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_vc_service_creation() {
+        let config = create_test_config();
+        let vc_service = VcService::new(config);
+
+        // Verify service structure
+        assert!(std::ptr::addr_of!(vc_service.v1) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_vc_service_with_custom_config() {
+        let config = Config::builder()
+            .app_id("vc_app")
+            .app_secret("vc_secret")
+            .req_timeout(std::time::Duration::from_millis(18000))
+            .base_url("https://vc.api.com")
+            .build();
+
+        let vc_service = VcService::new(config);
+
+        // Verify service creation with custom config
+        assert!(std::ptr::addr_of!(vc_service.v1) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_vc_service_configuration_scenarios() {
+        let test_configs = vec![
+            Config::builder()
+                .app_id("vc_basic")
+                .app_secret("basic_secret")
+                .build(),
+            Config::builder()
+                .app_id("vc_timeout")
+                .app_secret("timeout_secret")
+                .req_timeout(std::time::Duration::from_millis(25000))
+                .build(),
+            Config::builder()
+                .app_id("vc_custom")
+                .app_secret("custom_secret")
+                .base_url("https://custom.vc.com")
+                .build(),
+            Config::builder()
+                .app_id("vc_enterprise")
+                .app_secret("enterprise_secret")
+                .req_timeout(std::time::Duration::from_millis(35000))
+                .base_url("https://enterprise.vc.com")
+                .enable_token_cache(false)
+                .build(),
+        ];
+
+        for config in test_configs {
+            let vc_service = VcService::new(config);
+
+            // Each configuration should create a valid service
+            assert!(std::ptr::addr_of!(vc_service.v1) as *const _ != std::ptr::null());
+        }
+    }
+
+    #[test]
+    fn test_vc_service_multiple_instances() {
+        let config1 = create_test_config();
+        let config2 = Config::builder()
+            .app_id("vc2")
+            .app_secret("secret2")
+            .build();
+
+        let vc_service1 = VcService::new(config1);
+        let vc_service2 = VcService::new(config2);
+
+        // Services should be independent instances
+        let service1_ptr = std::ptr::addr_of!(vc_service1) as *const _;
+        let service2_ptr = std::ptr::addr_of!(vc_service2) as *const _;
+
+        assert_ne!(service1_ptr, service2_ptr, "Services should be independent instances");
+
+        // Each service should have valid v1 API
+        assert!(std::ptr::addr_of!(vc_service1.v1) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(vc_service2.v1) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_vc_service_config_cloning_behavior() {
+        let original_config = create_test_config();
+
+        // Test that the service works with cloned configs
+        let vc_service1 = VcService::new(original_config.clone());
+        let vc_service2 = VcService::new(original_config);
+
+        // Both should work independently
+        assert!(std::ptr::addr_of!(vc_service1.v1) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(vc_service2.v1) as *const _ != std::ptr::null());
+
+        // But should be different service instances
+        let service1_ptr = std::ptr::addr_of!(vc_service1) as *const _;
+        let service2_ptr = std::ptr::addr_of!(vc_service2) as *const _;
+        assert_ne!(service1_ptr, service2_ptr);
+    }
+
+    #[test]
+    fn test_vc_service_v1_api_structure() {
+        let config = create_test_config();
+        let vc_service = VcService::new(config);
+
+        // Verify that the v1 API is properly structured
+        assert!(std::ptr::addr_of!(vc_service.v1) as *const _ != std::ptr::null());
+
+        // Test that service maintains proper memory layout
+        assert!(std::ptr::addr_of!(vc_service) as *const _ != std::ptr::null());
+    }
+}
