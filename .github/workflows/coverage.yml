@@ -86,7 +86,12 @@ jobs:
         run: |
           echo "## Coverage Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          if [ -d "target/llvm-cov-target" ] && [ "$(ls -A target/llvm-cov-target/*.profraw 2>/dev/null)" ]; then
+          find_list_file() {
+            find target/llvm-cov-target -maxdepth 1 -name '*-profraw-list' -print -quit 2>/dev/null || true
+          }
+
+          list_file=$(find_list_file)
+          if [ -n "$list_file" ] && [ -s "$list_file" ]; then
             cargo llvm-cov report --summary-only >> $GITHUB_STEP_SUMMARY
           else
             echo "No coverage data available - tests may have failed" >> $GITHUB_STEP_SUMMARY
@@ -111,7 +116,12 @@ jobs:
           
       - name: Check coverage threshold (report-only)
         run: |
-          if [ -d "target/llvm-cov-target" ] && [ "$(ls -A target/llvm-cov-target/*.profraw 2>/dev/null)" ]; then
+          find_list_file() {
+            find target/llvm-cov-target -maxdepth 1 -name '*-profraw-list' -print -quit 2>/dev/null || true
+          }
+
+          list_file=$(find_list_file)
+          if [ -n "$list_file" ] && [ -s "$list_file" ]; then
             summary=$(cargo llvm-cov report --summary-only)
             echo "$summary"
             cov=$(echo "$summary" | awk '/TOTAL/ {for (i=1;i<=NF;i++) if ($i ~ /%$/) { gsub(/%/, "", $i); print $i; exit }}')
