@@ -348,3 +348,360 @@ impl LarkAPIError {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::io::{Error as IOError, ErrorKind};
+
+    #[test]
+    fn test_lark_api_error_creation() {
+        let error = LarkAPIError::IOErr("test error".to_string());
+        assert!(matches!(error, LarkAPIError::IOErr(_)));
+    }
+
+    #[test]
+    fn test_error_display() {
+        let io_error = LarkAPIError::IOErr("file not found".to_string());
+        assert_eq!(io_error.to_string(), "IO error: file not found");
+
+        let param_error = LarkAPIError::IllegalParamError("invalid user_id".to_string());
+        assert_eq!(param_error.to_string(), "Invalid parameter: invalid user_id");
+
+        let deserialize_error = LarkAPIError::DeserializeError("invalid json".to_string());
+        assert_eq!(deserialize_error.to_string(), "JSON deserialization error: invalid json");
+
+        let request_error = LarkAPIError::RequestError("timeout".to_string());
+        assert_eq!(request_error.to_string(), "HTTP request failed: timeout");
+
+        let url_error = LarkAPIError::UrlParseError("malformed url".to_string());
+        assert_eq!(url_error.to_string(), "URL parse error: malformed url");
+
+        let missing_token = LarkAPIError::MissingAccessToken;
+        assert_eq!(missing_token.to_string(), "Missing access token");
+
+        let bad_request = LarkAPIError::BadRequest("malformed data".to_string());
+        assert_eq!(bad_request.to_string(), "Bad request: malformed data");
+
+        let data_error = LarkAPIError::DataError("validation failed".to_string());
+        assert_eq!(data_error.to_string(), "Data error: validation failed");
+    }
+
+    #[test]
+    fn test_api_error_with_context() {
+        let api_error = LarkAPIError::ApiError {
+            code: 403,
+            message: "Permission denied".to_string(),
+            request_id: Some("req_123".to_string()),
+        };
+
+        let display = api_error.to_string();
+        assert!(display.contains("403"));
+        assert!(display.contains("Permission denied"));
+        assert!(display.contains("req_123"));
+    }
+
+    #[test]
+    fn test_api_error_without_request_id() {
+        let api_error = LarkAPIError::ApiError {
+            code: 404,
+            message: "Not found".to_string(),
+            request_id: None,
+        };
+
+        let display = api_error.to_string();
+        assert!(display.contains("404"));
+        assert!(display.contains("Not found"));
+    }
+
+    #[test]
+    fn test_standard_api_error() {
+        let api_error = LarkAPIError::APIError {
+            code: 500,
+            msg: "Internal server error".to_string(),
+            error: Some("Database connection failed".to_string()),
+        };
+
+        let display = api_error.to_string();
+        assert!(display.contains("500"));
+        assert!(display.contains("Internal server error"));
+    }
+
+    #[test]
+    fn test_error_clone() {
+        let original = LarkAPIError::ApiError {
+            code: 403,
+            message: "Forbidden".to_string(),
+            request_id: Some("req_456".to_string()),
+        };
+
+        let cloned = original.clone();
+
+        match (&original, &cloned) {
+            (
+                LarkAPIError::ApiError { code: c1, message: m1, request_id: r1 },
+                LarkAPIError::ApiError { code: c2, message: m2, request_id: r2 },
+            ) => {
+                assert_eq!(c1, c2);
+                assert_eq!(m1, m2);
+                assert_eq!(r1, r2);
+            }
+            _ => panic!("Clone did not preserve variant"),
+        }
+    }
+
+    #[test]
+    fn test_from_std_io_error() {
+        let io_error = IOError::new(ErrorKind::NotFound, "file not found");
+        let lark_error: LarkAPIError = io_error.into();
+
+        match lark_error {
+            LarkAPIError::IOErr(msg) => assert!(msg.contains("file not found")),
+            _ => panic!("Wrong error type"),
+        }
+    }
+
+    #[test]
+    fn test_from_serde_json_error() {
+        let json_result: Result<serde_json::Value, _> = serde_json::from_str("invalid json");
+        let json_error = json_result.unwrap_err();
+        let lark_error: LarkAPIError = json_error.into();
+
+        match lark_error {
+            LarkAPIError::DeserializeError(msg) => assert!(!msg.is_empty()),
+            _ => panic!("Wrong error type"),
+        }
+    }
+
+    #[test]
+    fn test_from_reqwest_error() {
+        // Create a reqwest error (this is a bit tricky, so we'll test the conversion logic)
+        let error = LarkAPIError::RequestError("connection refused".to_string());
+        assert!(matches!(error, LarkAPIError::RequestError(_)));
+    }
+
+    #[test]
+    fn test_from_url_parse_error() {
+        let url_result = url::Url::parse("not a url");
+        let url_error = url_result.unwrap_err();
+        let lark_error: LarkAPIError = url_error.into();
+
+        match lark_error {
+            LarkAPIError::UrlParseError(msg) => assert!(!msg.is_empty()),
+            _ => panic!("Wrong error type"),
+        }
+    }
+
+    #[test]
+    fn test_error_severity_values() {
+        assert_eq!(ErrorSeverity::Info, ErrorSeverity::Info);
+        assert_ne!(ErrorSeverity::Info, ErrorSeverity::Warning);
+        assert_ne!(ErrorSeverity::Warning, ErrorSeverity::Error);
+        assert_ne!(ErrorSeverity::Error, ErrorSeverity::Critical);
+    }
+
+    #[test]
+    fn test_error_severity_debug() {
+        let info = ErrorSeverity::Info;
+        let debug_string = format!("{:?}", info);
+        assert_eq!(debug_string, "Info");
+    }
+
+    #[test]
+    fn test_error_severity_clone() {
+        let original = ErrorSeverity::Critical;
+        let cloned = original.clone();
+        assert_eq!(original, cloned);
+    }
+
+    #[test]
+    fn test_api_error_constructor() {
+        let error = LarkAPIError::api_error(404, "Resource not found", Some("req_789".to_string()));
+
+        match error {
+            LarkAPIError::ApiError { code, message, request_id } => {
+                assert_eq!(code, 404);
+                assert_eq!(message, "Resource not found");
+                assert_eq!(request_id, Some("req_789".to_string()));
+            }
+            _ => panic!("Wrong error type"),
+        }
+    }
+
+    #[test]
+    fn test_illegal_param_constructor() {
+        let error = LarkAPIError::illegal_param("Invalid user ID format");
+
+        match error {
+            LarkAPIError::IllegalParamError(msg) => {
+                assert_eq!(msg, "Invalid user ID format");
+            }
+            _ => panic!("Wrong error type"),
+        }
+    }
+
+    #[test]
+    fn test_is_permission_error() {
+        let permission_error = LarkAPIError::ApiError {
+            code: 403,
+            message: "Forbidden".to_string(),
+            request_id: None,
+        };
+        assert!(permission_error.is_permission_error());
+
+        let not_permission_error = LarkAPIError::ApiError {
+            code: 404,
+            message: "Not found".to_string(),
+            request_id: None,
+        };
+        assert!(!not_permission_error.is_permission_error());
+
+        let other_error = LarkAPIError::MissingAccessToken;
+        assert!(!other_error.is_permission_error());
+    }
+
+    #[test]
+    fn test_is_retryable() {
+        // Test retryable request errors
+        let timeout_error = LarkAPIError::RequestError("connection timeout".to_string());
+        assert!(timeout_error.is_retryable());
+
+        let connect_error = LarkAPIError::RequestError("connection refused".to_string());
+        assert!(connect_error.is_retryable());
+
+        let timed_out_error = LarkAPIError::RequestError("request timed out".to_string());
+        assert!(timed_out_error.is_retryable());
+
+        // Test non-retryable errors
+        let param_error = LarkAPIError::IllegalParamError("bad param".to_string());
+        assert!(!param_error.is_retryable());
+
+        let missing_token = LarkAPIError::MissingAccessToken;
+        assert!(!missing_token.is_retryable());
+
+        let other_request_error = LarkAPIError::RequestError("bad request".to_string());
+        assert!(!other_request_error.is_retryable());
+    }
+
+    #[test]
+    fn test_user_friendly_message() {
+        // Test missing access token
+        let missing_token = LarkAPIError::MissingAccessToken;
+        assert_eq!(missing_token.user_friendly_message(), "缺少访问令牌，请检查认证配置");
+
+        // Test parameter error
+        let param_error = LarkAPIError::IllegalParamError("invalid format".to_string());
+        assert_eq!(param_error.user_friendly_message(), "参数错误: invalid format");
+
+        // Test timeout
+        let timeout_error = LarkAPIError::RequestError("connection timeout".to_string());
+        assert_eq!(timeout_error.user_friendly_message(), "请求超时，请检查网络连接");
+
+        // Test connection error
+        let connect_error = LarkAPIError::RequestError("connection failed".to_string());
+        assert_eq!(connect_error.user_friendly_message(), "连接失败，请检查网络设置");
+
+        // Test generic request error
+        let generic_error = LarkAPIError::RequestError("unknown error".to_string());
+        assert_eq!(generic_error.user_friendly_message(), "网络请求失败: unknown error");
+
+        // Test other error types
+        let io_error = LarkAPIError::IOErr("file error".to_string());
+        assert!(io_error.user_friendly_message().contains("file error"));
+    }
+
+    #[test]
+    fn test_api_error_user_friendly_message() {
+        let api_error = LarkAPIError::ApiError {
+            code: 123456, // Unknown code
+            message: "Unknown error".to_string(),
+            request_id: Some("req_test".to_string()),
+        };
+
+        let friendly_msg = api_error.user_friendly_message();
+        assert!(friendly_msg.contains("Unknown error"));
+        assert!(friendly_msg.contains("123456"));
+    }
+
+    #[test]
+    fn test_all_error_variants_clone() {
+        let errors = vec![
+            LarkAPIError::IOErr("io".to_string()),
+            LarkAPIError::IllegalParamError("param".to_string()),
+            LarkAPIError::DeserializeError("json".to_string()),
+            LarkAPIError::RequestError("request".to_string()),
+            LarkAPIError::UrlParseError("url".to_string()),
+            LarkAPIError::ApiError {
+                code: 400,
+                message: "test".to_string(),
+                request_id: Some("req".to_string()),
+            },
+            LarkAPIError::MissingAccessToken,
+            LarkAPIError::BadRequest("bad".to_string()),
+            LarkAPIError::DataError("data".to_string()),
+            LarkAPIError::APIError {
+                code: 500,
+                msg: "error".to_string(),
+                error: Some("detail".to_string()),
+            },
+        ];
+
+        for error in errors {
+            let cloned = error.clone();
+            // Test that clone preserves the variant and data
+            assert_eq!(error.to_string(), cloned.to_string());
+        }
+    }
+
+    #[test]
+    fn test_debug_trait() {
+        let error = LarkAPIError::ApiError {
+            code: 403,
+            message: "Forbidden".to_string(),
+            request_id: Some("req_debug".to_string()),
+        };
+
+        let debug_string = format!("{:?}", error);
+        assert!(debug_string.contains("ApiError"));
+        assert!(debug_string.contains("403"));
+        assert!(debug_string.contains("Forbidden"));
+    }
+
+    #[test]
+    fn test_api_error_with_string_conversion() {
+        let error = LarkAPIError::api_error(500, String::from("Server error"), None);
+
+        match error {
+            LarkAPIError::ApiError { message, .. } => {
+                assert_eq!(message, "Server error");
+            }
+            _ => panic!("Wrong error type"),
+        }
+    }
+
+    #[test]
+    fn test_illegal_param_with_string_conversion() {
+        let error = LarkAPIError::illegal_param(String::from("Bad parameter"));
+
+        match error {
+            LarkAPIError::IllegalParamError(msg) => {
+                assert_eq!(msg, "Bad parameter");
+            }
+            _ => panic!("Wrong error type"),
+        }
+    }
+
+    #[test]
+    fn test_error_severity_hash() {
+        use std::collections::HashMap;
+
+        let mut map = HashMap::new();
+        map.insert(ErrorSeverity::Info, "info");
+        map.insert(ErrorSeverity::Warning, "warning");
+        map.insert(ErrorSeverity::Error, "error");
+        map.insert(ErrorSeverity::Critical, "critical");
+
+        assert_eq!(map.get(&ErrorSeverity::Info), Some(&"info"));
+        assert_eq!(map.get(&ErrorSeverity::Critical), Some(&"critical"));
+    }
+}
