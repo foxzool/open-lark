@@ -366,10 +366,16 @@ mod tests {
         assert_eq!(io_error.to_string(), "IO error: file not found");
 
         let param_error = LarkAPIError::IllegalParamError("invalid user_id".to_string());
-        assert_eq!(param_error.to_string(), "Invalid parameter: invalid user_id");
+        assert_eq!(
+            param_error.to_string(),
+            "Invalid parameter: invalid user_id"
+        );
 
         let deserialize_error = LarkAPIError::DeserializeError("invalid json".to_string());
-        assert_eq!(deserialize_error.to_string(), "JSON deserialization error: invalid json");
+        assert_eq!(
+            deserialize_error.to_string(),
+            "JSON deserialization error: invalid json"
+        );
 
         let request_error = LarkAPIError::RequestError("timeout".to_string());
         assert_eq!(request_error.to_string(), "HTTP request failed: timeout");
@@ -439,8 +445,16 @@ mod tests {
 
         match (&original, &cloned) {
             (
-                LarkAPIError::ApiError { code: c1, message: m1, request_id: r1 },
-                LarkAPIError::ApiError { code: c2, message: m2, request_id: r2 },
+                LarkAPIError::ApiError {
+                    code: c1,
+                    message: m1,
+                    request_id: r1,
+                },
+                LarkAPIError::ApiError {
+                    code: c2,
+                    message: m2,
+                    request_id: r2,
+                },
             ) => {
                 assert_eq!(c1, c2);
                 assert_eq!(m1, m2);
@@ -519,7 +533,11 @@ mod tests {
         let error = LarkAPIError::api_error(404, "Resource not found", Some("req_789".to_string()));
 
         match error {
-            LarkAPIError::ApiError { code, message, request_id } => {
+            LarkAPIError::ApiError {
+                code,
+                message,
+                request_id,
+            } => {
                 assert_eq!(code, 404);
                 assert_eq!(message, "Resource not found");
                 assert_eq!(request_id, Some("req_789".to_string()));
@@ -587,23 +605,38 @@ mod tests {
     fn test_user_friendly_message() {
         // Test missing access token
         let missing_token = LarkAPIError::MissingAccessToken;
-        assert_eq!(missing_token.user_friendly_message(), "缺少访问令牌，请检查认证配置");
+        assert_eq!(
+            missing_token.user_friendly_message(),
+            "缺少访问令牌，请检查认证配置"
+        );
 
         // Test parameter error
         let param_error = LarkAPIError::IllegalParamError("invalid format".to_string());
-        assert_eq!(param_error.user_friendly_message(), "参数错误: invalid format");
+        assert_eq!(
+            param_error.user_friendly_message(),
+            "参数错误: invalid format"
+        );
 
         // Test timeout
         let timeout_error = LarkAPIError::RequestError("connection timeout".to_string());
-        assert_eq!(timeout_error.user_friendly_message(), "请求超时，请检查网络连接");
+        assert_eq!(
+            timeout_error.user_friendly_message(),
+            "请求超时，请检查网络连接"
+        );
 
         // Test connection error
         let connect_error = LarkAPIError::RequestError("connection failed".to_string());
-        assert_eq!(connect_error.user_friendly_message(), "连接失败，请检查网络设置");
+        assert_eq!(
+            connect_error.user_friendly_message(),
+            "连接失败，请检查网络设置"
+        );
 
         // Test generic request error
         let generic_error = LarkAPIError::RequestError("unknown error".to_string());
-        assert_eq!(generic_error.user_friendly_message(), "网络请求失败: unknown error");
+        assert_eq!(
+            generic_error.user_friendly_message(),
+            "网络请求失败: unknown error"
+        );
 
         // Test other error types
         let io_error = LarkAPIError::IOErr("file error".to_string());
