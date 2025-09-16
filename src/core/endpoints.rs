@@ -1080,6 +1080,10 @@ impl Endpoints {
     pub const TASK_V2_TASK_REMOVE_REMINDERS: &'static str =
         "/open-apis/task/v2/tasks/{task_guid}/remove_reminders";
 
+    /// 任务加入清单
+    pub const TASK_V2_TASK_ADD_TASKLIST: &'static str =
+        "/open-apis/task/v2/tasks/{task_guid}/add_tasklist";
+
     /// 任务添加依赖
     pub const TASK_V2_TASK_ADD_DEPENDENCIES: &'static str =
         "/open-apis/task/v2/tasks/{task_guid}/add_dependencies";
