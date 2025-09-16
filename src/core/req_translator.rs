@@ -24,7 +24,7 @@ impl ReqTranslator {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{constants::AppType, api_req::ApiRequest};
+    use crate::core::{api_req::ApiRequest, constants::AppType};
     use reqwest::Method;
 
     #[test]
@@ -53,12 +53,8 @@ mod tests {
 
         // Test that translate method delegates to UnifiedRequestBuilder
         // This will test the delegation without actually making network requests
-        let result = ReqTranslator::translate(
-            &mut api_req,
-            AccessTokenType::App,
-            &config,
-            &option,
-        ).await;
+        let result =
+            ReqTranslator::translate(&mut api_req, AccessTokenType::App, &config, &option).await;
 
         // The exact result depends on UnifiedRequestBuilder implementation
         // But we can verify the method can be called without panicking
@@ -93,12 +89,8 @@ mod tests {
         ];
 
         for token_type in token_types.iter() {
-            let result = ReqTranslator::translate(
-                &mut api_req,
-                *token_type,
-                &config,
-                &option,
-            ).await;
+            let result =
+                ReqTranslator::translate(&mut api_req, *token_type, &config, &option).await;
 
             // Each call should complete without panicking
             // Result depends on UnifiedRequestBuilder behavior
@@ -117,7 +109,13 @@ mod tests {
 
         let option = RequestOption::default();
 
-        let methods = [Method::GET, Method::POST, Method::PUT, Method::DELETE, Method::PATCH];
+        let methods = [
+            Method::GET,
+            Method::POST,
+            Method::PUT,
+            Method::DELETE,
+            Method::PATCH,
+        ];
 
         for method in methods.iter() {
             let mut api_req = ApiRequest {
@@ -126,12 +124,9 @@ mod tests {
                 ..Default::default()
             };
 
-            let result = ReqTranslator::translate(
-                &mut api_req,
-                AccessTokenType::App,
-                &config,
-                &option,
-            ).await;
+            let result =
+                ReqTranslator::translate(&mut api_req, AccessTokenType::App, &config, &option)
+                    .await;
 
             // Each method should be handled
             assert!(result.is_ok() || result.is_err());
@@ -163,15 +158,13 @@ mod tests {
             ..Default::default()
         };
 
-        let mut option = RequestOption::default();
-        option.tenant_key = "test_tenant".to_string();
+        let option = RequestOption {
+            tenant_key: "test_tenant".to_string(),
+            ..Default::default()
+        };
 
-        let result = ReqTranslator::translate(
-            &mut api_req,
-            AccessTokenType::Tenant,
-            &config,
-            &option,
-        ).await;
+        let result =
+            ReqTranslator::translate(&mut api_req, AccessTokenType::Tenant, &config, &option).await;
 
         // Should handle marketplace app configuration
         assert!(result.is_ok() || result.is_err());

@@ -358,17 +358,26 @@ mod tests {
     fn test_sign_boundary_values() {
         // Test with various timestamp boundary values
         let test_cases = [
-            (0, "secret"),           // Unix epoch
-            (i64::MAX, "secret"),   // Maximum timestamp
-            (1609459200, ""),       // Empty secret
-            (-1, "secret"),         // Negative timestamp (before epoch)
+            (0, "secret"),        // Unix epoch
+            (i64::MAX, "secret"), // Maximum timestamp
+            (1609459200, ""),     // Empty secret
+            (-1, "secret"),       // Negative timestamp (before epoch)
         ];
 
         for (timestamp, secret) in &test_cases {
             let signature = CustomBot::sign(*timestamp, secret);
-            assert!(!signature.is_empty(), "Failed for timestamp: {}, secret: '{}'", timestamp, secret);
-            assert!(base64::prelude::BASE64_STANDARD.decode(&signature).is_ok(),
-                    "Invalid base64 for timestamp: {}, secret: '{}'", timestamp, secret);
+            assert!(
+                !signature.is_empty(),
+                "Failed for timestamp: {}, secret: '{}'",
+                timestamp,
+                secret
+            );
+            assert!(
+                base64::prelude::BASE64_STANDARD.decode(&signature).is_ok(),
+                "Invalid base64 for timestamp: {}, secret: '{}'",
+                timestamp,
+                secret
+            );
         }
     }
 
