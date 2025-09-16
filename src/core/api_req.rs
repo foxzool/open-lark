@@ -141,8 +141,8 @@ pub struct ApiRequest {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use reqwest::Method;
     use crate::core::constants::AccessTokenType;
+    use reqwest::Method;
 
     #[test]
     fn test_api_request_creation() {
@@ -161,7 +161,10 @@ mod tests {
         assert_eq!(api_req.body, b"test body".to_vec());
         assert!(api_req.query_params.is_empty());
         assert!(api_req.path_params.is_empty());
-        assert_eq!(api_req.supported_access_token_types, vec![AccessTokenType::Tenant]);
+        assert_eq!(
+            api_req.supported_access_token_types,
+            vec![AccessTokenType::Tenant]
+        );
         assert!(api_req.file.is_empty());
     }
 
@@ -205,7 +208,10 @@ mod tests {
         assert_eq!(original.body, cloned.body);
         assert_eq!(original.query_params, cloned.query_params);
         assert_eq!(original.path_params, cloned.path_params);
-        assert_eq!(original.supported_access_token_types, cloned.supported_access_token_types);
+        assert_eq!(
+            original.supported_access_token_types,
+            cloned.supported_access_token_types
+        );
         assert_eq!(original.file, cloned.file);
     }
 
@@ -252,13 +258,26 @@ mod tests {
 
         // Add query parameters
         api_req.query_params.insert("page_size", "20".to_string());
-        api_req.query_params.insert("page_token", "token123".to_string());
-        api_req.query_params.insert("filter", "status=active".to_string());
+        api_req
+            .query_params
+            .insert("page_token", "token123".to_string());
+        api_req
+            .query_params
+            .insert("filter", "status=active".to_string());
 
         assert_eq!(api_req.query_params.len(), 3);
-        assert_eq!(api_req.query_params.get("page_size"), Some(&"20".to_string()));
-        assert_eq!(api_req.query_params.get("page_token"), Some(&"token123".to_string()));
-        assert_eq!(api_req.query_params.get("filter"), Some(&"status=active".to_string()));
+        assert_eq!(
+            api_req.query_params.get("page_size"),
+            Some(&"20".to_string())
+        );
+        assert_eq!(
+            api_req.query_params.get("page_token"),
+            Some(&"token123".to_string())
+        );
+        assert_eq!(
+            api_req.query_params.get("filter"),
+            Some(&"status=active".to_string())
+        );
     }
 
     #[test]
@@ -266,14 +285,30 @@ mod tests {
         let mut api_req = ApiRequest::default();
 
         // Add path parameters
-        api_req.path_params.insert("user_id".to_string(), vec!["user123".to_string()]);
-        api_req.path_params.insert("file_id".to_string(), vec!["file456".to_string()]);
-        api_req.path_params.insert("multiple".to_string(), vec!["val1".to_string(), "val2".to_string()]);
+        api_req
+            .path_params
+            .insert("user_id".to_string(), vec!["user123".to_string()]);
+        api_req
+            .path_params
+            .insert("file_id".to_string(), vec!["file456".to_string()]);
+        api_req.path_params.insert(
+            "multiple".to_string(),
+            vec!["val1".to_string(), "val2".to_string()],
+        );
 
         assert_eq!(api_req.path_params.len(), 3);
-        assert_eq!(api_req.path_params.get("user_id"), Some(&vec!["user123".to_string()]));
-        assert_eq!(api_req.path_params.get("file_id"), Some(&vec!["file456".to_string()]));
-        assert_eq!(api_req.path_params.get("multiple"), Some(&vec!["val1".to_string(), "val2".to_string()]));
+        assert_eq!(
+            api_req.path_params.get("user_id"),
+            Some(&vec!["user123".to_string()])
+        );
+        assert_eq!(
+            api_req.path_params.get("file_id"),
+            Some(&vec!["file456".to_string()])
+        );
+        assert_eq!(
+            api_req.path_params.get("multiple"),
+            Some(&vec!["val1".to_string(), "val2".to_string()])
+        );
     }
 
     #[test]
@@ -283,7 +318,11 @@ mod tests {
             vec![AccessTokenType::Tenant],
             vec![AccessTokenType::App],
             vec![AccessTokenType::User, AccessTokenType::Tenant],
-            vec![AccessTokenType::User, AccessTokenType::Tenant, AccessTokenType::App],
+            vec![
+                AccessTokenType::User,
+                AccessTokenType::Tenant,
+                AccessTokenType::App,
+            ],
         ];
 
         for token_type_vec in token_types {
@@ -403,7 +442,10 @@ mod tests {
         assert_eq!(api_req.http_method, Method::POST);
         assert!(!api_req.body.is_empty()); // Has metadata
         assert!(!api_req.file.is_empty()); // Has file content
-        assert_eq!(api_req.supported_access_token_types, vec![AccessTokenType::Tenant]);
+        assert_eq!(
+            api_req.supported_access_token_types,
+            vec![AccessTokenType::Tenant]
+        );
     }
 
     #[test]
@@ -454,17 +496,37 @@ mod tests {
 
         // Test with special characters and edge cases
         api_req.query_params.insert("empty", "".to_string());
-        api_req.query_params.insert("space", "value with space".to_string());
-        api_req.query_params.insert("special", "value@#$%^&*()".to_string());
-        api_req.query_params.insert("unicode", "中文值🚀".to_string());
-        api_req.query_params.insert("url_encoded", "value%20with%20encoding".to_string());
+        api_req
+            .query_params
+            .insert("space", "value with space".to_string());
+        api_req
+            .query_params
+            .insert("special", "value@#$%^&*()".to_string());
+        api_req
+            .query_params
+            .insert("unicode", "中文值🚀".to_string());
+        api_req
+            .query_params
+            .insert("url_encoded", "value%20with%20encoding".to_string());
 
         assert_eq!(api_req.query_params.len(), 5);
         assert_eq!(api_req.query_params.get("empty"), Some(&"".to_string()));
-        assert_eq!(api_req.query_params.get("space"), Some(&"value with space".to_string()));
-        assert_eq!(api_req.query_params.get("special"), Some(&"value@#$%^&*()".to_string()));
-        assert_eq!(api_req.query_params.get("unicode"), Some(&"中文值🚀".to_string()));
-        assert_eq!(api_req.query_params.get("url_encoded"), Some(&"value%20with%20encoding".to_string()));
+        assert_eq!(
+            api_req.query_params.get("space"),
+            Some(&"value with space".to_string())
+        );
+        assert_eq!(
+            api_req.query_params.get("special"),
+            Some(&"value@#$%^&*()".to_string())
+        );
+        assert_eq!(
+            api_req.query_params.get("unicode"),
+            Some(&"中文值🚀".to_string())
+        );
+        assert_eq!(
+            api_req.query_params.get("url_encoded"),
+            Some(&"value%20with%20encoding".to_string())
+        );
     }
 
     #[test]
@@ -472,32 +534,49 @@ mod tests {
         let mut api_req = ApiRequest::default();
 
         // Test with complex path parameter structures
-        api_req.path_params.insert("single".to_string(), vec!["one".to_string()]);
-        api_req.path_params.insert("multiple".to_string(), vec![
-            "first".to_string(),
-            "second".to_string(),
-            "third".to_string()
-        ]);
+        api_req
+            .path_params
+            .insert("single".to_string(), vec!["one".to_string()]);
+        api_req.path_params.insert(
+            "multiple".to_string(),
+            vec![
+                "first".to_string(),
+                "second".to_string(),
+                "third".to_string(),
+            ],
+        );
         api_req.path_params.insert("empty".to_string(), vec![]);
-        api_req.path_params.insert("special".to_string(), vec![
-            "value@#$".to_string(),
-            "中文".to_string(),
-            "🚀emoji".to_string()
-        ]);
+        api_req.path_params.insert(
+            "special".to_string(),
+            vec![
+                "value@#$".to_string(),
+                "中文".to_string(),
+                "🚀emoji".to_string(),
+            ],
+        );
 
         assert_eq!(api_req.path_params.len(), 4);
-        assert_eq!(api_req.path_params.get("single"), Some(&vec!["one".to_string()]));
-        assert_eq!(api_req.path_params.get("multiple"), Some(&vec![
-            "first".to_string(),
-            "second".to_string(),
-            "third".to_string()
-        ]));
+        assert_eq!(
+            api_req.path_params.get("single"),
+            Some(&vec!["one".to_string()])
+        );
+        assert_eq!(
+            api_req.path_params.get("multiple"),
+            Some(&vec![
+                "first".to_string(),
+                "second".to_string(),
+                "third".to_string()
+            ])
+        );
         assert_eq!(api_req.path_params.get("empty"), Some(&vec![]));
-        assert_eq!(api_req.path_params.get("special"), Some(&vec![
-            "value@#$".to_string(),
-            "中文".to_string(),
-            "🚀emoji".to_string()
-        ]));
+        assert_eq!(
+            api_req.path_params.get("special"),
+            Some(&vec![
+                "value@#$".to_string(),
+                "中文".to_string(),
+                "🚀emoji".to_string()
+            ])
+        );
     }
 
     #[test]
@@ -516,11 +595,13 @@ mod tests {
     #[test]
     fn test_api_request_memory_efficiency() {
         // Test creating many ApiRequest instances
-        let requests: Vec<ApiRequest> = (0..100).map(|i| ApiRequest {
-            api_path: format!("/api/path/{}", i),
-            body: format!("body_{}", i).into_bytes(),
-            ..Default::default()
-        }).collect();
+        let requests: Vec<ApiRequest> = (0..100)
+            .map(|i| ApiRequest {
+                api_path: format!("/api/path/{}", i),
+                body: format!("body_{}", i).into_bytes(),
+                ..Default::default()
+            })
+            .collect();
 
         assert_eq!(requests.len(), 100);
 
@@ -539,8 +620,12 @@ mod tests {
         api_req.api_path = "/test".to_string();
         api_req.body = b"test body".to_vec();
         api_req.query_params.insert("test", "value".to_string());
-        api_req.path_params.insert("id".to_string(), vec!["123".to_string()]);
-        api_req.supported_access_token_types.push(AccessTokenType::User);
+        api_req
+            .path_params
+            .insert("id".to_string(), vec!["123".to_string()]);
+        api_req
+            .supported_access_token_types
+            .push(AccessTokenType::User);
         api_req.file = b"file content".to_vec();
 
         // Verify all fields are set correctly

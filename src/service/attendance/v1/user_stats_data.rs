@@ -179,10 +179,7 @@ impl_executable_builder_owned!(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{
-        api_req::ApiRequest,
-        config::Config,
-    };
+    use crate::core::{api_req::ApiRequest, config::Config};
     use crate::service::attendance::v1::models::StatsSettings;
 
     fn create_test_config() -> Config {
@@ -275,7 +272,11 @@ mod tests {
             employee_type: "employee_id".to_string(),
             start_date: "2023-01-01".to_string(),
             end_date: "2023-01-31".to_string(),
-            user_ids: vec!["user001".to_string(), "user002".to_string(), "user003".to_string()],
+            user_ids: vec![
+                "user001".to_string(),
+                "user002".to_string(),
+                "user003".to_string(),
+            ],
             need_fields: vec!["attendance_days".to_string(), "work_hours".to_string()],
             locale: Some("en-US".to_string()),
         };
@@ -313,12 +314,7 @@ mod tests {
 
     #[test]
     fn test_different_employee_types() {
-        let employee_types = vec![
-            "employee_id",
-            "employee_no",
-            "open_id",
-            "union_id",
-        ];
+        let employee_types = vec!["employee_id", "employee_no", "open_id", "union_id"];
 
         for emp_type in employee_types {
             let request = QueryStatsSettingsRequest {
@@ -378,11 +374,20 @@ mod tests {
     #[test]
     fn test_user_ids_variations() {
         let user_id_lists = vec![
-            vec![], // Empty list
-            vec!["single_user".to_string()], // Single user
+            vec![],                                         // Empty list
+            vec!["single_user".to_string()],                // Single user
             vec!["user1".to_string(), "user2".to_string()], // Two users
-            vec!["user1".to_string(), "user2".to_string(), "user3".to_string(), "user4".to_string(), "user5".to_string()], // Multiple users
-            vec!["user-with-dashes".to_string(), "user_with_underscores".to_string()], // Special characters
+            vec![
+                "user1".to_string(),
+                "user2".to_string(),
+                "user3".to_string(),
+                "user4".to_string(),
+                "user5".to_string(),
+            ], // Multiple users
+            vec![
+                "user-with-dashes".to_string(),
+                "user_with_underscores".to_string(),
+            ], // Special characters
             vec!["用户001".to_string(), "用户002".to_string()], // Unicode
             vec!["user🚀001".to_string(), "user🔐002".to_string()], // Emoji
         ];
@@ -403,13 +408,21 @@ mod tests {
     #[test]
     fn test_need_fields_variations() {
         let field_lists = vec![
-            vec![], // Empty list
-            vec!["attendance_days".to_string()], // Single field
+            vec![],                                                        // Empty list
+            vec!["attendance_days".to_string()],                           // Single field
             vec!["attendance_days".to_string(), "work_hours".to_string()], // Two fields
-            vec!["field1".to_string(), "field2".to_string(), "field3".to_string(), "field4".to_string()], // Multiple fields
-            vec!["field-with-dashes".to_string(), "field_with_underscores".to_string()], // Special characters
-            vec!["考勤天数".to_string(), "工作小时".to_string()], // Unicode
-            vec!["field🎯1".to_string(), "field📊2".to_string()], // Emoji
+            vec![
+                "field1".to_string(),
+                "field2".to_string(),
+                "field3".to_string(),
+                "field4".to_string(),
+            ], // Multiple fields
+            vec![
+                "field-with-dashes".to_string(),
+                "field_with_underscores".to_string(),
+            ], // Special characters
+            vec!["考勤天数".to_string(), "工作小时".to_string()],          // Unicode
+            vec!["field🎯1".to_string(), "field📊2".to_string()],          // Emoji
         ];
 
         for need_fields in field_lists {
@@ -586,12 +599,12 @@ mod tests {
     #[test]
     fn test_special_date_formats() {
         let date_pairs = vec![
-            ("", ""), // Empty dates
-            ("2023-01-01", ""), // Empty end date
-            ("", "2023-12-31"), // Empty start date
+            ("", ""),                         // Empty dates
+            ("2023-01-01", ""),               // Empty end date
+            ("", "2023-12-31"),               // Empty start date
             ("invalid-date", "also-invalid"), // Invalid format
-            ("2023/01/01", "2023/12/31"), // Different separator
-            ("01-01-2023", "31-12-2023"), // Different order
+            ("2023/01/01", "2023/12/31"),     // Different separator
+            ("01-01-2023", "31-12-2023"),     // Different order
         ];
 
         for (start_date, end_date) in date_pairs {
@@ -611,8 +624,8 @@ mod tests {
     #[test]
     fn test_memory_efficiency() {
         // Create multiple request instances to test memory usage
-        let requests: Vec<UpdateUserStatsDataRequest> = (0..100).map(|i| {
-            UpdateUserStatsDataRequest {
+        let requests: Vec<UpdateUserStatsDataRequest> = (0..100)
+            .map(|i| UpdateUserStatsDataRequest {
                 api_req: ApiRequest::default(),
                 employee_type: "employee_id".to_string(),
                 stats_setting: StatsSettings {
@@ -622,8 +635,8 @@ mod tests {
                     user_ids: vec![format!("user_{:03}", i)],
                     need_fields: vec![format!("field_{:03}", i)],
                 },
-            }
-        }).collect();
+            })
+            .collect();
 
         assert_eq!(requests.len(), 100);
 
@@ -631,7 +644,10 @@ mod tests {
             assert_eq!(request.employee_type, "employee_id");
             assert_eq!(request.stats_setting.stats_scope, (i % 3 + 1) as i32);
             assert_eq!(request.stats_setting.user_ids[0], format!("user_{:03}", i));
-            assert_eq!(request.stats_setting.need_fields[0], format!("field_{:03}", i));
+            assert_eq!(
+                request.stats_setting.need_fields[0],
+                format!("field_{:03}", i)
+            );
         }
     }
 }

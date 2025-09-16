@@ -219,7 +219,6 @@ mod tests {
         let _ = manager.cache.get(&key);
     }
 
-
     #[test]
     fn test_very_long_ticket_value() {
         let mut manager = AppTicketManager::new();

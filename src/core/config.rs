@@ -108,7 +108,9 @@ impl ConfigBuilder {
             app_id: self.app_id.unwrap_or(default.app_id),
             app_secret: self.app_secret.unwrap_or(default.app_secret),
             base_url: self.base_url.unwrap_or(default.base_url),
-            enable_token_cache: self.enable_token_cache.unwrap_or(default.enable_token_cache),
+            enable_token_cache: self
+                .enable_token_cache
+                .unwrap_or(default.enable_token_cache),
             app_type: self.app_type.unwrap_or(default.app_type),
             http_client: self.http_client.unwrap_or(default.http_client),
             req_timeout: self.req_timeout.or(default.req_timeout),
@@ -122,8 +124,8 @@ impl ConfigBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::time::Duration;
     use crate::core::constants::{AppType, FEISHU_BASE_URL};
+    use std::time::Duration;
 
     #[test]
     fn test_config_creation() {
@@ -188,7 +190,10 @@ mod tests {
         assert_eq!(config.app_type, cloned_config.app_type);
         assert_eq!(config.req_timeout, cloned_config.req_timeout);
         assert_eq!(config.header.len(), cloned_config.header.len());
-        assert_eq!(config.header.get("Test-Header"), cloned_config.header.get("Test-Header"));
+        assert_eq!(
+            config.header.get("Test-Header"),
+            cloned_config.header.get("Test-Header")
+        );
     }
 
     #[test]
@@ -205,12 +210,22 @@ mod tests {
     #[test]
     fn test_config_with_custom_header() {
         let mut config = Config::default();
-        config.header.insert("Authorization".to_string(), "Bearer token".to_string());
-        config.header.insert("Content-Type".to_string(), "application/json".to_string());
+        config
+            .header
+            .insert("Authorization".to_string(), "Bearer token".to_string());
+        config
+            .header
+            .insert("Content-Type".to_string(), "application/json".to_string());
 
         assert_eq!(config.header.len(), 2);
-        assert_eq!(config.header.get("Authorization"), Some(&"Bearer token".to_string()));
-        assert_eq!(config.header.get("Content-Type"), Some(&"application/json".to_string()));
+        assert_eq!(
+            config.header.get("Authorization"),
+            Some(&"Bearer token".to_string())
+        );
+        assert_eq!(
+            config.header.get("Content-Type"),
+            Some(&"application/json".to_string())
+        );
     }
 
     #[test]
@@ -248,8 +263,14 @@ mod tests {
         };
 
         assert!(no_timeout_config.req_timeout.is_none());
-        assert_eq!(short_timeout_config.req_timeout, Some(Duration::from_secs(5)));
-        assert_eq!(long_timeout_config.req_timeout, Some(Duration::from_secs(300)));
+        assert_eq!(
+            short_timeout_config.req_timeout,
+            Some(Duration::from_secs(5))
+        );
+        assert_eq!(
+            long_timeout_config.req_timeout,
+            Some(Duration::from_secs(300))
+        );
     }
 
     #[test]
@@ -378,14 +399,23 @@ mod tests {
         assert!(config.header.is_empty());
 
         // Add headers
-        config.header.insert("User-Agent".to_string(), "open-lark-sdk".to_string());
-        config.header.insert("Accept".to_string(), "application/json".to_string());
+        config
+            .header
+            .insert("User-Agent".to_string(), "open-lark-sdk".to_string());
+        config
+            .header
+            .insert("Accept".to_string(), "application/json".to_string());
         assert_eq!(config.header.len(), 2);
 
         // Update existing header
-        config.header.insert("User-Agent".to_string(), "open-lark-sdk-v2".to_string());
+        config
+            .header
+            .insert("User-Agent".to_string(), "open-lark-sdk-v2".to_string());
         assert_eq!(config.header.len(), 2);
-        assert_eq!(config.header.get("User-Agent"), Some(&"open-lark-sdk-v2".to_string()));
+        assert_eq!(
+            config.header.get("User-Agent"),
+            Some(&"open-lark-sdk-v2".to_string())
+        );
 
         // Remove header
         config.header.remove("Accept");
@@ -406,7 +436,10 @@ mod tests {
         };
 
         assert_eq!(millis_config.req_timeout, Some(Duration::from_millis(1500)));
-        assert_eq!(nanos_config.req_timeout, Some(Duration::from_nanos(2_500_000_000)));
+        assert_eq!(
+            nanos_config.req_timeout,
+            Some(Duration::from_nanos(2_500_000_000))
+        );
     }
 
     #[test]
@@ -421,18 +454,26 @@ mod tests {
             ..Default::default()
         };
 
-        assert_eq!(zero_timeout_config.req_timeout, Some(Duration::from_secs(0)));
-        assert_eq!(max_timeout_config.req_timeout, Some(Duration::from_secs(u64::MAX)));
+        assert_eq!(
+            zero_timeout_config.req_timeout,
+            Some(Duration::from_secs(0))
+        );
+        assert_eq!(
+            max_timeout_config.req_timeout,
+            Some(Duration::from_secs(u64::MAX))
+        );
     }
 
     #[test]
     fn test_config_memory_efficiency() {
         // Test that Config doesn't consume excessive memory
-        let configs: Vec<Config> = (0..100).map(|i| Config {
-            app_id: format!("app_{}", i),
-            app_secret: format!("secret_{}", i),
-            ..Default::default()
-        }).collect();
+        let configs: Vec<Config> = (0..100)
+            .map(|i| Config {
+                app_id: format!("app_{}", i),
+                app_secret: format!("secret_{}", i),
+                ..Default::default()
+            })
+            .collect();
 
         assert_eq!(configs.len(), 100);
 

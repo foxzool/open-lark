@@ -222,9 +222,7 @@ impl UserTaskService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{
-        config::Config,
-    };
+    use crate::core::config::Config;
     use crate::service::attendance::v1::models::UserTaskCreate;
 
     fn create_test_config() -> Config {
@@ -252,21 +250,19 @@ mod tests {
         let service = create_test_service();
         let mut request = BatchCreateUserTaskRequest::default();
         request.employee_type = "employee_id".to_string();
-        request.user_tasks = vec![
-            UserTaskCreate {
-                user_id: "user123".to_string(),
-                group_id: "group123".to_string(),
-                shift_id: "shift123".to_string(),
-                check_date: "2023-01-01".to_string(),
-                check_time: "2023-01-01 09:00:00".to_string(),
-                check_type: 1,
-                check_result: 1,
-                location: None,
-                is_field: Some(false),
-                is_remedy: Some(false),
-                comment: Some("Test task".to_string()),
-            }
-        ];
+        request.user_tasks = vec![UserTaskCreate {
+            user_id: "user123".to_string(),
+            group_id: "group123".to_string(),
+            shift_id: "shift123".to_string(),
+            check_date: "2023-01-01".to_string(),
+            check_time: "2023-01-01 09:00:00".to_string(),
+            check_type: 1,
+            check_result: 1,
+            location: None,
+            is_field: Some(false),
+            is_remedy: Some(false),
+            comment: Some("Test task".to_string()),
+        }];
 
         // Test request structure
         assert_eq!(request.employee_type, "employee_id");
