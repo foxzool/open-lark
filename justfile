@@ -38,8 +38,8 @@ coverage:
   @echo "📊 Running coverage analysis..."
   cargo llvm-cov clean --workspace
   cargo llvm-cov test --all-features --workspace \
-    --lcov --output-path target/llvm-cov/lcov.info \
     --html --output-dir target/llvm-cov/html
+  cargo llvm-cov report --lcov --output-path target/llvm-cov/lcov.info
   @echo "📋 Coverage report generated:"
   @echo "  - HTML: target/llvm-cov/html/index.html"
   @echo "  - LCOV: target/llvm-cov/lcov.info"

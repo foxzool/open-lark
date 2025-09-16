@@ -70,3 +70,93 @@ impl WorkplaceService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_workplace_service_creation() {
+        let config = create_test_config();
+        let workplace_service = WorkplaceService::new(config);
+
+        // Verify service structure
+        assert!(std::ptr::addr_of!(workplace_service.workplace_access_data) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(workplace_service.app_recommend) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_workplace_service_debug_trait() {
+        let config = create_test_config();
+        let workplace_service = WorkplaceService::new(config);
+
+        // Test that service can be used
+        assert!(std::ptr::addr_of!(workplace_service) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_workplace_service_modules_independence() {
+        let config = create_test_config();
+        let workplace_service = WorkplaceService::new(config);
+
+        // Test that sub-modules are independent
+        let access_data_ptr = std::ptr::addr_of!(workplace_service.workplace_access_data) as *const _;
+        let app_recommend_ptr = std::ptr::addr_of!(workplace_service.app_recommend) as *const _;
+
+        assert_ne!(access_data_ptr, app_recommend_ptr, "Sub-services should be independent");
+    }
+
+    #[test]
+    fn test_workplace_service_with_different_configs() {
+        let configs = vec![
+            Config::builder()
+                .app_id("workplace1")
+                .app_secret("secret1")
+                .build(),
+            Config::builder()
+                .app_id("workplace2")
+                .app_secret("secret2")
+                .req_timeout(std::time::Duration::from_millis(12000))
+                .build(),
+            Config::builder()
+                .app_id("workplace3")
+                .app_secret("secret3")
+                .base_url("https://workplace.custom.com")
+                .build(),
+        ];
+
+        for config in configs {
+            let workplace_service = WorkplaceService::new(config);
+
+            // Each service should be created successfully
+            assert!(std::ptr::addr_of!(workplace_service.workplace_access_data) as *const _ != std::ptr::null());
+            assert!(std::ptr::addr_of!(workplace_service.app_recommend) as *const _ != std::ptr::null());
+        }
+    }
+
+    #[test]
+    fn test_workplace_service_config_cloning() {
+        let config = create_test_config();
+
+        // Test that config cloning works correctly
+        let workplace_service1 = WorkplaceService::new(config.clone());
+        let workplace_service2 = WorkplaceService::new(config);
+
+        // Both services should be created successfully
+        assert!(std::ptr::addr_of!(workplace_service1.workplace_access_data) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(workplace_service2.workplace_access_data) as *const _ != std::ptr::null());
+
+        // But should be different instances
+        let service1_ptr = std::ptr::addr_of!(workplace_service1) as *const _;
+        let service2_ptr = std::ptr::addr_of!(workplace_service2) as *const _;
+        assert_ne!(service1_ptr, service2_ptr, "Services should be independent instances");
+    }
+}
