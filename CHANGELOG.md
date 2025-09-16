@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Task v2**: 支持在 `CreateTaskRequest` 中指定 `tasklist_guid`，并新增 `TaskService::add_tasklist` 帮助方法，便于将既有任务加入指定清单。
+- **文档**: 更新任务模块文档，补充任务加入清单的示例和能力说明。
+
 ## [0.13.2] - 2025-09-06
 
 ### Fixed - 🐛 WebSocket 消息已读事件修复

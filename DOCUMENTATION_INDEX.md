@@ -104,7 +104,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 | 模块 | 功能说明 | 文档位置 | API数量 |
 |------|----------|----------|---------|
 | **approval** | 审批 - 工作流程管理 | [`src/service/approval/`](src/service/approval/) | 20+ |
-| **task** | 任务 - 任务和项目管理 | [`src/service/task/`](src/service/task/) | 18+ |
+| **task** | 任务 - 任务和项目管理（含任务清单关联能力） | [`src/service/task/`](src/service/task/) | 18+ |
 | **okr** | OKR - 目标管理 | [`src/service/okr/`](src/service/okr/) | 15+ |
 | **calendar** | 日历 - 日程安排 | [`src/service/calendar/`](src/service/calendar/) | 25+ |
 
