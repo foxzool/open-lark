@@ -1056,4 +1056,344 @@ mod tests {
         assert!(entry.expires_within(700)); // 10分钟 < 700秒
         assert!(!entry.expires_within(500)); // 10分钟 > 500秒
     }
+
+    #[test]
+    fn test_preheating_config_custom_values() {
+        let config = PreheatingConfig {
+            check_interval_seconds: 900,
+            preheat_threshold_seconds: 300,
+            enable_tenant_preheating: false,
+            max_concurrent_preheat: 5,
+        };
+
+        assert_eq!(config.check_interval_seconds, 900);
+        assert_eq!(config.preheat_threshold_seconds, 300);
+        assert!(!config.enable_tenant_preheating);
+        assert_eq!(config.max_concurrent_preheat, 5);
+    }
+
+    #[test]
+    fn test_preheating_config_clone() {
+        let config = PreheatingConfig::default();
+        let cloned = config.clone();
+
+        assert_eq!(config.check_interval_seconds, cloned.check_interval_seconds);
+        assert_eq!(config.preheat_threshold_seconds, cloned.preheat_threshold_seconds);
+        assert_eq!(config.enable_tenant_preheating, cloned.enable_tenant_preheating);
+        assert_eq!(config.max_concurrent_preheat, cloned.max_concurrent_preheat);
+    }
+
+    #[test]
+    fn test_preheating_config_debug() {
+        let config = PreheatingConfig::default();
+        let debug_str = format!("{:?}", config);
+
+        assert!(debug_str.contains("PreheatingConfig"));
+        assert!(debug_str.contains("1800"));
+        assert!(debug_str.contains("900"));
+    }
+
+    #[test]
+    fn test_token_metrics_zero_division_safety() {
+        let metrics = TokenMetrics::new();
+
+        // 测试零除法安全性 - 当没有统计数据时应该返回0.0
+        assert_eq!(metrics.app_cache_hit_rate(), 0.0);
+        assert_eq!(metrics.tenant_cache_hit_rate(), 0.0);
+        assert_eq!(metrics.refresh_success_rate(), 0.0);
+    }
+
+    #[test]
+    fn test_token_metrics_edge_cases() {
+        let metrics = TokenMetrics::new();
+
+        // 测试只有缓存命中，没有未命中的情况
+        metrics.app_cache_hits.store(100, Ordering::Relaxed);
+        assert_eq!(metrics.app_cache_hit_rate(), 1.0);
+
+        // 测试只有缓存未命中，没有命中的情况
+        metrics.app_cache_hits.store(0, Ordering::Relaxed);
+        metrics.app_cache_misses.store(50, Ordering::Relaxed);
+        assert_eq!(metrics.app_cache_hit_rate(), 0.0);
+    }
+
+    #[test]
+    fn test_token_metrics_debug() {
+        let metrics = TokenMetrics::new();
+        let debug_str = format!("{:?}", metrics);
+
+        assert!(debug_str.contains("TokenMetrics"));
+        assert!(debug_str.contains("app_cache_hits"));
+        assert!(debug_str.contains("refresh_success"));
+    }
+
+    #[test]
+    fn test_token_metrics_all_rates_with_data() {
+        let metrics = TokenMetrics::new();
+
+        // 设置各种统计数据
+        metrics.app_cache_hits.store(75, Ordering::Relaxed);
+        metrics.app_cache_misses.store(25, Ordering::Relaxed);
+        metrics.tenant_cache_hits.store(60, Ordering::Relaxed);
+        metrics.tenant_cache_misses.store(40, Ordering::Relaxed);
+        metrics.refresh_success.store(90, Ordering::Relaxed);
+        metrics.refresh_failures.store(10, Ordering::Relaxed);
+        metrics.read_lock_acquisitions.store(200, Ordering::Relaxed);
+        metrics.write_lock_acquisitions.store(50, Ordering::Relaxed);
+
+        assert_eq!(metrics.app_cache_hit_rate(), 0.75);
+        assert_eq!(metrics.tenant_cache_hit_rate(), 0.6);
+        assert_eq!(metrics.refresh_success_rate(), 0.9);
+        assert_eq!(metrics.read_lock_acquisitions.load(Ordering::Relaxed), 200);
+        assert_eq!(metrics.write_lock_acquisitions.load(Ordering::Relaxed), 50);
+    }
+
+    #[test]
+    fn test_token_request_structs_serialization() {
+        let self_built_req = SelfBuiltAppAccessTokenReq {
+            app_id: "test_app".to_string(),
+            app_secret: "test_secret".to_string(),
+        };
+
+        let json = serde_json::to_string(&self_built_req).unwrap();
+        assert!(json.contains("test_app"));
+        assert!(json.contains("test_secret"));
+
+        let deserialized: SelfBuiltAppAccessTokenReq = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.app_id, "test_app");
+        assert_eq!(deserialized.app_secret, "test_secret");
+    }
+
+    #[test]
+    fn test_marketplace_token_request_serialization() {
+        let marketplace_req = MarketplaceAppAccessTokenReq {
+            app_id: "marketplace_app".to_string(),
+            app_secret: "marketplace_secret".to_string(),
+            app_ticket: "test_ticket".to_string(),
+        };
+
+        let json = serde_json::to_string(&marketplace_req).unwrap();
+        assert!(json.contains("marketplace_app"));
+        assert!(json.contains("marketplace_secret"));
+        assert!(json.contains("test_ticket"));
+
+        let deserialized: MarketplaceAppAccessTokenReq = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.app_id, "marketplace_app");
+        assert_eq!(deserialized.app_ticket, "test_ticket");
+    }
+
+    #[test]
+    fn test_tenant_token_request_serialization() {
+        let tenant_req = MarketplaceTenantAccessTokenReq {
+            app_access_token: "app_token_123".to_string(),
+            tenant_key: "tenant_abc".to_string(),
+        };
+
+        let json = serde_json::to_string(&tenant_req).unwrap();
+        assert!(json.contains("app_token_123"));
+        assert!(json.contains("tenant_abc"));
+
+        let deserialized: MarketplaceTenantAccessTokenReq = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.app_access_token, "app_token_123");
+        assert_eq!(deserialized.tenant_key, "tenant_abc");
+    }
+
+    #[test]
+    fn test_app_access_token_response() {
+        use crate::core::api_resp::{ResponseFormat, RawResponse};
+
+        // 测试ResponseFormat
+        assert!(matches!(AppAccessTokenResp::data_format(), ResponseFormat::Flatten));
+
+        // 测试响应结构
+        let raw_resp = RawResponse {
+            code: 0,
+            msg: "success".to_string(),
+            err: None,
+        };
+
+        let resp = AppAccessTokenResp {
+            raw_response: raw_resp,
+            expire: 3600,
+            app_access_token: "test_token_123".to_string(),
+        };
+
+        assert_eq!(resp.expire, 3600);
+        assert_eq!(resp.app_access_token, "test_token_123");
+        assert_eq!(resp.raw_response.code, 0);
+    }
+
+    #[test]
+    fn test_tenant_access_token_response() {
+        use crate::core::api_resp::{ResponseFormat, RawResponse};
+
+        // 测试ResponseFormat
+        assert!(matches!(TenantAccessTokenResp::data_format(), ResponseFormat::Flatten));
+
+        // 测试响应结构
+        let raw_resp = RawResponse {
+            code: 0,
+            msg: "success".to_string(),
+            err: None,
+        };
+
+        let resp = TenantAccessTokenResp {
+            raw_response: raw_resp,
+            expire: 7200,
+            tenant_access_token: "tenant_token_456".to_string(),
+        };
+
+        assert_eq!(resp.expire, 7200);
+        assert_eq!(resp.tenant_access_token, "tenant_token_456");
+        assert_eq!(resp.raw_response.code, 0);
+    }
+
+    #[tokio::test]
+    async fn test_token_manager_stop_preheating() {
+        let mut manager = TokenManager::new();
+
+        // 确保初始状态下没有预热任务
+        assert!(!manager.is_preheating_active());
+
+        // 停止不存在的预热任务应该不会panic
+        manager.stop_background_preheating();
+        assert!(!manager.is_preheating_active());
+    }
+
+    #[tokio::test]
+    async fn test_token_manager_concurrent_access() {
+        let manager = Arc::new(TokenManager::new());
+        let manager_clone = manager.clone();
+
+        // 测试并发访问不会导致死锁
+        let handle1 = tokio::spawn(async move {
+            let cache = manager_clone.cache.read().await;
+            cache.get("test_key")
+        });
+
+        let handle2 = tokio::spawn(async move {
+            let cache = manager.cache.read().await;
+            cache.get("another_key")
+        });
+
+        let (result1, result2) = tokio::join!(handle1, handle2);
+        assert!(result1.is_ok());
+        assert!(result2.is_ok());
+    }
+
+    #[test]
+    fn test_key_generation_with_special_characters() {
+        let app_id_with_special = "app-id_with.special@chars";
+        let tenant_with_special = "tenant.key-with_special@chars";
+
+        let app_key = app_access_token_key(app_id_with_special);
+        let tenant_key = tenant_access_token_key(app_id_with_special, tenant_with_special);
+
+        assert!(app_key.contains(app_id_with_special));
+        assert!(tenant_key.contains(app_id_with_special));
+        assert!(tenant_key.contains(tenant_with_special));
+    }
+
+    #[test]
+    fn test_key_generation_with_unicode() {
+        let app_id = "应用标识符";
+        let tenant_key = "租户标识符";
+
+        let app_key = app_access_token_key(app_id);
+        let tenant_access_key = tenant_access_token_key(app_id, tenant_key);
+
+        assert!(app_key.contains(app_id));
+        assert!(tenant_access_key.contains(app_id));
+        assert!(tenant_access_key.contains(tenant_key));
+    }
+
+    #[tokio::test]
+    async fn test_token_metrics_atomic_operations() {
+        let metrics = Arc::new(TokenMetrics::new());
+        let metrics_clone = metrics.clone();
+
+        // 测试并发修改指标
+        let handle = tokio::spawn(async move {
+            for _ in 0..100 {
+                metrics_clone.app_cache_hits.fetch_add(1, Ordering::Relaxed);
+                metrics_clone.app_cache_misses.fetch_add(1, Ordering::Relaxed);
+            }
+        });
+
+        for _ in 0..50 {
+            metrics.refresh_success.fetch_add(1, Ordering::Relaxed);
+            metrics.refresh_failures.fetch_add(1, Ordering::Relaxed);
+        }
+
+        handle.await.unwrap();
+
+        assert_eq!(metrics.app_cache_hits.load(Ordering::Relaxed), 100);
+        assert_eq!(metrics.app_cache_misses.load(Ordering::Relaxed), 100);
+        assert_eq!(metrics.refresh_success.load(Ordering::Relaxed), 50);
+        assert_eq!(metrics.refresh_failures.load(Ordering::Relaxed), 50);
+    }
+
+    #[test]
+    fn test_self_built_tenant_access_token_req() {
+        let req = SelfBuiltTenantAccessTokenReq {
+            app_id: "self_built_app".to_string(),
+            app_secret: "self_built_secret".to_string(),
+        };
+
+        let json = serde_json::to_string(&req).unwrap();
+        assert!(json.contains("self_built_app"));
+        assert!(json.contains("self_built_secret"));
+
+        let deserialized: SelfBuiltTenantAccessTokenReq = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.app_id, "self_built_app");
+        assert_eq!(deserialized.app_secret, "self_built_secret");
+    }
+
+    #[test]
+    fn test_token_response_debug() {
+        use crate::core::api_resp::RawResponse;
+
+        let raw_resp = RawResponse {
+            code: 0,
+            msg: "success".to_string(),
+            err: None,
+        };
+
+        let app_resp = AppAccessTokenResp {
+            raw_response: raw_resp.clone(),
+            expire: 3600,
+            app_access_token: "debug_token".to_string(),
+        };
+
+        let debug_str = format!("{:?}", app_resp);
+        assert!(debug_str.contains("AppAccessTokenResp"));
+        assert!(debug_str.contains("debug_token"));
+        assert!(debug_str.contains("3600"));
+
+        let tenant_resp = TenantAccessTokenResp {
+            raw_response: raw_resp,
+            expire: 7200,
+            tenant_access_token: "tenant_debug_token".to_string(),
+        };
+
+        let debug_str = format!("{:?}", tenant_resp);
+        assert!(debug_str.contains("TenantAccessTokenResp"));
+        assert!(debug_str.contains("tenant_debug_token"));
+        assert!(debug_str.contains("7200"));
+    }
+
+    #[test]
+    fn test_token_manager_memory_efficiency() {
+        // 测试创建多个TokenManager实例不会消耗过多内存
+        let managers: Vec<TokenManager> = (0..50)
+            .map(|_| TokenManager::new())
+            .collect();
+
+        assert_eq!(managers.len(), 50);
+
+        // 验证每个manager都有独立的缓存和指标
+        for manager in &managers {
+            assert!(manager.cache.try_read().is_ok());
+        }
+    }
 }

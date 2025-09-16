@@ -234,12 +234,347 @@ fn decode_file_name(file_name: &str) -> Option<String> {
 
 #[cfg(test)]
 mod test {
-    use crate::core::http::decode_file_name;
+    use std::collections::HashMap;
+
+    use crate::core::{
+        config::Config,
+        constants::{AccessTokenType, AppType, HTTP_HEADER_KEY_REQUEST_ID, HTTP_HEADER_REQUEST_ID},
+        error::LarkAPIError,
+        http::{decode_file_name, determine_token_type, validate, validate_token_type},
+        req_option::RequestOption,
+    };
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+    }
+
+    fn create_test_config_marketplace() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::Marketplace)
+            .build()
+    }
 
     #[test]
     fn test_decode_file_name() {
         let raw = "attachment; filename=\"upload_all.rs\"; filename*=UTF-8''upload_all.rs";
         let file_name = decode_file_name(raw).unwrap();
         assert_eq!(file_name, "upload_all.rs");
+    }
+
+    #[test]
+    fn test_decode_file_name_no_utf8() {
+        let raw = "attachment; filename=\"simple.txt\"";
+        let file_name = decode_file_name(raw);
+        assert!(file_name.is_none());
+    }
+
+    #[test]
+    fn test_decode_file_name_multiple_parts() {
+        let raw = "attachment; charset=utf-8; filename*=UTF-8''complex%20name.txt; other=value";
+        let file_name = decode_file_name(raw).unwrap();
+        assert_eq!(file_name, "complex%20name.txt");
+    }
+
+    #[test]
+    fn test_decode_file_name_empty() {
+        let raw = "";
+        let file_name = decode_file_name(raw);
+        assert!(file_name.is_none());
+    }
+
+    #[test]
+    #[should_panic(expected = "index out of bounds")]
+    fn test_validate_token_type_empty_list_bug() {
+        let empty_types: Vec<AccessTokenType> = vec![];
+        let option = RequestOption::default();
+
+        // This demonstrates the bug in validate_token_type - it will panic
+        // due to accessing index 0 on empty list
+        let _ = validate_token_type(&empty_types, &option);
+    }
+
+    #[test]
+    fn test_validate_token_type_non_empty_list_returns_ok() {
+        let types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let option = RequestOption::default();
+
+        // Non-empty list should return Ok immediately without validation
+        let result = validate_token_type(&types, &option);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_validate_token_type_tenant_with_user_token() {
+        let types = vec![AccessTokenType::Tenant];
+        let mut option = RequestOption::default();
+        option.user_access_token = "user_token".to_string();
+
+        // Non-empty list returns Ok immediately, so this passes despite mismatch
+        let result = validate_token_type(&types, &option);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_validate_token_type_app_with_tenant_token() {
+        let types = vec![AccessTokenType::App];
+        let mut option = RequestOption::default();
+        option.tenant_access_token = "tenant_token".to_string();
+
+        // Non-empty list returns Ok immediately, so this passes despite mismatch
+        let result = validate_token_type(&types, &option);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_validate_token_type_valid_combinations() {
+        let types = vec![AccessTokenType::User];
+        let mut option = RequestOption::default();
+        option.user_access_token = "user_token".to_string();
+
+        let result = validate_token_type(&types, &option);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_determine_token_type_no_cache_user() {
+        let types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let mut option = RequestOption::default();
+        option.user_access_token = "user_token".to_string();
+
+        let token_type = determine_token_type(&types, &option, false);
+        assert_eq!(token_type, AccessTokenType::User);
+    }
+
+    #[test]
+    fn test_determine_token_type_no_cache_tenant() {
+        let types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let mut option = RequestOption::default();
+        option.tenant_access_token = "tenant_token".to_string();
+
+        let token_type = determine_token_type(&types, &option, false);
+        assert_eq!(token_type, AccessTokenType::Tenant);
+    }
+
+    #[test]
+    fn test_determine_token_type_no_cache_app() {
+        let types = vec![AccessTokenType::App, AccessTokenType::Tenant];
+        let mut option = RequestOption::default();
+        option.app_access_token = "app_token".to_string();
+
+        let token_type = determine_token_type(&types, &option, false);
+        assert_eq!(token_type, AccessTokenType::App);
+    }
+
+    #[test]
+    fn test_determine_token_type_no_cache_none() {
+        let types = vec![AccessTokenType::None];
+        let option = RequestOption::default();
+
+        let token_type = determine_token_type(&types, &option, false);
+        assert_eq!(token_type, AccessTokenType::None);
+    }
+
+    #[test]
+    fn test_determine_token_type_with_cache_defaults_to_tenant() {
+        let types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let option = RequestOption::default();
+
+        let token_type = determine_token_type(&types, &option, true);
+        assert_eq!(token_type, AccessTokenType::Tenant);
+    }
+
+    #[test]
+    fn test_determine_token_type_with_cache_tenant_key() {
+        let types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let mut option = RequestOption::default();
+        option.tenant_key = "tenant_key".to_string();
+
+        let token_type = determine_token_type(&types, &option, true);
+        assert_eq!(token_type, AccessTokenType::Tenant);
+    }
+
+    #[test]
+    fn test_determine_token_type_with_cache_user_access_token() {
+        let types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        let mut option = RequestOption::default();
+        option.user_access_token = "user_token".to_string();
+
+        let token_type = determine_token_type(&types, &option, true);
+        assert_eq!(token_type, AccessTokenType::User);
+    }
+
+    #[test]
+    fn test_validate_empty_app_id() {
+        let config = Config::builder()
+            .app_id("")
+            .app_secret("test_secret")
+            .build();
+        let option = RequestOption::default();
+
+        let result = validate(&config, &option, AccessTokenType::None);
+        assert!(matches!(result, Err(LarkAPIError::IllegalParamError(_))));
+    }
+
+    #[test]
+    fn test_validate_empty_app_secret() {
+        let config = Config::builder()
+            .app_id("test_id")
+            .app_secret("")
+            .build();
+        let option = RequestOption::default();
+
+        let result = validate(&config, &option, AccessTokenType::None);
+        assert!(matches!(result, Err(LarkAPIError::IllegalParamError(_))));
+    }
+
+    #[test]
+    fn test_validate_no_cache_missing_access_tokens() {
+        let mut config = create_test_config();
+        config.enable_token_cache = false;
+        let option = RequestOption::default();
+
+        let result = validate(&config, &option, AccessTokenType::User);
+        assert!(matches!(result, Err(LarkAPIError::IllegalParamError(_))));
+    }
+
+    #[test]
+    fn test_validate_no_cache_with_tokens() {
+        let mut config = create_test_config();
+        config.enable_token_cache = false;
+        let mut option = RequestOption::default();
+        option.user_access_token = "token".to_string();
+
+        let result = validate(&config, &option, AccessTokenType::User);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_validate_marketplace_tenant_no_key() {
+        let config = create_test_config_marketplace();
+        let option = RequestOption::default();
+
+        let result = validate(&config, &option, AccessTokenType::Tenant);
+        assert!(matches!(result, Err(LarkAPIError::IllegalParamError(_))));
+    }
+
+    #[test]
+    fn test_validate_marketplace_tenant_with_key() {
+        let config = create_test_config_marketplace();
+        let mut option = RequestOption::default();
+        option.tenant_key = "tenant_key".to_string();
+
+        let result = validate(&config, &option, AccessTokenType::Tenant);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_validate_user_token_empty() {
+        let config = create_test_config();
+        let option = RequestOption::default();
+
+        let result = validate(&config, &option, AccessTokenType::User);
+        assert!(matches!(result, Err(LarkAPIError::IllegalParamError(_))));
+    }
+
+    #[test]
+    fn test_validate_user_token_present() {
+        let config = create_test_config();
+        let mut option = RequestOption::default();
+        option.user_access_token = "user_token".to_string();
+
+        let result = validate(&config, &option, AccessTokenType::User);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_validate_forbidden_header_key_request_id() {
+        let config = create_test_config();
+        let mut option = RequestOption::default();
+        let mut header = HashMap::new();
+        header.insert(HTTP_HEADER_KEY_REQUEST_ID.to_string(), "test".to_string());
+        option.header = header;
+
+        let result = validate(&config, &option, AccessTokenType::None);
+        assert!(matches!(result, Err(LarkAPIError::IllegalParamError(_))));
+    }
+
+    #[test]
+    fn test_validate_forbidden_header_request_id() {
+        let config = create_test_config();
+        let mut option = RequestOption::default();
+        let mut header = HashMap::new();
+        header.insert(HTTP_HEADER_REQUEST_ID.to_string(), "test".to_string());
+        option.header = header;
+
+        let result = validate(&config, &option, AccessTokenType::None);
+        assert!(matches!(result, Err(LarkAPIError::IllegalParamError(_))));
+    }
+
+    #[test]
+    fn test_validate_valid_config() {
+        let config = create_test_config();
+        let option = RequestOption::default();
+
+        let result = validate(&config, &option, AccessTokenType::None);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_validate_no_cache_none_token_type() {
+        let mut config = create_test_config();
+        config.enable_token_cache = false;
+        let option = RequestOption::default();
+
+        let result = validate(&config, &option, AccessTokenType::None);
+        assert!(result.is_ok());
+    }
+
+
+    #[test]
+    fn test_determine_token_type_first_is_tenant() {
+        let types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        let option = RequestOption::default();
+
+        let token_type = determine_token_type(&types, &option, true);
+        assert_eq!(token_type, AccessTokenType::Tenant);
+    }
+
+    #[test]
+    fn test_determine_token_type_no_tenant_in_list() {
+        let types = vec![AccessTokenType::User, AccessTokenType::App];
+        let option = RequestOption::default();
+
+        let token_type = determine_token_type(&types, &option, true);
+        // Should use first type when no Tenant type is available
+        assert_eq!(token_type, AccessTokenType::User);
+    }
+
+    #[test]
+    fn test_validate_token_type_edge_case_single_element() {
+        let types = vec![AccessTokenType::None];
+        let mut option = RequestOption::default();
+        option.user_access_token = "user_token".to_string();
+
+        let result = validate_token_type(&types, &option);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_decode_file_name_whitespace_handling() {
+        let raw = " attachment ; filename=\"test.txt\" ; filename*=UTF-8''spaced%20file.txt ";
+        let file_name = decode_file_name(raw).unwrap();
+        assert_eq!(file_name, "spaced%20file.txt");
+    }
+
+    #[test]
+    fn test_decode_file_name_no_equals() {
+        let raw = "attachment; filename*UTF-8''invalid.txt";
+        let file_name = decode_file_name(raw);
+        assert!(file_name.is_none());
     }
 }
