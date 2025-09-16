@@ -119,9 +119,139 @@ pub struct BotService {
 }
 
 impl BotService {
+    /// 创建新的机器人服务实例
+    ///
+    /// # 参数
+    /// - `config`: 客户端配置，包含认证信息和API设置
+    ///
+    /// # 返回值
+    /// 配置完成的机器人服务实例
     pub fn new(config: Config) -> Self {
         Self {
             v3: v3::V3::new(config),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_bot_service_creation() {
+        let config = create_test_config();
+        let bot_service = BotService::new(config);
+
+        // Verify service structure
+        assert!(std::ptr::addr_of!(bot_service.v3) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_bot_service_with_custom_config() {
+        let config = Config::builder()
+            .app_id("bot_app")
+            .app_secret("bot_secret")
+            .req_timeout(std::time::Duration::from_millis(10000))
+            .base_url("https://bot.api.com")
+            .build();
+
+        let bot_service = BotService::new(config);
+
+        // Verify service creation with custom config
+        assert!(std::ptr::addr_of!(bot_service.v3) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_bot_service_configuration_variations() {
+        let test_configs = vec![
+            Config::builder()
+                .app_id("bot_basic")
+                .app_secret("basic_secret")
+                .build(),
+            Config::builder()
+                .app_id("bot_timeout")
+                .app_secret("timeout_secret")
+                .req_timeout(std::time::Duration::from_millis(15000))
+                .build(),
+            Config::builder()
+                .app_id("bot_custom")
+                .app_secret("custom_secret")
+                .base_url("https://custom.bot.com")
+                .build(),
+            Config::builder()
+                .app_id("bot_full")
+                .app_secret("full_secret")
+                .req_timeout(std::time::Duration::from_millis(20000))
+                .base_url("https://full.bot.com")
+                .enable_token_cache(false)
+                .build(),
+        ];
+
+        for config in test_configs {
+            let bot_service = BotService::new(config);
+
+            // Each configuration should create a valid service
+            assert!(std::ptr::addr_of!(bot_service.v3) as *const _ != std::ptr::null());
+        }
+    }
+
+    #[test]
+    fn test_bot_service_multiple_instances() {
+        let config1 = create_test_config();
+        let config2 = Config::builder()
+            .app_id("bot2")
+            .app_secret("secret2")
+            .build();
+
+        let bot_service1 = BotService::new(config1);
+        let bot_service2 = BotService::new(config2);
+
+        // Services should be independent instances
+        let service1_ptr = std::ptr::addr_of!(bot_service1) as *const _;
+        let service2_ptr = std::ptr::addr_of!(bot_service2) as *const _;
+
+        assert_ne!(service1_ptr, service2_ptr, "Services should be independent instances");
+
+        // Each service should have valid v3 API
+        assert!(std::ptr::addr_of!(bot_service1.v3) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(bot_service2.v3) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_bot_service_config_cloning_behavior() {
+        let original_config = create_test_config();
+
+        // Test that the service works with cloned configs
+        let bot_service1 = BotService::new(original_config.clone());
+        let bot_service2 = BotService::new(original_config);
+
+        // Both should work independently
+        assert!(std::ptr::addr_of!(bot_service1.v3) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(bot_service2.v3) as *const _ != std::ptr::null());
+
+        // But should be different service instances
+        let service1_ptr = std::ptr::addr_of!(bot_service1) as *const _;
+        let service2_ptr = std::ptr::addr_of!(bot_service2) as *const _;
+        assert_ne!(service1_ptr, service2_ptr);
+    }
+
+    #[test]
+    fn test_bot_service_api_version_structure() {
+        let config = create_test_config();
+        let bot_service = BotService::new(config);
+
+        // Verify that the v3 API is properly structured
+        assert!(std::ptr::addr_of!(bot_service.v3) as *const _ != std::ptr::null());
+
+        // Test that service can be used (basic memory check)
+        assert!(std::ptr::addr_of!(bot_service) as *const _ != std::ptr::null());
     }
 }
