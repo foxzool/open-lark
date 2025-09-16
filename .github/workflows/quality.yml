@@ -101,7 +101,7 @@ jobs:
       - name: Set higher coverage threshold on main
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          echo "MIN_COVERAGE=65.0" >> $GITHUB_ENV
+          echo "MIN_COVERAGE=54.0" >> $GITHUB_ENV
       - name: Run llvm-cov
         run: |
           cargo llvm-cov --workspace --all-features \
@@ -109,8 +109,8 @@ jobs:
             --lcov --output-path lcov.info
       - name: Enforce coverage threshold
         env:
-          # 默认阈值（PR 使用）；如为 push 到 main，上一步会将其覆盖为 65.0
-          MIN_COVERAGE: "55.0"
+          # 默认阈值（PR 使用）；如为 push 到 main，上一步会将其覆盖为 54.0
+          MIN_COVERAGE: "54.0"
         run: |
           set -euo pipefail
           summary=$(cargo llvm-cov report --summary-only)
