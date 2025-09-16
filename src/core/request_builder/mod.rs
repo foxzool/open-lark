@@ -102,13 +102,9 @@ mod tests {
         let config = create_test_config();
         let option = RequestOption::default();
 
-        let result = UnifiedRequestBuilder::build(
-            &mut api_req,
-            AccessTokenType::None,
-            &config,
-            &option,
-        )
-        .await;
+        let result =
+            UnifiedRequestBuilder::build(&mut api_req, AccessTokenType::None, &config, &option)
+                .await;
 
         // Should build request successfully
         assert!(result.is_ok());
@@ -123,13 +119,9 @@ mod tests {
         let config = create_test_config();
         let option = RequestOption::default();
 
-        let result = UnifiedRequestBuilder::build(
-            &mut api_req,
-            AccessTokenType::None,
-            &config,
-            &option,
-        )
-        .await;
+        let result =
+            UnifiedRequestBuilder::build(&mut api_req, AccessTokenType::None, &config, &option)
+                .await;
 
         assert!(result.is_ok());
     }
@@ -145,13 +137,9 @@ mod tests {
         let config = create_test_config();
         let option = RequestOption::default();
 
-        let result = UnifiedRequestBuilder::build(
-            &mut api_req,
-            AccessTokenType::None,
-            &config,
-            &option,
-        )
-        .await;
+        let result =
+            UnifiedRequestBuilder::build(&mut api_req, AccessTokenType::None, &config, &option)
+                .await;
 
         // This might fail due to multipart builder dependencies, but should not panic
         assert!(result.is_ok() || result.is_err());
@@ -166,13 +154,9 @@ mod tests {
         let config = create_test_config();
         let option = RequestOption::default();
 
-        let result = UnifiedRequestBuilder::build(
-            &mut api_req,
-            AccessTokenType::None,
-            &config,
-            &option,
-        )
-        .await;
+        let result =
+            UnifiedRequestBuilder::build(&mut api_req, AccessTokenType::None, &config, &option)
+                .await;
 
         assert!(result.is_ok());
     }
@@ -181,16 +165,14 @@ mod tests {
     async fn test_build_request_with_app_token() {
         let mut api_req = create_test_api_request();
         let config = create_test_config();
-        let mut option = RequestOption::default();
-        option.app_access_token = "app_token_123".to_string();
+        let option = RequestOption {
+            app_access_token: "app_token_123".to_string(),
+            ..Default::default()
+        };
 
-        let result = UnifiedRequestBuilder::build(
-            &mut api_req,
-            AccessTokenType::App,
-            &config,
-            &option,
-        )
-        .await;
+        let result =
+            UnifiedRequestBuilder::build(&mut api_req, AccessTokenType::App, &config, &option)
+                .await;
 
         assert!(result.is_ok());
     }
@@ -199,16 +181,14 @@ mod tests {
     async fn test_build_request_with_tenant_token() {
         let mut api_req = create_test_api_request();
         let config = create_test_config();
-        let mut option = RequestOption::default();
-        option.tenant_access_token = "tenant_token_123".to_string();
+        let option = RequestOption {
+            tenant_access_token: "tenant_token_123".to_string(),
+            ..Default::default()
+        };
 
-        let result = UnifiedRequestBuilder::build(
-            &mut api_req,
-            AccessTokenType::Tenant,
-            &config,
-            &option,
-        )
-        .await;
+        let result =
+            UnifiedRequestBuilder::build(&mut api_req, AccessTokenType::Tenant, &config, &option)
+                .await;
 
         assert!(result.is_ok());
     }
@@ -217,16 +197,14 @@ mod tests {
     async fn test_build_request_with_user_token() {
         let mut api_req = create_test_api_request();
         let config = create_test_config();
-        let mut option = RequestOption::default();
-        option.user_access_token = "user_token_123".to_string();
+        let option = RequestOption {
+            user_access_token: "user_token_123".to_string(),
+            ..Default::default()
+        };
 
-        let result = UnifiedRequestBuilder::build(
-            &mut api_req,
-            AccessTokenType::User,
-            &config,
-            &option,
-        )
-        .await;
+        let result =
+            UnifiedRequestBuilder::build(&mut api_req, AccessTokenType::User, &config, &option)
+                .await;
 
         assert!(result.is_ok());
     }
@@ -236,19 +214,21 @@ mod tests {
         let config = create_test_config();
         let option = RequestOption::default();
 
-        let methods = [Method::GET, Method::POST, Method::PUT, Method::DELETE, Method::PATCH];
+        let methods = [
+            Method::GET,
+            Method::POST,
+            Method::PUT,
+            Method::DELETE,
+            Method::PATCH,
+        ];
 
         for method in methods.iter() {
             let mut api_req = create_test_api_request();
             api_req.http_method = method.clone();
 
-            let result = UnifiedRequestBuilder::build(
-                &mut api_req,
-                AccessTokenType::None,
-                &config,
-                &option,
-            )
-            .await;
+            let result =
+                UnifiedRequestBuilder::build(&mut api_req, AccessTokenType::None, &config, &option)
+                    .await;
 
             assert!(result.is_ok(), "Failed for method: {:?}", method);
         }
@@ -264,7 +244,9 @@ mod tests {
         assert!(result.is_ok());
         let url = result.unwrap();
         // May have trailing ? due to parse_with_params implementation
-        assert!(url.as_str().starts_with("https://open.feishu.cn/open-apis/test"));
+        assert!(url
+            .as_str()
+            .starts_with("https://open.feishu.cn/open-apis/test"));
     }
 
     #[test]
@@ -288,8 +270,12 @@ mod tests {
     fn test_build_url_with_special_characters() {
         let config = create_test_config();
         let mut api_req = create_test_api_request();
-        api_req.query_params.insert("query", "test with spaces".to_string());
-        api_req.query_params.insert("filter", "key=value&other=data".to_string());
+        api_req
+            .query_params
+            .insert("query", "test with spaces".to_string());
+        api_req
+            .query_params
+            .insert("filter", "key=value&other=data".to_string());
 
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);
 
@@ -329,17 +315,17 @@ mod tests {
     async fn test_build_request_with_custom_headers() {
         let mut api_req = create_test_api_request();
         let config = create_test_config();
-        let mut option = RequestOption::default();
-        option.request_id = "custom-request-123".to_string();
-        option.header.insert("X-Custom-Header".to_string(), "custom-value".to_string());
+        let mut option = RequestOption {
+            request_id: "custom-request-123".to_string(),
+            ..Default::default()
+        };
+        option
+            .header
+            .insert("X-Custom-Header".to_string(), "custom-value".to_string());
 
-        let result = UnifiedRequestBuilder::build(
-            &mut api_req,
-            AccessTokenType::None,
-            &config,
-            &option,
-        )
-        .await;
+        let result =
+            UnifiedRequestBuilder::build(&mut api_req, AccessTokenType::None, &config, &option)
+                .await;
 
         assert!(result.is_ok());
     }
@@ -358,17 +344,15 @@ mod tests {
         api_req.query_params.insert("format", "json".to_string());
 
         let config = create_test_config();
-        let mut option = RequestOption::default();
-        option.request_id = "complex-request-456".to_string();
-        option.app_access_token = "app_token_456".to_string();
+        let option = RequestOption {
+            request_id: "complex-request-456".to_string(),
+            app_access_token: "app_token_456".to_string(),
+            ..Default::default()
+        };
 
-        let result = UnifiedRequestBuilder::build(
-            &mut api_req,
-            AccessTokenType::App,
-            &config,
-            &option,
-        )
-        .await;
+        let result =
+            UnifiedRequestBuilder::build(&mut api_req, AccessTokenType::App, &config, &option)
+                .await;
 
         assert!(result.is_ok());
     }
@@ -395,13 +379,9 @@ mod tests {
         let config = create_test_config();
         let option = RequestOption::default();
 
-        let result = UnifiedRequestBuilder::build(
-            &mut api_req,
-            AccessTokenType::None,
-            &config,
-            &option,
-        )
-        .await;
+        let result =
+            UnifiedRequestBuilder::build(&mut api_req, AccessTokenType::None, &config, &option)
+                .await;
 
         // Should handle files taking precedence over body
         assert!(result.is_ok() || result.is_err());
@@ -418,6 +398,8 @@ mod tests {
         assert!(result.is_ok());
         let url = result.unwrap();
         // May have trailing ? due to parse_with_params implementation
-        assert!(url.as_str().starts_with("https://open.feishu.cn/open-apis/v1/users/123/messages"));
+        assert!(url
+            .as_str()
+            .starts_with("https://open.feishu.cn/open-apis/v1/users/123/messages"));
     }
 }
