@@ -9,13 +9,14 @@
 //!
 //! 使用静态字符串常量可以显著减少内存分配：
 //! ```rust
-//! // 优化前: 每次调用都创建新字符串 (~60字节堆分配)
-//! api_path: "/open-apis/workplace/v1/workplace_access_data/search".to_string(),
+//! use open_lark::core::endpoints::Endpoints;
 //!
-//! // 优化后: 使用静态常量
-//! api_path: Endpoints::WORKPLACE_ACCESS_DATA_SEARCH.to_string(), // 仅在需要时分配
-//! // 或者进一步优化为
-//! api_path: Endpoints::WORKPLACE_ACCESS_DATA_SEARCH, // 零分配（如果API支持&str）
+//! // 优化前：每次调用时动态分配字符串
+//! let dynamic = "/open-apis/workplace/v1/workplace_access_data/search".to_string();
+//!
+//! // 优化后：使用静态常量，必要时再转换为 String
+//! let optimized = Endpoints::WORKPLACE_ACCESS_DATA_SEARCH;
+//! assert_eq!(optimized, dynamic.as_str());
 //! ```
 //!
 //! # 组织结构

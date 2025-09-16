@@ -2,16 +2,13 @@
 use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
 use open_lark::core::{
     api_req::ApiRequest,
-    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    api_resp::{ApiResponseTrait, ResponseFormat},
     config::Config,
-    constants::{AccessTokenType, AppType},
-    http::Transport,
+    constants::AppType,
     req_option::RequestOption,
     SDKResult,
 };
-use reqwest::Method;
 use serde::{Deserialize, Serialize};
-use std::sync::Arc;
 use std::time::Duration;
 use tokio::runtime::Runtime;
 
@@ -46,11 +43,20 @@ impl ApiResponseTrait for BenchmarkResponse {
 }
 
 async fn create_test_config() -> Config {
-    Config::builder("bench_app_id", "bench_app_secret")
-        .with_app_type(AppType::SelfBuilt)
-        .with_enable_token_cache(true)
-        .with_request_timeout(Duration::from_secs(30))
+    let timeout = Duration::from_secs(30);
+    let http_client = reqwest::Client::builder()
+        .timeout(timeout)
         .build()
+        .expect("failed to build bench http client");
+
+    Config {
+        app_id: "bench_app_id".to_string(),
+        app_secret: "bench_app_secret".to_string(),
+        app_type: AppType::SelfBuild,
+        req_timeout: Some(timeout),
+        http_client,
+        ..Default::default()
+    }
 }
 
 fn create_benchmark_request(size: usize) -> BenchmarkRequest {
@@ -62,15 +68,11 @@ fn create_benchmark_request(size: usize) -> BenchmarkRequest {
 }
 
 fn create_api_request(payload: &BenchmarkRequest) -> SDKResult<ApiRequest> {
-    Ok(ApiRequest {
-        api_path: "/benchmark/test".to_string(),
-        http_method: Method::POST,
-        query_params: Default::default(),
-        headers: Default::default(),
-        body: serde_json::to_vec(payload).unwrap(),
-        supported_access_token_types: vec![AccessTokenType::Tenant],
-        ..Default::default()
-    })
+    let mut request = ApiRequest::default();
+    request.api_path = "/benchmark/test".to_string();
+    request.query_params = Default::default();
+    request.body = serde_json::to_vec(payload).unwrap();
+    Ok(request)
 }
 
 fn bench_request_serialization(c: &mut Criterion) {
@@ -201,7 +203,6 @@ fn bench_request_option_creation(c: &mut Criterion) {
             let _option = black_box(
                 RequestOption::builder()
                     .user_access_token("test_token")
-                    .request_timeout(Duration::from_secs(30))
                     .build(),
             );
         })

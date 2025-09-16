@@ -26,9 +26,9 @@ pub struct GenericPageResponse<T> {
 /// # 使用示例
 ///
 /// ```rust
-/// use open_lark::core::validation::PaginationRequestBuilder;
+/// use open_lark::core::validation::pagination::PaginationRequestBuilder;
 ///
-/// let request = PaginationRequestBuilder::<MessageType>::default()
+/// let request = PaginationRequestBuilder::<()>::default()
 ///     .with_page_size(50)
 ///     .with_page_token("next_page_token")
 ///     .build()
@@ -68,7 +68,13 @@ impl<T> PaginationRequestBuilder<T> {
     /// # 示例
     ///
     /// ```rust
-    /// .with_page_size(50)
+    /// use open_lark::core::validation::pagination::PaginationRequestBuilder;
+    ///
+    /// let params = PaginationRequestBuilder::<()>::default()
+    ///     .with_page_size(50)
+    ///     .build()
+    ///     .unwrap();
+    /// assert_eq!(params.get("page_size"), Some(&"50".to_string()));
     /// ```
     pub fn with_page_size(mut self, page_size: u32) -> Self {
         self.page_size = Some(page_size);
@@ -83,7 +89,13 @@ impl<T> PaginationRequestBuilder<T> {
     /// # 示例
     ///
     /// ```rust
-    /// .with_page_token("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
+    /// use open_lark::core::validation::pagination::PaginationRequestBuilder;
+    ///
+    /// let params = PaginationRequestBuilder::<()>::default()
+    ///     .with_page_token("next_page_token")
+    ///     .build()
+    ///     .unwrap();
+    /// assert_eq!(params.get("page_token"), Some(&"next_page_token".to_string()));
     /// ```
     pub fn with_page_token(mut self, page_token: impl ToString) -> Self {
         self.page_token = Some(page_token.to_string());

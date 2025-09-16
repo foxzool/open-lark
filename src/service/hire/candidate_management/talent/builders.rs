@@ -18,7 +18,7 @@ use crate::{
 /// # 使用示例
 ///
 /// ```rust
-/// use open_lark::service::hire::candidate_management::talent::builders::TalentCreateRequestBuilder;
+/// use open_lark::service::hire::candidate_management::talent::TalentCreateRequestBuilder;
 ///
 /// let request = TalentCreateRequestBuilder::default()
 ///     .with_name("张三")
