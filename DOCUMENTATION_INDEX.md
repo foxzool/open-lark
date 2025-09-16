@@ -1,7 +1,7 @@
 # 📚 open-lark 文档导航索引
 
-**更新时间**: 2025年1月1日  
-**文档版本**: v1.0  
+**更新时间**: 2025年9月16日
+**文档版本**: v1.0
 **维护状态**: ✅ 持续更新
 
 ---
@@ -151,10 +151,10 @@ examples/
 ```
 
 ### 🎯 推荐示例
-- **新手入门**: [`basic_usage.rs`](examples/basic_usage.rs)
-- **企业应用**: [`contact_v3_example.rs`](examples/api/contact_v3_example.rs)
+- **新手入门**: [`client_setup.rs`](examples/basic/client_setup.rs)
+- **企业应用**: [`contact_v3_comprehensive.rs`](examples/api/contact_v3_comprehensive.rs)
 - **招聘系统**: [`hire_v1_example.rs`](examples/api/hire_v1_example.rs)
-- **错误处理**: [`error_handling_demo.rs`](examples/api/error_handling_demo.rs)
+- **WebSocket连接**: [`websocket_client.rs`](examples/basic/websocket_client.rs)
 
 ---
 
@@ -201,9 +201,9 @@ examples/
 
 #### 🔧 贡献者路径
 1. **项目结构** → [项目架构报告](reports/complete_api_implementation_analysis.md)
-2. **代码规范** → [API设计指南](API_DESIGN_GUIDELINES.md)
-3. **开发流程** → [贡献指南](CONTRIBUTING.md)
-4. **质量标准** → [质量保证报告](reports/project_completion_status_2025-01-01.md)
+2. **开发流程** → [贡献指南](CONTRIBUTING.md)
+3. **质量标准** → [质量保证报告](reports/project_completion_status_2025-01-01.md)
+4. **错误处理** → [错误处理最佳实践](docs/ERROR_HANDLING_BEST_PRACTICES.md)
 
 ### 🔧 开发工具链
 
@@ -279,4 +279,4 @@ just check-all
 
 ---
 
-*最后更新: 2025年1月1日 | 文档版本: v1.0 | 维护状态: ✅ 活跃*
+*最后更新: 2025年9月16日 | 文档版本: v1.0 | 维护状态: ✅ 活跃*

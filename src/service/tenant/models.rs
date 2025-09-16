@@ -18,7 +18,7 @@ pub struct Tenant {
 }
 
 /// 企业头像信息
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct TenantAvatar {
     /// 头像 72x72 像素
     #[serde(skip_serializing_if = "Option::is_none")]
