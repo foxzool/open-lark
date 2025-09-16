@@ -524,7 +524,7 @@ mod tests {
     #[test]
     fn test_error_severity_clone() {
         let original = ErrorSeverity::Critical;
-        let cloned = original.clone();
+        let cloned = original;
         assert_eq!(original, cloned);
     }
 

@@ -613,12 +613,12 @@ mod tests {
 
     #[test]
     fn test_api_request_field_independence() {
-        let mut api_req = ApiRequest::default();
-
-        // Modify each field independently
-        api_req.http_method = Method::POST;
-        api_req.api_path = "/test".to_string();
-        api_req.body = b"test body".to_vec();
+        let mut api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: "/test".to_string(),
+            body: b"test body".to_vec(),
+            ..Default::default()
+        };
         api_req.query_params.insert("test", "value".to_string());
         api_req
             .path_params

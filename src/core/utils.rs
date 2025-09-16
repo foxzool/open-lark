@@ -32,8 +32,8 @@ mod tests {
         let version_part = user_agent.strip_prefix("open-lark/").unwrap();
         assert_eq!(version_part, VERSION);
 
-        // Verify version is not empty
-        assert!(!VERSION.is_empty());
+        // Verify version matches expected pattern
+        assert!(VERSION.contains('.'));
     }
 
     #[test]
@@ -128,8 +128,8 @@ mod tests {
         // with the VERSION constant from the constants module
         let user_agent = user_agent();
 
-        // Test that VERSION constant is accessible
-        assert!(!VERSION.is_empty());
+        // Test that VERSION constant is accessible and has expected pattern
+        assert!(VERSION.contains('.'));
 
         // Test that the user_agent incorporates VERSION correctly
         assert!(user_agent.ends_with(VERSION));

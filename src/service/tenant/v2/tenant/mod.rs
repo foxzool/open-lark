@@ -161,7 +161,7 @@ mod tests {
     #[test]
     fn test_access_token_types() {
         // Verify that tenant query supports both tenant and user access tokens
-        let supported_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        let supported_types = [AccessTokenType::Tenant, AccessTokenType::User];
 
         assert!(supported_types.contains(&AccessTokenType::Tenant));
         assert!(supported_types.contains(&AccessTokenType::User));
@@ -172,7 +172,7 @@ mod tests {
     fn test_api_path_constant() {
         // Verify the API path is correct
         use crate::core::endpoints::TENANT_V2_QUERY;
-        assert!(!TENANT_V2_QUERY.is_empty());
+        assert_eq!(TENANT_V2_QUERY, "/open-apis/tenant/v2/tenant/query");
     }
 
     #[test]
