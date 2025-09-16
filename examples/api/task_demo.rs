@@ -47,6 +47,7 @@ async fn demo_task_management(client: &LarkClient) -> Result<(), Box<dyn std::er
             let create_task_req = CreateTaskRequest {
                 summary: "实现用户认证功能".to_string(),
                 description: Some("需要实现JWT认证和权限管理".to_string()),
+                tasklist_guid: Some(tasklist_guid.clone()),
                 due: Some(TaskDue {
                     timestamp: Some("1672531200000".to_string()), // 2023-01-01
                     is_all_day: Some(false),
