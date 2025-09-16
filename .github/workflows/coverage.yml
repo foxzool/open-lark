@@ -86,7 +86,11 @@ jobs:
         run: |
           echo "## Coverage Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          cargo llvm-cov report --summary-only >> $GITHUB_STEP_SUMMARY
+          if [ -d "target/llvm-cov-target" ] && [ "$(ls -A target/llvm-cov-target/*.profraw 2>/dev/null)" ]; then
+            cargo llvm-cov report --summary-only >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No coverage data available - tests may have failed" >> $GITHUB_STEP_SUMMARY
+          fi
           
       - name: Upload coverage to Codecov (optional)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -107,7 +111,11 @@ jobs:
           
       - name: Check coverage threshold (report-only)
         run: |
-          summary=$(cargo llvm-cov report --summary-only)
-          echo "$summary"
-          cov=$(echo "$summary" | awk '/TOTAL/ {for (i=1;i<=NF;i++) if ($i ~ /%$/) { gsub(/%/, "", $i); print $i; exit }}')
-          echo "Total coverage: ${cov}% (report-only, not enforced)"
+          if [ -d "target/llvm-cov-target" ] && [ "$(ls -A target/llvm-cov-target/*.profraw 2>/dev/null)" ]; then
+            summary=$(cargo llvm-cov report --summary-only)
+            echo "$summary"
+            cov=$(echo "$summary" | awk '/TOTAL/ {for (i=1;i<=NF;i++) if ($i ~ /%$/) { gsub(/%/, "", $i); print $i; exit }}')
+            echo "Total coverage: ${cov}% (report-only, not enforced)"
+          else
+            echo "No coverage data available - tests may have failed"
+          fi

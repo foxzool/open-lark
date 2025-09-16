@@ -330,6 +330,7 @@ impl LarkClientBuilder {
         }
 
         // 创建共享的 Arc<Config> 实例
+        #[allow(unused_variables)]
         let config = self.config.clone();
 
         LarkClient {
