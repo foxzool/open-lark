@@ -138,7 +138,7 @@ mod tests {
 
         assert!(result.is_err());
         match result {
-            Err(LarkAPIError::DeserializeError(_)) => {},
+            Err(LarkAPIError::DeserializeError(_)) => {}
             _ => panic!("Expected DeserializeError"),
         }
     }

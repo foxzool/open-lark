@@ -489,42 +489,36 @@ mod tests {
 
     #[test]
     fn test_builder_with_app_type() {
-        let builder = create_test_builder()
-            .with_app_type(AppType::Marketplace);
+        let builder = create_test_builder().with_app_type(AppType::Marketplace);
         assert_eq!(builder.config.app_type, AppType::Marketplace);
     }
 
     #[test]
     fn test_builder_with_marketplace_app() {
-        let builder = create_test_builder()
-            .with_marketplace_app();
+        let builder = create_test_builder().with_marketplace_app();
         assert_eq!(builder.config.app_type, AppType::Marketplace);
     }
 
     #[test]
     fn test_builder_with_custom_base_url() {
         let custom_url = "https://custom.api.feishu.cn";
-        let builder = create_test_builder()
-            .with_open_base_url(custom_url.to_string());
+        let builder = create_test_builder().with_open_base_url(custom_url.to_string());
         assert_eq!(builder.config.base_url, custom_url);
     }
 
     #[test]
     fn test_builder_with_enable_token_cache() {
-        let builder_enabled = create_test_builder()
-            .with_enable_token_cache(true);
+        let builder_enabled = create_test_builder().with_enable_token_cache(true);
         assert!(builder_enabled.config.enable_token_cache);
 
-        let builder_disabled = create_test_builder()
-            .with_enable_token_cache(false);
+        let builder_disabled = create_test_builder().with_enable_token_cache(false);
         assert!(!builder_disabled.config.enable_token_cache);
     }
 
     #[test]
     fn test_builder_with_req_timeout() {
         let timeout_seconds = 30.0;
-        let builder = create_test_builder()
-            .with_req_timeout(Some(timeout_seconds));
+        let builder = create_test_builder().with_req_timeout(Some(timeout_seconds));
 
         let expected_duration = Duration::from_secs_f32(timeout_seconds);
         assert_eq!(builder.config.req_timeout, Some(expected_duration));
@@ -532,8 +526,7 @@ mod tests {
 
     #[test]
     fn test_builder_with_none_timeout() {
-        let builder = create_test_builder()
-            .with_req_timeout(None);
+        let builder = create_test_builder().with_req_timeout(None);
         assert_eq!(builder.config.req_timeout, None);
     }
 
@@ -547,7 +540,10 @@ mod tests {
 
         assert_eq!(builder.config.app_type, AppType::Marketplace);
         assert!(builder.config.enable_token_cache);
-        assert_eq!(builder.config.req_timeout, Some(Duration::from_secs_f32(45.0)));
+        assert_eq!(
+            builder.config.req_timeout,
+            Some(Duration::from_secs_f32(45.0))
+        );
         assert_eq!(builder.config.base_url, "https://test.api.feishu.cn");
     }
 
@@ -562,18 +558,17 @@ mod tests {
 
     #[test]
     fn test_client_build_with_timeout() {
-        let client = create_test_builder()
-            .with_req_timeout(Some(60.0))
-            .build();
+        let client = create_test_builder().with_req_timeout(Some(60.0)).build();
 
-        assert_eq!(client.config.req_timeout, Some(Duration::from_secs_f32(60.0)));
+        assert_eq!(
+            client.config.req_timeout,
+            Some(Duration::from_secs_f32(60.0))
+        );
     }
 
     #[test]
     fn test_client_build_marketplace_app() {
-        let client = create_test_builder()
-            .with_marketplace_app()
-            .build();
+        let client = create_test_builder().with_marketplace_app().build();
 
         assert_eq!(client.config.app_type, AppType::Marketplace);
     }
@@ -590,7 +585,10 @@ mod tests {
         assert_eq!(client.config.app_type, AppType::Marketplace);
         assert!(!client.config.enable_token_cache);
         assert_eq!(client.config.base_url, "https://custom.feishu.cn");
-        assert_eq!(client.config.req_timeout, Some(Duration::from_secs_f32(120.0)));
+        assert_eq!(
+            client.config.req_timeout,
+            Some(Duration::from_secs_f32(120.0))
+        );
     }
 
     #[test]
@@ -633,26 +631,28 @@ mod tests {
     #[test]
     fn test_builder_extreme_timeout_values() {
         // Very small timeout
-        let small_timeout = create_test_builder()
-            .with_req_timeout(Some(0.001))
-            .build();
-        assert_eq!(small_timeout.config.req_timeout, Some(Duration::from_secs_f32(0.001)));
+        let small_timeout = create_test_builder().with_req_timeout(Some(0.001)).build();
+        assert_eq!(
+            small_timeout.config.req_timeout,
+            Some(Duration::from_secs_f32(0.001))
+        );
 
         // Very large timeout
         let large_timeout = create_test_builder()
             .with_req_timeout(Some(3600.0)) // 1 hour
             .build();
-        assert_eq!(large_timeout.config.req_timeout, Some(Duration::from_secs_f32(3600.0)));
+        assert_eq!(
+            large_timeout.config.req_timeout,
+            Some(Duration::from_secs_f32(3600.0))
+        );
     }
 
     #[test]
     fn test_config_independence() {
         // Test that multiple builders don't interfere with each other
-        let builder1 = create_test_builder()
-            .with_app_type(AppType::Marketplace);
+        let builder1 = create_test_builder().with_app_type(AppType::Marketplace);
 
-        let builder2 = create_test_builder()
-            .with_app_type(AppType::SelfBuild);
+        let builder2 = create_test_builder().with_app_type(AppType::SelfBuild);
 
         assert_eq!(builder1.config.app_type, AppType::Marketplace);
         assert_eq!(builder2.config.app_type, AppType::SelfBuild);
@@ -688,9 +688,7 @@ mod tests {
     #[test]
     fn test_client_builder_multiple_configurations() {
         // Test that the builder can be used to create multiple different clients
-        let client1 = create_test_builder()
-            .with_marketplace_app()
-            .build();
+        let client1 = create_test_builder().with_marketplace_app().build();
 
         let client2 = LarkClient::builder("different_id", "different_secret")
             .with_enable_token_cache(false)

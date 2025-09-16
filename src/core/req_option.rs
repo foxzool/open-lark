@@ -131,9 +131,7 @@ mod tests {
 
     #[test]
     fn test_request_option_builder_tenant_key() {
-        let option = RequestOption::builder()
-            .tenant_key("test_tenant")
-            .build();
+        let option = RequestOption::builder().tenant_key("test_tenant").build();
 
         assert_eq!(option.tenant_key, "test_tenant");
 
@@ -195,24 +193,18 @@ mod tests {
 
     #[test]
     fn test_request_option_builder_need_helpdesk_auth() {
-        let option = RequestOption::builder()
-            .need_helpdesk_auth(true)
-            .build();
+        let option = RequestOption::builder().need_helpdesk_auth(true).build();
 
         assert!(option.need_helpdesk_auth);
 
-        let option = RequestOption::builder()
-            .need_helpdesk_auth(false)
-            .build();
+        let option = RequestOption::builder().need_helpdesk_auth(false).build();
 
         assert!(!option.need_helpdesk_auth);
     }
 
     #[test]
     fn test_request_option_builder_request_id() {
-        let option = RequestOption::builder()
-            .request_id("req_12345")
-            .build();
+        let option = RequestOption::builder().request_id("req_12345").build();
 
         assert_eq!(option.request_id, "req_12345");
 
@@ -226,9 +218,7 @@ mod tests {
 
     #[test]
     fn test_request_option_builder_app_ticket() {
-        let option = RequestOption::builder()
-            .app_ticket("ticket_abc")
-            .build();
+        let option = RequestOption::builder().app_ticket("ticket_abc").build();
 
         assert_eq!(option.app_ticket, "ticket_abc");
 
@@ -242,30 +232,22 @@ mod tests {
 
     #[test]
     fn test_request_option_builder_file_upload() {
-        let option = RequestOption::builder()
-            .file_upload(true)
-            .build();
+        let option = RequestOption::builder().file_upload(true).build();
 
         assert!(option.file_upload);
 
-        let option = RequestOption::builder()
-            .file_upload(false)
-            .build();
+        let option = RequestOption::builder().file_upload(false).build();
 
         assert!(!option.file_upload);
     }
 
     #[test]
     fn test_request_option_builder_file_download() {
-        let option = RequestOption::builder()
-            .file_download(true)
-            .build();
+        let option = RequestOption::builder().file_download(true).build();
 
         assert!(option.file_download);
 
-        let option = RequestOption::builder()
-            .file_download(false)
-            .build();
+        let option = RequestOption::builder().file_download(false).build();
 
         assert!(!option.file_download);
     }
@@ -276,13 +258,17 @@ mod tests {
         headers.insert("Content-Type".to_string(), "application/json".to_string());
         headers.insert("Authorization".to_string(), "Bearer token".to_string());
 
-        let option = RequestOption::builder()
-            .header(headers.clone())
-            .build();
+        let option = RequestOption::builder().header(headers.clone()).build();
 
         assert_eq!(option.header.len(), 2);
-        assert_eq!(option.header.get("Content-Type"), Some(&"application/json".to_string()));
-        assert_eq!(option.header.get("Authorization"), Some(&"Bearer token".to_string()));
+        assert_eq!(
+            option.header.get("Content-Type"),
+            Some(&"application/json".to_string())
+        );
+        assert_eq!(
+            option.header.get("Authorization"),
+            Some(&"Bearer token".to_string())
+        );
     }
 
     #[test]
@@ -293,8 +279,14 @@ mod tests {
             .build();
 
         assert_eq!(option.header.len(), 2);
-        assert_eq!(option.header.get("X-Custom-Header"), Some(&"custom_value".to_string()));
-        assert_eq!(option.header.get("X-Another-Header"), Some(&"another_value".to_string()));
+        assert_eq!(
+            option.header.get("X-Custom-Header"),
+            Some(&"custom_value".to_string())
+        );
+        assert_eq!(
+            option.header.get("X-Another-Header"),
+            Some(&"another_value".to_string())
+        );
 
         // Test with String types
         let option = RequestOption::builder()
@@ -302,7 +294,10 @@ mod tests {
             .build();
 
         assert_eq!(option.header.len(), 1);
-        assert_eq!(option.header.get("X-String-Header"), Some(&"string_value".to_string()));
+        assert_eq!(
+            option.header.get("X-String-Header"),
+            Some(&"string_value".to_string())
+        );
     }
 
     #[test]
@@ -330,8 +325,14 @@ mod tests {
             .build();
 
         assert_eq!(option.header.len(), 2);
-        assert_eq!(option.header.get("Initial-Header"), Some(&"initial_value".to_string()));
-        assert_eq!(option.header.get("Added-Header"), Some(&"added_value".to_string()));
+        assert_eq!(
+            option.header.get("Initial-Header"),
+            Some(&"initial_value".to_string())
+        );
+        assert_eq!(
+            option.header.get("Added-Header"),
+            Some(&"added_value".to_string())
+        );
     }
 
     #[test]
@@ -393,7 +394,10 @@ mod tests {
         assert_eq!(option.tenant_key, "tenant@#$%^&*()");
         assert_eq!(option.user_access_token, "token_with_symbols!@#");
         assert_eq!(option.request_id, "req_with_unicode_测试");
-        assert_eq!(option.header.get("X-Special-Chars"), Some(&"value@#$%".to_string()));
+        assert_eq!(
+            option.header.get("X-Special-Chars"),
+            Some(&"value@#$%".to_string())
+        );
     }
 
     #[test]
@@ -407,16 +411,17 @@ mod tests {
             .build();
 
         assert_eq!(option.header.len(), 1);
-        assert_eq!(option.header.get("Test-Header"), Some(&"overwritten_value".to_string()));
+        assert_eq!(
+            option.header.get("Test-Header"),
+            Some(&"overwritten_value".to_string())
+        );
     }
 
     #[test]
     fn test_request_option_builder_empty_header_map() {
         let empty_headers = HashMap::new();
 
-        let option = RequestOption::builder()
-            .header(empty_headers)
-            .build();
+        let option = RequestOption::builder().header(empty_headers).build();
 
         assert!(option.header.is_empty());
     }
@@ -449,7 +454,10 @@ mod tests {
         assert_eq!(option.tenant_key, default_option.tenant_key);
         assert_eq!(option.user_access_token, default_option.user_access_token);
         assert_eq!(option.app_access_token, default_option.app_access_token);
-        assert_eq!(option.tenant_access_token, default_option.tenant_access_token);
+        assert_eq!(
+            option.tenant_access_token,
+            default_option.tenant_access_token
+        );
         assert_eq!(option.need_helpdesk_auth, default_option.need_helpdesk_auth);
         assert_eq!(option.request_id, default_option.request_id);
         assert_eq!(option.app_ticket, default_option.app_ticket);

@@ -415,7 +415,8 @@ mod tests {
 
     #[test]
     fn test_base_response_success() {
-        let response: BaseResponse<String> = create_test_response(0, "success", Some("test_data".to_string()));
+        let response: BaseResponse<String> =
+            create_test_response(0, "success", Some("test_data".to_string()));
         assert!(response.success());
 
         let error_response: BaseResponse<String> = create_test_response(1000, "error", None);
@@ -431,7 +432,8 @@ mod tests {
 
     #[test]
     fn test_base_response_data_or_error_success() {
-        let response: BaseResponse<String> = create_test_response(0, "success", Some("test_data".to_string()));
+        let response: BaseResponse<String> =
+            create_test_response(0, "success", Some("test_data".to_string()));
         let result = response.data_or_error();
         assert!(result.is_ok());
         assert_eq!(result.unwrap(), "test_data");
@@ -457,7 +459,8 @@ mod tests {
 
     #[test]
     fn test_base_response_data_or_api_error_success() {
-        let response: BaseResponse<String> = create_test_response(0, "success", Some("test_data".to_string()));
+        let response: BaseResponse<String> =
+            create_test_response(0, "success", Some("test_data".to_string()));
         let result = response.data_or_api_error();
         assert!(result.is_ok());
         assert_eq!(result.unwrap(), "test_data");
@@ -480,14 +483,16 @@ mod tests {
 
     #[test]
     fn test_base_response_handle_common_errors_success() {
-        let response: BaseResponse<String> = create_test_response(0, "success", Some("test_data".to_string()));
+        let response: BaseResponse<String> =
+            create_test_response(0, "success", Some("test_data".to_string()));
         let result = response.handle_common_errors();
         assert!(result.is_ok());
     }
 
     #[test]
     fn test_base_response_user_friendly_error_success() {
-        let response: BaseResponse<String> = create_test_response(0, "success", Some("test_data".to_string()));
+        let response: BaseResponse<String> =
+            create_test_response(0, "success", Some("test_data".to_string()));
         assert!(response.user_friendly_error().is_none());
     }
 
@@ -501,7 +506,8 @@ mod tests {
 
     #[test]
     fn test_base_response_error_solutions_success() {
-        let response: BaseResponse<String> = create_test_response(0, "success", Some("test_data".to_string()));
+        let response: BaseResponse<String> =
+            create_test_response(0, "success", Some("test_data".to_string()));
         assert!(response.error_solutions().is_empty());
     }
 
@@ -515,7 +521,8 @@ mod tests {
 
     #[test]
     fn test_base_response_help_links_success() {
-        let response: BaseResponse<String> = create_test_response(0, "success", Some("test_data".to_string()));
+        let response: BaseResponse<String> =
+            create_test_response(0, "success", Some("test_data".to_string()));
         assert!(response.help_links().is_empty());
     }
 
@@ -529,7 +536,8 @@ mod tests {
 
     #[test]
     fn test_base_response_print_error_details() {
-        let response: BaseResponse<String> = create_test_response(0, "success", Some("test_data".to_string()));
+        let response: BaseResponse<String> =
+            create_test_response(0, "success", Some("test_data".to_string()));
         // Test that print_error_details doesn't panic
         response.print_error_details();
 
@@ -569,7 +577,10 @@ mod tests {
 
     #[test]
     fn test_raw_response_data_format() {
-        assert!(matches!(RawResponse::data_format(), ResponseFormat::Flatten));
+        assert!(matches!(
+            RawResponse::data_format(),
+            ResponseFormat::Flatten
+        ));
     }
 
     #[test]
@@ -636,7 +647,10 @@ mod tests {
 
     #[test]
     fn test_binary_response_data_format() {
-        assert!(matches!(BinaryResponse::data_format(), ResponseFormat::Binary));
+        assert!(matches!(
+            BinaryResponse::data_format(),
+            ResponseFormat::Binary
+        ));
     }
 
     #[test]
@@ -739,7 +753,10 @@ mod tests {
 
         let deserialized: ErrorInfo = serde_json::from_str(&json).unwrap();
         assert_eq!(deserialized.permission_violations.len(), 1);
-        assert_eq!(deserialized.permission_violations[0].type_, Some("SCOPE_REQUIRED".to_string()));
+        assert_eq!(
+            deserialized.permission_violations[0].type_,
+            Some("SCOPE_REQUIRED".to_string())
+        );
     }
 
     #[test]
@@ -763,7 +780,10 @@ mod tests {
 
         let deserialized: ErrorInfo = serde_json::from_str(&json).unwrap();
         assert_eq!(deserialized.field_violations.len(), 1);
-        assert_eq!(deserialized.field_violations[0].field, Some("email".to_string()));
+        assert_eq!(
+            deserialized.field_violations[0].field,
+            Some("email".to_string())
+        );
     }
 
     #[test]
@@ -848,7 +868,8 @@ mod tests {
 
     #[test]
     fn test_base_response_debug() {
-        let response: BaseResponse<String> = create_test_response(200, "OK", Some("debug_data".to_string()));
+        let response: BaseResponse<String> =
+            create_test_response(200, "OK", Some("debug_data".to_string()));
         let debug_str = format!("{:?}", response);
         assert!(debug_str.contains("BaseResponse"));
         assert!(debug_str.contains("debug_data"));
@@ -872,7 +893,10 @@ mod tests {
         assert!(!response.success());
         assert_eq!(response.code(), 400);
         assert!(response.err().is_some());
-        assert_eq!(response.err().unwrap().log_id, Some("error_log_123".to_string()));
+        assert_eq!(
+            response.err().unwrap().log_id,
+            Some("error_log_123".to_string())
+        );
     }
 
     #[test]
@@ -897,20 +921,16 @@ mod tests {
                     value: Some("value2".to_string()),
                 },
             ],
-            permission_violations: vec![
-                CodeErrorPermissionViolation {
-                    type_: Some("PERMISSION_DENIED".to_string()),
-                    subject: Some("user:123".to_string()),
-                    description: Some("User lacks permission".to_string()),
-                },
-            ],
-            field_violations: vec![
-                CodeErrorFieldViolation {
-                    field: Some("username".to_string()),
-                    value: Some("".to_string()),
-                    description: Some("Username cannot be empty".to_string()),
-                },
-            ],
+            permission_violations: vec![CodeErrorPermissionViolation {
+                type_: Some("PERMISSION_DENIED".to_string()),
+                subject: Some("user:123".to_string()),
+                description: Some("User lacks permission".to_string()),
+            }],
+            field_violations: vec![CodeErrorFieldViolation {
+                field: Some("username".to_string()),
+                value: Some("".to_string()),
+                description: Some("Username cannot be empty".to_string()),
+            }],
         };
 
         let json = serde_json::to_string(&error_info).unwrap();

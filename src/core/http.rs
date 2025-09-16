@@ -422,10 +422,7 @@ mod test {
 
     #[test]
     fn test_validate_empty_app_secret() {
-        let config = Config::builder()
-            .app_id("test_id")
-            .app_secret("")
-            .build();
+        let config = Config::builder().app_id("test_id").app_secret("").build();
         let option = RequestOption::default();
 
         let result = validate(&config, &option, AccessTokenType::None);
@@ -533,7 +530,6 @@ mod test {
         let result = validate(&config, &option, AccessTokenType::None);
         assert!(result.is_ok());
     }
-
 
     #[test]
     fn test_determine_token_type_first_is_tenant() {
