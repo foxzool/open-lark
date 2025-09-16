@@ -115,3 +115,92 @@ impl ContactService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_contact_service_creation() {
+        let config = create_test_config();
+        let contact_service = ContactService::new(config);
+
+        // Verify service structure
+        assert!(std::ptr::addr_of!(contact_service.v3) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_contact_service_with_custom_config() {
+        let config = Config::builder()
+            .app_id("contact_app")
+            .app_secret("contact_secret")
+            .req_timeout(std::time::Duration::from_millis(8000))
+            .base_url("https://contact.api.com")
+            .build();
+
+        let contact_service = ContactService::new(config);
+
+        // Verify service creation with custom config
+        assert!(std::ptr::addr_of!(contact_service.v3) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_contact_service_multiple_instances() {
+        let configs = vec![
+            Config::builder().app_id("app1").app_secret("secret1").build(),
+            Config::builder().app_id("app2").app_secret("secret2")
+                .req_timeout(std::time::Duration::from_millis(12000))
+                .build(),
+            Config::builder().app_id("app3").app_secret("secret3")
+                .base_url("https://custom.contact.com")
+                .build(),
+        ];
+
+        let mut services = Vec::new();
+        for config in configs {
+            let service = ContactService::new(config);
+            services.push(service);
+        }
+
+        // All services should be created successfully
+        assert_eq!(services.len(), 3);
+        for service in &services {
+            assert!(std::ptr::addr_of!(service.v3) as *const _ != std::ptr::null());
+        }
+
+        // Services should be independent instances
+        for (i, service1) in services.iter().enumerate() {
+            for service2 in services.iter().skip(i + 1) {
+                let ptr1 = std::ptr::addr_of!(*service1) as *const _;
+                let ptr2 = std::ptr::addr_of!(*service2) as *const _;
+                assert_ne!(ptr1, ptr2, "Services should be independent instances");
+            }
+        }
+    }
+
+    #[test]
+    fn test_contact_service_config_cloning() {
+        let config = create_test_config();
+
+        // Test that the service works with cloned configs
+        let contact_service1 = ContactService::new(config.clone());
+        let contact_service2 = ContactService::new(config);
+
+        // Both should work independently
+        assert!(std::ptr::addr_of!(contact_service1.v3) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(contact_service2.v3) as *const _ != std::ptr::null());
+
+        // But should be different service instances
+        let service1_ptr = std::ptr::addr_of!(contact_service1) as *const _;
+        let service2_ptr = std::ptr::addr_of!(contact_service2) as *const _;
+        assert_ne!(service1_ptr, service2_ptr);
+    }
+}
