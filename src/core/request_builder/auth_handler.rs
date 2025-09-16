@@ -109,12 +109,8 @@ mod tests {
         let config = create_test_config();
         let option = RequestOption::default();
 
-        let result = AuthHandler::apply_auth(
-            req_builder,
-            AccessTokenType::None,
-            &config,
-            &option,
-        ).await;
+        let result =
+            AuthHandler::apply_auth(req_builder, AccessTokenType::None, &config, &option).await;
 
         assert!(result.is_ok());
     }
@@ -123,15 +119,13 @@ mod tests {
     async fn test_apply_auth_user_type() {
         let req_builder = create_test_request_builder();
         let config = create_test_config();
-        let mut option = RequestOption::default();
-        option.user_access_token = "user_token_123".to_string();
+        let option = RequestOption {
+            user_access_token: "user_token_123".to_string(),
+            ..Default::default()
+        };
 
-        let result = AuthHandler::apply_auth(
-            req_builder,
-            AccessTokenType::User,
-            &config,
-            &option,
-        ).await;
+        let result =
+            AuthHandler::apply_auth(req_builder, AccessTokenType::User, &config, &option).await;
 
         assert!(result.is_ok());
     }
@@ -140,8 +134,10 @@ mod tests {
     async fn test_apply_app_auth_with_token_in_option() {
         let req_builder = create_test_request_builder();
         let config = create_test_config();
-        let mut option = RequestOption::default();
-        option.app_access_token = "app_token_123".to_string();
+        let option = RequestOption {
+            app_access_token: "app_token_123".to_string(),
+            ..Default::default()
+        };
 
         let result = AuthHandler::apply_app_auth(req_builder, &config, &option).await;
         assert!(result.is_ok());
@@ -166,8 +162,10 @@ mod tests {
     async fn test_apply_tenant_auth_with_token_in_option() {
         let req_builder = create_test_request_builder();
         let config = create_test_config();
-        let mut option = RequestOption::default();
-        option.tenant_access_token = "tenant_token_123".to_string();
+        let option = RequestOption {
+            tenant_access_token: "tenant_token_123".to_string(),
+            ..Default::default()
+        };
 
         let result = AuthHandler::apply_tenant_auth(req_builder, &config, &option).await;
         assert!(result.is_ok());
@@ -191,8 +189,10 @@ mod tests {
     #[test]
     fn test_apply_user_auth() {
         let req_builder = create_test_request_builder();
-        let mut option = RequestOption::default();
-        option.user_access_token = "user_token_456".to_string();
+        let option = RequestOption {
+            user_access_token: "user_token_456".to_string(),
+            ..Default::default()
+        };
 
         let result = AuthHandler::apply_user_auth(req_builder, &option);
 
@@ -230,29 +230,33 @@ mod tests {
 
         let test_cases = vec![
             (AccessTokenType::None, RequestOption::default()),
-            (AccessTokenType::User, RequestOption {
-                user_access_token: "user_token".to_string(),
-                ..Default::default()
-            }),
-            (AccessTokenType::App, RequestOption {
-                app_access_token: "app_token".to_string(),
-                ..Default::default()
-            }),
-            (AccessTokenType::Tenant, RequestOption {
-                tenant_access_token: "tenant_token".to_string(),
-                ..Default::default()
-            }),
+            (
+                AccessTokenType::User,
+                RequestOption {
+                    user_access_token: "user_token".to_string(),
+                    ..Default::default()
+                },
+            ),
+            (
+                AccessTokenType::App,
+                RequestOption {
+                    app_access_token: "app_token".to_string(),
+                    ..Default::default()
+                },
+            ),
+            (
+                AccessTokenType::Tenant,
+                RequestOption {
+                    tenant_access_token: "tenant_token".to_string(),
+                    ..Default::default()
+                },
+            ),
         ];
 
         for (token_type, option) in test_cases {
             let req_builder = create_test_request_builder();
 
-            let result = AuthHandler::apply_auth(
-                req_builder,
-                token_type,
-                &config,
-                &option,
-            ).await;
+            let result = AuthHandler::apply_auth(req_builder, token_type, &config, &option).await;
 
             // All cases with tokens should succeed
             // None type always succeeds
@@ -278,12 +282,8 @@ mod tests {
 
         // This will likely fail because token_manager needs proper setup
         // but we test that it doesn't panic
-        let result = AuthHandler::apply_auth(
-            req_builder,
-            AccessTokenType::App,
-            &config,
-            &option,
-        ).await;
+        let result =
+            AuthHandler::apply_auth(req_builder, AccessTokenType::App, &config, &option).await;
 
         // Result depends on token_manager implementation
         assert!(result.is_ok() || result.is_err());

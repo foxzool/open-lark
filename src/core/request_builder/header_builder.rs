@@ -71,17 +71,27 @@ mod tests {
         };
 
         // Add some global headers
-        config.header.insert("X-Global-Header".to_string(), "global-value".to_string());
-        config.header.insert("X-App-Version".to_string(), "1.0.0".to_string());
+        config
+            .header
+            .insert("X-Global-Header".to_string(), "global-value".to_string());
+        config
+            .header
+            .insert("X-App-Version".to_string(), "1.0.0".to_string());
 
         config
     }
 
     fn create_test_request_option() -> RequestOption {
-        let mut option = RequestOption::default();
-        option.request_id = "test-request-123".to_string();
-        option.header.insert("X-Custom-Header".to_string(), "custom-value".to_string());
-        option.header.insert("X-Test-Flag".to_string(), "true".to_string());
+        let mut option = RequestOption {
+            request_id: "test-request-123".to_string(),
+            ..Default::default()
+        };
+        option
+            .header
+            .insert("X-Custom-Header".to_string(), "custom-value".to_string());
+        option
+            .header
+            .insert("X-Test-Flag".to_string(), "true".to_string());
         option
     }
 
@@ -150,10 +160,14 @@ mod tests {
     fn test_build_headers_header_precedence() {
         let req_builder = create_test_request_builder();
         let mut config = create_test_config();
-        config.header.insert("X-Common-Header".to_string(), "config-value".to_string());
+        config
+            .header
+            .insert("X-Common-Header".to_string(), "config-value".to_string());
 
         let mut option = create_test_request_option();
-        option.header.insert("X-Common-Header".to_string(), "option-value".to_string());
+        option
+            .header
+            .insert("X-Common-Header".to_string(), "option-value".to_string());
 
         let result = HeaderBuilder::build_headers(req_builder, &config, &option);
 
@@ -242,8 +256,12 @@ mod tests {
 
         // Add many headers to test performance
         for i in 0..50 {
-            config.header.insert(format!("X-Config-Header-{i}"), format!("config-value-{i}"));
-            option.header.insert(format!("X-Option-Header-{i}"), format!("option-value-{i}"));
+            config
+                .header
+                .insert(format!("X-Config-Header-{i}"), format!("config-value-{i}"));
+            option
+                .header
+                .insert(format!("X-Option-Header-{i}"), format!("option-value-{i}"));
         }
 
         let result = HeaderBuilder::build_headers(req_builder, &config, &option);
@@ -259,8 +277,13 @@ mod tests {
         let mut option = create_test_request_option();
 
         // Add headers with special characters
-        option.header.insert("X-Special-Chars".to_string(), "value with spaces & symbols!".to_string());
-        config.header.insert("X-Unicode".to_string(), "测试中文".to_string());
+        option.header.insert(
+            "X-Special-Chars".to_string(),
+            "value with spaces & symbols!".to_string(),
+        );
+        config
+            .header
+            .insert("X-Unicode".to_string(), "测试中文".to_string());
 
         let result = HeaderBuilder::build_headers(req_builder, &config, &option);
 
