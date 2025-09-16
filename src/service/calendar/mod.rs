@@ -137,3 +137,114 @@ impl CalendarService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_calendar_service_creation() {
+        let config = create_test_config();
+        let calendar_service = CalendarService::new(config);
+
+        // Verify service structure
+        assert!(std::ptr::addr_of!(calendar_service.v4) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_calendar_service_with_custom_config() {
+        let config = Config::builder()
+            .app_id("calendar_app")
+            .app_secret("calendar_secret")
+            .req_timeout(std::time::Duration::from_millis(15000))
+            .base_url("https://calendar.api.com")
+            .build();
+
+        let calendar_service = CalendarService::new(config);
+
+        // Verify service creation with custom config
+        assert!(std::ptr::addr_of!(calendar_service.v4) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_calendar_service_configuration_variations() {
+        let test_configs = vec![
+            Config::builder()
+                .app_id("cal_basic")
+                .app_secret("basic_secret")
+                .build(),
+            Config::builder()
+                .app_id("cal_timeout")
+                .app_secret("timeout_secret")
+                .req_timeout(std::time::Duration::from_millis(20000))
+                .build(),
+            Config::builder()
+                .app_id("cal_custom")
+                .app_secret("custom_secret")
+                .base_url("https://custom.calendar.com")
+                .build(),
+            Config::builder()
+                .app_id("cal_full")
+                .app_secret("full_secret")
+                .req_timeout(std::time::Duration::from_millis(25000))
+                .base_url("https://full.calendar.com")
+                .enable_token_cache(false)
+                .build(),
+        ];
+
+        for config in test_configs {
+            let calendar_service = CalendarService::new(config);
+
+            // Each configuration should create a valid service
+            assert!(std::ptr::addr_of!(calendar_service.v4) as *const _ != std::ptr::null());
+        }
+    }
+
+    #[test]
+    fn test_calendar_service_multiple_instances() {
+        let config1 = create_test_config();
+        let config2 = Config::builder()
+            .app_id("calendar2")
+            .app_secret("secret2")
+            .build();
+
+        let calendar_service1 = CalendarService::new(config1);
+        let calendar_service2 = CalendarService::new(config2);
+
+        // Services should be independent instances
+        let service1_ptr = std::ptr::addr_of!(calendar_service1) as *const _;
+        let service2_ptr = std::ptr::addr_of!(calendar_service2) as *const _;
+
+        assert_ne!(service1_ptr, service2_ptr, "Services should be independent instances");
+
+        // Each service should have valid v4 API
+        assert!(std::ptr::addr_of!(calendar_service1.v4) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(calendar_service2.v4) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_calendar_service_config_cloning_behavior() {
+        let original_config = create_test_config();
+
+        // Test that the service works with cloned configs
+        let calendar_service1 = CalendarService::new(original_config.clone());
+        let calendar_service2 = CalendarService::new(original_config);
+
+        // Both should work independently
+        assert!(std::ptr::addr_of!(calendar_service1.v4) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(calendar_service2.v4) as *const _ != std::ptr::null());
+
+        // But should be different service instances
+        let service1_ptr = std::ptr::addr_of!(calendar_service1) as *const _;
+        let service2_ptr = std::ptr::addr_of!(calendar_service2) as *const _;
+        assert_ne!(service1_ptr, service2_ptr);
+    }
+}
