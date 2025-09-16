@@ -596,8 +596,14 @@ mod tests {
         special_params.insert("search", "hello world".to_string());
         special_params.insert("encoded", "test@domain.com".to_string());
 
-        assert_eq!(special_params.get("search"), Some(&"hello world".to_string()));
-        assert_eq!(special_params.get("encoded"), Some(&"test@domain.com".to_string()));
+        assert_eq!(
+            special_params.get("search"),
+            Some(&"hello world".to_string())
+        );
+        assert_eq!(
+            special_params.get("encoded"),
+            Some(&"test@domain.com".to_string())
+        );
     }
 
     #[test]
@@ -668,7 +674,10 @@ mod tests {
         assert_eq!(api_req.http_method, Method::POST);
         assert_eq!(api_req.api_path, "/test/path");
         assert_eq!(api_req.supported_access_token_types.len(), 1);
-        assert_eq!(api_req.supported_access_token_types[0], AccessTokenType::Tenant);
+        assert_eq!(
+            api_req.supported_access_token_types[0],
+            AccessTokenType::Tenant
+        );
 
         // Test setting query params
         let mut query_params = HashMap::new();
@@ -728,7 +737,10 @@ mod tests {
         assert_eq!(option.tenant_key, "test_tenant");
         assert_eq!(option.user_access_token, "user_token");
         assert_eq!(option.request_id, "req_123");
-        assert_eq!(option.header.get("X-Test-Header"), Some(&"test_value".to_string()));
+        assert_eq!(
+            option.header.get("X-Test-Header"),
+            Some(&"test_value".to_string())
+        );
 
         // Test None option case
         let none_option: Option<RequestOption> = None;
