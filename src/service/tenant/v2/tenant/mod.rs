@@ -68,11 +68,7 @@ impl TenantService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{
-        api_resp::ResponseFormat,
-        config::Config,
-        constants::AccessTokenType,
-    };
+    use crate::core::{api_resp::ResponseFormat, config::Config, constants::AccessTokenType};
 
     fn create_test_config() -> Config {
         Config::builder()
@@ -131,7 +127,10 @@ mod tests {
         // Test deserialization
         let deserialized: GetTenantResponse = serde_json::from_str(&json).unwrap();
         assert_eq!(deserialized.tenant.name, Some("Test Company".to_string()));
-        assert_eq!(deserialized.tenant.display_name, Some("Test Display Name".to_string()));
+        assert_eq!(
+            deserialized.tenant.display_name,
+            Some("Test Display Name".to_string())
+        );
     }
 
     #[test]
@@ -179,7 +178,10 @@ mod tests {
     #[test]
     fn test_response_format_trait() {
         // Test that the ApiResponseTrait is properly implemented
-        assert!(matches!(GetTenantResponse::data_format(), ResponseFormat::Data));
+        assert!(matches!(
+            GetTenantResponse::data_format(),
+            ResponseFormat::Data
+        ));
     }
 
     #[test]

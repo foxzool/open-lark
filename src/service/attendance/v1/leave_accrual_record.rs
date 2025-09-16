@@ -71,10 +71,7 @@ impl_executable_builder_owned!(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{
-        api_req::ApiRequest,
-        config::Config,
-    };
+    use crate::core::{api_req::ApiRequest, config::Config};
     use crate::service::attendance::v1::models::LeaveAccrualRecordPatch;
 
     fn create_test_config() -> Config {
@@ -126,12 +123,27 @@ mod tests {
 
         assert_eq!(request.employee_type, "employee_id");
         assert_eq!(request.leave_accrual_record_id, "record123");
-        assert_eq!(request.leave_accrual_record.employee_id, Some("emp001".to_string()));
-        assert_eq!(request.leave_accrual_record.leave_type_id, Some("leave_type_001".to_string()));
+        assert_eq!(
+            request.leave_accrual_record.employee_id,
+            Some("emp001".to_string())
+        );
+        assert_eq!(
+            request.leave_accrual_record.leave_type_id,
+            Some("leave_type_001".to_string())
+        );
         assert_eq!(request.leave_accrual_record.granted_amount, Some(8.0));
-        assert_eq!(request.leave_accrual_record.expire_time, Some(1640995200000));
-        assert_eq!(request.leave_accrual_record.granted_time, Some(1609459200000));
-        assert_eq!(request.leave_accrual_record.granted_reason, Some("Annual leave allocation".to_string()));
+        assert_eq!(
+            request.leave_accrual_record.expire_time,
+            Some(1640995200000)
+        );
+        assert_eq!(
+            request.leave_accrual_record.granted_time,
+            Some(1609459200000)
+        );
+        assert_eq!(
+            request.leave_accrual_record.granted_reason,
+            Some("Annual leave allocation".to_string())
+        );
         assert_eq!(request.leave_accrual_record.validity_type, Some(2));
         assert_eq!(request.leave_accrual_record.granted_type, Some(1));
     }
@@ -163,19 +175,17 @@ mod tests {
         assert_eq!(partial_patch.granted_amount, Some(16.0));
         assert!(partial_patch.expire_time.is_none());
         assert!(partial_patch.granted_time.is_none());
-        assert_eq!(partial_patch.granted_reason, Some("Updated allocation".to_string()));
+        assert_eq!(
+            partial_patch.granted_reason,
+            Some("Updated allocation".to_string())
+        );
         assert!(partial_patch.validity_type.is_none());
         assert!(partial_patch.granted_type.is_none());
     }
 
     #[test]
     fn test_different_employee_types() {
-        let employee_types = vec![
-            "employee_id",
-            "employee_no",
-            "open_id",
-            "union_id",
-        ];
+        let employee_types = vec!["employee_id", "employee_no", "open_id", "union_id"];
 
         for emp_type in employee_types {
             let request = PatchLeaveAccrualRecordRequest {
@@ -241,7 +251,7 @@ mod tests {
             Some(1609459200000i64), // 2021-01-01
             Some(1640995200000i64), // 2022-01-01
             Some(2556144000000i64), // 2051-01-01
-            Some(-1i64), // Edge case: negative timestamp
+            Some(-1i64),            // Edge case: negative timestamp
             None,
         ];
 
@@ -265,10 +275,10 @@ mod tests {
     #[test]
     fn test_validity_type_variations() {
         let validity_types = vec![
-            Some(1), // 永久有效
-            Some(2), // 指定过期时间
-            Some(0), // Edge case: invalid type
-            Some(-1), // Edge case: negative type
+            Some(1),   // 永久有效
+            Some(2),   // 指定过期时间
+            Some(0),   // Edge case: invalid type
+            Some(-1),  // Edge case: negative type
             Some(999), // Edge case: large number
             None,
         ];
@@ -286,11 +296,11 @@ mod tests {
     #[test]
     fn test_granted_type_variations() {
         let granted_types = vec![
-            Some(1), // 系统自动发放
-            Some(2), // 管理员手动发放
-            Some(3), // 员工申请发放
-            Some(0), // Edge case: invalid type
-            Some(-1), // Edge case: negative type
+            Some(1),   // 系统自动发放
+            Some(2),   // 管理员手动发放
+            Some(3),   // 员工申请发放
+            Some(0),   // Edge case: invalid type
+            Some(-1),  // Edge case: negative type
             Some(999), // Edge case: large number
             None,
         ];
@@ -450,7 +460,8 @@ mod tests {
         assert!(json_str.contains("Test allocation"));
 
         // Test deserialization
-        let deserialized_result: Result<LeaveAccrualRecordPatch, _> = serde_json::from_str(&json_str);
+        let deserialized_result: Result<LeaveAccrualRecordPatch, _> =
+            serde_json::from_str(&json_str);
         assert!(deserialized_result.is_ok());
 
         let deserialized_patch = deserialized_result.unwrap();
@@ -489,8 +500,8 @@ mod tests {
     #[test]
     fn test_memory_efficiency() {
         // Create multiple request instances to test memory usage
-        let requests: Vec<PatchLeaveAccrualRecordRequest> = (0..100).map(|i| {
-            PatchLeaveAccrualRecordRequest {
+        let requests: Vec<PatchLeaveAccrualRecordRequest> = (0..100)
+            .map(|i| PatchLeaveAccrualRecordRequest {
                 api_req: ApiRequest::default(),
                 employee_type: "employee_id".to_string(),
                 leave_accrual_record_id: format!("record_{}", i),
@@ -499,15 +510,21 @@ mod tests {
                     granted_amount: Some(8.0 + i as f64),
                     ..Default::default()
                 },
-            }
-        }).collect();
+            })
+            .collect();
 
         assert_eq!(requests.len(), 100);
 
         for (i, request) in requests.iter().enumerate() {
             assert_eq!(request.leave_accrual_record_id, format!("record_{}", i));
-            assert_eq!(request.leave_accrual_record.employee_id, Some(format!("emp_{}", i)));
-            assert_eq!(request.leave_accrual_record.granted_amount, Some(8.0 + i as f64));
+            assert_eq!(
+                request.leave_accrual_record.employee_id,
+                Some(format!("emp_{}", i))
+            );
+            assert_eq!(
+                request.leave_accrual_record.granted_amount,
+                Some(8.0 + i as f64)
+            );
         }
     }
 }
