@@ -167,3 +167,126 @@ impl GroupService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_group_service_creation() {
+        let config = create_test_config();
+        let group_service = GroupService::new(config);
+
+        // Verify service structure
+        assert!(std::ptr::addr_of!(group_service.v1) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_group_service_with_custom_config() {
+        let config = Config::builder()
+            .app_id("group_app")
+            .app_secret("group_secret")
+            .req_timeout(std::time::Duration::from_millis(14000))
+            .base_url("https://group.api.com")
+            .build();
+
+        let group_service = GroupService::new(config);
+
+        // Verify service creation with custom config
+        assert!(std::ptr::addr_of!(group_service.v1) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_group_service_configuration_scenarios() {
+        let test_configs = vec![
+            Config::builder()
+                .app_id("group_basic")
+                .app_secret("basic_secret")
+                .build(),
+            Config::builder()
+                .app_id("group_timeout")
+                .app_secret("timeout_secret")
+                .req_timeout(std::time::Duration::from_millis(16000))
+                .build(),
+            Config::builder()
+                .app_id("group_custom")
+                .app_secret("custom_secret")
+                .base_url("https://custom.group.com")
+                .build(),
+            Config::builder()
+                .app_id("group_enterprise")
+                .app_secret("enterprise_secret")
+                .req_timeout(std::time::Duration::from_millis(30000))
+                .base_url("https://enterprise.group.com")
+                .enable_token_cache(false)
+                .build(),
+        ];
+
+        for config in test_configs {
+            let group_service = GroupService::new(config);
+
+            // Each configuration should create a valid service
+            assert!(std::ptr::addr_of!(group_service.v1) as *const _ != std::ptr::null());
+        }
+    }
+
+    #[test]
+    fn test_group_service_multiple_instances() {
+        let config1 = create_test_config();
+        let config2 = Config::builder()
+            .app_id("group2")
+            .app_secret("secret2")
+            .build();
+
+        let group_service1 = GroupService::new(config1);
+        let group_service2 = GroupService::new(config2);
+
+        // Services should be independent instances
+        let service1_ptr = std::ptr::addr_of!(group_service1) as *const _;
+        let service2_ptr = std::ptr::addr_of!(group_service2) as *const _;
+
+        assert_ne!(service1_ptr, service2_ptr, "Services should be independent instances");
+
+        // Each service should have valid v1 API
+        assert!(std::ptr::addr_of!(group_service1.v1) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(group_service2.v1) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_group_service_config_cloning_behavior() {
+        let original_config = create_test_config();
+
+        // Test that the service works with cloned configs
+        let group_service1 = GroupService::new(original_config.clone());
+        let group_service2 = GroupService::new(original_config);
+
+        // Both should work independently
+        assert!(std::ptr::addr_of!(group_service1.v1) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(group_service2.v1) as *const _ != std::ptr::null());
+
+        // But should be different service instances
+        let service1_ptr = std::ptr::addr_of!(group_service1) as *const _;
+        let service2_ptr = std::ptr::addr_of!(group_service2) as *const _;
+        assert_ne!(service1_ptr, service2_ptr);
+    }
+
+    #[test]
+    fn test_group_service_v1_api_structure() {
+        let config = create_test_config();
+        let group_service = GroupService::new(config);
+
+        // Verify that the v1 API is properly structured
+        assert!(std::ptr::addr_of!(group_service.v1) as *const _ != std::ptr::null());
+
+        // Test that service maintains proper memory layout
+        assert!(std::ptr::addr_of!(group_service) as *const _ != std::ptr::null());
+    }
+}

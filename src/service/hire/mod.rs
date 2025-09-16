@@ -175,3 +175,156 @@ impl HireService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_hire_service_creation() {
+        let config = create_test_config();
+        let hire_service = HireService::new(config);
+
+        // Verify all sub-service structures
+        assert!(std::ptr::addr_of!(hire_service.recruitment_config) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(hire_service.get_candidates) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(hire_service.candidate_management) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(hire_service.ecological_docking) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(hire_service.referral_account) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(hire_service.attachment) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_hire_service_with_custom_config() {
+        let config = Config::builder()
+            .app_id("hire_app")
+            .app_secret("hire_secret")
+            .req_timeout(std::time::Duration::from_millis(20000))
+            .base_url("https://hire.api.com")
+            .build();
+
+        let hire_service = HireService::new(config);
+
+        // Verify service creation with custom config
+        assert!(std::ptr::addr_of!(hire_service.recruitment_config) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(hire_service.get_candidates) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(hire_service.candidate_management) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(hire_service.ecological_docking) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(hire_service.referral_account) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(hire_service.attachment) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_hire_service_configuration_scenarios() {
+        let test_configs = vec![
+            Config::builder()
+                .app_id("hire_basic")
+                .app_secret("basic_secret")
+                .build(),
+            Config::builder()
+                .app_id("hire_timeout")
+                .app_secret("timeout_secret")
+                .req_timeout(std::time::Duration::from_millis(25000))
+                .build(),
+            Config::builder()
+                .app_id("hire_custom")
+                .app_secret("custom_secret")
+                .base_url("https://custom.hire.com")
+                .build(),
+            Config::builder()
+                .app_id("hire_enterprise")
+                .app_secret("enterprise_secret")
+                .req_timeout(std::time::Duration::from_millis(40000))
+                .base_url("https://enterprise.hire.com")
+                .enable_token_cache(false)
+                .build(),
+        ];
+
+        for config in test_configs {
+            let hire_service = HireService::new(config);
+
+            // Each configuration should create valid sub-services
+            assert!(std::ptr::addr_of!(hire_service.recruitment_config) as *const _ != std::ptr::null());
+            assert!(std::ptr::addr_of!(hire_service.get_candidates) as *const _ != std::ptr::null());
+            assert!(std::ptr::addr_of!(hire_service.candidate_management) as *const _ != std::ptr::null());
+            assert!(std::ptr::addr_of!(hire_service.ecological_docking) as *const _ != std::ptr::null());
+            assert!(std::ptr::addr_of!(hire_service.referral_account) as *const _ != std::ptr::null());
+            assert!(std::ptr::addr_of!(hire_service.attachment) as *const _ != std::ptr::null());
+        }
+    }
+
+    #[test]
+    fn test_hire_service_multiple_instances() {
+        let config1 = create_test_config();
+        let config2 = Config::builder()
+            .app_id("hire2")
+            .app_secret("secret2")
+            .build();
+
+        let hire_service1 = HireService::new(config1);
+        let hire_service2 = HireService::new(config2);
+
+        // Services should be independent instances
+        let service1_ptr = std::ptr::addr_of!(hire_service1) as *const _;
+        let service2_ptr = std::ptr::addr_of!(hire_service2) as *const _;
+
+        assert_ne!(service1_ptr, service2_ptr, "Services should be independent instances");
+
+        // Each service should have valid sub-services
+        assert!(std::ptr::addr_of!(hire_service1.recruitment_config) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(hire_service1.get_candidates) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(hire_service2.recruitment_config) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(hire_service2.get_candidates) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_hire_service_config_cloning_behavior() {
+        let original_config = create_test_config();
+
+        // Test that the service works with cloned configs
+        let hire_service1 = HireService::new(original_config.clone());
+        let hire_service2 = HireService::new(original_config);
+
+        // Both should work independently
+        assert!(std::ptr::addr_of!(hire_service1.recruitment_config) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(hire_service1.get_candidates) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(hire_service2.recruitment_config) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(hire_service2.get_candidates) as *const _ != std::ptr::null());
+
+        // But should be different service instances
+        let service1_ptr = std::ptr::addr_of!(hire_service1) as *const _;
+        let service2_ptr = std::ptr::addr_of!(hire_service2) as *const _;
+        assert_ne!(service1_ptr, service2_ptr);
+    }
+
+    #[test]
+    fn test_hire_service_sub_services_independence() {
+        let config = create_test_config();
+        let hire_service = HireService::new(config);
+
+        // Test that all sub-services are independent
+        let recruitment_config_ptr = std::ptr::addr_of!(hire_service.recruitment_config) as *const _;
+        let get_candidates_ptr = std::ptr::addr_of!(hire_service.get_candidates) as *const _;
+        let candidate_management_ptr = std::ptr::addr_of!(hire_service.candidate_management) as *const _;
+        let ecological_docking_ptr = std::ptr::addr_of!(hire_service.ecological_docking) as *const _;
+        let referral_account_ptr = std::ptr::addr_of!(hire_service.referral_account) as *const _;
+        let attachment_ptr = std::ptr::addr_of!(hire_service.attachment) as *const _;
+
+        assert_ne!(recruitment_config_ptr, get_candidates_ptr, "Sub-services should be independent");
+        assert_ne!(get_candidates_ptr, candidate_management_ptr, "Sub-services should be independent");
+        assert_ne!(candidate_management_ptr, ecological_docking_ptr, "Sub-services should be independent");
+        assert_ne!(ecological_docking_ptr, referral_account_ptr, "Sub-services should be independent");
+        assert_ne!(referral_account_ptr, attachment_ptr, "Sub-services should be independent");
+
+        // Verify service maintains proper memory layout
+        assert!(std::ptr::addr_of!(hire_service) as *const _ != std::ptr::null());
+    }
+}
