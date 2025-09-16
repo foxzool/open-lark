@@ -664,7 +664,7 @@ mod tests {
 
         // Verify default values match Config defaults
         assert_eq!(builder.config.app_type, AppType::SelfBuild);
-        assert_eq!(builder.config.enable_token_cache, true); // Default from Config
+        assert!(builder.config.enable_token_cache); // Default from Config
         assert_eq!(builder.config.req_timeout, None);
         assert!(!builder.config.base_url.is_empty()); // Should have default URL
     }

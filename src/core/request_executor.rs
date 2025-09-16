@@ -138,7 +138,7 @@ impl RequestExecutor {
     ///     &config,
     ///     Method::GET,
     ///     "/open-apis/im/v1/messages",
-    ///     vec![AccessTokenType::Tenant, AccessTokenType::User],
+    ///     [AccessTokenType::Tenant, AccessTokenType::User],
     ///     Some(query_params),
     ///     None::<()>,
     ///     None,
@@ -149,7 +149,7 @@ impl RequestExecutor {
     ///     &config,
     ///     Method::POST,
     ///     "/open-apis/im/v1/messages",
-    ///     vec![AccessTokenType::Tenant, AccessTokenType::User],
+    ///     [AccessTokenType::Tenant, AccessTokenType::User],
     ///     None,
     ///     Some(create_request),
     ///     None,
@@ -202,7 +202,7 @@ impl RequestExecutor {
     ///     Method::GET,
     ///     "/open-apis/im/v1/messages/{message_id}",
     ///     path_params,
-    ///     vec![AccessTokenType::Tenant],
+    ///     [AccessTokenType::Tenant],
     ///     None,
     ///     None::<()>,
     ///     None,
@@ -360,7 +360,7 @@ mod tests {
         use std::collections::HashMap;
 
         // Test that get method constructs the correct parameters
-        let supported_tokens = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        let supported_tokens = [AccessTokenType::Tenant, AccessTokenType::User];
         let mut query_params = HashMap::new();
         query_params.insert("page", "1".to_string());
         query_params.insert("limit", "10".to_string());
@@ -378,7 +378,7 @@ mod tests {
         use crate::core::constants::AccessTokenType;
 
         // Test POST method parameter types
-        let supported_tokens = vec![AccessTokenType::App];
+        let supported_tokens = [AccessTokenType::App];
         let request_body = TestRequest {
             message: "test message".to_string(),
         };
@@ -397,7 +397,7 @@ mod tests {
         use crate::core::constants::AccessTokenType;
 
         // Test PUT method parameter types
-        let supported_tokens = vec![AccessTokenType::Tenant];
+        let supported_tokens = [AccessTokenType::Tenant];
         let request_body = TestRequest {
             message: "update message".to_string(),
         };
@@ -416,7 +416,7 @@ mod tests {
         use crate::core::constants::AccessTokenType;
 
         // Test DELETE method parameter types
-        let supported_tokens = vec![AccessTokenType::User];
+        let supported_tokens = [AccessTokenType::User];
 
         // Verify token types
         assert_eq!(supported_tokens.len(), 1);
@@ -428,7 +428,7 @@ mod tests {
         use crate::core::constants::AccessTokenType;
 
         // Test PATCH method parameter types
-        let supported_tokens = vec![AccessTokenType::Tenant, AccessTokenType::App];
+        let supported_tokens = [AccessTokenType::Tenant, AccessTokenType::App];
         let request_body = TestRequest {
             message: "patch message".to_string(),
         };
@@ -518,14 +518,14 @@ mod tests {
         use crate::core::constants::AccessTokenType;
 
         // Test that json_request uses default token types
-        let default_tokens = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        let default_tokens = [AccessTokenType::Tenant, AccessTokenType::User];
 
         assert_eq!(default_tokens.len(), 2);
         assert!(default_tokens.contains(&AccessTokenType::Tenant));
         assert!(default_tokens.contains(&AccessTokenType::User));
 
         // Verify these are the same tokens used in json_request
-        let expected_tokens = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        let expected_tokens = [AccessTokenType::Tenant, AccessTokenType::User];
         assert_eq!(default_tokens, expected_tokens);
     }
 
@@ -534,7 +534,7 @@ mod tests {
         use crate::core::constants::AccessTokenType;
 
         // Test that query_request uses default token types
-        let default_tokens = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        let default_tokens = [AccessTokenType::Tenant, AccessTokenType::User];
 
         assert_eq!(default_tokens.len(), 2);
         assert!(default_tokens.contains(&AccessTokenType::Tenant));
@@ -611,7 +611,7 @@ mod tests {
         use crate::core::constants::AccessTokenType;
 
         // Test all access token types
-        let all_types = vec![
+        let all_types = [
             AccessTokenType::Tenant,
             AccessTokenType::User,
             AccessTokenType::App,
@@ -625,8 +625,8 @@ mod tests {
         assert_ne!(AccessTokenType::App, AccessTokenType::Tenant);
 
         // Test combinations
-        let tenant_user = vec![AccessTokenType::Tenant, AccessTokenType::User];
-        let app_only = vec![AccessTokenType::App];
+        let tenant_user = [AccessTokenType::Tenant, AccessTokenType::User];
+        let app_only = [AccessTokenType::App];
 
         assert_eq!(tenant_user.len(), 2);
         assert_eq!(app_only.len(), 1);

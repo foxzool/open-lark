@@ -233,6 +233,7 @@ fn decode_file_name(file_name: &str) -> Option<String> {
 }
 
 #[cfg(test)]
+#[allow(clippy::field_reassign_with_default)]
 mod test {
     use std::collections::HashMap;
 
@@ -311,8 +312,10 @@ mod test {
     #[test]
     fn test_validate_token_type_tenant_with_user_token() {
         let types = vec![AccessTokenType::Tenant];
-        let mut option = RequestOption::default();
-        option.user_access_token = "user_token".to_string();
+        let option = RequestOption {
+            user_access_token: "user_token".to_string(),
+            ..Default::default()
+        };
 
         // Non-empty list returns Ok immediately, so this passes despite mismatch
         let result = validate_token_type(&types, &option);
@@ -322,8 +325,10 @@ mod test {
     #[test]
     fn test_validate_token_type_app_with_tenant_token() {
         let types = vec![AccessTokenType::App];
-        let mut option = RequestOption::default();
-        option.tenant_access_token = "tenant_token".to_string();
+        let option = RequestOption {
+            tenant_access_token: "tenant_token".to_string(),
+            ..Default::default()
+        };
 
         // Non-empty list returns Ok immediately, so this passes despite mismatch
         let result = validate_token_type(&types, &option);
@@ -353,8 +358,10 @@ mod test {
     #[test]
     fn test_determine_token_type_no_cache_tenant() {
         let types = vec![AccessTokenType::User, AccessTokenType::Tenant];
-        let mut option = RequestOption::default();
-        option.tenant_access_token = "tenant_token".to_string();
+        let option = RequestOption {
+            tenant_access_token: "tenant_token".to_string(),
+            ..Default::default()
+        };
 
         let token_type = determine_token_type(&types, &option, false);
         assert_eq!(token_type, AccessTokenType::Tenant);
@@ -363,8 +370,10 @@ mod test {
     #[test]
     fn test_determine_token_type_no_cache_app() {
         let types = vec![AccessTokenType::App, AccessTokenType::Tenant];
-        let mut option = RequestOption::default();
-        option.app_access_token = "app_token".to_string();
+        let option = RequestOption {
+            app_access_token: "app_token".to_string(),
+            ..Default::default()
+        };
 
         let token_type = determine_token_type(&types, &option, false);
         assert_eq!(token_type, AccessTokenType::App);

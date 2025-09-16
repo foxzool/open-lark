@@ -312,7 +312,7 @@ mod tests {
             ("123numeric", "app_ticket-123numeric"),
         ];
 
-        for (app_id, expected_suffix) in test_cases {
+        for (app_id, _expected_suffix) in test_cases {
             let key = app_ticket_key(app_id);
             assert!(key.ends_with(&format!("-{}", app_id)));
             // Verify it starts with the expected prefix

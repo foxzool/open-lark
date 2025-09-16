@@ -103,8 +103,7 @@ mod tests {
                 granted_reason: Some("Annual leave allocation".to_string()),
                 validity_type: Some(2),
                 granted_type: Some(1),
-                granted_description: Some("Test description".to_string()),
-                ..Default::default()
+                granted_description: Some("Test description".to_string())
             },
         }
     }
