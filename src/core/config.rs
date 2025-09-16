@@ -420,7 +420,7 @@ mod tests {
         // Remove header
         config.header.remove("Accept");
         assert_eq!(config.header.len(), 1);
-        assert!(config.header.get("Accept").is_none());
+        assert!(!config.header.contains_key("Accept"));
     }
 
     #[test]

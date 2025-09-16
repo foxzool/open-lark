@@ -220,6 +220,7 @@ impl UserTaskService {
 }
 
 #[cfg(test)]
+#[allow(clippy::field_reassign_with_default)]
 mod tests {
     use super::*;
     use crate::core::config::Config;
@@ -247,7 +248,7 @@ mod tests {
 
     #[test]
     fn test_batch_create_request_builder() {
-        let service = create_test_service();
+        let _service = create_test_service();
         let mut request = BatchCreateUserTaskRequest::default();
         request.employee_type = "employee_id".to_string();
         request.user_tasks = vec![UserTaskCreate {
@@ -355,7 +356,7 @@ mod tests {
     #[test]
     fn test_access_token_types() {
         // All attendance user task operations should use tenant access token
-        let service = create_test_service();
+        let _service = create_test_service();
 
         // These would be tested in actual API calls, but we can verify
         // that the service properly supports tenant access tokens
