@@ -1078,8 +1078,14 @@ mod tests {
         let cloned = config.clone();
 
         assert_eq!(config.check_interval_seconds, cloned.check_interval_seconds);
-        assert_eq!(config.preheat_threshold_seconds, cloned.preheat_threshold_seconds);
-        assert_eq!(config.enable_tenant_preheating, cloned.enable_tenant_preheating);
+        assert_eq!(
+            config.preheat_threshold_seconds,
+            cloned.preheat_threshold_seconds
+        );
+        assert_eq!(
+            config.enable_tenant_preheating,
+            cloned.enable_tenant_preheating
+        );
         assert_eq!(config.max_concurrent_preheat, cloned.max_concurrent_preheat);
     }
 
@@ -1200,10 +1206,13 @@ mod tests {
 
     #[test]
     fn test_app_access_token_response() {
-        use crate::core::api_resp::{ResponseFormat, RawResponse};
+        use crate::core::api_resp::{RawResponse, ResponseFormat};
 
         // 测试ResponseFormat
-        assert!(matches!(AppAccessTokenResp::data_format(), ResponseFormat::Flatten));
+        assert!(matches!(
+            AppAccessTokenResp::data_format(),
+            ResponseFormat::Flatten
+        ));
 
         // 测试响应结构
         let raw_resp = RawResponse {
@@ -1225,10 +1234,13 @@ mod tests {
 
     #[test]
     fn test_tenant_access_token_response() {
-        use crate::core::api_resp::{ResponseFormat, RawResponse};
+        use crate::core::api_resp::{RawResponse, ResponseFormat};
 
         // 测试ResponseFormat
-        assert!(matches!(TenantAccessTokenResp::data_format(), ResponseFormat::Flatten));
+        assert!(matches!(
+            TenantAccessTokenResp::data_format(),
+            ResponseFormat::Flatten
+        ));
 
         // 测试响应结构
         let raw_resp = RawResponse {
@@ -1316,7 +1328,9 @@ mod tests {
         let handle = tokio::spawn(async move {
             for _ in 0..100 {
                 metrics_clone.app_cache_hits.fetch_add(1, Ordering::Relaxed);
-                metrics_clone.app_cache_misses.fetch_add(1, Ordering::Relaxed);
+                metrics_clone
+                    .app_cache_misses
+                    .fetch_add(1, Ordering::Relaxed);
             }
         });
 
@@ -1385,9 +1399,7 @@ mod tests {
     #[test]
     fn test_token_manager_memory_efficiency() {
         // 测试创建多个TokenManager实例不会消耗过多内存
-        let managers: Vec<TokenManager> = (0..50)
-            .map(|_| TokenManager::new())
-            .collect();
+        let managers: Vec<TokenManager> = (0..50).map(|_| TokenManager::new()).collect();
 
         assert_eq!(managers.len(), 50);
 
