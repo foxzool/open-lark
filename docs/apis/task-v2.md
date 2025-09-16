@@ -21,6 +21,39 @@
 [添加依赖](https://open.feishu.cn/document/task-v2/task/add_dependencies)
 [移除依赖](https://open.feishu.cn/document/task-v2/task/remove_dependencies)
 
+### 开发者提示：在清单中管理任务
+
+- 通过 `CreateTaskRequest` 的 `tasklist_guid` 字段，可以在任务创建时直接指定所属清单。
+- 如需将已存在的任务加入新的清单，可使用 `TaskService::add_tasklist` 方法并提供 `AddTaskTasklistRequest`。
+
+```rust,no_run
+use open_lark::prelude::*;
+use open_lark::service::task::v2::task::AddTaskTasklistRequest;
+
+async fn attach_task_to_list(
+    client: &LarkClient,
+    task_guid: &str,
+    tasklist_guid: String,
+) -> SDKResult<()> {
+    let request = AddTaskTasklistRequest {
+        tasklist_guid,
+        section_guid: None,
+    };
+
+    let response = client
+        .task
+        .task
+        .add_tasklist(task_guid, request, None, None)
+        .await?;
+
+    if let Some(data) = response.data {
+        println!("任务已加入清单: {:?}", data.tasklist.name);
+    }
+
+    Ok(())
+}
+```
+
 ## 子任务
 
 [创建子任务](https://open.feishu.cn/document/task-v2/task-subtask/create)
