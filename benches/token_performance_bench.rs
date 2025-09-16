@@ -1,23 +1,11 @@
 #![cfg(feature = "benchmarks")]
 use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
-use open_lark::core::{
-    config::Config,
-    constants::AppType,
-    token_manager::{PreheatingConfig, TokenManager},
-};
+use open_lark::core::token_manager::{PreheatingConfig, TokenManager};
 use std::sync::Arc;
-use std::time::Duration;
 use tokio::runtime::Runtime;
 
 // Token 管理性能基准测试
 // 测量 Token 获取、缓存、刷新的性能
-
-async fn create_test_config() -> Config {
-    Config::builder("test_app_id", "test_app_secret")
-        .with_app_type(AppType::SelfBuilt)
-        .with_enable_token_cache(true)
-        .build()
-}
 
 fn bench_token_manager_creation(c: &mut Criterion) {
     let rt = Runtime::new().unwrap();
@@ -25,8 +13,7 @@ fn bench_token_manager_creation(c: &mut Criterion) {
     c.bench_function("token_manager_creation", |b| {
         b.iter(|| {
             rt.block_on(async {
-                let config = create_test_config().await;
-                let _token_manager = Arc::new(TokenManager::new(config));
+                let _token_manager = Arc::new(TokenManager::new());
             })
         })
     });
@@ -45,8 +32,7 @@ fn bench_token_cache_operations(c: &mut Criterion) {
             |b, &size| {
                 b.iter(|| {
                     rt.block_on(async {
-                        let config = create_test_config().await;
-                        let token_manager = Arc::new(TokenManager::new(config));
+                        let token_manager = Arc::new(TokenManager::new());
 
                         // 模拟并发缓存访问
                         let mut handles = Vec::new();
@@ -54,6 +40,10 @@ fn bench_token_cache_operations(c: &mut Criterion) {
                         for i in 0..size {
                             let tm = Arc::clone(&token_manager);
                             let handle = tokio::spawn(async move {
+                                // 访问性能指标触发读操作，模拟真实并发读取
+                                let metrics = tm.metrics().clone();
+                                black_box(metrics);
+
                                 // 模拟 token 缓存键查找
                                 let key = format!("test_tenant_{}", i);
                                 black_box(key);
@@ -105,14 +95,16 @@ fn bench_token_manager_memory_usage(c: &mut Criterion) {
             |b, &count| {
                 b.iter(|| {
                     rt.block_on(async {
-                        let config = create_test_config().await;
-                        let token_manager = Arc::new(TokenManager::new(config));
+                        let token_manager = Arc::new(TokenManager::new());
 
                         // 模拟多租户场景下的内存占用
                         let tenant_keys: Vec<String> =
                             (0..count).map(|i| format!("tenant_key_{}", i)).collect();
 
-                        black_box(tenant_keys);
+                        // 读取一次指标，模拟监控场景
+                        let metrics = token_manager.metrics().clone();
+
+                        black_box((tenant_keys, metrics));
                     })
                 })
             },
