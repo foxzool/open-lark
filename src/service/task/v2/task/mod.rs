@@ -13,7 +13,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    service::task::models::{Dependency, Reminder, Task, TaskMember, UserIdType},
+    service::task::models::{Dependency, Reminder, Task, TaskMember, Tasklist, UserIdType},
 };
 
 /// 任务服务
@@ -29,6 +29,9 @@ pub struct CreateTaskRequest {
     /// 任务描述
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 清单GUID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tasklist_guid: Option<String>,
     /// 截止时间
     #[serde(skip_serializing_if = "Option::is_none")]
     pub due: Option<TaskDue>,
@@ -165,6 +168,29 @@ pub struct ListTasksResponse {
 }
 
 impl ApiResponseTrait for ListTasksResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+/// 任务加入清单请求
+#[derive(Debug, Serialize, Deserialize)]
+pub struct AddTaskTasklistRequest {
+    /// 清单GUID
+    pub tasklist_guid: String,
+    /// 自定义分组GUID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub section_guid: Option<String>,
+}
+
+/// 任务加入清单响应
+#[derive(Debug, Serialize, Deserialize)]
+pub struct AddTaskTasklistResponse {
+    /// 加入的清单
+    pub tasklist: Tasklist,
+}
+
+impl ApiResponseTrait for AddTaskTasklistResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
@@ -544,6 +570,35 @@ impl TaskService {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
                 Endpoints::TASK_V2_TASK_ADD_REMINDERS,
+                "task_guid",
+                task_guid,
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            body: serde_json::to_vec(&request)?,
+            ..Default::default()
+        };
+
+        Transport::request(api_req, &self.config, option).await
+    }
+
+    /// 任务加入清单
+    pub async fn add_tasklist(
+        &self,
+        task_guid: &str,
+        request: AddTaskTasklistRequest,
+        user_id_type: Option<UserIdType>,
+        option: Option<RequestOption>,
+    ) -> SDKResult<BaseResponse<AddTaskTasklistResponse>> {
+        let mut query_params = HashMap::new();
+        if let Some(user_id_type) = user_id_type {
+            query_params.insert("user_id_type", user_id_type.as_str().to_string());
+        }
+
+        let api_req = ApiRequest {
+            http_method: Method::POST,
+            api_path: EndpointBuilder::replace_param(
+                Endpoints::TASK_V2_TASK_ADD_TASKLIST,
                 "task_guid",
                 task_guid,
             ),
