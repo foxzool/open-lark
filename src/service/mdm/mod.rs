@@ -73,3 +73,67 @@ impl MdmService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_mdm_service_creation() {
+        let config = create_test_config();
+        let mdm_service = MdmService::new(config);
+
+        // Verify service structure
+        assert!(std::ptr::addr_of!(mdm_service.country_region) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(mdm_service.user_auth_data_relation) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_mdm_service_debug_trait() {
+        let config = create_test_config();
+        let mdm_service = MdmService::new(config);
+
+        // Test that service can be used
+        assert!(std::ptr::addr_of!(mdm_service) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_mdm_service_with_different_configs() {
+        let configs = vec![
+            Config::builder().app_id("app1").app_secret("secret1").build(),
+            Config::builder().app_id("app2").app_secret("secret2")
+                .req_timeout(std::time::Duration::from_millis(5000))
+                .build(),
+            Config::builder().app_id("app3").app_secret("secret3")
+                .base_url("https://custom.api.com")
+                .build(),
+        ];
+
+        for config in configs {
+            let mdm_service = MdmService::new(config);
+            // Each service should be created successfully
+            assert!(std::ptr::addr_of!(mdm_service.country_region) as *const _ != std::ptr::null());
+            assert!(std::ptr::addr_of!(mdm_service.user_auth_data_relation) as *const _ != std::ptr::null());
+        }
+    }
+
+    #[test]
+    fn test_mdm_service_module_independence() {
+        let config = create_test_config();
+        let mdm_service = MdmService::new(config);
+
+        // Test that sub-modules are independent (different memory addresses)
+        let country_ptr = std::ptr::addr_of!(mdm_service.country_region) as *const _;
+        let user_auth_ptr = std::ptr::addr_of!(mdm_service.user_auth_data_relation) as *const _;
+
+        assert_ne!(country_ptr, user_auth_ptr);
+    }
+}

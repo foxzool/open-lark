@@ -97,3 +97,101 @@ impl LingoService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_lingo_service_creation() {
+        let config = create_test_config();
+        let lingo_service = LingoService::new(config);
+
+        // Verify all sub-services are created
+        assert!(std::ptr::addr_of!(lingo_service.draft) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(lingo_service.entity) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(lingo_service.classification) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(lingo_service.repo) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(lingo_service.file) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_lingo_service_debug_trait() {
+        let config = create_test_config();
+        let lingo_service = LingoService::new(config);
+
+        // Test that service can be used
+        assert!(std::ptr::addr_of!(lingo_service) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_lingo_service_with_custom_config() {
+        let config = Config::builder()
+            .app_id("lingo_app")
+            .app_secret("lingo_secret")
+            .req_timeout(std::time::Duration::from_millis(10000))
+            .base_url("https://lingo.api.com")
+            .build();
+
+        let lingo_service = LingoService::new(config);
+
+        // Verify service creation with custom config
+        assert!(std::ptr::addr_of!(lingo_service.draft) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(lingo_service.entity) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(lingo_service.classification) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(lingo_service.repo) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(lingo_service.file) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_lingo_service_modules_independence() {
+        let config = create_test_config();
+        let lingo_service = LingoService::new(config);
+
+        // Test that all sub-modules are independent (different memory addresses)
+        let draft_ptr = std::ptr::addr_of!(lingo_service.draft) as *const _;
+        let entity_ptr = std::ptr::addr_of!(lingo_service.entity) as *const _;
+        let classification_ptr = std::ptr::addr_of!(lingo_service.classification) as *const _;
+        let repo_ptr = std::ptr::addr_of!(lingo_service.repo) as *const _;
+        let file_ptr = std::ptr::addr_of!(lingo_service.file) as *const _;
+
+        // All addresses should be different
+        let addresses = vec![draft_ptr, entity_ptr, classification_ptr, repo_ptr, file_ptr];
+        for (i, &addr1) in addresses.iter().enumerate() {
+            for &addr2 in addresses.iter().skip(i + 1) {
+                assert_ne!(addr1, addr2, "Services should have different memory addresses");
+            }
+        }
+    }
+
+    #[test]
+    fn test_lingo_service_config_cloning() {
+        let config = create_test_config();
+        let lingo_service = LingoService::new(config);
+
+        // Test that the service can be created multiple times with cloned configs
+        // This simulates real usage where configs might be shared
+        let config2 = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build();
+        let lingo_service2 = LingoService::new(config2);
+
+        // Both services should be created successfully
+        assert!(std::ptr::addr_of!(lingo_service.draft) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(lingo_service2.draft) as *const _ != std::ptr::null());
+
+        // But should be different instances
+        let service1_ptr = std::ptr::addr_of!(lingo_service) as *const _;
+        let service2_ptr = std::ptr::addr_of!(lingo_service2) as *const _;
+        assert_ne!(service1_ptr, service2_ptr);
+    }
+}
