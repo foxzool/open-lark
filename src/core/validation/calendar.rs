@@ -11,15 +11,17 @@
 ///
 /// 使用示例：
 /// ```rust
-/// use open_lark::core::validation::calendar::*;
+/// use open_lark::core::validation::{calendar::*, ValidationResult};
 ///
 /// // 验证日程创建参数
-/// let result = validate_calendar_event_params(
+/// let result = validate_calendar_event_creation_params(
 ///     "团队会议",
 ///     "2024-01-01T10:00:00+08:00",
 ///     "2024-01-01T11:00:00+08:00",
-///     false
+///     false,
+///     5,
 /// );
+/// assert!(matches!(result, ValidationResult::Valid));
 /// ```
 use super::ValidationResult;
 use chrono::{DateTime, NaiveDate};

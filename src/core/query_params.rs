@@ -9,22 +9,32 @@
 //!
 //! 使用本模块常量可以显著减少内存分配：
 //! ```rust
+//! use open_lark::core::query_params::QueryParams;
+//! use std::collections::HashMap;
+//!
+//! # fn main() {
+//! let mut params = HashMap::new();
+//! let value = "20".to_string();
 //! // 优化前: 每次调用都分配新字符串
-//! params.insert("page_size", value); // ~9字节堆分配
+//! params.insert("page_size", value.clone());
 //!
 //! // 优化后: 使用静态字符串常量
-//! params.insert(QueryParams::PAGE_SIZE, value);  // ~8字节栈引用
+//! params.insert(QueryParams::PAGE_SIZE, value);
+//! # }
 //! ```
 //!
 //! # 使用示例
 //!
 //! ```rust
-//! use crate::core::query_params::QueryParams;
+//! use open_lark::core::query_params::QueryParams;
 //! use std::collections::HashMap;
 //!
+//! # fn main() {
 //! let mut params = HashMap::new();
 //! params.insert(QueryParams::PAGE_SIZE, "20".to_string());
+//! let token = "next-page-token".to_string();
 //! params.insert(QueryParams::PAGE_TOKEN, token);
+//! # }
 //! ```
 
 use std::collections::HashMap;
@@ -202,11 +212,15 @@ impl QueryParams {
 /// # 示例
 ///
 /// ```rust
+/// use open_lark::core::query_params::{QueryParams, QueryParamsBuilder};
+///
 /// let params = QueryParamsBuilder::new()
 ///     .page_size(20)
 ///     .page_token("token_123")
 ///     .start_time("2024-01-01T00:00:00Z")
 ///     .build();
+///
+/// assert_eq!(params.get(QueryParams::PAGE_SIZE), Some(&"20".to_string()));
 /// ```
 #[derive(Debug, Default)]
 pub struct QueryParamsBuilder {
