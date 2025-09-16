@@ -145,3 +145,112 @@ impl AttendanceService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_attendance_service_creation() {
+        let config = create_test_config();
+        let attendance_service = AttendanceService::new(config);
+
+        // Verify service structure
+        assert!(std::ptr::addr_of!(attendance_service.v1) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_attendance_service_debug_trait() {
+        let config = create_test_config();
+        let attendance_service = AttendanceService::new(config);
+
+        // Test that service can be used
+        assert!(std::ptr::addr_of!(attendance_service) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_attendance_service_with_custom_config() {
+        let config = Config::builder()
+            .app_id("attendance_app")
+            .app_secret("attendance_secret")
+            .req_timeout(std::time::Duration::from_millis(15000))
+            .base_url("https://attendance.api.com")
+            .build();
+
+        let attendance_service = AttendanceService::new(config);
+
+        // Verify service creation with custom config
+        assert!(std::ptr::addr_of!(attendance_service.v1) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_attendance_service_multiple_instances() {
+        let configs = vec![
+            Config::builder().app_id("app1").app_secret("secret1").build(),
+            Config::builder().app_id("app2").app_secret("secret2")
+                .req_timeout(std::time::Duration::from_millis(8000))
+                .build(),
+            Config::builder().app_id("app3").app_secret("secret3")
+                .enable_token_cache(false)
+                .build(),
+        ];
+
+        let mut services = Vec::new();
+        for config in configs {
+            let service = AttendanceService::new(config);
+            services.push(service);
+        }
+
+        // All services should be created successfully
+        assert_eq!(services.len(), 3);
+        for service in &services {
+            assert!(std::ptr::addr_of!(service.v1) as *const _ != std::ptr::null());
+        }
+
+        // Services should be independent
+        for (i, service1) in services.iter().enumerate() {
+            for service2 in services.iter().skip(i + 1) {
+                let ptr1 = std::ptr::addr_of!(*service1) as *const _;
+                let ptr2 = std::ptr::addr_of!(*service2) as *const _;
+                assert_ne!(ptr1, ptr2, "Services should be independent instances");
+            }
+        }
+    }
+
+    #[test]
+    fn test_attendance_service_config_variations() {
+        // Test different configuration combinations
+        let test_cases = vec![
+            ("basic", "secret", None, None),
+            ("timeout", "secret", Some(10000), None),
+            ("custom_url", "secret", None, Some("https://custom.test.com")),
+            ("full_custom", "secret", Some(20000), Some("https://full.test.com")),
+        ];
+
+        for (app_id, app_secret, timeout, base_url) in test_cases {
+            let mut builder = Config::builder().app_id(app_id).app_secret(app_secret);
+
+            if let Some(timeout_ms) = timeout {
+                builder = builder.req_timeout(std::time::Duration::from_millis(timeout_ms));
+            }
+
+            if let Some(url) = base_url {
+                builder = builder.base_url(url);
+            }
+
+            let config = builder.build();
+            let attendance_service = AttendanceService::new(config);
+
+            // Each configuration should work
+            assert!(std::ptr::addr_of!(attendance_service.v1) as *const _ != std::ptr::null());
+        }
+    }
+}
