@@ -125,11 +125,11 @@ mod tests {
         let service = AcsService::new(config);
 
         // Verify that all services are properly initialized
-        assert!(std::ptr::addr_of!(service.user) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(service.rule_external) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(service.visitor) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(service.device) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(service.access_record) as *const _ != std::ptr::null());
+        assert!(!(std::ptr::addr_of!(service.user) as *const _).is_null());
+        assert!(!(std::ptr::addr_of!(service.rule_external) as *const _).is_null());
+        assert!(!(std::ptr::addr_of!(service.visitor) as *const _).is_null());
+        assert!(!(std::ptr::addr_of!(service.device) as *const _).is_null());
+        assert!(!(std::ptr::addr_of!(service.access_record) as *const _).is_null());
     }
 
     #[test]
@@ -143,7 +143,7 @@ mod tests {
         let service = AcsService::new(config);
 
         // Verify service creation works with different config types
-        assert!(std::ptr::addr_of!(service.user) as *const _ != std::ptr::null());
+        assert!(!(std::ptr::addr_of!(service.user) as *const _).is_null());
     }
 
     #[test]
@@ -159,7 +159,7 @@ mod tests {
         let _access_record = &service.access_record;
 
         // If we reach here without panic, structure is correct
-        assert!(true);
+        // Test passes by not panicking above
     }
 
     #[test]

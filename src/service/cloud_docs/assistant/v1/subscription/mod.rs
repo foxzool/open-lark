@@ -312,7 +312,7 @@ mod tests {
         let _service = SubscriptionService::new(config);
 
         // Test that the service can be created without panicking
-        assert!(true);
+        // Test passes by not panicking above
     }
 
     #[test]

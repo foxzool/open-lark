@@ -164,7 +164,7 @@ mod tests {
         let file_ptr = std::ptr::addr_of!(lingo_service.file) as *const _;
 
         // All addresses should be different
-        let addresses = vec![
+        let addresses = [
             draft_ptr,
             entity_ptr,
             classification_ptr,
