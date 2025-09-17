@@ -289,7 +289,7 @@ impl ExecutableBuilder<FileService, String, GetFileResponse> for FileDownloadBui
 
     async fn execute(self, service: &FileService) -> SDKResult<GetFileResponse> {
         let file_key = self.build();
-        service.get(&file_key, None).await
+        _service.get(&file_key, None).await
     }
 
     async fn execute_with_options(
@@ -298,6 +298,6 @@ impl ExecutableBuilder<FileService, String, GetFileResponse> for FileDownloadBui
         option: RequestOption,
     ) -> SDKResult<GetFileResponse> {
         let file_key = self.build();
-        service.get(&file_key, Some(option)).await
+        _service.get(&file_key, Some(option)).await
     }
 }

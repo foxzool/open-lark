@@ -259,8 +259,8 @@ mod tests {
         let service = TicketService::new(config.clone());
 
         // The config should be stored properly
-        assert_eq!(service.config.app_id, config.app_id);
-        assert_eq!(service.config.app_secret, config.app_secret);
+        assert_eq!(_service.config.app_id, config.app_id);
+        assert_eq!(_service.config.app_secret, config.app_secret);
     }
 
     #[test]
@@ -486,7 +486,7 @@ mod tests {
 
         // The actual method call would fail due to network, but we can verify
         // that the method signature and basic setup work correctly
-        let result = service.start_service(request, user_id_type, option).await;
+        let result = _service.start_service(request, user_id_type, option).await;
 
         // We expect this to fail with a network error, not a construction error
         assert!(result.is_err());
@@ -502,7 +502,7 @@ mod tests {
         let option = Some(RequestOption::default());
 
         // Test API request construction
-        let result = service.get(ticket_id, user_id_type, option).await;
+        let result = _service.get(ticket_id, user_id_type, option).await;
 
         // We expect this to fail with a network error, not a construction error
         assert!(result.is_err());
@@ -560,7 +560,7 @@ mod tests {
         assert!(debug_output.contains("TicketService"));
 
         // Test that we can access config
-        assert!(!service.config.app_id.is_empty());
+        assert!(!_service.config.app_id.is_empty());
     }
 
     #[test]

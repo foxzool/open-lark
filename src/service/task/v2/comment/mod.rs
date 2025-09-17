@@ -273,7 +273,6 @@ mod tests {
     fn test_comment_service_creation() {
         let config = create_test_config();
         let service = CommentService::new(config);
-        assert!(std::ptr::addr_of!(service.config) as *const _ != std::ptr::null());
     }
 
     #[test]

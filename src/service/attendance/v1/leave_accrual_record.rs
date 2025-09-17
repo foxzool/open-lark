@@ -110,10 +110,10 @@ mod tests {
 
     #[test]
     fn test_service_creation() {
-        let service = create_test_service();
-        assert_eq!(service.config.app_id, "test_app_id");
-        assert_eq!(service.config.app_secret, "test_app_secret");
-        assert_eq!(service.config.base_url, "https://test.api.com");
+        let _service = create_test_service();
+        assert_eq!(_service.config.app_id, "test_app_id");
+        assert_eq!(_service.config.app_secret, "test_app_secret");
+        assert_eq!(_service.config.base_url, "https://test.api.com");
     }
 
     #[test]

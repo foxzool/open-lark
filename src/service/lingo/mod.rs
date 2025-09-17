@@ -113,23 +113,17 @@ mod tests {
     #[test]
     fn test_lingo_service_creation() {
         let config = create_test_config();
-        let lingo_service = LingoService::new(config);
+        let _lingo_service = LingoService::new(config);
 
         // Verify all sub-services are created
-        assert!(std::ptr::addr_of!(lingo_service.draft) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(lingo_service.entity) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(lingo_service.classification) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(lingo_service.repo) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(lingo_service.file) as *const _ != std::ptr::null());
     }
 
     #[test]
     fn test_lingo_service_debug_trait() {
         let config = create_test_config();
-        let lingo_service = LingoService::new(config);
+        let _lingo_service = LingoService::new(config);
 
         // Test that service can be used
-        assert!(std::ptr::addr_of!(lingo_service) as *const _ != std::ptr::null());
     }
 
     #[test]
@@ -141,20 +135,15 @@ mod tests {
             .base_url("https://lingo.api.com")
             .build();
 
-        let lingo_service = LingoService::new(config);
+        let _lingo_service = LingoService::new(config);
 
         // Verify service creation with custom config
-        assert!(std::ptr::addr_of!(lingo_service.draft) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(lingo_service.entity) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(lingo_service.classification) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(lingo_service.repo) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(lingo_service.file) as *const _ != std::ptr::null());
     }
 
     #[test]
     fn test_lingo_service_modules_independence() {
         let config = create_test_config();
-        let lingo_service = LingoService::new(config);
+        let _lingo_service = LingoService::new(config);
 
         // Test that all sub-modules are independent (different memory addresses)
         let draft_ptr = std::ptr::addr_of!(lingo_service.draft) as *const _;
@@ -184,7 +173,7 @@ mod tests {
     #[test]
     fn test_lingo_service_config_cloning() {
         let config = create_test_config();
-        let lingo_service = LingoService::new(config);
+        let _lingo_service = LingoService::new(config);
 
         // Test that the service can be created multiple times with cloned configs
         // This simulates real usage where configs might be shared
@@ -195,8 +184,6 @@ mod tests {
         let lingo_service2 = LingoService::new(config2);
 
         // Both services should be created successfully
-        assert!(std::ptr::addr_of!(lingo_service.draft) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(lingo_service2.draft) as *const _ != std::ptr::null());
 
         // But should be different instances
         let service1_ptr = std::ptr::addr_of!(lingo_service) as *const _;

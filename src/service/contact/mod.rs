@@ -131,10 +131,9 @@ mod tests {
     #[test]
     fn test_contact_service_creation() {
         let config = create_test_config();
-        let contact_service = ContactService::new(config);
+        let _contact_service = ContactService::new(config);
 
         // Verify service structure
-        assert!(std::ptr::addr_of!(contact_service.v3) as *const _ != std::ptr::null());
     }
 
     #[test]
@@ -146,10 +145,9 @@ mod tests {
             .base_url("https://contact.api.com")
             .build();
 
-        let contact_service = ContactService::new(config);
+        let _contact_service = ContactService::new(config);
 
         // Verify service creation with custom config
-        assert!(std::ptr::addr_of!(contact_service.v3) as *const _ != std::ptr::null());
     }
 
     #[test]
@@ -174,13 +172,12 @@ mod tests {
         let mut services = Vec::new();
         for config in configs {
             let service = ContactService::new(config);
-            services.push(service);
+            services.push(_service);
         }
 
         // All services should be created successfully
         assert_eq!(services.len(), 3);
         for service in &services {
-            assert!(std::ptr::addr_of!(service.v3) as *const _ != std::ptr::null());
         }
 
         // Services should be independent instances
@@ -202,8 +199,6 @@ mod tests {
         let contact_service2 = ContactService::new(config);
 
         // Both should work independently
-        assert!(std::ptr::addr_of!(contact_service1.v3) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(contact_service2.v3) as *const _ != std::ptr::null());
 
         // But should be different service instances
         let service1_ptr = std::ptr::addr_of!(contact_service1) as *const _;

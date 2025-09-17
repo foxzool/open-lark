@@ -80,19 +80,19 @@ mod tests {
     #[test]
     fn test_tenant_service_creation() {
         let config = create_test_config();
-        let service = TenantService::new(config.clone());
+        let _service = TenantService::new(config.clone());
 
-        assert_eq!(service.config.app_id, "test_app_id");
-        assert_eq!(service.config.app_secret, "test_app_secret");
+        assert_eq!(_service.config.app_id, "test_app_id");
+        assert_eq!(_service.config.app_secret, "test_app_secret");
     }
 
     #[test]
     fn test_tenant_service_new() {
         let config = create_test_config();
-        let service = TenantService::new(config);
+        let _service = TenantService::new(config);
 
         // Verify service is created properly
-        assert_eq!(service.config.app_id, "test_app_id");
+        assert_eq!(_service.config.app_id, "test_app_id");
     }
 
     #[test]

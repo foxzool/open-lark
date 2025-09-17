@@ -52,7 +52,7 @@
 //!     .build();
 //!
 //! // 获取任务服务（通过v2版本）
-//! // let task_service = &client.task.v2;
+//! // let _task_service = &client.task.v2;
 //!
 //! // 创建任务列表
 //! // let tasklist_request = CreateTasklistRequest::builder()
@@ -116,13 +116,11 @@ mod tests {
     #[test]
     fn test_task_module_structure() {
         // Test that all modules are properly exposed
-        assert!(true); // Basic structure test
     }
 
     #[test]
     fn test_models_import() {
         // Test that models are properly imported
         let _user_id_type = UserIdType::OpenId;
-        assert!(true);
     }
 }
