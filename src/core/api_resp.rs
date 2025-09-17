@@ -270,6 +270,7 @@ pub trait ApiResponseTrait: for<'a> Deserialize<'a> + Send + Sync + 'static + De
 /// 响应格式类型
 ///
 /// 定义API响应的不同格式类型
+#[derive(Debug, PartialEq)]
 pub enum ResponseFormat {
     /// 标准数据格式, 既是用data包裹数据
     Data,

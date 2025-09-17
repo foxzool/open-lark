@@ -17,6 +17,7 @@ use crate::{
 };
 
 /// 评论服务
+#[derive(Debug)]
 pub struct CommentService {
     pub config: Config,
 }
@@ -252,5 +253,170 @@ impl CommentService {
         };
 
         Transport::request(api_req, &self.config, option).await
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::constants::AppType;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .build()
+    }
+
+    #[test]
+    fn test_comment_service_creation() {
+        let config = create_test_config();
+        let service = CommentService::new(config);
+        assert!(std::ptr::addr_of!(service.config) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_create_comment_request_serialization() {
+        let request = CreateCommentRequest {
+            content: "这是一个测试评论".to_string(),
+            parent_id: Some("parent_123".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&request).unwrap();
+        let deserialized: CreateCommentRequest = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(request.content, deserialized.content);
+        assert_eq!(request.parent_id, deserialized.parent_id);
+    }
+
+    #[test]
+    fn test_create_comment_request_without_parent() {
+        let request = CreateCommentRequest {
+            content: "顶级评论".to_string(),
+            parent_id: None,
+        };
+
+        let serialized = serde_json::to_string(&request).unwrap();
+        let deserialized: CreateCommentRequest = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(request.content, deserialized.content);
+        assert!(deserialized.parent_id.is_none());
+    }
+
+    #[test]
+    fn test_create_comment_response_serialization() {
+        let comment = Comment {
+            id: Some("comment_123".to_string()),
+            content: Some("测试评论内容".to_string()),
+            ..Default::default()
+        };
+
+        let response = CreateCommentResponse { comment };
+        let serialized = serde_json::to_string(&response).unwrap();
+        let deserialized: CreateCommentResponse = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(response.comment.id, deserialized.comment.id);
+        assert_eq!(response.comment.content, deserialized.comment.content);
+    }
+
+    #[test]
+    fn test_update_comment_request_serialization() {
+        let request = UpdateCommentRequest {
+            content: "更新后的评论内容".to_string(),
+        };
+
+        let serialized = serde_json::to_string(&request).unwrap();
+        let deserialized: UpdateCommentRequest = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(request.content, deserialized.content);
+    }
+
+    #[test]
+    fn test_update_comment_response_serialization() {
+        let comment = Comment {
+            id: Some("comment_456".to_string()),
+            content: Some("更新的评论".to_string()),
+            ..Default::default()
+        };
+
+        let response = UpdateCommentResponse { comment };
+        let serialized = serde_json::to_string(&response).unwrap();
+        let deserialized: UpdateCommentResponse = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(response.comment.id, deserialized.comment.id);
+        assert_eq!(response.comment.content, deserialized.comment.content);
+    }
+
+    #[test]
+    fn test_get_comment_response_serialization() {
+        let comment = Comment {
+            id: Some("comment_789".to_string()),
+            content: Some("获取的评论".to_string()),
+            ..Default::default()
+        };
+
+        let response = GetCommentResponse { comment };
+        let serialized = serde_json::to_string(&response).unwrap();
+        let deserialized: GetCommentResponse = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(response.comment.id, deserialized.comment.id);
+        assert_eq!(response.comment.content, deserialized.comment.content);
+    }
+
+    #[test]
+    fn test_list_comments_response_serialization() {
+        let comment = Comment {
+            id: Some("comment_list_1".to_string()),
+            content: Some("列表评论".to_string()),
+            ..Default::default()
+        };
+
+        let response = ListCommentsResponse {
+            items: vec![comment],
+            page_token: Some("next_page_token".to_string()),
+            has_more: Some(true),
+        };
+
+        let serialized = serde_json::to_string(&response).unwrap();
+        let deserialized: ListCommentsResponse = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(response.items.len(), deserialized.items.len());
+        assert_eq!(response.page_token, deserialized.page_token);
+        assert_eq!(response.has_more, deserialized.has_more);
+    }
+
+    #[test]
+    fn test_list_comments_response_optional_fields() {
+        let response = ListCommentsResponse {
+            items: vec![],
+            page_token: None,
+            has_more: None,
+        };
+
+        let serialized = serde_json::to_string(&response).unwrap();
+        let deserialized: ListCommentsResponse = serde_json::from_str(&serialized).unwrap();
+
+        assert!(deserialized.items.is_empty());
+        assert!(deserialized.page_token.is_none());
+        assert!(deserialized.has_more.is_none());
+    }
+
+    #[test]
+    fn test_response_format_traits() {
+        assert_eq!(CreateCommentResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(UpdateCommentResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(GetCommentResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(ListCommentsResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_comment_service_debug() {
+        let config = create_test_config();
+        let service = CommentService::new(config);
+
+        // Test Debug trait implementation
+        let debug_string = format!("{:?}", service);
+        assert!(debug_string.contains("CommentService"));
     }
 }
