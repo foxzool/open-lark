@@ -12,3 +12,8 @@ Cargo.lock
 
 # Generated reports (CI/local analysis artifacts)
 /reports/
+
+# Code coverage files
+*.lcov
+coverage.lcov
+**/coverage.lcov
