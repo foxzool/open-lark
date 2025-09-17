@@ -256,7 +256,7 @@ mod tests {
         };
 
         let serialized = serde_json::to_string(&info).unwrap();
-        let deserialized: TenantProductAssignInfo = serde_json::from_str(&serialized).unwrap();
+        let _deserialized: TenantProductAssignInfo = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(info.service_status, Some("trial".to_string()));
         assert_eq!(info.product_name, Some("Trial Plan".to_string()));
@@ -276,7 +276,7 @@ mod tests {
         };
 
         let serialized = serde_json::to_string(&info).unwrap();
-        let deserialized: TenantProductAssignInfo = serde_json::from_str(&serialized).unwrap();
+        let _deserialized: TenantProductAssignInfo = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(info.service_status, Some("expired".to_string()));
         assert_eq!(info.assigned_seat_count, Some(0));

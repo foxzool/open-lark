@@ -704,7 +704,7 @@ mod tests {
     fn test_empty_response_serialization() {
         let response = EmptyResponse {};
         let serialized = serde_json::to_string(&response).unwrap();
-        let deserialized: EmptyResponse = serde_json::from_str(&serialized).unwrap();
+        let _deserialized: EmptyResponse = serde_json::from_str(&serialized).unwrap();
 
         // Just ensure it serializes and deserializes without error
         assert_eq!(serialized, "{}");
