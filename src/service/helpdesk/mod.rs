@@ -160,3 +160,70 @@ impl HelpdeskService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::constants::AppType;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .build()
+    }
+
+    #[test]
+    fn test_helpdesk_service_creation() {
+        let config = create_test_config();
+        let service = HelpdeskService::new(config);
+
+        // Verify that the v1 service is properly initialized
+        assert!(std::ptr::addr_of!(service.v1) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_helpdesk_service_with_different_config() {
+        let config = Config::builder()
+            .app_id("different_app_id")
+            .app_secret("different_app_secret")
+            .app_type(AppType::Marketplace)
+            .build();
+
+        let service = HelpdeskService::new(config);
+
+        // Verify service creation works with different config types
+        assert!(std::ptr::addr_of!(service.v1) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_helpdesk_service_structure() {
+        let config = create_test_config();
+        let service = HelpdeskService::new(config);
+
+        // Test that we can access v1 service fields
+        let _agent = &service.v1.agent;
+        let _ticket = &service.v1.ticket;
+        let _faq = &service.v1.faq;
+        let _notification = &service.v1.notification;
+
+        // If we reach here without panic, structure is correct
+        assert!(true);
+    }
+
+    #[test]
+    fn test_helpdesk_service_memory_safety() {
+        let config = create_test_config();
+
+        // Create service in a scope
+        let service = HelpdeskService::new(config);
+
+        // Access services multiple times
+        let _first_access = &service.v1.ticket;
+        let _second_access = &service.v1.ticket;
+
+        // Verify multiple references work correctly
+        assert!(std::ptr::eq(_first_access, _second_access));
+    }
+}

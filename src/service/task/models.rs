@@ -156,7 +156,7 @@ pub struct Tasklist {
 }
 
 /// 评论
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Comment {
     /// 评论ID
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -182,7 +182,7 @@ pub struct Comment {
 }
 
 /// 附件
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Attachment {
     /// 附件GUID
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -321,4 +321,203 @@ pub struct ActivitySubscription {
     /// 更新时间
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json;
+
+    #[test]
+    fn test_user_id_type_as_str() {
+        assert_eq!(UserIdType::OpenId.as_str(), "open_id");
+        assert_eq!(UserIdType::UserId.as_str(), "user_id");
+        assert_eq!(UserIdType::UnionId.as_str(), "union_id");
+    }
+
+    #[test]
+    fn test_user_id_type_serialization() {
+        let open_id = UserIdType::OpenId;
+        let serialized = serde_json::to_string(&open_id).unwrap();
+        assert_eq!(serialized, "\"open_id\"");
+
+        let user_id = UserIdType::UserId;
+        let serialized = serde_json::to_string(&user_id).unwrap();
+        assert_eq!(serialized, "\"user_id\"");
+
+        let union_id = UserIdType::UnionId;
+        let serialized = serde_json::to_string(&union_id).unwrap();
+        assert_eq!(serialized, "\"union_id\"");
+    }
+
+    #[test]
+    fn test_user_id_type_deserialization() {
+        let deserialized: UserIdType = serde_json::from_str("\"open_id\"").unwrap();
+        assert!(matches!(deserialized, UserIdType::OpenId));
+
+        let deserialized: UserIdType = serde_json::from_str("\"user_id\"").unwrap();
+        assert!(matches!(deserialized, UserIdType::UserId));
+
+        let deserialized: UserIdType = serde_json::from_str("\"union_id\"").unwrap();
+        assert!(matches!(deserialized, UserIdType::UnionId));
+    }
+
+    #[test]
+    fn test_task_serialization() {
+        let task = Task {
+            guid: Some("task123".to_string()),
+            summary: Some("Test Task".to_string()),
+            description: Some("This is a test task".to_string()),
+            due: Some(TaskDue {
+                timestamp: Some("2023-12-31T23:59:59Z".to_string()),
+                is_all_day: Some(false),
+            }),
+            start: Some(TaskStart {
+                timestamp: Some("2023-01-01T00:00:00Z".to_string()),
+                is_all_day: Some(false),
+            }),
+            completed_at: None,
+            members: Some(vec![TaskMember {
+                id: Some("user123".to_string()),
+                type_: Some("user".to_string()),
+                role: Some("assignee".to_string()),
+            }]),
+            repeat_rule: None,
+            custom_complete: None,
+            created_at: Some("2023-01-01T00:00:00Z".to_string()),
+            updated_at: Some("2023-01-01T01:00:00Z".to_string()),
+            status: Some("pending".to_string()),
+            workflow_state: Some("active".to_string()),
+            source: Some(1),
+            url: Some("https://example.com/task/123".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&task).unwrap();
+        let deserialized: Task = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(task.guid, deserialized.guid);
+        assert_eq!(task.summary, deserialized.summary);
+        assert_eq!(task.description, deserialized.description);
+        assert_eq!(task.status, deserialized.status);
+    }
+
+    #[test]
+    fn test_task_due_serialization() {
+        let due = TaskDue {
+            timestamp: Some("2023-12-31T23:59:59Z".to_string()),
+            is_all_day: Some(true),
+        };
+
+        let serialized = serde_json::to_string(&due).unwrap();
+        let deserialized: TaskDue = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(due.timestamp, deserialized.timestamp);
+        assert_eq!(due.is_all_day, deserialized.is_all_day);
+    }
+
+    #[test]
+    fn test_task_member_serialization() {
+        let member = TaskMember {
+            id: Some("user123".to_string()),
+            type_: Some("user".to_string()),
+            role: Some("assignee".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&member).unwrap();
+        let deserialized: TaskMember = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(member.id, deserialized.id);
+        assert_eq!(member.type_, deserialized.type_);
+        assert_eq!(member.role, deserialized.role);
+    }
+
+    #[test]
+    fn test_activity_subscription_serialization() {
+        let subscription = ActivitySubscription {
+            guid: Some("sub123".to_string()),
+            name: Some("Task Updates".to_string()),
+            subscribers: Some(vec![TaskMember {
+                id: Some("user123".to_string()),
+                type_: Some("user".to_string()),
+                role: Some("subscriber".to_string()),
+            }]),
+            include_completed: Some(true),
+            created_at: Some("2023-01-01T00:00:00Z".to_string()),
+            updated_at: Some("2023-01-01T01:00:00Z".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&subscription).unwrap();
+        let deserialized: ActivitySubscription = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(subscription.guid, deserialized.guid);
+        assert_eq!(subscription.name, deserialized.name);
+        assert_eq!(subscription.include_completed, deserialized.include_completed);
+    }
+
+    #[test]
+    fn test_models_with_none_values() {
+        let task = Task {
+            guid: None,
+            summary: None,
+            description: None,
+            due: None,
+            start: None,
+            completed_at: None,
+            members: None,
+            repeat_rule: None,
+            custom_complete: None,
+            created_at: None,
+            updated_at: None,
+            status: None,
+            workflow_state: None,
+            source: None,
+            url: None,
+        };
+
+        let serialized = serde_json::to_string(&task).unwrap();
+        assert_eq!(serialized, "{}");
+
+        let deserialized: Task = serde_json::from_str("{}").unwrap();
+        assert_eq!(deserialized.guid, None);
+        assert_eq!(deserialized.summary, None);
+    }
+
+    #[test]
+    fn test_debug_trait_for_models() {
+        let task = Task {
+            guid: Some("task123".to_string()),
+            summary: Some("Test".to_string()),
+            description: None,
+            due: None,
+            start: None,
+            completed_at: None,
+            members: None,
+            repeat_rule: None,
+            custom_complete: None,
+            created_at: None,
+            updated_at: None,
+            status: None,
+            workflow_state: None,
+            source: None,
+            url: None,
+        };
+
+        let debug_output = format!("{:?}", task);
+        assert!(debug_output.contains("Task"));
+        assert!(debug_output.contains("task123"));
+    }
+
+    #[test]
+    fn test_clone_trait_for_models() {
+        let original_member = TaskMember {
+            id: Some("user123".to_string()),
+            type_: Some("user".to_string()),
+            role: Some("assignee".to_string()),
+        };
+
+        let cloned_member = original_member.clone();
+        assert_eq!(original_member.id, cloned_member.id);
+        assert_eq!(original_member.type_, cloned_member.type_);
+        assert_eq!(original_member.role, cloned_member.role);
+    }
 }
