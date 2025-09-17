@@ -201,7 +201,9 @@ mod tests {
 
         // Verify that all services are properly initialized
         assert!(std::ptr::addr_of!(service.document_ai) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(service.optical_char_recognition) as *const _ != std::ptr::null());
+        assert!(
+            std::ptr::addr_of!(service.optical_char_recognition) as *const _ != std::ptr::null()
+        );
         assert!(std::ptr::addr_of!(service.speech_to_text) as *const _ != std::ptr::null());
         assert!(std::ptr::addr_of!(service.translation) as *const _ != std::ptr::null());
     }
@@ -218,7 +220,9 @@ mod tests {
 
         // Verify service creation works with different config types
         assert!(std::ptr::addr_of!(service.document_ai) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(service.optical_char_recognition) as *const _ != std::ptr::null());
+        assert!(
+            std::ptr::addr_of!(service.optical_char_recognition) as *const _ != std::ptr::null()
+        );
         assert!(std::ptr::addr_of!(service.speech_to_text) as *const _ != std::ptr::null());
         assert!(std::ptr::addr_of!(service.translation) as *const _ != std::ptr::null());
     }

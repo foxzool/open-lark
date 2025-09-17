@@ -245,7 +245,10 @@ mod tests {
         let service1_ptr = std::ptr::addr_of!(vc_service1) as *const _;
         let service2_ptr = std::ptr::addr_of!(vc_service2) as *const _;
 
-        assert_ne!(service1_ptr, service2_ptr, "Services should be independent instances");
+        assert_ne!(
+            service1_ptr, service2_ptr,
+            "Services should be independent instances"
+        );
 
         // Each service should have valid v1 API
         assert!(std::ptr::addr_of!(vc_service1.v1) as *const _ != std::ptr::null());

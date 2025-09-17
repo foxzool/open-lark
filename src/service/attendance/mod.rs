@@ -194,11 +194,18 @@ mod tests {
     #[test]
     fn test_attendance_service_multiple_instances() {
         let configs = vec![
-            Config::builder().app_id("app1").app_secret("secret1").build(),
-            Config::builder().app_id("app2").app_secret("secret2")
+            Config::builder()
+                .app_id("app1")
+                .app_secret("secret1")
+                .build(),
+            Config::builder()
+                .app_id("app2")
+                .app_secret("secret2")
                 .req_timeout(std::time::Duration::from_millis(8000))
                 .build(),
-            Config::builder().app_id("app3").app_secret("secret3")
+            Config::builder()
+                .app_id("app3")
+                .app_secret("secret3")
                 .enable_token_cache(false)
                 .build(),
         ];
@@ -231,8 +238,18 @@ mod tests {
         let test_cases = vec![
             ("basic", "secret", None, None),
             ("timeout", "secret", Some(10000), None),
-            ("custom_url", "secret", None, Some("https://custom.test.com")),
-            ("full_custom", "secret", Some(20000), Some("https://full.test.com")),
+            (
+                "custom_url",
+                "secret",
+                None,
+                Some("https://custom.test.com"),
+            ),
+            (
+                "full_custom",
+                "secret",
+                Some(20000),
+                Some("https://full.test.com"),
+            ),
         ];
 
         for (app_id, app_secret, timeout, base_url) in test_cases {

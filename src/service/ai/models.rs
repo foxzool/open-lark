@@ -466,7 +466,11 @@ mod tests {
                 end_time: Some("2020-03".to_string()),
                 description: Some("负责后端开发工作".to_string()),
             }]),
-            skills: Some(vec!["Python".to_string(), "Java".to_string(), "Rust".to_string()]),
+            skills: Some(vec![
+                "Python".to_string(),
+                "Java".to_string(),
+                "Rust".to_string(),
+            ]),
         };
 
         let serialized = serde_json::to_string(&resume).unwrap();
@@ -475,9 +479,18 @@ mod tests {
         assert_eq!(resume.name, deserialized.name);
         assert_eq!(resume.phone, deserialized.phone);
         assert_eq!(resume.email, deserialized.email);
-        assert_eq!(resume.education.as_ref().unwrap().len(), deserialized.education.as_ref().unwrap().len());
-        assert_eq!(resume.work_experience.as_ref().unwrap().len(), deserialized.work_experience.as_ref().unwrap().len());
-        assert_eq!(resume.skills.as_ref().unwrap().len(), deserialized.skills.as_ref().unwrap().len());
+        assert_eq!(
+            resume.education.as_ref().unwrap().len(),
+            deserialized.education.as_ref().unwrap().len()
+        );
+        assert_eq!(
+            resume.work_experience.as_ref().unwrap().len(),
+            deserialized.work_experience.as_ref().unwrap().len()
+        );
+        assert_eq!(
+            resume.skills.as_ref().unwrap().len(),
+            deserialized.skills.as_ref().unwrap().len()
+        );
     }
 
     #[test]
@@ -591,7 +604,10 @@ mod tests {
         let deserialized: OcrResult = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(ocr_result.text, deserialized.text);
-        assert_eq!(ocr_result.text_detection.as_ref().unwrap().len(), deserialized.text_detection.as_ref().unwrap().len());
+        assert_eq!(
+            ocr_result.text_detection.as_ref().unwrap().len(),
+            deserialized.text_detection.as_ref().unwrap().len()
+        );
     }
 
     #[test]
@@ -604,7 +620,10 @@ mod tests {
         let serialized = serde_json::to_string(&speech_result).unwrap();
         let deserialized: SpeechRecognizeResult = serde_json::from_str(&serialized).unwrap();
 
-        assert_eq!(speech_result.recognition_text, deserialized.recognition_text);
+        assert_eq!(
+            speech_result.recognition_text,
+            deserialized.recognition_text
+        );
         assert_eq!(speech_result.confidence, deserialized.confidence);
     }
 
@@ -618,8 +637,14 @@ mod tests {
         let serialized = serde_json::to_string(&translate_result).unwrap();
         let deserialized: TranslateResult = serde_json::from_str(&serialized).unwrap();
 
-        assert_eq!(translate_result.translated_text, deserialized.translated_text);
-        assert_eq!(translate_result.detected_language, deserialized.detected_language);
+        assert_eq!(
+            translate_result.translated_text,
+            deserialized.translated_text
+        );
+        assert_eq!(
+            translate_result.detected_language,
+            deserialized.detected_language
+        );
     }
 
     #[test]

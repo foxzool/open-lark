@@ -296,7 +296,10 @@ mod tests {
 
     #[test]
     fn test_response_format_traits() {
-        assert_eq!(UploadAttachmentResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            UploadAttachmentResponse::data_format(),
+            ResponseFormat::Data
+        );
         assert_eq!(ListAttachmentsResponse::data_format(), ResponseFormat::Data);
         assert_eq!(GetAttachmentResponse::data_format(), ResponseFormat::Data);
     }

@@ -414,68 +414,164 @@ mod tests {
 
     #[test]
     fn test_agent_status_serialization() {
-        assert_eq!(serde_json::to_string(&AgentStatus::Online).unwrap(), "\"online\"");
-        assert_eq!(serde_json::to_string(&AgentStatus::Offline).unwrap(), "\"offline\"");
-        assert_eq!(serde_json::to_string(&AgentStatus::Busy).unwrap(), "\"busy\"");
-        assert_eq!(serde_json::to_string(&AgentStatus::Away).unwrap(), "\"away\"");
+        assert_eq!(
+            serde_json::to_string(&AgentStatus::Online).unwrap(),
+            "\"online\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AgentStatus::Offline).unwrap(),
+            "\"offline\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AgentStatus::Busy).unwrap(),
+            "\"busy\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AgentStatus::Away).unwrap(),
+            "\"away\""
+        );
     }
 
     #[test]
     fn test_repeat_type_serialization() {
-        assert_eq!(serde_json::to_string(&RepeatType::None).unwrap(), "\"none\"");
-        assert_eq!(serde_json::to_string(&RepeatType::Daily).unwrap(), "\"daily\"");
-        assert_eq!(serde_json::to_string(&RepeatType::Weekly).unwrap(), "\"weekly\"");
-        assert_eq!(serde_json::to_string(&RepeatType::Monthly).unwrap(), "\"monthly\"");
+        assert_eq!(
+            serde_json::to_string(&RepeatType::None).unwrap(),
+            "\"none\""
+        );
+        assert_eq!(
+            serde_json::to_string(&RepeatType::Daily).unwrap(),
+            "\"daily\""
+        );
+        assert_eq!(
+            serde_json::to_string(&RepeatType::Weekly).unwrap(),
+            "\"weekly\""
+        );
+        assert_eq!(
+            serde_json::to_string(&RepeatType::Monthly).unwrap(),
+            "\"monthly\""
+        );
     }
 
     #[test]
     fn test_ticket_status_serialization() {
-        assert_eq!(serde_json::to_string(&TicketStatus::Pending).unwrap(), "\"pending\"");
-        assert_eq!(serde_json::to_string(&TicketStatus::Processing).unwrap(), "\"processing\"");
-        assert_eq!(serde_json::to_string(&TicketStatus::Solved).unwrap(), "\"solved\"");
-        assert_eq!(serde_json::to_string(&TicketStatus::Closed).unwrap(), "\"closed\"");
+        assert_eq!(
+            serde_json::to_string(&TicketStatus::Pending).unwrap(),
+            "\"pending\""
+        );
+        assert_eq!(
+            serde_json::to_string(&TicketStatus::Processing).unwrap(),
+            "\"processing\""
+        );
+        assert_eq!(
+            serde_json::to_string(&TicketStatus::Solved).unwrap(),
+            "\"solved\""
+        );
+        assert_eq!(
+            serde_json::to_string(&TicketStatus::Closed).unwrap(),
+            "\"closed\""
+        );
     }
 
     #[test]
     fn test_ticket_priority_serialization() {
-        assert_eq!(serde_json::to_string(&TicketPriority::Low).unwrap(), "\"low\"");
-        assert_eq!(serde_json::to_string(&TicketPriority::Medium).unwrap(), "\"medium\"");
-        assert_eq!(serde_json::to_string(&TicketPriority::High).unwrap(), "\"high\"");
-        assert_eq!(serde_json::to_string(&TicketPriority::Urgent).unwrap(), "\"urgent\"");
+        assert_eq!(
+            serde_json::to_string(&TicketPriority::Low).unwrap(),
+            "\"low\""
+        );
+        assert_eq!(
+            serde_json::to_string(&TicketPriority::Medium).unwrap(),
+            "\"medium\""
+        );
+        assert_eq!(
+            serde_json::to_string(&TicketPriority::High).unwrap(),
+            "\"high\""
+        );
+        assert_eq!(
+            serde_json::to_string(&TicketPriority::Urgent).unwrap(),
+            "\"urgent\""
+        );
     }
 
     #[test]
     fn test_message_type_serialization() {
-        assert_eq!(serde_json::to_string(&MessageType::Text).unwrap(), "\"text\"");
-        assert_eq!(serde_json::to_string(&MessageType::Image).unwrap(), "\"image\"");
-        assert_eq!(serde_json::to_string(&MessageType::File).unwrap(), "\"file\"");
-        assert_eq!(serde_json::to_string(&MessageType::Card).unwrap(), "\"card\"");
+        assert_eq!(
+            serde_json::to_string(&MessageType::Text).unwrap(),
+            "\"text\""
+        );
+        assert_eq!(
+            serde_json::to_string(&MessageType::Image).unwrap(),
+            "\"image\""
+        );
+        assert_eq!(
+            serde_json::to_string(&MessageType::File).unwrap(),
+            "\"file\""
+        );
+        assert_eq!(
+            serde_json::to_string(&MessageType::Card).unwrap(),
+            "\"card\""
+        );
     }
 
     #[test]
     fn test_faq_status_serialization() {
-        assert_eq!(serde_json::to_string(&FaqStatus::Draft).unwrap(), "\"draft\"");
-        assert_eq!(serde_json::to_string(&FaqStatus::Published).unwrap(), "\"published\"");
-        assert_eq!(serde_json::to_string(&FaqStatus::Archived).unwrap(), "\"archived\"");
+        assert_eq!(
+            serde_json::to_string(&FaqStatus::Draft).unwrap(),
+            "\"draft\""
+        );
+        assert_eq!(
+            serde_json::to_string(&FaqStatus::Published).unwrap(),
+            "\"published\""
+        );
+        assert_eq!(
+            serde_json::to_string(&FaqStatus::Archived).unwrap(),
+            "\"archived\""
+        );
     }
 
     #[test]
     fn test_notification_status_serialization() {
-        assert_eq!(serde_json::to_string(&NotificationStatus::Draft).unwrap(), "\"draft\"");
-        assert_eq!(serde_json::to_string(&NotificationStatus::PendingApproval).unwrap(), "\"pending_approval\"");
-        assert_eq!(serde_json::to_string(&NotificationStatus::Approved).unwrap(), "\"approved\"");
-        assert_eq!(serde_json::to_string(&NotificationStatus::Sent).unwrap(), "\"sent\"");
-        assert_eq!(serde_json::to_string(&NotificationStatus::Cancelled).unwrap(), "\"cancelled\"");
+        assert_eq!(
+            serde_json::to_string(&NotificationStatus::Draft).unwrap(),
+            "\"draft\""
+        );
+        assert_eq!(
+            serde_json::to_string(&NotificationStatus::PendingApproval).unwrap(),
+            "\"pending_approval\""
+        );
+        assert_eq!(
+            serde_json::to_string(&NotificationStatus::Approved).unwrap(),
+            "\"approved\""
+        );
+        assert_eq!(
+            serde_json::to_string(&NotificationStatus::Sent).unwrap(),
+            "\"sent\""
+        );
+        assert_eq!(
+            serde_json::to_string(&NotificationStatus::Cancelled).unwrap(),
+            "\"cancelled\""
+        );
     }
 
     #[test]
     fn test_field_type_serialization() {
         assert_eq!(serde_json::to_string(&FieldType::Text).unwrap(), "\"text\"");
-        assert_eq!(serde_json::to_string(&FieldType::Number).unwrap(), "\"number\"");
+        assert_eq!(
+            serde_json::to_string(&FieldType::Number).unwrap(),
+            "\"number\""
+        );
         assert_eq!(serde_json::to_string(&FieldType::Date).unwrap(), "\"date\"");
-        assert_eq!(serde_json::to_string(&FieldType::SingleSelect).unwrap(), "\"single_select\"");
-        assert_eq!(serde_json::to_string(&FieldType::MultiSelect).unwrap(), "\"multi_select\"");
-        assert_eq!(serde_json::to_string(&FieldType::Textarea).unwrap(), "\"textarea\"");
+        assert_eq!(
+            serde_json::to_string(&FieldType::SingleSelect).unwrap(),
+            "\"single_select\""
+        );
+        assert_eq!(
+            serde_json::to_string(&FieldType::MultiSelect).unwrap(),
+            "\"multi_select\""
+        );
+        assert_eq!(
+            serde_json::to_string(&FieldType::Textarea).unwrap(),
+            "\"textarea\""
+        );
     }
 
     #[test]
@@ -573,7 +669,11 @@ mod tests {
             field_type: Some(FieldType::SingleSelect),
             required: Some(true),
             default_value: Some("Medium".to_string()),
-            options: Some(vec!["Low".to_string(), "Medium".to_string(), "High".to_string()]),
+            options: Some(vec![
+                "Low".to_string(),
+                "Medium".to_string(),
+                "High".to_string(),
+            ]),
         };
 
         let serialized = serde_json::to_string(&field).unwrap();

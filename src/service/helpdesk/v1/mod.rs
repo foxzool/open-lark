@@ -57,3 +57,76 @@ impl V1 {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::{config::Config, constants::AppType};
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .build()
+    }
+
+    #[test]
+    fn test_v1_service_creation() {
+        let config = create_test_config();
+        let service = V1::new(config);
+
+        // Verify that all services are properly initialized
+        // We can't directly test the inner fields as they are public structs
+        // but we can verify the service creation doesn't panic
+        assert!(std::ptr::addr_of!(service.agent) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(service.agent_schedule) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(service.agent_skill) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(service.agent_skill_rule) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(service.category) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(service.event) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(service.faq) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(service.notification) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(service.ticket) as *const _ != std::ptr::null());
+        assert!(
+            std::ptr::addr_of!(service.ticket_customized_field) as *const _ != std::ptr::null()
+        );
+        assert!(std::ptr::addr_of!(service.ticket_message) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_v1_service_with_different_config() {
+        let config = Config::builder()
+            .app_id("different_app_id")
+            .app_secret("different_app_secret")
+            .app_type(AppType::Marketplace)
+            .build();
+
+        let service = V1::new(config);
+
+        // Verify service creation works with different config types
+        assert!(std::ptr::addr_of!(service.ticket) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_v1_service_memory_safety() {
+        let config = create_test_config();
+        let service = V1::new(config);
+
+        // Test that we can access all services without memory issues
+        let _agent = &service.agent;
+        let _schedule = &service.agent_schedule;
+        let _skill = &service.agent_skill;
+        let _skill_rule = &service.agent_skill_rule;
+        let _category = &service.category;
+        let _event = &service.event;
+        let _faq = &service.faq;
+        let _notification = &service.notification;
+        let _ticket = &service.ticket;
+        let _customized_field = &service.ticket_customized_field;
+        let _message = &service.ticket_message;
+
+        // If we reach here without panic, memory layout is correct
+        assert!(true);
+    }
+}

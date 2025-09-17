@@ -323,7 +323,10 @@ mod tests {
     #[test]
     fn test_department_id_type_as_str() {
         assert_eq!(DepartmentIdType::DepartmentId.as_str(), "department_id");
-        assert_eq!(DepartmentIdType::OpenDepartmentId.as_str(), "open_department_id");
+        assert_eq!(
+            DepartmentIdType::OpenDepartmentId.as_str(),
+            "open_department_id"
+        );
     }
 
     #[test]
@@ -389,8 +392,14 @@ mod tests {
         assert_eq!(approval.approval_code, deserialized.approval_code);
         assert_eq!(approval.approval_name, deserialized.approval_name);
         assert_eq!(approval.description, deserialized.description);
-        assert_eq!(approval.creator.as_ref().unwrap().user_id, deserialized.creator.as_ref().unwrap().user_id);
-        assert_eq!(approval.form.as_ref().unwrap().len(), deserialized.form.as_ref().unwrap().len());
+        assert_eq!(
+            approval.creator.as_ref().unwrap().user_id,
+            deserialized.creator.as_ref().unwrap().user_id
+        );
+        assert_eq!(
+            approval.form.as_ref().unwrap().len(),
+            deserialized.form.as_ref().unwrap().len()
+        );
     }
 
     #[test]
@@ -441,8 +450,14 @@ mod tests {
         assert_eq!(instance.instance_code, deserialized.instance_code);
         assert_eq!(instance.approval_code, deserialized.approval_code);
         assert_eq!(instance.status, deserialized.status);
-        assert_eq!(instance.initiator.as_ref().unwrap().user_id, deserialized.initiator.as_ref().unwrap().user_id);
-        assert_eq!(instance.timeline.as_ref().unwrap().len(), deserialized.timeline.as_ref().unwrap().len());
+        assert_eq!(
+            instance.initiator.as_ref().unwrap().user_id,
+            deserialized.initiator.as_ref().unwrap().user_id
+        );
+        assert_eq!(
+            instance.timeline.as_ref().unwrap().len(),
+            deserialized.timeline.as_ref().unwrap().len()
+        );
     }
 
     #[test]
@@ -479,8 +494,14 @@ mod tests {
         assert_eq!(task.task_id, deserialized.task_id);
         assert_eq!(task.instance_code, deserialized.instance_code);
         assert_eq!(task.status, deserialized.status);
-        assert_eq!(task.approver.as_ref().unwrap().user_id, deserialized.approver.as_ref().unwrap().user_id);
-        assert_eq!(task.task_links.as_ref().unwrap().len(), deserialized.task_links.as_ref().unwrap().len());
+        assert_eq!(
+            task.approver.as_ref().unwrap().user_id,
+            deserialized.approver.as_ref().unwrap().user_id
+        );
+        assert_eq!(
+            task.task_links.as_ref().unwrap().len(),
+            deserialized.task_links.as_ref().unwrap().len()
+        );
     }
 
     #[test]
@@ -581,8 +602,14 @@ mod tests {
 
         assert_eq!(comment.comment_id, deserialized.comment_id);
         assert_eq!(comment.content, deserialized.content);
-        assert_eq!(comment.commenter.as_ref().unwrap().user_id, deserialized.commenter.as_ref().unwrap().user_id);
-        assert_eq!(comment.attachments.as_ref().unwrap().len(), deserialized.attachments.as_ref().unwrap().len());
+        assert_eq!(
+            comment.commenter.as_ref().unwrap().user_id,
+            deserialized.commenter.as_ref().unwrap().user_id
+        );
+        assert_eq!(
+            comment.attachments.as_ref().unwrap().len(),
+            deserialized.attachments.as_ref().unwrap().len()
+        );
     }
 
     #[test]

@@ -155,11 +155,18 @@ mod tests {
     #[test]
     fn test_contact_service_multiple_instances() {
         let configs = vec![
-            Config::builder().app_id("app1").app_secret("secret1").build(),
-            Config::builder().app_id("app2").app_secret("secret2")
+            Config::builder()
+                .app_id("app1")
+                .app_secret("secret1")
+                .build(),
+            Config::builder()
+                .app_id("app2")
+                .app_secret("secret2")
                 .req_timeout(std::time::Duration::from_millis(12000))
                 .build(),
-            Config::builder().app_id("app3").app_secret("secret3")
+            Config::builder()
+                .app_id("app3")
+                .app_secret("secret3")
                 .base_url("https://custom.contact.com")
                 .build(),
         ];

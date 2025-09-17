@@ -663,3 +663,446 @@ impl ApiResponseTrait for ListUsersResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{core::config::Config, service::contact::models::User};
+
+    fn create_test_config() -> Config {
+        Config {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_app_secret".to_string(),
+            base_url: "https://test.example.com".to_string(),
+            ..Default::default()
+        }
+    }
+
+    fn create_test_user() -> User {
+        use crate::service::contact::models::{Avatar, UserCustomAttr, UserStatus};
+
+        User {
+            user_id: Some("user123".to_string()),
+            name: Some("Test User".to_string()),
+            en_name: Some("test_user".to_string()),
+            email: Some("test@example.com".to_string()),
+            mobile: Some("+86138000000".to_string()),
+            mobile_visible: Some(true),
+            gender: Some(1),
+            avatar: Some(Avatar {
+                avatar_72: Some("https://example.com/avatar_72.jpg".to_string()),
+                avatar_240: Some("https://example.com/avatar_240.jpg".to_string()),
+                avatar_640: Some("https://example.com/avatar_640.jpg".to_string()),
+                avatar_origin: Some("https://example.com/avatar_origin.jpg".to_string()),
+            }),
+            status: Some(UserStatus {
+                is_frozen: Some(false),
+                is_resigned: Some(false),
+                is_activated: Some(true),
+                is_exited: Some(false),
+                is_unjoin: Some(false),
+            }),
+            department_ids: Some(vec!["dept1".to_string(), "dept2".to_string()]),
+            leader_user_id: Some("leader123".to_string()),
+            city: Some("Beijing".to_string()),
+            country: Some("China".to_string()),
+            work_station: Some("Workstation 101".to_string()),
+            join_time: Some(1634567890),
+            employee_no: Some("EMP001".to_string()),
+            employee_type: Some(1),
+            custom_attrs: Some(vec![UserCustomAttr {
+                r#type: Some("text".to_string()),
+                id: Some("custom_1".to_string()),
+                value: Some(serde_json::Value::String("test_value".to_string())),
+            }]),
+            enterprise_email: Some("test@company.com".to_string()),
+            job_title: Some("Engineer".to_string()),
+            ..Default::default()
+        }
+    }
+
+    #[test]
+    fn test_user_service_new() {
+        let config = create_test_config();
+        let service = UserService::new(config.clone());
+
+        assert_eq!(service.config.app_id, config.app_id);
+        assert_eq!(service.config.app_secret, config.app_secret);
+        assert_eq!(service.config.base_url, config.base_url);
+    }
+
+    #[test]
+    fn test_create_user_request_serialization() {
+        let user = create_test_user();
+        let request = CreateUserRequest {
+            user: user.clone(),
+            user_id_type: Some("open_id".to_string()),
+            department_id_type: Some("department_id".to_string()),
+        };
+
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("test@example.com"));
+        assert!(json.contains("Test User"));
+        assert!(json.contains("open_id"));
+    }
+
+    #[test]
+    fn test_create_user_response_deserialization() {
+        let json = r#"{
+            "user": {
+                "user_id": "user123",
+                "name": "Test User",
+                "email": "test@example.com",
+                "mobile": "+86138000000"
+            }
+        }"#;
+
+        let response: CreateUserResponse = serde_json::from_str(json).unwrap();
+        assert_eq!(response.user.user_id, Some("user123".to_string()));
+        assert_eq!(response.user.name, Some("Test User".to_string()));
+        assert_eq!(response.user.email, Some("test@example.com".to_string()));
+    }
+
+    #[test]
+    fn test_create_user_builder() {
+        let user = create_test_user();
+        let builder = CreateUserBuilder::new()
+            .user(user.clone())
+            .user_id_type("open_id")
+            .department_id_type("department_id");
+
+        let request = builder.build();
+        assert_eq!(request.user.name, user.name);
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
+        assert_eq!(
+            request.department_id_type,
+            Some("department_id".to_string())
+        );
+    }
+
+    #[test]
+    fn test_create_user_builder_default() {
+        let builder = CreateUserBuilder::new();
+        let request = builder.build();
+
+        assert_eq!(request.user.name, None);
+        assert_eq!(request.user_id_type, None);
+        assert_eq!(request.department_id_type, None);
+    }
+
+    #[test]
+    fn test_patch_user_request_serialization() {
+        let user = create_test_user();
+        let request = PatchUserRequest {
+            user: user.clone(),
+            user_id_type: Some("user_id".to_string()),
+            department_id_type: None,
+        };
+
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("Test User"));
+        assert!(json.contains("user_id"));
+        assert!(!json.contains("department_id_type"));
+    }
+
+    #[test]
+    fn test_update_user_id_request_serialization() {
+        let request = UpdateUserIdRequest {
+            new_user_id: "new_user_123".to_string(),
+            user_id_type: Some("open_id".to_string()),
+        };
+
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("new_user_123"));
+        assert!(json.contains("open_id"));
+    }
+
+    #[test]
+    fn test_get_user_request_default() {
+        let request = GetUserRequest::default();
+        assert_eq!(request.user_id_type, None);
+        assert_eq!(request.department_id_type, None);
+    }
+
+    #[test]
+    fn test_batch_get_users_request() {
+        let request = BatchGetUsersRequest {
+            user_ids: vec![
+                "user1".to_string(),
+                "user2".to_string(),
+                "user3".to_string(),
+            ],
+            user_id_type: Some("open_id".to_string()),
+            department_id_type: Some("department_id".to_string()),
+        };
+
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("user1"));
+        assert!(json.contains("user2"));
+        assert!(json.contains("user3"));
+        assert_eq!(request.user_ids.len(), 3);
+    }
+
+    #[test]
+    fn test_batch_get_users_response() {
+        let user1 = create_test_user();
+        let mut user2 = create_test_user();
+        user2.user_id = Some("user456".to_string());
+        user2.name = Some("Another User".to_string());
+
+        let response = BatchGetUsersResponse {
+            items: vec![user1, user2],
+        };
+
+        assert_eq!(response.items.len(), 2);
+        assert_eq!(response.items[0].user_id, Some("user123".to_string()));
+        assert_eq!(response.items[1].user_id, Some("user456".to_string()));
+    }
+
+    #[test]
+    fn test_find_users_by_department_request() {
+        let request = FindUsersByDepartmentRequest {
+            department_id: Some("dept123".to_string()),
+            user_id_type: Some("open_id".to_string()),
+            department_id_type: Some("department_id".to_string()),
+            page_size: Some(50),
+            page_token: Some("token123".to_string()),
+        };
+
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("dept123"));
+        assert!(json.contains("50"));
+        assert!(json.contains("token123"));
+    }
+
+    #[test]
+    fn test_find_users_by_department_response() {
+        let user = create_test_user();
+        let response = FindUsersByDepartmentResponse {
+            items: vec![user],
+            has_more: Some(true),
+            page_token: Some("next_token".to_string()),
+        };
+
+        assert_eq!(response.items.len(), 1);
+        assert_eq!(response.has_more, Some(true));
+        assert_eq!(response.page_token, Some("next_token".to_string()));
+    }
+
+    #[test]
+    fn test_batch_get_user_id_request() {
+        let request = BatchGetUserIdRequest {
+            emails: Some(vec![
+                "test1@example.com".to_string(),
+                "test2@example.com".to_string(),
+            ]),
+            mobiles: Some(vec!["+86138000001".to_string(), "+86138000002".to_string()]),
+            include_resigned: Some(true),
+        };
+
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("test1@example.com"));
+        assert!(json.contains("+86138000001"));
+        assert!(json.contains("true"));
+    }
+
+    #[test]
+    fn test_user_id_info_serialization() {
+        let user_info = UserIdInfo {
+            user_id: Some("user123".to_string()),
+            email: Some("test@example.com".to_string()),
+            mobile: Some("+86138000000".to_string()),
+        };
+
+        let json = serde_json::to_string(&user_info).unwrap();
+        let deserialized: UserIdInfo = serde_json::from_str(&json).unwrap();
+
+        assert_eq!(deserialized.user_id, user_info.user_id);
+        assert_eq!(deserialized.email, user_info.email);
+        assert_eq!(deserialized.mobile, user_info.mobile);
+    }
+
+    #[test]
+    fn test_search_users_request() {
+        let request = SearchUsersRequest {
+            query: "张三".to_string(),
+            page_size: Some(20),
+            page_token: Some("search_token".to_string()),
+            user_id_type: Some("open_id".to_string()),
+            department_id_type: Some("department_id".to_string()),
+        };
+
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("张三"));
+        assert!(json.contains("20"));
+        assert!(json.contains("search_token"));
+    }
+
+    #[test]
+    fn test_search_users_response() {
+        let user = create_test_user();
+        let response = SearchUsersResponse {
+            items: vec![user],
+            has_more: Some(false),
+            page_token: None,
+        };
+
+        assert_eq!(response.items.len(), 1);
+        assert_eq!(response.has_more, Some(false));
+        assert_eq!(response.page_token, None);
+    }
+
+    #[test]
+    fn test_delete_user_request_default() {
+        let request = DeleteUserRequest::default();
+        assert_eq!(request.user_id_type, None);
+        assert_eq!(request.department_id_type, None);
+    }
+
+    #[test]
+    fn test_resurrect_user_request() {
+        let request = ResurrectUserRequest {
+            user_id_type: Some("open_id".to_string()),
+            department_id_type: Some("department_id".to_string()),
+        };
+
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("open_id"));
+        assert!(json.contains("department_id"));
+    }
+
+    #[test]
+    fn test_list_users_request() {
+        let request = ListUsersRequest {
+            page_size: Some(100),
+            page_token: Some("list_token".to_string()),
+            user_id_type: Some("user_id".to_string()),
+            department_id_type: Some("department_id".to_string()),
+        };
+
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("100"));
+        assert!(json.contains("list_token"));
+        assert!(json.contains("user_id"));
+        assert!(json.contains("department_id"));
+    }
+
+    #[test]
+    fn test_list_users_response() {
+        let user1 = create_test_user();
+        let mut user2 = create_test_user();
+        user2.user_id = Some("user789".to_string());
+        user2.name = Some("Third User".to_string());
+
+        let response = ListUsersResponse {
+            items: vec![user1, user2],
+            has_more: Some(true),
+            page_token: Some("next_page_token".to_string()),
+        };
+
+        assert_eq!(response.items.len(), 2);
+        assert_eq!(response.has_more, Some(true));
+        assert_eq!(response.page_token, Some("next_page_token".to_string()));
+    }
+
+    #[test]
+    fn test_api_response_trait_implementations() {
+        use crate::core::api_resp::ResponseFormat;
+
+        match CreateUserResponse::data_format() {
+            ResponseFormat::Data => assert!(true),
+            _ => assert!(false, "Expected ResponseFormat::Data"),
+        }
+
+        match PatchUserResponse::data_format() {
+            ResponseFormat::Data => assert!(true),
+            _ => assert!(false, "Expected ResponseFormat::Data"),
+        }
+
+        match UpdateUserIdResponse::data_format() {
+            ResponseFormat::Data => assert!(true),
+            _ => assert!(false, "Expected ResponseFormat::Data"),
+        }
+
+        match GetUserResponse::data_format() {
+            ResponseFormat::Data => assert!(true),
+            _ => assert!(false, "Expected ResponseFormat::Data"),
+        }
+
+        match BatchGetUsersResponse::data_format() {
+            ResponseFormat::Data => assert!(true),
+            _ => assert!(false, "Expected ResponseFormat::Data"),
+        }
+    }
+
+    #[test]
+    fn test_empty_responses() {
+        let update_response = UpdateUserIdResponse {};
+        let delete_response = DeleteUserResponse {};
+
+        let update_json = serde_json::to_string(&update_response).unwrap();
+        let delete_json = serde_json::to_string(&delete_response).unwrap();
+
+        assert_eq!(update_json, "{}");
+        assert_eq!(delete_json, "{}");
+    }
+
+    #[test]
+    fn test_user_service_builder_creation() {
+        let config = create_test_config();
+        let service = UserService::new(config);
+        let builder = service.create_user_builder();
+
+        let user = create_test_user();
+        let request = builder
+            .user(user.clone())
+            .user_id_type("open_id")
+            .department_id_type("department_id")
+            .build();
+
+        assert_eq!(request.user.name, user.name);
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
+        assert_eq!(
+            request.department_id_type,
+            Some("department_id".to_string())
+        );
+    }
+
+    #[test]
+    fn test_request_serialization_edge_cases() {
+        let request = CreateUserRequest {
+            user: User::default(),
+            user_id_type: None,
+            department_id_type: None,
+        };
+
+        let json = serde_json::to_string(&request).unwrap();
+        let deserialized: CreateUserRequest = serde_json::from_str(&json).unwrap();
+
+        assert_eq!(deserialized.user_id_type, None);
+        assert_eq!(deserialized.department_id_type, None);
+    }
+
+    #[test]
+    fn test_unicode_handling() {
+        let mut user = create_test_user();
+        user.name = Some("张三".to_string());
+        user.city = Some("北京市".to_string());
+        user.country = Some("中国".to_string());
+
+        let request = CreateUserRequest {
+            user: user.clone(),
+            user_id_type: Some("用户ID".to_string()),
+            department_id_type: Some("部门ID".to_string()),
+        };
+
+        let json = serde_json::to_string(&request).unwrap();
+        let deserialized: CreateUserRequest = serde_json::from_str(&json).unwrap();
+
+        assert_eq!(deserialized.user.name, Some("张三".to_string()));
+        assert_eq!(deserialized.user.city, Some("北京市".to_string()));
+        assert_eq!(deserialized.user.country, Some("中国".to_string()));
+        assert_eq!(deserialized.user_id_type, Some("用户ID".to_string()));
+        assert_eq!(deserialized.department_id_type, Some("部门ID".to_string()));
+    }
+}

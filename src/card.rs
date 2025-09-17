@@ -455,3 +455,394 @@ pub enum MessageCardColor {
     /// 胭脂红主题
     Carmine,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::card::components::content_components::{
+        plain_text::PlainText,
+        title::{FeishuCardTitle, Title},
+    };
+
+    #[test]
+    fn test_feishu_card_new() {
+        let card = FeishuCard::new();
+
+        assert!(card.config.is_none());
+        assert_eq!(card.i18n_header.len(), 1);
+        assert!(card.i18n_header.contains_key(&FeishuCardLanguage::ZhCN));
+        assert_eq!(card.i18n_elements.len(), 1);
+        assert!(card.i18n_elements.contains_key(&FeishuCardLanguage::ZhCN));
+        assert!(card.i18n_elements[&FeishuCardLanguage::ZhCN].is_empty());
+    }
+
+    #[test]
+    fn test_feishu_card_config() {
+        let config = FeishuCardConfig::new()
+            .enable_forward(false)
+            .update_multi(true);
+
+        let card = FeishuCard::new().config(config);
+
+        assert!(card.config.is_some());
+        let card_config = card.config.unwrap();
+        assert_eq!(card_config.enable_forward, Some(false));
+        assert_eq!(card_config.update_multi, Some(true));
+    }
+
+    #[test]
+    fn test_feishu_card_header_valid_language() {
+        let title = FeishuCardTitle::new().title(Title::new("Test Title"));
+        let result = FeishuCard::new().header("en_us", title);
+
+        assert!(result.is_ok());
+        let card = result.unwrap();
+        assert!(card.i18n_header.contains_key(&FeishuCardLanguage::EnUS));
+    }
+
+    #[test]
+    fn test_feishu_card_header_invalid_language() {
+        let title = FeishuCardTitle::new().title(Title::new("Test Title"));
+        let result = FeishuCard::new().header("invalid_lang", title);
+
+        assert!(result.is_err());
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("unknown language 'invalid_lang'"));
+    }
+
+    #[test]
+    fn test_feishu_card_elements_valid_language() {
+        let elements = vec![];
+        let result = FeishuCard::new().elements("ja_jp", elements);
+
+        assert!(result.is_ok());
+        let card = result.unwrap();
+        assert!(card.i18n_elements.contains_key(&FeishuCardLanguage::JaJP));
+    }
+
+    #[test]
+    fn test_feishu_card_elements_invalid_language() {
+        let elements = vec![];
+        let result = FeishuCard::new().elements("unknown_lang", elements);
+
+        assert!(result.is_err());
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("unknown language 'unknown_lang'"));
+    }
+
+    #[test]
+    fn test_feishu_card_config_new() {
+        let config = FeishuCardConfig::new();
+
+        assert!(config.enable_forward.is_none());
+        assert!(config.update_multi.is_none());
+        assert!(config.width_mode.is_none());
+        assert!(config.use_custom_translation.is_none());
+        assert!(config.enable_forward_interaction.is_none());
+        assert!(config.style.is_none());
+    }
+
+    #[test]
+    fn test_feishu_card_config_enable_forward() {
+        let config = FeishuCardConfig::new().enable_forward(true);
+        assert_eq!(config.enable_forward, Some(true));
+    }
+
+    #[test]
+    fn test_feishu_card_config_update_multi() {
+        let config = FeishuCardConfig::new().update_multi(false);
+        assert_eq!(config.update_multi, Some(false));
+    }
+
+    #[test]
+    fn test_feishu_card_config_width_mode() {
+        let config = FeishuCardConfig::new().width_mode(FeishuCardWidthMode::Fill);
+        assert!(matches!(config.width_mode, Some(FeishuCardWidthMode::Fill)));
+    }
+
+    #[test]
+    fn test_feishu_card_config_use_custom_translation() {
+        let config = FeishuCardConfig::new().use_custom_translation(true);
+        assert_eq!(config.use_custom_translation, Some(true));
+    }
+
+    #[test]
+    fn test_feishu_card_config_enable_forward_interaction() {
+        let config = FeishuCardConfig::new().enable_forward_interaction(false);
+        assert_eq!(config.enable_forward_interaction, Some(false));
+    }
+
+    #[test]
+    fn test_feishu_card_config_style() {
+        let style = FeishuCardStyle {
+            text_size: None,
+            color: None,
+        };
+        let config = FeishuCardConfig::new().style(style);
+        assert!(config.style.is_some());
+    }
+
+    #[test]
+    fn test_feishu_card_config_builder_pattern() {
+        let config = FeishuCardConfig::new()
+            .enable_forward(true)
+            .update_multi(false)
+            .width_mode(FeishuCardWidthMode::Default)
+            .use_custom_translation(true)
+            .enable_forward_interaction(false);
+
+        assert_eq!(config.enable_forward, Some(true));
+        assert_eq!(config.update_multi, Some(false));
+        assert!(matches!(
+            config.width_mode,
+            Some(FeishuCardWidthMode::Default)
+        ));
+        assert_eq!(config.use_custom_translation, Some(true));
+        assert_eq!(config.enable_forward_interaction, Some(false));
+    }
+
+    #[test]
+    fn test_feishu_card_width_mode_default() {
+        let mode = FeishuCardWidthMode::default();
+        assert!(matches!(mode, FeishuCardWidthMode::Default));
+    }
+
+    #[test]
+    fn test_feishu_card_width_mode_serde() {
+        let mode_default = FeishuCardWidthMode::Default;
+        let mode_fill = FeishuCardWidthMode::Fill;
+
+        let json_default = serde_json::to_string(&mode_default).unwrap();
+        let json_fill = serde_json::to_string(&mode_fill).unwrap();
+
+        assert_eq!(json_default, "\"default\"");
+        assert_eq!(json_fill, "\"fill\"");
+    }
+
+    #[test]
+    fn test_feishu_card_language_from_str() {
+        assert_eq!(
+            "zh_cn".parse::<FeishuCardLanguage>().unwrap(),
+            FeishuCardLanguage::ZhCN
+        );
+        assert_eq!(
+            "en_us".parse::<FeishuCardLanguage>().unwrap(),
+            FeishuCardLanguage::EnUS
+        );
+        assert_eq!(
+            "ja_jp".parse::<FeishuCardLanguage>().unwrap(),
+            FeishuCardLanguage::JaJP
+        );
+        assert_eq!(
+            "zh_hk".parse::<FeishuCardLanguage>().unwrap(),
+            FeishuCardLanguage::ZhHK
+        );
+        assert_eq!(
+            "zh_tw".parse::<FeishuCardLanguage>().unwrap(),
+            FeishuCardLanguage::ZhTW
+        );
+    }
+
+    #[test]
+    fn test_feishu_card_language_from_str_case_insensitive() {
+        assert_eq!(
+            "ZH_CN".parse::<FeishuCardLanguage>().unwrap(),
+            FeishuCardLanguage::ZhCN
+        );
+        assert_eq!(
+            "En_Us".parse::<FeishuCardLanguage>().unwrap(),
+            FeishuCardLanguage::EnUS
+        );
+    }
+
+    #[test]
+    fn test_feishu_card_language_from_str_invalid() {
+        let result = "invalid_lang".parse::<FeishuCardLanguage>();
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err(), "unknown language: invalid_lang");
+    }
+
+    #[test]
+    fn test_feishu_card_language_default() {
+        let lang = FeishuCardLanguage::default();
+        assert_eq!(lang, FeishuCardLanguage::ZhCN);
+    }
+
+    #[test]
+    fn test_feishu_card_language_serde() {
+        let lang = FeishuCardLanguage::EnUS;
+        let json = serde_json::to_string(&lang).unwrap();
+        assert_eq!(json, "\"en_us\"");
+
+        let deserialized: FeishuCardLanguage = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized, FeishuCardLanguage::EnUS);
+    }
+
+    #[test]
+    fn test_text_tag_new() {
+        let tag = TextTag::new();
+        assert_eq!(tag.tag, "text_tag");
+        assert!(tag.text.is_none());
+        assert!(tag.color.is_none());
+    }
+
+    #[test]
+    fn test_text_tag_text() {
+        let plain_text = PlainText::text("Test content");
+        let tag = TextTag::new().text(plain_text);
+        assert!(tag.text.is_some());
+    }
+
+    #[test]
+    fn test_text_tag_color() {
+        let tag = TextTag::new().color("red");
+        assert_eq!(tag.color, Some("red".to_string()));
+    }
+
+    #[test]
+    fn test_text_tag_builder_pattern() {
+        let plain_text = PlainText::text("Test content");
+        let tag = TextTag::new().text(plain_text).color("blue");
+
+        assert_eq!(tag.tag, "text_tag");
+        assert!(tag.text.is_some());
+        assert_eq!(tag.color, Some("blue".to_string()));
+    }
+
+    #[test]
+    fn test_text_tag_default() {
+        let tag = TextTag::default();
+        assert_eq!(tag.tag, "text_tag");
+        assert!(tag.text.is_none());
+        assert!(tag.color.is_none());
+    }
+
+    #[test]
+    fn test_feishu_card_header_template_default() {
+        let template = FeishuCardHeaderTemplate::default();
+        assert!(matches!(template, FeishuCardHeaderTemplate::Default));
+    }
+
+    #[test]
+    fn test_feishu_card_header_template_from_str() {
+        assert!(matches!(
+            "blue".parse::<FeishuCardHeaderTemplate>().unwrap(),
+            FeishuCardHeaderTemplate::Blue
+        ));
+        assert!(matches!(
+            "red".parse::<FeishuCardHeaderTemplate>().unwrap(),
+            FeishuCardHeaderTemplate::Red
+        ));
+        assert!(matches!(
+            "green".parse::<FeishuCardHeaderTemplate>().unwrap(),
+            FeishuCardHeaderTemplate::Green
+        ));
+    }
+
+    #[test]
+    fn test_feishu_card_header_template_serde() {
+        let template = FeishuCardHeaderTemplate::Blue;
+        let json = serde_json::to_string(&template).unwrap();
+        assert_eq!(json, "\"blue\"");
+
+        let deserialized: FeishuCardHeaderTemplate = serde_json::from_str(&json).unwrap();
+        assert!(matches!(deserialized, FeishuCardHeaderTemplate::Blue));
+    }
+
+    #[test]
+    fn test_message_card_color_default() {
+        let color = MessageCardColor::default();
+        assert!(matches!(color, MessageCardColor::Blue));
+    }
+
+    #[test]
+    fn test_message_card_color_serde() {
+        let color = MessageCardColor::Green;
+        let json = serde_json::to_string(&color).unwrap();
+        assert_eq!(json, "\"green\"");
+
+        let deserialized: MessageCardColor = serde_json::from_str(&json).unwrap();
+        assert!(matches!(deserialized, MessageCardColor::Green));
+    }
+
+    #[test]
+    fn test_feishu_card_serde() {
+        let card = FeishuCard::new();
+        let json = serde_json::to_string(&card).unwrap();
+
+        // Should be able to serialize and deserialize
+        let deserialized: FeishuCard = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.i18n_header.len(), 1);
+        assert_eq!(deserialized.i18n_elements.len(), 1);
+    }
+
+    #[test]
+    fn test_feishu_card_config_serde() {
+        let config = FeishuCardConfig::new()
+            .enable_forward(true)
+            .update_multi(false);
+
+        let json = serde_json::to_string(&config).unwrap();
+        let deserialized: FeishuCardConfig = serde_json::from_str(&json).unwrap();
+
+        assert_eq!(deserialized.enable_forward, Some(true));
+        assert_eq!(deserialized.update_multi, Some(false));
+    }
+
+    #[test]
+    fn test_feishu_card_complete_builder() {
+        let config = FeishuCardConfig::new()
+            .enable_forward(true)
+            .update_multi(false)
+            .width_mode(FeishuCardWidthMode::Fill);
+
+        let title = FeishuCardTitle::new().title(Title::new("Test Card"));
+
+        let result = FeishuCard::new()
+            .config(config)
+            .header("en_us", title)
+            .and_then(|card| card.elements("en_us", vec![]));
+
+        assert!(result.is_ok());
+        let card = result.unwrap();
+        assert!(card.config.is_some());
+        assert!(card.i18n_header.contains_key(&FeishuCardLanguage::EnUS));
+        assert!(card.i18n_elements.contains_key(&FeishuCardLanguage::EnUS));
+    }
+
+    #[test]
+    fn test_feishu_card_multiple_languages() {
+        let zh_title = FeishuCardTitle::new().title(Title::new("中文标题"));
+        let en_title = FeishuCardTitle::new().title(Title::new("English Title"));
+
+        let result = FeishuCard::new()
+            .header("zh_cn", zh_title)
+            .and_then(|card| card.header("en_us", en_title))
+            .and_then(|card| card.elements("zh_cn", vec![]))
+            .and_then(|card| card.elements("en_us", vec![]));
+
+        assert!(result.is_ok());
+        let card = result.unwrap();
+        assert_eq!(card.i18n_header.len(), 2);
+        assert_eq!(card.i18n_elements.len(), 2);
+        assert!(card.i18n_header.contains_key(&FeishuCardLanguage::ZhCN));
+        assert!(card.i18n_header.contains_key(&FeishuCardLanguage::EnUS));
+    }
+
+    #[cfg(feature = "im")]
+    #[test]
+    fn test_feishu_card_send_message_trait() {
+        let card = FeishuCard::new();
+        assert_eq!(card.msg_type(), "interactive");
+
+        let content = card.content();
+        assert!(!content.is_empty());
+
+        // Should be valid JSON
+        let _: serde_json::Value = serde_json::from_str(&content).unwrap();
+    }
+}

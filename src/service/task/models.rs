@@ -451,7 +451,10 @@ mod tests {
 
         assert_eq!(subscription.guid, deserialized.guid);
         assert_eq!(subscription.name, deserialized.name);
-        assert_eq!(subscription.include_completed, deserialized.include_completed);
+        assert_eq!(
+            subscription.include_completed,
+            deserialized.include_completed
+        );
     }
 
     #[test]

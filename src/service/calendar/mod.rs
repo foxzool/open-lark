@@ -223,7 +223,10 @@ mod tests {
         let service1_ptr = std::ptr::addr_of!(calendar_service1) as *const _;
         let service2_ptr = std::ptr::addr_of!(calendar_service2) as *const _;
 
-        assert_ne!(service1_ptr, service2_ptr, "Services should be independent instances");
+        assert_ne!(
+            service1_ptr, service2_ptr,
+            "Services should be independent instances"
+        );
 
         // Each service should have valid v4 API
         assert!(std::ptr::addr_of!(calendar_service1.v4) as *const _ != std::ptr::null());

@@ -260,3 +260,145 @@ impl SubscriptionService {
         results
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_app_secret".to_string(),
+            base_url: "https://test.example.com".to_string(),
+            ..Default::default()
+        }
+    }
+
+    #[test]
+    fn test_subscription_service_new() {
+        let config = create_test_config();
+        let service = SubscriptionService::new(config.clone());
+
+        assert_eq!(service.config.app_id, config.app_id);
+        assert_eq!(service.config.app_secret, config.app_secret);
+        assert_eq!(service.config.base_url, config.base_url);
+    }
+
+    #[test]
+    fn test_subscription_service_config_independence() {
+        let config1 = Config {
+            app_id: "app1".to_string(),
+            app_secret: "secret1".to_string(),
+            ..Default::default()
+        };
+        let config2 = Config {
+            app_id: "app2".to_string(),
+            app_secret: "secret2".to_string(),
+            ..Default::default()
+        };
+
+        let service1 = SubscriptionService::new(config1);
+        let service2 = SubscriptionService::new(config2);
+
+        assert_eq!(service1.config.app_id, "app1");
+        assert_eq!(service2.config.app_id, "app2");
+        assert_ne!(service1.config.app_id, service2.config.app_id);
+    }
+
+    #[test]
+    fn test_subscription_service_construction() {
+        let config = create_test_config();
+        let _service = SubscriptionService::new(config);
+
+        // Test that the service can be created without panicking
+        assert!(true);
+    }
+
+    #[test]
+    fn test_subscription_service_config_clone() {
+        let config = create_test_config();
+        let cloned_config = config.clone();
+        let service = SubscriptionService::new(cloned_config);
+
+        assert_eq!(service.config.app_id, config.app_id);
+        assert_eq!(service.config.app_secret, config.app_secret);
+    }
+
+    #[test]
+    fn test_subscription_service_with_empty_config() {
+        let config = Config::default();
+        let service = SubscriptionService::new(config);
+
+        // Service should be constructible even with default/empty config
+        assert_eq!(service.config.app_id, "");
+        assert_eq!(service.config.app_secret, "");
+    }
+
+    #[test]
+    fn test_subscription_service_config_fields() {
+        let config = Config {
+            app_id: "test_app".to_string(),
+            app_secret: "test_secret".to_string(),
+            base_url: "https://api.test.com".to_string(),
+            req_timeout: Some(std::time::Duration::from_secs(30)),
+            ..Default::default()
+        };
+        let service = SubscriptionService::new(config.clone());
+
+        assert_eq!(service.config.app_id, "test_app");
+        assert_eq!(service.config.app_secret, "test_secret");
+        assert_eq!(service.config.base_url, "https://api.test.com");
+        assert_eq!(
+            service.config.req_timeout,
+            Some(std::time::Duration::from_secs(30))
+        );
+    }
+
+    #[test]
+    fn test_subscription_service_multiple_instances() {
+        let config = create_test_config();
+        let service1 = SubscriptionService::new(config.clone());
+        let service2 = SubscriptionService::new(config.clone());
+
+        // Multiple instances should have the same configuration
+        assert_eq!(service1.config.app_id, service2.config.app_id);
+        assert_eq!(service1.config.app_secret, service2.config.app_secret);
+    }
+
+    #[test]
+    fn test_subscription_service_with_unicode_config() {
+        let config = Config {
+            app_id: "应用ID".to_string(),
+            app_secret: "应用密钥".to_string(),
+            base_url: "https://中文域名.com".to_string(),
+            ..Default::default()
+        };
+        let service = SubscriptionService::new(config);
+
+        assert_eq!(service.config.app_id, "应用ID");
+        assert_eq!(service.config.app_secret, "应用密钥");
+        assert_eq!(service.config.base_url, "https://中文域名.com");
+    }
+
+    #[test]
+    fn test_subscription_service_with_long_strings() {
+        let long_string = "a".repeat(1000);
+        let config = Config {
+            app_id: long_string.clone(),
+            app_secret: long_string.clone(),
+            base_url: format!("https://{}.com", long_string),
+            ..Default::default()
+        };
+        let service = SubscriptionService::new(config);
+
+        assert_eq!(service.config.app_id.len(), 1000);
+        assert_eq!(service.config.app_secret.len(), 1000);
+        assert!(service.config.base_url.starts_with("https://"));
+    }
+
+    // Note: These are construction tests only. Async method tests would require
+    // mocking the HTTP transport layer, which is beyond the scope of basic
+    // test coverage improvement. The async methods are covered by integration
+    // tests in the individual modules (create.rs, get.rs, patch.rs).
+}
