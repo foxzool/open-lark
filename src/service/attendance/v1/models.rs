@@ -1877,3 +1877,643 @@ impl PatchLeaveAccrualRecordRequest {
         self
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json;
+
+    #[test]
+    fn test_shift_serialization() {
+        let shift = Shift {
+            shift_id: "shift_001".to_string(),
+            shift_name: "Morning Shift".to_string(),
+            punch_times: 2,
+            is_flexible: Some(true),
+            flexible_minutes: Some(30),
+            flexible_rule: Some(vec![FlexibleRule {
+                flexible_early_minutes: 15,
+                flexible_late_minutes: 15,
+            }]),
+            no_need_off: Some(false),
+            punch_time_rule: Some(vec![PunchTimeRule {
+                on_time: "09:00".to_string(),
+                off_time: "18:00".to_string(),
+                on_advance_minutes: 30,
+                off_delay_minutes: 30,
+                late_minutes_as_late: Some(10),
+                late_minutes_as_lack: Some(30),
+                early_minutes_as_early: Some(10),
+                early_minutes_as_lack: Some(30),
+            }]),
+            late_minutes_as_late: Some(10),
+            late_minutes_as_lack: Some(30),
+            early_minutes_as_early: Some(10),
+            early_minutes_as_lack: Some(30),
+            allow_outside_apply: Some(true),
+            outside_apply_limit: Some(2),
+            allow_face_punch: Some(true),
+            face_punch_cfg: Some(FacePunchConfig {
+                face_punch: true,
+                face_live_need_action: Some(true),
+                face_downgrade: Some(false),
+            }),
+            create_time: Some("2023-01-01T00:00:00Z".to_string()),
+            update_time: Some("2023-01-02T00:00:00Z".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&shift).unwrap();
+        let deserialized: Shift = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(shift.shift_id, deserialized.shift_id);
+        assert_eq!(shift.shift_name, deserialized.shift_name);
+        assert_eq!(shift.punch_times, deserialized.punch_times);
+    }
+
+    #[test]
+    fn test_flexible_rule_serialization() {
+        let rule = FlexibleRule {
+            flexible_early_minutes: 15,
+            flexible_late_minutes: 20,
+        };
+
+        let serialized = serde_json::to_string(&rule).unwrap();
+        let deserialized: FlexibleRule = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(rule.flexible_early_minutes, deserialized.flexible_early_minutes);
+        assert_eq!(rule.flexible_late_minutes, deserialized.flexible_late_minutes);
+    }
+
+    #[test]
+    fn test_punch_time_rule_serialization() {
+        let rule = PunchTimeRule {
+            on_time: "09:00".to_string(),
+            off_time: "17:30".to_string(),
+            on_advance_minutes: 30,
+            off_delay_minutes: 60,
+            late_minutes_as_late: Some(15),
+            late_minutes_as_lack: Some(45),
+            early_minutes_as_early: Some(15),
+            early_minutes_as_lack: Some(45),
+        };
+
+        let serialized = serde_json::to_string(&rule).unwrap();
+        let deserialized: PunchTimeRule = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(rule.on_time, deserialized.on_time);
+        assert_eq!(rule.off_time, deserialized.off_time);
+        assert_eq!(rule.on_advance_minutes, deserialized.on_advance_minutes);
+    }
+
+    #[test]
+    fn test_face_punch_config_serialization() {
+        let config = FacePunchConfig {
+            face_punch: true,
+            face_live_need_action: Some(false),
+            face_downgrade: Some(true),
+        };
+
+        let serialized = serde_json::to_string(&config).unwrap();
+        let deserialized: FacePunchConfig = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(config.face_punch, deserialized.face_punch);
+        assert_eq!(config.face_live_need_action, deserialized.face_live_need_action);
+        assert_eq!(config.face_downgrade, deserialized.face_downgrade);
+    }
+
+    #[test]
+    fn test_create_shift_request_default() {
+        let request = CreateShiftRequest::default();
+        assert_eq!(request.employee_type, "");
+        assert_eq!(request.shift_name, "");
+        assert_eq!(request.punch_times, 0);
+        assert!(request.is_flexible.is_none());
+    }
+
+    #[test]
+    fn test_create_shift_resp_data_api_response_trait() {
+        assert_eq!(CreateShiftRespData::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_user_daily_shift_serialization() {
+        let shift = UserDailyShift {
+            user_id: "user_123".to_string(),
+            shift_date: "2023-10-15".to_string(),
+            shift_id: "shift_456".to_string(),
+        };
+
+        let serialized = serde_json::to_string(&shift).unwrap();
+        let deserialized: UserDailyShift = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(shift.user_id, deserialized.user_id);
+        assert_eq!(shift.shift_date, deserialized.shift_date);
+        assert_eq!(shift.shift_id, deserialized.shift_id);
+    }
+
+    #[test]
+    fn test_batch_create_user_daily_shift_resp_data_serialization() {
+        let resp_data = BatchCreateUserDailyShiftRespData {
+            failed_user_daily_shifts: Some(vec![UserDailyShift {
+                user_id: "user_789".to_string(),
+                shift_date: "2023-10-16".to_string(),
+                shift_id: "shift_101".to_string(),
+            }]),
+            success_count: Some(5),
+            failed_count: Some(1),
+        };
+
+        let serialized = serde_json::to_string(&resp_data).unwrap();
+        let deserialized: BatchCreateUserDailyShiftRespData = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(resp_data.success_count, deserialized.success_count);
+        assert_eq!(resp_data.failed_count, deserialized.failed_count);
+    }
+
+    #[test]
+    fn test_group_serialization() {
+        let group = Group {
+            group_id: "group_001".to_string(),
+            group_name: "Engineering Team".to_string(),
+            time_zone: Some("Asia/Shanghai".to_string()),
+            bind_dept_ids: Some(vec!["dept_001".to_string(), "dept_002".to_string()]),
+            except_date_rule: Some(vec![ExceptDateRule {
+                date: "2023-12-25".to_string(),
+                except_type: 2,
+                shift_id: None,
+            }]),
+            attendance_type: Some(1),
+            punch_type: Some(1),
+            allow_late_minutes: Some(10),
+            allow_early_leave_minutes: Some(10),
+            work_day_rule: Some(vec![WorkDayRule {
+                week_day: 1,
+                shift_id: "shift_001".to_string(),
+            }]),
+            shift_rule: Some(vec![ShiftRule {
+                shift_id: "shift_001".to_string(),
+                shift_name: Some("Morning".to_string()),
+            }]),
+            member_rule: Some(MemberRule {
+                member_type: 1,
+                member_ids: vec!["member_001".to_string()],
+            }),
+            create_time: Some("2023-01-01T00:00:00Z".to_string()),
+            update_time: Some("2023-01-02T00:00:00Z".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&group).unwrap();
+        let deserialized: Group = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(group.group_id, deserialized.group_id);
+        assert_eq!(group.group_name, deserialized.group_name);
+        assert_eq!(group.time_zone, deserialized.time_zone);
+    }
+
+    #[test]
+    fn test_except_date_rule_serialization() {
+        let rule = ExceptDateRule {
+            date: "2023-05-01".to_string(),
+            except_type: 1,
+            shift_id: Some("shift_special".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&rule).unwrap();
+        let deserialized: ExceptDateRule = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(rule.date, deserialized.date);
+        assert_eq!(rule.except_type, deserialized.except_type);
+        assert_eq!(rule.shift_id, deserialized.shift_id);
+    }
+
+    #[test]
+    fn test_work_day_rule_serialization() {
+        let rule = WorkDayRule {
+            week_day: 2,
+            shift_id: "shift_tuesday".to_string(),
+        };
+
+        let serialized = serde_json::to_string(&rule).unwrap();
+        let deserialized: WorkDayRule = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(rule.week_day, deserialized.week_day);
+        assert_eq!(rule.shift_id, deserialized.shift_id);
+    }
+
+    #[test]
+    fn test_user_setting_serialization() {
+        let setting = UserSetting {
+            user_id: "user_001".to_string(),
+            face_key_open: Some(true),
+            face_key: Some("face_key_abc123".to_string()),
+            face_live_need_action: Some(false),
+            face_downgrade: Some(true),
+            create_time: Some("2023-01-01T00:00:00Z".to_string()),
+            update_time: Some("2023-01-02T00:00:00Z".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&setting).unwrap();
+        let deserialized: UserSetting = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(setting.user_id, deserialized.user_id);
+        assert_eq!(setting.face_key_open, deserialized.face_key_open);
+        assert_eq!(setting.face_key, deserialized.face_key);
+    }
+
+    #[test]
+    fn test_stats_settings_serialization() {
+        let settings = StatsSettings {
+            stats_scope: 1,
+            start_date: "2023-01-01".to_string(),
+            end_date: "2023-12-31".to_string(),
+            user_ids: vec!["user_001".to_string(), "user_002".to_string()],
+            need_fields: vec!["attendance_days".to_string(), "late_count".to_string()],
+        };
+
+        let serialized = serde_json::to_string(&settings).unwrap();
+        let deserialized: StatsSettings = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(settings.stats_scope, deserialized.stats_scope);
+        assert_eq!(settings.start_date, deserialized.start_date);
+        assert_eq!(settings.end_date, deserialized.end_date);
+        assert_eq!(settings.user_ids, deserialized.user_ids);
+    }
+
+    #[test]
+    fn test_stats_field_serialization() {
+        let field = StatsField {
+            field_key: "attendance_rate".to_string(),
+            field_name: "Attendance Rate".to_string(),
+            field_name_zh: Some("出勤率".to_string()),
+            field_name_en: Some("Attendance Rate".to_string()),
+            field_name_ja: Some("出席率".to_string()),
+            field_type: 1,
+        };
+
+        let serialized = serde_json::to_string(&field).unwrap();
+        let deserialized: StatsField = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(field.field_key, deserialized.field_key);
+        assert_eq!(field.field_name, deserialized.field_name);
+        assert_eq!(field.field_type, deserialized.field_type);
+    }
+
+    #[test]
+    fn test_user_stats_data_serialization() {
+        let mut datas = std::collections::HashMap::new();
+        datas.insert("attendance_days".to_string(), serde_json::Value::Number(22.into()));
+        datas.insert("late_count".to_string(), serde_json::Value::Number(3.into()));
+
+        let stats_data = UserStatsData {
+            user_id: "user_001".to_string(),
+            user_name: Some("John Doe".to_string()),
+            datas,
+        };
+
+        let serialized = serde_json::to_string(&stats_data).unwrap();
+        let deserialized: UserStatsData = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(stats_data.user_id, deserialized.user_id);
+        assert_eq!(stats_data.user_name, deserialized.user_name);
+        assert_eq!(stats_data.datas.len(), deserialized.datas.len());
+    }
+
+    #[test]
+    fn test_user_approval_serialization() {
+        let approval = UserApproval {
+            approval_id: "approval_001".to_string(),
+            user_id: "user_001".to_string(),
+            user_name: Some("Jane Smith".to_string()),
+            approval_type: 1,
+            status: 2,
+            start_time: "2023-10-01T09:00:00Z".to_string(),
+            end_time: "2023-10-01T18:00:00Z".to_string(),
+            duration: Some(8.0),
+            reason: Some("Personal leave".to_string()),
+            approval_note: Some("Approved by manager".to_string()),
+            created_at: Some("2023-09-30T10:00:00Z".to_string()),
+            approved_at: Some("2023-09-30T11:00:00Z".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&approval).unwrap();
+        let deserialized: UserApproval = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(approval.approval_id, deserialized.approval_id);
+        assert_eq!(approval.user_id, deserialized.user_id);
+        assert_eq!(approval.approval_type, deserialized.approval_type);
+        assert_eq!(approval.duration, deserialized.duration);
+    }
+
+    #[test]
+    fn test_user_task_remedy_application_serialization() {
+        let application = UserTaskRemedyApplication {
+            user_id: "user_001".to_string(),
+            remedy_date: "2023-10-15".to_string(),
+            remedy_time: "09:15".to_string(),
+            remedy_type: 1,
+            reason: "Traffic jam".to_string(),
+            comment: Some("Heavy traffic due to weather".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&application).unwrap();
+        let deserialized: UserTaskRemedyApplication = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(application.user_id, deserialized.user_id);
+        assert_eq!(application.remedy_date, deserialized.remedy_date);
+        assert_eq!(application.remedy_type, deserialized.remedy_type);
+        assert_eq!(application.reason, deserialized.reason);
+    }
+
+    #[test]
+    fn test_user_task_location_serialization() {
+        let location = UserTaskLocation {
+            latitude: 39.9042,
+            longitude: 116.4074,
+            address: Some("Beijing, China".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&location).unwrap();
+        let deserialized: UserTaskLocation = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(location.latitude, deserialized.latitude);
+        assert_eq!(location.longitude, deserialized.longitude);
+        assert_eq!(location.address, deserialized.address);
+    }
+
+    #[test]
+    fn test_user_task_create_serialization() {
+        let task_create = UserTaskCreate {
+            user_id: "user_001".to_string(),
+            group_id: "group_001".to_string(),
+            shift_id: "shift_001".to_string(),
+            check_date: "2023-10-15".to_string(),
+            check_time: "2023-10-15 09:00:00".to_string(),
+            check_type: 1,
+            check_result: 1,
+            location: Some(UserTaskLocation {
+                latitude: 39.9042,
+                longitude: 116.4074,
+                address: Some("Office Building".to_string()),
+            }),
+            is_field: Some(false),
+            is_remedy: Some(false),
+            comment: Some("Normal check-in".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&task_create).unwrap();
+        let deserialized: UserTaskCreate = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(task_create.user_id, deserialized.user_id);
+        assert_eq!(task_create.check_type, deserialized.check_type);
+        assert_eq!(task_create.check_result, deserialized.check_result);
+    }
+
+    #[test]
+    fn test_user_task_serialization() {
+        let task = UserTask {
+            task_id: "task_001".to_string(),
+            user_id: "user_001".to_string(),
+            user_name: Some("Alice Johnson".to_string()),
+            group_id: "group_001".to_string(),
+            shift_id: "shift_001".to_string(),
+            shift_name: "Morning Shift".to_string(),
+            check_date: "2023-10-15".to_string(),
+            check_time: "2023-10-15 09:00:00".to_string(),
+            check_type: 1,
+            check_result: 1,
+            location: Some(UserTaskLocation {
+                latitude: 39.9042,
+                longitude: 116.4074,
+                address: Some("Main Office".to_string()),
+            }),
+            is_field: false,
+            is_remedy: false,
+            comment: Some("On time arrival".to_string()),
+            create_time: "1634284800000".to_string(),
+            update_time: "1634284800000".to_string(),
+        };
+
+        let serialized = serde_json::to_string(&task).unwrap();
+        let deserialized: UserTask = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(task.task_id, deserialized.task_id);
+        assert_eq!(task.user_name, deserialized.user_name);
+        assert_eq!(task.shift_name, deserialized.shift_name);
+        assert_eq!(task.is_field, deserialized.is_field);
+    }
+
+    #[test]
+    fn test_archive_field_option_serialization() {
+        let option = ArchiveFieldOption {
+            value: "active".to_string(),
+            label: "Active Status".to_string(),
+        };
+
+        let serialized = serde_json::to_string(&option).unwrap();
+        let deserialized: ArchiveFieldOption = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(option.value, deserialized.value);
+        assert_eq!(option.label, deserialized.label);
+    }
+
+    #[test]
+    fn test_archive_stats_field_serialization() {
+        let field = ArchiveStatsField {
+            field_id: "field_001".to_string(),
+            field_name: "Employee Status".to_string(),
+            field_type: 1,
+            field_description: Some("Current employment status".to_string()),
+            is_required: true,
+            default_value: Some("active".to_string()),
+            field_options: Some(vec![ArchiveFieldOption {
+                value: "active".to_string(),
+                label: "Active".to_string(),
+            }]),
+        };
+
+        let serialized = serde_json::to_string(&field).unwrap();
+        let deserialized: ArchiveStatsField = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(field.field_id, deserialized.field_id);
+        assert_eq!(field.field_name, deserialized.field_name);
+        assert_eq!(field.is_required, deserialized.is_required);
+    }
+
+    #[test]
+    fn test_archive_report_record_serialization() {
+        let mut field_data = std::collections::HashMap::new();
+        field_data.insert("status".to_string(), "active".to_string());
+        field_data.insert("department".to_string(), "engineering".to_string());
+
+        let record = ArchiveReportRecord {
+            record_id: Some("record_001".to_string()),
+            user_id: "user_001".to_string(),
+            archive_date: "2023-10-15".to_string(),
+            field_data,
+        };
+
+        let serialized = serde_json::to_string(&record).unwrap();
+        let deserialized: ArchiveReportRecord = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(record.record_id, deserialized.record_id);
+        assert_eq!(record.user_id, deserialized.user_id);
+        assert_eq!(record.archive_date, deserialized.archive_date);
+        assert_eq!(record.field_data.len(), deserialized.field_data.len());
+    }
+
+    #[test]
+    fn test_leave_employ_expire_record_serialization() {
+        let record = LeaveEmployExpireRecord {
+            record_id: "leave_001".to_string(),
+            employee_id: "emp_001".to_string(),
+            employee_name: Some("Bob Wilson".to_string()),
+            leave_type_id: "annual_leave".to_string(),
+            leave_type_name: "Annual Leave".to_string(),
+            granted_amount: 40.0,
+            expire_time: 1672531200000,
+            granted_time: 1640995200000,
+            granted_reason: Some("Annual allocation".to_string()),
+            remaining_amount: 32.0,
+            status: 1,
+            create_time: 1640995200000,
+            update_time: 1640995200000,
+        };
+
+        let serialized = serde_json::to_string(&record).unwrap();
+        let deserialized: LeaveEmployExpireRecord = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(record.record_id, deserialized.record_id);
+        assert_eq!(record.employee_id, deserialized.employee_id);
+        assert_eq!(record.granted_amount, deserialized.granted_amount);
+        assert_eq!(record.remaining_amount, deserialized.remaining_amount);
+    }
+
+    #[test]
+    fn test_leave_accrual_record_patch_serialization() {
+        let patch = LeaveAccrualRecordPatch {
+            employee_id: Some("emp_002".to_string()),
+            leave_type_id: Some("sick_leave".to_string()),
+            granted_amount: Some(20.0),
+            expire_time: Some(1703980800000),
+            granted_time: Some(1672444800000),
+            granted_reason: Some("Sick leave allocation".to_string()),
+            validity_type: Some(2),
+            granted_type: Some(1),
+            granted_description: Some("System generated".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&patch).unwrap();
+        let deserialized: LeaveAccrualRecordPatch = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(patch.employee_id, deserialized.employee_id);
+        assert_eq!(patch.granted_amount, deserialized.granted_amount);
+        assert_eq!(patch.validity_type, deserialized.validity_type);
+    }
+
+    #[test]
+    fn test_leave_accrual_record_serialization() {
+        let record = LeaveAccrualRecord {
+            record_id: "accrual_001".to_string(),
+            employee_id: "emp_001".to_string(),
+            employee_name: Some("Charlie Brown".to_string()),
+            leave_type_id: "vacation".to_string(),
+            leave_type_name: "Vacation Leave".to_string(),
+            granted_amount: 80.0,
+            expire_time: Some(1703980800000),
+            granted_time: 1672444800000,
+            granted_reason: Some("Annual vacation allocation".to_string()),
+            remaining_amount: 64.0,
+            used_amount: 16.0,
+            status: 1,
+            validity_type: 2,
+            granted_type: 1,
+            granted_description: Some("Automatically granted".to_string()),
+            create_time: 1672444800000,
+            update_time: 1672444800000,
+        };
+
+        let serialized = serde_json::to_string(&record).unwrap();
+        let deserialized: LeaveAccrualRecord = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(record.record_id, deserialized.record_id);
+        assert_eq!(record.granted_amount, deserialized.granted_amount);
+        assert_eq!(record.used_amount, deserialized.used_amount);
+        assert_eq!(record.validity_type, deserialized.validity_type);
+    }
+
+    #[test]
+    fn test_default_request_structs() {
+        let _delete_shift = DeleteShiftRequest::default();
+        let _get_shift = GetShiftRequest::default();
+        let _query_shift = QueryShiftRequest::default();
+        let _list_shift = ListShiftRequest::default();
+        let _batch_create = BatchCreateUserDailyShiftRequest::default();
+        let _query_daily_shift = QueryUserDailyShiftRequest::default();
+        let _batch_create_temp = BatchCreateTempUserDailyShiftRequest::default();
+        let _list_group_user = ListGroupUserRequest::default();
+        let _create_group = CreateGroupRequest::default();
+        let _delete_group = DeleteGroupRequest::default();
+        let _get_group = GetGroupRequest::default();
+        let _search_group = SearchGroupRequest::default();
+        let _list_group = ListGroupRequest::default();
+        let _modify_user_setting = ModifyUserSettingRequest::default();
+        let _query_user_setting = QueryUserSettingRequest::default();
+        let _upload_photo = UploadUserPhotoRequest::default();
+        let _download_photo = DownloadUserPhotoRequest::default();
+    }
+
+    #[test]
+    fn test_api_response_trait_implementations() {
+        assert_eq!(Shift::data_format(), ResponseFormat::Data);
+        assert_eq!(EmptyResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(QueryShiftRespData::data_format(), ResponseFormat::Data);
+        assert_eq!(ShiftListData::data_format(), ResponseFormat::Data);
+        assert_eq!(BatchCreateUserDailyShiftRespData::data_format(), ResponseFormat::Data);
+        assert_eq!(QueryUserDailyShiftRespData::data_format(), ResponseFormat::Data);
+        assert_eq!(BatchCreateTempUserDailyShiftRespData::data_format(), ResponseFormat::Data);
+        assert_eq!(ListGroupUserRespData::data_format(), ResponseFormat::Data);
+        assert_eq!(CreateGroupRespData::data_format(), ResponseFormat::Data);
+        assert_eq!(SearchGroupRespData::data_format(), ResponseFormat::Data);
+        assert_eq!(ListGroupRespData::data_format(), ResponseFormat::Data);
+        assert_eq!(Group::data_format(), ResponseFormat::Data);
+        assert_eq!(ModifyUserSettingRespData::data_format(), ResponseFormat::Data);
+        assert_eq!(QueryUserSettingRespData::data_format(), ResponseFormat::Data);
+        assert_eq!(UploadUserPhotoRespData::data_format(), ResponseFormat::Data);
+        assert_eq!(DownloadUserPhotoRespData::data_format(), ResponseFormat::Data);
+        assert_eq!(UserSetting::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_build_methods() {
+        let stats_request = UpdateUserStatsDataRequest::default().build();
+        let query_stats = QueryStatsSettingsRequest::default().build();
+        let query_fields = QueryStatsFieldsRequest::default().build();
+        let query_data = QueryUserStatsDataRequest::default().build();
+        let remedy_request = CreateUserTaskRemedyRequest::default().build();
+        let allowed_remedys = QueryUserAllowedRemedysRequest::default().build();
+        let task_remedy = QueryUserTaskRemedyRequest::default().build();
+
+        // Just ensure build methods work without errors
+        assert_eq!(stats_request.employee_type, "");
+        assert_eq!(query_stats.employee_type, "");
+        assert_eq!(query_fields.employee_type, "");
+        assert_eq!(query_data.employee_type, "");
+        assert_eq!(remedy_request.employee_type, "");
+        assert_eq!(allowed_remedys.employee_type, "");
+        assert_eq!(task_remedy.employee_type, "");
+    }
+
+    #[test]
+    fn test_empty_response_serialization() {
+        let empty = EmptyResponse {};
+        let serialized = serde_json::to_string(&empty).unwrap();
+        let deserialized: EmptyResponse = serde_json::from_str(&serialized).unwrap();
+        // EmptyResponse should serialize/deserialize successfully
+        let _unused = deserialized;
+    }
+
+    #[test]
+    fn test_complex_nested_structures() {
+        let group_user = GroupUser {
+            user_id: "user_456".to_string(),
+            user_name: Some("Test User".to_string()),
+            employee_no: Some("EMP001".to_string()),
+            department_id: Some("dept_123".to_string()),
+            join_time: Some("2023-01-01T00:00:00Z".to_string()),
+        };
+
+        let serialized = serde_json::to_string(&group_user).unwrap();
+        let deserialized: GroupUser = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(group_user.user_id, deserialized.user_id);
+        assert_eq!(group_user.employee_no, deserialized.employee_no);
+    }
+
+    #[test]
+    fn test_member_rule_serialization() {
+        let rule = MemberRule {
+            member_type: 2,
+            member_ids: vec!["member_001".to_string(), "member_002".to_string()],
+        };
+
+        let serialized = serde_json::to_string(&rule).unwrap();
+        let deserialized: MemberRule = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(rule.member_type, deserialized.member_type);
+        assert_eq!(rule.member_ids, deserialized.member_ids);
+    }
+}
