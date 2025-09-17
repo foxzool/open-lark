@@ -194,10 +194,16 @@ mod tests {
         let hire_service = HireService::new(config);
 
         // Verify all sub-service structures
-        assert!(std::ptr::addr_of!(hire_service.recruitment_config) as *const _ != std::ptr::null());
+        assert!(
+            std::ptr::addr_of!(hire_service.recruitment_config) as *const _ != std::ptr::null()
+        );
         assert!(std::ptr::addr_of!(hire_service.get_candidates) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(hire_service.candidate_management) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(hire_service.ecological_docking) as *const _ != std::ptr::null());
+        assert!(
+            std::ptr::addr_of!(hire_service.candidate_management) as *const _ != std::ptr::null()
+        );
+        assert!(
+            std::ptr::addr_of!(hire_service.ecological_docking) as *const _ != std::ptr::null()
+        );
         assert!(std::ptr::addr_of!(hire_service.referral_account) as *const _ != std::ptr::null());
         assert!(std::ptr::addr_of!(hire_service.attachment) as *const _ != std::ptr::null());
     }
@@ -214,10 +220,16 @@ mod tests {
         let hire_service = HireService::new(config);
 
         // Verify service creation with custom config
-        assert!(std::ptr::addr_of!(hire_service.recruitment_config) as *const _ != std::ptr::null());
+        assert!(
+            std::ptr::addr_of!(hire_service.recruitment_config) as *const _ != std::ptr::null()
+        );
         assert!(std::ptr::addr_of!(hire_service.get_candidates) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(hire_service.candidate_management) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(hire_service.ecological_docking) as *const _ != std::ptr::null());
+        assert!(
+            std::ptr::addr_of!(hire_service.candidate_management) as *const _ != std::ptr::null()
+        );
+        assert!(
+            std::ptr::addr_of!(hire_service.ecological_docking) as *const _ != std::ptr::null()
+        );
         assert!(std::ptr::addr_of!(hire_service.referral_account) as *const _ != std::ptr::null());
         assert!(std::ptr::addr_of!(hire_service.attachment) as *const _ != std::ptr::null());
     }
@@ -252,11 +264,22 @@ mod tests {
             let hire_service = HireService::new(config);
 
             // Each configuration should create valid sub-services
-            assert!(std::ptr::addr_of!(hire_service.recruitment_config) as *const _ != std::ptr::null());
-            assert!(std::ptr::addr_of!(hire_service.get_candidates) as *const _ != std::ptr::null());
-            assert!(std::ptr::addr_of!(hire_service.candidate_management) as *const _ != std::ptr::null());
-            assert!(std::ptr::addr_of!(hire_service.ecological_docking) as *const _ != std::ptr::null());
-            assert!(std::ptr::addr_of!(hire_service.referral_account) as *const _ != std::ptr::null());
+            assert!(
+                std::ptr::addr_of!(hire_service.recruitment_config) as *const _ != std::ptr::null()
+            );
+            assert!(
+                std::ptr::addr_of!(hire_service.get_candidates) as *const _ != std::ptr::null()
+            );
+            assert!(
+                std::ptr::addr_of!(hire_service.candidate_management) as *const _
+                    != std::ptr::null()
+            );
+            assert!(
+                std::ptr::addr_of!(hire_service.ecological_docking) as *const _ != std::ptr::null()
+            );
+            assert!(
+                std::ptr::addr_of!(hire_service.referral_account) as *const _ != std::ptr::null()
+            );
             assert!(std::ptr::addr_of!(hire_service.attachment) as *const _ != std::ptr::null());
         }
     }
@@ -276,12 +299,19 @@ mod tests {
         let service1_ptr = std::ptr::addr_of!(hire_service1) as *const _;
         let service2_ptr = std::ptr::addr_of!(hire_service2) as *const _;
 
-        assert_ne!(service1_ptr, service2_ptr, "Services should be independent instances");
+        assert_ne!(
+            service1_ptr, service2_ptr,
+            "Services should be independent instances"
+        );
 
         // Each service should have valid sub-services
-        assert!(std::ptr::addr_of!(hire_service1.recruitment_config) as *const _ != std::ptr::null());
+        assert!(
+            std::ptr::addr_of!(hire_service1.recruitment_config) as *const _ != std::ptr::null()
+        );
         assert!(std::ptr::addr_of!(hire_service1.get_candidates) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(hire_service2.recruitment_config) as *const _ != std::ptr::null());
+        assert!(
+            std::ptr::addr_of!(hire_service2.recruitment_config) as *const _ != std::ptr::null()
+        );
         assert!(std::ptr::addr_of!(hire_service2.get_candidates) as *const _ != std::ptr::null());
     }
 
@@ -294,9 +324,13 @@ mod tests {
         let hire_service2 = HireService::new(original_config);
 
         // Both should work independently
-        assert!(std::ptr::addr_of!(hire_service1.recruitment_config) as *const _ != std::ptr::null());
+        assert!(
+            std::ptr::addr_of!(hire_service1.recruitment_config) as *const _ != std::ptr::null()
+        );
         assert!(std::ptr::addr_of!(hire_service1.get_candidates) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(hire_service2.recruitment_config) as *const _ != std::ptr::null());
+        assert!(
+            std::ptr::addr_of!(hire_service2.recruitment_config) as *const _ != std::ptr::null()
+        );
         assert!(std::ptr::addr_of!(hire_service2.get_candidates) as *const _ != std::ptr::null());
 
         // But should be different service instances
@@ -311,18 +345,36 @@ mod tests {
         let hire_service = HireService::new(config);
 
         // Test that all sub-services are independent
-        let recruitment_config_ptr = std::ptr::addr_of!(hire_service.recruitment_config) as *const _;
+        let recruitment_config_ptr =
+            std::ptr::addr_of!(hire_service.recruitment_config) as *const _;
         let get_candidates_ptr = std::ptr::addr_of!(hire_service.get_candidates) as *const _;
-        let candidate_management_ptr = std::ptr::addr_of!(hire_service.candidate_management) as *const _;
-        let ecological_docking_ptr = std::ptr::addr_of!(hire_service.ecological_docking) as *const _;
+        let candidate_management_ptr =
+            std::ptr::addr_of!(hire_service.candidate_management) as *const _;
+        let ecological_docking_ptr =
+            std::ptr::addr_of!(hire_service.ecological_docking) as *const _;
         let referral_account_ptr = std::ptr::addr_of!(hire_service.referral_account) as *const _;
         let attachment_ptr = std::ptr::addr_of!(hire_service.attachment) as *const _;
 
-        assert_ne!(recruitment_config_ptr, get_candidates_ptr, "Sub-services should be independent");
-        assert_ne!(get_candidates_ptr, candidate_management_ptr, "Sub-services should be independent");
-        assert_ne!(candidate_management_ptr, ecological_docking_ptr, "Sub-services should be independent");
-        assert_ne!(ecological_docking_ptr, referral_account_ptr, "Sub-services should be independent");
-        assert_ne!(referral_account_ptr, attachment_ptr, "Sub-services should be independent");
+        assert_ne!(
+            recruitment_config_ptr, get_candidates_ptr,
+            "Sub-services should be independent"
+        );
+        assert_ne!(
+            get_candidates_ptr, candidate_management_ptr,
+            "Sub-services should be independent"
+        );
+        assert_ne!(
+            candidate_management_ptr, ecological_docking_ptr,
+            "Sub-services should be independent"
+        );
+        assert_ne!(
+            ecological_docking_ptr, referral_account_ptr,
+            "Sub-services should be independent"
+        );
+        assert_ne!(
+            referral_account_ptr, attachment_ptr,
+            "Sub-services should be independent"
+        );
 
         // Verify service maintains proper memory layout
         assert!(std::ptr::addr_of!(hire_service) as *const _ != std::ptr::null());

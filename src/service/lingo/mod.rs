@@ -164,10 +164,19 @@ mod tests {
         let file_ptr = std::ptr::addr_of!(lingo_service.file) as *const _;
 
         // All addresses should be different
-        let addresses = vec![draft_ptr, entity_ptr, classification_ptr, repo_ptr, file_ptr];
+        let addresses = vec![
+            draft_ptr,
+            entity_ptr,
+            classification_ptr,
+            repo_ptr,
+            file_ptr,
+        ];
         for (i, &addr1) in addresses.iter().enumerate() {
             for &addr2 in addresses.iter().skip(i + 1) {
-                assert_ne!(addr1, addr2, "Services should have different memory addresses");
+                assert_ne!(
+                    addr1, addr2,
+                    "Services should have different memory addresses"
+                );
             }
         }
     }
