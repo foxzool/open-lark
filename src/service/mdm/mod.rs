@@ -93,7 +93,9 @@ mod tests {
 
         // Verify service structure
         assert!(std::ptr::addr_of!(mdm_service.country_region) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(mdm_service.user_auth_data_relation) as *const _ != std::ptr::null());
+        assert!(
+            std::ptr::addr_of!(mdm_service.user_auth_data_relation) as *const _ != std::ptr::null()
+        );
     }
 
     #[test]
@@ -108,11 +110,18 @@ mod tests {
     #[test]
     fn test_mdm_service_with_different_configs() {
         let configs = vec![
-            Config::builder().app_id("app1").app_secret("secret1").build(),
-            Config::builder().app_id("app2").app_secret("secret2")
+            Config::builder()
+                .app_id("app1")
+                .app_secret("secret1")
+                .build(),
+            Config::builder()
+                .app_id("app2")
+                .app_secret("secret2")
                 .req_timeout(std::time::Duration::from_millis(5000))
                 .build(),
-            Config::builder().app_id("app3").app_secret("secret3")
+            Config::builder()
+                .app_id("app3")
+                .app_secret("secret3")
                 .base_url("https://custom.api.com")
                 .build(),
         ];
@@ -121,7 +130,10 @@ mod tests {
             let mdm_service = MdmService::new(config);
             // Each service should be created successfully
             assert!(std::ptr::addr_of!(mdm_service.country_region) as *const _ != std::ptr::null());
-            assert!(std::ptr::addr_of!(mdm_service.user_auth_data_relation) as *const _ != std::ptr::null());
+            assert!(
+                std::ptr::addr_of!(mdm_service.user_auth_data_relation) as *const _
+                    != std::ptr::null()
+            );
         }
     }
 

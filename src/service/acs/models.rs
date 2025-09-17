@@ -356,10 +356,10 @@ mod tests {
             let deserialized: UserType = serde_json::from_str(&serialized).unwrap();
 
             match (user_type, deserialized) {
-                (UserType::Employee, UserType::Employee) => {},
-                (UserType::Visitor, UserType::Visitor) => {},
-                (UserType::Contractor, UserType::Contractor) => {},
-                (UserType::Temporary, UserType::Temporary) => {},
+                (UserType::Employee, UserType::Employee) => {}
+                (UserType::Visitor, UserType::Visitor) => {}
+                (UserType::Contractor, UserType::Contractor) => {}
+                (UserType::Temporary, UserType::Temporary) => {}
                 _ => panic!("Serialization/deserialization failed"),
             }
         }
@@ -379,10 +379,10 @@ mod tests {
             let deserialized: UserStatus = serde_json::from_str(&serialized).unwrap();
 
             match (status, deserialized) {
-                (UserStatus::Active, UserStatus::Active) => {},
-                (UserStatus::Disabled, UserStatus::Disabled) => {},
-                (UserStatus::Expired, UserStatus::Expired) => {},
-                (UserStatus::Pending, UserStatus::Pending) => {},
+                (UserStatus::Active, UserStatus::Active) => {}
+                (UserStatus::Disabled, UserStatus::Disabled) => {}
+                (UserStatus::Expired, UserStatus::Expired) => {}
+                (UserStatus::Pending, UserStatus::Pending) => {}
                 _ => panic!("Serialization/deserialization failed"),
             }
         }
@@ -543,16 +543,34 @@ mod tests {
     #[test]
     fn test_enum_serialization_formats() {
         // Test AccessType
-        assert_eq!(serde_json::to_string(&AccessType::Entry).unwrap(), "\"entry\"");
-        assert_eq!(serde_json::to_string(&AccessType::Exit).unwrap(), "\"exit\"");
+        assert_eq!(
+            serde_json::to_string(&AccessType::Entry).unwrap(),
+            "\"entry\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AccessType::Exit).unwrap(),
+            "\"exit\""
+        );
 
         // Test AccessMethod
-        assert_eq!(serde_json::to_string(&AccessMethod::FaceRecognition).unwrap(), "\"face_recognition\"");
-        assert_eq!(serde_json::to_string(&AccessMethod::Card).unwrap(), "\"card\"");
+        assert_eq!(
+            serde_json::to_string(&AccessMethod::FaceRecognition).unwrap(),
+            "\"face_recognition\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AccessMethod::Card).unwrap(),
+            "\"card\""
+        );
 
         // Test AccessResult
-        assert_eq!(serde_json::to_string(&AccessResult::Success).unwrap(), "\"success\"");
-        assert_eq!(serde_json::to_string(&AccessResult::Failed).unwrap(), "\"failed\"");
+        assert_eq!(
+            serde_json::to_string(&AccessResult::Success).unwrap(),
+            "\"success\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AccessResult::Failed).unwrap(),
+            "\"failed\""
+        );
     }
 
     #[test]

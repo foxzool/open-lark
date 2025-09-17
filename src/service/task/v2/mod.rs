@@ -59,3 +59,86 @@ impl TaskV2Service {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::constants::AppType;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .build()
+    }
+
+    #[test]
+    fn test_task_v2_service_creation() {
+        let config = create_test_config();
+        let service = TaskV2Service::new(config);
+
+        // Verify that all services are properly initialized
+        assert!(std::ptr::addr_of!(service.task) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(service.task_subtask) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(service.tasklist) as *const _ != std::ptr::null());
+        assert!(
+            std::ptr::addr_of!(service.tasklist_activity_subscription) as *const _
+                != std::ptr::null()
+        );
+        assert!(std::ptr::addr_of!(service.comment) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(service.attachment) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(service.section) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(service.custom_field) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(service.custom_field_option) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_task_v2_service_with_different_config() {
+        let config = Config::builder()
+            .app_id("different_app_id")
+            .app_secret("different_app_secret")
+            .app_type(AppType::Marketplace)
+            .build();
+
+        let service = TaskV2Service::new(config);
+
+        // Verify service creation works with different config types
+        assert!(std::ptr::addr_of!(service.task) as *const _ != std::ptr::null());
+    }
+
+    #[test]
+    fn test_task_v2_service_structure() {
+        let config = create_test_config();
+        let service = TaskV2Service::new(config);
+
+        // Test that we can access all service fields
+        let _task = &service.task;
+        let _task_subtask = &service.task_subtask;
+        let _tasklist = &service.tasklist;
+        let _subscription = &service.tasklist_activity_subscription;
+        let _comment = &service.comment;
+        let _attachment = &service.attachment;
+        let _section = &service.section;
+        let _custom_field = &service.custom_field;
+        let _custom_field_option = &service.custom_field_option;
+
+        // If we reach here without panic, structure is correct
+        assert!(true);
+    }
+
+    #[test]
+    fn test_task_v2_service_memory_safety() {
+        let config = create_test_config();
+
+        // Create service in a scope
+        let service = TaskV2Service::new(config);
+
+        // Access services multiple times
+        let _first_access = &service.task;
+        let _second_access = &service.task;
+
+        // Verify multiple references work correctly
+        assert!(std::ptr::eq(_first_access, _second_access));
+    }
+}

@@ -210,3 +210,330 @@ impl EventDispatcherHandlerBuilder {
         Ok(self)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::event::context::{EventContext, EventHeader};
+    use serde_json::json;
+    use std::collections::HashMap;
+    use std::sync::{Arc, Mutex};
+
+    struct TestEventHandler {
+        calls: Arc<Mutex<Vec<String>>>,
+    }
+
+    impl TestEventHandler {
+        fn new(calls: Arc<Mutex<Vec<String>>>) -> Self {
+            Self { calls }
+        }
+    }
+
+    impl EventHandler for TestEventHandler {
+        fn handle(&self, payload: &[u8]) -> anyhow::Result<()> {
+            let payload_str = String::from_utf8_lossy(payload);
+            self.calls.lock().unwrap().push(payload_str.to_string());
+            Ok(())
+        }
+    }
+
+    struct FailingEventHandler;
+
+    impl EventHandler for FailingEventHandler {
+        fn handle(&self, _payload: &[u8]) -> anyhow::Result<()> {
+            Err(anyhow::anyhow!("Intentional test failure"))
+        }
+    }
+
+    #[test]
+    fn test_event_dispatcher_handler_builder_creation() {
+        let builder = EventDispatcherHandler::builder();
+        assert!(builder.processor_map.is_empty());
+        assert!(builder.verification_token.is_none());
+        assert!(builder.event_encrypt_key.is_none());
+    }
+
+    #[test]
+    fn test_event_dispatcher_handler_build() {
+        let handler = EventDispatcherHandler::builder().build();
+        assert!(handler.processor_map.is_empty());
+        assert!(handler.verification_token.is_none());
+        assert!(handler.event_encrypt_key.is_none());
+    }
+
+    #[test]
+    fn test_set_verification_token() {
+        let mut handler = EventDispatcherHandler::builder().build();
+        handler.set_verification_token("test_token".to_string());
+        assert_eq!(handler.verification_token, Some("test_token".to_string()));
+    }
+
+    #[test]
+    fn test_set_event_encrypt_key() {
+        let mut handler = EventDispatcherHandler::builder().build();
+        handler.set_event_encrypt_key("test_encrypt_key".to_string());
+        assert_eq!(
+            handler.event_encrypt_key,
+            Some("test_encrypt_key".to_string())
+        );
+    }
+
+    #[test]
+    fn test_emit_with_registered_handler() {
+        let calls = Arc::new(Mutex::new(Vec::new()));
+        let test_handler = TestEventHandler::new(calls.clone());
+
+        let mut handler = EventDispatcherHandler::builder().build();
+        handler
+            .processor_map
+            .insert("test.event".to_string(), Box::new(test_handler));
+
+        let test_payload = b"test payload";
+        let result = handler.emit("test.event", test_payload);
+
+        assert!(result.is_ok());
+        let calls_vec = calls.lock().unwrap();
+        assert_eq!(calls_vec.len(), 1);
+        assert_eq!(calls_vec[0], "test payload");
+    }
+
+    #[test]
+    fn test_emit_with_unregistered_handler() {
+        let handler = EventDispatcherHandler::builder().build();
+        let test_payload = b"test payload";
+
+        let result = handler.emit("unregistered.event", test_payload);
+
+        assert!(result.is_err());
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("event processor unregistered.event not found"));
+    }
+
+    #[test]
+    fn test_emit_with_failing_handler() {
+        let failing_handler = FailingEventHandler;
+
+        let mut handler = EventDispatcherHandler::builder().build();
+        handler
+            .processor_map
+            .insert("failing.event".to_string(), Box::new(failing_handler));
+
+        let test_payload = b"test payload";
+        let result = handler.emit("failing.event", test_payload);
+
+        assert!(result.is_err());
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("Intentional test failure"));
+    }
+
+    #[test]
+    fn test_do_without_validation_v2_event() {
+        let calls = Arc::new(Mutex::new(Vec::new()));
+        let test_handler = TestEventHandler::new(calls.clone());
+
+        let mut handler = EventDispatcherHandler::builder().build();
+        handler
+            .processor_map
+            .insert("p2.test.event.type".to_string(), Box::new(test_handler));
+
+        // Create a v2 event context
+        let event_context = EventContext {
+            ts: Some("1234567890".to_string()),
+            uuid: None,
+            token: Some("test_token".to_string()),
+            type_: Some("original.type".to_string()),
+            schema: Some("2.0".to_string()), // v2 event has schema
+            header: Some(EventHeader {
+                event_id: Some("event_123".to_string()),
+                event_type: Some("test.event.type".to_string()),
+                create_time: Some("1234567890".to_string()),
+                token: Some("header_token".to_string()),
+                app_id: Some("app_123".to_string()),
+                tenant_key: Some("tenant_123".to_string()),
+            }),
+            event: HashMap::new(),
+        };
+
+        let payload = serde_json::to_vec(&event_context).unwrap();
+        let result = handler.do_without_validation(payload.clone());
+
+        assert!(result.is_ok());
+        let calls_vec = calls.lock().unwrap();
+        assert_eq!(calls_vec.len(), 1);
+        assert_eq!(calls_vec[0], String::from_utf8_lossy(&payload));
+    }
+
+    #[test]
+    fn test_do_without_validation_v1_event() {
+        let calls = Arc::new(Mutex::new(Vec::new()));
+        let test_handler = TestEventHandler::new(calls.clone());
+
+        let mut handler = EventDispatcherHandler::builder().build();
+        // Note: JSON string values get quotes when using to_string(), so we register with quotes
+        handler
+            .processor_map
+            .insert("p1.\"test.event.type\"".to_string(), Box::new(test_handler));
+
+        // Create a v1 event context
+        let mut event = HashMap::new();
+        event.insert("type".to_string(), json!("test.event.type"));
+
+        let event_context = EventContext {
+            ts: Some("1234567890".to_string()),
+            uuid: Some("uuid_123".to_string()), // v1 event has uuid
+            token: Some("test_token".to_string()),
+            type_: None,
+            schema: None, // v1 event has no schema
+            header: None,
+            event,
+        };
+
+        let payload = serde_json::to_vec(&event_context).unwrap();
+        let result = handler.do_without_validation(payload.clone());
+
+        assert!(result.is_ok());
+        let calls_vec = calls.lock().unwrap();
+        assert_eq!(calls_vec.len(), 1);
+        assert_eq!(calls_vec[0], String::from_utf8_lossy(&payload));
+    }
+
+    #[test]
+    fn test_do_without_validation_invalid_json() {
+        let handler = EventDispatcherHandler::builder().build();
+        let invalid_payload = b"invalid json";
+
+        let result = handler.do_without_validation(invalid_payload.to_vec());
+
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_do_without_validation_missing_handler() {
+        let handler = EventDispatcherHandler::builder().build();
+
+        let event_context = EventContext {
+            ts: Some("1234567890".to_string()),
+            uuid: Some("uuid_123".to_string()),
+            token: Some("test_token".to_string()),
+            type_: None,
+            schema: None,
+            header: None,
+            event: {
+                let mut event = HashMap::new();
+                event.insert("type".to_string(), json!("unregistered.event"));
+                event
+            },
+        };
+
+        let payload = serde_json::to_vec(&event_context).unwrap();
+        let result = handler.do_without_validation(payload);
+
+        assert!(result.is_err());
+        // JSON string values include quotes when converted to string
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("event processor p1.\"unregistered.event\" not found"));
+    }
+
+    #[test]
+    fn test_multiple_handlers_registration() {
+        let calls1 = Arc::new(Mutex::new(Vec::new()));
+        let calls2 = Arc::new(Mutex::new(Vec::new()));
+
+        let handler1 = TestEventHandler::new(calls1.clone());
+        let handler2 = TestEventHandler::new(calls2.clone());
+
+        let mut dispatcher = EventDispatcherHandler::builder().build();
+        dispatcher
+            .processor_map
+            .insert("event.1".to_string(), Box::new(handler1));
+        dispatcher
+            .processor_map
+            .insert("event.2".to_string(), Box::new(handler2));
+
+        let test_payload = b"test payload";
+
+        let result1 = dispatcher.emit("event.1", test_payload);
+        let result2 = dispatcher.emit("event.2", test_payload);
+
+        assert!(result1.is_ok());
+        assert!(result2.is_ok());
+
+        assert_eq!(calls1.lock().unwrap().len(), 1);
+        assert_eq!(calls2.lock().unwrap().len(), 1);
+    }
+
+    #[test]
+    #[should_panic(expected = "called `Option::unwrap()` on a `None` value")]
+    fn test_event_context_parsing_edge_cases() {
+        let handler = EventDispatcherHandler::builder().build();
+
+        // Test event with neither schema nor uuid - this will cause panic in the actual code
+        // because line 85 calls unwrap() on None values
+        let event_context = EventContext {
+            ts: Some("1234567890".to_string()),
+            uuid: None,
+            token: Some("test_token".to_string()),
+            type_: Some("some.type".to_string()),
+            schema: None,
+            header: None,
+            event: HashMap::new(),
+        };
+
+        let payload = serde_json::to_vec(&event_context).unwrap();
+
+        // This test documents the current behavior - it panics due to unwrap() on None
+        // In a real implementation, this should be handled more gracefully
+        handler.do_without_validation(payload).unwrap();
+    }
+
+    #[test]
+    fn test_handler_name_generation() {
+        let calls = Arc::new(Mutex::new(Vec::new()));
+        let test_handler = TestEventHandler::new(calls.clone());
+
+        let mut handler = EventDispatcherHandler::builder().build();
+        handler.processor_map.insert(
+            "p2.complex.event.name.with.dots".to_string(),
+            Box::new(test_handler),
+        );
+
+        let event_context = EventContext {
+            ts: Some("1234567890".to_string()),
+            uuid: None,
+            token: Some("test_token".to_string()),
+            type_: Some("original.type".to_string()),
+            schema: Some("2.0".to_string()),
+            header: Some(EventHeader {
+                event_id: Some("event_123".to_string()),
+                event_type: Some("complex.event.name.with.dots".to_string()),
+                create_time: Some("1234567890".to_string()),
+                token: Some("header_token".to_string()),
+                app_id: Some("app_123".to_string()),
+                tenant_key: Some("tenant_123".to_string()),
+            }),
+            event: HashMap::new(),
+        };
+
+        let payload = serde_json::to_vec(&event_context).unwrap();
+        let result = handler.do_without_validation(payload.clone());
+
+        assert!(result.is_ok());
+        let calls_vec = calls.lock().unwrap();
+        assert_eq!(calls_vec.len(), 1);
+    }
+
+    #[test]
+    fn test_empty_processor_map() {
+        let handler = EventDispatcherHandler::builder().build();
+        assert!(handler.processor_map.is_empty());
+
+        let result = handler.emit("any.event", b"payload");
+        assert!(result.is_err());
+    }
+}

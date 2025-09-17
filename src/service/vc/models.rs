@@ -182,11 +182,7 @@ mod tests {
 
     #[test]
     fn test_vc_user_id_type_serialization() {
-        let types = vec![
-            UserIdType::UserId,
-            UserIdType::UnionId,
-            UserIdType::OpenId,
-        ];
+        let types = vec![UserIdType::UserId, UserIdType::UnionId, UserIdType::OpenId];
 
         for user_type in types {
             let serialized = serde_json::to_string(&user_type).unwrap();
@@ -219,10 +215,7 @@ mod tests {
 
     #[test]
     fn test_room_id_type_serialization() {
-        let types = vec![
-            RoomIdType::RoomId,
-            RoomIdType::OmmRoomId,
-        ];
+        let types = vec![RoomIdType::RoomId, RoomIdType::OmmRoomId];
 
         for room_type in types {
             let serialized = serde_json::to_string(&room_type).unwrap();
@@ -521,7 +514,7 @@ mod tests {
             recording_id: "rec_123".to_string(),
             meeting_id: "meet_456".to_string(),
             title: Some("会议录制-项目讨论".to_string()),
-            duration: Some(5400), // 90 minutes in seconds
+            duration: Some(5400),   // 90 minutes in seconds
             size: Some(1073741824), // 1GB in bytes
             status: Some("completed".to_string()),
             start_time: Some("2024-05-01T10:00:00Z".to_string()),

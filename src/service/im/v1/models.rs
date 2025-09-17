@@ -367,11 +367,7 @@ mod tests {
 
     #[test]
     fn test_user_id_type_serialization() {
-        let types = vec![
-            UserIdType::UserId,
-            UserIdType::UnionId,
-            UserIdType::OpenId,
-        ];
+        let types = vec![UserIdType::UserId, UserIdType::UnionId, UserIdType::OpenId];
 
         for user_type in types {
             let serialized = serde_json::to_string(&user_type).unwrap();
@@ -487,7 +483,10 @@ mod tests {
         assert_eq!(reaction.message_id, deserialized.message_id);
         assert_eq!(reaction.reaction_count, deserialized.reaction_count);
         assert_eq!(reaction.has_reacted, deserialized.has_reacted);
-        assert_eq!(reaction.reaction_users.as_ref().unwrap().len(), deserialized.reaction_users.as_ref().unwrap().len());
+        assert_eq!(
+            reaction.reaction_users.as_ref().unwrap().len(),
+            deserialized.reaction_users.as_ref().unwrap().len()
+        );
     }
 
     #[test]
@@ -611,10 +610,7 @@ mod tests {
             card_id: Some("card_123".to_string()),
             card: Some(card_content.clone()),
             update_multi: Some(false),
-            user_id_list: Some(vec![
-                "user_1".to_string(),
-                "user_2".to_string(),
-            ]),
+            user_id_list: Some(vec!["user_1".to_string(), "user_2".to_string()]),
         };
 
         let serialized = serde_json::to_string(&card).unwrap();
@@ -628,11 +624,7 @@ mod tests {
 
     #[test]
     fn test_urgent_type_serialization() {
-        let types = vec![
-            UrgentType::App,
-            UrgentType::Sms,
-            UrgentType::Phone,
-        ];
+        let types = vec![UrgentType::App, UrgentType::Sms, UrgentType::Phone];
 
         for urgent_type in types {
             let serialized = serde_json::to_string(&urgent_type).unwrap();
@@ -718,7 +710,10 @@ mod tests {
 
         assert_eq!(read_info.has_more, deserialized.has_more);
         assert_eq!(read_info.page_token, deserialized.page_token);
-        assert_eq!(read_info.read_users.as_ref().unwrap().len(), deserialized.read_users.as_ref().unwrap().len());
+        assert_eq!(
+            read_info.read_users.as_ref().unwrap().len(),
+            deserialized.read_users.as_ref().unwrap().len()
+        );
     }
 
     #[test]

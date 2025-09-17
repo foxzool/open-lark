@@ -461,9 +461,7 @@ mod tests {
             }),
             is_all_day: Some(false),
             recurrence: Some("FREQ=WEEKLY;BYDAY=MO".to_string()),
-            reminders: Some(vec![Reminder {
-                minutes: Some(15),
-            }]),
+            reminders: Some(vec![Reminder { minutes: Some(15) }]),
             attendees: Some(vec![EventAttendee {
                 r#type: Some(AttendeeType::User),
                 attendee_id: Some("user_123".to_string()),
@@ -510,8 +508,14 @@ mod tests {
         assert_eq!(event.summary, deserialized.summary);
         assert_eq!(event.description, deserialized.description);
         assert_eq!(event.is_all_day, deserialized.is_all_day);
-        assert_eq!(event.attendees.as_ref().unwrap().len(), deserialized.attendees.as_ref().unwrap().len());
-        assert_eq!(event.meeting_rooms.as_ref().unwrap().len(), deserialized.meeting_rooms.as_ref().unwrap().len());
+        assert_eq!(
+            event.attendees.as_ref().unwrap().len(),
+            deserialized.attendees.as_ref().unwrap().len()
+        );
+        assert_eq!(
+            event.meeting_rooms.as_ref().unwrap().len(),
+            deserialized.meeting_rooms.as_ref().unwrap().len()
+        );
     }
 
     #[test]
@@ -562,7 +566,10 @@ mod tests {
         assert_eq!(attendee.is_optional, deserialized.is_optional);
         assert_eq!(attendee.is_external, deserialized.is_external);
         assert_eq!(attendee.third_party_email, deserialized.third_party_email);
-        assert_eq!(attendee.resource_customization.as_ref().unwrap().len(), deserialized.resource_customization.as_ref().unwrap().len());
+        assert_eq!(
+            attendee.resource_customization.as_ref().unwrap().len(),
+            deserialized.resource_customization.as_ref().unwrap().len()
+        );
     }
 
     #[test]
@@ -659,7 +666,10 @@ mod tests {
         let deserialized: CalendarAcl = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(acl.acl_id, deserialized.acl_id);
-        assert_eq!(acl.scope.as_ref().unwrap().user_id, deserialized.scope.as_ref().unwrap().user_id);
+        assert_eq!(
+            acl.scope.as_ref().unwrap().user_id,
+            deserialized.scope.as_ref().unwrap().user_id
+        );
     }
 
     #[test]
@@ -684,7 +694,10 @@ mod tests {
 
         assert_eq!(customization.index_id, deserialized.index_id);
         assert_eq!(customization.input_content, deserialized.input_content);
-        assert_eq!(customization.options.as_ref().unwrap().len(), deserialized.options.as_ref().unwrap().len());
+        assert_eq!(
+            customization.options.as_ref().unwrap().len(),
+            deserialized.options.as_ref().unwrap().len()
+        );
     }
 
     #[test]
@@ -735,9 +748,7 @@ mod tests {
         let debug_string = format!("{:?}", calendar_type);
         assert!(debug_string.contains("Shared"));
 
-        let reminder = Reminder {
-            minutes: Some(30),
-        };
+        let reminder = Reminder { minutes: Some(30) };
         let debug_string = format!("{:?}", reminder);
         assert!(debug_string.contains("Reminder"));
         assert!(debug_string.contains("30"));
