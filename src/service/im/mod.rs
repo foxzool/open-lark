@@ -89,11 +89,9 @@ mod tests {
     #[test]
     fn test_im_service_creation() {
         let config = create_test_config();
-        let im_service = ImService::new(config);
+        let _im_service = ImService::new(config);
 
         // Verify service structure
-        assert!(std::ptr::addr_of!(im_service.v1) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(im_service.v2) as *const _ != std::ptr::null());
     }
 
     #[test]
@@ -105,17 +103,15 @@ mod tests {
             .base_url("https://im.api.com")
             .build();
 
-        let im_service = ImService::new(config);
+        let _im_service = ImService::new(config);
 
         // Verify service creation with custom config
-        assert!(std::ptr::addr_of!(im_service.v1) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(im_service.v2) as *const _ != std::ptr::null());
     }
 
     #[test]
     fn test_im_service_api_versions_independence() {
         let config = create_test_config();
-        let im_service = ImService::new(config);
+        let _im_service = ImService::new(config);
 
         // Test that API versions are independent
         let v1_ptr = std::ptr::addr_of!(im_service.v1) as *const _;
@@ -151,11 +147,9 @@ mod tests {
         ];
 
         for config in test_configs {
-            let im_service = ImService::new(config);
+            let _im_service = ImService::new(config);
 
             // Each configuration should create valid services
-            assert!(std::ptr::addr_of!(im_service.v1) as *const _ != std::ptr::null());
-            assert!(std::ptr::addr_of!(im_service.v2) as *const _ != std::ptr::null());
         }
     }
 
@@ -180,10 +174,6 @@ mod tests {
         );
 
         // Each service should have valid API versions
-        assert!(std::ptr::addr_of!(im_service1.v1) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(im_service1.v2) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(im_service2.v1) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(im_service2.v2) as *const _ != std::ptr::null());
     }
 
     #[test]
@@ -195,10 +185,6 @@ mod tests {
         let im_service2 = ImService::new(original_config);
 
         // Both should work independently
-        assert!(std::ptr::addr_of!(im_service1.v1) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(im_service1.v2) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(im_service2.v1) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(im_service2.v2) as *const _ != std::ptr::null());
 
         // But should be different service instances
         let service1_ptr = std::ptr::addr_of!(im_service1) as *const _;

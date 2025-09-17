@@ -122,14 +122,9 @@ mod tests {
     #[test]
     fn test_acs_service_creation() {
         let config = create_test_config();
-        let service = AcsService::new(config);
+        let _service = AcsService::new(config);
 
         // Verify that all services are properly initialized
-        assert!(!(std::ptr::addr_of!(service.user) as *const _).is_null());
-        assert!(!(std::ptr::addr_of!(service.rule_external) as *const _).is_null());
-        assert!(!(std::ptr::addr_of!(service.visitor) as *const _).is_null());
-        assert!(!(std::ptr::addr_of!(service.device) as *const _).is_null());
-        assert!(!(std::ptr::addr_of!(service.access_record) as *const _).is_null());
     }
 
     #[test]
@@ -140,23 +135,22 @@ mod tests {
             .app_type(AppType::Marketplace)
             .build();
 
-        let service = AcsService::new(config);
+        let _service = AcsService::new(config);
 
         // Verify service creation works with different config types
-        assert!(!(std::ptr::addr_of!(service.user) as *const _).is_null());
     }
 
     #[test]
     fn test_acs_service_structure() {
         let config = create_test_config();
-        let service = AcsService::new(config);
+        let _service = AcsService::new(config);
 
         // Test that we can access all service fields
-        let _user = &service.user;
-        let _rule_external = &service.rule_external;
-        let _visitor = &service.visitor;
-        let _device = &service.device;
-        let _access_record = &service.access_record;
+        let _user = &_service.user;
+        let _rule_external = &_service.rule_external;
+        let _visitor = &_service.visitor;
+        let _device = &_service.device;
+        let _access_record = &_service.access_record;
 
         // If we reach here without panic, structure is correct
         // Test passes by not panicking above
@@ -167,11 +161,11 @@ mod tests {
         let config = create_test_config();
 
         // Create service in a scope
-        let service = AcsService::new(config);
+        let _service = AcsService::new(config);
 
         // Access services multiple times
-        let _first_access = &service.user;
-        let _second_access = &service.user;
+        let _first_access = &_service.user;
+        let _second_access = &_service.user;
 
         // Verify multiple references work correctly
         assert!(std::ptr::eq(_first_access, _second_access));

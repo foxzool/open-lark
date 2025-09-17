@@ -154,26 +154,23 @@ mod tests {
     #[test]
     fn test_search_service_creation() {
         let config = create_test_config();
-        let search_service = SearchService::new(config);
+        let _search_service = SearchService::new(config);
 
         // Verify service structure
-        assert!(std::ptr::addr_of!(search_service.v1) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(search_service.v2) as *const _ != std::ptr::null());
     }
 
     #[test]
     fn test_search_service_debug_trait() {
         let config = create_test_config();
-        let search_service = SearchService::new(config);
+        let _search_service = SearchService::new(config);
 
         // Test that service can be used (services don't need to implement Debug)
-        assert!(std::ptr::addr_of!(search_service) as *const _ != std::ptr::null());
     }
 
     #[test]
     fn test_search_service_api_versions_independence() {
         let config = create_test_config();
-        let search_service = SearchService::new(config);
+        let _search_service = SearchService::new(config);
 
         // Test that API versions are independent
         let v1_ptr = std::ptr::addr_of!(search_service.v1) as *const _;
@@ -209,11 +206,9 @@ mod tests {
         ];
 
         for config in test_configs {
-            let search_service = SearchService::new(config);
+            let _search_service = SearchService::new(config);
 
             // Each configuration should create a valid service
-            assert!(std::ptr::addr_of!(search_service.v1) as *const _ != std::ptr::null());
-            assert!(std::ptr::addr_of!(search_service.v2) as *const _ != std::ptr::null());
         }
     }
 
@@ -238,10 +233,6 @@ mod tests {
         );
 
         // Each service should have valid API versions
-        assert!(std::ptr::addr_of!(search_service1.v1) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(search_service1.v2) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(search_service2.v1) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(search_service2.v2) as *const _ != std::ptr::null());
     }
 
     #[test]
@@ -253,8 +244,6 @@ mod tests {
         let search_service2 = SearchService::new(original_config);
 
         // Both should work independently
-        assert!(std::ptr::addr_of!(search_service1.v1) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(search_service2.v1) as *const _ != std::ptr::null());
 
         // But should be different service instances
         let service1_ptr = std::ptr::addr_of!(search_service1) as *const _;

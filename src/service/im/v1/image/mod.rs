@@ -148,7 +148,7 @@ impl ExecutableBuilder<ImageService, (String, Vec<u8>), CreateImageResponse>
 
     async fn execute(self, service: &ImageService) -> SDKResult<CreateImageResponse> {
         let (image_type, image_data) = self.build();
-        service.create(&image_type, image_data, None).await
+        _service.create(&image_type, image_data, None).await
     }
 
     async fn execute_with_options(
@@ -157,7 +157,7 @@ impl ExecutableBuilder<ImageService, (String, Vec<u8>), CreateImageResponse>
         option: RequestOption,
     ) -> SDKResult<CreateImageResponse> {
         let (image_type, image_data) = self.build();
-        service.create(&image_type, image_data, Some(option)).await
+        _service.create(&image_type, image_data, Some(option)).await
     }
 }
 
@@ -191,7 +191,7 @@ impl ExecutableBuilder<ImageService, String, GetImageResponse> for ImageDownload
 
     async fn execute(self, service: &ImageService) -> SDKResult<GetImageResponse> {
         let image_key = self.build();
-        service.get(&image_key, None).await
+        _service.get(&image_key, None).await
     }
 
     async fn execute_with_options(
@@ -200,6 +200,6 @@ impl ExecutableBuilder<ImageService, String, GetImageResponse> for ImageDownload
         option: RequestOption,
     ) -> SDKResult<GetImageResponse> {
         let image_key = self.build();
-        service.get(&image_key, Some(option)).await
+        _service.get(&image_key, Some(option)).await
     }
 }

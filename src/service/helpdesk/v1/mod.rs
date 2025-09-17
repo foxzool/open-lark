@@ -74,24 +74,11 @@ mod tests {
     #[test]
     fn test_v1_service_creation() {
         let config = create_test_config();
-        let service = V1::new(config);
+        let _service = V1::new(config);
 
         // Verify that all services are properly initialized
         // We can't directly test the inner fields as they are public structs
         // but we can verify the service creation doesn't panic
-        assert!(std::ptr::addr_of!(service.agent) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(service.agent_schedule) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(service.agent_skill) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(service.agent_skill_rule) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(service.category) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(service.event) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(service.faq) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(service.notification) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(service.ticket) as *const _ != std::ptr::null());
-        assert!(
-            std::ptr::addr_of!(service.ticket_customized_field) as *const _ != std::ptr::null()
-        );
-        assert!(std::ptr::addr_of!(service.ticket_message) as *const _ != std::ptr::null());
     }
 
     #[test]
@@ -102,31 +89,29 @@ mod tests {
             .app_type(AppType::Marketplace)
             .build();
 
-        let service = V1::new(config);
+        let _service = V1::new(config);
 
         // Verify service creation works with different config types
-        assert!(std::ptr::addr_of!(service.ticket) as *const _ != std::ptr::null());
     }
 
     #[test]
     fn test_v1_service_memory_safety() {
         let config = create_test_config();
-        let service = V1::new(config);
+        let _service = V1::new(config);
 
         // Test that we can access all services without memory issues
-        let _agent = &service.agent;
-        let _schedule = &service.agent_schedule;
-        let _skill = &service.agent_skill;
-        let _skill_rule = &service.agent_skill_rule;
-        let _category = &service.category;
-        let _event = &service.event;
-        let _faq = &service.faq;
-        let _notification = &service.notification;
-        let _ticket = &service.ticket;
-        let _customized_field = &service.ticket_customized_field;
-        let _message = &service.ticket_message;
+        let _agent = &_service.agent;
+        let _schedule = &_service.agent_schedule;
+        let _skill = &_service.agent_skill;
+        let _skill_rule = &_service.agent_skill_rule;
+        let _category = &_service.category;
+        let _event = &_service.event;
+        let _faq = &_service.faq;
+        let _notification = &_service.notification;
+        let _ticket = &_service.ticket;
+        let _customized_field = &_service.ticket_customized_field;
+        let _message = &_service.ticket_message;
 
         // If we reach here without panic, memory layout is correct
-        assert!(true);
     }
 }

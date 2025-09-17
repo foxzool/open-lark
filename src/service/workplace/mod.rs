@@ -86,36 +86,28 @@ mod tests {
     #[test]
     fn test_workplace_service_creation() {
         let config = create_test_config();
-        let workplace_service = WorkplaceService::new(config);
+        let _workplace_service = WorkplaceService::new(config);
 
         // Verify service structure
-        assert!(
-            std::ptr::addr_of!(workplace_service.workplace_access_data) as *const _
-                != std::ptr::null()
-        );
-        assert!(
-            std::ptr::addr_of!(workplace_service.app_recommend) as *const _ != std::ptr::null()
-        );
     }
 
     #[test]
     fn test_workplace_service_debug_trait() {
         let config = create_test_config();
-        let workplace_service = WorkplaceService::new(config);
+        let _workplace_service = WorkplaceService::new(config);
 
         // Test that service can be used
-        assert!(std::ptr::addr_of!(workplace_service) as *const _ != std::ptr::null());
     }
 
     #[test]
     fn test_workplace_service_modules_independence() {
         let config = create_test_config();
-        let workplace_service = WorkplaceService::new(config);
+        let _workplace_service = WorkplaceService::new(config);
 
         // Test that sub-modules are independent
         let access_data_ptr =
-            std::ptr::addr_of!(workplace_service.workplace_access_data) as *const _;
-        let app_recommend_ptr = std::ptr::addr_of!(workplace_service.app_recommend) as *const _;
+            std::ptr::addr_of!(_workplace_service.workplace_access_data) as *const _;
+        let app_recommend_ptr = std::ptr::addr_of!(_workplace_service.app_recommend) as *const _;
 
         assert_ne!(
             access_data_ptr, app_recommend_ptr,
@@ -143,16 +135,9 @@ mod tests {
         ];
 
         for config in configs {
-            let workplace_service = WorkplaceService::new(config);
+            let _workplace_service = WorkplaceService::new(config);
 
             // Each service should be created successfully
-            assert!(
-                std::ptr::addr_of!(workplace_service.workplace_access_data) as *const _
-                    != std::ptr::null()
-            );
-            assert!(
-                std::ptr::addr_of!(workplace_service.app_recommend) as *const _ != std::ptr::null()
-            );
         }
     }
 
@@ -165,14 +150,6 @@ mod tests {
         let workplace_service2 = WorkplaceService::new(config);
 
         // Both services should be created successfully
-        assert!(
-            std::ptr::addr_of!(workplace_service1.workplace_access_data) as *const _
-                != std::ptr::null()
-        );
-        assert!(
-            std::ptr::addr_of!(workplace_service2.workplace_access_data) as *const _
-                != std::ptr::null()
-        );
 
         // But should be different instances
         let service1_ptr = std::ptr::addr_of!(workplace_service1) as *const _;

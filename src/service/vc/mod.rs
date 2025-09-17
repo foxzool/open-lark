@@ -175,10 +175,9 @@ mod tests {
     #[test]
     fn test_vc_service_creation() {
         let config = create_test_config();
-        let vc_service = VcService::new(config);
+        let _vc_service = VcService::new(config);
 
         // Verify service structure
-        assert!(std::ptr::addr_of!(vc_service.v1) as *const _ != std::ptr::null());
     }
 
     #[test]
@@ -190,10 +189,9 @@ mod tests {
             .base_url("https://vc.api.com")
             .build();
 
-        let vc_service = VcService::new(config);
+        let _vc_service = VcService::new(config);
 
         // Verify service creation with custom config
-        assert!(std::ptr::addr_of!(vc_service.v1) as *const _ != std::ptr::null());
     }
 
     #[test]
@@ -223,10 +221,9 @@ mod tests {
         ];
 
         for config in test_configs {
-            let vc_service = VcService::new(config);
+            let _vc_service = VcService::new(config);
 
             // Each configuration should create a valid service
-            assert!(std::ptr::addr_of!(vc_service.v1) as *const _ != std::ptr::null());
         }
     }
 
@@ -251,8 +248,6 @@ mod tests {
         );
 
         // Each service should have valid v1 API
-        assert!(std::ptr::addr_of!(vc_service1.v1) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(vc_service2.v1) as *const _ != std::ptr::null());
     }
 
     #[test]
@@ -264,8 +259,6 @@ mod tests {
         let vc_service2 = VcService::new(original_config);
 
         // Both should work independently
-        assert!(std::ptr::addr_of!(vc_service1.v1) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(vc_service2.v1) as *const _ != std::ptr::null());
 
         // But should be different service instances
         let service1_ptr = std::ptr::addr_of!(vc_service1) as *const _;
@@ -276,12 +269,10 @@ mod tests {
     #[test]
     fn test_vc_service_v1_api_structure() {
         let config = create_test_config();
-        let vc_service = VcService::new(config);
+        let _vc_service = VcService::new(config);
 
         // Verify that the v1 API is properly structured
-        assert!(std::ptr::addr_of!(vc_service.v1) as *const _ != std::ptr::null());
 
         // Test that service maintains proper memory layout
-        assert!(std::ptr::addr_of!(vc_service) as *const _ != std::ptr::null());
     }
 }

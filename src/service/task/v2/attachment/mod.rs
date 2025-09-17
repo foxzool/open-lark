@@ -215,7 +215,6 @@ mod tests {
     fn test_attachment_service_creation() {
         let config = create_test_config();
         let service = AttachmentService::new(config);
-        assert!(std::ptr::addr_of!(service.config) as *const _ != std::ptr::null());
     }
 
     #[test]

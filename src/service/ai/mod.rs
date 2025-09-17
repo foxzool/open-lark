@@ -197,15 +197,9 @@ mod tests {
     #[test]
     fn test_ai_service_creation() {
         let config = create_test_config();
-        let service = AiService::new(config);
+        let _service = AiService::new(config);
 
         // Verify that all services are properly initialized
-        assert!(!(std::ptr::addr_of!(service.document_ai) as *const _).is_null());
-        assert!(
-            !(std::ptr::addr_of!(service.optical_char_recognition) as *const _).is_null()
-        );
-        assert!(!(std::ptr::addr_of!(service.speech_to_text) as *const _).is_null());
-        assert!(!(std::ptr::addr_of!(service.translation) as *const _).is_null());
     }
 
     #[test]
@@ -216,27 +210,21 @@ mod tests {
             .app_type(AppType::Marketplace)
             .build();
 
-        let service = AiService::new(config);
+        let _service = AiService::new(config);
 
         // Verify service creation works with different config types
-        assert!(!(std::ptr::addr_of!(service.document_ai) as *const _).is_null());
-        assert!(
-            !(std::ptr::addr_of!(service.optical_char_recognition) as *const _).is_null()
-        );
-        assert!(!(std::ptr::addr_of!(service.speech_to_text) as *const _).is_null());
-        assert!(!(std::ptr::addr_of!(service.translation) as *const _).is_null());
     }
 
     #[test]
     fn test_ai_service_structure() {
         let config = create_test_config();
-        let service = AiService::new(config);
+        let _service = AiService::new(config);
 
         // Test that we can access all service fields
-        let _document_ai = &service.document_ai;
-        let _optical_char_recognition = &service.optical_char_recognition;
-        let _speech_to_text = &service.speech_to_text;
-        let _translation = &service.translation;
+        let _document_ai = &_service.document_ai;
+        let _optical_char_recognition = &_service.optical_char_recognition;
+        let _speech_to_text = &_service.speech_to_text;
+        let _translation = &_service.translation;
 
         // If we reach here without panic, structure is correct
         // Test passes by not panicking above
@@ -247,11 +235,11 @@ mod tests {
         let config = create_test_config();
 
         // Create service in a scope
-        let service = AiService::new(config);
+        let _service = AiService::new(config);
 
         // Access services multiple times
-        let _first_access = &service.document_ai;
-        let _second_access = &service.document_ai;
+        let _first_access = &_service.document_ai;
+        let _second_access = &_service.document_ai;
 
         // Verify multiple references work correctly
         assert!(std::ptr::eq(_first_access, _second_access));

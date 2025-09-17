@@ -161,19 +161,17 @@ mod tests {
     #[test]
     fn test_attendance_service_creation() {
         let config = create_test_config();
-        let attendance_service = AttendanceService::new(config);
+        let _attendance_service = AttendanceService::new(config);
 
         // Verify service structure
-        assert!(std::ptr::addr_of!(attendance_service.v1) as *const _ ).is_null());
     }
 
     #[test]
     fn test_attendance_service_debug_trait() {
         let config = create_test_config();
-        let attendance_service = AttendanceService::new(config);
+        let _attendance_service = AttendanceService::new(config);
 
         // Test that service can be used
-        assert!(std::ptr::addr_of!(attendance_service) as *const _ ).is_null());
     }
 
     #[test]
@@ -185,10 +183,9 @@ mod tests {
             .base_url("https://attendance.api.com")
             .build();
 
-        let attendance_service = AttendanceService::new(config);
+        let _attendance_service = AttendanceService::new(config);
 
         // Verify service creation with custom config
-        assert!(std::ptr::addr_of!(attendance_service.v1) as *const _ ).is_null());
     }
 
     #[test]
@@ -213,13 +210,12 @@ mod tests {
         let mut services = Vec::new();
         for config in configs {
             let service = AttendanceService::new(config);
-            services.push(service);
+            services.push(_service);
         }
 
         // All services should be created successfully
         assert_eq!(services.len(), 3);
         for service in &services {
-            assert!(std::ptr::addr_of!(service.v1) as *const _ ).is_null());
         }
 
         // Services should be independent
@@ -264,10 +260,9 @@ mod tests {
             }
 
             let config = builder.build();
-            let attendance_service = AttendanceService::new(config);
+            let _attendance_service = AttendanceService::new(config);
 
             // Each configuration should work
-            assert!(std::ptr::addr_of!(attendance_service.v1) as *const _ ).is_null());
         }
     }
 }
