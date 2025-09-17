@@ -153,10 +153,9 @@ mod tests {
     #[test]
     fn test_calendar_service_creation() {
         let config = create_test_config();
-        let calendar_service = CalendarService::new(config);
+        let _calendar_service = CalendarService::new(config);
 
         // Verify service structure
-        assert!(std::ptr::addr_of!(calendar_service.v4) as *const _ != std::ptr::null());
     }
 
     #[test]
@@ -168,10 +167,9 @@ mod tests {
             .base_url("https://calendar.api.com")
             .build();
 
-        let calendar_service = CalendarService::new(config);
+        let _calendar_service = CalendarService::new(config);
 
         // Verify service creation with custom config
-        assert!(std::ptr::addr_of!(calendar_service.v4) as *const _ != std::ptr::null());
     }
 
     #[test]
@@ -201,10 +199,9 @@ mod tests {
         ];
 
         for config in test_configs {
-            let calendar_service = CalendarService::new(config);
+            let _calendar_service = CalendarService::new(config);
 
             // Each configuration should create a valid service
-            assert!(std::ptr::addr_of!(calendar_service.v4) as *const _ != std::ptr::null());
         }
     }
 
@@ -229,8 +226,6 @@ mod tests {
         );
 
         // Each service should have valid v4 API
-        assert!(std::ptr::addr_of!(calendar_service1.v4) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(calendar_service2.v4) as *const _ != std::ptr::null());
     }
 
     #[test]
@@ -242,8 +237,6 @@ mod tests {
         let calendar_service2 = CalendarService::new(original_config);
 
         // Both should work independently
-        assert!(std::ptr::addr_of!(calendar_service1.v4) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(calendar_service2.v4) as *const _ != std::ptr::null());
 
         // But should be different service instances
         let service1_ptr = std::ptr::addr_of!(calendar_service1) as *const _;

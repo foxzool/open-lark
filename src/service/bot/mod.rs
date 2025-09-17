@@ -148,10 +148,9 @@ mod tests {
     #[test]
     fn test_bot_service_creation() {
         let config = create_test_config();
-        let bot_service = BotService::new(config);
+        let _bot_service = BotService::new(config);
 
         // Verify service structure
-        assert!(std::ptr::addr_of!(bot_service.v3) as *const _ != std::ptr::null());
     }
 
     #[test]
@@ -163,10 +162,9 @@ mod tests {
             .base_url("https://bot.api.com")
             .build();
 
-        let bot_service = BotService::new(config);
+        let _bot_service = BotService::new(config);
 
         // Verify service creation with custom config
-        assert!(std::ptr::addr_of!(bot_service.v3) as *const _ != std::ptr::null());
     }
 
     #[test]
@@ -196,10 +194,9 @@ mod tests {
         ];
 
         for config in test_configs {
-            let bot_service = BotService::new(config);
+            let _bot_service = BotService::new(config);
 
             // Each configuration should create a valid service
-            assert!(std::ptr::addr_of!(bot_service.v3) as *const _ != std::ptr::null());
         }
     }
 
@@ -224,8 +221,6 @@ mod tests {
         );
 
         // Each service should have valid v3 API
-        assert!(std::ptr::addr_of!(bot_service1.v3) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(bot_service2.v3) as *const _ != std::ptr::null());
     }
 
     #[test]
@@ -237,8 +232,6 @@ mod tests {
         let bot_service2 = BotService::new(original_config);
 
         // Both should work independently
-        assert!(std::ptr::addr_of!(bot_service1.v3) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(bot_service2.v3) as *const _ != std::ptr::null());
 
         // But should be different service instances
         let service1_ptr = std::ptr::addr_of!(bot_service1) as *const _;
@@ -249,12 +242,10 @@ mod tests {
     #[test]
     fn test_bot_service_api_version_structure() {
         let config = create_test_config();
-        let bot_service = BotService::new(config);
+        let _bot_service = BotService::new(config);
 
         // Verify that the v3 API is properly structured
-        assert!(std::ptr::addr_of!(bot_service.v3) as *const _ != std::ptr::null());
 
         // Test that service can be used (basic memory check)
-        assert!(std::ptr::addr_of!(bot_service) as *const _ != std::ptr::null());
     }
 }

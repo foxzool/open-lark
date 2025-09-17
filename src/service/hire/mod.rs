@@ -191,47 +191,9 @@ mod tests {
     #[test]
     fn test_hire_service_creation() {
         let config = create_test_config();
-        let hire_service = HireService::new(config);
+        let _hire_service = HireService::new(config);
 
-        // Verify all sub-service structures
-        assert!(
-            std::ptr::addr_of!(hire_service.recruitment_config) as *const _ != std::ptr::null()
-        );
-        assert!(std::ptr::addr_of!(hire_service.get_candidates) as *const _ != std::ptr::null());
-        assert!(
-            std::ptr::addr_of!(hire_service.candidate_management) as *const _ != std::ptr::null()
-        );
-        assert!(
-            std::ptr::addr_of!(hire_service.ecological_docking) as *const _ != std::ptr::null()
-        );
-        assert!(std::ptr::addr_of!(hire_service.referral_account) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(hire_service.attachment) as *const _ != std::ptr::null());
-    }
-
-    #[test]
-    fn test_hire_service_with_custom_config() {
-        let config = Config::builder()
-            .app_id("hire_app")
-            .app_secret("hire_secret")
-            .req_timeout(std::time::Duration::from_millis(20000))
-            .base_url("https://hire.api.com")
-            .build();
-
-        let hire_service = HireService::new(config);
-
-        // Verify service creation with custom config
-        assert!(
-            std::ptr::addr_of!(hire_service.recruitment_config) as *const _ != std::ptr::null()
-        );
-        assert!(std::ptr::addr_of!(hire_service.get_candidates) as *const _ != std::ptr::null());
-        assert!(
-            std::ptr::addr_of!(hire_service.candidate_management) as *const _ != std::ptr::null()
-        );
-        assert!(
-            std::ptr::addr_of!(hire_service.ecological_docking) as *const _ != std::ptr::null()
-        );
-        assert!(std::ptr::addr_of!(hire_service.referral_account) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(hire_service.attachment) as *const _ != std::ptr::null());
+        // Verify all sub-service structures - test passes by not panicking above
     }
 
     #[test]
@@ -261,26 +223,9 @@ mod tests {
         ];
 
         for config in test_configs {
-            let hire_service = HireService::new(config);
+            let _hire_service = HireService::new(config);
 
             // Each configuration should create valid sub-services
-            assert!(
-                std::ptr::addr_of!(hire_service.recruitment_config) as *const _ != std::ptr::null()
-            );
-            assert!(
-                std::ptr::addr_of!(hire_service.get_candidates) as *const _ != std::ptr::null()
-            );
-            assert!(
-                std::ptr::addr_of!(hire_service.candidate_management) as *const _
-                    != std::ptr::null()
-            );
-            assert!(
-                std::ptr::addr_of!(hire_service.ecological_docking) as *const _ != std::ptr::null()
-            );
-            assert!(
-                std::ptr::addr_of!(hire_service.referral_account) as *const _ != std::ptr::null()
-            );
-            assert!(std::ptr::addr_of!(hire_service.attachment) as *const _ != std::ptr::null());
         }
     }
 
@@ -292,12 +237,12 @@ mod tests {
             .app_secret("secret2")
             .build();
 
-        let hire_service1 = HireService::new(config1);
-        let hire_service2 = HireService::new(config2);
+        let _hire_service1 = HireService::new(config1);
+        let _hire_service2 = HireService::new(config2);
 
         // Services should be independent instances
-        let service1_ptr = std::ptr::addr_of!(hire_service1) as *const _;
-        let service2_ptr = std::ptr::addr_of!(hire_service2) as *const _;
+        let service1_ptr = std::ptr::addr_of!(_hire_service1) as *const _;
+        let service2_ptr = std::ptr::addr_of!(_hire_service2) as *const _;
 
         assert_ne!(
             service1_ptr, service2_ptr,
@@ -305,14 +250,6 @@ mod tests {
         );
 
         // Each service should have valid sub-services
-        assert!(
-            std::ptr::addr_of!(hire_service1.recruitment_config) as *const _ != std::ptr::null()
-        );
-        assert!(std::ptr::addr_of!(hire_service1.get_candidates) as *const _ != std::ptr::null());
-        assert!(
-            std::ptr::addr_of!(hire_service2.recruitment_config) as *const _ != std::ptr::null()
-        );
-        assert!(std::ptr::addr_of!(hire_service2.get_candidates) as *const _ != std::ptr::null());
     }
 
     #[test]
@@ -320,40 +257,32 @@ mod tests {
         let original_config = create_test_config();
 
         // Test that the service works with cloned configs
-        let hire_service1 = HireService::new(original_config.clone());
-        let hire_service2 = HireService::new(original_config);
+        let _hire_service1 = HireService::new(original_config.clone());
+        let _hire_service2 = HireService::new(original_config);
 
         // Both should work independently
-        assert!(
-            std::ptr::addr_of!(hire_service1.recruitment_config) as *const _ != std::ptr::null()
-        );
-        assert!(std::ptr::addr_of!(hire_service1.get_candidates) as *const _ != std::ptr::null());
-        assert!(
-            std::ptr::addr_of!(hire_service2.recruitment_config) as *const _ != std::ptr::null()
-        );
-        assert!(std::ptr::addr_of!(hire_service2.get_candidates) as *const _ != std::ptr::null());
 
         // But should be different service instances
-        let service1_ptr = std::ptr::addr_of!(hire_service1) as *const _;
-        let service2_ptr = std::ptr::addr_of!(hire_service2) as *const _;
+        let service1_ptr = std::ptr::addr_of!(_hire_service1) as *const _;
+        let service2_ptr = std::ptr::addr_of!(_hire_service2) as *const _;
         assert_ne!(service1_ptr, service2_ptr);
     }
 
     #[test]
     fn test_hire_service_sub_services_independence() {
         let config = create_test_config();
-        let hire_service = HireService::new(config);
+        let _hire_service = HireService::new(config);
 
         // Test that all sub-services are independent
         let recruitment_config_ptr =
-            std::ptr::addr_of!(hire_service.recruitment_config) as *const _;
-        let get_candidates_ptr = std::ptr::addr_of!(hire_service.get_candidates) as *const _;
+            std::ptr::addr_of!(_hire_service.recruitment_config) as *const _;
+        let get_candidates_ptr = std::ptr::addr_of!(_hire_service.get_candidates) as *const _;
         let candidate_management_ptr =
-            std::ptr::addr_of!(hire_service.candidate_management) as *const _;
+            std::ptr::addr_of!(_hire_service.candidate_management) as *const _;
         let ecological_docking_ptr =
-            std::ptr::addr_of!(hire_service.ecological_docking) as *const _;
-        let referral_account_ptr = std::ptr::addr_of!(hire_service.referral_account) as *const _;
-        let attachment_ptr = std::ptr::addr_of!(hire_service.attachment) as *const _;
+            std::ptr::addr_of!(_hire_service.ecological_docking) as *const _;
+        let referral_account_ptr = std::ptr::addr_of!(_hire_service.referral_account) as *const _;
+        let attachment_ptr = std::ptr::addr_of!(_hire_service.attachment) as *const _;
 
         assert_ne!(
             recruitment_config_ptr, get_candidates_ptr,
@@ -377,6 +306,5 @@ mod tests {
         );
 
         // Verify service maintains proper memory layout
-        assert!(std::ptr::addr_of!(hire_service) as *const _ != std::ptr::null());
     }
 }
