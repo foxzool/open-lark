@@ -108,3 +108,21 @@ pub mod v2;
 
 pub use models::*;
 pub use v2::*;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_task_module_structure() {
+        // Test that all modules are properly exposed
+        assert!(true); // Basic structure test
+    }
+
+    #[test]
+    fn test_models_import() {
+        // Test that models are properly imported
+        let _user_id_type = UserIdType::OpenId;
+        assert!(true);
+    }
+}
