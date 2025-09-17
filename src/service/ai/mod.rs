@@ -200,12 +200,12 @@ mod tests {
         let service = AiService::new(config);
 
         // Verify that all services are properly initialized
-        assert!(std::ptr::addr_of!(service.document_ai) as *const _ != std::ptr::null());
+        assert!(!(std::ptr::addr_of!(service.document_ai) as *const _).is_null());
         assert!(
-            std::ptr::addr_of!(service.optical_char_recognition) as *const _ != std::ptr::null()
+            !(std::ptr::addr_of!(service.optical_char_recognition) as *const _).is_null()
         );
-        assert!(std::ptr::addr_of!(service.speech_to_text) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(service.translation) as *const _ != std::ptr::null());
+        assert!(!(std::ptr::addr_of!(service.speech_to_text) as *const _).is_null());
+        assert!(!(std::ptr::addr_of!(service.translation) as *const _).is_null());
     }
 
     #[test]
@@ -219,12 +219,12 @@ mod tests {
         let service = AiService::new(config);
 
         // Verify service creation works with different config types
-        assert!(std::ptr::addr_of!(service.document_ai) as *const _ != std::ptr::null());
+        assert!(!(std::ptr::addr_of!(service.document_ai) as *const _).is_null());
         assert!(
-            std::ptr::addr_of!(service.optical_char_recognition) as *const _ != std::ptr::null()
+            !(std::ptr::addr_of!(service.optical_char_recognition) as *const _).is_null()
         );
-        assert!(std::ptr::addr_of!(service.speech_to_text) as *const _ != std::ptr::null());
-        assert!(std::ptr::addr_of!(service.translation) as *const _ != std::ptr::null());
+        assert!(!(std::ptr::addr_of!(service.speech_to_text) as *const _).is_null());
+        assert!(!(std::ptr::addr_of!(service.translation) as *const _).is_null());
     }
 
     #[test]
@@ -239,7 +239,7 @@ mod tests {
         let _translation = &service.translation;
 
         // If we reach here without panic, structure is correct
-        assert!(true);
+        // Test passes by not panicking above
     }
 
     #[test]

@@ -164,7 +164,7 @@ mod tests {
         let attendance_service = AttendanceService::new(config);
 
         // Verify service structure
-        assert!(std::ptr::addr_of!(attendance_service.v1) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(attendance_service.v1) as *const _ ).is_null());
     }
 
     #[test]
@@ -173,7 +173,7 @@ mod tests {
         let attendance_service = AttendanceService::new(config);
 
         // Test that service can be used
-        assert!(std::ptr::addr_of!(attendance_service) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(attendance_service) as *const _ ).is_null());
     }
 
     #[test]
@@ -188,7 +188,7 @@ mod tests {
         let attendance_service = AttendanceService::new(config);
 
         // Verify service creation with custom config
-        assert!(std::ptr::addr_of!(attendance_service.v1) as *const _ != std::ptr::null());
+        assert!(std::ptr::addr_of!(attendance_service.v1) as *const _ ).is_null());
     }
 
     #[test]
@@ -219,7 +219,7 @@ mod tests {
         // All services should be created successfully
         assert_eq!(services.len(), 3);
         for service in &services {
-            assert!(std::ptr::addr_of!(service.v1) as *const _ != std::ptr::null());
+            assert!(std::ptr::addr_of!(service.v1) as *const _ ).is_null());
         }
 
         // Services should be independent
@@ -267,7 +267,7 @@ mod tests {
             let attendance_service = AttendanceService::new(config);
 
             // Each configuration should work
-            assert!(std::ptr::addr_of!(attendance_service.v1) as *const _ != std::ptr::null());
+            assert!(std::ptr::addr_of!(attendance_service.v1) as *const _ ).is_null());
         }
     }
 }
