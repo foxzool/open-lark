@@ -52,7 +52,7 @@ pub struct CreateAppRoleRequest {
 }
 
 /// 数据表权限
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub struct TableRole {
     /// 数据表 id
     pub table_id: String,
@@ -64,7 +64,7 @@ pub struct TableRole {
 }
 
 /// 数据表默认权限
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub struct BlockRole {
     /// 多维表格数据表的唯一标识符
     pub block_id: String,

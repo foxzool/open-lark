@@ -166,4 +166,297 @@ mod tests {
 
         assert_eq!(serialized, expected);
     }
+
+    #[test]
+    fn test_create_app_request_builder_default() {
+        let builder = CreateAppRequestBuilder::default();
+        let request = builder.build();
+
+        assert_eq!(request.name, "");
+        assert_eq!(request.folder_token, None);
+        assert_eq!(request.time_zone, None);
+    }
+
+    #[test]
+    fn test_create_app_request_default() {
+        let request = CreateAppRequest::default();
+
+        assert_eq!(request.name, "");
+        assert_eq!(request.folder_token, None);
+        assert_eq!(request.time_zone, None);
+    }
+
+    #[test]
+    fn test_create_app_request_minimal() {
+        let request = CreateAppRequest::builder()
+            .name("简单表格")
+            .build();
+
+        assert_eq!(request.name, "简单表格");
+        assert_eq!(request.folder_token, None);
+        assert_eq!(request.time_zone, None);
+    }
+
+    #[test]
+    fn test_create_app_request_with_folder_only() {
+        let request = CreateAppRequest::builder()
+            .name("文件夹表格")
+            .folder_token("folder123")
+            .build();
+
+        assert_eq!(request.name, "文件夹表格");
+        assert_eq!(request.folder_token, Some("folder123".to_string()));
+        assert_eq!(request.time_zone, None);
+    }
+
+    #[test]
+    fn test_create_app_request_with_timezone_only() {
+        let request = CreateAppRequest::builder()
+            .name("时区表格")
+            .time_zone("UTC")
+            .build();
+
+        assert_eq!(request.name, "时区表格");
+        assert_eq!(request.folder_token, None);
+        assert_eq!(request.time_zone, Some("UTC".to_string()));
+    }
+
+    #[test]
+    fn test_create_app_request_builder_chaining() {
+        let request = CreateAppRequest::builder()
+            .name("链式调用")
+            .folder_token("folder456")
+            .time_zone("Europe/London")
+            .name("更新名称")
+            .build();
+
+        assert_eq!(request.name, "更新名称");
+        assert_eq!(request.folder_token, Some("folder456".to_string()));
+        assert_eq!(request.time_zone, Some("Europe/London".to_string()));
+    }
+
+    #[test]
+    fn test_create_app_request_debug() {
+        let request = CreateAppRequest::builder()
+            .name("调试测试")
+            .build();
+
+        let debug_str = format!("{:?}", request);
+        assert!(debug_str.contains("CreateAppRequest"));
+        assert!(debug_str.contains("调试测试"));
+    }
+
+    #[test]
+    fn test_create_app_request_with_unicode_name() {
+        let unicode_name = "测试表格🚀📊📈";
+        let request = CreateAppRequest::builder()
+            .name(unicode_name)
+            .build();
+
+        assert_eq!(request.name, unicode_name);
+    }
+
+    #[test]
+    fn test_create_app_request_with_string_types() {
+        let owned_string = String::from("拥有字符串");
+        let request1 = CreateAppRequest::builder()
+            .name(owned_string)
+            .build();
+        assert_eq!(request1.name, "拥有字符串");
+
+        let string_ref = "引用字符串";
+        let request2 = CreateAppRequest::builder()
+            .name(string_ref)
+            .build();
+        assert_eq!(request2.name, "引用字符串");
+    }
+
+    #[test]
+    fn test_create_app_request_body_with_none_values() {
+        let body = CreateAppRequestBody {
+            name: "基础表格".to_string(),
+            folder_token: None,
+            time_zone: None,
+        };
+
+        let serialized = serde_json::to_value(&body).unwrap();
+        let expected = json!({
+            "name": "基础表格"
+        });
+
+        assert_eq!(serialized, expected);
+    }
+
+    #[test]
+    fn test_create_app_request_body_with_empty_strings() {
+        let body = CreateAppRequestBody {
+            name: "".to_string(),
+            folder_token: Some("".to_string()),
+            time_zone: Some("".to_string()),
+        };
+
+        let serialized = serde_json::to_value(&body).unwrap();
+        let expected = json!({
+            "name": "",
+            "folder_token": "",
+            "time_zone": ""
+        });
+
+        assert_eq!(serialized, expected);
+    }
+
+    #[test]
+    fn test_create_app_response_deserialization() {
+        let json = r#"{
+            "app": {
+                "app_token": "bascnmBA*****yGehy8",
+                "name": "新建多维表格",
+                "revision": 1,
+                "url": "https://example.feishu.cn/base/bascnmBA*****yGehy8"
+            }
+        }"#;
+
+        let response: CreateAppResponse = serde_json::from_str(json).unwrap();
+        assert_eq!(response.app.app_token, "bascnmBA*****yGehy8");
+        assert_eq!(response.app.name, "新建多维表格");
+        assert_eq!(response.app.revision, 1);
+        assert_eq!(response.app.url, "https://example.feishu.cn/base/bascnmBA*****yGehy8");
+    }
+
+    #[test]
+    fn test_create_app_response_data_debug() {
+        let app_data = CreateAppResponseData {
+            app_token: "test_token".to_string(),
+            name: "Test App".to_string(),
+            revision: 1,
+            url: "https://test.url".to_string(),
+        };
+
+        let debug_str = format!("{:?}", app_data);
+        assert!(debug_str.contains("CreateAppResponseData"));
+        assert!(debug_str.contains("test_token"));
+        assert!(debug_str.contains("Test App"));
+        assert!(debug_str.contains("https://test.url"));
+    }
+
+    #[test]
+    fn test_create_app_response_debug() {
+        let response = CreateAppResponse {
+            app: CreateAppResponseData {
+                app_token: "debug_token".to_string(),
+                name: "Debug App".to_string(),
+                revision: 2,
+                url: "https://debug.url".to_string(),
+            },
+        };
+
+        let debug_str = format!("{:?}", response);
+        assert!(debug_str.contains("CreateAppResponse"));
+        assert!(debug_str.contains("debug_token"));
+        assert!(debug_str.contains("Debug App"));
+    }
+
+    #[test]
+    fn test_create_app_response_data_format() {
+        let format = CreateAppResponse::data_format();
+        assert!(matches!(format, ResponseFormat::Data));
+    }
+
+    #[test]
+    fn test_create_app_response_with_different_revisions() {
+        let revisions = vec![0, 1, 5, 100, 999999];
+
+        for revision in revisions {
+            let json = format!(
+                r#"{{
+                    "app": {{
+                        "app_token": "test_token",
+                        "name": "Test App",
+                        "revision": {},
+                        "url": "https://test.url"
+                    }}
+                }}"#,
+                revision
+            );
+
+            let response: CreateAppResponse = serde_json::from_str(&json).unwrap();
+            assert_eq!(response.app.revision, revision);
+        }
+    }
+
+    #[test]
+    fn test_create_app_response_with_unicode_data() {
+        let json = r#"{
+            "app": {
+                "app_token": "unicode_token",
+                "name": "多维表格📊数据分析🔍",
+                "revision": 1,
+                "url": "https://飞书.cn/base/unicode_token"
+            }
+        }"#;
+
+        let response: CreateAppResponse = serde_json::from_str(json).unwrap();
+        assert_eq!(response.app.name, "多维表格📊数据分析🔍");
+        assert_eq!(response.app.url, "https://飞书.cn/base/unicode_token");
+    }
+
+    #[test]
+    fn test_create_app_request_body_various_timezones() {
+        let timezones = vec![
+            "UTC",
+            "Asia/Shanghai",
+            "America/New_York",
+            "Europe/London",
+            "Asia/Tokyo",
+            "Australia/Sydney",
+        ];
+
+        for tz in timezones {
+            let body = CreateAppRequestBody {
+                name: "时区测试".to_string(),
+                folder_token: None,
+                time_zone: Some(tz.to_string()),
+            };
+
+            let serialized = serde_json::to_value(&body).unwrap();
+            let expected = json!({
+                "name": "时区测试",
+                "time_zone": tz
+            });
+
+            assert_eq!(serialized, expected);
+        }
+    }
+
+    #[test]
+    fn test_memory_efficiency() {
+        let request = CreateAppRequest::builder()
+            .name("内存测试")
+            .build();
+
+        let size = std::mem::size_of_val(&request);
+        assert!(size > 0);
+        assert!(size < 1024);
+    }
+
+    #[test]
+    fn test_create_app_request_with_long_name() {
+        let long_name = "a".repeat(1000);
+        let request = CreateAppRequest::builder()
+            .name(&long_name)
+            .build();
+
+        assert_eq!(request.name, long_name);
+    }
+
+    #[test]
+    fn test_create_app_request_builder_method_returns() {
+        let builder = CreateAppRequest::builder()
+            .name("测试链式");
+
+        // 确保builder方法返回正确的类型
+        let _chained = builder
+            .folder_token("folder")
+            .time_zone("UTC");
+    }
 }

@@ -491,3 +491,498 @@ pub struct PaymentDaySetting {
     /// 顺延规则
     pub adjustment_rule: Option<String>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json;
+
+    #[test]
+    fn test_page_response_serialization() {
+        let page = PageResponse {
+            items: vec!["item1".to_string(), "item2".to_string()],
+            has_more: true,
+            page_token: Some("token123".to_string()),
+        };
+        let json = serde_json::to_string(&page).unwrap();
+        assert!(json.contains("item1"));
+        assert!(json.contains("true"));
+        assert!(json.contains("token123"));
+    }
+
+    #[test]
+    fn test_i18n_text_serialization() {
+        let i18n = I18nText {
+            zh_cn: Some("中文".to_string()),
+            en_us: Some("English".to_string()),
+            ja_jp: Some("日本語".to_string()),
+        };
+        let json = serde_json::to_string(&i18n).unwrap();
+        assert!(json.contains("中文"));
+        assert!(json.contains("English"));
+        assert!(json.contains("日本語"));
+    }
+
+    #[test]
+    fn test_i18n_text_default() {
+        let i18n = I18nText::default();
+        assert_eq!(i18n.zh_cn, None);
+        assert_eq!(i18n.en_us, None);
+        assert_eq!(i18n.ja_jp, None);
+    }
+
+    #[test]
+    fn test_payment_detail_list_request() {
+        let request = PaymentDetailListRequest {
+            payment_activity_id: "activity123".to_string(),
+            page_size: Some(50),
+            page_token: Some("token456".to_string()),
+            employee_id: Some("emp789".to_string()),
+            user_id_type: Some("open_id".to_string()),
+            department_id_type: Some("open_department_id".to_string()),
+        };
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("activity123"));
+        assert!(json.contains("50"));
+        assert!(json.contains("emp789"));
+    }
+
+    #[test]
+    fn test_payment_detail_query_request() {
+        let request = PaymentDetailQueryRequest {
+            payment_activity_id: "activity456".to_string(),
+            employee_ids: vec!["emp1".to_string(), "emp2".to_string()],
+            user_id_type: Some("user_id".to_string()),
+            fields: Some(vec!["salary".to_string(), "bonus".to_string()]),
+        };
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("activity456"));
+        assert!(json.contains("emp1"));
+        assert!(json.contains("salary"));
+    }
+
+    #[test]
+    fn test_payment_item() {
+        let item = PaymentItem {
+            acct_item_id: "item123".to_string(),
+            acct_item_name: Some(I18nText {
+                zh_cn: Some("基本工资".to_string()),
+                en_us: Some("Base Salary".to_string()),
+                ja_jp: None,
+            }),
+            acct_item_type: Some("basic".to_string()),
+            amount: "5000.00".to_string(),
+            currency: Some("CNY".to_string()),
+            formula: Some("base * 1.0".to_string()),
+            remark: Some("基础薪资".to_string()),
+        };
+        let json = serde_json::to_string(&item).unwrap();
+        assert!(json.contains("item123"));
+        assert!(json.contains("基本工资"));
+        assert!(json.contains("5000.00"));
+        assert!(json.contains("CNY"));
+    }
+
+    #[test]
+    fn test_payment_detail() {
+        let detail = PaymentDetail {
+            employee_id: "emp123".to_string(),
+            employee_name: Some(I18nText {
+                zh_cn: Some("张三".to_string()),
+                en_us: Some("Zhang San".to_string()),
+                ja_jp: None,
+            }),
+            employee_number: Some("E001".to_string()),
+            department_id: Some("dept123".to_string()),
+            department_name: Some(I18nText {
+                zh_cn: Some("技术部".to_string()),
+                en_us: Some("Tech Dept".to_string()),
+                ja_jp: None,
+            }),
+            job_id: Some("job123".to_string()),
+            job_name: Some(I18nText {
+                zh_cn: Some("软件工程师".to_string()),
+                en_us: Some("Software Engineer".to_string()),
+                ja_jp: None,
+            }),
+            payment_items: vec![],
+            total_amount: Some("8000.00".to_string()),
+            currency: Some("CNY".to_string()),
+            payment_status: Some("paid".to_string()),
+            payment_time: Some("2024-01-31T00:00:00Z".to_string()),
+            remark: Some("正常发薪".to_string()),
+        };
+        let json = serde_json::to_string(&detail).unwrap();
+        assert!(json.contains("emp123"));
+        assert!(json.contains("张三"));
+        assert!(json.contains("E001"));
+        assert!(json.contains("8000.00"));
+        assert!(json.contains("paid"));
+    }
+
+    #[test]
+    fn test_payment_activity_list_request() {
+        let request = PaymentActivityListRequest {
+            page_size: Some(20),
+            page_token: Some("token789".to_string()),
+            status: Some("active".to_string()),
+            paygroup_id: Some("pg123".to_string()),
+            period_start: Some("2024-01-01".to_string()),
+            period_end: Some("2024-01-31".to_string()),
+        };
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("20"));
+        assert!(json.contains("active"));
+        assert!(json.contains("pg123"));
+        assert!(json.contains("2024-01-01"));
+    }
+
+    #[test]
+    fn test_payment_activity() {
+        let activity = PaymentActivity {
+            payment_activity_id: "pa123".to_string(),
+            activity_name: I18nText {
+                zh_cn: Some("1月份工资发放".to_string()),
+                en_us: Some("January Salary Payment".to_string()),
+                ja_jp: None,
+            },
+            status: "completed".to_string(),
+            paygroup_id: "pg456".to_string(),
+            paygroup_name: Some(I18nText {
+                zh_cn: Some("技术组".to_string()),
+                en_us: Some("Tech Group".to_string()),
+                ja_jp: None,
+            }),
+            period_start: "2024-01-01".to_string(),
+            period_end: "2024-01-31".to_string(),
+            planned_payment_date: Some("2024-02-01".to_string()),
+            actual_payment_date: Some("2024-02-01".to_string()),
+            employee_count: Some(50),
+            total_amount: Some("400000.00".to_string()),
+            currency: Some("CNY".to_string()),
+            created_time: Some("2024-01-01T00:00:00Z".to_string()),
+            updated_time: Some("2024-02-01T00:00:00Z".to_string()),
+            creator_id: Some("user123".to_string()),
+            remark: Some("月度工资发放".to_string()),
+        };
+        let json = serde_json::to_string(&activity).unwrap();
+        assert!(json.contains("pa123"));
+        assert!(json.contains("1月份工资发放"));
+        assert!(json.contains("completed"));
+        assert!(json.contains("50"));
+        assert!(json.contains("400000.00"));
+    }
+
+    #[test]
+    fn test_datasource_record_save_request() {
+        let request = DatasourceRecordSaveRequest {
+            datasource_id: "ds123".to_string(),
+            employee_id: "emp456".to_string(),
+            user_id_type: Some("open_id".to_string()),
+            records: vec![],
+            payment_period: "2024-01".to_string(),
+        };
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("ds123"));
+        assert!(json.contains("emp456"));
+        assert!(json.contains("2024-01"));
+    }
+
+    #[test]
+    fn test_datasource_record() {
+        let mut field_values = HashMap::new();
+        field_values.insert("overtime_hours".to_string(), serde_json::Value::Number(serde_json::Number::from(20)));
+        field_values.insert("bonus_rate".to_string(), serde_json::Value::Number(serde_json::Number::from_f64(1.5).unwrap()));
+
+        let record = DatasourceRecord {
+            record_id: Some("rec123".to_string()),
+            employee_id: "emp789".to_string(),
+            field_values,
+            payment_period: "2024-01".to_string(),
+            created_time: Some("2024-01-15T00:00:00Z".to_string()),
+            updated_time: Some("2024-01-16T00:00:00Z".to_string()),
+        };
+        let json = serde_json::to_string(&record).unwrap();
+        assert!(json.contains("rec123"));
+        assert!(json.contains("emp789"));
+        assert!(json.contains("overtime_hours"));
+        assert!(json.contains("2024-01"));
+    }
+
+    #[test]
+    fn test_datasource() {
+        let datasource = Datasource {
+            datasource_id: "ds456".to_string(),
+            datasource_name: I18nText {
+                zh_cn: Some("考勤数据源".to_string()),
+                en_us: Some("Attendance Datasource".to_string()),
+                ja_jp: None,
+            },
+            datasource_type: "attendance".to_string(),
+            status: "active".to_string(),
+            field_configs: vec![],
+            created_time: Some("2024-01-01T00:00:00Z".to_string()),
+            updated_time: Some("2024-01-02T00:00:00Z".to_string()),
+            description: Some(I18nText {
+                zh_cn: Some("员工考勤相关数据".to_string()),
+                en_us: Some("Employee attendance data".to_string()),
+                ja_jp: None,
+            }),
+        };
+        let json = serde_json::to_string(&datasource).unwrap();
+        assert!(json.contains("ds456"));
+        assert!(json.contains("考勤数据源"));
+        assert!(json.contains("attendance"));
+        assert!(json.contains("active"));
+    }
+
+    #[test]
+    fn test_datasource_field_config() {
+        let field_config = DatasourceFieldConfig {
+            field_id: "field123".to_string(),
+            field_name: I18nText {
+                zh_cn: Some("加班小时数".to_string()),
+                en_us: Some("Overtime Hours".to_string()),
+                ja_jp: None,
+            },
+            field_type: "number".to_string(),
+            required: true,
+            default_value: Some(serde_json::Value::Number(serde_json::Number::from(0))),
+            description: Some(I18nText {
+                zh_cn: Some("员工当月加班小时数".to_string()),
+                en_us: Some("Employee monthly overtime hours".to_string()),
+                ja_jp: None,
+            }),
+        };
+        let json = serde_json::to_string(&field_config).unwrap();
+        assert!(json.contains("field123"));
+        assert!(json.contains("加班小时数"));
+        assert!(json.contains("number"));
+        assert!(json.contains("true"));
+    }
+
+    #[test]
+    fn test_acct_item() {
+        let item = AcctItem {
+            acct_item_id: "ai123".to_string(),
+            item_name: I18nText {
+                zh_cn: Some("绩效奖金".to_string()),
+                en_us: Some("Performance Bonus".to_string()),
+                ja_jp: None,
+            },
+            item_type: "bonus".to_string(),
+            category: Some("variable".to_string()),
+            calculation_method: Some("formula".to_string()),
+            formula: Some("base_salary * performance_ratio".to_string()),
+            tax_related: true,
+            social_security_related: false,
+            display_order: Some(10),
+            status: "active".to_string(),
+            created_time: Some("2024-01-01T00:00:00Z".to_string()),
+            updated_time: Some("2024-01-02T00:00:00Z".to_string()),
+            description: Some(I18nText {
+                zh_cn: Some("根据绩效计算的奖金".to_string()),
+                en_us: Some("Bonus calculated based on performance".to_string()),
+                ja_jp: None,
+            }),
+        };
+        let json = serde_json::to_string(&item).unwrap();
+        assert!(json.contains("ai123"));
+        assert!(json.contains("绩效奖金"));
+        assert!(json.contains("bonus"));
+        assert!(json.contains("true"));
+        assert!(json.contains("false"));
+    }
+
+    #[test]
+    fn test_cost_allocation_report() {
+        let report = CostAllocationReport {
+            report_id: "report123".to_string(),
+            cost_center_id: "cc123".to_string(),
+            cost_center_name: Some(I18nText {
+                zh_cn: Some("研发成本中心".to_string()),
+                en_us: Some("R&D Cost Center".to_string()),
+                ja_jp: None,
+            }),
+            department_id: Some("dept456".to_string()),
+            department_name: Some(I18nText {
+                zh_cn: Some("技术部".to_string()),
+                en_us: Some("Tech Department".to_string()),
+                ja_jp: None,
+            }),
+            employee_count: 25,
+            total_cost: "200000.00".to_string(),
+            currency: "CNY".to_string(),
+            allocation_details: vec![],
+            period_start: "2024-01-01".to_string(),
+            period_end: "2024-01-31".to_string(),
+            generated_time: Some("2024-02-01T00:00:00Z".to_string()),
+        };
+        let json = serde_json::to_string(&report).unwrap();
+        assert!(json.contains("report123"));
+        assert!(json.contains("研发成本中心"));
+        assert!(json.contains("25"));
+        assert!(json.contains("200000.00"));
+        assert!(json.contains("CNY"));
+    }
+
+    #[test]
+    fn test_allocation_detail() {
+        let detail = AllocationDetail {
+            acct_item_id: "ai456".to_string(),
+            acct_item_name: Some(I18nText {
+                zh_cn: Some("基本工资".to_string()),
+                en_us: Some("Base Salary".to_string()),
+                ja_jp: None,
+            }),
+            allocated_amount: "150000.00".to_string(),
+            allocation_ratio: Some(0.75),
+            employee_count: 20,
+        };
+        let json = serde_json::to_string(&detail).unwrap();
+        assert!(json.contains("ai456"));
+        assert!(json.contains("基本工资"));
+        assert!(json.contains("150000.00"));
+        assert!(json.contains("0.75"));
+        assert!(json.contains("20"));
+    }
+
+    #[test]
+    fn test_cost_allocation_plan() {
+        let plan = CostAllocationPlan {
+            plan_id: "plan123".to_string(),
+            plan_name: I18nText {
+                zh_cn: Some("技术部成本分摊方案".to_string()),
+                en_us: Some("Tech Dept Cost Allocation Plan".to_string()),
+                ja_jp: None,
+            },
+            plan_type: "department".to_string(),
+            status: "active".to_string(),
+            allocation_rules: vec![],
+            effective_date: Some("2024-01-01".to_string()),
+            expiry_date: Some("2024-12-31".to_string()),
+            created_time: Some("2023-12-01T00:00:00Z".to_string()),
+            updated_time: Some("2024-01-01T00:00:00Z".to_string()),
+            creator_id: Some("user456".to_string()),
+            description: Some(I18nText {
+                zh_cn: Some("技术部门成本分摊规则".to_string()),
+                en_us: Some("Cost allocation rules for tech department".to_string()),
+                ja_jp: None,
+            }),
+        };
+        let json = serde_json::to_string(&plan).unwrap();
+        assert!(json.contains("plan123"));
+        assert!(json.contains("技术部成本分摊方案"));
+        assert!(json.contains("department"));
+        assert!(json.contains("active"));
+    }
+
+    #[test]
+    fn test_allocation_rule() {
+        let rule = AllocationRule {
+            rule_id: "rule123".to_string(),
+            rule_name: I18nText {
+                zh_cn: Some("按人数分摊".to_string()),
+                en_us: Some("Allocate by headcount".to_string()),
+                ja_jp: None,
+            },
+            allocation_dimension: "headcount".to_string(),
+            allocation_ratio: 0.8,
+            target_cost_center_id: "cc456".to_string(),
+            target_cost_center_name: Some(I18nText {
+                zh_cn: Some("目标成本中心".to_string()),
+                en_us: Some("Target Cost Center".to_string()),
+                ja_jp: None,
+            }),
+            conditions: Some(vec![]),
+        };
+        let json = serde_json::to_string(&rule).unwrap();
+        assert!(json.contains("rule123"));
+        assert!(json.contains("按人数分摊"));
+        assert!(json.contains("headcount"));
+        assert!(json.contains("0.8"));
+        assert!(json.contains("cc456"));
+    }
+
+    #[test]
+    fn test_rule_condition() {
+        let condition = RuleCondition {
+            field: "department_id".to_string(),
+            operator: "equals".to_string(),
+            value: serde_json::Value::String("dept123".to_string()),
+        };
+        let json = serde_json::to_string(&condition).unwrap();
+        assert!(json.contains("department_id"));
+        assert!(json.contains("equals"));
+        assert!(json.contains("dept123"));
+    }
+
+    #[test]
+    fn test_paygroup() {
+        let paygroup = Paygroup {
+            paygroup_id: "pg123".to_string(),
+            paygroup_name: I18nText {
+                zh_cn: Some("技术组薪资组".to_string()),
+                en_us: Some("Tech Group Payroll".to_string()),
+                ja_jp: None,
+            },
+            paygroup_type: "standard".to_string(),
+            status: "active".to_string(),
+            payment_cycle_type: "monthly".to_string(),
+            payment_day_setting: Some(PaymentDaySetting {
+                payment_day_type: "fixed".to_string(),
+                payment_day: Some(15),
+                holiday_adjustment: true,
+                adjustment_rule: Some("advance".to_string()),
+            }),
+            employee_count: Some(30),
+            created_time: Some("2024-01-01T00:00:00Z".to_string()),
+            updated_time: Some("2024-01-15T00:00:00Z".to_string()),
+            description: Some(I18nText {
+                zh_cn: Some("技术部门薪资组".to_string()),
+                en_us: Some("Payroll group for tech department".to_string()),
+                ja_jp: None,
+            }),
+        };
+        let json = serde_json::to_string(&paygroup).unwrap();
+        assert!(json.contains("pg123"));
+        assert!(json.contains("技术组薪资组"));
+        assert!(json.contains("monthly"));
+        assert!(json.contains("30"));
+    }
+
+    #[test]
+    fn test_payment_day_setting() {
+        let setting = PaymentDaySetting {
+            payment_day_type: "last_day".to_string(),
+            payment_day: Some(31),
+            holiday_adjustment: false,
+            adjustment_rule: Some("no_adjustment".to_string()),
+        };
+        let json = serde_json::to_string(&setting).unwrap();
+        assert!(json.contains("last_day"));
+        assert!(json.contains("31"));
+        assert!(json.contains("false"));
+        assert!(json.contains("no_adjustment"));
+    }
+
+    #[test]
+    fn test_minimal_structs() {
+        let minimal_i18n = I18nText {
+            zh_cn: Some("中文".to_string()),
+            en_us: None,
+            ja_jp: None,
+        };
+        let json = serde_json::to_string(&minimal_i18n).unwrap();
+        assert!(json.contains("中文"));
+        // Note: serde includes null fields by default, so en_us will appear as null
+        assert!(json.contains("en_us"));
+
+        let minimal_request = PaymentDetailListRequest {
+            payment_activity_id: "minimal".to_string(),
+            ..Default::default()
+        };
+        let json = serde_json::to_string(&minimal_request).unwrap();
+        assert!(json.contains("minimal"));
+    }
+}

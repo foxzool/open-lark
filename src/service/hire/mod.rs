@@ -191,7 +191,7 @@ mod tests {
     #[test]
     fn test_hire_service_creation() {
         let config = create_test_config();
-        let _hire_service = HireService::new(config);
+        let hire_service = HireService::new(config);
 
         // Verify all sub-service structures - test passes by not panicking above
     }
@@ -223,7 +223,7 @@ mod tests {
         ];
 
         for config in test_configs {
-            let _hire_service = HireService::new(config);
+            let hire_service = HireService::new(config);
 
             // Each configuration should create valid sub-services
         }
@@ -271,18 +271,18 @@ mod tests {
     #[test]
     fn test_hire_service_sub_services_independence() {
         let config = create_test_config();
-        let _hire_service = HireService::new(config);
+        let hire_service = HireService::new(config);
 
         // Test that all sub-services are independent
         let recruitment_config_ptr =
-            std::ptr::addr_of!(_hire_service.recruitment_config) as *const _;
-        let get_candidates_ptr = std::ptr::addr_of!(_hire_service.get_candidates) as *const _;
+            std::ptr::addr_of!(hire_service.recruitment_config) as *const _;
+        let get_candidates_ptr = std::ptr::addr_of!(hire_service.get_candidates) as *const _;
         let candidate_management_ptr =
-            std::ptr::addr_of!(_hire_service.candidate_management) as *const _;
+            std::ptr::addr_of!(hire_service.candidate_management) as *const _;
         let ecological_docking_ptr =
-            std::ptr::addr_of!(_hire_service.ecological_docking) as *const _;
-        let referral_account_ptr = std::ptr::addr_of!(_hire_service.referral_account) as *const _;
-        let attachment_ptr = std::ptr::addr_of!(_hire_service.attachment) as *const _;
+            std::ptr::addr_of!(hire_service.ecological_docking) as *const _;
+        let referral_account_ptr = std::ptr::addr_of!(hire_service.referral_account) as *const _;
+        let attachment_ptr = std::ptr::addr_of!(hire_service.attachment) as *const _;
 
         assert_ne!(
             recruitment_config_ptr, get_candidates_ptr,

@@ -161,7 +161,7 @@ mod tests {
     #[test]
     fn test_attendance_service_creation() {
         let config = create_test_config();
-        let _attendance_service = AttendanceService::new(config);
+        let attendance_service = AttendanceService::new(config);
 
         // Verify service structure
     }
@@ -169,7 +169,7 @@ mod tests {
     #[test]
     fn test_attendance_service_debug_trait() {
         let config = create_test_config();
-        let _attendance_service = AttendanceService::new(config);
+        let attendance_service = AttendanceService::new(config);
 
         // Test that service can be used
     }
@@ -183,7 +183,7 @@ mod tests {
             .base_url("https://attendance.api.com")
             .build();
 
-        let _attendance_service = AttendanceService::new(config);
+        let attendance_service = AttendanceService::new(config);
 
         // Verify service creation with custom config
     }
@@ -210,7 +210,7 @@ mod tests {
         let mut services = Vec::new();
         for config in configs {
             let service = AttendanceService::new(config);
-            services.push(_service);
+            services.push(service);
         }
 
         // All services should be created successfully
@@ -260,7 +260,7 @@ mod tests {
             }
 
             let config = builder.build();
-            let _attendance_service = AttendanceService::new(config);
+            let attendance_service = AttendanceService::new(config);
 
             // Each configuration should work
         }

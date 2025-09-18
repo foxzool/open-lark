@@ -52,7 +52,7 @@
 //!     .build();
 //!
 //! // 获取任务服务（通过v2版本）
-//! // let _task_service = &client.task.v2;
+//! // let task_service = &client.task.v2;
 //!
 //! // 创建任务列表
 //! // let tasklist_request = CreateTasklistRequest::builder()

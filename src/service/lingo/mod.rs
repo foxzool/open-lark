@@ -113,7 +113,7 @@ mod tests {
     #[test]
     fn test_lingo_service_creation() {
         let config = create_test_config();
-        let _lingo_service = LingoService::new(config);
+        let lingo_service = LingoService::new(config);
 
         // Verify all sub-services are created
     }
@@ -121,7 +121,7 @@ mod tests {
     #[test]
     fn test_lingo_service_debug_trait() {
         let config = create_test_config();
-        let _lingo_service = LingoService::new(config);
+        let lingo_service = LingoService::new(config);
 
         // Test that service can be used
     }
@@ -135,7 +135,7 @@ mod tests {
             .base_url("https://lingo.api.com")
             .build();
 
-        let _lingo_service = LingoService::new(config);
+        let lingo_service = LingoService::new(config);
 
         // Verify service creation with custom config
     }
@@ -143,7 +143,7 @@ mod tests {
     #[test]
     fn test_lingo_service_modules_independence() {
         let config = create_test_config();
-        let _lingo_service = LingoService::new(config);
+        let lingo_service = LingoService::new(config);
 
         // Test that all sub-modules are independent (different memory addresses)
         let draft_ptr = std::ptr::addr_of!(lingo_service.draft) as *const _;
@@ -173,7 +173,7 @@ mod tests {
     #[test]
     fn test_lingo_service_config_cloning() {
         let config = create_test_config();
-        let _lingo_service = LingoService::new(config);
+        let lingo_service = LingoService::new(config);
 
         // Test that the service can be created multiple times with cloned configs
         // This simulates real usage where configs might be shared

@@ -89,7 +89,7 @@ mod tests {
     #[test]
     fn test_mdm_service_creation() {
         let config = create_test_config();
-        let _mdm_service = MdmService::new(config);
+        let mdm_service = MdmService::new(config);
 
         // Verify service structure
     }
@@ -97,7 +97,7 @@ mod tests {
     #[test]
     fn test_mdm_service_debug_trait() {
         let config = create_test_config();
-        let _mdm_service = MdmService::new(config);
+        let mdm_service = MdmService::new(config);
 
         // Test that service can be used
     }
@@ -122,7 +122,7 @@ mod tests {
         ];
 
         for config in configs {
-            let _mdm_service = MdmService::new(config);
+            let mdm_service = MdmService::new(config);
             // Each service should be created successfully
         }
     }
@@ -130,11 +130,11 @@ mod tests {
     #[test]
     fn test_mdm_service_module_independence() {
         let config = create_test_config();
-        let _mdm_service = MdmService::new(config);
+        let mdm_service = MdmService::new(config);
 
         // Test that sub-modules are independent (different memory addresses)
-        let country_ptr = std::ptr::addr_of!(_mdm_service.country_region) as *const _;
-        let user_auth_ptr = std::ptr::addr_of!(_mdm_service.user_auth_data_relation) as *const _;
+        let country_ptr = std::ptr::addr_of!(mdm_service.country_region) as *const _;
+        let user_auth_ptr = std::ptr::addr_of!(mdm_service.user_auth_data_relation) as *const _;
 
         assert_ne!(country_ptr, user_auth_ptr);
     }

@@ -302,3 +302,458 @@ pub struct ContentFormatResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub format_type: Option<String>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_post_get_request() {
+        let request = PostGetRequest {
+            post_id: "post123".to_string(),
+            user_id_type: Some("user_id".to_string()),
+        };
+
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("post123"));
+        assert!(json.contains("user_id"));
+    }
+
+    #[test]
+    fn test_post_media() {
+        let media = PostMedia {
+            media_type: Some("image".to_string()),
+            media_url: Some("https://example.com/image.jpg".to_string()),
+            media_key: Some("media_key123".to_string()),
+            thumbnail_url: Some("https://example.com/thumb.jpg".to_string()),
+            file_size: Some(1024000),
+            file_name: Some("image.jpg".to_string()),
+        };
+
+        let json = serde_json::to_string(&media).unwrap();
+        assert!(json.contains("\"image\""));
+        assert!(json.contains("https://example.com/image.jpg"));
+        assert!(json.contains("media_key123"));
+        assert!(json.contains("1024000"));
+        assert!(json.contains("image.jpg"));
+    }
+
+    #[test]
+    fn test_post_visibility() {
+        let visibility = PostVisibility {
+            visibility_type: Some("custom".to_string()),
+            visible_user_ids: Some(vec!["user1".to_string(), "user2".to_string()]),
+            visible_department_ids: Some(vec!["dept1".to_string()]),
+        };
+
+        let json = serde_json::to_string(&visibility).unwrap();
+        assert!(json.contains("\"custom\""));
+        assert!(json.contains("user1"));
+        assert!(json.contains("user2"));
+        assert!(json.contains("dept1"));
+    }
+
+    #[test]
+    fn test_post_statistics() {
+        let mut reaction_stats = HashMap::new();
+        reaction_stats.insert("like".to_string(), 25);
+        reaction_stats.insert("heart".to_string(), 10);
+
+        let stats = PostStatistics {
+            comment_count: Some(15),
+            like_count: Some(25),
+            view_count: Some(200),
+            share_count: Some(5),
+            reaction_stats: Some(reaction_stats),
+        };
+
+        let json = serde_json::to_string(&stats).unwrap();
+        assert!(json.contains("\"comment_count\":15"));
+        assert!(json.contains("\"like_count\":25"));
+        assert!(json.contains("\"view_count\":200"));
+        assert!(json.contains("\"share_count\":5"));
+        assert!(json.contains("\"like\":25"));
+        assert!(json.contains("\"heart\":10"));
+    }
+
+    #[test]
+    fn test_post_full() {
+        let media = PostMedia {
+            media_type: Some("image".to_string()),
+            media_url: Some("https://example.com/image.jpg".to_string()),
+            media_key: Some("media_key123".to_string()),
+            thumbnail_url: None,
+            file_size: Some(500000),
+            file_name: Some("company_event.jpg".to_string()),
+        };
+
+        let visibility = PostVisibility {
+            visibility_type: Some("department".to_string()),
+            visible_user_ids: None,
+            visible_department_ids: Some(vec!["tech_dept".to_string()]),
+        };
+
+        let stats = PostStatistics {
+            comment_count: Some(5),
+            like_count: Some(12),
+            view_count: Some(89),
+            share_count: Some(2),
+            reaction_stats: None,
+        };
+
+        let mut extra = HashMap::new();
+        extra.insert("tags".to_string(), serde_json::json!(["团建", "技术"]));
+
+        let post = Post {
+            post_id: Some("post456".to_string()),
+            author_id: Some("ou_author123".to_string()),
+            author_name: Some("张三".to_string()),
+            title: Some("公司团建活动".to_string()),
+            content: Some("今天的团建活动很精彩！".to_string()),
+            content_type: Some("rich_text".to_string()),
+            media_list: Some(vec![media]),
+            status: Some("published".to_string()),
+            create_time: Some("2024-01-01T10:00:00Z".to_string()),
+            update_time: Some("2024-01-01T10:05:00Z".to_string()),
+            visibility: Some(visibility),
+            statistics: Some(stats),
+            extra: Some(extra),
+        };
+
+        let json = serde_json::to_string(&post).unwrap();
+        assert!(json.contains("post456"));
+        assert!(json.contains("公司团建活动"));
+        assert!(json.contains("今天的团建活动很精彩！"));
+        assert!(json.contains("ou_author123"));
+        assert!(json.contains("张三"));
+        assert!(json.contains("published"));
+        assert!(json.contains("department"));
+        assert!(json.contains("tech_dept"));
+        assert!(json.contains("团建"));
+    }
+
+    #[test]
+    fn test_comment_full() {
+        let media = PostMedia {
+            media_type: Some("image".to_string()),
+            media_url: Some("https://example.com/comment_img.jpg".to_string()),
+            media_key: Some("comment_media123".to_string()),
+            thumbnail_url: None,
+            file_size: Some(200000),
+            file_name: Some("response.jpg".to_string()),
+        };
+
+        let comment = Comment {
+            comment_id: Some("comment789".to_string()),
+            post_id: Some("post456".to_string()),
+            author_id: Some("ou_commenter456".to_string()),
+            author_name: Some("李四".to_string()),
+            content: Some("太棒了！期待下次活动".to_string()),
+            content_type: Some("text".to_string()),
+            parent_comment_id: None,
+            reply_to_user_id: None,
+            create_time: Some("2024-01-01T11:00:00Z".to_string()),
+            update_time: Some("2024-01-01T11:00:00Z".to_string()),
+            media_list: Some(vec![media]),
+        };
+
+        let json = serde_json::to_string(&comment).unwrap();
+        assert!(json.contains("comment789"));
+        assert!(json.contains("post456"));
+        assert!(json.contains("ou_commenter456"));
+        assert!(json.contains("李四"));
+        assert!(json.contains("太棒了！期待下次活动"));
+        assert!(json.contains("comment_media123"));
+    }
+
+    #[test]
+    fn test_comment_reply() {
+        let reply = Comment {
+            comment_id: Some("reply123".to_string()),
+            post_id: Some("post456".to_string()),
+            author_id: Some("ou_replier789".to_string()),
+            author_name: Some("王五".to_string()),
+            content: Some("我也是这样认为的！".to_string()),
+            content_type: Some("text".to_string()),
+            parent_comment_id: Some("comment789".to_string()),
+            reply_to_user_id: Some("ou_commenter456".to_string()),
+            create_time: Some("2024-01-01T11:30:00Z".to_string()),
+            update_time: None,
+            media_list: None,
+        };
+
+        let json = serde_json::to_string(&reply).unwrap();
+        assert!(json.contains("reply123"));
+        assert!(json.contains("comment789"));
+        assert!(json.contains("ou_replier789"));
+        assert!(json.contains("王五"));
+        assert!(json.contains("我也是这样认为的！"));
+        assert!(json.contains("ou_commenter456"));
+        assert!(!json.contains("update_time"));
+        assert!(!json.contains("media_list"));
+    }
+
+    #[test]
+    fn test_reaction() {
+        let reaction = Reaction {
+            reaction_id: Some("reaction456".to_string()),
+            post_id: Some("post456".to_string()),
+            comment_id: None,
+            user_id: Some("ou_reactor123".to_string()),
+            user_name: Some("赵六".to_string()),
+            reaction_type: Some("like".to_string()),
+            emoji: Some("👍".to_string()),
+            create_time: Some("2024-01-01T12:00:00Z".to_string()),
+        };
+
+        let json = serde_json::to_string(&reaction).unwrap();
+        assert!(json.contains("reaction456"));
+        assert!(json.contains("post456"));
+        assert!(json.contains("ou_reactor123"));
+        assert!(json.contains("赵六"));
+        assert!(json.contains("\"like\""));
+        assert!(json.contains("👍"));
+        assert!(!json.contains("comment_id"));
+    }
+
+    #[test]
+    fn test_reaction_on_comment() {
+        let comment_reaction = Reaction {
+            reaction_id: Some("reaction789".to_string()),
+            post_id: Some("post456".to_string()),
+            comment_id: Some("comment789".to_string()),
+            user_id: Some("ou_reactor456".to_string()),
+            user_name: Some("孙七".to_string()),
+            reaction_type: Some("heart".to_string()),
+            emoji: Some("❤️".to_string()),
+            create_time: Some("2024-01-01T12:15:00Z".to_string()),
+        };
+
+        let json = serde_json::to_string(&comment_reaction).unwrap();
+        assert!(json.contains("reaction789"));
+        assert!(json.contains("comment789"));
+        assert!(json.contains("孙七"));
+        assert!(json.contains("\"heart\""));
+        assert!(json.contains("❤️"));
+    }
+
+    #[test]
+    fn test_post_event() {
+        let post = Post {
+            post_id: Some("post789".to_string()),
+            author_id: Some("ou_author456".to_string()),
+            author_name: Some("作者".to_string()),
+            title: Some("新帖子".to_string()),
+            content: Some("这是一个新帖子".to_string()),
+            content_type: Some("text".to_string()),
+            media_list: None,
+            status: Some("published".to_string()),
+            create_time: Some("2024-01-01T14:00:00Z".to_string()),
+            update_time: None,
+            visibility: None,
+            statistics: None,
+            extra: None,
+        };
+
+        let event = PostEvent {
+            event_type: Some("created".to_string()),
+            post: Some(post),
+            event_time: Some("2024-01-01T14:00:01Z".to_string()),
+            operator_id: Some("ou_author456".to_string()),
+        };
+
+        let json = serde_json::to_string(&event).unwrap();
+        assert!(json.contains("\"created\""));
+        assert!(json.contains("post789"));
+        assert!(json.contains("新帖子"));
+        assert!(json.contains("这是一个新帖子"));
+        assert!(json.contains("2024-01-01T14:00:01Z"));
+    }
+
+    #[test]
+    fn test_comment_event() {
+        let comment = Comment {
+            comment_id: Some("comment456".to_string()),
+            post_id: Some("post123".to_string()),
+            author_id: Some("ou_commenter123".to_string()),
+            author_name: Some("评论者".to_string()),
+            content: Some("很好的帖子！".to_string()),
+            content_type: Some("text".to_string()),
+            parent_comment_id: None,
+            reply_to_user_id: None,
+            create_time: Some("2024-01-01T15:00:00Z".to_string()),
+            update_time: None,
+            media_list: None,
+        };
+
+        let event = CommentEvent {
+            event_type: Some("created".to_string()),
+            comment: Some(comment),
+            event_time: Some("2024-01-01T15:00:01Z".to_string()),
+            operator_id: Some("ou_commenter123".to_string()),
+        };
+
+        let json = serde_json::to_string(&event).unwrap();
+        assert!(json.contains("\"created\""));
+        assert!(json.contains("comment456"));
+        assert!(json.contains("很好的帖子！"));
+        assert!(json.contains("ou_commenter123"));
+    }
+
+    #[test]
+    fn test_reaction_event() {
+        let reaction = Reaction {
+            reaction_id: Some("reaction123".to_string()),
+            post_id: Some("post123".to_string()),
+            comment_id: None,
+            user_id: Some("ou_reactor789".to_string()),
+            user_name: Some("互动者".to_string()),
+            reaction_type: Some("like".to_string()),
+            emoji: Some("👍".to_string()),
+            create_time: Some("2024-01-01T16:00:00Z".to_string()),
+        };
+
+        let event = ReactionEvent {
+            event_type: Some("created".to_string()),
+            reaction: Some(reaction),
+            event_time: Some("2024-01-01T16:00:01Z".to_string()),
+            operator_id: Some("ou_reactor789".to_string()),
+        };
+
+        let json = serde_json::to_string(&event).unwrap();
+        assert!(json.contains("\"created\""));
+        assert!(json.contains("reaction123"));
+        assert!(json.contains("互动者"));
+        assert!(json.contains("👍"));
+    }
+
+    #[test]
+    fn test_statistics_changes() {
+        let mut reaction_changes = HashMap::new();
+        reaction_changes.insert("like".to_string(), 5);
+        reaction_changes.insert("heart".to_string(), 2);
+
+        let changes = StatisticsChanges {
+            comment_count_change: Some(2),
+            like_count_change: Some(5),
+            view_count_change: Some(15),
+            share_count_change: Some(1),
+            reaction_changes: Some(reaction_changes),
+        };
+
+        let json = serde_json::to_string(&changes).unwrap();
+        assert!(json.contains("\"comment_count_change\":2"));
+        assert!(json.contains("\"like_count_change\":5"));
+        assert!(json.contains("\"view_count_change\":15"));
+        assert!(json.contains("\"share_count_change\":1"));
+        assert!(json.contains("\"like\":5"));
+        assert!(json.contains("\"heart\":2"));
+    }
+
+    #[test]
+    fn test_post_statistics_event() {
+        let stats = PostStatistics {
+            comment_count: Some(20),
+            like_count: Some(35),
+            view_count: Some(250),
+            share_count: Some(8),
+            reaction_stats: None,
+        };
+
+        let changes = StatisticsChanges {
+            comment_count_change: Some(1),
+            like_count_change: Some(2),
+            view_count_change: Some(10),
+            share_count_change: Some(0),
+            reaction_changes: None,
+        };
+
+        let event = PostStatisticsEvent {
+            event_type: Some("updated".to_string()),
+            post_id: Some("post123".to_string()),
+            statistics: Some(stats),
+            changes: Some(changes),
+            event_time: Some("2024-01-01T17:00:00Z".to_string()),
+        };
+
+        let json = serde_json::to_string(&event).unwrap();
+        assert!(json.contains("\"updated\""));
+        assert!(json.contains("post123"));
+        assert!(json.contains("\"comment_count\":20"));
+        assert!(json.contains("\"like_count\":35"));
+        assert!(json.contains("\"comment_count_change\":1"));
+        assert!(json.contains("\"like_count_change\":2"));
+    }
+
+    #[test]
+    fn test_content_format_request() {
+        let request = ContentFormatRequest {
+            content: "# 标题\n\n这是**粗体**文本".to_string(),
+            from_format: "markdown".to_string(),
+            to_format: "rich_text".to_string(),
+        };
+
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("# 标题"));
+        assert!(json.contains("**粗体**"));
+        assert!(json.contains("markdown"));
+        assert!(json.contains("rich_text"));
+    }
+
+    #[test]
+    fn test_content_format_response() {
+        let response = ContentFormatResponse {
+            content: Some("<h1>标题</h1><p>这是<strong>粗体</strong>文本</p>".to_string()),
+            format_type: Some("rich_text".to_string()),
+        };
+
+        let json = serde_json::to_string(&response).unwrap();
+        assert!(json.contains("<h1>标题</h1>"));
+        assert!(json.contains("<strong>粗体</strong>"));
+        assert!(json.contains("rich_text"));
+    }
+
+    #[test]
+    fn test_minimal_structs() {
+        let minimal_post = Post {
+            post_id: Some("minimal_post".to_string()),
+            author_id: None,
+            author_name: None,
+            title: None,
+            content: None,
+            content_type: None,
+            media_list: None,
+            status: None,
+            create_time: None,
+            update_time: None,
+            visibility: None,
+            statistics: None,
+            extra: None,
+        };
+
+        let json = serde_json::to_string(&minimal_post).unwrap();
+        assert!(json.contains("minimal_post"));
+        assert!(!json.contains("author_id"));
+        assert!(!json.contains("content"));
+        assert!(!json.contains("statistics"));
+
+        let minimal_comment = Comment {
+            comment_id: Some("minimal_comment".to_string()),
+            post_id: None,
+            author_id: None,
+            author_name: None,
+            content: None,
+            content_type: None,
+            parent_comment_id: None,
+            reply_to_user_id: None,
+            create_time: None,
+            update_time: None,
+            media_list: None,
+        };
+
+        let comment_json = serde_json::to_string(&minimal_comment).unwrap();
+        assert!(comment_json.contains("minimal_comment"));
+        assert!(!comment_json.contains("post_id"));
+        assert!(!comment_json.contains("content"));
+    }
+}

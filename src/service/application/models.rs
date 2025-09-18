@@ -493,3 +493,369 @@ pub enum ContactsRangeType {
     #[serde(rename = "admin_range")]
     AdminRange,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json;
+
+    #[test]
+    fn test_user_id_type_enum() {
+        assert_eq!(serde_json::to_string(&UserIdType::OpenId).unwrap(), "\"open_id\"");
+        assert_eq!(serde_json::to_string(&UserIdType::UserId).unwrap(), "\"user_id\"");
+        assert_eq!(serde_json::to_string(&UserIdType::UnionId).unwrap(), "\"union_id\"");
+    }
+
+    #[test]
+    fn test_user_id_type_as_str() {
+        assert_eq!(UserIdType::OpenId.as_str(), "open_id");
+        assert_eq!(UserIdType::UserId.as_str(), "user_id");
+        assert_eq!(UserIdType::UnionId.as_str(), "union_id");
+    }
+
+    #[test]
+    fn test_department_id_type_enum() {
+        assert_eq!(serde_json::to_string(&DepartmentIdType::OpenDepartmentId).unwrap(), "\"open_department_id\"");
+        assert_eq!(serde_json::to_string(&DepartmentIdType::DepartmentId).unwrap(), "\"department_id\"");
+    }
+
+    #[test]
+    fn test_department_id_type_as_str() {
+        assert_eq!(DepartmentIdType::OpenDepartmentId.as_str(), "open_department_id");
+        assert_eq!(DepartmentIdType::DepartmentId.as_str(), "department_id");
+    }
+
+    #[test]
+    fn test_application_full() {
+        let app = Application {
+            app_id: Some("app123".to_string()),
+            app_name: Some("测试应用".to_string()),
+            description: Some("这是一个测试应用".to_string()),
+            avatar_url: Some("https://example.com/avatar.png".to_string()),
+            app_type: Some(AppType::SelfBuilt),
+            status: Some(AppStatus::Published),
+            create_time: Some("2024-01-01T00:00:00Z".to_string()),
+            update_time: Some("2024-01-01T12:00:00Z".to_string()),
+        };
+        let json = serde_json::to_string(&app).unwrap();
+        assert!(json.contains("app123"));
+        assert!(json.contains("测试应用"));
+        assert!(json.contains("self_built"));
+        assert!(json.contains("published"));
+    }
+
+    #[test]
+    fn test_app_type_enum() {
+        assert_eq!(serde_json::to_string(&AppType::SelfBuilt).unwrap(), "\"self_built\"");
+        assert_eq!(serde_json::to_string(&AppType::Marketplace).unwrap(), "\"marketplace\"");
+    }
+
+    #[test]
+    fn test_app_status_enum() {
+        assert_eq!(serde_json::to_string(&AppStatus::Developing).unwrap(), "\"developing\"");
+        assert_eq!(serde_json::to_string(&AppStatus::Published).unwrap(), "\"published\"");
+        assert_eq!(serde_json::to_string(&AppStatus::Removed).unwrap(), "\"removed\"");
+        assert_eq!(serde_json::to_string(&AppStatus::Disabled).unwrap(), "\"disabled\"");
+    }
+
+    #[test]
+    fn test_app_version() {
+        let version = AppVersion {
+            version_id: Some("v123".to_string()),
+            version: Some("1.2.0".to_string()),
+            version_name: Some("重要更新".to_string()),
+            remark: Some("修复了若干bug".to_string()),
+            create_time: Some("2024-01-01T00:00:00Z".to_string()),
+            publish_time: Some("2024-01-02T00:00:00Z".to_string()),
+            status: Some(VersionStatus::Published),
+        };
+        let json = serde_json::to_string(&version).unwrap();
+        assert!(json.contains("v123"));
+        assert!(json.contains("1.2.0"));
+        assert!(json.contains("重要更新"));
+        assert!(json.contains("published"));
+    }
+
+    #[test]
+    fn test_version_status_enum() {
+        assert_eq!(serde_json::to_string(&VersionStatus::Developing).unwrap(), "\"developing\"");
+        assert_eq!(serde_json::to_string(&VersionStatus::Auditing).unwrap(), "\"auditing\"");
+        assert_eq!(serde_json::to_string(&VersionStatus::Published).unwrap(), "\"published\"");
+        assert_eq!(serde_json::to_string(&VersionStatus::Rejected).unwrap(), "\"rejected\"");
+    }
+
+    #[test]
+    fn test_app_collaborator() {
+        let collaborator = AppCollaborator {
+            collaborator_id: Some("user123".to_string()),
+            collaborator_type: Some(CollaboratorType::User),
+            permissions: Some(vec!["read".to_string(), "write".to_string()]),
+        };
+        let json = serde_json::to_string(&collaborator).unwrap();
+        assert!(json.contains("user123"));
+        assert!(json.contains("user"));
+        assert!(json.contains("read"));
+    }
+
+    #[test]
+    fn test_collaborator_type_enum() {
+        assert_eq!(serde_json::to_string(&CollaboratorType::User).unwrap(), "\"user\"");
+        assert_eq!(serde_json::to_string(&CollaboratorType::Group).unwrap(), "\"group\"");
+    }
+
+    #[test]
+    fn test_permission_scope() {
+        let scope = PermissionScope {
+            permission: Some("contacts:read".to_string()),
+            granted: Some(true),
+            status: Some(AuthStatus::Granted),
+        };
+        let json = serde_json::to_string(&scope).unwrap();
+        assert!(json.contains("contacts:read"));
+        assert!(json.contains("true"));
+        assert!(json.contains("granted"));
+    }
+
+    #[test]
+    fn test_auth_status_enum() {
+        assert_eq!(serde_json::to_string(&AuthStatus::Granted).unwrap(), "\"granted\"");
+        assert_eq!(serde_json::to_string(&AuthStatus::NotGranted).unwrap(), "\"not_granted\"");
+        assert_eq!(serde_json::to_string(&AuthStatus::Pending).unwrap(), "\"pending\"");
+        assert_eq!(serde_json::to_string(&AuthStatus::Rejected).unwrap(), "\"rejected\"");
+    }
+
+    #[test]
+    fn test_app_admin() {
+        let admin = AppAdmin {
+            user_id: Some("admin123".to_string()),
+            permissions: Some(vec![AdminPermission::AppManagement, AdminPermission::UserManagement]),
+        };
+        let json = serde_json::to_string(&admin).unwrap();
+        assert!(json.contains("admin123"));
+        assert!(json.contains("app_management"));
+        assert!(json.contains("user_management"));
+    }
+
+    #[test]
+    fn test_admin_permission_enum() {
+        assert_eq!(serde_json::to_string(&AdminPermission::AppManagement).unwrap(), "\"app_management\"");
+        assert_eq!(serde_json::to_string(&AdminPermission::UserManagement).unwrap(), "\"user_management\"");
+        assert_eq!(serde_json::to_string(&AdminPermission::PermissionManagement).unwrap(), "\"permission_management\"");
+    }
+
+    #[test]
+    fn test_app_availability() {
+        let availability = AppAvailability {
+            is_visible_to_all: Some(false),
+            visible_list: Some(VisibilityList {
+                user_list: Some(vec!["user1".to_string(), "user2".to_string()]),
+                department_list: Some(vec!["dept1".to_string()]),
+                group_list: Some(vec!["group1".to_string()]),
+            }),
+            invisible_list: None,
+        };
+        let json = serde_json::to_string(&availability).unwrap();
+        assert!(json.contains("false"));
+        assert!(json.contains("user1"));
+        assert!(json.contains("dept1"));
+    }
+
+    #[test]
+    fn test_visibility_list() {
+        let list = VisibilityList {
+            user_list: Some(vec!["user123".to_string()]),
+            department_list: Some(vec!["tech".to_string(), "product".to_string()]),
+            group_list: None,
+        };
+        let json = serde_json::to_string(&list).unwrap();
+        assert!(json.contains("user123"));
+        assert!(json.contains("tech"));
+        assert!(json.contains("product"));
+    }
+
+    #[test]
+    fn test_app_usage() {
+        let usage = AppUsage {
+            date: Some("2024-01-01".to_string()),
+            active_users: Some(150),
+            new_users: Some(20),
+            message_push_count: Some(500),
+        };
+        let json = serde_json::to_string(&usage).unwrap();
+        assert!(json.contains("2024-01-01"));
+        assert!(json.contains("150"));
+        assert!(json.contains("20"));
+        assert!(json.contains("500"));
+    }
+
+    #[test]
+    fn test_department_usage() {
+        let usage = DepartmentUsage {
+            department_id: Some("dept123".to_string()),
+            department_name: Some("技术部".to_string()),
+            active_users: Some(25),
+            total_users: Some(30),
+        };
+        let json = serde_json::to_string(&usage).unwrap();
+        assert!(json.contains("dept123"));
+        assert!(json.contains("技术部"));
+        assert!(json.contains("25"));
+        assert!(json.contains("30"));
+    }
+
+    #[test]
+    fn test_app_feedback() {
+        let feedback = AppFeedback {
+            feedback_id: Some("fb123".to_string()),
+            user_id: Some("user456".to_string()),
+            feedback_type: Some(FeedbackType::Bug),
+            content: Some("应用启动很慢".to_string()),
+            rating: Some(3),
+            create_time: Some("2024-01-01T10:00:00Z".to_string()),
+            status: Some(FeedbackStatus::Processing),
+        };
+        let json = serde_json::to_string(&feedback).unwrap();
+        assert!(json.contains("fb123"));
+        assert!(json.contains("bug"));
+        assert!(json.contains("应用启动很慢"));
+        assert!(json.contains("processing"));
+    }
+
+    #[test]
+    fn test_feedback_type_enum() {
+        assert_eq!(serde_json::to_string(&FeedbackType::Bug).unwrap(), "\"bug\"");
+        assert_eq!(serde_json::to_string(&FeedbackType::Feature).unwrap(), "\"feature\"");
+        assert_eq!(serde_json::to_string(&FeedbackType::Other).unwrap(), "\"other\"");
+    }
+
+    #[test]
+    fn test_feedback_status_enum() {
+        assert_eq!(serde_json::to_string(&FeedbackStatus::Pending).unwrap(), "\"pending\"");
+        assert_eq!(serde_json::to_string(&FeedbackStatus::Processing).unwrap(), "\"processing\"");
+        assert_eq!(serde_json::to_string(&FeedbackStatus::Completed).unwrap(), "\"completed\"");
+        assert_eq!(serde_json::to_string(&FeedbackStatus::Closed).unwrap(), "\"closed\"");
+    }
+
+    #[test]
+    fn test_app_badge() {
+        let badge = AppBadge {
+            badge_type: Some(BadgeType::Number),
+            content: Some("5".to_string()),
+        };
+        let json = serde_json::to_string(&badge).unwrap();
+        assert!(json.contains("number"));
+        assert!(json.contains("5"));
+    }
+
+    #[test]
+    fn test_badge_type_enum() {
+        assert_eq!(serde_json::to_string(&BadgeType::Number).unwrap(), "\"number\"");
+        assert_eq!(serde_json::to_string(&BadgeType::Dot).unwrap(), "\"dot\"");
+        assert_eq!(serde_json::to_string(&BadgeType::Clear).unwrap(), "\"clear\"");
+    }
+
+    #[test]
+    fn test_order() {
+        let order = Order {
+            order_id: Some("order123".to_string()),
+            status: Some(OrderStatus::Paid),
+            pricing_plan_id: Some("plan456".to_string()),
+            quantity: Some(10),
+            purchase_time: Some("2024-01-01T00:00:00Z".to_string()),
+            expire_time: Some("2025-01-01T00:00:00Z".to_string()),
+        };
+        let json = serde_json::to_string(&order).unwrap();
+        assert!(json.contains("order123"));
+        assert!(json.contains("paid"));
+        assert!(json.contains("plan456"));
+        assert!(json.contains("10"));
+    }
+
+    #[test]
+    fn test_order_status_enum() {
+        assert_eq!(serde_json::to_string(&OrderStatus::Pending).unwrap(), "\"pending\"");
+        assert_eq!(serde_json::to_string(&OrderStatus::Paid).unwrap(), "\"paid\"");
+        assert_eq!(serde_json::to_string(&OrderStatus::Cancelled).unwrap(), "\"cancelled\"");
+        assert_eq!(serde_json::to_string(&OrderStatus::Expired).unwrap(), "\"expired\"");
+    }
+
+    #[test]
+    fn test_pricing_plan() {
+        let plan = PricingPlan {
+            pricing_plan_id: Some("plan123".to_string()),
+            plan_name: Some("专业版".to_string()),
+            description: Some("适合中型团队".to_string()),
+            price: Some("99.00".to_string()),
+            billing_cycle: Some(BillingCycle::Monthly),
+        };
+        let json = serde_json::to_string(&plan).unwrap();
+        assert!(json.contains("plan123"));
+        assert!(json.contains("专业版"));
+        assert!(json.contains("99.00"));
+        assert!(json.contains("monthly"));
+    }
+
+    #[test]
+    fn test_billing_cycle_enum() {
+        assert_eq!(serde_json::to_string(&BillingCycle::Monthly).unwrap(), "\"monthly\"");
+        assert_eq!(serde_json::to_string(&BillingCycle::Yearly).unwrap(), "\"yearly\"");
+        assert_eq!(serde_json::to_string(&BillingCycle::Once).unwrap(), "\"once\"");
+    }
+
+    #[test]
+    fn test_audit_status() {
+        let status = AuditStatus {
+            status: Some(AuditResult::Approved),
+            comment: Some("应用符合规范".to_string()),
+            audit_time: Some("2024-01-01T14:00:00Z".to_string()),
+        };
+        let json = serde_json::to_string(&status).unwrap();
+        assert!(json.contains("approved"));
+        assert!(json.contains("应用符合规范"));
+    }
+
+    #[test]
+    fn test_audit_result_enum() {
+        assert_eq!(serde_json::to_string(&AuditResult::Pending).unwrap(), "\"pending\"");
+        assert_eq!(serde_json::to_string(&AuditResult::Approved).unwrap(), "\"approved\"");
+        assert_eq!(serde_json::to_string(&AuditResult::Rejected).unwrap(), "\"rejected\"");
+    }
+
+    #[test]
+    fn test_contacts_range() {
+        let range = ContactsRange {
+            range_type: Some(ContactsRangeType::Some),
+            department_list: Some(vec!["dept1".to_string(), "dept2".to_string()]),
+            user_list: Some(vec!["user1".to_string()]),
+        };
+        let json = serde_json::to_string(&range).unwrap();
+        assert!(json.contains("some"));
+        assert!(json.contains("dept1"));
+        assert!(json.contains("user1"));
+    }
+
+    #[test]
+    fn test_contacts_range_type_enum() {
+        assert_eq!(serde_json::to_string(&ContactsRangeType::All).unwrap(), "\"all\"");
+        assert_eq!(serde_json::to_string(&ContactsRangeType::Some).unwrap(), "\"some\"");
+        assert_eq!(serde_json::to_string(&ContactsRangeType::AdminRange).unwrap(), "\"admin_range\"");
+    }
+
+    #[test]
+    fn test_minimal_structs() {
+        let minimal_app = Application {
+            app_id: Some("minimal".to_string()),
+            app_name: Some("最小应用".to_string()),
+            description: None,
+            avatar_url: None,
+            app_type: None,
+            status: None,
+            create_time: None,
+            update_time: None,
+        };
+        let json = serde_json::to_string(&minimal_app).unwrap();
+        assert!(json.contains("minimal"));
+        assert!(json.contains("最小应用"));
+        assert!(!json.contains("description"));
+    }
+}

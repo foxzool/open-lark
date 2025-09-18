@@ -434,3 +434,282 @@ pub struct SubscriptionStatus {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subscribe_time: Option<i64>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json;
+
+    #[test]
+    fn test_user_id_type_as_str() {
+        assert_eq!(UserIdType::OpenId.as_str(), "open_id");
+        assert_eq!(UserIdType::UserId.as_str(), "user_id");
+        assert_eq!(UserIdType::UnionId.as_str(), "union_id");
+    }
+
+    #[test]
+    fn test_user_id_type_serialization() {
+        let open_id = UserIdType::OpenId;
+        let json = serde_json::to_string(&open_id).unwrap();
+        assert_eq!(json, "\"open_id\"");
+
+        let user_id = UserIdType::UserId;
+        let json = serde_json::to_string(&user_id).unwrap();
+        assert_eq!(json, "\"user_id\"");
+
+        let union_id = UserIdType::UnionId;
+        let json = serde_json::to_string(&union_id).unwrap();
+        assert_eq!(json, "\"union_id\"");
+    }
+
+    #[test]
+    fn test_folder_type_serialization() {
+        let system = FolderType::System;
+        let json = serde_json::to_string(&system).unwrap();
+        assert_eq!(json, "\"system\"");
+
+        let custom = FolderType::Custom;
+        let json = serde_json::to_string(&custom).unwrap();
+        assert_eq!(json, "\"custom\"");
+    }
+
+    #[test]
+    fn test_folder_complete() {
+        let folder = Folder {
+            folder_id: Some("folder123".to_string()),
+            folder_name: Some("Inbox".to_string()),
+            parent_folder_id: Some("root".to_string()),
+            folder_type: Some(FolderType::System),
+            folder_path: Some("/inbox".to_string()),
+        };
+        let json = serde_json::to_string(&folder).unwrap();
+        assert!(json.contains("folder123"));
+        assert!(json.contains("Inbox"));
+        assert!(json.contains("system"));
+    }
+
+    #[test]
+    fn test_folder_optional_fields() {
+        let folder = Folder {
+            folder_id: Some("folder456".to_string()),
+            folder_name: None,
+            parent_folder_id: None,
+            folder_type: None,
+            folder_path: None,
+        };
+        let json = serde_json::to_string(&folder).unwrap();
+        assert!(json.contains("folder456"));
+        assert!(!json.contains("folder_name"));
+        assert!(!json.contains("parent_folder_id"));
+    }
+
+    #[test]
+    fn test_mail_address_complete() {
+        let address = MailAddress {
+            name: Some("John Doe".to_string()),
+            email: Some("john.doe@example.com".to_string()),
+        };
+        let json = serde_json::to_string(&address).unwrap();
+        assert!(json.contains("John Doe"));
+        assert!(json.contains("john.doe@example.com"));
+    }
+
+    #[test]
+    fn test_mail_body_types() {
+        let html_body = MailBody {
+            body_type: Some("html".to_string()),
+            content: Some("<p>HTML content</p>".to_string()),
+        };
+        let json = serde_json::to_string(&html_body).unwrap();
+        assert!(json.contains("html"));
+        assert!(json.contains("<p>HTML content</p>"));
+
+        let text_body = MailBody {
+            body_type: Some("text".to_string()),
+            content: Some("Plain text content".to_string()),
+        };
+        let json = serde_json::to_string(&text_body).unwrap();
+        assert!(json.contains("text"));
+        assert!(json.contains("Plain text content"));
+    }
+
+    #[test]
+    fn test_message_status_serialization() {
+        let unread = MessageStatus::Unread;
+        let json = serde_json::to_string(&unread).unwrap();
+        assert_eq!(json, "\"unread\"");
+
+        let read = MessageStatus::Read;
+        let json = serde_json::to_string(&read).unwrap();
+        assert_eq!(json, "\"read\"");
+
+        let deleted = MessageStatus::Deleted;
+        let json = serde_json::to_string(&deleted).unwrap();
+        assert_eq!(json, "\"deleted\"");
+
+        let flagged = MessageStatus::Flagged;
+        let json = serde_json::to_string(&flagged).unwrap();
+        assert_eq!(json, "\"flagged\"");
+    }
+
+    #[test]
+    fn test_message_with_recipients() {
+        let message = Message {
+            message_id: Some("msg123".to_string()),
+            thread_id: Some("thread456".to_string()),
+            folder_id: Some("inbox".to_string()),
+            subject: Some("Test Subject".to_string()),
+            from: Some(MailAddress {
+                name: Some("Sender Name".to_string()),
+                email: Some("sender@example.com".to_string()),
+            }),
+            to: Some(vec![
+                MailAddress {
+                    name: Some("Recipient 1".to_string()),
+                    email: Some("recipient1@example.com".to_string()),
+                },
+                MailAddress {
+                    name: Some("Recipient 2".to_string()),
+                    email: Some("recipient2@example.com".to_string()),
+                },
+            ]),
+            cc: Some(vec![]),
+            bcc: None,
+            reply_to: None,
+            body: Some(MailBody {
+                body_type: Some("html".to_string()),
+                content: Some("<p>Email body content</p>".to_string()),
+            }),
+            attachments: Some(vec![]),
+            status: Some(MessageStatus::Unread),
+            sent_time: Some(1640995200),
+            received_time: Some(1640995260),
+        };
+        let json = serde_json::to_string(&message).unwrap();
+        assert!(json.contains("msg123"));
+        assert!(json.contains("Test Subject"));
+        assert!(json.contains("sender@example.com"));
+        assert!(json.contains("recipient1@example.com"));
+    }
+
+    #[test]
+    fn test_attachment_with_size() {
+        let attachment = Attachment {
+            attachment_id: Some("att789".to_string()),
+            file_name: Some("document.pdf".to_string()),
+            content_type: Some("application/pdf".to_string()),
+            size: Some(1024000),
+            content_id: Some("content123".to_string()),
+            is_inline: Some(false),
+            download_url: Some("https://example.com/download/att789".to_string()),
+        };
+        let json = serde_json::to_string(&attachment).unwrap();
+        assert!(json.contains("att789"));
+        assert!(json.contains("document.pdf"));
+        assert!(json.contains("application/pdf"));
+        assert!(json.contains("1024000"));
+    }
+
+    #[test]
+    fn test_attachment_inline() {
+        let attachment = Attachment {
+            attachment_id: Some("att456".to_string()),
+            file_name: Some("image.png".to_string()),
+            content_type: Some("image/png".to_string()),
+            size: Some(52000),
+            content_id: Some("img001".to_string()),
+            is_inline: Some(true),
+            download_url: None,
+        };
+        let json = serde_json::to_string(&attachment).unwrap();
+        assert!(json.contains("att456"));
+        assert!(json.contains("image.png"));
+        assert!(json.contains("true"));
+        assert!(!json.contains("download_url"));
+    }
+
+    #[test]
+    fn test_rule_with_conditions() {
+        let rule = Rule {
+            rule_id: Some("rule123".to_string()),
+            rule_name: Some("Important Emails".to_string()),
+            is_enabled: Some(true),
+            conditions: Some(vec![
+                RuleCondition {
+                    field_type: Some("from".to_string()),
+                    operator: Some("contains".to_string()),
+                    value: Some("boss@company.com".to_string()),
+                },
+                RuleCondition {
+                    field_type: Some("subject".to_string()),
+                    operator: Some("contains".to_string()),
+                    value: Some("urgent".to_string()),
+                },
+            ]),
+            actions: Some(vec![
+                RuleAction {
+                    action_type: Some("move_to_folder".to_string()),
+                    target_folder_id: Some("important".to_string()),
+                    mark_as_read: Some(false),
+                    forward_to: None,
+                },
+            ]),
+            priority: Some(1),
+            created_time: Some(1640995200),
+            updated_time: Some(1640995300),
+        };
+        let json = serde_json::to_string(&rule).unwrap();
+        assert!(json.contains("rule123"));
+        assert!(json.contains("Important Emails"));
+        assert!(json.contains("boss@company.com"));
+        assert!(json.contains("move_to_folder"));
+    }
+
+    #[test]
+    fn test_rule_action_forward() {
+        let action = RuleAction {
+            action_type: Some("forward".to_string()),
+            target_folder_id: None,
+            mark_as_read: Some(true),
+            forward_to: Some("assistant@company.com".to_string()),
+        };
+        let json = serde_json::to_string(&action).unwrap();
+        assert!(json.contains("forward"));
+        assert!(json.contains("assistant@company.com"));
+        assert!(!json.contains("target_folder_id"));
+    }
+
+    #[test]
+    fn test_mailbox_subscription() {
+        let subscription = MailboxSubscription {
+            subscription_id: Some("sub789".to_string()),
+            mailbox_id: Some("mailbox123".to_string()),
+            webhook_url: Some("https://webhook.example.com/mail".to_string()),
+            event_types: Some(vec!["message_received".to_string(), "message_sent".to_string()]),
+            is_subscribed: Some(true),
+            subscribe_time: Some(1640995200),
+        };
+        let json = serde_json::to_string(&subscription).unwrap();
+        assert!(json.contains("sub789"));
+        assert!(json.contains("mailbox123"));
+        assert!(json.contains("https://webhook.example.com/mail"));
+        assert!(json.contains("message_received"));
+    }
+
+    #[test]
+    fn test_mailbox_subscription_unsubscribed() {
+        let subscription = MailboxSubscription {
+            subscription_id: Some("sub456".to_string()),
+            mailbox_id: Some("mailbox456".to_string()),
+            webhook_url: None,
+            event_types: None,
+            is_subscribed: Some(false),
+            subscribe_time: None,
+        };
+        let json = serde_json::to_string(&subscription).unwrap();
+        assert!(json.contains("sub456"));
+        assert!(json.contains("false"));
+        assert!(!json.contains("webhook_url"));
+        assert!(!json.contains("subscribe_time"));
+    }
+}

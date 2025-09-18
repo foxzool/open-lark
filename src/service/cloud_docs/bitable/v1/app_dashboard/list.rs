@@ -146,8 +146,8 @@ pub async fn list_dashboard(
     config: Config,
     option: Option<RequestOption>,
 ) -> SDKResult<BaseResponse<ListDashboardResponse>> {
-    let _service = DashboardService::new(config);
-    _service.list(request, option).await
+    let service = DashboardService::new(config);
+    service.list(request, option).await
 }
 
 #[cfg(test)]

@@ -175,7 +175,7 @@ mod tests {
     #[test]
     fn test_vc_service_creation() {
         let config = create_test_config();
-        let _vc_service = VcService::new(config);
+        let vc_service = VcService::new(config);
 
         // Verify service structure
     }
@@ -189,7 +189,7 @@ mod tests {
             .base_url("https://vc.api.com")
             .build();
 
-        let _vc_service = VcService::new(config);
+        let vc_service = VcService::new(config);
 
         // Verify service creation with custom config
     }
@@ -221,7 +221,7 @@ mod tests {
         ];
 
         for config in test_configs {
-            let _vc_service = VcService::new(config);
+            let vc_service = VcService::new(config);
 
             // Each configuration should create a valid service
         }
@@ -269,7 +269,7 @@ mod tests {
     #[test]
     fn test_vc_service_v1_api_structure() {
         let config = create_test_config();
-        let _vc_service = VcService::new(config);
+        let vc_service = VcService::new(config);
 
         // Verify that the v1 API is properly structured
 
