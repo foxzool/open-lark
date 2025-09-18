@@ -76,7 +76,7 @@ mod tests {
     #[test]
     fn test_task_v2_service_creation() {
         let config = create_test_config();
-        let _service = TaskV2Service::new(config);
+        let service = TaskV2Service::new(config);
 
         // Verify that all services are properly initialized - test passes by not panicking above
     }
@@ -84,18 +84,18 @@ mod tests {
     #[test]
     fn test_task_v2_service_structure() {
         let config = create_test_config();
-        let _service = TaskV2Service::new(config);
+        let service = TaskV2Service::new(config);
 
         // Test that we can access all service fields
-        let _task = &_service.task;
-        let _task_subtask = &_service.task_subtask;
-        let _tasklist = &_service.tasklist;
-        let _subscription = &_service.tasklist_activity_subscription;
-        let _comment = &_service.comment;
-        let _attachment = &_service.attachment;
-        let _section = &_service.section;
-        let _custom_field = &_service.custom_field;
-        let _custom_field_option = &_service.custom_field_option;
+        let _task = &service.task;
+        let _task_subtask = &service.task_subtask;
+        let _tasklist = &service.tasklist;
+        let _subscription = &service.tasklist_activity_subscription;
+        let _comment = &service.comment;
+        let _attachment = &service.attachment;
+        let _section = &service.section;
+        let _custom_field = &service.custom_field;
+        let _custom_field_option = &service.custom_field_option;
 
         // If we reach here without panic, structure is correct
     }
@@ -105,11 +105,11 @@ mod tests {
         let config = create_test_config();
 
         // Create service in a scope
-        let _service = TaskV2Service::new(config);
+        let service = TaskV2Service::new(config);
 
         // Access services multiple times
-        let _first_access = &_service.task;
-        let _second_access = &_service.task;
+        let _first_access = &service.task;
+        let _second_access = &service.task;
 
         // Verify multiple references work correctly
         assert!(std::ptr::eq(_first_access, _second_access));

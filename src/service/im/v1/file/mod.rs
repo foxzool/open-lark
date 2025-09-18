@@ -107,7 +107,7 @@ impl FileService {
         FileUploadBuilder::new()
     }
 
-    /// 创建文件下载Builder (推荐)  
+    /// 创建文件下载Builder (推荐)
     pub fn download_builder(&self) -> FileDownloadBuilder {
         FileDownloadBuilder::new()
     }
@@ -259,7 +259,7 @@ impl ExecutableBuilder<FileService, FileUploadRequest, CreateFileResponse> for F
     }
 }
 
-/// 文件下载Builder  
+/// 文件下载Builder
 #[derive(Default)]
 pub struct FileDownloadBuilder {
     file_key: Option<String>,
@@ -289,7 +289,7 @@ impl ExecutableBuilder<FileService, String, GetFileResponse> for FileDownloadBui
 
     async fn execute(self, service: &FileService) -> SDKResult<GetFileResponse> {
         let file_key = self.build();
-        _service.get(&file_key, None).await
+        service.get(&file_key, None).await
     }
 
     async fn execute_with_options(
@@ -298,6 +298,245 @@ impl ExecutableBuilder<FileService, String, GetFileResponse> for FileDownloadBui
         option: RequestOption,
     ) -> SDKResult<GetFileResponse> {
         let file_key = self.build();
-        _service.get(&file_key, Some(option)).await
+        service.get(&file_key, Some(option)).await
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::config::Config;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_file_service_creation() {
+        let config = create_test_config();
+        let service = FileService::new(config.clone());
+
+        assert_eq!(service.config.app_id, config.app_id);
+        assert_eq!(service.config.app_secret, config.app_secret);
+    }
+
+    #[test]
+    fn test_file_service_with_custom_config() {
+        let config = Config::builder()
+            .app_id("file_app")
+            .app_secret("file_secret")
+            .req_timeout(std::time::Duration::from_millis(15000))
+            .base_url("https://file.api.com")
+            .build();
+
+        let service = FileService::new(config.clone());
+
+        assert_eq!(service.config.app_id, "file_app");
+        assert_eq!(service.config.app_secret, "file_secret");
+        assert_eq!(service.config.base_url, "https://file.api.com");
+        assert_eq!(service.config.req_timeout, Some(std::time::Duration::from_millis(15000)));
+    }
+
+    #[test]
+    fn test_file_service_config_independence() {
+        let config1 = Config::builder()
+            .app_id("file1")
+            .app_secret("secret1")
+            .build();
+        let config2 = Config::builder()
+            .app_id("file2")
+            .app_secret("secret2")
+            .build();
+
+        let service1 = FileService::new(config1);
+        let service2 = FileService::new(config2);
+
+        assert_eq!(service1.config.app_id, "file1");
+        assert_eq!(service2.config.app_id, "file2");
+        assert_ne!(service1.config.app_id, service2.config.app_id);
+    }
+
+    #[test]
+    fn test_file_service_memory_layout() {
+        let config = create_test_config();
+        let service = FileService::new(config);
+
+        let service_ptr = std::ptr::addr_of!(service) as *const u8;
+        let config_ptr = std::ptr::addr_of!(service.config) as *const u8;
+
+        assert!(!service_ptr.is_null(), "Service should have valid memory address");
+        assert!(!config_ptr.is_null(), "Config should have valid memory address");
+    }
+
+    #[test]
+    fn test_file_service_with_different_configurations() {
+        let test_configs = vec![
+            Config::builder()
+                .app_id("file_basic")
+                .app_secret("basic_secret")
+                .build(),
+            Config::builder()
+                .app_id("file_timeout")
+                .app_secret("timeout_secret")
+                .req_timeout(std::time::Duration::from_millis(12000))
+                .build(),
+            Config::builder()
+                .app_id("file_custom")
+                .app_secret("custom_secret")
+                .base_url("https://custom.file.com")
+                .build(),
+            Config::builder()
+                .app_id("file_full")
+                .app_secret("full_secret")
+                .req_timeout(std::time::Duration::from_millis(20000))
+                .base_url("https://full.file.com")
+                .enable_token_cache(false)
+                .build(),
+        ];
+
+        for config in test_configs {
+            let service = FileService::new(config.clone());
+
+            assert_eq!(service.config.app_id, config.app_id);
+            assert_eq!(service.config.app_secret, config.app_secret);
+            assert_eq!(service.config.base_url, config.base_url);
+            assert_eq!(service.config.req_timeout, config.req_timeout);
+        }
+    }
+
+    #[test]
+    fn test_file_service_multiple_instances() {
+        let config = create_test_config();
+        let service1 = FileService::new(config.clone());
+        let service2 = FileService::new(config.clone());
+
+        assert_eq!(service1.config.app_id, service2.config.app_id);
+        assert_eq!(service1.config.app_secret, service2.config.app_secret);
+
+        let ptr1 = std::ptr::addr_of!(service1) as *const u8;
+        let ptr2 = std::ptr::addr_of!(service2) as *const u8;
+        assert_ne!(ptr1, ptr2, "Services should be independent instances");
+    }
+
+    #[test]
+    fn test_file_service_config_cloning() {
+        let original_config = create_test_config();
+        let cloned_config = original_config.clone();
+
+        let service = FileService::new(cloned_config);
+
+        assert_eq!(service.config.app_id, original_config.app_id);
+        assert_eq!(service.config.app_secret, original_config.app_secret);
+    }
+
+    #[test]
+    fn test_file_service_with_empty_config() {
+        let config = Config::default();
+        let service = FileService::new(config);
+
+        assert_eq!(service.config.app_id, "");
+        assert_eq!(service.config.app_secret, "");
+    }
+
+    #[test]
+    fn test_file_service_with_unicode_config() {
+        let config = Config::builder()
+            .app_id("文件应用")
+            .app_secret("文件密钥")
+            .base_url("https://文件.com")
+            .build();
+        let service = FileService::new(config);
+
+        assert_eq!(service.config.app_id, "文件应用");
+        assert_eq!(service.config.app_secret, "文件密钥");
+        assert_eq!(service.config.base_url, "https://文件.com");
+    }
+
+    #[test]
+    fn test_file_service_with_extreme_timeout() {
+        let config = Config::builder()
+            .app_id("file_extreme")
+            .app_secret("extreme_secret")
+            .req_timeout(std::time::Duration::from_secs(7200))
+            .build();
+        let service = FileService::new(config);
+
+        assert_eq!(service.config.req_timeout, Some(std::time::Duration::from_secs(7200)));
+    }
+
+    #[test]
+    fn test_file_service_builder_methods() {
+        let config = create_test_config();
+        let service = FileService::new(config);
+
+        let upload_builder = service.upload_builder();
+        let download_builder = service.download_builder();
+
+        // Builders should be created successfully
+        assert!(std::ptr::addr_of!(upload_builder) as *const u8 != std::ptr::null());
+        assert!(std::ptr::addr_of!(download_builder) as *const u8 != std::ptr::null());
+    }
+
+    #[test]
+    fn test_file_upload_builder_basic() {
+        let builder = FileUploadBuilder::new()
+            .file_type("image")
+            .file_name("test.jpg")
+            .file_data(vec![1, 2, 3, 4]);
+
+        let request = builder.build_unvalidated();
+        assert_eq!(request.file_type, "image");
+        assert_eq!(request.file_name, "test.jpg");
+        assert_eq!(request.file_data, vec![1, 2, 3, 4]);
+    }
+
+    #[test]
+    fn test_file_upload_builder_chaining() {
+        let request = FileUploadBuilder::new()
+            .file_type("document")
+            .file_name("document.pdf")
+            .file_data(vec![0xFF, 0xFE, 0xFD])
+            .build_unvalidated();
+
+        assert_eq!(request.file_type, "document");
+        assert_eq!(request.file_name, "document.pdf");
+        assert_eq!(request.file_data, vec![0xFF, 0xFE, 0xFD]);
+    }
+
+    #[test]
+    fn test_file_download_builder_basic() {
+        let builder = FileDownloadBuilder::new()
+            .file_key("test_key_123");
+
+        let file_key = builder.build();
+        assert_eq!(file_key, "test_key_123");
+    }
+
+    #[test]
+    fn test_file_download_builder_empty() {
+        let builder = FileDownloadBuilder::new();
+        let file_key = builder.build();
+        assert_eq!(file_key, "");
+    }
+
+    #[test]
+    fn test_file_upload_request_default() {
+        let request = FileUploadRequest::default();
+        assert_eq!(request.file_type, "");
+        assert_eq!(request.file_name, "");
+        assert_eq!(request.file_data, Vec::<u8>::new());
+    }
+
+    #[test]
+    fn test_create_file_response_format() {
+        assert_eq!(CreateFileResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_get_file_response_format() {
+        assert_eq!(GetFileResponse::data_format(), ResponseFormat::Data);
     }
 }

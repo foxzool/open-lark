@@ -544,3 +544,148 @@ pub struct CommonResponse {
     /// 操作时间
     pub timestamp: Option<String>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json;
+
+    #[test]
+    fn test_page_response_serialization() {
+        let response = PageResponse {
+            items: vec!["item1".to_string(), "item2".to_string()],
+            has_more: true,
+            page_token: Some("token123".to_string()),
+        };
+        let json = serde_json::to_string(&response).unwrap();
+        assert!(json.contains("item1"));
+        assert!(json.contains("has_more"));
+        assert!(json.contains("token123"));
+    }
+
+    #[test]
+    fn test_i18n_text_complete() {
+        let text = I18nText {
+            zh_cn: Some("中文".to_string()),
+            en_us: Some("English".to_string()),
+            ja_jp: Some("日本語".to_string()),
+        };
+        let json = serde_json::to_string(&text).unwrap();
+        let deserialized: I18nText = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.zh_cn, Some("中文".to_string()));
+        assert_eq!(deserialized.en_us, Some("English".to_string()));
+        assert_eq!(deserialized.ja_jp, Some("日本語".to_string()));
+    }
+
+    #[test]
+    fn test_i18n_text_default() {
+        let text = I18nText::default();
+        assert_eq!(text.zh_cn, None);
+        assert_eq!(text.en_us, None);
+        assert_eq!(text.ja_jp, None);
+    }
+
+    #[test]
+    fn test_user_id_serialization() {
+        let user_id = UserId {
+            id: "user123".to_string(),
+            id_type: "open_id".to_string(),
+        };
+        let json = serde_json::to_string(&user_id).unwrap();
+        assert!(json.contains("user123"));
+        assert!(json.contains("open_id"));
+    }
+
+    #[test]
+    fn test_department_id_serialization() {
+        let dept_id = DepartmentId {
+            id: "dept456".to_string(),
+            id_type: "department_id".to_string(),
+        };
+        let json = serde_json::to_string(&dept_id).unwrap();
+        assert!(json.contains("dept456"));
+        assert!(json.contains("department_id"));
+    }
+
+    #[test]
+    fn test_attachment_complete() {
+        let attachment = Attachment {
+            id: "att789".to_string(),
+            name: "resume.pdf".to_string(),
+            file_type: Some("application/pdf".to_string()),
+            size: Some(1024000),
+            created_time: Some("2024-01-01T00:00:00Z".to_string()),
+        };
+        let json = serde_json::to_string(&attachment).unwrap();
+        assert!(json.contains("att789"));
+        assert!(json.contains("resume.pdf"));
+        assert!(json.contains("application/pdf"));
+    }
+
+    #[test]
+    fn test_location_active() {
+        let location = Location {
+            id: "loc001".to_string(),
+            name: I18nText {
+                zh_cn: Some("北京".to_string()),
+                en_us: Some("Beijing".to_string()),
+                ja_jp: None,
+            },
+            location_type: "city".to_string(),
+            parent_id: Some("china".to_string()),
+            code: Some("BJ".to_string()),
+            active_status: true,
+        };
+        let json = serde_json::to_string(&location).unwrap();
+        assert!(json.contains("loc001"));
+        assert!(json.contains("北京"));
+        assert!(json.contains("Beijing"));
+        assert!(json.contains("true"));
+    }
+
+    #[test]
+    fn test_location_query_request_default() {
+        let request = LocationQueryRequest::default();
+        assert_eq!(request.location_type, None);
+        assert_eq!(request.parent_id, None);
+        assert_eq!(request.page_size, None);
+        assert_eq!(request.page_token, None);
+    }
+
+    #[test]
+    fn test_common_response_success() {
+        let response = CommonResponse {
+            success: true,
+            message: Some("Operation completed".to_string()),
+            timestamp: Some("2024-01-01T00:00:00Z".to_string()),
+        };
+        let json = serde_json::to_string(&response).unwrap();
+        assert!(json.contains("true"));
+        assert!(json.contains("Operation completed"));
+    }
+
+    #[test]
+    fn test_common_response_error() {
+        let response = CommonResponse {
+            success: false,
+            message: Some("Operation failed".to_string()),
+            timestamp: None,
+        };
+        let json = serde_json::to_string(&response).unwrap();
+        assert!(json.contains("false"));
+        assert!(json.contains("Operation failed"));
+    }
+
+    #[test]
+    fn test_attachment_create_request() {
+        let request = AttachmentCreateRequest {
+            name: "document.pdf".to_string(),
+            content: "base64encodedcontent".to_string(),
+            file_type: Some("application/pdf".to_string()),
+        };
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("document.pdf"));
+        assert!(json.contains("base64encodedcontent"));
+        assert!(json.contains("application/pdf"));
+    }
+}

@@ -153,7 +153,7 @@ mod tests {
     #[test]
     fn test_calendar_service_creation() {
         let config = create_test_config();
-        let _calendar_service = CalendarService::new(config);
+        let calendar_service = CalendarService::new(config);
 
         // Verify service structure
     }
@@ -167,7 +167,7 @@ mod tests {
             .base_url("https://calendar.api.com")
             .build();
 
-        let _calendar_service = CalendarService::new(config);
+        let calendar_service = CalendarService::new(config);
 
         // Verify service creation with custom config
     }
@@ -199,7 +199,7 @@ mod tests {
         ];
 
         for config in test_configs {
-            let _calendar_service = CalendarService::new(config);
+            let calendar_service = CalendarService::new(config);
 
             // Each configuration should create a valid service
         }

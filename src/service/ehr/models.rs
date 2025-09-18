@@ -391,3 +391,302 @@ pub struct EhrResponse<T> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub msg: Option<String>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json;
+
+    #[test]
+    fn test_employee_list_request_default() {
+        let request = EmployeeListRequest {
+            page_size: Some(50),
+            page_token: None,
+            status: Some("active".to_string()),
+            department_id: None,
+            user_id_type: Some("open_id".to_string()),
+            department_id_type: None,
+            include_resigned: Some(false),
+            fields: Some(vec!["employee_id".to_string(), "name".to_string()]),
+        };
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("50"));
+        assert!(json.contains("active"));
+        assert!(json.contains("open_id"));
+        assert!(json.contains("employee_id"));
+    }
+
+    #[test]
+    fn test_employee_list_request_minimal() {
+        let request = EmployeeListRequest {
+            page_size: None,
+            page_token: None,
+            status: None,
+            department_id: None,
+            user_id_type: None,
+            department_id_type: None,
+            include_resigned: None,
+            fields: None,
+        };
+        let json = serde_json::to_string(&request).unwrap();
+        assert_eq!(json, "{}");
+    }
+
+    #[test]
+    fn test_employee_complete() {
+        let employee = Employee {
+            employee_id: Some("emp123".to_string()),
+            user_id: Some("usr456".to_string()),
+            employee_number: Some("E001".to_string()),
+            name: Some("张三".to_string()),
+            en_name: Some("Zhang San".to_string()),
+            email: Some("zhangsan@company.com".to_string()),
+            mobile: Some("+86-13800138000".to_string()),
+            gender: Some("male".to_string()),
+            birthday: Some("1990-05-20".to_string()),
+            id_number: Some("110101199005200001".to_string()),
+            status: Some(EmployeeStatus {
+                status: Some("active".to_string()),
+                effective_date: Some("2023-01-15".to_string()),
+                resignation_date: None,
+                resignation_reason: None,
+            }),
+            department_info: Some(EmployeeDepartment {
+                department_id: Some("dept789".to_string()),
+                department_name: Some("技术部".to_string()),
+                parent_department_id: Some("company".to_string()),
+                department_path: Some("/company/tech".to_string()),
+            }),
+            job_info: Some(EmployeeJob {
+                job_title: Some("软件工程师".to_string()),
+                job_level: Some("L3".to_string()),
+                job_family: Some("技术序列".to_string()),
+                supervisor_id: Some("mgr001".to_string()),
+                supervisor_name: Some("张经理".to_string()),
+                employee_type: Some("full_time".to_string()),
+                work_location: Some("北京".to_string()),
+            }),
+            hire_info: None,
+            personal_info: None,
+            education_info: None,
+            work_experience: None,
+            emergency_contact: None,
+            bank_account: None,
+            social_security: None,
+            create_time: Some("2023-01-15T00:00:00Z".to_string()),
+            update_time: None,
+            custom_fields: Some(HashMap::new()),
+        };
+        let json = serde_json::to_string(&employee).unwrap();
+        assert!(json.contains("emp123"));
+        assert!(json.contains("张三"));
+        assert!(json.contains("zhangsan@company.com"));
+        assert!(json.contains("active"));
+        assert!(json.contains("技术部"));
+    }
+
+    #[test]
+    fn test_employee_status_active() {
+        let status = EmployeeStatus {
+            status: Some("active".to_string()),
+            effective_date: Some("2023-01-01".to_string()),
+            resignation_date: None,
+            resignation_reason: None,
+        };
+        let json = serde_json::to_string(&status).unwrap();
+        assert!(json.contains("active"));
+        assert!(json.contains("2023-01-01"));
+        assert!(!json.contains("resignation_date"));
+    }
+
+    #[test]
+    fn test_employee_status_resigned() {
+        let status = EmployeeStatus {
+            status: Some("inactive".to_string()),
+            effective_date: Some("2023-01-01".to_string()),
+            resignation_date: Some("2024-01-01".to_string()),
+            resignation_reason: Some("career_change".to_string()),
+        };
+        let json = serde_json::to_string(&status).unwrap();
+        assert!(json.contains("inactive"));
+        assert!(json.contains("2024-01-01"));
+        assert!(json.contains("career_change"));
+    }
+
+    #[test]
+    fn test_employee_department_hierarchy() {
+        let department = EmployeeDepartment {
+            department_id: Some("tech001".to_string()),
+            department_name: Some("前端开发组".to_string()),
+            parent_department_id: Some("tech".to_string()),
+            department_path: Some("/company/tech/frontend".to_string()),
+        };
+        let json = serde_json::to_string(&department).unwrap();
+        assert!(json.contains("tech001"));
+        assert!(json.contains("前端开发组"));
+        assert!(json.contains("tech"));
+        assert!(json.contains("frontend"));
+    }
+
+    #[test]
+    fn test_employee_job_complete() {
+        let job = EmployeeJob {
+            job_title: Some("高级软件工程师".to_string()),
+            job_level: Some("L4".to_string()),
+            job_family: Some("技术序列".to_string()),
+            supervisor_id: Some("mgr002".to_string()),
+            supervisor_name: Some("李经理".to_string()),
+            employee_type: Some("full_time".to_string()),
+            work_location: Some("上海".to_string()),
+        };
+        let json = serde_json::to_string(&job).unwrap();
+        assert!(json.contains("高级软件工程师"));
+        assert!(json.contains("L4"));
+        assert!(json.contains("技术序列"));
+        assert!(json.contains("上海"));
+    }
+
+    #[test]
+    fn test_employee_hire_info() {
+        let hire = EmployeeHire {
+            hire_date: Some("2023-01-15".to_string()),
+            probation_end_date: Some("2023-04-15".to_string()),
+            contract_type: Some("permanent".to_string()),
+            contract_start_date: Some("2023-01-15".to_string()),
+            contract_end_date: None,
+        };
+        let json = serde_json::to_string(&hire).unwrap();
+        assert!(json.contains("2023-01-15"));
+        assert!(json.contains("2023-04-15"));
+        assert!(json.contains("permanent"));
+    }
+
+    #[test]
+    fn test_employee_personal_info() {
+        let personal = EmployeePersonal {
+            nationality: Some("中国".to_string()),
+            ethnicity: Some("汉".to_string()),
+            marital_status: Some("married".to_string()),
+            political_status: Some("party_member".to_string()),
+            registered_address: Some("北京市朝阳区".to_string()),
+            current_address: Some("上海市浦东区".to_string()),
+            graduate_school: Some("清华大学".to_string()),
+            highest_education: Some("bachelor".to_string()),
+        };
+        let json = serde_json::to_string(&personal).unwrap();
+        assert!(json.contains("中国"));
+        assert!(json.contains("married"));
+        assert!(json.contains("北京市朝阳区"));
+        assert!(json.contains("清华大学"));
+    }
+
+    #[test]
+    fn test_employee_education() {
+        let education = EmployeeEducation {
+            school_name: Some("清华大学".to_string()),
+            major: Some("计算机科学与技术".to_string()),
+            degree: Some("bachelor".to_string()),
+            start_date: Some("2008-09-01".to_string()),
+            end_date: Some("2012-06-30".to_string()),
+        };
+        let json = serde_json::to_string(&education).unwrap();
+        assert!(json.contains("bachelor"));
+        assert!(json.contains("清华大学"));
+        assert!(json.contains("计算机科学与技术"));
+        assert!(json.contains("2008-09-01"));
+    }
+
+    #[test]
+    fn test_employee_work_experience() {
+        let experience = EmployeeWorkExperience {
+            company_name: Some("阿里巴巴".to_string()),
+            position: Some("软件工程师".to_string()),
+            start_date: Some("2019-07-01".to_string()),
+            end_date: Some("2022-12-31".to_string()),
+            description: Some("负责电商平台后端开发".to_string()),
+        };
+        let json = serde_json::to_string(&experience).unwrap();
+        assert!(json.contains("阿里巴巴"));
+        assert!(json.contains("软件工程师"));
+        assert!(json.contains("负责电商平台后端开发"));
+    }
+
+    #[test]
+    fn test_emergency_contact() {
+        let contact = EmergencyContact {
+            name: Some("李四".to_string()),
+            relationship: Some("spouse".to_string()),
+            phone: Some("+86-13900139000".to_string()),
+            address: Some("北京市海淀区".to_string()),
+        };
+        let json = serde_json::to_string(&contact).unwrap();
+        assert!(json.contains("李四"));
+        assert!(json.contains("spouse"));
+        assert!(json.contains("13900139000"));
+        assert!(json.contains("海淀区"));
+    }
+
+    #[test]
+    fn test_employee_list_response() {
+        let create_minimal_employee = |id: &str, name: &str, email: &str| Employee {
+            employee_id: Some(id.to_string()),
+            user_id: None,
+            employee_number: None,
+            name: Some(name.to_string()),
+            en_name: None,
+            email: Some(email.to_string()),
+            mobile: None,
+            gender: None,
+            birthday: None,
+            id_number: None,
+            status: Some(EmployeeStatus {
+                status: Some("active".to_string()),
+                effective_date: Some("2023-01-01".to_string()),
+                resignation_date: None,
+                resignation_reason: None,
+            }),
+            department_info: None,
+            job_info: None,
+            hire_info: None,
+            personal_info: None,
+            education_info: None,
+            work_experience: None,
+            emergency_contact: None,
+            bank_account: None,
+            social_security: None,
+            create_time: None,
+            update_time: None,
+            custom_fields: None,
+        };
+
+        let response = EhrResponse {
+            success: Some(true),
+            data: Some(vec![
+                create_minimal_employee("emp001", "员工一", "emp1@company.com"),
+                create_minimal_employee("emp002", "员工二", "emp2@company.com"),
+            ]),
+            code: Some(0),
+            msg: Some("success".to_string()),
+        };
+        let json = serde_json::to_string(&response).unwrap();
+        assert!(json.contains("emp001"));
+        assert!(json.contains("员工一"));
+        assert!(json.contains("emp2@company.com"));
+        assert!(json.contains("success"));
+    }
+
+    #[test]
+    fn test_ehr_response_error() {
+        let response: EhrResponse<Employee> = EhrResponse {
+            success: Some(false),
+            data: None,
+            code: Some(400),
+            msg: Some("Invalid request".to_string()),
+        };
+        let json = serde_json::to_string(&response).unwrap();
+        assert!(json.contains("false"));
+        assert!(json.contains("400"));
+        assert!(json.contains("Invalid request"));
+        assert!(!json.contains("data"));
+    }
+}

@@ -241,14 +241,14 @@ mod tests {
 
     #[test]
     fn test_user_task_service_creation() {
-        let _service = create_test_service();
-        assert_eq!(_service.config.app_id, "test_app_id");
-        assert_eq!(_service.config.app_secret, "test_app_secret");
+        let service = create_test_service();
+        assert_eq!(service.config.app_id, "test_app_id");
+        assert_eq!(service.config.app_secret, "test_app_secret");
     }
 
     #[test]
     fn test_batch_create_request_builder() {
-        let _service = create_test_service();
+        let service = create_test_service();
         let mut request = BatchCreateUserTaskRequest::default();
         request.employee_type = "employee_id".to_string();
         request.user_tasks = vec![UserTaskCreate {
@@ -356,7 +356,7 @@ mod tests {
     #[test]
     fn test_access_token_types() {
         // All attendance user task operations should use tenant access token
-        let _service = create_test_service();
+        let service = create_test_service();
 
         // These would be tested in actual API calls, but we can verify
         // that the service properly supports tenant access tokens
