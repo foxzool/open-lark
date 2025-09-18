@@ -2,6 +2,29 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 
+/// 附件
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Attachment {
+    /// 文件ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_id: Option<String>,
+    /// 文件名称
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_name: Option<String>,
+    /// 文件URL
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_url: Option<String>,
+    /// 文件大小
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_size: Option<i64>,
+    /// 文件类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_type: Option<String>,
+    /// 上传时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub uploaded_at: Option<String>,
+}
+
 /// 分页响应
 #[derive(Debug, Serialize, Deserialize)]
 pub struct PageResponse<T> {
@@ -626,4 +649,329 @@ pub struct FileUploadResult {
     /// 上传时间
     #[serde(skip_serializing_if = "Option::is_none")]
     pub uploaded_at: Option<String>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json;
+
+    #[test]
+    fn test_page_response_serialization() {
+        let response = PageResponse {
+            has_more: Some(true),
+            page_token: Some("next_token".to_string()),
+            items: Some(vec!["item1".to_string(), "item2".to_string()]),
+        };
+        let json = serde_json::to_string(&response).unwrap();
+        assert!(json.contains("true"));
+        assert!(json.contains("next_token"));
+        assert!(json.contains("item1"));
+    }
+
+    #[test]
+    fn test_page_response_empty() {
+        let response: PageResponse<String> = PageResponse {
+            has_more: Some(false),
+            page_token: None,
+            items: Some(vec![]),
+        };
+        let json = serde_json::to_string(&response).unwrap();
+        assert!(json.contains("false"));
+        assert!(!json.contains("page_token"));
+    }
+
+    #[test]
+    fn test_session_create_request() {
+        let mut metadata = HashMap::new();
+        metadata.insert("user_id".to_string(), serde_json::json!("user123"));
+
+        let request = SessionCreateRequest {
+            app_id: "app456".to_string(),
+            metadata: Some(metadata),
+            tool_set: Some(ToolSet {
+                tools: Some(vec![Tool {
+                    tool_type: Some("function".to_string()),
+                    config: Some(serde_json::json!({
+                        "name": "get_weather",
+                        "description": "Get weather information"
+                    })),
+                }]),
+            }),
+        };
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("app456"));
+        assert!(json.contains("user123"));
+        assert!(json.contains("get_weather"));
+    }
+
+    #[test]
+    fn test_session_update_request() {
+        let request = SessionUpdateRequest {
+            app_id: "app789".to_string(),
+            session_id: "session123".to_string(),
+            metadata: Some(HashMap::new()),
+            tool_set: None,
+        };
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("app789"));
+        assert!(json.contains("session123"));
+        assert!(!json.contains("tool_set"));
+    }
+
+    #[test]
+    fn test_session_get_request() {
+        let request = SessionGetRequest {
+            app_id: "app001".to_string(),
+            session_id: "session456".to_string(),
+        };
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("app001"));
+        assert!(json.contains("session456"));
+    }
+
+    #[test]
+    fn test_session_complete() {
+        let session = Session {
+            session_id: Some("sess789".to_string()),
+            app_id: Some("app123".to_string()),
+            created_at: Some("2024-01-01T00:00:00Z".to_string()),
+            metadata: Some({
+                let mut map = HashMap::new();
+                map.insert("context".to_string(), serde_json::json!("conversation"));
+                map
+            }),
+            tool_set: Some(ToolSet {
+                tools: Some(vec![]),
+            }),
+        };
+        let json = serde_json::to_string(&session).unwrap();
+        assert!(json.contains("sess789"));
+        assert!(json.contains("app123"));
+        assert!(json.contains("conversation"));
+    }
+
+    #[test]
+    fn test_tool_set_with_function() {
+        let tool_set = ToolSet {
+            tools: Some(vec![
+                Tool {
+                    tool_type: Some("function".to_string()),
+                    config: Some(serde_json::json!({
+                        "name": "calculate",
+                        "description": "Perform calculations",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "expression": {"type": "string"}
+                            }
+                        }
+                    })),
+                },
+            ]),
+        };
+        let json = serde_json::to_string(&tool_set).unwrap();
+        assert!(json.contains("function"));
+        assert!(json.contains("calculate"));
+        assert!(json.contains("parameters"));
+    }
+
+    #[test]
+    fn test_message_create_request() {
+        let request = MessageCreateRequest {
+            app_id: "app555".to_string(),
+            session_id: "session888".to_string(),
+            content: "Hello, assistant!".to_string(),
+            message_type: Some("text".to_string()),
+            metadata: Some({
+                let mut map = HashMap::new();
+                map.insert("priority".to_string(), serde_json::json!("high"));
+                map
+            }),
+        };
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("app555"));
+        assert!(json.contains("session888"));
+        assert!(json.contains("Hello, assistant!"));
+        assert!(json.contains("high"));
+        assert!(json.contains("text"));
+    }
+
+    #[test]
+    fn test_message_list_request() {
+        let request = MessageListRequest {
+            app_id: "app777".to_string(),
+            session_id: "session999".to_string(),
+            page_size: Some(50),
+            page_token: Some("page_token_123".to_string()),
+            order: Some("desc".to_string()),
+        };
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("app777"));
+        assert!(json.contains("session999"));
+        assert!(json.contains("50"));
+        assert!(json.contains("desc"));
+        assert!(json.contains("page_token_123"));
+    }
+
+    #[test]
+    fn test_message_with_assistant_role() {
+        let message = Message {
+            message_id: Some("msg456".to_string()),
+            session_id: Some("session123".to_string()),
+            role: Some("assistant".to_string()),
+            content: Some("I can help you with that task.".to_string()),
+            message_type: Some("text".to_string()),
+            created_at: Some("2024-01-01T10:00:00Z".to_string()),
+            metadata: Some({
+                let mut map = HashMap::new();
+                map.insert("confidence".to_string(), serde_json::json!(0.95));
+                map
+            }),
+        };
+        let json = serde_json::to_string(&message).unwrap();
+        assert!(json.contains("msg456"));
+        assert!(json.contains("assistant"));
+        assert!(json.contains("I can help you"));
+        assert!(json.contains("0.95"));
+    }
+
+    #[test]
+    fn test_run_create_request() {
+        let request = RunCreateRequest {
+            app_id: "app666".to_string(),
+            session_id: "session444".to_string(),
+            instructions: Some("Please analyze the uploaded document".to_string()),
+            additional_instructions: Some("Focus on key insights".to_string()),
+            metadata: Some({
+                let mut map = HashMap::new();
+                map.insert("analysis_type".to_string(), serde_json::json!("detailed"));
+                map
+            }),
+            tool_set: Some(ToolSet {
+                tools: Some(vec![
+                    Tool {
+                        tool_type: "code_interpreter".to_string(),
+                        function: None,
+                    },
+                ]),
+            }),
+            stream: Some(true),
+        };
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("app666"));
+        assert!(json.contains("session444"));
+        assert!(json.contains("analyze the uploaded"));
+        assert!(json.contains("code_interpreter"));
+        assert!(json.contains("true"));
+    }
+
+    #[test]
+    fn test_run_list_request() {
+        let request = RunListRequest {
+            app_id: "app888".to_string(),
+            session_id: "session777".to_string(),
+            limit: Some(20),
+            order: Some("asc".to_string()),
+            after: Some("run123".to_string()),
+            before: None,
+            status: Some("completed".to_string()),
+        };
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("app888"));
+        assert!(json.contains("session777"));
+        assert!(json.contains("20"));
+        assert!(json.contains("asc"));
+        assert!(json.contains("completed"));
+    }
+
+    #[test]
+    fn test_run_in_progress() {
+        let run = Run {
+            run_id: Some("run789".to_string()),
+            session_id: Some("session456".to_string()),
+            status: Some("in_progress".to_string()),
+            started_at: Some("2024-01-01T14:00:00Z".to_string()),
+            completed_at: None,
+            failed_at: None,
+            instructions: Some("Generate a summary report".to_string()),
+            additional_instructions: None,
+            last_error: None,
+            metadata: Some({
+                let mut map = HashMap::new();
+                map.insert("step".to_string(), serde_json::json!(2));
+                map.insert("total_steps".to_string(), serde_json::json!(5));
+                map
+            }),
+        };
+        let json = serde_json::to_string(&run).unwrap();
+        assert!(json.contains("run789"));
+        assert!(json.contains("in_progress"));
+        assert!(json.contains("Generate a summary"));
+        assert!(json.contains("\"step\":2"));
+        assert!(!json.contains("completed_at"));
+    }
+
+    #[test]
+    fn test_run_failed() {
+        let run = Run {
+            run_id: Some("run999".to_string()),
+            session_id: Some("session111".to_string()),
+            status: Some("failed".to_string()),
+            started_at: Some("2024-01-01T15:00:00Z".to_string()),
+            completed_at: None,
+            failed_at: Some("2024-01-01T15:05:00Z".to_string()),
+            instructions: Some("Process large dataset".to_string()),
+            additional_instructions: None,
+            last_error: Some({
+                let mut map = HashMap::new();
+                map.insert("code".to_string(), serde_json::json!("TIMEOUT"));
+                map.insert("message".to_string(), serde_json::json!("Processing timeout"));
+                map
+            }),
+            metadata: None,
+        };
+        let json = serde_json::to_string(&run).unwrap();
+        assert!(json.contains("run999"));
+        assert!(json.contains("failed"));
+        assert!(json.contains("TIMEOUT"));
+        assert!(json.contains("Processing timeout"));
+        assert!(json.contains("failed_at"));
+    }
+
+    #[test]
+    fn test_attachment_complete() {
+        let attachment = Attachment {
+            file_id: Some("file789".to_string()),
+            file_name: Some("presentation.pptx".to_string()),
+            file_url: Some("https://files.example.com/file789".to_string()),
+            file_size: Some(2048000),
+            file_type: Some("application/vnd.ms-powerpoint".to_string()),
+            uploaded_at: Some("2024-01-01T16:30:00Z".to_string()),
+        };
+        let json = serde_json::to_string(&attachment).unwrap();
+        assert!(json.contains("file789"));
+        assert!(json.contains("presentation.pptx"));
+        assert!(json.contains("files.example.com"));
+        assert!(json.contains("2048000"));
+        assert!(json.contains("vnd.ms-powerpoint"));
+    }
+
+    #[test]
+    fn test_attachment_minimal() {
+        let attachment = Attachment {
+            file_id: Some("file456".to_string()),
+            file_name: Some("note.txt".to_string()),
+            file_url: None,
+            file_size: None,
+            file_type: Some("text/plain".to_string()),
+            uploaded_at: None,
+        };
+        let json = serde_json::to_string(&attachment).unwrap();
+        assert!(json.contains("file456"));
+        assert!(json.contains("note.txt"));
+        assert!(json.contains("text/plain"));
+        assert!(!json.contains("file_url"));
+        assert!(!json.contains("uploaded_at"));
+    }
 }

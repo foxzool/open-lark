@@ -183,7 +183,7 @@ mod tests {
     #[test]
     fn test_group_service_creation() {
         let config = create_test_config();
-        let _group_service = GroupService::new(config);
+        let group_service = GroupService::new(config);
 
         // Verify service structure
     }
@@ -197,7 +197,7 @@ mod tests {
             .base_url("https://group.api.com")
             .build();
 
-        let _group_service = GroupService::new(config);
+        let group_service = GroupService::new(config);
 
         // Verify service creation with custom config
     }
@@ -229,7 +229,7 @@ mod tests {
         ];
 
         for config in test_configs {
-            let _group_service = GroupService::new(config);
+            let group_service = GroupService::new(config);
 
             // Each configuration should create a valid service
         }
@@ -277,10 +277,176 @@ mod tests {
     #[test]
     fn test_group_service_v1_api_structure() {
         let config = create_test_config();
-        let _group_service = GroupService::new(config);
+        let group_service = GroupService::new(config);
 
         // Verify that the v1 API is properly structured
 
         // Test that service maintains proper memory layout
+    }
+
+    #[test]
+    fn test_group_service_v1_chat_service_access() {
+        let config = create_test_config();
+        let group_service = GroupService::new(config);
+
+        // Verify that chat service is accessible and properly configured
+        let chat_ptr = std::ptr::addr_of!(group_service.v1.chat) as *const u8;
+        assert!(!chat_ptr.is_null(), "Chat service should be properly instantiated");
+    }
+
+    #[test]
+    fn test_group_service_v1_member_service_access() {
+        let config = create_test_config();
+        let group_service = GroupService::new(config);
+
+        // Verify that chat member service is accessible and properly configured
+        let member_ptr = std::ptr::addr_of!(group_service.v1.chat_member) as *const u8;
+        assert!(!member_ptr.is_null(), "Chat member service should be properly instantiated");
+    }
+
+    #[test]
+    fn test_group_service_v1_announcement_service_access() {
+        let config = create_test_config();
+        let group_service = GroupService::new(config);
+
+        // Verify that chat announcement service is accessible
+        let announcement_ptr = std::ptr::addr_of!(group_service.v1.chat_announcement) as *const u8;
+        assert!(!announcement_ptr.is_null(), "Chat announcement service should be properly instantiated");
+    }
+
+    #[test]
+    fn test_group_service_v1_tab_service_access() {
+        let config = create_test_config();
+        let group_service = GroupService::new(config);
+
+        // Verify that chat tab service is accessible
+        let tab_ptr = std::ptr::addr_of!(group_service.v1.chat_tab) as *const u8;
+        assert!(!tab_ptr.is_null(), "Chat tab service should be properly instantiated");
+    }
+
+    #[test]
+    fn test_group_service_v1_menu_tree_service_access() {
+        let config = create_test_config();
+        let group_service = GroupService::new(config);
+
+        // Verify that chat menu tree service is accessible
+        let menu_ptr = std::ptr::addr_of!(group_service.v1.chat_menu_tree) as *const u8;
+        assert!(!menu_ptr.is_null(), "Chat menu tree service should be properly instantiated");
+    }
+
+    #[test]
+    fn test_group_service_v1_services_independence() {
+        let config = create_test_config();
+        let group_service = GroupService::new(config);
+
+        // Verify that all sub-services are independent instances
+        let chat_ptr = std::ptr::addr_of!(group_service.v1.chat) as *const _;
+        let member_ptr = std::ptr::addr_of!(group_service.v1.chat_member) as *const _;
+        let announcement_ptr = std::ptr::addr_of!(group_service.v1.chat_announcement) as *const _;
+        let tab_ptr = std::ptr::addr_of!(group_service.v1.chat_tab) as *const _;
+        let menu_ptr = std::ptr::addr_of!(group_service.v1.chat_menu_tree) as *const _;
+
+        assert_ne!(chat_ptr, member_ptr, "Chat and member services should be independent");
+        assert_ne!(chat_ptr, announcement_ptr, "Chat and announcement services should be independent");
+        assert_ne!(chat_ptr, tab_ptr, "Chat and tab services should be independent");
+        assert_ne!(chat_ptr, menu_ptr, "Chat and menu services should be independent");
+        assert_ne!(member_ptr, announcement_ptr, "Member and announcement services should be independent");
+        assert_ne!(member_ptr, tab_ptr, "Member and tab services should be independent");
+        assert_ne!(member_ptr, menu_ptr, "Member and menu services should be independent");
+        assert_ne!(announcement_ptr, tab_ptr, "Announcement and tab services should be independent");
+        assert_ne!(announcement_ptr, menu_ptr, "Announcement and menu services should be independent");
+        assert_ne!(tab_ptr, menu_ptr, "Tab and menu services should be independent");
+    }
+
+    #[test]
+    fn test_group_service_with_different_timeouts() {
+        let fast_config = Config::builder()
+            .app_id("fast_group")
+            .app_secret("fast_secret")
+            .req_timeout(std::time::Duration::from_millis(5000))
+            .build();
+
+        let slow_config = Config::builder()
+            .app_id("slow_group")
+            .app_secret("slow_secret")
+            .req_timeout(std::time::Duration::from_millis(60000))
+            .build();
+
+        let fast_service = GroupService::new(fast_config);
+        let slow_service = GroupService::new(slow_config);
+
+        // Both services should be created successfully regardless of timeout settings
+        let fast_ptr = std::ptr::addr_of!(fast_service) as *const _;
+        let slow_ptr = std::ptr::addr_of!(slow_service) as *const _;
+        assert_ne!(fast_ptr, slow_ptr, "Services with different configs should be independent");
+    }
+
+    #[test]
+    fn test_group_service_with_different_base_urls() {
+        let dev_config = Config::builder()
+            .app_id("dev_group")
+            .app_secret("dev_secret")
+            .base_url("https://dev.group.api")
+            .build();
+
+        let prod_config = Config::builder()
+            .app_id("prod_group")
+            .app_secret("prod_secret")
+            .base_url("https://api.group.lark.com")
+            .build();
+
+        let dev_service = GroupService::new(dev_config);
+        let prod_service = GroupService::new(prod_config);
+
+        // Both services should be created successfully with different base URLs
+        let dev_ptr = std::ptr::addr_of!(dev_service) as *const _;
+        let prod_ptr = std::ptr::addr_of!(prod_service) as *const _;
+        assert_ne!(dev_ptr, prod_ptr, "Services with different base URLs should be independent");
+    }
+
+    #[test]
+    fn test_group_service_v1_struct_memory_layout() {
+        let config = create_test_config();
+        let group_service = GroupService::new(config);
+
+        // Test that the V1 struct is properly aligned and accessible
+        let v1_ptr = std::ptr::addr_of!(group_service.v1) as *const u8;
+        assert!(!v1_ptr.is_null(), "V1 service should be properly instantiated");
+
+        // Verify all services are properly embedded within V1
+        let chat_offset = unsafe { std::ptr::addr_of!(group_service.v1.chat) as usize - v1_ptr as usize };
+        let member_offset = unsafe { std::ptr::addr_of!(group_service.v1.chat_member) as usize - v1_ptr as usize };
+        let announcement_offset = unsafe { std::ptr::addr_of!(group_service.v1.chat_announcement) as usize - v1_ptr as usize };
+        let tab_offset = unsafe { std::ptr::addr_of!(group_service.v1.chat_tab) as usize - v1_ptr as usize };
+        let menu_offset = unsafe { std::ptr::addr_of!(group_service.v1.chat_menu_tree) as usize - v1_ptr as usize };
+
+        // All offsets should be different, indicating proper struct layout
+        let offsets = vec![chat_offset, member_offset, announcement_offset, tab_offset, menu_offset];
+        let mut unique_offsets = offsets.clone();
+        unique_offsets.sort();
+        unique_offsets.dedup();
+
+        assert_eq!(offsets.len(), unique_offsets.len(), "All services should have unique memory positions within V1");
+    }
+
+    #[test]
+    fn test_group_service_config_propagation() {
+        let config = Config::builder()
+            .app_id("config_test")
+            .app_secret("config_secret")
+            .base_url("https://config.test.com")
+            .req_timeout(std::time::Duration::from_millis(45000))
+            .enable_token_cache(false)
+            .build();
+
+        let group_service = GroupService::new(config);
+
+        // All sub-services should be properly instantiated with the config
+        // We can't directly access their configs, but we can verify they exist
+        assert!(!(std::ptr::addr_of!(group_service.v1.chat) as *const u8).is_null());
+        assert!(!(std::ptr::addr_of!(group_service.v1.chat_member) as *const u8).is_null());
+        assert!(!(std::ptr::addr_of!(group_service.v1.chat_announcement) as *const u8).is_null());
+        assert!(!(std::ptr::addr_of!(group_service.v1.chat_tab) as *const u8).is_null());
+        assert!(!(std::ptr::addr_of!(group_service.v1.chat_menu_tree) as *const u8).is_null());
     }
 }

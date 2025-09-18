@@ -327,7 +327,7 @@ impl ExecutableBuilder<UserService, CreateUserRequest, CreateUserResponse> for C
 
     async fn execute(self, service: &UserService) -> SDKResult<CreateUserResponse> {
         let req = self.build();
-        _service.create(&req).await
+        service.create(&req).await
     }
 
     async fn execute_with_options(
@@ -337,7 +337,7 @@ impl ExecutableBuilder<UserService, CreateUserRequest, CreateUserResponse> for C
     ) -> SDKResult<CreateUserResponse> {
         // 目前简单实现，后续可以支持传递option到service方法
         let req = self.build();
-        _service.create(&req).await
+        service.create(&req).await
     }
 }
 
@@ -667,7 +667,7 @@ impl ApiResponseTrait for ListUsersResponse {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{core::config::Config, service::contact::models::User};
+    use crate::{core::config::Config, service::contact::models::User, core::api_resp::ResponseFormat};
 
     fn create_test_config() -> Config {
         Config {
@@ -726,9 +726,9 @@ mod tests {
         let config = create_test_config();
         let service = UserService::new(config.clone());
 
-        assert_eq!(_service.config.app_id, config.app_id);
-        assert_eq!(_service.config.app_secret, config.app_secret);
-        assert_eq!(_service.config.base_url, config.base_url);
+        assert_eq!(service.config.app_id, config.app_id);
+        assert_eq!(service.config.app_secret, config.app_secret);
+        assert_eq!(service.config.base_url, config.base_url);
     }
 
     #[test]
@@ -1007,26 +1007,11 @@ mod tests {
 
     #[test]
     fn test_api_response_trait_implementations() {
-
-        match CreateUserResponse::data_format() {
-            _ => assert!(false, "Expected ResponseFormat::Data"),
-        }
-
-        match PatchUserResponse::data_format() {
-            _ => assert!(false, "Expected ResponseFormat::Data"),
-        }
-
-        match UpdateUserIdResponse::data_format() {
-            _ => assert!(false, "Expected ResponseFormat::Data"),
-        }
-
-        match GetUserResponse::data_format() {
-            _ => assert!(false, "Expected ResponseFormat::Data"),
-        }
-
-        match BatchGetUsersResponse::data_format() {
-            _ => assert!(false, "Expected ResponseFormat::Data"),
-        }
+        assert!(matches!(CreateUserResponse::data_format(), ResponseFormat::Data));
+        assert!(matches!(PatchUserResponse::data_format(), ResponseFormat::Data));
+        assert!(matches!(UpdateUserIdResponse::data_format(), ResponseFormat::Data));
+        assert!(matches!(GetUserResponse::data_format(), ResponseFormat::Data));
+        assert!(matches!(BatchGetUsersResponse::data_format(), ResponseFormat::Data));
     }
 
     #[test]
@@ -1045,7 +1030,7 @@ mod tests {
     fn test_user_service_builder_creation() {
         let config = create_test_config();
         let service = UserService::new(config);
-        let builder = _service.create_user_builder();
+        let builder = service.create_user_builder();
 
         let user = create_test_user();
         let request = builder

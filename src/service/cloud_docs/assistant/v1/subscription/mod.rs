@@ -278,11 +278,11 @@ mod tests {
     #[test]
     fn test_subscription_service_new() {
         let config = create_test_config();
-        let _service = SubscriptionService::new(config.clone());
+        let service = SubscriptionService::new(config.clone());
 
-        assert_eq!(_service.config.app_id, config.app_id);
-        assert_eq!(_service.config.app_secret, config.app_secret);
-        assert_eq!(_service.config.base_url, config.base_url);
+        assert_eq!(service.config.app_id, config.app_id);
+        assert_eq!(service.config.app_secret, config.app_secret);
+        assert_eq!(service.config.base_url, config.base_url);
     }
 
     #[test]
@@ -309,7 +309,7 @@ mod tests {
     #[test]
     fn test_subscription_service_construction() {
         let config = create_test_config();
-        let _service = SubscriptionService::new(config);
+        let service = SubscriptionService::new(config);
 
         // Test that the service can be created without panicking
         // Test passes by not panicking above
@@ -319,20 +319,20 @@ mod tests {
     fn test_subscription_service_config_clone() {
         let config = create_test_config();
         let cloned_config = config.clone();
-        let _service = SubscriptionService::new(cloned_config);
+        let service = SubscriptionService::new(cloned_config);
 
-        assert_eq!(_service.config.app_id, config.app_id);
-        assert_eq!(_service.config.app_secret, config.app_secret);
+        assert_eq!(service.config.app_id, config.app_id);
+        assert_eq!(service.config.app_secret, config.app_secret);
     }
 
     #[test]
     fn test_subscription_service_with_empty_config() {
         let config = Config::default();
-        let _service = SubscriptionService::new(config);
+        let service = SubscriptionService::new(config);
 
         // Service should be constructible even with default/empty config
-        assert_eq!(_service.config.app_id, "");
-        assert_eq!(_service.config.app_secret, "");
+        assert_eq!(service.config.app_id, "");
+        assert_eq!(service.config.app_secret, "");
     }
 
     #[test]
@@ -344,13 +344,13 @@ mod tests {
             req_timeout: Some(std::time::Duration::from_secs(30)),
             ..Default::default()
         };
-        let _service = SubscriptionService::new(config.clone());
+        let service = SubscriptionService::new(config.clone());
 
-        assert_eq!(_service.config.app_id, "test_app");
-        assert_eq!(_service.config.app_secret, "test_secret");
-        assert_eq!(_service.config.base_url, "https://api.test.com");
+        assert_eq!(service.config.app_id, "test_app");
+        assert_eq!(service.config.app_secret, "test_secret");
+        assert_eq!(service.config.base_url, "https://api.test.com");
         assert_eq!(
-            _service.config.req_timeout,
+            service.config.req_timeout,
             Some(std::time::Duration::from_secs(30))
         );
     }
@@ -374,11 +374,11 @@ mod tests {
             base_url: "https://中文域名.com".to_string(),
             ..Default::default()
         };
-        let _service = SubscriptionService::new(config);
+        let service = SubscriptionService::new(config);
 
-        assert_eq!(_service.config.app_id, "应用ID");
-        assert_eq!(_service.config.app_secret, "应用密钥");
-        assert_eq!(_service.config.base_url, "https://中文域名.com");
+        assert_eq!(service.config.app_id, "应用ID");
+        assert_eq!(service.config.app_secret, "应用密钥");
+        assert_eq!(service.config.base_url, "https://中文域名.com");
     }
 
     #[test]
@@ -390,11 +390,11 @@ mod tests {
             base_url: format!("https://{}.com", long_string),
             ..Default::default()
         };
-        let _service = SubscriptionService::new(config);
+        let service = SubscriptionService::new(config);
 
-        assert_eq!(_service.config.app_id.len(), 1000);
-        assert_eq!(_service.config.app_secret.len(), 1000);
-        assert!(_service.config.base_url.starts_with("https://"));
+        assert_eq!(service.config.app_id.len(), 1000);
+        assert_eq!(service.config.app_secret.len(), 1000);
+        assert!(service.config.base_url.starts_with("https://"));
     }
 
     // Note: These are construction tests only. Async method tests would require
