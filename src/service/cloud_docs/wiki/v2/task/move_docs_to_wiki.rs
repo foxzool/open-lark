@@ -126,6 +126,7 @@ pub async fn move_docs_to_wiki(
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 

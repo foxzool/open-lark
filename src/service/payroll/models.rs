@@ -493,6 +493,7 @@ pub struct PaymentDaySetting {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -691,8 +692,14 @@ mod tests {
     #[test]
     fn test_datasource_record() {
         let mut field_values = HashMap::new();
-        field_values.insert("overtime_hours".to_string(), serde_json::Value::Number(serde_json::Number::from(20)));
-        field_values.insert("bonus_rate".to_string(), serde_json::Value::Number(serde_json::Number::from_f64(1.5).unwrap()));
+        field_values.insert(
+            "overtime_hours".to_string(),
+            serde_json::Value::Number(serde_json::Number::from(20)),
+        );
+        field_values.insert(
+            "bonus_rate".to_string(),
+            serde_json::Value::Number(serde_json::Number::from_f64(1.5).unwrap()),
+        );
 
         let record = DatasourceRecord {
             record_id: Some("rec123".to_string()),

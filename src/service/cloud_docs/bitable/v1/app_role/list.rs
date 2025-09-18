@@ -129,6 +129,7 @@ pub async fn list_app_roles(
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -309,17 +310,13 @@ mod tests {
 
     #[test]
     fn test_list_app_role_request_builder_partial() {
-        let request1 = ListAppRoleRequest::builder()
-            .app_token("only_app")
-            .build();
+        let request1 = ListAppRoleRequest::builder().app_token("only_app").build();
 
         assert_eq!(request1.app_token, "only_app");
         assert_eq!(request1.page_token, None);
         assert_eq!(request1.page_size, None);
 
-        let request2 = ListAppRoleRequest::builder()
-            .page_size(100)
-            .build();
+        let request2 = ListAppRoleRequest::builder().page_size(100).build();
 
         assert_eq!(request2.app_token, "");
         assert_eq!(request2.page_size, Some(100));
@@ -461,8 +458,14 @@ mod tests {
 
         assert!(request.api_request.query_params.contains_key("page_token"));
         assert!(request.api_request.query_params.contains_key("page_size"));
-        assert_eq!(request.api_request.query_params.get("page_token").unwrap(), "test_token");
-        assert_eq!(request.api_request.query_params.get("page_size").unwrap(), "25");
+        assert_eq!(
+            request.api_request.query_params.get("page_token").unwrap(),
+            "test_token"
+        );
+        assert_eq!(
+            request.api_request.query_params.get("page_size").unwrap(),
+            "25"
+        );
     }
 
     #[test]
@@ -486,12 +489,9 @@ mod tests {
 
     #[test]
     fn test_list_app_role_request_builder_method_returns() {
-        let builder = ListAppRoleRequest::builder()
-            .app_token("测试链式");
+        let builder = ListAppRoleRequest::builder().app_token("测试链式");
 
         // 确保builder方法返回正确的类型
-        let _chained = builder
-            .page_token("token")
-            .page_size(10);
+        let _chained = builder.page_token("token").page_size(10);
     }
 }

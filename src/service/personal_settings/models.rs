@@ -104,6 +104,7 @@ pub struct ListSystemStatusRequest {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -139,7 +140,8 @@ mod tests {
         assert_eq!(status.update_time, deserialized.update_time);
 
         // Check nested i18n_title
-        if let (Some(orig_i18n), Some(deser_i18n)) = (&status.i18n_title, &deserialized.i18n_title) {
+        if let (Some(orig_i18n), Some(deser_i18n)) = (&status.i18n_title, &deserialized.i18n_title)
+        {
             assert_eq!(orig_i18n.zh_cn, deser_i18n.zh_cn);
             assert_eq!(orig_i18n.en_us, deser_i18n.en_us);
             assert_eq!(orig_i18n.ja_jp, deser_i18n.ja_jp);
@@ -230,7 +232,8 @@ mod tests {
         assert_eq!(request.priority, deserialized.priority);
 
         // Check i18n_title
-        if let (Some(orig_i18n), Some(deser_i18n)) = (&request.i18n_title, &deserialized.i18n_title) {
+        if let (Some(orig_i18n), Some(deser_i18n)) = (&request.i18n_title, &deserialized.i18n_title)
+        {
             assert_eq!(orig_i18n.zh_cn, deser_i18n.zh_cn);
             assert_eq!(orig_i18n.en_us, deser_i18n.en_us);
             assert_eq!(orig_i18n.ja_jp, deser_i18n.ja_jp);
@@ -281,7 +284,8 @@ mod tests {
         assert_eq!(request.priority, deserialized.priority);
 
         // Check i18n_title
-        if let (Some(orig_i18n), Some(deser_i18n)) = (&request.i18n_title, &deserialized.i18n_title) {
+        if let (Some(orig_i18n), Some(deser_i18n)) = (&request.i18n_title, &deserialized.i18n_title)
+        {
             assert_eq!(orig_i18n.zh_cn, deser_i18n.zh_cn);
             assert_eq!(orig_i18n.en_us, deser_i18n.en_us);
             assert_eq!(orig_i18n.ja_jp, deser_i18n.ja_jp);
@@ -395,7 +399,10 @@ mod tests {
         let deserialized: SystemStatus = serde_json::from_str(&serialized).unwrap();
 
         // Verify all fields
-        assert_eq!(complex_status.system_status_id, deserialized.system_status_id);
+        assert_eq!(
+            complex_status.system_status_id,
+            deserialized.system_status_id
+        );
         assert_eq!(complex_status.title, deserialized.title);
         assert_eq!(complex_status.icon_style, deserialized.icon_style);
         assert_eq!(complex_status.icon_url, deserialized.icon_url);
@@ -406,7 +413,7 @@ mod tests {
 
         // Verify priority is highest
         assert_eq!(deserialized.priority.unwrap(), 1);
-        assert_eq!(deserialized.is_open.unwrap(), true);
+        assert!(deserialized.is_open.unwrap());
 
         // Verify i18n content
         if let Some(i18n) = &deserialized.i18n_title {
@@ -471,9 +478,9 @@ mod tests {
         assert!(medium_deserialized.priority.unwrap() < low_deserialized.priority.unwrap());
 
         // Verify status states
-        assert_eq!(high_deserialized.is_open.unwrap(), true);
-        assert_eq!(medium_deserialized.is_open.unwrap(), true);
-        assert_eq!(low_deserialized.is_open.unwrap(), false);
+        assert!(high_deserialized.is_open.unwrap());
+        assert!(medium_deserialized.is_open.unwrap());
+        assert!(!low_deserialized.is_open.unwrap());
     }
 
     #[test]

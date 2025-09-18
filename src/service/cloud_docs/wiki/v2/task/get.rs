@@ -188,6 +188,7 @@ impl TaskDetail {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 

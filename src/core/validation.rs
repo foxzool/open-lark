@@ -877,7 +877,10 @@ mod tests {
         ));
 
         // 测试过长邮箱
-        let long_email = format!("{}@example.com", "a".repeat(employee_limits::EMAIL_MAX_LENGTH));
+        let long_email = format!(
+            "{}@example.com",
+            "a".repeat(employee_limits::EMAIL_MAX_LENGTH)
+        );
         assert!(matches!(
             validate_email(&long_email, "邮箱"),
             ValidationResult::Invalid(_)
@@ -1018,7 +1021,11 @@ mod tests {
     #[test]
     fn test_validate_tags() {
         // 测试有效标签
-        let valid_tags = vec!["Java".to_string(), "Python".to_string(), "React".to_string()];
+        let valid_tags = vec![
+            "Java".to_string(),
+            "Python".to_string(),
+            "React".to_string(),
+        ];
         assert!(matches!(
             validate_tags(&valid_tags, "技能标签"),
             ValidationResult::Valid

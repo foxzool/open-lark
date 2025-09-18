@@ -1022,6 +1022,7 @@ pub struct Offboarding {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -1160,23 +1161,22 @@ mod tests {
     #[test]
     fn test_department_creation() {
         let department = Department {
-            id: Some("dept_001".to_string()),
-            name: Some(vec![I18nText {
+            department_id: Some("dept_001".to_string()),
+            name: Some(I18nText {
                 zh_cn: Some("技术部".to_string()),
                 en_us: Some("Technology Department".to_string()),
-            }]),
+            }),
             parent_department_id: Some("root_dept".to_string()),
             manager: Some("mgr_001".to_string()),
             code: Some("TECH".to_string()),
-            description: Some(vec![I18nText {
+            description: Some(I18nText {
                 zh_cn: Some("负责技术研发工作".to_string()),
                 en_us: Some("Responsible for technology R&D".to_string()),
-            }]),
-            tree_order: Some("001".to_string()),
-            is_confidential: Some(false),
+            }),
+            active: Some(true),
             effective_time: Some("2023-01-01 00:00:00".to_string()),
             expiration_time: Some("2025-12-31 23:59:59".to_string()),
-            staffing_model: Some("headcount".to_string()),
+            children: None,
             custom_fields: None,
         };
 
@@ -1191,23 +1191,18 @@ mod tests {
     #[test]
     fn test_employment_details() {
         let employment = Employment {
-            id: Some("employment_001".to_string()),
-            employee_type_id: Some("regular".to_string()),
-            sequence_number: Some(1),
-            company_id: Some("company_001".to_string()),
-            department_id: Some("dept_001".to_string()),
-            job_id: Some("job_001".to_string()),
-            job_level_id: Some("level_p6".to_string()),
-            work_location_id: Some("location_001".to_string()),
+            employment_id: Some("employment_001".to_string()),
             employment_type: Some("full_time".to_string()),
-            weekly_working_hours: Some(40),
+            employee_type_id: Some("regular".to_string()),
+            hire_date: Some("2023-01-15".to_string()),
+            end_date: None,
+            status: Some("active".to_string()),
+            working_hours_type_id: Some("standard".to_string()),
+            work_email: Some("employee@example.com".to_string()),
+            work_phone: Some("010-12345678".to_string()),
             probation_start_date: Some("2023-01-15".to_string()),
             probation_end_date: Some("2023-07-15".to_string()),
-            conversion_date: Some("2023-07-16".to_string()),
-            service_years: Some(2),
-            effective_time: Some("2023-01-15 00:00:00".to_string()),
-            expiration_time: Some("2025-01-15 23:59:59".to_string()),
-            custom_fields: None,
+            probation_status: Some("in_progress".to_string()),
         };
 
         let json = serde_json::to_string(&employment).unwrap();
@@ -1221,30 +1216,28 @@ mod tests {
     #[test]
     fn test_job_data_comprehensive() {
         let job = JobData {
-            id: Some("job_001".to_string()),
-            job_title: Some(vec![I18nText {
-                zh_cn: Some("高级软件工程师".to_string()),
-                en_us: Some("Senior Software Engineer".to_string()),
-            }]),
-            job_code: Some("SWE-SR".to_string()),
-            job_requirements: Some("5+ years experience in software development".to_string()),
-            job_description: Some("Develop high-quality software solutions".to_string()),
-            job_category_id: Some("engineering".to_string()),
+            job_data_id: Some("job_data_001".to_string()),
+            version_id: Some("v1".to_string()),
+            job_id: Some("job_001".to_string()),
             job_level_id: Some("level_p6".to_string()),
+            job_grade_id: Some("grade_1".to_string()),
             job_family_id: Some("tech".to_string()),
             department_id: Some("dept_001".to_string()),
-            head_count: Some(10),
-            is_key_position: Some(true),
+            location_id: Some("beijing".to_string()),
+            company_id: Some("company_001".to_string()),
+            cost_center_id: Some("cost_center_01".to_string()),
+            work_location: Some("北京望京".to_string()),
+            direct_manager_id: Some("manager_001".to_string()),
+            dotted_line_manager_id: None,
             effective_time: Some("2023-01-01 00:00:00".to_string()),
             expiration_time: Some("2024-12-31 23:59:59".to_string()),
-            sequence: Some(1),
-            custom_fields: None,
+            assignment_start_reason: Some("new_hire".to_string()),
         };
 
         let json = serde_json::to_string(&job).unwrap();
-        assert!(json.contains("高级软件工程师"));
-        assert!(json.contains("SWE-SR"));
-        assert!(json.contains("engineering"));
+        assert!(json.contains("job_data_001"));
+        assert!(json.contains("level_p6"));
+        assert!(json.contains("北京望京"));
 
         let _deserialized: JobData = serde_json::from_str(&json).unwrap();
     }
@@ -1254,6 +1247,9 @@ mod tests {
         let national_id = NationalId {
             national_id_type_id: Some("passport".to_string()),
             national_id_number: Some("G12345678".to_string()),
+            start_date: Some("2023-01-01".to_string()),
+            end_date: Some("2033-01-01".to_string()),
+            issued_location: Some("Beijing".to_string()),
         };
 
         let json = serde_json::to_string(&national_id).unwrap();
@@ -1266,20 +1262,14 @@ mod tests {
     #[test]
     fn test_address_complete() {
         let address = Address {
-            id: Some("addr_001".to_string()),
             country_region_id: Some("CHN".to_string()),
             region_id: Some("beijing".to_string()),
             city_id: Some("beijing_city".to_string()),
             district_id: Some("chaoyang".to_string()),
-            full_address: Some(vec![I18nText {
-                zh_cn: Some("北京市朝阳区xxx街道xxx号".to_string()),
-                en_us: Some("No.xxx, xxx Street, Chaoyang District, Beijing".to_string()),
-            }]),
-            zip_code: Some("100000".to_string()),
-            address_type_id: Some("home".to_string()),
-            primary_address: Some(true),
-            public_address: Some(false),
-            custom_fields: None,
+            address_line_1: Some("北京市朝阳区xxx街道xxx号".to_string()),
+            address_line_2: Some("软件园2号楼".to_string()),
+            postal_code: Some("100000".to_string()),
+            address_type: Some("home".to_string()),
         };
 
         let json = serde_json::to_string(&address).unwrap();
@@ -1293,21 +1283,24 @@ mod tests {
     #[test]
     fn test_country_region_info() {
         let country = CountryRegion {
-            id: Some("CHN".to_string()),
-            name: Some(vec![I18nText {
+            country_region_id: Some("CHN".to_string()),
+            name: Some(I18nText {
                 zh_cn: Some("中国".to_string()),
                 en_us: Some("China".to_string()),
-            }]),
-            alpha_2_code: Some("CN".to_string()),
-            alpha_3_code: Some("CHN".to_string()),
-            numeric_code: Some("156".to_string()),
-            phone_country_code: Some("+86".to_string()),
+            }),
+            full_name: Some(I18nText {
+                zh_cn: Some("中华人民共和国".to_string()),
+                en_us: Some("People's Republic of China".to_string()),
+            }),
+            code: Some("CN".to_string()),
+            time_zone: Some("Asia/Shanghai".to_string()),
         };
 
         let json = serde_json::to_string(&country).unwrap();
         assert!(json.contains("中国"));
-        assert!(json.contains("+86"));
-        assert!(json.contains("CHN"));
+        assert!(json.contains("中华人民共和国"));
+        assert!(json.contains("\"CN\""));
+        assert!(json.contains("Asia/Shanghai"));
 
         let _deserialized: CountryRegion = serde_json::from_str(&json).unwrap();
     }
@@ -1315,13 +1308,12 @@ mod tests {
     #[test]
     fn test_nationality_info() {
         let nationality = Nationality {
-            id: Some("CHN".to_string()),
-            name: Some(vec![I18nText {
+            nationality_id: Some("CHN".to_string()),
+            name: Some(I18nText {
                 zh_cn: Some("中国".to_string()),
                 en_us: Some("Chinese".to_string()),
-            }]),
-            alpha_2_code: Some("CN".to_string()),
-            alpha_3_code: Some("CHN".to_string()),
+            }),
+            code: Some("CN".to_string()),
         };
 
         let json = serde_json::to_string(&nationality).unwrap();
@@ -1335,18 +1327,13 @@ mod tests {
     #[test]
     fn test_enum_info_structure() {
         let enum_info = EnumInfo {
-            id: Some("employment_type".to_string()),
-            name: Some(vec![I18nText {
+            enum_value: Some("employment_type".to_string()),
+            content: Some(I18nText {
                 zh_cn: Some("雇佣类型".to_string()),
                 en_us: Some("Employment Type".to_string()),
-            }]),
-            description: Some(vec![I18nText {
-                zh_cn: Some("员工的雇佣类型分类".to_string()),
-                en_us: Some("Classification of employee employment types".to_string()),
-            }]),
-            parent_id: Some("hr_enums".to_string()),
-            active: Some(true),
-            sort: Some(1),
+            }),
+            enum_type: Some("hr".to_string()),
+            enum_status: Some(1),
         };
 
         let json = serde_json::to_string(&enum_info).unwrap();
@@ -1362,25 +1349,20 @@ mod tests {
             has_more: Some(false),
             page_token: None,
             items: Some(vec![Employee {
-                id: Some("emp_test".to_string()),
-                hire_date: Some("2023-01-01".to_string()),
+                employee_id: Some("emp_test".to_string()),
+                user_id: Some("user_test".to_string()),
                 employee_number: Some("E999".to_string()),
-                employee_type_id: None,
-                work_email: None,
-                person_id: None,
-                employment_id: None,
-                department_id: None,
-                job_id: None,
-                probation_start_date: None,
-                probation_end_date: None,
-                status: Some("active".to_string()),
-                manager_id: None,
+                employment_status: Some("active".to_string()),
+                person: None,
+                employment: None,
+                job_datas: None,
                 custom_fields: None,
             }]),
         };
 
         let json = serde_json::to_string(&employee_response).unwrap();
         assert!(json.contains("emp_test"));
+        assert!(json.contains("user_test"));
         assert!(json.contains("E999"));
 
         let _deserialized: PageResponse<Employee> = serde_json::from_str(&json).unwrap();

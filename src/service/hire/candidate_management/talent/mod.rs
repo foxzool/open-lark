@@ -24,6 +24,7 @@ mod builders;
 pub use builders::{TalentCreateRequestBuilder, TalentListRequestBuilder};
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests;
 
 /// 人才服务

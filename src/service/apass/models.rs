@@ -594,7 +594,123 @@ pub struct PageResponse<T> {
     pub total_count: Option<i32>,
 }
 
+/// 用户权限查询请求
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UserPermissionQueryRequest {
+    /// 用户ID
+    pub user_id: String,
+    /// 资源类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// 资源ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
+    /// 权限类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permission_type: Option<String>,
+}
+
+/// 用户权限信息
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UserPermission {
+    /// 用户ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    /// 资源类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// 资源ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
+    /// 权限类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permission_type: Option<String>,
+    /// 是否授权
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub granted: Option<bool>,
+    /// 授权角色
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub granted_by_role: Option<String>,
+    /// 授权时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub granted_time: Option<String>,
+    /// 过期时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expires_at: Option<String>,
+}
+
+/// 访问令牌创建请求
+#[derive(Debug, Serialize, Deserialize)]
+pub struct AccessTokenCreateRequest {
+    /// 应用ID
+    pub app_id: String,
+    /// 用户ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    /// 权限范围
+    pub scope: Vec<String>,
+    /// 过期时间(秒)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expires_in: Option<i32>,
+    /// 描述
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+}
+
+/// 访问令牌信息
+#[derive(Debug, Serialize, Deserialize)]
+pub struct AccessToken {
+    /// 令牌ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token_id: Option<String>,
+    /// 访问令牌
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_token: Option<String>,
+    /// 令牌类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token_type: Option<String>,
+    /// 过期时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expires_in: Option<i32>,
+    /// 权限范围
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scope: Option<Vec<String>>,
+}
+
+/// 应用授权请求
+#[derive(Debug, Serialize, Deserialize)]
+pub struct AppAuthorizationRequest {
+    /// 应用ID
+    pub app_id: String,
+    /// 用户ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    /// 权限范围
+    pub scope: Vec<String>,
+    /// 重定向URI
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub redirect_uri: Option<String>,
+}
+
+/// 应用授权信息
+#[derive(Debug, Serialize, Deserialize)]
+pub struct AppAuthorization {
+    /// 授权码
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_code: Option<String>,
+    /// 状态
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// 重定向URI
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub redirect_uri: Option<String>,
+    /// 过期时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expires_in: Option<i32>,
+}
+
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -646,34 +762,31 @@ mod tests {
         let activity = SeatActivity {
             user_id: Some("user456".to_string()),
             user_name: Some("李四".to_string()),
-            seat_type: Some("standard".to_string()),
             activity_time: Some("2024-01-15T10:30:00Z".to_string()),
-            activity_type: Some("login".to_string()),
-            ip_address: Some("192.168.1.100".to_string()),
-            device_info: Some("MacBook Pro".to_string()),
+            activity_level: Some("high".to_string()),
         };
         let json = serde_json::to_string(&activity).unwrap();
         assert!(json.contains("user456"));
         assert!(json.contains("李四"));
-        assert!(json.contains("login"));
-        assert!(json.contains("192.168.1.100"));
-        assert!(json.contains("MacBook Pro"));
+        assert!(json.contains("2024-01-15T10:30:00Z"));
+        assert!(json.contains("high"));
     }
 
     #[test]
     fn test_audit_log_list_request() {
         let request = AuditLogListRequest {
+            app_id: "app123".to_string(),
             page_size: Some(200),
             page_token: Some("audit_token".to_string()),
             start_time: Some("2024-01-01T00:00:00Z".to_string()),
             end_time: Some("2024-01-07T23:59:59Z".to_string()),
-            user_id: Some("admin123".to_string()),
-            action_type: Some("user_create".to_string()),
+            operation_type: Some("user_create".to_string()),
         };
         let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("app123"));
         assert!(json.contains("200"));
         assert!(json.contains("audit_token"));
-        assert!(json.contains("admin123"));
+        assert!(json.contains("user_create"));
         assert!(json.contains("user_create"));
     }
 
@@ -681,15 +794,12 @@ mod tests {
     fn test_audit_log_security_event() {
         let log = AuditLog {
             log_id: Some("log789".to_string()),
-            timestamp: Some("2024-01-15T14:20:00Z".to_string()),
-            user_id: Some("user789".to_string()),
-            user_name: Some("王五".to_string()),
-            action_type: Some("password_reset".to_string()),
-            resource_type: Some("user_account".to_string()),
-            resource_id: Some("acc456".to_string()),
-            action_result: Some("success".to_string()),
-            ip_address: Some("10.0.0.50".to_string()),
-            user_agent: Some("Mozilla/5.0 (Windows NT 10.0; Win64; x64)".to_string()),
+            operator_id: Some("user789".to_string()),
+            operator_name: Some("王五".to_string()),
+            operation_type: Some("password_reset".to_string()),
+            operation_object: Some("user_account".to_string()),
+            operation_time: Some("2024-01-15T14:20:00Z".to_string()),
+            operation_result: Some("success".to_string()),
             details: Some(serde_json::json!({
                 "reason": "forgot_password",
                 "method": "email_verification"
@@ -705,59 +815,54 @@ mod tests {
     #[test]
     fn test_data_change_log_list_request() {
         let request = DataChangeLogListRequest {
+            app_id: "app987".to_string(),
             page_size: Some(75),
             page_token: None,
-            start_time: Some("2024-01-10T00:00:00Z".to_string()),
-            end_time: Some("2024-01-20T23:59:59Z".to_string()),
-            data_type: Some("user_profile".to_string()),
-            change_type: Some("update".to_string()),
+            object_api_name: Some("user_profile".to_string()),
         };
         let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("app987"));
         assert!(json.contains("75"));
         assert!(json.contains("user_profile"));
-        assert!(json.contains("update"));
     }
 
     #[test]
     fn test_data_change_log_detailed() {
         let log = DataChangeLog {
-            change_id: Some("change123".to_string()),
-            timestamp: Some("2024-01-15T16:45:00Z".to_string()),
-            user_id: Some("admin456".to_string()),
-            data_type: Some("department".to_string()),
-            data_id: Some("dept789".to_string()),
+            log_id: Some("log123".to_string()),
+            record_id: Some("record456".to_string()),
+            object_api_name: Some("department".to_string()),
             change_type: Some("create".to_string()),
-            old_value: None,
-            new_value: Some(serde_json::json!({
+            change_time: Some("2024-01-15T16:45:00Z".to_string()),
+            changed_by: Some("admin456".to_string()),
+            before_data: None,
+            after_data: Some(serde_json::json!({
                 "name": "新技术部",
                 "parent_id": "company",
                 "status": "active"
             })),
-            change_reason: Some("组织架构调整".to_string()),
         };
         let json = serde_json::to_string(&log).unwrap();
-        assert!(json.contains("change123"));
-        assert!(json.contains("department"));
+        assert!(json.contains("log123"));
+        assert!(json.contains("record456"));
         assert!(json.contains("create"));
+        assert!(json.contains("2024-01-15T16:45:00Z"));
+        assert!(json.contains("admin456"));
         assert!(json.contains("新技术部"));
-        assert!(json.contains("组织架构调整"));
     }
 
     #[test]
     fn test_role_member_authorization_request() {
         let request = RoleMemberAuthorizationRequest {
-            role_id: "role123".to_string(),
-            user_id: "user789".to_string(),
-            operation: "grant".to_string(),
-            scope: Some("department:tech".to_string()),
-            reason: Some("职位调整".to_string()),
+            app_id: "app456".to_string(),
+            role_api_name: "role_admin".to_string(),
+            user_ids: vec!["user789".to_string(), "user456".to_string()],
         };
         let json = serde_json::to_string(&request).unwrap();
-        assert!(json.contains("role123"));
+        assert!(json.contains("app456"));
+        assert!(json.contains("role_admin"));
         assert!(json.contains("user789"));
-        assert!(json.contains("grant"));
-        assert!(json.contains("department:tech"));
-        assert!(json.contains("职位调整"));
+        assert!(json.contains("user456"));
     }
 
     #[test]
@@ -765,20 +870,14 @@ mod tests {
         let member = RoleMember {
             user_id: Some("user654".to_string()),
             user_name: Some("赵六".to_string()),
-            role_id: Some("role456".to_string()),
-            role_name: Some("部门管理员".to_string()),
-            granted_time: Some("2024-01-01T09:00:00Z".to_string()),
-            granted_by: Some("admin001".to_string()),
-            scope: Some("department:sales".to_string()),
-            status: Some("active".to_string()),
-            expires_at: Some("2024-12-31T23:59:59Z".to_string()),
+            role_api_name: Some("role456".to_string()),
+            authorized_time: Some("2024-01-01T09:00:00Z".to_string()),
         };
         let json = serde_json::to_string(&member).unwrap();
         assert!(json.contains("user654"));
         assert!(json.contains("赵六"));
-        assert!(json.contains("部门管理员"));
-        assert!(json.contains("department:sales"));
-        assert!(json.contains("2024-12-31"));
+        assert!(json.contains("role456"));
+        assert!(json.contains("2024-01-01T09:00:00Z"));
     }
 
     #[test]
@@ -838,31 +937,26 @@ mod tests {
     fn test_access_token_active() {
         let token = AccessToken {
             token_id: Some("token789".to_string()),
-            app_id: Some("app456".to_string()),
-            user_id: Some("user123".to_string()),
+            access_token: Some("access_123".to_string()),
+            token_type: Some("Bearer".to_string()),
+            expires_in: Some(3600),
             scope: Some(vec!["read:profile".to_string()]),
-            created_at: Some("2024-01-01T10:00:00Z".to_string()),
-            expires_at: Some("2024-01-01T11:00:00Z".to_string()),
-            status: Some("active".to_string()),
-            last_used_at: Some("2024-01-01T10:30:00Z".to_string()),
-            usage_count: Some(5),
         };
         let json = serde_json::to_string(&token).unwrap();
         assert!(json.contains("token789"));
-        assert!(json.contains("app456"));
+        assert!(json.contains("access_123"));
         assert!(json.contains("read:profile"));
-        assert!(json.contains("active"));
-        assert!(json.contains("\"usage_count\":5"));
+        assert!(json.contains("Bearer"));
+        assert!(json.contains("3600"));
     }
 
     #[test]
     fn test_app_authorization_request() {
         let request = AppAuthorizationRequest {
             app_id: "app789".to_string(),
-            user_id: "user321".to_string(),
-            requested_scope: vec!["read:contact".to_string(), "write:calendar".to_string()],
+            user_id: Some("user321".to_string()),
+            scope: vec!["read:contact".to_string(), "write:calendar".to_string()],
             redirect_uri: Some("https://app.example.com/callback".to_string()),
-            state: Some("random_state_123".to_string()),
         };
         let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("app789"));
@@ -870,27 +964,21 @@ mod tests {
         assert!(json.contains("read:contact"));
         assert!(json.contains("write:calendar"));
         assert!(json.contains("callback"));
-        assert!(json.contains("random_state_123"));
     }
 
     #[test]
     fn test_app_authorization_approved() {
         let auth = AppAuthorization {
-            authorization_id: Some("auth456".to_string()),
-            app_id: Some("app654".to_string()),
-            user_id: Some("user987".to_string()),
-            granted_scope: Some(vec!["read:user".to_string(), "read:email".to_string()]),
             authorization_code: Some("code_abc123".to_string()),
-            status: Some("approved".to_string()),
-            created_at: Some("2024-01-15T12:00:00Z".to_string()),
-            expires_at: Some("2024-01-15T12:10:00Z".to_string()),
+            state: Some("approved".to_string()),
+            redirect_uri: Some("https://app.example.com/callback".to_string()),
+            expires_in: Some(600),
         };
         let json = serde_json::to_string(&auth).unwrap();
-        assert!(json.contains("auth456"));
-        assert!(json.contains("app654"));
-        assert!(json.contains("approved"));
         assert!(json.contains("code_abc123"));
-        assert!(json.contains("read:email"));
+        assert!(json.contains("approved"));
+        assert!(json.contains("callback"));
+        assert!(json.contains("600"));
     }
 
     #[test]

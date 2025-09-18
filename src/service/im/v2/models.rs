@@ -77,6 +77,7 @@ pub struct TimelyNotification {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -188,8 +189,14 @@ mod tests {
         assert_eq!(feed_card.title, Some("Test Card".to_string()));
         assert_eq!(feed_card.content, Some("Test Content".to_string()));
         assert_eq!(feed_card.status, Some(FeedCardStatus::Active));
-        assert_eq!(feed_card.create_time, Some("2023-01-01T00:00:00Z".to_string()));
-        assert_eq!(feed_card.update_time, Some("2023-01-02T00:00:00Z".to_string()));
+        assert_eq!(
+            feed_card.create_time,
+            Some("2023-01-01T00:00:00Z".to_string())
+        );
+        assert_eq!(
+            feed_card.update_time,
+            Some("2023-01-02T00:00:00Z".to_string())
+        );
     }
 
     #[test]
@@ -359,7 +366,10 @@ mod tests {
         };
 
         let cloned_notification = notification.clone();
-        assert_eq!(notification.notification_type, cloned_notification.notification_type);
+        assert_eq!(
+            notification.notification_type,
+            cloned_notification.notification_type
+        );
         assert_eq!(notification.message, cloned_notification.message);
         assert_eq!(notification.target_users, cloned_notification.target_users);
 
@@ -403,11 +413,7 @@ mod tests {
 
     #[test]
     fn test_all_user_id_types() {
-        let types = vec![
-            UserIdType::UserId,
-            UserIdType::UnionId,
-            UserIdType::OpenId,
-        ];
+        let types = vec![UserIdType::UserId, UserIdType::UnionId, UserIdType::OpenId];
 
         for user_type in types {
             let json = serde_json::to_string(&user_type).unwrap();

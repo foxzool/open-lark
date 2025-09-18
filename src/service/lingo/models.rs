@@ -260,6 +260,7 @@ pub struct FileInfo {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -659,8 +660,14 @@ mod tests {
         let deserialized: HighlightResult = serde_json::from_str(&serialized).unwrap();
         assert_eq!(highlight_result.text, deserialized.text);
         assert_eq!(highlight_result.ranges.len(), deserialized.ranges.len());
-        assert_eq!(highlight_result.ranges[0].start, deserialized.ranges[0].start);
-        assert_eq!(highlight_result.ranges[1].entity_id, deserialized.ranges[1].entity_id);
+        assert_eq!(
+            highlight_result.ranges[0].start,
+            deserialized.ranges[0].start
+        );
+        assert_eq!(
+            highlight_result.ranges[1].entity_id,
+            deserialized.ranges[1].entity_id
+        );
     }
 
     #[test]

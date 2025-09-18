@@ -139,6 +139,7 @@ impl CalendarService {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use crate::core::config::Config;
@@ -153,7 +154,7 @@ mod tests {
     #[test]
     fn test_calendar_service_creation() {
         let config = create_test_config();
-        let calendar_service = CalendarService::new(config);
+        let _calendar_service = CalendarService::new(config);
 
         // Verify service structure
     }
@@ -167,7 +168,7 @@ mod tests {
             .base_url("https://calendar.api.com")
             .build();
 
-        let calendar_service = CalendarService::new(config);
+        let _calendar_service = CalendarService::new(config);
 
         // Verify service creation with custom config
     }
@@ -199,7 +200,7 @@ mod tests {
         ];
 
         for config in test_configs {
-            let calendar_service = CalendarService::new(config);
+            let _calendar_service = CalendarService::new(config);
 
             // Each configuration should create a valid service
         }

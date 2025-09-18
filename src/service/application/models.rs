@@ -495,15 +495,25 @@ pub enum ContactsRangeType {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
 
     #[test]
     fn test_user_id_type_enum() {
-        assert_eq!(serde_json::to_string(&UserIdType::OpenId).unwrap(), "\"open_id\"");
-        assert_eq!(serde_json::to_string(&UserIdType::UserId).unwrap(), "\"user_id\"");
-        assert_eq!(serde_json::to_string(&UserIdType::UnionId).unwrap(), "\"union_id\"");
+        assert_eq!(
+            serde_json::to_string(&UserIdType::OpenId).unwrap(),
+            "\"open_id\""
+        );
+        assert_eq!(
+            serde_json::to_string(&UserIdType::UserId).unwrap(),
+            "\"user_id\""
+        );
+        assert_eq!(
+            serde_json::to_string(&UserIdType::UnionId).unwrap(),
+            "\"union_id\""
+        );
     }
 
     #[test]
@@ -515,13 +525,22 @@ mod tests {
 
     #[test]
     fn test_department_id_type_enum() {
-        assert_eq!(serde_json::to_string(&DepartmentIdType::OpenDepartmentId).unwrap(), "\"open_department_id\"");
-        assert_eq!(serde_json::to_string(&DepartmentIdType::DepartmentId).unwrap(), "\"department_id\"");
+        assert_eq!(
+            serde_json::to_string(&DepartmentIdType::OpenDepartmentId).unwrap(),
+            "\"open_department_id\""
+        );
+        assert_eq!(
+            serde_json::to_string(&DepartmentIdType::DepartmentId).unwrap(),
+            "\"department_id\""
+        );
     }
 
     #[test]
     fn test_department_id_type_as_str() {
-        assert_eq!(DepartmentIdType::OpenDepartmentId.as_str(), "open_department_id");
+        assert_eq!(
+            DepartmentIdType::OpenDepartmentId.as_str(),
+            "open_department_id"
+        );
         assert_eq!(DepartmentIdType::DepartmentId.as_str(), "department_id");
     }
 
@@ -546,16 +565,34 @@ mod tests {
 
     #[test]
     fn test_app_type_enum() {
-        assert_eq!(serde_json::to_string(&AppType::SelfBuilt).unwrap(), "\"self_built\"");
-        assert_eq!(serde_json::to_string(&AppType::Marketplace).unwrap(), "\"marketplace\"");
+        assert_eq!(
+            serde_json::to_string(&AppType::SelfBuilt).unwrap(),
+            "\"self_built\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AppType::Marketplace).unwrap(),
+            "\"marketplace\""
+        );
     }
 
     #[test]
     fn test_app_status_enum() {
-        assert_eq!(serde_json::to_string(&AppStatus::Developing).unwrap(), "\"developing\"");
-        assert_eq!(serde_json::to_string(&AppStatus::Published).unwrap(), "\"published\"");
-        assert_eq!(serde_json::to_string(&AppStatus::Removed).unwrap(), "\"removed\"");
-        assert_eq!(serde_json::to_string(&AppStatus::Disabled).unwrap(), "\"disabled\"");
+        assert_eq!(
+            serde_json::to_string(&AppStatus::Developing).unwrap(),
+            "\"developing\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AppStatus::Published).unwrap(),
+            "\"published\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AppStatus::Removed).unwrap(),
+            "\"removed\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AppStatus::Disabled).unwrap(),
+            "\"disabled\""
+        );
     }
 
     #[test]
@@ -578,10 +615,22 @@ mod tests {
 
     #[test]
     fn test_version_status_enum() {
-        assert_eq!(serde_json::to_string(&VersionStatus::Developing).unwrap(), "\"developing\"");
-        assert_eq!(serde_json::to_string(&VersionStatus::Auditing).unwrap(), "\"auditing\"");
-        assert_eq!(serde_json::to_string(&VersionStatus::Published).unwrap(), "\"published\"");
-        assert_eq!(serde_json::to_string(&VersionStatus::Rejected).unwrap(), "\"rejected\"");
+        assert_eq!(
+            serde_json::to_string(&VersionStatus::Developing).unwrap(),
+            "\"developing\""
+        );
+        assert_eq!(
+            serde_json::to_string(&VersionStatus::Auditing).unwrap(),
+            "\"auditing\""
+        );
+        assert_eq!(
+            serde_json::to_string(&VersionStatus::Published).unwrap(),
+            "\"published\""
+        );
+        assert_eq!(
+            serde_json::to_string(&VersionStatus::Rejected).unwrap(),
+            "\"rejected\""
+        );
     }
 
     #[test]
@@ -599,8 +648,14 @@ mod tests {
 
     #[test]
     fn test_collaborator_type_enum() {
-        assert_eq!(serde_json::to_string(&CollaboratorType::User).unwrap(), "\"user\"");
-        assert_eq!(serde_json::to_string(&CollaboratorType::Group).unwrap(), "\"group\"");
+        assert_eq!(
+            serde_json::to_string(&CollaboratorType::User).unwrap(),
+            "\"user\""
+        );
+        assert_eq!(
+            serde_json::to_string(&CollaboratorType::Group).unwrap(),
+            "\"group\""
+        );
     }
 
     #[test]
@@ -618,17 +673,32 @@ mod tests {
 
     #[test]
     fn test_auth_status_enum() {
-        assert_eq!(serde_json::to_string(&AuthStatus::Granted).unwrap(), "\"granted\"");
-        assert_eq!(serde_json::to_string(&AuthStatus::NotGranted).unwrap(), "\"not_granted\"");
-        assert_eq!(serde_json::to_string(&AuthStatus::Pending).unwrap(), "\"pending\"");
-        assert_eq!(serde_json::to_string(&AuthStatus::Rejected).unwrap(), "\"rejected\"");
+        assert_eq!(
+            serde_json::to_string(&AuthStatus::Granted).unwrap(),
+            "\"granted\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AuthStatus::NotGranted).unwrap(),
+            "\"not_granted\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AuthStatus::Pending).unwrap(),
+            "\"pending\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AuthStatus::Rejected).unwrap(),
+            "\"rejected\""
+        );
     }
 
     #[test]
     fn test_app_admin() {
         let admin = AppAdmin {
             user_id: Some("admin123".to_string()),
-            permissions: Some(vec![AdminPermission::AppManagement, AdminPermission::UserManagement]),
+            permissions: Some(vec![
+                AdminPermission::AppManagement,
+                AdminPermission::UserManagement,
+            ]),
         };
         let json = serde_json::to_string(&admin).unwrap();
         assert!(json.contains("admin123"));
@@ -638,9 +708,18 @@ mod tests {
 
     #[test]
     fn test_admin_permission_enum() {
-        assert_eq!(serde_json::to_string(&AdminPermission::AppManagement).unwrap(), "\"app_management\"");
-        assert_eq!(serde_json::to_string(&AdminPermission::UserManagement).unwrap(), "\"user_management\"");
-        assert_eq!(serde_json::to_string(&AdminPermission::PermissionManagement).unwrap(), "\"permission_management\"");
+        assert_eq!(
+            serde_json::to_string(&AdminPermission::AppManagement).unwrap(),
+            "\"app_management\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AdminPermission::UserManagement).unwrap(),
+            "\"user_management\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AdminPermission::PermissionManagement).unwrap(),
+            "\"permission_management\""
+        );
     }
 
     #[test]
@@ -723,17 +802,38 @@ mod tests {
 
     #[test]
     fn test_feedback_type_enum() {
-        assert_eq!(serde_json::to_string(&FeedbackType::Bug).unwrap(), "\"bug\"");
-        assert_eq!(serde_json::to_string(&FeedbackType::Feature).unwrap(), "\"feature\"");
-        assert_eq!(serde_json::to_string(&FeedbackType::Other).unwrap(), "\"other\"");
+        assert_eq!(
+            serde_json::to_string(&FeedbackType::Bug).unwrap(),
+            "\"bug\""
+        );
+        assert_eq!(
+            serde_json::to_string(&FeedbackType::Feature).unwrap(),
+            "\"feature\""
+        );
+        assert_eq!(
+            serde_json::to_string(&FeedbackType::Other).unwrap(),
+            "\"other\""
+        );
     }
 
     #[test]
     fn test_feedback_status_enum() {
-        assert_eq!(serde_json::to_string(&FeedbackStatus::Pending).unwrap(), "\"pending\"");
-        assert_eq!(serde_json::to_string(&FeedbackStatus::Processing).unwrap(), "\"processing\"");
-        assert_eq!(serde_json::to_string(&FeedbackStatus::Completed).unwrap(), "\"completed\"");
-        assert_eq!(serde_json::to_string(&FeedbackStatus::Closed).unwrap(), "\"closed\"");
+        assert_eq!(
+            serde_json::to_string(&FeedbackStatus::Pending).unwrap(),
+            "\"pending\""
+        );
+        assert_eq!(
+            serde_json::to_string(&FeedbackStatus::Processing).unwrap(),
+            "\"processing\""
+        );
+        assert_eq!(
+            serde_json::to_string(&FeedbackStatus::Completed).unwrap(),
+            "\"completed\""
+        );
+        assert_eq!(
+            serde_json::to_string(&FeedbackStatus::Closed).unwrap(),
+            "\"closed\""
+        );
     }
 
     #[test]
@@ -749,9 +849,15 @@ mod tests {
 
     #[test]
     fn test_badge_type_enum() {
-        assert_eq!(serde_json::to_string(&BadgeType::Number).unwrap(), "\"number\"");
+        assert_eq!(
+            serde_json::to_string(&BadgeType::Number).unwrap(),
+            "\"number\""
+        );
         assert_eq!(serde_json::to_string(&BadgeType::Dot).unwrap(), "\"dot\"");
-        assert_eq!(serde_json::to_string(&BadgeType::Clear).unwrap(), "\"clear\"");
+        assert_eq!(
+            serde_json::to_string(&BadgeType::Clear).unwrap(),
+            "\"clear\""
+        );
     }
 
     #[test]
@@ -773,10 +879,22 @@ mod tests {
 
     #[test]
     fn test_order_status_enum() {
-        assert_eq!(serde_json::to_string(&OrderStatus::Pending).unwrap(), "\"pending\"");
-        assert_eq!(serde_json::to_string(&OrderStatus::Paid).unwrap(), "\"paid\"");
-        assert_eq!(serde_json::to_string(&OrderStatus::Cancelled).unwrap(), "\"cancelled\"");
-        assert_eq!(serde_json::to_string(&OrderStatus::Expired).unwrap(), "\"expired\"");
+        assert_eq!(
+            serde_json::to_string(&OrderStatus::Pending).unwrap(),
+            "\"pending\""
+        );
+        assert_eq!(
+            serde_json::to_string(&OrderStatus::Paid).unwrap(),
+            "\"paid\""
+        );
+        assert_eq!(
+            serde_json::to_string(&OrderStatus::Cancelled).unwrap(),
+            "\"cancelled\""
+        );
+        assert_eq!(
+            serde_json::to_string(&OrderStatus::Expired).unwrap(),
+            "\"expired\""
+        );
     }
 
     #[test]
@@ -797,9 +915,18 @@ mod tests {
 
     #[test]
     fn test_billing_cycle_enum() {
-        assert_eq!(serde_json::to_string(&BillingCycle::Monthly).unwrap(), "\"monthly\"");
-        assert_eq!(serde_json::to_string(&BillingCycle::Yearly).unwrap(), "\"yearly\"");
-        assert_eq!(serde_json::to_string(&BillingCycle::Once).unwrap(), "\"once\"");
+        assert_eq!(
+            serde_json::to_string(&BillingCycle::Monthly).unwrap(),
+            "\"monthly\""
+        );
+        assert_eq!(
+            serde_json::to_string(&BillingCycle::Yearly).unwrap(),
+            "\"yearly\""
+        );
+        assert_eq!(
+            serde_json::to_string(&BillingCycle::Once).unwrap(),
+            "\"once\""
+        );
     }
 
     #[test]
@@ -816,9 +943,18 @@ mod tests {
 
     #[test]
     fn test_audit_result_enum() {
-        assert_eq!(serde_json::to_string(&AuditResult::Pending).unwrap(), "\"pending\"");
-        assert_eq!(serde_json::to_string(&AuditResult::Approved).unwrap(), "\"approved\"");
-        assert_eq!(serde_json::to_string(&AuditResult::Rejected).unwrap(), "\"rejected\"");
+        assert_eq!(
+            serde_json::to_string(&AuditResult::Pending).unwrap(),
+            "\"pending\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AuditResult::Approved).unwrap(),
+            "\"approved\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AuditResult::Rejected).unwrap(),
+            "\"rejected\""
+        );
     }
 
     #[test]
@@ -836,9 +972,18 @@ mod tests {
 
     #[test]
     fn test_contacts_range_type_enum() {
-        assert_eq!(serde_json::to_string(&ContactsRangeType::All).unwrap(), "\"all\"");
-        assert_eq!(serde_json::to_string(&ContactsRangeType::Some).unwrap(), "\"some\"");
-        assert_eq!(serde_json::to_string(&ContactsRangeType::AdminRange).unwrap(), "\"admin_range\"");
+        assert_eq!(
+            serde_json::to_string(&ContactsRangeType::All).unwrap(),
+            "\"all\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ContactsRangeType::Some).unwrap(),
+            "\"some\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ContactsRangeType::AdminRange).unwrap(),
+            "\"admin_range\""
+        );
     }
 
     #[test]

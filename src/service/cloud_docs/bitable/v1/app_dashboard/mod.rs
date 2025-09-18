@@ -36,6 +36,7 @@ impl AppDashboardService {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use crate::core::config::Config;
@@ -70,7 +71,10 @@ mod tests {
         assert_eq!(service.config.app_id, "dashboard_app");
         assert_eq!(service.config.app_secret, "dashboard_secret");
         assert_eq!(service.config.base_url, "https://dashboard.api.com");
-        assert_eq!(service.config.req_timeout, Some(std::time::Duration::from_millis(10000)));
+        assert_eq!(
+            service.config.req_timeout,
+            Some(std::time::Duration::from_millis(10000))
+        );
     }
 
     #[test]
@@ -101,8 +105,14 @@ mod tests {
         let service_ptr = std::ptr::addr_of!(service) as *const u8;
         let config_ptr = std::ptr::addr_of!(service.config) as *const u8;
 
-        assert!(!service_ptr.is_null(), "Service should have valid memory address");
-        assert!(!config_ptr.is_null(), "Config should have valid memory address");
+        assert!(
+            !service_ptr.is_null(),
+            "Service should have valid memory address"
+        );
+        assert!(
+            !config_ptr.is_null(),
+            "Config should have valid memory address"
+        );
     }
 
     #[test]
@@ -201,7 +211,10 @@ mod tests {
             .build();
         let service = AppDashboardService::new(config);
 
-        assert_eq!(service.config.req_timeout, Some(std::time::Duration::from_secs(3600)));
+        assert_eq!(
+            service.config.req_timeout,
+            Some(std::time::Duration::from_secs(3600))
+        );
     }
 
     #[test]

@@ -139,6 +139,7 @@ pub async fn update_space_setting(
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 

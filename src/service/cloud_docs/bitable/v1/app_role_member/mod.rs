@@ -52,6 +52,7 @@ impl AppRoleMemberService {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use crate::core::config::Config;
@@ -86,7 +87,10 @@ mod tests {
         assert_eq!(service.config.app_id, "member_app");
         assert_eq!(service.config.app_secret, "member_secret");
         assert_eq!(service.config.base_url, "https://member.api.com");
-        assert_eq!(service.config.req_timeout, Some(std::time::Duration::from_millis(9000)));
+        assert_eq!(
+            service.config.req_timeout,
+            Some(std::time::Duration::from_millis(9000))
+        );
     }
 
     #[test]
@@ -116,8 +120,14 @@ mod tests {
         let service_ptr = std::ptr::addr_of!(service) as *const u8;
         let config_ptr = std::ptr::addr_of!(service.config) as *const u8;
 
-        assert!(!service_ptr.is_null(), "Service should have valid memory address");
-        assert!(!config_ptr.is_null(), "Config should have valid memory address");
+        assert!(
+            !service_ptr.is_null(),
+            "Service should have valid memory address"
+        );
+        assert!(
+            !config_ptr.is_null(),
+            "Config should have valid memory address"
+        );
     }
 
     #[test]
@@ -213,7 +223,10 @@ mod tests {
             .build();
         let service = AppRoleMemberService::new(config);
 
-        assert_eq!(service.config.req_timeout, Some(std::time::Duration::from_secs(9000)));
+        assert_eq!(
+            service.config.req_timeout,
+            Some(std::time::Duration::from_secs(9000))
+        );
     }
 
     #[test]

@@ -154,6 +154,7 @@ pub struct UpdatesInfo {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {
     use serde_json::json;
 

@@ -113,6 +113,7 @@ impl ApiResponseTrait for GetAppResponse {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;

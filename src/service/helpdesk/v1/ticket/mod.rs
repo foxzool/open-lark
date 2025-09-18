@@ -238,10 +238,11 @@ impl TicketService {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use crate::core::config::Config;
-    use crate::service::application::models::AppType;
+    use crate::core::constants::AppType;
     use serde_json;
 
     fn create_test_config() -> Config {

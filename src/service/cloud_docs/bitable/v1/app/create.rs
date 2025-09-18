@@ -129,6 +129,7 @@ impl ApiResponseTrait for CreateAppResponse {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json::json;
@@ -188,9 +189,7 @@ mod tests {
 
     #[test]
     fn test_create_app_request_minimal() {
-        let request = CreateAppRequest::builder()
-            .name("简单表格")
-            .build();
+        let request = CreateAppRequest::builder().name("简单表格").build();
 
         assert_eq!(request.name, "简单表格");
         assert_eq!(request.folder_token, None);
@@ -237,9 +236,7 @@ mod tests {
 
     #[test]
     fn test_create_app_request_debug() {
-        let request = CreateAppRequest::builder()
-            .name("调试测试")
-            .build();
+        let request = CreateAppRequest::builder().name("调试测试").build();
 
         let debug_str = format!("{:?}", request);
         assert!(debug_str.contains("CreateAppRequest"));
@@ -249,9 +246,7 @@ mod tests {
     #[test]
     fn test_create_app_request_with_unicode_name() {
         let unicode_name = "测试表格🚀📊📈";
-        let request = CreateAppRequest::builder()
-            .name(unicode_name)
-            .build();
+        let request = CreateAppRequest::builder().name(unicode_name).build();
 
         assert_eq!(request.name, unicode_name);
     }
@@ -259,15 +254,11 @@ mod tests {
     #[test]
     fn test_create_app_request_with_string_types() {
         let owned_string = String::from("拥有字符串");
-        let request1 = CreateAppRequest::builder()
-            .name(owned_string)
-            .build();
+        let request1 = CreateAppRequest::builder().name(owned_string).build();
         assert_eq!(request1.name, "拥有字符串");
 
         let string_ref = "引用字符串";
-        let request2 = CreateAppRequest::builder()
-            .name(string_ref)
-            .build();
+        let request2 = CreateAppRequest::builder().name(string_ref).build();
         assert_eq!(request2.name, "引用字符串");
     }
 
@@ -320,7 +311,10 @@ mod tests {
         assert_eq!(response.app.app_token, "bascnmBA*****yGehy8");
         assert_eq!(response.app.name, "新建多维表格");
         assert_eq!(response.app.revision, 1);
-        assert_eq!(response.app.url, "https://example.feishu.cn/base/bascnmBA*****yGehy8");
+        assert_eq!(
+            response.app.url,
+            "https://example.feishu.cn/base/bascnmBA*****yGehy8"
+        );
     }
 
     #[test]
@@ -430,9 +424,7 @@ mod tests {
 
     #[test]
     fn test_memory_efficiency() {
-        let request = CreateAppRequest::builder()
-            .name("内存测试")
-            .build();
+        let request = CreateAppRequest::builder().name("内存测试").build();
 
         let size = std::mem::size_of_val(&request);
         assert!(size > 0);
@@ -442,21 +434,16 @@ mod tests {
     #[test]
     fn test_create_app_request_with_long_name() {
         let long_name = "a".repeat(1000);
-        let request = CreateAppRequest::builder()
-            .name(&long_name)
-            .build();
+        let request = CreateAppRequest::builder().name(&long_name).build();
 
         assert_eq!(request.name, long_name);
     }
 
     #[test]
     fn test_create_app_request_builder_method_returns() {
-        let builder = CreateAppRequest::builder()
-            .name("测试链式");
+        let builder = CreateAppRequest::builder().name("测试链式");
 
         // 确保builder方法返回正确的类型
-        let _chained = builder
-            .folder_token("folder")
-            .time_zone("UTC");
+        let _chained = builder.folder_token("folder").time_zone("UTC");
     }
 }

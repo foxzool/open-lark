@@ -104,6 +104,7 @@ impl_executable_builder_owned!(
 );
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {
     use serde_json::json;
 

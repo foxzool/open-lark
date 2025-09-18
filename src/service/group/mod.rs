@@ -169,6 +169,7 @@ impl GroupService {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use crate::core::config::Config;
@@ -291,7 +292,10 @@ mod tests {
 
         // Verify that chat service is accessible and properly configured
         let chat_ptr = std::ptr::addr_of!(group_service.v1.chat) as *const u8;
-        assert!(!chat_ptr.is_null(), "Chat service should be properly instantiated");
+        assert!(
+            !chat_ptr.is_null(),
+            "Chat service should be properly instantiated"
+        );
     }
 
     #[test]
@@ -301,7 +305,10 @@ mod tests {
 
         // Verify that chat member service is accessible and properly configured
         let member_ptr = std::ptr::addr_of!(group_service.v1.chat_member) as *const u8;
-        assert!(!member_ptr.is_null(), "Chat member service should be properly instantiated");
+        assert!(
+            !member_ptr.is_null(),
+            "Chat member service should be properly instantiated"
+        );
     }
 
     #[test]
@@ -311,7 +318,10 @@ mod tests {
 
         // Verify that chat announcement service is accessible
         let announcement_ptr = std::ptr::addr_of!(group_service.v1.chat_announcement) as *const u8;
-        assert!(!announcement_ptr.is_null(), "Chat announcement service should be properly instantiated");
+        assert!(
+            !announcement_ptr.is_null(),
+            "Chat announcement service should be properly instantiated"
+        );
     }
 
     #[test]
@@ -321,7 +331,10 @@ mod tests {
 
         // Verify that chat tab service is accessible
         let tab_ptr = std::ptr::addr_of!(group_service.v1.chat_tab) as *const u8;
-        assert!(!tab_ptr.is_null(), "Chat tab service should be properly instantiated");
+        assert!(
+            !tab_ptr.is_null(),
+            "Chat tab service should be properly instantiated"
+        );
     }
 
     #[test]
@@ -331,7 +344,10 @@ mod tests {
 
         // Verify that chat menu tree service is accessible
         let menu_ptr = std::ptr::addr_of!(group_service.v1.chat_menu_tree) as *const u8;
-        assert!(!menu_ptr.is_null(), "Chat menu tree service should be properly instantiated");
+        assert!(
+            !menu_ptr.is_null(),
+            "Chat menu tree service should be properly instantiated"
+        );
     }
 
     #[test]
@@ -346,16 +362,46 @@ mod tests {
         let tab_ptr = std::ptr::addr_of!(group_service.v1.chat_tab) as *const _;
         let menu_ptr = std::ptr::addr_of!(group_service.v1.chat_menu_tree) as *const _;
 
-        assert_ne!(chat_ptr, member_ptr, "Chat and member services should be independent");
-        assert_ne!(chat_ptr, announcement_ptr, "Chat and announcement services should be independent");
-        assert_ne!(chat_ptr, tab_ptr, "Chat and tab services should be independent");
-        assert_ne!(chat_ptr, menu_ptr, "Chat and menu services should be independent");
-        assert_ne!(member_ptr, announcement_ptr, "Member and announcement services should be independent");
-        assert_ne!(member_ptr, tab_ptr, "Member and tab services should be independent");
-        assert_ne!(member_ptr, menu_ptr, "Member and menu services should be independent");
-        assert_ne!(announcement_ptr, tab_ptr, "Announcement and tab services should be independent");
-        assert_ne!(announcement_ptr, menu_ptr, "Announcement and menu services should be independent");
-        assert_ne!(tab_ptr, menu_ptr, "Tab and menu services should be independent");
+        assert_ne!(
+            chat_ptr, member_ptr,
+            "Chat and member services should be independent"
+        );
+        assert_ne!(
+            chat_ptr, announcement_ptr,
+            "Chat and announcement services should be independent"
+        );
+        assert_ne!(
+            chat_ptr, tab_ptr,
+            "Chat and tab services should be independent"
+        );
+        assert_ne!(
+            chat_ptr, menu_ptr,
+            "Chat and menu services should be independent"
+        );
+        assert_ne!(
+            member_ptr, announcement_ptr,
+            "Member and announcement services should be independent"
+        );
+        assert_ne!(
+            member_ptr, tab_ptr,
+            "Member and tab services should be independent"
+        );
+        assert_ne!(
+            member_ptr, menu_ptr,
+            "Member and menu services should be independent"
+        );
+        assert_ne!(
+            announcement_ptr, tab_ptr,
+            "Announcement and tab services should be independent"
+        );
+        assert_ne!(
+            announcement_ptr, menu_ptr,
+            "Announcement and menu services should be independent"
+        );
+        assert_ne!(
+            tab_ptr, menu_ptr,
+            "Tab and menu services should be independent"
+        );
     }
 
     #[test]
@@ -378,7 +424,10 @@ mod tests {
         // Both services should be created successfully regardless of timeout settings
         let fast_ptr = std::ptr::addr_of!(fast_service) as *const _;
         let slow_ptr = std::ptr::addr_of!(slow_service) as *const _;
-        assert_ne!(fast_ptr, slow_ptr, "Services with different configs should be independent");
+        assert_ne!(
+            fast_ptr, slow_ptr,
+            "Services with different configs should be independent"
+        );
     }
 
     #[test]
@@ -401,7 +450,10 @@ mod tests {
         // Both services should be created successfully with different base URLs
         let dev_ptr = std::ptr::addr_of!(dev_service) as *const _;
         let prod_ptr = std::ptr::addr_of!(prod_service) as *const _;
-        assert_ne!(dev_ptr, prod_ptr, "Services with different base URLs should be independent");
+        assert_ne!(
+            dev_ptr, prod_ptr,
+            "Services with different base URLs should be independent"
+        );
     }
 
     #[test]
@@ -411,22 +463,42 @@ mod tests {
 
         // Test that the V1 struct is properly aligned and accessible
         let v1_ptr = std::ptr::addr_of!(group_service.v1) as *const u8;
-        assert!(!v1_ptr.is_null(), "V1 service should be properly instantiated");
+        assert!(
+            !v1_ptr.is_null(),
+            "V1 service should be properly instantiated"
+        );
 
         // Verify all services are properly embedded within V1
-        let chat_offset = unsafe { std::ptr::addr_of!(group_service.v1.chat) as usize - v1_ptr as usize };
-        let member_offset = unsafe { std::ptr::addr_of!(group_service.v1.chat_member) as usize - v1_ptr as usize };
-        let announcement_offset = unsafe { std::ptr::addr_of!(group_service.v1.chat_announcement) as usize - v1_ptr as usize };
-        let tab_offset = unsafe { std::ptr::addr_of!(group_service.v1.chat_tab) as usize - v1_ptr as usize };
-        let menu_offset = unsafe { std::ptr::addr_of!(group_service.v1.chat_menu_tree) as usize - v1_ptr as usize };
+        let chat_offset =
+            unsafe { std::ptr::addr_of!(group_service.v1.chat) as usize - v1_ptr as usize };
+        let member_offset =
+            unsafe { std::ptr::addr_of!(group_service.v1.chat_member) as usize - v1_ptr as usize };
+        let announcement_offset = unsafe {
+            std::ptr::addr_of!(group_service.v1.chat_announcement) as usize - v1_ptr as usize
+        };
+        let tab_offset =
+            unsafe { std::ptr::addr_of!(group_service.v1.chat_tab) as usize - v1_ptr as usize };
+        let menu_offset = unsafe {
+            std::ptr::addr_of!(group_service.v1.chat_menu_tree) as usize - v1_ptr as usize
+        };
 
         // All offsets should be different, indicating proper struct layout
-        let offsets = vec![chat_offset, member_offset, announcement_offset, tab_offset, menu_offset];
+        let offsets = vec![
+            chat_offset,
+            member_offset,
+            announcement_offset,
+            tab_offset,
+            menu_offset,
+        ];
         let mut unique_offsets = offsets.clone();
         unique_offsets.sort();
         unique_offsets.dedup();
 
-        assert_eq!(offsets.len(), unique_offsets.len(), "All services should have unique memory positions within V1");
+        assert_eq!(
+            offsets.len(),
+            unique_offsets.len(),
+            "All services should have unique memory positions within V1"
+        );
     }
 
     #[test]

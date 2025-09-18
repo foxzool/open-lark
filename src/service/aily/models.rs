@@ -652,6 +652,7 @@ pub struct FileUploadResult {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -754,21 +755,19 @@ mod tests {
     #[test]
     fn test_tool_set_with_function() {
         let tool_set = ToolSet {
-            tools: Some(vec![
-                Tool {
-                    tool_type: Some("function".to_string()),
-                    config: Some(serde_json::json!({
-                        "name": "calculate",
-                        "description": "Perform calculations",
-                        "parameters": {
-                            "type": "object",
-                            "properties": {
-                                "expression": {"type": "string"}
-                            }
+            tools: Some(vec![Tool {
+                tool_type: Some("function".to_string()),
+                config: Some(serde_json::json!({
+                    "name": "calculate",
+                    "description": "Perform calculations",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "expression": {"type": "string"}
                         }
-                    })),
-                },
-            ]),
+                    }
+                })),
+            }]),
         };
         let json = serde_json::to_string(&tool_set).unwrap();
         assert!(json.contains("function"));
@@ -842,28 +841,20 @@ mod tests {
             app_id: "app666".to_string(),
             session_id: "session444".to_string(),
             instructions: Some("Please analyze the uploaded document".to_string()),
-            additional_instructions: Some("Focus on key insights".to_string()),
-            metadata: Some({
-                let mut map = HashMap::new();
-                map.insert("analysis_type".to_string(), serde_json::json!("detailed"));
-                map
-            }),
+            model: Some("gpt-4".to_string()),
+            additional_messages: Some(vec![]),
             tool_set: Some(ToolSet {
-                tools: Some(vec![
-                    Tool {
-                        tool_type: "code_interpreter".to_string(),
-                        function: None,
-                    },
-                ]),
+                tools: Some(vec![Tool {
+                    tool_type: Some("code_interpreter".to_string()),
+                    config: None,
+                }]),
             }),
-            stream: Some(true),
         };
         let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("app666"));
         assert!(json.contains("session444"));
         assert!(json.contains("analyze the uploaded"));
         assert!(json.contains("code_interpreter"));
-        assert!(json.contains("true"));
     }
 
     #[test]
@@ -871,18 +862,16 @@ mod tests {
         let request = RunListRequest {
             app_id: "app888".to_string(),
             session_id: "session777".to_string(),
-            limit: Some(20),
+            page_size: Some(20),
+            page_token: Some("run123".to_string()),
             order: Some("asc".to_string()),
-            after: Some("run123".to_string()),
-            before: None,
-            status: Some("completed".to_string()),
         };
         let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("app888"));
         assert!(json.contains("session777"));
         assert!(json.contains("20"));
         assert!(json.contains("asc"));
-        assert!(json.contains("completed"));
+        assert!(json.contains("run123"));
     }
 
     #[test]
@@ -891,24 +880,25 @@ mod tests {
             run_id: Some("run789".to_string()),
             session_id: Some("session456".to_string()),
             status: Some("in_progress".to_string()),
+            created_at: Some("2024-01-01T14:00:00Z".to_string()),
             started_at: Some("2024-01-01T14:00:00Z".to_string()),
             completed_at: None,
             failed_at: None,
+            cancelled_at: None,
             instructions: Some("Generate a summary report".to_string()),
-            additional_instructions: None,
-            last_error: None,
-            metadata: Some({
-                let mut map = HashMap::new();
-                map.insert("step".to_string(), serde_json::json!(2));
-                map.insert("total_steps".to_string(), serde_json::json!(5));
-                map
+            model: Some("gpt-4".to_string()),
+            tool_set: Some(ToolSet {
+                tools: Some(vec![Tool {
+                    tool_type: Some("code_interpreter".to_string()),
+                    config: None,
+                }]),
             }),
+            last_error: None,
         };
         let json = serde_json::to_string(&run).unwrap();
         assert!(json.contains("run789"));
         assert!(json.contains("in_progress"));
         assert!(json.contains("Generate a summary"));
-        assert!(json.contains("\"step\":2"));
         assert!(!json.contains("completed_at"));
     }
 
@@ -918,18 +908,18 @@ mod tests {
             run_id: Some("run999".to_string()),
             session_id: Some("session111".to_string()),
             status: Some("failed".to_string()),
+            created_at: Some("2024-01-01T15:00:00Z".to_string()),
             started_at: Some("2024-01-01T15:00:00Z".to_string()),
             completed_at: None,
             failed_at: Some("2024-01-01T15:05:00Z".to_string()),
+            cancelled_at: None,
             instructions: Some("Process large dataset".to_string()),
-            additional_instructions: None,
-            last_error: Some({
-                let mut map = HashMap::new();
-                map.insert("code".to_string(), serde_json::json!("TIMEOUT"));
-                map.insert("message".to_string(), serde_json::json!("Processing timeout"));
-                map
+            model: Some("gpt-4".to_string()),
+            tool_set: None,
+            last_error: Some(RunError {
+                code: Some("TIMEOUT".to_string()),
+                message: Some("Processing timeout".to_string()),
             }),
-            metadata: None,
         };
         let json = serde_json::to_string(&run).unwrap();
         assert!(json.contains("run999"));

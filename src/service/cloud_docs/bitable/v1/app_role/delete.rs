@@ -107,6 +107,7 @@ pub async fn delete_app_role(
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -311,9 +312,7 @@ mod tests {
         assert_eq!(request1.app_token, "only_app");
         assert_eq!(request1.role_id, "");
 
-        let request2 = DeleteAppRoleRequest::builder()
-            .role_id("only_role")
-            .build();
+        let request2 = DeleteAppRoleRequest::builder().role_id("only_role").build();
 
         assert_eq!(request2.app_token, "");
         assert_eq!(request2.role_id, "only_role");

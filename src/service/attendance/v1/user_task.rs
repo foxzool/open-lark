@@ -220,6 +220,7 @@ impl UserTaskService {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 #[allow(clippy::field_reassign_with_default)]
 mod tests {
     use super::*;

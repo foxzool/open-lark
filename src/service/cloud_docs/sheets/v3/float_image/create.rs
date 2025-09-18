@@ -200,6 +200,7 @@ impl ApiResponseTrait for CreateFloatImageResponseData {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {
     use super::*;
     use serde_json::json;
