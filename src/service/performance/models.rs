@@ -558,6 +558,7 @@ pub struct ReviewDetail {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -576,10 +577,22 @@ mod tests {
 
     #[test]
     fn test_semester_status_enum() {
-        assert_eq!(serde_json::to_string(&SemesterStatus::NotStarted).unwrap(), "\"not_started\"");
-        assert_eq!(serde_json::to_string(&SemesterStatus::InProgress).unwrap(), "\"in_progress\"");
-        assert_eq!(serde_json::to_string(&SemesterStatus::Finished).unwrap(), "\"finished\"");
-        assert_eq!(serde_json::to_string(&SemesterStatus::Paused).unwrap(), "\"paused\"");
+        assert_eq!(
+            serde_json::to_string(&SemesterStatus::NotStarted).unwrap(),
+            "\"not_started\""
+        );
+        assert_eq!(
+            serde_json::to_string(&SemesterStatus::InProgress).unwrap(),
+            "\"in_progress\""
+        );
+        assert_eq!(
+            serde_json::to_string(&SemesterStatus::Finished).unwrap(),
+            "\"finished\""
+        );
+        assert_eq!(
+            serde_json::to_string(&SemesterStatus::Paused).unwrap(),
+            "\"paused\""
+        );
     }
 
     #[test]
@@ -602,20 +615,50 @@ mod tests {
 
     #[test]
     fn test_activity_status_enum() {
-        assert_eq!(serde_json::to_string(&ActivityStatus::NotStarted).unwrap(), "\"not_started\"");
-        assert_eq!(serde_json::to_string(&ActivityStatus::InProgress).unwrap(), "\"in_progress\"");
-        assert_eq!(serde_json::to_string(&ActivityStatus::Finished).unwrap(), "\"finished\"");
-        assert_eq!(serde_json::to_string(&ActivityStatus::Paused).unwrap(), "\"paused\"");
-        assert_eq!(serde_json::to_string(&ActivityStatus::Cancelled).unwrap(), "\"cancelled\"");
+        assert_eq!(
+            serde_json::to_string(&ActivityStatus::NotStarted).unwrap(),
+            "\"not_started\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ActivityStatus::InProgress).unwrap(),
+            "\"in_progress\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ActivityStatus::Finished).unwrap(),
+            "\"finished\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ActivityStatus::Paused).unwrap(),
+            "\"paused\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ActivityStatus::Cancelled).unwrap(),
+            "\"cancelled\""
+        );
     }
 
     #[test]
     fn test_activity_type_enum() {
-        assert_eq!(serde_json::to_string(&ActivityType::Performance).unwrap(), "\"performance\"");
-        assert_eq!(serde_json::to_string(&ActivityType::Full360).unwrap(), "\"full360\"");
-        assert_eq!(serde_json::to_string(&ActivityType::SelfReview).unwrap(), "\"self_review\"");
-        assert_eq!(serde_json::to_string(&ActivityType::ManagerReview).unwrap(), "\"manager_review\"");
-        assert_eq!(serde_json::to_string(&ActivityType::PeerReview).unwrap(), "\"peer_review\"");
+        assert_eq!(
+            serde_json::to_string(&ActivityType::Performance).unwrap(),
+            "\"performance\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ActivityType::Full360).unwrap(),
+            "\"full360\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ActivityType::SelfReview).unwrap(),
+            "\"self_review\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ActivityType::ManagerReview).unwrap(),
+            "\"manager_review\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ActivityType::PeerReview).unwrap(),
+            "\"peer_review\""
+        );
     }
 
     #[test]
@@ -640,11 +683,26 @@ mod tests {
 
     #[test]
     fn test_additional_info_type_enum() {
-        assert_eq!(serde_json::to_string(&AdditionalInfoType::Text).unwrap(), "\"text\"");
-        assert_eq!(serde_json::to_string(&AdditionalInfoType::Number).unwrap(), "\"number\"");
-        assert_eq!(serde_json::to_string(&AdditionalInfoType::Date).unwrap(), "\"date\"");
-        assert_eq!(serde_json::to_string(&AdditionalInfoType::Selection).unwrap(), "\"selection\"");
-        assert_eq!(serde_json::to_string(&AdditionalInfoType::MultiSelection).unwrap(), "\"multi_selection\"");
+        assert_eq!(
+            serde_json::to_string(&AdditionalInfoType::Text).unwrap(),
+            "\"text\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AdditionalInfoType::Number).unwrap(),
+            "\"number\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AdditionalInfoType::Date).unwrap(),
+            "\"date\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AdditionalInfoType::Selection).unwrap(),
+            "\"selection\""
+        );
+        assert_eq!(
+            serde_json::to_string(&AdditionalInfoType::MultiSelection).unwrap(),
+            "\"multi_selection\""
+        );
     }
 
     #[test]
@@ -701,10 +759,22 @@ mod tests {
 
     #[test]
     fn test_template_type_enum() {
-        assert_eq!(serde_json::to_string(&TemplateType::SelfReview).unwrap(), "\"self_review\"");
-        assert_eq!(serde_json::to_string(&TemplateType::ManagerReview).unwrap(), "\"manager_review\"");
-        assert_eq!(serde_json::to_string(&TemplateType::PeerReview).unwrap(), "\"peer_review\"");
-        assert_eq!(serde_json::to_string(&TemplateType::SubordinateReview).unwrap(), "\"subordinate_review\"");
+        assert_eq!(
+            serde_json::to_string(&TemplateType::SelfReview).unwrap(),
+            "\"self_review\""
+        );
+        assert_eq!(
+            serde_json::to_string(&TemplateType::ManagerReview).unwrap(),
+            "\"manager_review\""
+        );
+        assert_eq!(
+            serde_json::to_string(&TemplateType::PeerReview).unwrap(),
+            "\"peer_review\""
+        );
+        assert_eq!(
+            serde_json::to_string(&TemplateType::SubordinateReview).unwrap(),
+            "\"subordinate_review\""
+        );
     }
 
     #[test]
@@ -727,11 +797,26 @@ mod tests {
 
     #[test]
     fn test_review_item_type_enum() {
-        assert_eq!(serde_json::to_string(&ReviewItemType::Rating).unwrap(), "\"rating\"");
-        assert_eq!(serde_json::to_string(&ReviewItemType::Text).unwrap(), "\"text\"");
-        assert_eq!(serde_json::to_string(&ReviewItemType::SingleChoice).unwrap(), "\"single_choice\"");
-        assert_eq!(serde_json::to_string(&ReviewItemType::MultipleChoice).unwrap(), "\"multiple_choice\"");
-        assert_eq!(serde_json::to_string(&ReviewItemType::Tag).unwrap(), "\"tag\"");
+        assert_eq!(
+            serde_json::to_string(&ReviewItemType::Rating).unwrap(),
+            "\"rating\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ReviewItemType::Text).unwrap(),
+            "\"text\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ReviewItemType::SingleChoice).unwrap(),
+            "\"single_choice\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ReviewItemType::MultipleChoice).unwrap(),
+            "\"multiple_choice\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ReviewItemType::Tag).unwrap(),
+            "\"tag\""
+        );
     }
 
     #[test]
@@ -757,7 +842,11 @@ mod tests {
         let config = TagQuestionConfig {
             config_id: "cfg123".to_string(),
             item_id: "item456".to_string(),
-            tag_options: vec!["团队合作".to_string(), "创新能力".to_string(), "执行力".to_string()],
+            tag_options: vec![
+                "团队合作".to_string(),
+                "创新能力".to_string(),
+                "执行力".to_string(),
+            ],
             min_selection: Some(1),
             max_selection: Some(3),
             allow_custom: Some(true),
@@ -770,10 +859,22 @@ mod tests {
 
     #[test]
     fn test_metric_type_enum() {
-        assert_eq!(serde_json::to_string(&MetricType::Number).unwrap(), "\"number\"");
-        assert_eq!(serde_json::to_string(&MetricType::Percentage).unwrap(), "\"percentage\"");
-        assert_eq!(serde_json::to_string(&MetricType::Text).unwrap(), "\"text\"");
-        assert_eq!(serde_json::to_string(&MetricType::Boolean).unwrap(), "\"boolean\"");
+        assert_eq!(
+            serde_json::to_string(&MetricType::Number).unwrap(),
+            "\"number\""
+        );
+        assert_eq!(
+            serde_json::to_string(&MetricType::Percentage).unwrap(),
+            "\"percentage\""
+        );
+        assert_eq!(
+            serde_json::to_string(&MetricType::Text).unwrap(),
+            "\"text\""
+        );
+        assert_eq!(
+            serde_json::to_string(&MetricType::Boolean).unwrap(),
+            "\"boolean\""
+        );
     }
 
     #[test]
@@ -796,11 +897,26 @@ mod tests {
 
     #[test]
     fn test_task_status_enum() {
-        assert_eq!(serde_json::to_string(&TaskStatus::NotStarted).unwrap(), "\"not_started\"");
-        assert_eq!(serde_json::to_string(&TaskStatus::InProgress).unwrap(), "\"in_progress\"");
-        assert_eq!(serde_json::to_string(&TaskStatus::Completed).unwrap(), "\"completed\"");
-        assert_eq!(serde_json::to_string(&TaskStatus::Expired).unwrap(), "\"expired\"");
-        assert_eq!(serde_json::to_string(&TaskStatus::Paused).unwrap(), "\"paused\"");
+        assert_eq!(
+            serde_json::to_string(&TaskStatus::NotStarted).unwrap(),
+            "\"not_started\""
+        );
+        assert_eq!(
+            serde_json::to_string(&TaskStatus::InProgress).unwrap(),
+            "\"in_progress\""
+        );
+        assert_eq!(
+            serde_json::to_string(&TaskStatus::Completed).unwrap(),
+            "\"completed\""
+        );
+        assert_eq!(
+            serde_json::to_string(&TaskStatus::Expired).unwrap(),
+            "\"expired\""
+        );
+        assert_eq!(
+            serde_json::to_string(&TaskStatus::Paused).unwrap(),
+            "\"paused\""
+        );
     }
 
     #[test]
@@ -827,11 +943,26 @@ mod tests {
 
     #[test]
     fn test_performance_level_enum() {
-        assert_eq!(serde_json::to_string(&PerformanceLevel::Excellent).unwrap(), "\"excellent\"");
-        assert_eq!(serde_json::to_string(&PerformanceLevel::Good).unwrap(), "\"good\"");
-        assert_eq!(serde_json::to_string(&PerformanceLevel::Average).unwrap(), "\"average\"");
-        assert_eq!(serde_json::to_string(&PerformanceLevel::NeedsImprovement).unwrap(), "\"needs_improvement\"");
-        assert_eq!(serde_json::to_string(&PerformanceLevel::Unsatisfactory).unwrap(), "\"unsatisfactory\"");
+        assert_eq!(
+            serde_json::to_string(&PerformanceLevel::Excellent).unwrap(),
+            "\"excellent\""
+        );
+        assert_eq!(
+            serde_json::to_string(&PerformanceLevel::Good).unwrap(),
+            "\"good\""
+        );
+        assert_eq!(
+            serde_json::to_string(&PerformanceLevel::Average).unwrap(),
+            "\"average\""
+        );
+        assert_eq!(
+            serde_json::to_string(&PerformanceLevel::NeedsImprovement).unwrap(),
+            "\"needs_improvement\""
+        );
+        assert_eq!(
+            serde_json::to_string(&PerformanceLevel::Unsatisfactory).unwrap(),
+            "\"unsatisfactory\""
+        );
     }
 
     #[test]

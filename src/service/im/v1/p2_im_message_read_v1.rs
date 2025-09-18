@@ -60,6 +60,7 @@ where
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use crate::event::context::EventHeader;
@@ -206,7 +207,10 @@ mod tests {
         let message = create_test_p2_im_message_read();
 
         assert_eq!(message.schema, "2.0");
-        assert_eq!(message.header.event_type, Some("im.message.read_v1".to_string()));
+        assert_eq!(
+            message.header.event_type,
+            Some("im.message.read_v1".to_string())
+        );
         assert_eq!(message.header.app_id, Some("test_app_id".to_string()));
         assert_eq!(message.event.message_id_list.len(), 3);
     }
@@ -252,7 +256,10 @@ mod tests {
 
         let message: P2ImMessageReadV1 = serde_json::from_str(json).unwrap();
         assert_eq!(message.schema, "2.0");
-        assert_eq!(message.header.event_type, Some("im.message.read_v1".to_string()));
+        assert_eq!(
+            message.header.event_type,
+            Some("im.message.read_v1".to_string())
+        );
         assert_eq!(message.header.app_id, Some("test_app_id".to_string()));
         assert_eq!(message.event.message_id_list.len(), 2);
         assert_eq!(message.event.message_id_list[0], "msg_a");
@@ -267,7 +274,8 @@ mod tests {
 
         // Processor should be created successfully
         // We can't directly test the function field, but we can test that creation works
-        assert!(std::ptr::addr_of!(processor) as *const u8 != std::ptr::null());
+        let ptr = std::ptr::addr_of!(processor) as *const u8;
+        assert!(!ptr.is_null());
     }
 
     #[test]
@@ -281,7 +289,10 @@ mod tests {
 
             // Verify the message content
             assert_eq!(message.schema, "2.0");
-            assert_eq!(message.header.event_type, Some("im.message.read_v1".to_string()));
+            assert_eq!(
+                message.header.event_type,
+                Some("im.message.read_v1".to_string())
+            );
         });
 
         let test_message = create_test_p2_im_message_read();

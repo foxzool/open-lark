@@ -119,6 +119,7 @@ impl ApiResponseTrait for PatchTableResponse {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json::json;

@@ -198,6 +198,7 @@ pub struct UserInfo {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -240,15 +241,13 @@ mod tests {
                 template_id: Some("tpl_001".to_string()),
                 template_name: Some("日报模板".to_string()),
                 content: Some("今日工作内容...".to_string()),
-                fields: Some(vec![
-                    ReportField {
-                        field_id: "field_001".to_string(),
-                        field_name: "工作内容".to_string(),
-                        field_type: Some("text".to_string()),
-                        required: Some(true),
-                        description: Some("请填写今日完成的工作内容".to_string()),
-                    },
-                ]),
+                fields: Some(vec![ReportField {
+                    field_id: "field_001".to_string(),
+                    field_name: "工作内容".to_string(),
+                    field_type: Some("text".to_string()),
+                    required: Some(true),
+                    description: Some("请填写今日完成的工作内容".to_string()),
+                }]),
             }),
             creator: Some("creator_001".to_string()),
             created_at: Some(1640995200),

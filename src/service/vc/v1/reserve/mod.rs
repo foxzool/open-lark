@@ -247,11 +247,10 @@ impl ReserveService {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use crate::{
-        service::vc::models::{Meeting, MeetingStatus, Reserve, UserInfo},
-    };
+    use crate::service::vc::models::{Meeting, MeetingStatus, Reserve, UserInfo};
 
     fn create_test_config() -> Config {
         Config {
@@ -382,9 +381,7 @@ mod tests {
 
     #[test]
     fn test_apply_reserve_response_data_format() {
-        match ApplyReserveResponse::data_format() {
-            _ => assert!(false, "Expected ResponseFormat::Data"),
-        }
+        assert_eq!(ApplyReserveResponse::data_format(), ResponseFormat::Data);
     }
 
     #[test]
@@ -446,9 +443,7 @@ mod tests {
 
     #[test]
     fn test_update_reserve_response_data_format() {
-        match UpdateReserveResponse::data_format() {
-            _ => assert!(false, "Expected ResponseFormat::Data"),
-        }
+        assert_eq!(UpdateReserveResponse::data_format(), ResponseFormat::Data);
     }
 
     #[test]
@@ -467,9 +462,7 @@ mod tests {
 
     #[test]
     fn test_get_reserve_response_data_format() {
-        match GetReserveResponse::data_format() {
-            _ => assert!(false, "Expected ResponseFormat::Data"),
-        }
+        assert_eq!(GetReserveResponse::data_format(), ResponseFormat::Data);
     }
 
     #[test]
@@ -490,9 +483,10 @@ mod tests {
 
     #[test]
     fn test_get_active_meeting_response_data_format() {
-        match GetActiveMeetingResponse::data_format() {
-            _ => assert!(false, "Expected ResponseFormat::Data"),
-        }
+        assert_eq!(
+            GetActiveMeetingResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 
     #[test]

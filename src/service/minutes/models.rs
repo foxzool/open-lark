@@ -115,6 +115,7 @@ pub struct KeywordStatistic {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 
@@ -175,7 +176,10 @@ mod tests {
 
         assert_eq!(deserialized.minute_id, "minute_123");
         assert_eq!(deserialized.title, Some("项目讨论会议".to_string()));
-        assert_eq!(deserialized.create_time, Some("2024-01-15T10:00:00Z".to_string()));
+        assert_eq!(
+            deserialized.create_time,
+            Some("2024-01-15T10:00:00Z".to_string())
+        );
         assert!(deserialized.creator.is_some());
         assert_eq!(deserialized.creator.as_ref().unwrap().id, "creator_001");
         assert_eq!(deserialized.status, Some("completed".to_string()));
@@ -218,7 +222,10 @@ mod tests {
 
         assert_eq!(deserialized.id, "user_456");
         assert_eq!(deserialized.name, Some("李四".to_string()));
-        assert_eq!(deserialized.avatar_url, Some("https://cdn.example.com/user456.png".to_string()));
+        assert_eq!(
+            deserialized.avatar_url,
+            Some("https://cdn.example.com/user456.png".to_string())
+        );
     }
 
     #[test]
@@ -252,10 +259,16 @@ mod tests {
         let deserialized: MinuteMedia = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(deserialized.file_id, "file_789");
-        assert_eq!(deserialized.filename, Some("meeting_recording.mp4".to_string()));
+        assert_eq!(
+            deserialized.filename,
+            Some("meeting_recording.mp4".to_string())
+        );
         assert_eq!(deserialized.file_size, Some(104857600));
         assert_eq!(deserialized.file_type, Some("video/mp4".to_string()));
-        assert_eq!(deserialized.download_url, Some("https://storage.example.com/file_789".to_string()));
+        assert_eq!(
+            deserialized.download_url,
+            Some("https://storage.example.com/file_789".to_string())
+        );
     }
 
     #[test]
@@ -288,7 +301,10 @@ mod tests {
         let serialized = serde_json::to_string(&transcript).unwrap();
         let deserialized: MinuteTranscript = serde_json::from_str(&serialized).unwrap();
 
-        assert_eq!(deserialized.content, "会议讨论了项目进度，决定下周进行代码审查。");
+        assert_eq!(
+            deserialized.content,
+            "会议讨论了项目进度，决定下周进行代码审查。"
+        );
         assert_eq!(deserialized.language, Some("zh-CN".to_string()));
         assert_eq!(deserialized.format, Some("text/plain".to_string()));
     }
@@ -330,7 +346,7 @@ mod tests {
             participant_count: Some(8),
             speech_count: Some(42),
             speech_duration: Some(2400), // 40 minutes
-            mute_duration: Some(1200), // 20 minutes
+            mute_duration: Some(1200),   // 20 minutes
             keywords: Some(vec![
                 KeywordStatistic {
                     keyword: "项目".to_string(),
@@ -423,7 +439,10 @@ mod tests {
 
         assert!(deserialized.title.as_ref().unwrap().contains("季度总结"));
         assert!(deserialized.title.as_ref().unwrap().contains("Q1 2024"));
-        assert_eq!(deserialized.creator.as_ref().unwrap().name, Some("王经理".to_string()));
+        assert_eq!(
+            deserialized.creator.as_ref().unwrap().name,
+            Some("王经理".to_string())
+        );
 
         // Test time parsing would work
         let start = deserialized.start_time.unwrap();

@@ -196,6 +196,7 @@ pub struct RuleScope {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -266,7 +267,10 @@ mod tests {
             avatar_url: Some("https://cdn.partner.com/avatars/alice.jpg".to_string()),
             status: Some("active".to_string()),
             user_type: Some("external".to_string()),
-            department_ids: Some(vec!["dept_engineering".to_string(), "dept_product".to_string()]),
+            department_ids: Some(vec![
+                "dept_engineering".to_string(),
+                "dept_product".to_string(),
+            ]),
             job_title: Some("高级工程师".to_string()),
             created_at: Some(1640995200),
             updated_at: Some(1640995200),
@@ -522,7 +526,9 @@ mod tests {
             scope_type: Some("project_based".to_string()),
             department_ids: Some(vec!["eng_dept".to_string()]),
             user_ids: Some(vec!["user_senior_eng".to_string()]),
-            description: Some("Project-based collaboration scope for external contractors".to_string()),
+            description: Some(
+                "Project-based collaboration scope for external contractors".to_string(),
+            ),
         };
 
         let rule_config = RuleConfig {
@@ -539,7 +545,9 @@ mod tests {
         let visibility_rule = SearchableVisibleRule {
             rule_id: "contractor_visibility_rule".to_string(),
             name: "External Contractor Visibility Rule".to_string(),
-            description: Some("Controls visibility and search permissions for external contractors".to_string()),
+            description: Some(
+                "Controls visibility and search permissions for external contractors".to_string(),
+            ),
             rule_type: Some("contractor_access".to_string()),
             status: Some("active".to_string()),
             org_id: Some("partner_tech_org".to_string()),

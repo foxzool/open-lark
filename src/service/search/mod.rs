@@ -140,6 +140,7 @@ impl SearchService {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use crate::core::config::Config;
@@ -260,32 +261,56 @@ mod tests {
         let v1_ptr = std::ptr::addr_of!(search_service.v1) as *const u8;
         let v2_ptr = std::ptr::addr_of!(search_service.v2) as *const u8;
 
-        assert!(!v1_ptr.is_null(), "V1 service should be properly instantiated");
-        assert!(!v2_ptr.is_null(), "V2 service should be properly instantiated");
-        assert_ne!(v1_ptr, v2_ptr, "V1 and V2 services should be independent instances");
+        assert!(
+            !v1_ptr.is_null(),
+            "V1 service should be properly instantiated"
+        );
+        assert!(
+            !v2_ptr.is_null(),
+            "V2 service should be properly instantiated"
+        );
+        assert_ne!(
+            v1_ptr, v2_ptr,
+            "V1 and V2 services should be independent instances"
+        );
     }
 
     #[test]
     fn test_search_service_with_various_configurations() {
         let variations = vec![
-            ("minimal", Config::builder().app_id("minimal").app_secret("secret").build()),
-            ("with_timeout", Config::builder()
-                .app_id("timeout")
-                .app_secret("secret")
-                .req_timeout(std::time::Duration::from_millis(35000))
-                .build()),
-            ("with_base_url", Config::builder()
-                .app_id("base_url")
-                .app_secret("secret")
-                .base_url("https://test.search.api.com")
-                .build()),
-            ("full_featured", Config::builder()
-                .app_id("full")
-                .app_secret("secret")
-                .req_timeout(std::time::Duration::from_millis(40000))
-                .base_url("https://full.test.search.api.com")
-                .enable_token_cache(true)
-                .build()),
+            (
+                "minimal",
+                Config::builder()
+                    .app_id("minimal")
+                    .app_secret("secret")
+                    .build(),
+            ),
+            (
+                "with_timeout",
+                Config::builder()
+                    .app_id("timeout")
+                    .app_secret("secret")
+                    .req_timeout(std::time::Duration::from_millis(35000))
+                    .build(),
+            ),
+            (
+                "with_base_url",
+                Config::builder()
+                    .app_id("base_url")
+                    .app_secret("secret")
+                    .base_url("https://test.search.api.com")
+                    .build(),
+            ),
+            (
+                "full_featured",
+                Config::builder()
+                    .app_id("full")
+                    .app_secret("secret")
+                    .req_timeout(std::time::Duration::from_millis(40000))
+                    .base_url("https://full.test.search.api.com")
+                    .enable_token_cache(true)
+                    .build(),
+            ),
         ];
 
         let mut services = Vec::new();
@@ -302,7 +327,10 @@ mod tests {
             for (_, service2) in services.iter().skip(i + 1) {
                 let ptr1 = std::ptr::addr_of!(*service1) as *const u8;
                 let ptr2 = std::ptr::addr_of!(*service2) as *const u8;
-                assert_ne!(ptr1, ptr2, "Services with different configs should be independent");
+                assert_ne!(
+                    ptr1, ptr2,
+                    "Services with different configs should be independent"
+                );
             }
         }
     }
@@ -377,7 +405,10 @@ mod tests {
 
             // Each service should be created successfully regardless of extreme config
             let service_ptr = std::ptr::addr_of!(search_service) as *const u8;
-            assert!(!service_ptr.is_null(), "Service should be created with extreme config");
+            assert!(
+                !service_ptr.is_null(),
+                "Service should be created with extreme config"
+            );
         }
     }
 
@@ -387,11 +418,16 @@ mod tests {
         let search_service = SearchService::new(config);
 
         // Verify the service contains exactly two API versions
-        let v1_offset = std::ptr::addr_of!(search_service.v1) as usize - std::ptr::addr_of!(search_service) as usize;
-        let v2_offset = std::ptr::addr_of!(search_service.v2) as usize - std::ptr::addr_of!(search_service) as usize;
+        let v1_offset = std::ptr::addr_of!(search_service.v1) as usize
+            - std::ptr::addr_of!(search_service) as usize;
+        let v2_offset = std::ptr::addr_of!(search_service.v2) as usize
+            - std::ptr::addr_of!(search_service) as usize;
 
         // V1 and V2 should have different memory offsets
-        assert_ne!(v1_offset, v2_offset, "V1 and V2 should occupy different memory positions");
+        assert_ne!(
+            v1_offset, v2_offset,
+            "V1 and V2 should occupy different memory positions"
+        );
 
         // Both offsets should be reasonable (within struct bounds)
         assert!(v1_offset < 4096, "V1 offset should be reasonable");
@@ -407,7 +443,10 @@ mod tests {
         let service_ptr1 = std::ptr::addr_of!(search_service) as *const u8;
         let service_ptr2 = std::ptr::addr_of!(search_service) as *const u8;
 
-        assert_eq!(service_ptr1, service_ptr2, "Service memory address should be consistent");
+        assert_eq!(
+            service_ptr1, service_ptr2,
+            "Service memory address should be consistent"
+        );
 
         // Test API version consistency
         let v1_ptr1 = std::ptr::addr_of!(search_service.v1) as *const u8;
@@ -415,8 +454,14 @@ mod tests {
         let v2_ptr1 = std::ptr::addr_of!(search_service.v2) as *const u8;
         let v2_ptr2 = std::ptr::addr_of!(search_service.v2) as *const u8;
 
-        assert_eq!(v1_ptr1, v1_ptr2, "V1 API memory address should be consistent");
-        assert_eq!(v2_ptr1, v2_ptr2, "V2 API memory address should be consistent");
+        assert_eq!(
+            v1_ptr1, v1_ptr2,
+            "V1 API memory address should be consistent"
+        );
+        assert_eq!(
+            v2_ptr1, v2_ptr2,
+            "V2 API memory address should be consistent"
+        );
     }
 
     #[test]
@@ -457,7 +502,10 @@ mod tests {
         let service1_ptr = std::ptr::addr_of!(search_service1) as *const u8;
         let service2_ptr = std::ptr::addr_of!(search_service2) as *const u8;
 
-        assert_ne!(service1_ptr, service2_ptr, "Services should be independent instances");
+        assert_ne!(
+            service1_ptr, service2_ptr,
+            "Services should be independent instances"
+        );
 
         // API versions should also be independent
         let v1_ptr1 = std::ptr::addr_of!(search_service1.v1) as *const u8;
@@ -478,13 +526,13 @@ mod tests {
         assert!(!empty_ptr.is_null(), "Service should handle empty config");
 
         // Test minimal config
-        let minimal_config = Config::builder()
-            .app_id("min")
-            .app_secret("sec")
-            .build();
+        let minimal_config = Config::builder().app_id("min").app_secret("sec").build();
         let search_service_minimal = SearchService::new(minimal_config);
         let minimal_ptr = std::ptr::addr_of!(search_service_minimal) as *const u8;
-        assert!(!minimal_ptr.is_null(), "Service should handle minimal config");
+        assert!(
+            !minimal_ptr.is_null(),
+            "Service should handle minimal config"
+        );
 
         // Test Unicode config
         let unicode_config = Config::builder()
@@ -494,6 +542,9 @@ mod tests {
             .build();
         let search_service_unicode = SearchService::new(unicode_config);
         let unicode_ptr = std::ptr::addr_of!(search_service_unicode) as *const u8;
-        assert!(!unicode_ptr.is_null(), "Service should handle Unicode config");
+        assert!(
+            !unicode_ptr.is_null(),
+            "Service should handle Unicode config"
+        );
     }
 }

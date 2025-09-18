@@ -117,6 +117,7 @@ impl ContactService {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use crate::core::config::Config;
@@ -177,8 +178,7 @@ mod tests {
 
         // All services should be created successfully
         assert_eq!(services.len(), 3);
-        for _service in &services {
-        }
+        for _service in &services {}
 
         // Services should be independent instances
         for (i, service1) in services.iter().enumerate() {
@@ -213,30 +213,48 @@ mod tests {
 
         // Verify that v3 API is accessible
         let v3_ptr = std::ptr::addr_of!(contact_service.v3) as *const u8;
-        assert!(!v3_ptr.is_null(), "V3 service should be properly instantiated");
+        assert!(
+            !v3_ptr.is_null(),
+            "V3 service should be properly instantiated"
+        );
     }
 
     #[test]
     fn test_contact_service_with_various_configurations() {
         let variations = vec![
-            ("minimal", Config::builder().app_id("minimal").app_secret("secret").build()),
-            ("with_timeout", Config::builder()
-                .app_id("timeout")
-                .app_secret("secret")
-                .req_timeout(std::time::Duration::from_millis(15000))
-                .build()),
-            ("with_base_url", Config::builder()
-                .app_id("base_url")
-                .app_secret("secret")
-                .base_url("https://test.contact.api.com")
-                .build()),
-            ("full_featured", Config::builder()
-                .app_id("full")
-                .app_secret("secret")
-                .req_timeout(std::time::Duration::from_millis(20000))
-                .base_url("https://full.test.contact.api.com")
-                .enable_token_cache(true)
-                .build()),
+            (
+                "minimal",
+                Config::builder()
+                    .app_id("minimal")
+                    .app_secret("secret")
+                    .build(),
+            ),
+            (
+                "with_timeout",
+                Config::builder()
+                    .app_id("timeout")
+                    .app_secret("secret")
+                    .req_timeout(std::time::Duration::from_millis(15000))
+                    .build(),
+            ),
+            (
+                "with_base_url",
+                Config::builder()
+                    .app_id("base_url")
+                    .app_secret("secret")
+                    .base_url("https://test.contact.api.com")
+                    .build(),
+            ),
+            (
+                "full_featured",
+                Config::builder()
+                    .app_id("full")
+                    .app_secret("secret")
+                    .req_timeout(std::time::Duration::from_millis(20000))
+                    .base_url("https://full.test.contact.api.com")
+                    .enable_token_cache(true)
+                    .build(),
+            ),
         ];
 
         let mut services = Vec::new();
@@ -253,7 +271,10 @@ mod tests {
             for (_, service2) in services.iter().skip(i + 1) {
                 let ptr1 = std::ptr::addr_of!(*service1) as *const u8;
                 let ptr2 = std::ptr::addr_of!(*service2) as *const u8;
-                assert_ne!(ptr1, ptr2, "Services with different configs should be independent");
+                assert_ne!(
+                    ptr1, ptr2,
+                    "Services with different configs should be independent"
+                );
             }
         }
     }
@@ -328,7 +349,10 @@ mod tests {
 
             // Each service should be created successfully regardless of extreme config
             let service_ptr = std::ptr::addr_of!(contact_service) as *const u8;
-            assert!(!service_ptr.is_null(), "Service should be created with extreme config");
+            assert!(
+                !service_ptr.is_null(),
+                "Service should be created with extreme config"
+            );
         }
     }
 
@@ -341,13 +365,19 @@ mod tests {
         let service_ptr1 = std::ptr::addr_of!(contact_service) as *const u8;
         let service_ptr2 = std::ptr::addr_of!(contact_service) as *const u8;
 
-        assert_eq!(service_ptr1, service_ptr2, "Service memory address should be consistent");
+        assert_eq!(
+            service_ptr1, service_ptr2,
+            "Service memory address should be consistent"
+        );
 
         // Test API version consistency
         let v3_ptr1 = std::ptr::addr_of!(contact_service.v3) as *const u8;
         let v3_ptr2 = std::ptr::addr_of!(contact_service.v3) as *const u8;
 
-        assert_eq!(v3_ptr1, v3_ptr2, "V3 API memory address should be consistent");
+        assert_eq!(
+            v3_ptr1, v3_ptr2,
+            "V3 API memory address should be consistent"
+        );
     }
 
     #[test]
@@ -378,7 +408,10 @@ mod tests {
         let service1_ptr = std::ptr::addr_of!(contact_service1) as *const u8;
         let service2_ptr = std::ptr::addr_of!(contact_service2) as *const u8;
 
-        assert_ne!(service1_ptr, service2_ptr, "Services should be independent instances");
+        assert_ne!(
+            service1_ptr, service2_ptr,
+            "Services should be independent instances"
+        );
 
         // V3 APIs should also be independent
         let v3_ptr1 = std::ptr::addr_of!(contact_service1.v3) as *const u8;
@@ -396,13 +429,13 @@ mod tests {
         assert!(!empty_ptr.is_null(), "Service should handle empty config");
 
         // Test minimal config
-        let minimal_config = Config::builder()
-            .app_id("min")
-            .app_secret("sec")
-            .build();
+        let minimal_config = Config::builder().app_id("min").app_secret("sec").build();
         let contact_service_minimal = ContactService::new(minimal_config);
         let minimal_ptr = std::ptr::addr_of!(contact_service_minimal) as *const u8;
-        assert!(!minimal_ptr.is_null(), "Service should handle minimal config");
+        assert!(
+            !minimal_ptr.is_null(),
+            "Service should handle minimal config"
+        );
 
         // Test Unicode config
         let unicode_config = Config::builder()
@@ -412,7 +445,10 @@ mod tests {
             .build();
         let contact_service_unicode = ContactService::new(unicode_config);
         let unicode_ptr = std::ptr::addr_of!(contact_service_unicode) as *const u8;
-        assert!(!unicode_ptr.is_null(), "Service should handle Unicode config");
+        assert!(
+            !unicode_ptr.is_null(),
+            "Service should handle Unicode config"
+        );
     }
 
     #[test]
@@ -421,7 +457,8 @@ mod tests {
         let contact_service = ContactService::new(config);
 
         // Verify the service contains v3 API
-        let v3_offset = std::ptr::addr_of!(contact_service.v3) as usize - std::ptr::addr_of!(contact_service) as usize;
+        let v3_offset = std::ptr::addr_of!(contact_service.v3) as usize
+            - std::ptr::addr_of!(contact_service) as usize;
 
         // V3 offset should be reasonable (within struct bounds)
         assert!(v3_offset < 4096, "V3 offset should be reasonable");
@@ -438,6 +475,9 @@ mod tests {
 
         let contact_service = ContactService::new(config);
         let service_ptr = std::ptr::addr_of!(contact_service) as *const u8;
-        assert!(!service_ptr.is_null(), "Service should handle long credentials");
+        assert!(
+            !service_ptr.is_null(),
+            "Service should handle long credentials"
+        );
     }
 }

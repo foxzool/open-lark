@@ -393,6 +393,7 @@ pub struct EhrResponse<T> {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -660,7 +661,6 @@ mod tests {
         };
 
         let response = EhrResponse {
-            success: Some(true),
             data: Some(vec![
                 create_minimal_employee("emp001", "员工一", "emp1@company.com"),
                 create_minimal_employee("emp002", "员工二", "emp2@company.com"),
@@ -678,13 +678,11 @@ mod tests {
     #[test]
     fn test_ehr_response_error() {
         let response: EhrResponse<Employee> = EhrResponse {
-            success: Some(false),
             data: None,
             code: Some(400),
             msg: Some("Invalid request".to_string()),
         };
         let json = serde_json::to_string(&response).unwrap();
-        assert!(json.contains("false"));
         assert!(json.contains("400"));
         assert!(json.contains("Invalid request"));
         assert!(!json.contains("data"));

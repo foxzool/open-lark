@@ -459,6 +459,7 @@ pub struct WorkCity {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -870,12 +871,10 @@ mod tests {
                     value: Some("Senior".to_string()),
                 },
             ]),
-            description: Some(vec![
-                I18nContent {
-                    locale: Some("zh_cn".to_string()),
-                    value: Some("高级职级".to_string()),
-                },
-            ]),
+            description: Some(vec![I18nContent {
+                locale: Some("zh_cn".to_string()),
+                value: Some("高级职级".to_string()),
+            }]),
             status: Some(true),
             rank: Some(5),
         };
@@ -900,12 +899,10 @@ mod tests {
                     value: Some("Technology Track".to_string()),
                 },
             ]),
-            description: Some(vec![
-                I18nContent {
-                    locale: Some("zh_cn".to_string()),
-                    value: Some("技术发展序列".to_string()),
-                },
-            ]),
+            description: Some(vec![I18nContent {
+                locale: Some("zh_cn".to_string()),
+                value: Some("技术发展序列".to_string()),
+            }]),
             status: Some(true),
         };
         let serialized = serde_json::to_string(&job_family).unwrap();

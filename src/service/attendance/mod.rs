@@ -147,6 +147,7 @@ impl AttendanceService {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use crate::core::config::Config;
@@ -161,7 +162,7 @@ mod tests {
     #[test]
     fn test_attendance_service_creation() {
         let config = create_test_config();
-        let attendance_service = AttendanceService::new(config);
+        let _attendance_service = AttendanceService::new(config);
 
         // Verify service structure
     }
@@ -169,7 +170,7 @@ mod tests {
     #[test]
     fn test_attendance_service_debug_trait() {
         let config = create_test_config();
-        let attendance_service = AttendanceService::new(config);
+        let _attendance_service = AttendanceService::new(config);
 
         // Test that service can be used
     }
@@ -183,7 +184,7 @@ mod tests {
             .base_url("https://attendance.api.com")
             .build();
 
-        let attendance_service = AttendanceService::new(config);
+        let _attendance_service = AttendanceService::new(config);
 
         // Verify service creation with custom config
     }
@@ -215,8 +216,7 @@ mod tests {
 
         // All services should be created successfully
         assert_eq!(services.len(), 3);
-        for service in &services {
-        }
+        for _service in &services {}
 
         // Services should be independent
         for (i, service1) in services.iter().enumerate() {
@@ -260,7 +260,7 @@ mod tests {
             }
 
             let config = builder.build();
-            let attendance_service = AttendanceService::new(config);
+            let _attendance_service = AttendanceService::new(config);
 
             // Each configuration should work
         }

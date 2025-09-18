@@ -1,4 +1,5 @@
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod talent_tests {
     use crate::core::validation::ValidateBuilder;
     use crate::service::hire::candidate_management::talent::{

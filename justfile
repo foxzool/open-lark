@@ -49,15 +49,7 @@ coverage-check:
   @echo "📊 Running coverage with threshold check..."
   just coverage
   @echo "🔍 Checking coverage threshold..."
-  @COVERAGE=$$(cargo llvm-cov report --summary-only | grep -oP 'Total.*?(\d+\.\d+)%' | grep -oP '\d+\.\d+' || echo "0.0"); \
-  MIN_COVERAGE=65.0; \
-  echo "Total coverage: $${COVERAGE}%"; \
-  if (( $$(echo "$${COVERAGE} < $${MIN_COVERAGE}" | bc -l 2>/dev/null || echo "1") )); then \
-    echo "❌ Coverage $${COVERAGE}% is below minimum threshold $${MIN_COVERAGE}%"; \
-    exit 1; \
-  else \
-    echo "✅ Coverage $${COVERAGE}% meets minimum threshold $${MIN_COVERAGE}%"; \
-  fi
+  @python3 scripts/check_coverage.py
 
 # Run security audit
 audit:

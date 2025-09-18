@@ -165,6 +165,7 @@ pub async fn batch_get_record(
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 

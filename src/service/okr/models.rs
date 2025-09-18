@@ -267,36 +267,76 @@ pub struct Review {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_period_status_enum() {
-        assert_eq!(serde_json::to_string(&PeriodStatus::Draft).unwrap(), "\"draft\"");
-        assert_eq!(serde_json::to_string(&PeriodStatus::Active).unwrap(), "\"active\"");
-        assert_eq!(serde_json::to_string(&PeriodStatus::Ended).unwrap(), "\"ended\"");
-        assert_eq!(serde_json::to_string(&PeriodStatus::Paused).unwrap(), "\"paused\"");
+        assert_eq!(
+            serde_json::to_string(&PeriodStatus::Draft).unwrap(),
+            "\"draft\""
+        );
+        assert_eq!(
+            serde_json::to_string(&PeriodStatus::Active).unwrap(),
+            "\"active\""
+        );
+        assert_eq!(
+            serde_json::to_string(&PeriodStatus::Ended).unwrap(),
+            "\"ended\""
+        );
+        assert_eq!(
+            serde_json::to_string(&PeriodStatus::Paused).unwrap(),
+            "\"paused\""
+        );
     }
 
     #[test]
     fn test_okr_status_enum() {
-        assert_eq!(serde_json::to_string(&OkrStatus::Normal).unwrap(), "\"normal\"");
-        assert_eq!(serde_json::to_string(&OkrStatus::Deleted).unwrap(), "\"deleted\"");
-        assert_eq!(serde_json::to_string(&OkrStatus::Draft).unwrap(), "\"draft\"");
+        assert_eq!(
+            serde_json::to_string(&OkrStatus::Normal).unwrap(),
+            "\"normal\""
+        );
+        assert_eq!(
+            serde_json::to_string(&OkrStatus::Deleted).unwrap(),
+            "\"deleted\""
+        );
+        assert_eq!(
+            serde_json::to_string(&OkrStatus::Draft).unwrap(),
+            "\"draft\""
+        );
     }
 
     #[test]
     fn test_progress_record_type_enum() {
-        assert_eq!(serde_json::to_string(&ProgressRecordType::Simple).unwrap(), "\"simple\"");
-        assert_eq!(serde_json::to_string(&ProgressRecordType::Detail).unwrap(), "\"detail\"");
-        assert_eq!(serde_json::to_string(&ProgressRecordType::Image).unwrap(), "\"image\"");
+        assert_eq!(
+            serde_json::to_string(&ProgressRecordType::Simple).unwrap(),
+            "\"simple\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ProgressRecordType::Detail).unwrap(),
+            "\"detail\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ProgressRecordType::Image).unwrap(),
+            "\"image\""
+        );
     }
 
     #[test]
     fn test_key_result_type_enum() {
-        assert_eq!(serde_json::to_string(&KeyResultType::Numeric).unwrap(), "\"numeric\"");
-        assert_eq!(serde_json::to_string(&KeyResultType::Percentage).unwrap(), "\"percentage\"");
-        assert_eq!(serde_json::to_string(&KeyResultType::Milestone).unwrap(), "\"milestone\"");
+        assert_eq!(
+            serde_json::to_string(&KeyResultType::Numeric).unwrap(),
+            "\"numeric\""
+        );
+        assert_eq!(
+            serde_json::to_string(&KeyResultType::Percentage).unwrap(),
+            "\"percentage\""
+        );
+        assert_eq!(
+            serde_json::to_string(&KeyResultType::Milestone).unwrap(),
+            "\"milestone\""
+        );
     }
 
     #[test]
@@ -625,7 +665,9 @@ mod tests {
             review_id: "review123".to_string(),
             okr_id: "okr789".to_string(),
             period_id: "period789".to_string(),
-            content: Some("本季度目标基本达成，团队协作有所提升，下季度需要重点关注效率优化".to_string()),
+            content: Some(
+                "本季度目标基本达成，团队协作有所提升，下季度需要重点关注效率优化".to_string(),
+            ),
             score: Some(8.5),
             reviewer: Some(reviewer),
             create_time: Some(1711900800000),

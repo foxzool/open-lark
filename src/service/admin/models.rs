@@ -403,6 +403,7 @@ pub struct BadgeGrant {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -511,8 +512,14 @@ mod tests {
     #[test]
     fn test_data_report_serialization() {
         let mut additional_metrics = HashMap::new();
-        additional_metrics.insert("custom_metric_1".to_string(), serde_json::Value::Number(serde_json::Number::from(42)));
-        additional_metrics.insert("custom_metric_2".to_string(), serde_json::Value::String("test_value".to_string()));
+        additional_metrics.insert(
+            "custom_metric_1".to_string(),
+            serde_json::Value::Number(serde_json::Number::from(42)),
+        );
+        additional_metrics.insert(
+            "custom_metric_2".to_string(),
+            serde_json::Value::String("test_value".to_string()),
+        );
 
         let report = DataReport {
             date: Some("2022-01-15".to_string()),
@@ -545,7 +552,10 @@ mod tests {
 
         let mut i18n_description = HashMap::new();
         i18n_description.insert("zh_cn".to_string(), "表彰优秀表现的员工".to_string());
-        i18n_description.insert("en_us".to_string(), "Recognizing excellent performance".to_string());
+        i18n_description.insert(
+            "en_us".to_string(),
+            "Recognizing excellent performance".to_string(),
+        );
 
         let request = BadgeCreateRequest {
             name: "优秀员工徽章".to_string(),
@@ -728,14 +738,12 @@ mod tests {
             badge_id: Some("badge_002".to_string()),
             name: Some("Q2卓越团队".to_string()),
             description: Some("第二季度卓越团队表彰".to_string()),
-            user_list: Some(vec![
-                BadgeGrantUser {
-                    user_id: "team_lead".to_string(),
-                    user_id_type: Some("employee_id".to_string()),
-                    reason: Some("团队管理优秀".to_string()),
-                    grant_time: Some("2022-07-01T09:00:00Z".to_string()),
-                },
-            ]),
+            user_list: Some(vec![BadgeGrantUser {
+                user_id: "team_lead".to_string(),
+                user_id_type: Some("employee_id".to_string()),
+                reason: Some("团队管理优秀".to_string()),
+                grant_time: Some("2022-07-01T09:00:00Z".to_string()),
+            }]),
             effective_time: Some("2022-07-01T00:00:00Z".to_string()),
             expiry_time: Some("2022-10-01T00:00:00Z".to_string()),
             time_zone: Some("UTC".to_string()),
@@ -783,14 +791,26 @@ mod tests {
     #[test]
     fn test_complex_data_report_with_additional_metrics() {
         let mut complex_metrics = HashMap::new();
-        complex_metrics.insert("video_calls".to_string(), serde_json::Value::Number(serde_json::Number::from(45)));
-        complex_metrics.insert("approval_rate".to_string(), serde_json::Value::Number(serde_json::Number::from_f64(95.5).unwrap()));
-        complex_metrics.insert("top_feature".to_string(), serde_json::Value::String("collaboration".to_string()));
-        complex_metrics.insert("enabled_features".to_string(), serde_json::Value::Array(vec![
-            serde_json::Value::String("chat".to_string()),
-            serde_json::Value::String("docs".to_string()),
-            serde_json::Value::String("calendar".to_string()),
-        ]));
+        complex_metrics.insert(
+            "video_calls".to_string(),
+            serde_json::Value::Number(serde_json::Number::from(45)),
+        );
+        complex_metrics.insert(
+            "approval_rate".to_string(),
+            serde_json::Value::Number(serde_json::Number::from_f64(95.5).unwrap()),
+        );
+        complex_metrics.insert(
+            "top_feature".to_string(),
+            serde_json::Value::String("collaboration".to_string()),
+        );
+        complex_metrics.insert(
+            "enabled_features".to_string(),
+            serde_json::Value::Array(vec![
+                serde_json::Value::String("chat".to_string()),
+                serde_json::Value::String("docs".to_string()),
+                serde_json::Value::String("calendar".to_string()),
+            ]),
+        );
 
         let report = DataReport {
             date: Some("2022-12-31".to_string()),
@@ -812,7 +832,9 @@ mod tests {
         assert_eq!(report.meeting_duration, deserialized.meeting_duration);
 
         // Verify additional metrics are properly deserialized
-        if let (Some(orig_metrics), Some(deser_metrics)) = (&report.additional_metrics, &deserialized.additional_metrics) {
+        if let (Some(orig_metrics), Some(deser_metrics)) =
+            (&report.additional_metrics, &deserialized.additional_metrics)
+        {
             assert_eq!(orig_metrics.len(), deser_metrics.len());
             assert!(deser_metrics.contains_key("video_calls"));
             assert!(deser_metrics.contains_key("approval_rate"));

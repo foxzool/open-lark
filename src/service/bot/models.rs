@@ -97,6 +97,7 @@ pub struct MenuEventDetail {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -217,7 +218,8 @@ mod tests {
         let serialized = serde_json::to_string(&operator).unwrap();
         let deserialized: EventOperator = serde_json::from_str(&serialized).unwrap();
         assert_eq!(operator.operator_type, deserialized.operator_type);
-        if let (Some(orig_id), Some(deser_id)) = (&operator.operator_id, &deserialized.operator_id) {
+        if let (Some(orig_id), Some(deser_id)) = (&operator.operator_id, &deserialized.operator_id)
+        {
             assert_eq!(orig_id.open_id, deser_id.open_id);
             assert_eq!(orig_id.union_id, deser_id.union_id);
             assert_eq!(orig_id.user_id, deser_id.user_id);

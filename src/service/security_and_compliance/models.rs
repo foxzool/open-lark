@@ -165,6 +165,7 @@ impl ApiResponseTrait for AuditLogGetResponse {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -258,7 +259,11 @@ mod tests {
             end_time: 1641081600000,
             page: Some(2),
             page_size: Some(200),
-            audit_types: Some(vec!["login".to_string(), "file_access".to_string(), "admin_operation".to_string()]),
+            audit_types: Some(vec![
+                "login".to_string(),
+                "file_access".to_string(),
+                "admin_operation".to_string(),
+            ]),
             operator_ids: Some(vec!["user_admin".to_string(), "user_manager".to_string()]),
             object_ids: Some(vec!["file_001".to_string(), "folder_002".to_string()]),
         };
@@ -340,7 +345,9 @@ mod tests {
             operation_detail: "下载敏感文件".to_string(),
             ip: Some("192.168.1.50".to_string()),
             device_info: Some("macOS, Safari 15.1".to_string()),
-            extend_info: Some(serde_json::json!({"file_size": 2048576, "classification": "confidential"})),
+            extend_info: Some(
+                serde_json::json!({"file_size": 2048576, "classification": "confidential"}),
+            ),
         };
 
         let response = AuditLogGetResponse {
@@ -495,7 +502,7 @@ mod tests {
             api: "/open-apis/contact/v3/users/batch_get".to_string(),
             method: "POST".to_string(),
             request_id: "req_batch_abuse_001".to_string(),
-            response_code: 429, // Rate limited
+            response_code: 429,  // Rate limited
             response_time: 5000, // Very slow due to rate limiting
             user_id: Some("ou_suspicious_user".to_string()),
             tenant_key: Some("tenant_target".to_string()),

@@ -200,6 +200,7 @@ pub struct CourseRegistrationEvent {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -230,8 +231,14 @@ mod tests {
         assert_eq!(page_response.items.len(), deserialized.items.len());
         assert_eq!(page_response.page_token, deserialized.page_token);
         assert_eq!(page_response.has_more, deserialized.has_more);
-        assert_eq!(page_response.items[0].course_id, deserialized.items[0].course_id);
-        assert_eq!(page_response.items[0].course_name, deserialized.items[0].course_name);
+        assert_eq!(
+            page_response.items[0].course_id,
+            deserialized.items[0].course_id
+        );
+        assert_eq!(
+            page_response.items[0].course_name,
+            deserialized.items[0].course_name
+        );
     }
 
     #[test]
@@ -314,12 +321,16 @@ mod tests {
         assert_eq!(registration.passed, deserialized.passed);
 
         // Check nested structures
-        if let (Some(orig_course), Some(deser_course)) = (&registration.course_info, &deserialized.course_info) {
+        if let (Some(orig_course), Some(deser_course)) =
+            (&registration.course_info, &deserialized.course_info)
+        {
             assert_eq!(orig_course.course_id, deser_course.course_id);
             assert_eq!(orig_course.course_name, deser_course.course_name);
         }
 
-        if let (Some(orig_user), Some(deser_user)) = (&registration.user_info, &deserialized.user_info) {
+        if let (Some(orig_user), Some(deser_user)) =
+            (&registration.user_info, &deserialized.user_info)
+        {
             assert_eq!(orig_user.user_id, deser_user.user_id);
             assert_eq!(orig_user.name, deser_user.name);
             assert_eq!(orig_user.email, deser_user.email);
@@ -536,14 +547,22 @@ mod tests {
         let deserialized: CourseRegistrationEvent = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(event.event_type, deserialized.event_type);
-        assert_eq!(event.registration.registration_id, deserialized.registration.registration_id);
+        assert_eq!(
+            event.registration.registration_id,
+            deserialized.registration.registration_id
+        );
         assert_eq!(event.registration.status, deserialized.registration.status);
-        assert_eq!(event.registration.progress, deserialized.registration.progress);
+        assert_eq!(
+            event.registration.progress,
+            deserialized.registration.progress
+        );
         assert_eq!(event.timestamp, deserialized.timestamp);
         assert_eq!(event.source, deserialized.source);
 
         // Check old_registration
-        if let (Some(orig_old), Some(deser_old)) = (&event.old_registration, &deserialized.old_registration) {
+        if let (Some(orig_old), Some(deser_old)) =
+            (&event.old_registration, &deserialized.old_registration)
+        {
             assert_eq!(orig_old.status, deser_old.status);
             assert_eq!(orig_old.progress, deser_old.progress);
             assert_eq!(orig_old.passed, deser_old.passed);
@@ -584,7 +603,10 @@ mod tests {
 
         let deserialized: CourseRegistrationEvent = serde_json::from_str(&serialized).unwrap();
         assert_eq!(event.event_type, deserialized.event_type);
-        assert_eq!(event.registration.registration_id, deserialized.registration.registration_id);
+        assert_eq!(
+            event.registration.registration_id,
+            deserialized.registration.registration_id
+        );
         assert_eq!(event.timestamp, deserialized.timestamp);
         assert!(deserialized.old_registration.is_none());
         assert!(deserialized.source.is_none());
@@ -674,12 +696,18 @@ mod tests {
         let serialized = serde_json::to_string(&complex_registration).unwrap();
         let deserialized: CourseRegistration = serde_json::from_str(&serialized).unwrap();
 
-        assert_eq!(complex_registration.registration_id, deserialized.registration_id);
+        assert_eq!(
+            complex_registration.registration_id,
+            deserialized.registration_id
+        );
         assert_eq!(complex_registration.progress, deserialized.progress);
         assert_eq!(complex_registration.score, deserialized.score);
 
         // Test learning records array
-        if let (Some(orig_records), Some(deser_records)) = (&complex_registration.learning_records, &deserialized.learning_records) {
+        if let (Some(orig_records), Some(deser_records)) = (
+            &complex_registration.learning_records,
+            &deserialized.learning_records,
+        ) {
             assert_eq!(orig_records.len(), deser_records.len());
             assert_eq!(orig_records.len(), 3);
 
@@ -700,7 +728,9 @@ mod tests {
         }
 
         // Test course info
-        if let (Some(orig_course), Some(deser_course)) = (&complex_registration.course_info, &deserialized.course_info) {
+        if let (Some(orig_course), Some(deser_course)) =
+            (&complex_registration.course_info, &deserialized.course_info)
+        {
             assert_eq!(orig_course.tags, deser_course.tags);
             if let (Some(orig_tags), Some(deser_tags)) = (&orig_course.tags, &deser_course.tags) {
                 assert_eq!(orig_tags.len(), 5);

@@ -415,6 +415,7 @@ pub struct TranslateResult {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 
@@ -781,14 +782,23 @@ mod tests {
         assert_eq!(invoice.seller_tax_id, deserialized.seller_tax_id);
         assert_eq!(invoice.total_amount, deserialized.total_amount);
         assert_eq!(invoice.total_tax, deserialized.total_tax);
-        assert_eq!(invoice.total_amount_with_tax, deserialized.total_amount_with_tax);
+        assert_eq!(
+            invoice.total_amount_with_tax,
+            deserialized.total_amount_with_tax
+        );
     }
 
     #[test]
     fn test_contract_info_serialization() {
         let mut other_fields = serde_json::Map::new();
-        other_fields.insert("备注".to_string(), serde_json::Value::String("重要合同".to_string()));
-        other_fields.insert("版本号".to_string(), serde_json::Value::Number(serde_json::Number::from(2)));
+        other_fields.insert(
+            "备注".to_string(),
+            serde_json::Value::String("重要合同".to_string()),
+        );
+        other_fields.insert(
+            "版本号".to_string(),
+            serde_json::Value::Number(serde_json::Number::from(2)),
+        );
 
         let contract = ContractInfo {
             title: Some("软件开发合同".to_string()),
@@ -833,7 +843,9 @@ mod tests {
         assert_eq!(detection.text, deserialized.text);
         assert_eq!(detection.confidence, deserialized.confidence);
 
-        if let (Some(orig_box), Some(deser_box)) = (&detection.bounding_box, &deserialized.bounding_box) {
+        if let (Some(orig_box), Some(deser_box)) =
+            (&detection.bounding_box, &deserialized.bounding_box)
+        {
             assert_eq!(orig_box.x, deser_box.x);
             assert_eq!(orig_box.y, deser_box.y);
             assert_eq!(orig_box.width, deser_box.width);
@@ -1013,7 +1025,8 @@ mod tests {
         let serialized = serde_json::to_string(&response).unwrap();
         assert!(!serialized.contains("confidence"));
 
-        let deserialized: RecognizeResponse<ResumeInfo> = serde_json::from_str(&serialized).unwrap();
+        let deserialized: RecognizeResponse<ResumeInfo> =
+            serde_json::from_str(&serialized).unwrap();
         assert_eq!(response.confidence, deserialized.confidence);
         assert_eq!(response.data.name, deserialized.data.name);
     }

@@ -134,6 +134,7 @@ pub async fn update_app_role(
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -368,9 +369,7 @@ mod tests {
         assert_eq!(request1.role_id, "");
         assert!(request1.role_name.is_none());
 
-        let request2 = UpdateAppRoleRequest::builder()
-            .role_id("only_role")
-            .build();
+        let request2 = UpdateAppRoleRequest::builder().role_id("only_role").build();
 
         assert_eq!(request2.app_token, "");
         assert_eq!(request2.role_id, "only_role");
@@ -440,13 +439,10 @@ mod tests {
 
     #[test]
     fn test_update_app_role_request_builder_method_returns() {
-        let builder = UpdateAppRoleRequest::builder()
-            .app_token("测试链式");
+        let builder = UpdateAppRoleRequest::builder().app_token("测试链式");
 
         // 确保builder方法返回正确的类型
-        let _chained = builder
-            .role_id("role")
-            .role_name("name");
+        let _chained = builder.role_id("role").role_name("name");
     }
 
     #[test]
