@@ -158,12 +158,12 @@ mod tests {
     #[test]
     fn test_user_info_service_new() {
         let config = Config::default();
-        let _service = UserInfoService::new(config.clone());
+        let service = UserInfoService::new(config.clone());
 
         // Check that the service was created with the provided config
-        assert_eq!(_service.config.base_url, config.base_url);
-        assert_eq!(_service.config.app_id, config.app_id);
-        assert_eq!(_service.config.app_secret, config.app_secret);
+        assert_eq!(service.config.base_url, config.base_url);
+        assert_eq!(service.config.app_id, config.app_id);
+        assert_eq!(service.config.app_secret, config.app_secret);
     }
 
     #[test]
@@ -172,9 +172,7 @@ mod tests {
         let format = UserInfo::data_format();
         // We can't compare directly, but we can check that the method exists
         // This tests that the ApiResponseTrait is properly implemented
-        match format {
-            _ => assert!(false, "Expected ResponseFormat::Data"),
-        }
+        assert!(matches!(format, ResponseFormat::Data));
     }
 
     #[test]

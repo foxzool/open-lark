@@ -785,6 +785,398 @@ mod tests {
             ValidationResult::Invalid(_)
         ));
     }
+
+    #[test]
+    fn test_is_chinese_char() {
+        // 测试中文字符
+        assert!(is_chinese_char('中'));
+        assert!(is_chinese_char('文'));
+        assert!(is_chinese_char('字'));
+        assert!(is_chinese_char('符'));
+
+        // 测试CJK符号和标点（注意：这些符号在CJK范围内）
+        // 中文句号在CJK范围内
+        assert!(is_chinese_char('。')); // Unicode U+3002
+
+        // 测试一些不在CJK范围内的全角符号
+        assert!(!is_chinese_char('，')); // Unicode U+FF0C - 在全角符号区，不在CJK范围
+
+        // 测试非中文字符
+        assert!(!is_chinese_char('a'));
+        assert!(!is_chinese_char('1'));
+        assert!(!is_chinese_char('!'));
+        assert!(!is_chinese_char(' '));
+    }
+
+    #[test]
+    fn test_validate_name() {
+        // 测试有效姓名
+        assert!(matches!(
+            validate_name("张三", "姓名"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_name("John Smith", "姓名"),
+            ValidationResult::Valid
+        ));
+
+        // 测试空姓名
+        assert!(matches!(
+            validate_name("", "姓名"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试过短姓名
+        assert!(matches!(
+            validate_name("A", "姓名"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试过长姓名
+        let long_name = "A".repeat(employee_limits::NAME_MAX_LENGTH + 1);
+        assert!(matches!(
+            validate_name(&long_name, "姓名"),
+            ValidationResult::Invalid(_)
+        ));
+    }
+
+    #[test]
+    fn test_validate_email() {
+        // 测试有效邮箱
+        assert!(matches!(
+            validate_email("test@example.com", "邮箱"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_email("user.name+tag@domain.co.uk", "邮箱"),
+            ValidationResult::Valid
+        ));
+
+        // 测试无效邮箱
+        assert!(matches!(
+            validate_email("invalid-email", "邮箱"),
+            ValidationResult::Invalid(_)
+        ));
+
+        assert!(matches!(
+            validate_email("@example.com", "邮箱"),
+            ValidationResult::Invalid(_)
+        ));
+
+        assert!(matches!(
+            validate_email("test@", "邮箱"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试空邮箱
+        assert!(matches!(
+            validate_email("", "邮箱"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试过长邮箱
+        let long_email = format!("{}@example.com", "a".repeat(employee_limits::EMAIL_MAX_LENGTH));
+        assert!(matches!(
+            validate_email(&long_email, "邮箱"),
+            ValidationResult::Invalid(_)
+        ));
+    }
+
+    #[test]
+    fn test_validate_phone() {
+        // 测试有效电话号码
+        assert!(matches!(
+            validate_phone("13812345678", "电话"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_phone("+86-138-1234-5678", "电话"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_phone("021-12345678", "电话"),
+            ValidationResult::Valid
+        ));
+
+        // 测试无效电话号码
+        assert!(matches!(
+            validate_phone("123", "电话"),
+            ValidationResult::Invalid(_)
+        ));
+
+        assert!(matches!(
+            validate_phone("abc123def", "电话"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试空电话号码（电话是可选的，所以空值是有效的）
+        assert!(matches!(
+            validate_phone("", "电话"),
+            ValidationResult::Valid
+        ));
+
+        // 测试过长电话号码
+        let long_phone = "1".repeat(employee_limits::PHONE_MAX_LENGTH + 1);
+        assert!(matches!(
+            validate_phone(&long_phone, "电话"),
+            ValidationResult::Invalid(_)
+        ));
+    }
+
+    #[test]
+    fn test_validate_work_experience() {
+        // 测试有效工作年限
+        assert!(matches!(
+            validate_work_experience(5, "工作年限"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_work_experience(0, "工作年限"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_work_experience(employee_limits::WORK_EXPERIENCE_MAX, "工作年限"),
+            ValidationResult::Valid
+        ));
+
+        // 测试无效工作年限
+        assert!(matches!(
+            validate_work_experience(employee_limits::WORK_EXPERIENCE_MAX + 1, "工作年限"),
+            ValidationResult::Invalid(_)
+        ));
+    }
+
+    #[test]
+    fn test_validate_birthday() {
+        // 测试有效生日
+        assert!(matches!(
+            validate_birthday(&Some("1990-01-01".to_string()), "生日"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_birthday(&Some("2000-12-31".to_string()), "生日"),
+            ValidationResult::Valid
+        ));
+
+        // 测试空生日（可选字段）
+        assert!(matches!(
+            validate_birthday(&None, "生日"),
+            ValidationResult::Valid
+        ));
+
+        // 测试无效生日格式
+        assert!(matches!(
+            validate_birthday(&Some("invalid-date".to_string()), "生日"),
+            ValidationResult::Invalid(_)
+        ));
+
+        assert!(matches!(
+            validate_birthday(&Some("1990/01/01".to_string()), "生日"),
+            ValidationResult::Invalid(_)
+        ));
+
+        assert!(matches!(
+            validate_birthday(&Some("1990-13-01".to_string()), "生日"),
+            ValidationResult::Invalid(_)
+        ));
+    }
+
+    #[test]
+    fn test_validate_expected_salary() {
+        // 测试有效期望薪资
+        assert!(matches!(
+            validate_expected_salary(&Some("10000-15000".to_string()), "期望薪资"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_expected_salary(&Some("面议".to_string()), "期望薪资"),
+            ValidationResult::Valid
+        ));
+
+        // 测试空期望薪资（可选字段）
+        assert!(matches!(
+            validate_expected_salary(&None, "期望薪资"),
+            ValidationResult::Valid
+        ));
+
+        // 测试过长期望薪资
+        let long_salary = "1".repeat(employee_limits::EXPECTED_SALARY_MAX_LENGTH + 1);
+        assert!(matches!(
+            validate_expected_salary(&Some(long_salary), "期望薪资"),
+            ValidationResult::Invalid(_)
+        ));
+    }
+
+    #[test]
+    fn test_validate_tags() {
+        // 测试有效标签
+        let valid_tags = vec!["Java".to_string(), "Python".to_string(), "React".to_string()];
+        assert!(matches!(
+            validate_tags(&valid_tags, "技能标签"),
+            ValidationResult::Valid
+        ));
+
+        // 测试空标签列表
+        assert!(matches!(
+            validate_tags(&[], "技能标签"),
+            ValidationResult::Valid
+        ));
+
+        // 测试过多标签
+        let too_many_tags: Vec<String> = (0..employee_limits::MAX_TALENT_TAGS + 1)
+            .map(|i| format!("tag{}", i))
+            .collect();
+        assert!(matches!(
+            validate_tags(&too_many_tags, "技能标签"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试空标签
+        let tags_with_empty = vec!["Java".to_string(), "".to_string()];
+        assert!(matches!(
+            validate_tags(&tags_with_empty, "技能标签"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试过长标签
+        let long_tag = "a".repeat(employee_limits::TAG_MAX_LENGTH + 1);
+        let tags_with_long = vec![long_tag];
+        assert!(matches!(
+            validate_tags(&tags_with_long, "技能标签"),
+            ValidationResult::Invalid(_)
+        ));
+    }
+
+    #[test]
+    fn test_sanitize_name() {
+        // 测试去除首尾空白
+        assert_eq!(sanitize_name("  张三  "), "张三");
+
+        // 测试去除多余空格
+        assert_eq!(sanitize_name("张  三"), "张 三");
+
+        // 测试正常名称
+        assert_eq!(sanitize_name("John Smith"), "John Smith");
+
+        // 测试空字符串
+        assert_eq!(sanitize_name(""), "");
+    }
+
+    #[test]
+    fn test_sanitize_tags() {
+        let input_tags = vec![
+            "  Java  ".to_string(),
+            "Python".to_string(),
+            "  ".to_string(),
+            "React JS".to_string(),
+        ];
+
+        let sanitized = sanitize_tags(&input_tags);
+        assert_eq!(sanitized, vec!["java", "python", "react js"]);
+    }
+
+    #[test]
+    fn test_sanitize_tag() {
+        // 测试去除空白和转换
+        assert_eq!(sanitize_tag("  Java-Script  "), "java_script");
+        assert_eq!(sanitize_tag("Node.js"), "node.js");
+        assert_eq!(sanitize_tag("C++"), "c++");
+        assert_eq!(sanitize_tag("React_Native"), "react_native");
+    }
+
+    #[test]
+    fn test_validate_page_size() {
+        // 测试有效页面大小
+        assert!(matches!(
+            validate_page_size(10, "页面大小"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_page_size(pagination_limits::MAX_PAGE_SIZE, "页面大小"),
+            ValidationResult::Valid
+        ));
+
+        // 测试无效页面大小
+        assert!(matches!(
+            validate_page_size(0, "页面大小"),
+            ValidationResult::Invalid(_)
+        ));
+
+        assert!(matches!(
+            validate_page_size(pagination_limits::MAX_PAGE_SIZE + 1, "页面大小"),
+            ValidationResult::Invalid(_)
+        ));
+    }
+
+    #[test]
+    fn test_validate_page_token() {
+        // 测试有效页面令牌
+        assert!(matches!(
+            validate_page_token("valid_token_123", "页面令牌"),
+            ValidationResult::Valid
+        ));
+
+        // 测试空页面令牌（空令牌是有效的，表示第一页）
+        assert!(matches!(
+            validate_page_token("", "页面令牌"),
+            ValidationResult::Valid
+        ));
+
+        // 测试过长页面令牌
+        let long_token = "a".repeat(pagination_limits::MAX_PAGE_TOKEN_LENGTH + 1);
+        assert!(matches!(
+            validate_page_token(&long_token, "页面令牌"),
+            ValidationResult::Invalid(_)
+        ));
+    }
+
+    #[test]
+    fn test_validate_pagination_params() {
+        // 测试有效分页参数
+        assert!(matches!(
+            validate_pagination_params(Some(10), Some("token123"), "test"),
+            ValidationResult::Valid
+        ));
+
+        // 测试只有页面大小
+        assert!(matches!(
+            validate_pagination_params(Some(10), None, "test"),
+            ValidationResult::Valid
+        ));
+
+        // 测试只有页面令牌（会产生警告但仍然有效）
+        assert!(matches!(
+            validate_pagination_params(None, Some("token123"), "test"),
+            ValidationResult::Valid
+        ));
+
+        // 测试都为空
+        assert!(matches!(
+            validate_pagination_params(None, None, "test"),
+            ValidationResult::Valid
+        ));
+
+        // 测试无效页面大小
+        assert!(matches!(
+            validate_pagination_params(Some(0), Some("token123"), "test"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试空页面令牌（空令牌是有效的）
+        assert!(matches!(
+            validate_pagination_params(Some(10), Some(""), "test"),
+            ValidationResult::Valid
+        ));
+    }
 }
 
 // ============================================================================
