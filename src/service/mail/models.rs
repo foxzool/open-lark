@@ -192,6 +192,15 @@ pub struct RuleAction {
     /// 动作类型
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_type: Option<String>,
+    /// 目标文件夹ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_folder_id: Option<String>,
+    /// 标记为已读
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mark_as_read: Option<bool>,
+    /// 转发到
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub forward_to: Option<String>,
     /// 参数
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<serde_json::Value>,
@@ -435,7 +444,46 @@ pub struct SubscriptionStatus {
     pub subscribe_time: Option<i64>,
 }
 
+/// 邮箱订阅信息
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MailboxSubscription {
+    /// 订阅ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subscription_id: Option<String>,
+    /// 邮箱ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mailbox_id: Option<String>,
+    /// 用户ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    /// Webhook URL
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub webhook_url: Option<String>,
+    /// 事件类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_types: Option<Vec<String>>,
+    /// 订阅类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subscription_type: Option<String>,
+    /// 订阅状态
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// 是否已订阅
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_subscribed: Option<bool>,
+    /// 订阅时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subscribe_time: Option<i64>,
+    /// 订阅时间字符串
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subscription_time: Option<String>,
+    /// 更新时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_time: Option<String>,
+}
+
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -517,16 +565,16 @@ mod tests {
     #[test]
     fn test_mail_body_types() {
         let html_body = MailBody {
-            body_type: Some("html".to_string()),
-            content: Some("<p>HTML content</p>".to_string()),
+            text: None,
+            html: Some("<p>HTML content</p>".to_string()),
         };
         let json = serde_json::to_string(&html_body).unwrap();
         assert!(json.contains("html"));
         assert!(json.contains("<p>HTML content</p>"));
 
         let text_body = MailBody {
-            body_type: Some("text".to_string()),
-            content: Some("Plain text content".to_string()),
+            text: Some("Plain text content".to_string()),
+            html: None,
         };
         let json = serde_json::to_string(&text_body).unwrap();
         assert!(json.contains("text"));
@@ -535,29 +583,27 @@ mod tests {
 
     #[test]
     fn test_message_status_serialization() {
-        let unread = MessageStatus::Unread;
-        let json = serde_json::to_string(&unread).unwrap();
-        assert_eq!(json, "\"unread\"");
+        let draft = MessageStatus::Draft;
+        let json = serde_json::to_string(&draft).unwrap();
+        assert_eq!(json, "\"draft\"");
 
-        let read = MessageStatus::Read;
-        let json = serde_json::to_string(&read).unwrap();
-        assert_eq!(json, "\"read\"");
+        let sent = MessageStatus::Sent;
+        let json = serde_json::to_string(&sent).unwrap();
+        assert_eq!(json, "\"sent\"");
 
         let deleted = MessageStatus::Deleted;
         let json = serde_json::to_string(&deleted).unwrap();
         assert_eq!(json, "\"deleted\"");
 
-        let flagged = MessageStatus::Flagged;
-        let json = serde_json::to_string(&flagged).unwrap();
-        assert_eq!(json, "\"flagged\"");
+        let received = MessageStatus::Received;
+        let json = serde_json::to_string(&received).unwrap();
+        assert_eq!(json, "\"received\"");
     }
 
     #[test]
     fn test_message_with_recipients() {
         let message = Message {
             message_id: Some("msg123".to_string()),
-            thread_id: Some("thread456".to_string()),
-            folder_id: Some("inbox".to_string()),
             subject: Some("Test Subject".to_string()),
             from: Some(MailAddress {
                 name: Some("Sender Name".to_string()),
@@ -575,15 +621,14 @@ mod tests {
             ]),
             cc: Some(vec![]),
             bcc: None,
-            reply_to: None,
             body: Some(MailBody {
-                body_type: Some("html".to_string()),
-                content: Some("<p>Email body content</p>".to_string()),
+                text: None,
+                html: Some("<p>Email body content</p>".to_string()),
             }),
-            attachments: Some(vec![]),
-            status: Some(MessageStatus::Unread),
             sent_time: Some(1640995200),
-            received_time: Some(1640995260),
+            is_read: Some(false),
+            status: Some(MessageStatus::Draft),
+            attachments: Some(vec![]),
         };
         let json = serde_json::to_string(&message).unwrap();
         assert!(json.contains("msg123"));
@@ -596,11 +641,9 @@ mod tests {
     fn test_attachment_with_size() {
         let attachment = Attachment {
             attachment_id: Some("att789".to_string()),
-            file_name: Some("document.pdf".to_string()),
+            name: Some("document.pdf".to_string()),
             content_type: Some("application/pdf".to_string()),
             size: Some(1024000),
-            content_id: Some("content123".to_string()),
-            is_inline: Some(false),
             download_url: Some("https://example.com/download/att789".to_string()),
         };
         let json = serde_json::to_string(&attachment).unwrap();
@@ -614,17 +657,15 @@ mod tests {
     fn test_attachment_inline() {
         let attachment = Attachment {
             attachment_id: Some("att456".to_string()),
-            file_name: Some("image.png".to_string()),
+            name: Some("image.png".to_string()),
             content_type: Some("image/png".to_string()),
             size: Some(52000),
-            content_id: Some("img001".to_string()),
-            is_inline: Some(true),
             download_url: None,
         };
         let json = serde_json::to_string(&attachment).unwrap();
         assert!(json.contains("att456"));
         assert!(json.contains("image.png"));
-        assert!(json.contains("true"));
+        assert!(json.contains("image/png"));
         assert!(!json.contains("download_url"));
     }
 
@@ -633,30 +674,27 @@ mod tests {
         let rule = Rule {
             rule_id: Some("rule123".to_string()),
             rule_name: Some("Important Emails".to_string()),
-            is_enabled: Some(true),
+            enabled: Some(true),
             conditions: Some(vec![
                 RuleCondition {
-                    field_type: Some("from".to_string()),
+                    field: Some("from".to_string()),
                     operator: Some("contains".to_string()),
                     value: Some("boss@company.com".to_string()),
                 },
                 RuleCondition {
-                    field_type: Some("subject".to_string()),
+                    field: Some("subject".to_string()),
                     operator: Some("contains".to_string()),
                     value: Some("urgent".to_string()),
                 },
             ]),
-            actions: Some(vec![
-                RuleAction {
-                    action_type: Some("move_to_folder".to_string()),
-                    target_folder_id: Some("important".to_string()),
-                    mark_as_read: Some(false),
-                    forward_to: None,
-                },
-            ]),
+            actions: Some(vec![RuleAction {
+                action_type: Some("move_to_folder".to_string()),
+                target_folder_id: Some("important".to_string()),
+                mark_as_read: Some(false),
+                forward_to: None,
+                parameters: None,
+            }]),
             priority: Some(1),
-            created_time: Some(1640995200),
-            updated_time: Some(1640995300),
         };
         let json = serde_json::to_string(&rule).unwrap();
         assert!(json.contains("rule123"));
@@ -672,6 +710,7 @@ mod tests {
             target_folder_id: None,
             mark_as_read: Some(true),
             forward_to: Some("assistant@company.com".to_string()),
+            parameters: None,
         };
         let json = serde_json::to_string(&action).unwrap();
         assert!(json.contains("forward"));
@@ -684,10 +723,18 @@ mod tests {
         let subscription = MailboxSubscription {
             subscription_id: Some("sub789".to_string()),
             mailbox_id: Some("mailbox123".to_string()),
+            user_id: Some("user123".to_string()),
             webhook_url: Some("https://webhook.example.com/mail".to_string()),
-            event_types: Some(vec!["message_received".to_string(), "message_sent".to_string()]),
+            event_types: Some(vec![
+                "message_received".to_string(),
+                "message_sent".to_string(),
+            ]),
+            subscription_type: Some("webhook".to_string()),
+            status: Some("active".to_string()),
             is_subscribed: Some(true),
             subscribe_time: Some(1640995200),
+            subscription_time: Some("2024-01-01T10:00:00Z".to_string()),
+            update_time: Some("2024-01-01T10:00:00Z".to_string()),
         };
         let json = serde_json::to_string(&subscription).unwrap();
         assert!(json.contains("sub789"));
@@ -701,10 +748,15 @@ mod tests {
         let subscription = MailboxSubscription {
             subscription_id: Some("sub456".to_string()),
             mailbox_id: Some("mailbox456".to_string()),
+            user_id: None,
             webhook_url: None,
             event_types: None,
+            subscription_type: Some("inactive".to_string()),
+            status: Some("inactive".to_string()),
             is_subscribed: Some(false),
             subscribe_time: None,
+            subscription_time: None,
+            update_time: None,
         };
         let json = serde_json::to_string(&subscription).unwrap();
         assert!(json.contains("sub456"));

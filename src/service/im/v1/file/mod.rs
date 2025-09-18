@@ -303,6 +303,7 @@ impl ExecutableBuilder<FileService, String, GetFileResponse> for FileDownloadBui
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use crate::core::config::Config;
@@ -337,7 +338,10 @@ mod tests {
         assert_eq!(service.config.app_id, "file_app");
         assert_eq!(service.config.app_secret, "file_secret");
         assert_eq!(service.config.base_url, "https://file.api.com");
-        assert_eq!(service.config.req_timeout, Some(std::time::Duration::from_millis(15000)));
+        assert_eq!(
+            service.config.req_timeout,
+            Some(std::time::Duration::from_millis(15000))
+        );
     }
 
     #[test]
@@ -367,8 +371,14 @@ mod tests {
         let service_ptr = std::ptr::addr_of!(service) as *const u8;
         let config_ptr = std::ptr::addr_of!(service.config) as *const u8;
 
-        assert!(!service_ptr.is_null(), "Service should have valid memory address");
-        assert!(!config_ptr.is_null(), "Config should have valid memory address");
+        assert!(
+            !service_ptr.is_null(),
+            "Service should have valid memory address"
+        );
+        assert!(
+            !config_ptr.is_null(),
+            "Config should have valid memory address"
+        );
     }
 
     #[test]
@@ -464,7 +474,10 @@ mod tests {
             .build();
         let service = FileService::new(config);
 
-        assert_eq!(service.config.req_timeout, Some(std::time::Duration::from_secs(7200)));
+        assert_eq!(
+            service.config.req_timeout,
+            Some(std::time::Duration::from_secs(7200))
+        );
     }
 
     #[test]
@@ -476,8 +489,10 @@ mod tests {
         let download_builder = service.download_builder();
 
         // Builders should be created successfully
-        assert!(std::ptr::addr_of!(upload_builder) as *const u8 != std::ptr::null());
-        assert!(std::ptr::addr_of!(download_builder) as *const u8 != std::ptr::null());
+        let upload_ptr = std::ptr::addr_of!(upload_builder) as *const u8;
+        let download_ptr = std::ptr::addr_of!(download_builder) as *const u8;
+        assert!(!upload_ptr.is_null());
+        assert!(!download_ptr.is_null());
     }
 
     #[test]
@@ -508,8 +523,7 @@ mod tests {
 
     #[test]
     fn test_file_download_builder_basic() {
-        let builder = FileDownloadBuilder::new()
-            .file_key("test_key_123");
+        let builder = FileDownloadBuilder::new().file_key("test_key_123");
 
         let file_key = builder.build();
         assert_eq!(file_key, "test_key_123");

@@ -64,6 +64,7 @@ pub struct TenantProductAssignInfo {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -146,7 +147,8 @@ mod tests {
         assert_eq!(tenant.display_name, deserialized.display_name);
         assert_eq!(tenant.tenant_key, deserialized.tenant_key);
 
-        if let (Some(original), Some(deserialized_avatar)) = (&tenant.avatar, &deserialized.avatar) {
+        if let (Some(original), Some(deserialized_avatar)) = (&tenant.avatar, &deserialized.avatar)
+        {
             assert_eq!(original, deserialized_avatar);
         }
     }
@@ -190,7 +192,8 @@ mod tests {
         assert_eq!(tenant.display_name, deserialized.display_name);
         assert_eq!(tenant.tenant_key, deserialized.tenant_key);
 
-        if let (Some(original), Some(deserialized_avatar)) = (&tenant.avatar, &deserialized.avatar) {
+        if let (Some(original), Some(deserialized_avatar)) = (&tenant.avatar, &deserialized.avatar)
+        {
             assert_eq!(original, deserialized_avatar);
         }
     }
@@ -212,7 +215,10 @@ mod tests {
 
         assert_eq!(info.total_seat_count, deserialized.total_seat_count);
         assert_eq!(info.assigned_seat_count, deserialized.assigned_seat_count);
-        assert_eq!(info.max_assigned_seat_count, deserialized.max_assigned_seat_count);
+        assert_eq!(
+            info.max_assigned_seat_count,
+            deserialized.max_assigned_seat_count
+        );
         assert_eq!(info.purchase_time, deserialized.purchase_time);
         assert_eq!(info.expire_time, deserialized.expire_time);
         assert_eq!(info.product_name, deserialized.product_name);
@@ -236,7 +242,10 @@ mod tests {
 
         assert_eq!(info.total_seat_count, deserialized.total_seat_count);
         assert_eq!(info.assigned_seat_count, deserialized.assigned_seat_count);
-        assert_eq!(info.max_assigned_seat_count, deserialized.max_assigned_seat_count);
+        assert_eq!(
+            info.max_assigned_seat_count,
+            deserialized.max_assigned_seat_count
+        );
         assert_eq!(info.purchase_time, deserialized.purchase_time);
         assert_eq!(info.expire_time, deserialized.expire_time);
         assert_eq!(info.product_name, deserialized.product_name);
@@ -300,7 +309,10 @@ mod tests {
 
         assert_eq!(info.total_seat_count, deserialized.total_seat_count);
         assert_eq!(info.assigned_seat_count, deserialized.assigned_seat_count);
-        assert_eq!(info.max_assigned_seat_count, deserialized.max_assigned_seat_count);
+        assert_eq!(
+            info.max_assigned_seat_count,
+            deserialized.max_assigned_seat_count
+        );
         assert_eq!(info.purchase_time, deserialized.purchase_time);
         assert_eq!(info.expire_time, deserialized.expire_time);
         assert_eq!(info.product_name, deserialized.product_name);
@@ -389,7 +401,9 @@ mod tests {
                 avatar_72: Some("https://cdn.example.com/avatars/tenant_72x72.jpg".to_string()),
                 avatar_240: Some("https://cdn.example.com/avatars/tenant_240x240.jpg".to_string()),
                 avatar_640: None,
-                avatar_origin: Some("https://cdn.example.com/avatars/tenant_original.jpg".to_string()),
+                avatar_origin: Some(
+                    "https://cdn.example.com/avatars/tenant_original.jpg".to_string(),
+                ),
             }),
             tenant_key: Some("complex_corp_2023".to_string()),
         };
@@ -405,11 +419,16 @@ mod tests {
         assert!(tenant.avatar.is_some());
         assert!(deserialized.avatar.is_some());
 
-        if let (Some(original_avatar), Some(deserialized_avatar)) = (&tenant.avatar, &deserialized.avatar) {
+        if let (Some(original_avatar), Some(deserialized_avatar)) =
+            (&tenant.avatar, &deserialized.avatar)
+        {
             assert_eq!(original_avatar.avatar_72, deserialized_avatar.avatar_72);
             assert_eq!(original_avatar.avatar_240, deserialized_avatar.avatar_240);
             assert_eq!(original_avatar.avatar_640, deserialized_avatar.avatar_640);
-            assert_eq!(original_avatar.avatar_origin, deserialized_avatar.avatar_origin);
+            assert_eq!(
+                original_avatar.avatar_origin,
+                deserialized_avatar.avatar_origin
+            );
         }
     }
 
@@ -460,6 +479,9 @@ mod tests {
         assert_eq!(info.max_assigned_seat_count, Some(900000));
         assert_eq!(deserialized.total_seat_count, info.total_seat_count);
         assert_eq!(deserialized.assigned_seat_count, info.assigned_seat_count);
-        assert_eq!(deserialized.max_assigned_seat_count, info.max_assigned_seat_count);
+        assert_eq!(
+            deserialized.max_assigned_seat_count,
+            info.max_assigned_seat_count
+        );
     }
 }

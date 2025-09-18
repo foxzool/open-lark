@@ -168,6 +168,7 @@ pub async fn patch_form_meta(
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 

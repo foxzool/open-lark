@@ -1879,6 +1879,7 @@ impl PatchLeaveAccrualRecordRequest {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -1938,8 +1939,14 @@ mod tests {
 
         let serialized = serde_json::to_string(&rule).unwrap();
         let deserialized: FlexibleRule = serde_json::from_str(&serialized).unwrap();
-        assert_eq!(rule.flexible_early_minutes, deserialized.flexible_early_minutes);
-        assert_eq!(rule.flexible_late_minutes, deserialized.flexible_late_minutes);
+        assert_eq!(
+            rule.flexible_early_minutes,
+            deserialized.flexible_early_minutes
+        );
+        assert_eq!(
+            rule.flexible_late_minutes,
+            deserialized.flexible_late_minutes
+        );
     }
 
     #[test]
@@ -1973,7 +1980,10 @@ mod tests {
         let serialized = serde_json::to_string(&config).unwrap();
         let deserialized: FacePunchConfig = serde_json::from_str(&serialized).unwrap();
         assert_eq!(config.face_punch, deserialized.face_punch);
-        assert_eq!(config.face_live_need_action, deserialized.face_live_need_action);
+        assert_eq!(
+            config.face_live_need_action,
+            deserialized.face_live_need_action
+        );
         assert_eq!(config.face_downgrade, deserialized.face_downgrade);
     }
 
@@ -2019,7 +2029,8 @@ mod tests {
         };
 
         let serialized = serde_json::to_string(&resp_data).unwrap();
-        let deserialized: BatchCreateUserDailyShiftRespData = serde_json::from_str(&serialized).unwrap();
+        let deserialized: BatchCreateUserDailyShiftRespData =
+            serde_json::from_str(&serialized).unwrap();
         assert_eq!(resp_data.success_count, deserialized.success_count);
         assert_eq!(resp_data.failed_count, deserialized.failed_count);
     }
@@ -2149,8 +2160,14 @@ mod tests {
     #[test]
     fn test_user_stats_data_serialization() {
         let mut datas = std::collections::HashMap::new();
-        datas.insert("attendance_days".to_string(), serde_json::Value::Number(22.into()));
-        datas.insert("late_count".to_string(), serde_json::Value::Number(3.into()));
+        datas.insert(
+            "attendance_days".to_string(),
+            serde_json::Value::Number(22.into()),
+        );
+        datas.insert(
+            "late_count".to_string(),
+            serde_json::Value::Number(3.into()),
+        );
 
         let stats_data = UserStatsData {
             user_id: "user_001".to_string(),
@@ -2444,18 +2461,36 @@ mod tests {
         assert_eq!(EmptyResponse::data_format(), ResponseFormat::Data);
         assert_eq!(QueryShiftRespData::data_format(), ResponseFormat::Data);
         assert_eq!(ShiftListData::data_format(), ResponseFormat::Data);
-        assert_eq!(BatchCreateUserDailyShiftRespData::data_format(), ResponseFormat::Data);
-        assert_eq!(QueryUserDailyShiftRespData::data_format(), ResponseFormat::Data);
-        assert_eq!(BatchCreateTempUserDailyShiftRespData::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            BatchCreateUserDailyShiftRespData::data_format(),
+            ResponseFormat::Data
+        );
+        assert_eq!(
+            QueryUserDailyShiftRespData::data_format(),
+            ResponseFormat::Data
+        );
+        assert_eq!(
+            BatchCreateTempUserDailyShiftRespData::data_format(),
+            ResponseFormat::Data
+        );
         assert_eq!(ListGroupUserRespData::data_format(), ResponseFormat::Data);
         assert_eq!(CreateGroupRespData::data_format(), ResponseFormat::Data);
         assert_eq!(SearchGroupRespData::data_format(), ResponseFormat::Data);
         assert_eq!(ListGroupRespData::data_format(), ResponseFormat::Data);
         assert_eq!(Group::data_format(), ResponseFormat::Data);
-        assert_eq!(ModifyUserSettingRespData::data_format(), ResponseFormat::Data);
-        assert_eq!(QueryUserSettingRespData::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            ModifyUserSettingRespData::data_format(),
+            ResponseFormat::Data
+        );
+        assert_eq!(
+            QueryUserSettingRespData::data_format(),
+            ResponseFormat::Data
+        );
         assert_eq!(UploadUserPhotoRespData::data_format(), ResponseFormat::Data);
-        assert_eq!(DownloadUserPhotoRespData::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            DownloadUserPhotoRespData::data_format(),
+            ResponseFormat::Data
+        );
         assert_eq!(UserSetting::data_format(), ResponseFormat::Data);
     }
 

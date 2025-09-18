@@ -119,6 +119,7 @@ pub struct DataDimension {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use serde_json;
@@ -126,7 +127,11 @@ mod tests {
     #[test]
     fn test_page_response_serialization() {
         let page_response = PageResponse {
-            items: vec!["item1".to_string(), "item2".to_string(), "item3".to_string()],
+            items: vec![
+                "item1".to_string(),
+                "item2".to_string(),
+                "item3".to_string(),
+            ],
             page_token: Some("next_page_token_123".to_string()),
             has_more: Some(true),
         };
@@ -198,7 +203,10 @@ mod tests {
         assert_eq!(page_response.items.len(), deserialized.items.len());
         assert_eq!(page_response.page_token, deserialized.page_token);
         assert_eq!(page_response.has_more, deserialized.has_more);
-        assert_eq!(page_response.items[0].master_data_code, deserialized.items[0].master_data_code);
+        assert_eq!(
+            page_response.items[0].master_data_code,
+            deserialized.items[0].master_data_code
+        );
         assert_eq!(page_response.items[1].name, deserialized.items[1].name);
     }
 
@@ -290,12 +298,21 @@ mod tests {
         assert_eq!(relation.relation_id, deserialized.relation_id);
         assert_eq!(relation.user_id, deserialized.user_id);
         assert_eq!(relation.data_dimension_id, deserialized.data_dimension_id);
-        assert_eq!(relation.data_dimension_name, deserialized.data_dimension_name);
-        assert_eq!(relation.data_dimension_type, deserialized.data_dimension_type);
+        assert_eq!(
+            relation.data_dimension_name,
+            deserialized.data_dimension_name
+        );
+        assert_eq!(
+            relation.data_dimension_type,
+            deserialized.data_dimension_type
+        );
         assert_eq!(relation.bind_type, deserialized.bind_type);
         assert_eq!(relation.permission_level, deserialized.permission_level);
         assert_eq!(relation.status, deserialized.status);
-        assert_eq!(relation.effective_start_time, deserialized.effective_start_time);
+        assert_eq!(
+            relation.effective_start_time,
+            deserialized.effective_start_time
+        );
         assert_eq!(relation.effective_end_time, deserialized.effective_end_time);
         assert_eq!(relation.creator, deserialized.creator);
         assert_eq!(relation.created_at, deserialized.created_at);
@@ -326,12 +343,21 @@ mod tests {
         assert_eq!(relation.relation_id, deserialized.relation_id);
         assert_eq!(relation.user_id, deserialized.user_id);
         assert_eq!(relation.data_dimension_id, deserialized.data_dimension_id);
-        assert_eq!(relation.data_dimension_name, deserialized.data_dimension_name);
-        assert_eq!(relation.data_dimension_type, deserialized.data_dimension_type);
+        assert_eq!(
+            relation.data_dimension_name,
+            deserialized.data_dimension_name
+        );
+        assert_eq!(
+            relation.data_dimension_type,
+            deserialized.data_dimension_type
+        );
         assert_eq!(relation.bind_type, deserialized.bind_type);
         assert_eq!(relation.permission_level, deserialized.permission_level);
         assert_eq!(relation.status, deserialized.status);
-        assert_eq!(relation.effective_start_time, deserialized.effective_start_time);
+        assert_eq!(
+            relation.effective_start_time,
+            deserialized.effective_start_time
+        );
         assert_eq!(relation.effective_end_time, deserialized.effective_end_time);
         assert_eq!(relation.creator, deserialized.creator);
         assert_eq!(relation.created_at, deserialized.created_at);
@@ -343,7 +369,9 @@ mod tests {
         let dimension = DataDimension {
             data_dimension_id: "dim_product_001".to_string(),
             name: "Product Category".to_string(),
-            description: Some("Product categorization dimension for data access control".to_string()),
+            description: Some(
+                "Product categorization dimension for data access control".to_string(),
+            ),
             dimension_type: Some("hierarchical".to_string()),
             category: Some("business".to_string()),
             is_enabled: Some(true),
@@ -548,14 +576,21 @@ mod tests {
         };
 
         let serialized = serde_json::to_string(&page_response).unwrap();
-        let deserialized: PageResponse<UserAuthDataRelation> = serde_json::from_str(&serialized).unwrap();
+        let deserialized: PageResponse<UserAuthDataRelation> =
+            serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(page_response.items.len(), 2);
         assert_eq!(deserialized.items.len(), 2);
-        assert_eq!(page_response.page_token, Some("relations_page_2".to_string()));
+        assert_eq!(
+            page_response.page_token,
+            Some("relations_page_2".to_string())
+        );
         assert_eq!(page_response.has_more, Some(false));
         assert_eq!(deserialized.items[0].user_id, "user_001");
-        assert_eq!(deserialized.items[1].permission_level, Some("read_write".to_string()));
+        assert_eq!(
+            deserialized.items[1].permission_level,
+            Some("read_write".to_string())
+        );
     }
 
     #[test]

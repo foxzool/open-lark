@@ -22,6 +22,7 @@ impl MessageService {
 pub use crate::service::im::v1::message::*;
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use crate::core::config::Config;

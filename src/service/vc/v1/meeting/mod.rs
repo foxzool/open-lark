@@ -304,11 +304,10 @@ impl MeetingService {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use crate::{
-        service::vc::models::{Meeting, MeetingStatus, UserInfo},
-    };
+    use crate::service::vc::models::{Meeting, MeetingStatus, UserInfo};
 
     fn create_test_config() -> Config {
         Config {
@@ -440,9 +439,7 @@ mod tests {
 
     #[test]
     fn test_invite_meeting_response_data_format() {
-        match InviteMeetingResponse::data_format() {
-            _ => assert!(false, "Expected ResponseFormat::Data"),
-        }
+        assert_eq!(InviteMeetingResponse::data_format(), ResponseFormat::Data);
     }
 
     #[test]
@@ -489,9 +486,7 @@ mod tests {
 
     #[test]
     fn test_kickout_meeting_response_data_format() {
-        match KickoutMeetingResponse::data_format() {
-            _ => assert!(false, "Expected ResponseFormat::Data"),
-        }
+        assert_eq!(KickoutMeetingResponse::data_format(), ResponseFormat::Data);
     }
 
     #[test]
@@ -528,9 +523,7 @@ mod tests {
 
     #[test]
     fn test_get_meeting_response_data_format() {
-        match GetMeetingResponse::data_format() {
-            _ => assert!(false, "Expected ResponseFormat::Data"),
-        }
+        assert_eq!(GetMeetingResponse::data_format(), ResponseFormat::Data);
     }
 
     #[test]
@@ -550,15 +543,16 @@ mod tests {
 
         let deserialized: ListMeetingsByNoResponse = serde_json::from_str(&json).unwrap();
         assert_eq!(deserialized.meetings.len(), 1);
-        assert_eq!(deserialized.has_more, true);
+        assert!(deserialized.has_more);
         assert_eq!(deserialized.page_token, Some("next_page_token".to_string()));
     }
 
     #[test]
     fn test_list_meetings_by_no_response_data_format() {
-        match ListMeetingsByNoResponse::data_format() {
-            _ => assert!(false, "Expected ResponseFormat::Data"),
-        }
+        assert_eq!(
+            ListMeetingsByNoResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 
     #[test]
@@ -689,7 +683,7 @@ mod tests {
 
         let deserialized: ListMeetingsByNoResponse = serde_json::from_str(&json).unwrap();
         assert_eq!(deserialized.meetings.len(), 0);
-        assert_eq!(deserialized.has_more, false);
+        assert!(!deserialized.has_more);
         assert!(deserialized.page_token.is_none());
     }
 

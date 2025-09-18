@@ -161,6 +161,7 @@ impl MailService {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use crate::core::config::Config;
@@ -175,7 +176,7 @@ mod tests {
     #[test]
     fn test_mail_service_creation() {
         let config = create_test_config();
-        let mail_service = MailService::new(config);
+        let _mail_service = MailService::new(config);
 
         // Verify service structure
     }
@@ -189,7 +190,7 @@ mod tests {
             .base_url("https://mail.api.com")
             .build();
 
-        let mail_service = MailService::new(config);
+        let _mail_service = MailService::new(config);
 
         // Verify service creation with custom config
     }
@@ -221,7 +222,7 @@ mod tests {
         ];
 
         for config in test_configs {
-            let mail_service = MailService::new(config);
+            let _mail_service = MailService::new(config);
 
             // Each configuration should create a valid service
         }
@@ -269,7 +270,7 @@ mod tests {
     #[test]
     fn test_mail_service_v1_api_structure() {
         let config = create_test_config();
-        let mail_service = MailService::new(config);
+        let _mail_service = MailService::new(config);
 
         // Verify that the v1 API is properly structured
 

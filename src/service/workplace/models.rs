@@ -218,6 +218,7 @@ pub struct AppRecommendRule {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 
@@ -446,14 +447,8 @@ mod tests {
                 "app_002".to_string(),
                 "app_003".to_string(),
             ]),
-            user_ids: Some(vec![
-                "ou_user_001".to_string(),
-                "ou_user_002".to_string(),
-            ]),
-            department_ids: Some(vec![
-                "dept_tech".to_string(),
-                "dept_product".to_string(),
-            ]),
+            user_ids: Some(vec!["ou_user_001".to_string(), "ou_user_002".to_string()]),
+            department_ids: Some(vec!["dept_tech".to_string(), "dept_product".to_string()]),
             priority: Some(10),
             start_time: Some(1704067200000),
             end_time: Some(1735689600000), // 一年后

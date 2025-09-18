@@ -665,9 +665,12 @@ impl ApiResponseTrait for ListUsersResponse {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use crate::{core::config::Config, service::contact::models::User, core::api_resp::ResponseFormat};
+    use crate::{
+        core::api_resp::ResponseFormat, core::config::Config, service::contact::models::User,
+    };
 
     fn create_test_config() -> Config {
         Config {
@@ -1007,11 +1010,26 @@ mod tests {
 
     #[test]
     fn test_api_response_trait_implementations() {
-        assert!(matches!(CreateUserResponse::data_format(), ResponseFormat::Data));
-        assert!(matches!(PatchUserResponse::data_format(), ResponseFormat::Data));
-        assert!(matches!(UpdateUserIdResponse::data_format(), ResponseFormat::Data));
-        assert!(matches!(GetUserResponse::data_format(), ResponseFormat::Data));
-        assert!(matches!(BatchGetUsersResponse::data_format(), ResponseFormat::Data));
+        assert!(matches!(
+            CreateUserResponse::data_format(),
+            ResponseFormat::Data
+        ));
+        assert!(matches!(
+            PatchUserResponse::data_format(),
+            ResponseFormat::Data
+        ));
+        assert!(matches!(
+            UpdateUserIdResponse::data_format(),
+            ResponseFormat::Data
+        ));
+        assert!(matches!(
+            GetUserResponse::data_format(),
+            ResponseFormat::Data
+        ));
+        assert!(matches!(
+            BatchGetUsersResponse::data_format(),
+            ResponseFormat::Data
+        ));
     }
 
     #[test]

@@ -149,6 +149,7 @@ pub async fn batch_create_role_members(
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 

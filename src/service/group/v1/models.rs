@@ -337,20 +337,36 @@ pub struct PageInfo {
 }
 
 #[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_user_id_type_enum() {
-        assert_eq!(serde_json::to_string(&UserIdType::UserId).unwrap(), "\"user_id\"");
-        assert_eq!(serde_json::to_string(&UserIdType::UnionId).unwrap(), "\"union_id\"");
-        assert_eq!(serde_json::to_string(&UserIdType::OpenId).unwrap(), "\"open_id\"");
+        assert_eq!(
+            serde_json::to_string(&UserIdType::UserId).unwrap(),
+            "\"user_id\""
+        );
+        assert_eq!(
+            serde_json::to_string(&UserIdType::UnionId).unwrap(),
+            "\"union_id\""
+        );
+        assert_eq!(
+            serde_json::to_string(&UserIdType::OpenId).unwrap(),
+            "\"open_id\""
+        );
     }
 
     #[test]
     fn test_chat_id_type_enum() {
-        assert_eq!(serde_json::to_string(&ChatIdType::ChatId).unwrap(), "\"chat_id\"");
-        assert_eq!(serde_json::to_string(&ChatIdType::OpenChatId).unwrap(), "\"open_chat_id\"");
+        assert_eq!(
+            serde_json::to_string(&ChatIdType::ChatId).unwrap(),
+            "\"chat_id\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ChatIdType::OpenChatId).unwrap(),
+            "\"open_chat_id\""
+        );
     }
 
     #[test]
@@ -361,38 +377,77 @@ mod tests {
 
     #[test]
     fn test_chat_mode_enum() {
-        assert_eq!(serde_json::to_string(&ChatMode::Group).unwrap(), "\"group\"");
-        assert_eq!(serde_json::to_string(&ChatMode::Topic).unwrap(), "\"topic\"");
+        assert_eq!(
+            serde_json::to_string(&ChatMode::Group).unwrap(),
+            "\"group\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ChatMode::Topic).unwrap(),
+            "\"topic\""
+        );
     }
 
     #[test]
     fn test_member_type_enum() {
-        assert_eq!(serde_json::to_string(&MemberType::User).unwrap(), "\"user\"");
+        assert_eq!(
+            serde_json::to_string(&MemberType::User).unwrap(),
+            "\"user\""
+        );
         assert_eq!(serde_json::to_string(&MemberType::Bot).unwrap(), "\"bot\"");
     }
 
     #[test]
     fn test_member_role_enum() {
-        assert_eq!(serde_json::to_string(&MemberRole::Owner).unwrap(), "\"owner\"");
-        assert_eq!(serde_json::to_string(&MemberRole::Admin).unwrap(), "\"admin\"");
-        assert_eq!(serde_json::to_string(&MemberRole::Member).unwrap(), "\"member\"");
+        assert_eq!(
+            serde_json::to_string(&MemberRole::Owner).unwrap(),
+            "\"owner\""
+        );
+        assert_eq!(
+            serde_json::to_string(&MemberRole::Admin).unwrap(),
+            "\"admin\""
+        );
+        assert_eq!(
+            serde_json::to_string(&MemberRole::Member).unwrap(),
+            "\"member\""
+        );
     }
 
     #[test]
     fn test_chat_tab_type_enum() {
-        assert_eq!(serde_json::to_string(&ChatTabType::Message).unwrap(), "\"message\"");
+        assert_eq!(
+            serde_json::to_string(&ChatTabType::Message).unwrap(),
+            "\"message\""
+        );
         assert_eq!(serde_json::to_string(&ChatTabType::Doc).unwrap(), "\"doc\"");
-        assert_eq!(serde_json::to_string(&ChatTabType::Meeting).unwrap(), "\"meeting\"");
-        assert_eq!(serde_json::to_string(&ChatTabType::File).unwrap(), "\"file\"");
+        assert_eq!(
+            serde_json::to_string(&ChatTabType::Meeting).unwrap(),
+            "\"meeting\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ChatTabType::File).unwrap(),
+            "\"file\""
+        );
         assert_eq!(serde_json::to_string(&ChatTabType::Bot).unwrap(), "\"bot\"");
-        assert_eq!(serde_json::to_string(&ChatTabType::Custom).unwrap(), "\"custom\"");
+        assert_eq!(
+            serde_json::to_string(&ChatTabType::Custom).unwrap(),
+            "\"custom\""
+        );
     }
 
     #[test]
     fn test_chat_menu_type_enum() {
-        assert_eq!(serde_json::to_string(&ChatMenuType::Link).unwrap(), "\"link\"");
-        assert_eq!(serde_json::to_string(&ChatMenuType::Callback).unwrap(), "\"callback\"");
-        assert_eq!(serde_json::to_string(&ChatMenuType::Submenu).unwrap(), "\"submenu\"");
+        assert_eq!(
+            serde_json::to_string(&ChatMenuType::Link).unwrap(),
+            "\"link\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ChatMenuType::Callback).unwrap(),
+            "\"callback\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ChatMenuType::Submenu).unwrap(),
+            "\"submenu\""
+        );
     }
 
     #[test]
