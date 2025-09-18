@@ -250,7 +250,6 @@ impl ReserveService {
 mod tests {
     use super::*;
     use crate::{
-        core::{api_resp::ResponseFormat, config::Config},
         service::vc::models::{Meeting, MeetingStatus, Reserve, UserInfo},
     };
 
@@ -304,11 +303,11 @@ mod tests {
     #[test]
     fn test_reserve_service_new() {
         let config = create_test_config();
-        let _service = ReserveService::new(config.clone());
+        let service = ReserveService::new(config.clone());
 
-        assert_eq!(_service.config.app_id, config.app_id);
-        assert_eq!(_service.config.app_secret, config.app_secret);
-        assert_eq!(_service.config.base_url, config.base_url);
+        assert_eq!(service.config.app_id, config.app_id);
+        assert_eq!(service.config.app_secret, config.app_secret);
+        assert_eq!(service.config.base_url, config.base_url);
     }
 
     #[test]
@@ -545,10 +544,10 @@ mod tests {
     #[test]
     fn test_reserve_service_with_empty_config() {
         let config = Config::default();
-        let _service = ReserveService::new(config);
+        let service = ReserveService::new(config);
 
-        assert_eq!(_service.config.app_id, "");
-        assert_eq!(_service.config.app_secret, "");
+        assert_eq!(service.config.app_id, "");
+        assert_eq!(service.config.app_secret, "");
     }
 
     #[test]
@@ -609,10 +608,10 @@ mod tests {
             base_url: "https://测试域名.com".to_string(),
             ..Default::default()
         };
-        let _service = ReserveService::new(config);
+        let service = ReserveService::new(config);
 
-        assert_eq!(_service.config.app_id, "测试应用");
-        assert_eq!(_service.config.app_secret, "测试密钥");
-        assert_eq!(_service.config.base_url, "https://测试域名.com");
+        assert_eq!(service.config.app_id, "测试应用");
+        assert_eq!(service.config.app_secret, "测试密钥");
+        assert_eq!(service.config.base_url, "https://测试域名.com");
     }
 }

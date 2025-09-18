@@ -177,7 +177,7 @@ mod tests {
     #[test]
     fn test_helpdesk_service_creation() {
         let config = create_test_config();
-        let _service = HelpdeskService::new(config);
+        let service = HelpdeskService::new(config);
 
         // Verify that the v1 service is properly initialized
     }
@@ -190,7 +190,7 @@ mod tests {
             .app_type(AppType::Marketplace)
             .build();
 
-        let _service = HelpdeskService::new(config);
+        let service = HelpdeskService::new(config);
 
         // Verify service creation works with different config types
     }
@@ -198,13 +198,13 @@ mod tests {
     #[test]
     fn test_helpdesk_service_structure() {
         let config = create_test_config();
-        let _service = HelpdeskService::new(config);
+        let service = HelpdeskService::new(config);
 
         // Test that we can access v1 service fields
-        let _agent = &_service.v1.agent;
-        let _ticket = &_service.v1.ticket;
-        let _faq = &_service.v1.faq;
-        let _notification = &_service.v1.notification;
+        let _agent = &service.v1.agent;
+        let _ticket = &service.v1.ticket;
+        let _faq = &service.v1.faq;
+        let _notification = &service.v1.notification;
 
         // If we reach here without panic, structure is correct
     }
@@ -214,11 +214,11 @@ mod tests {
         let config = create_test_config();
 
         // Create service in a scope
-        let _service = HelpdeskService::new(config);
+        let service = HelpdeskService::new(config);
 
         // Access services multiple times
-        let _first_access = &_service.v1.ticket;
-        let _second_access = &_service.v1.ticket;
+        let _first_access = &service.v1.ticket;
+        let _second_access = &service.v1.ticket;
 
         // Verify multiple references work correctly
         assert!(std::ptr::eq(_first_access, _second_access));

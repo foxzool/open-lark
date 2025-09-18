@@ -148,7 +148,7 @@ mod tests {
     #[test]
     fn test_bot_service_creation() {
         let config = create_test_config();
-        let _bot_service = BotService::new(config);
+        let bot_service = BotService::new(config);
 
         // Verify service structure
     }
@@ -162,7 +162,7 @@ mod tests {
             .base_url("https://bot.api.com")
             .build();
 
-        let _bot_service = BotService::new(config);
+        let bot_service = BotService::new(config);
 
         // Verify service creation with custom config
     }
@@ -194,7 +194,7 @@ mod tests {
         ];
 
         for config in test_configs {
-            let _bot_service = BotService::new(config);
+            let bot_service = BotService::new(config);
 
             // Each configuration should create a valid service
         }
@@ -242,7 +242,7 @@ mod tests {
     #[test]
     fn test_bot_service_api_version_structure() {
         let config = create_test_config();
-        let _bot_service = BotService::new(config);
+        let bot_service = BotService::new(config);
 
         // Verify that the v3 API is properly structured
 

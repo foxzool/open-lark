@@ -40,20 +40,20 @@ mod tests {
         let config = create_test_config();
         let service = MessageService::new(config.clone());
 
-        assert_eq!(_service.config.app_id, config.app_id);
-        assert_eq!(_service.config.app_secret, config.app_secret);
-        assert_eq!(_service.config.base_url, config.base_url);
+        assert_eq!(service.config.app_id, config.app_id);
+        assert_eq!(service.config.app_secret, config.app_secret);
+        assert_eq!(service.config.base_url, config.base_url);
     }
 
     #[test]
     fn test_message_service_clone() {
         let config = create_test_config();
         let service = MessageService::new(config);
-        let cloned_service = _service.clone();
+        let cloned_service = service.clone();
 
-        assert_eq!(_service.config.app_id, cloned_service.config.app_id);
-        assert_eq!(_service.config.app_secret, cloned_service.config.app_secret);
-        assert_eq!(_service.config.base_url, cloned_service.config.base_url);
+        assert_eq!(service.config.app_id, cloned_service.config.app_id);
+        assert_eq!(service.config.app_secret, cloned_service.config.app_secret);
+        assert_eq!(service.config.base_url, cloned_service.config.base_url);
     }
 
     #[test]
@@ -92,8 +92,8 @@ mod tests {
         let config = Config::default();
         let service = MessageService::new(config);
 
-        assert_eq!(_service.config.app_id, "");
-        assert_eq!(_service.config.app_secret, "");
+        assert_eq!(service.config.app_id, "");
+        assert_eq!(service.config.app_secret, "");
     }
 
     #[test]
@@ -106,9 +106,9 @@ mod tests {
         };
         let service = MessageService::new(config);
 
-        assert_eq!(_service.config.app_id, "消息应用");
-        assert_eq!(_service.config.app_secret, "消息密钥");
-        assert_eq!(_service.config.base_url, "https://消息域名.com");
+        assert_eq!(service.config.app_id, "消息应用");
+        assert_eq!(service.config.app_secret, "消息密钥");
+        assert_eq!(service.config.base_url, "https://消息域名.com");
     }
 
     #[test]
@@ -127,8 +127,8 @@ mod tests {
         let cloned_config = config.clone();
         let service = MessageService::new(cloned_config);
 
-        assert_eq!(_service.config.app_id, config.app_id);
-        assert_eq!(_service.config.app_secret, config.app_secret);
+        assert_eq!(service.config.app_id, config.app_id);
+        assert_eq!(service.config.app_secret, config.app_secret);
     }
 
     #[test]
@@ -142,9 +142,9 @@ mod tests {
         };
         let service = MessageService::new(config.clone());
 
-        assert_eq!(_service.config.app_id, "timeout_app");
+        assert_eq!(service.config.app_id, "timeout_app");
         assert_eq!(
-            _service.config.req_timeout,
+            service.config.req_timeout,
             Some(std::time::Duration::from_secs(30))
         );
     }
@@ -155,9 +155,9 @@ mod tests {
         let service = MessageService::new(config);
 
         // Test that we can access the config field
-        assert!(!_service.config.app_id.is_empty());
-        assert!(!_service.config.app_secret.is_empty());
-        assert!(!_service.config.base_url.is_empty());
+        assert!(!service.config.app_id.is_empty());
+        assert!(!service.config.app_secret.is_empty());
+        assert!(!service.config.base_url.is_empty());
     }
 
     #[test]
@@ -181,8 +181,8 @@ mod tests {
 
         for config in test_configs {
             let service = MessageService::new(config);
-            assert!(!_service.config.app_id.is_empty());
-            assert!(!_service.config.app_secret.is_empty());
+            assert!(!service.config.app_id.is_empty());
+            assert!(!service.config.app_secret.is_empty());
         }
     }
 }
