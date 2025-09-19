@@ -431,7 +431,7 @@ mod tests {
         };
 
         assert_eq!(response.tags.len(), 2);
-        assert_eq!(response.has_more, true);
+        assert!(response.has_more);
         assert_eq!(response.page_token, Some("next_page_token".to_string()));
         assert_eq!(response.tags[0].tag_id, "list_tag_1");
         assert_eq!(response.tags[1].tag_id, "list_tag_2");
@@ -446,7 +446,7 @@ mod tests {
         };
 
         assert_eq!(response.tags.len(), 0);
-        assert_eq!(response.has_more, false);
+        assert!(!response.has_more);
         assert_eq!(response.page_token, None);
     }
 
@@ -478,7 +478,7 @@ mod tests {
         let deserialized: ListTagResponse = serde_json::from_str(&json).unwrap();
         assert_eq!(deserialized.tags.len(), 1);
         assert_eq!(deserialized.tags[0].tag_id, "serialization_test");
-        assert_eq!(deserialized.has_more, false);
+        assert!(!deserialized.has_more);
     }
 
     #[test]
@@ -517,7 +517,10 @@ mod tests {
         query_params.insert("page_size", "50".to_string());
         query_params.insert("tag_type", "chat".to_string());
 
-        assert_eq!(query_params.get("user_id_type"), Some(&"user_id".to_string()));
+        assert_eq!(
+            query_params.get("user_id_type"),
+            Some(&"user_id".to_string())
+        );
         assert_eq!(query_params.get("page_size"), Some(&"50".to_string()));
         assert_eq!(query_params.get("tag_type"), Some(&"chat".to_string()));
         assert_eq!(query_params.len(), 3);

@@ -288,22 +288,41 @@ mod tests {
 
     #[test]
     fn test_corehr_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "corehr_app_1".to_string();
+        let config1 = Config {
+            app_id: "corehr_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "corehr_app_2".to_string();
+        let config2 = Config {
+            app_id: "corehr_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = CoreHRService::new(config1);
         let service2 = CoreHRService::new(config2);
 
         assert_eq!(service1.basic_info.config.app_id, "corehr_app_1");
         assert_eq!(service2.basic_info.config.app_id, "corehr_app_2");
-        assert_ne!(service1.basic_info.config.app_id, service2.basic_info.config.app_id);
-        assert_ne!(service1.employee.config.app_id, service2.employee.config.app_id);
-        assert_ne!(service1.organization.config.app_id, service2.organization.config.app_id);
-        assert_ne!(service1.job_management.config.app_id, service2.job_management.config.app_id);
-        assert_ne!(service1.lifecycle.config.app_id, service2.lifecycle.config.app_id);
+        assert_ne!(
+            service1.basic_info.config.app_id,
+            service2.basic_info.config.app_id
+        );
+        assert_ne!(
+            service1.employee.config.app_id,
+            service2.employee.config.app_id
+        );
+        assert_ne!(
+            service1.organization.config.app_id,
+            service2.organization.config.app_id
+        );
+        assert_ne!(
+            service1.job_management.config.app_id,
+            service2.job_management.config.app_id
+        );
+        assert_ne!(
+            service1.lifecycle.config.app_id,
+            service2.lifecycle.config.app_id
+        );
     }
 
     #[test]
@@ -345,11 +364,26 @@ mod tests {
 
         let service = CoreHRService::new(config);
 
-        assert_eq!(service.basic_info.config.req_timeout, Some(Duration::from_secs(300)));
-        assert_eq!(service.employee.config.req_timeout, Some(Duration::from_secs(300)));
-        assert_eq!(service.organization.config.req_timeout, Some(Duration::from_secs(300)));
-        assert_eq!(service.job_management.config.req_timeout, Some(Duration::from_secs(300)));
-        assert_eq!(service.lifecycle.config.req_timeout, Some(Duration::from_secs(300)));
+        assert_eq!(
+            service.basic_info.config.req_timeout,
+            Some(Duration::from_secs(300))
+        );
+        assert_eq!(
+            service.employee.config.req_timeout,
+            Some(Duration::from_secs(300))
+        );
+        assert_eq!(
+            service.organization.config.req_timeout,
+            Some(Duration::from_secs(300))
+        );
+        assert_eq!(
+            service.job_management.config.req_timeout,
+            Some(Duration::from_secs(300))
+        );
+        assert_eq!(
+            service.lifecycle.config.req_timeout,
+            Some(Duration::from_secs(300))
+        );
     }
 
     #[test]
@@ -359,12 +393,30 @@ mod tests {
         let service1 = CoreHRService::new(config.clone());
         let service2 = CoreHRService::new(config.clone());
 
-        assert_eq!(service1.basic_info.config.app_id, service2.basic_info.config.app_id);
-        assert_eq!(service1.basic_info.config.app_secret, service2.basic_info.config.app_secret);
-        assert_eq!(service1.employee.config.app_id, service2.employee.config.app_id);
-        assert_eq!(service1.organization.config.app_id, service2.organization.config.app_id);
-        assert_eq!(service1.job_management.config.app_id, service2.job_management.config.app_id);
-        assert_eq!(service1.lifecycle.config.app_id, service2.lifecycle.config.app_id);
+        assert_eq!(
+            service1.basic_info.config.app_id,
+            service2.basic_info.config.app_id
+        );
+        assert_eq!(
+            service1.basic_info.config.app_secret,
+            service2.basic_info.config.app_secret
+        );
+        assert_eq!(
+            service1.employee.config.app_id,
+            service2.employee.config.app_id
+        );
+        assert_eq!(
+            service1.organization.config.app_id,
+            service2.organization.config.app_id
+        );
+        assert_eq!(
+            service1.job_management.config.app_id,
+            service2.job_management.config.app_id
+        );
+        assert_eq!(
+            service1.lifecycle.config.app_id,
+            service2.lifecycle.config.app_id
+        );
     }
 
     #[test]
@@ -380,7 +432,10 @@ mod tests {
 
         assert_eq!(service.basic_info.config.app_id, "consistency_test");
         assert_eq!(service.basic_info.config.app_secret, "consistency_secret");
-        assert_eq!(service.basic_info.config.req_timeout, Some(Duration::from_secs(240)));
+        assert_eq!(
+            service.basic_info.config.req_timeout,
+            Some(Duration::from_secs(240))
+        );
         assert_eq!(service.employee.config.app_id, "consistency_test");
         assert_eq!(service.organization.config.app_id, "consistency_test");
         assert_eq!(service.job_management.config.app_id, "consistency_test");

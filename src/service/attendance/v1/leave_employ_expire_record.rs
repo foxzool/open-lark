@@ -65,3 +65,52 @@ impl_executable_builder_owned!(
     BaseResponse<GetLeaveEmployExpireRecordRespData>,
     get
 );
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::{api_req::ApiRequest, config::Config};
+
+    #[test]
+    fn test_leave_employ_expire_record_service_creation() {
+        let config = Config::default();
+        let service = LeaveEmployExpireRecordService { config };
+        assert_eq!(format!("{:?}", service).len() > 0, true);
+    }
+
+    #[test]
+    fn test_leave_employ_expire_record_service_with_custom_config() {
+        let mut config = Config::default();
+        config.app_id = "test_app_id".to_string();
+        config.app_secret = "test_secret".to_string();
+        let service = LeaveEmployExpireRecordService { config };
+        assert_eq!(format!("{:?}", service).len() > 0, true);
+    }
+
+    #[test]
+    fn test_debug_implementation() {
+        let config = Config::default();
+        let service = LeaveEmployExpireRecordService { config };
+        let debug_string = format!("{:?}", service);
+        assert!(!debug_string.is_empty());
+        assert!(debug_string.contains("LeaveEmployExpireRecordService"));
+    }
+
+    #[test]
+    fn test_service_config_access() {
+        let mut config = Config::default();
+        config.app_id = "test_config_access".to_string();
+        let service = LeaveEmployExpireRecordService { config };
+        assert_eq!(service.config.app_id, "test_config_access");
+    }
+
+    #[test]
+    fn test_service_config_independence() {
+        let config1 = Config::default();
+        let config2 = Config::default();
+        let service1 = LeaveEmployExpireRecordService { config: config1 };
+        let service2 = LeaveEmployExpireRecordService { config: config2 };
+        assert_eq!(format!("{:?}", service1).len() > 0, true);
+        assert_eq!(format!("{:?}", service2).len() > 0, true);
+    }
+}

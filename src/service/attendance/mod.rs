@@ -162,13 +162,25 @@ mod tests {
         assert_eq!(service.v1.user_daily_shift.config.app_id, config.app_id);
         assert_eq!(service.v1.group.config.app_id, config.app_id);
         assert_eq!(service.v1.user_setting.config.app_id, config.app_id);
-        assert_eq!(service.v1.user_stats_data.config.app_secret, config.app_secret);
+        assert_eq!(
+            service.v1.user_stats_data.config.app_secret,
+            config.app_secret
+        );
         assert_eq!(service.v1.user_approval.config.app_id, config.app_id);
         assert_eq!(service.v1.user_task.config.app_id, config.app_id);
-        assert_eq!(service.v1.user_task_remedy.config.app_secret, config.app_secret);
+        assert_eq!(
+            service.v1.user_task_remedy.config.app_secret,
+            config.app_secret
+        );
         assert_eq!(service.v1.archive_rule.config.app_id, config.app_id);
-        assert_eq!(service.v1.leave_employ_expire_record.config.app_id, config.app_id);
-        assert_eq!(service.v1.leave_accrual_record.config.app_secret, config.app_secret);
+        assert_eq!(
+            service.v1.leave_employ_expire_record.config.app_id,
+            config.app_id
+        );
+        assert_eq!(
+            service.v1.leave_accrual_record.config.app_secret,
+            config.app_secret
+        );
     }
 
     #[test]
@@ -184,43 +196,110 @@ mod tests {
 
         assert_eq!(service.v1.shift.config.app_id, "attendance_test_app");
         assert_eq!(service.v1.shift.config.app_secret, "attendance_test_secret");
-        assert_eq!(service.v1.shift.config.req_timeout, Some(Duration::from_secs(350)));
-        assert_eq!(service.v1.user_daily_shift.config.app_id, "attendance_test_app");
-        assert_eq!(service.v1.group.config.req_timeout, Some(Duration::from_secs(350)));
+        assert_eq!(
+            service.v1.shift.config.req_timeout,
+            Some(Duration::from_secs(350))
+        );
+        assert_eq!(
+            service.v1.user_daily_shift.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            service.v1.group.config.req_timeout,
+            Some(Duration::from_secs(350))
+        );
         assert_eq!(service.v1.user_setting.config.app_id, "attendance_test_app");
-        assert_eq!(service.v1.user_stats_data.config.req_timeout, Some(Duration::from_secs(350)));
-        assert_eq!(service.v1.user_approval.config.app_id, "attendance_test_app");
-        assert_eq!(service.v1.user_task.config.req_timeout, Some(Duration::from_secs(350)));
-        assert_eq!(service.v1.user_task_remedy.config.app_id, "attendance_test_app");
-        assert_eq!(service.v1.archive_rule.config.req_timeout, Some(Duration::from_secs(350)));
-        assert_eq!(service.v1.leave_employ_expire_record.config.app_id, "attendance_test_app");
-        assert_eq!(service.v1.leave_accrual_record.config.req_timeout, Some(Duration::from_secs(350)));
+        assert_eq!(
+            service.v1.user_stats_data.config.req_timeout,
+            Some(Duration::from_secs(350))
+        );
+        assert_eq!(
+            service.v1.user_approval.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            service.v1.user_task.config.req_timeout,
+            Some(Duration::from_secs(350))
+        );
+        assert_eq!(
+            service.v1.user_task_remedy.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            service.v1.archive_rule.config.req_timeout,
+            Some(Duration::from_secs(350))
+        );
+        assert_eq!(
+            service.v1.leave_employ_expire_record.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            service.v1.leave_accrual_record.config.req_timeout,
+            Some(Duration::from_secs(350))
+        );
     }
 
     #[test]
     fn test_attendance_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "attendance_app_1".to_string();
+        let config1 = Config {
+            app_id: "attendance_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "attendance_app_2".to_string();
+        let config2 = Config {
+            app_id: "attendance_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = AttendanceService::new(config1);
         let service2 = AttendanceService::new(config2);
 
         assert_eq!(service1.v1.shift.config.app_id, "attendance_app_1");
         assert_eq!(service2.v1.shift.config.app_id, "attendance_app_2");
-        assert_ne!(service1.v1.shift.config.app_id, service2.v1.shift.config.app_id);
-        assert_ne!(service1.v1.user_daily_shift.config.app_id, service2.v1.user_daily_shift.config.app_id);
-        assert_ne!(service1.v1.group.config.app_id, service2.v1.group.config.app_id);
-        assert_ne!(service1.v1.user_setting.config.app_id, service2.v1.user_setting.config.app_id);
-        assert_ne!(service1.v1.user_stats_data.config.app_id, service2.v1.user_stats_data.config.app_id);
-        assert_ne!(service1.v1.user_approval.config.app_id, service2.v1.user_approval.config.app_id);
-        assert_ne!(service1.v1.user_task.config.app_id, service2.v1.user_task.config.app_id);
-        assert_ne!(service1.v1.user_task_remedy.config.app_id, service2.v1.user_task_remedy.config.app_id);
-        assert_ne!(service1.v1.archive_rule.config.app_id, service2.v1.archive_rule.config.app_id);
-        assert_ne!(service1.v1.leave_employ_expire_record.config.app_id, service2.v1.leave_employ_expire_record.config.app_id);
-        assert_ne!(service1.v1.leave_accrual_record.config.app_id, service2.v1.leave_accrual_record.config.app_id);
+        assert_ne!(
+            service1.v1.shift.config.app_id,
+            service2.v1.shift.config.app_id
+        );
+        assert_ne!(
+            service1.v1.user_daily_shift.config.app_id,
+            service2.v1.user_daily_shift.config.app_id
+        );
+        assert_ne!(
+            service1.v1.group.config.app_id,
+            service2.v1.group.config.app_id
+        );
+        assert_ne!(
+            service1.v1.user_setting.config.app_id,
+            service2.v1.user_setting.config.app_id
+        );
+        assert_ne!(
+            service1.v1.user_stats_data.config.app_id,
+            service2.v1.user_stats_data.config.app_id
+        );
+        assert_ne!(
+            service1.v1.user_approval.config.app_id,
+            service2.v1.user_approval.config.app_id
+        );
+        assert_ne!(
+            service1.v1.user_task.config.app_id,
+            service2.v1.user_task.config.app_id
+        );
+        assert_ne!(
+            service1.v1.user_task_remedy.config.app_id,
+            service2.v1.user_task_remedy.config.app_id
+        );
+        assert_ne!(
+            service1.v1.archive_rule.config.app_id,
+            service2.v1.archive_rule.config.app_id
+        );
+        assert_ne!(
+            service1.v1.leave_employ_expire_record.config.app_id,
+            service2.v1.leave_employ_expire_record.config.app_id
+        );
+        assert_ne!(
+            service1.v1.leave_accrual_record.config.app_id,
+            service2.v1.leave_accrual_record.config.app_id
+        );
     }
 
     #[test]
@@ -238,7 +317,10 @@ mod tests {
         assert_eq!(service.v1.user_task.config.app_id, config.app_id);
         assert_eq!(service.v1.user_task_remedy.config.app_id, config.app_id);
         assert_eq!(service.v1.archive_rule.config.app_id, config.app_id);
-        assert_eq!(service.v1.leave_employ_expire_record.config.app_id, config.app_id);
+        assert_eq!(
+            service.v1.leave_employ_expire_record.config.app_id,
+            config.app_id
+        );
         assert_eq!(service.v1.leave_accrual_record.config.app_id, config.app_id);
     }
 
@@ -254,16 +336,34 @@ mod tests {
 
         assert_eq!(service.v1.shift.config.app_id, "clone_test_app");
         assert_eq!(service.v1.shift.config.app_secret, "clone_test_secret");
-        assert_eq!(service.v1.user_daily_shift.config.app_secret, "clone_test_secret");
+        assert_eq!(
+            service.v1.user_daily_shift.config.app_secret,
+            "clone_test_secret"
+        );
         assert_eq!(service.v1.group.config.app_id, "clone_test_app");
-        assert_eq!(service.v1.user_setting.config.app_secret, "clone_test_secret");
+        assert_eq!(
+            service.v1.user_setting.config.app_secret,
+            "clone_test_secret"
+        );
         assert_eq!(service.v1.user_stats_data.config.app_id, "clone_test_app");
-        assert_eq!(service.v1.user_approval.config.app_secret, "clone_test_secret");
+        assert_eq!(
+            service.v1.user_approval.config.app_secret,
+            "clone_test_secret"
+        );
         assert_eq!(service.v1.user_task.config.app_id, "clone_test_app");
-        assert_eq!(service.v1.user_task_remedy.config.app_secret, "clone_test_secret");
+        assert_eq!(
+            service.v1.user_task_remedy.config.app_secret,
+            "clone_test_secret"
+        );
         assert_eq!(service.v1.archive_rule.config.app_id, "clone_test_app");
-        assert_eq!(service.v1.leave_employ_expire_record.config.app_secret, "clone_test_secret");
-        assert_eq!(service.v1.leave_accrual_record.config.app_id, "clone_test_app");
+        assert_eq!(
+            service.v1.leave_employ_expire_record.config.app_secret,
+            "clone_test_secret"
+        );
+        assert_eq!(
+            service.v1.leave_accrual_record.config.app_id,
+            "clone_test_app"
+        );
     }
 
     #[test]
@@ -276,17 +376,50 @@ mod tests {
         let service = AttendanceService::new(config);
 
         // Verify timeout is propagated to all sub-services
-        assert_eq!(service.v1.shift.config.req_timeout, Some(Duration::from_secs(360)));
-        assert_eq!(service.v1.user_daily_shift.config.req_timeout, Some(Duration::from_secs(360)));
-        assert_eq!(service.v1.group.config.req_timeout, Some(Duration::from_secs(360)));
-        assert_eq!(service.v1.user_setting.config.req_timeout, Some(Duration::from_secs(360)));
-        assert_eq!(service.v1.user_stats_data.config.req_timeout, Some(Duration::from_secs(360)));
-        assert_eq!(service.v1.user_approval.config.req_timeout, Some(Duration::from_secs(360)));
-        assert_eq!(service.v1.user_task.config.req_timeout, Some(Duration::from_secs(360)));
-        assert_eq!(service.v1.user_task_remedy.config.req_timeout, Some(Duration::from_secs(360)));
-        assert_eq!(service.v1.archive_rule.config.req_timeout, Some(Duration::from_secs(360)));
-        assert_eq!(service.v1.leave_employ_expire_record.config.req_timeout, Some(Duration::from_secs(360)));
-        assert_eq!(service.v1.leave_accrual_record.config.req_timeout, Some(Duration::from_secs(360)));
+        assert_eq!(
+            service.v1.shift.config.req_timeout,
+            Some(Duration::from_secs(360))
+        );
+        assert_eq!(
+            service.v1.user_daily_shift.config.req_timeout,
+            Some(Duration::from_secs(360))
+        );
+        assert_eq!(
+            service.v1.group.config.req_timeout,
+            Some(Duration::from_secs(360))
+        );
+        assert_eq!(
+            service.v1.user_setting.config.req_timeout,
+            Some(Duration::from_secs(360))
+        );
+        assert_eq!(
+            service.v1.user_stats_data.config.req_timeout,
+            Some(Duration::from_secs(360))
+        );
+        assert_eq!(
+            service.v1.user_approval.config.req_timeout,
+            Some(Duration::from_secs(360))
+        );
+        assert_eq!(
+            service.v1.user_task.config.req_timeout,
+            Some(Duration::from_secs(360))
+        );
+        assert_eq!(
+            service.v1.user_task_remedy.config.req_timeout,
+            Some(Duration::from_secs(360))
+        );
+        assert_eq!(
+            service.v1.archive_rule.config.req_timeout,
+            Some(Duration::from_secs(360))
+        );
+        assert_eq!(
+            service.v1.leave_employ_expire_record.config.req_timeout,
+            Some(Duration::from_secs(360))
+        );
+        assert_eq!(
+            service.v1.leave_accrual_record.config.req_timeout,
+            Some(Duration::from_secs(360))
+        );
     }
 
     #[test]
@@ -297,18 +430,54 @@ mod tests {
         let service2 = AttendanceService::new(config.clone());
 
         // Both services should have the same config values
-        assert_eq!(service1.v1.shift.config.app_id, service2.v1.shift.config.app_id);
-        assert_eq!(service1.v1.shift.config.app_secret, service2.v1.shift.config.app_secret);
-        assert_eq!(service1.v1.user_daily_shift.config.app_id, service2.v1.user_daily_shift.config.app_id);
-        assert_eq!(service1.v1.group.config.app_secret, service2.v1.group.config.app_secret);
-        assert_eq!(service1.v1.user_setting.config.app_id, service2.v1.user_setting.config.app_id);
-        assert_eq!(service1.v1.user_stats_data.config.app_secret, service2.v1.user_stats_data.config.app_secret);
-        assert_eq!(service1.v1.user_approval.config.app_id, service2.v1.user_approval.config.app_id);
-        assert_eq!(service1.v1.user_task.config.app_secret, service2.v1.user_task.config.app_secret);
-        assert_eq!(service1.v1.user_task_remedy.config.app_id, service2.v1.user_task_remedy.config.app_id);
-        assert_eq!(service1.v1.archive_rule.config.app_secret, service2.v1.archive_rule.config.app_secret);
-        assert_eq!(service1.v1.leave_employ_expire_record.config.app_id, service2.v1.leave_employ_expire_record.config.app_id);
-        assert_eq!(service1.v1.leave_accrual_record.config.app_secret, service2.v1.leave_accrual_record.config.app_secret);
+        assert_eq!(
+            service1.v1.shift.config.app_id,
+            service2.v1.shift.config.app_id
+        );
+        assert_eq!(
+            service1.v1.shift.config.app_secret,
+            service2.v1.shift.config.app_secret
+        );
+        assert_eq!(
+            service1.v1.user_daily_shift.config.app_id,
+            service2.v1.user_daily_shift.config.app_id
+        );
+        assert_eq!(
+            service1.v1.group.config.app_secret,
+            service2.v1.group.config.app_secret
+        );
+        assert_eq!(
+            service1.v1.user_setting.config.app_id,
+            service2.v1.user_setting.config.app_id
+        );
+        assert_eq!(
+            service1.v1.user_stats_data.config.app_secret,
+            service2.v1.user_stats_data.config.app_secret
+        );
+        assert_eq!(
+            service1.v1.user_approval.config.app_id,
+            service2.v1.user_approval.config.app_id
+        );
+        assert_eq!(
+            service1.v1.user_task.config.app_secret,
+            service2.v1.user_task.config.app_secret
+        );
+        assert_eq!(
+            service1.v1.user_task_remedy.config.app_id,
+            service2.v1.user_task_remedy.config.app_id
+        );
+        assert_eq!(
+            service1.v1.archive_rule.config.app_secret,
+            service2.v1.archive_rule.config.app_secret
+        );
+        assert_eq!(
+            service1.v1.leave_employ_expire_record.config.app_id,
+            service2.v1.leave_employ_expire_record.config.app_id
+        );
+        assert_eq!(
+            service1.v1.leave_accrual_record.config.app_secret,
+            service2.v1.leave_accrual_record.config.app_secret
+        );
     }
 
     #[test]

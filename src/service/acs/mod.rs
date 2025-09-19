@@ -137,20 +137,33 @@ mod tests {
 
         assert_eq!(service.user.config.app_id, "acs_test_app");
         assert_eq!(service.user.config.app_secret, "acs_test_secret");
-        assert_eq!(service.user.config.req_timeout, Some(Duration::from_secs(200)));
+        assert_eq!(
+            service.user.config.req_timeout,
+            Some(Duration::from_secs(200))
+        );
         assert_eq!(service.rule_external.config.app_id, "acs_test_app");
-        assert_eq!(service.visitor.config.req_timeout, Some(Duration::from_secs(200)));
+        assert_eq!(
+            service.visitor.config.req_timeout,
+            Some(Duration::from_secs(200))
+        );
         assert_eq!(service.device.config.app_id, "acs_test_app");
-        assert_eq!(service.access_record.config.req_timeout, Some(Duration::from_secs(200)));
+        assert_eq!(
+            service.access_record.config.req_timeout,
+            Some(Duration::from_secs(200))
+        );
     }
 
     #[test]
     fn test_acs_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "acs_app_1".to_string();
+        let config1 = Config {
+            app_id: "acs_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "acs_app_2".to_string();
+        let config2 = Config {
+            app_id: "acs_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = AcsService::new(config1);
         let service2 = AcsService::new(config2);
@@ -158,10 +171,19 @@ mod tests {
         assert_eq!(service1.user.config.app_id, "acs_app_1");
         assert_eq!(service2.user.config.app_id, "acs_app_2");
         assert_ne!(service1.user.config.app_id, service2.user.config.app_id);
-        assert_ne!(service1.rule_external.config.app_id, service2.rule_external.config.app_id);
-        assert_ne!(service1.visitor.config.app_id, service2.visitor.config.app_id);
+        assert_ne!(
+            service1.rule_external.config.app_id,
+            service2.rule_external.config.app_id
+        );
+        assert_ne!(
+            service1.visitor.config.app_id,
+            service2.visitor.config.app_id
+        );
         assert_ne!(service1.device.config.app_id, service2.device.config.app_id);
-        assert_ne!(service1.access_record.config.app_id, service2.access_record.config.app_id);
+        assert_ne!(
+            service1.access_record.config.app_id,
+            service2.access_record.config.app_id
+        );
     }
 
     #[test]
@@ -203,11 +225,26 @@ mod tests {
 
         let service = AcsService::new(config);
 
-        assert_eq!(service.user.config.req_timeout, Some(Duration::from_secs(210)));
-        assert_eq!(service.rule_external.config.req_timeout, Some(Duration::from_secs(210)));
-        assert_eq!(service.visitor.config.req_timeout, Some(Duration::from_secs(210)));
-        assert_eq!(service.device.config.req_timeout, Some(Duration::from_secs(210)));
-        assert_eq!(service.access_record.config.req_timeout, Some(Duration::from_secs(210)));
+        assert_eq!(
+            service.user.config.req_timeout,
+            Some(Duration::from_secs(210))
+        );
+        assert_eq!(
+            service.rule_external.config.req_timeout,
+            Some(Duration::from_secs(210))
+        );
+        assert_eq!(
+            service.visitor.config.req_timeout,
+            Some(Duration::from_secs(210))
+        );
+        assert_eq!(
+            service.device.config.req_timeout,
+            Some(Duration::from_secs(210))
+        );
+        assert_eq!(
+            service.access_record.config.req_timeout,
+            Some(Duration::from_secs(210))
+        );
     }
 
     #[test]
@@ -218,11 +255,23 @@ mod tests {
         let service2 = AcsService::new(config.clone());
 
         assert_eq!(service1.user.config.app_id, service2.user.config.app_id);
-        assert_eq!(service1.user.config.app_secret, service2.user.config.app_secret);
-        assert_eq!(service1.rule_external.config.app_id, service2.rule_external.config.app_id);
-        assert_eq!(service1.visitor.config.app_secret, service2.visitor.config.app_secret);
+        assert_eq!(
+            service1.user.config.app_secret,
+            service2.user.config.app_secret
+        );
+        assert_eq!(
+            service1.rule_external.config.app_id,
+            service2.rule_external.config.app_id
+        );
+        assert_eq!(
+            service1.visitor.config.app_secret,
+            service2.visitor.config.app_secret
+        );
         assert_eq!(service1.device.config.app_id, service2.device.config.app_id);
-        assert_eq!(service1.access_record.config.app_secret, service2.access_record.config.app_secret);
+        assert_eq!(
+            service1.access_record.config.app_secret,
+            service2.access_record.config.app_secret
+        );
     }
 
     #[test]
@@ -238,18 +287,39 @@ mod tests {
 
         assert_eq!(service.user.config.app_id, "consistency_test");
         assert_eq!(service.user.config.app_secret, "consistency_secret");
-        assert_eq!(service.user.config.req_timeout, Some(Duration::from_secs(160)));
+        assert_eq!(
+            service.user.config.req_timeout,
+            Some(Duration::from_secs(160))
+        );
         assert_eq!(service.rule_external.config.app_id, "consistency_test");
-        assert_eq!(service.rule_external.config.app_secret, "consistency_secret");
-        assert_eq!(service.rule_external.config.req_timeout, Some(Duration::from_secs(160)));
+        assert_eq!(
+            service.rule_external.config.app_secret,
+            "consistency_secret"
+        );
+        assert_eq!(
+            service.rule_external.config.req_timeout,
+            Some(Duration::from_secs(160))
+        );
         assert_eq!(service.visitor.config.app_id, "consistency_test");
         assert_eq!(service.visitor.config.app_secret, "consistency_secret");
-        assert_eq!(service.visitor.config.req_timeout, Some(Duration::from_secs(160)));
+        assert_eq!(
+            service.visitor.config.req_timeout,
+            Some(Duration::from_secs(160))
+        );
         assert_eq!(service.device.config.app_id, "consistency_test");
         assert_eq!(service.device.config.app_secret, "consistency_secret");
-        assert_eq!(service.device.config.req_timeout, Some(Duration::from_secs(160)));
+        assert_eq!(
+            service.device.config.req_timeout,
+            Some(Duration::from_secs(160))
+        );
         assert_eq!(service.access_record.config.app_id, "consistency_test");
-        assert_eq!(service.access_record.config.app_secret, "consistency_secret");
-        assert_eq!(service.access_record.config.req_timeout, Some(Duration::from_secs(160)));
+        assert_eq!(
+            service.access_record.config.app_secret,
+            "consistency_secret"
+        );
+        assert_eq!(
+            service.access_record.config.req_timeout,
+            Some(Duration::from_secs(160))
+        );
     }
 }

@@ -186,10 +186,16 @@ mod tests {
 
         assert_eq!(service.session.config.app_id, "aily_test_app");
         assert_eq!(service.session.config.app_secret, "aily_test_secret");
-        assert_eq!(service.session.config.req_timeout, Some(Duration::from_secs(90)));
+        assert_eq!(
+            service.session.config.req_timeout,
+            Some(Duration::from_secs(90))
+        );
 
         assert_eq!(service.message.config.app_id, "aily_test_app");
-        assert_eq!(service.message.config.req_timeout, Some(Duration::from_secs(90)));
+        assert_eq!(
+            service.message.config.req_timeout,
+            Some(Duration::from_secs(90))
+        );
 
         assert_eq!(service.run.config.app_id, "aily_test_app");
         assert_eq!(service.skill.config.app_id, "aily_test_app");
@@ -198,18 +204,25 @@ mod tests {
 
     #[test]
     fn test_aily_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "aily_app_1".to_string();
+        let config1 = Config {
+            app_id: "aily_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "aily_app_2".to_string();
+        let config2 = Config {
+            app_id: "aily_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = AilyService::new(config1);
         let service2 = AilyService::new(config2);
 
         assert_eq!(service1.session.config.app_id, "aily_app_1");
         assert_eq!(service2.session.config.app_id, "aily_app_2");
-        assert_ne!(service1.session.config.app_id, service2.session.config.app_id);
+        assert_ne!(
+            service1.session.config.app_id,
+            service2.session.config.app_id
+        );
 
         assert_eq!(service1.message.config.app_id, "aily_app_1");
         assert_eq!(service2.message.config.app_id, "aily_app_2");
@@ -260,11 +273,26 @@ mod tests {
 
         let service = AilyService::new(config);
 
-        assert_eq!(service.session.config.req_timeout, Some(Duration::from_secs(240)));
-        assert_eq!(service.message.config.req_timeout, Some(Duration::from_secs(240)));
-        assert_eq!(service.run.config.req_timeout, Some(Duration::from_secs(240)));
-        assert_eq!(service.skill.config.req_timeout, Some(Duration::from_secs(240)));
-        assert_eq!(service.knowledge.config.req_timeout, Some(Duration::from_secs(240)));
+        assert_eq!(
+            service.session.config.req_timeout,
+            Some(Duration::from_secs(240))
+        );
+        assert_eq!(
+            service.message.config.req_timeout,
+            Some(Duration::from_secs(240))
+        );
+        assert_eq!(
+            service.run.config.req_timeout,
+            Some(Duration::from_secs(240))
+        );
+        assert_eq!(
+            service.skill.config.req_timeout,
+            Some(Duration::from_secs(240))
+        );
+        assert_eq!(
+            service.knowledge.config.req_timeout,
+            Some(Duration::from_secs(240))
+        );
     }
 
     #[test]
@@ -274,11 +302,20 @@ mod tests {
         let service1 = AilyService::new(config.clone());
         let service2 = AilyService::new(config.clone());
 
-        assert_eq!(service1.session.config.app_id, service2.session.config.app_id);
-        assert_eq!(service1.message.config.app_id, service2.message.config.app_id);
+        assert_eq!(
+            service1.session.config.app_id,
+            service2.session.config.app_id
+        );
+        assert_eq!(
+            service1.message.config.app_id,
+            service2.message.config.app_id
+        );
         assert_eq!(service1.run.config.app_id, service2.run.config.app_id);
         assert_eq!(service1.skill.config.app_id, service2.skill.config.app_id);
-        assert_eq!(service1.knowledge.config.app_id, service2.knowledge.config.app_id);
+        assert_eq!(
+            service1.knowledge.config.app_id,
+            service2.knowledge.config.app_id
+        );
     }
 
     #[test]

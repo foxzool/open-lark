@@ -266,15 +266,42 @@ mod tests {
         let service2 = CloudDocsService::new(config2);
 
         // Verify services are created independently
-        assert!(!std::ptr::eq(std::ptr::addr_of!(service1.drive), std::ptr::addr_of!(service2.drive)));
-        assert!(!std::ptr::eq(std::ptr::addr_of!(service1.wiki), std::ptr::addr_of!(service2.wiki)));
-        assert!(!std::ptr::eq(std::ptr::addr_of!(service1.docx), std::ptr::addr_of!(service2.docx)));
-        assert!(!std::ptr::eq(std::ptr::addr_of!(service1.sheets), std::ptr::addr_of!(service2.sheets)));
-        assert!(!std::ptr::eq(std::ptr::addr_of!(service1.bitable), std::ptr::addr_of!(service2.bitable)));
-        assert!(!std::ptr::eq(std::ptr::addr_of!(service1.board), std::ptr::addr_of!(service2.board)));
-        assert!(!std::ptr::eq(std::ptr::addr_of!(service1.permission), std::ptr::addr_of!(service2.permission)));
-        assert!(!std::ptr::eq(std::ptr::addr_of!(service1.comments), std::ptr::addr_of!(service2.comments)));
-        assert!(!std::ptr::eq(std::ptr::addr_of!(service1.assistant), std::ptr::addr_of!(service2.assistant)));
+        assert!(!std::ptr::eq(
+            std::ptr::addr_of!(service1.drive),
+            std::ptr::addr_of!(service2.drive)
+        ));
+        assert!(!std::ptr::eq(
+            std::ptr::addr_of!(service1.wiki),
+            std::ptr::addr_of!(service2.wiki)
+        ));
+        assert!(!std::ptr::eq(
+            std::ptr::addr_of!(service1.docx),
+            std::ptr::addr_of!(service2.docx)
+        ));
+        assert!(!std::ptr::eq(
+            std::ptr::addr_of!(service1.sheets),
+            std::ptr::addr_of!(service2.sheets)
+        ));
+        assert!(!std::ptr::eq(
+            std::ptr::addr_of!(service1.bitable),
+            std::ptr::addr_of!(service2.bitable)
+        ));
+        assert!(!std::ptr::eq(
+            std::ptr::addr_of!(service1.board),
+            std::ptr::addr_of!(service2.board)
+        ));
+        assert!(!std::ptr::eq(
+            std::ptr::addr_of!(service1.permission),
+            std::ptr::addr_of!(service2.permission)
+        ));
+        assert!(!std::ptr::eq(
+            std::ptr::addr_of!(service1.comments),
+            std::ptr::addr_of!(service2.comments)
+        ));
+        assert!(!std::ptr::eq(
+            std::ptr::addr_of!(service1.assistant),
+            std::ptr::addr_of!(service2.assistant)
+        ));
     }
 
     #[test]

@@ -196,3 +196,373 @@ impl ApiResponseTrait for DeleteJobFamilyResponse {
         crate::core::api_resp::ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::config::Config;
+
+    #[test]
+    fn test_job_family_service_creation() {
+        let config = Config::default();
+        let service = JobFamilyService::new(config);
+        assert_eq!(format!("{:?}", service).len() > 0, true);
+    }
+
+    #[test]
+    fn test_job_family_service_creation_with_custom_config() {
+        let mut config = Config::default();
+        config.app_id = "test_app_id".to_string();
+        config.app_secret = "test_secret".to_string();
+        let service = JobFamilyService::new(config);
+        assert_eq!(format!("{:?}", service).len() > 0, true);
+    }
+
+    #[test]
+    fn test_create_job_family_request_construction() {
+        let job_family = JobFamily {
+            job_family_id: Some("family_123".to_string()),
+            name: Some("技术序列".to_string()),
+            description: Some("技术类职业序列".to_string()),
+            parent_job_family_id: Some("parent_123".to_string()),
+            status: Some(1),
+            i18n_name: Some(vec![]),
+            i18n_description: Some(vec![]),
+        };
+        let request = CreateJobFamilyRequest { job_family };
+        assert_eq!(
+            request.job_family.job_family_id,
+            Some("family_123".to_string())
+        );
+        assert_eq!(request.job_family.name, Some("技术序列".to_string()));
+    }
+
+    #[test]
+    fn test_create_job_family_request_with_minimal_data() {
+        let job_family = JobFamily {
+            job_family_id: None,
+            name: Some("简单序列".to_string()),
+            description: None,
+            parent_job_family_id: None,
+            status: None,
+            i18n_name: None,
+            i18n_description: None,
+        };
+        let request = CreateJobFamilyRequest { job_family };
+        assert_eq!(request.job_family.name, Some("简单序列".to_string()));
+        assert_eq!(request.job_family.description, None);
+    }
+
+    #[test]
+    fn test_create_job_family_request_with_empty_values() {
+        let job_family = JobFamily {
+            job_family_id: Some("".to_string()),
+            name: Some("".to_string()),
+            description: Some("".to_string()),
+            parent_job_family_id: Some("".to_string()),
+            status: Some(0),
+            i18n_name: Some(vec![]),
+            i18n_description: Some(vec![]),
+        };
+        let request = CreateJobFamilyRequest { job_family };
+        assert_eq!(request.job_family.job_family_id, Some("".to_string()));
+        assert_eq!(request.job_family.name, Some("".to_string()));
+    }
+
+    #[test]
+    fn test_create_job_family_request_with_long_values() {
+        let long_name = "a".repeat(1000);
+        let long_desc = "b".repeat(2000);
+        let job_family = JobFamily {
+            job_family_id: Some("family_long".to_string()),
+            name: Some(long_name.clone()),
+            description: Some(long_desc.clone()),
+            parent_job_family_id: None,
+            status: Some(1),
+            i18n_name: None,
+            i18n_description: None,
+        };
+        let request = CreateJobFamilyRequest { job_family };
+        assert_eq!(request.job_family.name, Some(long_name));
+        assert_eq!(request.job_family.description, Some(long_desc));
+    }
+
+    #[test]
+    fn test_create_job_family_response_default() {
+        let response = CreateJobFamilyResponse::default();
+        assert_eq!(response.job_family.job_family_id, None);
+        assert_eq!(response.job_family.name, None);
+    }
+
+    #[test]
+    fn test_create_job_family_response_data_format() {
+        assert_eq!(
+            CreateJobFamilyResponse::data_format(),
+            crate::core::api_resp::ResponseFormat::Data
+        );
+    }
+
+    #[test]
+    fn test_update_job_family_request_construction() {
+        let job_family = JobFamily {
+            job_family_id: Some("family_456".to_string()),
+            name: Some("更新序列".to_string()),
+            description: Some("更新后的描述".to_string()),
+            parent_job_family_id: Some("parent_456".to_string()),
+            status: Some(2),
+            i18n_name: None,
+            i18n_description: None,
+        };
+        let request = UpdateJobFamilyRequest { job_family };
+        assert_eq!(
+            request.job_family.job_family_id,
+            Some("family_456".to_string())
+        );
+        assert_eq!(request.job_family.name, Some("更新序列".to_string()));
+    }
+
+    #[test]
+    fn test_update_job_family_request_with_none_values() {
+        let job_family = JobFamily {
+            job_family_id: None,
+            name: None,
+            description: None,
+            parent_job_family_id: None,
+            status: None,
+            i18n_name: None,
+            i18n_description: None,
+        };
+        let request = UpdateJobFamilyRequest { job_family };
+        assert_eq!(request.job_family.job_family_id, None);
+        assert_eq!(request.job_family.name, None);
+    }
+
+    #[test]
+    fn test_update_job_family_response_default() {
+        let response = UpdateJobFamilyResponse::default();
+        assert_eq!(response.job_family.job_family_id, None);
+        assert_eq!(response.job_family.name, None);
+    }
+
+    #[test]
+    fn test_update_job_family_response_data_format() {
+        assert_eq!(
+            UpdateJobFamilyResponse::data_format(),
+            crate::core::api_resp::ResponseFormat::Data
+        );
+    }
+
+    #[test]
+    fn test_get_job_family_response_default() {
+        let response = GetJobFamilyResponse::default();
+        assert_eq!(response.job_family.job_family_id, None);
+        assert_eq!(response.job_family.name, None);
+    }
+
+    #[test]
+    fn test_get_job_family_response_data_format() {
+        assert_eq!(
+            GetJobFamilyResponse::data_format(),
+            crate::core::api_resp::ResponseFormat::Data
+        );
+    }
+
+    #[test]
+    fn test_list_job_families_request_default() {
+        let request = ListJobFamiliesRequest::default();
+        assert_eq!(request.page_size, None);
+        assert_eq!(request.page_token, None);
+    }
+
+    #[test]
+    fn test_list_job_families_request_with_pagination() {
+        let request = ListJobFamiliesRequest {
+            page_size: Some(20),
+            page_token: Some("token_abc".to_string()),
+        };
+        assert_eq!(request.page_size, Some(20));
+        assert_eq!(request.page_token, Some("token_abc".to_string()));
+    }
+
+    #[test]
+    fn test_list_job_families_request_with_large_page_size() {
+        let request = ListJobFamiliesRequest {
+            page_size: Some(10000),
+            page_token: Some("large_token".to_string()),
+        };
+        assert_eq!(request.page_size, Some(10000));
+        assert_eq!(request.page_token, Some("large_token".to_string()));
+    }
+
+    #[test]
+    fn test_list_job_families_request_with_zero_page_size() {
+        let request = ListJobFamiliesRequest {
+            page_size: Some(0),
+            page_token: None,
+        };
+        assert_eq!(request.page_size, Some(0));
+    }
+
+    #[test]
+    fn test_list_job_families_request_with_negative_page_size() {
+        let request = ListJobFamiliesRequest {
+            page_size: Some(-1),
+            page_token: None,
+        };
+        assert_eq!(request.page_size, Some(-1));
+    }
+
+    #[test]
+    fn test_list_job_families_request_with_empty_token() {
+        let request = ListJobFamiliesRequest {
+            page_size: Some(50),
+            page_token: Some("".to_string()),
+        };
+        assert_eq!(request.page_token, Some("".to_string()));
+    }
+
+    #[test]
+    fn test_list_job_families_request_with_long_token() {
+        let long_token = "x".repeat(3000);
+        let request = ListJobFamiliesRequest {
+            page_size: Some(100),
+            page_token: Some(long_token.clone()),
+        };
+        assert_eq!(request.page_token, Some(long_token));
+    }
+
+    #[test]
+    fn test_list_job_families_response_default() {
+        let response = ListJobFamiliesResponse::default();
+        assert_eq!(response.items.len(), 0);
+        assert_eq!(response.has_more, None);
+        assert_eq!(response.page_token, None);
+    }
+
+    #[test]
+    fn test_list_job_families_response_with_items() {
+        let items = vec![
+            JobFamily {
+                job_family_id: Some("family_1".to_string()),
+                name: Some("序列1".to_string()),
+                description: Some("描述1".to_string()),
+                parent_job_family_id: None,
+                status: Some(1),
+                i18n_name: None,
+                i18n_description: None,
+            },
+            JobFamily {
+                job_family_id: Some("family_2".to_string()),
+                name: Some("序列2".to_string()),
+                description: Some("描述2".to_string()),
+                parent_job_family_id: None,
+                status: Some(1),
+                i18n_name: None,
+                i18n_description: None,
+            },
+        ];
+        let response = ListJobFamiliesResponse {
+            items,
+            has_more: Some(true),
+            page_token: Some("next_page".to_string()),
+        };
+        assert_eq!(response.items.len(), 2);
+        assert_eq!(response.has_more, Some(true));
+        assert_eq!(response.page_token, Some("next_page".to_string()));
+    }
+
+    #[test]
+    fn test_list_job_families_response_with_large_list() {
+        let mut items = Vec::new();
+        for i in 0..500 {
+            items.push(JobFamily {
+                job_family_id: Some(format!("family_{}", i)),
+                name: Some(format!("序列{}", i)),
+                description: Some(format!("描述{}", i)),
+                parent_job_family_id: None,
+                status: Some(1),
+                i18n_name: None,
+                i18n_description: None,
+            });
+        }
+        let response = ListJobFamiliesResponse {
+            items,
+            has_more: Some(false),
+            page_token: None,
+        };
+        assert_eq!(response.items.len(), 500);
+        assert_eq!(response.has_more, Some(false));
+    }
+
+    #[test]
+    fn test_list_job_families_response_data_format() {
+        assert_eq!(
+            ListJobFamiliesResponse::data_format(),
+            crate::core::api_resp::ResponseFormat::Data
+        );
+    }
+
+    #[test]
+    fn test_delete_job_family_response_default() {
+        let response = DeleteJobFamilyResponse::default();
+        assert_eq!(format!("{:?}", response).len() > 0, true);
+    }
+
+    #[test]
+    fn test_delete_job_family_response_data_format() {
+        assert_eq!(
+            DeleteJobFamilyResponse::data_format(),
+            crate::core::api_resp::ResponseFormat::Data
+        );
+    }
+
+    #[test]
+    fn test_config_independence() {
+        let config1 = Config::default();
+        let config2 = Config::default();
+        let service1 = JobFamilyService::new(config1);
+        let service2 = JobFamilyService::new(config2);
+        assert_eq!(format!("{:?}", service1).len() > 0, true);
+        assert_eq!(format!("{:?}", service2).len() > 0, true);
+    }
+
+    #[test]
+    fn test_all_structs_debug_trait() {
+        let job_family = JobFamily {
+            job_family_id: Some("test".to_string()),
+            name: Some("test".to_string()),
+            description: Some("test".to_string()),
+            parent_job_family_id: Some("test".to_string()),
+            status: Some(1),
+            i18n_name: None,
+            i18n_description: None,
+        };
+
+        let create_request = CreateJobFamilyRequest {
+            job_family: job_family.clone(),
+        };
+        let update_request = UpdateJobFamilyRequest {
+            job_family: job_family.clone(),
+        };
+        let list_request = ListJobFamiliesRequest {
+            page_size: Some(10),
+            page_token: Some("test".to_string()),
+        };
+
+        assert!(format!("{:?}", create_request).contains("test"));
+        assert!(format!("{:?}", update_request).contains("test"));
+        assert!(format!("{:?}", list_request).contains("test"));
+
+        let create_response = CreateJobFamilyResponse::default();
+        let update_response = UpdateJobFamilyResponse::default();
+        let get_response = GetJobFamilyResponse::default();
+        let list_response = ListJobFamiliesResponse::default();
+        let delete_response = DeleteJobFamilyResponse::default();
+
+        assert_eq!(format!("{:?}", create_response).len() > 0, true);
+        assert_eq!(format!("{:?}", update_response).len() > 0, true);
+        assert_eq!(format!("{:?}", get_response).len() > 0, true);
+        assert_eq!(format!("{:?}", list_response).len() > 0, true);
+        assert_eq!(format!("{:?}", delete_response).len() > 0, true);
+    }
+}

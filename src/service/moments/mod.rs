@@ -175,16 +175,23 @@ mod tests {
 
         assert_eq!(service.post.config.app_id, "moments_test_app");
         assert_eq!(service.post.config.app_secret, "moments_test_secret");
-        assert_eq!(service.post.config.req_timeout, Some(Duration::from_secs(150)));
+        assert_eq!(
+            service.post.config.req_timeout,
+            Some(Duration::from_secs(150))
+        );
     }
 
     #[test]
     fn test_moments_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "moments_app_1".to_string();
+        let config1 = Config {
+            app_id: "moments_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "moments_app_2".to_string();
+        let config2 = Config {
+            app_id: "moments_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = MomentsService::new(config1);
         let service2 = MomentsService::new(config2);
@@ -227,7 +234,10 @@ mod tests {
 
         let service = MomentsService::new(config);
 
-        assert_eq!(service.post.config.req_timeout, Some(Duration::from_secs(180)));
+        assert_eq!(
+            service.post.config.req_timeout,
+            Some(Duration::from_secs(180))
+        );
     }
 
     #[test]
@@ -238,7 +248,10 @@ mod tests {
         let service2 = MomentsService::new(config.clone());
 
         assert_eq!(service1.post.config.app_id, service2.post.config.app_id);
-        assert_eq!(service1.post.config.app_secret, service2.post.config.app_secret);
+        assert_eq!(
+            service1.post.config.app_secret,
+            service2.post.config.app_secret
+        );
     }
 
     #[test]
@@ -254,6 +267,9 @@ mod tests {
 
         assert_eq!(service.post.config.app_id, "consistency_test");
         assert_eq!(service.post.config.app_secret, "consistency_secret");
-        assert_eq!(service.post.config.req_timeout, Some(Duration::from_secs(90)));
+        assert_eq!(
+            service.post.config.req_timeout,
+            Some(Duration::from_secs(90))
+        );
     }
 }
