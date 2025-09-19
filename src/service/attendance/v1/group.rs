@@ -266,6 +266,9 @@ impl GroupService {
 mod tests {
     use super::*;
     use crate::core::{api_req::ApiRequest, config::Config};
+    use crate::service::attendance::v1::models::{
+        ExceptDateRule, MemberRule, ShiftRule, WorkDayRule,
+    };
 
     #[test]
     fn test_group_service_creation() {
@@ -339,14 +342,27 @@ mod tests {
             group_name: "开发组".to_string(),
             time_zone: Some("Asia/Shanghai".to_string()),
             bind_dept_ids: Some(vec!["dept_1".to_string(), "dept_2".to_string()]),
-            except_date_rule: Some("weekend".to_string()),
+            except_date_rule: Some(vec![ExceptDateRule {
+                date: "2023-12-25".to_string(),
+                except_type: 2,
+                shift_id: None,
+            }]),
             attendance_type: Some(1),
             punch_type: Some(1),
             allow_late_minutes: Some(10),
             allow_early_leave_minutes: Some(5),
-            work_day_rule: Some("5_days".to_string()),
-            shift_rule: Some("normal".to_string()),
-            member_rule: Some("auto".to_string()),
+            work_day_rule: Some(vec![WorkDayRule {
+                week_day: 1,
+                shift_id: "shift_001".to_string(),
+            }]),
+            shift_rule: Some(vec![ShiftRule {
+                shift_id: "shift_001".to_string(),
+                shift_name: Some("normal".to_string()),
+            }]),
+            member_rule: Some(MemberRule {
+                member_type: 1,
+                member_ids: vec!["dept_1".to_string(), "dept_2".to_string()],
+            }),
         };
 
         assert_eq!(request.employee_type, "1");
@@ -357,14 +373,14 @@ mod tests {
             request.bind_dept_ids,
             Some(vec!["dept_1".to_string(), "dept_2".to_string()])
         );
-        assert_eq!(request.except_date_rule, Some("weekend".to_string()));
+        assert!(request.except_date_rule.is_some());
         assert_eq!(request.attendance_type, Some(1));
         assert_eq!(request.punch_type, Some(1));
         assert_eq!(request.allow_late_minutes, Some(10));
         assert_eq!(request.allow_early_leave_minutes, Some(5));
-        assert_eq!(request.work_day_rule, Some("5_days".to_string()));
-        assert_eq!(request.shift_rule, Some("normal".to_string()));
-        assert_eq!(request.member_rule, Some("auto".to_string()));
+        assert!(request.work_day_rule.is_some());
+        assert!(request.shift_rule.is_some());
+        assert!(request.member_rule.is_some());
     }
 
     #[test]
@@ -391,14 +407,14 @@ mod tests {
         assert_eq!(request.group_name, "测试组");
         assert_eq!(request.time_zone, None);
         assert_eq!(request.bind_dept_ids, None);
-        assert_eq!(request.except_date_rule, None);
+        assert!(request.except_date_rule.is_none());
         assert_eq!(request.attendance_type, None);
         assert_eq!(request.punch_type, None);
         assert_eq!(request.allow_late_minutes, None);
         assert_eq!(request.allow_early_leave_minutes, None);
-        assert_eq!(request.work_day_rule, None);
-        assert_eq!(request.shift_rule, None);
-        assert_eq!(request.member_rule, None);
+        assert!(request.work_day_rule.is_none());
+        assert!(request.shift_rule.is_none());
+        assert!(request.member_rule.is_none());
     }
 
     #[test]

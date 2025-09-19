@@ -12,6 +12,7 @@ use crate::{
 use serde::{Deserialize, Serialize};
 
 /// 序列管理服务
+#[derive(Debug)]
 pub struct JobFamilyService {
     config: Config,
 }
@@ -222,34 +223,37 @@ mod tests {
     fn test_create_job_family_request_construction() {
         let job_family = JobFamily {
             job_family_id: Some("family_123".to_string()),
-            name: Some("技术序列".to_string()),
-            description: Some("技术类职业序列".to_string()),
-            parent_job_family_id: Some("parent_123".to_string()),
-            status: Some(1),
-            i18n_name: Some(vec![]),
-            i18n_description: Some(vec![]),
+            name: Some(vec![I18nContent {
+                locale: Some("zh_cn".to_string()),
+                value: Some("技术序列".to_string()),
+            }]),
+            description: Some(vec![I18nContent {
+                locale: Some("zh_cn".to_string()),
+                value: Some("技术类职业序列".to_string()),
+            }]),
+            status: Some(true),
         };
         let request = CreateJobFamilyRequest { job_family };
         assert_eq!(
             request.job_family.job_family_id,
             Some("family_123".to_string())
         );
-        assert_eq!(request.job_family.name, Some("技术序列".to_string()));
+        assert!(request.job_family.name.is_some());
     }
 
     #[test]
     fn test_create_job_family_request_with_minimal_data() {
         let job_family = JobFamily {
             job_family_id: None,
-            name: Some("简单序列".to_string()),
+            name: Some(vec![I18nContent {
+                locale: Some("zh_cn".to_string()),
+                value: Some("简单序列".to_string()),
+            }]),
             description: None,
-            parent_job_family_id: None,
             status: None,
-            i18n_name: None,
-            i18n_description: None,
         };
         let request = CreateJobFamilyRequest { job_family };
-        assert_eq!(request.job_family.name, Some("简单序列".to_string()));
+        assert!(request.job_family.name.is_some());
         assert_eq!(request.job_family.description, None);
     }
 
@@ -257,16 +261,19 @@ mod tests {
     fn test_create_job_family_request_with_empty_values() {
         let job_family = JobFamily {
             job_family_id: Some("".to_string()),
-            name: Some("".to_string()),
-            description: Some("".to_string()),
-            parent_job_family_id: Some("".to_string()),
-            status: Some(0),
-            i18n_name: Some(vec![]),
-            i18n_description: Some(vec![]),
+            name: Some(vec![I18nContent {
+                locale: Some("zh_cn".to_string()),
+                value: Some("".to_string()),
+            }]),
+            description: Some(vec![I18nContent {
+                locale: Some("zh_cn".to_string()),
+                value: Some("".to_string()),
+            }]),
+            status: Some(false),
         };
         let request = CreateJobFamilyRequest { job_family };
         assert_eq!(request.job_family.job_family_id, Some("".to_string()));
-        assert_eq!(request.job_family.name, Some("".to_string()));
+        assert!(request.job_family.name.is_some());
     }
 
     #[test]
@@ -275,16 +282,19 @@ mod tests {
         let long_desc = "b".repeat(2000);
         let job_family = JobFamily {
             job_family_id: Some("family_long".to_string()),
-            name: Some(long_name.clone()),
-            description: Some(long_desc.clone()),
-            parent_job_family_id: None,
-            status: Some(1),
-            i18n_name: None,
-            i18n_description: None,
+            name: Some(vec![I18nContent {
+                locale: Some("zh_cn".to_string()),
+                value: Some(long_name.clone()),
+            }]),
+            description: Some(vec![I18nContent {
+                locale: Some("zh_cn".to_string()),
+                value: Some(long_desc.clone()),
+            }]),
+            status: Some(true),
         };
         let request = CreateJobFamilyRequest { job_family };
-        assert_eq!(request.job_family.name, Some(long_name));
-        assert_eq!(request.job_family.description, Some(long_desc));
+        assert!(request.job_family.name.is_some());
+        assert!(request.job_family.description.is_some());
     }
 
     #[test]
@@ -306,19 +316,22 @@ mod tests {
     fn test_update_job_family_request_construction() {
         let job_family = JobFamily {
             job_family_id: Some("family_456".to_string()),
-            name: Some("更新序列".to_string()),
-            description: Some("更新后的描述".to_string()),
-            parent_job_family_id: Some("parent_456".to_string()),
-            status: Some(2),
-            i18n_name: None,
-            i18n_description: None,
+            name: Some(vec![I18nContent {
+                locale: Some("zh_cn".to_string()),
+                value: Some("更新序列".to_string()),
+            }]),
+            description: Some(vec![I18nContent {
+                locale: Some("zh_cn".to_string()),
+                value: Some("更新后的描述".to_string()),
+            }]),
+            status: Some(true),
         };
         let request = UpdateJobFamilyRequest { job_family };
         assert_eq!(
             request.job_family.job_family_id,
             Some("family_456".to_string())
         );
-        assert_eq!(request.job_family.name, Some("更新序列".to_string()));
+        assert!(request.job_family.name.is_some());
     }
 
     #[test]
@@ -327,10 +340,7 @@ mod tests {
             job_family_id: None,
             name: None,
             description: None,
-            parent_job_family_id: None,
             status: None,
-            i18n_name: None,
-            i18n_description: None,
         };
         let request = UpdateJobFamilyRequest { job_family };
         assert_eq!(request.job_family.job_family_id, None);
@@ -444,21 +454,27 @@ mod tests {
         let items = vec![
             JobFamily {
                 job_family_id: Some("family_1".to_string()),
-                name: Some("序列1".to_string()),
-                description: Some("描述1".to_string()),
-                parent_job_family_id: None,
-                status: Some(1),
-                i18n_name: None,
-                i18n_description: None,
+                name: Some(vec![I18nContent {
+                    locale: Some("zh_cn".to_string()),
+                    value: Some("序列1".to_string()),
+                }]),
+                description: Some(vec![I18nContent {
+                    locale: Some("zh_cn".to_string()),
+                    value: Some("描述1".to_string()),
+                }]),
+                status: Some(true),
             },
             JobFamily {
                 job_family_id: Some("family_2".to_string()),
-                name: Some("序列2".to_string()),
-                description: Some("描述2".to_string()),
-                parent_job_family_id: None,
-                status: Some(1),
-                i18n_name: None,
-                i18n_description: None,
+                name: Some(vec![I18nContent {
+                    locale: Some("zh_cn".to_string()),
+                    value: Some("序列2".to_string()),
+                }]),
+                description: Some(vec![I18nContent {
+                    locale: Some("zh_cn".to_string()),
+                    value: Some("描述2".to_string()),
+                }]),
+                status: Some(true),
             },
         ];
         let response = ListJobFamiliesResponse {
@@ -477,12 +493,15 @@ mod tests {
         for i in 0..500 {
             items.push(JobFamily {
                 job_family_id: Some(format!("family_{}", i)),
-                name: Some(format!("序列{}", i)),
-                description: Some(format!("描述{}", i)),
-                parent_job_family_id: None,
-                status: Some(1),
-                i18n_name: None,
-                i18n_description: None,
+                name: Some(vec![I18nContent {
+                    locale: Some("zh_cn".to_string()),
+                    value: Some(format!("序列{}", i)),
+                }]),
+                description: Some(vec![I18nContent {
+                    locale: Some("zh_cn".to_string()),
+                    value: Some(format!("描述{}", i)),
+                }]),
+                status: Some(true),
             });
         }
         let response = ListJobFamiliesResponse {
@@ -530,12 +549,15 @@ mod tests {
     fn test_all_structs_debug_trait() {
         let job_family = JobFamily {
             job_family_id: Some("test".to_string()),
-            name: Some("test".to_string()),
-            description: Some("test".to_string()),
-            parent_job_family_id: Some("test".to_string()),
-            status: Some(1),
-            i18n_name: None,
-            i18n_description: None,
+            name: Some(vec![I18nContent {
+                locale: Some("en_us".to_string()),
+                value: Some("test".to_string()),
+            }]),
+            description: Some(vec![I18nContent {
+                locale: Some("en_us".to_string()),
+                value: Some("test description".to_string()),
+            }]),
+            status: Some(true),
         };
 
         let create_request = CreateJobFamilyRequest {

@@ -69,7 +69,7 @@ impl_executable_builder_owned!(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{api_req::ApiRequest, config::Config};
+    use crate::core::config::Config;
 
     #[test]
     fn test_leave_employ_expire_record_service_creation() {
