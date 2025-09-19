@@ -461,7 +461,7 @@ mod tests {
         let actions = vec![
             (1, "approve", "审批通过"),
             (2, "reject", "审批拒绝"),
-            (3, "withdraw", "撤回申请")
+            (3, "withdraw", "撤回申请"),
         ];
         for (action_code, action_name, action_desc) in actions {
             let request = ProcessUserApprovalRequest {
