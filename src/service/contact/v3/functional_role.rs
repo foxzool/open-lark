@@ -226,16 +226,18 @@ mod tests {
     fn test_functional_role_service_creation() {
         let config = Config::default();
         let service = FunctionalRoleService::new(config);
-        assert_eq!(format!("{:?}", service).len() > 0, true);
+        assert!(!format!("{:?}", service).is_empty());
     }
 
     #[test]
     fn test_functional_role_service_creation_with_custom_config() {
-        let mut config = Config::default();
-        config.app_id = "test_app_id".to_string();
-        config.app_secret = "test_secret".to_string();
+        let config = Config {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_secret".to_string(),
+            ..Default::default()
+        };
         let service = FunctionalRoleService::new(config);
-        assert_eq!(format!("{:?}", service).len() > 0, true);
+        assert!(!format!("{:?}", service).is_empty());
     }
 
     #[test]
@@ -244,7 +246,7 @@ mod tests {
             role_name: "测试角色".to_string(),
         };
         assert_eq!(request.role_name, "测试角色");
-        assert_eq!(format!("{:?}", request).contains("测试角色"), true);
+        assert!(format!("{:?}", request).contains("测试角色"));
     }
 
     #[test]
@@ -292,7 +294,7 @@ mod tests {
             role_name: "更新后角色".to_string(),
         };
         assert_eq!(request.role_name, "更新后角色");
-        assert_eq!(format!("{:?}", request).contains("更新后角色"), true);
+        assert!(format!("{:?}", request).contains("更新后角色"));
     }
 
     #[test]
@@ -315,7 +317,7 @@ mod tests {
     #[test]
     fn test_update_functional_role_response_default() {
         let response = UpdateFunctionalRoleResponse::default();
-        assert_eq!(format!("{:?}", response).len() > 0, true);
+        assert!(!format!("{:?}", response).is_empty());
     }
 
     #[test]
@@ -533,7 +535,7 @@ mod tests {
     #[test]
     fn test_delete_functional_role_response_default() {
         let response = DeleteFunctionalRoleResponse::default();
-        assert_eq!(format!("{:?}", response).len() > 0, true);
+        assert!(!format!("{:?}", response).is_empty());
     }
 
     #[test]
@@ -550,8 +552,8 @@ mod tests {
         let config2 = Config::default();
         let service1 = FunctionalRoleService::new(config1);
         let service2 = FunctionalRoleService::new(config2);
-        assert_eq!(format!("{:?}", service1).len() > 0, true);
-        assert_eq!(format!("{:?}", service2).len() > 0, true);
+        assert!(!format!("{:?}", service1).is_empty());
+        assert!(!format!("{:?}", service2).is_empty());
     }
 
     #[test]
@@ -576,11 +578,11 @@ mod tests {
         assert!(format!("{:?}", request1).contains("test"));
         assert!(format!("{:?}", request2).contains("test"));
         assert!(format!("{:?}", request3).contains("test"));
-        assert_eq!(format!("{:?}", response1).len() > 0, true);
-        assert_eq!(format!("{:?}", response2).len() > 0, true);
-        assert_eq!(format!("{:?}", response3).len() > 0, true);
-        assert_eq!(format!("{:?}", response4).len() > 0, true);
-        assert_eq!(format!("{:?}", response5).len() > 0, true);
-        assert_eq!(format!("{:?}", role).len() > 0, true);
+        assert!(!format!("{:?}", response1).is_empty());
+        assert!(!format!("{:?}", response2).is_empty());
+        assert!(!format!("{:?}", response3).is_empty());
+        assert!(!format!("{:?}", response4).is_empty());
+        assert!(!format!("{:?}", response5).is_empty());
+        assert!(!format!("{:?}", role).is_empty());
     }
 }

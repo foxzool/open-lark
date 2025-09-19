@@ -207,16 +207,18 @@ mod tests {
     fn test_job_family_service_creation() {
         let config = Config::default();
         let service = JobFamilyService::new(config);
-        assert_eq!(format!("{:?}", service).len() > 0, true);
+        assert!(!format!("{:?}", service).is_empty());
     }
 
     #[test]
     fn test_job_family_service_creation_with_custom_config() {
-        let mut config = Config::default();
-        config.app_id = "test_app_id".to_string();
-        config.app_secret = "test_secret".to_string();
+        let config = Config {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_secret".to_string(),
+            ..Default::default()
+        };
         let service = JobFamilyService::new(config);
-        assert_eq!(format!("{:?}", service).len() > 0, true);
+        assert!(!format!("{:?}", service).is_empty());
     }
 
     #[test]
@@ -524,7 +526,7 @@ mod tests {
     #[test]
     fn test_delete_job_family_response_default() {
         let response = DeleteJobFamilyResponse::default();
-        assert_eq!(format!("{:?}", response).len() > 0, true);
+        assert!(!format!("{:?}", response).is_empty());
     }
 
     #[test]
@@ -541,8 +543,8 @@ mod tests {
         let config2 = Config::default();
         let service1 = JobFamilyService::new(config1);
         let service2 = JobFamilyService::new(config2);
-        assert_eq!(format!("{:?}", service1).len() > 0, true);
-        assert_eq!(format!("{:?}", service2).len() > 0, true);
+        assert!(!format!("{:?}", service1).is_empty());
+        assert!(!format!("{:?}", service2).is_empty());
     }
 
     #[test]
@@ -581,10 +583,10 @@ mod tests {
         let list_response = ListJobFamiliesResponse::default();
         let delete_response = DeleteJobFamilyResponse::default();
 
-        assert_eq!(format!("{:?}", create_response).len() > 0, true);
-        assert_eq!(format!("{:?}", update_response).len() > 0, true);
-        assert_eq!(format!("{:?}", get_response).len() > 0, true);
-        assert_eq!(format!("{:?}", list_response).len() > 0, true);
-        assert_eq!(format!("{:?}", delete_response).len() > 0, true);
+        assert!(!format!("{:?}", create_response).is_empty());
+        assert!(!format!("{:?}", update_response).is_empty());
+        assert!(!format!("{:?}", get_response).is_empty());
+        assert!(!format!("{:?}", list_response).is_empty());
+        assert!(!format!("{:?}", delete_response).is_empty());
     }
 }

@@ -76,16 +76,18 @@ mod tests {
     fn test_leave_employ_expire_record_service_creation() {
         let config = Config::default();
         let service = LeaveEmployExpireRecordService { config };
-        assert_eq!(format!("{:?}", service).len() > 0, true);
+        assert!(!format!("{:?}", service).is_empty());
     }
 
     #[test]
     fn test_leave_employ_expire_record_service_with_custom_config() {
-        let mut config = Config::default();
-        config.app_id = "test_app_id".to_string();
-        config.app_secret = "test_secret".to_string();
+        let config = Config {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_secret".to_string(),
+            ..Default::default()
+        };
         let service = LeaveEmployExpireRecordService { config };
-        assert_eq!(format!("{:?}", service).len() > 0, true);
+        assert!(!format!("{:?}", service).is_empty());
     }
 
     #[test]
@@ -99,8 +101,10 @@ mod tests {
 
     #[test]
     fn test_service_config_access() {
-        let mut config = Config::default();
-        config.app_id = "test_config_access".to_string();
+        let config = Config {
+            app_id: "test_config_access".to_string(),
+            ..Default::default()
+        };
         let service = LeaveEmployExpireRecordService { config };
         assert_eq!(service.config.app_id, "test_config_access");
     }
@@ -111,7 +115,7 @@ mod tests {
         let config2 = Config::default();
         let service1 = LeaveEmployExpireRecordService { config: config1 };
         let service2 = LeaveEmployExpireRecordService { config: config2 };
-        assert_eq!(format!("{:?}", service1).len() > 0, true);
-        assert_eq!(format!("{:?}", service2).len() > 0, true);
+        assert!(!format!("{:?}", service1).is_empty());
+        assert!(!format!("{:?}", service2).is_empty());
     }
 }

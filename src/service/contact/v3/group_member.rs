@@ -244,16 +244,18 @@ mod tests {
     fn test_group_member_service_creation() {
         let config = Config::default();
         let service = GroupMemberService::new(config);
-        assert_eq!(format!("{:?}", service).len() > 0, true);
+        assert!(!format!("{:?}", service).is_empty());
     }
 
     #[test]
     fn test_group_member_service_creation_with_custom_config() {
-        let mut config = Config::default();
-        config.app_id = "test_app_id".to_string();
-        config.app_secret = "test_secret".to_string();
+        let config = Config {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_secret".to_string(),
+            ..Default::default()
+        };
         let service = GroupMemberService::new(config);
-        assert_eq!(format!("{:?}", service).len() > 0, true);
+        assert!(!format!("{:?}", service).is_empty());
     }
 
     #[test]
@@ -306,7 +308,7 @@ mod tests {
     #[test]
     fn test_add_group_member_response_default() {
         let response = AddGroupMemberResponse::default();
-        assert_eq!(format!("{:?}", response).len() > 0, true);
+        assert!(!format!("{:?}", response).is_empty());
     }
 
     #[test]
@@ -499,7 +501,7 @@ mod tests {
     #[test]
     fn test_remove_group_member_response_default() {
         let response = RemoveGroupMemberResponse::default();
-        assert_eq!(format!("{:?}", response).len() > 0, true);
+        assert!(!format!("{:?}", response).is_empty());
     }
 
     #[test]
@@ -558,8 +560,8 @@ mod tests {
         let config2 = Config::default();
         let service1 = GroupMemberService::new(config1);
         let service2 = GroupMemberService::new(config2);
-        assert_eq!(format!("{:?}", service1).len() > 0, true);
-        assert_eq!(format!("{:?}", service2).len() > 0, true);
+        assert!(!format!("{:?}", service1).is_empty());
+        assert!(!format!("{:?}", service2).is_empty());
     }
 
     #[test]
@@ -592,7 +594,7 @@ mod tests {
 
         assert!(format!("{:?}", add_request).contains("test"));
         assert!(format!("{:?}", batch_add_request).contains("test"));
-        assert_eq!(format!("{:?}", list_request).len() > 0, true);
+        assert!(!format!("{:?}", list_request).is_empty());
         assert!(format!("{:?}", remove_request).contains("test"));
         assert!(format!("{:?}", batch_remove_request).contains("test"));
 
@@ -602,10 +604,10 @@ mod tests {
         let remove_response = RemoveGroupMemberResponse::default();
         let batch_remove_response = BatchRemoveGroupMembersResponse::default();
 
-        assert_eq!(format!("{:?}", add_response).len() > 0, true);
-        assert_eq!(format!("{:?}", batch_add_response).len() > 0, true);
-        assert_eq!(format!("{:?}", list_response).len() > 0, true);
-        assert_eq!(format!("{:?}", remove_response).len() > 0, true);
-        assert_eq!(format!("{:?}", batch_remove_response).len() > 0, true);
+        assert!(!format!("{:?}", add_response).is_empty());
+        assert!(!format!("{:?}", batch_add_response).is_empty());
+        assert!(!format!("{:?}", list_response).is_empty());
+        assert!(!format!("{:?}", remove_response).is_empty());
+        assert!(!format!("{:?}", batch_remove_response).is_empty());
     }
 }
