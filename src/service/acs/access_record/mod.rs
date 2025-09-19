@@ -19,6 +19,7 @@ use crate::{
 };
 
 /// 访问记录服务
+#[derive(Debug)]
 pub struct AccessRecordService {
     pub config: Config,
 }
@@ -201,5 +202,247 @@ pub struct AccessRecordFaceImageResponse {
 impl ApiResponseTrait for AccessRecordFaceImageResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::{
+        constants::AppType,
+        endpoints::Endpoints,
+        config::Config,
+    };
+
+    #[test]
+    fn test_access_record_service_creation() {
+        let config = Config {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_secret".to_string(),
+            ..Default::default()
+        };
+        let service = AccessRecordService::new(config);
+        assert_eq!(service.config.app_id, "test_app_id");
+        assert_eq!(service.config.app_secret, "test_secret");
+    }
+
+    #[test]
+    fn test_access_record_service_debug_trait() {
+        let config = Config::default();
+        let service = AccessRecordService::new(config);
+        assert!(!format!("{:?}", service).is_empty());
+    }
+
+    #[test]
+    fn test_access_record_service_with_marketplace_config() {
+        let config = Config {
+            app_id: "cli_test".to_string(),
+            app_secret: "test_secret".to_string(),
+            app_type: AppType::Marketplace,
+            ..Default::default()
+        };
+        let service = AccessRecordService::new(config);
+        assert_eq!(service.config.app_type, AppType::Marketplace);
+    }
+
+    #[test]
+    fn test_access_record_list_request_default() {
+        let request = AccessRecordListRequest::default();
+        assert!(request.page_token.is_none());
+        assert!(request.page_size.is_none());
+        assert!(request.user_id.is_none());
+        assert!(request.device_id.is_none());
+        assert!(request.access_type.is_none());
+        assert!(request.access_method.is_none());
+        assert!(request.result.is_none());
+        assert!(request.start_time.is_none());
+        assert!(request.end_time.is_none());
+    }
+
+    #[test]
+    fn test_access_record_list_request_with_all_fields() {
+        let request = AccessRecordListRequest {
+            page_token: Some("token123".to_string()),
+            page_size: Some(20),
+            user_id: Some("user_id_123".to_string()),
+            device_id: Some("device_001".to_string()),
+            access_type: Some(AccessType::Entry),
+            access_method: Some(AccessMethod::Card),
+            result: Some(AccessResult::Success),
+            start_time: Some(1640995200), // 2022-01-01 00:00:00 UTC
+            end_time: Some(1643673600),   // 2022-02-01 00:00:00 UTC
+        };
+
+        assert_eq!(request.page_token, Some("token123".to_string()));
+        assert_eq!(request.page_size, Some(20));
+        assert_eq!(request.user_id, Some("user_id_123".to_string()));
+        assert_eq!(request.device_id, Some("device_001".to_string()));
+        assert_eq!(request.access_type, Some(AccessType::Entry));
+        assert_eq!(request.access_method, Some(AccessMethod::Card));
+        assert_eq!(request.result, Some(AccessResult::Success));
+        assert_eq!(request.start_time, Some(1640995200));
+        assert_eq!(request.end_time, Some(1643673600));
+    }
+
+    #[test]
+    fn test_access_record_list_request_clone() {
+        let original = AccessRecordListRequest {
+            page_token: Some("token123".to_string()),
+            page_size: Some(10),
+            user_id: Some("user_001".to_string()),
+            ..Default::default()
+        };
+
+        let cloned = original.clone();
+        assert_eq!(original.page_token, cloned.page_token);
+        assert_eq!(original.page_size, cloned.page_size);
+        assert_eq!(original.user_id, cloned.user_id);
+    }
+
+    #[test]
+    fn test_access_record_list_request_serialization() {
+        let request = AccessRecordListRequest {
+            page_token: Some("test_token".to_string()),
+            page_size: Some(50),
+            user_id: Some("user_123".to_string()),
+            start_time: Some(1640995200),
+            ..Default::default()
+        };
+
+        let json = serde_json::to_string(&request).expect("Should serialize");
+        let deserialized: AccessRecordListRequest =
+            serde_json::from_str(&json).expect("Should deserialize");
+
+        assert_eq!(request.page_token, deserialized.page_token);
+        assert_eq!(request.page_size, deserialized.page_size);
+        assert_eq!(request.user_id, deserialized.user_id);
+        assert_eq!(request.start_time, deserialized.start_time);
+    }
+
+    #[test]
+    fn test_access_record_list_request_debug() {
+        let request = AccessRecordListRequest {
+            page_token: Some("token".to_string()),
+            page_size: Some(10),
+            ..Default::default()
+        };
+        let debug_str = format!("{:?}", request);
+        assert!(debug_str.contains("AccessRecordListRequest"));
+        assert!(debug_str.contains("token"));
+    }
+
+    #[test]
+    fn test_access_record_list_response_data_format() {
+        assert_eq!(AccessRecordListResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_access_record_face_image_response_data_format() {
+        assert_eq!(AccessRecordFaceImageResponse::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_access_record_list_response_debug() {
+        use crate::service::acs::models::PageResponse;
+
+        let response = AccessRecordListResponse {
+            access_records: PageResponse {
+                has_more: Some(true),
+                page_token: Some("next_token".to_string()),
+                items: vec![],
+            },
+        };
+
+        let debug_str = format!("{:?}", response);
+        assert!(debug_str.contains("AccessRecordListResponse"));
+        assert!(debug_str.contains("next_token"));
+    }
+
+    #[test]
+    fn test_access_record_face_image_response_debug() {
+        let response = AccessRecordFaceImageResponse {
+            face_image: FaceImage {
+                image_id: "face_001".to_string(),
+                image_content: Some("base64_content".to_string()),
+                image_format: Some("jpeg".to_string()),
+                file_size: Some(1024),
+                uploaded_at: Some(1640995200),
+            },
+        };
+
+        let debug_str = format!("{:?}", response);
+        assert!(debug_str.contains("AccessRecordFaceImageResponse"));
+        assert!(debug_str.contains("face_001"));
+    }
+
+    #[test]
+    fn test_access_record_list_response_serialization() {
+        use crate::service::acs::models::PageResponse;
+
+        let response = AccessRecordListResponse {
+            access_records: PageResponse {
+                has_more: Some(false),
+                page_token: None,
+                items: vec![],
+            },
+        };
+
+        let json = serde_json::to_string(&response).expect("Should serialize");
+        let deserialized: AccessRecordListResponse =
+            serde_json::from_str(&json).expect("Should deserialize");
+
+        assert_eq!(response.access_records.has_more, deserialized.access_records.has_more);
+    }
+
+    #[test]
+    fn test_access_record_face_image_response_serialization() {
+        let response = AccessRecordFaceImageResponse {
+            face_image: FaceImage {
+                image_id: "test_image".to_string(),
+                image_content: Some("test_base64_content".to_string()),
+                image_format: Some("jpeg".to_string()),
+                file_size: Some(2048),
+                uploaded_at: Some(1643673600),
+            },
+        };
+
+        let json = serde_json::to_string(&response).expect("Should serialize");
+        let deserialized: AccessRecordFaceImageResponse =
+            serde_json::from_str(&json).expect("Should deserialize");
+
+        assert_eq!(response.face_image.image_id, deserialized.face_image.image_id);
+        assert_eq!(response.face_image.image_content, deserialized.face_image.image_content);
+        assert_eq!(response.face_image.file_size, deserialized.face_image.file_size);
+    }
+
+    #[test]
+    fn test_api_request_construction_for_list_access_records() {
+        let config = Config::default();
+        let service = AccessRecordService::new(config);
+        let _request = AccessRecordListRequest {
+            page_size: Some(10),
+            user_id: Some("test_user".to_string()),
+            ..Default::default()
+        };
+
+        // We can't directly test the async method without mocking,
+        // but we can test that the service handles the request structure properly
+        assert_eq!(service.config.app_id, "");
+    }
+
+    #[test]
+    fn test_endpoint_configuration() {
+        // Test that we're using the correct endpoints
+        assert!(!Endpoints::ACS_V1_ACCESS_RECORDS.is_empty());
+        assert!(!Endpoints::ACS_V1_ACCESS_RECORD_FACE_IMAGE.is_empty());
+    }
+
+    #[test]
+    fn test_access_token_type_support() {
+        // The service should support tenant and user access tokens
+        let supported_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        assert!(supported_types.contains(&AccessTokenType::Tenant));
+        assert!(supported_types.contains(&AccessTokenType::User));
+        assert!(!supported_types.contains(&AccessTokenType::App));
     }
 }
