@@ -14,7 +14,7 @@ pub struct PageResponse<T> {
 }
 
 /// 用户类型
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum UserType {
     /// 员工
@@ -28,7 +28,7 @@ pub enum UserType {
 }
 
 /// 用户状态
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum UserStatus {
     /// 活跃
@@ -169,7 +169,7 @@ pub struct Visitor {
 }
 
 /// 设备类型
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum DeviceType {
     /// 门禁设备
@@ -183,7 +183,7 @@ pub enum DeviceType {
 }
 
 /// 设备状态
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum DeviceStatus {
     /// 在线
@@ -230,7 +230,7 @@ pub struct Device {
 }
 
 /// 访问类型
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum AccessType {
     /// 进入
@@ -240,7 +240,7 @@ pub enum AccessType {
 }
 
 /// 访问方式
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum AccessMethod {
     /// 人脸识别
@@ -256,7 +256,7 @@ pub enum AccessMethod {
 }
 
 /// 访问结果
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum AccessResult {
     /// 成功
