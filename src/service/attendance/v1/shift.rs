@@ -419,7 +419,7 @@ impl ListShiftRequest {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{api_req::ApiRequest, config::Config};
+    use crate::core::config::Config;
 
     #[test]
     fn test_shift_service_creation() {

@@ -196,6 +196,7 @@ impl_executable_builder_owned!(
 mod tests {
     use super::*;
     use crate::core::{api_req::ApiRequest, config::Config};
+    use crate::service::attendance::v1::models::ArchiveReportRecord;
 
     #[test]
     fn test_archive_rule_service_creation() {
@@ -238,18 +239,31 @@ mod tests {
 
     #[test]
     fn test_upload_archive_report_request_construction() {
+        let record1 = ArchiveReportRecord {
+            record_id: Some("record1".to_string()),
+            user_id: "user1".to_string(),
+            archive_date: "2024-01-01".to_string(),
+            field_data: std::collections::HashMap::new(),
+        };
+        let record2 = ArchiveReportRecord {
+            record_id: Some("record2".to_string()),
+            user_id: "user2".to_string(),
+            archive_date: "2024-01-02".to_string(),
+            field_data: std::collections::HashMap::new(),
+        };
+
         let request = UploadArchiveReportRequest {
             api_req: ApiRequest::default(),
             archive_rule_id: "rule_456".to_string(),
             employee_type: "2".to_string(),
-            report_data: vec!["data1".to_string(), "data2".to_string()],
+            report_data: vec![record1, record2],
         };
 
         assert_eq!(request.archive_rule_id, "rule_456");
         assert_eq!(request.employee_type, "2");
         assert_eq!(request.report_data.len(), 2);
-        assert_eq!(request.report_data[0], "data1");
-        assert_eq!(request.report_data[1], "data2");
+        assert_eq!(request.report_data[0].user_id, "user1");
+        assert_eq!(request.report_data[1].user_id, "user2");
     }
 
     #[test]

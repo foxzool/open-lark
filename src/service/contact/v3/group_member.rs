@@ -12,6 +12,7 @@ use crate::{
 use serde::{Deserialize, Serialize};
 
 /// 用户组成员服务
+#[derive(Debug)]
 pub struct GroupMemberService {
     config: Config,
 }

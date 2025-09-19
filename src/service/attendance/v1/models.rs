@@ -374,7 +374,7 @@ pub struct Group {
 }
 
 /// 例外日期规则
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExceptDateRule {
     /// 例外日期，格式：YYYY-MM-DD
     pub date: String,
@@ -385,7 +385,7 @@ pub struct ExceptDateRule {
 }
 
 /// 工作日规则
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkDayRule {
     /// 星期几：1-7，1代表周一
     pub week_day: i32,
@@ -394,7 +394,7 @@ pub struct WorkDayRule {
 }
 
 /// 班次规则
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ShiftRule {
     /// 班次 ID
     pub shift_id: String,
@@ -403,7 +403,7 @@ pub struct ShiftRule {
 }
 
 /// 成员规则
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MemberRule {
     /// 成员类型：1-部门 2-用户
     pub member_type: i32,
@@ -1447,7 +1447,7 @@ impl ApiResponseTrait for QueryUserTaskResultRespData {
 // ==================== 归档报表相关数据结构 ====================
 
 /// 查询归档报表表头请求
-#[derive(Default, Clone)]
+#[derive(Debug, Default, Clone)]
 pub struct QueryArchiveStatsFieldsRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型

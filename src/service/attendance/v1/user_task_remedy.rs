@@ -168,9 +168,9 @@ impl_executable_builder_owned!(
 
 #[cfg(test)]
 mod tests {
-    use super::models::UserTaskRemedyApplication;
     use super::*;
     use crate::core::{api_req::ApiRequest, config::Config};
+    use crate::service::attendance::v1::models::UserTaskRemedyApplication;
 
     #[test]
     fn test_user_task_remedy_service_creation() {
