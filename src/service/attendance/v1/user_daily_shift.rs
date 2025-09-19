@@ -13,6 +13,7 @@ use super::models::{
 };
 
 /// 用户排班服务
+#[derive(Debug)]
 pub struct UserDailyShiftService {
     pub config: Config,
 }

@@ -87,7 +87,7 @@ pub struct FacePunchConfig {
 }
 
 /// 创建班次请求
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct CreateShiftRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型，作为查询参数。如果没有后台管理权限，可使用通过手机号或邮箱获取用户 ID
@@ -151,7 +151,7 @@ impl ApiResponseTrait for Shift {
 }
 
 /// 删除班次请求
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct DeleteShiftRequest {
     pub api_req: ApiRequest,
     /// 班次 ID
@@ -460,7 +460,7 @@ impl ApiResponseTrait for ListGroupUserRespData {
 }
 
 /// 创建或修改考勤组请求
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct CreateGroupRequest {
     pub api_req: ApiRequest,
     /// 员工 ID 类型
@@ -606,7 +606,7 @@ pub struct UserSetting {
 }
 
 /// 修改用户人脸识别信息请求
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct ModifyUserSettingRequest {
     pub api_req: ApiRequest,
     /// 员工 ID 类型
@@ -871,7 +871,7 @@ impl ApiResponseTrait for QueryUserStatsDataRespData {
 // ==================== 假勤审批相关数据结构 ====================
 
 /// 获取审批数据请求
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct QueryUserApprovalRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -999,7 +999,7 @@ impl ApiResponseTrait for ProcessUserApprovalRespData {
 // ==================== 考勤补卡相关数据结构 ====================
 
 /// 通知补卡审批发起请求
-#[derive(Default, Clone)]
+#[derive(Default, Clone, Debug)]
 pub struct CreateUserTaskRemedyRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型

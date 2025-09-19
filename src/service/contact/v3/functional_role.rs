@@ -9,6 +9,7 @@ use crate::core::{
 use serde::{Deserialize, Serialize};
 
 /// 角色管理服务
+#[derive(Debug)]
 pub struct FunctionalRoleService {
     config: Config,
 }
