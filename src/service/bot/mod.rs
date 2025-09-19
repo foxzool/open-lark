@@ -134,119 +134,114 @@ impl BotService {
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
-
-    fn create_test_config() -> Config {
-        Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build()
-    }
+    use std::time::Duration;
 
     #[test]
     fn test_bot_service_creation() {
-        let config = create_test_config();
-        let _bot_service = BotService::new(config);
+        let config = Config::default();
+        let service = BotService::new(config.clone());
 
-        // Verify service structure
+        // Verify V3 service structure exists with info sub-service
+        assert_eq!(service.v3.info.config.app_id, config.app_id);
+        assert_eq!(service.v3.info.config.app_secret, config.app_secret);
     }
 
     #[test]
     fn test_bot_service_with_custom_config() {
-        let config = Config::builder()
-            .app_id("bot_app")
-            .app_secret("bot_secret")
-            .req_timeout(std::time::Duration::from_millis(10000))
-            .base_url("https://bot.api.com")
-            .build();
+        let config = Config {
+            app_id: "bot_test_app".to_string(),
+            app_secret: "bot_test_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(410)),
+            ..Default::default()
+        };
 
-        let _bot_service = BotService::new(config);
+        let service = BotService::new(config.clone());
 
-        // Verify service creation with custom config
+        assert_eq!(service.v3.info.config.app_id, "bot_test_app");
+        assert_eq!(service.v3.info.config.app_secret, "bot_test_secret");
+        assert_eq!(service.v3.info.config.req_timeout, Some(Duration::from_secs(410)));
     }
 
     #[test]
-    fn test_bot_service_configuration_variations() {
-        let test_configs = vec![
-            Config::builder()
-                .app_id("bot_basic")
-                .app_secret("basic_secret")
-                .build(),
-            Config::builder()
-                .app_id("bot_timeout")
-                .app_secret("timeout_secret")
-                .req_timeout(std::time::Duration::from_millis(15000))
-                .build(),
-            Config::builder()
-                .app_id("bot_custom")
-                .app_secret("custom_secret")
-                .base_url("https://custom.bot.com")
-                .build(),
-            Config::builder()
-                .app_id("bot_full")
-                .app_secret("full_secret")
-                .req_timeout(std::time::Duration::from_millis(20000))
-                .base_url("https://full.bot.com")
-                .enable_token_cache(false)
-                .build(),
-        ];
+    fn test_bot_service_config_independence() {
+        let mut config1 = Config::default();
+        config1.app_id = "bot_app_1".to_string();
 
-        for config in test_configs {
-            let _bot_service = BotService::new(config);
+        let mut config2 = Config::default();
+        config2.app_id = "bot_app_2".to_string();
 
-            // Each configuration should create a valid service
-        }
+        let service1 = BotService::new(config1);
+        let service2 = BotService::new(config2);
+
+        assert_eq!(service1.v3.info.config.app_id, "bot_app_1");
+        assert_eq!(service2.v3.info.config.app_id, "bot_app_2");
+        assert_ne!(service1.v3.info.config.app_id, service2.v3.info.config.app_id);
+    }
+
+    #[test]
+    fn test_bot_service_sub_services_accessible() {
+        let config = Config::default();
+        let service = BotService::new(config.clone());
+
+        // Test that info sub-service is accessible
+        assert_eq!(service.v3.info.config.app_id, config.app_id);
+    }
+
+    #[test]
+    fn test_bot_service_config_cloning() {
+        let config = Config {
+            app_id: "clone_test_app".to_string(),
+            app_secret: "clone_test_secret".to_string(),
+            ..Default::default()
+        };
+
+        let service = BotService::new(config.clone());
+
+        assert_eq!(service.v3.info.config.app_id, "clone_test_app");
+        assert_eq!(service.v3.info.config.app_secret, "clone_test_secret");
+    }
+
+    #[test]
+    fn test_bot_service_timeout_propagation() {
+        let config = Config {
+            req_timeout: Some(Duration::from_secs(420)),
+            ..Default::default()
+        };
+
+        let service = BotService::new(config);
+
+        // Verify timeout is propagated to info sub-service
+        assert_eq!(service.v3.info.config.req_timeout, Some(Duration::from_secs(420)));
     }
 
     #[test]
     fn test_bot_service_multiple_instances() {
-        let config1 = create_test_config();
-        let config2 = Config::builder()
-            .app_id("bot2")
-            .app_secret("secret2")
-            .build();
+        let config = Config::default();
 
-        let bot_service1 = BotService::new(config1);
-        let bot_service2 = BotService::new(config2);
+        let service1 = BotService::new(config.clone());
+        let service2 = BotService::new(config.clone());
 
-        // Services should be independent instances
-        let service1_ptr = std::ptr::addr_of!(bot_service1) as *const _;
-        let service2_ptr = std::ptr::addr_of!(bot_service2) as *const _;
-
-        assert_ne!(
-            service1_ptr, service2_ptr,
-            "Services should be independent instances"
-        );
-
-        // Each service should have valid v3 API
+        // Both services should have the same config values
+        assert_eq!(service1.v3.info.config.app_id, service2.v3.info.config.app_id);
+        assert_eq!(service1.v3.info.config.app_secret, service2.v3.info.config.app_secret);
     }
 
     #[test]
-    fn test_bot_service_config_cloning_behavior() {
-        let original_config = create_test_config();
+    fn test_bot_service_config_consistency() {
+        let config = Config {
+            app_id: "consistency_test".to_string(),
+            app_secret: "consistency_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(430)),
+            ..Default::default()
+        };
 
-        // Test that the service works with cloned configs
-        let bot_service1 = BotService::new(original_config.clone());
-        let bot_service2 = BotService::new(original_config);
+        let service = BotService::new(config);
 
-        // Both should work independently
-
-        // But should be different service instances
-        let service1_ptr = std::ptr::addr_of!(bot_service1) as *const _;
-        let service2_ptr = std::ptr::addr_of!(bot_service2) as *const _;
-        assert_ne!(service1_ptr, service2_ptr);
-    }
-
-    #[test]
-    fn test_bot_service_api_version_structure() {
-        let config = create_test_config();
-        let _bot_service = BotService::new(config);
-
-        // Verify that the v3 API is properly structured
-
-        // Test that service can be used (basic memory check)
+        // Verify info sub-service has consistent configuration
+        assert_eq!(service.v3.info.config.app_id, "consistency_test");
+        assert_eq!(service.v3.info.config.app_secret, "consistency_secret");
+        assert_eq!(service.v3.info.config.req_timeout, Some(Duration::from_secs(430)));
     }
 }

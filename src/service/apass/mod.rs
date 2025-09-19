@@ -186,3 +186,184 @@ impl ApassService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::time::Duration;
+
+    #[test]
+    fn test_apass_service_creation() {
+        let config = Config::default();
+        let service = ApassService::new(config.clone());
+
+        // Verify all sub-services have the same config
+        assert_eq!(service.seat.config.app_id, config.app_id);
+        assert_eq!(service.audit_log.config.app_id, config.app_id);
+        assert_eq!(service.permission.config.app_id, config.app_id);
+        assert_eq!(service.object.config.app_id, config.app_id);
+        assert_eq!(service.function.config.app_id, config.app_id);
+        assert_eq!(service.environment_variable.config.app_id, config.app_id);
+        assert_eq!(service.flow.config.app_id, config.app_id);
+    }
+
+    #[test]
+    fn test_apass_service_with_custom_config() {
+        let config = Config {
+            app_id: "apass_test_app".to_string(),
+            app_secret: "apass_test_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(180)),
+            ..Default::default()
+        };
+
+        let service = ApassService::new(config.clone());
+
+        // Verify all sub-services got the custom config
+        assert_eq!(service.seat.config.app_id, "apass_test_app");
+        assert_eq!(service.seat.config.app_secret, "apass_test_secret");
+        assert_eq!(service.seat.config.req_timeout, Some(Duration::from_secs(180)));
+
+        assert_eq!(service.audit_log.config.app_id, "apass_test_app");
+        assert_eq!(service.audit_log.config.req_timeout, Some(Duration::from_secs(180)));
+
+        assert_eq!(service.permission.config.app_id, "apass_test_app");
+        assert_eq!(service.object.config.app_id, "apass_test_app");
+        assert_eq!(service.function.config.app_id, "apass_test_app");
+        assert_eq!(service.environment_variable.config.app_id, "apass_test_app");
+        assert_eq!(service.flow.config.app_id, "apass_test_app");
+    }
+
+    #[test]
+    fn test_apass_service_config_independence() {
+        let mut config1 = Config::default();
+        config1.app_id = "apass_app_1".to_string();
+
+        let mut config2 = Config::default();
+        config2.app_id = "apass_app_2".to_string();
+
+        let service1 = ApassService::new(config1);
+        let service2 = ApassService::new(config2);
+
+        // Verify services are independent
+        assert_eq!(service1.seat.config.app_id, "apass_app_1");
+        assert_eq!(service2.seat.config.app_id, "apass_app_2");
+        assert_ne!(service1.seat.config.app_id, service2.seat.config.app_id);
+
+        assert_eq!(service1.audit_log.config.app_id, "apass_app_1");
+        assert_eq!(service2.audit_log.config.app_id, "apass_app_2");
+    }
+
+    #[test]
+    fn test_apass_service_all_sub_services_accessible() {
+        let config = Config::default();
+        let service = ApassService::new(config.clone());
+
+        // Test that all sub-services are accessible and properly configured
+        assert_eq!(service.seat.config.app_id, config.app_id);
+        assert_eq!(service.audit_log.config.app_id, config.app_id);
+        assert_eq!(service.permission.config.app_id, config.app_id);
+        assert_eq!(service.object.config.app_id, config.app_id);
+        assert_eq!(service.function.config.app_id, config.app_id);
+        assert_eq!(service.environment_variable.config.app_id, config.app_id);
+        assert_eq!(service.flow.config.app_id, config.app_id);
+    }
+
+    #[test]
+    fn test_apass_service_config_cloning() {
+        let config = Config {
+            app_id: "clone_test_app".to_string(),
+            app_secret: "clone_test_secret".to_string(),
+            ..Default::default()
+        };
+
+        let service = ApassService::new(config.clone());
+
+        // All sub-services should have the same config values but be independent instances
+        let services_configs = [
+            &service.seat.config,
+            &service.audit_log.config,
+            &service.permission.config,
+            &service.object.config,
+            &service.function.config,
+            &service.environment_variable.config,
+            &service.flow.config,
+        ];
+
+        for service_config in &services_configs {
+            assert_eq!(service_config.app_id, "clone_test_app");
+            assert_eq!(service_config.app_secret, "clone_test_secret");
+        }
+    }
+
+    #[test]
+    fn test_apass_service_timeout_propagation() {
+        let config = Config {
+            req_timeout: Some(Duration::from_secs(300)),
+            ..Default::default()
+        };
+
+        let service = ApassService::new(config);
+
+        // Verify timeout is propagated to all sub-services
+        assert_eq!(service.seat.config.req_timeout, Some(Duration::from_secs(300)));
+        assert_eq!(service.audit_log.config.req_timeout, Some(Duration::from_secs(300)));
+        assert_eq!(service.permission.config.req_timeout, Some(Duration::from_secs(300)));
+        assert_eq!(service.object.config.req_timeout, Some(Duration::from_secs(300)));
+        assert_eq!(service.function.config.req_timeout, Some(Duration::from_secs(300)));
+        assert_eq!(service.environment_variable.config.req_timeout, Some(Duration::from_secs(300)));
+        assert_eq!(service.flow.config.req_timeout, Some(Duration::from_secs(300)));
+    }
+
+    #[test]
+    fn test_apass_service_multiple_instances() {
+        let config = Config::default();
+
+        let service1 = ApassService::new(config.clone());
+        let service2 = ApassService::new(config.clone());
+
+        // Both services should have the same config values
+        assert_eq!(service1.seat.config.app_id, service2.seat.config.app_id);
+        assert_eq!(service1.audit_log.config.app_id, service2.audit_log.config.app_id);
+        assert_eq!(service1.permission.config.app_id, service2.permission.config.app_id);
+        assert_eq!(service1.object.config.app_id, service2.object.config.app_id);
+        assert_eq!(service1.function.config.app_id, service2.function.config.app_id);
+        assert_eq!(service1.environment_variable.config.app_id, service2.environment_variable.config.app_id);
+        assert_eq!(service1.flow.config.app_id, service2.flow.config.app_id);
+    }
+
+    #[test]
+    fn test_apass_service_config_consistency() {
+        let config = Config {
+            app_id: "consistency_test".to_string(),
+            app_secret: "consistency_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(120)),
+            ..Default::default()
+        };
+
+        let service = ApassService::new(config);
+
+        // Verify all sub-services have consistent configurations
+        let configs = [
+            &service.seat.config,
+            &service.audit_log.config,
+            &service.permission.config,
+            &service.object.config,
+            &service.function.config,
+            &service.environment_variable.config,
+            &service.flow.config,
+        ];
+
+        for config in &configs {
+            assert_eq!(config.app_id, "consistency_test");
+            assert_eq!(config.app_secret, "consistency_secret");
+            assert_eq!(config.req_timeout, Some(Duration::from_secs(120)));
+        }
+
+        // Verify all configs are identical
+        for i in 1..configs.len() {
+            assert_eq!(configs[0].app_id, configs[i].app_id);
+            assert_eq!(configs[0].app_secret, configs[i].app_secret);
+            assert_eq!(configs[0].req_timeout, configs[i].req_timeout);
+        }
+    }
+}

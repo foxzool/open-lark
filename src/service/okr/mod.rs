@@ -223,3 +223,140 @@ impl OkrService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::time::Duration;
+
+    #[test]
+    fn test_okr_service_creation() {
+        let config = Config::default();
+        let service = OkrService::new(config.clone());
+
+        assert_eq!(service.period.config.app_id, config.app_id);
+        assert_eq!(service.period.config.app_secret, config.app_secret);
+        assert_eq!(service.period_rule.config.app_id, config.app_id);
+        assert_eq!(service.okr.config.app_id, config.app_id);
+        assert_eq!(service.progress_record.config.app_id, config.app_id);
+        assert_eq!(service.review.config.app_id, config.app_id);
+    }
+
+    #[test]
+    fn test_okr_service_with_custom_config() {
+        let config = Config {
+            app_id: "okr_test_app".to_string(),
+            app_secret: "okr_test_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(180)),
+            ..Default::default()
+        };
+
+        let service = OkrService::new(config.clone());
+
+        assert_eq!(service.period.config.app_id, "okr_test_app");
+        assert_eq!(service.period.config.app_secret, "okr_test_secret");
+        assert_eq!(service.period.config.req_timeout, Some(Duration::from_secs(180)));
+        assert_eq!(service.period_rule.config.app_id, "okr_test_app");
+        assert_eq!(service.okr.config.req_timeout, Some(Duration::from_secs(180)));
+        assert_eq!(service.progress_record.config.app_secret, "okr_test_secret");
+        assert_eq!(service.review.config.req_timeout, Some(Duration::from_secs(180)));
+    }
+
+    #[test]
+    fn test_okr_service_config_independence() {
+        let mut config1 = Config::default();
+        config1.app_id = "okr_app_1".to_string();
+
+        let mut config2 = Config::default();
+        config2.app_id = "okr_app_2".to_string();
+
+        let service1 = OkrService::new(config1);
+        let service2 = OkrService::new(config2);
+
+        assert_eq!(service1.period.config.app_id, "okr_app_1");
+        assert_eq!(service2.period.config.app_id, "okr_app_2");
+        assert_ne!(service1.period.config.app_id, service2.period.config.app_id);
+        assert_ne!(service1.okr.config.app_id, service2.review.config.app_id);
+    }
+
+    #[test]
+    fn test_okr_service_sub_services_accessible() {
+        let config = Config::default();
+        let service = OkrService::new(config.clone());
+
+        assert_eq!(service.period.config.app_id, config.app_id);
+        assert_eq!(service.period_rule.config.app_id, config.app_id);
+        assert_eq!(service.okr.config.app_id, config.app_id);
+        assert_eq!(service.progress_record.config.app_id, config.app_id);
+        assert_eq!(service.review.config.app_id, config.app_id);
+    }
+
+    #[test]
+    fn test_okr_service_config_cloning() {
+        let config = Config {
+            app_id: "clone_test_app".to_string(),
+            app_secret: "clone_test_secret".to_string(),
+            ..Default::default()
+        };
+
+        let service = OkrService::new(config.clone());
+
+        assert_eq!(service.period.config.app_id, "clone_test_app");
+        assert_eq!(service.period.config.app_secret, "clone_test_secret");
+        assert_eq!(service.period_rule.config.app_secret, "clone_test_secret");
+        assert_eq!(service.okr.config.app_id, "clone_test_app");
+        assert_eq!(service.progress_record.config.app_secret, "clone_test_secret");
+        assert_eq!(service.review.config.app_id, "clone_test_app");
+    }
+
+    #[test]
+    fn test_okr_service_timeout_propagation() {
+        let config = Config {
+            req_timeout: Some(Duration::from_secs(200)),
+            ..Default::default()
+        };
+
+        let service = OkrService::new(config);
+
+        assert_eq!(service.period.config.req_timeout, Some(Duration::from_secs(200)));
+        assert_eq!(service.period_rule.config.req_timeout, Some(Duration::from_secs(200)));
+        assert_eq!(service.okr.config.req_timeout, Some(Duration::from_secs(200)));
+        assert_eq!(service.progress_record.config.req_timeout, Some(Duration::from_secs(200)));
+        assert_eq!(service.review.config.req_timeout, Some(Duration::from_secs(200)));
+    }
+
+    #[test]
+    fn test_okr_service_multiple_instances() {
+        let config = Config::default();
+
+        let service1 = OkrService::new(config.clone());
+        let service2 = OkrService::new(config.clone());
+
+        assert_eq!(service1.period.config.app_id, service2.period.config.app_id);
+        assert_eq!(service1.period.config.app_secret, service2.period.config.app_secret);
+        assert_eq!(service1.period_rule.config.app_id, service2.period_rule.config.app_id);
+        assert_eq!(service1.okr.config.app_secret, service2.okr.config.app_secret);
+        assert_eq!(service1.progress_record.config.app_id, service2.progress_record.config.app_id);
+        assert_eq!(service1.review.config.app_secret, service2.review.config.app_secret);
+    }
+
+    #[test]
+    fn test_okr_service_config_consistency() {
+        let config = Config {
+            app_id: "consistency_test".to_string(),
+            app_secret: "consistency_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(160)),
+            ..Default::default()
+        };
+
+        let service = OkrService::new(config);
+
+        assert_eq!(service.period.config.app_id, "consistency_test");
+        assert_eq!(service.period.config.app_secret, "consistency_secret");
+        assert_eq!(service.period.config.req_timeout, Some(Duration::from_secs(160)));
+        assert_eq!(service.period_rule.config.app_id, "consistency_test");
+        assert_eq!(service.okr.config.app_secret, "consistency_secret");
+        assert_eq!(service.progress_record.config.req_timeout, Some(Duration::from_secs(160)));
+        assert_eq!(service.review.config.app_id, "consistency_test");
+    }
+}

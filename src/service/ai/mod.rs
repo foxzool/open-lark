@@ -182,67 +182,139 @@ impl AiService {
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use crate::core::constants::AppType;
-
-    fn create_test_config() -> Config {
-        Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .app_type(AppType::SelfBuild)
-            .build()
-    }
+    use std::time::Duration;
 
     #[test]
     fn test_ai_service_creation() {
-        let config = create_test_config();
-        let service = AiService::new(config);
+        let config = Config::default();
+        let service = AiService::new(config.clone());
 
-        // Verify that all services are properly initialized
+        assert_eq!(service.document_ai.config.app_id, config.app_id);
+        assert_eq!(service.document_ai.config.app_secret, config.app_secret);
+        assert_eq!(service.optical_char_recognition.config.app_id, config.app_id);
+        assert_eq!(service.speech_to_text.config.app_id, config.app_id);
+        assert_eq!(service.translation.config.app_secret, config.app_secret);
     }
 
     #[test]
-    fn test_ai_service_with_different_config() {
-        let config = Config::builder()
-            .app_id("different_app_id")
-            .app_secret("different_app_secret")
-            .app_type(AppType::Marketplace)
-            .build();
+    fn test_ai_service_with_custom_config() {
+        let config = Config {
+            app_id: "ai_test_app".to_string(),
+            app_secret: "ai_test_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(220)),
+            ..Default::default()
+        };
 
-        let service = AiService::new(config);
+        let service = AiService::new(config.clone());
 
-        // Verify service creation works with different config types
+        assert_eq!(service.document_ai.config.app_id, "ai_test_app");
+        assert_eq!(service.document_ai.config.app_secret, "ai_test_secret");
+        assert_eq!(service.document_ai.config.req_timeout, Some(Duration::from_secs(220)));
+        assert_eq!(service.optical_char_recognition.config.app_id, "ai_test_app");
+        assert_eq!(service.speech_to_text.config.req_timeout, Some(Duration::from_secs(220)));
+        assert_eq!(service.translation.config.app_id, "ai_test_app");
     }
 
     #[test]
-    fn test_ai_service_structure() {
-        let config = create_test_config();
-        let service = AiService::new(config);
+    fn test_ai_service_config_independence() {
+        let mut config1 = Config::default();
+        config1.app_id = "ai_app_1".to_string();
 
-        // Test that we can access all service fields
-        let _document_ai = &service.document_ai;
-        let _optical_char_recognition = &service.optical_char_recognition;
-        let _speech_to_text = &service.speech_to_text;
-        let _translation = &service.translation;
+        let mut config2 = Config::default();
+        config2.app_id = "ai_app_2".to_string();
 
-        // If we reach here without panic, structure is correct
-        // Test passes by not panicking above
+        let service1 = AiService::new(config1);
+        let service2 = AiService::new(config2);
+
+        assert_eq!(service1.document_ai.config.app_id, "ai_app_1");
+        assert_eq!(service2.document_ai.config.app_id, "ai_app_2");
+        assert_ne!(service1.document_ai.config.app_id, service2.document_ai.config.app_id);
+        assert_ne!(service1.optical_char_recognition.config.app_id, service2.optical_char_recognition.config.app_id);
+        assert_ne!(service1.speech_to_text.config.app_id, service2.speech_to_text.config.app_id);
+        assert_ne!(service1.translation.config.app_id, service2.translation.config.app_id);
     }
 
     #[test]
-    fn test_ai_service_memory_safety() {
-        let config = create_test_config();
+    fn test_ai_service_sub_services_accessible() {
+        let config = Config::default();
+        let service = AiService::new(config.clone());
 
-        // Create service in a scope
+        assert_eq!(service.document_ai.config.app_id, config.app_id);
+        assert_eq!(service.optical_char_recognition.config.app_id, config.app_id);
+        assert_eq!(service.speech_to_text.config.app_id, config.app_id);
+        assert_eq!(service.translation.config.app_id, config.app_id);
+    }
+
+    #[test]
+    fn test_ai_service_config_cloning() {
+        let config = Config {
+            app_id: "clone_test_app".to_string(),
+            app_secret: "clone_test_secret".to_string(),
+            ..Default::default()
+        };
+
+        let service = AiService::new(config.clone());
+
+        assert_eq!(service.document_ai.config.app_id, "clone_test_app");
+        assert_eq!(service.document_ai.config.app_secret, "clone_test_secret");
+        assert_eq!(service.optical_char_recognition.config.app_secret, "clone_test_secret");
+        assert_eq!(service.speech_to_text.config.app_id, "clone_test_app");
+        assert_eq!(service.translation.config.app_secret, "clone_test_secret");
+    }
+
+    #[test]
+    fn test_ai_service_timeout_propagation() {
+        let config = Config {
+            req_timeout: Some(Duration::from_secs(230)),
+            ..Default::default()
+        };
+
         let service = AiService::new(config);
 
-        // Access services multiple times
-        let _first_access = &service.document_ai;
-        let _second_access = &service.document_ai;
+        assert_eq!(service.document_ai.config.req_timeout, Some(Duration::from_secs(230)));
+        assert_eq!(service.optical_char_recognition.config.req_timeout, Some(Duration::from_secs(230)));
+        assert_eq!(service.speech_to_text.config.req_timeout, Some(Duration::from_secs(230)));
+        assert_eq!(service.translation.config.req_timeout, Some(Duration::from_secs(230)));
+    }
 
-        // Verify multiple references work correctly
-        assert!(std::ptr::eq(_first_access, _second_access));
+    #[test]
+    fn test_ai_service_multiple_instances() {
+        let config = Config::default();
+
+        let service1 = AiService::new(config.clone());
+        let service2 = AiService::new(config.clone());
+
+        assert_eq!(service1.document_ai.config.app_id, service2.document_ai.config.app_id);
+        assert_eq!(service1.document_ai.config.app_secret, service2.document_ai.config.app_secret);
+        assert_eq!(service1.optical_char_recognition.config.app_id, service2.optical_char_recognition.config.app_id);
+        assert_eq!(service1.speech_to_text.config.app_secret, service2.speech_to_text.config.app_secret);
+        assert_eq!(service1.translation.config.app_id, service2.translation.config.app_id);
+    }
+
+    #[test]
+    fn test_ai_service_config_consistency() {
+        let config = Config {
+            app_id: "consistency_test".to_string(),
+            app_secret: "consistency_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(170)),
+            ..Default::default()
+        };
+
+        let service = AiService::new(config);
+
+        assert_eq!(service.document_ai.config.app_id, "consistency_test");
+        assert_eq!(service.document_ai.config.app_secret, "consistency_secret");
+        assert_eq!(service.document_ai.config.req_timeout, Some(Duration::from_secs(170)));
+        assert_eq!(service.optical_char_recognition.config.app_id, "consistency_test");
+        assert_eq!(service.optical_char_recognition.config.app_secret, "consistency_secret");
+        assert_eq!(service.optical_char_recognition.config.req_timeout, Some(Duration::from_secs(170)));
+        assert_eq!(service.speech_to_text.config.app_id, "consistency_test");
+        assert_eq!(service.speech_to_text.config.app_secret, "consistency_secret");
+        assert_eq!(service.speech_to_text.config.req_timeout, Some(Duration::from_secs(170)));
+        assert_eq!(service.translation.config.app_id, "consistency_test");
+        assert_eq!(service.translation.config.app_secret, "consistency_secret");
+        assert_eq!(service.translation.config.req_timeout, Some(Duration::from_secs(170)));
     }
 }

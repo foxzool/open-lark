@@ -123,3 +123,111 @@ impl TenantTagService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::time::Duration;
+
+    #[test]
+    fn test_tenant_tag_service_creation() {
+        let config = Config::default();
+        let service = TenantTagService::new(config.clone());
+
+        assert_eq!(service.tag.config.app_id, config.app_id);
+        assert_eq!(service.tag.config.app_secret, config.app_secret);
+        assert_eq!(service.tag_binding.config.app_id, config.app_id);
+        assert_eq!(service.tag_binding.config.app_secret, config.app_secret);
+    }
+
+    #[test]
+    fn test_tenant_tag_service_with_custom_config() {
+        let config = Config {
+            app_id: "tenant_tag_app".to_string(),
+            app_secret: "tenant_tag_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(120)),
+            ..Default::default()
+        };
+
+        let service = TenantTagService::new(config.clone());
+
+        assert_eq!(service.tag.config.app_id, "tenant_tag_app");
+        assert_eq!(service.tag.config.app_secret, "tenant_tag_secret");
+        assert_eq!(service.tag.config.req_timeout, Some(Duration::from_secs(120)));
+
+        assert_eq!(service.tag_binding.config.app_id, "tenant_tag_app");
+        assert_eq!(service.tag_binding.config.app_secret, "tenant_tag_secret");
+        assert_eq!(service.tag_binding.config.req_timeout, Some(Duration::from_secs(120)));
+    }
+
+    #[test]
+    fn test_tenant_tag_service_config_independence() {
+        let mut config1 = Config::default();
+        config1.app_id = "app_1".to_string();
+
+        let mut config2 = Config::default();
+        config2.app_id = "app_2".to_string();
+
+        let service1 = TenantTagService::new(config1);
+        let service2 = TenantTagService::new(config2);
+
+        assert_eq!(service1.tag.config.app_id, "app_1");
+        assert_eq!(service1.tag_binding.config.app_id, "app_1");
+        assert_eq!(service2.tag.config.app_id, "app_2");
+        assert_eq!(service2.tag_binding.config.app_id, "app_2");
+        assert_ne!(service1.tag.config.app_id, service2.tag.config.app_id);
+    }
+
+    #[test]
+    fn test_tenant_tag_service_sub_services_access() {
+        let config = Config::default();
+        let service = TenantTagService::new(config.clone());
+
+        // Test that we can access both sub-services
+        assert_eq!(service.tag.config.app_id, config.app_id);
+        assert_eq!(service.tag_binding.config.app_id, config.app_id);
+    }
+
+    #[test]
+    fn test_tenant_tag_service_multiple_instances() {
+        let config = Config::default();
+
+        let service1 = TenantTagService::new(config.clone());
+        let service2 = TenantTagService::new(config.clone());
+
+        assert_eq!(service1.tag.config.app_id, service2.tag.config.app_id);
+        assert_eq!(service1.tag_binding.config.app_id, service2.tag_binding.config.app_id);
+    }
+
+    #[test]
+    fn test_tenant_tag_service_config_cloning() {
+        let config = Config {
+            app_id: "clone_test_app".to_string(),
+            app_secret: "clone_test_secret".to_string(),
+            ..Default::default()
+        };
+
+        let service = TenantTagService::new(config.clone());
+
+        // Both services should have the same config values but be independent instances
+        assert_eq!(service.tag.config.app_id, service.tag_binding.config.app_id);
+        assert_eq!(service.tag.config.app_secret, service.tag_binding.config.app_secret);
+
+        // But they should be independent instances (this tests that clone() worked)
+        assert_eq!(service.tag.config.app_id, "clone_test_app");
+        assert_eq!(service.tag_binding.config.app_id, "clone_test_app");
+    }
+
+    #[test]
+    fn test_tenant_tag_service_config_timeout_propagation() {
+        let config = Config {
+            req_timeout: Some(Duration::from_secs(90)),
+            ..Default::default()
+        };
+
+        let service = TenantTagService::new(config);
+
+        assert_eq!(service.tag.config.req_timeout, Some(Duration::from_secs(90)));
+        assert_eq!(service.tag_binding.config.req_timeout, Some(Duration::from_secs(90)));
+    }
+}
