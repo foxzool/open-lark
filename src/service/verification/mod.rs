@@ -158,3 +158,79 @@ impl VerificationService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::time::Duration;
+
+    #[test]
+    fn test_verification_service_creation() {
+        let config = Config::default();
+        let service = VerificationService::new(config.clone());
+
+        assert_eq!(service.v1.config.app_id, config.app_id);
+        assert_eq!(service.v1.config.app_secret, config.app_secret);
+    }
+
+    #[test]
+    fn test_verification_service_with_custom_config() {
+        let config = Config {
+            app_id: "verification_test_app".to_string(),
+            app_secret: "verification_test_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(45)),
+            ..Default::default()
+        };
+
+        let service = VerificationService::new(config.clone());
+
+        assert_eq!(service.v1.config.app_id, "verification_test_app");
+        assert_eq!(service.v1.config.app_secret, "verification_test_secret");
+        assert_eq!(service.v1.config.req_timeout, Some(Duration::from_secs(45)));
+    }
+
+    #[test]
+    fn test_verification_service_debug_trait() {
+        let config = Config::default();
+        let service = VerificationService::new(config);
+
+        let debug_output = format!("{:?}", service.v1.config);
+        assert!(debug_output.contains("Config"));
+    }
+
+    #[test]
+    fn test_verification_service_config_independence() {
+        let mut config1 = Config::default();
+        config1.app_id = "app_1".to_string();
+
+        let mut config2 = Config::default();
+        config2.app_id = "app_2".to_string();
+
+        let service1 = VerificationService::new(config1);
+        let service2 = VerificationService::new(config2);
+
+        assert_eq!(service1.v1.config.app_id, "app_1");
+        assert_eq!(service2.v1.config.app_id, "app_2");
+        assert_ne!(service1.v1.config.app_id, service2.v1.config.app_id);
+    }
+
+    #[test]
+    fn test_verification_service_v1_access() {
+        let config = Config::default();
+        let service = VerificationService::new(config.clone());
+
+        // Test that we can access the v1 service
+        assert_eq!(service.v1.config.app_id, config.app_id);
+    }
+
+    #[test]
+    fn test_verification_service_multiple_instances() {
+        let config = Config::default();
+
+        let service1 = VerificationService::new(config.clone());
+        let service2 = VerificationService::new(config.clone());
+
+        assert_eq!(service1.v1.config.app_id, service2.v1.config.app_id);
+        assert_eq!(service1.v1.config.app_secret, service2.v1.config.app_secret);
+    }
+}

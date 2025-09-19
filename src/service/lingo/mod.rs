@@ -99,96 +99,149 @@ impl LingoService {
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
-
-    fn create_test_config() -> Config {
-        Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build()
-    }
+    use std::time::Duration;
 
     #[test]
     fn test_lingo_service_creation() {
-        let config = create_test_config();
-        let lingo_service = LingoService::new(config);
+        let config = Config::default();
+        let service = LingoService::new(config.clone());
 
-        // Verify all sub-services are created
-    }
-
-    #[test]
-    fn test_lingo_service_debug_trait() {
-        let config = create_test_config();
-        let lingo_service = LingoService::new(config);
-
-        // Test that service can be used
+        assert_eq!(service.draft.config.app_id, config.app_id);
+        assert_eq!(service.draft.config.app_secret, config.app_secret);
+        assert_eq!(service.entity.config.app_id, config.app_id);
+        assert_eq!(service.classification.config.app_id, config.app_id);
+        assert_eq!(service.repo.config.app_id, config.app_id);
+        assert_eq!(service.file.config.app_secret, config.app_secret);
     }
 
     #[test]
     fn test_lingo_service_with_custom_config() {
-        let config = Config::builder()
-            .app_id("lingo_app")
-            .app_secret("lingo_secret")
-            .req_timeout(std::time::Duration::from_millis(10000))
-            .base_url("https://lingo.api.com")
-            .build();
+        let config = Config {
+            app_id: "lingo_test_app".to_string(),
+            app_secret: "lingo_test_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(270)),
+            ..Default::default()
+        };
 
-        let lingo_service = LingoService::new(config);
+        let service = LingoService::new(config.clone());
 
-        // Verify service creation with custom config
+        assert_eq!(service.draft.config.app_id, "lingo_test_app");
+        assert_eq!(service.draft.config.app_secret, "lingo_test_secret");
+        assert_eq!(service.draft.config.req_timeout, Some(Duration::from_secs(270)));
+        assert_eq!(service.entity.config.app_id, "lingo_test_app");
+        assert_eq!(service.classification.config.req_timeout, Some(Duration::from_secs(270)));
+        assert_eq!(service.repo.config.app_id, "lingo_test_app");
+        assert_eq!(service.file.config.req_timeout, Some(Duration::from_secs(270)));
     }
 
     #[test]
-    fn test_lingo_service_modules_independence() {
-        let config = create_test_config();
-        let lingo_service = LingoService::new(config);
+    fn test_lingo_service_config_independence() {
+        let mut config1 = Config::default();
+        config1.app_id = "lingo_app_1".to_string();
 
-        // Test that all sub-modules are independent (different memory addresses)
-        let draft_ptr = std::ptr::addr_of!(lingo_service.draft) as *const _;
-        let entity_ptr = std::ptr::addr_of!(lingo_service.entity) as *const _;
-        let classification_ptr = std::ptr::addr_of!(lingo_service.classification) as *const _;
-        let repo_ptr = std::ptr::addr_of!(lingo_service.repo) as *const _;
-        let file_ptr = std::ptr::addr_of!(lingo_service.file) as *const _;
+        let mut config2 = Config::default();
+        config2.app_id = "lingo_app_2".to_string();
 
-        // All addresses should be different
-        let addresses = [
-            draft_ptr,
-            entity_ptr,
-            classification_ptr,
-            repo_ptr,
-            file_ptr,
-        ];
-        for (i, &addr1) in addresses.iter().enumerate() {
-            for &addr2 in addresses.iter().skip(i + 1) {
-                assert_ne!(
-                    addr1, addr2,
-                    "Services should have different memory addresses"
-                );
-            }
-        }
+        let service1 = LingoService::new(config1);
+        let service2 = LingoService::new(config2);
+
+        assert_eq!(service1.draft.config.app_id, "lingo_app_1");
+        assert_eq!(service2.draft.config.app_id, "lingo_app_2");
+        assert_ne!(service1.draft.config.app_id, service2.draft.config.app_id);
+        assert_ne!(service1.entity.config.app_id, service2.entity.config.app_id);
+        assert_ne!(service1.classification.config.app_id, service2.classification.config.app_id);
+        assert_ne!(service1.repo.config.app_id, service2.repo.config.app_id);
+        assert_ne!(service1.file.config.app_id, service2.file.config.app_id);
+    }
+
+    #[test]
+    fn test_lingo_service_sub_services_accessible() {
+        let config = Config::default();
+        let service = LingoService::new(config.clone());
+
+        assert_eq!(service.draft.config.app_id, config.app_id);
+        assert_eq!(service.entity.config.app_id, config.app_id);
+        assert_eq!(service.classification.config.app_id, config.app_id);
+        assert_eq!(service.repo.config.app_id, config.app_id);
+        assert_eq!(service.file.config.app_id, config.app_id);
     }
 
     #[test]
     fn test_lingo_service_config_cloning() {
-        let config = create_test_config();
-        let lingo_service = LingoService::new(config);
+        let config = Config {
+            app_id: "clone_test_app".to_string(),
+            app_secret: "clone_test_secret".to_string(),
+            ..Default::default()
+        };
 
-        // Test that the service can be created multiple times with cloned configs
-        // This simulates real usage where configs might be shared
-        let config2 = Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build();
-        let lingo_service2 = LingoService::new(config2);
+        let service = LingoService::new(config.clone());
 
-        // Both services should be created successfully
+        assert_eq!(service.draft.config.app_id, "clone_test_app");
+        assert_eq!(service.draft.config.app_secret, "clone_test_secret");
+        assert_eq!(service.entity.config.app_secret, "clone_test_secret");
+        assert_eq!(service.classification.config.app_id, "clone_test_app");
+        assert_eq!(service.repo.config.app_secret, "clone_test_secret");
+        assert_eq!(service.file.config.app_id, "clone_test_app");
+    }
 
-        // But should be different instances
-        let service1_ptr = std::ptr::addr_of!(lingo_service) as *const _;
-        let service2_ptr = std::ptr::addr_of!(lingo_service2) as *const _;
-        assert_ne!(service1_ptr, service2_ptr);
+    #[test]
+    fn test_lingo_service_timeout_propagation() {
+        let config = Config {
+            req_timeout: Some(Duration::from_secs(280)),
+            ..Default::default()
+        };
+
+        let service = LingoService::new(config);
+
+        assert_eq!(service.draft.config.req_timeout, Some(Duration::from_secs(280)));
+        assert_eq!(service.entity.config.req_timeout, Some(Duration::from_secs(280)));
+        assert_eq!(service.classification.config.req_timeout, Some(Duration::from_secs(280)));
+        assert_eq!(service.repo.config.req_timeout, Some(Duration::from_secs(280)));
+        assert_eq!(service.file.config.req_timeout, Some(Duration::from_secs(280)));
+    }
+
+    #[test]
+    fn test_lingo_service_multiple_instances() {
+        let config = Config::default();
+
+        let service1 = LingoService::new(config.clone());
+        let service2 = LingoService::new(config.clone());
+
+        assert_eq!(service1.draft.config.app_id, service2.draft.config.app_id);
+        assert_eq!(service1.draft.config.app_secret, service2.draft.config.app_secret);
+        assert_eq!(service1.entity.config.app_id, service2.entity.config.app_id);
+        assert_eq!(service1.classification.config.app_secret, service2.classification.config.app_secret);
+        assert_eq!(service1.repo.config.app_id, service2.repo.config.app_id);
+        assert_eq!(service1.file.config.app_secret, service2.file.config.app_secret);
+    }
+
+    #[test]
+    fn test_lingo_service_config_consistency() {
+        let config = Config {
+            app_id: "consistency_test".to_string(),
+            app_secret: "consistency_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(190)),
+            ..Default::default()
+        };
+
+        let service = LingoService::new(config);
+
+        assert_eq!(service.draft.config.app_id, "consistency_test");
+        assert_eq!(service.draft.config.app_secret, "consistency_secret");
+        assert_eq!(service.draft.config.req_timeout, Some(Duration::from_secs(190)));
+        assert_eq!(service.entity.config.app_id, "consistency_test");
+        assert_eq!(service.entity.config.app_secret, "consistency_secret");
+        assert_eq!(service.entity.config.req_timeout, Some(Duration::from_secs(190)));
+        assert_eq!(service.classification.config.app_id, "consistency_test");
+        assert_eq!(service.classification.config.app_secret, "consistency_secret");
+        assert_eq!(service.classification.config.req_timeout, Some(Duration::from_secs(190)));
+        assert_eq!(service.repo.config.app_id, "consistency_test");
+        assert_eq!(service.repo.config.app_secret, "consistency_secret");
+        assert_eq!(service.repo.config.req_timeout, Some(Duration::from_secs(190)));
+        assert_eq!(service.file.config.app_id, "consistency_test");
+        assert_eq!(service.file.config.app_secret, "consistency_secret");
+        assert_eq!(service.file.config.req_timeout, Some(Duration::from_secs(190)));
     }
 }

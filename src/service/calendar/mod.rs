@@ -139,109 +139,192 @@ impl CalendarService {
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
-
-    fn create_test_config() -> Config {
-        Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build()
-    }
+    use std::time::Duration;
 
     #[test]
     fn test_calendar_service_creation() {
-        let config = create_test_config();
-        let _calendar_service = CalendarService::new(config);
+        let config = Config::default();
+        let service = CalendarService::new(config.clone());
 
-        // Verify service structure
+        // Verify all 10 sub-services are configured correctly
+        assert_eq!(service.v4.calendar.config.app_id, config.app_id);
+        assert_eq!(service.v4.calendar.config.app_secret, config.app_secret);
+        assert_eq!(service.v4.calendar_acl.config.app_id, config.app_id);
+        assert_eq!(service.v4.calendar_event.config.app_id, config.app_id);
+        assert_eq!(service.v4.meeting_chat.config.app_secret, config.app_secret);
+        assert_eq!(service.v4.meeting_minute.config.app_id, config.app_id);
+        assert_eq!(service.v4.timeoff_event.config.app_id, config.app_id);
+        assert_eq!(service.v4.meeting_room_event.config.app_secret, config.app_secret);
+        assert_eq!(service.v4.attendee.config.app_id, config.app_id);
+        assert_eq!(service.v4.setting.config.app_id, config.app_id);
+        assert_eq!(service.v4.exchange_binding.config.app_secret, config.app_secret);
     }
 
     #[test]
     fn test_calendar_service_with_custom_config() {
-        let config = Config::builder()
-            .app_id("calendar_app")
-            .app_secret("calendar_secret")
-            .req_timeout(std::time::Duration::from_millis(15000))
-            .base_url("https://calendar.api.com")
-            .build();
+        let config = Config {
+            app_id: "calendar_test_app".to_string(),
+            app_secret: "calendar_test_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(440)),
+            ..Default::default()
+        };
 
-        let _calendar_service = CalendarService::new(config);
+        let service = CalendarService::new(config.clone());
 
-        // Verify service creation with custom config
+        assert_eq!(service.v4.calendar.config.app_id, "calendar_test_app");
+        assert_eq!(service.v4.calendar.config.app_secret, "calendar_test_secret");
+        assert_eq!(service.v4.calendar.config.req_timeout, Some(Duration::from_secs(440)));
+        assert_eq!(service.v4.calendar_acl.config.app_id, "calendar_test_app");
+        assert_eq!(service.v4.calendar_event.config.req_timeout, Some(Duration::from_secs(440)));
+        assert_eq!(service.v4.meeting_chat.config.app_id, "calendar_test_app");
+        assert_eq!(service.v4.meeting_minute.config.req_timeout, Some(Duration::from_secs(440)));
+        assert_eq!(service.v4.timeoff_event.config.app_id, "calendar_test_app");
+        assert_eq!(service.v4.meeting_room_event.config.req_timeout, Some(Duration::from_secs(440)));
+        assert_eq!(service.v4.attendee.config.app_id, "calendar_test_app");
+        assert_eq!(service.v4.setting.config.req_timeout, Some(Duration::from_secs(440)));
+        assert_eq!(service.v4.exchange_binding.config.app_id, "calendar_test_app");
     }
 
     #[test]
-    fn test_calendar_service_configuration_variations() {
-        let test_configs = vec![
-            Config::builder()
-                .app_id("cal_basic")
-                .app_secret("basic_secret")
-                .build(),
-            Config::builder()
-                .app_id("cal_timeout")
-                .app_secret("timeout_secret")
-                .req_timeout(std::time::Duration::from_millis(20000))
-                .build(),
-            Config::builder()
-                .app_id("cal_custom")
-                .app_secret("custom_secret")
-                .base_url("https://custom.calendar.com")
-                .build(),
-            Config::builder()
-                .app_id("cal_full")
-                .app_secret("full_secret")
-                .req_timeout(std::time::Duration::from_millis(25000))
-                .base_url("https://full.calendar.com")
-                .enable_token_cache(false)
-                .build(),
-        ];
+    fn test_calendar_service_config_independence() {
+        let mut config1 = Config::default();
+        config1.app_id = "calendar_app_1".to_string();
 
-        for config in test_configs {
-            let _calendar_service = CalendarService::new(config);
+        let mut config2 = Config::default();
+        config2.app_id = "calendar_app_2".to_string();
 
-            // Each configuration should create a valid service
-        }
+        let service1 = CalendarService::new(config1);
+        let service2 = CalendarService::new(config2);
+
+        assert_eq!(service1.v4.calendar.config.app_id, "calendar_app_1");
+        assert_eq!(service2.v4.calendar.config.app_id, "calendar_app_2");
+        assert_ne!(service1.v4.calendar.config.app_id, service2.v4.calendar.config.app_id);
+        assert_ne!(service1.v4.calendar_acl.config.app_id, service2.v4.calendar_acl.config.app_id);
+        assert_ne!(service1.v4.calendar_event.config.app_id, service2.v4.calendar_event.config.app_id);
+        assert_ne!(service1.v4.meeting_chat.config.app_id, service2.v4.meeting_chat.config.app_id);
+        assert_ne!(service1.v4.meeting_minute.config.app_id, service2.v4.meeting_minute.config.app_id);
+        assert_ne!(service1.v4.timeoff_event.config.app_id, service2.v4.timeoff_event.config.app_id);
+        assert_ne!(service1.v4.meeting_room_event.config.app_id, service2.v4.meeting_room_event.config.app_id);
+        assert_ne!(service1.v4.attendee.config.app_id, service2.v4.attendee.config.app_id);
+        assert_ne!(service1.v4.setting.config.app_id, service2.v4.setting.config.app_id);
+        assert_ne!(service1.v4.exchange_binding.config.app_id, service2.v4.exchange_binding.config.app_id);
+    }
+
+    #[test]
+    fn test_calendar_service_sub_services_accessible() {
+        let config = Config::default();
+        let service = CalendarService::new(config.clone());
+
+        // Test that all sub-services are accessible
+        assert_eq!(service.v4.calendar.config.app_id, config.app_id);
+        assert_eq!(service.v4.calendar_acl.config.app_id, config.app_id);
+        assert_eq!(service.v4.calendar_event.config.app_id, config.app_id);
+        assert_eq!(service.v4.meeting_chat.config.app_id, config.app_id);
+        assert_eq!(service.v4.meeting_minute.config.app_id, config.app_id);
+        assert_eq!(service.v4.timeoff_event.config.app_id, config.app_id);
+        assert_eq!(service.v4.meeting_room_event.config.app_id, config.app_id);
+        assert_eq!(service.v4.attendee.config.app_id, config.app_id);
+        assert_eq!(service.v4.setting.config.app_id, config.app_id);
+        assert_eq!(service.v4.exchange_binding.config.app_id, config.app_id);
+    }
+
+    #[test]
+    fn test_calendar_service_config_cloning() {
+        let config = Config {
+            app_id: "clone_test_app".to_string(),
+            app_secret: "clone_test_secret".to_string(),
+            ..Default::default()
+        };
+
+        let service = CalendarService::new(config.clone());
+
+        assert_eq!(service.v4.calendar.config.app_id, "clone_test_app");
+        assert_eq!(service.v4.calendar.config.app_secret, "clone_test_secret");
+        assert_eq!(service.v4.calendar_acl.config.app_secret, "clone_test_secret");
+        assert_eq!(service.v4.calendar_event.config.app_id, "clone_test_app");
+        assert_eq!(service.v4.meeting_chat.config.app_secret, "clone_test_secret");
+        assert_eq!(service.v4.meeting_minute.config.app_id, "clone_test_app");
+        assert_eq!(service.v4.timeoff_event.config.app_secret, "clone_test_secret");
+        assert_eq!(service.v4.meeting_room_event.config.app_id, "clone_test_app");
+        assert_eq!(service.v4.attendee.config.app_secret, "clone_test_secret");
+        assert_eq!(service.v4.setting.config.app_id, "clone_test_app");
+        assert_eq!(service.v4.exchange_binding.config.app_secret, "clone_test_secret");
+    }
+
+    #[test]
+    fn test_calendar_service_timeout_propagation() {
+        let config = Config {
+            req_timeout: Some(Duration::from_secs(450)),
+            ..Default::default()
+        };
+
+        let service = CalendarService::new(config);
+
+        // Verify timeout is propagated to all sub-services
+        assert_eq!(service.v4.calendar.config.req_timeout, Some(Duration::from_secs(450)));
+        assert_eq!(service.v4.calendar_acl.config.req_timeout, Some(Duration::from_secs(450)));
+        assert_eq!(service.v4.calendar_event.config.req_timeout, Some(Duration::from_secs(450)));
+        assert_eq!(service.v4.meeting_chat.config.req_timeout, Some(Duration::from_secs(450)));
+        assert_eq!(service.v4.meeting_minute.config.req_timeout, Some(Duration::from_secs(450)));
+        assert_eq!(service.v4.timeoff_event.config.req_timeout, Some(Duration::from_secs(450)));
+        assert_eq!(service.v4.meeting_room_event.config.req_timeout, Some(Duration::from_secs(450)));
+        assert_eq!(service.v4.attendee.config.req_timeout, Some(Duration::from_secs(450)));
+        assert_eq!(service.v4.setting.config.req_timeout, Some(Duration::from_secs(450)));
+        assert_eq!(service.v4.exchange_binding.config.req_timeout, Some(Duration::from_secs(450)));
     }
 
     #[test]
     fn test_calendar_service_multiple_instances() {
-        let config1 = create_test_config();
-        let config2 = Config::builder()
-            .app_id("calendar2")
-            .app_secret("secret2")
-            .build();
+        let config = Config::default();
 
-        let calendar_service1 = CalendarService::new(config1);
-        let calendar_service2 = CalendarService::new(config2);
+        let service1 = CalendarService::new(config.clone());
+        let service2 = CalendarService::new(config.clone());
 
-        // Services should be independent instances
-        let service1_ptr = std::ptr::addr_of!(calendar_service1) as *const _;
-        let service2_ptr = std::ptr::addr_of!(calendar_service2) as *const _;
-
-        assert_ne!(
-            service1_ptr, service2_ptr,
-            "Services should be independent instances"
-        );
-
-        // Each service should have valid v4 API
+        // Both services should have the same config values
+        assert_eq!(service1.v4.calendar.config.app_id, service2.v4.calendar.config.app_id);
+        assert_eq!(service1.v4.calendar.config.app_secret, service2.v4.calendar.config.app_secret);
+        assert_eq!(service1.v4.calendar_acl.config.app_id, service2.v4.calendar_acl.config.app_id);
+        assert_eq!(service1.v4.calendar_event.config.app_secret, service2.v4.calendar_event.config.app_secret);
+        assert_eq!(service1.v4.meeting_chat.config.app_id, service2.v4.meeting_chat.config.app_id);
+        assert_eq!(service1.v4.meeting_minute.config.app_secret, service2.v4.meeting_minute.config.app_secret);
+        assert_eq!(service1.v4.timeoff_event.config.app_id, service2.v4.timeoff_event.config.app_id);
+        assert_eq!(service1.v4.meeting_room_event.config.app_secret, service2.v4.meeting_room_event.config.app_secret);
+        assert_eq!(service1.v4.attendee.config.app_id, service2.v4.attendee.config.app_id);
+        assert_eq!(service1.v4.setting.config.app_secret, service2.v4.setting.config.app_secret);
+        assert_eq!(service1.v4.exchange_binding.config.app_id, service2.v4.exchange_binding.config.app_id);
     }
 
     #[test]
-    fn test_calendar_service_config_cloning_behavior() {
-        let original_config = create_test_config();
+    fn test_calendar_service_config_consistency() {
+        let config = Config {
+            app_id: "consistency_test".to_string(),
+            app_secret: "consistency_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(460)),
+            ..Default::default()
+        };
 
-        // Test that the service works with cloned configs
-        let calendar_service1 = CalendarService::new(original_config.clone());
-        let calendar_service2 = CalendarService::new(original_config);
+        let service = CalendarService::new(config);
 
-        // Both should work independently
+        // Verify all sub-services have consistent configurations
+        let configs = [
+            &service.v4.calendar.config,
+            &service.v4.calendar_acl.config,
+            &service.v4.calendar_event.config,
+            &service.v4.meeting_chat.config,
+            &service.v4.meeting_minute.config,
+            &service.v4.timeoff_event.config,
+            &service.v4.meeting_room_event.config,
+            &service.v4.attendee.config,
+            &service.v4.setting.config,
+            &service.v4.exchange_binding.config,
+        ];
 
-        // But should be different service instances
-        let service1_ptr = std::ptr::addr_of!(calendar_service1) as *const _;
-        let service2_ptr = std::ptr::addr_of!(calendar_service2) as *const _;
-        assert_ne!(service1_ptr, service2_ptr);
+        for config in &configs {
+            assert_eq!(config.app_id, "consistency_test");
+            assert_eq!(config.app_secret, "consistency_secret");
+            assert_eq!(config.req_timeout, Some(Duration::from_secs(460)));
+        }
     }
 }
