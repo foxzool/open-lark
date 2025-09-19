@@ -10,6 +10,7 @@ use reqwest::Method;
 use super::models::{GetLeaveEmployExpireRecordRequest, GetLeaveEmployExpireRecordRespData};
 
 /// 休假获取过期发放记录服务
+#[derive(Debug)]
 pub struct LeaveEmployExpireRecordService {
     pub config: Config,
 }

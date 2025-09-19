@@ -273,13 +273,13 @@ mod tests {
             api_req: ApiRequest::default(),
             employee_type: "1".to_string(),
             approval_id: "approval_789".to_string(),
-            action: "approve".to_string(),
+            action: 1, // 审批通过
             message: Some("同意该申请".to_string()),
         };
 
         assert_eq!(request.employee_type, "1");
         assert_eq!(request.approval_id, "approval_789");
-        assert_eq!(request.action, "approve");
+        assert_eq!(request.action, 1);
         assert_eq!(request.message, Some("同意该申请".to_string()));
     }
 
@@ -289,13 +289,13 @@ mod tests {
             api_req: ApiRequest::default(),
             employee_type: "2".to_string(),
             approval_id: "approval_101".to_string(),
-            action: "reject".to_string(),
+            action: 2, // 审批拒绝
             message: None,
         };
 
         assert_eq!(request.employee_type, "2");
         assert_eq!(request.approval_id, "approval_101");
-        assert_eq!(request.action, "reject");
+        assert_eq!(request.action, 2);
         assert_eq!(request.message, None);
     }
 
@@ -451,37 +451,41 @@ mod tests {
             api_req: ApiRequest::default(),
             employee_type: "1".to_string(),
             approval_id: "approval_long_msg".to_string(),
-            action: "approve".to_string(),
+            action: 1, // 审批通过
             message: Some(long_message.clone()),
         };
 
         assert_eq!(request_long_message.message, Some(long_message));
 
         // Test with different action types
-        let actions = vec!["approve", "reject", "withdraw", "cancel", "suspend"];
-        for action in actions {
+        let actions = vec![
+            (1, "approve", "审批通过"),
+            (2, "reject", "审批拒绝"),
+            (3, "withdraw", "撤回申请")
+        ];
+        for (action_code, action_name, action_desc) in actions {
             let request = ProcessUserApprovalRequest {
                 api_req: ApiRequest::default(),
                 employee_type: "1".to_string(),
-                approval_id: format!("approval_{}", action),
-                action: action.to_string(),
-                message: Some(format!("{}操作", action)),
+                approval_id: format!("approval_{}", action_name),
+                action: action_code,
+                message: Some(format!("{}操作", action_desc)),
             };
 
-            assert_eq!(request.action, action);
-            assert_eq!(request.message, Some(format!("{}操作", action)));
+            assert_eq!(request.action, action_code);
+            assert_eq!(request.message, Some(format!("{}操作", action_desc)));
         }
 
-        // Test with empty action
-        let request_empty_action = ProcessUserApprovalRequest {
+        // Test with invalid action
+        let request_invalid_action = ProcessUserApprovalRequest {
             api_req: ApiRequest::default(),
             employee_type: "2".to_string(),
-            approval_id: "approval_empty_action".to_string(),
-            action: "".to_string(),
+            approval_id: "approval_invalid_action".to_string(),
+            action: 0, // 无效的动作类型
             message: None,
         };
 
-        assert_eq!(request_empty_action.action, "");
+        assert_eq!(request_invalid_action.action, 0);
     }
 
     #[test]
@@ -528,7 +532,7 @@ mod tests {
             api_req: ApiRequest::default(),
             employee_type: "union_id".to_string(),
             approval_id: "test_process".to_string(),
-            action: "approve".to_string(),
+            action: 1, // 审批通过
             message: None,
         };
 
