@@ -186,27 +186,46 @@ mod tests {
 
         assert_eq!(service.v1.minute.config.app_id, "minutes_test_app");
         assert_eq!(service.v1.minute.config.app_secret, "minutes_test_secret");
-        assert_eq!(service.v1.minute.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.v1.minute.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
         assert_eq!(service.v1.media.config.app_id, "minutes_test_app");
-        assert_eq!(service.v1.statistics.config.req_timeout, Some(Duration::from_secs(120)));
-        assert_eq!(service.v1.transcript.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.v1.statistics.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
+        assert_eq!(
+            service.v1.transcript.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
     }
 
     #[test]
     fn test_minutes_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "minutes_app_1".to_string();
+        let config1 = Config {
+            app_id: "minutes_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "minutes_app_2".to_string();
+        let config2 = Config {
+            app_id: "minutes_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = MinutesService::new(config1);
         let service2 = MinutesService::new(config2);
 
         assert_eq!(service1.v1.minute.config.app_id, "minutes_app_1");
         assert_eq!(service2.v1.minute.config.app_id, "minutes_app_2");
-        assert_ne!(service1.v1.minute.config.app_id, service2.v1.minute.config.app_id);
-        assert_ne!(service1.v1.media.config.app_id, service2.v1.transcript.config.app_id);
+        assert_ne!(
+            service1.v1.minute.config.app_id,
+            service2.v1.minute.config.app_id
+        );
+        assert_ne!(
+            service1.v1.media.config.app_id,
+            service2.v1.transcript.config.app_id
+        );
     }
 
     #[test]
@@ -245,10 +264,22 @@ mod tests {
 
         let service = MinutesService::new(config);
 
-        assert_eq!(service.v1.minute.config.req_timeout, Some(Duration::from_secs(180)));
-        assert_eq!(service.v1.media.config.req_timeout, Some(Duration::from_secs(180)));
-        assert_eq!(service.v1.statistics.config.req_timeout, Some(Duration::from_secs(180)));
-        assert_eq!(service.v1.transcript.config.req_timeout, Some(Duration::from_secs(180)));
+        assert_eq!(
+            service.v1.minute.config.req_timeout,
+            Some(Duration::from_secs(180))
+        );
+        assert_eq!(
+            service.v1.media.config.req_timeout,
+            Some(Duration::from_secs(180))
+        );
+        assert_eq!(
+            service.v1.statistics.config.req_timeout,
+            Some(Duration::from_secs(180))
+        );
+        assert_eq!(
+            service.v1.transcript.config.req_timeout,
+            Some(Duration::from_secs(180))
+        );
     }
 
     #[test]
@@ -258,10 +289,22 @@ mod tests {
         let service1 = MinutesService::new(config.clone());
         let service2 = MinutesService::new(config.clone());
 
-        assert_eq!(service1.v1.minute.config.app_id, service2.v1.minute.config.app_id);
-        assert_eq!(service1.v1.minute.config.app_secret, service2.v1.minute.config.app_secret);
-        assert_eq!(service1.v1.media.config.app_id, service2.v1.media.config.app_id);
-        assert_eq!(service1.v1.transcript.config.app_secret, service2.v1.transcript.config.app_secret);
+        assert_eq!(
+            service1.v1.minute.config.app_id,
+            service2.v1.minute.config.app_id
+        );
+        assert_eq!(
+            service1.v1.minute.config.app_secret,
+            service2.v1.minute.config.app_secret
+        );
+        assert_eq!(
+            service1.v1.media.config.app_id,
+            service2.v1.media.config.app_id
+        );
+        assert_eq!(
+            service1.v1.transcript.config.app_secret,
+            service2.v1.transcript.config.app_secret
+        );
     }
 
     #[test]
@@ -277,9 +320,18 @@ mod tests {
 
         assert_eq!(service.v1.minute.config.app_id, "consistency_test");
         assert_eq!(service.v1.minute.config.app_secret, "consistency_secret");
-        assert_eq!(service.v1.minute.config.req_timeout, Some(Duration::from_secs(150)));
+        assert_eq!(
+            service.v1.minute.config.req_timeout,
+            Some(Duration::from_secs(150))
+        );
         assert_eq!(service.v1.media.config.app_id, "consistency_test");
-        assert_eq!(service.v1.statistics.config.app_secret, "consistency_secret");
-        assert_eq!(service.v1.transcript.config.req_timeout, Some(Duration::from_secs(150)));
+        assert_eq!(
+            service.v1.statistics.config.app_secret,
+            "consistency_secret"
+        );
+        assert_eq!(
+            service.v1.transcript.config.req_timeout,
+            Some(Duration::from_secs(150))
+        );
     }
 }

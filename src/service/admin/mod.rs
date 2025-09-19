@@ -204,10 +204,16 @@ mod tests {
 
         assert_eq!(service.password.config.app_id, "admin_test_app");
         assert_eq!(service.password.config.app_secret, "admin_test_secret");
-        assert_eq!(service.password.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.password.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
 
         assert_eq!(service.data_report.config.app_id, "admin_test_app");
-        assert_eq!(service.data_report.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.data_report.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
 
         assert_eq!(service.badge.config.app_id, "admin_test_app");
         assert_eq!(service.badge_grant.config.app_id, "admin_test_app");
@@ -215,18 +221,25 @@ mod tests {
 
     #[test]
     fn test_admin_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "admin_app_1".to_string();
+        let config1 = Config {
+            app_id: "admin_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "admin_app_2".to_string();
+        let config2 = Config {
+            app_id: "admin_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = AdminService::new(config1);
         let service2 = AdminService::new(config2);
 
         assert_eq!(service1.password.config.app_id, "admin_app_1");
         assert_eq!(service2.password.config.app_id, "admin_app_2");
-        assert_ne!(service1.password.config.app_id, service2.password.config.app_id);
+        assert_ne!(
+            service1.password.config.app_id,
+            service2.password.config.app_id
+        );
 
         assert_eq!(service1.data_report.config.app_id, "admin_app_1");
         assert_eq!(service2.data_report.config.app_id, "admin_app_2");
@@ -275,10 +288,22 @@ mod tests {
 
         let service = AdminService::new(config);
 
-        assert_eq!(service.password.config.req_timeout, Some(Duration::from_secs(180)));
-        assert_eq!(service.data_report.config.req_timeout, Some(Duration::from_secs(180)));
-        assert_eq!(service.badge.config.req_timeout, Some(Duration::from_secs(180)));
-        assert_eq!(service.badge_grant.config.req_timeout, Some(Duration::from_secs(180)));
+        assert_eq!(
+            service.password.config.req_timeout,
+            Some(Duration::from_secs(180))
+        );
+        assert_eq!(
+            service.data_report.config.req_timeout,
+            Some(Duration::from_secs(180))
+        );
+        assert_eq!(
+            service.badge.config.req_timeout,
+            Some(Duration::from_secs(180))
+        );
+        assert_eq!(
+            service.badge_grant.config.req_timeout,
+            Some(Duration::from_secs(180))
+        );
     }
 
     #[test]
@@ -288,10 +313,19 @@ mod tests {
         let service1 = AdminService::new(config.clone());
         let service2 = AdminService::new(config.clone());
 
-        assert_eq!(service1.password.config.app_id, service2.password.config.app_id);
-        assert_eq!(service1.data_report.config.app_id, service2.data_report.config.app_id);
+        assert_eq!(
+            service1.password.config.app_id,
+            service2.password.config.app_id
+        );
+        assert_eq!(
+            service1.data_report.config.app_id,
+            service2.data_report.config.app_id
+        );
         assert_eq!(service1.badge.config.app_id, service2.badge.config.app_id);
-        assert_eq!(service1.badge_grant.config.app_id, service2.badge_grant.config.app_id);
+        assert_eq!(
+            service1.badge_grant.config.app_id,
+            service2.badge_grant.config.app_id
+        );
     }
 
     #[test]

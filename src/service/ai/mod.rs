@@ -193,7 +193,10 @@ mod tests {
 
         assert_eq!(service.document_ai.config.app_id, config.app_id);
         assert_eq!(service.document_ai.config.app_secret, config.app_secret);
-        assert_eq!(service.optical_char_recognition.config.app_id, config.app_id);
+        assert_eq!(
+            service.optical_char_recognition.config.app_id,
+            config.app_id
+        );
         assert_eq!(service.speech_to_text.config.app_id, config.app_id);
         assert_eq!(service.translation.config.app_secret, config.app_secret);
     }
@@ -211,29 +214,54 @@ mod tests {
 
         assert_eq!(service.document_ai.config.app_id, "ai_test_app");
         assert_eq!(service.document_ai.config.app_secret, "ai_test_secret");
-        assert_eq!(service.document_ai.config.req_timeout, Some(Duration::from_secs(220)));
-        assert_eq!(service.optical_char_recognition.config.app_id, "ai_test_app");
-        assert_eq!(service.speech_to_text.config.req_timeout, Some(Duration::from_secs(220)));
+        assert_eq!(
+            service.document_ai.config.req_timeout,
+            Some(Duration::from_secs(220))
+        );
+        assert_eq!(
+            service.optical_char_recognition.config.app_id,
+            "ai_test_app"
+        );
+        assert_eq!(
+            service.speech_to_text.config.req_timeout,
+            Some(Duration::from_secs(220))
+        );
         assert_eq!(service.translation.config.app_id, "ai_test_app");
     }
 
     #[test]
     fn test_ai_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "ai_app_1".to_string();
+        let config1 = Config {
+            app_id: "ai_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "ai_app_2".to_string();
+        let config2 = Config {
+            app_id: "ai_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = AiService::new(config1);
         let service2 = AiService::new(config2);
 
         assert_eq!(service1.document_ai.config.app_id, "ai_app_1");
         assert_eq!(service2.document_ai.config.app_id, "ai_app_2");
-        assert_ne!(service1.document_ai.config.app_id, service2.document_ai.config.app_id);
-        assert_ne!(service1.optical_char_recognition.config.app_id, service2.optical_char_recognition.config.app_id);
-        assert_ne!(service1.speech_to_text.config.app_id, service2.speech_to_text.config.app_id);
-        assert_ne!(service1.translation.config.app_id, service2.translation.config.app_id);
+        assert_ne!(
+            service1.document_ai.config.app_id,
+            service2.document_ai.config.app_id
+        );
+        assert_ne!(
+            service1.optical_char_recognition.config.app_id,
+            service2.optical_char_recognition.config.app_id
+        );
+        assert_ne!(
+            service1.speech_to_text.config.app_id,
+            service2.speech_to_text.config.app_id
+        );
+        assert_ne!(
+            service1.translation.config.app_id,
+            service2.translation.config.app_id
+        );
     }
 
     #[test]
@@ -242,7 +270,10 @@ mod tests {
         let service = AiService::new(config.clone());
 
         assert_eq!(service.document_ai.config.app_id, config.app_id);
-        assert_eq!(service.optical_char_recognition.config.app_id, config.app_id);
+        assert_eq!(
+            service.optical_char_recognition.config.app_id,
+            config.app_id
+        );
         assert_eq!(service.speech_to_text.config.app_id, config.app_id);
         assert_eq!(service.translation.config.app_id, config.app_id);
     }
@@ -259,7 +290,10 @@ mod tests {
 
         assert_eq!(service.document_ai.config.app_id, "clone_test_app");
         assert_eq!(service.document_ai.config.app_secret, "clone_test_secret");
-        assert_eq!(service.optical_char_recognition.config.app_secret, "clone_test_secret");
+        assert_eq!(
+            service.optical_char_recognition.config.app_secret,
+            "clone_test_secret"
+        );
         assert_eq!(service.speech_to_text.config.app_id, "clone_test_app");
         assert_eq!(service.translation.config.app_secret, "clone_test_secret");
     }
@@ -273,10 +307,22 @@ mod tests {
 
         let service = AiService::new(config);
 
-        assert_eq!(service.document_ai.config.req_timeout, Some(Duration::from_secs(230)));
-        assert_eq!(service.optical_char_recognition.config.req_timeout, Some(Duration::from_secs(230)));
-        assert_eq!(service.speech_to_text.config.req_timeout, Some(Duration::from_secs(230)));
-        assert_eq!(service.translation.config.req_timeout, Some(Duration::from_secs(230)));
+        assert_eq!(
+            service.document_ai.config.req_timeout,
+            Some(Duration::from_secs(230))
+        );
+        assert_eq!(
+            service.optical_char_recognition.config.req_timeout,
+            Some(Duration::from_secs(230))
+        );
+        assert_eq!(
+            service.speech_to_text.config.req_timeout,
+            Some(Duration::from_secs(230))
+        );
+        assert_eq!(
+            service.translation.config.req_timeout,
+            Some(Duration::from_secs(230))
+        );
     }
 
     #[test]
@@ -286,11 +332,26 @@ mod tests {
         let service1 = AiService::new(config.clone());
         let service2 = AiService::new(config.clone());
 
-        assert_eq!(service1.document_ai.config.app_id, service2.document_ai.config.app_id);
-        assert_eq!(service1.document_ai.config.app_secret, service2.document_ai.config.app_secret);
-        assert_eq!(service1.optical_char_recognition.config.app_id, service2.optical_char_recognition.config.app_id);
-        assert_eq!(service1.speech_to_text.config.app_secret, service2.speech_to_text.config.app_secret);
-        assert_eq!(service1.translation.config.app_id, service2.translation.config.app_id);
+        assert_eq!(
+            service1.document_ai.config.app_id,
+            service2.document_ai.config.app_id
+        );
+        assert_eq!(
+            service1.document_ai.config.app_secret,
+            service2.document_ai.config.app_secret
+        );
+        assert_eq!(
+            service1.optical_char_recognition.config.app_id,
+            service2.optical_char_recognition.config.app_id
+        );
+        assert_eq!(
+            service1.speech_to_text.config.app_secret,
+            service2.speech_to_text.config.app_secret
+        );
+        assert_eq!(
+            service1.translation.config.app_id,
+            service2.translation.config.app_id
+        );
     }
 
     #[test]
@@ -306,15 +367,36 @@ mod tests {
 
         assert_eq!(service.document_ai.config.app_id, "consistency_test");
         assert_eq!(service.document_ai.config.app_secret, "consistency_secret");
-        assert_eq!(service.document_ai.config.req_timeout, Some(Duration::from_secs(170)));
-        assert_eq!(service.optical_char_recognition.config.app_id, "consistency_test");
-        assert_eq!(service.optical_char_recognition.config.app_secret, "consistency_secret");
-        assert_eq!(service.optical_char_recognition.config.req_timeout, Some(Duration::from_secs(170)));
+        assert_eq!(
+            service.document_ai.config.req_timeout,
+            Some(Duration::from_secs(170))
+        );
+        assert_eq!(
+            service.optical_char_recognition.config.app_id,
+            "consistency_test"
+        );
+        assert_eq!(
+            service.optical_char_recognition.config.app_secret,
+            "consistency_secret"
+        );
+        assert_eq!(
+            service.optical_char_recognition.config.req_timeout,
+            Some(Duration::from_secs(170))
+        );
         assert_eq!(service.speech_to_text.config.app_id, "consistency_test");
-        assert_eq!(service.speech_to_text.config.app_secret, "consistency_secret");
-        assert_eq!(service.speech_to_text.config.req_timeout, Some(Duration::from_secs(170)));
+        assert_eq!(
+            service.speech_to_text.config.app_secret,
+            "consistency_secret"
+        );
+        assert_eq!(
+            service.speech_to_text.config.req_timeout,
+            Some(Duration::from_secs(170))
+        );
         assert_eq!(service.translation.config.app_id, "consistency_test");
         assert_eq!(service.translation.config.app_secret, "consistency_secret");
-        assert_eq!(service.translation.config.req_timeout, Some(Duration::from_secs(170)));
+        assert_eq!(
+            service.translation.config.req_timeout,
+            Some(Duration::from_secs(170))
+        );
     }
 }

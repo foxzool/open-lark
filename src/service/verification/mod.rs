@@ -200,11 +200,15 @@ mod tests {
 
     #[test]
     fn test_verification_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "app_1".to_string();
+        let config1 = Config {
+            app_id: "app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "app_2".to_string();
+        let config2 = Config {
+            app_id: "app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = VerificationService::new(config1);
         let service2 = VerificationService::new(config2);

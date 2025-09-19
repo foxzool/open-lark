@@ -59,16 +59,20 @@ pub struct Tag {
     /// 标签名称
     pub name: String,
     /// 标签描述
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 标签类型
     pub tag_type: TagType,
     /// 标签状态
     pub status: TagStatus,
     /// 创建时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<String>,
     /// 更新时间
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
     /// 创建者ID
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_id: Option<String>,
 }
 
@@ -154,8 +158,8 @@ mod tests {
 
     #[test]
     fn test_user_id_type_serialization() {
-        let types = vec![UserIdType::UserId, UserIdType::UnionId, UserIdType::OpenId];
-        let expected = vec!["\"user_id\"", "\"union_id\"", "\"open_id\""];
+        let types = [UserIdType::UserId, UserIdType::UnionId, UserIdType::OpenId];
+        let expected = ["\"user_id\"", "\"union_id\"", "\"open_id\""];
 
         for (i, id_type) in types.iter().enumerate() {
             let json = serde_json::to_string(id_type).unwrap();

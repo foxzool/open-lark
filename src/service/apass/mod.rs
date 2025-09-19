@@ -221,10 +221,16 @@ mod tests {
         // Verify all sub-services got the custom config
         assert_eq!(service.seat.config.app_id, "apass_test_app");
         assert_eq!(service.seat.config.app_secret, "apass_test_secret");
-        assert_eq!(service.seat.config.req_timeout, Some(Duration::from_secs(180)));
+        assert_eq!(
+            service.seat.config.req_timeout,
+            Some(Duration::from_secs(180))
+        );
 
         assert_eq!(service.audit_log.config.app_id, "apass_test_app");
-        assert_eq!(service.audit_log.config.req_timeout, Some(Duration::from_secs(180)));
+        assert_eq!(
+            service.audit_log.config.req_timeout,
+            Some(Duration::from_secs(180))
+        );
 
         assert_eq!(service.permission.config.app_id, "apass_test_app");
         assert_eq!(service.object.config.app_id, "apass_test_app");
@@ -235,11 +241,15 @@ mod tests {
 
     #[test]
     fn test_apass_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "apass_app_1".to_string();
+        let config1 = Config {
+            app_id: "apass_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "apass_app_2".to_string();
+        let config2 = Config {
+            app_id: "apass_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = ApassService::new(config1);
         let service2 = ApassService::new(config2);
@@ -305,13 +315,34 @@ mod tests {
         let service = ApassService::new(config);
 
         // Verify timeout is propagated to all sub-services
-        assert_eq!(service.seat.config.req_timeout, Some(Duration::from_secs(300)));
-        assert_eq!(service.audit_log.config.req_timeout, Some(Duration::from_secs(300)));
-        assert_eq!(service.permission.config.req_timeout, Some(Duration::from_secs(300)));
-        assert_eq!(service.object.config.req_timeout, Some(Duration::from_secs(300)));
-        assert_eq!(service.function.config.req_timeout, Some(Duration::from_secs(300)));
-        assert_eq!(service.environment_variable.config.req_timeout, Some(Duration::from_secs(300)));
-        assert_eq!(service.flow.config.req_timeout, Some(Duration::from_secs(300)));
+        assert_eq!(
+            service.seat.config.req_timeout,
+            Some(Duration::from_secs(300))
+        );
+        assert_eq!(
+            service.audit_log.config.req_timeout,
+            Some(Duration::from_secs(300))
+        );
+        assert_eq!(
+            service.permission.config.req_timeout,
+            Some(Duration::from_secs(300))
+        );
+        assert_eq!(
+            service.object.config.req_timeout,
+            Some(Duration::from_secs(300))
+        );
+        assert_eq!(
+            service.function.config.req_timeout,
+            Some(Duration::from_secs(300))
+        );
+        assert_eq!(
+            service.environment_variable.config.req_timeout,
+            Some(Duration::from_secs(300))
+        );
+        assert_eq!(
+            service.flow.config.req_timeout,
+            Some(Duration::from_secs(300))
+        );
     }
 
     #[test]
@@ -323,11 +354,23 @@ mod tests {
 
         // Both services should have the same config values
         assert_eq!(service1.seat.config.app_id, service2.seat.config.app_id);
-        assert_eq!(service1.audit_log.config.app_id, service2.audit_log.config.app_id);
-        assert_eq!(service1.permission.config.app_id, service2.permission.config.app_id);
+        assert_eq!(
+            service1.audit_log.config.app_id,
+            service2.audit_log.config.app_id
+        );
+        assert_eq!(
+            service1.permission.config.app_id,
+            service2.permission.config.app_id
+        );
         assert_eq!(service1.object.config.app_id, service2.object.config.app_id);
-        assert_eq!(service1.function.config.app_id, service2.function.config.app_id);
-        assert_eq!(service1.environment_variable.config.app_id, service2.environment_variable.config.app_id);
+        assert_eq!(
+            service1.function.config.app_id,
+            service2.function.config.app_id
+        );
+        assert_eq!(
+            service1.environment_variable.config.app_id,
+            service2.environment_variable.config.app_id
+        );
         assert_eq!(service1.flow.config.app_id, service2.flow.config.app_id);
     }
 
