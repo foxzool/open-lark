@@ -267,3 +267,155 @@ impl PayrollService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::time::Duration;
+
+    #[test]
+    fn test_payroll_service_creation() {
+        let config = Config::default();
+        let service = PayrollService::new(config.clone());
+
+        assert_eq!(service.payment_detail.config.app_id, config.app_id);
+        assert_eq!(service.payment_detail.config.app_secret, config.app_secret);
+        assert_eq!(service.payment_activity.config.app_id, config.app_id);
+        assert_eq!(service.datasource_record.config.app_id, config.app_id);
+        assert_eq!(service.datasource.config.app_id, config.app_id);
+        assert_eq!(service.acct_item.config.app_id, config.app_id);
+        assert_eq!(service.cost_allocation_report.config.app_id, config.app_id);
+        assert_eq!(service.cost_allocation_plan.config.app_id, config.app_id);
+        assert_eq!(service.paygroup.config.app_id, config.app_id);
+    }
+
+    #[test]
+    fn test_payroll_service_with_custom_config() {
+        let config = Config {
+            app_id: "payroll_test_app".to_string(),
+            app_secret: "payroll_test_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(240)),
+            ..Default::default()
+        };
+
+        let service = PayrollService::new(config.clone());
+
+        assert_eq!(service.payment_detail.config.app_id, "payroll_test_app");
+        assert_eq!(service.payment_detail.config.app_secret, "payroll_test_secret");
+        assert_eq!(service.payment_detail.config.req_timeout, Some(Duration::from_secs(240)));
+        assert_eq!(service.payment_activity.config.app_id, "payroll_test_app");
+        assert_eq!(service.datasource.config.req_timeout, Some(Duration::from_secs(240)));
+        assert_eq!(service.acct_item.config.app_secret, "payroll_test_secret");
+        assert_eq!(service.cost_allocation_report.config.req_timeout, Some(Duration::from_secs(240)));
+        assert_eq!(service.paygroup.config.app_id, "payroll_test_app");
+    }
+
+    #[test]
+    fn test_payroll_service_config_independence() {
+        let mut config1 = Config::default();
+        config1.app_id = "payroll_app_1".to_string();
+
+        let mut config2 = Config::default();
+        config2.app_id = "payroll_app_2".to_string();
+
+        let service1 = PayrollService::new(config1);
+        let service2 = PayrollService::new(config2);
+
+        assert_eq!(service1.payment_detail.config.app_id, "payroll_app_1");
+        assert_eq!(service2.payment_detail.config.app_id, "payroll_app_2");
+        assert_ne!(service1.payment_detail.config.app_id, service2.payment_detail.config.app_id);
+        assert_ne!(service1.datasource.config.app_id, service2.paygroup.config.app_id);
+    }
+
+    #[test]
+    fn test_payroll_service_sub_services_accessible() {
+        let config = Config::default();
+        let service = PayrollService::new(config.clone());
+
+        assert_eq!(service.payment_detail.config.app_id, config.app_id);
+        assert_eq!(service.payment_activity.config.app_id, config.app_id);
+        assert_eq!(service.datasource_record.config.app_id, config.app_id);
+        assert_eq!(service.datasource.config.app_id, config.app_id);
+        assert_eq!(service.acct_item.config.app_id, config.app_id);
+        assert_eq!(service.cost_allocation_report.config.app_id, config.app_id);
+        assert_eq!(service.cost_allocation_plan.config.app_id, config.app_id);
+        assert_eq!(service.paygroup.config.app_id, config.app_id);
+    }
+
+    #[test]
+    fn test_payroll_service_config_cloning() {
+        let config = Config {
+            app_id: "clone_test_app".to_string(),
+            app_secret: "clone_test_secret".to_string(),
+            ..Default::default()
+        };
+
+        let service = PayrollService::new(config.clone());
+
+        assert_eq!(service.payment_detail.config.app_id, "clone_test_app");
+        assert_eq!(service.payment_detail.config.app_secret, "clone_test_secret");
+        assert_eq!(service.payment_activity.config.app_secret, "clone_test_secret");
+        assert_eq!(service.datasource_record.config.app_id, "clone_test_app");
+        assert_eq!(service.datasource.config.app_secret, "clone_test_secret");
+        assert_eq!(service.acct_item.config.app_id, "clone_test_app");
+        assert_eq!(service.cost_allocation_plan.config.app_secret, "clone_test_secret");
+        assert_eq!(service.paygroup.config.app_id, "clone_test_app");
+    }
+
+    #[test]
+    fn test_payroll_service_timeout_propagation() {
+        let config = Config {
+            req_timeout: Some(Duration::from_secs(220)),
+            ..Default::default()
+        };
+
+        let service = PayrollService::new(config);
+
+        assert_eq!(service.payment_detail.config.req_timeout, Some(Duration::from_secs(220)));
+        assert_eq!(service.payment_activity.config.req_timeout, Some(Duration::from_secs(220)));
+        assert_eq!(service.datasource_record.config.req_timeout, Some(Duration::from_secs(220)));
+        assert_eq!(service.datasource.config.req_timeout, Some(Duration::from_secs(220)));
+        assert_eq!(service.acct_item.config.req_timeout, Some(Duration::from_secs(220)));
+        assert_eq!(service.cost_allocation_report.config.req_timeout, Some(Duration::from_secs(220)));
+        assert_eq!(service.cost_allocation_plan.config.req_timeout, Some(Duration::from_secs(220)));
+        assert_eq!(service.paygroup.config.req_timeout, Some(Duration::from_secs(220)));
+    }
+
+    #[test]
+    fn test_payroll_service_multiple_instances() {
+        let config = Config::default();
+
+        let service1 = PayrollService::new(config.clone());
+        let service2 = PayrollService::new(config.clone());
+
+        assert_eq!(service1.payment_detail.config.app_id, service2.payment_detail.config.app_id);
+        assert_eq!(service1.payment_detail.config.app_secret, service2.payment_detail.config.app_secret);
+        assert_eq!(service1.payment_activity.config.app_id, service2.payment_activity.config.app_id);
+        assert_eq!(service1.datasource.config.app_secret, service2.datasource.config.app_secret);
+        assert_eq!(service1.acct_item.config.app_id, service2.acct_item.config.app_id);
+        assert_eq!(service1.cost_allocation_report.config.app_secret, service2.cost_allocation_report.config.app_secret);
+        assert_eq!(service1.paygroup.config.app_id, service2.paygroup.config.app_id);
+    }
+
+    #[test]
+    fn test_payroll_service_config_consistency() {
+        let config = Config {
+            app_id: "consistency_test".to_string(),
+            app_secret: "consistency_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(190)),
+            ..Default::default()
+        };
+
+        let service = PayrollService::new(config);
+
+        assert_eq!(service.payment_detail.config.app_id, "consistency_test");
+        assert_eq!(service.payment_detail.config.app_secret, "consistency_secret");
+        assert_eq!(service.payment_detail.config.req_timeout, Some(Duration::from_secs(190)));
+        assert_eq!(service.payment_activity.config.app_id, "consistency_test");
+        assert_eq!(service.datasource_record.config.app_secret, "consistency_secret");
+        assert_eq!(service.datasource.config.req_timeout, Some(Duration::from_secs(190)));
+        assert_eq!(service.acct_item.config.app_id, "consistency_test");
+        assert_eq!(service.cost_allocation_plan.config.app_secret, "consistency_secret");
+        assert_eq!(service.paygroup.config.req_timeout, Some(Duration::from_secs(190)));
+    }
+}

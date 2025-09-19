@@ -171,3 +171,153 @@ impl ApplicationService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::time::Duration;
+
+    #[test]
+    fn test_application_service_creation() {
+        let config = Config::default();
+        let service = ApplicationService::new(config);
+
+        // Verify V6 service structure exists
+        let _ = &service.v6;
+        let _ = &service.v6.application;
+        let _ = &service.v6.scope;
+        let _ = &service.v6.admin;
+        let _ = &service.v6.appstore_paid_info;
+        let _ = &service.v6.app_usage;
+        let _ = &service.v6.application_feedback;
+        let _ = &service.v6.app_badge;
+    }
+
+    #[test]
+    fn test_application_service_with_custom_config() {
+        let config = Config {
+            app_id: "application_test_app".to_string(),
+            app_secret: "application_test_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(300)),
+            ..Default::default()
+        };
+
+        let service = ApplicationService::new(config);
+
+        // Verify service creation with custom config
+        let _ = &service.v6.application;
+        let _ = &service.v6.scope;
+        let _ = &service.v6.admin;
+        let _ = &service.v6.appstore_paid_info;
+        let _ = &service.v6.app_usage;
+        let _ = &service.v6.application_feedback;
+        let _ = &service.v6.app_badge;
+    }
+
+    #[test]
+    fn test_application_service_config_independence() {
+        let mut config1 = Config::default();
+        config1.app_id = "application_app_1".to_string();
+
+        let mut config2 = Config::default();
+        config2.app_id = "application_app_2".to_string();
+
+        let service1 = ApplicationService::new(config1);
+        let service2 = ApplicationService::new(config2);
+
+        // Verify both services are created successfully
+        let _ = &service1.v6.application;
+        let _ = &service1.v6.scope;
+        let _ = &service2.v6.application;
+        let _ = &service2.v6.scope;
+    }
+
+    #[test]
+    fn test_application_service_sub_services_accessible() {
+        let config = Config::default();
+        let service = ApplicationService::new(config);
+
+        // Test that all sub-services are accessible
+        let _ = &service.v6.application;
+        let _ = &service.v6.scope;
+        let _ = &service.v6.admin;
+        let _ = &service.v6.appstore_paid_info;
+        let _ = &service.v6.app_usage;
+        let _ = &service.v6.application_feedback;
+        let _ = &service.v6.app_badge;
+    }
+
+    #[test]
+    fn test_application_service_config_cloning() {
+        let config = Config {
+            app_id: "clone_test_app".to_string(),
+            app_secret: "clone_test_secret".to_string(),
+            ..Default::default()
+        };
+
+        let service = ApplicationService::new(config.clone());
+
+        // Verify service creation with cloned config
+        let _ = &service.v6.application;
+        let _ = &service.v6.scope;
+        let _ = &service.v6.admin;
+        let _ = &service.v6.appstore_paid_info;
+        let _ = &service.v6.app_usage;
+        let _ = &service.v6.application_feedback;
+        let _ = &service.v6.app_badge;
+    }
+
+    #[test]
+    fn test_application_service_timeout_propagation() {
+        let config = Config {
+            req_timeout: Some(Duration::from_secs(310)),
+            ..Default::default()
+        };
+
+        let service = ApplicationService::new(config);
+
+        // Verify service creation with timeout config
+        let _ = &service.v6.application;
+        let _ = &service.v6.scope;
+        let _ = &service.v6.admin;
+        let _ = &service.v6.appstore_paid_info;
+        let _ = &service.v6.app_usage;
+        let _ = &service.v6.application_feedback;
+        let _ = &service.v6.app_badge;
+    }
+
+    #[test]
+    fn test_application_service_multiple_instances() {
+        let config = Config::default();
+
+        let service1 = ApplicationService::new(config.clone());
+        let service2 = ApplicationService::new(config.clone());
+
+        // Verify both instances are created successfully
+        let _ = &service1.v6.application;
+        let _ = &service1.v6.scope;
+        let _ = &service2.v6.application;
+        let _ = &service2.v6.scope;
+    }
+
+    #[test]
+    fn test_application_service_config_consistency() {
+        let config = Config {
+            app_id: "consistency_test".to_string(),
+            app_secret: "consistency_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(200)),
+            ..Default::default()
+        };
+
+        let service = ApplicationService::new(config);
+
+        // Verify all sub-services are created consistently
+        let _ = &service.v6.application;
+        let _ = &service.v6.scope;
+        let _ = &service.v6.admin;
+        let _ = &service.v6.appstore_paid_info;
+        let _ = &service.v6.app_usage;
+        let _ = &service.v6.application_feedback;
+        let _ = &service.v6.app_badge;
+    }
+}

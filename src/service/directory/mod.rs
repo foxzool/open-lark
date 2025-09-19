@@ -173,3 +173,125 @@ impl DirectoryService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::time::Duration;
+
+    #[test]
+    fn test_directory_service_creation() {
+        let config = Config::default();
+        let service = DirectoryService::new(config.clone());
+
+        assert_eq!(service.v1.employee.config.app_id, config.app_id);
+        assert_eq!(service.v1.employee.config.app_secret, config.app_secret);
+        assert_eq!(service.v1.department.config.app_id, config.app_id);
+        assert_eq!(service.v1.department.config.app_secret, config.app_secret);
+    }
+
+    #[test]
+    fn test_directory_service_with_custom_config() {
+        let config = Config {
+            app_id: "directory_test_app".to_string(),
+            app_secret: "directory_test_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(250)),
+            ..Default::default()
+        };
+
+        let service = DirectoryService::new(config.clone());
+
+        assert_eq!(service.v1.employee.config.app_id, "directory_test_app");
+        assert_eq!(service.v1.employee.config.app_secret, "directory_test_secret");
+        assert_eq!(service.v1.employee.config.req_timeout, Some(Duration::from_secs(250)));
+        assert_eq!(service.v1.department.config.app_id, "directory_test_app");
+        assert_eq!(service.v1.department.config.req_timeout, Some(Duration::from_secs(250)));
+    }
+
+    #[test]
+    fn test_directory_service_config_independence() {
+        let mut config1 = Config::default();
+        config1.app_id = "directory_app_1".to_string();
+
+        let mut config2 = Config::default();
+        config2.app_id = "directory_app_2".to_string();
+
+        let service1 = DirectoryService::new(config1);
+        let service2 = DirectoryService::new(config2);
+
+        assert_eq!(service1.v1.employee.config.app_id, "directory_app_1");
+        assert_eq!(service2.v1.employee.config.app_id, "directory_app_2");
+        assert_ne!(service1.v1.employee.config.app_id, service2.v1.employee.config.app_id);
+        assert_ne!(service1.v1.department.config.app_id, service2.v1.department.config.app_id);
+    }
+
+    #[test]
+    fn test_directory_service_sub_services_accessible() {
+        let config = Config::default();
+        let service = DirectoryService::new(config.clone());
+
+        assert_eq!(service.v1.employee.config.app_id, config.app_id);
+        assert_eq!(service.v1.department.config.app_id, config.app_id);
+    }
+
+    #[test]
+    fn test_directory_service_config_cloning() {
+        let config = Config {
+            app_id: "clone_test_app".to_string(),
+            app_secret: "clone_test_secret".to_string(),
+            ..Default::default()
+        };
+
+        let service = DirectoryService::new(config.clone());
+
+        assert_eq!(service.v1.employee.config.app_id, "clone_test_app");
+        assert_eq!(service.v1.employee.config.app_secret, "clone_test_secret");
+        assert_eq!(service.v1.department.config.app_secret, "clone_test_secret");
+        assert_eq!(service.v1.department.config.app_id, "clone_test_app");
+    }
+
+    #[test]
+    fn test_directory_service_timeout_propagation() {
+        let config = Config {
+            req_timeout: Some(Duration::from_secs(260)),
+            ..Default::default()
+        };
+
+        let service = DirectoryService::new(config);
+
+        assert_eq!(service.v1.employee.config.req_timeout, Some(Duration::from_secs(260)));
+        assert_eq!(service.v1.department.config.req_timeout, Some(Duration::from_secs(260)));
+    }
+
+    #[test]
+    fn test_directory_service_multiple_instances() {
+        let config = Config::default();
+
+        let service1 = DirectoryService::new(config.clone());
+        let service2 = DirectoryService::new(config.clone());
+
+        assert_eq!(service1.v1.employee.config.app_id, service2.v1.employee.config.app_id);
+        assert_eq!(service1.v1.employee.config.app_secret, service2.v1.employee.config.app_secret);
+        assert_eq!(service1.v1.department.config.app_id, service2.v1.department.config.app_id);
+        assert_eq!(service1.v1.department.config.app_secret, service2.v1.department.config.app_secret);
+    }
+
+    #[test]
+    fn test_directory_service_config_consistency() {
+        let config = Config {
+            app_id: "consistency_test".to_string(),
+            app_secret: "consistency_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(180)),
+            ..Default::default()
+        };
+
+        let service = DirectoryService::new(config);
+
+        assert_eq!(service.v1.employee.config.app_id, "consistency_test");
+        assert_eq!(service.v1.employee.config.app_secret, "consistency_secret");
+        assert_eq!(service.v1.employee.config.req_timeout, Some(Duration::from_secs(180)));
+        assert_eq!(service.v1.department.config.app_id, "consistency_test");
+        assert_eq!(service.v1.department.config.app_secret, "consistency_secret");
+        assert_eq!(service.v1.department.config.req_timeout, Some(Duration::from_secs(180)));
+    }
+}

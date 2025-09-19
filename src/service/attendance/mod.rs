@@ -147,122 +147,200 @@ impl AttendanceService {
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use crate::core::config::Config;
-
-    fn create_test_config() -> Config {
-        Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build()
-    }
+    use std::time::Duration;
 
     #[test]
     fn test_attendance_service_creation() {
-        let config = create_test_config();
-        let _attendance_service = AttendanceService::new(config);
+        let config = Config::default();
+        let service = AttendanceService::new(config.clone());
 
-        // Verify service structure
-    }
-
-    #[test]
-    fn test_attendance_service_debug_trait() {
-        let config = create_test_config();
-        let _attendance_service = AttendanceService::new(config);
-
-        // Test that service can be used
+        // Verify all 11 sub-services are configured correctly
+        assert_eq!(service.v1.shift.config.app_id, config.app_id);
+        assert_eq!(service.v1.shift.config.app_secret, config.app_secret);
+        assert_eq!(service.v1.user_daily_shift.config.app_id, config.app_id);
+        assert_eq!(service.v1.group.config.app_id, config.app_id);
+        assert_eq!(service.v1.user_setting.config.app_id, config.app_id);
+        assert_eq!(service.v1.user_stats_data.config.app_secret, config.app_secret);
+        assert_eq!(service.v1.user_approval.config.app_id, config.app_id);
+        assert_eq!(service.v1.user_task.config.app_id, config.app_id);
+        assert_eq!(service.v1.user_task_remedy.config.app_secret, config.app_secret);
+        assert_eq!(service.v1.archive_rule.config.app_id, config.app_id);
+        assert_eq!(service.v1.leave_employ_expire_record.config.app_id, config.app_id);
+        assert_eq!(service.v1.leave_accrual_record.config.app_secret, config.app_secret);
     }
 
     #[test]
     fn test_attendance_service_with_custom_config() {
-        let config = Config::builder()
-            .app_id("attendance_app")
-            .app_secret("attendance_secret")
-            .req_timeout(std::time::Duration::from_millis(15000))
-            .base_url("https://attendance.api.com")
-            .build();
+        let config = Config {
+            app_id: "attendance_test_app".to_string(),
+            app_secret: "attendance_test_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(350)),
+            ..Default::default()
+        };
 
-        let _attendance_service = AttendanceService::new(config);
+        let service = AttendanceService::new(config.clone());
 
-        // Verify service creation with custom config
+        assert_eq!(service.v1.shift.config.app_id, "attendance_test_app");
+        assert_eq!(service.v1.shift.config.app_secret, "attendance_test_secret");
+        assert_eq!(service.v1.shift.config.req_timeout, Some(Duration::from_secs(350)));
+        assert_eq!(service.v1.user_daily_shift.config.app_id, "attendance_test_app");
+        assert_eq!(service.v1.group.config.req_timeout, Some(Duration::from_secs(350)));
+        assert_eq!(service.v1.user_setting.config.app_id, "attendance_test_app");
+        assert_eq!(service.v1.user_stats_data.config.req_timeout, Some(Duration::from_secs(350)));
+        assert_eq!(service.v1.user_approval.config.app_id, "attendance_test_app");
+        assert_eq!(service.v1.user_task.config.req_timeout, Some(Duration::from_secs(350)));
+        assert_eq!(service.v1.user_task_remedy.config.app_id, "attendance_test_app");
+        assert_eq!(service.v1.archive_rule.config.req_timeout, Some(Duration::from_secs(350)));
+        assert_eq!(service.v1.leave_employ_expire_record.config.app_id, "attendance_test_app");
+        assert_eq!(service.v1.leave_accrual_record.config.req_timeout, Some(Duration::from_secs(350)));
+    }
+
+    #[test]
+    fn test_attendance_service_config_independence() {
+        let mut config1 = Config::default();
+        config1.app_id = "attendance_app_1".to_string();
+
+        let mut config2 = Config::default();
+        config2.app_id = "attendance_app_2".to_string();
+
+        let service1 = AttendanceService::new(config1);
+        let service2 = AttendanceService::new(config2);
+
+        assert_eq!(service1.v1.shift.config.app_id, "attendance_app_1");
+        assert_eq!(service2.v1.shift.config.app_id, "attendance_app_2");
+        assert_ne!(service1.v1.shift.config.app_id, service2.v1.shift.config.app_id);
+        assert_ne!(service1.v1.user_daily_shift.config.app_id, service2.v1.user_daily_shift.config.app_id);
+        assert_ne!(service1.v1.group.config.app_id, service2.v1.group.config.app_id);
+        assert_ne!(service1.v1.user_setting.config.app_id, service2.v1.user_setting.config.app_id);
+        assert_ne!(service1.v1.user_stats_data.config.app_id, service2.v1.user_stats_data.config.app_id);
+        assert_ne!(service1.v1.user_approval.config.app_id, service2.v1.user_approval.config.app_id);
+        assert_ne!(service1.v1.user_task.config.app_id, service2.v1.user_task.config.app_id);
+        assert_ne!(service1.v1.user_task_remedy.config.app_id, service2.v1.user_task_remedy.config.app_id);
+        assert_ne!(service1.v1.archive_rule.config.app_id, service2.v1.archive_rule.config.app_id);
+        assert_ne!(service1.v1.leave_employ_expire_record.config.app_id, service2.v1.leave_employ_expire_record.config.app_id);
+        assert_ne!(service1.v1.leave_accrual_record.config.app_id, service2.v1.leave_accrual_record.config.app_id);
+    }
+
+    #[test]
+    fn test_attendance_service_sub_services_accessible() {
+        let config = Config::default();
+        let service = AttendanceService::new(config.clone());
+
+        // Test that all sub-services are accessible
+        assert_eq!(service.v1.shift.config.app_id, config.app_id);
+        assert_eq!(service.v1.user_daily_shift.config.app_id, config.app_id);
+        assert_eq!(service.v1.group.config.app_id, config.app_id);
+        assert_eq!(service.v1.user_setting.config.app_id, config.app_id);
+        assert_eq!(service.v1.user_stats_data.config.app_id, config.app_id);
+        assert_eq!(service.v1.user_approval.config.app_id, config.app_id);
+        assert_eq!(service.v1.user_task.config.app_id, config.app_id);
+        assert_eq!(service.v1.user_task_remedy.config.app_id, config.app_id);
+        assert_eq!(service.v1.archive_rule.config.app_id, config.app_id);
+        assert_eq!(service.v1.leave_employ_expire_record.config.app_id, config.app_id);
+        assert_eq!(service.v1.leave_accrual_record.config.app_id, config.app_id);
+    }
+
+    #[test]
+    fn test_attendance_service_config_cloning() {
+        let config = Config {
+            app_id: "clone_test_app".to_string(),
+            app_secret: "clone_test_secret".to_string(),
+            ..Default::default()
+        };
+
+        let service = AttendanceService::new(config.clone());
+
+        assert_eq!(service.v1.shift.config.app_id, "clone_test_app");
+        assert_eq!(service.v1.shift.config.app_secret, "clone_test_secret");
+        assert_eq!(service.v1.user_daily_shift.config.app_secret, "clone_test_secret");
+        assert_eq!(service.v1.group.config.app_id, "clone_test_app");
+        assert_eq!(service.v1.user_setting.config.app_secret, "clone_test_secret");
+        assert_eq!(service.v1.user_stats_data.config.app_id, "clone_test_app");
+        assert_eq!(service.v1.user_approval.config.app_secret, "clone_test_secret");
+        assert_eq!(service.v1.user_task.config.app_id, "clone_test_app");
+        assert_eq!(service.v1.user_task_remedy.config.app_secret, "clone_test_secret");
+        assert_eq!(service.v1.archive_rule.config.app_id, "clone_test_app");
+        assert_eq!(service.v1.leave_employ_expire_record.config.app_secret, "clone_test_secret");
+        assert_eq!(service.v1.leave_accrual_record.config.app_id, "clone_test_app");
+    }
+
+    #[test]
+    fn test_attendance_service_timeout_propagation() {
+        let config = Config {
+            req_timeout: Some(Duration::from_secs(360)),
+            ..Default::default()
+        };
+
+        let service = AttendanceService::new(config);
+
+        // Verify timeout is propagated to all sub-services
+        assert_eq!(service.v1.shift.config.req_timeout, Some(Duration::from_secs(360)));
+        assert_eq!(service.v1.user_daily_shift.config.req_timeout, Some(Duration::from_secs(360)));
+        assert_eq!(service.v1.group.config.req_timeout, Some(Duration::from_secs(360)));
+        assert_eq!(service.v1.user_setting.config.req_timeout, Some(Duration::from_secs(360)));
+        assert_eq!(service.v1.user_stats_data.config.req_timeout, Some(Duration::from_secs(360)));
+        assert_eq!(service.v1.user_approval.config.req_timeout, Some(Duration::from_secs(360)));
+        assert_eq!(service.v1.user_task.config.req_timeout, Some(Duration::from_secs(360)));
+        assert_eq!(service.v1.user_task_remedy.config.req_timeout, Some(Duration::from_secs(360)));
+        assert_eq!(service.v1.archive_rule.config.req_timeout, Some(Duration::from_secs(360)));
+        assert_eq!(service.v1.leave_employ_expire_record.config.req_timeout, Some(Duration::from_secs(360)));
+        assert_eq!(service.v1.leave_accrual_record.config.req_timeout, Some(Duration::from_secs(360)));
     }
 
     #[test]
     fn test_attendance_service_multiple_instances() {
-        let configs = vec![
-            Config::builder()
-                .app_id("app1")
-                .app_secret("secret1")
-                .build(),
-            Config::builder()
-                .app_id("app2")
-                .app_secret("secret2")
-                .req_timeout(std::time::Duration::from_millis(8000))
-                .build(),
-            Config::builder()
-                .app_id("app3")
-                .app_secret("secret3")
-                .enable_token_cache(false)
-                .build(),
-        ];
+        let config = Config::default();
 
-        let mut services = Vec::new();
-        for config in configs {
-            let service = AttendanceService::new(config);
-            services.push(service);
-        }
+        let service1 = AttendanceService::new(config.clone());
+        let service2 = AttendanceService::new(config.clone());
 
-        // All services should be created successfully
-        assert_eq!(services.len(), 3);
-        for _service in &services {}
-
-        // Services should be independent
-        for (i, service1) in services.iter().enumerate() {
-            for service2 in services.iter().skip(i + 1) {
-                let ptr1 = std::ptr::addr_of!(*service1) as *const _;
-                let ptr2 = std::ptr::addr_of!(*service2) as *const _;
-                assert_ne!(ptr1, ptr2, "Services should be independent instances");
-            }
-        }
+        // Both services should have the same config values
+        assert_eq!(service1.v1.shift.config.app_id, service2.v1.shift.config.app_id);
+        assert_eq!(service1.v1.shift.config.app_secret, service2.v1.shift.config.app_secret);
+        assert_eq!(service1.v1.user_daily_shift.config.app_id, service2.v1.user_daily_shift.config.app_id);
+        assert_eq!(service1.v1.group.config.app_secret, service2.v1.group.config.app_secret);
+        assert_eq!(service1.v1.user_setting.config.app_id, service2.v1.user_setting.config.app_id);
+        assert_eq!(service1.v1.user_stats_data.config.app_secret, service2.v1.user_stats_data.config.app_secret);
+        assert_eq!(service1.v1.user_approval.config.app_id, service2.v1.user_approval.config.app_id);
+        assert_eq!(service1.v1.user_task.config.app_secret, service2.v1.user_task.config.app_secret);
+        assert_eq!(service1.v1.user_task_remedy.config.app_id, service2.v1.user_task_remedy.config.app_id);
+        assert_eq!(service1.v1.archive_rule.config.app_secret, service2.v1.archive_rule.config.app_secret);
+        assert_eq!(service1.v1.leave_employ_expire_record.config.app_id, service2.v1.leave_employ_expire_record.config.app_id);
+        assert_eq!(service1.v1.leave_accrual_record.config.app_secret, service2.v1.leave_accrual_record.config.app_secret);
     }
 
     #[test]
-    fn test_attendance_service_config_variations() {
-        // Test different configuration combinations
-        let test_cases = vec![
-            ("basic", "secret", None, None),
-            ("timeout", "secret", Some(10000), None),
-            (
-                "custom_url",
-                "secret",
-                None,
-                Some("https://custom.test.com"),
-            ),
-            (
-                "full_custom",
-                "secret",
-                Some(20000),
-                Some("https://full.test.com"),
-            ),
+    fn test_attendance_service_config_consistency() {
+        let config = Config {
+            app_id: "consistency_test".to_string(),
+            app_secret: "consistency_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(370)),
+            ..Default::default()
+        };
+
+        let service = AttendanceService::new(config);
+
+        // Verify all sub-services have consistent configurations
+        let configs = [
+            &service.v1.shift.config,
+            &service.v1.user_daily_shift.config,
+            &service.v1.group.config,
+            &service.v1.user_setting.config,
+            &service.v1.user_stats_data.config,
+            &service.v1.user_approval.config,
+            &service.v1.user_task.config,
+            &service.v1.user_task_remedy.config,
+            &service.v1.archive_rule.config,
+            &service.v1.leave_employ_expire_record.config,
+            &service.v1.leave_accrual_record.config,
         ];
 
-        for (app_id, app_secret, timeout, base_url) in test_cases {
-            let mut builder = Config::builder().app_id(app_id).app_secret(app_secret);
-
-            if let Some(timeout_ms) = timeout {
-                builder = builder.req_timeout(std::time::Duration::from_millis(timeout_ms));
-            }
-
-            if let Some(url) = base_url {
-                builder = builder.base_url(url);
-            }
-
-            let config = builder.build();
-            let _attendance_service = AttendanceService::new(config);
-
-            // Each configuration should work
+        for config in &configs {
+            assert_eq!(config.app_id, "consistency_test");
+            assert_eq!(config.app_secret, "consistency_secret");
+            assert_eq!(config.req_timeout, Some(Duration::from_secs(370)));
         }
     }
 }

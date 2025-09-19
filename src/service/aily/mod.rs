@@ -155,3 +155,161 @@ impl AilyService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::time::Duration;
+
+    #[test]
+    fn test_aily_service_creation() {
+        let config = Config::default();
+        let service = AilyService::new(config.clone());
+
+        assert_eq!(service.session.config.app_id, config.app_id);
+        assert_eq!(service.message.config.app_id, config.app_id);
+        assert_eq!(service.run.config.app_id, config.app_id);
+        assert_eq!(service.skill.config.app_id, config.app_id);
+        assert_eq!(service.knowledge.config.app_id, config.app_id);
+    }
+
+    #[test]
+    fn test_aily_service_with_custom_config() {
+        let config = Config {
+            app_id: "aily_test_app".to_string(),
+            app_secret: "aily_test_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(90)),
+            ..Default::default()
+        };
+
+        let service = AilyService::new(config.clone());
+
+        assert_eq!(service.session.config.app_id, "aily_test_app");
+        assert_eq!(service.session.config.app_secret, "aily_test_secret");
+        assert_eq!(service.session.config.req_timeout, Some(Duration::from_secs(90)));
+
+        assert_eq!(service.message.config.app_id, "aily_test_app");
+        assert_eq!(service.message.config.req_timeout, Some(Duration::from_secs(90)));
+
+        assert_eq!(service.run.config.app_id, "aily_test_app");
+        assert_eq!(service.skill.config.app_id, "aily_test_app");
+        assert_eq!(service.knowledge.config.app_id, "aily_test_app");
+    }
+
+    #[test]
+    fn test_aily_service_config_independence() {
+        let mut config1 = Config::default();
+        config1.app_id = "aily_app_1".to_string();
+
+        let mut config2 = Config::default();
+        config2.app_id = "aily_app_2".to_string();
+
+        let service1 = AilyService::new(config1);
+        let service2 = AilyService::new(config2);
+
+        assert_eq!(service1.session.config.app_id, "aily_app_1");
+        assert_eq!(service2.session.config.app_id, "aily_app_2");
+        assert_ne!(service1.session.config.app_id, service2.session.config.app_id);
+
+        assert_eq!(service1.message.config.app_id, "aily_app_1");
+        assert_eq!(service2.message.config.app_id, "aily_app_2");
+    }
+
+    #[test]
+    fn test_aily_service_all_sub_services_accessible() {
+        let config = Config::default();
+        let service = AilyService::new(config.clone());
+
+        assert_eq!(service.session.config.app_id, config.app_id);
+        assert_eq!(service.message.config.app_id, config.app_id);
+        assert_eq!(service.run.config.app_id, config.app_id);
+        assert_eq!(service.skill.config.app_id, config.app_id);
+        assert_eq!(service.knowledge.config.app_id, config.app_id);
+    }
+
+    #[test]
+    fn test_aily_service_config_cloning() {
+        let config = Config {
+            app_id: "clone_test_app".to_string(),
+            app_secret: "clone_test_secret".to_string(),
+            ..Default::default()
+        };
+
+        let service = AilyService::new(config.clone());
+
+        let services_configs = [
+            &service.session.config,
+            &service.message.config,
+            &service.run.config,
+            &service.skill.config,
+            &service.knowledge.config,
+        ];
+
+        for service_config in &services_configs {
+            assert_eq!(service_config.app_id, "clone_test_app");
+            assert_eq!(service_config.app_secret, "clone_test_secret");
+        }
+    }
+
+    #[test]
+    fn test_aily_service_timeout_propagation() {
+        let config = Config {
+            req_timeout: Some(Duration::from_secs(240)),
+            ..Default::default()
+        };
+
+        let service = AilyService::new(config);
+
+        assert_eq!(service.session.config.req_timeout, Some(Duration::from_secs(240)));
+        assert_eq!(service.message.config.req_timeout, Some(Duration::from_secs(240)));
+        assert_eq!(service.run.config.req_timeout, Some(Duration::from_secs(240)));
+        assert_eq!(service.skill.config.req_timeout, Some(Duration::from_secs(240)));
+        assert_eq!(service.knowledge.config.req_timeout, Some(Duration::from_secs(240)));
+    }
+
+    #[test]
+    fn test_aily_service_multiple_instances() {
+        let config = Config::default();
+
+        let service1 = AilyService::new(config.clone());
+        let service2 = AilyService::new(config.clone());
+
+        assert_eq!(service1.session.config.app_id, service2.session.config.app_id);
+        assert_eq!(service1.message.config.app_id, service2.message.config.app_id);
+        assert_eq!(service1.run.config.app_id, service2.run.config.app_id);
+        assert_eq!(service1.skill.config.app_id, service2.skill.config.app_id);
+        assert_eq!(service1.knowledge.config.app_id, service2.knowledge.config.app_id);
+    }
+
+    #[test]
+    fn test_aily_service_config_consistency() {
+        let config = Config {
+            app_id: "consistency_test".to_string(),
+            app_secret: "consistency_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(150)),
+            ..Default::default()
+        };
+
+        let service = AilyService::new(config);
+
+        let configs = [
+            &service.session.config,
+            &service.message.config,
+            &service.run.config,
+            &service.skill.config,
+            &service.knowledge.config,
+        ];
+
+        for config in &configs {
+            assert_eq!(config.app_id, "consistency_test");
+            assert_eq!(config.app_secret, "consistency_secret");
+            assert_eq!(config.req_timeout, Some(Duration::from_secs(150)));
+        }
+
+        for i in 1..configs.len() {
+            assert_eq!(configs[0].app_id, configs[i].app_id);
+            assert_eq!(configs[0].app_secret, configs[i].app_secret);
+            assert_eq!(configs[0].req_timeout, configs[i].req_timeout);
+        }
+    }
+}

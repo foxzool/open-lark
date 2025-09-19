@@ -174,3 +174,154 @@ impl AdminService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::time::Duration;
+
+    #[test]
+    fn test_admin_service_creation() {
+        let config = Config::default();
+        let service = AdminService::new(config.clone());
+
+        assert_eq!(service.password.config.app_id, config.app_id);
+        assert_eq!(service.data_report.config.app_id, config.app_id);
+        assert_eq!(service.badge.config.app_id, config.app_id);
+        assert_eq!(service.badge_grant.config.app_id, config.app_id);
+    }
+
+    #[test]
+    fn test_admin_service_with_custom_config() {
+        let config = Config {
+            app_id: "admin_test_app".to_string(),
+            app_secret: "admin_test_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(120)),
+            ..Default::default()
+        };
+
+        let service = AdminService::new(config.clone());
+
+        assert_eq!(service.password.config.app_id, "admin_test_app");
+        assert_eq!(service.password.config.app_secret, "admin_test_secret");
+        assert_eq!(service.password.config.req_timeout, Some(Duration::from_secs(120)));
+
+        assert_eq!(service.data_report.config.app_id, "admin_test_app");
+        assert_eq!(service.data_report.config.req_timeout, Some(Duration::from_secs(120)));
+
+        assert_eq!(service.badge.config.app_id, "admin_test_app");
+        assert_eq!(service.badge_grant.config.app_id, "admin_test_app");
+    }
+
+    #[test]
+    fn test_admin_service_config_independence() {
+        let mut config1 = Config::default();
+        config1.app_id = "admin_app_1".to_string();
+
+        let mut config2 = Config::default();
+        config2.app_id = "admin_app_2".to_string();
+
+        let service1 = AdminService::new(config1);
+        let service2 = AdminService::new(config2);
+
+        assert_eq!(service1.password.config.app_id, "admin_app_1");
+        assert_eq!(service2.password.config.app_id, "admin_app_2");
+        assert_ne!(service1.password.config.app_id, service2.password.config.app_id);
+
+        assert_eq!(service1.data_report.config.app_id, "admin_app_1");
+        assert_eq!(service2.data_report.config.app_id, "admin_app_2");
+    }
+
+    #[test]
+    fn test_admin_service_all_sub_services_accessible() {
+        let config = Config::default();
+        let service = AdminService::new(config.clone());
+
+        assert_eq!(service.password.config.app_id, config.app_id);
+        assert_eq!(service.data_report.config.app_id, config.app_id);
+        assert_eq!(service.badge.config.app_id, config.app_id);
+        assert_eq!(service.badge_grant.config.app_id, config.app_id);
+    }
+
+    #[test]
+    fn test_admin_service_config_cloning() {
+        let config = Config {
+            app_id: "clone_test_app".to_string(),
+            app_secret: "clone_test_secret".to_string(),
+            ..Default::default()
+        };
+
+        let service = AdminService::new(config.clone());
+
+        let services_configs = [
+            &service.password.config,
+            &service.data_report.config,
+            &service.badge.config,
+            &service.badge_grant.config,
+        ];
+
+        for service_config in &services_configs {
+            assert_eq!(service_config.app_id, "clone_test_app");
+            assert_eq!(service_config.app_secret, "clone_test_secret");
+        }
+    }
+
+    #[test]
+    fn test_admin_service_timeout_propagation() {
+        let config = Config {
+            req_timeout: Some(Duration::from_secs(180)),
+            ..Default::default()
+        };
+
+        let service = AdminService::new(config);
+
+        assert_eq!(service.password.config.req_timeout, Some(Duration::from_secs(180)));
+        assert_eq!(service.data_report.config.req_timeout, Some(Duration::from_secs(180)));
+        assert_eq!(service.badge.config.req_timeout, Some(Duration::from_secs(180)));
+        assert_eq!(service.badge_grant.config.req_timeout, Some(Duration::from_secs(180)));
+    }
+
+    #[test]
+    fn test_admin_service_multiple_instances() {
+        let config = Config::default();
+
+        let service1 = AdminService::new(config.clone());
+        let service2 = AdminService::new(config.clone());
+
+        assert_eq!(service1.password.config.app_id, service2.password.config.app_id);
+        assert_eq!(service1.data_report.config.app_id, service2.data_report.config.app_id);
+        assert_eq!(service1.badge.config.app_id, service2.badge.config.app_id);
+        assert_eq!(service1.badge_grant.config.app_id, service2.badge_grant.config.app_id);
+    }
+
+    #[test]
+    fn test_admin_service_config_consistency() {
+        let config = Config {
+            app_id: "consistency_test".to_string(),
+            app_secret: "consistency_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(200)),
+            ..Default::default()
+        };
+
+        let service = AdminService::new(config);
+
+        let configs = [
+            &service.password.config,
+            &service.data_report.config,
+            &service.badge.config,
+            &service.badge_grant.config,
+        ];
+
+        for config in &configs {
+            assert_eq!(config.app_id, "consistency_test");
+            assert_eq!(config.app_secret, "consistency_secret");
+            assert_eq!(config.req_timeout, Some(Duration::from_secs(200)));
+        }
+
+        for i in 1..configs.len() {
+            assert_eq!(configs[0].app_id, configs[i].app_id);
+            assert_eq!(configs[0].app_secret, configs[i].app_secret);
+            assert_eq!(configs[0].req_timeout, configs[i].req_timeout);
+        }
+    }
+}

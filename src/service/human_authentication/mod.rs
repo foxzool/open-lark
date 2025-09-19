@@ -416,3 +416,111 @@ impl ApiResponseTrait for AuthenticationResultResponse {
         ResponseFormat::Data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::time::Duration;
+
+    #[test]
+    fn test_human_authentication_service_creation() {
+        let config = Config::default();
+        let service = HumanAuthenticationService::new(config.clone());
+
+        assert_eq!(service.config.app_id, config.app_id);
+        assert_eq!(service.config.app_secret, config.app_secret);
+    }
+
+    #[test]
+    fn test_human_authentication_service_with_custom_config() {
+        let config = Config {
+            app_id: "human_auth_test_app".to_string(),
+            app_secret: "human_auth_test_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(120)),
+            ..Default::default()
+        };
+
+        let service = HumanAuthenticationService::new(config.clone());
+
+        assert_eq!(service.config.app_id, "human_auth_test_app");
+        assert_eq!(service.config.app_secret, "human_auth_test_secret");
+        assert_eq!(service.config.req_timeout, Some(Duration::from_secs(120)));
+    }
+
+    #[test]
+    fn test_human_authentication_service_config_independence() {
+        let mut config1 = Config::default();
+        config1.app_id = "human_auth_app_1".to_string();
+
+        let mut config2 = Config::default();
+        config2.app_id = "human_auth_app_2".to_string();
+
+        let service1 = HumanAuthenticationService::new(config1);
+        let service2 = HumanAuthenticationService::new(config2);
+
+        assert_eq!(service1.config.app_id, "human_auth_app_1");
+        assert_eq!(service2.config.app_id, "human_auth_app_2");
+        assert_ne!(service1.config.app_id, service2.config.app_id);
+    }
+
+    #[test]
+    fn test_human_authentication_service_accessible() {
+        let config = Config::default();
+        let service = HumanAuthenticationService::new(config.clone());
+
+        assert_eq!(service.config.app_id, config.app_id);
+    }
+
+    #[test]
+    fn test_human_authentication_service_config_cloning() {
+        let config = Config {
+            app_id: "clone_test_app".to_string(),
+            app_secret: "clone_test_secret".to_string(),
+            ..Default::default()
+        };
+
+        let service = HumanAuthenticationService::new(config.clone());
+
+        assert_eq!(service.config.app_id, "clone_test_app");
+        assert_eq!(service.config.app_secret, "clone_test_secret");
+    }
+
+    #[test]
+    fn test_human_authentication_service_timeout_propagation() {
+        let config = Config {
+            req_timeout: Some(Duration::from_secs(150)),
+            ..Default::default()
+        };
+
+        let service = HumanAuthenticationService::new(config);
+
+        assert_eq!(service.config.req_timeout, Some(Duration::from_secs(150)));
+    }
+
+    #[test]
+    fn test_human_authentication_service_multiple_instances() {
+        let config = Config::default();
+
+        let service1 = HumanAuthenticationService::new(config.clone());
+        let service2 = HumanAuthenticationService::new(config.clone());
+
+        assert_eq!(service1.config.app_id, service2.config.app_id);
+        assert_eq!(service1.config.app_secret, service2.config.app_secret);
+    }
+
+    #[test]
+    fn test_human_authentication_service_config_consistency() {
+        let config = Config {
+            app_id: "consistency_test".to_string(),
+            app_secret: "consistency_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(180)),
+            ..Default::default()
+        };
+
+        let service = HumanAuthenticationService::new(config);
+
+        assert_eq!(service.config.app_id, "consistency_test");
+        assert_eq!(service.config.app_secret, "consistency_secret");
+        assert_eq!(service.config.req_timeout, Some(Duration::from_secs(180)));
+    }
+}

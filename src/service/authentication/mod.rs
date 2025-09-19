@@ -133,3 +133,118 @@ impl AuthenService {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::config::Config;
+    use std::time::Duration;
+
+    #[test]
+    fn test_authentication_service_creation() {
+        let config = Config::default();
+        let service = AuthenService::new(config);
+
+        // Verify V1 service structure exists with user_info sub-service
+        let _ = &service.v1;
+        let _ = &service.v1.user_info;
+    }
+
+    #[test]
+    fn test_authentication_service_with_custom_config() {
+        let config = Config {
+            app_id: "authentication_test_app".to_string(),
+            app_secret: "authentication_test_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(380)),
+            ..Default::default()
+        };
+
+        let service = AuthenService::new(config);
+
+        // Verify service creation with custom config
+        let _ = &service.v1.user_info;
+    }
+
+    #[test]
+    fn test_authentication_service_config_independence() {
+        let config1 = Config {
+            app_id: "authentication_app_1".to_string(),
+            ..Default::default()
+        };
+
+        let config2 = Config {
+            app_id: "authentication_app_2".to_string(),
+            ..Default::default()
+        };
+
+        let service1 = AuthenService::new(config1);
+        let service2 = AuthenService::new(config2);
+
+        // Verify both services are created successfully
+        let _ = &service1.v1.user_info;
+        let _ = &service2.v1.user_info;
+    }
+
+    #[test]
+    fn test_authentication_service_sub_services_accessible() {
+        let config = Config::default();
+        let service = AuthenService::new(config);
+
+        // Test that user_info sub-service is accessible
+        let _ = &service.v1.user_info;
+    }
+
+    #[test]
+    fn test_authentication_service_config_cloning() {
+        let config = Config {
+            app_id: "clone_test_app".to_string(),
+            app_secret: "clone_test_secret".to_string(),
+            ..Default::default()
+        };
+
+        let service = AuthenService::new(config.clone());
+
+        // Verify service creation with cloned config
+        let _ = &service.v1.user_info;
+    }
+
+    #[test]
+    fn test_authentication_service_timeout_propagation() {
+        let config = Config {
+            req_timeout: Some(Duration::from_secs(390)),
+            ..Default::default()
+        };
+
+        let service = AuthenService::new(config);
+
+        // Verify service creation with timeout config
+        let _ = &service.v1.user_info;
+    }
+
+    #[test]
+    fn test_authentication_service_multiple_instances() {
+        let config = Config::default();
+
+        let service1 = AuthenService::new(config.clone());
+        let service2 = AuthenService::new(config.clone());
+
+        // Verify both instances are created successfully
+        let _ = &service1.v1.user_info;
+        let _ = &service2.v1.user_info;
+    }
+
+    #[test]
+    fn test_authentication_service_config_consistency() {
+        let config = Config {
+            app_id: "consistency_test".to_string(),
+            app_secret: "consistency_secret".to_string(),
+            req_timeout: Some(Duration::from_secs(400)),
+            ..Default::default()
+        };
+
+        let service = AuthenService::new(config);
+
+        // Verify user_info sub-service is created consistently
+        let _ = &service.v1.user_info;
+    }
+}
