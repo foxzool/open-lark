@@ -225,7 +225,7 @@ mod tests {
             employee_type: "1".to_string(),
             face_key_open: Some(true),
             face_key: Some("face_key_456".to_string()),
-            face_live_need_action: Some(1),
+            face_live_need_action: Some(true),
             face_downgrade: Some(false),
         };
 
@@ -233,7 +233,7 @@ mod tests {
         assert_eq!(request.employee_type, "1");
         assert_eq!(request.face_key_open, Some(true));
         assert_eq!(request.face_key, Some("face_key_456".to_string()));
-        assert_eq!(request.face_live_need_action, Some(1));
+        assert_eq!(request.face_live_need_action, Some(true));
         assert_eq!(request.face_downgrade, Some(false));
     }
 
@@ -376,7 +376,7 @@ mod tests {
             employee_type: "1".to_string(),
             face_key_open: Some(true),
             face_key: Some("debug_face_key".to_string()),
-            face_live_need_action: Some(2),
+            face_live_need_action: Some(true),
             face_downgrade: Some(true),
         };
 
@@ -395,11 +395,11 @@ mod tests {
             employee_type: "1".to_string(),
             face_key_open: Some(true),
             face_key: Some("key_level_0".to_string()),
-            face_live_need_action: Some(0), // No action required
+            face_live_need_action: Some(false), // No action required
             face_downgrade: Some(false),
         };
 
-        assert_eq!(request_level_0.face_live_need_action, Some(0));
+        assert_eq!(request_level_0.face_live_need_action, Some(false));
 
         let request_level_2 = ModifyUserSettingRequest {
             api_req: ApiRequest::default(),
@@ -407,11 +407,11 @@ mod tests {
             employee_type: "1".to_string(),
             face_key_open: Some(true),
             face_key: Some("key_level_2".to_string()),
-            face_live_need_action: Some(2), // High action required
+            face_live_need_action: Some(true), // High action required
             face_downgrade: Some(true),
         };
 
-        assert_eq!(request_level_2.face_live_need_action, Some(2));
+        assert_eq!(request_level_2.face_live_need_action, Some(true));
     }
 
     #[test]
@@ -510,7 +510,7 @@ mod tests {
             employee_type: "1".to_string(),
             face_key_open: Some(false),
             face_key: Some("disabled_key".to_string()),
-            face_live_need_action: Some(0),
+            face_live_need_action: Some(false),
             face_downgrade: Some(true),
         };
 
@@ -524,11 +524,11 @@ mod tests {
             employee_type: "2".to_string(),
             face_key_open: Some(true),
             face_key: Some("negative_key".to_string()),
-            face_live_need_action: Some(-1),
+            face_live_need_action: Some(false),
             face_downgrade: Some(false),
         };
 
-        assert_eq!(request_negative.face_live_need_action, Some(-1));
+        assert_eq!(request_negative.face_live_need_action, Some(false));
 
         // Test with very large face_live_need_action value
         let request_large_action = ModifyUserSettingRequest {
@@ -537,11 +537,11 @@ mod tests {
             employee_type: "1".to_string(),
             face_key_open: Some(true),
             face_key: Some("large_action_key".to_string()),
-            face_live_need_action: Some(999),
+            face_live_need_action: Some(true),
             face_downgrade: Some(true),
         };
 
-        assert_eq!(request_large_action.face_live_need_action, Some(999));
+        assert_eq!(request_large_action.face_live_need_action, Some(true));
     }
 
     #[test]
