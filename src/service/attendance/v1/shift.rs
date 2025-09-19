@@ -415,3 +415,270 @@ impl ListShiftRequest {
         self
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::{api_req::ApiRequest, config::Config};
+
+    #[test]
+    fn test_shift_service_creation() {
+        let config = Config::default();
+        let service = ShiftService {
+            config: config.clone(),
+        };
+
+        assert_eq!(service.config.app_id, config.app_id);
+        assert_eq!(service.config.app_secret, config.app_secret);
+    }
+
+    #[test]
+    fn test_shift_service_with_custom_config() {
+        let config = Config {
+            app_id: "shift_test_app".to_string(),
+            app_secret: "shift_test_secret".to_string(),
+            ..Default::default()
+        };
+
+        let service = ShiftService {
+            config: config.clone(),
+        };
+
+        assert_eq!(service.config.app_id, "shift_test_app");
+        assert_eq!(service.config.app_secret, "shift_test_secret");
+    }
+
+    #[test]
+    fn test_create_shift_request_builder() {
+        let request = CreateShiftRequest::builder()
+            .employee_type("1")
+            .shift_name("Morning Shift")
+            .punch_times(2)
+            .is_flexible(true)
+            .flexible_minutes(30)
+            .no_need_off(false)
+            .late_minutes_as_late(10)
+            .late_minutes_as_lack(30)
+            .early_minutes_as_early(10)
+            .early_minutes_as_lack(30)
+            .allow_outside_apply(true)
+            .outside_apply_limit(5)
+            .allow_face_punch(true)
+            .build();
+
+        assert_eq!(request.employee_type, "1");
+        assert_eq!(request.shift_name, "Morning Shift");
+        assert_eq!(request.punch_times, 2);
+        assert_eq!(request.is_flexible, Some(true));
+        assert_eq!(request.flexible_minutes, Some(30));
+        assert_eq!(request.no_need_off, Some(false));
+        assert_eq!(request.late_minutes_as_late, Some(10));
+        assert_eq!(request.late_minutes_as_lack, Some(30));
+        assert_eq!(request.early_minutes_as_early, Some(10));
+        assert_eq!(request.early_minutes_as_lack, Some(30));
+        assert_eq!(request.allow_outside_apply, Some(true));
+        assert_eq!(request.outside_apply_limit, Some(5));
+        assert_eq!(request.allow_face_punch, Some(true));
+    }
+
+    #[test]
+    fn test_create_shift_request_builder_minimal() {
+        let request = CreateShiftRequest::builder()
+            .employee_type("2")
+            .shift_name("Evening Shift")
+            .punch_times(4)
+            .build();
+
+        assert_eq!(request.employee_type, "2");
+        assert_eq!(request.shift_name, "Evening Shift");
+        assert_eq!(request.punch_times, 4);
+        assert_eq!(request.is_flexible, None);
+        assert_eq!(request.flexible_minutes, None);
+        assert_eq!(request.no_need_off, None);
+    }
+
+    #[test]
+    fn test_delete_shift_request_new() {
+        let request = DeleteShiftRequest::new("shift_123");
+
+        assert_eq!(request.shift_id, "shift_123");
+    }
+
+    #[test]
+    fn test_get_shift_request_new() {
+        let request = GetShiftRequest::new("shift_456");
+
+        assert_eq!(request.shift_id, "shift_456");
+    }
+
+    #[test]
+    fn test_query_shift_request_new() {
+        let request = QueryShiftRequest::new("1", "Day Shift");
+
+        assert_eq!(request.employee_type, "1");
+        assert_eq!(request.shift_name, "Day Shift");
+    }
+
+    #[test]
+    fn test_list_shift_request_new() {
+        let request = ListShiftRequest::new();
+
+        assert_eq!(request.page_size, None);
+        assert_eq!(request.page_token, None);
+    }
+
+    #[test]
+    fn test_list_shift_request_with_pagination() {
+        let request = ListShiftRequest::new()
+            .page_size(50)
+            .page_token("token_123");
+
+        assert_eq!(request.page_size, Some(50));
+        assert_eq!(request.page_token, Some("token_123".to_string()));
+    }
+
+    #[test]
+    fn test_shift_service_config_independence() {
+        let config1 = Config {
+            app_id: "shift_app_1".to_string(),
+            ..Default::default()
+        };
+
+        let config2 = Config {
+            app_id: "shift_app_2".to_string(),
+            ..Default::default()
+        };
+
+        let service1 = ShiftService { config: config1 };
+        let service2 = ShiftService { config: config2 };
+
+        assert_eq!(service1.config.app_id, "shift_app_1");
+        assert_eq!(service2.config.app_id, "shift_app_2");
+        assert_ne!(service1.config.app_id, service2.config.app_id);
+    }
+
+    #[test]
+    fn test_create_shift_request_builder_edge_cases() {
+        // Test with zero punch times
+        let request_zero = CreateShiftRequest::builder()
+            .employee_type("1")
+            .shift_name("Zero Punch Shift")
+            .punch_times(0)
+            .build();
+
+        assert_eq!(request_zero.punch_times, 0);
+
+        // Test with large punch times
+        let request_large = CreateShiftRequest::builder()
+            .employee_type("2")
+            .shift_name("Many Punch Shift")
+            .punch_times(100)
+            .build();
+
+        assert_eq!(request_large.punch_times, 100);
+
+        // Test with negative flexible minutes
+        let request_negative = CreateShiftRequest::builder()
+            .employee_type("3")
+            .shift_name("Negative Flexible Shift")
+            .punch_times(2)
+            .flexible_minutes(-30)
+            .build();
+
+        assert_eq!(request_negative.flexible_minutes, Some(-30));
+    }
+
+    #[test]
+    fn test_request_structs_debug_trait() {
+        let create_request = CreateShiftRequest::builder()
+            .employee_type("1")
+            .shift_name("Debug Shift")
+            .punch_times(2)
+            .build();
+
+        let debug_str = format!("{:?}", create_request);
+        assert!(debug_str.contains("CreateShiftRequest"));
+        assert!(debug_str.contains("Debug Shift"));
+
+        let delete_request = DeleteShiftRequest::new("debug_shift_id");
+        let debug_str = format!("{:?}", delete_request);
+        assert!(debug_str.contains("DeleteShiftRequest"));
+        assert!(debug_str.contains("debug_shift_id"));
+    }
+
+    #[test]
+    fn test_list_shift_request_edge_cases() {
+        // Test with very large page size
+        let request_large = ListShiftRequest::new().page_size(10000);
+        assert_eq!(request_large.page_size, Some(10000));
+
+        // Test with zero page size
+        let request_zero = ListShiftRequest::new().page_size(0);
+        assert_eq!(request_zero.page_size, Some(0));
+
+        // Test with very long page token
+        let long_token = "a".repeat(1000);
+        let request_long_token = ListShiftRequest::new().page_token(long_token.clone());
+        assert_eq!(request_long_token.page_token, Some(long_token));
+
+        // Test with empty page token
+        let request_empty_token = ListShiftRequest::new().page_token("");
+        assert_eq!(request_empty_token.page_token, Some("".to_string()));
+    }
+
+    #[test]
+    fn test_create_shift_request_builder_string_into() {
+        // Test that Into<String> works for both &str and String
+        let request1 = CreateShiftRequest::builder()
+            .employee_type("1")
+            .shift_name("Test Shift")
+            .punch_times(2)
+            .build();
+
+        let request2 = CreateShiftRequest::builder()
+            .employee_type("1".to_string())
+            .shift_name("Test Shift".to_string())
+            .punch_times(2)
+            .build();
+
+        assert_eq!(request1.employee_type, request2.employee_type);
+        assert_eq!(request1.shift_name, request2.shift_name);
+    }
+
+    #[test]
+    fn test_query_shift_request_string_into() {
+        // Test that Into<String> works for QueryShiftRequest::new
+        let request1 = QueryShiftRequest::new("1", "Test Query");
+        let request2 = QueryShiftRequest::new("1".to_string(), "Test Query".to_string());
+
+        assert_eq!(request1.employee_type, request2.employee_type);
+        assert_eq!(request1.shift_name, request2.shift_name);
+    }
+
+    #[test]
+    fn test_create_shift_request_builder_chaining() {
+        let request = CreateShiftRequest::builder()
+            .employee_type("chain_test")
+            .shift_name("Chain Test Shift")
+            .punch_times(4)
+            .is_flexible(true)
+            .flexible_minutes(15)
+            .no_need_off(true)
+            .late_minutes_as_late(5)
+            .early_minutes_as_early(5)
+            .allow_outside_apply(false)
+            .allow_face_punch(false)
+            .build();
+
+        assert_eq!(request.employee_type, "chain_test");
+        assert_eq!(request.shift_name, "Chain Test Shift");
+        assert_eq!(request.punch_times, 4);
+        assert_eq!(request.is_flexible, Some(true));
+        assert_eq!(request.flexible_minutes, Some(15));
+        assert_eq!(request.no_need_off, Some(true));
+        assert_eq!(request.late_minutes_as_late, Some(5));
+        assert_eq!(request.early_minutes_as_early, Some(5));
+        assert_eq!(request.allow_outside_apply, Some(false));
+        assert_eq!(request.allow_face_punch, Some(false));
+    }
+}

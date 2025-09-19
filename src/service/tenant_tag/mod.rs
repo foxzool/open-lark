@@ -153,20 +153,30 @@ mod tests {
 
         assert_eq!(service.tag.config.app_id, "tenant_tag_app");
         assert_eq!(service.tag.config.app_secret, "tenant_tag_secret");
-        assert_eq!(service.tag.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.tag.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
 
         assert_eq!(service.tag_binding.config.app_id, "tenant_tag_app");
         assert_eq!(service.tag_binding.config.app_secret, "tenant_tag_secret");
-        assert_eq!(service.tag_binding.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.tag_binding.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
     }
 
     #[test]
     fn test_tenant_tag_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "app_1".to_string();
+        let config1 = Config {
+            app_id: "app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "app_2".to_string();
+        let config2 = Config {
+            app_id: "app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = TenantTagService::new(config1);
         let service2 = TenantTagService::new(config2);
@@ -196,7 +206,10 @@ mod tests {
         let service2 = TenantTagService::new(config.clone());
 
         assert_eq!(service1.tag.config.app_id, service2.tag.config.app_id);
-        assert_eq!(service1.tag_binding.config.app_id, service2.tag_binding.config.app_id);
+        assert_eq!(
+            service1.tag_binding.config.app_id,
+            service2.tag_binding.config.app_id
+        );
     }
 
     #[test]
@@ -211,7 +224,10 @@ mod tests {
 
         // Both services should have the same config values but be independent instances
         assert_eq!(service.tag.config.app_id, service.tag_binding.config.app_id);
-        assert_eq!(service.tag.config.app_secret, service.tag_binding.config.app_secret);
+        assert_eq!(
+            service.tag.config.app_secret,
+            service.tag_binding.config.app_secret
+        );
 
         // But they should be independent instances (this tests that clone() worked)
         assert_eq!(service.tag.config.app_id, "clone_test_app");
@@ -227,7 +243,13 @@ mod tests {
 
         let service = TenantTagService::new(config);
 
-        assert_eq!(service.tag.config.req_timeout, Some(Duration::from_secs(90)));
-        assert_eq!(service.tag_binding.config.req_timeout, Some(Duration::from_secs(90)));
+        assert_eq!(
+            service.tag.config.req_timeout,
+            Some(Duration::from_secs(90))
+        );
+        assert_eq!(
+            service.tag_binding.config.req_timeout,
+            Some(Duration::from_secs(90))
+        );
     }
 }

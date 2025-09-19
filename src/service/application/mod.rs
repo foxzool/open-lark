@@ -216,11 +216,15 @@ mod tests {
 
     #[test]
     fn test_application_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "application_app_1".to_string();
+        let config1 = Config {
+            app_id: "application_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "application_app_2".to_string();
+        let config2 = Config {
+            app_id: "application_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = ApplicationService::new(config1);
         let service2 = ApplicationService::new(config2);

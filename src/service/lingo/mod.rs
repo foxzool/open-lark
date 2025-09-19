@@ -129,20 +129,33 @@ mod tests {
 
         assert_eq!(service.draft.config.app_id, "lingo_test_app");
         assert_eq!(service.draft.config.app_secret, "lingo_test_secret");
-        assert_eq!(service.draft.config.req_timeout, Some(Duration::from_secs(270)));
+        assert_eq!(
+            service.draft.config.req_timeout,
+            Some(Duration::from_secs(270))
+        );
         assert_eq!(service.entity.config.app_id, "lingo_test_app");
-        assert_eq!(service.classification.config.req_timeout, Some(Duration::from_secs(270)));
+        assert_eq!(
+            service.classification.config.req_timeout,
+            Some(Duration::from_secs(270))
+        );
         assert_eq!(service.repo.config.app_id, "lingo_test_app");
-        assert_eq!(service.file.config.req_timeout, Some(Duration::from_secs(270)));
+        assert_eq!(
+            service.file.config.req_timeout,
+            Some(Duration::from_secs(270))
+        );
     }
 
     #[test]
     fn test_lingo_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "lingo_app_1".to_string();
+        let config1 = Config {
+            app_id: "lingo_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "lingo_app_2".to_string();
+        let config2 = Config {
+            app_id: "lingo_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = LingoService::new(config1);
         let service2 = LingoService::new(config2);
@@ -151,7 +164,10 @@ mod tests {
         assert_eq!(service2.draft.config.app_id, "lingo_app_2");
         assert_ne!(service1.draft.config.app_id, service2.draft.config.app_id);
         assert_ne!(service1.entity.config.app_id, service2.entity.config.app_id);
-        assert_ne!(service1.classification.config.app_id, service2.classification.config.app_id);
+        assert_ne!(
+            service1.classification.config.app_id,
+            service2.classification.config.app_id
+        );
         assert_ne!(service1.repo.config.app_id, service2.repo.config.app_id);
         assert_ne!(service1.file.config.app_id, service2.file.config.app_id);
     }
@@ -195,11 +211,26 @@ mod tests {
 
         let service = LingoService::new(config);
 
-        assert_eq!(service.draft.config.req_timeout, Some(Duration::from_secs(280)));
-        assert_eq!(service.entity.config.req_timeout, Some(Duration::from_secs(280)));
-        assert_eq!(service.classification.config.req_timeout, Some(Duration::from_secs(280)));
-        assert_eq!(service.repo.config.req_timeout, Some(Duration::from_secs(280)));
-        assert_eq!(service.file.config.req_timeout, Some(Duration::from_secs(280)));
+        assert_eq!(
+            service.draft.config.req_timeout,
+            Some(Duration::from_secs(280))
+        );
+        assert_eq!(
+            service.entity.config.req_timeout,
+            Some(Duration::from_secs(280))
+        );
+        assert_eq!(
+            service.classification.config.req_timeout,
+            Some(Duration::from_secs(280))
+        );
+        assert_eq!(
+            service.repo.config.req_timeout,
+            Some(Duration::from_secs(280))
+        );
+        assert_eq!(
+            service.file.config.req_timeout,
+            Some(Duration::from_secs(280))
+        );
     }
 
     #[test]
@@ -210,11 +241,20 @@ mod tests {
         let service2 = LingoService::new(config.clone());
 
         assert_eq!(service1.draft.config.app_id, service2.draft.config.app_id);
-        assert_eq!(service1.draft.config.app_secret, service2.draft.config.app_secret);
+        assert_eq!(
+            service1.draft.config.app_secret,
+            service2.draft.config.app_secret
+        );
         assert_eq!(service1.entity.config.app_id, service2.entity.config.app_id);
-        assert_eq!(service1.classification.config.app_secret, service2.classification.config.app_secret);
+        assert_eq!(
+            service1.classification.config.app_secret,
+            service2.classification.config.app_secret
+        );
         assert_eq!(service1.repo.config.app_id, service2.repo.config.app_id);
-        assert_eq!(service1.file.config.app_secret, service2.file.config.app_secret);
+        assert_eq!(
+            service1.file.config.app_secret,
+            service2.file.config.app_secret
+        );
     }
 
     #[test]
@@ -230,18 +270,36 @@ mod tests {
 
         assert_eq!(service.draft.config.app_id, "consistency_test");
         assert_eq!(service.draft.config.app_secret, "consistency_secret");
-        assert_eq!(service.draft.config.req_timeout, Some(Duration::from_secs(190)));
+        assert_eq!(
+            service.draft.config.req_timeout,
+            Some(Duration::from_secs(190))
+        );
         assert_eq!(service.entity.config.app_id, "consistency_test");
         assert_eq!(service.entity.config.app_secret, "consistency_secret");
-        assert_eq!(service.entity.config.req_timeout, Some(Duration::from_secs(190)));
+        assert_eq!(
+            service.entity.config.req_timeout,
+            Some(Duration::from_secs(190))
+        );
         assert_eq!(service.classification.config.app_id, "consistency_test");
-        assert_eq!(service.classification.config.app_secret, "consistency_secret");
-        assert_eq!(service.classification.config.req_timeout, Some(Duration::from_secs(190)));
+        assert_eq!(
+            service.classification.config.app_secret,
+            "consistency_secret"
+        );
+        assert_eq!(
+            service.classification.config.req_timeout,
+            Some(Duration::from_secs(190))
+        );
         assert_eq!(service.repo.config.app_id, "consistency_test");
         assert_eq!(service.repo.config.app_secret, "consistency_secret");
-        assert_eq!(service.repo.config.req_timeout, Some(Duration::from_secs(190)));
+        assert_eq!(
+            service.repo.config.req_timeout,
+            Some(Duration::from_secs(190))
+        );
         assert_eq!(service.file.config.app_id, "consistency_test");
         assert_eq!(service.file.config.app_secret, "consistency_secret");
-        assert_eq!(service.file.config.req_timeout, Some(Duration::from_secs(190)));
+        assert_eq!(
+            service.file.config.req_timeout,
+            Some(Duration::from_secs(190))
+        );
     }
 }

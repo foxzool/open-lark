@@ -182,7 +182,10 @@ mod tests {
         assert_eq!(service.v1.faq.config.app_id, config.app_id);
         assert_eq!(service.v1.notification.config.app_id, config.app_id);
         assert_eq!(service.v1.ticket.config.app_id, config.app_id);
-        assert_eq!(service.v1.ticket_customized_field.config.app_id, config.app_id);
+        assert_eq!(
+            service.v1.ticket_customized_field.config.app_id,
+            config.app_id
+        );
         assert_eq!(service.v1.ticket_message.config.app_id, config.app_id);
     }
 
@@ -199,43 +202,101 @@ mod tests {
 
         assert_eq!(service.v1.agent.config.app_id, "helpdesk_test_app");
         assert_eq!(service.v1.agent.config.app_secret, "helpdesk_test_secret");
-        assert_eq!(service.v1.agent.config.req_timeout, Some(Duration::from_secs(470)));
+        assert_eq!(
+            service.v1.agent.config.req_timeout,
+            Some(Duration::from_secs(470))
+        );
         assert_eq!(service.v1.agent_schedule.config.app_id, "helpdesk_test_app");
-        assert_eq!(service.v1.agent_skill.config.req_timeout, Some(Duration::from_secs(470)));
-        assert_eq!(service.v1.agent_skill_rule.config.app_id, "helpdesk_test_app");
-        assert_eq!(service.v1.category.config.req_timeout, Some(Duration::from_secs(470)));
+        assert_eq!(
+            service.v1.agent_skill.config.req_timeout,
+            Some(Duration::from_secs(470))
+        );
+        assert_eq!(
+            service.v1.agent_skill_rule.config.app_id,
+            "helpdesk_test_app"
+        );
+        assert_eq!(
+            service.v1.category.config.req_timeout,
+            Some(Duration::from_secs(470))
+        );
         assert_eq!(service.v1.event.config.app_id, "helpdesk_test_app");
-        assert_eq!(service.v1.faq.config.req_timeout, Some(Duration::from_secs(470)));
+        assert_eq!(
+            service.v1.faq.config.req_timeout,
+            Some(Duration::from_secs(470))
+        );
         assert_eq!(service.v1.notification.config.app_id, "helpdesk_test_app");
-        assert_eq!(service.v1.ticket.config.req_timeout, Some(Duration::from_secs(470)));
-        assert_eq!(service.v1.ticket_customized_field.config.app_id, "helpdesk_test_app");
-        assert_eq!(service.v1.ticket_message.config.req_timeout, Some(Duration::from_secs(470)));
+        assert_eq!(
+            service.v1.ticket.config.req_timeout,
+            Some(Duration::from_secs(470))
+        );
+        assert_eq!(
+            service.v1.ticket_customized_field.config.app_id,
+            "helpdesk_test_app"
+        );
+        assert_eq!(
+            service.v1.ticket_message.config.req_timeout,
+            Some(Duration::from_secs(470))
+        );
     }
 
     #[test]
     fn test_helpdesk_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "helpdesk_app_1".to_string();
+        let config1 = Config {
+            app_id: "helpdesk_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "helpdesk_app_2".to_string();
+        let config2 = Config {
+            app_id: "helpdesk_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = HelpdeskService::new(config1);
         let service2 = HelpdeskService::new(config2);
 
         assert_eq!(service1.v1.agent.config.app_id, "helpdesk_app_1");
         assert_eq!(service2.v1.agent.config.app_id, "helpdesk_app_2");
-        assert_ne!(service1.v1.agent.config.app_id, service2.v1.agent.config.app_id);
-        assert_ne!(service1.v1.agent_schedule.config.app_id, service2.v1.agent_schedule.config.app_id);
-        assert_ne!(service1.v1.agent_skill.config.app_id, service2.v1.agent_skill.config.app_id);
-        assert_ne!(service1.v1.agent_skill_rule.config.app_id, service2.v1.agent_skill_rule.config.app_id);
-        assert_ne!(service1.v1.category.config.app_id, service2.v1.category.config.app_id);
-        assert_ne!(service1.v1.event.config.app_id, service2.v1.event.config.app_id);
+        assert_ne!(
+            service1.v1.agent.config.app_id,
+            service2.v1.agent.config.app_id
+        );
+        assert_ne!(
+            service1.v1.agent_schedule.config.app_id,
+            service2.v1.agent_schedule.config.app_id
+        );
+        assert_ne!(
+            service1.v1.agent_skill.config.app_id,
+            service2.v1.agent_skill.config.app_id
+        );
+        assert_ne!(
+            service1.v1.agent_skill_rule.config.app_id,
+            service2.v1.agent_skill_rule.config.app_id
+        );
+        assert_ne!(
+            service1.v1.category.config.app_id,
+            service2.v1.category.config.app_id
+        );
+        assert_ne!(
+            service1.v1.event.config.app_id,
+            service2.v1.event.config.app_id
+        );
         assert_ne!(service1.v1.faq.config.app_id, service2.v1.faq.config.app_id);
-        assert_ne!(service1.v1.notification.config.app_id, service2.v1.notification.config.app_id);
-        assert_ne!(service1.v1.ticket.config.app_id, service2.v1.ticket.config.app_id);
-        assert_ne!(service1.v1.ticket_customized_field.config.app_id, service2.v1.ticket_customized_field.config.app_id);
-        assert_ne!(service1.v1.ticket_message.config.app_id, service2.v1.ticket_message.config.app_id);
+        assert_ne!(
+            service1.v1.notification.config.app_id,
+            service2.v1.notification.config.app_id
+        );
+        assert_ne!(
+            service1.v1.ticket.config.app_id,
+            service2.v1.ticket.config.app_id
+        );
+        assert_ne!(
+            service1.v1.ticket_customized_field.config.app_id,
+            service2.v1.ticket_customized_field.config.app_id
+        );
+        assert_ne!(
+            service1.v1.ticket_message.config.app_id,
+            service2.v1.ticket_message.config.app_id
+        );
     }
 
     #[test]
@@ -253,7 +314,10 @@ mod tests {
         assert_eq!(service.v1.faq.config.app_id, config.app_id);
         assert_eq!(service.v1.notification.config.app_id, config.app_id);
         assert_eq!(service.v1.ticket.config.app_id, config.app_id);
-        assert_eq!(service.v1.ticket_customized_field.config.app_id, config.app_id);
+        assert_eq!(
+            service.v1.ticket_customized_field.config.app_id,
+            config.app_id
+        );
         assert_eq!(service.v1.ticket_message.config.app_id, config.app_id);
     }
 
@@ -269,15 +333,27 @@ mod tests {
 
         assert_eq!(service.v1.agent.config.app_id, "clone_test_app");
         assert_eq!(service.v1.agent.config.app_secret, "clone_test_secret");
-        assert_eq!(service.v1.agent_schedule.config.app_secret, "clone_test_secret");
+        assert_eq!(
+            service.v1.agent_schedule.config.app_secret,
+            "clone_test_secret"
+        );
         assert_eq!(service.v1.agent_skill.config.app_id, "clone_test_app");
-        assert_eq!(service.v1.agent_skill_rule.config.app_secret, "clone_test_secret");
+        assert_eq!(
+            service.v1.agent_skill_rule.config.app_secret,
+            "clone_test_secret"
+        );
         assert_eq!(service.v1.category.config.app_id, "clone_test_app");
         assert_eq!(service.v1.event.config.app_secret, "clone_test_secret");
         assert_eq!(service.v1.faq.config.app_id, "clone_test_app");
-        assert_eq!(service.v1.notification.config.app_secret, "clone_test_secret");
+        assert_eq!(
+            service.v1.notification.config.app_secret,
+            "clone_test_secret"
+        );
         assert_eq!(service.v1.ticket.config.app_id, "clone_test_app");
-        assert_eq!(service.v1.ticket_customized_field.config.app_secret, "clone_test_secret");
+        assert_eq!(
+            service.v1.ticket_customized_field.config.app_secret,
+            "clone_test_secret"
+        );
         assert_eq!(service.v1.ticket_message.config.app_id, "clone_test_app");
     }
 
@@ -291,17 +367,50 @@ mod tests {
         let service = HelpdeskService::new(config);
 
         // Verify timeout is propagated to all 11 sub-services
-        assert_eq!(service.v1.agent.config.req_timeout, Some(Duration::from_secs(480)));
-        assert_eq!(service.v1.agent_schedule.config.req_timeout, Some(Duration::from_secs(480)));
-        assert_eq!(service.v1.agent_skill.config.req_timeout, Some(Duration::from_secs(480)));
-        assert_eq!(service.v1.agent_skill_rule.config.req_timeout, Some(Duration::from_secs(480)));
-        assert_eq!(service.v1.category.config.req_timeout, Some(Duration::from_secs(480)));
-        assert_eq!(service.v1.event.config.req_timeout, Some(Duration::from_secs(480)));
-        assert_eq!(service.v1.faq.config.req_timeout, Some(Duration::from_secs(480)));
-        assert_eq!(service.v1.notification.config.req_timeout, Some(Duration::from_secs(480)));
-        assert_eq!(service.v1.ticket.config.req_timeout, Some(Duration::from_secs(480)));
-        assert_eq!(service.v1.ticket_customized_field.config.req_timeout, Some(Duration::from_secs(480)));
-        assert_eq!(service.v1.ticket_message.config.req_timeout, Some(Duration::from_secs(480)));
+        assert_eq!(
+            service.v1.agent.config.req_timeout,
+            Some(Duration::from_secs(480))
+        );
+        assert_eq!(
+            service.v1.agent_schedule.config.req_timeout,
+            Some(Duration::from_secs(480))
+        );
+        assert_eq!(
+            service.v1.agent_skill.config.req_timeout,
+            Some(Duration::from_secs(480))
+        );
+        assert_eq!(
+            service.v1.agent_skill_rule.config.req_timeout,
+            Some(Duration::from_secs(480))
+        );
+        assert_eq!(
+            service.v1.category.config.req_timeout,
+            Some(Duration::from_secs(480))
+        );
+        assert_eq!(
+            service.v1.event.config.req_timeout,
+            Some(Duration::from_secs(480))
+        );
+        assert_eq!(
+            service.v1.faq.config.req_timeout,
+            Some(Duration::from_secs(480))
+        );
+        assert_eq!(
+            service.v1.notification.config.req_timeout,
+            Some(Duration::from_secs(480))
+        );
+        assert_eq!(
+            service.v1.ticket.config.req_timeout,
+            Some(Duration::from_secs(480))
+        );
+        assert_eq!(
+            service.v1.ticket_customized_field.config.req_timeout,
+            Some(Duration::from_secs(480))
+        );
+        assert_eq!(
+            service.v1.ticket_message.config.req_timeout,
+            Some(Duration::from_secs(480))
+        );
     }
 
     #[test]
@@ -312,18 +421,54 @@ mod tests {
         let service2 = HelpdeskService::new(config.clone());
 
         // Both services should have the same config values
-        assert_eq!(service1.v1.agent.config.app_id, service2.v1.agent.config.app_id);
-        assert_eq!(service1.v1.agent.config.app_secret, service2.v1.agent.config.app_secret);
-        assert_eq!(service1.v1.agent_schedule.config.app_id, service2.v1.agent_schedule.config.app_id);
-        assert_eq!(service1.v1.agent_skill.config.app_secret, service2.v1.agent_skill.config.app_secret);
-        assert_eq!(service1.v1.agent_skill_rule.config.app_id, service2.v1.agent_skill_rule.config.app_id);
-        assert_eq!(service1.v1.category.config.app_secret, service2.v1.category.config.app_secret);
-        assert_eq!(service1.v1.event.config.app_id, service2.v1.event.config.app_id);
-        assert_eq!(service1.v1.faq.config.app_secret, service2.v1.faq.config.app_secret);
-        assert_eq!(service1.v1.notification.config.app_id, service2.v1.notification.config.app_id);
-        assert_eq!(service1.v1.ticket.config.app_secret, service2.v1.ticket.config.app_secret);
-        assert_eq!(service1.v1.ticket_customized_field.config.app_id, service2.v1.ticket_customized_field.config.app_id);
-        assert_eq!(service1.v1.ticket_message.config.app_secret, service2.v1.ticket_message.config.app_secret);
+        assert_eq!(
+            service1.v1.agent.config.app_id,
+            service2.v1.agent.config.app_id
+        );
+        assert_eq!(
+            service1.v1.agent.config.app_secret,
+            service2.v1.agent.config.app_secret
+        );
+        assert_eq!(
+            service1.v1.agent_schedule.config.app_id,
+            service2.v1.agent_schedule.config.app_id
+        );
+        assert_eq!(
+            service1.v1.agent_skill.config.app_secret,
+            service2.v1.agent_skill.config.app_secret
+        );
+        assert_eq!(
+            service1.v1.agent_skill_rule.config.app_id,
+            service2.v1.agent_skill_rule.config.app_id
+        );
+        assert_eq!(
+            service1.v1.category.config.app_secret,
+            service2.v1.category.config.app_secret
+        );
+        assert_eq!(
+            service1.v1.event.config.app_id,
+            service2.v1.event.config.app_id
+        );
+        assert_eq!(
+            service1.v1.faq.config.app_secret,
+            service2.v1.faq.config.app_secret
+        );
+        assert_eq!(
+            service1.v1.notification.config.app_id,
+            service2.v1.notification.config.app_id
+        );
+        assert_eq!(
+            service1.v1.ticket.config.app_secret,
+            service2.v1.ticket.config.app_secret
+        );
+        assert_eq!(
+            service1.v1.ticket_customized_field.config.app_id,
+            service2.v1.ticket_customized_field.config.app_id
+        );
+        assert_eq!(
+            service1.v1.ticket_message.config.app_secret,
+            service2.v1.ticket_message.config.app_secret
+        );
     }
 
     #[test]

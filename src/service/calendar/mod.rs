@@ -156,10 +156,16 @@ mod tests {
         assert_eq!(service.v4.meeting_chat.config.app_secret, config.app_secret);
         assert_eq!(service.v4.meeting_minute.config.app_id, config.app_id);
         assert_eq!(service.v4.timeoff_event.config.app_id, config.app_id);
-        assert_eq!(service.v4.meeting_room_event.config.app_secret, config.app_secret);
+        assert_eq!(
+            service.v4.meeting_room_event.config.app_secret,
+            config.app_secret
+        );
         assert_eq!(service.v4.attendee.config.app_id, config.app_id);
         assert_eq!(service.v4.setting.config.app_id, config.app_id);
-        assert_eq!(service.v4.exchange_binding.config.app_secret, config.app_secret);
+        assert_eq!(
+            service.v4.exchange_binding.config.app_secret,
+            config.app_secret
+        );
     }
 
     #[test]
@@ -174,42 +180,97 @@ mod tests {
         let service = CalendarService::new(config.clone());
 
         assert_eq!(service.v4.calendar.config.app_id, "calendar_test_app");
-        assert_eq!(service.v4.calendar.config.app_secret, "calendar_test_secret");
-        assert_eq!(service.v4.calendar.config.req_timeout, Some(Duration::from_secs(440)));
+        assert_eq!(
+            service.v4.calendar.config.app_secret,
+            "calendar_test_secret"
+        );
+        assert_eq!(
+            service.v4.calendar.config.req_timeout,
+            Some(Duration::from_secs(440))
+        );
         assert_eq!(service.v4.calendar_acl.config.app_id, "calendar_test_app");
-        assert_eq!(service.v4.calendar_event.config.req_timeout, Some(Duration::from_secs(440)));
+        assert_eq!(
+            service.v4.calendar_event.config.req_timeout,
+            Some(Duration::from_secs(440))
+        );
         assert_eq!(service.v4.meeting_chat.config.app_id, "calendar_test_app");
-        assert_eq!(service.v4.meeting_minute.config.req_timeout, Some(Duration::from_secs(440)));
+        assert_eq!(
+            service.v4.meeting_minute.config.req_timeout,
+            Some(Duration::from_secs(440))
+        );
         assert_eq!(service.v4.timeoff_event.config.app_id, "calendar_test_app");
-        assert_eq!(service.v4.meeting_room_event.config.req_timeout, Some(Duration::from_secs(440)));
+        assert_eq!(
+            service.v4.meeting_room_event.config.req_timeout,
+            Some(Duration::from_secs(440))
+        );
         assert_eq!(service.v4.attendee.config.app_id, "calendar_test_app");
-        assert_eq!(service.v4.setting.config.req_timeout, Some(Duration::from_secs(440)));
-        assert_eq!(service.v4.exchange_binding.config.app_id, "calendar_test_app");
+        assert_eq!(
+            service.v4.setting.config.req_timeout,
+            Some(Duration::from_secs(440))
+        );
+        assert_eq!(
+            service.v4.exchange_binding.config.app_id,
+            "calendar_test_app"
+        );
     }
 
     #[test]
     fn test_calendar_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "calendar_app_1".to_string();
+        let config1 = Config {
+            app_id: "calendar_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "calendar_app_2".to_string();
+        let config2 = Config {
+            app_id: "calendar_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = CalendarService::new(config1);
         let service2 = CalendarService::new(config2);
 
         assert_eq!(service1.v4.calendar.config.app_id, "calendar_app_1");
         assert_eq!(service2.v4.calendar.config.app_id, "calendar_app_2");
-        assert_ne!(service1.v4.calendar.config.app_id, service2.v4.calendar.config.app_id);
-        assert_ne!(service1.v4.calendar_acl.config.app_id, service2.v4.calendar_acl.config.app_id);
-        assert_ne!(service1.v4.calendar_event.config.app_id, service2.v4.calendar_event.config.app_id);
-        assert_ne!(service1.v4.meeting_chat.config.app_id, service2.v4.meeting_chat.config.app_id);
-        assert_ne!(service1.v4.meeting_minute.config.app_id, service2.v4.meeting_minute.config.app_id);
-        assert_ne!(service1.v4.timeoff_event.config.app_id, service2.v4.timeoff_event.config.app_id);
-        assert_ne!(service1.v4.meeting_room_event.config.app_id, service2.v4.meeting_room_event.config.app_id);
-        assert_ne!(service1.v4.attendee.config.app_id, service2.v4.attendee.config.app_id);
-        assert_ne!(service1.v4.setting.config.app_id, service2.v4.setting.config.app_id);
-        assert_ne!(service1.v4.exchange_binding.config.app_id, service2.v4.exchange_binding.config.app_id);
+        assert_ne!(
+            service1.v4.calendar.config.app_id,
+            service2.v4.calendar.config.app_id
+        );
+        assert_ne!(
+            service1.v4.calendar_acl.config.app_id,
+            service2.v4.calendar_acl.config.app_id
+        );
+        assert_ne!(
+            service1.v4.calendar_event.config.app_id,
+            service2.v4.calendar_event.config.app_id
+        );
+        assert_ne!(
+            service1.v4.meeting_chat.config.app_id,
+            service2.v4.meeting_chat.config.app_id
+        );
+        assert_ne!(
+            service1.v4.meeting_minute.config.app_id,
+            service2.v4.meeting_minute.config.app_id
+        );
+        assert_ne!(
+            service1.v4.timeoff_event.config.app_id,
+            service2.v4.timeoff_event.config.app_id
+        );
+        assert_ne!(
+            service1.v4.meeting_room_event.config.app_id,
+            service2.v4.meeting_room_event.config.app_id
+        );
+        assert_ne!(
+            service1.v4.attendee.config.app_id,
+            service2.v4.attendee.config.app_id
+        );
+        assert_ne!(
+            service1.v4.setting.config.app_id,
+            service2.v4.setting.config.app_id
+        );
+        assert_ne!(
+            service1.v4.exchange_binding.config.app_id,
+            service2.v4.exchange_binding.config.app_id
+        );
     }
 
     #[test]
@@ -242,15 +303,30 @@ mod tests {
 
         assert_eq!(service.v4.calendar.config.app_id, "clone_test_app");
         assert_eq!(service.v4.calendar.config.app_secret, "clone_test_secret");
-        assert_eq!(service.v4.calendar_acl.config.app_secret, "clone_test_secret");
+        assert_eq!(
+            service.v4.calendar_acl.config.app_secret,
+            "clone_test_secret"
+        );
         assert_eq!(service.v4.calendar_event.config.app_id, "clone_test_app");
-        assert_eq!(service.v4.meeting_chat.config.app_secret, "clone_test_secret");
+        assert_eq!(
+            service.v4.meeting_chat.config.app_secret,
+            "clone_test_secret"
+        );
         assert_eq!(service.v4.meeting_minute.config.app_id, "clone_test_app");
-        assert_eq!(service.v4.timeoff_event.config.app_secret, "clone_test_secret");
-        assert_eq!(service.v4.meeting_room_event.config.app_id, "clone_test_app");
+        assert_eq!(
+            service.v4.timeoff_event.config.app_secret,
+            "clone_test_secret"
+        );
+        assert_eq!(
+            service.v4.meeting_room_event.config.app_id,
+            "clone_test_app"
+        );
         assert_eq!(service.v4.attendee.config.app_secret, "clone_test_secret");
         assert_eq!(service.v4.setting.config.app_id, "clone_test_app");
-        assert_eq!(service.v4.exchange_binding.config.app_secret, "clone_test_secret");
+        assert_eq!(
+            service.v4.exchange_binding.config.app_secret,
+            "clone_test_secret"
+        );
     }
 
     #[test]
@@ -263,16 +339,46 @@ mod tests {
         let service = CalendarService::new(config);
 
         // Verify timeout is propagated to all sub-services
-        assert_eq!(service.v4.calendar.config.req_timeout, Some(Duration::from_secs(450)));
-        assert_eq!(service.v4.calendar_acl.config.req_timeout, Some(Duration::from_secs(450)));
-        assert_eq!(service.v4.calendar_event.config.req_timeout, Some(Duration::from_secs(450)));
-        assert_eq!(service.v4.meeting_chat.config.req_timeout, Some(Duration::from_secs(450)));
-        assert_eq!(service.v4.meeting_minute.config.req_timeout, Some(Duration::from_secs(450)));
-        assert_eq!(service.v4.timeoff_event.config.req_timeout, Some(Duration::from_secs(450)));
-        assert_eq!(service.v4.meeting_room_event.config.req_timeout, Some(Duration::from_secs(450)));
-        assert_eq!(service.v4.attendee.config.req_timeout, Some(Duration::from_secs(450)));
-        assert_eq!(service.v4.setting.config.req_timeout, Some(Duration::from_secs(450)));
-        assert_eq!(service.v4.exchange_binding.config.req_timeout, Some(Duration::from_secs(450)));
+        assert_eq!(
+            service.v4.calendar.config.req_timeout,
+            Some(Duration::from_secs(450))
+        );
+        assert_eq!(
+            service.v4.calendar_acl.config.req_timeout,
+            Some(Duration::from_secs(450))
+        );
+        assert_eq!(
+            service.v4.calendar_event.config.req_timeout,
+            Some(Duration::from_secs(450))
+        );
+        assert_eq!(
+            service.v4.meeting_chat.config.req_timeout,
+            Some(Duration::from_secs(450))
+        );
+        assert_eq!(
+            service.v4.meeting_minute.config.req_timeout,
+            Some(Duration::from_secs(450))
+        );
+        assert_eq!(
+            service.v4.timeoff_event.config.req_timeout,
+            Some(Duration::from_secs(450))
+        );
+        assert_eq!(
+            service.v4.meeting_room_event.config.req_timeout,
+            Some(Duration::from_secs(450))
+        );
+        assert_eq!(
+            service.v4.attendee.config.req_timeout,
+            Some(Duration::from_secs(450))
+        );
+        assert_eq!(
+            service.v4.setting.config.req_timeout,
+            Some(Duration::from_secs(450))
+        );
+        assert_eq!(
+            service.v4.exchange_binding.config.req_timeout,
+            Some(Duration::from_secs(450))
+        );
     }
 
     #[test]
@@ -283,17 +389,50 @@ mod tests {
         let service2 = CalendarService::new(config.clone());
 
         // Both services should have the same config values
-        assert_eq!(service1.v4.calendar.config.app_id, service2.v4.calendar.config.app_id);
-        assert_eq!(service1.v4.calendar.config.app_secret, service2.v4.calendar.config.app_secret);
-        assert_eq!(service1.v4.calendar_acl.config.app_id, service2.v4.calendar_acl.config.app_id);
-        assert_eq!(service1.v4.calendar_event.config.app_secret, service2.v4.calendar_event.config.app_secret);
-        assert_eq!(service1.v4.meeting_chat.config.app_id, service2.v4.meeting_chat.config.app_id);
-        assert_eq!(service1.v4.meeting_minute.config.app_secret, service2.v4.meeting_minute.config.app_secret);
-        assert_eq!(service1.v4.timeoff_event.config.app_id, service2.v4.timeoff_event.config.app_id);
-        assert_eq!(service1.v4.meeting_room_event.config.app_secret, service2.v4.meeting_room_event.config.app_secret);
-        assert_eq!(service1.v4.attendee.config.app_id, service2.v4.attendee.config.app_id);
-        assert_eq!(service1.v4.setting.config.app_secret, service2.v4.setting.config.app_secret);
-        assert_eq!(service1.v4.exchange_binding.config.app_id, service2.v4.exchange_binding.config.app_id);
+        assert_eq!(
+            service1.v4.calendar.config.app_id,
+            service2.v4.calendar.config.app_id
+        );
+        assert_eq!(
+            service1.v4.calendar.config.app_secret,
+            service2.v4.calendar.config.app_secret
+        );
+        assert_eq!(
+            service1.v4.calendar_acl.config.app_id,
+            service2.v4.calendar_acl.config.app_id
+        );
+        assert_eq!(
+            service1.v4.calendar_event.config.app_secret,
+            service2.v4.calendar_event.config.app_secret
+        );
+        assert_eq!(
+            service1.v4.meeting_chat.config.app_id,
+            service2.v4.meeting_chat.config.app_id
+        );
+        assert_eq!(
+            service1.v4.meeting_minute.config.app_secret,
+            service2.v4.meeting_minute.config.app_secret
+        );
+        assert_eq!(
+            service1.v4.timeoff_event.config.app_id,
+            service2.v4.timeoff_event.config.app_id
+        );
+        assert_eq!(
+            service1.v4.meeting_room_event.config.app_secret,
+            service2.v4.meeting_room_event.config.app_secret
+        );
+        assert_eq!(
+            service1.v4.attendee.config.app_id,
+            service2.v4.attendee.config.app_id
+        );
+        assert_eq!(
+            service1.v4.setting.config.app_secret,
+            service2.v4.setting.config.app_secret
+        );
+        assert_eq!(
+            service1.v4.exchange_binding.config.app_id,
+            service2.v4.exchange_binding.config.app_id
+        );
     }
 
     #[test]

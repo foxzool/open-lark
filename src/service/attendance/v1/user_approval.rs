@@ -147,3 +147,393 @@ impl UserApprovalService {
         Ok(api_resp)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::{api_req::ApiRequest, config::Config};
+
+    #[test]
+    fn test_user_approval_service_creation() {
+        let config = Config::default();
+        let service = UserApprovalService {
+            config: config.clone(),
+        };
+
+        assert_eq!(service.config.app_id, config.app_id);
+        assert_eq!(service.config.app_secret, config.app_secret);
+    }
+
+    #[test]
+    fn test_user_approval_service_with_custom_config() {
+        let config = Config {
+            app_id: "approval_test_app".to_string(),
+            app_secret: "approval_test_secret".to_string(),
+            ..Default::default()
+        };
+
+        let service = UserApprovalService {
+            config: config.clone(),
+        };
+
+        assert_eq!(service.config.app_id, "approval_test_app");
+        assert_eq!(service.config.app_secret, "approval_test_secret");
+    }
+
+    #[test]
+    fn test_query_user_approval_request_construction() {
+        let request = QueryUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            status: Some(1),
+            date_from: Some("2023-10-01".to_string()),
+            date_to: Some("2023-10-31".to_string()),
+            user_ids: Some(vec![
+                "user_1".to_string(),
+                "user_2".to_string(),
+                "user_3".to_string(),
+            ]),
+            page_size: Some(50),
+            page_token: Some("page_token_123".to_string()),
+        };
+
+        assert_eq!(request.employee_type, "1");
+        assert_eq!(request.status, Some(1));
+        assert_eq!(request.date_from, Some("2023-10-01".to_string()));
+        assert_eq!(request.date_to, Some("2023-10-31".to_string()));
+        assert_eq!(
+            request.user_ids,
+            Some(vec![
+                "user_1".to_string(),
+                "user_2".to_string(),
+                "user_3".to_string()
+            ])
+        );
+        assert_eq!(request.page_size, Some(50));
+        assert_eq!(request.page_token, Some("page_token_123".to_string()));
+    }
+
+    #[test]
+    fn test_query_user_approval_request_with_minimal_data() {
+        let request = QueryUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "2".to_string(),
+            status: None,
+            date_from: None,
+            date_to: None,
+            user_ids: None,
+            page_size: None,
+            page_token: None,
+        };
+
+        assert_eq!(request.employee_type, "2");
+        assert_eq!(request.status, None);
+        assert_eq!(request.date_from, None);
+        assert_eq!(request.date_to, None);
+        assert_eq!(request.user_ids, None);
+        assert_eq!(request.page_size, None);
+        assert_eq!(request.page_token, None);
+    }
+
+    #[test]
+    fn test_create_user_approval_request_construction() {
+        let request = CreateUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            approval_id: "approval_123".to_string(),
+            status: 1,
+            approval_note: Some("审批通过".to_string()),
+        };
+
+        assert_eq!(request.employee_type, "1");
+        assert_eq!(request.approval_id, "approval_123");
+        assert_eq!(request.status, 1);
+        assert_eq!(request.approval_note, Some("审批通过".to_string()));
+    }
+
+    #[test]
+    fn test_create_user_approval_request_without_note() {
+        let request = CreateUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "2".to_string(),
+            approval_id: "approval_456".to_string(),
+            status: 0,
+            approval_note: None,
+        };
+
+        assert_eq!(request.employee_type, "2");
+        assert_eq!(request.approval_id, "approval_456");
+        assert_eq!(request.status, 0);
+        assert_eq!(request.approval_note, None);
+    }
+
+    #[test]
+    fn test_process_user_approval_request_construction() {
+        let request = ProcessUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            approval_id: "approval_789".to_string(),
+            action: "approve".to_string(),
+            message: Some("同意该申请".to_string()),
+        };
+
+        assert_eq!(request.employee_type, "1");
+        assert_eq!(request.approval_id, "approval_789");
+        assert_eq!(request.action, "approve");
+        assert_eq!(request.message, Some("同意该申请".to_string()));
+    }
+
+    #[test]
+    fn test_process_user_approval_request_without_message() {
+        let request = ProcessUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "2".to_string(),
+            approval_id: "approval_101".to_string(),
+            action: "reject".to_string(),
+            message: None,
+        };
+
+        assert_eq!(request.employee_type, "2");
+        assert_eq!(request.approval_id, "approval_101");
+        assert_eq!(request.action, "reject");
+        assert_eq!(request.message, None);
+    }
+
+    #[test]
+    fn test_query_user_approval_request_with_single_user() {
+        let request = QueryUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            status: Some(2),
+            date_from: Some("2023-11-01".to_string()),
+            date_to: Some("2023-11-01".to_string()),
+            user_ids: Some(vec!["single_user".to_string()]),
+            page_size: Some(10),
+            page_token: None,
+        };
+
+        assert_eq!(request.employee_type, "1");
+        assert_eq!(request.status, Some(2));
+        assert_eq!(request.user_ids.as_ref().unwrap().len(), 1);
+        assert_eq!(request.user_ids.as_ref().unwrap()[0], "single_user");
+        assert_eq!(request.page_size, Some(10));
+    }
+
+    #[test]
+    fn test_user_approval_service_config_independence() {
+        let config1 = Config {
+            app_id: "approval_app_1".to_string(),
+            ..Default::default()
+        };
+
+        let config2 = Config {
+            app_id: "approval_app_2".to_string(),
+            ..Default::default()
+        };
+
+        let service1 = UserApprovalService { config: config1 };
+        let service2 = UserApprovalService { config: config2 };
+
+        assert_eq!(service1.config.app_id, "approval_app_1");
+        assert_eq!(service2.config.app_id, "approval_app_2");
+        assert_ne!(service1.config.app_id, service2.config.app_id);
+    }
+
+    #[test]
+    fn test_request_structs_debug_trait() {
+        let query_request = QueryUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            status: Some(1),
+            date_from: Some("2023-10-01".to_string()),
+            date_to: Some("2023-10-31".to_string()),
+            user_ids: Some(vec!["debug_user".to_string()]),
+            page_size: Some(20),
+            page_token: Some("debug_token".to_string()),
+        };
+
+        let debug_str = format!("{:?}", query_request);
+        assert!(debug_str.contains("QueryUserApprovalRequest"));
+        assert!(debug_str.contains("debug_user"));
+        assert!(debug_str.contains("debug_token"));
+    }
+
+    #[test]
+    fn test_query_user_approval_request_edge_cases() {
+        // Test with very large user ID list
+        let large_user_list: Vec<String> = (0..1000).map(|i| format!("user_{}", i)).collect();
+        let request_large = QueryUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            status: Some(1),
+            date_from: None,
+            date_to: None,
+            user_ids: Some(large_user_list.clone()),
+            page_size: Some(1000),
+            page_token: None,
+        };
+
+        assert_eq!(request_large.user_ids.as_ref().unwrap().len(), 1000);
+        assert_eq!(request_large.user_ids.as_ref().unwrap()[999], "user_999");
+
+        // Test with zero page size
+        let request_zero_page = QueryUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "2".to_string(),
+            status: Some(0),
+            date_from: None,
+            date_to: None,
+            user_ids: None,
+            page_size: Some(0),
+            page_token: None,
+        };
+
+        assert_eq!(request_zero_page.page_size, Some(0));
+
+        // Test with negative status
+        let request_negative_status = QueryUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            status: Some(-1),
+            date_from: None,
+            date_to: None,
+            user_ids: None,
+            page_size: None,
+            page_token: None,
+        };
+
+        assert_eq!(request_negative_status.status, Some(-1));
+    }
+
+    #[test]
+    fn test_create_user_approval_request_edge_cases() {
+        // Test with very long approval note
+        let long_note = "审批备注".repeat(100);
+        let request_long_note = CreateUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            approval_id: "approval_long_note".to_string(),
+            status: 1,
+            approval_note: Some(long_note.clone()),
+        };
+
+        assert_eq!(request_long_note.approval_note, Some(long_note));
+
+        // Test with very long approval ID
+        let long_approval_id = "approval_".repeat(100);
+        let request_long_id = CreateUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "2".to_string(),
+            approval_id: long_approval_id.clone(),
+            status: 0,
+            approval_note: None,
+        };
+
+        assert_eq!(request_long_id.approval_id, long_approval_id);
+
+        // Test with extreme status values
+        let request_extreme_status = CreateUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            approval_id: "approval_extreme".to_string(),
+            status: 999,
+            approval_note: Some("极端状态测试".to_string()),
+        };
+
+        assert_eq!(request_extreme_status.status, 999);
+    }
+
+    #[test]
+    fn test_process_user_approval_request_edge_cases() {
+        // Test with very long message
+        let long_message = "处理消息".repeat(200);
+        let request_long_message = ProcessUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            approval_id: "approval_long_msg".to_string(),
+            action: "approve".to_string(),
+            message: Some(long_message.clone()),
+        };
+
+        assert_eq!(request_long_message.message, Some(long_message));
+
+        // Test with different action types
+        let actions = vec!["approve", "reject", "withdraw", "cancel", "suspend"];
+        for action in actions {
+            let request = ProcessUserApprovalRequest {
+                api_req: ApiRequest::default(),
+                employee_type: "1".to_string(),
+                approval_id: format!("approval_{}", action),
+                action: action.to_string(),
+                message: Some(format!("{}操作", action)),
+            };
+
+            assert_eq!(request.action, action);
+            assert_eq!(request.message, Some(format!("{}操作", action)));
+        }
+
+        // Test with empty action
+        let request_empty_action = ProcessUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "2".to_string(),
+            approval_id: "approval_empty_action".to_string(),
+            action: "".to_string(),
+            message: None,
+        };
+
+        assert_eq!(request_empty_action.action, "");
+    }
+
+    #[test]
+    fn test_query_user_approval_request_with_empty_user_list() {
+        let request = QueryUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            status: Some(1),
+            date_from: Some("2023-10-01".to_string()),
+            date_to: Some("2023-10-31".to_string()),
+            user_ids: Some(vec![]),
+            page_size: Some(20),
+            page_token: Some("empty_users_token".to_string()),
+        };
+
+        assert!(request.user_ids.as_ref().unwrap().is_empty());
+        assert_eq!(request.employee_type, "1");
+        assert_eq!(request.page_size, Some(20));
+    }
+
+    #[test]
+    fn test_all_request_structs_with_different_employee_types() {
+        // Test all request types with different employee types
+        let query_request = QueryUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "employee_id".to_string(),
+            status: Some(1),
+            date_from: None,
+            date_to: None,
+            user_ids: None,
+            page_size: None,
+            page_token: None,
+        };
+
+        let create_request = CreateUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "open_id".to_string(),
+            approval_id: "test_approval".to_string(),
+            status: 1,
+            approval_note: None,
+        };
+
+        let process_request = ProcessUserApprovalRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "union_id".to_string(),
+            approval_id: "test_process".to_string(),
+            action: "approve".to_string(),
+            message: None,
+        };
+
+        assert_eq!(query_request.employee_type, "employee_id");
+        assert_eq!(create_request.employee_type, "open_id");
+        assert_eq!(process_request.employee_type, "union_id");
+    }
+}

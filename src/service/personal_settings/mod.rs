@@ -163,7 +163,10 @@ mod tests {
         let service = PersonalSettingsService::new(config.clone());
 
         assert_eq!(service.v1.system_status.config.app_id, config.app_id);
-        assert_eq!(service.v1.system_status.config.app_secret, config.app_secret);
+        assert_eq!(
+            service.v1.system_status.config.app_secret,
+            config.app_secret
+        );
     }
 
     #[test]
@@ -177,25 +180,47 @@ mod tests {
 
         let service = PersonalSettingsService::new(config.clone());
 
-        assert_eq!(service.v1.system_status.config.app_id, "personal_settings_test_app");
-        assert_eq!(service.v1.system_status.config.app_secret, "personal_settings_test_secret");
-        assert_eq!(service.v1.system_status.config.req_timeout, Some(Duration::from_secs(140)));
+        assert_eq!(
+            service.v1.system_status.config.app_id,
+            "personal_settings_test_app"
+        );
+        assert_eq!(
+            service.v1.system_status.config.app_secret,
+            "personal_settings_test_secret"
+        );
+        assert_eq!(
+            service.v1.system_status.config.req_timeout,
+            Some(Duration::from_secs(140))
+        );
     }
 
     #[test]
     fn test_personal_settings_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "personal_settings_app_1".to_string();
+        let config1 = Config {
+            app_id: "personal_settings_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "personal_settings_app_2".to_string();
+        let config2 = Config {
+            app_id: "personal_settings_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = PersonalSettingsService::new(config1);
         let service2 = PersonalSettingsService::new(config2);
 
-        assert_eq!(service1.v1.system_status.config.app_id, "personal_settings_app_1");
-        assert_eq!(service2.v1.system_status.config.app_id, "personal_settings_app_2");
-        assert_ne!(service1.v1.system_status.config.app_id, service2.v1.system_status.config.app_id);
+        assert_eq!(
+            service1.v1.system_status.config.app_id,
+            "personal_settings_app_1"
+        );
+        assert_eq!(
+            service2.v1.system_status.config.app_id,
+            "personal_settings_app_2"
+        );
+        assert_ne!(
+            service1.v1.system_status.config.app_id,
+            service2.v1.system_status.config.app_id
+        );
     }
 
     #[test]
@@ -217,7 +242,10 @@ mod tests {
         let service = PersonalSettingsService::new(config.clone());
 
         assert_eq!(service.v1.system_status.config.app_id, "clone_test_app");
-        assert_eq!(service.v1.system_status.config.app_secret, "clone_test_secret");
+        assert_eq!(
+            service.v1.system_status.config.app_secret,
+            "clone_test_secret"
+        );
     }
 
     #[test]
@@ -229,7 +257,10 @@ mod tests {
 
         let service = PersonalSettingsService::new(config);
 
-        assert_eq!(service.v1.system_status.config.req_timeout, Some(Duration::from_secs(160)));
+        assert_eq!(
+            service.v1.system_status.config.req_timeout,
+            Some(Duration::from_secs(160))
+        );
     }
 
     #[test]
@@ -239,8 +270,14 @@ mod tests {
         let service1 = PersonalSettingsService::new(config.clone());
         let service2 = PersonalSettingsService::new(config.clone());
 
-        assert_eq!(service1.v1.system_status.config.app_id, service2.v1.system_status.config.app_id);
-        assert_eq!(service1.v1.system_status.config.app_secret, service2.v1.system_status.config.app_secret);
+        assert_eq!(
+            service1.v1.system_status.config.app_id,
+            service2.v1.system_status.config.app_id
+        );
+        assert_eq!(
+            service1.v1.system_status.config.app_secret,
+            service2.v1.system_status.config.app_secret
+        );
     }
 
     #[test]
@@ -255,7 +292,13 @@ mod tests {
         let service = PersonalSettingsService::new(config);
 
         assert_eq!(service.v1.system_status.config.app_id, "consistency_test");
-        assert_eq!(service.v1.system_status.config.app_secret, "consistency_secret");
-        assert_eq!(service.v1.system_status.config.req_timeout, Some(Duration::from_secs(130)));
+        assert_eq!(
+            service.v1.system_status.config.app_secret,
+            "consistency_secret"
+        );
+        assert_eq!(
+            service.v1.system_status.config.req_timeout,
+            Some(Duration::from_secs(130))
+        );
     }
 }

@@ -65,8 +65,14 @@ mod tests {
         };
 
         assert_eq!(verification_info.app_id, Some("cli_test_app".to_string()));
-        assert_eq!(verification_info.app_name, Some("Test CLI Application".to_string()));
-        assert_eq!(verification_info.verification_status, Some("verified".to_string()));
+        assert_eq!(
+            verification_info.app_name,
+            Some("Test CLI Application".to_string())
+        );
+        assert_eq!(
+            verification_info.verification_status,
+            Some("verified".to_string())
+        );
         assert_eq!(verification_info.scopes.as_ref().unwrap().len(), 2);
         assert!(verification_info.tenant_info.is_some());
     }
@@ -104,7 +110,10 @@ mod tests {
 
         let deserialized: VerificationInfo = serde_json::from_str(&json).unwrap();
         assert_eq!(deserialized.app_id, Some("app_123".to_string()));
-        assert_eq!(deserialized.verification_status, Some("pending".to_string()));
+        assert_eq!(
+            deserialized.verification_status,
+            Some("pending".to_string())
+        );
         assert_eq!(deserialized.expire_time, None);
         assert_eq!(deserialized.scopes.as_ref().unwrap().len(), 3);
     }
@@ -180,8 +189,14 @@ mod tests {
         assert!(json.contains("Serialization Test Org"));
 
         let deserialized: TenantInfo = serde_json::from_str(&json).unwrap();
-        assert_eq!(deserialized.tenant_key, Some("serialization_test".to_string()));
-        assert_eq!(deserialized.tenant_name, Some("Serialization Test Org".to_string()));
+        assert_eq!(
+            deserialized.tenant_key,
+            Some("serialization_test".to_string())
+        );
+        assert_eq!(
+            deserialized.tenant_name,
+            Some("Serialization Test Org".to_string())
+        );
     }
 
     #[test]
@@ -281,10 +296,24 @@ mod tests {
             tenant_info: None,
         };
 
-        assert!(info_with_timestamps.verification_time.as_ref().unwrap().parse::<u64>().is_ok());
-        assert!(info_with_timestamps.expire_time.as_ref().unwrap().parse::<u64>().is_ok());
+        assert!(info_with_timestamps
+            .verification_time
+            .as_ref()
+            .unwrap()
+            .parse::<u64>()
+            .is_ok());
+        assert!(info_with_timestamps
+            .expire_time
+            .as_ref()
+            .unwrap()
+            .parse::<u64>()
+            .is_ok());
 
-        let verification_time: u64 = info_with_timestamps.verification_time.unwrap().parse().unwrap();
+        let verification_time: u64 = info_with_timestamps
+            .verification_time
+            .unwrap()
+            .parse()
+            .unwrap();
         let expire_time: u64 = info_with_timestamps.expire_time.unwrap().parse().unwrap();
         assert!(expire_time > verification_time);
     }

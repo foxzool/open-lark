@@ -154,8 +154,8 @@ mod tests {
         let config = Config::default();
         let service = CardkitService::new(config.clone());
 
-        assert_eq!(service.v1.config.app_id, config.app_id);
-        assert_eq!(service.v1.config.app_secret, config.app_secret);
+        assert_eq!(service.v1.card.config.app_id, config.app_id);
+        assert_eq!(service.v1.card.config.app_secret, config.app_secret);
     }
 
     #[test]
@@ -169,25 +169,35 @@ mod tests {
 
         let service = CardkitService::new(config.clone());
 
-        assert_eq!(service.v1.config.app_id, "cardkit_test_app");
-        assert_eq!(service.v1.config.app_secret, "cardkit_test_secret");
-        assert_eq!(service.v1.config.req_timeout, Some(Duration::from_secs(90)));
+        assert_eq!(service.v1.card.config.app_id, "cardkit_test_app");
+        assert_eq!(service.v1.card.config.app_secret, "cardkit_test_secret");
+        assert_eq!(
+            service.v1.card.config.req_timeout,
+            Some(Duration::from_secs(90))
+        );
     }
 
     #[test]
     fn test_cardkit_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "cardkit_app_1".to_string();
+        let config1 = Config {
+            app_id: "cardkit_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "cardkit_app_2".to_string();
+        let config2 = Config {
+            app_id: "cardkit_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = CardkitService::new(config1);
         let service2 = CardkitService::new(config2);
 
-        assert_eq!(service1.v1.config.app_id, "cardkit_app_1");
-        assert_eq!(service2.v1.config.app_id, "cardkit_app_2");
-        assert_ne!(service1.v1.config.app_id, service2.v1.config.app_id);
+        assert_eq!(service1.v1.card.config.app_id, "cardkit_app_1");
+        assert_eq!(service2.v1.card.config.app_id, "cardkit_app_2");
+        assert_ne!(
+            service1.v1.card.config.app_id,
+            service2.v1.card.config.app_id
+        );
     }
 
     #[test]
@@ -195,7 +205,7 @@ mod tests {
         let config = Config::default();
         let service = CardkitService::new(config.clone());
 
-        assert_eq!(service.v1.config.app_id, config.app_id);
+        assert_eq!(service.v1.card.config.app_id, config.app_id);
     }
 
     #[test]
@@ -208,8 +218,8 @@ mod tests {
 
         let service = CardkitService::new(config.clone());
 
-        assert_eq!(service.v1.config.app_id, "clone_test_app");
-        assert_eq!(service.v1.config.app_secret, "clone_test_secret");
+        assert_eq!(service.v1.card.config.app_id, "clone_test_app");
+        assert_eq!(service.v1.card.config.app_secret, "clone_test_secret");
     }
 
     #[test]
@@ -221,7 +231,10 @@ mod tests {
 
         let service = CardkitService::new(config);
 
-        assert_eq!(service.v1.config.req_timeout, Some(Duration::from_secs(200)));
+        assert_eq!(
+            service.v1.card.config.req_timeout,
+            Some(Duration::from_secs(200))
+        );
     }
 
     #[test]
@@ -231,8 +244,14 @@ mod tests {
         let service1 = CardkitService::new(config.clone());
         let service2 = CardkitService::new(config.clone());
 
-        assert_eq!(service1.v1.config.app_id, service2.v1.config.app_id);
-        assert_eq!(service1.v1.config.app_secret, service2.v1.config.app_secret);
+        assert_eq!(
+            service1.v1.card.config.app_id,
+            service2.v1.card.config.app_id
+        );
+        assert_eq!(
+            service1.v1.card.config.app_secret,
+            service2.v1.card.config.app_secret
+        );
     }
 
     #[test]
@@ -246,8 +265,11 @@ mod tests {
 
         let service = CardkitService::new(config);
 
-        assert_eq!(service.v1.config.app_id, "consistency_test");
-        assert_eq!(service.v1.config.app_secret, "consistency_secret");
-        assert_eq!(service.v1.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(service.v1.card.config.app_id, "consistency_test");
+        assert_eq!(service.v1.card.config.app_secret, "consistency_secret");
+        assert_eq!(
+            service.v1.card.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
     }
 }

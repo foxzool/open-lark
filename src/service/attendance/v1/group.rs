@@ -261,3 +261,529 @@ impl GroupService {
         Ok(api_resp)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::{api_req::ApiRequest, config::Config};
+
+    #[test]
+    fn test_group_service_creation() {
+        let config = Config::default();
+        let service = GroupService {
+            config: config.clone(),
+        };
+
+        assert_eq!(service.config.app_id, config.app_id);
+        assert_eq!(service.config.app_secret, config.app_secret);
+    }
+
+    #[test]
+    fn test_group_service_with_custom_config() {
+        let config = Config {
+            app_id: "group_test_app".to_string(),
+            app_secret: "group_test_secret".to_string(),
+            ..Default::default()
+        };
+
+        let service = GroupService {
+            config: config.clone(),
+        };
+
+        assert_eq!(service.config.app_id, "group_test_app");
+        assert_eq!(service.config.app_secret, "group_test_secret");
+    }
+
+    #[test]
+    fn test_list_group_user_request_construction() {
+        let request = ListGroupUserRequest {
+            api_req: ApiRequest::default(),
+            group_id: "group_123".to_string(),
+            employee_type: "1".to_string(),
+            dept_type: Some("dept_id".to_string()),
+            page_size: Some(50),
+            page_token: Some("user_page_token".to_string()),
+        };
+
+        assert_eq!(request.group_id, "group_123");
+        assert_eq!(request.employee_type, "1");
+        assert_eq!(request.dept_type, Some("dept_id".to_string()));
+        assert_eq!(request.page_size, Some(50));
+        assert_eq!(request.page_token, Some("user_page_token".to_string()));
+    }
+
+    #[test]
+    fn test_list_group_user_request_with_none_values() {
+        let request = ListGroupUserRequest {
+            api_req: ApiRequest::default(),
+            group_id: "group_456".to_string(),
+            employee_type: "2".to_string(),
+            dept_type: None,
+            page_size: None,
+            page_token: None,
+        };
+
+        assert_eq!(request.group_id, "group_456");
+        assert_eq!(request.employee_type, "2");
+        assert_eq!(request.dept_type, None);
+        assert_eq!(request.page_size, None);
+        assert_eq!(request.page_token, None);
+    }
+
+    #[test]
+    fn test_create_group_request_construction() {
+        let request = CreateGroupRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            dept_type: Some("department_id".to_string()),
+            group_name: "开发组".to_string(),
+            time_zone: Some("Asia/Shanghai".to_string()),
+            bind_dept_ids: Some(vec!["dept_1".to_string(), "dept_2".to_string()]),
+            except_date_rule: Some("weekend".to_string()),
+            attendance_type: Some(1),
+            punch_type: Some(1),
+            allow_late_minutes: Some(10),
+            allow_early_leave_minutes: Some(5),
+            work_day_rule: Some("5_days".to_string()),
+            shift_rule: Some("normal".to_string()),
+            member_rule: Some("auto".to_string()),
+        };
+
+        assert_eq!(request.employee_type, "1");
+        assert_eq!(request.dept_type, Some("department_id".to_string()));
+        assert_eq!(request.group_name, "开发组");
+        assert_eq!(request.time_zone, Some("Asia/Shanghai".to_string()));
+        assert_eq!(
+            request.bind_dept_ids,
+            Some(vec!["dept_1".to_string(), "dept_2".to_string()])
+        );
+        assert_eq!(request.except_date_rule, Some("weekend".to_string()));
+        assert_eq!(request.attendance_type, Some(1));
+        assert_eq!(request.punch_type, Some(1));
+        assert_eq!(request.allow_late_minutes, Some(10));
+        assert_eq!(request.allow_early_leave_minutes, Some(5));
+        assert_eq!(request.work_day_rule, Some("5_days".to_string()));
+        assert_eq!(request.shift_rule, Some("normal".to_string()));
+        assert_eq!(request.member_rule, Some("auto".to_string()));
+    }
+
+    #[test]
+    fn test_create_group_request_with_minimal_data() {
+        let request = CreateGroupRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "2".to_string(),
+            dept_type: None,
+            group_name: "测试组".to_string(),
+            time_zone: None,
+            bind_dept_ids: None,
+            except_date_rule: None,
+            attendance_type: None,
+            punch_type: None,
+            allow_late_minutes: None,
+            allow_early_leave_minutes: None,
+            work_day_rule: None,
+            shift_rule: None,
+            member_rule: None,
+        };
+
+        assert_eq!(request.employee_type, "2");
+        assert_eq!(request.dept_type, None);
+        assert_eq!(request.group_name, "测试组");
+        assert_eq!(request.time_zone, None);
+        assert_eq!(request.bind_dept_ids, None);
+        assert_eq!(request.except_date_rule, None);
+        assert_eq!(request.attendance_type, None);
+        assert_eq!(request.punch_type, None);
+        assert_eq!(request.allow_late_minutes, None);
+        assert_eq!(request.allow_early_leave_minutes, None);
+        assert_eq!(request.work_day_rule, None);
+        assert_eq!(request.shift_rule, None);
+        assert_eq!(request.member_rule, None);
+    }
+
+    #[test]
+    fn test_delete_group_request_construction() {
+        let request = DeleteGroupRequest {
+            api_req: ApiRequest::default(),
+            group_id: "group_to_delete".to_string(),
+        };
+
+        assert_eq!(request.group_id, "group_to_delete");
+    }
+
+    #[test]
+    fn test_get_group_request_construction() {
+        let request = GetGroupRequest {
+            api_req: ApiRequest::default(),
+            group_id: "group_to_get".to_string(),
+            employee_type: "1".to_string(),
+            dept_type: Some("open_id".to_string()),
+        };
+
+        assert_eq!(request.group_id, "group_to_get");
+        assert_eq!(request.employee_type, "1");
+        assert_eq!(request.dept_type, Some("open_id".to_string()));
+    }
+
+    #[test]
+    fn test_get_group_request_without_dept_type() {
+        let request = GetGroupRequest {
+            api_req: ApiRequest::default(),
+            group_id: "group_no_dept".to_string(),
+            employee_type: "2".to_string(),
+            dept_type: None,
+        };
+
+        assert_eq!(request.group_id, "group_no_dept");
+        assert_eq!(request.employee_type, "2");
+        assert_eq!(request.dept_type, None);
+    }
+
+    #[test]
+    fn test_search_group_request_construction() {
+        let request = SearchGroupRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            dept_type: Some("department_id".to_string()),
+            group_name: "研发组".to_string(),
+        };
+
+        assert_eq!(request.employee_type, "1");
+        assert_eq!(request.dept_type, Some("department_id".to_string()));
+        assert_eq!(request.group_name, "研发组");
+    }
+
+    #[test]
+    fn test_search_group_request_without_dept_type() {
+        let request = SearchGroupRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "2".to_string(),
+            dept_type: None,
+            group_name: "销售组".to_string(),
+        };
+
+        assert_eq!(request.employee_type, "2");
+        assert_eq!(request.dept_type, None);
+        assert_eq!(request.group_name, "销售组");
+    }
+
+    #[test]
+    fn test_list_group_request_construction() {
+        let request = ListGroupRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            dept_type: Some("union_id".to_string()),
+            page_size: Some(100),
+            page_token: Some("list_page_token".to_string()),
+        };
+
+        assert_eq!(request.employee_type, "1");
+        assert_eq!(request.dept_type, Some("union_id".to_string()));
+        assert_eq!(request.page_size, Some(100));
+        assert_eq!(request.page_token, Some("list_page_token".to_string()));
+    }
+
+    #[test]
+    fn test_list_group_request_with_minimal_data() {
+        let request = ListGroupRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "2".to_string(),
+            dept_type: None,
+            page_size: None,
+            page_token: None,
+        };
+
+        assert_eq!(request.employee_type, "2");
+        assert_eq!(request.dept_type, None);
+        assert_eq!(request.page_size, None);
+        assert_eq!(request.page_token, None);
+    }
+
+    #[test]
+    fn test_group_service_config_independence() {
+        let config1 = Config {
+            app_id: "group_app_1".to_string(),
+            ..Default::default()
+        };
+
+        let config2 = Config {
+            app_id: "group_app_2".to_string(),
+            ..Default::default()
+        };
+
+        let service1 = GroupService { config: config1 };
+        let service2 = GroupService { config: config2 };
+
+        assert_eq!(service1.config.app_id, "group_app_1");
+        assert_eq!(service2.config.app_id, "group_app_2");
+        assert_ne!(service1.config.app_id, service2.config.app_id);
+    }
+
+    #[test]
+    fn test_request_structs_debug_trait() {
+        let create_request = CreateGroupRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            dept_type: Some("debug_dept".to_string()),
+            group_name: "Debug Group".to_string(),
+            time_zone: Some("UTC".to_string()),
+            bind_dept_ids: Some(vec!["debug_dept_1".to_string()]),
+            except_date_rule: None,
+            attendance_type: Some(1),
+            punch_type: None,
+            allow_late_minutes: None,
+            allow_early_leave_minutes: None,
+            work_day_rule: None,
+            shift_rule: None,
+            member_rule: None,
+        };
+
+        let debug_str = format!("{:?}", create_request);
+        assert!(debug_str.contains("CreateGroupRequest"));
+        assert!(debug_str.contains("Debug Group"));
+        assert!(debug_str.contains("debug_dept"));
+    }
+
+    #[test]
+    fn test_create_group_request_edge_cases() {
+        // Test with very long group name
+        let long_name = "长考勤组名称".repeat(50);
+        let request_long_name = CreateGroupRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            dept_type: None,
+            group_name: long_name.clone(),
+            time_zone: None,
+            bind_dept_ids: None,
+            except_date_rule: None,
+            attendance_type: None,
+            punch_type: None,
+            allow_late_minutes: None,
+            allow_early_leave_minutes: None,
+            work_day_rule: None,
+            shift_rule: None,
+            member_rule: None,
+        };
+
+        assert_eq!(request_long_name.group_name, long_name);
+
+        // Test with large number of bind department IDs
+        let large_dept_list: Vec<String> = (0..1000).map(|i| format!("dept_{}", i)).collect();
+        let request_large_depts = CreateGroupRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            dept_type: None,
+            group_name: "Large Depts Group".to_string(),
+            time_zone: None,
+            bind_dept_ids: Some(large_dept_list.clone()),
+            except_date_rule: None,
+            attendance_type: None,
+            punch_type: None,
+            allow_late_minutes: None,
+            allow_early_leave_minutes: None,
+            work_day_rule: None,
+            shift_rule: None,
+            member_rule: None,
+        };
+
+        assert_eq!(
+            request_large_depts.bind_dept_ids.as_ref().unwrap().len(),
+            1000
+        );
+        assert_eq!(
+            request_large_depts.bind_dept_ids.as_ref().unwrap()[999],
+            "dept_999"
+        );
+
+        // Test with extreme late minutes values
+        let request_extreme_late = CreateGroupRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            dept_type: None,
+            group_name: "Extreme Late Group".to_string(),
+            time_zone: None,
+            bind_dept_ids: None,
+            except_date_rule: None,
+            attendance_type: None,
+            punch_type: None,
+            allow_late_minutes: Some(99999),
+            allow_early_leave_minutes: Some(99999),
+            work_day_rule: None,
+            shift_rule: None,
+            member_rule: None,
+        };
+
+        assert_eq!(request_extreme_late.allow_late_minutes, Some(99999));
+        assert_eq!(request_extreme_late.allow_early_leave_minutes, Some(99999));
+    }
+
+    #[test]
+    fn test_list_group_user_request_edge_cases() {
+        // Test with very long group ID
+        let long_group_id = "group_".repeat(100);
+        let request_long_id = ListGroupUserRequest {
+            api_req: ApiRequest::default(),
+            group_id: long_group_id.clone(),
+            employee_type: "1".to_string(),
+            dept_type: None,
+            page_size: None,
+            page_token: None,
+        };
+
+        assert_eq!(request_long_id.group_id, long_group_id);
+
+        // Test with very large page size
+        let request_large_page = ListGroupUserRequest {
+            api_req: ApiRequest::default(),
+            group_id: "group_large_page".to_string(),
+            employee_type: "1".to_string(),
+            dept_type: None,
+            page_size: Some(10000),
+            page_token: None,
+        };
+
+        assert_eq!(request_large_page.page_size, Some(10000));
+
+        // Test with zero page size
+        let request_zero_page = ListGroupUserRequest {
+            api_req: ApiRequest::default(),
+            group_id: "group_zero_page".to_string(),
+            employee_type: "1".to_string(),
+            dept_type: None,
+            page_size: Some(0),
+            page_token: None,
+        };
+
+        assert_eq!(request_zero_page.page_size, Some(0));
+    }
+
+    #[test]
+    fn test_search_group_request_edge_cases() {
+        // Test with empty group name
+        let request_empty_name = SearchGroupRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            dept_type: None,
+            group_name: "".to_string(),
+        };
+
+        assert_eq!(request_empty_name.group_name, "");
+
+        // Test with very long group name
+        let long_search_name = "搜索组名".repeat(100);
+        let request_long_search = SearchGroupRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "2".to_string(),
+            dept_type: Some("dept_long".to_string()),
+            group_name: long_search_name.clone(),
+        };
+
+        assert_eq!(request_long_search.group_name, long_search_name);
+    }
+
+    #[test]
+    fn test_all_request_structs_with_different_employee_types() {
+        // Test all request types with different employee types
+        let list_user_request = ListGroupUserRequest {
+            api_req: ApiRequest::default(),
+            group_id: "test_group".to_string(),
+            employee_type: "employee_id".to_string(),
+            dept_type: None,
+            page_size: None,
+            page_token: None,
+        };
+
+        let create_request = CreateGroupRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "open_id".to_string(),
+            dept_type: None,
+            group_name: "Test Group".to_string(),
+            time_zone: None,
+            bind_dept_ids: None,
+            except_date_rule: None,
+            attendance_type: None,
+            punch_type: None,
+            allow_late_minutes: None,
+            allow_early_leave_minutes: None,
+            work_day_rule: None,
+            shift_rule: None,
+            member_rule: None,
+        };
+
+        let get_request = GetGroupRequest {
+            api_req: ApiRequest::default(),
+            group_id: "test_get_group".to_string(),
+            employee_type: "union_id".to_string(),
+            dept_type: None,
+        };
+
+        let search_request = SearchGroupRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "user_id".to_string(),
+            dept_type: None,
+            group_name: "Search Group".to_string(),
+        };
+
+        let list_request = ListGroupRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "department_id".to_string(),
+            dept_type: None,
+            page_size: None,
+            page_token: None,
+        };
+
+        assert_eq!(list_user_request.employee_type, "employee_id");
+        assert_eq!(create_request.employee_type, "open_id");
+        assert_eq!(get_request.employee_type, "union_id");
+        assert_eq!(search_request.employee_type, "user_id");
+        assert_eq!(list_request.employee_type, "department_id");
+    }
+
+    #[test]
+    fn test_create_group_request_with_empty_bind_dept_ids() {
+        let request = CreateGroupRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            dept_type: None,
+            group_name: "Empty Depts Group".to_string(),
+            time_zone: None,
+            bind_dept_ids: Some(vec![]),
+            except_date_rule: None,
+            attendance_type: None,
+            punch_type: None,
+            allow_late_minutes: None,
+            allow_early_leave_minutes: None,
+            work_day_rule: None,
+            shift_rule: None,
+            member_rule: None,
+        };
+
+        assert!(request.bind_dept_ids.as_ref().unwrap().is_empty());
+        assert_eq!(request.group_name, "Empty Depts Group");
+    }
+
+    #[test]
+    fn test_create_group_request_with_negative_values() {
+        let request = CreateGroupRequest {
+            api_req: ApiRequest::default(),
+            employee_type: "1".to_string(),
+            dept_type: None,
+            group_name: "Negative Values Group".to_string(),
+            time_zone: None,
+            bind_dept_ids: None,
+            except_date_rule: None,
+            attendance_type: Some(-1),
+            punch_type: Some(-1),
+            allow_late_minutes: Some(-10),
+            allow_early_leave_minutes: Some(-5),
+            work_day_rule: None,
+            shift_rule: None,
+            member_rule: None,
+        };
+
+        assert_eq!(request.attendance_type, Some(-1));
+        assert_eq!(request.punch_type, Some(-1));
+        assert_eq!(request.allow_late_minutes, Some(-10));
+        assert_eq!(request.allow_early_leave_minutes, Some(-5));
+    }
+}

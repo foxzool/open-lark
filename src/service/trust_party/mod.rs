@@ -88,10 +88,22 @@ mod tests {
         let config = Config::default();
         let service = TrustPartyService::new(config.clone());
 
-        assert_eq!(service.collaboration_organization.config.app_id, config.app_id);
-        assert_eq!(service.collaboration_organization.config.app_secret, config.app_secret);
-        assert_eq!(service.searchable_visible_rules.config.app_id, config.app_id);
-        assert_eq!(service.searchable_visible_rules.config.app_secret, config.app_secret);
+        assert_eq!(
+            service.collaboration_organization.config.app_id,
+            config.app_id
+        );
+        assert_eq!(
+            service.collaboration_organization.config.app_secret,
+            config.app_secret
+        );
+        assert_eq!(
+            service.searchable_visible_rules.config.app_id,
+            config.app_id
+        );
+        assert_eq!(
+            service.searchable_visible_rules.config.app_secret,
+            config.app_secret
+        );
     }
 
     #[test]
@@ -105,28 +117,59 @@ mod tests {
 
         let service = TrustPartyService::new(config.clone());
 
-        assert_eq!(service.collaboration_organization.config.app_id, "trust_party_test_app");
-        assert_eq!(service.collaboration_organization.config.app_secret, "trust_party_test_secret");
-        assert_eq!(service.collaboration_organization.config.req_timeout, Some(Duration::from_secs(150)));
-        assert_eq!(service.searchable_visible_rules.config.app_id, "trust_party_test_app");
-        assert_eq!(service.searchable_visible_rules.config.req_timeout, Some(Duration::from_secs(150)));
+        assert_eq!(
+            service.collaboration_organization.config.app_id,
+            "trust_party_test_app"
+        );
+        assert_eq!(
+            service.collaboration_organization.config.app_secret,
+            "trust_party_test_secret"
+        );
+        assert_eq!(
+            service.collaboration_organization.config.req_timeout,
+            Some(Duration::from_secs(150))
+        );
+        assert_eq!(
+            service.searchable_visible_rules.config.app_id,
+            "trust_party_test_app"
+        );
+        assert_eq!(
+            service.searchable_visible_rules.config.req_timeout,
+            Some(Duration::from_secs(150))
+        );
     }
 
     #[test]
     fn test_trust_party_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "trust_party_app_1".to_string();
+        let config1 = Config {
+            app_id: "trust_party_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "trust_party_app_2".to_string();
+        let config2 = Config {
+            app_id: "trust_party_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = TrustPartyService::new(config1);
         let service2 = TrustPartyService::new(config2);
 
-        assert_eq!(service1.collaboration_organization.config.app_id, "trust_party_app_1");
-        assert_eq!(service2.collaboration_organization.config.app_id, "trust_party_app_2");
-        assert_ne!(service1.collaboration_organization.config.app_id, service2.collaboration_organization.config.app_id);
-        assert_ne!(service1.searchable_visible_rules.config.app_id, service2.searchable_visible_rules.config.app_id);
+        assert_eq!(
+            service1.collaboration_organization.config.app_id,
+            "trust_party_app_1"
+        );
+        assert_eq!(
+            service2.collaboration_organization.config.app_id,
+            "trust_party_app_2"
+        );
+        assert_ne!(
+            service1.collaboration_organization.config.app_id,
+            service2.collaboration_organization.config.app_id
+        );
+        assert_ne!(
+            service1.searchable_visible_rules.config.app_id,
+            service2.searchable_visible_rules.config.app_id
+        );
     }
 
     #[test]
@@ -134,8 +177,14 @@ mod tests {
         let config = Config::default();
         let service = TrustPartyService::new(config.clone());
 
-        assert_eq!(service.collaboration_organization.config.app_id, config.app_id);
-        assert_eq!(service.searchable_visible_rules.config.app_id, config.app_id);
+        assert_eq!(
+            service.collaboration_organization.config.app_id,
+            config.app_id
+        );
+        assert_eq!(
+            service.searchable_visible_rules.config.app_id,
+            config.app_id
+        );
     }
 
     #[test]
@@ -148,10 +197,22 @@ mod tests {
 
         let service = TrustPartyService::new(config.clone());
 
-        assert_eq!(service.collaboration_organization.config.app_id, "clone_test_app");
-        assert_eq!(service.collaboration_organization.config.app_secret, "clone_test_secret");
-        assert_eq!(service.searchable_visible_rules.config.app_secret, "clone_test_secret");
-        assert_eq!(service.searchable_visible_rules.config.app_id, "clone_test_app");
+        assert_eq!(
+            service.collaboration_organization.config.app_id,
+            "clone_test_app"
+        );
+        assert_eq!(
+            service.collaboration_organization.config.app_secret,
+            "clone_test_secret"
+        );
+        assert_eq!(
+            service.searchable_visible_rules.config.app_secret,
+            "clone_test_secret"
+        );
+        assert_eq!(
+            service.searchable_visible_rules.config.app_id,
+            "clone_test_app"
+        );
     }
 
     #[test]
@@ -163,8 +224,14 @@ mod tests {
 
         let service = TrustPartyService::new(config);
 
-        assert_eq!(service.collaboration_organization.config.req_timeout, Some(Duration::from_secs(180)));
-        assert_eq!(service.searchable_visible_rules.config.req_timeout, Some(Duration::from_secs(180)));
+        assert_eq!(
+            service.collaboration_organization.config.req_timeout,
+            Some(Duration::from_secs(180))
+        );
+        assert_eq!(
+            service.searchable_visible_rules.config.req_timeout,
+            Some(Duration::from_secs(180))
+        );
     }
 
     #[test]
@@ -174,10 +241,22 @@ mod tests {
         let service1 = TrustPartyService::new(config.clone());
         let service2 = TrustPartyService::new(config.clone());
 
-        assert_eq!(service1.collaboration_organization.config.app_id, service2.collaboration_organization.config.app_id);
-        assert_eq!(service1.collaboration_organization.config.app_secret, service2.collaboration_organization.config.app_secret);
-        assert_eq!(service1.searchable_visible_rules.config.app_id, service2.searchable_visible_rules.config.app_id);
-        assert_eq!(service1.searchable_visible_rules.config.app_secret, service2.searchable_visible_rules.config.app_secret);
+        assert_eq!(
+            service1.collaboration_organization.config.app_id,
+            service2.collaboration_organization.config.app_id
+        );
+        assert_eq!(
+            service1.collaboration_organization.config.app_secret,
+            service2.collaboration_organization.config.app_secret
+        );
+        assert_eq!(
+            service1.searchable_visible_rules.config.app_id,
+            service2.searchable_visible_rules.config.app_id
+        );
+        assert_eq!(
+            service1.searchable_visible_rules.config.app_secret,
+            service2.searchable_visible_rules.config.app_secret
+        );
     }
 
     #[test]
@@ -191,11 +270,29 @@ mod tests {
 
         let service = TrustPartyService::new(config);
 
-        assert_eq!(service.collaboration_organization.config.app_id, "consistency_test");
-        assert_eq!(service.collaboration_organization.config.app_secret, "consistency_secret");
-        assert_eq!(service.collaboration_organization.config.req_timeout, Some(Duration::from_secs(130)));
-        assert_eq!(service.searchable_visible_rules.config.app_id, "consistency_test");
-        assert_eq!(service.searchable_visible_rules.config.app_secret, "consistency_secret");
-        assert_eq!(service.searchable_visible_rules.config.req_timeout, Some(Duration::from_secs(130)));
+        assert_eq!(
+            service.collaboration_organization.config.app_id,
+            "consistency_test"
+        );
+        assert_eq!(
+            service.collaboration_organization.config.app_secret,
+            "consistency_secret"
+        );
+        assert_eq!(
+            service.collaboration_organization.config.req_timeout,
+            Some(Duration::from_secs(130))
+        );
+        assert_eq!(
+            service.searchable_visible_rules.config.app_id,
+            "consistency_test"
+        );
+        assert_eq!(
+            service.searchable_visible_rules.config.app_secret,
+            "consistency_secret"
+        );
+        assert_eq!(
+            service.searchable_visible_rules.config.req_timeout,
+            Some(Duration::from_secs(130))
+        );
     }
 }

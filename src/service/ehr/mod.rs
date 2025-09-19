@@ -215,27 +215,43 @@ mod tests {
 
         assert_eq!(service.employee.config.app_id, "ehr_test_app");
         assert_eq!(service.employee.config.app_secret, "ehr_test_secret");
-        assert_eq!(service.employee.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.employee.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
         assert_eq!(service.attachment.config.app_id, "ehr_test_app");
         assert_eq!(service.attachment.config.app_secret, "ehr_test_secret");
-        assert_eq!(service.attachment.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.attachment.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
     }
 
     #[test]
     fn test_ehr_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "ehr_app_1".to_string();
+        let config1 = Config {
+            app_id: "ehr_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "ehr_app_2".to_string();
+        let config2 = Config {
+            app_id: "ehr_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = EhrService::new(config1);
         let service2 = EhrService::new(config2);
 
         assert_eq!(service1.employee.config.app_id, "ehr_app_1");
         assert_eq!(service2.employee.config.app_id, "ehr_app_2");
-        assert_ne!(service1.employee.config.app_id, service2.employee.config.app_id);
-        assert_ne!(service1.attachment.config.app_id, service2.attachment.config.app_id);
+        assert_ne!(
+            service1.employee.config.app_id,
+            service2.employee.config.app_id
+        );
+        assert_ne!(
+            service1.attachment.config.app_id,
+            service2.attachment.config.app_id
+        );
     }
 
     #[test]
@@ -272,8 +288,14 @@ mod tests {
 
         let service = EhrService::new(config);
 
-        assert_eq!(service.employee.config.req_timeout, Some(Duration::from_secs(180)));
-        assert_eq!(service.attachment.config.req_timeout, Some(Duration::from_secs(180)));
+        assert_eq!(
+            service.employee.config.req_timeout,
+            Some(Duration::from_secs(180))
+        );
+        assert_eq!(
+            service.attachment.config.req_timeout,
+            Some(Duration::from_secs(180))
+        );
     }
 
     #[test]
@@ -283,10 +305,22 @@ mod tests {
         let service1 = EhrService::new(config.clone());
         let service2 = EhrService::new(config.clone());
 
-        assert_eq!(service1.employee.config.app_id, service2.employee.config.app_id);
-        assert_eq!(service1.employee.config.app_secret, service2.employee.config.app_secret);
-        assert_eq!(service1.attachment.config.app_id, service2.attachment.config.app_id);
-        assert_eq!(service1.attachment.config.app_secret, service2.attachment.config.app_secret);
+        assert_eq!(
+            service1.employee.config.app_id,
+            service2.employee.config.app_id
+        );
+        assert_eq!(
+            service1.employee.config.app_secret,
+            service2.employee.config.app_secret
+        );
+        assert_eq!(
+            service1.attachment.config.app_id,
+            service2.attachment.config.app_id
+        );
+        assert_eq!(
+            service1.attachment.config.app_secret,
+            service2.attachment.config.app_secret
+        );
     }
 
     #[test]
@@ -302,9 +336,15 @@ mod tests {
 
         assert_eq!(service.employee.config.app_id, "consistency_test");
         assert_eq!(service.employee.config.app_secret, "consistency_secret");
-        assert_eq!(service.employee.config.req_timeout, Some(Duration::from_secs(150)));
+        assert_eq!(
+            service.employee.config.req_timeout,
+            Some(Duration::from_secs(150))
+        );
         assert_eq!(service.attachment.config.app_id, "consistency_test");
         assert_eq!(service.attachment.config.app_secret, "consistency_secret");
-        assert_eq!(service.attachment.config.req_timeout, Some(Duration::from_secs(150)));
+        assert_eq!(
+            service.attachment.config.req_timeout,
+            Some(Duration::from_secs(150))
+        );
     }
 }

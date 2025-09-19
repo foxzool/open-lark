@@ -449,11 +449,15 @@ mod tests {
 
     #[test]
     fn test_human_authentication_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "human_auth_app_1".to_string();
+        let config1 = Config {
+            app_id: "human_auth_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "human_auth_app_2".to_string();
+        let config2 = Config {
+            app_id: "human_auth_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = HumanAuthenticationService::new(config1);
         let service2 = HumanAuthenticationService::new(config2);

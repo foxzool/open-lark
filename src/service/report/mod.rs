@@ -104,18 +104,28 @@ mod tests {
 
         assert_eq!(service.rule.config.app_id, "report_test_app");
         assert_eq!(service.rule.config.app_secret, "report_test_secret");
-        assert_eq!(service.rule.config.req_timeout, Some(Duration::from_secs(170)));
+        assert_eq!(
+            service.rule.config.req_timeout,
+            Some(Duration::from_secs(170))
+        );
         assert_eq!(service.rule_view.config.app_id, "report_test_app");
-        assert_eq!(service.task.config.req_timeout, Some(Duration::from_secs(170)));
+        assert_eq!(
+            service.task.config.req_timeout,
+            Some(Duration::from_secs(170))
+        );
     }
 
     #[test]
     fn test_report_service_config_independence() {
-        let mut config1 = Config::default();
-        config1.app_id = "report_app_1".to_string();
+        let config1 = Config {
+            app_id: "report_app_1".to_string(),
+            ..Default::default()
+        };
 
-        let mut config2 = Config::default();
-        config2.app_id = "report_app_2".to_string();
+        let config2 = Config {
+            app_id: "report_app_2".to_string(),
+            ..Default::default()
+        };
 
         let service1 = ReportService::new(config1);
         let service2 = ReportService::new(config2);
@@ -123,7 +133,10 @@ mod tests {
         assert_eq!(service1.rule.config.app_id, "report_app_1");
         assert_eq!(service2.rule.config.app_id, "report_app_2");
         assert_ne!(service1.rule.config.app_id, service2.rule.config.app_id);
-        assert_ne!(service1.rule_view.config.app_id, service2.task.config.app_id);
+        assert_ne!(
+            service1.rule_view.config.app_id,
+            service2.task.config.app_id
+        );
     }
 
     #[test]
@@ -161,9 +174,18 @@ mod tests {
 
         let service = ReportService::new(config);
 
-        assert_eq!(service.rule.config.req_timeout, Some(Duration::from_secs(190)));
-        assert_eq!(service.rule_view.config.req_timeout, Some(Duration::from_secs(190)));
-        assert_eq!(service.task.config.req_timeout, Some(Duration::from_secs(190)));
+        assert_eq!(
+            service.rule.config.req_timeout,
+            Some(Duration::from_secs(190))
+        );
+        assert_eq!(
+            service.rule_view.config.req_timeout,
+            Some(Duration::from_secs(190))
+        );
+        assert_eq!(
+            service.task.config.req_timeout,
+            Some(Duration::from_secs(190))
+        );
     }
 
     #[test]
@@ -174,9 +196,18 @@ mod tests {
         let service2 = ReportService::new(config.clone());
 
         assert_eq!(service1.rule.config.app_id, service2.rule.config.app_id);
-        assert_eq!(service1.rule.config.app_secret, service2.rule.config.app_secret);
-        assert_eq!(service1.rule_view.config.app_id, service2.rule_view.config.app_id);
-        assert_eq!(service1.task.config.app_secret, service2.task.config.app_secret);
+        assert_eq!(
+            service1.rule.config.app_secret,
+            service2.rule.config.app_secret
+        );
+        assert_eq!(
+            service1.rule_view.config.app_id,
+            service2.rule_view.config.app_id
+        );
+        assert_eq!(
+            service1.task.config.app_secret,
+            service2.task.config.app_secret
+        );
     }
 
     #[test]
@@ -192,7 +223,10 @@ mod tests {
 
         assert_eq!(service.rule.config.app_id, "consistency_test");
         assert_eq!(service.rule.config.app_secret, "consistency_secret");
-        assert_eq!(service.rule.config.req_timeout, Some(Duration::from_secs(140)));
+        assert_eq!(
+            service.rule.config.req_timeout,
+            Some(Duration::from_secs(140))
+        );
         assert_eq!(service.rule_view.config.app_id, "consistency_test");
         assert_eq!(service.task.config.app_secret, "consistency_secret");
     }

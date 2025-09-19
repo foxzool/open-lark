@@ -69,10 +69,7 @@ impl V1 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{
-        core::api_resp::ResponseFormat,
-        service::verification::models::TenantInfo,
-    };
+    use crate::{core::api_resp::ResponseFormat, service::verification::models::TenantInfo};
     use std::time::Duration;
 
     #[test]
@@ -144,8 +141,14 @@ mod tests {
         assert!(json.contains("2ed263bf32cf1651"));
 
         let deserialized: GetVerificationResponse = serde_json::from_str(&json).unwrap();
-        assert_eq!(deserialized.verification.app_id, Some("cli_test123".to_string()));
-        assert_eq!(deserialized.verification.app_name, Some("CLI Test App".to_string()));
+        assert_eq!(
+            deserialized.verification.app_id,
+            Some("cli_test123".to_string())
+        );
+        assert_eq!(
+            deserialized.verification.app_name,
+            Some("CLI Test App".to_string())
+        );
     }
 
     #[test]
@@ -175,7 +178,7 @@ mod tests {
     #[test]
     fn test_api_request_construction() {
         let config = Config::default();
-        let v1 = V1::new(config);
+        let _v1 = V1::new(config);
 
         let api_req = ApiRequest {
             http_method: Method::GET,
@@ -187,18 +190,23 @@ mod tests {
         assert_eq!(api_req.http_method, Method::GET);
         assert_eq!(api_req.api_path, "/open-apis/verification/v1/get");
         assert_eq!(api_req.supported_access_token_types.len(), 2);
-        assert!(api_req.supported_access_token_types.contains(&AccessTokenType::Tenant));
-        assert!(api_req.supported_access_token_types.contains(&AccessTokenType::User));
+        assert!(api_req
+            .supported_access_token_types
+            .contains(&AccessTokenType::Tenant));
+        assert!(api_req
+            .supported_access_token_types
+            .contains(&AccessTokenType::User));
     }
 
     #[test]
     fn test_request_option_creation() {
-        let option = RequestOption::default()
+        let option = RequestOption::builder()
             .tenant_access_token("t-test123".to_string())
-            .request_id("req-12345".to_string());
+            .request_id("req-12345".to_string())
+            .build();
 
-        assert_eq!(option.tenant_access_token, Some("t-test123".to_string()));
-        assert_eq!(option.request_id, Some("req-12345".to_string()));
+        assert_eq!(option.tenant_access_token, "t-test123");
+        assert_eq!(option.request_id, "req-12345");
     }
 
     #[test]
@@ -240,6 +248,14 @@ mod tests {
         let deserialized: GetVerificationResponse = serde_json::from_str(&json).unwrap();
 
         assert_eq!(deserialized.verification.scopes, Some(vec![]));
-        assert_eq!(deserialized.verification.tenant_info.as_ref().unwrap().tenant_key, Some("".to_string()));
+        assert_eq!(
+            deserialized
+                .verification
+                .tenant_info
+                .as_ref()
+                .unwrap()
+                .tenant_key,
+            Some("".to_string())
+        );
     }
 }
