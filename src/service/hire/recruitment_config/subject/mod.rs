@@ -180,20 +180,20 @@ impl SubjectService {
     ///
     /// let request = SubjectCreateRequest {
     ///     name: I18nText {
-    ///         zh_cn: Some("2024年春季校园招聘".to_string(),
-    ///         en_us: Some("2024 Spring Campus Recruitment".to_string(),
+    ///         zh_cn: Some("2024年春季校园招聘".to_string()),
+    ///         en_us: Some("2024 Spring Campus Recruitment".to_string()),
     ///         ja_jp: None,
     ///     },
     ///     subject_type: "campus_recruitment".to_string(),
     ///     description: Some(I18nText {
-    ///         zh_cn: Some("面向应届毕业生的春季招聘项目".to_string(),
-    ///         en_us: Some("Spring recruitment project for fresh graduates".to_string(),
+    ///         zh_cn: Some("面向应届毕业生的春季招聘项目".to_string()),
+    ///         en_us: Some("Spring recruitment project for fresh graduates".to_string()),
     ///         ja_jp: None,
     ///     }),
-    ///     owner_id: Some("user_123456".to_string(),
+    ///     owner_id: Some("user_123456".to_string()),
     ///     member_ids: vec!["user_789".to_string(), "user_456".to_string()],
-    ///     start_time: Some("2024-02-01T00:00:00Z".to_string(),
-    ///     end_time: Some("2024-05-31T23:59:59Z".to_string(),
+    ///     start_time: Some("2024-02-01T00:00:00Z".to_string()),
+    ///     end_time: Some("2024-05-31T23:59:59Z".to_string()),
     ///     ..Default::default()
     /// };
     ///
@@ -296,9 +296,9 @@ impl SubjectService {
     /// let request = SubjectListRequest {
     ///     page_size: Some(50),
     ///     page_token: None,
-    ///     subject_type: Some("campus_recruitment".to_string(),
-    ///     status: Some("active".to_string(),
-    ///     owner_id: Some("user_123456".to_string(),
+    ///     subject_type: Some("campus_recruitment".to_string()),
+    ///     status: Some("active".to_string()),
+    ///     owner_id: Some("user_123456".to_string()),
     /// };
     ///
     /// let response = client.hire.recruitment_config.subject.list_subjects(request, None).await?;
@@ -369,8 +369,8 @@ impl SubjectService {
     /// let subject_id = "subject_123456";
     /// let request = SubjectCreateRequest {
     ///     name: I18nText {
-    ///         zh_cn: Some("2024年春季校园招聘(更新)".to_string(),
-    ///         en_us: Some("2024 Spring Campus Recruitment (Updated)".to_string(),
+    ///         zh_cn: Some("2024年春季校园招聘(更新)".to_string()),
+    ///         en_us: Some("2024 Spring Campus Recruitment (Updated)".to_string()),
     ///         ja_jp: None,
     ///     },
     ///     subject_type: "campus_recruitment".to_string(),
