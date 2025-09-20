@@ -152,9 +152,11 @@ mod tests {
 
     #[test]
     fn test_visitor_service_creation() {
-        let mut config = Config::default();
-        config.app_id = "test_app_id".to_string();
-        config.app_secret = "test_app_secret".to_string();
+        let config = Config {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_app_secret".to_string(),
+            ..Default::default()
+        };
         let service = VisitorService::new(config.clone());
 
         assert_eq!(service.config.app_id, "test_app_id");
@@ -163,9 +165,11 @@ mod tests {
 
     #[test]
     fn test_visitor_service_debug() {
-        let mut config = Config::default();
-        config.app_id = "app_id".to_string();
-        config.app_secret = "app_secret".to_string();
+        let config = Config {
+            app_id: "app_id".to_string(),
+            app_secret: "app_secret".to_string(),
+            ..Default::default()
+        };
         let service = VisitorService::new(config);
         let debug_str = format!("{:?}", service);
 
@@ -612,9 +616,11 @@ mod tests {
 
     #[test]
     fn test_memory_efficiency() {
-        let mut config = Config::default();
-        config.app_id = "test".to_string();
-        config.app_secret = "test".to_string();
+        let config = Config {
+            app_id: "test".to_string(),
+            app_secret: "test".to_string(),
+            ..Default::default()
+        };
         let service = VisitorService::new(config);
         let size = std::mem::size_of_val(&service);
 
@@ -671,16 +677,20 @@ mod tests {
 
     #[test]
     fn test_visitor_service_with_different_app_types() {
-        let mut config_self_built = Config::default();
-        config_self_built.app_id = "app1".to_string();
-        config_self_built.app_secret = "secret1".to_string();
-        config_self_built.app_type = AppType::SelfBuild;
+        let config_self_built = Config {
+            app_id: "app1".to_string(),
+            app_secret: "secret1".to_string(),
+            app_type: AppType::SelfBuild,
+            ..Default::default()
+        };
         let service_self_built = VisitorService::new(config_self_built);
 
-        let mut config_marketplace = Config::default();
-        config_marketplace.app_id = "app2".to_string();
-        config_marketplace.app_secret = "secret2".to_string();
-        config_marketplace.app_type = AppType::Marketplace;
+        let config_marketplace = Config {
+            app_id: "app2".to_string(),
+            app_secret: "secret2".to_string(),
+            app_type: AppType::Marketplace,
+            ..Default::default()
+        };
         let service_marketplace = VisitorService::new(config_marketplace);
 
         // Both services should be created successfully
