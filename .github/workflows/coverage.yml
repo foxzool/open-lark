@@ -10,93 +10,65 @@ env:
   CARGO_TERM_COLOR: always
   CARGO_TOOLCHAIN: stable
   CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
+  MIN_COVERAGE: "54.0"
 
 jobs:
   coverage:
     runs-on: ubuntu-latest
-    # 临时允许失败，避免阻塞主分支；后续定位原因后再收紧
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
-        
+
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ env.CARGO_TOOLCHAIN }}
           components: llvm-tools-preview
-          
+
       - name: Install cargo-llvm-cov
         uses: taiki-e/install-action@v2
         with:
           tool: cargo-llvm-cov
+
       - name: Show cargo-llvm-cov version
         run: cargo llvm-cov --version
-        
-      - name: Cache Cargo registry
-        uses: actions/cache@v4
-        with:
-          path: ~/.cargo/registry
-          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-registry-
-            
-      - name: Cache Cargo index
-        uses: actions/cache@v4
-        with:
-          path: ~/.cargo/git
-          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-index-
-            
-      - name: Cache target directory
-        uses: actions/cache@v4
-        with:
-          path: target
-          key: ${{ runner.os }}-target-cov-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-target-cov-
-            ${{ runner.os }}-target-
-            
+
+      - uses: Swatinem/rust-cache@v2
+
       - name: Install Protoc
         uses: arduino/setup-protoc@v3
         with:
           version: 23.4
           include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Run coverage tests
-        continue-on-error: true
         run: |
+          set -euo pipefail
           cargo llvm-cov clean --workspace
-          echo "Running coverage tests..."
-          # 仅运行库覆盖率，避免 doc-tests & 集成示例导致失败
-          if cargo llvm-cov --all-features --workspace --lib \
+          cargo llvm-cov --workspace --all-features --lib \
             --lcov --output-path target/llvm-cov/lcov.info \
-            --html --output-dir target/llvm-cov/html; then
-            echo "Coverage tests completed successfully"
-          else
-            echo "Coverage tests failed, exit code: $?"
-            echo "Checking target directory..."
-            ls -la target/ || true
-            ls -la target/llvm-cov-target/ || true
-          fi
-            
-      - name: Generate coverage summary
-        if: always()
+            --html --output-dir target/llvm-cov/html
+
+      - name: Collect coverage summary
+        id: coverage
         run: |
+          set -euo pipefail
           echo "## Coverage Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          find_list_file() {
-            find target/llvm-cov-target -maxdepth 1 -name '*-profraw-list' -print -quit 2>/dev/null || true
-          }
 
-          list_file=$(find_list_file)
-          if [ -n "$list_file" ] && [ -s "$list_file" ]; then
-            cargo llvm-cov report --summary-only >> $GITHUB_STEP_SUMMARY
-          else
-            echo "No coverage data available - tests may have failed" >> $GITHUB_STEP_SUMMARY
+          summary=$(cargo llvm-cov report --summary-only)
+          echo "$summary" >> $GITHUB_STEP_SUMMARY
+
+          cov=$(echo "$summary" | awk '/TOTAL/ {for (i=1;i<=NF;i++) if ($i ~ /%$/) { gsub(/%/, "", $i); print $i; exit }}')
+
+          if [ -z "$cov" ]; then
+            echo "Failed to parse coverage result" >&2
+            exit 1
           fi
-          
+
+          printf 'Coverage: %s%%\n' "$cov"
+          echo "value=$cov" >> $GITHUB_OUTPUT
+
       - name: Upload coverage to Codecov (optional)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: codecov/codecov-action@v4
@@ -105,7 +77,7 @@ jobs:
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false
-          
+
       - name: Upload HTML coverage report
         uses: actions/upload-artifact@v4
         if: always()
@@ -113,19 +85,15 @@ jobs:
           name: coverage-report
           path: target/llvm-cov/html/
           retention-days: 30
-          
-      - name: Check coverage threshold (report-only)
-        run: |
-          find_list_file() {
-            find target/llvm-cov-target -maxdepth 1 -name '*-profraw-list' -print -quit 2>/dev/null || true
-          }
 
-          list_file=$(find_list_file)
-          if [ -n "$list_file" ] && [ -s "$list_file" ]; then
-            summary=$(cargo llvm-cov report --summary-only)
-            echo "$summary"
-            cov=$(echo "$summary" | awk '/TOTAL/ {for (i=1;i<=NF;i++) if ($i ~ /%$/) { gsub(/%/, "", $i); print $i; exit }}')
-            echo "Total coverage: ${cov}% (report-only, not enforced)"
-          else
-            echo "No coverage data available - tests may have failed"
-          fi
+      - name: Enforce coverage threshold on main
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          cov=${{ steps.coverage.outputs.value }}
+          awk -v cov="$cov" -v min="$MIN_COVERAGE" 'BEGIN { if (cov+0 < min+0) { printf("Coverage %.2f%% < threshold %.2f%%\n", cov, min); exit 1 } else { printf("Coverage %.2f%% >= threshold %.2f%%\n", cov, min); } }'
+
+      - name: Report coverage threshold (PR)
+        if: github.event_name == 'pull_request'
+        run: |
+          cov=${{ steps.coverage.outputs.value }}
+          printf 'Pull request coverage: %s%% (threshold %s%%, informational only)\n' "$cov" "$MIN_COVERAGE"
