@@ -1,0 +1,77 @@
+name: Quality
+
+on:
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
+
+permissions:
+  contents: read
+
+jobs:
+  fmt:
+    name: Format Check
+    if: ${{ github.event.workflow_run.event == 'pull_request' || github.event.workflow_run.event == 'push' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mirror CI result
+        run: |
+          if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then
+            echo "Upstream CI 运行失败，请查看 CI 工作流日志。"
+            exit 1
+          fi
+          echo "CI 通过，继承状态。"
+
+  clippy:
+    name: Clippy Lint
+    needs: fmt
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mirror CI result
+        run: |
+          if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then
+            echo "Upstream CI 运行失败，请查看 CI 工作流日志。"
+            exit 1
+          fi
+          echo "CI 通过，继承状态。"
+
+  tests:
+    name: Tests
+    needs: clippy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mirror CI result
+        run: |
+          if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then
+            echo "Upstream CI 运行失败，请查看 CI 工作流日志。"
+            exit 1
+          fi
+          echo "CI 通过，继承状态。"
+
+  coverage:
+    name: Coverage (llvm-cov)
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mirror CI result
+        run: |
+          if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then
+            echo "Upstream CI 运行失败，请查看 CI 工作流日志。"
+            exit 1
+          fi
+          echo "CI 通过，继承状态。"
+
+  docs:
+    name: Docs Build
+    needs: coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mirror CI result
+        run: |
+          if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then
+            echo "Upstream CI 运行失败，请查看 CI 工作流日志。"
+            exit 1
+          fi
+          echo "CI 通过，继承状态。"

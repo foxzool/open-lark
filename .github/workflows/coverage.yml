@@ -45,6 +45,7 @@ jobs:
         run: |
           set -euo pipefail
           cargo llvm-cov clean --workspace
+          mkdir -p target/llvm-cov
           cargo llvm-cov --workspace --all-features --lib \
             --lcov --output-path target/llvm-cov/lcov.info
           cargo llvm-cov --workspace --all-features --lib \
