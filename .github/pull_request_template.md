@@ -1,71 +1,36 @@
-# Pull Request
+# 概要
 
-## 📝 Description
+请用 2-3 句概述改动动机与效果。
 
-<!-- Provide a brief description of the changes in this PR -->
+## 变更类型
 
-## 🎯 Type of Change
+- [ ] 🐛 修复
+- [ ] ✨ 新功能
+- [ ] 📚 文档 / 格式
+- [ ] 🔧 构建 / CI
+- [ ] 💥 破坏性改动
 
-<!-- Mark the relevant option with an "x" -->
+## 关联 Issue（可选）
 
-- [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
-- [ ] ✨ New feature (non-breaking change which adds functionality)
-- [ ] 💥 Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] 📚 Documentation update
-- [ ] 🎨 Code style/formatting changes
-- [ ] ♻️ Refactoring (no functional changes)
-- [ ] ⚡ Performance improvements
-- [ ] 🧪 Test additions or modifications
-- [ ] 🔧 Build/CI configuration changes
+Fixes #
 
-## 🔗 Related Issue
+## 验证
 
-<!-- Link to the issue this PR addresses -->
-Fixes #(issue number)
+- [ ] `cargo fmt --all -- --check`
+- [ ] `cargo clippy --workspace --all-targets --all-features`
+- [ ] `cargo test --workspace --all-features`
+- [ ] 其它说明：
 
-## 🧪 Testing
+## 备注（可选）
 
-<!-- Describe the tests you ran to verify your changes -->
+补充 reviewer 需要知道的细节、迁移步骤或回滚方式。
 
-- [ ] Unit tests pass
-- [ ] Integration tests pass
-- [ ] Manual testing completed
-- [ ] Added new tests for new functionality
+<details>
+<summary>维护者检查（如适用）</summary>
 
-### Test Details
+- [ ] 更新 CHANGELOG
+- [ ] 评估版本号调整
+- [ ] 安全影响评估
+- [ ] 更新 API 文档
 
-<!-- Provide details about testing -->
-
-## 📋 Checklist
-
-<!-- Mark completed items with an "x" -->
-
-- [ ] My code follows the project's coding standards
-- [ ] I have performed a self-review of my code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] New and existing unit tests pass locally with my changes
-- [ ] Any dependent changes have been merged and published
-
-## 📸 Screenshots (if applicable)
-
-<!-- Add screenshots to help explain your changes -->
-
-## 🔄 Breaking Changes
-
-<!-- If this PR introduces breaking changes, describe them here -->
-
-## 📖 Additional Notes
-
-<!-- Any additional information that reviewers should know -->
-
----
-
-**For Maintainers:**
-
-- [ ] Update CHANGELOG.md
-- [ ] Consider version bump requirements
-- [ ] Review security implications
-- [ ] Check for API documentation updates needed
+</details>

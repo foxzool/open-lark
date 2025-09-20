@@ -46,7 +46,8 @@ jobs:
           set -euo pipefail
           cargo llvm-cov clean --workspace
           cargo llvm-cov --workspace --all-features --lib \
-            --lcov --output-path target/llvm-cov/lcov.info \
+            --lcov --output-path target/llvm-cov/lcov.info
+          cargo llvm-cov --workspace --all-features --lib \
             --html --output-dir target/llvm-cov/html
 
       - name: Collect coverage summary
