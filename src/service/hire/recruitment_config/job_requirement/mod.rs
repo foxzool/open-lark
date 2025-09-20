@@ -115,8 +115,8 @@ impl JobRequirementService {
     ///     name: "急招Java高级工程师".to_string(),
     ///     job_id: "job_123456".to_string(),
     ///     headcount: 3,
-    ///     description: Some("项目紧急需求，要求有微服务架构经验".to_string(),
-    ///     expected_entry_time: Some("2024-02-01".to_string(),
+    ///     description: Some("项目紧急需求，要求有微服务架构经验".to_string()),
+    ///     expected_entry_time: Some("2024-02-01".to_string()),
     /// };
     ///
     /// let response = client.hire.recruitment_config.job_requirement.create_requirement(request, None).await?;
@@ -216,8 +216,8 @@ impl JobRequirementService {
     /// let request = JobRequirementListRequest {
     ///     page_size: Some(50),
     ///     page_token: None,
-    ///     job_id: Some("job_123456".to_string(),
-    ///     status: Some("active".to_string(),
+    ///     job_id: Some("job_123456".to_string()),
+    ///     status: Some("active".to_string()),
     /// };
     ///
     /// let response = client.hire.recruitment_config.job_requirement.list_requirements(request, None).await?;
@@ -285,8 +285,8 @@ impl JobRequirementService {
     ///     name: "急招Java架构师".to_string(),
     ///     job_id: "job_123456".to_string(),
     ///     headcount: 2,
-    ///     description: Some("项目技术难度较高，需要有分布式系统设计经验".to_string(),
-    ///     expected_entry_time: Some("2024-01-15".to_string(),
+    ///     description: Some("项目技术难度较高，需要有分布式系统设计经验".to_string()),
+    ///     expected_entry_time: Some("2024-01-15".to_string()),
     /// };
     ///
     /// let response = client.hire.recruitment_config.job_requirement.update_requirement(requirement_id, request, None).await?;

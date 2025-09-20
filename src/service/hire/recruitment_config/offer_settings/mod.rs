@@ -267,8 +267,8 @@ impl OfferSettingsService {
     ///
     /// let request = OfferSettingsCreateRequest {
     ///     name: I18nText {
-    ///         zh_cn: Some("技术岗位Offer设置".to_string(),
-    ///         en_us: Some("Technical Position Offer Settings".to_string(),
+    ///         zh_cn: Some("技术岗位Offer设置".to_string()),
+    ///         en_us: Some("Technical Position Offer Settings".to_string()),
     ///         ja_jp: None,
     ///     },
     ///     applicable_job_types: vec!["software_engineer".to_string()],
@@ -393,8 +393,8 @@ impl OfferSettingsService {
     /// let request = OfferSettingsListRequest {
     ///     page_size: Some(50),
     ///     page_token: None,
-    ///     job_type: Some("software_engineer".to_string(),
-    ///     status: Some("active".to_string(),
+    ///     job_type: Some("software_engineer".to_string()),
+    ///     status: Some("active".to_string()),
     /// };
     ///
     /// let response = client.hire.recruitment_config.offer_settings.list_settings(request, None).await?;
@@ -463,8 +463,8 @@ impl OfferSettingsService {
     /// let settings_id = "settings_123456";
     /// let request = OfferSettingsCreateRequest {
     ///     name: I18nText {
-    ///         zh_cn: Some("高级技术岗位Offer设置".to_string(),
-    ///         en_us: Some("Senior Technical Position Offer Settings".to_string(),
+    ///         zh_cn: Some("高级技术岗位Offer设置".to_string()),
+    ///         en_us: Some("Senior Technical Position Offer Settings".to_string()),
     ///         ja_jp: None,
     ///     },
     ///     applicable_job_types: vec!["senior_engineer".to_string()],
