@@ -208,7 +208,7 @@ impl ApiResponseTrait for AccessRecordFaceImageResponse {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{config::Config, constants::AppType, endpoints::Endpoints};
+    use crate::core::{config::Config, constants::AppType};
 
     #[test]
     fn test_access_record_service_creation() {
@@ -445,16 +445,9 @@ mod tests {
     }
 
     #[test]
-    fn test_endpoint_configuration() {
-        // Test that we're using the correct endpoints
-        assert!(!Endpoints::ACS_V1_ACCESS_RECORDS.is_empty());
-        assert!(!Endpoints::ACS_V1_ACCESS_RECORD_FACE_IMAGE.is_empty());
-    }
-
-    #[test]
     fn test_access_token_type_support() {
         // The service should support tenant and user access tokens
-        let supported_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        let supported_types = [AccessTokenType::Tenant, AccessTokenType::User];
         assert!(supported_types.contains(&AccessTokenType::Tenant));
         assert!(supported_types.contains(&AccessTokenType::User));
         assert!(!supported_types.contains(&AccessTokenType::App));

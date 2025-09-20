@@ -758,17 +758,9 @@ mod tests {
     #[test]
     fn test_access_token_type_support() {
         // The user service should support tenant and user access tokens
-        let supported_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        let supported_types = [AccessTokenType::Tenant, AccessTokenType::User];
         assert!(supported_types.contains(&AccessTokenType::Tenant));
         assert!(supported_types.contains(&AccessTokenType::User));
         assert!(!supported_types.contains(&AccessTokenType::App));
-    }
-
-    #[test]
-    fn test_endpoint_configuration() {
-        // Test that we're using the correct endpoints
-        assert!(!Endpoints::ACS_V1_USER_OPERATION.is_empty());
-        assert!(!Endpoints::ACS_V1_USERS.is_empty());
-        assert!(!Endpoints::ACS_V1_USER_FACE_IMAGE.is_empty());
     }
 }

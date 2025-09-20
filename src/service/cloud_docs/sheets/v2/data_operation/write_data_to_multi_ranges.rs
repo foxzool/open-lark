@@ -323,7 +323,7 @@ mod tests {
             .add_value_range("Sheet1!A1", json!("Hello"))
             .add_value_range("Sheet1!B1", json!(42))
             .add_value_range("Sheet1!C1", json!(true))
-            .add_value_range("Sheet1!D1", json!(3.14))
+            .add_value_range("Sheet1!D1", json!(3.14286))
             .build();
 
         assert_eq!(request.spreadsheet_token, "single_cells_test");
@@ -331,7 +331,7 @@ mod tests {
         assert_eq!(request.value_ranges[0].values, json!("Hello"));
         assert_eq!(request.value_ranges[1].values, json!(42));
         assert_eq!(request.value_ranges[2].values, json!(true));
-        assert_eq!(request.value_ranges[3].values, json!(3.14));
+        assert_eq!(request.value_ranges[3].values, json!(3.14286));
     }
 
     #[test]
@@ -394,7 +394,7 @@ mod tests {
 
     #[test]
     fn test_write_data_to_multi_ranges_numeric_precision() {
-        let numeric_data1 = json!([["Integer", "Float"], [42, 3.14159], [-100, -0.001]]);
+        let numeric_data1 = json!([["Integer", "Float"], [42, 3.14286], [-100, -0.001]]);
 
         let numeric_data2 = json!([
             ["Scientific", "Currency"],
