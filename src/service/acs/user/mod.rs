@@ -340,10 +340,7 @@ impl ApiResponseTrait for FaceImageDownloadResponse {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{
-        constants::AppType,
-        config::Config,
-    };
+    use crate::core::{config::Config, constants::AppType};
 
     #[test]
     fn test_user_service_creation() {
@@ -603,7 +600,10 @@ mod tests {
 
     #[test]
     fn test_face_image_download_response_data_format() {
-        assert_eq!(FaceImageDownloadResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            FaceImageDownloadResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 
     #[test]

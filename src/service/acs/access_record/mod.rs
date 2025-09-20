@@ -208,11 +208,7 @@ impl ApiResponseTrait for AccessRecordFaceImageResponse {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{
-        constants::AppType,
-        endpoints::Endpoints,
-        config::Config,
-    };
+    use crate::core::{config::Config, constants::AppType, endpoints::Endpoints};
 
     #[test]
     fn test_access_record_service_creation() {
@@ -333,12 +329,18 @@ mod tests {
 
     #[test]
     fn test_access_record_list_response_data_format() {
-        assert_eq!(AccessRecordListResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            AccessRecordListResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 
     #[test]
     fn test_access_record_face_image_response_data_format() {
-        assert_eq!(AccessRecordFaceImageResponse::data_format(), ResponseFormat::Data);
+        assert_eq!(
+            AccessRecordFaceImageResponse::data_format(),
+            ResponseFormat::Data
+        );
     }
 
     #[test]
@@ -391,7 +393,10 @@ mod tests {
         let deserialized: AccessRecordListResponse =
             serde_json::from_str(&json).expect("Should deserialize");
 
-        assert_eq!(response.access_records.has_more, deserialized.access_records.has_more);
+        assert_eq!(
+            response.access_records.has_more,
+            deserialized.access_records.has_more
+        );
     }
 
     #[test]
@@ -410,9 +415,18 @@ mod tests {
         let deserialized: AccessRecordFaceImageResponse =
             serde_json::from_str(&json).expect("Should deserialize");
 
-        assert_eq!(response.face_image.image_id, deserialized.face_image.image_id);
-        assert_eq!(response.face_image.image_content, deserialized.face_image.image_content);
-        assert_eq!(response.face_image.file_size, deserialized.face_image.file_size);
+        assert_eq!(
+            response.face_image.image_id,
+            deserialized.face_image.image_id
+        );
+        assert_eq!(
+            response.face_image.image_content,
+            deserialized.face_image.image_content
+        );
+        assert_eq!(
+            response.face_image.file_size,
+            deserialized.face_image.file_size
+        );
     }
 
     #[test]
