@@ -577,17 +577,15 @@ mod tests {
             request1.api_request.query_params.get("valueRenderOption"),
             Some(&"FormattedValue".to_string())
         );
-        assert!(request1
+        assert!(!request1
             .api_request
             .query_params
-            .get("user_id_type")
-            .is_none());
+            .contains_key("user_id_type"));
 
-        assert!(request2
+        assert!(!request2
             .api_request
             .query_params
-            .get("valueRenderOption")
-            .is_none());
+            .contains_key("valueRenderOption"));
         assert_eq!(
             request2.api_request.query_params.get("user_id_type"),
             Some(&"open_id".to_string())

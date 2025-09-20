@@ -42,7 +42,7 @@ impl Record {
     pub fn get_text(&self, key: &str) -> Option<String> {
         let value = self.fields.get(key)?;
         let array = value.as_array()?;
-        let first_item = array.get(0)?;
+        let first_item = array.first()?;
         let text = first_item.get("text")?.as_str()?;
         Some(text.to_string())
     }

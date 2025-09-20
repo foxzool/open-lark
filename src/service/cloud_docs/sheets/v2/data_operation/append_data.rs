@@ -319,7 +319,7 @@ mod tests {
         let different_types = vec![
             json!("string"),
             json!(42),
-            json!(3.14),
+            json!(3.14286),
             json!(true),
             json!(null),
             json!([1, 2, 3]),
@@ -449,8 +449,8 @@ mod tests {
         let requests: Vec<AppendDataRequest> = (0..100)
             .map(|i| {
                 AppendDataRequest::builder()
-                    .spreadsheet_token(&format!("token_{}", i))
-                    .range(&format!("Sheet{}!A:B", i))
+                    .spreadsheet_token(format!("token_{}", i))
+                    .range(format!("Sheet{}!A:B", i))
                     .values(json!([[i.to_string(), (i + 1).to_string()]]))
                     .build()
             })

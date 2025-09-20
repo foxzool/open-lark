@@ -318,7 +318,7 @@ mod tests {
     fn test_write_data_to_single_range_numeric_precision() {
         let numeric_data = json!([
             ["Integer", "Float", "Scientific", "Currency"],
-            [42, 3.14159, 1.23e-4, 1299.99],
+            [42, 3.14286, 1.23e-4, 1299.99],
             [-100, -0.001, 6.022e23, 0.01],
             [0, 0.0, 0.0e0, 0.00]
         ]);

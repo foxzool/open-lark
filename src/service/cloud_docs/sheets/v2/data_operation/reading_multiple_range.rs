@@ -602,7 +602,7 @@ mod tests {
                     "majorDimension": "ROWS",
                     "range": "Numbers!C1:D3",
                     "values": [
-                        [42, 3.14159],
+                        [42, 3.14286],
                         [true, false],
                         [null, ""]
                     ],
@@ -629,7 +629,7 @@ mod tests {
         if let serde_json::Value::Array(values) = &numbers_range.values {
             if let serde_json::Value::Array(first_row) = &values[0] {
                 assert_eq!(first_row[0], 42);
-                assert_eq!(first_row[1], 3.14159);
+                assert_eq!(first_row[1], 3.14286);
             }
             if let serde_json::Value::Array(second_row) = &values[1] {
                 assert_eq!(second_row[0], true);
@@ -708,21 +708,19 @@ mod tests {
             request1.api_request.query_params.get("valueRenderOption"),
             Some(&"FormattedValue".to_string())
         );
-        assert!(request1
+        assert!(!request1
             .api_request
             .query_params
-            .get("user_id_type")
-            .is_none());
+            .contains_key("user_id_type"));
 
         assert_eq!(
             request2.api_request.query_params.get("ranges"),
             Some(&"Sheet2!C1:D2,Sheet3!E1:F2".to_string())
         );
-        assert!(request2
+        assert!(!request2
             .api_request
             .query_params
-            .get("valueRenderOption")
-            .is_none());
+            .contains_key("valueRenderOption"));
         assert_eq!(
             request2.api_request.query_params.get("user_id_type"),
             Some(&"open_id".to_string())

@@ -288,7 +288,7 @@ mod tests {
             ("第一页", "B3:E8"),
         ];
 
-        for (_i, (sheet, range)) in sheets_and_ranges.iter().enumerate() {
+        for (sheet, range) in sheets_and_ranges.iter() {
             let full_range = format!("{}!{}", sheet, range);
             let request = MergeCellsRequest::builder()
                 .spreadsheet_token("multi_sheet_test")

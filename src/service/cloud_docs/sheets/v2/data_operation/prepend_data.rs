@@ -421,8 +421,8 @@ mod tests {
         let requests: Vec<PrependDataRequest> = (0..50)
             .map(|i| {
                 PrependDataRequest::builder()
-                    .spreadsheet_token(&format!("efficient_token_{}", i))
-                    .range(&format!("Sheet{}!A:C", i + 1))
+                    .spreadsheet_token(format!("efficient_token_{}", i))
+                    .range(format!("Sheet{}!A:C", i + 1))
                     .values(json!([[
                         format!("Row{}", i),
                         i.to_string(),
@@ -466,7 +466,7 @@ mod tests {
         let comprehensive_data = json!([
             ["Text", "Number", "Boolean", "Null", "Array", "Object"],
             ["Sample", 42, true, null, [1, 2, 3], {"nested": "value"}],
-            ["Unicode: 中文", 3.14159, false, null, [], {}]
+            ["Unicode: 中文", 3.14286, false, null, [], {}]
         ]);
 
         let request = PrependDataRequest::builder()
