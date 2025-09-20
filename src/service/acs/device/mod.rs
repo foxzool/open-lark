@@ -120,10 +120,7 @@ impl ApiResponseTrait for DeviceListResponse {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{
-        constants::AppType,
-        config::Config,
-    };
+    use crate::core::{config::Config, constants::AppType};
 
     #[test]
     fn test_device_service_creation() {
@@ -346,13 +343,19 @@ mod tests {
             device_type: Some(DeviceType::AccessControl),
             ..Default::default()
         };
-        assert_eq!(access_control_request.device_type, Some(DeviceType::AccessControl));
+        assert_eq!(
+            access_control_request.device_type,
+            Some(DeviceType::AccessControl)
+        );
 
         let face_recognition_request = DeviceListRequest {
             device_type: Some(DeviceType::FaceRecognition),
             ..Default::default()
         };
-        assert_eq!(face_recognition_request.device_type, Some(DeviceType::FaceRecognition));
+        assert_eq!(
+            face_recognition_request.device_type,
+            Some(DeviceType::FaceRecognition)
+        );
 
         // Test different device statuses
         let online_request = DeviceListRequest {

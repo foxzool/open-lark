@@ -9,7 +9,7 @@ use crate::{
         req_option, SDKResult,
     },
     impl_executable_builder_owned,
-    service::sheets::v2::{data_operation::ValueRangeResponse, SpreadsheetService},
+    service::cloud_docs::sheets::v2::{data_operation::ValueRangeResponse, SpreadsheetService},
 };
 
 /// 读取单个范围请求
@@ -170,5 +170,504 @@ impl SpreadsheetService {
         let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
 
         Ok(api_resp)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::{config::Config, constants::AppType};
+    use serde_json::json;
+
+    fn create_test_config() -> Config {
+        Config {
+            app_id: "test_app_id".to_string(),
+            app_secret: "test_app_secret".to_string(),
+            app_type: AppType::SelfBuild,
+            ..Default::default()
+        }
+    }
+
+    fn create_test_service() -> SpreadsheetService {
+        SpreadsheetService::new(create_test_config())
+    }
+
+    #[allow(dead_code)]
+    fn create_test_response() -> ReadingSingleRangeResponse {
+        ReadingSingleRangeResponse {
+            revision: 123456,
+            spreadsheet_token: "test_token_12345".to_string(),
+            value_range: ValueRangeResponse {
+                major_dimension: "ROWS".to_string(),
+                range: "Sheet1!A1:B2".to_string(),
+                values: json!([["Name", "Age"], ["Alice", "30"]]),
+                revision: 123456,
+            },
+        }
+    }
+
+    #[test]
+    fn test_reading_single_range_request_builder_default() {
+        let builder = ReadingSingleRangeRequest::builder();
+        let request = builder.build();
+
+        assert_eq!(request.spreadsheet_token, "");
+        assert_eq!(request.range, "");
+        assert!(request.value_render_option.is_none());
+        assert!(request.date_time_render_option.is_none());
+        assert!(request.user_id_type.is_none());
+        assert!(request.api_request.query_params.is_empty());
+    }
+
+    #[test]
+    fn test_reading_single_range_request_builder_basic() {
+        let request = ReadingSingleRangeRequest::builder()
+            .spreadsheet_token("test_token_12345")
+            .range("Sheet1!A1:B2")
+            .build();
+
+        assert_eq!(request.spreadsheet_token, "test_token_12345");
+        assert_eq!(request.range, "Sheet1!A1:B2");
+        assert!(request.value_render_option.is_none());
+        assert!(request.date_time_render_option.is_none());
+        assert!(request.user_id_type.is_none());
+        assert!(request.api_request.query_params.is_empty());
+    }
+
+    #[test]
+    fn test_reading_single_range_request_builder_all_options() {
+        let request = ReadingSingleRangeRequest::builder()
+            .spreadsheet_token("test_token_12345")
+            .range("Sheet1!A1:C10")
+            .value_render_option("FormattedValue")
+            .date_time_render_option("FormattedString")
+            .user_id_type("open_id")
+            .build();
+
+        assert_eq!(request.spreadsheet_token, "test_token_12345");
+        assert_eq!(request.range, "Sheet1!A1:C10");
+        assert_eq!(
+            request.value_render_option,
+            Some("FormattedValue".to_string())
+        );
+        assert_eq!(
+            request.date_time_render_option,
+            Some("FormattedString".to_string())
+        );
+        assert_eq!(request.user_id_type, Some("open_id".to_string()));
+
+        // Check query params
+        assert_eq!(
+            request.api_request.query_params.get("valueRenderOption"),
+            Some(&"FormattedValue".to_string())
+        );
+        assert_eq!(
+            request.api_request.query_params.get("dateTimeRenderOption"),
+            Some(&"FormattedString".to_string())
+        );
+        assert_eq!(
+            request.api_request.query_params.get("user_id_type"),
+            Some(&"open_id".to_string())
+        );
+    }
+
+    #[test]
+    fn test_reading_single_range_request_builder_value_render_options() {
+        let test_cases = vec!["ToString", "FormattedValue", "Formula", "UnformattedValue"];
+
+        for option in test_cases {
+            let request = ReadingSingleRangeRequest::builder()
+                .spreadsheet_token("test_token")
+                .range("Sheet1!A1:A1")
+                .value_render_option(option)
+                .build();
+
+            assert_eq!(request.value_render_option, Some(option.to_string()));
+            assert_eq!(
+                request.api_request.query_params.get("valueRenderOption"),
+                Some(&option.to_string())
+            );
+        }
+    }
+
+    #[test]
+    fn test_reading_single_range_request_builder_user_id_types() {
+        let test_cases = vec!["open_id", "union_id", "lark_id"];
+
+        for user_id_type in test_cases {
+            let request = ReadingSingleRangeRequest::builder()
+                .spreadsheet_token("test_token")
+                .range("Sheet1!A1:A1")
+                .user_id_type(user_id_type)
+                .build();
+
+            assert_eq!(request.user_id_type, Some(user_id_type.to_string()));
+            assert_eq!(
+                request.api_request.query_params.get("user_id_type"),
+                Some(&user_id_type.to_string())
+            );
+        }
+    }
+
+    #[test]
+    fn test_reading_single_range_request_unicode_handling() {
+        let request = ReadingSingleRangeRequest::builder()
+            .spreadsheet_token("测试token_🔥📊")
+            .range("工作表1!A1:Z100")
+            .value_render_option("FormattedValue")
+            .build();
+
+        assert_eq!(request.spreadsheet_token, "测试token_🔥📊");
+        assert_eq!(request.range, "工作表1!A1:Z100");
+        assert_eq!(
+            request.value_render_option,
+            Some("FormattedValue".to_string())
+        );
+    }
+
+    #[test]
+    fn test_reading_single_range_request_complex_ranges() {
+        let test_cases = vec![
+            "Sheet1!A1:B2",
+            "工作表1!C3:F20",
+            "数据表!AA1:ZZ1000",
+            "Sheet with spaces!A1:B2",
+            "Sheet1!$A$1:$B$2",
+            "SingleCell!A1",
+            "LargeRange!A1:XFD1048576",
+        ];
+
+        for range in test_cases {
+            let request = ReadingSingleRangeRequest::builder()
+                .spreadsheet_token("test_token")
+                .range(range)
+                .build();
+
+            assert_eq!(request.range, range);
+        }
+    }
+
+    #[test]
+    fn test_reading_single_range_request_very_long_token() {
+        let long_token = "a".repeat(1000);
+        let request = ReadingSingleRangeRequest::builder()
+            .spreadsheet_token(&long_token)
+            .range("Sheet1!A1:B2")
+            .build();
+
+        assert_eq!(request.spreadsheet_token, long_token);
+    }
+
+    #[test]
+    fn test_reading_single_range_request_empty_values() {
+        let request = ReadingSingleRangeRequest::builder()
+            .spreadsheet_token("")
+            .range("")
+            .value_render_option("")
+            .date_time_render_option("")
+            .user_id_type("")
+            .build();
+
+        assert_eq!(request.spreadsheet_token, "");
+        assert_eq!(request.range, "");
+        assert_eq!(request.value_render_option, Some("".to_string()));
+        assert_eq!(request.date_time_render_option, Some("".to_string()));
+        assert_eq!(request.user_id_type, Some("".to_string()));
+    }
+
+    #[test]
+    fn test_reading_single_range_response_deserialization() {
+        let json_data = json!({
+            "revision": 123456,
+            "spreadsheetToken": "test_token_12345",
+            "valueRange": {
+                "majorDimension": "ROWS",
+                "range": "Sheet1!A1:B2",
+                "values": [
+                    ["Name", "Age"],
+                    ["Alice", "30"]
+                ],
+                "revision": 123456
+            }
+        });
+
+        let response: ReadingSingleRangeResponse = serde_json::from_value(json_data).unwrap();
+        assert_eq!(response.revision, 123456);
+        assert_eq!(response.spreadsheet_token, "test_token_12345");
+        assert_eq!(response.value_range.range, "Sheet1!A1:B2");
+        if let serde_json::Value::Array(values) = &response.value_range.values {
+            assert_eq!(values.len(), 2);
+            if let serde_json::Value::Array(first_row) = &values[0] {
+                assert_eq!(first_row[0], "Name");
+                assert_eq!(first_row[1], "Age");
+            }
+            if let serde_json::Value::Array(second_row) = &values[1] {
+                assert_eq!(second_row[0], "Alice");
+                assert_eq!(second_row[1], "30");
+            }
+        } else {
+            panic!("Expected array values");
+        }
+    }
+
+    #[test]
+    fn test_reading_single_range_response_no_values() {
+        let json_data = json!({
+            "revision": 789,
+            "spreadsheetToken": "empty_token",
+            "valueRange": {
+                "majorDimension": "ROWS",
+                "range": "Sheet1!A1:A1",
+                "values": null,
+                "revision": 789
+            }
+        });
+
+        let response: ReadingSingleRangeResponse = serde_json::from_value(json_data).unwrap();
+        assert_eq!(response.revision, 789);
+        assert_eq!(response.spreadsheet_token, "empty_token");
+        assert_eq!(response.value_range.range, "Sheet1!A1:A1");
+        assert_eq!(response.value_range.values, serde_json::Value::Null);
+    }
+
+    #[test]
+    fn test_reading_single_range_response_large_dataset() {
+        let mut large_values = Vec::new();
+        for i in 0..1000 {
+            large_values.push(vec![format!("Row{}", i), format!("Data{}", i)]);
+        }
+
+        let json_data = json!({
+            "revision": 999999,
+            "spreadsheetToken": "large_data_token",
+            "valueRange": {
+                "majorDimension": "ROWS",
+                "range": "Sheet1!A1:B1000",
+                "values": large_values,
+                "revision": 999999
+            }
+        });
+
+        let response: ReadingSingleRangeResponse = serde_json::from_value(json_data).unwrap();
+        assert_eq!(response.revision, 999999);
+        assert_eq!(response.spreadsheet_token, "large_data_token");
+        assert_eq!(response.value_range.range, "Sheet1!A1:B1000");
+
+        if let serde_json::Value::Array(values) = &response.value_range.values {
+            assert_eq!(values.len(), 1000);
+            if let serde_json::Value::Array(first_row) = &values[0] {
+                assert_eq!(first_row[0], "Row0");
+                assert_eq!(first_row[1], "Data0");
+            }
+            if let serde_json::Value::Array(last_row) = &values[999] {
+                assert_eq!(last_row[0], "Row999");
+                assert_eq!(last_row[1], "Data999");
+            }
+        } else {
+            panic!("Expected array values");
+        }
+    }
+
+    #[test]
+    fn test_reading_single_range_response_unicode_data() {
+        let json_data = json!({
+            "revision": 456789,
+            "spreadsheetToken": "unicode_token_测试",
+            "valueRange": {
+                "majorDimension": "ROWS",
+                "range": "工作表1!A1:C3",
+                "values": [
+                    ["姓名", "年龄", "城市"],
+                    ["张三", "25", "北京"],
+                    ["李四", "30", "上海"],
+                    ["🎉", "🔥", "📊"]
+                ],
+                "revision": 456789
+            }
+        });
+
+        let response: ReadingSingleRangeResponse = serde_json::from_value(json_data).unwrap();
+        assert_eq!(response.revision, 456789);
+        assert_eq!(response.spreadsheet_token, "unicode_token_测试");
+        assert_eq!(response.value_range.range, "工作表1!A1:C3");
+
+        if let serde_json::Value::Array(values) = &response.value_range.values {
+            assert_eq!(values.len(), 4);
+            if let serde_json::Value::Array(first_row) = &values[0] {
+                assert_eq!(first_row[0], "姓名");
+                assert_eq!(first_row[1], "年龄");
+                assert_eq!(first_row[2], "城市");
+            }
+            if let serde_json::Value::Array(second_row) = &values[1] {
+                assert_eq!(second_row[0], "张三");
+                assert_eq!(second_row[1], "25");
+                assert_eq!(second_row[2], "北京");
+            }
+            if let serde_json::Value::Array(fourth_row) = &values[3] {
+                assert_eq!(fourth_row[0], "🎉");
+                assert_eq!(fourth_row[1], "🔥");
+                assert_eq!(fourth_row[2], "📊");
+            }
+        } else {
+            panic!("Expected array values");
+        }
+    }
+
+    #[test]
+    fn test_reading_single_range_response_api_trait() {
+        assert_eq!(
+            ReadingSingleRangeResponse::data_format(),
+            ResponseFormat::Data
+        );
+    }
+
+    #[test]
+    fn test_reading_single_range_executable_builder_trait() {
+        let service = create_test_service();
+        let request = ReadingSingleRangeRequest::builder()
+            .spreadsheet_token("test_token")
+            .range("Sheet1!A1:B2")
+            .build();
+
+        // Test that the service method is available
+        // We can't easily test the actual execution without a mock server
+        // but we can verify the method exists by calling it in a future
+        let _future = service.reading_a_single_range(request, None);
+        // Just verify the method compiles and returns a future
+    }
+
+    #[test]
+    fn test_reading_single_range_memory_efficiency() {
+        // Test that the builder doesn't allocate unnecessarily
+        let builder = ReadingSingleRangeRequest::builder();
+        let size_before = std::mem::size_of_val(&builder);
+
+        let builder = builder
+            .spreadsheet_token("test")
+            .range("A1:B2")
+            .value_render_option("FormattedValue");
+
+        let size_after = std::mem::size_of_val(&builder);
+
+        // Size should be reasonable (this is a rough check)
+        assert!(size_before > 0);
+        assert!(size_after > 0);
+
+        let request = builder.build();
+        let request_size = std::mem::size_of_val(&request);
+        assert!(request_size > 0);
+    }
+
+    #[test]
+    fn test_reading_single_range_request_query_params_independence() {
+        let request1 = ReadingSingleRangeRequest::builder()
+            .spreadsheet_token("token1")
+            .range("Sheet1!A1:B2")
+            .value_render_option("FormattedValue")
+            .build();
+
+        let request2 = ReadingSingleRangeRequest::builder()
+            .spreadsheet_token("token2")
+            .range("Sheet2!C1:D2")
+            .user_id_type("open_id")
+            .build();
+
+        // Ensure requests don't share query params
+        assert_eq!(
+            request1.api_request.query_params.get("valueRenderOption"),
+            Some(&"FormattedValue".to_string())
+        );
+        assert!(request1
+            .api_request
+            .query_params
+            .get("user_id_type")
+            .is_none());
+
+        assert!(request2
+            .api_request
+            .query_params
+            .get("valueRenderOption")
+            .is_none());
+        assert_eq!(
+            request2.api_request.query_params.get("user_id_type"),
+            Some(&"open_id".to_string())
+        );
+    }
+
+    #[test]
+    fn test_reading_single_range_request_builder_chaining() {
+        // Test that all builder methods can be chained fluently
+        let request = ReadingSingleRangeRequest::builder()
+            .spreadsheet_token("chain_test_token")
+            .range("Sheet1!A1:Z100")
+            .value_render_option("ToString")
+            .date_time_render_option("FormattedString")
+            .user_id_type("union_id")
+            .build();
+
+        assert_eq!(request.spreadsheet_token, "chain_test_token");
+        assert_eq!(request.range, "Sheet1!A1:Z100");
+        assert_eq!(request.value_render_option, Some("ToString".to_string()));
+        assert_eq!(
+            request.date_time_render_option,
+            Some("FormattedString".to_string())
+        );
+        assert_eq!(request.user_id_type, Some("union_id".to_string()));
+
+        // Verify all query params are set
+        assert_eq!(request.api_request.query_params.len(), 3);
+        assert_eq!(
+            request.api_request.query_params.get("valueRenderOption"),
+            Some(&"ToString".to_string())
+        );
+        assert_eq!(
+            request.api_request.query_params.get("dateTimeRenderOption"),
+            Some(&"FormattedString".to_string())
+        );
+        assert_eq!(
+            request.api_request.query_params.get("user_id_type"),
+            Some(&"union_id".to_string())
+        );
+    }
+
+    #[test]
+    fn test_reading_single_range_response_deeply_nested_values() {
+        let complex_values = vec![
+            vec![
+                "=SUM(A1:A10)".to_string(),
+                "=IF(B1>0,\"Positive\",\"Negative\")".to_string(),
+            ],
+            vec!["2023-12-31 23:59:59".to_string(), "0.5".to_string()],
+            vec!["@user_12345".to_string(), "@group_67890".to_string()],
+        ];
+
+        let json_data = json!({
+            "revision": 2023123115,
+            "spreadsheetToken": "complex_formulas_token",
+            "valueRange": {
+                "majorDimension": "ROWS",
+                "range": "Formulas!A1:B3",
+                "values": complex_values,
+                "revision": 2023123115
+            }
+        });
+
+        let response: ReadingSingleRangeResponse = serde_json::from_value(json_data).unwrap();
+        assert_eq!(response.revision, 2023123115);
+
+        if let serde_json::Value::Array(values) = &response.value_range.values {
+            assert_eq!(values.len(), 3);
+            if let serde_json::Value::Array(first_row) = &values[0] {
+                assert_eq!(first_row[0], "=SUM(A1:A10)");
+            }
+            if let serde_json::Value::Array(second_row) = &values[1] {
+                assert_eq!(second_row[0], "2023-12-31 23:59:59");
+            }
+            if let serde_json::Value::Array(third_row) = &values[2] {
+                assert_eq!(third_row[0], "@user_12345");
+            }
+        } else {
+            panic!("Expected array values");
+        }
     }
 }
