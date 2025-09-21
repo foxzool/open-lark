@@ -4,32 +4,29 @@
 
 ## 📋 报告索引
 
-### 🎯 API实现状态 (核心报告)
-- **[complete_api_implementation_analysis.md](./complete_api_implementation_analysis.md)** - 🌟 **完整API实现分析报告** (100%覆盖率)
-- **[application_v6_analysis_report.md](./application_v6_analysis_report.md)** - Application v6专项分析报告
-- **[contact_v3_api_implementation_analysis.md](./contact_v3_api_implementation_analysis.md)** - Contact v3专项分析报告
+### 🎯 API实现与覆盖
+- **[complete_api_implementation_analysis.md](./complete_api_implementation_analysis.md)** - 🌟 **完整API实现分析报告**（100%覆盖率）
+- **[api_coverage_verification_report.md](./api_coverage_verification_report.md)** - API覆盖率验证方法与校验流程
+- **[documentation_coverage_analysis_2025-07-01.md](./documentation_coverage_analysis_2025-07-01.md)** - 文档覆盖率与质量分析
+- **[documentation_enhancement_completion_report_2025-01-01.md](./documentation_enhancement_completion_report_2025-01-01.md)** - 文档能力增强阶段总结
+- **[documentation_project_final_summary_2025-01-01.md](./documentation_project_final_summary_2025-01-01.md)** - 文档体系建设最终总结
 
-### 🏗️ 企业功能实现
+### 🏢 企业功能实现
 - **[hire_v1_implementation_report.md](./hire_v1_implementation_report.md)** - 飞书招聘v1完整实现报告
 - **[attendance-v1-implementation-status.md](./attendance-v1-implementation-status.md)** - 考勤v1模块实现状态
+- **[example_strategy_analysis.md](./example_strategy_analysis.md)** - 示例代码组织策略
 
-### 🔧 系统架构与错误处理
+### 🔧 架构与质量保障
+- **[trait_refactoring_final_report.md](./trait_refactoring_final_report.md)** - Trait系统重构最终报告
 - **[error_handling_system_completion_report.md](./error_handling_system_completion_report.md)** - 错误处理系统完成报告
 - **[project_completion_summary.md](./project_completion_summary.md)** - 项目完成总结报告
-- **[trait_refactoring_final_report.md](./trait_refactoring_final_report.md)** - Trait系统重构最终报告
+- **[project_completion_status_2025-01-01.md](./project_completion_status_2025-01-01.md)** - 项目完成状态与质量指标
+- **[doctest_fixes_completion_report_2025-01-01.md](./doctest_fixes_completion_report_2025-01-01.md)** - 文档测试修复总结
 
-### 🔄 架构迁移记录
-- **[bitable_migration_report.md](./bitable_migration_report.md)** - Bitable模块架构迁移记录
-- **[comments_board_migration_report.md](./comments_board_migration_report.md)** - Comments/Board模块迁移记录
-- **[refactor_board_docx_services.md](./refactor_board_docx_services.md)** - Board和Docx服务重构分析
-
-### 📚 开发指南与策略
-- **[api_coverage_verification_report.md](./api_coverage_verification_report.md)** - API覆盖率验证报告
-- **[example_strategy_analysis.md](./example_strategy_analysis.md)** - 示例代码策略分析
-- **[api_documentation_urls_update_report.md](./api_documentation_urls_update_report.md)** - API文档链接更新记录
-
-### 🔧 质量保证工具
-- **[api_consistency_summary.md](./api_consistency_summary.md)** - API设计一致性检查总结
+### 🚀 交付进展与路线图
+- **[final_project_delivery_2025-01-01.md](./final_project_delivery_2025-01-01.md)** - 项目交付结果报告
+- **[phase-2.9-completion-report.md](./phase-2.9-completion-report.md)** - 2.9阶段收官总结
+- **[expansion_roadmap.md](./expansion_roadmap.md)** - 后续能力扩展路线图
 
 ## 🎉 项目完成状态
 
@@ -58,25 +55,14 @@
 
 ## 📂 目录结构
 
-### 当前报告 (12个活跃文档)
-包含项目的最新和核心技术文档，按功能分类：
-- API实现分析 (3个)
-- 企业功能实现 (2个)  
-- 系统架构 (3个)
-- 架构迁移 (3个)
-- 开发指南 (3个)
-- 其他专项 (1个)
+### 当前报告 (16个活跃文档)
+包含项目的最新核心报告，按主题分类：
+- API实现与覆盖（5个）
+- 企业功能实现（3个）
+- 架构与质量保障（5个）
+- 交付进展与路线图（3个）
 
-### archived/ (归档文档)
-```
-archived/
-├── old_analysis_reports/     # 过期的分析报告 (12个)
-│   ├── API分析报告 (4个)
-│   ├── Contact v3报告 (2个)
-│   ├── Hire分析报告 (5个)
-│   └── Application v6报告 (1个)
-└── [其他归档文档]           # 早期版本文档 (5个)
-```
+> ℹ️ 本目录已移除所有过期与归档文件，确保仅保留仍在使用的权威报告。
 
 ## 🔍 使用指南
 
@@ -94,7 +80,7 @@ archived/
 ### 🔧 了解技术架构
 - `trait_refactoring_final_report.md` - 核心架构演进
 - `project_completion_summary.md` - 技术债务清理
-- 各migration报告 - 重要架构变更记录
+- `error_handling_system_completion_report.md` - 错误处理体系落地
 
 ### 📚 开发参考
 - `example_strategy_analysis.md` - 示例代码组织策略
@@ -102,11 +88,10 @@ archived/
 
 ## 📝 文档维护策略
 
-### ✅ 已完成清理 (2025-06-30)
-- **移除重复文档**: 15个过期和重复报告已清理
-- **优化报告结构**: 简化超大文件，提供精简摘要版本
-- **归档设计文档**: 已完成的设计分析报告移至归档
-- **结构优化**: 按功能重新分类组织，保留核心文档
+### ✅ 已完成清理 (2025-09-30)
+- **移除过期文档**: 清理 legacy 归档目录与历史分析报告
+- **优化报告结构**: 刷新索引分类，仅保留仍具参考价值的文档
+- **减少混淆**: 移除生成的覆盖率文件与本地路径信息
 
 ### 🔄 持续维护原则
 - **版本控制**: 保留最新完整版本，归档过期版本
@@ -116,7 +101,7 @@ archived/
 
 ---
 
-**最后更新**: 2025-06-30  
-**项目状态**: 🎉 **100% API覆盖率达成，现代化Builder模式完成** 🎉  
-**报告状态**: ✅ **文档清理完成，结构持续优化** ✅  
-**文档数量**: 当前12个活跃文档，21个归档文档
+**最后更新**: 2025-09-30
+**项目状态**: 🎉 **100% API覆盖率达成，现代化Builder模式完成** 🎉
+**报告状态**: ✅ **最新报告索引已同步，过期内容已移除** ✅
+**文档数量**: 当前16个活跃文档

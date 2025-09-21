@@ -17,5 +17,6 @@ Cargo.lock
 *.lcov
 coverage.lcov
 **/coverage.lcov
+lcov.info
 
 *.changeset
