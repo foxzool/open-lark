@@ -434,11 +434,10 @@ mod tests {
 
     #[test]
     fn test_shift_service_with_custom_config() {
-        let config = Config {
-            app_id: "shift_test_app".to_string(),
-            app_secret: "shift_test_secret".to_string(),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("shift_test_app")
+            .app_secret("shift_test_secret")
+            .build();
 
         let service = ShiftService {
             config: config.clone(),
@@ -539,15 +538,9 @@ mod tests {
 
     #[test]
     fn test_shift_service_config_independence() {
-        let config1 = Config {
-            app_id: "shift_app_1".to_string(),
-            ..Default::default()
-        };
+        let config1 = Config::builder().app_id("shift_app_1").build();
 
-        let config2 = Config {
-            app_id: "shift_app_2".to_string(),
-            ..Default::default()
-        };
+        let config2 = Config::builder().app_id("shift_app_2").build();
 
         let service1 = ShiftService { config: config1 };
         let service2 = ShiftService { config: config2 };

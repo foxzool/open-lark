@@ -166,11 +166,10 @@ mod tests {
 
     #[test]
     fn test_user_approval_service_with_custom_config() {
-        let config = Config {
-            app_id: "approval_test_app".to_string(),
-            app_secret: "approval_test_secret".to_string(),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("approval_test_app")
+            .app_secret("approval_test_secret")
+            .build();
 
         let service = UserApprovalService {
             config: config.clone(),
@@ -321,15 +320,9 @@ mod tests {
 
     #[test]
     fn test_user_approval_service_config_independence() {
-        let config1 = Config {
-            app_id: "approval_app_1".to_string(),
-            ..Default::default()
-        };
+        let config1 = Config::builder().app_id("approval_app_1").build();
 
-        let config2 = Config {
-            app_id: "approval_app_2".to_string(),
-            ..Default::default()
-        };
+        let config2 = Config::builder().app_id("approval_app_2").build();
 
         let service1 = UserApprovalService { config: config1 };
         let service2 = UserApprovalService { config: config2 };

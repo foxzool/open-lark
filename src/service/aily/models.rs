@@ -445,14 +445,9 @@ pub struct ChatMessage {
 }
 
 /// 检索配置
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct RetrievalConfig {
-    /// 检索文档数量
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub top_k: Option<i32>,
-    /// 相似度阈值
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub similarity_threshold: Option<f64>,
+    // TODO: Add fields
 }
 
 /// 数据知识问答结果

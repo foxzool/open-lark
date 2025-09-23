@@ -203,12 +203,11 @@ mod tests {
 
     #[test]
     fn test_ai_service_with_custom_config() {
-        let config = Config {
-            app_id: "ai_test_app".to_string(),
-            app_secret: "ai_test_secret".to_string(),
-            req_timeout: Some(Duration::from_secs(220)),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("ai_test_app")
+            .app_secret("ai_test_secret")
+            .req_timeout(Duration::from_secs(220))
+            .build();
 
         let service = AiService::new(config.clone());
 
@@ -231,15 +230,9 @@ mod tests {
 
     #[test]
     fn test_ai_service_config_independence() {
-        let config1 = Config {
-            app_id: "ai_app_1".to_string(),
-            ..Default::default()
-        };
+        let config1 = Config::builder().app_id("ai_app_1").build();
 
-        let config2 = Config {
-            app_id: "ai_app_2".to_string(),
-            ..Default::default()
-        };
+        let config2 = Config::builder().app_id("ai_app_2").build();
 
         let service1 = AiService::new(config1);
         let service2 = AiService::new(config2);
@@ -280,11 +273,10 @@ mod tests {
 
     #[test]
     fn test_ai_service_config_cloning() {
-        let config = Config {
-            app_id: "clone_test_app".to_string(),
-            app_secret: "clone_test_secret".to_string(),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("clone_test_app")
+            .app_secret("clone_test_secret")
+            .build();
 
         let service = AiService::new(config.clone());
 
@@ -300,10 +292,9 @@ mod tests {
 
     #[test]
     fn test_ai_service_timeout_propagation() {
-        let config = Config {
-            req_timeout: Some(Duration::from_secs(230)),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .req_timeout(Duration::from_secs(230))
+            .build();
 
         let service = AiService::new(config);
 
@@ -356,12 +347,11 @@ mod tests {
 
     #[test]
     fn test_ai_service_config_consistency() {
-        let config = Config {
-            app_id: "consistency_test".to_string(),
-            app_secret: "consistency_secret".to_string(),
-            req_timeout: Some(Duration::from_secs(170)),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("consistency_test")
+            .app_secret("consistency_secret")
+            .req_timeout(Duration::from_secs(170))
+            .build();
 
         let service = AiService::new(config);
 

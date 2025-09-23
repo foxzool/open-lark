@@ -122,6 +122,14 @@ impl SecurityAndComplianceService {
             audit_log: AuditLogService::new(config),
         }
     }
+
+    /// 使用共享配置创建服务（实验性）
+    pub fn new_from_shared(shared: std::sync::Arc<Config>) -> Self {
+        Self {
+            openapi_log: OpenapiLogService::new(shared.as_ref().clone()),
+            audit_log: AuditLogService::new(shared.as_ref().clone()),
+        }
+    }
 }
 
 #[cfg(test)]
@@ -142,12 +150,11 @@ mod tests {
 
     #[test]
     fn test_security_and_compliance_service_with_custom_config() {
-        let config = Config {
-            app_id: "security_test_app".to_string(),
-            app_secret: "security_test_secret".to_string(),
-            req_timeout: Some(Duration::from_secs(180)),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("security_test_app")
+            .app_secret("security_test_secret")
+            .req_timeout(Duration::from_secs(180))
+            .build();
 
         let service = SecurityAndComplianceService::new(config.clone());
 
@@ -169,15 +176,9 @@ mod tests {
 
     #[test]
     fn test_security_and_compliance_service_config_independence() {
-        let config1 = Config {
-            app_id: "security_app_1".to_string(),
-            ..Default::default()
-        };
+        let config1 = Config::builder().app_id("security_app_1").build();
 
-        let config2 = Config {
-            app_id: "security_app_2".to_string(),
-            ..Default::default()
-        };
+        let config2 = Config::builder().app_id("security_app_2").build();
 
         let service1 = SecurityAndComplianceService::new(config1);
         let service2 = SecurityAndComplianceService::new(config2);
@@ -205,11 +206,10 @@ mod tests {
 
     #[test]
     fn test_security_and_compliance_service_config_cloning() {
-        let config = Config {
-            app_id: "clone_test_app".to_string(),
-            app_secret: "clone_test_secret".to_string(),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("clone_test_app")
+            .app_secret("clone_test_secret")
+            .build();
 
         let service = SecurityAndComplianceService::new(config.clone());
 
@@ -221,10 +221,9 @@ mod tests {
 
     #[test]
     fn test_security_and_compliance_service_timeout_propagation() {
-        let config = Config {
-            req_timeout: Some(Duration::from_secs(200)),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .req_timeout(Duration::from_secs(200))
+            .build();
 
         let service = SecurityAndComplianceService::new(config);
 
@@ -265,12 +264,11 @@ mod tests {
 
     #[test]
     fn test_security_and_compliance_service_config_consistency() {
-        let config = Config {
-            app_id: "consistency_test".to_string(),
-            app_secret: "consistency_secret".to_string(),
-            req_timeout: Some(Duration::from_secs(150)),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("consistency_test")
+            .app_secret("consistency_secret")
+            .req_timeout(Duration::from_secs(150))
+            .build();
 
         let service = SecurityAndComplianceService::new(config);
 

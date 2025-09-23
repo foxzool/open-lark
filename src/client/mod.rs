@@ -1,6 +1,10 @@
 use std::time::Duration;
+use std::sync::Arc;
 
-use crate::core::{config::Config, constants::AppType};
+use crate::core::{
+    config::{Config, ConfigBuilder},
+    constants::AppType,
+};
 
 // 条件导入服务
 #[cfg(feature = "acs")]
@@ -149,6 +153,8 @@ pub mod ws_client;
 /// - 更多服务请参考各字段文档
 pub struct LarkClient {
     pub config: Config,
+    /// 共享配置（实验性）：单一 Arc<Config>，用于内部服务扇出以减少 clone
+    shared_config: Arc<Config>,
     // 核心服务 - 使用条件编译
     #[cfg(feature = "acs")]
     pub acs: AcsService,
@@ -272,22 +278,28 @@ pub struct LarkClient {
 ///     .build();
 /// ```
 pub struct LarkClientBuilder {
-    config: Config,
+    config_builder: ConfigBuilder,
 }
 
 impl LarkClientBuilder {
+    /// 获取当前配置构建器（仅测试使用）
+    #[cfg(test)]
+    fn build_config(&self) -> Config {
+        self.config_builder.clone().build()
+    }
+
     /// 设置应用类型
     ///
     /// # 参数
     /// - `app_type`: 应用类型，`AppType::SelfBuild`（自建应用）或`AppType::Marketplace`（商店应用）
     pub fn with_app_type(mut self, app_type: AppType) -> Self {
-        self.config.app_type = app_type;
+        self.config_builder = self.config_builder.app_type(app_type);
         self
     }
 
     /// 设置为商店应用（等同于 `with_app_type(AppType::Marketplace)`）
     pub fn with_marketplace_app(mut self) -> Self {
-        self.config.app_type = AppType::Marketplace;
+        self.config_builder = self.config_builder.app_type(AppType::Marketplace);
         self
     }
 
@@ -296,7 +308,7 @@ impl LarkClientBuilder {
     /// # 参数
     /// - `base_url`: 自定义的API基础URL，默认为官方地址
     pub fn with_open_base_url(mut self, base_url: String) -> Self {
-        self.config.base_url = base_url;
+        self.config_builder = self.config_builder.base_url(base_url);
         self
     }
 
@@ -305,7 +317,7 @@ impl LarkClientBuilder {
     /// # 参数
     /// - `enable`: 是否启用令牌缓存，建议启用以提高性能
     pub fn with_enable_token_cache(mut self, enable: bool) -> Self {
-        self.config.enable_token_cache = enable;
+        self.config_builder = self.config_builder.enable_token_cache(enable);
         self
     }
 
@@ -314,27 +326,23 @@ impl LarkClientBuilder {
     /// # 参数
     /// - `timeout`: 超时时间（秒），None表示使用默认值
     pub fn with_req_timeout(mut self, timeout: Option<f32>) -> Self {
-        self.config.req_timeout = timeout.map(Duration::from_secs_f32);
+        if let Some(timeout) = timeout {
+            self.config_builder = self
+                .config_builder
+                .req_timeout(Duration::from_secs_f32(timeout));
+        }
         self
     }
 
     /// 构建LarkClient实例
     ///
     /// 根据配置的参数创建最终的客户端实例。
-    pub fn build(mut self) -> LarkClient {
-        if let Some(req_timeout) = self.config.req_timeout {
-            self.config.http_client = reqwest::Client::builder()
-                .timeout(req_timeout)
-                .build()
-                .expect("Failed to build HTTP client with timeout")
-        }
-
-        // 创建共享的 Arc<Config> 实例
-        #[allow(unused_variables)]
-        let config = self.config.clone();
-
+    pub fn build(self) -> LarkClient {
+        let config = self.config_builder.build();
+        let shared_config = Arc::new(config.clone());
         LarkClient {
-            config: self.config,
+            config: config.clone(),
+            shared_config: shared_config.clone(),
             // 核心服务 - 使用条件编译
             #[cfg(feature = "acs")]
             acs: AcsService::new(config.clone()),
@@ -347,7 +355,7 @@ impl LarkClientBuilder {
             #[cfg(feature = "apass")]
             apass: ApassService::new(config.clone()),
             #[cfg(feature = "application")]
-            application: ApplicationService::new(config.clone()),
+            application: ApplicationService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "approval")]
             approval: ApprovalService::new(config.clone()),
             #[cfg(feature = "attendance")]
@@ -357,17 +365,17 @@ impl LarkClientBuilder {
             #[cfg(feature = "bot")]
             bot: BotService::new(config.clone()),
             #[cfg(feature = "calendar")]
-            calendar: CalendarService::new(config.clone()),
+            calendar: CalendarService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "cardkit")]
             cardkit: CardkitService::new(config.clone()),
             #[cfg(feature = "contact")]
-            contact: ContactService::new(config.clone()),
+            contact: ContactService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "corehr")]
             corehr: CoreHRService::new(config.clone()),
             #[cfg(feature = "directory")]
-            directory: DirectoryService::new(config.clone()),
+            directory: DirectoryService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "ehr")]
-            ehr: EhrService::new(config.clone()),
+            ehr: EhrService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "elearning")]
             elearning: ELearningService::new(config.clone()),
             #[cfg(feature = "group")]
@@ -379,7 +387,7 @@ impl LarkClientBuilder {
             #[cfg(feature = "human-authentication")]
             human_authentication: HumanAuthenticationService::new(config.clone()),
             #[cfg(feature = "im")]
-            im: ImService::new(config.clone()),
+            im: ImService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "lingo")]
             lingo: LingoService::new(config.clone()),
             #[cfg(feature = "mail")]
@@ -399,15 +407,15 @@ impl LarkClientBuilder {
             #[cfg(feature = "personal-settings")]
             personal_settings: PersonalSettingsService::new(config.clone()),
             #[cfg(feature = "report")]
-            report: ReportService::new(config.clone()),
+            report: ReportService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "search")]
-            search: SearchService::new(config.clone()),
+            search: SearchService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "security-and-compliance")]
-            security_and_compliance: SecurityAndComplianceService::new(config.clone()),
+            security_and_compliance: SecurityAndComplianceService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "task")]
-            task: TaskV2Service::new(config.clone()),
+            task: TaskV2Service::new_from_shared(shared_config.clone()),
             #[cfg(feature = "tenant")]
-            tenant: TenantService::new(config.clone()),
+            tenant: TenantService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "tenant-tag")]
             tenant_tag: TenantTagService::new(config.clone()),
             #[cfg(feature = "trust-party")]
@@ -420,26 +428,26 @@ impl LarkClientBuilder {
             workplace: WorkplaceService::new(config.clone()),
             // 云文档服务聚合
             #[cfg(feature = "cloud-docs")]
-            cloud_docs: CloudDocsService::new(config.clone()),
+            cloud_docs: CloudDocsService::new_from_shared(shared_config.clone()),
             // 向后兼容的字段（重新创建实例）
             #[cfg(feature = "cloud-docs")]
-            assistant: AssistantService::new(config.clone()),
+            assistant: AssistantService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "cloud-docs")]
             docs: DocsService::new(config.clone()),
             #[cfg(feature = "cloud-docs")]
-            drive: DriveService::new(config.clone()),
+            drive: DriveService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "cloud-docs")]
-            sheets: SheetsService::new(config.clone()),
+            sheets: SheetsService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "cloud-docs")]
-            bitable: BitableService::new(config.clone()),
+            bitable: BitableService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "cloud-docs")]
-            wiki: WikiService::new(config.clone()),
+            wiki: WikiService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "cloud-docs")]
-            comments: CommentsService::new(config.clone()),
+            comments: CommentsService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "cloud-docs")]
-            permission: PermissionService::new(config.clone()),
+            permission: PermissionService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "cloud-docs")]
-            board: BoardService::new(config.clone()),
+            board: BoardService::new_from_shared(shared_config.clone()),
         }
     }
 }
@@ -461,12 +469,13 @@ impl LarkClient {
     /// ```
     pub fn builder(app_id: &str, app_secret: &str) -> LarkClientBuilder {
         LarkClientBuilder {
-            config: Config {
-                app_id: app_id.to_string(),
-                app_secret: app_secret.to_string(),
-                ..Default::default()
-            },
+            config_builder: Config::builder().app_id(app_id).app_secret(app_secret),
         }
+    }
+
+    /// 获取共享配置（用于内部服务扇出，减少 clone）
+    pub(crate) fn shared_config(&self) -> Arc<Config> {
+        self.shared_config.clone()
     }
 }
 
@@ -481,70 +490,77 @@ mod tests {
 
     #[test]
     fn test_client_builder_creation() {
-        let builder = LarkClient::builder("test_id", "test_secret");
-        assert_eq!(builder.config.app_id, "test_id");
-        assert_eq!(builder.config.app_secret, "test_secret");
-        assert_eq!(builder.config.app_type, AppType::SelfBuild); // Default
+        let client = LarkClient::builder("test_id", "test_secret").build();
+        assert_eq!(client.config.app_id, "test_id");
+        assert_eq!(client.config.app_secret, "test_secret");
+        assert_eq!(client.config.app_type, AppType::SelfBuild); // Default
     }
 
     #[test]
     fn test_builder_with_app_type() {
-        let builder = create_test_builder().with_app_type(AppType::Marketplace);
-        assert_eq!(builder.config.app_type, AppType::Marketplace);
+        let client = create_test_builder()
+            .with_app_type(AppType::Marketplace)
+            .build();
+        assert_eq!(client.config.app_type, AppType::Marketplace);
     }
 
     #[test]
     fn test_builder_with_marketplace_app() {
-        let builder = create_test_builder().with_marketplace_app();
-        assert_eq!(builder.config.app_type, AppType::Marketplace);
+        let client = create_test_builder().with_marketplace_app().build();
+        assert_eq!(client.config.app_type, AppType::Marketplace);
     }
 
     #[test]
     fn test_builder_with_custom_base_url() {
         let custom_url = "https://custom.api.feishu.cn";
-        let builder = create_test_builder().with_open_base_url(custom_url.to_string());
-        assert_eq!(builder.config.base_url, custom_url);
+        let client = create_test_builder()
+            .with_open_base_url(custom_url.to_string())
+            .build();
+        assert_eq!(client.config.base_url, custom_url);
     }
 
     #[test]
     fn test_builder_with_enable_token_cache() {
-        let builder_enabled = create_test_builder().with_enable_token_cache(true);
-        assert!(builder_enabled.config.enable_token_cache);
+        let client_enabled = create_test_builder().with_enable_token_cache(true).build();
+        assert!(client_enabled.config.enable_token_cache);
 
-        let builder_disabled = create_test_builder().with_enable_token_cache(false);
-        assert!(!builder_disabled.config.enable_token_cache);
+        let client_disabled = create_test_builder().with_enable_token_cache(false).build();
+        assert!(!client_disabled.config.enable_token_cache);
     }
 
     #[test]
     fn test_builder_with_req_timeout() {
         let timeout_seconds = 30.0;
-        let builder = create_test_builder().with_req_timeout(Some(timeout_seconds));
+        let client = create_test_builder()
+            .with_req_timeout(Some(timeout_seconds))
+            .build();
 
         let expected_duration = Duration::from_secs_f32(timeout_seconds);
-        assert_eq!(builder.config.req_timeout, Some(expected_duration));
+        assert_eq!(client.config.req_timeout, Some(expected_duration));
     }
 
     #[test]
     fn test_builder_with_none_timeout() {
-        let builder = create_test_builder().with_req_timeout(None);
-        assert_eq!(builder.config.req_timeout, None);
+        let client = create_test_builder().with_req_timeout(None).build();
+        assert_eq!(client.config.req_timeout, None);
     }
 
     #[test]
     fn test_builder_chaining() {
-        let builder = create_test_builder()
+        let client = create_test_builder()
             .with_app_type(AppType::Marketplace)
             .with_enable_token_cache(true)
             .with_req_timeout(Some(45.0))
-            .with_open_base_url("https://test.api.feishu.cn".to_string());
+            .with_open_base_url("https://test.api.feishu.cn".to_string())
+            .build();
 
-        assert_eq!(builder.config.app_type, AppType::Marketplace);
-        assert!(builder.config.enable_token_cache);
+        assert_eq!(client.config.app_type, AppType::Marketplace);
+        assert!(client.config.enable_token_cache);
         assert_eq!(
-            builder.config.req_timeout,
+            client.config.req_timeout,
             Some(Duration::from_secs_f32(45.0))
         );
-        assert_eq!(builder.config.base_url, "https://test.api.feishu.cn");
+        assert_eq!(client.config.base_url, "https://test.api.feishu.cn");
     }
 
     #[test]
@@ -594,8 +610,9 @@ mod tests {
     #[test]
     fn test_builder_empty_credentials() {
         let builder = LarkClient::builder("", "");
-        assert_eq!(builder.config.app_id, "");
-        assert_eq!(builder.config.app_secret, "");
+        let config = builder.build_config();
+        assert_eq!(config.app_id, "");
+        assert_eq!(config.app_secret, "");
     }
 
     #[test]
@@ -603,9 +620,10 @@ mod tests {
         let app_id = "测试_app_id_🔑";
         let app_secret = "测试_secret_🔐";
         let builder = LarkClient::builder(app_id, app_secret);
+        let config = builder.build_config();
 
-        assert_eq!(builder.config.app_id, app_id);
-        assert_eq!(builder.config.app_secret, app_secret);
+        assert_eq!(config.app_id, app_id);
+        assert_eq!(config.app_secret, app_secret);
     }
 
     #[test]
@@ -613,9 +631,10 @@ mod tests {
         let long_id = "a".repeat(1000);
         let long_secret = "b".repeat(1000);
         let builder = LarkClient::builder(&long_id, &long_secret);
+        let config = builder.build_config();
 
-        assert_eq!(builder.config.app_id, long_id);
-        assert_eq!(builder.config.app_secret, long_secret);
+        assert_eq!(config.app_id, long_id);
+        assert_eq!(config.app_secret, long_secret);
     }
 
     #[test]
@@ -623,9 +642,10 @@ mod tests {
         let special_id = "app-id_123!@#$%^&*()";
         let special_secret = "secret/\\?<>|:\"{}";
         let builder = LarkClient::builder(special_id, special_secret);
+        let config = builder.build_config();
 
-        assert_eq!(builder.config.app_id, special_id);
-        assert_eq!(builder.config.app_secret, special_secret);
+        assert_eq!(config.app_id, special_id);
+        assert_eq!(config.app_secret, special_secret);
     }
 
     #[test]
@@ -654,19 +674,20 @@ mod tests {
 
         let builder2 = create_test_builder().with_app_type(AppType::SelfBuild);
 
-        assert_eq!(builder1.config.app_type, AppType::Marketplace);
-        assert_eq!(builder2.config.app_type, AppType::SelfBuild);
+        assert_eq!(builder1.build_config().app_type, AppType::Marketplace);
+        assert_eq!(builder2.build_config().app_type, AppType::SelfBuild);
     }
 
     #[test]
     fn test_builder_default_values() {
         let builder = create_test_builder();
+        let config = builder.build_config();
 
         // Verify default values match Config defaults
-        assert_eq!(builder.config.app_type, AppType::SelfBuild);
-        assert!(builder.config.enable_token_cache); // Default from Config
-        assert_eq!(builder.config.req_timeout, None);
-        assert!(!builder.config.base_url.is_empty()); // Should have default URL
+        assert_eq!(config.app_type, AppType::SelfBuild);
+        assert!(config.enable_token_cache); // Default from Config
+        assert_eq!(config.req_timeout, None);
+        assert!(!config.base_url.is_empty()); // Should have default URL
     }
 
     #[cfg(feature = "cloud-docs")]

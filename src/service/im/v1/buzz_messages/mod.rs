@@ -8,7 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
@@ -16,6 +16,7 @@ use crate::{
     },
     service::im::v1::models::UserIdType,
 };
+use crate::impl_full_service;
 
 /// 消息加急服务
 pub struct BuzzMessagesService {
@@ -28,6 +29,9 @@ pub struct UrgentAppRequest {
     /// 用户ID列表
     pub user_id_list: Vec<String>,
 }
+
+// 接入统一 Service 抽象（IM v1 - BuzzMessagesService）
+impl_full_service!(BuzzMessagesService, "im.buzz_messages", "v1");
 
 /// 发送短信加急请求  
 #[derive(Debug, Serialize, Deserialize)]
@@ -72,7 +76,7 @@ impl BuzzMessagesService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V1_MESSAGE_URGENT_APP,
+                crate::core::endpoints::im::IM_V1_MESSAGE_URGENT_APP,
                 "message_id",
                 message_id,
             ),
@@ -98,7 +102,7 @@ impl BuzzMessagesService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V1_MESSAGE_URGENT_SMS,
+                crate::core::endpoints::im::IM_V1_MESSAGE_URGENT_SMS,
                 "message_id",
                 message_id,
             ),
@@ -124,7 +128,7 @@ impl BuzzMessagesService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V1_MESSAGE_URGENT_PHONE,
+                crate::core::endpoints::im::IM_V1_MESSAGE_URGENT_PHONE,
                 "message_id",
                 message_id,
             ),

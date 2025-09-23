@@ -137,6 +137,14 @@ impl SearchService {
             v2: v2::V2::new(config),
         }
     }
+
+    /// 使用共享配置（实验性）
+    pub fn new_from_shared(shared: std::sync::Arc<Config>) -> Self {
+        Self {
+            v1: v1::V1::new(shared.as_ref().clone()),
+            v2: v2::V2::new(shared.as_ref().clone()),
+        }
+    }
 }
 
 #[cfg(test)]
@@ -146,10 +154,7 @@ mod tests {
     use crate::core::config::Config;
 
     fn create_test_config() -> Config {
-        Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build()
+        Config::default()
     }
 
     #[test]

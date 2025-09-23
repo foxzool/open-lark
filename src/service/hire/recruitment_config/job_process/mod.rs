@@ -42,16 +42,9 @@ pub struct JobProcessStage {
 }
 
 /// 阶段配置信息
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct StageConfig {
-    /// 允许的操作列表
-    pub allowed_actions: Vec<String>,
-    /// 自动推进设置
-    pub auto_advance: Option<bool>,
-    /// 通知设置
-    pub notification_settings: Option<NotificationSettings>,
-    /// 自定义字段
-    pub custom_fields: Option<serde_json::Value>,
+    // TODO: Add fields
 }
 
 /// 通知设置

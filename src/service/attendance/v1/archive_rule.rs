@@ -211,11 +211,10 @@ mod tests {
 
     #[test]
     fn test_archive_rule_service_with_custom_config() {
-        let config = Config {
-            app_id: "archive_test_app".to_string(),
-            app_secret: "archive_test_secret".to_string(),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("archive_test_app")
+            .app_secret("archive_test_secret")
+            .build();
 
         let service = ArchiveRuleService {
             config: config.clone(),
@@ -311,15 +310,9 @@ mod tests {
 
     #[test]
     fn test_archive_rule_service_config_independence() {
-        let config1 = Config {
-            app_id: "archive_app_1".to_string(),
-            ..Default::default()
-        };
+        let config1 = Config::builder().app_id("archive_app_1").build();
 
-        let config2 = Config {
-            app_id: "archive_app_2".to_string(),
-            ..Default::default()
-        };
+        let config2 = Config::builder().app_id("archive_app_2").build();
 
         let service1 = ArchiveRuleService { config: config1 };
         let service2 = ArchiveRuleService { config: config2 };

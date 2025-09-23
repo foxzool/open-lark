@@ -8,7 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
@@ -16,6 +16,7 @@ use crate::{
     },
     service::im::v1::models::{MessageReaction, UserIdType},
 };
+use crate::impl_full_service;
 
 /// 表情回复服务
 pub struct MessageReactionService {
@@ -28,6 +29,9 @@ pub struct CreateReactionRequest {
     /// 表情类型
     pub emoji_type: String,
 }
+
+// 接入统一 Service 抽象（IM v1 - MessageReactionService）
+impl_full_service!(MessageReactionService, "im.message_reaction", "v1");
 
 /// 获取表情回复响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -66,7 +70,7 @@ impl MessageReactionService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V1_MESSAGE_REACTIONS,
+                crate::core::endpoints::im::IM_V1_MESSAGE_REACTIONS,
                 "message_id",
                 message_id,
             ),
@@ -106,7 +110,7 @@ impl MessageReactionService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V1_MESSAGE_REACTIONS,
+                crate::core::endpoints::im::IM_V1_MESSAGE_REACTIONS,
                 "message_id",
                 message_id,
             ),
@@ -136,7 +140,7 @@ impl MessageReactionService {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_params_from_array(
-                Endpoints::IM_V1_DELETE_MESSAGE_REACTION,
+                crate::core::endpoints::im::IM_V1_DELETE_MESSAGE_REACTION,
                 &[("message_id", message_id), ("reaction_id", reaction_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],

@@ -175,12 +175,11 @@ mod tests {
 
     #[test]
     fn test_verification_service_with_custom_config() {
-        let config = Config {
-            app_id: "verification_test_app".to_string(),
-            app_secret: "verification_test_secret".to_string(),
-            req_timeout: Some(Duration::from_secs(45)),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("verification_test_app")
+            .app_secret("verification_test_secret")
+            .req_timeout(Duration::from_secs(45))
+            .build();
 
         let service = VerificationService::new(config.clone());
 
@@ -200,15 +199,9 @@ mod tests {
 
     #[test]
     fn test_verification_service_config_independence() {
-        let config1 = Config {
-            app_id: "app_1".to_string(),
-            ..Default::default()
-        };
+        let config1 = Config::builder().app_id("app_1").build();
 
-        let config2 = Config {
-            app_id: "app_2".to_string(),
-            ..Default::default()
-        };
+        let config2 = Config::builder().app_id("app_2").build();
 
         let service1 = VerificationService::new(config1);
         let service2 = VerificationService::new(config2);

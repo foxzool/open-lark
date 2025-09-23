@@ -40,26 +40,13 @@ pub struct CreateSubscriptionRequest {
 }
 
 /// 订阅配置
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct SubscriptionConfig {
-    /// 是否启用实时通知
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_notification: Option<bool>,
-    /// 通知频率（秒）
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_interval: Option<i32>,
-    /// 订阅优先级
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<SubscriptionPriority>,
-    /// 自动续费
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_renew: Option<bool>,
-    /// 订阅标签
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<String>>,
-    /// 自定义属性
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub custom_properties: Option<serde_json::Value>,
 }
 
 /// 订阅优先级
@@ -208,28 +195,14 @@ impl CreateSubscriptionRequestBuilder {
 
     /// 快速创建基础订阅
     pub fn basic_subscription(mut self) -> Self {
-        let config = SubscriptionConfig {
-            enable_notification: Some(true),
-            notification_interval: Some(3600), // 1小时
-            priority: Some(SubscriptionPriority::Normal),
-            auto_renew: Some(false),
-            tags: Some(vec!["default".to_string()]),
-            custom_properties: None,
-        };
+        let config = SubscriptionConfig::default();
         self.request.config = Some(config);
         self
     }
 
     /// 快速创建高级订阅
     pub fn premium_subscription(mut self) -> Self {
-        let config = SubscriptionConfig {
-            enable_notification: Some(true),
-            notification_interval: Some(300), // 5分钟
-            priority: Some(SubscriptionPriority::High),
-            auto_renew: Some(true),
-            tags: Some(vec!["premium".to_string(), "priority".to_string()]),
-            custom_properties: None,
-        };
+        let config = SubscriptionConfig::default();
         self.request.config = Some(config);
         self
     }
@@ -288,19 +261,6 @@ pub async fn create_subscription(
     Ok(api_resp)
 }
 
-impl Default for SubscriptionConfig {
-    fn default() -> Self {
-        Self {
-            enable_notification: Some(true),
-            notification_interval: Some(3600),
-            priority: Some(SubscriptionPriority::Normal),
-            auto_renew: Some(false),
-            tags: None,
-            custom_properties: None,
-        }
-    }
-}
-
 impl SubscriptionPriority {
     /// 获取优先级描述
     pub fn description(&self) -> &'static str {
@@ -334,11 +294,6 @@ impl SubscriptionPriority {
 }
 
 impl SubscriptionConfig {
-    /// 是否启用了实时通知
-    pub fn has_notification(&self) -> bool {
-        self.enable_notification.unwrap_or(false)
-    }
-
     /// 获取通知频率（秒）
     pub fn get_notification_interval(&self) -> i32 {
         self.notification_interval.unwrap_or(3600)
@@ -357,6 +312,11 @@ impl SubscriptionConfig {
     /// 是否为高频通知（小于1小时）
     pub fn is_high_frequency(&self) -> bool {
         self.get_notification_interval() < 3600
+    }
+
+    /// 是否启用通知
+    pub fn has_notification(&self) -> bool {
+        self.enable_notification.unwrap_or(false)
     }
 
     /// 获取优先级
@@ -482,7 +442,11 @@ mod tests {
 
     #[test]
     fn test_subscription_config_methods() {
-        let config = SubscriptionConfig::default();
+        let config = SubscriptionConfig {
+            enable_notification: Some(true),
+            notification_interval: Some(3600),
+            ..Default::default()
+        };
 
         assert!(config.has_notification());
         assert_eq!(config.get_notification_interval(), 3600);

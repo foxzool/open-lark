@@ -39,24 +39,24 @@ pub enum ChatMode {
 }
 
 /// 群配置
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
 pub struct ChatConfig {
-    /// 是否允许加入群聊
+    /// 是否可加入
     #[serde(skip_serializing_if = "Option::is_none")]
     pub joinable: Option<bool>,
-    /// 是否允许搜索到群聊
+    /// 是否可搜索
     #[serde(skip_serializing_if = "Option::is_none")]
     pub searchable: Option<bool>,
-    /// 是否允许成员分享群链接
+    /// 是否允许分享
     #[serde(skip_serializing_if = "Option::is_none")]
     pub share_allowed: Option<bool>,
-    /// 是否仅群主可编辑群信息
+    /// 仅群主可编辑
     #[serde(skip_serializing_if = "Option::is_none")]
     pub only_owner_edit: Option<bool>,
-    /// 是否仅群主和群管理员可发起视频会议
+    /// 仅群主可发起视频
     #[serde(skip_serializing_if = "Option::is_none")]
     pub only_owner_video_call: Option<bool>,
-    /// 是否仅群主和群管理员可发送消息
+    /// 仅群主可发言
     #[serde(skip_serializing_if = "Option::is_none")]
     pub only_owner_send_msg: Option<bool>,
 }
@@ -472,12 +472,8 @@ mod tests {
     #[test]
     fn test_chat_config_minimal() {
         let config = ChatConfig {
-            joinable: None,
             searchable: Some(true),
-            share_allowed: None,
-            only_owner_edit: None,
-            only_owner_video_call: None,
-            only_owner_send_msg: None,
+            ..Default::default()
         };
         let json = serde_json::to_string(&config).unwrap();
         assert!(json.contains("\"searchable\":true"));
@@ -487,14 +483,7 @@ mod tests {
 
     #[test]
     fn test_chat_full() {
-        let chat_config = ChatConfig {
-            joinable: Some(true),
-            searchable: Some(true),
-            share_allowed: Some(false),
-            only_owner_edit: Some(true),
-            only_owner_video_call: Some(false),
-            only_owner_send_msg: Some(true),
-        };
+        let chat_config = ChatConfig::default();
 
         let chat = Chat {
             chat_id: Some("oc_123456".to_string()),

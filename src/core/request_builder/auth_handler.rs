@@ -85,13 +85,12 @@ mod tests {
     use reqwest::Client;
 
     fn create_test_config() -> Config {
-        Config {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            app_type: AppType::SelfBuild,
-            enable_token_cache: false,
-            ..Default::default()
-        }
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .enable_token_cache(false)
+            .build()
     }
 
     fn create_test_request_builder() -> RequestBuilder {
@@ -274,8 +273,12 @@ mod tests {
 
     #[tokio::test]
     async fn test_apply_auth_with_cache_enabled() {
-        let mut config = create_test_config();
-        config.enable_token_cache = true;
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .enable_token_cache(true)
+            .build();
 
         let option = RequestOption::default();
         let req_builder = create_test_request_builder();

@@ -10,22 +10,20 @@ use crate::{
         endpoints::{EndpointBuilder, LINGO_DRAFT_CREATE, LINGO_DRAFT_UPDATE},
         http::Transport,
         req_option::RequestOption,
+        trait_system::AsyncServiceOperation,
         SDKResult,
     },
+    impl_basic_service, impl_service_constructor,
     service::lingo::models::{Draft, OuterInfo, RelatedMeta},
 };
 
 /// 草稿管理服务
+#[derive(Debug, Clone)]
 pub struct DraftService {
     pub config: Config,
 }
 
 impl DraftService {
-    /// 创建草稿管理服务实例
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-
     /// 创建草稿
     ///
     /// 创建词条草稿，可以是新词条的草稿或是对现有词条的修改草稿。
@@ -43,15 +41,18 @@ impl DraftService {
         request: DraftCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<DraftCreateResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: LINGO_DRAFT_CREATE.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        <Self as AsyncServiceOperation<DraftCreateRequest, BaseResponse<DraftCreateResponse>>>::execute_with_observability(
+            self, "create_draft", || async {
+            let api_req = ApiRequest {
+                http_method: Method::POST,
+                api_path: LINGO_DRAFT_CREATE.to_string(),
+                supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+                body: serde_json::to_vec(&request)?,
+                ..Default::default()
+            };
 
-        Transport::request(api_req, &self.config, option).await
+            Transport::request(api_req, &self.config, option).await
+        }).await
     }
 
     /// 更新草稿
@@ -73,15 +74,19 @@ impl DraftService {
         request: DraftUpdateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<DraftUpdateResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::PUT,
-            api_path: EndpointBuilder::replace_param(LINGO_DRAFT_UPDATE, "{draft_id}", draft_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        let draft_id = draft_id.to_string(); // 移到闭包外部以避免借用检查问题
+        <Self as AsyncServiceOperation<DraftUpdateRequest, BaseResponse<DraftUpdateResponse>>>::execute_with_observability(
+            self, "update_draft", move || async move {
+            let api_req = ApiRequest {
+                http_method: Method::PUT,
+                api_path: EndpointBuilder::replace_param(LINGO_DRAFT_UPDATE, "{draft_id}", &draft_id),
+                supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+                body: serde_json::to_vec(&request)?,
+                ..Default::default()
+            };
 
-        Transport::request(api_req, &self.config, option).await
+            Transport::request(api_req, &self.config, option).await
+        }).await
     }
 }
 
@@ -157,3 +162,11 @@ impl ApiResponseTrait for DraftUpdateResponse {
         ResponseFormat::Data
     }
 }
+
+// 使用宏实现基础 Service traits
+impl_basic_service!(DraftService, "lingo.draft", "v1");
+impl_service_constructor!(DraftService);
+
+// 实现异步操作支持
+impl AsyncServiceOperation<DraftCreateRequest, BaseResponse<DraftCreateResponse>> for DraftService {}
+impl AsyncServiceOperation<DraftUpdateRequest, BaseResponse<DraftUpdateResponse>> for DraftService {}

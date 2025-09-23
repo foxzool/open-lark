@@ -58,20 +58,31 @@ impl TaskV2Service {
             custom_field_option: CustomFieldOptionService::new(config),
         }
     }
+
+    /// 使用共享配置创建服务（实验性）
+    pub fn new_from_shared(shared: std::sync::Arc<Config>) -> Self {
+        Self {
+            task: TaskService::new(shared.as_ref().clone()),
+            task_subtask: TaskSubtaskService::new(shared.as_ref().clone()),
+            tasklist: TasklistService::new(shared.as_ref().clone()),
+            tasklist_activity_subscription:
+                TasklistActivitySubscriptionService::new(shared.as_ref().clone()),
+            comment: CommentService::new(shared.as_ref().clone()),
+            attachment: AttachmentService::new(shared.as_ref().clone()),
+            section: SectionService::new(shared.as_ref().clone()),
+            custom_field: CustomFieldService::new(shared.as_ref().clone()),
+            custom_field_option: CustomFieldOptionService::new(shared.as_ref().clone()),
+        }
+    }
 }
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use crate::core::constants::AppType;
 
     fn create_test_config() -> Config {
-        Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .app_type(AppType::SelfBuild)
-            .build()
+        Config::default()
     }
 
     #[test]

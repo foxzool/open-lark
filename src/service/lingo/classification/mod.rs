@@ -10,22 +10,20 @@ use crate::{
         endpoints::LINGO_CLASSIFICATION_LIST,
         http::Transport,
         req_option::RequestOption,
+        trait_system::AsyncServiceOperation,
         SDKResult,
     },
+    impl_basic_service, impl_service_constructor,
     service::lingo::models::{Classification, PageResponse},
 };
 
 /// 分类管理服务
+#[derive(Debug, Clone)]
 pub struct ClassificationService {
     pub config: Config,
 }
 
 impl ClassificationService {
-    /// 创建分类管理服务实例
-    pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-
     /// 获取词典分类
     ///
     /// 获取词典中的分类列表，支持分页查询。
@@ -43,30 +41,36 @@ impl ClassificationService {
         request: ClassificationListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ClassificationListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: LINGO_CLASSIFICATION_LIST.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: vec![],
-            ..Default::default()
-        };
+        <Self as AsyncServiceOperation<
+            ClassificationListRequest,
+            BaseResponse<ClassificationListResponse>,
+        >>::execute_with_observability(self, "list_classifications", || async {
+            let mut api_req = ApiRequest {
+                http_method: Method::GET,
+                api_path: LINGO_CLASSIFICATION_LIST.to_string(),
+                supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+                body: vec![],
+                ..Default::default()
+            };
 
-        // 添加查询参数
-        if let Some(page_token) = request.page_token {
-            api_req.query_params.insert("page_token", page_token);
-        }
+            // 添加查询参数
+            if let Some(page_token) = request.page_token {
+                api_req.query_params.insert("page_token", page_token);
+            }
 
-        if let Some(page_size) = request.page_size {
-            api_req
-                .query_params
-                .insert("page_size", page_size.to_string());
-        }
+            if let Some(page_size) = request.page_size {
+                api_req
+                    .query_params
+                    .insert("page_size", page_size.to_string());
+            }
 
-        if let Some(repo_id) = request.repo_id {
-            api_req.query_params.insert("repo_id", repo_id);
-        }
+            if let Some(repo_id) = request.repo_id {
+                api_req.query_params.insert("repo_id", repo_id);
+            }
 
-        Transport::request(api_req, &self.config, option).await
+            Transport::request(api_req, &self.config, option).await
+        })
+        .await
     }
 }
 
@@ -96,4 +100,14 @@ impl ApiResponseTrait for ClassificationListResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
     }
+}
+
+// 使用宏实现基础 Service traits
+impl_basic_service!(ClassificationService, "lingo.classification", "v1");
+impl_service_constructor!(ClassificationService);
+
+// 实现异步操作支持
+impl AsyncServiceOperation<ClassificationListRequest, BaseResponse<ClassificationListResponse>>
+    for ClassificationService
+{
 }

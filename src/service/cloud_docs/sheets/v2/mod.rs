@@ -150,7 +150,10 @@ impl SpreadsheetService {
 /// - 避免频繁的工作表操作
 /// - 及时清理不需要的工作表
 pub struct SpreadsheetSheetService {
+    // 向后兼容：保留原始 Config 字段，便于现有测试/示例访问
     config: Config,
+    // 试点：共享配置引用，后续逐步替换内部使用以降低 clone
+    config_arc: Arc<Config>,
 }
 
 impl SpreadsheetSheetService {
@@ -159,6 +162,15 @@ impl SpreadsheetSheetService {
     /// # 参数
     /// - `config`: 客户端配置
     pub fn new(config: Config) -> Self {
-        Self { config }
+        let config_arc = Arc::new(config.clone());
+        Self { config, config_arc }
     }
 }
+
+impl SpreadsheetSheetService {
+    /// 获取共享配置的引用计数指针（试点接口）
+    pub fn config_shared(&self) -> Arc<Config> {
+        self.config_arc.clone()
+    }
+}
+use std::sync::Arc;

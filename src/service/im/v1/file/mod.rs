@@ -7,7 +7,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::{EndpointBuilder, Endpoints},
+    endpoints::EndpointBuilder,
     error::LarkAPIError,
     http::Transport,
     req_option::RequestOption,
@@ -16,6 +16,7 @@ use crate::core::{
     validation::{validate_file_name, validate_upload_file, ValidateBuilder, ValidationResult},
     SDKResult,
 };
+use crate::impl_full_service;
 use async_trait::async_trait;
 
 /// 文件服务
@@ -68,7 +69,7 @@ impl FileService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::IM_V1_FILES.to_string(),
+            api_path: crate::core::endpoints::im::IM_V1_FILES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: file_data,
@@ -89,7 +90,7 @@ impl FileService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V1_DOWNLOAD_FILE,
+                crate::core::endpoints::im::IM_V1_DOWNLOAD_FILE,
                 "file_key",
                 file_key,
             ),
@@ -112,6 +113,9 @@ impl FileService {
         FileDownloadBuilder::new()
     }
 }
+
+// 接入统一 Service 抽象（IM v1 - FileService）
+impl_full_service!(FileService, "im.file", "v1");
 
 /// 文件上传请求结构
 #[derive(Debug, Clone, Default)]
@@ -309,10 +313,7 @@ mod tests {
     use crate::core::config::Config;
 
     fn create_test_config() -> Config {
-        Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build()
+        Config::default()
     }
 
     #[test]

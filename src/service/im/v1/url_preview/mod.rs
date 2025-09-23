@@ -7,12 +7,13 @@ use crate::core::{
     api_resp::{BaseResponse, EmptyResponse},
     config::Config,
     constants::AccessTokenType,
-    endpoints::{EndpointBuilder, Endpoints},
+    endpoints::EndpointBuilder,
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
     SDKResult,
 };
+use crate::impl_full_service;
 
 /// URL预览服务
 pub struct UrlPreviewService {
@@ -25,6 +26,9 @@ pub struct BatchUpdateUrlPreviewRequest {
     /// URL预览列表
     pub previews: Vec<UrlPreviewInfo>,
 }
+
+// 接入统一 Service 抽象（IM v1 - UrlPreviewService）
+impl_full_service!(UrlPreviewService, "im.url_preview", "v1");
 
 /// URL预览信息
 #[derive(Debug, Serialize, Deserialize)]
@@ -60,7 +64,7 @@ impl UrlPreviewService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V1_MESSAGE_URL_PREVIEW_BATCH_UPDATE,
+                crate::core::endpoints::im::IM_V1_MESSAGE_URL_PREVIEW_BATCH_UPDATE,
                 "message_id",
                 message_id,
             ),

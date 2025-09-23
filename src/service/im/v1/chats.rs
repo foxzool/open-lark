@@ -6,12 +6,12 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::Endpoints,
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
     SDKResult,
 };
+use crate::impl_full_service;
 
 pub struct ChatsService {
     pub config: Config,
@@ -28,7 +28,7 @@ impl ChatsService {
     ) -> SDKResult<ListChatRespData> {
         let mut api_req = list_chat_request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = Endpoints::IM_CHAT_CREATE.to_string();
+        api_req.api_path = crate::core::endpoints::im::IM_CHAT_CREATE.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp: BaseResponse<ListChatRespData> =
@@ -49,6 +49,9 @@ impl ChatsService {
         }
     }
 }
+
+// 接入统一 Service 抽象（IM v1 - ChatsService）
+impl_full_service!(ChatsService, "im.chats", "v1");
 
 pub struct ListChatIterator<'a> {
     service: &'a ChatsService,

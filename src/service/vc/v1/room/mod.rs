@@ -8,7 +8,11 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, VC_ROOM_CREATE, VC_ROOM_LIST, VC_ROOM_SEARCH},
+        endpoints::EndpointBuilder,
+        endpoints_original::{
+            VC_ROOM_CREATE, VC_ROOM_DELETE, VC_ROOM_GET, VC_ROOM_LIST, VC_ROOM_SEARCH,
+            VC_ROOM_UPDATE,
+        },
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -186,11 +190,7 @@ impl RoomService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::VC_ROOM_UPDATE,
-                "{room_id}",
-                room_id,
-            ),
+            api_path: EndpointBuilder::replace_param(VC_ROOM_UPDATE, "{room_id}", room_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -218,11 +218,7 @@ impl RoomService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::VC_ROOM_DELETE,
-                "{room_id}",
-                room_id,
-            ),
+            api_path: EndpointBuilder::replace_param(VC_ROOM_DELETE, "{room_id}", room_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -249,11 +245,7 @@ impl RoomService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::VC_ROOM_GET,
-                "{room_id}",
-                room_id,
-            ),
+            api_path: EndpointBuilder::replace_param(VC_ROOM_GET, "{room_id}", room_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

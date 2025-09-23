@@ -77,4 +77,12 @@ impl SheetsService {
             v3: v3::V3::new(config.clone()),
         }
     }
+
+    /// 使用共享配置（实验性）
+    pub fn new_from_shared(shared: std::sync::Arc<crate::core::config::Config>) -> Self {
+        Self {
+            v2: v2::V2::new(shared.as_ref().clone()),
+            v3: v3::V3::new(shared.as_ref().clone()),
+        }
+    }
 }

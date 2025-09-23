@@ -212,11 +212,10 @@ mod tests {
 
     #[test]
     fn test_job_family_service_creation_with_custom_config() {
-        let config = Config {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_secret".to_string(),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_secret")
+            .build();
         let service = JobFamilyService::new(config);
         assert!(!format!("{:?}", service).is_empty());
     }

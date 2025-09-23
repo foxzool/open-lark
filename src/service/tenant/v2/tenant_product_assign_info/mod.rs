@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY,
+        endpoints_original::TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -36,6 +36,11 @@ impl ApiResponseTrait for GetTenantProductAssignInfoResponse {
 impl TenantProductAssignInfoService {
     pub fn new(config: Config) -> Self {
         Self { config }
+    }
+
+    /// 使用共享配置创建服务实例（实验性）
+    pub fn new_from_shared(shared: std::sync::Arc<Config>) -> Self {
+        Self { config: (*shared).clone() }
     }
 
     /// 获取企业席位信息

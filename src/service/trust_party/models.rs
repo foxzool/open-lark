@@ -165,18 +165,18 @@ pub struct SearchableVisibleRule {
 }
 
 /// 规则配置
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct RuleConfig {
-    /// 可见性设置
+    /// 可见性（如 public/restricted/private）
     #[serde(skip_serializing_if = "Option::is_none")]
     pub visibility: Option<String>,
-    /// 搜索权限设置
+    /// 是否可搜索
     #[serde(skip_serializing_if = "Option::is_none")]
     pub searchable: Option<bool>,
     /// 适用范围
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scope: Option<RuleScope>,
-    /// 例外情况
+    /// 例外对象（用户/部门/组等标识）
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exceptions: Option<Vec<String>>,
 }
@@ -347,8 +347,8 @@ mod tests {
             searchable: Some(true),
             scope: Some(RuleScope {
                 department_ids: Some(vec!["dept_all".to_string()]),
-                user_ids: Some(vec!["admin_001".to_string()]),
-                group_ids: Some(vec!["group_managers".to_string()]),
+                user_ids: None,
+                group_ids: None,
             }),
             exceptions: Some(vec!["sensitive_dept".to_string()]),
         };
@@ -536,10 +536,13 @@ mod tests {
             searchable: Some(true),
             scope: Some(RuleScope {
                 department_ids: Some(vec!["eng_dept".to_string()]),
-                user_ids: Some(vec!["project_manager".to_string()]),
-                group_ids: Some(vec!["external_contractors".to_string()]),
+                user_ids: Some(vec!["user_senior_eng".to_string()]),
+                group_ids: None,
             }),
-            exceptions: Some(vec!["confidential_projects".to_string()]),
+            exceptions: Some(vec![
+                "external_contractors".to_string(),
+                "confidential_projects".to_string(),
+            ]),
         };
 
         let visibility_rule = SearchableVisibleRule {

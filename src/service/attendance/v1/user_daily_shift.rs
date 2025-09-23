@@ -131,11 +131,10 @@ mod tests {
 
     #[test]
     fn test_user_daily_shift_service_with_custom_config() {
-        let config = Config {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_secret".to_string(),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_secret")
+            .build();
         let service = UserDailyShiftService { config };
         assert!(!format!("{:?}", service).is_empty());
     }
@@ -151,10 +150,7 @@ mod tests {
 
     #[test]
     fn test_service_config_access() {
-        let config = Config {
-            app_id: "test_config_access".to_string(),
-            ..Default::default()
-        };
+        let config = Config::builder().app_id("test_config_access").build();
         let service = UserDailyShiftService { config };
         assert_eq!(service.config.app_id, "test_config_access");
     }

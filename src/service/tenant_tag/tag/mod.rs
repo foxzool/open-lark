@@ -200,12 +200,11 @@ mod tests {
 
     #[test]
     fn test_tag_service_with_custom_config() {
-        let config = Config {
-            app_id: "tag_service_app".to_string(),
-            app_secret: "tag_service_secret".to_string(),
-            req_timeout: Some(Duration::from_secs(60)),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("tag_service_app")
+            .app_secret("tag_service_secret")
+            .req_timeout(Duration::from_secs(60))
+            .build();
 
         let service = TagService::new(config.clone());
 

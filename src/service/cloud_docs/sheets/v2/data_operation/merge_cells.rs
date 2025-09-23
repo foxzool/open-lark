@@ -105,12 +105,11 @@ mod tests {
     };
 
     fn create_service() -> SpreadsheetService {
-        let config = Config {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            app_type: AppType::SelfBuild,
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .build();
         SpreadsheetService { config }
     }
 

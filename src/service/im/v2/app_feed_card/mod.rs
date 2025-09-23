@@ -7,7 +7,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::{EndpointBuilder, Endpoints},
+    endpoints::EndpointBuilder,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -89,7 +89,7 @@ impl AppFeedCardService {
     ) -> SDKResult<BaseResponse<CreateAppFeedCardResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::IM_V2_APP_FEED_CARD.to_string(),
+            api_path: crate::core::endpoints::im::IM_V2_APP_FEED_CARD.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -108,7 +108,7 @@ impl AppFeedCardService {
         let api_req = ApiRequest {
             http_method: Method::PUT,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V2_GET_APP_FEED_CARD,
+                crate::core::endpoints::im::IM_V2_GET_APP_FEED_CARD,
                 "card_id",
                 card_id,
             ),
@@ -129,7 +129,7 @@ impl AppFeedCardService {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V2_DELETE_APP_FEED_CARD,
+                crate::core::endpoints::im::IM_V2_DELETE_APP_FEED_CARD,
                 "card_id",
                 card_id,
             ),

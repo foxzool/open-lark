@@ -62,23 +62,16 @@ mod tests {
     use std::collections::HashMap;
 
     fn create_test_config() -> Config {
-        let mut config = Config {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            app_type: AppType::SelfBuild,
-            header: HashMap::new(),
-            ..Default::default()
-        };
+        let mut headers = HashMap::new();
+        headers.insert("X-Global-Header".to_string(), "global-value".to_string());
+        headers.insert("X-App-Version".to_string(), "1.0.0".to_string());
 
-        // Add some global headers
-        config
-            .header
-            .insert("X-Global-Header".to_string(), "global-value".to_string());
-        config
-            .header
-            .insert("X-App-Version".to_string(), "1.0.0".to_string());
-
-        config
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .header(headers)
+            .build()
     }
 
     fn create_test_request_option() -> RequestOption {
@@ -132,8 +125,12 @@ mod tests {
     #[test]
     fn test_build_headers_with_empty_headers() {
         let req_builder = create_test_request_builder();
-        let mut config = create_test_config();
-        config.header.clear(); // No global headers
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .header(HashMap::new()) // Empty headers
+            .build();
 
         let mut option = create_test_request_option();
         option.header.clear(); // No custom headers
@@ -159,10 +156,17 @@ mod tests {
     #[test]
     fn test_build_headers_header_precedence() {
         let req_builder = create_test_request_builder();
-        let mut config = create_test_config();
-        config
-            .header
-            .insert("X-Common-Header".to_string(), "config-value".to_string());
+        let mut config_headers = HashMap::new();
+        config_headers.insert("X-Global-Header".to_string(), "global-value".to_string());
+        config_headers.insert("X-App-Version".to_string(), "1.0.0".to_string());
+        config_headers.insert("X-Common-Header".to_string(), "config-value".to_string());
+
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .header(config_headers)
+            .build();
 
         let mut option = create_test_request_option();
         option
@@ -251,14 +255,25 @@ mod tests {
     #[test]
     fn test_build_headers_with_large_number_of_headers() {
         let req_builder = create_test_request_builder();
-        let mut config = create_test_config();
-        let mut option = create_test_request_option();
 
-        // Add many headers to test performance
+        // Pre-create headers for config
+        let mut config_headers = HashMap::new();
+        config_headers.insert("X-Global-Header".to_string(), "global-value".to_string());
+        config_headers.insert("X-App-Version".to_string(), "1.0.0".to_string());
         for i in 0..50 {
-            config
-                .header
-                .insert(format!("X-Config-Header-{i}"), format!("config-value-{i}"));
+            config_headers.insert(format!("X-Config-Header-{i}"), format!("config-value-{i}"));
+        }
+
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .header(config_headers)
+            .build();
+
+        let mut option = create_test_request_option();
+        // Add many headers to option
+        for i in 0..50 {
             option
                 .header
                 .insert(format!("X-Option-Header-{i}"), format!("option-value-{i}"));
@@ -273,17 +288,26 @@ mod tests {
     #[test]
     fn test_build_headers_with_special_characters() {
         let req_builder = create_test_request_builder();
-        let mut config = create_test_config();
-        let mut option = create_test_request_option();
 
+        // Pre-create config headers with special characters
+        let mut config_headers = HashMap::new();
+        config_headers.insert("X-Global-Header".to_string(), "global-value".to_string());
+        config_headers.insert("X-App-Version".to_string(), "1.0.0".to_string());
+        config_headers.insert("X-Unicode".to_string(), "测试中文".to_string());
+
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .header(config_headers)
+            .build();
+
+        let mut option = create_test_request_option();
         // Add headers with special characters
         option.header.insert(
             "X-Special-Chars".to_string(),
             "value with spaces & symbols!".to_string(),
         );
-        config
-            .header
-            .insert("X-Unicode".to_string(), "测试中文".to_string());
 
         let result = HeaderBuilder::build_headers(req_builder, &config, &option);
 

@@ -176,16 +176,11 @@ impl SpreadsheetService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{config::Config, constants::AppType};
+    use crate::core::config::Config;
     use serde_json::json;
 
     fn create_test_config() -> Config {
-        Config {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            app_type: AppType::SelfBuild,
-            ..Default::default()
-        }
+        Config::default()
     }
 
     fn create_test_service() -> SpreadsheetService {

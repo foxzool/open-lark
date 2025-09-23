@@ -849,7 +849,7 @@ impl ApiResponseTrait for TenantAccessTokenResp {
 mod tests {
     use super::*;
     use crate::core::{config::Config, constants::AppType};
-    use std::{collections::HashMap, sync::Arc, time::Duration};
+    use std::{sync::Arc, time::Duration};
     use tokio::sync::Mutex;
 
     #[test]
@@ -892,20 +892,14 @@ mod tests {
     #[tokio::test]
     async fn test_get_app_access_token_cache_miss_does_not_error() {
         let manager = TokenManager::new();
-        let config = Config {
-            app_id: "test_app".to_string(),
-            app_secret: "test_secret".to_string(),
-            app_type: AppType::SelfBuild,
-            base_url: "https://open.feishu.cn".to_string(),
-            http_client: reqwest::Client::new(),
-            enable_token_cache: true,
-            req_timeout: Some(Duration::from_secs(30)),
-            header: HashMap::new(),
-            token_manager: Arc::new(Mutex::new(TokenManager::new())),
-            app_ticket_manager: Arc::new(Mutex::new(
-                crate::core::app_ticket_manager::AppTicketManager::new(),
-            )),
-        };
+        let config = Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .app_type(AppType::SelfBuild)
+            .base_url("https://open.feishu.cn")
+            .enable_token_cache(true)
+            .req_timeout(Duration::from_secs(30))
+            .build();
 
         let app_ticket_manager = Arc::new(Mutex::new(
             crate::core::app_ticket_manager::AppTicketManager::new(),

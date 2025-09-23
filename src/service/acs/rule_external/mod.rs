@@ -248,11 +248,10 @@ mod tests {
 
     #[test]
     fn test_rule_external_service_creation() {
-        let config = Config {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_secret".to_string(),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_secret")
+            .build();
         let service = RuleExternalService::new(config);
         assert_eq!(service.config.app_id, "test_app_id");
         assert_eq!(service.config.app_secret, "test_secret");
@@ -267,12 +266,11 @@ mod tests {
 
     #[test]
     fn test_rule_external_service_with_marketplace_config() {
-        let config = Config {
-            app_id: "cli_rule_test".to_string(),
-            app_secret: "rule_secret".to_string(),
-            app_type: AppType::Marketplace,
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("cli_rule_test")
+            .app_secret("rule_secret")
+            .app_type(AppType::Marketplace)
+            .build();
         let service = RuleExternalService::new(config);
         assert_eq!(service.config.app_type, AppType::Marketplace);
         assert_eq!(service.config.app_id, "cli_rule_test");

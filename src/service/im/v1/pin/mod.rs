@@ -8,7 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
@@ -16,6 +16,7 @@ use crate::{
     },
     service::im::v1::models::{Pin, UserIdType},
 };
+use crate::impl_full_service;
 
 /// Pin消息服务
 pub struct PinService {
@@ -28,6 +29,9 @@ pub struct CreatePinResponse {
     /// Pin信息
     pub pin: PinInfo,
 }
+
+// 接入统一 Service 抽象（IM v1 - PinService）
+impl_full_service!(PinService, "im.pin", "v1");
 
 /// Pin信息
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -87,7 +91,7 @@ impl PinService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::IM_V1_PINS.to_string(),
+            api_path: crate::core::endpoints::im::IM_V1_PINS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -113,7 +117,7 @@ impl PinService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(Endpoints::IM_V1_DELETE_PIN, "pin_id", pin_id),
+            api_path: EndpointBuilder::replace_param(crate::core::endpoints::im::IM_V1_DELETE_PIN, "pin_id", pin_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -147,7 +151,7 @@ impl PinService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::IM_V1_PINS.to_string(),
+            api_path: crate::core::endpoints::im::IM_V1_PINS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

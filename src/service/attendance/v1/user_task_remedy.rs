@@ -185,11 +185,10 @@ mod tests {
 
     #[test]
     fn test_user_task_remedy_service_with_custom_config() {
-        let config = Config {
-            app_id: "remedy_test_app".to_string(),
-            app_secret: "remedy_test_secret".to_string(),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("remedy_test_app")
+            .app_secret("remedy_test_secret")
+            .build();
 
         let service = UserTaskRemedyService {
             config: config.clone(),
@@ -385,15 +384,9 @@ mod tests {
 
     #[test]
     fn test_user_task_remedy_service_config_independence() {
-        let config1 = Config {
-            app_id: "remedy_app_1".to_string(),
-            ..Default::default()
-        };
+        let config1 = Config::builder().app_id("remedy_app_1").build();
 
-        let config2 = Config {
-            app_id: "remedy_app_2".to_string(),
-            ..Default::default()
-        };
+        let config2 = Config::builder().app_id("remedy_app_2").build();
 
         let service1 = UserTaskRemedyService { config: config1 };
         let service2 = UserTaskRemedyService { config: config2 };

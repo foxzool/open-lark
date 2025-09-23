@@ -260,14 +260,9 @@ impl CommentService {
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use crate::core::constants::AppType;
 
     fn create_test_config() -> Config {
-        Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .app_type(AppType::SelfBuild)
-            .build()
+        Config::default()
     }
 
     #[test]

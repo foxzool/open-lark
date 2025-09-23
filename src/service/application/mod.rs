@@ -170,6 +170,11 @@ impl ApplicationService {
             v6: v6::V6::new(config),
         }
     }
+
+    /// 使用共享配置创建服务（实验性）
+    pub fn new_from_shared(shared: std::sync::Arc<Config>) -> Self {
+        Self { v6: v6::V6::new(shared.as_ref().clone()) }
+    }
 }
 
 #[cfg(test)]
@@ -195,12 +200,11 @@ mod tests {
 
     #[test]
     fn test_application_service_with_custom_config() {
-        let config = Config {
-            app_id: "application_test_app".to_string(),
-            app_secret: "application_test_secret".to_string(),
-            req_timeout: Some(Duration::from_secs(300)),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("application_test_app")
+            .app_secret("application_test_secret")
+            .req_timeout(Duration::from_secs(300))
+            .build();
 
         let service = ApplicationService::new(config);
 
@@ -216,15 +220,9 @@ mod tests {
 
     #[test]
     fn test_application_service_config_independence() {
-        let config1 = Config {
-            app_id: "application_app_1".to_string(),
-            ..Default::default()
-        };
+        let config1 = Config::builder().app_id("application_app_1").build();
 
-        let config2 = Config {
-            app_id: "application_app_2".to_string(),
-            ..Default::default()
-        };
+        let config2 = Config::builder().app_id("application_app_2").build();
 
         let service1 = ApplicationService::new(config1);
         let service2 = ApplicationService::new(config2);
@@ -253,11 +251,10 @@ mod tests {
 
     #[test]
     fn test_application_service_config_cloning() {
-        let config = Config {
-            app_id: "clone_test_app".to_string(),
-            app_secret: "clone_test_secret".to_string(),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("clone_test_app")
+            .app_secret("clone_test_secret")
+            .build();
 
         let service = ApplicationService::new(config.clone());
 
@@ -273,10 +270,9 @@ mod tests {
 
     #[test]
     fn test_application_service_timeout_propagation() {
-        let config = Config {
-            req_timeout: Some(Duration::from_secs(310)),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .req_timeout(Duration::from_secs(310))
+            .build();
 
         let service = ApplicationService::new(config);
 
@@ -306,12 +302,11 @@ mod tests {
 
     #[test]
     fn test_application_service_config_consistency() {
-        let config = Config {
-            app_id: "consistency_test".to_string(),
-            app_secret: "consistency_secret".to_string(),
-            req_timeout: Some(Duration::from_secs(200)),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("consistency_test")
+            .app_secret("consistency_secret")
+            .req_timeout(Duration::from_secs(200))
+            .build();
 
         let service = ApplicationService::new(config);
 

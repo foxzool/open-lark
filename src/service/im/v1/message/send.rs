@@ -4,7 +4,7 @@ use crate::{
     core::{
         api_resp::BaseResponse,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
@@ -30,7 +30,7 @@ impl MessageService {
     ) -> SDKResult<Message> {
         let mut api_req = create_message_request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = Endpoints::IM_V1_SEND_MESSAGE.to_string();
+        api_req.api_path = crate::core::endpoints::im::IM_V1_SEND_MESSAGE.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp: BaseResponse<CreateMessageResp> =
@@ -49,7 +49,7 @@ impl MessageService {
         let api_req = crate::core::api_req::ApiRequest {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V1_DELETE_MESSAGE,
+                crate::core::endpoints::im::IM_V1_DELETE_MESSAGE,
                 "message_id",
                 message_id,
             ),
@@ -77,7 +77,7 @@ impl MessageService {
         let mut api_req = update_message_request.api_req;
         api_req.http_method = Method::PATCH;
         api_req.api_path = EndpointBuilder::replace_param(
-            Endpoints::IM_V1_UPDATE_MESSAGE,
+            crate::core::endpoints::im::IM_V1_UPDATE_MESSAGE,
             "message_id",
             message_id,
         );
@@ -103,7 +103,7 @@ impl MessageService {
         let mut api_req = reply_message_request.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = EndpointBuilder::replace_param(
-            Endpoints::IM_V1_REPLY_MESSAGE,
+            crate::core::endpoints::im::IM_V1_REPLY_MESSAGE,
             "message_id",
             message_id,
         );
