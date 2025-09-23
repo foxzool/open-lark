@@ -13,6 +13,7 @@ use crate::{
     },
     service::contact::models::*,
 };
+use crate::impl_full_service;
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 
@@ -27,6 +28,10 @@ use serde::{Deserialize, Serialize};
 pub struct UserService {
     config: Config,
 }
+
+// Service 抽象接入（标准样例）：Contact v3 UserService
+// 要求结构体包含 `config: Config` 字段
+impl_full_service!(UserService, "contact.user", "v3");
 
 impl UserService {
     pub fn new(config: Config) -> Self {
@@ -673,12 +678,11 @@ mod tests {
     };
 
     fn create_test_config() -> Config {
-        Config {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            base_url: "https://test.example.com".to_string(),
-            ..Default::default()
-        }
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .base_url("https://test.example.com")
+            .build()
     }
 
     fn create_test_user() -> User {

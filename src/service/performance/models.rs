@@ -286,23 +286,14 @@ pub struct ReviewItem {
 }
 
 /// 标签填写题配置
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct TagQuestionConfig {
     /// 配置ID
-    pub config_id: String,
-    /// 评估项ID
-    pub item_id: String,
-    /// 标签选项列表
-    pub tag_options: Vec<String>,
-    /// 最小选择数量
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub min_selection: Option<i32>,
-    /// 最大选择数量
+    pub config_id: Option<String>,
+    /// 可选标签列表
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub max_selection: Option<i32>,
-    /// 是否允许自定义标签
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub allow_custom: Option<bool>,
+    pub tags: Option<Vec<String>>,
 }
 
 /// 指标类型
@@ -840,16 +831,8 @@ mod tests {
     #[test]
     fn test_tag_question_config() {
         let config = TagQuestionConfig {
-            config_id: "cfg123".to_string(),
-            item_id: "item456".to_string(),
-            tag_options: vec![
-                "团队合作".to_string(),
-                "创新能力".to_string(),
-                "执行力".to_string(),
-            ],
-            min_selection: Some(1),
-            max_selection: Some(3),
-            allow_custom: Some(true),
+            config_id: Some("cfg123".to_string()),
+            tags: Some(vec!["团队合作".to_string(), "创新能力".to_string()]),
         };
         let json = serde_json::to_string(&config).unwrap();
         assert!(json.contains("cfg123"));

@@ -14,6 +14,7 @@ use crate::core::{
     validation::{self, ValidationResult},
     SDKResult,
 };
+use crate::impl_full_service;
 
 pub struct UserService {
     config: Config,
@@ -87,6 +88,8 @@ impl UserService {
         self.search_user(builder.build(), option).await
     }
 }
+
+impl_full_service!(UserService, "search.user", "v1");
 
 /// 搜索用户请求
 #[derive(Default, Clone)]

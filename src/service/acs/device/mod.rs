@@ -124,11 +124,10 @@ mod tests {
 
     #[test]
     fn test_device_service_creation() {
-        let config = Config {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_secret".to_string(),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_secret")
+            .build();
         let service = DeviceService::new(config);
         assert_eq!(service.config.app_id, "test_app_id");
         assert_eq!(service.config.app_secret, "test_secret");
@@ -143,12 +142,11 @@ mod tests {
 
     #[test]
     fn test_device_service_with_marketplace_config() {
-        let config = Config {
-            app_id: "cli_device_test".to_string(),
-            app_secret: "device_secret".to_string(),
-            app_type: AppType::Marketplace,
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("cli_device_test")
+            .app_secret("device_secret")
+            .app_type(AppType::Marketplace)
+            .build();
         let service = DeviceService::new(config);
         assert_eq!(service.config.app_type, AppType::Marketplace);
         assert_eq!(service.config.app_id, "cli_device_test");

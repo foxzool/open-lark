@@ -8,8 +8,9 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{
-            EndpointBuilder, VC_MEETING_END, VC_MEETING_GET, VC_MEETING_INVITE, VC_MEETING_KICKOUT,
+        endpoints::EndpointBuilder,
+        endpoints_original::{
+            VC_MEETING_END, VC_MEETING_GET, VC_MEETING_INVITE, VC_MEETING_KICKOUT,
             VC_MEETING_LIST_BY_NO, VC_MEETING_SET_HOST,
         },
         http::Transport,
@@ -310,12 +311,11 @@ mod tests {
     use crate::service::vc::models::{Meeting, MeetingStatus, UserInfo};
 
     fn create_test_config() -> Config {
-        Config {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            base_url: "https://test.example.com".to_string(),
-            ..Default::default()
-        }
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .base_url("https://test.example.com")
+            .build()
     }
 
     fn create_test_meeting() -> Meeting {
@@ -365,16 +365,14 @@ mod tests {
 
     #[test]
     fn test_meeting_service_config_independence() {
-        let config1 = Config {
-            app_id: "app1".to_string(),
-            app_secret: "secret1".to_string(),
-            ..Default::default()
-        };
-        let config2 = Config {
-            app_id: "app2".to_string(),
-            app_secret: "secret2".to_string(),
-            ..Default::default()
-        };
+        let config1 = Config::builder()
+            .app_id("app1")
+            .app_secret("secret1")
+            .build();
+        let config2 = Config::builder()
+            .app_id("app2")
+            .app_secret("secret2")
+            .build();
 
         let service1 = MeetingService::new(config1);
         let service2 = MeetingService::new(config2);
@@ -631,12 +629,11 @@ mod tests {
 
     #[test]
     fn test_meeting_service_with_unicode_config() {
-        let config = Config {
-            app_id: "测试应用".to_string(),
-            app_secret: "测试密钥".to_string(),
-            base_url: "https://测试域名.com".to_string(),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("测试应用")
+            .app_secret("测试密钥")
+            .base_url("https://测试域名.com")
+            .build();
         let service = MeetingService::new(config);
 
         assert_eq!(service.config.app_id, "测试应用");

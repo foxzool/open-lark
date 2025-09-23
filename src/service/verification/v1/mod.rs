@@ -211,12 +211,11 @@ mod tests {
 
     #[test]
     fn test_verification_with_custom_config() {
-        let config = Config {
-            app_id: "test_verification_app".to_string(),
-            app_secret: "test_secret".to_string(),
-            req_timeout: Some(Duration::from_secs(30)),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("test_verification_app")
+            .app_secret("test_secret")
+            .req_timeout(Duration::from_secs(30))
+            .build();
 
         let v1 = V1::new(config.clone());
 

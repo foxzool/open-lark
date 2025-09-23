@@ -116,16 +116,9 @@ pub struct WebsiteConfiguration {
 }
 
 /// SEO配置
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct SeoConfig {
-    /// 网站标题
-    pub title: Option<I18nText>,
-    /// 网站关键词
-    pub keywords: Option<I18nText>,
-    /// 网站描述
-    pub description: Option<I18nText>,
-    /// 网站图标URL
-    pub favicon_url: Option<String>,
+    // TODO: Add fields
 }
 
 /// 官网职位发布请求
@@ -613,12 +606,7 @@ impl WebsiteService {
     ///     }),
     ///     contact_email: Some("careers@techcorp.com".to_string()),
     ///     enabled: Some(true),
-    ///     seo_config: Some(SeoConfig {
-    ///         title: Some(I18nText {
-    ///             zh_cn: Some("加入我们 - 某科技公司".to_string()),
-    ///             en_us: Some("Join Us - TechCorp".to_string()),
-    ///             ja_jp: None,
-    ///         }),
+    ///     seo_config: Some(SeoConfig::default()),
     ///         keywords: Some(I18nText {
     ///             zh_cn: Some("招聘,技术,工程师".to_string()),
     ///             en_us: Some("careers,technology,engineer".to_string()),

@@ -76,12 +76,11 @@ mod tests {
     use crate::service::attendance::v1::models::LeaveAccrualRecordPatch;
 
     fn create_test_config() -> Config {
-        Config {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            base_url: "https://test.api.com".to_string(),
-            ..Default::default()
-        }
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .base_url("https://test.api.com")
+            .build()
     }
 
     fn create_test_service() -> LeaveAccrualRecordService {

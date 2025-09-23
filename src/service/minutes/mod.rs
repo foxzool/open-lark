@@ -175,12 +175,11 @@ mod tests {
 
     #[test]
     fn test_minutes_service_with_custom_config() {
-        let config = Config {
-            app_id: "minutes_test_app".to_string(),
-            app_secret: "minutes_test_secret".to_string(),
-            req_timeout: Some(Duration::from_secs(120)),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("minutes_test_app")
+            .app_secret("minutes_test_secret")
+            .req_timeout(Duration::from_secs(120))
+            .build();
 
         let service = MinutesService::new(config.clone());
 
@@ -203,15 +202,9 @@ mod tests {
 
     #[test]
     fn test_minutes_service_config_independence() {
-        let config1 = Config {
-            app_id: "minutes_app_1".to_string(),
-            ..Default::default()
-        };
+        let config1 = Config::builder().app_id("minutes_app_1").build();
 
-        let config2 = Config {
-            app_id: "minutes_app_2".to_string(),
-            ..Default::default()
-        };
+        let config2 = Config::builder().app_id("minutes_app_2").build();
 
         let service1 = MinutesService::new(config1);
         let service2 = MinutesService::new(config2);
@@ -241,11 +234,10 @@ mod tests {
 
     #[test]
     fn test_minutes_service_config_cloning() {
-        let config = Config {
-            app_id: "clone_test_app".to_string(),
-            app_secret: "clone_test_secret".to_string(),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("clone_test_app")
+            .app_secret("clone_test_secret")
+            .build();
 
         let service = MinutesService::new(config.clone());
 
@@ -257,10 +249,9 @@ mod tests {
 
     #[test]
     fn test_minutes_service_timeout_propagation() {
-        let config = Config {
-            req_timeout: Some(Duration::from_secs(180)),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .req_timeout(Duration::from_secs(180))
+            .build();
 
         let service = MinutesService::new(config);
 
@@ -309,12 +300,11 @@ mod tests {
 
     #[test]
     fn test_minutes_service_config_consistency() {
-        let config = Config {
-            app_id: "consistency_test".to_string(),
-            app_secret: "consistency_secret".to_string(),
-            req_timeout: Some(Duration::from_secs(150)),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("consistency_test")
+            .app_secret("consistency_secret")
+            .req_timeout(Duration::from_secs(150))
+            .build();
 
         let service = MinutesService::new(config);
 

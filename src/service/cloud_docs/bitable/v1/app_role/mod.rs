@@ -55,10 +55,7 @@ mod tests {
     use crate::core::config::Config;
 
     fn create_test_config() -> Config {
-        Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build()
+        Config::default()
     }
 
     #[test]

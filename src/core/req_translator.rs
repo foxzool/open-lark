@@ -42,12 +42,11 @@ mod tests {
             ..Default::default()
         };
 
-        let config = Config {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            app_type: AppType::SelfBuild,
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .build();
 
         let option = RequestOption::default();
 
@@ -71,12 +70,11 @@ mod tests {
             ..Default::default()
         };
 
-        let config = Config {
-            app_id: "test_app".to_string(),
-            app_secret: "test_secret".to_string(),
-            app_type: AppType::SelfBuild,
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .app_type(AppType::SelfBuild)
+            .build();
 
         let option = RequestOption::default();
 
@@ -100,12 +98,11 @@ mod tests {
 
     #[tokio::test]
     async fn test_req_translator_with_various_request_methods() {
-        let config = Config {
-            app_id: "test_app".to_string(),
-            app_secret: "test_secret".to_string(),
-            app_type: AppType::SelfBuild,
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .app_type(AppType::SelfBuild)
+            .build();
 
         let option = RequestOption::default();
 
@@ -151,12 +148,11 @@ mod tests {
             ..Default::default()
         };
 
-        let config = Config {
-            app_id: "marketplace_app".to_string(),
-            app_secret: "marketplace_secret".to_string(),
-            app_type: AppType::Marketplace,
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("marketplace_app")
+            .app_secret("marketplace_secret")
+            .app_type(AppType::Marketplace)
+            .build();
 
         let option = RequestOption {
             tenant_key: "test_tenant".to_string(),

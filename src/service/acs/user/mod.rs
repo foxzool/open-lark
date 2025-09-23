@@ -344,11 +344,10 @@ mod tests {
 
     #[test]
     fn test_user_service_creation() {
-        let config = Config {
-            app_id: "test_user_app".to_string(),
-            app_secret: "test_user_secret".to_string(),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("test_user_app")
+            .app_secret("test_user_secret")
+            .build();
         let service = UserService::new(config);
         assert_eq!(service.config.app_id, "test_user_app");
         assert_eq!(service.config.app_secret, "test_user_secret");
@@ -363,12 +362,11 @@ mod tests {
 
     #[test]
     fn test_user_service_with_marketplace_config() {
-        let config = Config {
-            app_id: "cli_user_test".to_string(),
-            app_secret: "user_secret".to_string(),
-            app_type: AppType::Marketplace,
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("cli_user_test")
+            .app_secret("user_secret")
+            .app_type(AppType::Marketplace)
+            .build();
         let service = UserService::new(config);
         assert_eq!(service.config.app_type, AppType::Marketplace);
         assert_eq!(service.config.app_id, "cli_user_test");

@@ -19,4 +19,13 @@ impl V2 {
                 tenant_product_assign_info::TenantProductAssignInfoService::new(config),
         }
     }
+
+    /// 使用共享配置创建 v2 服务集合（实验性）
+    pub fn new_from_shared(shared: std::sync::Arc<Config>) -> Self {
+        Self {
+            tenant: tenant::TenantService::new_from_shared(shared.clone()),
+            tenant_product_assign_info:
+                tenant_product_assign_info::TenantProductAssignInfoService::new_from_shared(shared),
+        }
+    }
 }

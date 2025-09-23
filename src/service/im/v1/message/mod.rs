@@ -19,12 +19,17 @@ pub use list::{ListMessageRequest, ListMessageRequestBuilder, ListMessageRespDat
 pub use types::{CreateMessageResp, ListMessageIterator, Message, SendMessageTrait};
 
 use crate::core::config::Config;
+use crate::impl_full_service;
 
 /// Message service
 ///
 /// Provides core message functionality including creating, sending, and retrieving messages.
 /// Supports multiple message types: text, post, image, file, audio, media, sticker,
 /// interactive, share_chat, share_user.
+///
+/// Service 抽象接入：通过 `impl_full_service!` 为该服务实现
+/// `Service`/`ServiceObservability`/`ServiceBuilder`/`ServiceHealthCheck`/`ConfigurableService`
+/// 等核心能力，统一服务行为与可观测性。
 #[derive(Debug, Clone)]
 pub struct MessageService {
     /// Service configuration
@@ -38,17 +43,18 @@ impl MessageService {
     }
 }
 
+// 为 MessageService 一次性实现核心服务能力（标准样例）
+impl_full_service!(MessageService, "im.message", "v1");
+
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use crate::core::config::Config;
+    use crate::core::trait_system::Service;
 
     fn create_test_config() -> Config {
-        Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build()
+        Config::default()
     }
 
     #[test]
@@ -58,6 +64,11 @@ mod tests {
 
         assert_eq!(service.config.app_id, config.app_id);
         assert_eq!(service.config.app_secret, config.app_secret);
+        // 验证 Service 抽象静态信息
+        assert_eq!(MessageService::service_name(), "im.message");
+        assert_eq!(MessageService::service_version(), "v1");
+        // 验证 Service::config() 访问
+        assert_eq!(service.config().app_id, config.app_id);
     }
 
     #[test]

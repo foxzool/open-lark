@@ -21,34 +21,9 @@ pub struct ExternalSystemService {
 }
 
 /// 外部系统配置
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct ExternalSystemConfig {
-    /// 配置ID
-    pub id: String,
-    /// 系统名称
-    pub system_name: String,
-    /// 系统类型
-    pub system_type: String,
-    /// 系统描述
-    pub description: Option<String>,
-    /// 接口地址
-    pub api_endpoint: String,
-    /// 认证方式
-    pub auth_type: String,
-    /// 认证配置
-    pub auth_config: serde_json::Value,
-    /// 数据映射配置
-    pub data_mapping: Option<serde_json::Value>,
-    /// 同步频率
-    pub sync_frequency: Option<String>,
-    /// 是否启用
-    pub enabled: bool,
-    /// 最后同步时间
-    pub last_sync_time: Option<String>,
-    /// 创建时间
-    pub created_time: Option<String>,
-    /// 更新时间
-    pub updated_time: Option<String>,
+    // TODO: Add fields
 }
 
 /// 外部系统同步记录

@@ -124,6 +124,115 @@ macro_rules! impl_executable_builder_config {
     };
 }
 
+// Service trait 相关宏
+
+/// 为基础服务生成标准实现的宏
+///
+/// 这个宏减少了创建简单服务时的样板代码
+#[macro_export]
+macro_rules! impl_basic_service {
+    ($service_type:ty, $name:expr, $version:expr) => {
+        impl $crate::core::trait_system::Service for $service_type {
+            fn config(&self) -> &$crate::core::config::Config {
+                &self.config
+            }
+
+            fn service_name() -> &'static str {
+                $name
+            }
+
+            fn service_version() -> &'static str {
+                $version
+            }
+        }
+
+        impl $crate::core::trait_system::ServiceObservability for $service_type {}
+
+        impl $crate::core::trait_system::ServiceBuilder<$service_type> for $service_type {
+            fn build(config: $crate::core::config::Config) -> $service_type {
+                Self { config }
+            }
+        }
+    };
+}
+
+/// 为服务生成异步操作支持的宏
+#[macro_export]
+macro_rules! impl_async_service {
+    ($service_type:ty, $request_type:ty, $response_type:ty) => {
+        impl $crate::core::trait_system::AsyncServiceOperation<$request_type, $response_type>
+            for $service_type
+        {
+        }
+    };
+}
+
+/// 为服务生成健康检查实现的宏
+#[macro_export]
+macro_rules! impl_service_health_check {
+    ($service_type:ty) => {
+        impl $crate::core::trait_system::ServiceHealthCheck for $service_type {
+            async fn health_check(
+                &self,
+            ) -> $crate::core::SDKResult<$crate::core::trait_system::ServiceHealthStatus> {
+                use $crate::core::trait_system::ServiceHealthStatus;
+
+                if !self.is_config_valid() {
+                    return Ok(ServiceHealthStatus::Unhealthy(
+                        "Invalid configuration".to_string(),
+                    ));
+                }
+
+                // 基础健康检查 - 可以在具体服务中重写
+                Ok(ServiceHealthStatus::Healthy)
+            }
+        }
+    };
+}
+
+/// 为服务生成可配置实现的宏
+#[macro_export]
+macro_rules! impl_configurable_service {
+    ($service_type:ty) => {
+        impl $crate::core::trait_system::ConfigurableService for $service_type {
+            fn update_config(
+                &mut self,
+                new_config: $crate::core::config::Config,
+            ) -> $crate::core::SDKResult<()> {
+                self.validate_config(&new_config)?;
+                self.config = new_config;
+                Ok(())
+            }
+        }
+    };
+}
+
+/// 一次性实现所有基础服务 traits 的便利宏
+#[macro_export]
+macro_rules! impl_full_service {
+    ($service_type:ty, $name:expr) => {
+        impl_full_service!($service_type, $name, "v1");
+    };
+    ($service_type:ty, $name:expr, $version:expr) => {
+        $crate::impl_basic_service!($service_type, $name, $version);
+        $crate::impl_service_health_check!($service_type);
+        $crate::impl_configurable_service!($service_type);
+    };
+}
+
+/// 为服务 builder 生成构造函数的宏
+#[macro_export]
+macro_rules! impl_service_constructor {
+    ($service_type:ty) => {
+        impl $service_type {
+            /// 创建服务实例
+            pub fn new(config: $crate::core::config::Config) -> Self {
+                <Self as $crate::core::trait_system::ServiceBuilder<Self>>::build(config)
+            }
+        }
+    };
+}
+
 #[cfg(test)]
 mod tests {
     use crate::core::{
