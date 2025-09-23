@@ -114,6 +114,11 @@ impl ContactService {
             v3: v3::V3::new(config),
         }
     }
+
+    /// 使用共享配置创建服务（实验性）
+    pub fn new_from_shared(shared: std::sync::Arc<Config>) -> Self {
+        Self { v3: v3::V3::new(shared.as_ref().clone()) }
+    }
 }
 
 #[cfg(test)]
@@ -123,10 +128,7 @@ mod tests {
     use crate::core::config::Config;
 
     fn create_test_config() -> Config {
-        Config::builder()
-            .app_id("test_app_id")
-            .app_secret("test_app_secret")
-            .build()
+        Config::default()
     }
 
     #[test]

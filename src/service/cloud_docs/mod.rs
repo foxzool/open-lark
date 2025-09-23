@@ -134,6 +134,7 @@
 //! - 📈 项目管理和跟踪
 
 use crate::core::config::Config;
+use std::sync::Arc;
 
 // 子模块声明
 pub mod assistant;
@@ -195,6 +196,21 @@ impl CloudDocsService {
             assistant: AssistantService::new(config.clone()),
         }
     }
+
+    /// 使用共享配置创建聚合服务（实验性）
+    pub fn new_from_shared(shared: Arc<Config>) -> Self {
+        Self {
+            drive: DriveService::new_from_shared(shared.clone()),
+            wiki: WikiService::new_from_shared(shared.clone()),
+            docx: DocxService::new_from_shared(shared.clone()),
+            sheets: SheetsService::new_from_shared(shared.clone()),
+            bitable: BitableService::new_from_shared(shared.clone()),
+            board: BoardService::new_from_shared(shared.clone()),
+            permission: PermissionService::new_from_shared(shared.clone()),
+            comments: CommentsService::new_from_shared(shared.clone()),
+            assistant: AssistantService::new_from_shared(shared),
+        }
+    }
 }
 
 #[cfg(test)]
@@ -229,12 +245,11 @@ mod tests {
 
     #[test]
     fn test_cloud_docs_service_with_custom_config() {
-        let config = Config {
-            app_id: "cloud_docs_test_app".to_string(),
-            app_secret: "cloud_docs_test_secret".to_string(),
-            req_timeout: Some(Duration::from_secs(300)),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("cloud_docs_test_app")
+            .app_secret("cloud_docs_test_secret")
+            .req_timeout(Duration::from_secs(300))
+            .build();
 
         let service = CloudDocsService::new(config.clone());
 
@@ -252,15 +267,9 @@ mod tests {
 
     #[test]
     fn test_cloud_docs_service_config_independence() {
-        let config1 = Config {
-            app_id: "cloud_docs_app_1".to_string(),
-            ..Default::default()
-        };
+        let config1 = Config::builder().app_id("cloud_docs_app_1").build();
 
-        let config2 = Config {
-            app_id: "cloud_docs_app_2".to_string(),
-            ..Default::default()
-        };
+        let config2 = Config::builder().app_id("cloud_docs_app_2").build();
 
         let service1 = CloudDocsService::new(config1);
         let service2 = CloudDocsService::new(config2);
@@ -321,11 +330,10 @@ mod tests {
 
     #[test]
     fn test_cloud_docs_service_config_cloning() {
-        let config = Config {
-            app_id: "clone_test_app".to_string(),
-            app_secret: "clone_test_secret".to_string(),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("clone_test_app")
+            .app_secret("clone_test_secret")
+            .build();
 
         let service = CloudDocsService::new(config.clone());
 
@@ -343,10 +351,9 @@ mod tests {
 
     #[test]
     fn test_cloud_docs_service_timeout_propagation() {
-        let config = Config {
-            req_timeout: Some(Duration::from_secs(240)),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .req_timeout(Duration::from_secs(240))
+            .build();
 
         let service = CloudDocsService::new(config);
 
@@ -401,12 +408,11 @@ mod tests {
 
     #[test]
     fn test_cloud_docs_service_config_consistency() {
-        let config = Config {
-            app_id: "consistency_test".to_string(),
-            app_secret: "consistency_secret".to_string(),
-            req_timeout: Some(Duration::from_secs(360)),
-            ..Default::default()
-        };
+        let config = Config::builder()
+            .app_id("consistency_test")
+            .app_secret("consistency_secret")
+            .req_timeout(Duration::from_secs(360))
+            .build();
 
         let service = CloudDocsService::new(config);
 

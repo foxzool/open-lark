@@ -8,7 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
@@ -16,6 +16,7 @@ use crate::{
     },
     service::im::v1::models::{BatchMessageStatus, ReceiveIdType, UserIdType},
 };
+use crate::impl_full_service;
 
 /// 批量消息服务
 pub struct BatchMessageService {
@@ -35,6 +36,9 @@ pub struct BatchSendMessageRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub uuid: Option<String>,
 }
+
+// 接入统一 Service 抽象（IM v1 - BatchMessageService）
+impl_full_service!(BatchMessageService, "im.batch_message", "v1");
 
 /// 批量发送消息响应
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -123,7 +127,7 @@ impl BatchMessageService {
     ) -> SDKResult<BatchSendMessageResponse> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::IM_V1_BATCH_MESSAGES.to_string(),
+            api_path: crate::core::endpoints::im::IM_V1_BATCH_MESSAGES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params: HashMap::from([(
                 "receive_id_type",
@@ -147,7 +151,7 @@ impl BatchMessageService {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V1_DELETE_BATCH_MESSAGE,
+                crate::core::endpoints::im::IM_V1_DELETE_BATCH_MESSAGE,
                 "batch_message_id",
                 batch_message_id,
             ),
@@ -169,7 +173,7 @@ impl BatchMessageService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V1_BATCH_MESSAGE_PROGRESS,
+                crate::core::endpoints::im::IM_V1_BATCH_MESSAGE_PROGRESS,
                 "batch_message_id",
                 batch_message_id,
             ),
@@ -205,7 +209,7 @@ impl BatchMessageService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V1_BATCH_MESSAGE_READ_USER,
+                crate::core::endpoints::im::IM_V1_BATCH_MESSAGE_READ_USER,
                 "batch_message_id",
                 batch_message_id,
             ),

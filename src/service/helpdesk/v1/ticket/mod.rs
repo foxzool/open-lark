@@ -242,14 +242,12 @@ impl TicketService {
 mod tests {
     use super::*;
     use crate::core::config::Config;
-    use crate::core::constants::AppType;
     use serde_json;
 
     fn create_test_config() -> Config {
         Config::builder()
             .app_id("test_app_id")
             .app_secret("test_app_secret")
-            .app_type(AppType::SelfBuild)
             .build()
     }
 

@@ -70,4 +70,12 @@ impl DriveService {
             v2: V2::new(config.clone()),
         }
     }
+
+    /// 使用共享配置创建服务（实验性）
+    pub fn new_from_shared(shared: std::sync::Arc<Config>) -> Self {
+        Self {
+            v1: V1::new(shared.as_ref().clone()),
+            v2: V2::new(shared.as_ref().clone()),
+        }
+    }
 }

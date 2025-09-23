@@ -9,7 +9,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -120,7 +120,7 @@ impl GroupsBotsService {
     ) -> SDKResult<BaseResponse<BotTimeSentiveResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::IM_V2_GROUPS_BOTS_TIME_SENSITIVE.to_string(),
+            api_path: crate::core::endpoints::im::IM_V2_GROUPS_BOTS_TIME_SENSITIVE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params: HashMap::from([(
                 "receive_id_type",
@@ -143,7 +143,7 @@ impl GroupsBotsService {
         let api_req = ApiRequest {
             http_method: Method::PUT,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V2_GROUPS_BOTS_UPDATE,
+                crate::core::endpoints::im::IM_V2_GROUPS_BOTS_UPDATE,
                 "message_id",
                 message_id,
             ),
@@ -164,7 +164,7 @@ impl GroupsBotsService {
     ) -> SDKResult<BaseResponse<TimelyReminderResponse>> {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: Endpoints::IM_V2_GROUPS_BOTS_PATCH.to_string(),
+            api_path: crate::core::endpoints::im::IM_V2_GROUPS_BOTS_PATCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params: HashMap::from([(
                 "receive_id_type",

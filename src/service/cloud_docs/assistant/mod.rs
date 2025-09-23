@@ -16,4 +16,9 @@ impl AssistantService {
             v1: V1::new(config.clone()),
         }
     }
+
+    /// 使用共享配置（实验性）
+    pub fn new_from_shared(shared: std::sync::Arc<Config>) -> Self {
+        Self { v1: V1::new(shared.as_ref().clone()) }
+    }
 }

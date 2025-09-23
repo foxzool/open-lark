@@ -54,14 +54,7 @@ pub struct OfferSettings {
 /// 薪资配置
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct SalaryConfig {
-    /// 支持的薪资币种
-    pub supported_currencies: Vec<String>,
-    /// 默认币种
-    pub default_currency: String,
-    /// 薪资组成项
-    pub salary_components: Vec<SalaryComponent>,
-    /// 是否允许自定义薪资组成
-    pub allow_custom_components: bool,
+    // TODO: Add fields
 }
 
 /// 薪资组成项
@@ -84,14 +77,7 @@ pub struct SalaryComponent {
 /// 审批配置
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct ApprovalConfig {
-    /// 是否需要审批
-    pub require_approval: bool,
-    /// 审批流程ID
-    pub approval_process_id: Option<String>,
-    /// 审批人列表
-    pub approvers: Vec<UserId>,
-    /// 审批规则
-    pub approval_rules: Vec<ApprovalRule>,
+    // TODO: Add fields
 }
 
 /// 审批规则
@@ -110,40 +96,19 @@ pub struct ApprovalRule {
 /// 有效期配置
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct ValidityConfig {
-    /// 默认有效期（天）
-    pub default_validity_days: u32,
-    /// 最小有效期（天）
-    pub min_validity_days: Option<u32>,
-    /// 最大有效期（天）
-    pub max_validity_days: Option<u32>,
-    /// 是否允许自定义有效期
-    pub allow_custom_validity: bool,
+    // TODO: Add fields
 }
 
 /// 签约配置
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct ContractConfig {
-    /// 是否支持电子签约
-    pub support_electronic_contract: bool,
-    /// 合同模板ID
-    pub contract_template_id: Option<String>,
-    /// 签约平台配置
-    pub signing_platform_config: Option<serde_json::Value>,
+    // TODO: Add fields
 }
 
 /// 通知配置
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct NotificationConfig {
-    /// 是否发送Offer通知
-    pub send_offer_notification: bool,
-    /// 是否发送接受确认
-    pub send_acceptance_confirmation: bool,
-    /// 是否发送到期提醒
-    pub send_expiry_reminder: bool,
-    /// 提醒时间（到期前多少天）
-    pub reminder_days: Option<u32>,
-    /// 通知模板ID
-    pub template_id: Option<String>,
+    // TODO: Add fields
 }
 
 /// Offer设置创建请求
@@ -272,24 +237,9 @@ impl OfferSettingsService {
     ///         ja_jp: None,
     ///     },
     ///     applicable_job_types: vec!["software_engineer".to_string()],
-    ///     salary_config: SalaryConfig {
-    ///         supported_currencies: vec!["CNY".to_string(), "USD".to_string()],
-    ///         default_currency: "CNY".to_string(),
-    ///         salary_components: vec![],
-    ///         allow_custom_components: true,
-    ///     },
-    ///     approval_config: ApprovalConfig {
-    ///         require_approval: true,
-    ///         approval_process_id: None,
-    ///         approvers: vec![],
-    ///         approval_rules: vec![],
-    ///     },
-    ///     validity_config: ValidityConfig {
-    ///         default_validity_days: 7,
-    ///         min_validity_days: Some(3),
-    ///         max_validity_days: Some(30),
-    ///         allow_custom_validity: true,
-    ///     },
+    ///     salary_config: SalaryConfig::default(),
+    ///     approval_config: ApprovalConfig::default(),
+    ///     validity_config: ValidityConfig::default(),
     ///     ..Default::default()
     /// };
     ///
@@ -468,12 +418,7 @@ impl OfferSettingsService {
     ///         ja_jp: None,
     ///     },
     ///     applicable_job_types: vec!["senior_engineer".to_string()],
-    ///     validity_config: ValidityConfig {
-    ///         default_validity_days: 14,
-    ///         min_validity_days: Some(7),
-    ///         max_validity_days: Some(60),
-    ///         allow_custom_validity: true,
-    ///     },
+    ///     validity_config: ValidityConfig::default(),
     ///     ..Default::default()
     /// };
     ///

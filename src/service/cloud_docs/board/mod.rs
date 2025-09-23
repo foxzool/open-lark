@@ -23,6 +23,14 @@ impl BoardService {
         }
     }
 
+    /// 使用共享配置（实验性）
+    pub fn new_from_shared(shared: std::sync::Arc<Config>) -> Self {
+        Self {
+            whiteboard: v1::whiteboard::WhiteboardService::new(shared.as_ref().clone()),
+            config: (*shared).clone(),
+        }
+    }
+
     /// 获取画板所有节点
     pub async fn list_nodes(
         &self,

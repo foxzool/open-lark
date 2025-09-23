@@ -301,16 +301,14 @@ mod tests {
 
     #[test]
     fn test_user_info_service_config_independence() {
-        let config1 = Config {
-            app_id: "app1".to_string(),
-            app_secret: "secret1".to_string(),
-            ..Default::default()
-        };
-        let config2 = Config {
-            app_id: "app2".to_string(),
-            app_secret: "secret2".to_string(),
-            ..Default::default()
-        };
+        let config1 = Config::builder()
+            .app_id("app1")
+            .app_secret("secret1")
+            .build();
+        let config2 = Config::builder()
+            .app_id("app2")
+            .app_secret("secret2")
+            .build();
 
         let service1 = UserInfoService::new(config1);
         let service2 = UserInfoService::new(config2);

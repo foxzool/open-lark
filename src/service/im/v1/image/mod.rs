@@ -7,13 +7,14 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::{EndpointBuilder, Endpoints},
+    endpoints::EndpointBuilder,
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
     trait_system::executable_builder::ExecutableBuilder,
     SDKResult,
 };
+use crate::impl_full_service;
 use async_trait::async_trait;
 
 /// 图片服务
@@ -61,7 +62,7 @@ impl ImageService {
     ) -> SDKResult<CreateImageResponse> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::IM_V1_IMAGES.to_string(),
+            api_path: crate::core::endpoints::im::IM_V1_IMAGES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params: HashMap::from([("image_type", image_type.to_string())]),
             body: image_data,
@@ -82,7 +83,7 @@ impl ImageService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V1_DOWNLOAD_IMAGE,
+                crate::core::endpoints::im::IM_V1_DOWNLOAD_IMAGE,
                 "image_key",
                 image_key,
             ),
@@ -105,6 +106,9 @@ impl ImageService {
         ImageDownloadBuilder::new()
     }
 }
+
+// 接入统一 Service 抽象（IM v1 - ImageService）
+impl_full_service!(ImageService, "im.image", "v1");
 
 /// 图片上传Builder
 #[derive(Default)]

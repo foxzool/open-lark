@@ -7,11 +7,12 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::{EndpointBuilder, Endpoints},
+    endpoints::EndpointBuilder,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
+use crate::impl_full_service;
 
 /// 消息卡片服务
 pub struct MessageCardService {
@@ -27,6 +28,9 @@ pub struct PatchMessageCardRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub token: Option<String>,
 }
+
+// 接入统一 Service 抽象（IM v1 - MessageCardService）
+impl_full_service!(MessageCardService, "im.message_card", "v1");
 
 /// 延时更新消息卡片请求
 #[derive(Debug, Serialize, Deserialize)]
@@ -77,7 +81,7 @@ impl MessageCardService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V1_UPDATE_MESSAGE,
+                crate::core::endpoints::im::IM_V1_UPDATE_MESSAGE,
                 "message_id",
                 message_id,
             ),
@@ -99,7 +103,7 @@ impl MessageCardService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V1_MESSAGE_DELAY_UPDATE,
+                crate::core::endpoints::im::IM_V1_MESSAGE_DELAY_UPDATE,
                 "message_id",
                 message_id,
             ),
@@ -121,7 +125,7 @@ impl MessageCardService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V1_MESSAGE_URGENT_APP,
+                crate::core::endpoints::im::IM_V1_MESSAGE_URGENT_APP,
                 "message_id",
                 message_id,
             ),
@@ -147,7 +151,7 @@ impl MessageCardService {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::IM_V1_MESSAGE_URGENT_APP,
+                crate::core::endpoints::im::IM_V1_MESSAGE_URGENT_APP,
                 "message_id",
                 message_id,
             ),

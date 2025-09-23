@@ -71,13 +71,12 @@ mod tests {
     use std::collections::HashMap;
 
     fn create_test_config() -> Config {
-        Config {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            app_type: AppType::SelfBuild,
-            base_url: "https://open.feishu.cn".to_string(),
-            ..Default::default()
-        }
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .base_url("https://open.feishu.cn")
+            .build()
     }
 
     fn create_test_api_request() -> ApiRequest {
@@ -301,8 +300,12 @@ mod tests {
 
     #[test]
     fn test_build_url_invalid_base_url() {
-        let mut config = create_test_config();
-        config.base_url = "invalid-url".to_string();
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .app_type(AppType::SelfBuild)
+            .base_url("invalid-url")
+            .build();
         let api_req = create_test_api_request();
 
         let result = UnifiedRequestBuilder::build_url(&config, &api_req);

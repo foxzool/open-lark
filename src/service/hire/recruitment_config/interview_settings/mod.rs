@@ -12,7 +12,7 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    service::hire::models::{CommonResponse, I18nText, PageResponse, UserId},
+    service::hire::models::{CommonResponse, I18nText, PageResponse},
 };
 
 /// 面试设置服务
@@ -52,40 +52,19 @@ pub struct InterviewSettings {
 /// 面试时长配置
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct InterviewDurationConfig {
-    /// 默认时长（分钟）
-    pub default_duration: u32,
-    /// 最小时长（分钟）
-    pub min_duration: Option<u32>,
-    /// 最大时长（分钟）
-    pub max_duration: Option<u32>,
-    /// 是否允许自定义时长
-    pub allow_custom_duration: bool,
+    // TODO: Add fields
 }
 
 /// 面试官配置
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct InterviewerConfig {
-    /// 最小面试官数量
-    pub min_interviewers: u32,
-    /// 最大面试官数量
-    pub max_interviewers: u32,
-    /// 是否必须有主面试官
-    pub require_primary_interviewer: bool,
-    /// 默认面试官列表
-    pub default_interviewers: Vec<UserId>,
+    // TODO: Add fields
 }
 
 /// 评分配置
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct EvaluationConfig {
-    /// 评分方式
-    pub evaluation_type: String,
-    /// 评分项目
-    pub evaluation_items: Vec<EvaluationItem>,
-    /// 是否必须填写评语
-    pub require_comments: bool,
-    /// 评分范围
-    pub score_range: Option<ScoreRange>,
+    // TODO: Add fields
 }
 
 /// 评分项目
@@ -113,16 +92,9 @@ pub struct ScoreRange {
 }
 
 /// 通知配置
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct NotificationConfig {
-    /// 是否发送面试邀请
-    pub send_invitation: bool,
-    /// 是否发送面试提醒
-    pub send_reminder: bool,
-    /// 提醒时间（面试前多少分钟）
-    pub reminder_minutes: Option<u32>,
-    /// 通知模板ID
-    pub template_id: Option<String>,
+    // TODO: Add fields
 }
 
 /// 面试设置创建请求
@@ -248,18 +220,8 @@ impl InterviewSettingsService {
     ///         ja_jp: None,
     ///     },
     ///     interview_type: "technical".to_string(),
-    ///     duration_config: InterviewDurationConfig {
-    ///         default_duration: 60,
-    ///         min_duration: Some(30),
-    ///         max_duration: Some(120),
-    ///         allow_custom_duration: true,
-    ///     },
-    ///     interviewer_config: InterviewerConfig {
-    ///         min_interviewers: 1,
-    ///         max_interviewers: 3,
-    ///         require_primary_interviewer: true,
-    ///         default_interviewers: vec![],
-    ///     },
+    ///     duration_config: InterviewDurationConfig::default(),
+    ///     interviewer_config: InterviewerConfig::default(),
     ///     ..Default::default()
     /// };
     ///
@@ -439,18 +401,8 @@ impl InterviewSettingsService {
     ///         ja_jp: None,
     ///     },
     ///     interview_type: "senior_technical".to_string(),
-    ///     duration_config: InterviewDurationConfig {
-    ///         default_duration: 90,
-    ///         min_duration: Some(60),
-    ///         max_duration: Some(180),
-    ///         allow_custom_duration: true,
-    ///     },
-    ///     interviewer_config: InterviewerConfig {
-    ///         min_interviewers: 2,
-    ///         max_interviewers: 4,
-    ///         require_primary_interviewer: true,
-    ///         default_interviewers: vec![],
-    ///     },
+    ///     duration_config: InterviewDurationConfig::default(),
+    ///     interviewer_config: InterviewerConfig::default(),
     ///     ..Default::default()
     /// };
     ///

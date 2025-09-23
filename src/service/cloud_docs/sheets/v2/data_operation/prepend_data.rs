@@ -77,7 +77,7 @@ impl SpreadsheetSheetService {
         api_req.http_method = reqwest::Method::POST;
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::App];
 
-        let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
+        let api_resp = crate::core::http::Transport::request(api_req, &*self.config_arc, option).await?;
 
         Ok(api_resp)
     }
@@ -90,12 +90,10 @@ mod tests {
     use serde_json::{json, Value};
 
     fn create_test_config() -> Config {
-        Config {
-            app_id: "test_app_id".to_string(),
-            app_secret: "test_app_secret".to_string(),
-            app_type: AppType::SelfBuild,
-            ..Default::default()
-        }
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
     }
 
     fn create_test_service() -> SpreadsheetSheetService {

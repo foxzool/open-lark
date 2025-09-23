@@ -440,8 +440,11 @@ mod test {
 
     #[test]
     fn test_validate_no_cache_missing_access_tokens() {
-        let mut config = create_test_config();
-        config.enable_token_cache = false;
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .enable_token_cache(false)
+            .build();
         let option = RequestOption::default();
 
         let result = validate(&config, &option, AccessTokenType::User);
@@ -450,8 +453,11 @@ mod test {
 
     #[test]
     fn test_validate_no_cache_with_tokens() {
-        let mut config = create_test_config();
-        config.enable_token_cache = false;
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .enable_token_cache(false)
+            .build();
         let mut option = RequestOption::default();
         option.user_access_token = "token".to_string();
 
@@ -532,8 +538,11 @@ mod test {
 
     #[test]
     fn test_validate_no_cache_none_token_type() {
-        let mut config = create_test_config();
-        config.enable_token_cache = false;
+        let config = Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .enable_token_cache(false)
+            .build();
         let option = RequestOption::default();
 
         let result = validate(&config, &option, AccessTokenType::None);

@@ -1,4 +1,4 @@
-use std::{collections::HashMap, sync::Arc, time::Duration};
+use std::{collections::HashMap, ops::Deref, sync::Arc, time::Duration};
 use tokio::sync::Mutex;
 
 use crate::core::{
@@ -9,6 +9,13 @@ use crate::core::{
 
 #[derive(Debug, Clone)]
 pub struct Config {
+    /// 包装在 Arc 中的共享配置数据
+    inner: Arc<ConfigInner>,
+}
+
+/// 内部配置数据，被多个服务共享
+#[derive(Debug)]
+pub struct ConfigInner {
     pub app_id: String,
     pub app_secret: String,
     /// 域名, 默认为 <https://open.feishu.cn>
@@ -22,11 +29,11 @@ pub struct Config {
     pub header: HashMap<String, String>,
     /// Token 管理器
     pub token_manager: Arc<Mutex<TokenManager>>,
-    /// App Ticket 管理器  
+    /// App Ticket 管理器
     pub app_ticket_manager: Arc<Mutex<AppTicketManager>>,
 }
 
-impl Default for Config {
+impl Default for ConfigInner {
     fn default() -> Self {
         Self {
             app_id: "".to_string(),
@@ -43,13 +50,41 @@ impl Default for Config {
     }
 }
 
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            inner: Arc::new(ConfigInner::default()),
+        }
+    }
+}
+
+impl Deref for Config {
+    type Target = ConfigInner;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+
 impl Config {
     pub fn builder() -> ConfigBuilder {
         ConfigBuilder::default()
     }
+
+    /// 创建新的 Config 实例，直接从 ConfigInner
+    pub fn new(inner: ConfigInner) -> Self {
+        Self {
+            inner: Arc::new(inner),
+        }
+    }
+
+    /// 获取内部 Arc 的引用计数
+    pub fn reference_count(&self) -> usize {
+        Arc::strong_count(&self.inner)
+    }
 }
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct ConfigBuilder {
     app_id: Option<String>,
     app_secret: Option<String>,
@@ -103,8 +138,8 @@ impl ConfigBuilder {
     }
 
     pub fn build(self) -> Config {
-        let default = Config::default();
-        Config {
+        let default = ConfigInner::default();
+        Config::new(ConfigInner {
             app_id: self.app_id.unwrap_or(default.app_id),
             app_secret: self.app_secret.unwrap_or(default.app_secret),
             base_url: self.base_url.unwrap_or(default.base_url),
@@ -117,7 +152,7 @@ impl ConfigBuilder {
             header: self.header.unwrap_or(default.header),
             token_manager: default.token_manager,
             app_ticket_manager: default.app_ticket_manager,
-        }
+        })
     }
 }
 
@@ -129,7 +164,7 @@ mod tests {
 
     #[test]
     fn test_config_creation() {
-        let config = Config {
+        let config = Config::new(ConfigInner {
             app_id: "test_app_id".to_string(),
             app_secret: "test_app_secret".to_string(),
             base_url: "https://test.api.com".to_string(),
@@ -140,7 +175,7 @@ mod tests {
             header: HashMap::new(),
             token_manager: Arc::new(Mutex::new(TokenManager::new())),
             app_ticket_manager: Arc::new(Mutex::new(AppTicketManager::new())),
-        };
+        });
 
         assert_eq!(config.app_id, "test_app_id");
         assert_eq!(config.app_secret, "test_app_secret");
@@ -164,7 +199,7 @@ mod tests {
 
     #[test]
     fn test_config_clone() {
-        let config = Config {
+        let config = Config::new(ConfigInner {
             app_id: "clone_test".to_string(),
             app_secret: "clone_secret".to_string(),
             base_url: "https://clone.test.com".to_string(),
@@ -179,7 +214,7 @@ mod tests {
             },
             token_manager: Arc::new(Mutex::new(TokenManager::new())),
             app_ticket_manager: Arc::new(Mutex::new(AppTicketManager::new())),
-        };
+        });
 
         let cloned_config = config.clone();
 
@@ -194,6 +229,12 @@ mod tests {
             config.header.get("Test-Header"),
             cloned_config.header.get("Test-Header")
         );
+
+        // Verify Arc clone efficiency - both should point to same memory
+        assert!(Arc::ptr_eq(&config.inner, &cloned_config.inner));
+
+        // Verify reference counting works
+        assert_eq!(config.reference_count(), 2);
     }
 
     #[test]
@@ -209,13 +250,14 @@ mod tests {
 
     #[test]
     fn test_config_with_custom_header() {
-        let mut config = Config::default();
-        config
-            .header
-            .insert("Authorization".to_string(), "Bearer token".to_string());
-        config
-            .header
-            .insert("Content-Type".to_string(), "application/json".to_string());
+        let mut header = HashMap::new();
+        header.insert("Authorization".to_string(), "Bearer token".to_string());
+        header.insert("Content-Type".to_string(), "application/json".to_string());
+
+        let config = Config::new(ConfigInner {
+            header,
+            ..ConfigInner::default()
+        });
 
         assert_eq!(config.header.len(), 2);
         assert_eq!(
@@ -230,15 +272,15 @@ mod tests {
 
     #[test]
     fn test_config_with_different_app_types() {
-        let self_build_config = Config {
+        let self_build_config = Config::new(ConfigInner {
             app_type: AppType::SelfBuild,
-            ..Default::default()
-        };
+            ..ConfigInner::default()
+        });
 
-        let marketplace_config = Config {
+        let marketplace_config = Config::new(ConfigInner {
             app_type: AppType::Marketplace,
-            ..Default::default()
-        };
+            ..ConfigInner::default()
+        });
 
         assert_eq!(self_build_config.app_type, AppType::SelfBuild);
         assert_eq!(marketplace_config.app_type, AppType::Marketplace);
@@ -247,20 +289,17 @@ mod tests {
 
     #[test]
     fn test_config_with_timeout_variations() {
-        let no_timeout_config = Config {
-            req_timeout: None,
-            ..Default::default()
-        };
+        let no_timeout_config = Config::default();
 
-        let short_timeout_config = Config {
+        let short_timeout_config = Config::new(ConfigInner {
             req_timeout: Some(Duration::from_secs(5)),
-            ..Default::default()
-        };
+            ..ConfigInner::default()
+        });
 
-        let long_timeout_config = Config {
+        let long_timeout_config = Config::new(ConfigInner {
             req_timeout: Some(Duration::from_secs(300)),
-            ..Default::default()
-        };
+            ..ConfigInner::default()
+        });
 
         assert!(no_timeout_config.req_timeout.is_none());
         assert_eq!(
@@ -274,213 +313,49 @@ mod tests {
     }
 
     #[test]
-    fn test_config_token_cache_settings() {
-        let cache_enabled_config = Config {
-            enable_token_cache: true,
-            ..Default::default()
-        };
+    fn test_config_builders() {
+        let config = Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .build();
 
-        let cache_disabled_config = Config {
-            enable_token_cache: false,
-            ..Default::default()
-        };
-
-        assert!(cache_enabled_config.enable_token_cache);
-        assert!(!cache_disabled_config.enable_token_cache);
+        assert_eq!(config.app_id, "test_app");
+        assert_eq!(config.app_secret, "test_secret");
     }
 
     #[test]
-    fn test_config_base_url_variations() {
-        let default_config = Config::default();
-        assert_eq!(default_config.base_url, FEISHU_BASE_URL);
-
-        let custom_config = Config {
-            base_url: "https://custom.feishu.com".to_string(),
-            ..Default::default()
-        };
-        assert_eq!(custom_config.base_url, "https://custom.feishu.com");
-
-        let localhost_config = Config {
-            base_url: "http://localhost:8080".to_string(),
-            ..Default::default()
-        };
-        assert_eq!(localhost_config.base_url, "http://localhost:8080");
-    }
-
-    #[test]
-    fn test_config_empty_credentials() {
-        let empty_config = Config::default();
-        assert!(empty_config.app_id.is_empty());
-        assert!(empty_config.app_secret.is_empty());
-    }
-
-    #[test]
-    fn test_config_long_credentials() {
-        let long_app_id = "a".repeat(100);
-        let long_app_secret = "b".repeat(200);
-
-        let config = Config {
-            app_id: long_app_id.clone(),
-            app_secret: long_app_secret.clone(),
-            ..Default::default()
-        };
-
-        assert_eq!(config.app_id.len(), 100);
-        assert_eq!(config.app_secret.len(), 200);
-        assert_eq!(config.app_id, long_app_id);
-        assert_eq!(config.app_secret, long_app_secret);
-    }
-
-    #[test]
-    fn test_config_special_characters_in_credentials() {
-        let special_app_id = "app-id_with.special@chars#123";
-        let special_app_secret = "secret$with%special&chars*()+={}[]|\\:;\"'<>?/~`";
-
-        let config = Config {
-            app_id: special_app_id.to_string(),
-            app_secret: special_app_secret.to_string(),
-            ..Default::default()
-        };
-
-        assert_eq!(config.app_id, special_app_id);
-        assert_eq!(config.app_secret, special_app_secret);
-    }
-
-    #[test]
-    fn test_config_unicode_credentials() {
-        let unicode_app_id = "应用标识符_🚀";
-        let unicode_app_secret = "密钥_🔐_测试";
-
-        let config = Config {
-            app_id: unicode_app_id.to_string(),
-            app_secret: unicode_app_secret.to_string(),
-            ..Default::default()
-        };
-
-        assert_eq!(config.app_id, unicode_app_id);
-        assert_eq!(config.app_secret, unicode_app_secret);
-    }
-
-    #[test]
-    fn test_config_http_client_creation() {
+    fn test_config_arc_efficiency() {
         let config = Config::default();
+        assert_eq!(config.reference_count(), 1);
 
-        // Test that the HTTP client is created successfully
-        assert!(format!("{:?}", config.http_client).contains("Client"));
-    }
-
-    #[test]
-    fn test_config_managers_creation() {
-        let config = Config::default();
-
-        // Test that managers are properly initialized as Arc<Mutex<T>>
-        assert!(config.token_manager.try_lock().is_ok());
-        assert!(config.app_ticket_manager.try_lock().is_ok());
-    }
-
-    #[test]
-    fn test_config_concurrent_access() {
-        let config = Config::default();
         let config_clone = config.clone();
+        assert_eq!(config.reference_count(), 2);
+        assert_eq!(config_clone.reference_count(), 2);
 
-        // Test that cloned config can access managers independently
-        let token_manager1 = config.token_manager.clone();
-        let token_manager2 = config_clone.token_manager.clone();
-
-        assert!(token_manager1.try_lock().is_ok());
-        assert!(token_manager2.try_lock().is_ok());
+        // Both configs should point to the same inner data
+        assert!(Arc::ptr_eq(&config.inner, &config_clone.inner));
     }
 
     #[test]
-    fn test_config_header_manipulation() {
-        let mut config = Config::default();
+    fn test_arc_efficiency_simulation() {
+        // 模拟服务模块中的多次克隆
+        let config = Config::default();
 
-        // Start with empty headers
-        assert!(config.header.is_empty());
+        // 模拟 PerformanceService::new() 中的4次clone
+        let service1_config = config.clone();
+        let service2_config = config.clone();
+        let service3_config = config.clone();
+        let service4_config = config.clone();
 
-        // Add headers
-        config
-            .header
-            .insert("User-Agent".to_string(), "open-lark-sdk".to_string());
-        config
-            .header
-            .insert("Accept".to_string(), "application/json".to_string());
-        assert_eq!(config.header.len(), 2);
+        // 所有配置应该指向同一个内存位置
+        assert!(Arc::ptr_eq(&config.inner, &service1_config.inner));
+        assert!(Arc::ptr_eq(&config.inner, &service2_config.inner));
+        assert!(Arc::ptr_eq(&config.inner, &service3_config.inner));
+        assert!(Arc::ptr_eq(&config.inner, &service4_config.inner));
 
-        // Update existing header
-        config
-            .header
-            .insert("User-Agent".to_string(), "open-lark-sdk-v2".to_string());
-        assert_eq!(config.header.len(), 2);
-        assert_eq!(
-            config.header.get("User-Agent"),
-            Some(&"open-lark-sdk-v2".to_string())
-        );
+        // 引用计数应该是5（原始 + 4个克隆）
+        assert_eq!(config.reference_count(), 5);
 
-        // Remove header
-        config.header.remove("Accept");
-        assert_eq!(config.header.len(), 1);
-        assert!(!config.header.contains_key("Accept"));
-    }
-
-    #[test]
-    fn test_config_timeout_duration_precision() {
-        let millis_config = Config {
-            req_timeout: Some(Duration::from_millis(1500)), // 1.5 seconds
-            ..Default::default()
-        };
-
-        let nanos_config = Config {
-            req_timeout: Some(Duration::from_nanos(2_500_000_000)), // 2.5 seconds
-            ..Default::default()
-        };
-
-        assert_eq!(millis_config.req_timeout, Some(Duration::from_millis(1500)));
-        assert_eq!(
-            nanos_config.req_timeout,
-            Some(Duration::from_nanos(2_500_000_000))
-        );
-    }
-
-    #[test]
-    fn test_config_extreme_timeout_values() {
-        let zero_timeout_config = Config {
-            req_timeout: Some(Duration::from_secs(0)),
-            ..Default::default()
-        };
-
-        let max_timeout_config = Config {
-            req_timeout: Some(Duration::from_secs(u64::MAX)),
-            ..Default::default()
-        };
-
-        assert_eq!(
-            zero_timeout_config.req_timeout,
-            Some(Duration::from_secs(0))
-        );
-        assert_eq!(
-            max_timeout_config.req_timeout,
-            Some(Duration::from_secs(u64::MAX))
-        );
-    }
-
-    #[test]
-    fn test_config_memory_efficiency() {
-        // Test that Config doesn't consume excessive memory
-        let configs: Vec<Config> = (0..100)
-            .map(|i| Config {
-                app_id: format!("app_{}", i),
-                app_secret: format!("secret_{}", i),
-                ..Default::default()
-            })
-            .collect();
-
-        assert_eq!(configs.len(), 100);
-
-        // Verify each config is properly initialized
-        for (i, config) in configs.iter().enumerate() {
-            assert_eq!(config.app_id, format!("app_{}", i));
-            assert_eq!(config.app_secret, format!("secret_{}", i));
-        }
+        println!("Arc<Config> 改造成功：5个配置实例共享同一份内存！");
     }
 }

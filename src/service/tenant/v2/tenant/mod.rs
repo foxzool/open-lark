@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::TENANT_V2_QUERY,
+        endpoints_original::TENANT_V2_QUERY,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -18,6 +18,8 @@ use crate::{
 /// 企业信息服务
 pub struct TenantService {
     pub config: Config,
+    // 试点：共享配置，后续内部可逐步改用 Arc 降低 clone
+    pub(crate) config_arc: Arc<Config>,
 }
 
 /// 获取企业信息响应
@@ -35,7 +37,16 @@ impl ApiResponseTrait for GetTenantResponse {
 
 impl TenantService {
     pub fn new(config: Config) -> Self {
-        Self { config }
+        let config_arc = Arc::new(config.clone());
+        Self { config, config_arc }
+    }
+
+    /// 使用共享配置创建服务实例（实验性）
+    pub fn new_from_shared(shared: Arc<Config>) -> Self {
+        Self {
+            config: (*shared).clone(),
+            config_arc: shared,
+        }
     }
 
     /// 获取企业信息
@@ -61,7 +72,7 @@ impl TenantService {
             ..Default::default()
         };
 
-        Transport::request(api_req, &self.config, option).await
+        Transport::request(api_req, &*self.config_arc, option).await
     }
 }
 
@@ -171,7 +182,7 @@ mod tests {
     #[test]
     fn test_api_path_constant() {
         // Verify the API path is correct
-        use crate::core::endpoints::TENANT_V2_QUERY;
+        use crate::core::endpoints_original::TENANT_V2_QUERY;
         assert_eq!(TENANT_V2_QUERY, "/open-apis/tenant/v2/tenant/query");
     }
 
@@ -208,3 +219,4 @@ mod tests {
         assert!(debug_string.contains("Debug Test"));
     }
 }
+use std::sync::Arc;
