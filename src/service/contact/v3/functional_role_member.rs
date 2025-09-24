@@ -3,7 +3,7 @@ use crate::core::{
     api_resp::ApiResponseTrait,
     config::Config,
     constants::AccessTokenType,
-    endpoints::{EndpointBuilder, Endpoints},
+    endpoints::EndpointBuilder,
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
@@ -27,7 +27,7 @@ impl FunctionalRoleMemberService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS,
+                crate::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS,
                 "role_id",
                 role_id,
             ),
@@ -50,7 +50,7 @@ impl FunctionalRoleMemberService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_CREATE,
+                crate::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_CREATE,
                 "role_id",
                 role_id,
             ),
@@ -74,7 +74,7 @@ impl FunctionalRoleMemberService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_SCOPES,
+                crate::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_SCOPES,
                 "role_id",
                 role_id,
             ),
@@ -99,7 +99,7 @@ impl FunctionalRoleMemberService {
             http_method: reqwest::Method::GET,
             api_path: {
                 let path = EndpointBuilder::replace_param(
-                    Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_MEMBER_GET,
+                    crate::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBER_GET,
                     "role_id",
                     role_id,
                 );
@@ -124,7 +124,7 @@ impl FunctionalRoleMemberService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS,
+                crate::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS,
                 "role_id",
                 role_id,
             ),
@@ -148,7 +148,7 @@ impl FunctionalRoleMemberService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_DELETE,
+                crate::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_DELETE,
                 "role_id",
                 role_id,
             ),

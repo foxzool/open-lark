@@ -4,7 +4,7 @@ use crate::{
         api_resp::ApiResponseTrait,
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
     },
     service::contact::models::*,
@@ -31,7 +31,7 @@ impl GroupMemberService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_GROUP_MEMBERS_ADD,
+                crate::core::endpoints::contact::CONTACT_V3_GROUP_MEMBERS_ADD,
                 "group_id",
                 group_id,
             ),
@@ -54,7 +54,7 @@ impl GroupMemberService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_GROUP_MEMBERS_BATCH_ADD,
+                crate::core::endpoints::contact::CONTACT_V3_GROUP_MEMBERS_BATCH_ADD,
                 "group_id",
                 group_id,
             ),
@@ -77,7 +77,7 @@ impl GroupMemberService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_GROUP_MEMBERS_SIMPLELIST,
+                crate::core::endpoints::contact::CONTACT_V3_GROUP_MEMBERS_SIMPLELIST,
                 "group_id",
                 group_id,
             ),
@@ -101,7 +101,7 @@ impl GroupMemberService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_GROUP_MEMBERS_REMOVE,
+                crate::core::endpoints::contact::CONTACT_V3_GROUP_MEMBERS_REMOVE,
                 "group_id",
                 group_id,
             ),
@@ -124,7 +124,7 @@ impl GroupMemberService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_GROUP_MEMBERS_BATCH_REMOVE,
+                crate::core::endpoints::contact::CONTACT_V3_GROUP_MEMBERS_BATCH_REMOVE,
                 "group_id",
                 group_id,
             ),

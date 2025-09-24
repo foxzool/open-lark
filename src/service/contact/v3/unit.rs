@@ -4,7 +4,7 @@ use crate::{
         api_resp::ApiResponseTrait,
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
     },
     service::contact::models::*,
@@ -28,7 +28,7 @@ impl UnitService {
     ) -> crate::core::SDKResult<CreateUnitResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: Endpoints::CONTACT_V3_UNITS.to_string(),
+            api_path: crate::core::endpoints::contact::CONTACT_V3_UNITS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -47,7 +47,7 @@ impl UnitService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_UNIT_GET,
+                crate::core::endpoints::contact::CONTACT_V3_UNIT_GET,
                 "unit_id",
                 unit_id,
             ),
@@ -69,7 +69,7 @@ impl UnitService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_UNIT_BIND_DEPARTMENT,
+                crate::core::endpoints::contact::CONTACT_V3_UNIT_BIND_DEPARTMENT,
                 "unit_id",
                 unit_id,
             ),
@@ -92,7 +92,7 @@ impl UnitService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_UNIT_UNBIND_DEPARTMENT,
+                crate::core::endpoints::contact::CONTACT_V3_UNIT_UNBIND_DEPARTMENT,
                 "unit_id",
                 unit_id,
             ),
@@ -115,7 +115,7 @@ impl UnitService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_UNIT_LIST_DEPARTMENT,
+                crate::core::endpoints::contact::CONTACT_V3_UNIT_LIST_DEPARTMENT,
                 "unit_id",
                 unit_id,
             ),
@@ -135,7 +135,7 @@ impl UnitService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_UNIT_GET,
+                crate::core::endpoints::contact::CONTACT_V3_UNIT_GET,
                 "unit_id",
                 unit_id,
             ),
@@ -152,7 +152,7 @@ impl UnitService {
     pub async fn list(&self, _req: &ListUnitsRequest) -> crate::core::SDKResult<ListUnitsResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: Endpoints::CONTACT_V3_UNITS.to_string(),
+            api_path: crate::core::endpoints::contact::CONTACT_V3_UNITS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -168,7 +168,7 @@ impl UnitService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_UNIT_GET,
+                crate::core::endpoints::contact::CONTACT_V3_UNIT_GET,
                 "unit_id",
                 unit_id,
             ),

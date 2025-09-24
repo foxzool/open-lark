@@ -4,7 +4,7 @@ use crate::{
         api_resp::ApiResponseTrait,
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
@@ -45,7 +45,7 @@ impl UserService {
     ) -> crate::core::SDKResult<CreateUserResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: Endpoints::CONTACT_V3_USERS.to_string(),
+            api_path: crate::core::endpoints::contact::CONTACT_V3_USERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -64,7 +64,7 @@ impl UserService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_USER_GET,
+                crate::core::endpoints::contact::CONTACT_V3_USER_GET,
                 "user_id",
                 user_id,
             ),
@@ -86,7 +86,7 @@ impl UserService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_USER_UPDATE_ID,
+                crate::core::endpoints::contact::CONTACT_V3_USER_UPDATE_ID,
                 "user_id",
                 user_id,
             ),
@@ -116,7 +116,7 @@ impl UserService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_USER_GET,
+                crate::core::endpoints::contact::CONTACT_V3_USER_GET,
                 "user_id",
                 user_id,
             ),
@@ -137,7 +137,7 @@ impl UserService {
     ) -> crate::core::SDKResult<BatchGetUsersResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: Endpoints::CONTACT_V3_USERS_BATCH.to_string(),
+            api_path: crate::core::endpoints::contact::CONTACT_V3_USERS_BATCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -154,7 +154,7 @@ impl UserService {
     ) -> crate::core::SDKResult<FindUsersByDepartmentResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: Endpoints::CONTACT_V3_USERS_FIND_BY_DEPARTMENT.to_string(),
+            api_path: crate::core::endpoints::contact::CONTACT_V3_USERS_FIND_BY_DEPARTMENT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -173,7 +173,7 @@ impl UserService {
     ) -> crate::core::SDKResult<BatchGetUserIdResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: Endpoints::CONTACT_V3_USERS_BATCH_GET_ID.to_string(),
+            api_path: crate::core::endpoints::contact::CONTACT_V3_USERS_BATCH_GET_ID.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -191,7 +191,7 @@ impl UserService {
     ) -> crate::core::SDKResult<SearchUsersResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: Endpoints::CONTACT_V3_USERS_SEARCH.to_string(),
+            api_path: crate::core::endpoints::contact::CONTACT_V3_USERS_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -210,7 +210,7 @@ impl UserService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_USER_GET,
+                crate::core::endpoints::contact::CONTACT_V3_USER_GET,
                 "user_id",
                 user_id,
             ),
@@ -233,7 +233,7 @@ impl UserService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_USER_RESURRECT,
+                crate::core::endpoints::contact::CONTACT_V3_USER_RESURRECT,
                 "user_id",
                 user_id,
             ),
@@ -265,7 +265,7 @@ impl UserService {
 
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: Endpoints::CONTACT_V3_USERS.to_string(),
+            api_path: crate::core::endpoints::contact::CONTACT_V3_USERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params,

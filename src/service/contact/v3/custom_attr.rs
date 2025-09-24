@@ -1,7 +1,7 @@
 use crate::{
     core::{
         api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
-        constants::AccessTokenType, endpoints::Endpoints, http::Transport,
+        constants::AccessTokenType, http::Transport,
     },
     service::contact::models::*,
 };
@@ -24,7 +24,7 @@ impl CustomAttrService {
     ) -> crate::core::SDKResult<ListCustomAttrsResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: Endpoints::CONTACT_V3_CUSTOM_ATTRS.to_string(),
+            api_path: crate::core::endpoints::contact::CONTACT_V3_CUSTOM_ATTRS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
