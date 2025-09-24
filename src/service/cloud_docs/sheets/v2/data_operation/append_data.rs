@@ -90,7 +90,7 @@ impl SpreadsheetSheetService {
         api_req.http_method = reqwest::Method::POST;
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::App];
 
-        let api_resp = crate::core::http::Transport::request(api_req, &*self.config_arc, option).await?;
+        let api_resp = crate::core::http::Transport::request(api_req, &self.config_arc, option).await?;
 
         Ok(api_resp)
     }

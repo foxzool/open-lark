@@ -151,6 +151,7 @@ impl SpreadsheetService {
 /// - 及时清理不需要的工作表
 pub struct SpreadsheetSheetService {
     // 向后兼容：保留原始 Config 字段，便于现有测试/示例访问
+    #[allow(dead_code)] // Backward compatibility field for tests/examples
     config: Config,
     // 试点：共享配置引用，后续逐步替换内部使用以降低 clone
     config_arc: Arc<Config>,

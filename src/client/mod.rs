@@ -154,6 +154,7 @@ pub mod ws_client;
 pub struct LarkClient {
     pub config: Config,
     /// 共享配置（实验性）：单一 Arc<Config>，用于内部服务扇出以减少 clone
+    #[allow(dead_code)] // Used in constructor and tests
     shared_config: Arc<Config>,
     // 核心服务 - 使用条件编译
     #[cfg(feature = "acs")]
@@ -474,6 +475,7 @@ impl LarkClient {
     }
 
     /// 获取共享配置（用于内部服务扇出，减少 clone）
+    #[allow(dead_code)] // Used by services in constructor
     pub(crate) fn shared_config(&self) -> Arc<Config> {
         self.shared_config.clone()
     }

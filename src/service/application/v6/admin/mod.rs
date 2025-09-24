@@ -8,7 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -51,7 +51,7 @@ impl AdminService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::APPLICATION_V6_ADMIN_APPS.to_string(),
+            api_path: crate::core::endpoints::application::APPLICATION_V6_ADMIN_APPS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -87,7 +87,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_ADMIN_USER_AVAILABLE_APPS,
+                crate::core::endpoints::application::APPLICATION_V6_ADMIN_USER_AVAILABLE_APPS,
                 "user_id",
                 user_id,
             ),
@@ -121,7 +121,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_ADMIN_APP_CONTACTS_RANGE_CONFIGURATION_GET,
+                crate::core::endpoints::application::APPLICATION_V6_ADMIN_APP_CONTACTS_RANGE_CONFIGURATION_GET,
                 "app_id",
                 app_id,
             ),
@@ -156,7 +156,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_ADMIN_APP_CONTACTS_RANGE_CONFIGURATION_SET,
+                crate::core::endpoints::application::APPLICATION_V6_ADMIN_APP_CONTACTS_RANGE_CONFIGURATION_SET,
                 "app_id",
                 app_id,
             ),
@@ -191,7 +191,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_ADMIN_APP_VISIBILITY,
+                crate::core::endpoints::application::APPLICATION_V6_ADMIN_APP_VISIBILITY,
                 "app_id",
                 app_id,
             ),
@@ -226,7 +226,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_ADMIN_APP_CHECK_WHITE_BLACK_LIST,
+                crate::core::endpoints::application::APPLICATION_V6_ADMIN_APP_CHECK_WHITE_BLACK_LIST,
                 "app_id",
                 app_id,
             ),
@@ -262,7 +262,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_ADMIN_APP_VISIBILITY_CREATE,
+                crate::core::endpoints::application::APPLICATION_V6_ADMIN_APP_VISIBILITY_CREATE,
                 "app_id",
                 app_id,
             ),
@@ -285,7 +285,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_ADMIN_APP_ENABLE,
+                crate::core::endpoints::application::APPLICATION_V6_ADMIN_APP_ENABLE,
                 "app_id",
                 app_id,
             ),
@@ -320,7 +320,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_ADMIN_APP_ADMINS,
+                crate::core::endpoints::application::APPLICATION_V6_ADMIN_APP_ADMINS,
                 "app_id",
                 app_id,
             ),
@@ -355,7 +355,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
-                Endpoints::APPLICATION_V6_ADMIN_APP_ADMIN_MANAGEMENT_PERMISSIONS,
+                crate::core::endpoints::application::APPLICATION_V6_ADMIN_APP_ADMIN_MANAGEMENT_PERMISSIONS,
                 &[("app_id", app_id), ("user_id", user_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
@@ -382,7 +382,7 @@ impl AdminService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
-                Endpoints::APPLICATION_V6_ADMIN_APP_ADMIN_VERIFY,
+                crate::core::endpoints::application::APPLICATION_V6_ADMIN_APP_ADMIN_VERIFY,
                 &[("app_id", app_id), ("user_id", user_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],

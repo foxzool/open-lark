@@ -8,7 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -43,7 +43,7 @@ impl AppstorePaidInfoService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
-                Endpoints::APPLICATION_V6_APPSTORE_PAID_INFO_CHECK,
+                crate::core::endpoints::application::APPLICATION_V6_APPSTORE_PAID_INFO_CHECK,
                 &[
                     ("app_id", app_id),
                     ("user_id", user_id),
@@ -77,7 +77,7 @@ impl AppstorePaidInfoService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_APPSTORE_PAID_INFO_PRICING_PLANS,
+                crate::core::endpoints::application::APPLICATION_V6_APPSTORE_PAID_INFO_PRICING_PLANS,
                 "app_id",
                 app_id,
             ),
@@ -99,7 +99,7 @@ impl AppstorePaidInfoService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
-                Endpoints::APPLICATION_V6_APPSTORE_PAID_INFO_ORDER_GET,
+                crate::core::endpoints::application::APPLICATION_V6_APPSTORE_PAID_INFO_ORDER_GET,
                 &[("app_id", app_id), ("order_id", order_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],

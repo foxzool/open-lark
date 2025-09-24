@@ -8,7 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -36,7 +36,7 @@ impl ScopeService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_APP_SCOPE_APPLY,
+                crate::core::endpoints::application::APPLICATION_V6_APP_SCOPE_APPLY,
                 "app_id",
                 app_id,
             ),
@@ -63,7 +63,7 @@ impl ScopeService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_APP_SCOPE_GET,
+                crate::core::endpoints::application::APPLICATION_V6_APP_SCOPE_GET,
                 "app_id",
                 app_id,
             ),

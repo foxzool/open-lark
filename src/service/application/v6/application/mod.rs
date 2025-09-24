@@ -8,7 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -36,7 +36,7 @@ impl ApplicationService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_APP_TRANSFER_OWNER,
+                crate::core::endpoints::application::APPLICATION_V6_APP_TRANSFER_OWNER,
                 "app_id",
                 app_id,
             ),
@@ -58,7 +58,7 @@ impl ApplicationService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_APP_COLLABORATORS,
+                crate::core::endpoints::application::APPLICATION_V6_APP_COLLABORATORS,
                 "app_id",
                 app_id,
             ),
@@ -85,7 +85,7 @@ impl ApplicationService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_APP_COLLABORATORS,
+                crate::core::endpoints::application::APPLICATION_V6_APP_COLLABORATORS,
                 "app_id",
                 app_id,
             ),
@@ -112,7 +112,7 @@ impl ApplicationService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_APP_GET,
+                crate::core::endpoints::application::APPLICATION_V6_APP_GET,
                 "app_id",
                 app_id,
             ),
@@ -140,7 +140,7 @@ impl ApplicationService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
-                Endpoints::APPLICATION_V6_APP_VERSION_GET,
+                crate::core::endpoints::application::APPLICATION_V6_APP_VERSION_GET,
                 &[("app_id", app_id), ("version_id", version_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
@@ -174,7 +174,7 @@ impl ApplicationService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_APP_VERSIONS,
+                crate::core::endpoints::application::APPLICATION_V6_APP_VERSIONS,
                 "app_id",
                 app_id,
             ),
@@ -202,7 +202,7 @@ impl ApplicationService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
-                Endpoints::APPLICATION_V6_APP_VERSION_CONTACTS_RANGE_SUGGEST,
+                crate::core::endpoints::application::APPLICATION_V6_APP_VERSION_CONTACTS_RANGE_SUGGEST,
                 &[("app_id", app_id), ("version_id", version_id)],
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
@@ -234,7 +234,8 @@ impl ApplicationService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::APPLICATION_V6_APPS_UNDERAUDITLIST.to_string(),
+            api_path: crate::core::endpoints::application::APPLICATION_V6_APPS_UNDERAUDITLIST
+                .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -253,7 +254,7 @@ impl ApplicationService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_APP_AUDIT,
+                crate::core::endpoints::application::APPLICATION_V6_APP_AUDIT,
                 "app_id",
                 app_id,
             ),
@@ -275,7 +276,7 @@ impl ApplicationService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_APP_GROUP,
+                crate::core::endpoints::application::APPLICATION_V6_APP_GROUP,
                 "app_id",
                 app_id,
             ),
