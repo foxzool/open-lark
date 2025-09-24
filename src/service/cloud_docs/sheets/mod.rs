@@ -50,6 +50,9 @@
 //! // client.sheets.v3.data_operation.write_data_to_multiple_ranges(write_request, None).await?;
 //! ```
 
+use crate::core::{config::Config, trait_system::Service};
+use std::sync::Arc;
+
 /// Sheets API v2版本
 pub mod v2;
 /// Sheets API v3版本
@@ -60,6 +63,9 @@ pub mod v3;
 /// 聚合所有Sheets相关的API版本，提供统一的电子表格操作接口。
 /// 推荐使用v3版本获得最新功能和最佳性能。
 pub struct SheetsService {
+    config: Config,
+    #[allow(dead_code)] // Reserved for future optimizations
+    config_arc: Arc<Config>,
     /// Sheets API v2版本服务
     pub v2: v2::V2,
     /// Sheets API v3版本服务（推荐）
@@ -71,18 +77,37 @@ impl SheetsService {
     ///
     /// # 参数
     /// - `config`: 客户端配置
-    pub fn new(config: crate::core::config::Config) -> Self {
+    pub fn new(config: Config) -> Self {
+        let config_arc = Arc::new(config.clone());
         Self {
+            config: config.clone(),
+            config_arc: config_arc.clone(),
             v2: v2::V2::new(config.clone()),
             v3: v3::V3::new(config.clone()),
         }
     }
 
     /// 使用共享配置（实验性）
-    pub fn new_from_shared(shared: std::sync::Arc<crate::core::config::Config>) -> Self {
+    pub fn new_from_shared(shared: Arc<Config>) -> Self {
         Self {
+            config: shared.as_ref().clone(),
+            config_arc: shared.clone(),
             v2: v2::V2::new(shared.as_ref().clone()),
             v3: v3::V3::new(shared.as_ref().clone()),
         }
+    }
+}
+
+impl Service for SheetsService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "sheets"
+    }
+
+    fn service_version() -> &'static str {
+        "v3"
     }
 }
