@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::{EndpointBuilder, admin},
         http::Transport,
         query_params::QueryParams,
         req_option::RequestOption,
@@ -118,7 +118,7 @@ impl BadgeService {
     ) -> SDKResult<BaseResponse<BadgeCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::ADMIN_V1_BADGES_CREATE.to_string(),
+            api_path: admin::ADMIN_V1_BADGES_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -143,7 +143,7 @@ impl BadgeService {
         let api_req = ApiRequest {
             http_method: Method::PUT,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::ADMIN_V1_BADGES_OPERATION,
+                admin::ADMIN_V1_BADGES_OPERATION,
                 "badge_id",
                 &request.badge_id,
             ),
@@ -179,7 +179,7 @@ impl BadgeService {
     ) -> SDKResult<BaseResponse<BadgeImageUploadResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::ADMIN_V1_BADGES_IMAGE_UPLOAD.to_string(),
+            api_path: admin::ADMIN_V1_BADGES_IMAGE_UPLOAD.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -203,7 +203,7 @@ impl BadgeService {
     ) -> SDKResult<BaseResponse<BadgeListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::ADMIN_V1_BADGES_LIST.to_string(),
+            api_path: admin::ADMIN_V1_BADGES_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -243,7 +243,7 @@ impl BadgeService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::ADMIN_V1_BADGES_OPERATION,
+                admin::ADMIN_V1_BADGES_OPERATION,
                 "badge_id",
                 &request.badge_id,
             ),
