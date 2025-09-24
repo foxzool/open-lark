@@ -4,7 +4,7 @@ use crate::{
         api_resp::ApiResponseTrait,
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
     },
     service::contact::models::*,
@@ -28,7 +28,7 @@ impl EmployeeTypeEnumService {
     ) -> crate::core::SDKResult<CreateEmployeeTypeResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: Endpoints::CONTACT_V3_EMPLOYEE_TYPE_ENUMS.to_string(),
+            api_path: crate::core::endpoints::contact::CONTACT_V3_EMPLOYEE_TYPE_ENUMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -48,7 +48,7 @@ impl EmployeeTypeEnumService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PUT,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_EMPLOYEE_TYPE_ENUM_GET,
+                crate::core::endpoints::contact::CONTACT_V3_EMPLOYEE_TYPE_ENUM_GET,
                 "enum_id",
                 enum_id,
             ),
@@ -69,7 +69,7 @@ impl EmployeeTypeEnumService {
     ) -> crate::core::SDKResult<ListEmployeeTypesResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: Endpoints::CONTACT_V3_EMPLOYEE_TYPE_ENUMS.to_string(),
+            api_path: crate::core::endpoints::contact::CONTACT_V3_EMPLOYEE_TYPE_ENUMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
@@ -89,7 +89,7 @@ impl EmployeeTypeEnumService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_EMPLOYEE_TYPE_ENUM_GET,
+                crate::core::endpoints::contact::CONTACT_V3_EMPLOYEE_TYPE_ENUM_GET,
                 "enum_id",
                 enum_id,
             ),

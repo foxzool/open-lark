@@ -3,7 +3,7 @@ use crate::core::{
     api_resp::ApiResponseTrait,
     config::Config,
     constants::AccessTokenType,
-    endpoints::{EndpointBuilder, Endpoints},
+    endpoints::EndpointBuilder,
     http::Transport,
 };
 use serde::{Deserialize, Serialize};
@@ -26,7 +26,7 @@ impl FunctionalRoleService {
     ) -> crate::core::SDKResult<CreateFunctionalRoleResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
-            api_path: Endpoints::CONTACT_V3_FUNCTIONAL_ROLES.to_string(),
+            api_path: crate::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(req)?,
             ..Default::default()
@@ -46,7 +46,7 @@ impl FunctionalRoleService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::PUT,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_GET,
+                crate::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_GET,
                 "role_id",
                 role_id,
             ),
@@ -65,7 +65,7 @@ impl FunctionalRoleService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_GET,
+                crate::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_GET,
                 "role_id",
                 role_id,
             ),
@@ -86,7 +86,7 @@ impl FunctionalRoleService {
     ) -> crate::core::SDKResult<ListFunctionalRolesResponse> {
         let mut api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: Endpoints::CONTACT_V3_FUNCTIONAL_ROLES.to_string(),
+            api_path: crate::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             ..Default::default()
@@ -117,7 +117,7 @@ impl FunctionalRoleService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_FUNCTIONAL_ROLE_GET,
+                crate::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_GET,
                 "role_id",
                 role_id,
             ),
