@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -99,7 +99,7 @@ impl DataItemService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::SEARCH_V2_DATA_ITEM_CREATE,
+                crate::core::endpoints::search::SEARCH_V2_DATA_ITEM_CREATE,
                 "data_source_id",
                 data_source_id,
             ),
@@ -133,7 +133,7 @@ impl DataItemService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::SEARCH_V2_DATA_ITEM_BATCH_CREATE,
+                crate::core::endpoints::search::SEARCH_V2_DATA_ITEM_BATCH_CREATE,
                 "data_source_id",
                 data_source_id,
             ),
@@ -163,7 +163,7 @@ impl DataItemService {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_params_from_array(
-                Endpoints::SEARCH_V2_DATA_ITEM_OPERATION,
+                crate::core::endpoints::search::SEARCH_V2_DATA_ITEM_OPERATION,
                 &[
                     ("data_source_id", data_source_id),
                     ("data_item_id", data_item_id),
@@ -194,7 +194,7 @@ impl DataItemService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_params_from_array(
-                Endpoints::SEARCH_V2_DATA_ITEM_OPERATION,
+                crate::core::endpoints::search::SEARCH_V2_DATA_ITEM_OPERATION,
                 &[
                     ("data_source_id", data_source_id),
                     ("data_item_id", data_item_id),

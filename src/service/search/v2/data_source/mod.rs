@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -102,7 +102,7 @@ impl DataSourceService {
     ) -> SDKResult<BaseResponse<CreateDataSourceResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::SEARCH_V2_DATA_SOURCES.to_string(),
+            api_path: crate::core::endpoints::search::SEARCH_V2_DATA_SOURCES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -127,7 +127,7 @@ impl DataSourceService {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::SEARCH_V2_DATA_SOURCE_OPERATION,
+                crate::core::endpoints::search::SEARCH_V2_DATA_SOURCE_OPERATION,
                 "data_source_id",
                 data_source_id,
             ),
@@ -156,7 +156,7 @@ impl DataSourceService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::SEARCH_V2_DATA_SOURCE_OPERATION,
+                crate::core::endpoints::search::SEARCH_V2_DATA_SOURCE_OPERATION,
                 "data_source_id",
                 data_source_id,
             ),
@@ -184,7 +184,7 @@ impl DataSourceService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::SEARCH_V2_DATA_SOURCE_OPERATION,
+                crate::core::endpoints::search::SEARCH_V2_DATA_SOURCE_OPERATION,
                 "data_source_id",
                 data_source_id,
             ),
@@ -210,7 +210,7 @@ impl DataSourceService {
     ) -> SDKResult<BaseResponse<ListDataSourceResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::SEARCH_V2_DATA_SOURCES.to_string(),
+            api_path: crate::core::endpoints::search::SEARCH_V2_DATA_SOURCES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
