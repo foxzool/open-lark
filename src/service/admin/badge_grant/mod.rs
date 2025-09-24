@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::{EndpointBuilder, admin},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -120,7 +120,7 @@ impl BadgeGrantService {
     ) -> SDKResult<BaseResponse<BadgeGrantCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::ADMIN_V1_BADGE_GRANTS_CREATE.to_string(),
+            api_path: admin::ADMIN_V1_BADGE_GRANTS_CREATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -145,7 +145,7 @@ impl BadgeGrantService {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::ADMIN_V1_BADGE_GRANTS_OPERATION,
+                admin::ADMIN_V1_BADGE_GRANTS_OPERATION,
                 "grant_id",
                 &request.grant_id,
             ),
@@ -173,7 +173,7 @@ impl BadgeGrantService {
         let api_req = ApiRequest {
             http_method: Method::PUT,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::ADMIN_V1_BADGE_GRANTS_OPERATION,
+                admin::ADMIN_V1_BADGE_GRANTS_OPERATION,
                 "grant_id",
                 &request.grant_id,
             ),
@@ -207,7 +207,7 @@ impl BadgeGrantService {
     ) -> SDKResult<BaseResponse<BadgeGrantListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::ADMIN_V1_BADGE_GRANTS_LIST.to_string(),
+            api_path: admin::ADMIN_V1_BADGE_GRANTS_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -248,7 +248,7 @@ impl BadgeGrantService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::ADMIN_V1_BADGE_GRANTS_OPERATION,
+                admin::ADMIN_V1_BADGE_GRANTS_OPERATION,
                 "grant_id",
                 &request.grant_id,
             ),
