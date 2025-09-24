@@ -1,4 +1,4 @@
-use crate::core::config::Config;
+use crate::{core::config::Config, impl_full_service};
 
 pub mod create;
 pub mod delete;
@@ -20,6 +20,9 @@ pub mod unsubscription;
 pub struct CalendarEventService {
     pub config: Config,
 }
+
+// Service 抽象接入：Calendar v4 CalendarEventService
+impl_full_service!(CalendarEventService, "calendar.event", "v4");
 
 impl CalendarEventService {
     pub fn new(config: Config) -> Self {
