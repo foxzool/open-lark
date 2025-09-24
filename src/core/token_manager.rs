@@ -1,4 +1,5 @@
 use log::warn;
+use tracing::{info_span, Instrument};
 use serde::{Deserialize, Serialize};
 use std::{
     sync::{
@@ -460,30 +461,43 @@ impl TokenManager {
         app_ticket: &str,
         app_ticket_manager: &Arc<Mutex<AppTicketManager>>,
     ) -> SDKResult<String> {
-        let start_time = Instant::now();
-        let key = app_access_token_key(&config.app_id);
+        let span = info_span!(
+            "token_get_app",
+            app_id = %config.app_id,
+            app_type = ?config.app_type,
+            cache_hit = tracing::field::Empty,
+            duration_ms = tracing::field::Empty,
+        );
 
-        // 快速路径：使用读锁尝试获取缓存的token
-        {
-            self.metrics
-                .read_lock_acquisitions
-                .fetch_add(1, Ordering::Relaxed);
-            let cache = self.cache.read().await;
-            if let Some(token) = cache.get(&key) {
-                if !token.is_empty() {
-                    self.metrics.app_cache_hits.fetch_add(1, Ordering::Relaxed);
-                    log::debug!("App token cache hit in {:?}", start_time.elapsed());
-                    return Ok(token);
+        async move {
+            let start_time = Instant::now();
+            let key = app_access_token_key(&config.app_id);
+
+            // 快速路径：使用读锁尝试获取缓存的token
+            {
+                self.metrics
+                    .read_lock_acquisitions
+                    .fetch_add(1, Ordering::Relaxed);
+                let cache = self.cache.read().await;
+                if let Some(token) = cache.get(&key) {
+                    if !token.is_empty() {
+                        self.metrics.app_cache_hits.fetch_add(1, Ordering::Relaxed);
+                        let current_span = tracing::Span::current();
+                        current_span.record("cache_hit", true);
+                        current_span.record("duration_ms", start_time.elapsed().as_millis() as u64);
+                        log::debug!("App token cache hit in {:?}", start_time.elapsed());
+                        return Ok(token);
+                    }
                 }
             }
-        }
 
-        // 记录缓存未命中
-        self.metrics
-            .app_cache_misses
-            .fetch_add(1, Ordering::Relaxed);
+            // 记录缓存未命中
+            tracing::Span::current().record("cache_hit", false);
+            self.metrics
+                .app_cache_misses
+                .fetch_add(1, Ordering::Relaxed);
 
-        // 慢速路径：需要刷新token，使用写锁
+            // 慢速路径：需要刷新token，使用写锁
         self.metrics
             .write_lock_acquisitions
             .fetch_add(1, Ordering::Relaxed);
@@ -514,25 +528,29 @@ impl TokenManager {
                 .await
         };
 
-        // 记录刷新结果
-        match &result {
-            Ok(_) => {
-                self.metrics.refresh_success.fetch_add(1, Ordering::Relaxed);
-                log::debug!("App token refresh succeeded in {:?}", start_time.elapsed());
+            // 记录刷新结果
+            match &result {
+                Ok(_) => {
+                    self.metrics.refresh_success.fetch_add(1, Ordering::Relaxed);
+                    log::debug!("App token refresh succeeded in {:?}", start_time.elapsed());
+                }
+                Err(e) => {
+                    self.metrics
+                        .refresh_failures
+                        .fetch_add(1, Ordering::Relaxed);
+                    log::warn!(
+                        "App token refresh failed in {:?}: {:?}",
+                        start_time.elapsed(),
+                        e
+                    );
+                }
             }
-            Err(e) => {
-                self.metrics
-                    .refresh_failures
-                    .fetch_add(1, Ordering::Relaxed);
-                log::warn!(
-                    "App token refresh failed in {:?}: {:?}",
-                    start_time.elapsed(),
-                    e
-                );
-            }
-        }
 
-        result
+            tracing::Span::current().record("duration_ms", start_time.elapsed().as_millis() as u64);
+            result
+        }
+        .instrument(span)
+        .await
     }
 
     async fn get_custom_app_access_token_then_cache(&self, config: &Config) -> SDKResult<String> {
