@@ -4,7 +4,7 @@ use crate::{
         api_resp::ApiResponseTrait,
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
     },
     service::contact::models::*,
@@ -26,7 +26,7 @@ impl JobTitleService {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::CONTACT_V3_JOB_TITLE_GET,
+                crate::core::endpoints::contact::CONTACT_V3_JOB_TITLE_GET,
                 "job_title_id",
                 job_title_id,
             ),
@@ -46,7 +46,7 @@ impl JobTitleService {
     ) -> crate::core::SDKResult<ListJobTitlesResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: Endpoints::CONTACT_V3_JOB_TITLES.to_string(),
+            api_path: crate::core::endpoints::contact::CONTACT_V3_JOB_TITLES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
