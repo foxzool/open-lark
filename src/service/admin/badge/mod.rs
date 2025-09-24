@@ -17,12 +17,16 @@ use crate::{
         Badge, BadgeCreateRequest, BadgeGetRequest, BadgeImageUploadRequest,
         BadgeImageUploadResult, BadgeListRequest, BadgeUpdateRequest, PageResponse,
     },
+    impl_full_service,
 };
 
 /// 勋章管理服务
 pub struct BadgeService {
     pub config: Config,
 }
+
+// Service 抽象接入：Admin BadgeService
+impl_full_service!(BadgeService, "admin.badge", "v1");
 
 /// 勋章创建响应
 #[derive(Debug, Serialize, Deserialize)]

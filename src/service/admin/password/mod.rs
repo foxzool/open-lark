@@ -14,6 +14,7 @@ use crate::{
         SDKResult,
     },
     service::admin::models::{PasswordResetRequest, PasswordResetResponse},
+    impl_full_service,
 };
 
 // Re-export builders
@@ -25,6 +26,9 @@ mod builders;
 pub struct PasswordService {
     pub config: Config,
 }
+
+// Service 抽象接入：Admin PasswordService
+impl_full_service!(PasswordService, "admin.password", "v1");
 
 /// 重置用户企业邮箱密码响应结构
 #[derive(Debug, Serialize, Deserialize)]

@@ -16,12 +16,16 @@ use crate::{
         BadgeGrant, BadgeGrantCreateRequest, BadgeGrantDeleteRequest, BadgeGrantGetRequest,
         BadgeGrantListRequest, BadgeGrantUpdateRequest, PageResponse,
     },
+    impl_full_service,
 };
 
 /// 勋章授予名单管理服务
 pub struct BadgeGrantService {
     pub config: Config,
 }
+
+// Service 抽象接入：Admin BadgeGrantService
+impl_full_service!(BadgeGrantService, "admin.badge_grant", "v1");
 
 /// 勋章授予名单创建响应
 #[derive(Debug, Serialize, Deserialize)]
