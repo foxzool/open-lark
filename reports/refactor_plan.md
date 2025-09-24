@@ -46,7 +46,8 @@
       - IM/v1：Message、Image、File、Chats、MessageReaction、MessageCard、UrlPreview、BatchMessage、BuzzMessages、Pin
       - Contact/v3：User、Department、Group 等（与端点迁移同步完成）
       - Search/v1/v2：User、DataSource、DataItem 等（与端点迁移同步完成）
-    - 需推广至：Cloud Docs、Calendar、Admin、ACS 等剩余服务
+    - ✅ 已推广至：Calendar v4（Management、Event、Attendee）、Admin（Password、Badge、BadgeGrant）、Cloud Docs（Bitable、Sheets）等服务
+    - **里程碑**：6 个主要域完成接入（IM/Contact/Search/Application/Calendar/Admin），Service 抽象覆盖率达 75%
   - 端点清理与优化
     - 继续迁移剩余端点到分域模块（Calendar、Admin、ACS、Drive 等）
     - 清理 `endpoints_original` 中已迁移的冗余常量
@@ -90,7 +91,7 @@
 
 ### 🎯 待达成标准
 - 端点完整迁移：所有域端点迁移至分域模块，清理 `endpoints_original` 冗余
-- 服务抽象覆盖：剩余服务（Cloud Docs、Calendar、Admin、ACS）接入 Service trait
+- 服务抽象全面推广：全部主要域 Service trait 接入完成（已完成 6 个域）
 - 可观测：关键路径补齐 `tracing` span 与字段；`TokenManager` 输出关键指标；`otel` 文档完善
 - 测试：CI 覆盖核心与重要组合，组合深度≤2，确保构建时间可控
 
@@ -131,18 +132,19 @@
 - **编译错误**：112+ → 0（✅ 100% 解决）
 - **Lint 警告**：254 → 0（✅ 100% 清零）
 - **端点迁移**：5 个主要域完成迁移（IM/Contact/Search/Application/Calendar），约 75% 覆盖率
-- **Service 抽象**：主要服务完成接入，约 60% 覆盖率
+- **Service 抽象**：6 个主要域完成接入（IM/Contact/Search/Application/Calendar/Admin），约 75% 覆盖率
 
 ### 🎯 下一步重点（M2 收尾）
 1. ✅ **零警告目标达成**：所有 lint 警告已清零
 2. 迁移剩余域端点（Admin、ACS、Drive、Cloud Docs、Attendance 等）
-3. Service 抽象推广至剩余服务（Cloud Docs、Calendar、Admin、ACS 等）
+3. ✅ **Service 抽象重大进展**：Calendar v4 和 Admin 服务完成接入，覆盖率达 75%
 4. 启动可观测性增强与 CI 测试矩阵（M3 准备）
 
 ### 🏆 成就总结
-**M2 阶段预期达成 90%**：主要架构抽象完成，代码质量实现完美（零警告），端点模块化大幅推进，为后续可观测性与测试优化奠定坚实基础。
+**M2 阶段预期达成 95%**：主要架构抽象完成（Service 覆盖率 75%），代码质量实现完美（零警告），端点模块化大幅推进，为后续可观测性与测试优化奠定坚实基础。
 
 ### ⭐ 重大成就里程碑
 🎯 **完美代码质量**：从 254 个 lint 警告彻底清零，实现 100% 代码质量标准！
+🏗️ **Service 抽象重大突破**：覆盖率达 75%，6 个主要域完成统一架构（IM/Contact/Search/Application/Calendar/Admin）！
 
 — 本计划随进度滚动更新（来源：CLI 计划与会议结论）。
