@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
+        
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -73,7 +73,7 @@ impl SuiteSearchService {
     ) -> SDKResult<BaseResponse<SearchMessageResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::SEARCH_V2_MESSAGE.to_string(),
+            api_path: crate::core::endpoints::search::SEARCH_V2_MESSAGE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -114,7 +114,7 @@ impl SuiteSearchService {
     ) -> SDKResult<BaseResponse<SearchAppResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::SEARCH_V2_APP.to_string(),
+            api_path: crate::core::endpoints::search::SEARCH_V2_APP.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
