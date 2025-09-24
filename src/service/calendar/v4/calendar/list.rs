@@ -6,7 +6,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
-        endpoints::Endpoints,
+        endpoints::calendar::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -159,7 +159,7 @@ impl CalendarManagementService {
     ) -> SDKResult<BaseResponse<ListCalendarResponse>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = Endpoints::CALENDAR_V4_CALENDARS.to_string();
+        api_req.api_path = CALENDAR_V4_CALENDARS.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

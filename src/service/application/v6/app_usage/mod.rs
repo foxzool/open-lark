@@ -8,7 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -54,7 +54,7 @@ impl AppUsageService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_APP_USAGE_DEPARTMENT_OVERVIEW,
+                crate::core::endpoints::application::APPLICATION_V6_APP_USAGE_DEPARTMENT_OVERVIEW,
                 "app_id",
                 app_id,
             ),
@@ -81,7 +81,7 @@ impl AppUsageService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_APP_USAGE_MESSAGE_PUSH_OVERVIEW,
+                crate::core::endpoints::application::APPLICATION_V6_APP_USAGE_MESSAGE_PUSH_OVERVIEW,
                 "app_id",
                 app_id,
             ),
@@ -108,7 +108,7 @@ impl AppUsageService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_APP_USAGE_OVERVIEW,
+                crate::core::endpoints::application::APPLICATION_V6_APP_USAGE_OVERVIEW,
                 "app_id",
                 app_id,
             ),
