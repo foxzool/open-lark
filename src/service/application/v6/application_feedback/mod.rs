@@ -8,7 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -42,7 +42,7 @@ impl ApplicationFeedbackService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPLICATION_V6_APPLICATION_FEEDBACK_GET,
+                crate::core::endpoints::application::APPLICATION_V6_APPLICATION_FEEDBACK_GET,
                 "feedback_id",
                 feedback_id,
             ),
@@ -90,7 +90,8 @@ impl ApplicationFeedbackService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::APPLICATION_V6_APPLICATION_FEEDBACK.to_string(),
+            api_path: crate::core::endpoints::application::APPLICATION_V6_APPLICATION_FEEDBACK
+                .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
