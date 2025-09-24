@@ -2,6 +2,7 @@ use std::{collections::HashSet, marker::PhantomData};
 
 use log::debug;
 use reqwest::RequestBuilder;
+use tracing::{info_span, Instrument};
 
 use crate::core::{
     api_req::ApiRequest,
@@ -26,21 +27,54 @@ impl<T: ApiResponseTrait> Transport<T> {
         config: &Config,
         option: Option<RequestOption>,
     ) -> Result<BaseResponse<T>, LarkAPIError> {
-        let option = option.unwrap_or_default();
-
-        if req.supported_access_token_types.is_empty() {
-            req.supported_access_token_types = vec![AccessTokenType::None];
-        }
-
-        validate_token_type(&req.supported_access_token_types, &option)?;
-        let access_token_type = determine_token_type(
-            &req.supported_access_token_types,
-            &option,
-            config.enable_token_cache,
+        // Create span for HTTP request tracing
+        let span = info_span!(
+            "http_request",
+            method = %req.http_method,
+            path = %req.api_path,
+            app_id = %config.app_id,
+            duration_ms = tracing::field::Empty,
+            status = tracing::field::Empty,
         );
-        validate(config, &option, access_token_type)?;
 
-        Self::do_request(req, access_token_type, config, option).await
+        async move {
+            let start_time = std::time::Instant::now();
+            let option = option.unwrap_or_default();
+
+            if req.supported_access_token_types.is_empty() {
+                req.supported_access_token_types = vec![AccessTokenType::None];
+            }
+
+            let result = async {
+                validate_token_type(&req.supported_access_token_types, &option)?;
+                let access_token_type = determine_token_type(
+                    &req.supported_access_token_types,
+                    &option,
+                    config.enable_token_cache,
+                );
+                validate(config, &option, access_token_type)?;
+
+                Self::do_request(req, access_token_type, config, option).await
+            }.await;
+
+            // Record metrics in current span
+            let current_span = tracing::Span::current();
+            let duration_ms = start_time.elapsed().as_millis() as u64;
+            current_span.record("duration_ms", duration_ms);
+
+            match &result {
+                Ok(response) => {
+                    current_span.record("status", if response.success() { "success" } else { "api_error" });
+                }
+                Err(_) => {
+                    current_span.record("status", "error");
+                }
+            }
+
+            result
+        }
+        .instrument(span)
+        .await
     }
 
     async fn do_request(
@@ -67,22 +101,39 @@ impl<T: ApiResponseTrait> Transport<T> {
         body: Vec<u8>,
         multi_part: bool,
     ) -> SDKResult<BaseResponse<T>> {
-        let future = if multi_part {
-            raw_request.send()
-        } else {
-            raw_request.body(body).send()
-        };
+        // Create span for network request tracing
+        let span = info_span!(
+            "http_send",
+            multi_part = multi_part,
+            body_size = body.len(),
+            response_code = tracing::field::Empty,
+            response_size = tracing::field::Empty,
+        );
 
-        match future.await {
-            Ok(response) => {
-                // 使用改进的响应处理器，单次解析而非双重解析
-                ImprovedResponseHandler::handle_response(response).await
-            }
-            Err(err) => {
-                debug!("Request error: {err:?}");
-                Err(LarkAPIError::RequestError(err.to_string()))
+        async move {
+            let future = if multi_part {
+                raw_request.send()
+            } else {
+                raw_request.body(body).send()
+            };
+
+            match future.await {
+                Ok(response) => {
+                    let status_code = response.status();
+                    tracing::Span::current().record("response_code", status_code.as_u16());
+
+                    // 使用改进的响应处理器，单次解析而非双重解析
+                    ImprovedResponseHandler::handle_response(response).await
+                }
+                Err(err) => {
+                    debug!("Request error: {err:?}");
+                    tracing::Span::current().record("response_code", 0_u16); // Indicate network error
+                    Err(LarkAPIError::RequestError(err.to_string()))
+                }
             }
         }
+        .instrument(span)
+        .await
     }
 }
 
