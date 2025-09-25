@@ -29,6 +29,15 @@ pub const APPROVAL_V4_FILE_UPLOAD: &str = "/open-apis/approval/v4/files/upload";
 /// 审批实例列表
 pub const APPROVAL_V4_INSTANCES: &str = "/open-apis/approval/v4/instances";
 
+/// 审批实例列表查询
+pub const APPROVAL_V4_INSTANCES_LIST: &str = "/open-apis/approval/v4/instances/list";
+
+/// 审批实例搜索
+pub const APPROVAL_V4_INSTANCES_SEARCH: &str = "/open-apis/approval/v4/instances/search";
+
+/// 审批实例抄送搜索
+pub const APPROVAL_V4_INSTANCES_SEARCH_CC: &str = "/open-apis/approval/v4/instances/search_cc";
+
 /// 审批实例取消
 pub const APPROVAL_V4_INSTANCE_CANCEL: &str =
     "/open-apis/approval/v4/instances/{instance_id}/cancel";
@@ -46,6 +55,22 @@ pub const APPROVAL_V4_INSTANCE_GET: &str = "/open-apis/approval/v4/instances/{in
 pub const APPROVAL_V4_INSTANCE_COMMENTS: &str =
     "/open-apis/approval/v4/instances/{instance_id}/comments";
 
+/// 审批实例评论创建
+pub const APPROVAL_V4_INSTANCE_COMMENTS_CREATE: &str =
+    "/open-apis/approval/v4/instances/{instance_id}/comments/create";
+
+/// 审批实例评论列表查询
+pub const APPROVAL_V4_INSTANCE_COMMENTS_LIST: &str =
+    "/open-apis/approval/v4/instances/{instance_id}/comments/list";
+
+/// 审批实例评论回复
+pub const APPROVAL_V4_INSTANCE_COMMENTS_REPLY: &str =
+    "/open-apis/approval/v4/instances/{instance_id}/comments/reply";
+
+/// 审批实例评论删除
+pub const APPROVAL_V4_INSTANCE_COMMENT_DELETE: &str =
+    "/open-apis/approval/v4/instances/{instance_id}/comments/{comment_id}/delete";
+
 /// 审批实例评论操作
 pub const APPROVAL_V4_INSTANCE_COMMENT_OPERATION: &str =
     "/open-apis/approval/v4/instances/{instance_id}/comments/{comment_id}";
@@ -53,8 +78,14 @@ pub const APPROVAL_V4_INSTANCE_COMMENT_OPERATION: &str =
 /// 审批消息
 pub const APPROVAL_V4_MESSAGES: &str = "/open-apis/approval/v4/messages";
 
+/// 审批消息更新
+pub const APPROVAL_V4_MESSAGE_PATCH: &str = "/open-apis/approval/v4/messages/{message_id}";
+
 /// 审批搜索
 pub const APPROVAL_V4_SEARCH: &str = "/open-apis/approval/v4/search";
+
+/// 审批列表搜索
+pub const APPROVAL_V4_APPROVALS_SEARCH: &str = "/open-apis/approval/v4/approvals/search";
 
 /// 审批任务列表
 pub const APPROVAL_V4_TASKS: &str = "/open-apis/approval/v4/tasks";

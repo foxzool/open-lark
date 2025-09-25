@@ -2,7 +2,10 @@ use serde::Serialize;
 use serde_json::Value;
 
 use crate::{
-    core::{api_req::ApiRequest, api_resp::BaseResponse, constants::AccessTokenType},
+    core::{
+        api_req::ApiRequest, api_resp::BaseResponse, constants::AccessTokenType,
+        endpoints::cloud_docs::*, req_option::RequestOption, SDKResult,
+    },
     impl_executable_builder_owned,
     service::cloud_docs::sheets::v2::{
         data_operation::{UpdateSheetDataResponse, ValueRangeRequest},
@@ -78,7 +81,7 @@ impl SpreadsheetSheetService {
     pub async fn append_data(
         &self,
         request: AppendDataRequest,
-        option: Option<req_option::RequestOption>,
+        option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AppendDataResponse>> {
         let mut api_req = request.api_request;
         api_req.api_path =
