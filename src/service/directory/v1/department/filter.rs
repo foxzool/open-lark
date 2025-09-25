@@ -8,6 +8,7 @@ use crate::{
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
+        endpoints::directory::*,
         SDKResult,
     },
     impl_executable_builder_owned,
