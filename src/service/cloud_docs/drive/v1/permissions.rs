@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse},
         config::Config,
         constants::AccessTokenType,
+        endpoints::cloud_docs::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
