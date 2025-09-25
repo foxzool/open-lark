@@ -92,3 +92,30 @@ pub const APPROVAL_V4_TASKS: &str = "/open-apis/approval/v4/tasks";
 
 /// 审批任务操作
 pub const APPROVAL_V4_TASK_OPERATION: &str = "/open-apis/approval/v4/tasks/{task_id}";
+
+/// 审批任务搜索
+pub const APPROVAL_V4_TASKS_SEARCH: &str = "/open-apis/approval/v4/tasks/search";
+
+/// 审批任务查询
+pub const APPROVAL_V4_TASKS_QUERY: &str = "/open-apis/approval/v4/tasks/query";
+
+/// 审批任务同意
+pub const APPROVAL_V4_TASK_APPROVE: &str = "/open-apis/approval/v4/tasks/{task_id}/approve";
+
+/// 审批任务拒绝
+pub const APPROVAL_V4_TASK_REJECT: &str = "/open-apis/approval/v4/tasks/{task_id}/reject";
+
+/// 审批任务转交
+pub const APPROVAL_V4_TASK_TRANSFER: &str = "/open-apis/approval/v4/tasks/{task_id}/transfer";
+
+/// 审批任务指定回退
+pub const APPROVAL_V4_TASK_SPECIFIED_ROLLBACK: &str = "/open-apis/approval/v4/tasks/{task_id}/specified_rollback";
+
+/// 审批任务回退
+pub const APPROVAL_V4_TASK_ROLLBACK: &str = "/open-apis/approval/v4/tasks/{task_id}/rollback";
+
+/// 审批任务加签
+pub const APPROVAL_V4_TASK_ADD_SIGN: &str = "/open-apis/approval/v4/tasks/{task_id}/add_sign";
+
+/// 审批任务重新发起
+pub const APPROVAL_V4_TASK_RESUBMIT: &str = "/open-apis/approval/v4/tasks/{task_id}/resubmit";

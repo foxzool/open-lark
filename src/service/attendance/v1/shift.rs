@@ -7,7 +7,7 @@ use crate::{
         api_resp::BaseResponse,
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::{attendance::*, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
