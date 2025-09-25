@@ -276,6 +276,62 @@ pub const COMMENT_V1_COMMENT_REPLY_DELETE: &str = "/open-apis/comment/v1/comment
 /// Assistant助手服务
 pub const ASSISTANT_V1_FILE_SUBSCRIPTION: &str = "/open-apis/assistant/v1/file/{}/{}/subscription";
 
+// ==================== Drive (云盘) v1 ====================
+
+/// Drive文件管理
+pub const DRIVE_V1_FILES: &str = "/open-apis/drive/v1/files";
+pub const DRIVE_V1_FILE_GET: &str = "/open-apis/drive/v1/files/{}";
+pub const DRIVE_V1_FILE_COPY: &str = "/open-apis/drive/v1/files/{}/copy";
+pub const DRIVE_V1_FILE_DOWNLOAD: &str = "/open-apis/drive/v1/files/{}/download";
+pub const DRIVE_V1_FILE_STATISTICS: &str = "/open-apis/drive/v1/files/{}/statistics";
+pub const DRIVE_V1_FILE_SUBSCRIPTIONS: &str = "/open-apis/drive/v1/files/{}/subscriptions";
+pub const DRIVE_V1_FILES_SUBSCRIBE: &str = "/open-apis/drive/v1/files/subscribe";
+pub const DRIVE_V1_FILES_SEARCH: &str = "/open-apis/drive/v1/files/search";
+pub const DRIVE_V1_FILES_CREATE_FOLDER: &str = "/open-apis/drive/v1/files/create_folder";
+pub const DRIVE_V1_FILES_CREATE_SHORTCUT: &str = "/open-apis/drive/v1/files/create_shortcut";
+
+/// Drive上传管理
+pub const DRIVE_V1_FILES_UPLOAD_PREPARE: &str = "/open-apis/drive/v1/files/upload_prepare";
+pub const DRIVE_V1_FILES_UPLOAD_PART: &str = "/open-apis/drive/v1/files/upload_part";
+pub const DRIVE_V1_FILES_UPLOAD_FINISH: &str = "/open-apis/drive/v1/files/upload_finish";
+pub const DRIVE_V1_FILES_UPLOAD_ALL: &str = "/open-apis/drive/v1/files/upload_all";
+
+/// Drive文件夹管理
+pub const DRIVE_V1_FOLDERS: &str = "/open-apis/drive/v1/folders";
+pub const DRIVE_V1_FOLDER_GET: &str = "/open-apis/drive/v1/folders/{}";
+pub const DRIVE_V1_FOLDER_CHILDREN: &str = "/open-apis/drive/v1/folders/{}/children";
+pub const DRIVE_V1_FOLDER_MOVE: &str = "/open-apis/drive/v1/folders/{}/move";
+pub const DRIVE_V1_FOLDERS_ROOT_FOLDER_META: &str = "/open-apis/drive/v1/folders/root_folder_meta";
+
+/// Drive文件版本管理
+pub const DRIVE_V1_FILE_VERSIONS: &str = "/open-apis/drive/v1/files/{}/versions";
+pub const DRIVE_V1_FILE_VERSION_GET: &str = "/open-apis/drive/v1/files/{}/versions/{}";
+
+/// Drive文件互动记录
+pub const DRIVE_V1_FILE_VIEW_RECORDS: &str = "/open-apis/drive/v1/files/{}/view_records";
+pub const DRIVE_V1_FILE_LIKE_RECORDS: &str = "/open-apis/drive/v1/files/{}/like_records";
+
+/// Drive媒体管理
+pub const DRIVE_V1_MEDIAS_UPLOAD_PREPARE: &str = "/open-apis/drive/v1/medias/upload_prepare";
+pub const DRIVE_V1_MEDIAS_UPLOAD_PART: &str = "/open-apis/drive/v1/medias/upload_part";
+pub const DRIVE_V1_MEDIAS_UPLOAD_FINISH: &str = "/open-apis/drive/v1/medias/upload_finish";
+pub const DRIVE_V1_MEDIAS_UPLOAD_ALL: &str = "/open-apis/drive/v1/medias/upload_all";
+pub const DRIVE_V1_MEDIAS_DOWNLOAD: &str = "/open-apis/drive/v1/medias/{}/download";
+pub const DRIVE_V1_MEDIAS_BATCH_GET_TMP_DOWNLOAD_URL: &str =
+    "/open-apis/drive/v1/medias/batch_get_tmp_download_url";
+
+/// Drive批量查询和导入
+pub const DRIVE_V1_METAS_BATCH_QUERY: &str = "/open-apis/drive/v1/metas/batch_query";
+pub const DRIVE_V1_IMPORT_TASKS: &str = "/open-apis/drive/v1/import_tasks";
+pub const DRIVE_V1_IMPORT_TASK_GET: &str = "/open-apis/drive/v1/import_tasks/{}";
+pub const DRIVE_V1_TASK_GET: &str = "/open-apis/drive/v1/tasks/{}";
+
+/// Drive Explorer v2
+pub const DRIVE_EXPLORER_V2_ROOT_FOLDER_META: &str =
+    "/open-apis/drive/explorer/v2/root_folder_meta";
+pub const DRIVE_EXPLORER_V2_FOLDER_META: &str =
+    "/open-apis/drive/explorer/v2/folder/{folder_token}/meta";
+
 // ==================== Permission (权限) v1/v2 ====================
 
 /// Drive权限管理v1

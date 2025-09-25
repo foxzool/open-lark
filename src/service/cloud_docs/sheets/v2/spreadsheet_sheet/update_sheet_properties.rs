@@ -1,7 +1,14 @@
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    core::{api_req::ApiRequest, api_resp::BaseResponse, constants::AccessTokenType},
+    core::{
+        api_req::ApiRequest,
+        api_resp::BaseResponse,
+        constants::AccessTokenType,
+        endpoints::cloud_docs::*,
+        req_option::RequestOption,
+        SDKResult,
+    },
     impl_executable_builder_owned,
     service::sheets::v2::{
         spreadsheet_sheet::{OperateSheetResponse, OperateSheetsRequestElem},
@@ -118,7 +125,7 @@ impl SpreadsheetSheetService {
     pub async fn update_sheet_properties(
         &self,
         request: UpdateSheetPropertiesRequest,
-        option: Option<req_option::RequestOption>,
+        option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OperateSheetResponse>> {
         let mut api_req = request.api_request;
         api_req.api_path =
