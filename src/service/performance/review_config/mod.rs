@@ -7,7 +7,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -48,7 +47,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<SemesterListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::PERFORMANCE_SEMESTER_LIST.to_string(),
+            api_path: PERFORMANCE_SEMESTER_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -87,7 +86,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<ActivityQueryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::PERFORMANCE_ACTIVITIES_QUERY.to_string(),
+            api_path: PERFORMANCE_ACTIVITIES_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -130,7 +129,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<AdditionalInfoQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::PERFORMANCE_ADDITIONAL_INFO_QUERY.to_string(),
+            api_path: PERFORMANCE_ADDITIONAL_INFO_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -158,7 +157,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<AdditionalInfoImportResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::PERFORMANCE_ADDITIONAL_INFO_IMPORT.to_string(),
+            api_path: PERFORMANCE_ADDITIONAL_INFO_IMPORT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -186,7 +185,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<AdditionalInfoDeleteResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::PERFORMANCE_ADDITIONAL_INFO_DELETE.to_string(),
+            api_path: PERFORMANCE_ADDITIONAL_INFO_DELETE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -214,7 +213,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<UserGroupWriteResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::PERFORMANCE_USER_GROUP_WRITE.to_string(),
+            api_path: PERFORMANCE_USER_GROUP_WRITE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -242,7 +241,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<RevieweeQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::PERFORMANCE_REVIEWEES_QUERY.to_string(),
+            api_path: PERFORMANCE_REVIEWEES_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -270,7 +269,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<ReviewTemplateQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::PERFORMANCE_REVIEW_TEMPLATES_QUERY.to_string(),
+            api_path: PERFORMANCE_REVIEW_TEMPLATES_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -298,7 +297,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<ReviewItemQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::PERFORMANCE_REVIEW_ITEMS_QUERY.to_string(),
+            api_path: PERFORMANCE_REVIEW_ITEMS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -326,7 +325,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<TagQuestionConfigQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::PERFORMANCE_TAG_QUESTIONS_QUERY.to_string(),
+            api_path: PERFORMANCE_TAG_QUESTIONS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -354,7 +353,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<MetricQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::PERFORMANCE_METRICS_QUERY.to_string(),
+            api_path: PERFORMANCE_METRICS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -382,7 +381,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<MetricTemplateQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::PERFORMANCE_METRIC_TEMPLATES_QUERY.to_string(),
+            api_path: PERFORMANCE_METRIC_TEMPLATES_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -410,7 +409,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<MetricFieldQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::PERFORMANCE_METRIC_FIELDS_QUERY.to_string(),
+            api_path: PERFORMANCE_METRIC_FIELDS_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -438,7 +437,7 @@ impl ReviewConfigService {
     ) -> SDKResult<BaseResponse<MetricTagListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::PERFORMANCE_METRIC_TAGS.to_string(),
+            api_path: PERFORMANCE_METRIC_TAGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

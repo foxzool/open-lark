@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         query_params::QueryParams,
         req_option::RequestOption,
@@ -324,7 +324,7 @@ impl ReferralAccountService {
     ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HIRE_V1_REFERRAL_ACCOUNTS.to_string(),
+            api_path: HIRE_V1_REFERRAL_ACCOUNTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -382,7 +382,7 @@ impl ReferralAccountService {
     ) -> SDKResult<BaseResponse<ReferralAccountListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_V1_REFERRAL_ACCOUNTS.to_string(),
+            api_path: HIRE_V1_REFERRAL_ACCOUNTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -449,7 +449,7 @@ impl ReferralAccountService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_REFERRAL_ACCOUNT_BALANCE,
+                HIRE_REFERRAL_ACCOUNT_BALANCE,
                 "user_id",
                 user_id,
             ),
@@ -514,7 +514,7 @@ impl ReferralAccountService {
     ) -> SDKResult<BaseResponse<IncomeRecordListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_REFERRAL_INCOME_RECORDS.to_string(),
+            api_path: HIRE_REFERRAL_INCOME_RECORDS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -608,7 +608,7 @@ impl ReferralAccountService {
     ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HIRE_REFERRAL_WITHDRAWALS.to_string(),
+            api_path: HIRE_REFERRAL_WITHDRAWALS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -670,7 +670,7 @@ impl ReferralAccountService {
     ) -> SDKResult<BaseResponse<WithdrawalRecordListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_REFERRAL_WITHDRAWALS.to_string(),
+            api_path: HIRE_REFERRAL_WITHDRAWALS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -754,7 +754,7 @@ impl ReferralAccountService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_REFERRAL_WITHDRAWAL_APPROVE,
+                HIRE_REFERRAL_WITHDRAWAL_APPROVE,
                 "withdrawal_id",
                 withdrawal_id,
             ),
@@ -790,7 +790,7 @@ impl ReferralAccountService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_REFERRAL_ACCOUNT_ENABLE,
+                HIRE_REFERRAL_ACCOUNT_ENABLE,
                 "user_id",
                 user_id,
             ),
@@ -839,7 +839,7 @@ impl ReferralAccountService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_REFERRAL_ACCOUNT_DISABLE,
+                HIRE_REFERRAL_ACCOUNT_DISABLE,
                 "user_id",
                 user_id,
             ),
@@ -882,7 +882,7 @@ impl ReferralAccountService {
     ) -> SDKResult<BaseResponse<serde_json::Value>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_REFERRAL_STATISTICS.to_string(),
+            api_path: HIRE_REFERRAL_STATISTICS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

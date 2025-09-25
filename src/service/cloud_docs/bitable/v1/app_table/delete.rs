@@ -24,7 +24,7 @@ impl AppTableService {
     ) -> SDKResult<BaseResponse<DeleteTableResponse>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::DELETE;
-        api_req.api_path = crate::core::endpoints::Endpoints::BITABLE_V1_TABLE_DELETE
+        api_req.api_path = BITABLE_V1_TABLE_DELETE
             .replace("{app_token}", &request.app_token)
             .replace("{table_id}", &request.table_id);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];

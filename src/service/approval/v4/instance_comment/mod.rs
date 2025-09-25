@@ -8,7 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::{approval::*, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -82,7 +82,7 @@ impl InstanceCommentService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPROVAL_V4_INSTANCE_COMMENTS_CREATE,
+                APPROVAL_V4_INSTANCE_COMMENTS_CREATE,
                 "instance_code",
                 instance_code,
             ),
@@ -112,7 +112,7 @@ impl InstanceCommentService {
             http_method: Method::DELETE,
             api_path: {
                 let path = EndpointBuilder::replace_param(
-                    Endpoints::APPROVAL_V4_INSTANCE_COMMENT_DELETE,
+                    APPROVAL_V4_INSTANCE_COMMENT_DELETE,
                     "instance_code",
                     instance_code,
                 );
@@ -141,7 +141,7 @@ impl InstanceCommentService {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPROVAL_V4_INSTANCE_COMMENTS_REPLY,
+                APPROVAL_V4_INSTANCE_COMMENTS_REPLY,
                 "instance_code",
                 instance_code,
             ),
@@ -176,7 +176,7 @@ impl InstanceCommentService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPROVAL_V4_INSTANCE_COMMENTS_LIST,
+                APPROVAL_V4_INSTANCE_COMMENTS_LIST,
                 "instance_code",
                 instance_code,
             ),

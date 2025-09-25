@@ -7,7 +7,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -121,7 +120,7 @@ impl BasicInfoService {
     ) -> SDKResult<BaseResponse<EnumSearchResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::COREHR_BASIC_INFO_ENUM_SEARCH.to_string(),
+            api_path: COREHR_BASIC_INFO_ENUM_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -168,7 +167,7 @@ impl BasicInfoService {
     ) -> SDKResult<BaseResponse<CountryRegionSearchResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::COREHR_BASIC_INFO_LOCATION_SEARCH.to_string(),
+            api_path: COREHR_BASIC_INFO_LOCATION_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -214,7 +213,7 @@ impl BasicInfoService {
     ) -> SDKResult<BaseResponse<NationalitySearchResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::COREHR_BASIC_INFO_NATIONALITY_SEARCH.to_string(),
+            api_path: COREHR_BASIC_INFO_NATIONALITY_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -261,7 +260,7 @@ impl BasicInfoService {
     ) -> SDKResult<BaseResponse<IdConvertResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::COREHR_COMMON_DATA_ID_CONVERT.to_string(),
+            api_path: COREHR_COMMON_DATA_ID_CONVERT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()

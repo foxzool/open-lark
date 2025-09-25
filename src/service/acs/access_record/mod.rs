@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::{acs::*, EndpointBuilder},
         http::Transport,
         query_params::QueryParams,
         req_option::RequestOption,
@@ -49,7 +49,7 @@ impl AccessRecordService {
     ) -> SDKResult<BaseResponse<AccessRecordListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::ACS_V1_ACCESS_RECORDS.to_string(),
+            api_path: ACS_V1_ACCESS_RECORDS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -133,7 +133,7 @@ impl AccessRecordService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::ACS_V1_ACCESS_RECORD_FACE_IMAGE,
+                ACS_V1_ACCESS_RECORD_FACE_IMAGE,
                 "record_id",
                 record_id,
             ),

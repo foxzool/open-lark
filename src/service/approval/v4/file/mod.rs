@@ -7,7 +7,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -54,7 +53,7 @@ impl FileService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::APPROVAL_V4_FILE_UPLOAD.to_string(),
+            api_path: APPROVAL_V4_FILE_UPLOAD.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&metadata)
                 .map_err(|e| LarkAPIError::DeserializeError(e.to_string()))?,

@@ -7,7 +7,6 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
-        endpoints::calendar::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,

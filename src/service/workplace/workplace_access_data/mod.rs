@@ -7,7 +7,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         query_params::QueryParams,
         req_option::RequestOption,
@@ -50,7 +49,7 @@ impl WorkplaceAccessDataService {
     ) -> SDKResult<AccessDataSearchResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::WORKPLACE_ACCESS_DATA_SEARCH.to_string(),
+            api_path: WORKPLACE_ACCESS_DATA_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -121,7 +120,7 @@ impl WorkplaceAccessDataService {
     ) -> SDKResult<CustomAccessDataSearchResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::WORKPLACE_CUSTOM_ACCESS_DATA_SEARCH.to_string(),
+            api_path: WORKPLACE_CUSTOM_ACCESS_DATA_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -186,7 +185,7 @@ impl WorkplaceAccessDataService {
     ) -> SDKResult<CustomWidgetAccessDataSearchResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::WORKPLACE_WIDGET_ACCESS_DATA_SEARCH.to_string(),
+            api_path: WORKPLACE_WIDGET_ACCESS_DATA_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

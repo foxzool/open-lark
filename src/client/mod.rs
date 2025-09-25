@@ -1,5 +1,5 @@
-use std::time::Duration;
 use std::sync::Arc;
+use std::time::Duration;
 
 use crate::core::{
     config::{Config, ConfigBuilder},
@@ -412,7 +412,9 @@ impl LarkClientBuilder {
             #[cfg(feature = "search")]
             search: SearchService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "security-and-compliance")]
-            security_and_compliance: SecurityAndComplianceService::new_from_shared(shared_config.clone()),
+            security_and_compliance: SecurityAndComplianceService::new_from_shared(
+                shared_config.clone(),
+            ),
             #[cfg(feature = "task")]
             task: TaskV2Service::new_from_shared(shared_config.clone()),
             #[cfg(feature = "tenant")]

@@ -8,7 +8,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, BinaryResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
@@ -264,7 +263,7 @@ impl FilesService {
     ) -> SDKResult<UploadAllResponse> {
         let mut api_req = upload_all_request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = Endpoints::DRIVE_V1_FILES_UPLOAD_ALL.to_string();
+        api_req.api_path = DRIVE_V1_FILES_UPLOAD_ALL.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp: BaseResponse<UploadAllResponse> =
@@ -281,7 +280,7 @@ impl FilesService {
     ) -> SDKResult<BinaryResponse> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = Endpoints::DRIVE_V1_FILE_DOWNLOAD.replace("{}", &request.file_token);
+        api_req.api_path = DRIVE_V1_FILE_DOWNLOAD.replace("{}", &request.file_token);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp: BaseResponse<BinaryResponse> =

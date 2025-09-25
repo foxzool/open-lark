@@ -6,7 +6,6 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::Endpoints,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -108,7 +107,7 @@ pub async fn delete_record(
 ) -> SDKResult<BaseResponse<DeleteRecordResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::DELETE;
-    api_req.api_path = Endpoints::BITABLE_V1_RECORD_DELETE
+    api_req.api_path = BITABLE_V1_RECORD_DELETE
         .replace("{app_token}", &request.app_token)
         .replace("{table_id}", &request.table_id)
         .replace("{record_id}", &request.record_id);

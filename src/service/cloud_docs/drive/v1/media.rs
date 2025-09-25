@@ -7,7 +7,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, BinaryResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         validation::{validate_file_name, validate_upload_file, ValidateBuilder, ValidationResult},
@@ -54,7 +53,7 @@ impl MediaService {
     ) -> SDKResult<BaseResponse<UploadMediaRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = Endpoints::DRIVE_V1_MEDIAS_UPLOAD_ALL.to_string();
+        api_req.api_path = DRIVE_V1_MEDIAS_UPLOAD_ALL.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -73,7 +72,7 @@ impl MediaService {
     ) -> SDKResult<BaseResponse<UploadPrepareRespData>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::DRIVE_V1_MEDIAS_UPLOAD_PREPARE.to_string(),
+            api_path: DRIVE_V1_MEDIAS_UPLOAD_PREPARE.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -95,7 +94,7 @@ impl MediaService {
     ) -> SDKResult<BaseResponse<UploadPartRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = Endpoints::DRIVE_V1_MEDIAS_UPLOAD_PART.to_string();
+        api_req.api_path = DRIVE_V1_MEDIAS_UPLOAD_PART.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -114,7 +113,7 @@ impl MediaService {
     ) -> SDKResult<BaseResponse<UploadFinishRespData>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::DRIVE_V1_MEDIAS_UPLOAD_FINISH.to_string(),
+            api_path: DRIVE_V1_MEDIAS_UPLOAD_FINISH.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -136,7 +135,7 @@ impl MediaService {
     ) -> SDKResult<BaseResponse<BinaryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::DRIVE_V1_MEDIAS_DOWNLOAD.replace("{}", &request.file_token),
+            api_path: DRIVE_V1_MEDIAS_DOWNLOAD.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
@@ -157,7 +156,7 @@ impl MediaService {
     ) -> SDKResult<BaseResponse<BatchGetTmpDownloadUrlRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::DRIVE_V1_MEDIAS_BATCH_GET_TMP_DOWNLOAD_URL.to_string(),
+            api_path: DRIVE_V1_MEDIAS_BATCH_GET_TMP_DOWNLOAD_URL.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };

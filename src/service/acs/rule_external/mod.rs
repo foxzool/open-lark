@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::{acs::*, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -46,7 +46,7 @@ impl RuleExternalService {
     ) -> SDKResult<BaseResponse<RuleCreateOrUpdateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::ACS_V1_RULE_EXTERNAL.to_string(),
+            api_path: ACS_V1_RULE_EXTERNAL.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -75,7 +75,7 @@ impl RuleExternalService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::ACS_V1_RULE_EXTERNAL_OPERATION,
+                ACS_V1_RULE_EXTERNAL_OPERATION,
                 "rule_id",
                 rule_id,
             ),
@@ -107,7 +107,7 @@ impl RuleExternalService {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::ACS_V1_RULE_EXTERNAL_OPERATION,
+                ACS_V1_RULE_EXTERNAL_OPERATION,
                 "rule_id",
                 rule_id,
             ),
@@ -138,7 +138,7 @@ impl RuleExternalService {
     ) -> SDKResult<BaseResponse<DeviceBindResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::ACS_V1_RULE_EXTERNAL_DEVICE_BIND.to_string(),
+            api_path: ACS_V1_RULE_EXTERNAL_DEVICE_BIND.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

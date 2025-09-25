@@ -8,7 +8,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -122,7 +121,7 @@ impl TicketMessageService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_TICKET_MESSAGES,
+                HELPDESK_V1_TICKET_MESSAGES,
                 "ticket_id",
                 ticket_id,
             ),
@@ -174,7 +173,7 @@ impl TicketMessageService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_TICKET_MESSAGES,
+                HELPDESK_V1_TICKET_MESSAGES,
                 "ticket_id",
                 ticket_id,
             ),
@@ -218,7 +217,7 @@ impl TicketMessageService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_TICKET_BOT_MESSAGES,
+                HELPDESK_V1_TICKET_BOT_MESSAGES,
                 "ticket_id",
                 ticket_id,
             ),

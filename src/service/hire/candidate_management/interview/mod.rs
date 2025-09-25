@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -313,7 +313,7 @@ impl InterviewService {
     ) -> SDKResult<BaseResponse<InterviewOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HIRE_V1_INTERVIEWS.to_string(),
+            api_path: HIRE_V1_INTERVIEWS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -361,7 +361,7 @@ impl InterviewService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_INTERVIEW_GET,
+                HIRE_V1_INTERVIEW_GET,
                 "interview_id",
                 interview_id,
             ),
@@ -428,7 +428,7 @@ impl InterviewService {
     ) -> SDKResult<BaseResponse<InterviewListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_V1_INTERVIEWS.to_string(),
+            api_path: HIRE_V1_INTERVIEWS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -513,7 +513,7 @@ impl InterviewService {
     ) -> SDKResult<BaseResponse<InterviewOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HIRE_V1_INTERVIEW_ARRANGEMENTS.to_string(),
+            api_path: HIRE_V1_INTERVIEW_ARRANGEMENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -567,7 +567,7 @@ impl InterviewService {
     ) -> SDKResult<BaseResponse<InterviewOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HIRE_V1_INTERVIEW_EVALUATIONS.to_string(),
+            api_path: HIRE_V1_INTERVIEW_EVALUATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -609,7 +609,7 @@ impl InterviewService {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_INTERVIEW_EVALUATIONS_BY_ID,
+                HIRE_V1_INTERVIEW_EVALUATIONS_BY_ID,
                 "interview_id",
                 interview_id,
             ),
@@ -673,7 +673,7 @@ impl InterviewService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_INTERVIEW_CANCEL,
+                HIRE_V1_INTERVIEW_CANCEL,
                 "interview_id",
                 interview_id,
             ),
@@ -732,7 +732,7 @@ impl InterviewService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_INTERVIEW_RESCHEDULE,
+                HIRE_V1_INTERVIEW_RESCHEDULE,
                 "interview_id",
                 interview_id,
             ),

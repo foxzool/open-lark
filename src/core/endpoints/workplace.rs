@@ -24,3 +24,6 @@ pub const WORKPLACE_APP_RECOMMEND_RECOMMEND: &str =
 
 /// 获取应用推荐规则列表
 pub const WORKPLACE_APP_RECOMMEND_LIST: &str = "/open-apis/workplace/v1/app_recommend_rule/list";
+
+/// 工作台ID
+pub const WORKPLACE_ID: &str = "/open-apis/workplace/v1/workplace_access_data/search";

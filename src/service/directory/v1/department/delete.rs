@@ -115,7 +115,7 @@ impl DepartmentService {
         let mut api_req = request.api_req;
         api_req.http_method = Method::DELETE;
         api_req.api_path = EndpointBuilder::replace_param(
-            Endpoints::DIRECTORY_V1_DEPARTMENT_GET,
+            DIRECTORY_V1_DEPARTMENT_GET,
             "department_id",
             &request.department_id,
         );

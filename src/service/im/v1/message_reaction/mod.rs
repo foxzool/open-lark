@@ -2,6 +2,7 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
+use crate::impl_full_service;
 use crate::{
     core::{
         api_req::ApiRequest,
@@ -16,7 +17,6 @@ use crate::{
     },
     service::im::v1::models::{MessageReaction, UserIdType},
 };
-use crate::impl_full_service;
 
 /// 表情回复服务
 pub struct MessageReactionService {

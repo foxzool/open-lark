@@ -6,7 +6,6 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::Endpoints,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -118,7 +117,7 @@ pub async fn move_docs_to_wiki(
 ) -> SDKResult<BaseResponse<MoveDocsToWikiResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::POST;
-    api_req.api_path = Endpoints::WIKI_V2_TASKS_MOVE_DOCS_TO_WIKI.to_string();
+    api_req.api_path = WIKI_V2_TASKS_MOVE_DOCS_TO_WIKI.to_string();
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
     let api_resp = Transport::request(api_req, config, option).await?;

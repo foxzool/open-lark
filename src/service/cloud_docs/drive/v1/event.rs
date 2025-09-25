@@ -7,7 +7,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -37,7 +36,7 @@ impl EventService {
     ) -> SDKResult<BaseResponse<SubscribeFileEventsRespData>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::DRIVE_V1_FILES_SUBSCRIBE.to_string(),
+            api_path: DRIVE_V1_FILES_SUBSCRIBE.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -59,7 +58,7 @@ impl EventService {
     ) -> SDKResult<BaseResponse<GetFileSubscriptionRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::DRIVE_V1_FILE_SUBSCRIPTIONS
+            api_path: DRIVE_V1_FILE_SUBSCRIPTIONS
                 .replace("{}", &request.file_token)
                 .replace("{}", &request.subscription_id),
             ..Default::default()
@@ -82,7 +81,7 @@ impl EventService {
     ) -> SDKResult<BaseResponse<UnsubscribeFileEventsRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: Endpoints::DRIVE_V1_FILE_SUBSCRIPTIONS
+            api_path: DRIVE_V1_FILE_SUBSCRIPTIONS
                 .replace("{}", &request.file_token)
                 .replace("{}", &request.subscription_id),
             ..Default::default()

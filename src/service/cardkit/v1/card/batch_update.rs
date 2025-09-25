@@ -7,7 +7,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::{cardkit::*, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -145,7 +145,7 @@ impl CardService {
         let mut api_req = request.api_req;
         api_req.http_method = Method::PATCH;
         api_req.api_path = EndpointBuilder::replace_param(
-            Endpoints::CARDKIT_V1_CARD_BATCH_UPDATE,
+            CARDKIT_V1_CARD_BATCH_UPDATE,
             "card_id",
             &request.card_id,
         );

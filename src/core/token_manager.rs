@@ -1,5 +1,4 @@
 use log::warn;
-use tracing::{info_span, Instrument};
 use serde::{Deserialize, Serialize};
 use std::{
     sync::{
@@ -12,6 +11,7 @@ use tokio::{
     sync::{Mutex, RwLock},
     time::interval,
 };
+use tracing::{info_span, Instrument};
 
 use crate::core::{
     api_resp::{ApiResponseTrait, RawResponse, ResponseFormat},
@@ -498,35 +498,39 @@ impl TokenManager {
                 .fetch_add(1, Ordering::Relaxed);
 
             // 慢速路径：需要刷新token，使用写锁
-        self.metrics
-            .write_lock_acquisitions
-            .fetch_add(1, Ordering::Relaxed);
-        let cache = self.cache.write().await;
+            self.metrics
+                .write_lock_acquisitions
+                .fetch_add(1, Ordering::Relaxed);
+            let cache = self.cache.write().await;
 
-        // 双重检查：可能其他线程已经刷新了token
-        if let Some(token) = cache.get(&key) {
-            if !token.is_empty() {
-                // 双重检查命中，更新为缓存命中统计
-                self.metrics
-                    .app_cache_misses
-                    .fetch_sub(1, Ordering::Relaxed);
-                self.metrics.app_cache_hits.fetch_add(1, Ordering::Relaxed);
-                log::debug!("App token double-check hit in {:?}", start_time.elapsed());
-                return Ok(token);
+            // 双重检查：可能其他线程已经刷新了token
+            if let Some(token) = cache.get(&key) {
+                if !token.is_empty() {
+                    // 双重检查命中，更新为缓存命中统计
+                    self.metrics
+                        .app_cache_misses
+                        .fetch_sub(1, Ordering::Relaxed);
+                    self.metrics.app_cache_hits.fetch_add(1, Ordering::Relaxed);
+                    log::debug!("App token double-check hit in {:?}", start_time.elapsed());
+                    return Ok(token);
+                }
             }
-        }
 
-        // 实际执行token刷新
-        drop(cache); // 释放写锁，避免在HTTP请求期间持有锁
-        log::debug!("App token cache miss, refreshing token");
+            // 实际执行token刷新
+            drop(cache); // 释放写锁，避免在HTTP请求期间持有锁
+            log::debug!("App token cache miss, refreshing token");
 
-        let app_type = config.app_type;
-        let result = if app_type == AppType::SelfBuild {
-            self.get_custom_app_access_token_then_cache(config).await
-        } else {
-            self.get_marketplace_app_access_token_then_cache(config, app_ticket, app_ticket_manager)
+            let app_type = config.app_type;
+            let result = if app_type == AppType::SelfBuild {
+                self.get_custom_app_access_token_then_cache(config).await
+            } else {
+                self.get_marketplace_app_access_token_then_cache(
+                    config,
+                    app_ticket,
+                    app_ticket_manager,
+                )
                 .await
-        };
+            };
 
             // 记录刷新结果
             match &result {

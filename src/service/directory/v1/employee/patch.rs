@@ -258,7 +258,7 @@ impl EmployeeService {
         let mut api_req = request.api_req;
         api_req.http_method = Method::PATCH;
         api_req.api_path = EndpointBuilder::replace_param(
-            Endpoints::DIRECTORY_V1_EMPLOYEE_GET,
+            DIRECTORY_V1_EMPLOYEE_GET,
             "employee_id",
             &request.employee_id,
         );

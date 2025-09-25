@@ -7,7 +7,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -105,7 +104,7 @@ pub async fn delete_field(
 ) -> SDKResult<BaseResponse<DeleteFieldResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::DELETE;
-    api_req.api_path = Endpoints::BITABLE_V1_FIELD_DELETE
+    api_req.api_path = BITABLE_V1_FIELD_DELETE
         .replace("{app_token}", &request.app_token)
         .replace("{table_id}", &request.table_id)
         .replace("{field_id}", &request.field_id);

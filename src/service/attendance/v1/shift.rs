@@ -37,7 +37,7 @@ impl ShiftService {
     ) -> SDKResult<BaseResponse<CreateShiftRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = Endpoints::ATTENDANCE_V1_SHIFTS.to_string();
+        api_req.api_path = ATTENDANCE_V1_SHIFTS.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加必需的查询参数
@@ -120,7 +120,7 @@ impl ShiftService {
         let mut api_req = request.api_req;
         api_req.http_method = Method::DELETE;
         api_req.api_path = EndpointBuilder::replace_param(
-            Endpoints::ATTENDANCE_V1_SHIFT_DELETE,
+            ATTENDANCE_V1_SHIFT_DELETE,
             "shift_id",
             &request.shift_id,
         );
@@ -142,11 +142,8 @@ impl ShiftService {
     ) -> SDKResult<BaseResponse<Shift>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = EndpointBuilder::replace_param(
-            Endpoints::ATTENDANCE_V1_SHIFT_GET,
-            "shift_id",
-            &request.shift_id,
-        );
+        api_req.api_path =
+            EndpointBuilder::replace_param(ATTENDANCE_V1_SHIFT_GET, "shift_id", &request.shift_id);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -165,7 +162,7 @@ impl ShiftService {
     ) -> SDKResult<BaseResponse<Shift>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = Endpoints::ATTENDANCE_V1_SHIFTS_QUERY.to_string();
+        api_req.api_path = ATTENDANCE_V1_SHIFTS_QUERY.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加必需的查询参数
@@ -211,7 +208,7 @@ impl ShiftService {
     ) -> SDKResult<BaseResponse<ShiftListData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = Endpoints::ATTENDANCE_V1_SHIFTS.to_string();
+        api_req.api_path = ATTENDANCE_V1_SHIFTS.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数

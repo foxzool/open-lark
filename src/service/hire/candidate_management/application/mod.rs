@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -171,7 +171,7 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<ApplicationOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HIRE_V1_APPLICATIONS.to_string(),
+            api_path: HIRE_V1_APPLICATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -220,7 +220,7 @@ impl ApplicationService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_APPLICATION_GET,
+                HIRE_V1_APPLICATION_GET,
                 "application_id",
                 application_id,
             ),
@@ -288,7 +288,7 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<ApplicationListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_V1_APPLICATIONS.to_string(),
+            api_path: HIRE_V1_APPLICATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -368,7 +368,7 @@ impl ApplicationService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_APPLICATION_ADVANCE,
+                HIRE_V1_APPLICATION_ADVANCE,
                 "application_id",
                 &request.application_id,
             ),
@@ -427,7 +427,7 @@ impl ApplicationService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_APPLICATION_REJECT,
+                HIRE_V1_APPLICATION_REJECT,
                 "application_id",
                 application_id,
             ),
@@ -485,7 +485,7 @@ impl ApplicationService {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_APPLICATION_INTERVIEWS,
+                HIRE_V1_APPLICATION_INTERVIEWS,
                 "application_id",
                 application_id,
             ),
@@ -543,7 +543,7 @@ impl ApplicationService {
     ) -> SDKResult<BaseResponse<ApplicationOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HIRE_V1_OFFERS.to_string(),
+            api_path: HIRE_V1_OFFERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -590,7 +590,7 @@ impl ApplicationService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_APPLICATION_OFFER,
+                HIRE_V1_APPLICATION_OFFER,
                 "application_id",
                 application_id,
             ),
@@ -635,7 +635,7 @@ impl ApplicationService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_APPLICATION_EVALUATIONS,
+                HIRE_V1_APPLICATION_EVALUATIONS,
                 "application_id",
                 &request.application_id,
             ),

@@ -51,7 +51,8 @@ pub const CONTACT_V3_GROUPS_SIMPLELIST: &str = "/open-apis/contact/v3/groups/sim
 pub const CONTACT_V3_GROUPS_MEMBER_BELONG: &str = "/open-apis/contact/v3/groups/member_belong";
 pub const CONTACT_V3_GROUP_GET: &str = "/open-apis/contact/v3/groups/{group_id}";
 pub const CONTACT_V3_GROUP_DETAIL: &str = "/open-apis/contact/v3/groups/{group_id}/detail";
-pub const CONTACT_V3_GROUP_MEMBERS_ADD: &str = "/open-apis/contact/v3/groups/{group_id}/members/add";
+pub const CONTACT_V3_GROUP_MEMBERS_ADD: &str =
+    "/open-apis/contact/v3/groups/{group_id}/members/add";
 pub const CONTACT_V3_GROUP_MEMBERS_BATCH_ADD: &str =
     "/open-apis/contact/v3/groups/{group_id}/members/batch_add";
 pub const CONTACT_V3_GROUP_MEMBERS_REMOVE: &str =
@@ -64,15 +65,19 @@ pub const CONTACT_V3_GROUP_MEMBERS_SIMPLELIST: &str =
 // ==================== 单位/工作城市/枚举/自定义属性/权限范围 ====================
 pub const CONTACT_V3_UNITS: &str = "/open-apis/contact/v3/units";
 pub const CONTACT_V3_UNIT_GET: &str = "/open-apis/contact/v3/units/{unit_id}";
-pub const CONTACT_V3_UNIT_BIND_DEPARTMENT: &str = "/open-apis/contact/v3/units/{unit_id}/bind_department";
-pub const CONTACT_V3_UNIT_UNBIND_DEPARTMENT: &str = "/open-apis/contact/v3/units/{unit_id}/unbind_department";
-pub const CONTACT_V3_UNIT_LIST_DEPARTMENT: &str = "/open-apis/contact/v3/units/{unit_id}/list_department";
+pub const CONTACT_V3_UNIT_BIND_DEPARTMENT: &str =
+    "/open-apis/contact/v3/units/{unit_id}/bind_department";
+pub const CONTACT_V3_UNIT_UNBIND_DEPARTMENT: &str =
+    "/open-apis/contact/v3/units/{unit_id}/unbind_department";
+pub const CONTACT_V3_UNIT_LIST_DEPARTMENT: &str =
+    "/open-apis/contact/v3/units/{unit_id}/list_department";
 
 pub const CONTACT_V3_WORK_CITIES: &str = "/open-apis/contact/v3/work_cities";
 pub const CONTACT_V3_WORK_CITY_GET: &str = "/open-apis/contact/v3/work_cities/{work_city_id}";
 
 pub const CONTACT_V3_EMPLOYEE_TYPE_ENUMS: &str = "/open-apis/contact/v3/employee_type_enums";
-pub const CONTACT_V3_EMPLOYEE_TYPE_ENUM_GET: &str = "/open-apis/contact/v3/employee_type_enums/{enum_id}";
+pub const CONTACT_V3_EMPLOYEE_TYPE_ENUM_GET: &str =
+    "/open-apis/contact/v3/employee_type_enums/{enum_id}";
 
 pub const CONTACT_V3_CUSTOM_ATTRS: &str = "/open-apis/contact/v3/custom_attrs";
 pub const CONTACT_V3_SCOPES: &str = "/open-apis/contact/v3/scopes";

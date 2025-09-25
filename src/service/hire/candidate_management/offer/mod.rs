@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -343,7 +343,7 @@ impl OfferService {
     ) -> SDKResult<BaseResponse<OfferOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HIRE_V1_OFFERS.to_string(),
+            api_path: HIRE_V1_OFFERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -389,11 +389,7 @@ impl OfferService {
     ) -> SDKResult<BaseResponse<OfferDetailResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_OFFER_GET,
-                "offer_id",
-                offer_id,
-            ),
+            api_path: EndpointBuilder::replace_param(HIRE_V1_OFFER_GET, "offer_id", offer_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -457,7 +453,7 @@ impl OfferService {
     ) -> SDKResult<BaseResponse<OfferListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_V1_OFFERS.to_string(),
+            api_path: HIRE_V1_OFFERS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -547,11 +543,7 @@ impl OfferService {
     ) -> SDKResult<BaseResponse<OfferOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_OFFER_GET,
-                "offer_id",
-                offer_id,
-            ),
+            api_path: EndpointBuilder::replace_param(HIRE_V1_OFFER_GET, "offer_id", offer_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -606,11 +598,7 @@ impl OfferService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_OFFER_SEND,
-                "offer_id",
-                offer_id,
-            ),
+            api_path: EndpointBuilder::replace_param(HIRE_V1_OFFER_SEND, "offer_id", offer_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -655,11 +643,7 @@ impl OfferService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_OFFER_WITHDRAW,
-                "offer_id",
-                offer_id,
-            ),
+            api_path: EndpointBuilder::replace_param(HIRE_V1_OFFER_WITHDRAW, "offer_id", offer_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -704,7 +688,7 @@ impl OfferService {
     ) -> SDKResult<BaseResponse<OfferOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HIRE_V1_ONBOARDINGS.to_string(),
+            api_path: HIRE_V1_ONBOARDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -747,7 +731,7 @@ impl OfferService {
     ) -> SDKResult<BaseResponse<OnboardingListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_V1_ONBOARDINGS.to_string(),
+            api_path: HIRE_V1_ONBOARDINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -824,7 +808,7 @@ impl OfferService {
             http_method: Method::POST,
             api_path: {
                 let path = EndpointBuilder::replace_param(
-                    Endpoints::HIRE_V1_ONBOARDING_PROGRESS,
+                    HIRE_V1_ONBOARDING_PROGRESS,
                     "onboarding_id",
                     onboarding_id,
                 );

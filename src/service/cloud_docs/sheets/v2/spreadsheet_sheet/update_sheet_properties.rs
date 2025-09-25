@@ -1,11 +1,7 @@
-use crate::core::endpoints::Endpoints;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    core::{
-        api_req::ApiRequest, api_resp::BaseResponse, constants::AccessTokenType, req_option,
-        SDKResult,
-    },
+    core::{api_req::ApiRequest, api_resp::BaseResponse, constants::AccessTokenType},
     impl_executable_builder_owned,
     service::sheets::v2::{
         spreadsheet_sheet::{OperateSheetResponse, OperateSheetsRequestElem},
@@ -125,12 +121,13 @@ impl SpreadsheetSheetService {
         option: Option<req_option::RequestOption>,
     ) -> SDKResult<BaseResponse<OperateSheetResponse>> {
         let mut api_req = request.api_request;
-        api_req.api_path = Endpoints::SHEETS_V2_SPREADSHEET_SHEETS_BATCH_UPDATE
-            .replace("{}", &request.spreadsheet_token);
+        api_req.api_path =
+            SHEETS_V2_SPREADSHEET_SHEETS_BATCH_UPDATE.replace("{}", &request.spreadsheet_token);
         api_req.http_method = reqwest::Method::POST;
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::App];
 
-        let api_resp = crate::core::http::Transport::request(api_req, &self.config_arc, option).await?;
+        let api_resp =
+            crate::core::http::Transport::request(api_req, &self.config_arc, option).await?;
 
         Ok(api_resp)
     }

@@ -8,7 +8,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -128,7 +127,7 @@ impl TicketService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HELPDESK_V1_START_SERVICE.to_string(),
+            api_path: HELPDESK_V1_START_SERVICE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -153,7 +152,7 @@ impl TicketService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_TICKET_GET,
+                HELPDESK_V1_TICKET_GET,
                 "ticket_id",
                 ticket_id,
             ),
@@ -181,7 +180,7 @@ impl TicketService {
         let api_req = ApiRequest {
             http_method: Method::PUT,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_TICKET_GET,
+                HELPDESK_V1_TICKET_GET,
                 "ticket_id",
                 ticket_id,
             ),
@@ -215,7 +214,7 @@ impl TicketService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HELPDESK_V1_TICKETS.to_string(),
+            api_path: HELPDESK_V1_TICKETS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

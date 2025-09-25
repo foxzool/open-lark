@@ -2,10 +2,7 @@ use reqwest::Method;
 use serde_json::json;
 
 use crate::{
-    core::{
-        api_resp::BaseResponse, config::Config, constants::AccessTokenType, endpoints::Endpoints,
-        http::Transport, req_option::RequestOption, SDKResult,
-    },
+    core::{api_resp::BaseResponse, config::Config, constants::AccessTokenType},
     impl_executable_builder_owned,
 };
 
@@ -32,7 +29,7 @@ impl UserTaskRemedyService {
     ) -> SDKResult<BaseResponse<CreateUserTaskRemedyRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_TASK_REMEDYS.to_string();
+        api_req.api_path = ATTENDANCE_V1_USER_TASK_REMEDYS.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
@@ -68,8 +65,7 @@ impl UserTaskRemedyService {
     ) -> SDKResult<BaseResponse<QueryUserAllowedRemedysRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path =
-            Endpoints::ATTENDANCE_V1_USER_TASK_REMEDYS_QUERY_USER_ALLOWED_REMEDYS.to_string();
+        api_req.api_path = ATTENDANCE_V1_USER_TASK_REMEDYS_QUERY_USER_ALLOWED_REMEDYS.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
@@ -102,7 +98,7 @@ impl UserTaskRemedyService {
     ) -> SDKResult<BaseResponse<QueryUserTaskRemedyRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_TASK_REMEDYS.to_string();
+        api_req.api_path = ATTENDANCE_V1_USER_TASK_REMEDYS.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数

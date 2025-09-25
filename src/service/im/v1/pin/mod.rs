@@ -2,6 +2,7 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
+use crate::impl_full_service;
 use crate::{
     core::{
         api_req::ApiRequest,
@@ -16,7 +17,6 @@ use crate::{
     },
     service::im::v1::models::{Pin, UserIdType},
 };
-use crate::impl_full_service;
 
 /// Pin消息服务
 pub struct PinService {
@@ -117,7 +117,11 @@ impl PinService {
 
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(crate::core::endpoints::im::IM_V1_DELETE_PIN, "pin_id", pin_id),
+            api_path: EndpointBuilder::replace_param(
+                crate::core::endpoints::im::IM_V1_DELETE_PIN,
+                "pin_id",
+                pin_id,
+            ),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

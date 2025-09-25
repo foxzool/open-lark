@@ -65,8 +65,9 @@ impl TaskV2Service {
             task: TaskService::new(shared.as_ref().clone()),
             task_subtask: TaskSubtaskService::new(shared.as_ref().clone()),
             tasklist: TasklistService::new(shared.as_ref().clone()),
-            tasklist_activity_subscription:
-                TasklistActivitySubscriptionService::new(shared.as_ref().clone()),
+            tasklist_activity_subscription: TasklistActivitySubscriptionService::new(
+                shared.as_ref().clone(),
+            ),
             comment: CommentService::new(shared.as_ref().clone()),
             attachment: AttachmentService::new(shared.as_ref().clone()),
             section: SectionService::new(shared.as_ref().clone()),

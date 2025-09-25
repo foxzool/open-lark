@@ -6,7 +6,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::{EndpointBuilder, Endpoints},
+    endpoints::{drive::*, EndpointBuilder},
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -209,7 +209,7 @@ pub async fn delete_permission_member(
     api_req.api_path = format!(
         "{}?type={}&member_type={}",
         EndpointBuilder::replace_params_from_array(
-            Endpoints::DRIVE_V1_PERMISSIONS_MEMBER_GET,
+            DRIVE_V1_PERMISSIONS_MEMBER_GET,
             &[("token", &request.token), ("member_id", &request.member_id)]
         ),
         request.obj_type,

@@ -8,7 +8,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -87,7 +86,7 @@ impl AgentSkillRuleService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HELPDESK_V1_AGENT_SKILL_RULES_OPERATOR_OPTIONS.to_string(),
+            api_path: HELPDESK_V1_AGENT_SKILL_RULES_OPERATOR_OPTIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()
@@ -131,7 +130,7 @@ impl AgentSkillRuleService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HELPDESK_V1_AGENT_SKILL_RULES.to_string(),
+            api_path: HELPDESK_V1_AGENT_SKILL_RULES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

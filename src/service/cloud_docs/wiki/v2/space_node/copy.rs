@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::{cloud_docs::*, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -160,11 +160,8 @@ pub async fn copy_space_node(
     let mut api_req = request.api_request;
     api_req.http_method = Method::POST;
     api_req.api_path = {
-        let mut path = EndpointBuilder::replace_param(
-            Endpoints::WIKI_V2_SPACE_NODE_COPY,
-            "space_id",
-            &request.space_id,
-        );
+        let mut path =
+            EndpointBuilder::replace_param(WIKI_V2_SPACE_NODE_COPY, "space_id", &request.space_id);
         path = EndpointBuilder::replace_param(&path, "node_token", &request.node_token);
         path
     };

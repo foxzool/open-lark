@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -251,7 +251,7 @@ impl ReferralService {
     ) -> SDKResult<BaseResponse<ReferralOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HIRE_V1_REFERRALS.to_string(),
+            api_path: HIRE_V1_REFERRALS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -299,7 +299,7 @@ impl ReferralService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_REFERRAL_GET,
+                HIRE_V1_REFERRAL_GET,
                 "referral_id",
                 referral_id,
             ),
@@ -366,7 +366,7 @@ impl ReferralService {
     ) -> SDKResult<BaseResponse<ReferralListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_V1_REFERRALS.to_string(),
+            api_path: HIRE_V1_REFERRALS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -445,7 +445,7 @@ impl ReferralService {
     ) -> SDKResult<BaseResponse<ReferralOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HIRE_V1_REFERRAL_ACCOUNTS.to_string(),
+            api_path: HIRE_V1_REFERRAL_ACCOUNTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -492,7 +492,7 @@ impl ReferralService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_REFERRAL_ACCOUNT_GET,
+                HIRE_V1_REFERRAL_ACCOUNT_GET,
                 "user_id",
                 user_id,
             ),
@@ -551,7 +551,7 @@ impl ReferralService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_REFERRAL_GRANT_REWARD,
+                HIRE_V1_REFERRAL_GRANT_REWARD,
                 "referral_id",
                 referral_id,
             ),
@@ -596,7 +596,7 @@ impl ReferralService {
     ) -> SDKResult<BaseResponse<ReferralOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HIRE_V1_REFERRAL_REWARD_SETTINGS.to_string(),
+            api_path: HIRE_V1_REFERRAL_REWARD_SETTINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -642,7 +642,7 @@ impl ReferralService {
     ) -> SDKResult<BaseResponse<ReferralRewardSettingsListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_V1_REFERRAL_REWARD_SETTINGS.to_string(),
+            api_path: HIRE_V1_REFERRAL_REWARD_SETTINGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

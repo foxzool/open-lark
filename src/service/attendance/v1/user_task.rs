@@ -35,7 +35,7 @@ impl UserTaskService {
     ) -> SDKResult<BaseResponse<BatchCreateUserTaskRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_TASKS_BATCH_CREATE.to_string();
+        api_req.api_path = ATTENDANCE_V1_USER_TASKS_BATCH_CREATE.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
@@ -67,7 +67,7 @@ impl UserTaskService {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = EndpointBuilder::replace_param(
-            Endpoints::ATTENDANCE_V1_USER_TASK_GET,
+            ATTENDANCE_V1_USER_TASK_GET,
             "user_id",
             &request.user_id,
         );
@@ -97,7 +97,7 @@ impl UserTaskService {
     ) -> SDKResult<BaseResponse<QueryUserTaskRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_TASKS_QUERY.to_string();
+        api_req.api_path = ATTENDANCE_V1_USER_TASKS_QUERY.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
@@ -151,7 +151,7 @@ impl UserTaskService {
     ) -> SDKResult<BaseResponse<BatchDelUserTaskRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_TASKS_BATCH_DELETE.to_string();
+        api_req.api_path = ATTENDANCE_V1_USER_TASKS_BATCH_DELETE.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数
@@ -182,7 +182,7 @@ impl UserTaskService {
     ) -> SDKResult<BaseResponse<QueryUserTaskResultRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_TASK_RESULTS_QUERY.to_string();
+        api_req.api_path = ATTENDANCE_V1_USER_TASK_RESULTS_QUERY.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数

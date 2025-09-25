@@ -8,7 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::{approval::*, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -77,7 +77,7 @@ impl MessageService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::APPROVAL_V4_MESSAGES.to_string(),
+            api_path: APPROVAL_V4_MESSAGES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -103,7 +103,7 @@ impl MessageService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::APPROVAL_V4_MESSAGE_PATCH,
+                APPROVAL_V4_MESSAGE_PATCH,
                 "message_id",
                 message_id,
             ),

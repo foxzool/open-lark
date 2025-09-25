@@ -175,7 +175,9 @@ impl DirectoryService {
 
     /// 使用共享配置创建服务（实验性）
     pub fn new_from_shared(shared: std::sync::Arc<Config>) -> Self {
-        Self { v1: v1::V1::new(shared.as_ref().clone()) }
+        Self {
+            v1: v1::V1::new(shared.as_ref().clone()),
+        }
     }
 }
 

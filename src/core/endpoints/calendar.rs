@@ -29,22 +29,27 @@ pub const CALENDAR_SEARCH: &str = "/open-apis/calendar/v4/calendars/{calendar_id
 pub const CALENDAR_EVENT_CREATE: &str = "/open-apis/calendar/v4/calendars/{calendar_id}/events";
 
 /// 获取日程详情
-pub const CALENDAR_EVENT_GET: &str = "/open-apis/calendar/v4/calendars/{calendar_id}/events/{event_id}";
+pub const CALENDAR_EVENT_GET: &str =
+    "/open-apis/calendar/v4/calendars/{calendar_id}/events/{event_id}";
 
 /// 更新日程
-pub const CALENDAR_EVENT_UPDATE: &str = "/open-apis/calendar/v4/calendars/{calendar_id}/events/{event_id}";
+pub const CALENDAR_EVENT_UPDATE: &str =
+    "/open-apis/calendar/v4/calendars/{calendar_id}/events/{event_id}";
 
 /// 删除日程
-pub const CALENDAR_EVENT_DELETE: &str = "/open-apis/calendar/v4/calendars/{calendar_id}/events/{event_id}";
+pub const CALENDAR_EVENT_DELETE: &str =
+    "/open-apis/calendar/v4/calendars/{calendar_id}/events/{event_id}";
 
 /// 获取日程列表
 pub const CALENDAR_EVENT_LIST: &str = "/open-apis/calendar/v4/calendars/{calendar_id}/events";
 
 /// 回复日程
-pub const CALENDAR_EVENT_REPLY: &str = "/open-apis/calendar/v4/calendars/{calendar_id}/events/{event_id}/reply";
+pub const CALENDAR_EVENT_REPLY: &str =
+    "/open-apis/calendar/v4/calendars/{calendar_id}/events/{event_id}/reply";
 
 /// 搜索日程
-pub const CALENDAR_EVENT_SEARCH: &str = "/open-apis/calendar/v4/calendars/{calendar_id}/events/search";
+pub const CALENDAR_EVENT_SEARCH: &str =
+    "/open-apis/calendar/v4/calendars/{calendar_id}/events/search";
 
 // ===== v4 兼容性别名 =====
 

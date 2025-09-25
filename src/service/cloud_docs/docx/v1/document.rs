@@ -7,7 +7,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -37,7 +36,7 @@ impl DocumentService {
     ) -> SDKResult<BaseResponse<CreateDocumentRespData>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::DOCX_V1_DOCUMENTS.to_string(),
+            api_path: DOCX_V1_DOCUMENTS.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -59,7 +58,7 @@ impl DocumentService {
     ) -> SDKResult<BaseResponse<GetDocumentRespData>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::DOCX_V1_DOCUMENT_GET.replace("{}", &document_id.into()),
+            api_path: DOCX_V1_DOCUMENT_GET.replace("{}", &document_id.into()),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
@@ -80,7 +79,7 @@ impl DocumentService {
     ) -> SDKResult<BaseResponse<GetRawContentRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::DOCX_V1_DOCUMENT_RAW_CONTENT.replace("{}", &document_id.into()),
+            api_path: DOCX_V1_DOCUMENT_RAW_CONTENT.replace("{}", &document_id.into()),
             ..Default::default()
         };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
@@ -101,7 +100,7 @@ impl DocumentService {
     ) -> SDKResult<BaseResponse<ListDocumentBlocksRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::DOCX_V1_DOCUMENT_BLOCKS.replace("{}", &request.document_id),
+            api_path: DOCX_V1_DOCUMENT_BLOCKS.replace("{}", &request.document_id),
             ..Default::default()
         };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
@@ -132,7 +131,7 @@ impl DocumentService {
     ) -> SDKResult<BaseResponse<ConvertToDocxRespData>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::DOCX_V1_DOCUMENT_CONVERT.replace("{}", &document_id.into()),
+            api_path: DOCX_V1_DOCUMENT_CONVERT.replace("{}", &document_id.into()),
             ..Default::default()
         };
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];

@@ -1,4 +1,3 @@
-use crate::core::endpoints::Endpoints;
 use serde::Serialize;
 
 use crate::{
@@ -79,7 +78,7 @@ impl SpreadsheetSheetFilterService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut api_req = request.api_request;
-        api_req.api_path = Endpoints::SHEETS_V3_SPREADSHEET_FILTER
+        api_req.api_path = SHEETS_V3_SPREADSHEET_FILTER
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
         api_req.http_method = reqwest::Method::PUT;

@@ -6,7 +6,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::{EndpointBuilder, Endpoints},
+    endpoints::{drive::*, EndpointBuilder},
     http::Transport,
     query_params::QueryParams,
     req_option::RequestOption,
@@ -170,7 +170,7 @@ pub async fn create_password(
     let mut api_req = request.api_request;
     api_req.http_method = Method::POST;
     api_req.api_path = EndpointBuilder::replace_param(
-        Endpoints::DRIVE_V1_PERMISSIONS_PUBLIC_PASSWORD,
+        DRIVE_V1_PERMISSIONS_PUBLIC_PASSWORD,
         "token",
         &request.token,
     );

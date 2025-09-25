@@ -6,7 +6,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::{EndpointBuilder, Endpoints},
+    endpoints::{cloud_docs::*, EndpointBuilder},
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -127,11 +127,8 @@ pub async fn update_space_setting(
 ) -> SDKResult<BaseResponse<UpdateSpaceSettingResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::PUT;
-    api_req.api_path = EndpointBuilder::replace_param(
-        Endpoints::WIKI_V2_SPACE_SETTING_UPDATE,
-        "space_id",
-        &request.space_id,
-    );
+    api_req.api_path =
+        EndpointBuilder::replace_param(WIKI_V2_SPACE_SETTING_UPDATE, "space_id", &request.space_id);
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
     let api_resp = Transport::request(api_req, config, option).await?;

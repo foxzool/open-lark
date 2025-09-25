@@ -6,7 +6,6 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
@@ -28,7 +27,7 @@ impl DataOperationService {
     ) -> SDKResult<ReadingSingleRangeResponseData> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::GET;
-        api_req.api_path = Endpoints::SHEETS_V3_SPREADSHEET_VALUES_GET
+        api_req.api_path = SHEETS_V3_SPREADSHEET_VALUES_GET
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.range);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];

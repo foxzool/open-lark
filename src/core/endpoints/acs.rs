@@ -19,7 +19,8 @@ pub const ACS_V1_VISITOR_GET: &str = "/open-apis/acs/v1/visitors/{visitor_id}";
 pub const ACS_V1_ACCESS_RECORDS: &str = "/open-apis/acs/v1/access_records";
 
 /// 门禁记录人脸照片
-pub const ACS_V1_ACCESS_RECORD_FACE_IMAGE: &str = "/open-apis/acs/v1/access_records/{access_record_id}/face_image";
+pub const ACS_V1_ACCESS_RECORD_FACE_IMAGE: &str =
+    "/open-apis/acs/v1/access_records/{access_record_id}/face_image";
 
 // ===== 门禁规则 =====
 
@@ -30,7 +31,8 @@ pub const ACS_V1_RULE_EXTERNAL: &str = "/open-apis/acs/v1/rule_external";
 pub const ACS_V1_RULE_EXTERNAL_OPERATION: &str = "/open-apis/acs/v1/rule_external/{rule_id}";
 
 /// 外部门禁规则设备绑定
-pub const ACS_V1_RULE_EXTERNAL_DEVICE_BIND: &str = "/open-apis/acs/v1/rule_external/{rule_id}/device_bind";
+pub const ACS_V1_RULE_EXTERNAL_DEVICE_BIND: &str =
+    "/open-apis/acs/v1/rule_external/{rule_id}/device_bind";
 
 // ===== 用户管理 =====
 
