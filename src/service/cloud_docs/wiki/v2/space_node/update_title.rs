@@ -6,7 +6,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::{EndpointBuilder, Endpoints},
+    endpoints::{cloud_docs::*, EndpointBuilder},
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -114,7 +114,7 @@ pub async fn update_space_node_title(
     api_req.http_method = Method::PUT;
     api_req.api_path = {
         let mut path = EndpointBuilder::replace_param(
-            Endpoints::WIKI_V2_SPACE_NODE_UPDATE_TITLE,
+            WIKI_V2_SPACE_NODE_UPDATE_TITLE,
             "space_id",
             &request.space_id,
         );

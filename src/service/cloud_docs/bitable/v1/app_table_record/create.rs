@@ -9,7 +9,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
@@ -157,7 +156,7 @@ pub async fn create_record(
 ) -> SDKResult<CreateRecordResponse> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::POST;
-    api_req.api_path = Endpoints::BITABLE_V1_RECORDS
+    api_req.api_path = BITABLE_V1_RECORDS
         .replace("{app_token}", &request.app_token)
         .replace("{table_id}", &request.table_id);
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];

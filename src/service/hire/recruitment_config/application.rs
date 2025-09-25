@@ -7,7 +7,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -75,7 +74,7 @@ impl ApplicationConfigService {
     ) -> SDKResult<BaseResponse<TalentTagListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_V1_TALENT_TAGS.to_string(),
+            api_path: HIRE_V1_TALENT_TAGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -120,7 +119,7 @@ impl ApplicationConfigService {
     ) -> SDKResult<BaseResponse<RegistrationFormListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_V1_REGISTRATION_FORMS.to_string(),
+            api_path: HIRE_V1_REGISTRATION_FORMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

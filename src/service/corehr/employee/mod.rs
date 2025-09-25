@@ -7,7 +7,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -105,7 +104,7 @@ impl EmployeeService {
     ) -> SDKResult<BaseResponse<EmployeeBatchGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::COREHR_EMPLOYEES_BATCH_GET.to_string(),
+            api_path: COREHR_EMPLOYEES_BATCH_GET.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -169,7 +168,7 @@ impl EmployeeService {
     ) -> SDKResult<BaseResponse<EmployeeSearchResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::COREHR_EMPLOYEES_SEARCH.to_string(),
+            api_path: COREHR_EMPLOYEES_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()

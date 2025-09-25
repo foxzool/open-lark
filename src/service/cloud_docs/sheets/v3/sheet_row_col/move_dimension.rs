@@ -5,7 +5,6 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{BaseResponse, EmptyResponse},
         constants::AccessTokenType,
-        endpoints::Endpoints,
         req_option, SDKResult,
     },
     service::sheets::v3::SpreadsheetSheetService,
@@ -116,7 +115,7 @@ impl SpreadsheetSheetService {
         option: Option<req_option::RequestOption>,
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut api_req = request.api_request;
-        api_req.api_path = Endpoints::SHEETS_V3_SPREADSHEET_MOVE_DIMENSION
+        api_req.api_path = SHEETS_V3_SPREADSHEET_MOVE_DIMENSION
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
         api_req.http_method = reqwest::Method::POST;

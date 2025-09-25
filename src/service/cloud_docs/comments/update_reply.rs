@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::{cloud_docs::*, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -202,7 +202,7 @@ pub async fn update_reply(
     api_req.api_path = format!(
         "{}?file_type={}&file_token={}",
         EndpointBuilder::replace_params_from_array(
-            Endpoints::COMMENT_V1_COMMENT_REPLY_UPDATE,
+            COMMENT_V1_COMMENT_REPLY_UPDATE,
             &[
                 ("comment_id", &request.comment_id),
                 ("reply_id", &request.reply_id)

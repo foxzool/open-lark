@@ -2,13 +2,8 @@ use reqwest::Method;
 
 use crate::{
     core::{
-        api_resp::BaseResponse,
-        constants::AccessTokenType,
-        endpoints::EndpointBuilder,
-        http::Transport,
-        req_option::RequestOption,
-        standard_response::StandardResponse,
-        SDKResult,
+        api_resp::BaseResponse, constants::AccessTokenType, endpoints::EndpointBuilder,
+        http::Transport, req_option::RequestOption, standard_response::StandardResponse, SDKResult,
     },
     service::im::v1::message::{CreateMessageResp, Message},
 };

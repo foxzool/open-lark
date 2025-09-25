@@ -55,7 +55,8 @@ impl<T: ApiResponseTrait> Transport<T> {
                 validate(config, &option, access_token_type)?;
 
                 Self::do_request(req, access_token_type, config, option).await
-            }.await;
+            }
+            .await;
 
             // Record metrics in current span
             let current_span = tracing::Span::current();
@@ -64,7 +65,14 @@ impl<T: ApiResponseTrait> Transport<T> {
 
             match &result {
                 Ok(response) => {
-                    current_span.record("status", if response.success() { "success" } else { "api_error" });
+                    current_span.record(
+                        "status",
+                        if response.success() {
+                            "success"
+                        } else {
+                            "api_error"
+                        },
+                    );
                 }
                 Err(_) => {
                     current_span.record("status", "error");

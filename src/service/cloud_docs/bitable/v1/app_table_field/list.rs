@@ -7,7 +7,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -161,7 +160,7 @@ pub async fn list_field(
 ) -> SDKResult<BaseResponse<ListFieldResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::GET;
-    api_req.api_path = Endpoints::BITABLE_V1_FIELDS
+    api_req.api_path = BITABLE_V1_FIELDS
         .replace("{app_token}", &request.app_token)
         .replace("{table_id}", &request.table_id);
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];

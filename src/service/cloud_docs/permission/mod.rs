@@ -24,7 +24,9 @@ impl PermissionService {
 
     /// 使用共享配置（实验性）
     pub fn new_from_shared(shared: std::sync::Arc<Config>) -> Self {
-        Self { config: (*shared).clone() }
+        Self {
+            config: (*shared).clone(),
+        }
     }
 
     /// 批量增加协作者权限

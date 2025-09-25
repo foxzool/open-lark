@@ -6,7 +6,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::{EndpointBuilder, Endpoints},
+    endpoints::{drive::*, EndpointBuilder},
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -259,11 +259,7 @@ pub async fn create_permission_member(
     api_req.http_method = Method::POST;
     api_req.api_path = format!(
         "{}?type={}",
-        EndpointBuilder::replace_param(
-            Endpoints::DRIVE_V1_PERMISSIONS_MEMBERS,
-            "token",
-            &request.token
-        ),
+        EndpointBuilder::replace_param(DRIVE_V1_PERMISSIONS_MEMBERS, "token", &request.token),
         request.obj_type
     );
 

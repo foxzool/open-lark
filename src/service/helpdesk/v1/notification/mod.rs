@@ -8,7 +8,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -124,7 +123,7 @@ impl NotificationService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HELPDESK_V1_NOTIFICATIONS.to_string(),
+            api_path: HELPDESK_V1_NOTIFICATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -150,7 +149,7 @@ impl NotificationService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_NOTIFICATION_UPDATE,
+                HELPDESK_V1_NOTIFICATION_UPDATE,
                 "notification_id",
                 notification_id,
             ),
@@ -178,7 +177,7 @@ impl NotificationService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_NOTIFICATION_GET,
+                HELPDESK_V1_NOTIFICATION_GET,
                 "notification_id",
                 notification_id,
             ),
@@ -205,7 +204,7 @@ impl NotificationService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_NOTIFICATION_PREVIEW,
+                HELPDESK_V1_NOTIFICATION_PREVIEW,
                 "notification_id",
                 notification_id,
             ),
@@ -232,7 +231,7 @@ impl NotificationService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_NOTIFICATION_SUBMIT_APPROVE,
+                HELPDESK_V1_NOTIFICATION_SUBMIT_APPROVE,
                 "notification_id",
                 notification_id,
             ),
@@ -259,7 +258,7 @@ impl NotificationService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_NOTIFICATION_CANCEL_APPROVE,
+                HELPDESK_V1_NOTIFICATION_CANCEL_APPROVE,
                 "notification_id",
                 notification_id,
             ),
@@ -286,7 +285,7 @@ impl NotificationService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_NOTIFICATION_EXECUTE_SEND,
+                HELPDESK_V1_NOTIFICATION_EXECUTE_SEND,
                 "notification_id",
                 notification_id,
             ),
@@ -313,7 +312,7 @@ impl NotificationService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_NOTIFICATION_CANCEL_SEND,
+                HELPDESK_V1_NOTIFICATION_CANCEL_SEND,
                 "notification_id",
                 notification_id,
             ),

@@ -6,7 +6,6 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::Endpoints,
     http::Transport,
     query_params::QueryParams,
     req_option::RequestOption,
@@ -400,7 +399,7 @@ pub async fn patch_permission_public_v2(
 ) -> SDKResult<BaseResponse<PatchPermissionPublicV2Response>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::PATCH;
-    api_req.api_path = Endpoints::DRIVE_V2_PERMISSIONS_PUBLIC.replace("{}", &request.token);
+    api_req.api_path = DRIVE_V2_PERMISSIONS_PUBLIC.replace("{}", &request.token);
 
     // 添加查询参数
     api_req

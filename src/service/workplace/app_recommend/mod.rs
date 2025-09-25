@@ -7,7 +7,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         query_params::QueryParams,
         req_option::RequestOption,
@@ -47,7 +46,7 @@ impl AppRecommendService {
     ) -> SDKResult<FavouriteAppsResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::WORKPLACE_APP_RECOMMEND_FAVOURITE.to_string(),
+            api_path: WORKPLACE_APP_RECOMMEND_FAVOURITE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -94,7 +93,7 @@ impl AppRecommendService {
     ) -> SDKResult<RecommendedAppsResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::WORKPLACE_APP_RECOMMEND_RECOMMEND.to_string(),
+            api_path: WORKPLACE_APP_RECOMMEND_RECOMMEND.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()
@@ -147,7 +146,7 @@ impl AppRecommendService {
     ) -> SDKResult<RecommendRulesListResponse> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::WORKPLACE_APP_RECOMMEND_LIST.to_string(),
+            api_path: WORKPLACE_APP_RECOMMEND_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

@@ -7,7 +7,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        
         http::Transport,
         req_option::RequestOption,
         SDKResult,

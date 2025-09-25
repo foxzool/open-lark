@@ -155,7 +155,7 @@ pub async fn patch_form_question(
 ) -> SDKResult<BaseResponse<PatchFormQuestionResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::PATCH;
-    api_req.api_path = crate::core::endpoints::Endpoints::BITABLE_V1_FORM_QUESTION
+    api_req.api_path = BITABLE_V1_FORM_PATCH
         .replace("{app_token}", &request.app_token)
         .replace("{form_id}", &request.form_id)
         .replace("{question_id}", &request.question_id);

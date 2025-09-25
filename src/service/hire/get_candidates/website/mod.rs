@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -292,7 +292,7 @@ impl WebsiteService {
     ) -> SDKResult<BaseResponse<WebsiteJobListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_V1_WEBSITE_JOBS.to_string(),
+            api_path: HIRE_V1_WEBSITE_JOBS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -371,7 +371,7 @@ impl WebsiteService {
     ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HIRE_V1_WEBSITE_JOBS_PUBLISH.to_string(),
+            api_path: HIRE_V1_WEBSITE_JOBS_PUBLISH.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -404,7 +404,7 @@ impl WebsiteService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_WEBSITE_JOB_UNPUBLISH,
+                HIRE_V1_WEBSITE_JOB_UNPUBLISH,
                 "job_id",
                 job_id,
             ),
@@ -472,7 +472,7 @@ impl WebsiteService {
     ) -> SDKResult<BaseResponse<WebsiteApplicationListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_V1_WEBSITE_APPLICATIONS.to_string(),
+            api_path: HIRE_V1_WEBSITE_APPLICATIONS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -559,7 +559,7 @@ impl WebsiteService {
     ) -> SDKResult<BaseResponse<WebsiteConfigurationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_V1_WEBSITE_CONFIGURATION.to_string(),
+            api_path: HIRE_V1_WEBSITE_CONFIGURATION.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -627,7 +627,7 @@ impl WebsiteService {
     ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HIRE_V1_WEBSITE_CONFIGURATION.to_string(),
+            api_path: HIRE_V1_WEBSITE_CONFIGURATION.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -660,7 +660,7 @@ impl WebsiteService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_WEBSITE_APPLICATION_CONVERT,
+                HIRE_V1_WEBSITE_APPLICATION_CONVERT,
                 "website_application_id",
                 website_application_id,
             ),
@@ -707,7 +707,7 @@ impl WebsiteService {
     ) -> SDKResult<BaseResponse<serde_json::Value>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_V1_WEBSITE_STATISTICS.to_string(),
+            api_path: HIRE_V1_WEBSITE_STATISTICS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

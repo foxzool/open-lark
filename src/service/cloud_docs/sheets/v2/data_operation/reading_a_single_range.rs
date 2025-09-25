@@ -1,4 +1,3 @@
-use crate::core::endpoints::Endpoints;
 use serde::Deserialize;
 
 use crate::{
@@ -161,7 +160,7 @@ impl SpreadsheetService {
         option: Option<req_option::RequestOption>,
     ) -> SDKResult<BaseResponse<ReadingSingleRangeResponse>> {
         let mut api_req = request.api_request;
-        api_req.api_path = Endpoints::SHEETS_V2_SPREADSHEET_VALUES_RANGE
+        api_req.api_path = SHEETS_V2_SPREADSHEET_VALUES_RANGE
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.range);
         api_req.http_method = reqwest::Method::GET;

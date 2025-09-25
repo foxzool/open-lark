@@ -8,7 +8,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -125,7 +124,7 @@ impl CategoryService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HELPDESK_V1_CATEGORIES.to_string(),
+            api_path: HELPDESK_V1_CATEGORIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -150,7 +149,7 @@ impl CategoryService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_CATEGORY_GET,
+                HELPDESK_V1_CATEGORY_GET,
                 "category_id",
                 category_id,
             ),
@@ -178,7 +177,7 @@ impl CategoryService {
         let api_req = ApiRequest {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_CATEGORY_GET,
+                HELPDESK_V1_CATEGORY_GET,
                 "category_id",
                 category_id,
             ),
@@ -206,7 +205,7 @@ impl CategoryService {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_CATEGORY_GET,
+                HELPDESK_V1_CATEGORY_GET,
                 "category_id",
                 category_id,
             ),
@@ -243,7 +242,7 @@ impl CategoryService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HELPDESK_V1_CATEGORIES.to_string(),
+            api_path: HELPDESK_V1_CATEGORIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

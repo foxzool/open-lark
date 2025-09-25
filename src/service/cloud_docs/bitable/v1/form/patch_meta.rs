@@ -158,7 +158,7 @@ pub async fn patch_form_meta(
 ) -> SDKResult<BaseResponse<PatchFormMetaResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::PATCH;
-    api_req.api_path = crate::core::endpoints::Endpoints::BITABLE_V1_FORM_PATCH
+    api_req.api_path = BITABLE_V1_FORM_PATCH
         .replace("{app_token}", &request.app_token)
         .replace("{form_id}", &request.form_id);
     api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];

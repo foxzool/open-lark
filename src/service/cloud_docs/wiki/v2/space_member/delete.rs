@@ -6,7 +6,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::{EndpointBuilder, Endpoints},
+    endpoints::{cloud_docs::*, EndpointBuilder},
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -102,7 +102,7 @@ pub async fn delete_space_member(
     api_req.http_method = Method::DELETE;
     api_req.api_path = {
         let mut path = EndpointBuilder::replace_param(
-            Endpoints::WIKI_V2_SPACE_MEMBER_DELETE,
+            WIKI_V2_SPACE_MEMBER_DELETE,
             "space_id",
             &request.space_id,
         );

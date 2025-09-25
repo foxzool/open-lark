@@ -7,16 +7,16 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, admin},
+        endpoints::{admin, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
     },
+    impl_full_service,
     service::admin::models::{
         BadgeGrant, BadgeGrantCreateRequest, BadgeGrantDeleteRequest, BadgeGrantGetRequest,
         BadgeGrantListRequest, BadgeGrantUpdateRequest, PageResponse,
     },
-    impl_full_service,
 };
 
 /// 勋章授予名单管理服务

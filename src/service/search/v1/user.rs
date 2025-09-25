@@ -7,7 +7,6 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
     constants::AccessTokenType,
-    
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,

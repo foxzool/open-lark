@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -295,7 +295,7 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HIRE_V1_EXTERNAL_SYSTEMS.to_string(),
+            api_path: HIRE_V1_EXTERNAL_SYSTEMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -353,7 +353,7 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemConfigListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_V1_EXTERNAL_SYSTEMS.to_string(),
+            api_path: HIRE_V1_EXTERNAL_SYSTEMS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -418,7 +418,7 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HIRE_V1_EXTERNAL_SYSTEMS_SYNC_TASKS.to_string(),
+            api_path: HIRE_V1_EXTERNAL_SYSTEMS_SYNC_TASKS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -480,7 +480,7 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemSyncRecordListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_V1_EXTERNAL_SYSTEMS_SYNC_RECORDS.to_string(),
+            api_path: HIRE_V1_EXTERNAL_SYSTEMS_SYNC_RECORDS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -561,7 +561,7 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_IMPORT.to_string(),
+            api_path: HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_IMPORT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -622,7 +622,7 @@ impl ExternalSystemService {
     ) -> SDKResult<BaseResponse<ExternalCandidateListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES.to_string(),
+            api_path: HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -683,7 +683,7 @@ impl ExternalSystemService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_CONVERT,
+                HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_CONVERT,
                 "external_candidate_id",
                 external_candidate_id,
             ),
@@ -722,7 +722,7 @@ impl ExternalSystemService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HIRE_V1_EXTERNAL_SYSTEMS_TEST_CONNECTION,
+                HIRE_V1_EXTERNAL_SYSTEMS_TEST_CONNECTION,
                 "system_config_id",
                 system_config_id,
             ),

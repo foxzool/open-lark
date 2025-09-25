@@ -36,7 +36,7 @@ impl LeaveAccrualRecordService {
         let mut api_req = request.api_req;
         api_req.http_method = Method::PATCH;
         api_req.api_path = EndpointBuilder::replace_param(
-            Endpoints::ATTENDANCE_V1_LEAVE_ACCRUAL_RECORD_GET,
+            ATTENDANCE_V1_LEAVE_ACCRUAL_RECORD_GET,
             "leave_accrual_record_id",
             &request.leave_accrual_record_id,
         );

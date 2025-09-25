@@ -140,12 +140,16 @@ impl TenantService {
     /// # 返回值
     /// 配置完成的企业信息服务实例
     pub fn new(config: Config) -> Self {
-        Self { v2: v2::V2::new(config) }
+        Self {
+            v2: v2::V2::new(config),
+        }
     }
 
     /// 使用共享配置创建服务（实验性）
     pub fn new_from_shared(shared: std::sync::Arc<Config>) -> Self {
-        Self { v2: v2::V2::new_from_shared(shared) }
+        Self {
+            v2: v2::V2::new_from_shared(shared),
+        }
     }
 }
 
