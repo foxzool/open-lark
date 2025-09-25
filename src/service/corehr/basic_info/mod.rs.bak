@@ -9,7 +9,6 @@ use crate::{
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
-        endpoints::corehr::*,
         SDKResult,
     },
     service::corehr::models::{
