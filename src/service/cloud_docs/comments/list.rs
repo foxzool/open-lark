@@ -7,7 +7,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -273,9 +272,7 @@ pub async fn list_comments(
     api_req.http_method = Method::GET;
     api_req.api_path = format!(
         "{}?file_type={}&file_token={}",
-        Endpoints::COMMENT_V1_COMMENTS,
-        request.file_type,
-        request.file_token
+        COMMENT_V1_COMMENTS, request.file_type, request.file_token
     );
 
     // 构建查询参数

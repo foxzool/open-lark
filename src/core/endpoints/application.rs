@@ -14,8 +14,7 @@ pub const APPLICATION_V6_APP_VERSION_GET: &str =
     "/open-apis/application/v6/applications/{app_id}/versions/{version_id}";
 pub const APPLICATION_V6_APPS_UNDERAUDITLIST: &str =
     "/open-apis/application/v6/applications/underauditlist";
-pub const APPLICATION_V6_APP_AUDIT: &str =
-    "/open-apis/application/v6/applications/{app_id}/audit";
+pub const APPLICATION_V6_APP_AUDIT: &str = "/open-apis/application/v6/applications/{app_id}/audit";
 pub const APPLICATION_V6_APP_GROUP: &str = "/open-apis/application/v6/applications/{app_id}/group";
 pub const APPLICATION_V6_APP_VERSION_CONTACTS_RANGE_SUGGEST: &str =
     "/open-apis/application/v6/applications/{app_id}/versions/{version_id}/contacts_range_suggest";
@@ -31,22 +30,27 @@ pub const APPLICATION_V6_APP_USAGE_DEPARTMENT_OVERVIEW: &str =
 // ==================== 应用权限范围 ====================
 pub const APPLICATION_V6_APP_SCOPE_APPLY: &str =
     "/open-apis/application/v6/applications/{app_id}/scope/apply";
-pub const APPLICATION_V6_APP_SCOPE_GET: &str = "/open-apis/application/v6/applications/{app_id}/scope";
+pub const APPLICATION_V6_APP_SCOPE_GET: &str =
+    "/open-apis/application/v6/applications/{app_id}/scope";
 
 // ==================== 应用徽章 ====================
 pub const APPLICATION_V6_APP_BADGE_SET: &str =
     "/open-apis/application/v6/app_badge/{app_id}/users/{user_id}/set";
 
 // ==================== 应用反馈 ====================
-pub const APPLICATION_V6_APPLICATION_FEEDBACK: &str = "/open-apis/application/v6/application_feedback";
+pub const APPLICATION_V6_APPLICATION_FEEDBACK: &str =
+    "/open-apis/application/v6/application_feedback";
 pub const APPLICATION_V6_APPLICATION_FEEDBACK_GET: &str =
     "/open-apis/application/v6/application_feedback/{feedback_id}";
 
 // ==================== 管理员应用管理 ====================
 pub const APPLICATION_V6_ADMIN_APPS: &str = "/open-apis/application/v6/admin/apps";
-pub const APPLICATION_V6_ADMIN_APP_ENABLE: &str = "/open-apis/application/v6/admin/apps/{app_id}/enable";
-pub const APPLICATION_V6_ADMIN_APP_ADMINS: &str = "/open-apis/application/v6/admin/apps/{app_id}/admins";
-pub const APPLICATION_V6_ADMIN_APP_VISIBILITY: &str = "/open-apis/application/v6/admin/apps/{app_id}/visibility";
+pub const APPLICATION_V6_ADMIN_APP_ENABLE: &str =
+    "/open-apis/application/v6/admin/apps/{app_id}/enable";
+pub const APPLICATION_V6_ADMIN_APP_ADMINS: &str =
+    "/open-apis/application/v6/admin/apps/{app_id}/admins";
+pub const APPLICATION_V6_ADMIN_APP_VISIBILITY: &str =
+    "/open-apis/application/v6/admin/apps/{app_id}/visibility";
 pub const APPLICATION_V6_ADMIN_APP_VISIBILITY_CREATE: &str =
     "/open-apis/application/v6/admin/apps/{app_id}/visibility";
 pub const APPLICATION_V6_ADMIN_USER_AVAILABLE_APPS: &str =

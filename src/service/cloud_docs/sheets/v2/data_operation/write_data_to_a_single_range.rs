@@ -1,11 +1,7 @@
-use crate::core::endpoints::Endpoints;
 use serde::Serialize;
 
 use crate::{
-    core::{
-        api_req::ApiRequest, api_resp::BaseResponse, constants::AccessTokenType, req_option,
-        SDKResult,
-    },
+    core::{api_req::ApiRequest, api_resp::BaseResponse, constants::AccessTokenType},
     impl_executable_builder_owned,
     service::cloud_docs::sheets::v2::{
         data_operation::{SheetDataUpdates, ValueRangeRequest},
@@ -77,8 +73,7 @@ impl SpreadsheetService {
         option: Option<req_option::RequestOption>,
     ) -> SDKResult<BaseResponse<WriteDataToSingleRangeResponse>> {
         let mut api_req = request.api_request;
-        api_req.api_path =
-            Endpoints::SHEETS_V2_SPREADSHEET_VALUES.replace("{}", &request.spreadsheet_token);
+        api_req.api_path = SHEETS_V2_SPREADSHEET_VALUES.replace("{}", &request.spreadsheet_token);
         api_req.http_method = reqwest::Method::PUT;
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::App];
 

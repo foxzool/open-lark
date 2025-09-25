@@ -1,12 +1,8 @@
-use crate::core::endpoints::Endpoints;
 use serde::Serialize;
 use serde_json::Value;
 
 use crate::{
-    core::{
-        api_req::ApiRequest, api_resp::BaseResponse, constants::AccessTokenType, req_option,
-        SDKResult,
-    },
+    core::{api_req::ApiRequest, api_resp::BaseResponse, constants::AccessTokenType},
     impl_executable_builder_owned,
     service::cloud_docs::sheets::v2::{
         data_operation::{UpdateSheetDataResponse, ValueRangeRequest},
@@ -85,12 +81,13 @@ impl SpreadsheetSheetService {
         option: Option<req_option::RequestOption>,
     ) -> SDKResult<BaseResponse<AppendDataResponse>> {
         let mut api_req = request.api_request;
-        api_req.api_path = Endpoints::SHEETS_V2_SPREADSHEET_VALUES_APPEND
-            .replace("{}", &request.spreadsheet_token);
+        api_req.api_path =
+            SHEETS_V2_SPREADSHEET_VALUES_APPEND.replace("{}", &request.spreadsheet_token);
         api_req.http_method = reqwest::Method::POST;
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::App];
 
-        let api_resp = crate::core::http::Transport::request(api_req, &self.config_arc, option).await?;
+        let api_resp =
+            crate::core::http::Transport::request(api_req, &self.config_arc, option).await?;
 
         Ok(api_resp)
     }

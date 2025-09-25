@@ -6,7 +6,6 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -23,7 +22,7 @@ impl SpreadsheetSheetService {
     ) -> SDKResult<BaseResponse<DeleteConditionFormatsResponseData>> {
         let mut api_req = request.api_request;
         api_req.http_method = Method::DELETE;
-        api_req.api_path = Endpoints::SHEETS_V3_SPREADSHEET_CONDITION_FORMAT
+        api_req.api_path = SHEETS_V3_SPREADSHEET_CONDITION_FORMAT
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];

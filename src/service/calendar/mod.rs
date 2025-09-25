@@ -139,7 +139,9 @@ impl CalendarService {
 
     /// 使用共享配置（实验性）
     pub fn new_from_shared(shared: std::sync::Arc<Config>) -> Self {
-        Self { v4: V4::new(shared.as_ref().clone()) }
+        Self {
+            v4: V4::new(shared.as_ref().clone()),
+        }
     }
 }
 

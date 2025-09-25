@@ -10,7 +10,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -36,7 +35,7 @@ impl ExplorerService {
     ) -> SDKResult<BaseResponse<ExplorerRootMeta>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::DRIVE_EXPLORER_V2_ROOT_FOLDER_META.to_string(),
+            api_path: DRIVE_EXPLORER_V2_ROOT_FOLDER_META.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
@@ -56,8 +55,7 @@ impl ExplorerService {
     ) -> SDKResult<BaseResponse<ExplorerFolderMeta>> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::DRIVE_EXPLORER_V2_FOLDER_META
-                .replace("{folder_token}", folder_token),
+            api_path: DRIVE_EXPLORER_V2_FOLDER_META.replace("{folder_token}", folder_token),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
@@ -76,7 +74,7 @@ impl ExplorerService {
     ) -> SDKResult<BaseResponse<CreateFolderResponse>> {
         let mut api_req = create_folder_request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = Endpoints::DRIVE_V1_FILES_CREATE_FOLDER.to_string();
+        api_req.api_path = DRIVE_V1_FILES_CREATE_FOLDER.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -94,7 +92,7 @@ impl ExplorerService {
     ) -> SDKResult<BaseResponse<ListFolderResponse>> {
         let mut api_req = list_folder_request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = Endpoints::DRIVE_V1_FILES.to_string();
+        api_req.api_path = DRIVE_V1_FILES.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

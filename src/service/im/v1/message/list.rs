@@ -6,7 +6,6 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse},
         constants::AccessTokenType,
-        
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,

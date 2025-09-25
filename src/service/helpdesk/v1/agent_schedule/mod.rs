@@ -8,7 +8,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -126,7 +125,7 @@ impl AgentScheduleService {
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_AGENT_SCHEDULES,
+                HELPDESK_V1_AGENT_SCHEDULES,
                 "agent_id",
                 agent_id,
             ),
@@ -156,7 +155,7 @@ impl AgentScheduleService {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
                 &EndpointBuilder::replace_param(
-                    Endpoints::HELPDESK_V1_AGENT_SCHEDULE_DELETE,
+                    HELPDESK_V1_AGENT_SCHEDULE_DELETE,
                     "agent_id",
                     agent_id,
                 ),
@@ -189,7 +188,7 @@ impl AgentScheduleService {
             http_method: Method::PATCH,
             api_path: EndpointBuilder::replace_param(
                 &EndpointBuilder::replace_param(
-                    Endpoints::HELPDESK_V1_AGENT_SCHEDULE_DELETE,
+                    HELPDESK_V1_AGENT_SCHEDULE_DELETE,
                     "agent_id",
                     agent_id,
                 ),
@@ -222,7 +221,7 @@ impl AgentScheduleService {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
                 &EndpointBuilder::replace_param(
-                    Endpoints::HELPDESK_V1_AGENT_SCHEDULE_DELETE,
+                    HELPDESK_V1_AGENT_SCHEDULE_DELETE,
                     "agent_id",
                     agent_id,
                 ),
@@ -260,7 +259,7 @@ impl AgentScheduleService {
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_AGENT_SCHEDULES,
+                HELPDESK_V1_AGENT_SCHEDULES,
                 "agent_id",
                 agent_id,
             ),

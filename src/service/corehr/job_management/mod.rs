@@ -7,7 +7,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -181,7 +180,7 @@ impl JobManagementService {
     ) -> SDKResult<BaseResponse<JobFamilyCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::COREHR_JOB_FAMILIES.to_string(),
+            api_path: COREHR_JOB_FAMILIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -224,7 +223,7 @@ impl JobManagementService {
     ) -> SDKResult<BaseResponse<JobFamilyListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::COREHR_JOB_FAMILIES.to_string(),
+            api_path: COREHR_JOB_FAMILIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -288,7 +287,7 @@ impl JobManagementService {
     ) -> SDKResult<BaseResponse<JobLevelCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::COREHR_JOB_LEVELS.to_string(),
+            api_path: COREHR_JOB_LEVELS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -331,7 +330,7 @@ impl JobManagementService {
     ) -> SDKResult<BaseResponse<JobLevelListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::COREHR_JOB_LEVELS.to_string(),
+            api_path: COREHR_JOB_LEVELS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -395,7 +394,7 @@ impl JobManagementService {
     ) -> SDKResult<BaseResponse<JobGradeCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::COREHR_JOB_GRADES.to_string(),
+            api_path: COREHR_JOB_GRADES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -438,7 +437,7 @@ impl JobManagementService {
     ) -> SDKResult<BaseResponse<JobGradeQueryResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::COREHR_JOB_GRADES_QUERY.to_string(),
+            api_path: COREHR_JOB_GRADES_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()
@@ -498,7 +497,7 @@ impl JobManagementService {
     ) -> SDKResult<BaseResponse<JobCreateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::COREHR_JOBS.to_string(),
+            api_path: COREHR_JOBS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
@@ -541,7 +540,7 @@ impl JobManagementService {
     ) -> SDKResult<BaseResponse<JobListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::COREHR_JOBS.to_string(),
+            api_path: COREHR_JOBS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

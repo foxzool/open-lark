@@ -1,10 +1,7 @@
 use reqwest::Method;
 use serde_json::json;
 
-use crate::core::{
-    api_resp::BaseResponse, config::Config, constants::AccessTokenType, endpoints::Endpoints,
-    http::Transport, req_option::RequestOption, SDKResult,
-};
+use crate::core::{http::Transport, req_option::RequestOption, SDKResult};
 
 use super::models::{
     BatchCreateTempUserDailyShiftRequest, BatchCreateTempUserDailyShiftRespData,
@@ -32,7 +29,7 @@ impl UserDailyShiftService {
     ) -> SDKResult<BaseResponse<BatchCreateUserDailyShiftRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_DAILY_SHIFTS_BATCH_CREATE.to_string();
+        api_req.api_path = ATTENDANCE_V1_USER_DAILY_SHIFTS_BATCH_CREATE.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加必需的查询参数
@@ -63,7 +60,7 @@ impl UserDailyShiftService {
     ) -> SDKResult<BaseResponse<QueryUserDailyShiftRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_DAILY_SHIFTS_QUERY.to_string();
+        api_req.api_path = ATTENDANCE_V1_USER_DAILY_SHIFTS_QUERY.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加必需的查询参数
@@ -97,7 +94,7 @@ impl UserDailyShiftService {
     ) -> SDKResult<BaseResponse<BatchCreateTempUserDailyShiftRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = Endpoints::ATTENDANCE_V1_USER_DAILY_SHIFTS_BATCH_CREATE_TEMP.to_string();
+        api_req.api_path = ATTENDANCE_V1_USER_DAILY_SHIFTS_BATCH_CREATE_TEMP.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加必需的查询参数

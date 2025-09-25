@@ -7,7 +7,7 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::{cardkit::*, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -169,11 +169,8 @@ impl CardElementService {
     ) -> SDKResult<BaseResponse<CreateElementResponse>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = EndpointBuilder::replace_param(
-            Endpoints::CARDKIT_V1_CARD_ELEMENTS,
-            "card_id",
-            &request.card_id,
-        );
+        api_req.api_path =
+            EndpointBuilder::replace_param(CARDKIT_V1_CARD_ELEMENTS, "card_id", &request.card_id);
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

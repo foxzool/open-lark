@@ -8,7 +8,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -122,7 +121,7 @@ pub async fn delete_role_member(
 ) -> SDKResult<BaseResponse<DeleteRoleMemberResponse>> {
     let mut api_req = request.api_request;
     api_req.http_method = Method::DELETE;
-    api_req.api_path = Endpoints::BITABLE_V1_ROLE_MEMBER_DELETE
+    api_req.api_path = BITABLE_V1_ROLE_MEMBER_DELETE
         .replace("{app_token}", &request.app_token)
         .replace("{role_id}", &request.role_id)
         .replace("{member_id}", &request.member_id);

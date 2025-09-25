@@ -6,7 +6,7 @@ use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::{EndpointBuilder, Endpoints},
+    endpoints::{drive::*, EndpointBuilder},
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -212,7 +212,7 @@ pub async fn transfer_owner(
     api_req.api_path = format!(
         "{}?type={}",
         EndpointBuilder::replace_param(
-            Endpoints::DRIVE_V1_PERMISSIONS_MEMBERS_TRANSFER_OWNER,
+            DRIVE_V1_PERMISSIONS_MEMBERS_TRANSFER_OWNER,
             "token",
             &request.token
         ),

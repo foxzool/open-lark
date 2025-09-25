@@ -37,7 +37,9 @@ impl CommentsService {
 
     /// 使用共享配置（实验性）
     pub fn new_from_shared(shared: std::sync::Arc<Config>) -> Self {
-        Self { config: (*shared).clone() }
+        Self {
+            config: (*shared).clone(),
+        }
     }
 
     /// 获取云文档所有评论

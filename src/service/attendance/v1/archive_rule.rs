@@ -39,7 +39,7 @@ impl ArchiveRuleService {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
         api_req.api_path = EndpointBuilder::replace_param(
-            Endpoints::ATTENDANCE_V1_ARCHIVE_RULE_USER_STATS_FIELDS,
+            ATTENDANCE_V1_ARCHIVE_RULE_USER_STATS_FIELDS,
             "archive_rule_id",
             &request.archive_rule_id,
         );
@@ -67,7 +67,7 @@ impl ArchiveRuleService {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = EndpointBuilder::replace_param(
-            Endpoints::ATTENDANCE_V1_ARCHIVE_RULE_UPLOAD_REPORT,
+            ATTENDANCE_V1_ARCHIVE_RULE_UPLOAD_REPORT,
             "archive_rule_id",
             &request.archive_rule_id,
         );
@@ -102,7 +102,7 @@ impl ArchiveRuleService {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
         api_req.api_path = EndpointBuilder::replace_param(
-            Endpoints::ATTENDANCE_V1_ARCHIVE_RULE_DEL_REPORT,
+            ATTENDANCE_V1_ARCHIVE_RULE_DEL_REPORT,
             "archive_rule_id",
             &request.archive_rule_id,
         );
@@ -136,7 +136,7 @@ impl ArchiveRuleService {
     ) -> SDKResult<BaseResponse<ListArchiveRulesRespData>> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::GET;
-        api_req.api_path = Endpoints::ATTENDANCE_V1_ARCHIVE_RULES.to_string();
+        api_req.api_path = ATTENDANCE_V1_ARCHIVE_RULES.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
 
         // 添加查询参数

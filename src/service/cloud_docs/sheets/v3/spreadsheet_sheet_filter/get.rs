@@ -5,7 +5,6 @@ use crate::{
         api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
-        endpoints::Endpoints,
         req_option::RequestOption,
         SDKResult,
     },
@@ -90,7 +89,7 @@ impl SpreadsheetSheetFilterService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SheetFilterResponse>> {
         let mut api_req = request.api_request;
-        api_req.api_path = Endpoints::SHEETS_V3_SPREADSHEET_FILTER
+        api_req.api_path = SHEETS_V3_SPREADSHEET_FILTER
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
         api_req.http_method = reqwest::Method::GET;

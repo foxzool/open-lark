@@ -8,7 +8,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -93,11 +92,7 @@ impl AgentService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_AGENT_GET,
-                "agent_id",
-                agent_id,
-            ),
+            api_path: EndpointBuilder::replace_param(HELPDESK_V1_AGENT_GET, "agent_id", agent_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -135,11 +130,7 @@ impl AgentService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                Endpoints::HELPDESK_V1_AGENT_EMAIL,
-                "agent_id",
-                agent_id,
-            ),
+            api_path: EndpointBuilder::replace_param(HELPDESK_V1_AGENT_EMAIL, "agent_id", agent_id),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
             ..Default::default()

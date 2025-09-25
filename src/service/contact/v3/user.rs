@@ -1,19 +1,13 @@
+use crate::impl_full_service;
 use crate::{
     core::{
-        api_req::ApiRequest,
-        api_resp::ApiResponseTrait,
-        config::Config,
-        constants::AccessTokenType,
-        endpoints::EndpointBuilder,
-        http::Transport,
-        req_option::RequestOption,
-        standard_response::StandardResponse,
-        trait_system::executable_builder::ExecutableBuilder,
-        SDKResult,
+        api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
+        constants::AccessTokenType, endpoints::EndpointBuilder, http::Transport,
+        req_option::RequestOption, standard_response::StandardResponse,
+        trait_system::executable_builder::ExecutableBuilder, SDKResult,
     },
     service::contact::models::*,
 };
-use crate::impl_full_service;
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 
@@ -154,7 +148,8 @@ impl UserService {
     ) -> crate::core::SDKResult<FindUsersByDepartmentResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
-            api_path: crate::core::endpoints::contact::CONTACT_V3_USERS_FIND_BY_DEPARTMENT.to_string(),
+            api_path: crate::core::endpoints::contact::CONTACT_V3_USERS_FIND_BY_DEPARTMENT
+                .to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),

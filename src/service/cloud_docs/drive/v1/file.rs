@@ -8,7 +8,6 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
@@ -39,7 +38,7 @@ impl FileService {
     ) -> SDKResult<GetFileMetaRespData> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::DRIVE_V1_METAS_BATCH_QUERY.to_string(),
+            api_path: DRIVE_V1_METAS_BATCH_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -62,7 +61,7 @@ impl FileService {
     ) -> SDKResult<GetFileStatisticsRespData> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::DRIVE_V1_FILE_STATISTICS.replace("{}", &request.file_token),
+            api_path: DRIVE_V1_FILE_STATISTICS.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
@@ -84,7 +83,7 @@ impl FileService {
     ) -> SDKResult<ListFileViewRecordsRespData> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::DRIVE_V1_FILE_VIEW_RECORDS.replace("{}", &request.file_token),
+            api_path: DRIVE_V1_FILE_VIEW_RECORDS.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
@@ -116,7 +115,7 @@ impl FileService {
     ) -> SDKResult<CreateFileRespData> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::DRIVE_V1_FILES.to_string(),
+            api_path: DRIVE_V1_FILES.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -146,7 +145,7 @@ impl FileService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::DRIVE_V1_FILE_COPY.replace("{}", &request.file_token),
+            api_path: DRIVE_V1_FILE_COPY.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&body)?,
             ..Default::default()
@@ -169,7 +168,7 @@ impl FileService {
     ) -> SDKResult<DeleteFileRespData> {
         let api_req = ApiRequest {
             http_method: Method::DELETE,
-            api_path: Endpoints::DRIVE_V1_FILE_GET.replace("{}", &request.file_token),
+            api_path: DRIVE_V1_FILE_GET.replace("{}", &request.file_token),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
@@ -191,7 +190,7 @@ impl FileService {
     ) -> SDKResult<CreateFileShortcutRespData> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::DRIVE_V1_FILES_CREATE_SHORTCUT.to_string(),
+            api_path: DRIVE_V1_FILES_CREATE_SHORTCUT.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -214,7 +213,7 @@ impl FileService {
     ) -> SDKResult<SearchFilesRespData> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::DRIVE_V1_FILES_SEARCH.to_string(),
+            api_path: DRIVE_V1_FILES_SEARCH.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };
@@ -252,7 +251,7 @@ impl FileService {
     ) -> SDKResult<FileUploadPrepareRespData> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::DRIVE_V1_FILES_UPLOAD_PREPARE.to_string(),
+            api_path: DRIVE_V1_FILES_UPLOAD_PREPARE.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -275,7 +274,7 @@ impl FileService {
     ) -> SDKResult<FileUploadPartRespData> {
         let mut api_req = request.api_req;
         api_req.http_method = Method::POST;
-        api_req.api_path = Endpoints::DRIVE_V1_FILES_UPLOAD_PART.to_string();
+        api_req.api_path = DRIVE_V1_FILES_UPLOAD_PART.to_string();
         api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
 
         let api_resp: BaseResponse<FileUploadPartRespData> =
@@ -295,7 +294,7 @@ impl FileService {
     ) -> SDKResult<FileUploadFinishRespData> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::DRIVE_V1_FILES_UPLOAD_FINISH.to_string(),
+            api_path: DRIVE_V1_FILES_UPLOAD_FINISH.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -318,7 +317,7 @@ impl FileService {
     ) -> SDKResult<CreateImportTaskRespData> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::DRIVE_V1_IMPORT_TASKS.to_string(),
+            api_path: DRIVE_V1_IMPORT_TASKS.to_string(),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -341,7 +340,7 @@ impl FileService {
     ) -> SDKResult<GetImportTaskRespData> {
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::DRIVE_V1_IMPORT_TASK_GET.replace("{}", &request.ticket),
+            api_path: DRIVE_V1_IMPORT_TASK_GET.replace("{}", &request.ticket),
             supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
             ..Default::default()
         };

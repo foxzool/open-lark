@@ -13,8 +13,8 @@ use crate::{
         req_option::RequestOption,
         SDKResult,
     },
-    service::admin::models::{PasswordResetRequest, PasswordResetResponse},
     impl_full_service,
+    service::admin::models::{PasswordResetRequest, PasswordResetResponse},
 };
 
 // Re-export builders
