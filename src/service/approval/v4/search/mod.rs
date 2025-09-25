@@ -10,6 +10,7 @@ use crate::{
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
+        endpoints::approval::*,
         SDKResult,
     },
     service::approval::models::{ApprovalInstance, ApprovalTask, UserIdType},

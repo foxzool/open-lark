@@ -11,6 +11,7 @@ use crate::{
         endpoints::{approval::*, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
+        endpoints::approval::*,
         SDKResult,
     },
     service::approval::models::UserIdType,
