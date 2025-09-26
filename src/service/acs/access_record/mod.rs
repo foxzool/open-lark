@@ -206,6 +206,20 @@ impl ApiResponseTrait for AccessRecordFaceImageResponse {
     }
 }
 
+impl Service for AccessRecordService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "access_record"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -450,19 +464,5 @@ mod tests {
         assert!(supported_types.contains(&AccessTokenType::Tenant));
         assert!(supported_types.contains(&AccessTokenType::User));
         assert!(!supported_types.contains(&AccessTokenType::App));
-    }
-}
-
-impl Service for AccessRecordService {
-    fn config(&self) -> &Config {
-        &self.config
-    }
-
-    fn service_name() -> &'static str {
-        "access_record"
-    }
-
-    fn service_version() -> &'static str {
-        "v1"
     }
 }

@@ -11,6 +11,7 @@ use crate::{
         endpoints::{approval::*, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::approval::models::UserIdType,
@@ -242,5 +243,19 @@ impl TaskService {
         };
 
         Transport::request(api_req, &self.config, option).await
+    }
+}
+
+impl Service for TaskService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "task"
+    }
+
+    fn service_version() -> &'static str {
+        "v4"
     }
 }
