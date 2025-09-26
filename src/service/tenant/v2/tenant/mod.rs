@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
@@ -72,7 +74,7 @@ impl TenantService {
             ..Default::default()
         };
 
-        Transport::request(api_req, &*self.config_arc, option).await
+        Transport::request(api_req, &self.config_arc, option).await
     }
 }
 
@@ -219,4 +221,3 @@ mod tests {
         assert!(debug_string.contains("Debug Test"));
     }
 }
-use std::sync::Arc;

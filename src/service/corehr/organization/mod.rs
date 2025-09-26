@@ -7,9 +7,9 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::corehr::*,
         http::Transport,
         req_option::RequestOption,
-        endpoints::corehr::*,
         SDKResult,
     },
     service::corehr::models::{
