@@ -12,6 +12,7 @@ use crate::{
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
+        trait_system::Service,
         SDKResult,
     },
     impl_executable_builder_owned,
@@ -1019,5 +1020,19 @@ pub struct ImportTaskResult {
 impl ApiResponseTrait for GetImportTaskRespData {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+impl Service for FileService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "file"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }

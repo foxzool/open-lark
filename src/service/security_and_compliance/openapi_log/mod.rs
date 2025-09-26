@@ -4,7 +4,7 @@ use crate::{
     core::{
         api_req::ApiRequest, api_resp::BaseResponse, config::Config, constants::AccessTokenType,
         endpoints::security_and_compliance::*, http::Transport, req_option::RequestOption,
-        SDKResult,
+        trait_system::Service, SDKResult,
     },
     service::security_and_compliance::models::{OpenapiLogListRequest, OpenapiLogListResponse},
 };
@@ -81,5 +81,19 @@ impl OpenapiLogService {
         }
 
         Transport::request(api_req, &self.config, option).await
+    }
+}
+
+impl Service for OpenapiLogService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "openapi_log"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }

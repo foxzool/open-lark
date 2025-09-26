@@ -11,6 +11,7 @@ use crate::{
         endpoints::{helpdesk::*, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::helpdesk::models::{Ticket, UserIdType},
@@ -618,5 +619,19 @@ mod tests {
         assert!(start_debug.contains("StartServiceResponse"));
         assert!(get_debug.contains("GetTicketResponse"));
         assert!(list_debug.contains("ListTicketsResponse"));
+    }
+}
+
+impl Service for TicketService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "ticket"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }

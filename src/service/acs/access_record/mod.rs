@@ -11,6 +11,7 @@ use crate::{
         http::Transport,
         query_params::QueryParams,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::acs::models::{
@@ -449,5 +450,19 @@ mod tests {
         assert!(supported_types.contains(&AccessTokenType::Tenant));
         assert!(supported_types.contains(&AccessTokenType::User));
         assert!(!supported_types.contains(&AccessTokenType::App));
+    }
+}
+
+impl Service for AccessRecordService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "access_record"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }
