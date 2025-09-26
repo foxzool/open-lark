@@ -7,6 +7,7 @@ use crate::core::{
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
+    trait_system::Service,
     SDKResult,
 };
 use serde::{Deserialize, Serialize};
@@ -75,6 +76,20 @@ pub struct UserInfo {
 impl ApiResponseTrait for UserInfo {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+impl Service for UserInfoService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "user_info"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }
 
