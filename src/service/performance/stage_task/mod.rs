@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::performance::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -44,7 +45,7 @@ impl StageTaskService {
     ) -> SDKResult<BaseResponse<TaskFindByUserListResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::PERFORMANCE_V1_STAGE_TASK_FIND_BY_USER_LIST.to_string(),
+            api_path: PERFORMANCE_V1_STAGE_TASK_FIND_BY_USER_LIST.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -72,7 +73,7 @@ impl StageTaskService {
     ) -> SDKResult<BaseResponse<TaskFindByPageResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::PERFORMANCE_V1_STAGE_TASK_FIND_BY_PAGE.to_string(),
+            api_path: PERFORMANCE_V1_STAGE_TASK_FIND_BY_PAGE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()

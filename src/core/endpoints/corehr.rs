@@ -4,10 +4,12 @@
 pub const COREHR_BASIC_INFO_ENUM_SEARCH: &str = "/open-apis/corehr/v1/basic_infos/enum_search";
 
 /// 基础信息 - 地点搜索
-pub const COREHR_BASIC_INFO_LOCATION_SEARCH: &str = "/open-apis/corehr/v1/basic_infos/location_search";
+pub const COREHR_BASIC_INFO_LOCATION_SEARCH: &str =
+    "/open-apis/corehr/v1/basic_infos/location_search";
 
 /// 基础信息 - 国籍搜索
-pub const COREHR_BASIC_INFO_NATIONALITY_SEARCH: &str = "/open-apis/corehr/v1/basic_infos/nationality_search";
+pub const COREHR_BASIC_INFO_NATIONALITY_SEARCH: &str =
+    "/open-apis/corehr/v1/basic_infos/nationality_search";
 
 /// 通用数据 - ID转换
 pub const COREHR_COMMON_DATA_ID_CONVERT: &str = "/open-apis/corehr/v1/common_data/id_convert";

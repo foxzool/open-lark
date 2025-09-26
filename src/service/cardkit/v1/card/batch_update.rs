@@ -10,7 +10,6 @@ use crate::{
         endpoints::{cardkit::*, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
-        endpoints::cardkit::*,
         SDKResult,
     },
     impl_executable_builder_owned,

@@ -109,7 +109,8 @@ pub const APPROVAL_V4_TASK_REJECT: &str = "/open-apis/approval/v4/tasks/{task_id
 pub const APPROVAL_V4_TASK_TRANSFER: &str = "/open-apis/approval/v4/tasks/{task_id}/transfer";
 
 /// 审批任务指定回退
-pub const APPROVAL_V4_TASK_SPECIFIED_ROLLBACK: &str = "/open-apis/approval/v4/tasks/{task_id}/specified_rollback";
+pub const APPROVAL_V4_TASK_SPECIFIED_ROLLBACK: &str =
+    "/open-apis/approval/v4/tasks/{task_id}/specified_rollback";
 
 /// 审批任务回退
 pub const APPROVAL_V4_TASK_ROLLBACK: &str = "/open-apis/approval/v4/tasks/{task_id}/rollback";

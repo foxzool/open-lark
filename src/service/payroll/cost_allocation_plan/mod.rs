@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::payroll::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -85,7 +86,7 @@ impl CostAllocationPlanService {
     ) -> SDKResult<BaseResponse<CostAllocationPlanListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::PAYROLL_V1_COST_ALLOCATION_PLANS.to_string(),
+            api_path: PAYROLL_V1_COST_ALLOCATION_PLANS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: vec![],
             ..Default::default()

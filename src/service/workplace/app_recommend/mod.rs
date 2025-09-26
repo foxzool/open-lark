@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::workplace::*,
         http::Transport,
         query_params::QueryParams,
         req_option::RequestOption,

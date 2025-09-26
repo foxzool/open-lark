@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::okr::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -86,7 +87,7 @@ impl PeriodRuleService {
     ) -> SDKResult<BaseResponse<PeriodRuleListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::OKR_V1_PERIOD_RULES.to_string(),
+            api_path: OKR_V1_PERIOD_RULES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

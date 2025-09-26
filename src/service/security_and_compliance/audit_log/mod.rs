@@ -3,6 +3,7 @@ use reqwest::Method;
 use crate::{
     core::{
         api_req::ApiRequest, api_resp::BaseResponse, config::Config, constants::AccessTokenType,
+        endpoints::security_and_compliance::*, http::Transport, req_option::RequestOption,
         SDKResult,
     },
     service::security_and_compliance::models::{AuditLogGetRequest, AuditLogGetResponse},
@@ -36,7 +37,7 @@ impl AuditLogService {
     ) -> SDKResult<BaseResponse<AuditLogGetResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::SECURITY_AND_COMPLIANCE_V1_AUDIT_DATAS.to_string(),
+            api_path: SECURITY_AND_COMPLIANCE_V1_AUDIT_DATAS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
