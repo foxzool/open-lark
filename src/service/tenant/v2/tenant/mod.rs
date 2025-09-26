@@ -79,6 +79,20 @@ impl TenantService {
     }
 }
 
+impl Service for TenantService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "tenant"
+    }
+
+    fn service_version() -> &'static str {
+        "v2"
+    }
+}
+
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
@@ -220,19 +234,5 @@ mod tests {
         let debug_string = format!("{:?}", response);
         assert!(debug_string.contains("GetTenantResponse"));
         assert!(debug_string.contains("Debug Test"));
-    }
-}
-
-impl Service for TenantService {
-    fn config(&self) -> &Config {
-        &self.config
-    }
-
-    fn service_name() -> &'static str {
-        "tenant"
-    }
-
-    fn service_version() -> &'static str {
-        "v2"
     }
 }

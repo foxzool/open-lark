@@ -4,7 +4,8 @@ use serde_json::json;
 use crate::{
     core::{
         api_resp::BaseResponse, config::Config, constants::AccessTokenType,
-        endpoints::attendance::*, http::Transport, req_option::RequestOption, SDKResult,
+        endpoints::attendance::*, http::Transport, req_option::RequestOption,
+        trait_system::Service, SDKResult,
     },
     impl_executable_builder_owned,
 };
@@ -137,6 +138,20 @@ impl UserTaskRemedyService {
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
+    }
+}
+
+impl Service for UserTaskRemedyService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "user_task_remedy"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }
 

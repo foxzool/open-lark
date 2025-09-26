@@ -238,6 +238,20 @@ impl TicketService {
     }
 }
 
+impl Service for TicketService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "ticket"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
+    }
+}
+
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
@@ -619,19 +633,5 @@ mod tests {
         assert!(start_debug.contains("StartServiceResponse"));
         assert!(get_debug.contains("GetTicketResponse"));
         assert!(list_debug.contains("ListTicketsResponse"));
-    }
-}
-
-impl Service for TicketService {
-    fn config(&self) -> &Config {
-        &self.config
-    }
-
-    fn service_name() -> &'static str {
-        "ticket"
-    }
-
-    fn service_version() -> &'static str {
-        "v1"
     }
 }

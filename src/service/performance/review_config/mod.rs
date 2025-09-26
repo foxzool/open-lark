@@ -10,6 +10,7 @@ use crate::{
         endpoints::performance::*,
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::performance::models::{
@@ -456,6 +457,20 @@ impl ReviewConfigService {
         }
 
         Transport::request(api_req, &self.config, option).await
+    }
+}
+
+impl Service for ReviewConfigService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "review_config"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }
 

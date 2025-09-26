@@ -3,7 +3,7 @@ use serde_json::json;
 
 use crate::core::{
     api_resp::BaseResponse, config::Config, constants::AccessTokenType, endpoints::attendance::*,
-    http::Transport, req_option::RequestOption, SDKResult,
+    http::Transport, req_option::RequestOption, trait_system::Service, SDKResult,
 };
 
 use super::models::{
@@ -114,6 +114,20 @@ impl UserDailyShiftService {
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
+    }
+}
+
+impl Service for UserDailyShiftService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "user_daily_shift"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }
 

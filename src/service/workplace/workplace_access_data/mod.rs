@@ -12,6 +12,7 @@ use crate::{
         query_params::QueryParams,
         req_option::RequestOption,
         standard_response::StandardResponse,
+        trait_system::Service,
         SDKResult,
     },
     service::workplace::models::{
@@ -236,6 +237,20 @@ impl WorkplaceAccessDataService {
         let api_resp: BaseResponse<CustomWidgetAccessDataSearchResponse> =
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
+    }
+}
+
+impl Service for WorkplaceAccessDataService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "workplace_access_data"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }
 
