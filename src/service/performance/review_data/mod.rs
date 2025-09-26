@@ -10,6 +10,7 @@ use crate::{
         endpoints::performance::*,
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::performance::models::{PerformanceResult, ReviewDetail},
@@ -139,5 +140,19 @@ pub struct DetailQueryResponse {
 impl ApiResponseTrait for DetailQueryResponse {
     fn data_format() -> ResponseFormat {
         ResponseFormat::Data
+    }
+}
+
+impl Service for ReviewDataService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "review_data"
+    }
+
+    fn service_version() -> &'static str {
+        "v2"
     }
 }

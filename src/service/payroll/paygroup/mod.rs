@@ -10,6 +10,7 @@ use crate::{
         endpoints::payroll::*,
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::payroll::models::{PageResponse, Paygroup, PaygroupListRequest},
@@ -106,5 +107,19 @@ impl PaygroupService {
         }
 
         Transport::request(api_req, &self.config, option).await
+    }
+}
+
+impl Service for PaygroupService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "paygroup"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }
