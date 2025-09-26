@@ -9,9 +9,10 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints_original::TENANT_V2_QUERY,
+        endpoints::tenant::*,
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::tenant::models::Tenant,
@@ -219,5 +220,19 @@ mod tests {
         let debug_string = format!("{:?}", response);
         assert!(debug_string.contains("GetTenantResponse"));
         assert!(debug_string.contains("Debug Test"));
+    }
+}
+
+impl Service for TenantService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "tenant"
+    }
+
+    fn service_version() -> &'static str {
+        "v2"
     }
 }

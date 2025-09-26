@@ -10,6 +10,7 @@ use crate::core::{
     endpoints::{cloud_docs::*, EndpointBuilder},
     http::Transport,
     req_option::RequestOption,
+    trait_system::Service,
     SDKResult,
 };
 
@@ -582,3 +583,19 @@ impl_execute_with_path!(
     BaseResponse<BatchDeleteBlockRespData>,
     batch_delete
 );
+
+// === Service trait 实现 ===
+
+impl Service for DocumentBlockService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "document_block"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
+    }
+}

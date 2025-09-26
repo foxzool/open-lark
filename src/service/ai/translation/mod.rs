@@ -7,9 +7,10 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::Endpoints,
+        endpoints::ai::*,
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::ai::models::{
@@ -70,7 +71,7 @@ impl TranslationService {
     ) -> SDKResult<BaseResponse<DetectResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::TRANSLATION_V1_TEXT_DETECT.to_string(),
+            api_path: TRANSLATION_V1_TEXT_DETECT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -94,12 +95,26 @@ impl TranslationService {
     ) -> SDKResult<BaseResponse<TranslateResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::TRANSLATION_V1_TEXT_TRANSLATE.to_string(),
+            api_path: TRANSLATION_V1_TEXT_TRANSLATE.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
 
         Transport::request(api_req, &self.config, option).await
+    }
+}
+
+impl Service for TranslationService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "translation"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }
