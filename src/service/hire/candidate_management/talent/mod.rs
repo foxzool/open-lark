@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::hire::*,
         endpoints::EndpointBuilder,
         error::LarkAPIError,
         http::Transport,

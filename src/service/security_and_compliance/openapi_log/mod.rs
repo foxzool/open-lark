@@ -3,6 +3,7 @@ use reqwest::Method;
 use crate::{
     core::{
         api_req::ApiRequest, api_resp::BaseResponse, config::Config, constants::AccessTokenType,
+        endpoints::security_and_compliance::*, http::Transport, req_option::RequestOption,
         SDKResult,
     },
     service::security_and_compliance::models::{OpenapiLogListRequest, OpenapiLogListResponse},
@@ -36,7 +37,7 @@ impl OpenapiLogService {
     ) -> SDKResult<BaseResponse<OpenapiLogListResponse>> {
         let mut api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::SECURITY_AND_COMPLIANCE_V1_OPENAPI_LOGS_LIST_DATA.to_string(),
+            api_path: SECURITY_AND_COMPLIANCE_V1_OPENAPI_LOGS_LIST_DATA.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: vec![],
             ..Default::default()

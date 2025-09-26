@@ -7,6 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
+        endpoints::performance::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -44,7 +45,7 @@ impl MetricDetailService {
     ) -> SDKResult<BaseResponse<MetricDetailQueryResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::PERFORMANCE_V1_METRIC_DETAIL_QUERY.to_string(),
+            api_path: PERFORMANCE_V1_METRIC_DETAIL_QUERY.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
@@ -72,7 +73,7 @@ impl MetricDetailService {
     ) -> SDKResult<BaseResponse<MetricDetailImportResponse>> {
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::PERFORMANCE_V1_METRIC_DETAIL_IMPORT.to_string(),
+            api_path: PERFORMANCE_V1_METRIC_DETAIL_IMPORT.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             body: serde_json::to_vec(&request)?,
             ..Default::default()
