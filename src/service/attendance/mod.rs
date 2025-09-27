@@ -90,7 +90,7 @@
 //! - 🔄 HR系统集成
 //! - 📊 组织架构联动
 
-use crate::core::config::Config;
+use crate::core::{config::Config, trait_system::Service};
 
 pub mod v1;
 
@@ -143,6 +143,20 @@ impl AttendanceService {
         Self {
             v1: v1::V1::new(config),
         }
+    }
+}
+
+impl Service for AttendanceService {
+    fn config(&self) -> &Config {
+        &self.v1.shift.config
+    }
+
+    fn service_name() -> &'static str {
+        "attendance"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }
 

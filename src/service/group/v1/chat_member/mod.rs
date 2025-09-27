@@ -14,7 +14,7 @@
 //!
 //! 🚧 **待实现** - 以上功能模块尚未实现，敬请期待。
 
-use crate::core::config::Config;
+use crate::core::{config::Config, trait_system::Service};
 
 // 规划中的功能模块（待实现）
 // pub mod create;
@@ -35,5 +35,19 @@ pub struct ChatMemberService {
 impl ChatMemberService {
     pub fn new(config: Config) -> Self {
         Self { config }
+    }
+}
+
+impl Service for ChatMemberService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "chat_member"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }

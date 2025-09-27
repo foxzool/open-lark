@@ -10,6 +10,7 @@ use crate::{
         endpoints::mdm::*,
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::mdm::models::{CountryRegion, PageResponse},
@@ -103,6 +104,20 @@ impl CountryRegionService {
         }
 
         Transport::request(api_req, &self.config, option).await
+    }
+}
+
+impl Service for CountryRegionService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "country_region"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }
 
