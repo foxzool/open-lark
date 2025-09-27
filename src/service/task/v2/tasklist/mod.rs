@@ -11,6 +11,7 @@ use crate::{
         endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::task::models::{Task, TaskMember, Tasklist, UserIdType},
@@ -418,5 +419,19 @@ impl TasklistService {
         };
 
         Transport::request(api_req, &self.config, option).await
+    }
+}
+
+impl Service for TasklistService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "tasklist"
+    }
+
+    fn service_version() -> &'static str {
+        "v2"
     }
 }

@@ -10,6 +10,7 @@ use crate::{
         endpoints_original::TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY,
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::tenant::models::TenantProductAssignInfo,
@@ -69,5 +70,19 @@ impl TenantProductAssignInfoService {
         };
 
         Transport::request(api_req, &self.config, option).await
+    }
+}
+
+impl Service for TenantProductAssignInfoService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "tenant_product_assign_info"
+    }
+
+    fn service_version() -> &'static str {
+        "v2"
     }
 }

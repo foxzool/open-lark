@@ -10,6 +10,7 @@ use crate::{
         endpoints::{EndpointBuilder, Endpoints},
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::payroll::models::{
@@ -200,5 +201,19 @@ impl PaymentActivityService {
         };
 
         Transport::request(api_req, &self.config, option).await
+    }
+}
+
+impl Service for PaymentActivityService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "payment_activity"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }

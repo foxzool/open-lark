@@ -10,6 +10,7 @@ use crate::{
         endpoints::approval::*,
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::approval::models::ApprovalFile,
@@ -63,5 +64,19 @@ impl FileService {
         };
 
         Transport::request(api_req, &self.config, option).await
+    }
+}
+
+impl Service for FileService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "approval_file"
+    }
+
+    fn service_version() -> &'static str {
+        "v4"
     }
 }

@@ -11,6 +11,7 @@ use crate::{
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::application::models::{UserIdType, *},
@@ -286,6 +287,20 @@ impl ApplicationService {
         };
 
         Transport::request(api_req, &self.config, option).await
+    }
+}
+
+impl Service for ApplicationService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "application"
+    }
+
+    fn service_version() -> &'static str {
+        "v6"
     }
 }
 

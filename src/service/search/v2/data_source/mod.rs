@@ -10,6 +10,7 @@ use crate::{
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::search::v2::models::{
@@ -228,5 +229,19 @@ impl DataSourceService {
         }
 
         Transport::request(api_req, &self.config, option).await
+    }
+}
+
+impl Service for DataSourceService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "data_source"
+    }
+
+    fn service_version() -> &'static str {
+        "v2"
     }
 }

@@ -9,6 +9,7 @@ use crate::{
         endpoints::{attendance::*, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     impl_executable_builder_owned,
@@ -67,6 +68,20 @@ impl_executable_builder_owned!(
     BaseResponse<PatchLeaveAccrualRecordRespData>,
     patch
 );
+
+impl Service for LeaveAccrualRecordService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "leave_accrual_record"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
+    }
+}
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]

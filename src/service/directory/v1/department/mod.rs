@@ -1,4 +1,4 @@
-use crate::core::config::Config;
+use crate::core::{config::Config, trait_system::Service};
 
 pub mod create;
 pub mod delete;
@@ -25,5 +25,19 @@ pub struct DepartmentService {
 impl DepartmentService {
     pub fn new(config: Config) -> Self {
         Self { config }
+    }
+}
+
+impl Service for DepartmentService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "department"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }

@@ -10,6 +10,7 @@ use crate::{
         endpoints::Endpoints,
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::ai::models::{
@@ -586,5 +587,19 @@ impl DocumentAiService {
         };
 
         Transport::request(api_req, &self.config, option).await
+    }
+}
+
+impl Service for DocumentAiService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "document_ai"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }

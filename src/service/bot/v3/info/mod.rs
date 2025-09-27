@@ -9,6 +9,7 @@ use crate::{
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::bot::models::Bot,
@@ -62,5 +63,19 @@ impl InfoService {
         };
 
         Transport::request(api_req, &self.config, option).await
+    }
+}
+
+impl Service for InfoService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "bot_info"
+    }
+
+    fn service_version() -> &'static str {
+        "v3"
     }
 }

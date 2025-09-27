@@ -8,6 +8,7 @@ use crate::core::{
     endpoints::{attendance::*, EndpointBuilder},
     http::Transport,
     req_option::RequestOption,
+    trait_system::Service,
     SDKResult,
 };
 
@@ -259,6 +260,20 @@ impl GroupService {
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
+    }
+}
+
+impl Service for GroupService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "attendance_group"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }
 

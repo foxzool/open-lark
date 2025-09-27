@@ -2,6 +2,7 @@ use crate::{
     core::{
         api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
         constants::AccessTokenType, endpoints::EndpointBuilder, http::Transport,
+        trait_system::Service,
     },
     service::contact::models::*,
 };
@@ -167,6 +168,20 @@ impl GroupService {
         let resp =
             Transport::<GetGroupDetailResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
+    }
+}
+
+impl Service for GroupService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "group"
+    }
+
+    fn service_version() -> &'static str {
+        "v3"
     }
 }
 

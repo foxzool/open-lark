@@ -10,6 +10,7 @@ use crate::{
         endpoints::mdm::*,
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::mdm::models::UserAuthDataRelation,
@@ -80,6 +81,20 @@ impl UserAuthDataRelationService {
         };
 
         Transport::request(api_req, &self.config, option).await
+    }
+}
+
+impl Service for UserAuthDataRelationService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "user_auth_data_relation"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }
 

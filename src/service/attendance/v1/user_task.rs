@@ -8,6 +8,7 @@ use crate::core::{
     endpoints::{attendance::*, EndpointBuilder},
     http::Transport,
     req_option::RequestOption,
+    trait_system::Service,
     SDKResult,
 };
 
@@ -216,6 +217,20 @@ impl UserTaskService {
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
+    }
+}
+
+impl Service for UserTaskService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "user_task"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }
 

@@ -9,6 +9,7 @@ use crate::{
         endpoints::{attendance::*, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     impl_executable_builder_owned,
@@ -191,6 +192,20 @@ impl_executable_builder_owned!(
     BaseResponse<ListArchiveRulesRespData>,
     list
 );
+
+impl Service for ArchiveRuleService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "archive_rule"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
+    }
+}
 
 #[cfg(test)]
 mod tests {

@@ -1,7 +1,8 @@
 use crate::{
     core::{
         api_resp::BaseResponse, config::Config, constants::AccessTokenType,
-        endpoints::attendance::*, http::Transport, req_option::RequestOption, SDKResult,
+        endpoints::attendance::*, http::Transport, req_option::RequestOption,
+        trait_system::Service, SDKResult,
     },
     impl_executable_builder_owned,
 };
@@ -66,6 +67,20 @@ impl_executable_builder_owned!(
     BaseResponse<GetLeaveEmployExpireRecordRespData>,
     get
 );
+
+impl Service for LeaveEmployExpireRecordService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "leave_employ_expire_record"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
+    }
+}
 
 #[cfg(test)]
 mod tests {
