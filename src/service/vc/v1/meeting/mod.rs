@@ -15,6 +15,7 @@ use crate::{
         },
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     service::vc::models::{Meeting, UserIdType},
@@ -301,6 +302,20 @@ impl MeetingService {
         };
 
         Transport::request(api_req, &self.config, option).await
+    }
+}
+
+impl Service for MeetingService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "meeting"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }
 

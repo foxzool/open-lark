@@ -10,6 +10,7 @@ use crate::{
         endpoints::{attendance::*, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
+        trait_system::Service,
         SDKResult,
     },
     impl_executable_builder_owned,
@@ -410,6 +411,20 @@ impl ListShiftRequest {
     pub fn page_token<T: Into<String>>(mut self, page_token: T) -> Self {
         self.page_token = Some(page_token.into());
         self
+    }
+}
+
+impl Service for ShiftService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "shift"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }
 

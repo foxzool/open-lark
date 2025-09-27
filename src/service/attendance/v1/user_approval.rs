@@ -8,6 +8,7 @@ use crate::core::{
     endpoints::{attendance::*, EndpointBuilder},
     http::Transport,
     req_option::RequestOption,
+    trait_system::Service,
     SDKResult,
 };
 
@@ -145,6 +146,20 @@ impl UserApprovalService {
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
+    }
+}
+
+impl Service for UserApprovalService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "user_approval"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }
 
