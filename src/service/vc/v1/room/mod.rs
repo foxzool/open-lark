@@ -8,10 +8,12 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::EndpointBuilder,
-        endpoints_original::{
-            VC_ROOM_CREATE, VC_ROOM_DELETE, VC_ROOM_GET, VC_ROOM_LIST, VC_ROOM_SEARCH,
-            VC_ROOM_UPDATE,
+        endpoints::{
+            vc::{
+                VC_ROOM_CREATE, VC_ROOM_DELETE, VC_ROOM_GET, VC_ROOM_LIST, VC_ROOM_SEARCH,
+                VC_ROOM_UPDATE,
+            },
+            EndpointBuilder,
         },
         http::Transport,
         req_option::RequestOption,

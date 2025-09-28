@@ -8,9 +8,12 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::EndpointBuilder,
-        endpoints_original::{
-            VC_RECORDING_GET, VC_RECORDING_SET_PERMISSION, VC_RECORDING_START, VC_RECORDING_STOP,
+        endpoints::{
+            vc::{
+                VC_RECORDING_GET, VC_RECORDING_SET_PERMISSION, VC_RECORDING_START,
+                VC_RECORDING_STOP,
+            },
+            EndpointBuilder,
         },
         http::Transport,
         req_option::RequestOption,

@@ -8,7 +8,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::{tenant_tag::*, EndpointBuilder},
         http::Transport,
         req_option::RequestOption,
         SDKResult,
@@ -109,7 +109,7 @@ impl TagService {
 
         let api_req = ApiRequest {
             http_method: Method::POST,
-            api_path: Endpoints::TENANT_TAG_V1_TAGS.to_string(),
+            api_path: TENANT_TAG_V1_TAGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -134,11 +134,7 @@ impl TagService {
 
         let api_req = ApiRequest {
             http_method: Method::PATCH,
-            api_path: EndpointBuilder::replace_param(
-                Endpoints::TENANT_TAG_V1_TAG_OPERATION,
-                "tag_id",
-                tag_id,
-            ),
+            api_path: EndpointBuilder::replace_param(TENANT_TAG_V1_TAG_OPERATION, "tag_id", tag_id),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             body: serde_json::to_vec(&request)?,
@@ -173,7 +169,7 @@ impl TagService {
 
         let api_req = ApiRequest {
             http_method: Method::GET,
-            api_path: Endpoints::TENANT_TAG_V1_TAGS.to_string(),
+            api_path: TENANT_TAG_V1_TAGS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             query_params,
             ..Default::default()
@@ -499,11 +495,8 @@ mod tests {
     #[test]
     fn test_endpoint_parameter_replacement() {
         let tag_id = "test_tag_123";
-        let endpoint = EndpointBuilder::replace_param(
-            Endpoints::TENANT_TAG_V1_TAG_OPERATION,
-            "tag_id",
-            tag_id,
-        );
+        let endpoint =
+            EndpointBuilder::replace_param(TENANT_TAG_V1_TAG_OPERATION, "tag_id", tag_id);
 
         assert!(endpoint.contains(tag_id));
         assert!(!endpoint.contains("{tag_id}"));

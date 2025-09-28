@@ -221,6 +221,148 @@ pub struct HttpTracker {
     start_time: Instant,
 }
 
+/// 认证操作跟踪器
+///
+/// 专门用于追踪token获取、刷新、验证等认证相关操作
+pub struct AuthTracker {
+    span: Span,
+    start_time: Instant,
+}
+
+impl AuthTracker {
+    /// 开始跟踪认证操作
+    pub fn start(operation_type: &str, app_id: &str, token_type: &str) -> Self {
+        let span = span!(
+            Level::INFO,
+            "auth_operation",
+            operation = operation_type,
+            app_id = app_id,
+            token_type = token_type,
+            cache_hit = tracing::field::Empty,
+            duration_ms = tracing::field::Empty,
+            success = tracing::field::Empty,
+            error_code = tracing::field::Empty,
+        );
+
+        {
+            let _enter = span.enter();
+            tracing::debug!("Starting authentication operation");
+        }
+
+        Self {
+            span,
+            start_time: Instant::now(),
+        }
+    }
+
+    /// 记录认证成功
+    pub fn success(self, cache_hit: bool) {
+        let duration = self.start_time.elapsed();
+        let duration_ms = duration.as_millis() as u64;
+
+        self.span.record("duration_ms", duration_ms);
+        self.span.record("success", true);
+        self.span.record("cache_hit", cache_hit);
+
+        let _enter = self.span.enter();
+        tracing::info!("Authentication operation completed successfully");
+    }
+
+    /// 记录认证失败
+    pub fn error(self, error: &str, error_code: Option<i32>) {
+        let duration = self.start_time.elapsed();
+        let duration_ms = duration.as_millis() as u64;
+
+        self.span.record("duration_ms", duration_ms);
+        self.span.record("success", false);
+
+        if let Some(code) = error_code {
+            self.span.record("error_code", code);
+        }
+
+        let _enter = self.span.enter();
+        tracing::error!(error = error, "Authentication operation failed");
+    }
+
+    /// 获取当前 span
+    pub fn span(&self) -> &Span {
+        &self.span
+    }
+}
+
+/// API响应处理跟踪器
+///
+/// 用于追踪响应解析、验证、转换等处理过程
+pub struct ResponseTracker {
+    span: Span,
+    start_time: Instant,
+}
+
+impl ResponseTracker {
+    /// 开始跟踪响应处理
+    pub fn start(response_format: &str, response_size: Option<u64>) -> Self {
+        let span = span!(
+            Level::DEBUG,
+            "response_processing",
+            format = response_format,
+            input_size = response_size.unwrap_or(0),
+            parsing_duration_ms = tracing::field::Empty,
+            validation_duration_ms = tracing::field::Empty,
+            total_duration_ms = tracing::field::Empty,
+            success = tracing::field::Empty,
+        );
+
+        {
+            let _enter = span.enter();
+            tracing::debug!("Starting response processing");
+        }
+
+        Self {
+            span,
+            start_time: Instant::now(),
+        }
+    }
+
+    /// 记录解析阶段完成
+    pub fn parsing_complete(&self) {
+        let parsing_duration = self.start_time.elapsed();
+        let parsing_duration_ms = parsing_duration.as_millis() as u64;
+        self.span.record("parsing_duration_ms", parsing_duration_ms);
+    }
+
+    /// 记录验证阶段完成
+    pub fn validation_complete(&self) {
+        let total_duration = self.start_time.elapsed();
+        let validation_duration_ms = total_duration.as_millis() as u64;
+        self.span
+            .record("validation_duration_ms", validation_duration_ms);
+    }
+
+    /// 记录处理成功
+    pub fn success(self) {
+        let duration = self.start_time.elapsed();
+        let duration_ms = duration.as_millis() as u64;
+
+        self.span.record("total_duration_ms", duration_ms);
+        self.span.record("success", true);
+
+        let _enter = self.span.enter();
+        tracing::debug!("Response processing completed successfully");
+    }
+
+    /// 记录处理失败
+    pub fn error(self, error: &str) {
+        let duration = self.start_time.elapsed();
+        let duration_ms = duration.as_millis() as u64;
+
+        self.span.record("total_duration_ms", duration_ms);
+        self.span.record("success", false);
+
+        let _enter = self.span.enter();
+        tracing::error!(error = error, "Response processing failed");
+    }
+}
+
 impl HttpTracker {
     /// 开始跟踪 HTTP 请求
     pub fn start(method: &str, url: &str) -> Self {
@@ -320,6 +462,98 @@ macro_rules! trace_async_performance {
             Ok(result) => {
                 tracker.success();
                 Ok(result)
+            }
+            Err(err) => {
+                tracker.error(&err.to_string());
+                Err(err)
+            }
+        }
+    }};
+}
+
+/// 认证操作跟踪宏
+///
+/// 简化在认证流程中添加可观测性的过程
+#[macro_export]
+macro_rules! trace_auth_operation {
+    ($operation:expr, $app_id:expr, $token_type:expr, $code:expr) => {
+        async move {
+            let tracker =
+                $crate::core::observability::AuthTracker::start($operation, $app_id, $token_type);
+            match $code.await {
+                Ok((result, cache_hit)) => {
+                    tracker.success(cache_hit);
+                    Ok(result)
+                }
+                Err(err) => {
+                    // 尝试从错误中提取错误码
+                    let error_code =
+                        if let $crate::core::error::LarkAPIError::APIError { code, .. } = &err {
+                            Some(*code)
+                        } else {
+                            None
+                        };
+                    tracker.error(&err.to_string(), error_code);
+                    Err(err)
+                }
+            }
+        }
+    };
+}
+
+/// HTTP请求跟踪宏
+///
+/// 为HTTP请求添加完整的可观测性
+#[macro_export]
+macro_rules! trace_http_request {
+    ($method:expr, $url:expr, $code:expr) => {
+        async move {
+            let tracker = $crate::core::observability::HttpTracker::start($method, $url);
+            match $code.await {
+                Ok(response) => {
+                    let status_code = if let Ok(status) = response.status() {
+                        status.as_u16()
+                    } else {
+                        0
+                    };
+                    tracker.response(status_code, None);
+                    Ok(response)
+                }
+                Err(err) => {
+                    tracker.error(&err.to_string());
+                    Err(err)
+                }
+            }
+        }
+    };
+}
+
+/// 响应处理跟踪宏
+///
+/// 为响应解析和处理添加可观测性
+#[macro_export]
+macro_rules! trace_response_processing {
+    ($format:expr, $size:expr, $parsing:expr, $validation:expr) => {{
+        let tracker = $crate::core::observability::ResponseTracker::start($format, $size);
+
+        // 解析阶段
+        let parsed_result = $parsing;
+        tracker.parsing_complete();
+
+        match parsed_result {
+            Ok(parsed_data) => {
+                // 验证阶段
+                match $validation(parsed_data) {
+                    Ok(validated_data) => {
+                        tracker.validation_complete();
+                        tracker.success();
+                        Ok(validated_data)
+                    }
+                    Err(err) => {
+                        tracker.error(&err.to_string());
+                        Err(err)
+                    }
+                }
             }
             Err(err) => {
                 tracker.error(&err.to_string());
@@ -464,5 +698,111 @@ mod tests {
         assert!(logs_contain("Starting operation"));
         assert!(logs_contain("Operation failed"));
         assert!(logs_contain("unhealthy"));
+    }
+
+    #[traced_test]
+    #[test]
+    fn test_auth_tracker_success() {
+        let tracker = AuthTracker::start("get_token", "test_app", "tenant");
+        std::thread::sleep(Duration::from_millis(10));
+
+        // 模拟缓存命中
+        tracker.success(true);
+
+        // 验证认证操作日志
+        assert!(logs_contain("Starting authentication operation"));
+        assert!(logs_contain(
+            "Authentication operation completed successfully"
+        ));
+    }
+
+    #[traced_test]
+    #[test]
+    fn test_auth_tracker_error() {
+        let tracker = AuthTracker::start("refresh_token", "test_app", "user");
+        tracker.error("Invalid credentials", Some(401));
+
+        // 验证认证错误日志
+        assert!(logs_contain("Starting authentication operation"));
+        assert!(logs_contain("Authentication operation failed"));
+        assert!(logs_contain("Invalid credentials"));
+    }
+
+    #[traced_test]
+    #[test]
+    fn test_response_tracker() {
+        let tracker = ResponseTracker::start("json", Some(1024));
+        std::thread::sleep(Duration::from_millis(5));
+
+        // 模拟解析完成
+        tracker.parsing_complete();
+        std::thread::sleep(Duration::from_millis(3));
+
+        // 模拟验证完成
+        tracker.validation_complete();
+
+        // 完成处理
+        tracker.success();
+
+        // 验证响应处理日志
+        assert!(logs_contain("Starting response processing"));
+        assert!(logs_contain("Response processing completed successfully"));
+    }
+
+    #[traced_test]
+    #[test]
+    fn test_response_tracker_error() {
+        let tracker = ResponseTracker::start("xml", Some(512));
+        tracker.error("Parse error: invalid XML structure");
+
+        // 验证响应处理错误日志
+        assert!(logs_contain("Starting response processing"));
+        assert!(logs_contain("Response processing failed"));
+        assert!(logs_contain("Parse error: invalid XML structure"));
+    }
+
+    #[traced_test]
+    #[tokio::test]
+    async fn test_trace_auth_operation_macro() {
+        use crate::core::error::LarkAPIError;
+
+        // 测试成功场景 - 需要返回元组 (结果, 是否缓存命中)
+        let result = trace_auth_operation!("get_app_token", "test_app", "app", async {
+            Ok::<(String, bool), LarkAPIError>(("token_value".to_string(), true))
+        })
+        .await;
+
+        assert!(result.is_ok());
+        assert!(logs_contain("Starting authentication operation"));
+        assert!(logs_contain(
+            "Authentication operation completed successfully"
+        ));
+    }
+
+    #[traced_test]
+    #[tokio::test]
+    async fn test_trace_response_processing_macro() {
+        // 测试响应处理宏
+        let format = "json";
+        let size = Some(256_u64);
+
+        let parsing_fn = || Ok::<String, std::io::Error>("parsed_data".to_string());
+        let validation_fn = |data: String| {
+            if data.is_empty() {
+                Err(std::io::Error::new(
+                    std::io::ErrorKind::InvalidData,
+                    "Empty data",
+                ))
+            } else {
+                Ok(data)
+            }
+        };
+
+        let result = trace_response_processing!(format, size, parsing_fn(), validation_fn);
+
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap(), "parsed_data");
+        assert!(logs_contain("Starting response processing"));
+        assert!(logs_contain("Response processing completed successfully"));
     }
 }

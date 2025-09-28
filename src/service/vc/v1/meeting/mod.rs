@@ -8,10 +8,12 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints::EndpointBuilder,
-        endpoints_original::{
-            VC_MEETING_END, VC_MEETING_GET, VC_MEETING_INVITE, VC_MEETING_KICKOUT,
-            VC_MEETING_LIST_BY_NO, VC_MEETING_SET_HOST,
+        endpoints::{
+            vc::{
+                VC_MEETING_END, VC_MEETING_GET, VC_MEETING_INVITE, VC_MEETING_KICKOUT,
+                VC_MEETING_LIST_BY_NO, VC_MEETING_SET_HOST,
+            },
+            EndpointBuilder,
         },
         http::Transport,
         req_option::RequestOption,
