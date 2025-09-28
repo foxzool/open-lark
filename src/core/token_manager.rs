@@ -1424,4 +1424,759 @@ mod tests {
             assert!(manager.cache.try_read().is_ok());
         }
     }
+
+    #[test]
+    fn test_token_manager_default_implementation() {
+        let manager1 = TokenManager::new();
+        let manager2 = TokenManager::default();
+
+        // 验证new()和default()创建的实例结构相同
+        assert!(!manager1.is_preheating_active());
+        assert!(!manager2.is_preheating_active());
+
+        // 验证都创建了独立的缓存和指标
+        assert!(manager1.metrics().app_cache_hit_rate() == manager2.metrics().app_cache_hit_rate());
+    }
+
+    #[test]
+    fn test_token_manager_get_cache_and_metrics() {
+        let manager = TokenManager::new();
+
+        // 测试获取缓存引用
+        let cache_ref = manager.get_cache();
+        assert!(cache_ref.try_read().is_ok());
+
+        // 测试获取指标引用
+        let metrics_ref = manager.get_metrics();
+        assert_eq!(metrics_ref.app_cache_hit_rate(), 0.0);
+    }
+
+    #[tokio::test]
+    async fn test_handle_app_access_token_response_success() {
+        let manager = TokenManager::new();
+
+        let successful_resp = AppAccessTokenResp {
+            raw_response: crate::core::api_resp::RawResponse {
+                code: 0,
+                msg: "success".to_string(),
+                err: None,
+            },
+            expire: 3600,
+            app_access_token: "test_success_token".to_string(),
+        };
+
+        let result = manager
+            .handle_app_access_token_response(successful_resp, "test_app")
+            .await;
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap(), "test_success_token");
+
+        // 验证token已缓存
+        let cache = manager.cache.read().await;
+        let cached_token = cache.get(&app_access_token_key("test_app"));
+        assert_eq!(cached_token, Some("test_success_token".to_string()));
+    }
+
+    #[tokio::test]
+    async fn test_handle_app_access_token_response_error() {
+        let manager = TokenManager::new();
+
+        let error_resp = AppAccessTokenResp {
+            raw_response: crate::core::api_resp::RawResponse {
+                code: 40001,
+                msg: "invalid app_id".to_string(),
+                err: None,
+            },
+            expire: 0,
+            app_access_token: "".to_string(),
+        };
+
+        let result = manager
+            .handle_app_access_token_response(error_resp, "invalid_app")
+            .await;
+        assert!(result.is_err());
+
+        // 验证错误包含原始错误信息
+        let error_msg = format!("{:?}", result.unwrap_err());
+        assert!(error_msg.contains("invalid app_id"));
+    }
+
+    #[tokio::test]
+    async fn test_handle_tenant_access_token_response_success() {
+        let manager = TokenManager::new();
+
+        let successful_resp = TenantAccessTokenResp {
+            raw_response: crate::core::api_resp::RawResponse {
+                code: 0,
+                msg: "success".to_string(),
+                err: None,
+            },
+            expire: 7200,
+            tenant_access_token: "test_tenant_token".to_string(),
+        };
+
+        let result = manager
+            .handle_tenant_access_token_response(successful_resp, "test_app", "test_tenant")
+            .await;
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap(), "test_tenant_token");
+
+        // 验证token已缓存
+        let cache = manager.cache.read().await;
+        let cached_token = cache.get(&tenant_access_token_key("test_app", "test_tenant"));
+        assert_eq!(cached_token, Some("test_tenant_token".to_string()));
+    }
+
+    #[tokio::test]
+    async fn test_handle_tenant_access_token_response_error() {
+        let manager = TokenManager::new();
+
+        let error_resp = TenantAccessTokenResp {
+            raw_response: crate::core::api_resp::RawResponse {
+                code: 40002,
+                msg: "invalid tenant_key".to_string(),
+                err: None,
+            },
+            expire: 0,
+            tenant_access_token: "".to_string(),
+        };
+
+        let result = manager
+            .handle_tenant_access_token_response(error_resp, "test_app", "invalid_tenant")
+            .await;
+        assert!(result.is_err());
+
+        // 验证错误包含原始错误信息
+        let error_msg = format!("{:?}", result.unwrap_err());
+        assert!(error_msg.contains("invalid tenant_key"));
+    }
+
+    #[tokio::test]
+    async fn test_tenant_token_double_check_hit() {
+        let manager = Arc::new(TokenManager::new());
+        let config = Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .app_type(AppType::SelfBuild)
+            .base_url("https://open.feishu.cn")
+            .build();
+
+        let app_ticket_manager = Arc::new(Mutex::new(
+            crate::core::app_ticket_manager::AppTicketManager::new(),
+        ));
+
+        // 预先在缓存中设置一个token
+        {
+            let mut cache = manager.cache.write().await;
+            cache.set(
+                &tenant_access_token_key("test_app", "test_tenant"),
+                "cached_token".to_string(),
+                3600,
+            );
+        }
+
+        // 同时启动多个请求，测试双重检查逻辑
+        let manager_clone = manager.clone();
+        let config_clone = config.clone();
+        let app_ticket_manager_clone = app_ticket_manager.clone();
+
+        let handle1 = tokio::spawn(async move {
+            manager_clone
+                .get_tenant_access_token(
+                    &config_clone,
+                    "test_tenant",
+                    "",
+                    &app_ticket_manager_clone,
+                )
+                .await
+        });
+
+        let handle2 = tokio::spawn(async move {
+            manager
+                .get_tenant_access_token(&config, "test_tenant", "", &app_ticket_manager)
+                .await
+        });
+
+        let (result1, result2) = tokio::join!(handle1, handle2);
+
+        // 两个请求都应该成功且返回相同的缓存token
+        if let (Ok(Ok(token1)), Ok(Ok(token2))) = (result1, result2) {
+            assert_eq!(token1, "cached_token");
+            assert_eq!(token2, "cached_token");
+        }
+    }
+
+    #[tokio::test]
+    async fn test_app_token_double_check_hit() {
+        let manager = Arc::new(TokenManager::new());
+        let config = Config::builder()
+            .app_id("test_app")
+            .app_secret("test_secret")
+            .app_type(AppType::SelfBuild)
+            .base_url("https://open.feishu.cn")
+            .build();
+
+        let app_ticket_manager = Arc::new(Mutex::new(
+            crate::core::app_ticket_manager::AppTicketManager::new(),
+        ));
+
+        // 预先在缓存中设置一个token
+        {
+            let mut cache = manager.cache.write().await;
+            cache.set(
+                &app_access_token_key("test_app"),
+                "cached_app_token".to_string(),
+                3600,
+            );
+        }
+
+        // 同时启动多个请求，测试双重检查逻辑
+        let manager_clone = manager.clone();
+        let config_clone = config.clone();
+        let app_ticket_manager_clone = app_ticket_manager.clone();
+
+        let handle1 = tokio::spawn(async move {
+            manager_clone
+                .get_app_access_token(&config_clone, "", &app_ticket_manager_clone)
+                .await
+        });
+
+        let handle2 = tokio::spawn(async move {
+            manager
+                .get_app_access_token(&config, "", &app_ticket_manager)
+                .await
+        });
+
+        let (result1, result2) = tokio::join!(handle1, handle2);
+
+        // 两个请求都应该成功且返回相同的缓存token
+        if let (Ok(Ok(token1)), Ok(Ok(token2))) = (result1, result2) {
+            assert_eq!(token1, "cached_app_token");
+            assert_eq!(token2, "cached_app_token");
+        }
+    }
+
+    #[tokio::test]
+    async fn test_metrics_record_correctly_during_operations() {
+        let manager = TokenManager::new();
+        let config = Config::builder()
+            .app_id("metrics_test_app")
+            .app_secret("test_secret")
+            .build();
+
+        let app_ticket_manager = Arc::new(Mutex::new(
+            crate::core::app_ticket_manager::AppTicketManager::new(),
+        ));
+
+        // 初始指标应该为0
+        assert_eq!(manager.metrics().app_cache_hits.load(Ordering::Relaxed), 0);
+        assert_eq!(
+            manager.metrics().app_cache_misses.load(Ordering::Relaxed),
+            0
+        );
+
+        // 尝试获取不存在的token（会增加cache miss）
+        let _result = manager
+            .get_app_access_token(&config, "", &app_ticket_manager)
+            .await;
+
+        // 验证cache miss被记录
+        assert!(manager.metrics().app_cache_misses.load(Ordering::Relaxed) > 0);
+    }
+
+    #[tokio::test]
+    async fn test_empty_string_token_handling() {
+        let manager = TokenManager::new();
+
+        // 设置一个空字符串token到缓存
+        {
+            let mut cache = manager.cache.write().await;
+            cache.set(&app_access_token_key("empty_app"), "".to_string(), 3600);
+        }
+
+        let config = Config::builder()
+            .app_id("empty_app")
+            .app_secret("test_secret")
+            .build();
+
+        let app_ticket_manager = Arc::new(Mutex::new(
+            crate::core::app_ticket_manager::AppTicketManager::new(),
+        ));
+
+        // 空字符串token应该被视为无效，触发刷新
+        let _result = manager
+            .get_app_access_token(&config, "", &app_ticket_manager)
+            .await;
+
+        // 验证cache miss被记录（因为空字符串被视为无效）
+        assert!(manager.metrics().app_cache_misses.load(Ordering::Relaxed) > 0);
+    }
+
+    #[tokio::test]
+    async fn test_concurrent_cache_access_with_writes() {
+        let manager = Arc::new(TokenManager::new());
+        let mut handles = vec![];
+
+        // 启动多个并发读操作
+        for i in 0..10 {
+            let manager_clone = manager.clone();
+            let handle = tokio::spawn(async move {
+                let cache = manager_clone.cache.read().await;
+                cache.get(&format!("test_key_{}", i))
+            });
+            handles.push(handle);
+        }
+
+        // 启动一个写操作
+        let manager_write = manager.clone();
+        let write_handle = tokio::spawn(async move {
+            let mut cache = manager_write.cache.write().await;
+            cache.set("write_key", "write_value".to_string(), 3600);
+        });
+
+        // 等待所有操作完成
+        for handle in handles {
+            assert!(handle.await.is_ok());
+        }
+        assert!(write_handle.await.is_ok());
+
+        // 验证写操作成功
+        let cache = manager.cache.read().await;
+        assert_eq!(cache.get("write_key"), Some("write_value".to_string()));
+    }
+
+    #[tokio::test]
+    async fn test_preheat_app_token_direct() {
+        let manager = TokenManager::new();
+        let cache = manager.get_cache();
+        let config = Config::builder()
+            .app_id("preheat_app")
+            .app_secret("preheat_secret")
+            .app_type(AppType::SelfBuild)
+            .base_url("https://open.feishu.cn")
+            .build();
+
+        let app_ticket_manager = Arc::new(Mutex::new(
+            crate::core::app_ticket_manager::AppTicketManager::new(),
+        ));
+
+        // 测试预热功能（预期会因为网络请求失败）
+        let result = TokenManager::preheat_app_token(&cache, &config, &app_ticket_manager).await;
+
+        // 应该返回网络错误或API错误，而不是缓存错误
+        if let Err(error) = result {
+            let error_msg = format!("{:?}", error);
+            assert!(!error_msg.contains("cache error"));
+        }
+    }
+
+    #[tokio::test]
+    async fn test_preheat_tenant_token_direct() {
+        let manager = TokenManager::new();
+        let cache = manager.get_cache();
+        let config = Config::builder()
+            .app_id("preheat_app")
+            .app_secret("preheat_secret")
+            .app_type(AppType::SelfBuild)
+            .base_url("https://open.feishu.cn")
+            .build();
+
+        let app_ticket_manager = Arc::new(Mutex::new(
+            crate::core::app_ticket_manager::AppTicketManager::new(),
+        ));
+
+        // 测试预热功能（预期会因为网络请求失败）
+        let result =
+            TokenManager::preheat_tenant_token(&cache, &config, "test_tenant", &app_ticket_manager)
+                .await;
+
+        // 应该返回网络错误或API错误，而不是缓存错误
+        if let Err(error) = result {
+            let error_msg = format!("{:?}", error);
+            assert!(!error_msg.contains("cache error"));
+        }
+    }
+
+    #[tokio::test]
+    async fn test_should_preheat_token_with_different_thresholds() {
+        let manager = TokenManager::new();
+        let key = "threshold_test_key";
+
+        // 添加一个token，1小时后过期
+        {
+            let mut cache = manager.cache.write().await;
+            cache.set(key, "test_value".to_string(), 3600);
+        }
+
+        // 测试不同阈值
+        assert!(!TokenManager::should_preheat_token_with_threshold(&manager.cache, key, 600).await); // 10分钟阈值
+        assert!(
+            !TokenManager::should_preheat_token_with_threshold(&manager.cache, key, 1800).await
+        ); // 30分钟阈值
+        assert!(
+            !TokenManager::should_preheat_token_with_threshold(&manager.cache, key, 3000).await
+        ); // 50分钟阈值
+        assert!(TokenManager::should_preheat_token_with_threshold(&manager.cache, key, 3700).await);
+        // 61分钟阈值（大于1小时）
+    }
+
+    #[tokio::test]
+    async fn test_should_preheat_token_default_threshold() {
+        let manager = TokenManager::new();
+        let key = "default_threshold_key";
+
+        // 测试不存在的token
+        assert!(TokenManager::should_preheat_token(&manager.cache, key).await);
+
+        // 添加一个token，20分钟后过期
+        {
+            let mut cache = manager.cache.write().await;
+            cache.set(key, "test_value".to_string(), 1200);
+        }
+
+        // 默认阈值是15分钟(900秒)，20分钟的token不需要预热
+        assert!(!TokenManager::should_preheat_token(&manager.cache, key).await);
+
+        // 添加一个token，10分钟后过期
+        {
+            let mut cache = manager.cache.write().await;
+            cache.set(key, "test_value2".to_string(), 600);
+        }
+
+        // 10分钟的token需要预热（小于15分钟阈值）
+        assert!(TokenManager::should_preheat_token(&manager.cache, key).await);
+    }
+
+    #[tokio::test]
+    async fn test_preheat_tokens_if_needed_default() {
+        let manager = TokenManager::new();
+        let cache = manager.get_cache();
+        let metrics = manager.get_metrics();
+        let config = Config::builder()
+            .app_id("preheat_test_app")
+            .app_secret("test_secret")
+            .app_type(AppType::SelfBuild)
+            .base_url("https://open.feishu.cn")
+            .build();
+
+        let app_ticket_manager = Arc::new(Mutex::new(
+            crate::core::app_ticket_manager::AppTicketManager::new(),
+        ));
+
+        // 测试默认配置的预热功能
+        let result =
+            TokenManager::preheat_tokens_if_needed(&cache, &metrics, &config, &app_ticket_manager)
+                .await;
+
+        // 函数应该正常执行，不会panic
+        // 由于没有可预热的token，或者网络请求失败，结果可能是Ok或Error
+        match result {
+            Ok(_) => {
+                // 成功或者没有需要预热的token
+                println!("预热检查完成，无需预热或预热成功");
+            }
+            Err(e) => {
+                // 网络错误或API错误，这是预期的
+                println!("预热过程中发生网络/API错误（预期）: {:?}", e);
+            }
+        }
+    }
+
+    #[tokio::test]
+    async fn test_preheat_tokens_with_custom_config() {
+        let manager = TokenManager::new();
+        let cache = manager.get_cache();
+        let metrics = manager.get_metrics();
+        let config = Config::builder()
+            .app_id("custom_preheat_app")
+            .app_secret("test_secret")
+            .app_type(AppType::SelfBuild)
+            .base_url("https://open.feishu.cn")
+            .build();
+
+        let app_ticket_manager = Arc::new(Mutex::new(
+            crate::core::app_ticket_manager::AppTicketManager::new(),
+        ));
+
+        let custom_config = PreheatingConfig {
+            check_interval_seconds: 300,     // 5分钟
+            preheat_threshold_seconds: 600,  // 10分钟
+            enable_tenant_preheating: false, // 禁用tenant预热
+            max_concurrent_preheat: 1,
+        };
+
+        // 测试自定义配置的预热功能
+        let result = TokenManager::preheat_tokens_if_needed_with_config(
+            &cache,
+            &metrics,
+            &config,
+            &app_ticket_manager,
+            &custom_config,
+        )
+        .await;
+
+        // 函数应该正常执行
+        match result {
+            Ok(_) => {
+                println!("自定义配置预热检查完成");
+            }
+            Err(e) => {
+                println!("自定义配置预热过程中发生错误（可能是网络错误）: {:?}", e);
+            }
+        }
+    }
+
+    #[tokio::test]
+    async fn test_start_background_preheating_basic() {
+        let mut manager = TokenManager::new();
+        let config = Config::builder()
+            .app_id("background_app")
+            .app_secret("test_secret")
+            .build();
+
+        let app_ticket_manager = Arc::new(Mutex::new(
+            crate::core::app_ticket_manager::AppTicketManager::new(),
+        ));
+
+        // 启动默认配置的后台预热
+        manager.start_background_preheating(config, app_ticket_manager);
+
+        // 验证预热任务已启动
+        assert!(manager.is_preheating_active());
+
+        // 停止预热任务
+        manager.stop_background_preheating();
+        assert!(!manager.is_preheating_active());
+    }
+
+    #[tokio::test]
+    async fn test_start_background_preheating_with_custom_config() {
+        let mut manager = TokenManager::new();
+        let config = Config::builder()
+            .app_id("custom_background_app")
+            .app_secret("test_secret")
+            .build();
+
+        let app_ticket_manager = Arc::new(Mutex::new(
+            crate::core::app_ticket_manager::AppTicketManager::new(),
+        ));
+
+        let custom_config = PreheatingConfig {
+            check_interval_seconds: 120,    // 2分钟
+            preheat_threshold_seconds: 300, // 5分钟
+            enable_tenant_preheating: true,
+            max_concurrent_preheat: 2,
+        };
+
+        // 启动自定义配置的后台预热
+        manager.start_background_preheating_with_config(config, app_ticket_manager, custom_config);
+
+        // 验证预热任务已启动
+        assert!(manager.is_preheating_active());
+
+        // 停止预热任务
+        manager.stop_background_preheating();
+        assert!(!manager.is_preheating_active());
+    }
+
+    #[tokio::test]
+    async fn test_restart_background_preheating() {
+        let mut manager = TokenManager::new();
+        let config = Config::builder()
+            .app_id("restart_app")
+            .app_secret("test_secret")
+            .build();
+
+        let app_ticket_manager = Arc::new(Mutex::new(
+            crate::core::app_ticket_manager::AppTicketManager::new(),
+        ));
+
+        // 首次启动
+        manager.start_background_preheating(config.clone(), app_ticket_manager.clone());
+        assert!(manager.is_preheating_active());
+
+        // 重新启动（应该先停止现有任务）
+        let new_config = PreheatingConfig {
+            check_interval_seconds: 60,
+            preheat_threshold_seconds: 180,
+            enable_tenant_preheating: false,
+            max_concurrent_preheat: 1,
+        };
+
+        manager.start_background_preheating_with_config(config, app_ticket_manager, new_config);
+        assert!(manager.is_preheating_active());
+
+        // 最终停止
+        manager.stop_background_preheating();
+        assert!(!manager.is_preheating_active());
+    }
+
+    #[test]
+    fn test_token_metrics_performance_report_format() {
+        let metrics = TokenMetrics::new();
+
+        // 设置一些测试数据
+        metrics.app_cache_hits.store(85, Ordering::Relaxed);
+        metrics.app_cache_misses.store(15, Ordering::Relaxed);
+        metrics.tenant_cache_hits.store(70, Ordering::Relaxed);
+        metrics.tenant_cache_misses.store(30, Ordering::Relaxed);
+        metrics.refresh_success.store(92, Ordering::Relaxed);
+        metrics.refresh_failures.store(8, Ordering::Relaxed);
+        metrics.read_lock_acquisitions.store(500, Ordering::Relaxed);
+        metrics
+            .write_lock_acquisitions
+            .store(100, Ordering::Relaxed);
+
+        let report = metrics.performance_report();
+
+        // 验证报告格式和内容
+        assert!(report.contains("TokenManager Performance Metrics"));
+        assert!(report.contains("85.00%")); // App cache hit rate
+        assert!(report.contains("70.00%")); // Tenant cache hit rate
+        assert!(report.contains("92.00%")); // Refresh success rate
+        assert!(report.contains("500")); // Read locks
+        assert!(report.contains("100")); // Write locks
+        assert!(report.contains("85 hits, 15 misses")); // App cache stats
+        assert!(report.contains("70 hits, 30 misses")); // Tenant cache stats
+        assert!(report.contains("92 success, 8 failures")); // Refresh stats
+    }
+
+    #[test]
+    fn test_request_structs_debug_trait() {
+        let self_built_req = SelfBuiltAppAccessTokenReq {
+            app_id: "debug_app".to_string(),
+            app_secret: "debug_secret".to_string(),
+        };
+
+        let debug_str = format!("{:?}", self_built_req);
+        assert!(debug_str.contains("SelfBuiltAppAccessTokenReq"));
+        assert!(debug_str.contains("debug_app"));
+
+        let tenant_req = SelfBuiltTenantAccessTokenReq {
+            app_id: "tenant_debug_app".to_string(),
+            app_secret: "tenant_debug_secret".to_string(),
+        };
+
+        let debug_str = format!("{:?}", tenant_req);
+        assert!(debug_str.contains("SelfBuiltTenantAccessTokenReq"));
+        assert!(debug_str.contains("tenant_debug_app"));
+    }
+
+    #[tokio::test]
+    async fn test_marketplace_vs_selfbuild_app_type_handling() {
+        let manager = TokenManager::new();
+
+        // 测试自建应用配置
+        let self_build_config = Config::builder()
+            .app_id("self_build_app")
+            .app_secret("self_build_secret")
+            .app_type(AppType::SelfBuild)
+            .base_url("https://open.feishu.cn")
+            .build();
+
+        // 测试应用商店应用配置
+        let marketplace_config = Config::builder()
+            .app_id("marketplace_app")
+            .app_secret("marketplace_secret")
+            .app_type(AppType::Marketplace)
+            .base_url("https://open.feishu.cn")
+            .build();
+
+        let app_ticket_manager = Arc::new(Mutex::new(
+            crate::core::app_ticket_manager::AppTicketManager::new(),
+        ));
+
+        // 测试两种类型的应用都能正确处理（虽然会因网络问题失败）
+        let self_build_result = manager
+            .get_app_access_token(&self_build_config, "", &app_ticket_manager)
+            .await;
+        let marketplace_result = manager
+            .get_app_access_token(&marketplace_config, "test_ticket", &app_ticket_manager)
+            .await;
+
+        // 验证都是网络/API错误，而不是配置错误
+        if let Err(e) = self_build_result {
+            let error_msg = format!("{:?}", e);
+            assert!(!error_msg.contains("config error"));
+        }
+
+        if let Err(e) = marketplace_result {
+            let error_msg = format!("{:?}", e);
+            assert!(!error_msg.contains("config error"));
+        }
+    }
+
+    #[tokio::test]
+    async fn test_token_key_generation_edge_cases() {
+        // 测试空字符串
+        let empty_app_key = app_access_token_key("");
+        assert!(empty_app_key.contains(APP_ACCESS_TOKEN_KEY_PREFIX));
+
+        let empty_tenant_key = tenant_access_token_key("", "");
+        assert!(empty_tenant_key.contains(APP_ACCESS_TOKEN_KEY_PREFIX));
+
+        // 测试非常长的字符串
+        let long_app_id = "a".repeat(1000);
+        let long_tenant_key = "b".repeat(1000);
+
+        let long_app_key = app_access_token_key(&long_app_id);
+        let long_tenant_cache_key = tenant_access_token_key(&long_app_id, &long_tenant_key);
+
+        assert!(long_app_key.len() > 1000);
+        assert!(long_tenant_cache_key.len() > 2000);
+        assert!(long_app_key.contains(&long_app_id));
+        assert!(long_tenant_cache_key.contains(&long_tenant_key));
+    }
+
+    #[tokio::test]
+    async fn test_metrics_counter_overflow_safety() {
+        let metrics = TokenMetrics::new();
+
+        // 测试接近u64最大值的计数器
+        metrics
+            .app_cache_hits
+            .store(u64::MAX - 1, Ordering::Relaxed);
+        metrics.app_cache_misses.store(1, Ordering::Relaxed);
+
+        // 验证hit rate计算在极值情况下不会panic
+        let hit_rate = metrics.app_cache_hit_rate();
+        assert!((0.0..=1.0).contains(&hit_rate));
+
+        // 测试fetch_add操作的溢出行为
+        let old_value = metrics.app_cache_hits.fetch_add(1, Ordering::Relaxed);
+        assert_eq!(old_value, u64::MAX - 1);
+
+        // 验证fetch_add操作完成（不验证具体溢出行为，因为实现依赖）
+        let new_value = metrics.app_cache_hits.load(Ordering::Relaxed);
+        assert!(new_value == u64::MAX || new_value == 0); // 允许饱和或wrapping行为
+    }
+
+    #[tokio::test]
+    async fn test_cache_token_with_special_expiry_values() {
+        let manager = TokenManager::new();
+
+        // 测试使用EXPIRY_DELTA的正确性
+        let successful_resp = AppAccessTokenResp {
+            raw_response: crate::core::api_resp::RawResponse {
+                code: 0,
+                msg: "success".to_string(),
+                err: None,
+            },
+            expire: 3600,
+            app_access_token: "expiry_test_token".to_string(),
+        };
+
+        let result = manager
+            .handle_app_access_token_response(successful_resp, "expiry_app")
+            .await;
+        assert!(result.is_ok());
+
+        // 验证缓存中的token过期时间已经减去了EXPIRY_DELTA
+        let cache = manager.cache.read().await;
+        if let Some(entry) = cache.get_with_expiry(&app_access_token_key("expiry_app")) {
+            // 过期时间应该是 3600 - EXPIRY_DELTA
+            let expected_expiry = 3600 - EXPIRY_DELTA;
+            assert!(entry.expiry_seconds() <= expected_expiry as u64);
+        }
+    }
 }

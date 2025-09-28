@@ -153,7 +153,7 @@ pub mod ws_client;
 /// - 更多服务请参考各字段文档
 pub struct LarkClient {
     pub config: Config,
-    /// 共享配置（实验性）：单一 Arc<Config>，用于内部服务扇出以减少 clone
+    /// 共享配置（实验性）：单一 `Arc<Config>`，用于内部服务扇出以减少 clone
     #[allow(dead_code)] // Used in constructor and tests
     shared_config: Arc<Config>,
     // 核心服务 - 使用条件编译

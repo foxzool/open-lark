@@ -393,25 +393,119 @@ impl QueryParamsBuilder {
 mod tests {
     use super::*;
 
+    // ==================== Constants Testing ====================
+
     #[test]
-    fn test_query_params_constants() {
+    fn test_pagination_constants() {
         assert_eq!(QueryParams::PAGE_SIZE, "page_size");
         assert_eq!(QueryParams::PAGE_TOKEN, "page_token");
-        assert_eq!(QueryParams::USER_ID, "user_id");
+        assert_eq!(QueryParams::PAGE, "page");
+        assert_eq!(QueryParams::OFFSET, "offset");
+        assert_eq!(QueryParams::LIMIT, "limit");
     }
 
     #[test]
-    fn test_query_params_builder() {
-        let params = QueryParamsBuilder::new()
-            .page_size(20)
-            .page_token("token_123")
-            .user_id("user_456")
-            .build();
+    fn test_time_range_constants() {
+        assert_eq!(QueryParams::START_TIME, "start_time");
+        assert_eq!(QueryParams::END_TIME, "end_time");
+        assert_eq!(QueryParams::CREATE_TIME_START, "create_time_start");
+        assert_eq!(QueryParams::CREATE_TIME_END, "create_time_end");
+        assert_eq!(QueryParams::UPDATE_TIME_START, "update_time_start");
+        assert_eq!(QueryParams::UPDATE_TIME_END, "update_time_end");
+    }
 
-        assert_eq!(params.len(), 3);
-        assert_eq!(params.get("page_size"), Some(&"20".to_string()));
-        assert_eq!(params.get("page_token"), Some(&"token_123".to_string()));
-        assert_eq!(params.get("user_id"), Some(&"user_456".to_string()));
+    #[test]
+    fn test_user_identity_constants() {
+        assert_eq!(QueryParams::USER_ID, "user_id");
+        assert_eq!(QueryParams::USER_ID_TYPE, "user_id_type");
+        assert_eq!(QueryParams::DEPARTMENT_ID, "department_id");
+        assert_eq!(QueryParams::DEPARTMENT_ID_TYPE, "department_id_type");
+        assert_eq!(QueryParams::ORG_ID, "org_id");
+        assert_eq!(QueryParams::EMPLOYEE_ID, "employee_id");
+    }
+
+    #[test]
+    fn test_status_type_constants() {
+        assert_eq!(QueryParams::STATUS, "status");
+        assert_eq!(QueryParams::TYPE, "type");
+        assert_eq!(QueryParams::RULE_TYPE, "rule_type");
+        assert_eq!(QueryParams::ACCESS_TYPE, "access_type");
+        assert_eq!(QueryParams::SORT, "sort");
+        assert_eq!(QueryParams::ORDER, "order");
+    }
+
+    #[test]
+    fn test_content_search_constants() {
+        assert_eq!(QueryParams::QUERY, "query");
+        assert_eq!(QueryParams::KEYWORD, "keyword");
+        assert_eq!(QueryParams::NAME, "name");
+        assert_eq!(QueryParams::TITLE, "title");
+        assert_eq!(QueryParams::LANGUAGE, "language");
+        assert_eq!(QueryParams::LOCALE, "locale");
+    }
+
+    #[test]
+    fn test_meeting_vc_constants() {
+        assert_eq!(QueryParams::MEETING_ID, "meeting_id");
+        assert_eq!(QueryParams::ROOM_ID, "room_id");
+        assert_eq!(QueryParams::RECORDING_ID, "recording_id");
+    }
+
+    #[test]
+    fn test_workplace_app_constants() {
+        assert_eq!(QueryParams::CUSTOM_WORKPLACE_ID, "custom_workplace_id");
+        assert_eq!(QueryParams::WIDGET_ID, "widget_id");
+        assert_eq!(QueryParams::APP_ID, "app_id");
+    }
+
+    #[test]
+    fn test_hire_related_constants() {
+        assert_eq!(QueryParams::INCOME_TYPE, "income_type");
+        assert_eq!(QueryParams::START_DATE, "start_date");
+        assert_eq!(QueryParams::END_DATE, "end_date");
+    }
+
+    #[test]
+    fn test_file_document_constants() {
+        assert_eq!(QueryParams::FILE_ID, "file_id");
+        assert_eq!(QueryParams::DOC_ID, "doc_id");
+        assert_eq!(QueryParams::FOLDER_ID, "folder_id");
+        assert_eq!(QueryParams::FILE_TYPE, "file_type");
+    }
+
+    #[test]
+    fn test_message_im_constants() {
+        assert_eq!(QueryParams::MESSAGE_ID, "message_id");
+        assert_eq!(QueryParams::CHAT_ID, "chat_id");
+        assert_eq!(QueryParams::CHANNEL_ID, "channel_id");
+    }
+
+    #[test]
+    fn test_device_access_constants() {
+        assert_eq!(QueryParams::DEVICE_ID, "device_id");
+        assert_eq!(QueryParams::ACCESS_METHOD, "access_method");
+        assert_eq!(QueryParams::RESULT, "result");
+    }
+
+    #[test]
+    fn test_badge_constants() {
+        assert_eq!(QueryParams::BADGE_ID, "badge_id");
+    }
+
+    // ==================== Builder Testing ====================
+
+    #[test]
+    fn test_query_params_builder_creation() {
+        let builder = QueryParamsBuilder::new();
+        assert_eq!(builder.len(), 0);
+        assert!(builder.is_empty());
+    }
+
+    #[test]
+    fn test_query_params_builder_default() {
+        let builder: QueryParamsBuilder = Default::default();
+        assert_eq!(builder.len(), 0);
+        assert!(builder.is_empty());
     }
 
     #[test]
@@ -419,17 +513,572 @@ mod tests {
         let builder = QueryParamsBuilder::with_capacity(5);
         assert_eq!(builder.len(), 0);
         assert!(builder.is_empty());
+        // Capacity doesn't affect length/empty state, just memory allocation
     }
 
     #[test]
-    fn test_optional_params() {
+    fn test_builder_debug_trait() {
+        let builder = QueryParamsBuilder::new().page_size(10).user_id("test123");
+
+        let debug_str = format!("{:?}", builder);
+        assert!(debug_str.contains("QueryParamsBuilder"));
+        assert!(debug_str.contains("params"));
+    }
+
+    // ==================== Pagination Methods Testing ====================
+
+    #[test]
+    fn test_pagination_methods() {
+        let params = QueryParamsBuilder::new()
+            .page_size(20)
+            .page_token("token_123")
+            .page(1)
+            .offset(100)
+            .limit(50)
+            .build();
+
+        assert_eq!(params.len(), 5);
+        assert_eq!(params.get("page_size"), Some(&"20".to_string()));
+        assert_eq!(params.get("page_token"), Some(&"token_123".to_string()));
+        assert_eq!(params.get("page"), Some(&"1".to_string()));
+        assert_eq!(params.get("offset"), Some(&"100".to_string()));
+        assert_eq!(params.get("limit"), Some(&"50".to_string()));
+    }
+
+    #[test]
+    fn test_page_size_edge_cases() {
+        let params = QueryParamsBuilder::new().page_size(0).build();
+        assert_eq!(params.get("page_size"), Some(&"0".to_string()));
+
+        let params = QueryParamsBuilder::new().page_size(-1).build();
+        assert_eq!(params.get("page_size"), Some(&"-1".to_string()));
+
+        let params = QueryParamsBuilder::new().page_size(i32::MAX).build();
+        assert_eq!(params.get("page_size"), Some(&i32::MAX.to_string()));
+    }
+
+    #[test]
+    fn test_page_token_different_types() {
+        let params = QueryParamsBuilder::new().page_token("string_token").build();
+        assert_eq!(params.get("page_token"), Some(&"string_token".to_string()));
+
+        let params = QueryParamsBuilder::new()
+            .page_token(String::from("owned_string"))
+            .build();
+        assert_eq!(params.get("page_token"), Some(&"owned_string".to_string()));
+
+        let params = QueryParamsBuilder::new().page_token(123).build();
+        assert_eq!(params.get("page_token"), Some(&"123".to_string()));
+    }
+
+    #[test]
+    fn test_offset_limit_combinations() {
+        let params = QueryParamsBuilder::new().offset(0).limit(10).build();
+        assert_eq!(params.get("offset"), Some(&"0".to_string()));
+        assert_eq!(params.get("limit"), Some(&"10".to_string()));
+
+        let params = QueryParamsBuilder::new().offset(100).limit(0).build();
+        assert_eq!(params.get("offset"), Some(&"100".to_string()));
+        assert_eq!(params.get("limit"), Some(&"0".to_string()));
+    }
+
+    // ==================== Time Methods Testing ====================
+
+    #[test]
+    fn test_time_methods() {
+        let params = QueryParamsBuilder::new()
+            .start_time("2024-01-01T00:00:00Z")
+            .end_time("2024-12-31T23:59:59Z")
+            .build();
+
+        assert_eq!(params.len(), 2);
+        assert_eq!(
+            params.get("start_time"),
+            Some(&"2024-01-01T00:00:00Z".to_string())
+        );
+        assert_eq!(
+            params.get("end_time"),
+            Some(&"2024-12-31T23:59:59Z".to_string())
+        );
+    }
+
+    #[test]
+    fn test_time_methods_different_formats() {
+        let params = QueryParamsBuilder::new()
+            .start_time("1640995200") // Unix timestamp
+            .end_time("2024-01-01") // Date only
+            .build();
+
+        assert_eq!(params.get("start_time"), Some(&"1640995200".to_string()));
+        assert_eq!(params.get("end_time"), Some(&"2024-01-01".to_string()));
+    }
+
+    #[test]
+    fn test_time_methods_empty_strings() {
+        let params = QueryParamsBuilder::new()
+            .start_time("")
+            .end_time("")
+            .build();
+
+        assert_eq!(params.get("start_time"), Some(&"".to_string()));
+        assert_eq!(params.get("end_time"), Some(&"".to_string()));
+    }
+
+    // ==================== User Identity Methods Testing ====================
+
+    #[test]
+    fn test_user_identity_methods() {
+        let params = QueryParamsBuilder::new()
+            .user_id("user_123")
+            .user_id_type("open_id")
+            .department_id("dept_456")
+            .org_id("org_789")
+            .build();
+
+        assert_eq!(params.len(), 4);
+        assert_eq!(params.get("user_id"), Some(&"user_123".to_string()));
+        assert_eq!(params.get("user_id_type"), Some(&"open_id".to_string()));
+        assert_eq!(params.get("department_id"), Some(&"dept_456".to_string()));
+        assert_eq!(params.get("org_id"), Some(&"org_789".to_string()));
+    }
+
+    #[test]
+    fn test_user_id_type_variants() {
+        let params = QueryParamsBuilder::new().user_id_type("open_id").build();
+        assert_eq!(params.get("user_id_type"), Some(&"open_id".to_string()));
+
+        let params = QueryParamsBuilder::new().user_id_type("union_id").build();
+        assert_eq!(params.get("user_id_type"), Some(&"union_id".to_string()));
+
+        let params = QueryParamsBuilder::new().user_id_type("user_id").build();
+        assert_eq!(params.get("user_id_type"), Some(&"user_id".to_string()));
+    }
+
+    #[test]
+    fn test_user_methods_with_unicode() {
+        let params = QueryParamsBuilder::new()
+            .user_id("用户_123")
+            .department_id("部门_456")
+            .build();
+
+        assert_eq!(params.get("user_id"), Some(&"用户_123".to_string()));
+        assert_eq!(params.get("department_id"), Some(&"部门_456".to_string()));
+    }
+
+    // ==================== Status and Type Methods Testing ====================
+
+    #[test]
+    fn test_status_type_methods() {
+        let params = QueryParamsBuilder::new()
+            .status("active")
+            .r#type("document")
+            .rule_type("approval")
+            .access_type("read")
+            .build();
+
+        assert_eq!(params.len(), 4);
+        assert_eq!(params.get("status"), Some(&"active".to_string()));
+        assert_eq!(params.get("type"), Some(&"document".to_string()));
+        assert_eq!(params.get("rule_type"), Some(&"approval".to_string()));
+        assert_eq!(params.get("access_type"), Some(&"read".to_string()));
+    }
+
+    #[test]
+    fn test_type_method_with_raw_identifier() {
+        // Test the r#type method specifically since it uses a Rust keyword
+        let params = QueryParamsBuilder::new().r#type("special_type").build();
+
+        assert_eq!(params.get("type"), Some(&"special_type".to_string()));
+    }
+
+    #[test]
+    fn test_status_variations() {
+        let status_values = ["active", "inactive", "pending", "approved", "rejected"];
+
+        for status in &status_values {
+            let params = QueryParamsBuilder::new().status(*status).build();
+            assert_eq!(params.get("status"), Some(&status.to_string()));
+        }
+    }
+
+    // ==================== Custom and Optional Methods Testing ====================
+
+    #[test]
+    fn test_custom_static_method() {
+        let params = QueryParamsBuilder::new()
+            .custom_static("custom_param", "custom_value".to_string())
+            .custom_static("another_param", "another_value".to_string())
+            .build();
+
+        assert_eq!(params.len(), 2);
+        assert_eq!(
+            params.get("custom_param"),
+            Some(&"custom_value".to_string())
+        );
+        assert_eq!(
+            params.get("another_param"),
+            Some(&"another_value".to_string())
+        );
+    }
+
+    #[test]
+    fn test_optional_method_with_some() {
+        let params = QueryParamsBuilder::new()
+            .optional(QueryParams::PAGE_SIZE, Some(10))
+            .optional(QueryParams::USER_ID, Some("user123"))
+            .optional(QueryParams::STATUS, Some(String::from("active")))
+            .build();
+
+        assert_eq!(params.len(), 3);
+        assert_eq!(params.get("page_size"), Some(&"10".to_string()));
+        assert_eq!(params.get("user_id"), Some(&"user123".to_string()));
+        assert_eq!(params.get("status"), Some(&"active".to_string()));
+    }
+
+    #[test]
+    fn test_optional_method_with_none() {
+        let params = QueryParamsBuilder::new()
+            .optional(QueryParams::PAGE_SIZE, None::<i32>)
+            .optional(QueryParams::PAGE_TOKEN, None::<String>)
+            .optional(QueryParams::USER_ID, None::<&str>)
+            .build();
+
+        assert_eq!(params.len(), 0);
+        assert!(!params.contains_key("page_size"));
+        assert!(!params.contains_key("page_token"));
+        assert!(!params.contains_key("user_id"));
+    }
+
+    #[test]
+    fn test_optional_method_mixed() {
         let params = QueryParamsBuilder::new()
             .optional(QueryParams::PAGE_SIZE, Some(10))
             .optional(QueryParams::PAGE_TOKEN, None::<String>)
+            .optional(QueryParams::USER_ID, Some("user123"))
+            .optional(QueryParams::STATUS, None::<&str>)
             .build();
 
-        assert_eq!(params.len(), 1);
+        assert_eq!(params.len(), 2);
         assert_eq!(params.get("page_size"), Some(&"10".to_string()));
+        assert_eq!(params.get("user_id"), Some(&"user123".to_string()));
         assert!(!params.contains_key("page_token"));
+        assert!(!params.contains_key("status"));
+    }
+
+    // ==================== Build Methods Testing ====================
+
+    #[test]
+    fn test_build_method() {
+        let builder = QueryParamsBuilder::new().page_size(20).user_id("test_user");
+
+        let params = builder.build();
+
+        assert_eq!(params.len(), 2);
+        assert_eq!(params.get("page_size"), Some(&"20".to_string()));
+        assert_eq!(params.get("user_id"), Some(&"test_user".to_string()));
+
+        // Verify the HashMap is the expected type
+        let _: HashMap<String, String> = params;
+    }
+
+    #[test]
+    fn test_build_ref_method() {
+        let builder = QueryParamsBuilder::new().page_size(20).user_id("test_user");
+
+        let params_ref = builder.build_ref();
+
+        assert_eq!(params_ref.len(), 2);
+        assert_eq!(
+            params_ref.get(QueryParams::PAGE_SIZE),
+            Some(&"20".to_string())
+        );
+        assert_eq!(
+            params_ref.get(QueryParams::USER_ID),
+            Some(&"test_user".to_string())
+        );
+
+        // Verify the HashMap is the expected type with static str keys
+        let _: &HashMap<&'static str, String> = params_ref;
+    }
+
+    #[test]
+    fn test_build_empty() {
+        let params = QueryParamsBuilder::new().build();
+        assert_eq!(params.len(), 0);
+        assert!(params.is_empty());
+    }
+
+    #[test]
+    fn test_build_ref_empty() {
+        let builder = QueryParamsBuilder::new();
+        let params_ref = builder.build_ref();
+        assert_eq!(params_ref.len(), 0);
+        assert!(params_ref.is_empty());
+    }
+
+    // ==================== Chain Building Testing ====================
+
+    #[test]
+    fn test_comprehensive_chaining() {
+        let params = QueryParamsBuilder::new()
+            .page_size(50)
+            .page_token("next_page_123")
+            .start_time("2024-01-01T00:00:00Z")
+            .end_time("2024-12-31T23:59:59Z")
+            .user_id("user_456")
+            .user_id_type("open_id")
+            .status("active")
+            .r#type("document")
+            .custom_static("custom_field", "custom_value".to_string())
+            .optional(QueryParams::LIMIT, Some(100))
+            .optional(QueryParams::OFFSET, None::<i32>)
+            .build();
+
+        assert_eq!(params.len(), 10); // All non-None values: page_size, page_token, start_time, end_time, user_id, user_id_type, status, type, custom_field, limit
+        assert_eq!(params.get("page_size"), Some(&"50".to_string()));
+        assert_eq!(params.get("page_token"), Some(&"next_page_123".to_string()));
+        assert_eq!(
+            params.get("start_time"),
+            Some(&"2024-01-01T00:00:00Z".to_string())
+        );
+        assert_eq!(
+            params.get("end_time"),
+            Some(&"2024-12-31T23:59:59Z".to_string())
+        );
+        assert_eq!(params.get("user_id"), Some(&"user_456".to_string()));
+        assert_eq!(params.get("user_id_type"), Some(&"open_id".to_string()));
+        assert_eq!(params.get("status"), Some(&"active".to_string()));
+        assert_eq!(params.get("type"), Some(&"document".to_string()));
+        assert_eq!(
+            params.get("custom_field"),
+            Some(&"custom_value".to_string())
+        );
+        assert_eq!(params.get("limit"), Some(&"100".to_string()));
+        assert!(!params.contains_key("offset"));
+    }
+
+    #[test]
+    fn test_method_overwriting() {
+        let params = QueryParamsBuilder::new()
+            .page_size(10)
+            .page_size(20) // Should overwrite the previous value
+            .user_id("user1")
+            .user_id("user2") // Should overwrite the previous value
+            .build();
+
+        assert_eq!(params.len(), 2);
+        assert_eq!(params.get("page_size"), Some(&"20".to_string()));
+        assert_eq!(params.get("user_id"), Some(&"user2".to_string()));
+    }
+
+    #[test]
+    fn test_large_chain_building() {
+        let mut builder = QueryParamsBuilder::new();
+
+        // Chain 20 different parameters
+        builder = builder
+            .page_size(10)
+            .page_token("token")
+            .page(1)
+            .offset(0)
+            .limit(50)
+            .start_time("2024-01-01")
+            .end_time("2024-12-31")
+            .user_id("user123")
+            .user_id_type("open_id")
+            .department_id("dept456")
+            .org_id("org789")
+            .status("active")
+            .r#type("document")
+            .rule_type("approval")
+            .access_type("read")
+            .custom_static("param1", "value1".to_string())
+            .custom_static("param2", "value2".to_string())
+            .optional(QueryParams::LANGUAGE, Some("en"))
+            .optional(QueryParams::LOCALE, Some("en_US"))
+            .optional("extra_param", Some("extra_value"));
+
+        let params = builder.build();
+        assert_eq!(params.len(), 20);
+    }
+
+    // ==================== Memory and Performance Testing ====================
+
+    #[test]
+    fn test_with_capacity_performance() {
+        let large_capacity = 1000;
+        let builder = QueryParamsBuilder::with_capacity(large_capacity);
+
+        // Builder should start empty regardless of capacity
+        assert_eq!(builder.len(), 0);
+        assert!(builder.is_empty());
+    }
+
+    #[test]
+    fn test_memory_efficiency_static_strings() {
+        let params1 = QueryParamsBuilder::new().page_size(10).build();
+
+        let params2 = QueryParamsBuilder::new().page_size(20).build();
+
+        // Both should use the same static string key "page_size"
+        let key1 = params1.keys().next().unwrap();
+        let key2 = params2.keys().next().unwrap();
+
+        assert_eq!(key1, key2);
+        assert_eq!(key1, "page_size");
+    }
+
+    #[test]
+    fn test_string_conversion_consistency() {
+        let builder = QueryParamsBuilder::new()
+            .page_size(42)
+            .user_id("test_user")
+            .status("active");
+
+        let params_owned = builder.build();
+        let params_ref = {
+            let temp_builder = QueryParamsBuilder::new()
+                .page_size(42)
+                .user_id("test_user")
+                .status("active");
+            // Create a temporary reference to test the ref method
+            temp_builder.build_ref().clone()
+        };
+
+        // Values should be the same between build() and build_ref()
+        assert_eq!(params_owned.get("page_size"), Some(&"42".to_string()));
+        assert_eq!(
+            params_ref.get(QueryParams::PAGE_SIZE),
+            Some(&"42".to_string())
+        );
+    }
+
+    // ==================== Edge Cases and Error Conditions ====================
+
+    #[test]
+    fn test_empty_string_values() {
+        let params = QueryParamsBuilder::new()
+            .page_token("")
+            .user_id("")
+            .status("")
+            .build();
+
+        assert_eq!(params.len(), 3);
+        assert_eq!(params.get("page_token"), Some(&"".to_string()));
+        assert_eq!(params.get("user_id"), Some(&"".to_string()));
+        assert_eq!(params.get("status"), Some(&"".to_string()));
+    }
+
+    #[test]
+    fn test_unicode_and_special_characters() {
+        let params = QueryParamsBuilder::new()
+            .user_id("用户_123_éñ")
+            .page_token("🚀🎯📊")
+            .status("状态_active")
+            .custom_static("unicode_key", "测试值_with_emoji_🧪".to_string())
+            .build();
+
+        assert_eq!(params.get("user_id"), Some(&"用户_123_éñ".to_string()));
+        assert_eq!(params.get("page_token"), Some(&"🚀🎯📊".to_string()));
+        assert_eq!(params.get("status"), Some(&"状态_active".to_string()));
+        assert_eq!(
+            params.get("unicode_key"),
+            Some(&"测试值_with_emoji_🧪".to_string())
+        );
+    }
+
+    #[test]
+    fn test_extreme_numeric_values() {
+        let params = QueryParamsBuilder::new()
+            .page_size(i32::MAX)
+            .offset(i32::MIN)
+            .limit(0)
+            .page(-1)
+            .build();
+
+        assert_eq!(params.get("page_size"), Some(&i32::MAX.to_string()));
+        assert_eq!(params.get("offset"), Some(&i32::MIN.to_string()));
+        assert_eq!(params.get("limit"), Some(&"0".to_string()));
+        assert_eq!(params.get("page"), Some(&"-1".to_string()));
+    }
+
+    #[test]
+    fn test_very_long_strings() {
+        let long_string = "a".repeat(10000);
+        let params = QueryParamsBuilder::new()
+            .page_token(&long_string)
+            .user_id(&long_string)
+            .build();
+
+        assert_eq!(params.get("page_token"), Some(&long_string));
+        assert_eq!(params.get("user_id"), Some(&long_string));
+    }
+
+    #[test]
+    fn test_builder_is_consumed_by_build() {
+        let builder = QueryParamsBuilder::new().page_size(10).user_id("test");
+
+        let _params = builder.build();
+        // builder is now consumed and cannot be used again
+        // This test just verifies the consumption pattern compiles correctly
+    }
+
+    #[test]
+    fn test_optional_with_different_types() {
+        let params = QueryParamsBuilder::new()
+            .optional("int_param", Some(42))
+            .optional("string_param", Some("test"))
+            .optional("owned_string_param", Some(String::from("owned")))
+            .optional("none_int", None::<i32>)
+            .optional("none_string", None::<String>)
+            .build();
+
+        assert_eq!(params.len(), 3);
+        assert_eq!(params.get("int_param"), Some(&"42".to_string()));
+        assert_eq!(params.get("string_param"), Some(&"test".to_string()));
+        assert_eq!(params.get("owned_string_param"), Some(&"owned".to_string()));
+        assert!(!params.contains_key("none_int"));
+        assert!(!params.contains_key("none_string"));
+    }
+
+    // ==================== Documentation Example Verification ====================
+
+    #[test]
+    fn test_documentation_example() {
+        // Verify the example from the module documentation works correctly
+        let params = QueryParamsBuilder::new()
+            .page_size(20)
+            .page_token("token_123")
+            .start_time("2024-01-01T00:00:00Z")
+            .build();
+
+        assert_eq!(params.get(QueryParams::PAGE_SIZE), Some(&"20".to_string()));
+        assert_eq!(
+            params.get(QueryParams::PAGE_TOKEN),
+            Some(&"token_123".to_string())
+        );
+        assert_eq!(
+            params.get(QueryParams::START_TIME),
+            Some(&"2024-01-01T00:00:00Z".to_string())
+        );
+    }
+
+    #[test]
+    fn test_static_string_memory_optimization() {
+        // Test that demonstrates the memory optimization of using static strings
+        let mut params = HashMap::new();
+        let value = "20".to_string();
+
+        // This is the optimized approach using constants
+        params.insert(QueryParams::PAGE_SIZE, value.clone());
+        assert_eq!(params.get(QueryParams::PAGE_SIZE), Some(&value));
+
+        // Verify the key is indeed a static string
+        assert_eq!(QueryParams::PAGE_SIZE, "page_size");
+
+        // The key should be from static memory (pointer comparison would be same)
+        let key1 = QueryParams::PAGE_SIZE;
+        let key2 = QueryParams::PAGE_SIZE;
+        assert_eq!(key1.as_ptr(), key2.as_ptr()); // Same memory location
     }
 }
