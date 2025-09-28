@@ -432,10 +432,6 @@ name = "moments_demo"
 path = "examples/api/moments_demo.rs"
 required-features = ["moments"]
 
-[[example]]
-name = "ehr_demo"
-path = "examples/api/ehr_demo.rs"
-required-features = ["ehr"]
 
 [[example]]
 name = "ehr_v1_demo"
@@ -552,15 +548,6 @@ name = "security_and_compliance_audit_log"
 path = "examples/api/security_and_compliance_audit_log.rs"
 required-features = ["security-and-compliance"]
 
-[[example]]
-name = "contact_v3_user_list"
-path = "examples/api/contact_v3_user_list.rs"
-required-features = ["contact"]
-
-[[example]]
-name = "contact_v3_group_detail"
-path = "examples/api/contact_v3_group_detail.rs"
-required-features = ["contact"]
 
 [[example]]
 name = "contact_v3_role_management"
