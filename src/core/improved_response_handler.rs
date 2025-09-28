@@ -1,9 +1,11 @@
 use log::debug;
 use serde_json::Value;
+use tracing::{info_span, Instrument};
 
 use crate::core::{
     api_resp::{ApiResponseTrait, BaseResponse, RawResponse, ResponseFormat},
     error::LarkAPIError,
+    observability::ResponseTracker,
     SDKResult,
 };
 
@@ -17,85 +19,166 @@ impl ImprovedResponseHandler {
     /// 1. 减少了不必要的JSON解析次数
     /// 2. 使用更高效的直接反序列化
     /// 3. 更好的错误处理
+    /// 4. 完整的可观测性支持
     pub async fn handle_response<T: ApiResponseTrait>(
         response: reqwest::Response,
     ) -> SDKResult<BaseResponse<T>> {
-        match T::data_format() {
-            ResponseFormat::Data => Self::handle_data_response(response).await,
-            ResponseFormat::Flatten => Self::handle_flatten_response(response).await,
-            ResponseFormat::Binary => Self::handle_binary_response(response).await,
+        let format = match T::data_format() {
+            ResponseFormat::Data => "data",
+            ResponseFormat::Flatten => "flatten",
+            ResponseFormat::Binary => "binary",
+        };
+
+        let span = info_span!(
+            "response_handling",
+            format = format,
+            status_code = response.status().as_u16(),
+            content_length = tracing::field::Empty,
+            processing_duration_ms = tracing::field::Empty,
+        );
+
+        async move {
+            let start_time = std::time::Instant::now();
+
+            // 获取内容长度用于监控
+            let content_length = response.content_length();
+            if let Some(length) = content_length {
+                tracing::Span::current().record("content_length", length);
+            }
+
+            let result = match T::data_format() {
+                ResponseFormat::Data => Self::handle_data_response(response).await,
+                ResponseFormat::Flatten => Self::handle_flatten_response(response).await,
+                ResponseFormat::Binary => Self::handle_binary_response(response).await,
+            };
+
+            // 记录处理时间
+            let duration_ms = start_time.elapsed().as_millis() as u64;
+            tracing::Span::current().record("processing_duration_ms", duration_ms);
+
+            result
         }
+        .instrument(span)
+        .await
     }
 
     /// 处理标准数据格式响应
-    /// 使用单次解析而非双重解析
+    /// 使用单次解析而非双重解析，包含详细的可观测性
     async fn handle_data_response<T: ApiResponseTrait>(
         response: reqwest::Response,
     ) -> SDKResult<BaseResponse<T>> {
+        let tracker = ResponseTracker::start("json_data", response.content_length());
+
         let response_text = response.text().await?;
         debug!("Raw response: {response_text}");
 
+        // 记录解析阶段开始
+        tracker.parsing_complete();
+
         // 尝试直接解析为BaseResponse<T>
         match serde_json::from_str::<BaseResponse<T>>(&response_text) {
-            Ok(base_response) => Ok(base_response),
-            Err(_) => {
+            Ok(base_response) => {
+                tracker.success();
+                Ok(base_response)
+            }
+            Err(direct_parse_err) => {
+                tracing::debug!("Direct parsing failed, attempting fallback parsing");
+
                 // 如果直接解析失败，可能是错误响应，先解析基本信息
-                let raw_value: Value = serde_json::from_str(&response_text)?;
+                match serde_json::from_str::<Value>(&response_text) {
+                    Ok(raw_value) => {
+                        let code = raw_value["code"].as_i64().unwrap_or(-1) as i32;
+                        let msg = raw_value["msg"]
+                            .as_str()
+                            .unwrap_or("Unknown error")
+                            .to_string();
 
-                let code = raw_value["code"].as_i64().unwrap_or(-1) as i32;
-                let msg = raw_value["msg"]
-                    .as_str()
-                    .unwrap_or("Unknown error")
-                    .to_string();
+                        tracker.validation_complete();
+                        tracker.success();
 
-                // 构建错误响应
-                Ok(BaseResponse {
-                    raw_response: RawResponse {
-                        code,
-                        msg,
-                        err: raw_value
-                            .get("error")
-                            .and_then(|e| serde_json::from_value(e.clone()).ok()),
-                    },
-                    data: None,
-                })
+                        Ok(BaseResponse {
+                            raw_response: RawResponse {
+                                code,
+                                msg,
+                                err: None,
+                            },
+                            data: None,
+                        })
+                    }
+                    Err(fallback_err) => {
+                        let error_msg = format!(
+                            "Failed to parse response. Direct parse error: {}. Fallback parse error: {}",
+                            direct_parse_err, fallback_err
+                        );
+                        tracker.error(&error_msg);
+                        Err(LarkAPIError::IllegalParamError(error_msg))
+                    }
+                }
             }
         }
     }
 
     /// 处理扁平格式响应
-    /// 对于扁平格式，使用自定义反序列化器
+    /// 对于扁平格式，使用自定义反序列化器，包含可观测性支持
     async fn handle_flatten_response<T: ApiResponseTrait>(
         response: reqwest::Response,
     ) -> SDKResult<BaseResponse<T>> {
+        let tracker = ResponseTracker::start("json_flatten", response.content_length());
+
         let response_text = response.text().await?;
         debug!("Raw response: {response_text}");
 
-        let raw_value: Value = serde_json::from_str(&response_text)?;
+        // 解析阶段
+        let raw_value: Value = match serde_json::from_str(&response_text) {
+            Ok(value) => {
+                tracker.parsing_complete();
+                value
+            }
+            Err(e) => {
+                let error_msg = format!("Failed to parse JSON: {}", e);
+                tracker.error(&error_msg);
+                return Err(LarkAPIError::IllegalParamError(error_msg));
+            }
+        };
 
         // 解析原始响应信息
-        let raw_response: RawResponse = serde_json::from_value(raw_value.clone())?;
+        let raw_response: RawResponse = match serde_json::from_value(raw_value.clone()) {
+            Ok(response) => response,
+            Err(e) => {
+                let error_msg = format!("Failed to parse raw response: {}", e);
+                tracker.error(&error_msg);
+                return Err(LarkAPIError::IllegalParamError(error_msg));
+            }
+        };
 
-        // 如果成功，尝试解析数据
+        // 验证和数据解析阶段
         let data = if raw_response.code == 0 {
             match serde_json::from_value::<T>(raw_value) {
-                Ok(parsed_data) => Some(parsed_data),
+                Ok(parsed_data) => {
+                    tracker.validation_complete();
+                    Some(parsed_data)
+                }
                 Err(e) => {
                     debug!("Failed to parse data for flatten response: {e}");
+                    tracker.validation_complete();
                     None
                 }
             }
         } else {
+            tracker.validation_complete();
             None
         };
 
+        tracker.success();
         Ok(BaseResponse { raw_response, data })
     }
 
-    /// 处理二进制响应
+    /// 处理二进制响应，包含可观测性支持
     async fn handle_binary_response<T: ApiResponseTrait>(
         response: reqwest::Response,
     ) -> SDKResult<BaseResponse<T>> {
+        let tracker = ResponseTracker::start("binary", response.content_length());
+
         // 获取文件名
         let file_name = response
             .headers()
@@ -104,12 +187,37 @@ impl ImprovedResponseHandler {
             .and_then(Self::extract_filename)
             .unwrap_or_default();
 
+        // 记录解析阶段完成（文件名提取）
+        tracker.parsing_complete();
+
         // 获取二进制数据
-        let bytes = response.bytes().await?.to_vec();
+        let bytes = match response.bytes().await {
+            Ok(bytes) => {
+                let byte_vec = bytes.to_vec();
+                tracing::debug!("Binary response received: {} bytes", byte_vec.len());
+                byte_vec
+            }
+            Err(e) => {
+                let error_msg = format!("Failed to read binary response: {}", e);
+                tracker.error(&error_msg);
+                return Err(LarkAPIError::RequestError(error_msg));
+            }
+        };
 
-        // 使用trait方法创建数据
-        let data = T::from_binary(file_name, bytes);
+        // 验证阶段 - 使用trait方法创建数据
+        let data = match T::from_binary(file_name.clone(), bytes) {
+            Some(binary_data) => {
+                tracker.validation_complete();
+                Some(binary_data)
+            }
+            None => {
+                tracker.validation_complete();
+                tracing::warn!("Binary data could not be processed for file: {}", file_name);
+                None
+            }
+        };
 
+        tracker.success();
         Ok(BaseResponse {
             raw_response: RawResponse {
                 code: 0,

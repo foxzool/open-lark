@@ -16,6 +16,7 @@ pub mod error_metrics;
 pub mod http;
 pub mod improved_response_handler;
 pub mod observability;
+pub mod performance;
 pub mod query_params;
 pub mod req_option;
 pub mod req_translator;
