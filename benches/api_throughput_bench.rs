@@ -49,14 +49,13 @@ async fn create_test_config() -> Config {
         .build()
         .expect("failed to build bench http client");
 
-    Config {
-        app_id: "bench_app_id".to_string(),
-        app_secret: "bench_app_secret".to_string(),
-        app_type: AppType::SelfBuild,
-        req_timeout: Some(timeout),
-        http_client,
-        ..Default::default()
-    }
+    Config::builder()
+        .app_id("bench_app_id")
+        .app_secret("bench_app_secret")
+        .app_type(AppType::SelfBuild)
+        .req_timeout(timeout)
+        .http_client(http_client)
+        .build()
 }
 
 fn create_benchmark_request(size: usize) -> BenchmarkRequest {
