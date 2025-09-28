@@ -4,6 +4,7 @@ use tokio::sync::Mutex;
 use crate::core::{
     app_ticket_manager::AppTicketManager,
     constants::{AppType, FEISHU_BASE_URL},
+    performance::OptimizedHttpConfig,
     token_manager::TokenManager,
 };
 
@@ -125,6 +126,34 @@ impl ConfigBuilder {
     pub fn http_client(mut self, client: reqwest::Client) -> Self {
         self.http_client = Some(client);
         self
+    }
+
+    /// 使用优化的HTTP配置构建客户端
+    pub fn optimized_http_client(
+        mut self,
+        config: OptimizedHttpConfig,
+    ) -> Result<Self, reqwest::Error> {
+        let client = config.build_client()?;
+        self.http_client = Some(client);
+        Ok(self)
+    }
+
+    /// 使用生产环境优化配置
+    pub fn production_http_client(self) -> Result<Self, reqwest::Error> {
+        let config = OptimizedHttpConfig::production();
+        self.optimized_http_client(config)
+    }
+
+    /// 使用高吞吐量配置
+    pub fn high_throughput_http_client(self) -> Result<Self, reqwest::Error> {
+        let config = OptimizedHttpConfig::high_throughput();
+        self.optimized_http_client(config)
+    }
+
+    /// 使用低延迟配置
+    pub fn low_latency_http_client(self) -> Result<Self, reqwest::Error> {
+        let config = OptimizedHttpConfig::low_latency();
+        self.optimized_http_client(config)
     }
 
     pub fn req_timeout(mut self, timeout: Duration) -> Self {

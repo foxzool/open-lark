@@ -295,95 +295,7 @@ impl Endpoints {
         "/open-apis/workplace/v1/app_recommend_rule/list";
 
     // ==================== 视频会议服务端点 ====================
-
-    // 会议室管理
-    /// 获取会议室列表
-    pub const VC_ROOM_LIST: &'static str = "/open-apis/vc/v1/rooms";
-
-    /// 获取会议室详情
-    pub const VC_ROOM_GET: &'static str = "/open-apis/vc/v1/rooms/{room_id}";
-
-    /// 创建会议室
-    pub const VC_ROOM_CREATE: &'static str = "/open-apis/vc/v1/rooms";
-
-    /// 更新会议室
-    pub const VC_ROOM_UPDATE: &'static str = "/open-apis/vc/v1/rooms/{room_id}";
-
-    /// 删除会议室
-    pub const VC_ROOM_DELETE: &'static str = "/open-apis/vc/v1/rooms/{room_id}";
-
-    // 会议管理
-    /// 获取会议列表
-    pub const VC_MEETING_LIST: &'static str = "/open-apis/vc/v1/meetings";
-
-    /// 获取会议详情
-    pub const VC_MEETING_GET: &'static str = "/open-apis/vc/v1/meetings/{meeting_id}";
-
-    /// 创建会议
-    pub const VC_MEETING_CREATE: &'static str = "/open-apis/vc/v1/meetings";
-
-    /// 更新会议
-    pub const VC_MEETING_UPDATE: &'static str = "/open-apis/vc/v1/meetings/{meeting_id}";
-
-    /// 结束会议
-    pub const VC_MEETING_END: &'static str = "/open-apis/vc/v1/meetings/{meeting_id}/end";
-
-    /// 邀请参会者
-    pub const VC_MEETING_INVITE: &'static str = "/open-apis/vc/v1/meetings/{meeting_id}/invite";
-
-    /// 移除参会者
-    pub const VC_MEETING_KICKOUT: &'static str = "/open-apis/vc/v1/meetings/{meeting_id}/kickout";
-
-    // 录制管理
-    /// 获取录制列表
-    pub const VC_RECORDING_LIST: &'static str = "/open-apis/vc/v1/meetings/{meeting_id}/recordings";
-
-    // 预约管理
-    /// 获取预约列表
-    pub const VC_RESERVE_LIST: &'static str = "/open-apis/vc/v1/reserves";
-
-    /// 获取预约详情
-    pub const VC_RESERVE_GET: &'static str = "/open-apis/vc/v1/reserves/{reserve_id}";
-
-    /// 创建预约
-    pub const VC_RESERVE_CREATE: &'static str = "/open-apis/vc/v1/reserves";
-
-    /// 更新预约
-    pub const VC_RESERVE_UPDATE: &'static str = "/open-apis/vc/v1/reserves/{reserve_id}";
-
-    /// 删除预约
-    pub const VC_RESERVE_DELETE: &'static str = "/open-apis/vc/v1/reserves/{reserve_id}";
-
-    // VC会议室搜索
-    /// 搜索会议室
-    pub const VC_ROOM_SEARCH: &'static str = "/open-apis/vc/v1/rooms/search";
-
-    // VC会议管理
-    /// 根据会议号获取会议列表
-    pub const VC_MEETING_LIST_BY_NO: &'static str = "/open-apis/vc/v1/meetings/list_by_no";
-
-    /// 设置会议主持人
-    pub const VC_MEETING_SET_HOST: &'static str = "/open-apis/vc/v1/meetings/{meeting_id}/set_host";
-
-    /// 开始录制
-    pub const VC_RECORDING_START: &'static str =
-        "/open-apis/vc/v1/meetings/{meeting_id}/recording/start";
-
-    /// 停止录制
-    pub const VC_RECORDING_STOP: &'static str =
-        "/open-apis/vc/v1/meetings/{meeting_id}/recording/stop";
-
-    /// 获取录制文件
-    pub const VC_RECORDING_GET: &'static str = "/open-apis/vc/v1/meetings/{meeting_id}/recording";
-
-    /// 设置录制权限
-    pub const VC_RECORDING_SET_PERMISSION: &'static str =
-        "/open-apis/vc/v1/meetings/{meeting_id}/recording/set_permission";
-
-    // VC预约管理
-    /// 获取活跃会议
-    pub const VC_RESERVE_GET_ACTIVE_MEETING: &'static str =
-        "/open-apis/vc/v1/reserves/{reserve_id}/get_active_meeting";
+    // 注意：VC相关端点已迁移至 core::endpoints::vc 模块
 
     // ==================== Lingo 知识管理服务端点 ====================
 
@@ -431,12 +343,7 @@ impl Endpoints {
     // ==================== 租户管理服务端点 ====================
 
     // 租户信息
-    /// 查询租户信息
-    pub const TENANT_V2_QUERY: &'static str = "/open-apis/tenant/v2/tenant/query";
-
-    /// 查询租户产品配置信息
-    pub const TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY: &'static str =
-        "/open-apis/tenant/v2/tenant_product_assign_info/query";
+    // 注意：租户相关端点已迁移至 core::endpoints::tenant 模块
 
     // ==================== 即时消息服务端点 ====================
 
@@ -979,14 +886,7 @@ impl Endpoints {
         "/open-apis/elearning/v2/course_registrations/statistics";
 
     // ==================== Tenant Tag 租户标签相关端点 ====================
-    /// 标签管理
-    pub const TENANT_TAG_V1_TAGS: &'static str = "/open-apis/tenant-tag/v1/tags";
-
-    /// 标签操作
-    pub const TENANT_TAG_V1_TAG_OPERATION: &'static str = "/open-apis/tenant-tag/v1/tags/{tag_id}";
-
-    /// 标签绑定管理
-    pub const TENANT_TAG_V1_TAG_BINDINGS: &'static str = "/open-apis/tenant-tag/v1/tag_bindings";
+    // 注意：TENANT_TAG相关端点已迁移至 core::endpoints::tenant_tag 模块
 
     // ==================== Task v2 相关端点 ====================
     /// 任务附件上传
@@ -3016,19 +2916,7 @@ impl EndpointBuilder {
         }
     }
 
-    /// 创建VC会议端点构建器
-    pub fn vc_meeting(meeting_id: &str) -> VcMeetingEndpointBuilder {
-        VcMeetingEndpointBuilder {
-            meeting_id: meeting_id.to_string(),
-        }
-    }
-
-    /// 创建VC房间端点构建器
-    pub fn vc_room(room_id: &str) -> VcRoomEndpointBuilder {
-        VcRoomEndpointBuilder {
-            room_id: room_id.to_string(),
-        }
-    }
+    // VC相关Builder方法已迁移至对应的vc服务模块
 
     /// 创建工作台端点构建器
     pub fn workplace() -> WorkplaceEndpointBuilder {
@@ -3178,53 +3066,7 @@ impl ImMessageEndpointBuilder {
     }
 }
 
-/// VC会议端点构建器
-pub struct VcMeetingEndpointBuilder {
-    meeting_id: String,
-}
-
-impl VcMeetingEndpointBuilder {
-    /// 获取会议端点
-    pub fn get(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::VC_MEETING_GET, "meeting_id", &self.meeting_id)
-    }
-
-    /// 更新会议端点
-    pub fn update(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::VC_MEETING_UPDATE, "meeting_id", &self.meeting_id)
-    }
-
-    /// 结束会议端点
-    pub fn end(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::VC_MEETING_END, "meeting_id", &self.meeting_id)
-    }
-
-    /// 邀请参会者端点
-    pub fn invite(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::VC_MEETING_INVITE, "meeting_id", &self.meeting_id)
-    }
-
-    /// 移除参会者端点
-    pub fn kickout(&self) -> String {
-        EndpointBuilder::replace_param(
-            Endpoints::VC_MEETING_KICKOUT,
-            "meeting_id",
-            &self.meeting_id,
-        )
-    }
-}
-
-/// VC房间端点构建器
-pub struct VcRoomEndpointBuilder {
-    room_id: String,
-}
-
-impl VcRoomEndpointBuilder {
-    /// 获取房间详情端点
-    pub fn get(&self) -> String {
-        EndpointBuilder::replace_param(Endpoints::VC_ROOM_GET, "room_id", &self.room_id)
-    }
-}
+// VC相关Builder已迁移至对应的vc服务模块
 
 /// 工作台端点构建器
 pub struct WorkplaceEndpointBuilder {}
@@ -3259,33 +3101,9 @@ pub const LINGO_FILE_DOWNLOAD: &str = Endpoints::LINGO_FILE_DOWNLOAD;
 pub const LINGO_REPO_LIST: &str = Endpoints::LINGO_REPO_LIST;
 
 // VC constants
-pub const VC_MEETING_GET: &str = Endpoints::VC_MEETING_GET;
-pub const VC_MEETING_END: &str = Endpoints::VC_MEETING_END;
-pub const VC_MEETING_INVITE: &str = Endpoints::VC_MEETING_INVITE;
-pub const VC_MEETING_KICKOUT: &str = Endpoints::VC_MEETING_KICKOUT;
-pub const VC_MEETING_LIST_BY_NO: &str = Endpoints::VC_MEETING_LIST_BY_NO;
-pub const VC_MEETING_SET_HOST: &str = Endpoints::VC_MEETING_SET_HOST;
-pub const VC_MEETING_UPDATE: &str = Endpoints::VC_MEETING_UPDATE;
-pub const VC_ROOM_GET: &str = Endpoints::VC_ROOM_GET;
-pub const VC_ROOM_LIST: &str = Endpoints::VC_ROOM_LIST;
-pub const VC_ROOM_CREATE: &str = Endpoints::VC_ROOM_CREATE;
-pub const VC_ROOM_UPDATE: &str = Endpoints::VC_ROOM_UPDATE;
-pub const VC_ROOM_DELETE: &str = Endpoints::VC_ROOM_DELETE;
-pub const VC_ROOM_SEARCH: &str = Endpoints::VC_ROOM_SEARCH;
-pub const VC_RECORDING_GET: &str = Endpoints::VC_RECORDING_GET;
-pub const VC_RECORDING_START: &str = Endpoints::VC_RECORDING_START;
-pub const VC_RECORDING_STOP: &str = Endpoints::VC_RECORDING_STOP;
-pub const VC_RECORDING_SET_PERMISSION: &str = Endpoints::VC_RECORDING_SET_PERMISSION;
-pub const VC_RESERVE_GET: &str = Endpoints::VC_RESERVE_GET;
-pub const VC_RESERVE_CREATE: &str = Endpoints::VC_RESERVE_CREATE;
-pub const VC_RESERVE_UPDATE: &str = Endpoints::VC_RESERVE_UPDATE;
-pub const VC_RESERVE_DELETE: &str = Endpoints::VC_RESERVE_DELETE;
-pub const VC_RESERVE_GET_ACTIVE_MEETING: &str = Endpoints::VC_RESERVE_GET_ACTIVE_MEETING;
+// VC constants - 已迁移至 core::endpoints::vc 模块
 
-// TENANT constants
-pub const TENANT_V2_QUERY: &str = Endpoints::TENANT_V2_QUERY;
-pub const TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY: &str =
-    Endpoints::TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY;
+// TENANT constants - 已迁移至 core::endpoints::tenant 模块
 
 // DIRECTORY constants
 pub const DIRECTORY_V1_DEPARTMENTS: &str = Endpoints::DIRECTORY_V1_DEPARTMENTS;
@@ -3423,10 +3241,7 @@ pub const ELEARNING_V2_COURSE_REGISTRATION_OPERATION: &str =
 pub const ELEARNING_V2_COURSE_REGISTRATIONS_STATISTICS: &str =
     Endpoints::ELEARNING_V2_COURSE_REGISTRATIONS_STATISTICS;
 
-// Tenant Tag constants
-pub const TENANT_TAG_V1_TAGS: &str = Endpoints::TENANT_TAG_V1_TAGS;
-pub const TENANT_TAG_V1_TAG_OPERATION: &str = Endpoints::TENANT_TAG_V1_TAG_OPERATION;
-pub const TENANT_TAG_V1_TAG_BINDINGS: &str = Endpoints::TENANT_TAG_V1_TAG_BINDINGS;
+// Tenant Tag constants - 已迁移至 core::endpoints::tenant_tag 模块
 
 // Performance constants
 pub const PERFORMANCE_V1_REVIEW_DATA_QUERY: &str = Endpoints::PERFORMANCE_V1_REVIEW_DATA_QUERY;
@@ -3501,11 +3316,7 @@ mod tests {
         );
     }
 
-    #[test]
-    fn test_vc_room_endpoints_builder() {
-        let room_endpoints = EndpointBuilder::vc_room("room_123");
-        assert_eq!(room_endpoints.get(), "/open-apis/vc/v1/rooms/room_123");
-    }
+    // VC room endpoints测试已迁移至对应的vc服务模块
 
     #[test]
     fn test_calendar_endpoints_builder() {
@@ -3579,28 +3390,6 @@ mod tests {
         assert_eq!(
             message_endpoints.delete(),
             "/open-apis/im/v1/messages/message_123"
-        );
-    }
-
-    #[test]
-    fn test_vc_endpoints() {
-        let vc_endpoints = EndpointBuilder::vc_meeting("meeting_456");
-        assert_eq!(vc_endpoints.get(), "/open-apis/vc/v1/meetings/meeting_456");
-        assert_eq!(
-            vc_endpoints.update(),
-            "/open-apis/vc/v1/meetings/meeting_456"
-        );
-        assert_eq!(
-            vc_endpoints.end(),
-            "/open-apis/vc/v1/meetings/meeting_456/end"
-        );
-        assert_eq!(
-            vc_endpoints.invite(),
-            "/open-apis/vc/v1/meetings/meeting_456/invite"
-        );
-        assert_eq!(
-            vc_endpoints.kickout(),
-            "/open-apis/vc/v1/meetings/meeting_456/kickout"
         );
     }
 

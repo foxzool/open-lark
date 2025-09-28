@@ -7,7 +7,7 @@ use crate::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
-        endpoints_original::TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY,
+        endpoints::tenant::TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY,
         http::Transport,
         req_option::RequestOption,
         trait_system::Service,
