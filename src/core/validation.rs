@@ -1184,6 +1184,531 @@ mod tests {
             ValidationResult::Valid
         ));
     }
+
+    #[test]
+    fn test_validate_custom_fields() {
+        use serde_json::Value;
+        use std::collections::HashMap;
+
+        // 测试空自定义字段
+        assert!(matches!(
+            validate_custom_fields(&None, "自定义字段"),
+            ValidationResult::Valid
+        ));
+
+        // 测试有效自定义字段
+        let mut valid_fields = HashMap::new();
+        valid_fields.insert(
+            "skill_level".to_string(),
+            Value::String("advanced".to_string()),
+        );
+        valid_fields.insert(
+            "years_exp".to_string(),
+            Value::Number(serde_json::Number::from(5)),
+        );
+        valid_fields.insert("is_certified".to_string(), Value::Bool(true));
+        valid_fields.insert(
+            "tags".to_string(),
+            Value::Array(vec![Value::String("rust".to_string())]),
+        );
+        valid_fields.insert("nullable_field".to_string(), Value::Null);
+
+        assert!(matches!(
+            validate_custom_fields(&Some(valid_fields), "自定义字段"),
+            ValidationResult::Valid
+        ));
+
+        // 测试过多字段（超过50个）
+        let mut too_many_fields = HashMap::new();
+        for i in 0..51 {
+            too_many_fields.insert(format!("field_{}", i), Value::String("value".to_string()));
+        }
+        assert!(matches!(
+            validate_custom_fields(&Some(too_many_fields), "自定义字段"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试空键
+        let mut empty_key_fields = HashMap::new();
+        empty_key_fields.insert("".to_string(), Value::String("value".to_string()));
+        assert!(matches!(
+            validate_custom_fields(&Some(empty_key_fields), "自定义字段"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试过长键
+        let mut long_key_fields = HashMap::new();
+        let long_key = "a".repeat(employee_limits::CUSTOM_FIELD_KEY_MAX_LENGTH + 1);
+        long_key_fields.insert(long_key, Value::String("value".to_string()));
+        assert!(matches!(
+            validate_custom_fields(&Some(long_key_fields), "自定义字段"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试过长字符串值
+        let mut long_value_fields = HashMap::new();
+        let long_value = "a".repeat(employee_limits::CUSTOM_FIELD_VALUE_MAX_LENGTH + 1);
+        long_value_fields.insert("key".to_string(), Value::String(long_value));
+        assert!(matches!(
+            validate_custom_fields(&Some(long_value_fields), "自定义字段"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试过大数组
+        let mut large_array_fields = HashMap::new();
+        let large_array = (0..101)
+            .map(|i| Value::Number(serde_json::Number::from(i)))
+            .collect();
+        large_array_fields.insert("large_array".to_string(), Value::Array(large_array));
+        assert!(matches!(
+            validate_custom_fields(&Some(large_array_fields), "自定义字段"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试对象值（不允许）
+        let mut object_fields = HashMap::new();
+        let mut nested_object = HashMap::new();
+        nested_object.insert("nested".to_string(), Value::String("value".to_string()));
+        object_fields.insert(
+            "object_field".to_string(),
+            Value::Object(serde_json::Map::from_iter(nested_object)),
+        );
+        assert!(matches!(
+            validate_custom_fields(&Some(object_fields), "自定义字段"),
+            ValidationResult::Invalid(_)
+        ));
+    }
+
+    #[test]
+    fn test_validate_resume_attachment_ids() {
+        // 测试有效附件ID列表
+        let valid_ids = vec!["attachment_1".to_string(), "attachment_2".to_string()];
+        assert!(matches!(
+            validate_resume_attachment_ids(&valid_ids, "简历附件"),
+            ValidationResult::Valid
+        ));
+
+        // 测试空列表
+        assert!(matches!(
+            validate_resume_attachment_ids(&[], "简历附件"),
+            ValidationResult::Valid
+        ));
+
+        // 测试过多附件
+        let too_many_ids: Vec<String> = (0..employee_limits::MAX_RESUME_ATTACHMENTS + 1)
+            .map(|i| format!("attachment_{}", i))
+            .collect();
+        assert!(matches!(
+            validate_resume_attachment_ids(&too_many_ids, "简历附件"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试空ID
+        let empty_id_list = vec!["valid_id".to_string(), "".to_string()];
+        assert!(matches!(
+            validate_resume_attachment_ids(&empty_id_list, "简历附件"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试ID长度不合法
+        let short_id_list = vec!["short".to_string()];
+        assert!(matches!(
+            validate_resume_attachment_ids(&short_id_list, "简历附件"),
+            ValidationResult::Invalid(_)
+        ));
+
+        let long_id_list = vec!["a".repeat(101)];
+        assert!(matches!(
+            validate_resume_attachment_ids(&long_id_list, "简历附件"),
+            ValidationResult::Invalid(_)
+        ));
+    }
+
+    #[test]
+    fn test_validate_talent_tag() {
+        // 测试有效标签
+        assert!(matches!(
+            validate_talent_tag("rust", "技能标签"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_talent_tag("Java_Spring", "技能标签"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_talent_tag("前端开发", "技能标签"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_talent_tag("Node_js", "技能标签"),
+            ValidationResult::Valid
+        ));
+
+        // 测试空标签
+        assert!(matches!(
+            validate_talent_tag("", "技能标签"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试过长标签
+        let long_tag = "a".repeat(51);
+        assert!(matches!(
+            validate_talent_tag(&long_tag, "技能标签"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试非法字符
+        assert!(matches!(
+            validate_talent_tag("tag@domain", "技能标签"),
+            ValidationResult::Invalid(_)
+        ));
+
+        assert!(matches!(
+            validate_talent_tag("tag*wildcard", "技能标签"),
+            ValidationResult::Invalid(_)
+        ));
+    }
+
+    #[test]
+    fn test_validate_talent_tags() {
+        // 测试有效标签列表
+        let valid_tags = vec![
+            "rust".to_string(),
+            "javascript".to_string(),
+            "前端开发".to_string(),
+        ];
+        assert!(matches!(
+            validate_talent_tags(&valid_tags),
+            ValidationResult::Valid
+        ));
+
+        // 测试空标签列表
+        assert!(matches!(validate_talent_tags(&[]), ValidationResult::Valid));
+
+        // 测试过多标签
+        let too_many_tags: Vec<String> = (0..21).map(|i| format!("tag_{}", i)).collect();
+        assert!(matches!(
+            validate_talent_tags(&too_many_tags),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试包含无效标签
+        let invalid_tags = vec!["valid_tag".to_string(), "invalid@tag".to_string()];
+        assert!(matches!(
+            validate_talent_tags(&invalid_tags),
+            ValidationResult::Invalid(_)
+        ));
+    }
+
+    #[test]
+    fn test_validate_resume_attachment() {
+        // 测试有效附件ID
+        assert!(matches!(
+            validate_resume_attachment("valid_attachment_123", "附件ID"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_resume_attachment("attachment-with-hyphens", "附件ID"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_resume_attachment("attachment_with_underscores", "附件ID"),
+            ValidationResult::Valid
+        ));
+
+        // 测试空附件ID
+        assert!(matches!(
+            validate_resume_attachment("", "附件ID"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试过长附件ID
+        let long_id = "a".repeat(101);
+        assert!(matches!(
+            validate_resume_attachment(&long_id, "附件ID"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试非法字符
+        assert!(matches!(
+            validate_resume_attachment("attachment@domain", "附件ID"),
+            ValidationResult::Invalid(_)
+        ));
+
+        assert!(matches!(
+            validate_resume_attachment("attachment with spaces", "附件ID"),
+            ValidationResult::Invalid(_)
+        ));
+
+        assert!(matches!(
+            validate_resume_attachment("attachment/with/slashes", "附件ID"),
+            ValidationResult::Invalid(_)
+        ));
+    }
+
+    #[test]
+    fn test_sanitize_name_edge_cases() {
+        // 测试只有空格的字符串
+        assert_eq!(sanitize_name("   "), "");
+
+        // 测试多种空白字符
+        assert_eq!(sanitize_name("  张\t三  \n"), "张 三");
+
+        // 测试连续多个空格
+        assert_eq!(sanitize_name("John     Smith"), "John Smith");
+
+        // 测试开头和结尾的空格
+        assert_eq!(sanitize_name("  Mary Jane  "), "Mary Jane");
+
+        // 测试混合空白字符
+        assert_eq!(sanitize_name("Test\t\tName\n\n"), "Test Name");
+
+        // 测试单个字符
+        assert_eq!(sanitize_name("A"), "A");
+
+        // 测试中文姓名
+        assert_eq!(sanitize_name("  李  小  明  "), "李 小 明");
+    }
+
+    #[test]
+    fn test_sanitize_tags_edge_cases() {
+        // 测试重复标签去重
+        let input_tags = vec!["java".to_string(), "JAVA".to_string(), "Java".to_string()];
+        let sanitized = sanitize_tags(&input_tags);
+        assert_eq!(sanitized, vec!["java"]);
+
+        // 测试空标签过滤
+        let input_tags = vec![
+            "valid".to_string(),
+            "".to_string(),
+            "   ".to_string(),
+            "another".to_string(),
+        ];
+        let sanitized = sanitize_tags(&input_tags);
+        assert_eq!(sanitized, vec!["valid", "another"]);
+
+        // 测试特殊字符处理
+        let input_tags = vec![
+            "node-js".to_string(),
+            "react_native".to_string(),
+            "vue.js".to_string(),
+        ];
+        let sanitized = sanitize_tags(&input_tags);
+        assert_eq!(sanitized, vec!["node_js", "react_native", "vue.js"]);
+
+        // 测试空列表
+        let sanitized = sanitize_tags(&[]);
+        assert!(sanitized.is_empty());
+    }
+
+    #[test]
+    fn test_sanitize_tag_individual() {
+        // 测试基本清理
+        assert_eq!(sanitize_tag("  JavaScript  "), "javascript");
+
+        // 测试连字符替换
+        assert_eq!(sanitize_tag("Node-JS"), "node_js");
+
+        // 测试下划线保持
+        assert_eq!(sanitize_tag("React_Native"), "react_native");
+
+        // 测试混合替换
+        assert_eq!(sanitize_tag("Vue-Router_Plugin"), "vue_router_plugin");
+
+        // 测试空字符串
+        assert_eq!(sanitize_tag(""), "");
+
+        // 测试只有空格
+        assert_eq!(sanitize_tag("   "), "");
+
+        // 测试已经是小写
+        assert_eq!(sanitize_tag("lowercase"), "lowercase");
+    }
+
+    #[test]
+    fn test_validate_page_size_warnings() {
+        // 测试边界值
+        assert!(matches!(
+            validate_page_size(pagination_limits::MIN_PAGE_SIZE, "页面大小"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_page_size(pagination_limits::MAX_PAGE_SIZE, "页面大小"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_page_size(pagination_limits::RECOMMENDED_PAGE_SIZE, "页面大小"),
+            ValidationResult::Valid
+        ));
+
+        // 测试推荐值以上（应该有警告但仍然有效）
+        assert!(matches!(
+            validate_page_size(pagination_limits::RECOMMENDED_PAGE_SIZE + 1, "页面大小"),
+            ValidationResult::Valid
+        ));
+    }
+
+    #[test]
+    fn test_validate_page_token_formats() {
+        // 测试各种有效的base64格式
+        assert!(matches!(
+            validate_page_token("dGVzdA==", "页面令牌"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_page_token("YWJjZGVmZw", "页面令牌"),
+            ValidationResult::Valid
+        ));
+
+        // 测试URL安全的base64格式
+        assert!(matches!(
+            validate_page_token("abc-def_123", "页面令牌"),
+            ValidationResult::Valid
+        ));
+
+        // 测试非法字符
+        assert!(matches!(
+            validate_page_token("invalid@token", "页面令牌"),
+            ValidationResult::Invalid(_)
+        ));
+
+        assert!(matches!(
+            validate_page_token("token with spaces", "页面令牌"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 测试过长令牌
+        let long_token = "a".repeat(pagination_limits::MAX_PAGE_TOKEN_LENGTH + 1);
+        assert!(matches!(
+            validate_page_token(&long_token, "页面令牌"),
+            ValidationResult::Invalid(_)
+        ));
+    }
+
+    #[test]
+    fn test_validation_result_error_method() {
+        let valid = ValidationResult::Valid;
+        assert_eq!(valid.error(), None);
+
+        let warning = ValidationResult::Warning("warning message".to_string());
+        assert_eq!(warning.error(), Some("warning message"));
+
+        let invalid = ValidationResult::Invalid("error message".to_string());
+        assert_eq!(invalid.error(), Some("error message"));
+    }
+
+    #[test]
+    fn test_is_chinese_char_comprehensive() {
+        // 测试基本CJK统一汉字
+        assert!(is_chinese_char('中')); // U+4E2D
+        assert!(is_chinese_char('文')); // U+6587
+        assert!(is_chinese_char('测')); // U+6D4B
+        assert!(is_chinese_char('试')); // U+8BD5
+
+        // 测试CJK扩展A区
+        assert!(is_chinese_char('\u{3400}')); // 扩展A区开始
+        assert!(is_chinese_char('\u{4DBF}')); // 扩展A区结束
+
+        // 测试CJK符号和标点
+        assert!(is_chinese_char('。')); // U+3002 中文句号
+        assert!(is_chinese_char('、')); // U+3001 中文顿号
+
+        // 测试康熙部首
+        assert!(is_chinese_char('\u{2F00}')); // 康熙部首开始
+
+        // 测试CJK兼容汉字
+        assert!(is_chinese_char('\u{F900}')); // 兼容汉字开始
+
+        // 测试非中文字符
+        assert!(!is_chinese_char('a'));
+        assert!(!is_chinese_char('A'));
+        assert!(!is_chinese_char('1'));
+        assert!(!is_chinese_char('!'));
+        assert!(!is_chinese_char(' '));
+        assert!(!is_chinese_char('\n'));
+        assert!(!is_chinese_char('α')); // 希腊字母
+        assert!(!is_chinese_char('й')); // 西里尔字母
+
+        // 测试边界值
+        assert!(!is_chinese_char('\u{4DFF}')); // CJK统一汉字前
+        assert!(is_chinese_char('\u{4E00}')); // CJK统一汉字开始
+        assert!(is_chinese_char('\u{9FFF}')); // CJK统一汉字结束
+        assert!(!is_chinese_char('\u{A000}')); // CJK统一汉字后
+    }
+
+    #[test]
+    fn test_validate_content_size_edge_cases() {
+        // 测试空内容
+        assert!(validate_content_size("", 100, "测试内容"));
+
+        // 测试临界值
+        let content = "a".repeat(100);
+        assert!(validate_content_size(&content, 100, "测试内容"));
+
+        // 测试刚好超出
+        let content = "a".repeat(101);
+        assert!(!validate_content_size(&content, 100, "测试内容"));
+
+        // 测试UTF-8字符
+        let chinese_content = "中文测试内容";
+        // 中文字符每个占3个字节
+        assert!(validate_content_size(chinese_content, 50, "中文内容"));
+        assert!(!validate_content_size(chinese_content, 10, "中文内容"));
+    }
+
+    #[test]
+    fn test_validate_string_length_utf8() {
+        // 测试UTF-8字符串截断（注意：这个函数按字节截断，可能会截断UTF-8字符）
+        let chinese_input = "中文测试".to_string(); // 每个中文字符3字节
+        let result = validate_string_length(chinese_input, 6, "中文字段");
+        // 应该截断到6字节，可能会有问题
+        assert_eq!(result.len(), 6);
+
+        // 测试英文字符串正常截断
+        let english_input = "hello world".to_string();
+        let result = validate_string_length(english_input, 5, "英文字段");
+        assert_eq!(result, "hello");
+    }
+
+    #[test]
+    fn test_validate_builder_trait() {
+        // 创建一个测试结构体实现ValidateBuilder trait
+        struct TestBuilder {
+            result: ValidationResult,
+        }
+
+        impl ValidateBuilder for TestBuilder {
+            fn validate(&self) -> ValidationResult {
+                self.result.clone()
+            }
+        }
+
+        // 测试Valid情况
+        let valid_builder = TestBuilder {
+            result: ValidationResult::Valid,
+        };
+        assert!(valid_builder.validate_and_log());
+
+        // 测试Warning情况
+        let warning_builder = TestBuilder {
+            result: ValidationResult::Warning("test warning".to_string()),
+        };
+        assert!(warning_builder.validate_and_log());
+
+        // 测试Invalid情况
+        let invalid_builder = TestBuilder {
+            result: ValidationResult::Invalid("test error".to_string()),
+        };
+        assert!(!invalid_builder.validate_and_log());
+    }
 }
 
 // ============================================================================

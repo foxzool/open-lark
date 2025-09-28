@@ -388,13 +388,13 @@ impl GetFileMetaRequest {
 }
 
 /// 获取文件元数据响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetFileMetaRespData {
     /// 文件元数据列表
     pub metas: Vec<FileMeta>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct FileMeta {
     /// 文件token
     pub doc_token: String,
@@ -434,7 +434,7 @@ impl GetFileStatisticsRequest {
 }
 
 /// 获取文件统计信息响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetFileStatisticsRespData {
     /// 文件浏览次数
     pub uv: i64,
@@ -484,7 +484,7 @@ impl ListFileViewRecordsRequest {
 }
 
 /// 获取文件访问记录响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ListFileViewRecordsRespData {
     /// 是否还有更多数据
     pub has_more: bool,
@@ -494,7 +494,7 @@ pub struct ListFileViewRecordsRespData {
     pub items: Vec<FileViewRecord>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct FileViewRecord {
     /// 访问者ID
     pub viewer_id: String,
@@ -539,7 +539,7 @@ impl CreateFileRequest {
 }
 
 /// 新建文件响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CreateFileRespData {
     /// 新建文件的token
     pub token: String,
@@ -1034,5 +1034,629 @@ impl Service for FileService {
 
     fn service_version() -> &'static str {
         "v1"
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::api_resp::ResponseFormat;
+    use rstest::rstest;
+
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+    }
+
+    fn create_test_service() -> FileService {
+        FileService::new(create_test_config())
+    }
+
+    #[test]
+    fn test_file_service_new() {
+        let config = create_test_config();
+        let service = FileService::new(config.clone());
+
+        assert_eq!(service.config.app_id, config.app_id);
+        assert_eq!(FileService::service_name(), "file");
+        assert_eq!(FileService::service_version(), "v1");
+    }
+
+    #[test]
+    fn test_service_trait_implementation() {
+        let service = create_test_service();
+        assert_eq!(service.config().app_id, "test_app_id");
+        assert_eq!(FileService::service_name(), "file");
+        assert_eq!(FileService::service_version(), "v1");
+    }
+
+    // === Request/Response Data Structure Tests ===
+
+    #[test]
+    fn test_get_file_meta_request() {
+        let docs = vec![
+            ("file_token_1".to_string(), "doc".to_string()),
+            ("file_token_2".to_string(), "sheet".to_string()),
+        ];
+        let request = GetFileMetaRequest::new(docs.clone());
+
+        assert_eq!(request.request_docs.len(), 2);
+        assert_eq!(request.request_docs[0].doc_token, "file_token_1");
+        assert_eq!(request.request_docs[0].doc_type, "doc");
+        assert_eq!(request.request_docs[1].doc_token, "file_token_2");
+        assert_eq!(request.request_docs[1].doc_type, "sheet");
+        assert_eq!(request.with_url, Some(true));
+    }
+
+    #[test]
+    fn test_get_file_meta_request_serialization() {
+        let docs = vec![("test_token".to_string(), "doc".to_string())];
+        let request = GetFileMetaRequest::new(docs);
+
+        let json = serde_json::to_string(&request).unwrap();
+        assert!(json.contains("request_docs"));
+        assert!(json.contains("with_url"));
+        assert!(json.contains("test_token"));
+        assert!(json.contains("doc"));
+
+        let deserialized: GetFileMetaRequest = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.request_docs.len(), 1);
+        assert_eq!(deserialized.request_docs[0].doc_token, "test_token");
+    }
+
+    #[test]
+    fn test_get_file_meta_resp_data_api_response_trait() {
+        assert_eq!(GetFileMetaRespData::data_format(), ResponseFormat::Data);
+    }
+
+    #[test]
+    fn test_get_file_statistics_request() {
+        let request = GetFileStatisticsRequest::new("test_file_token");
+        assert_eq!(request.file_token, "test_file_token");
+
+        let request2 = GetFileStatisticsRequest::new("another_token".to_string());
+        assert_eq!(request2.file_token, "another_token");
+    }
+
+    #[test]
+    fn test_get_file_statistics_resp_data() {
+        let resp_data = GetFileStatisticsRespData {
+            uv: 100,
+            pv: 250,
+            like_count: 15,
+            comment_count: 8,
+        };
+
+        assert_eq!(resp_data.uv, 100);
+        assert_eq!(resp_data.pv, 250);
+        assert_eq!(resp_data.like_count, 15);
+        assert_eq!(resp_data.comment_count, 8);
+        assert_eq!(
+            GetFileStatisticsRespData::data_format(),
+            ResponseFormat::Data
+        );
+
+        // Test serialization
+        let json = serde_json::to_string(&resp_data).unwrap();
+        let deserialized: GetFileStatisticsRespData = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.uv, resp_data.uv);
+        assert_eq!(deserialized.pv, resp_data.pv);
+    }
+
+    #[test]
+    fn test_list_file_view_records_request_builder() {
+        let request = ListFileViewRecordsRequest::new("test_token")
+            .with_page_token("next_page")
+            .with_page_size(20);
+
+        assert_eq!(request.file_token, "test_token");
+        assert_eq!(request.page_token, Some("next_page".to_string()));
+        assert_eq!(request.page_size, Some(20));
+    }
+
+    #[test]
+    fn test_list_file_view_records_request_minimal() {
+        let request = ListFileViewRecordsRequest::new("minimal_token");
+        assert_eq!(request.file_token, "minimal_token");
+        assert_eq!(request.page_token, None);
+        assert_eq!(request.page_size, None);
+    }
+
+    #[test]
+    fn test_list_file_view_records_resp_data() {
+        let records = vec![
+            FileViewRecord {
+                viewer_id: "user1".to_string(),
+                viewer_name: "John Doe".to_string(),
+                view_time: "2023-12-01T10:00:00Z".to_string(),
+                view_device: "web".to_string(),
+            },
+            FileViewRecord {
+                viewer_id: "user2".to_string(),
+                viewer_name: "Jane Smith".to_string(),
+                view_time: "2023-12-01T11:00:00Z".to_string(),
+                view_device: "mobile".to_string(),
+            },
+        ];
+
+        let resp_data = ListFileViewRecordsRespData {
+            has_more: true,
+            page_token: Some("next_token".to_string()),
+            items: records.clone(),
+        };
+
+        assert!(resp_data.has_more);
+        assert_eq!(resp_data.page_token, Some("next_token".to_string()));
+        assert_eq!(resp_data.items.len(), 2);
+        assert_eq!(resp_data.items[0].viewer_name, "John Doe");
+        assert_eq!(resp_data.items[1].view_device, "mobile");
+        assert_eq!(
+            ListFileViewRecordsRespData::data_format(),
+            ResponseFormat::Data
+        );
+    }
+
+    #[test]
+    fn test_create_file_request() {
+        let request = CreateFileRequest::new("My Document", "doc", "parent_folder_token");
+
+        assert_eq!(request.title, "My Document");
+        assert_eq!(request.file_type, "doc");
+        assert_eq!(request.parent_token, "parent_folder_token");
+    }
+
+    #[test]
+    fn test_create_file_request_serialization() {
+        let request = CreateFileRequest::new("Test File", "sheet", "folder123");
+        let json = serde_json::to_string(&request).unwrap();
+
+        assert!(json.contains("Test File"));
+        assert!(json.contains("\"type\":\"sheet\""));
+        assert!(json.contains("parent_token"));
+
+        let deserialized: CreateFileRequest = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.title, "Test File");
+        assert_eq!(deserialized.file_type, "sheet");
+    }
+
+    #[test]
+    fn test_copy_file_request() {
+        let request = CopyFileRequest::new("source_token", "Copy of Document", "target_folder");
+
+        assert_eq!(request.file_token, "source_token");
+        assert_eq!(request.name, "Copy of Document");
+        assert_eq!(request.copy_type, "copy");
+        assert_eq!(request.parent_token, "target_folder");
+    }
+
+    #[test]
+    fn test_delete_file_request() {
+        let request = DeleteFileRequest::new("file_to_delete");
+        assert_eq!(request.file_token, "file_to_delete");
+
+        let request2 = DeleteFileRequest::new("another_file".to_string());
+        assert_eq!(request2.file_token, "another_file");
+    }
+
+    #[test]
+    fn test_create_file_shortcut_request() {
+        let request = CreateFileShortcutRequest::new(
+            "doc",
+            "original_file_token",
+            "Shortcut to Document",
+            "shortcut_folder",
+        );
+
+        assert_eq!(request.refer_entity.entity_type, "doc");
+        assert_eq!(request.refer_entity.token, "original_file_token");
+        assert_eq!(request.name, "Shortcut to Document");
+        assert_eq!(request.parent_token, "shortcut_folder");
+    }
+
+    #[test]
+    fn test_search_files_request_builder() {
+        let request = SearchFilesRequest::new("important documents")
+            .with_count(50)
+            .with_offset(100)
+            .with_owner_ids(vec!["user1".to_string(), "user2".to_string()]);
+
+        assert_eq!(request.search_key, "important documents");
+        assert_eq!(request.count, Some(50));
+        assert_eq!(request.offset, Some(100));
+        assert_eq!(
+            request.owner_ids,
+            Some(vec!["user1".to_string(), "user2".to_string()])
+        );
+    }
+
+    #[test]
+    fn test_search_files_request_minimal() {
+        let request = SearchFilesRequest::new("test");
+        assert_eq!(request.search_key, "test");
+        assert_eq!(request.count, None);
+        assert_eq!(request.offset, None);
+        assert_eq!(request.owner_ids, None);
+    }
+
+    #[test]
+    fn test_file_upload_prepare_request() {
+        let request = FileUploadPrepareRequest::new("document.pdf", "upload_folder", 1024000)
+            .with_block_size(4096)
+            .with_checksum("sha256:abcdef123456");
+
+        assert_eq!(request.file_name, "document.pdf");
+        assert_eq!(request.parent_token, "upload_folder");
+        assert_eq!(request.size, 1024000);
+        assert_eq!(request.block_size, Some(4096));
+        assert_eq!(request.checksum, Some("sha256:abcdef123456".to_string()));
+    }
+
+    #[test]
+    fn test_file_upload_prepare_request_minimal() {
+        let request = FileUploadPrepareRequest::new("simple.txt", "folder", 500);
+        assert_eq!(request.file_name, "simple.txt");
+        assert_eq!(request.size, 500);
+        assert_eq!(request.block_size, None);
+        assert_eq!(request.checksum, None);
+    }
+
+    #[test]
+    fn test_file_upload_part_request_builder() {
+        let test_chunk = vec![1, 2, 3, 4, 5];
+        let request = FileUploadPartRequest::builder()
+            .upload_id("upload_123")
+            .seq(1)
+            .size(5)
+            .checksum("chunk_checksum")
+            .file_chunk(test_chunk.clone())
+            .build();
+
+        assert_eq!(request.upload_id, "upload_123");
+        assert_eq!(request.seq, 1);
+        assert_eq!(request.size, 5);
+        assert_eq!(request.checksum, Some("chunk_checksum".to_string()));
+        assert_eq!(request.api_req.file, test_chunk);
+    }
+
+    #[test]
+    fn test_file_upload_part_request_builder_minimal() {
+        let request = FileUploadPartRequest::builder()
+            .upload_id("minimal_upload")
+            .seq(0)
+            .size(100)
+            .build();
+
+        assert_eq!(request.upload_id, "minimal_upload");
+        assert_eq!(request.seq, 0);
+        assert_eq!(request.size, 100);
+        assert_eq!(request.checksum, None);
+    }
+
+    #[test]
+    fn test_file_upload_finish_request() {
+        let block_infos = vec![
+            FileBlockInfo {
+                etag: "etag1".to_string(),
+                seq: 1,
+            },
+            FileBlockInfo {
+                etag: "etag2".to_string(),
+                seq: 2,
+            },
+        ];
+        let request = FileUploadFinishRequest::new("upload_123", block_infos.clone());
+
+        assert_eq!(request.upload_id, "upload_123");
+        assert_eq!(request.block_infos.len(), 2);
+        assert_eq!(request.block_infos[0].etag, "etag1");
+        assert_eq!(request.block_infos[1].seq, 2);
+    }
+
+    #[test]
+    fn test_create_import_task_request() {
+        let request = CreateImportTaskRequest::new(
+            "pdf",
+            "source_file_token",
+            "import_type_doc",
+            "target_folder",
+            "imported_document.docx",
+            "folder",
+        );
+
+        assert_eq!(request.file_extension, "pdf");
+        assert_eq!(request.file_token, "source_file_token");
+        assert_eq!(request.import_type, "import_type_doc");
+        assert_eq!(request.parent_token, "target_folder");
+        assert_eq!(request.file_name, "imported_document.docx");
+        assert_eq!(request.parent_type, "folder");
+    }
+
+    #[test]
+    fn test_get_import_task_request() {
+        let request = GetImportTaskRequest::new("task_ticket_123");
+        assert_eq!(request.ticket, "task_ticket_123");
+
+        let request2 = GetImportTaskRequest::new("another_ticket".to_string());
+        assert_eq!(request2.ticket, "another_ticket");
+    }
+
+    // === Serialization/Deserialization Tests ===
+
+    #[rstest]
+    #[case(GetFileMetaRespData { metas: vec![] })]
+    #[case(GetFileStatisticsRespData { uv: 0, pv: 0, like_count: 0, comment_count: 0 })]
+    #[case(ListFileViewRecordsRespData { has_more: false, page_token: None, items: vec![] })]
+    #[case(CreateFileRespData { token: "test".to_string(), url: "http://test.com".to_string() })]
+    fn test_response_data_serialization<T>(#[case] data: T)
+    where
+        T: serde::Serialize + for<'de> serde::Deserialize<'de> + PartialEq + std::fmt::Debug,
+    {
+        let json = serde_json::to_string(&data).unwrap();
+        let deserialized: T = serde_json::from_str(&json).unwrap();
+        assert_eq!(data, deserialized);
+    }
+
+    #[test]
+    fn test_file_meta_serialization() {
+        let file_meta = FileMeta {
+            doc_token: "test_token".to_string(),
+            doc_type: "doc".to_string(),
+            title: "Test Document".to_string(),
+            owner_id: "owner123".to_string(),
+            create_time: "2023-01-01T00:00:00Z".to_string(),
+            update_time: "2023-01-02T00:00:00Z".to_string(),
+            url: Some("https://example.com/doc".to_string()),
+        };
+
+        let json = serde_json::to_string(&file_meta).unwrap();
+        let deserialized: FileMeta = serde_json::from_str(&json).unwrap();
+
+        assert_eq!(deserialized.doc_token, file_meta.doc_token);
+        assert_eq!(deserialized.title, file_meta.title);
+        assert_eq!(deserialized.url, file_meta.url);
+    }
+
+    #[test]
+    fn test_search_file_item_serialization() {
+        let item = SearchFileItem {
+            token: "file_token".to_string(),
+            name: "Important File".to_string(),
+            file_type: "doc".to_string(),
+            url: "https://example.com/file".to_string(),
+            owner_id: "user123".to_string(),
+        };
+
+        let json = serde_json::to_string(&item).unwrap();
+        assert!(json.contains("\"type\":\"doc\""));
+
+        let deserialized: SearchFileItem = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.file_type, "doc");
+        assert_eq!(deserialized.name, "Important File");
+    }
+
+    #[test]
+    fn test_import_task_result_serialization() {
+        let result = ImportTaskResult {
+            task_type: "import".to_string(),
+            ticket: "task_123".to_string(),
+            job_status: 1,
+            job_error_msg: Some("Error occurred".to_string()),
+            token: Some("result_token".to_string()),
+            url: Some("https://result.com".to_string()),
+        };
+
+        let json = serde_json::to_string(&result).unwrap();
+        assert!(json.contains("\"type\":\"import\""));
+
+        let deserialized: ImportTaskResult = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.task_type, "import");
+        assert_eq!(deserialized.job_status, 1);
+        assert_eq!(
+            deserialized.job_error_msg,
+            Some("Error occurred".to_string())
+        );
+    }
+
+    // === Edge Cases and Error Handling Tests ===
+
+    #[test]
+    fn test_empty_file_meta_request() {
+        let request = GetFileMetaRequest::new(vec![]);
+        assert_eq!(request.request_docs.len(), 0);
+        assert_eq!(request.with_url, Some(true));
+    }
+
+    #[test]
+    fn test_large_file_upload_prepare() {
+        let large_size = i64::MAX;
+        let request = FileUploadPrepareRequest::new("huge_file.dat", "folder", large_size);
+        assert_eq!(request.size, large_size);
+    }
+
+    #[test]
+    fn test_file_upload_part_zero_size() {
+        let request = FileUploadPartRequest::builder()
+            .upload_id("test")
+            .seq(0)
+            .size(0)
+            .build();
+        assert_eq!(request.size, 0);
+    }
+
+    #[test]
+    fn test_search_files_empty_search_key() {
+        let request = SearchFilesRequest::new("");
+        assert_eq!(request.search_key, "");
+    }
+
+    #[test]
+    fn test_search_files_negative_values() {
+        let request = SearchFilesRequest::new("test")
+            .with_count(-1)
+            .with_offset(-10);
+        assert_eq!(request.count, Some(-1));
+        assert_eq!(request.offset, Some(-10));
+    }
+
+    #[test]
+    fn test_list_file_view_records_empty_response() {
+        let resp_data = ListFileViewRecordsRespData {
+            has_more: false,
+            page_token: None,
+            items: vec![],
+        };
+        assert!(!resp_data.has_more);
+        assert_eq!(resp_data.items.len(), 0);
+    }
+
+    #[test]
+    fn test_file_upload_finish_empty_blocks() {
+        let request = FileUploadFinishRequest::new("upload_id", vec![]);
+        assert_eq!(request.block_infos.len(), 0);
+    }
+
+    // === API Response Trait Tests ===
+
+    #[rstest]
+    #[case(GetFileMetaRespData::data_format(), ResponseFormat::Data)]
+    #[case(GetFileStatisticsRespData::data_format(), ResponseFormat::Data)]
+    #[case(ListFileViewRecordsRespData::data_format(), ResponseFormat::Data)]
+    #[case(CreateFileRespData::data_format(), ResponseFormat::Data)]
+    #[case(CopyFileRespData::data_format(), ResponseFormat::Data)]
+    #[case(DeleteFileRespData::data_format(), ResponseFormat::Data)]
+    #[case(CreateFileShortcutRespData::data_format(), ResponseFormat::Data)]
+    #[case(SearchFilesRespData::data_format(), ResponseFormat::Data)]
+    #[case(FileUploadPrepareRespData::data_format(), ResponseFormat::Data)]
+    #[case(FileUploadPartRespData::data_format(), ResponseFormat::Data)]
+    #[case(FileUploadFinishRespData::data_format(), ResponseFormat::Data)]
+    #[case(CreateImportTaskRespData::data_format(), ResponseFormat::Data)]
+    #[case(GetImportTaskRespData::data_format(), ResponseFormat::Data)]
+    fn test_api_response_trait_format(
+        #[case] actual: ResponseFormat,
+        #[case] expected: ResponseFormat,
+    ) {
+        assert_eq!(actual, expected);
+    }
+
+    // === Builder Pattern Tests ===
+
+    #[test]
+    fn test_list_file_view_records_builder_chain() {
+        let request = ListFileViewRecordsRequest::new("token")
+            .with_page_token("page1")
+            .with_page_size(25)
+            .with_page_token("page2"); // Override previous page_token
+
+        assert_eq!(request.page_token, Some("page2".to_string()));
+        assert_eq!(request.page_size, Some(25));
+    }
+
+    #[test]
+    fn test_search_files_builder_chain() {
+        let owners = vec![
+            "user1".to_string(),
+            "user2".to_string(),
+            "user3".to_string(),
+        ];
+        let request = SearchFilesRequest::new("documents")
+            .with_count(100)
+            .with_offset(50)
+            .with_owner_ids(owners.clone())
+            .with_count(200); // Override previous count
+
+        assert_eq!(request.count, Some(200));
+        assert_eq!(request.offset, Some(50));
+        assert_eq!(request.owner_ids, Some(owners));
+    }
+
+    #[test]
+    fn test_file_upload_prepare_builder_chain() {
+        let request = FileUploadPrepareRequest::new("file.dat", "folder", 1000)
+            .with_block_size(512)
+            .with_checksum("checksum1")
+            .with_block_size(1024) // Override
+            .with_checksum("checksum2"); // Override
+
+        assert_eq!(request.block_size, Some(1024));
+        assert_eq!(request.checksum, Some("checksum2".to_string()));
+    }
+
+    // === Unicode and Special Character Tests ===
+
+    #[test]
+    fn test_unicode_file_names() {
+        let request = CreateFileRequest::new("文档测试🚀", "doc", "folder");
+        assert_eq!(request.title, "文档测试🚀");
+
+        let json = serde_json::to_string(&request).unwrap();
+        let deserialized: CreateFileRequest = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.title, "文档测试🚀");
+    }
+
+    #[test]
+    fn test_special_characters_in_search() {
+        let request = SearchFilesRequest::new("file@#$%^&*()[]{}");
+        assert_eq!(request.search_key, "file@#$%^&*()[]{}");
+    }
+
+    #[test]
+    fn test_long_file_names() {
+        let long_name = "a".repeat(1000);
+        let request = CreateFileRequest::new(&long_name, "doc", "folder");
+        assert_eq!(request.title.len(), 1000);
+    }
+
+    // === Default and Clone Tests ===
+
+    #[test]
+    fn test_file_upload_part_request_default() {
+        let request = FileUploadPartRequest::default();
+        assert_eq!(request.upload_id, "");
+        assert_eq!(request.seq, 0);
+        assert_eq!(request.size, 0);
+        assert_eq!(request.checksum, None);
+    }
+
+    #[test]
+    fn test_request_cloning() {
+        let original = CreateFileRequest::new("Original", "doc", "folder");
+        let cloned = original.clone();
+
+        assert_eq!(original.title, cloned.title);
+        assert_eq!(original.file_type, cloned.file_type);
+        assert_eq!(original.parent_token, cloned.parent_token);
+    }
+
+    // === Error Serialization Tests ===
+
+    #[test]
+    fn test_file_upload_part_builder_serialization_error() {
+        // Create a request that might cause serialization issues
+        let request = FileUploadPartRequest::builder()
+            .upload_id("test")
+            .seq(1)
+            .size(0)
+            .build();
+
+        // Even with potential serialization error, the request should be built
+        assert_eq!(request.upload_id, "test");
+        assert_eq!(request.seq, 1);
+    }
+
+    #[test]
+    fn test_api_response_trait_consistency() {
+        // Ensure all response types consistently use Data format
+        let formats = vec![
+            GetFileMetaRespData::data_format(),
+            GetFileStatisticsRespData::data_format(),
+            CreateFileRespData::data_format(),
+            DeleteFileRespData::data_format(),
+        ];
+
+        for format in formats {
+            assert_eq!(format, ResponseFormat::Data);
+        }
     }
 }

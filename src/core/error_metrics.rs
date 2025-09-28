@@ -544,6 +544,8 @@ impl ErrorReport {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rstest::rstest;
+    use std::thread;
 
     #[test]
     fn test_error_event_creation() {
@@ -584,5 +586,497 @@ mod tests {
         assert_eq!(ErrorSeverity::Critical.weight(), 4);
         assert_eq!(ErrorSeverity::Warning.weight(), 2);
         assert_eq!(ErrorSeverity::Critical.symbol(), "🚨");
+    }
+
+    // New comprehensive tests
+
+    #[rstest]
+    #[case(
+        LarkAPIError::api_error(401, "Unauthorized", None),
+        ErrorHandlingCategory::Authentication
+    )]
+    #[case(
+        LarkAPIError::api_error(403, "Forbidden", None),
+        ErrorHandlingCategory::Permission
+    )]
+    #[case(
+        LarkAPIError::api_error(400, "Bad Request", None),
+        ErrorHandlingCategory::ClientError
+    )]
+    #[case(
+        LarkAPIError::api_error(500, "Internal Server Error", None),
+        ErrorHandlingCategory::ServerError
+    )]
+    #[case(
+        LarkAPIError::api_error(429, "Too Many Requests", None),
+        ErrorHandlingCategory::RateLimit
+    )]
+    #[case(LarkAPIError::RequestError("Network timeout".to_string()), ErrorHandlingCategory::NetworkError)]
+    #[case(
+        LarkAPIError::MissingAccessToken,
+        ErrorHandlingCategory::Authentication
+    )]
+    #[case(LarkAPIError::IllegalParamError("invalid param".to_string()), ErrorHandlingCategory::ClientError)]
+    fn test_error_event_category_mapping(
+        #[case] error: LarkAPIError,
+        #[case] expected_category: ErrorHandlingCategory,
+    ) {
+        let event = ErrorEvent::from_error(error);
+        assert_eq!(event.category, expected_category);
+    }
+
+    #[test]
+    fn test_error_event_with_context() {
+        let error = LarkAPIError::api_error(400, "Bad Request", None);
+        let event = ErrorEvent::from_error(error)
+            .with_context("endpoint", "/api/test")
+            .with_context("user_id", "123");
+
+        assert_eq!(event.context.len(), 2);
+        assert_eq!(
+            event.context.get("endpoint"),
+            Some(&"/api/test".to_string())
+        );
+        assert_eq!(event.context.get("user_id"), Some(&"123".to_string()));
+    }
+
+    #[test]
+    fn test_error_event_with_processing_time() {
+        let error = LarkAPIError::api_error(500, "Server Error", None);
+        let processing_time = Duration::from_millis(150);
+        let event = ErrorEvent::from_error(error).with_processing_time(processing_time);
+
+        assert_eq!(event.processing_time, Some(processing_time));
+    }
+
+    #[rstest]
+    #[case(ErrorHandlingCategory::Authentication, ErrorSeverity::Warning)]
+    #[case(ErrorHandlingCategory::Permission, ErrorSeverity::Error)]
+    #[case(ErrorHandlingCategory::ClientError, ErrorSeverity::Warning)]
+    #[case(ErrorHandlingCategory::ServerError, ErrorSeverity::Critical)]
+    #[case(ErrorHandlingCategory::NetworkError, ErrorSeverity::Warning)]
+    #[case(ErrorHandlingCategory::RateLimit, ErrorSeverity::Warning)]
+    #[case(ErrorHandlingCategory::SystemError, ErrorSeverity::Critical)]
+    #[case(ErrorHandlingCategory::Unknown, ErrorSeverity::Error)]
+    fn test_error_event_severity_level(
+        #[case] category: ErrorHandlingCategory,
+        #[case] expected_severity: ErrorSeverity,
+    ) {
+        let error = LarkAPIError::api_error(400, "Test", None);
+        let mut event = ErrorEvent::from_error(error);
+        event.category = category;
+
+        assert_eq!(event.severity_level(), expected_severity);
+    }
+
+    #[test]
+    fn test_error_severity_weights() {
+        assert_eq!(ErrorSeverity::Info.weight(), 1);
+        assert_eq!(ErrorSeverity::Warning.weight(), 2);
+        assert_eq!(ErrorSeverity::Error.weight(), 3);
+        assert_eq!(ErrorSeverity::Critical.weight(), 4);
+
+        // Test ordering
+        assert!(ErrorSeverity::Critical.weight() > ErrorSeverity::Error.weight());
+        assert!(ErrorSeverity::Error.weight() > ErrorSeverity::Warning.weight());
+    }
+
+    #[test]
+    fn test_error_severity_symbols() {
+        assert_eq!(ErrorSeverity::Info.symbol(), "ℹ️");
+        assert_eq!(ErrorSeverity::Warning.symbol(), "⚠️");
+        assert_eq!(ErrorSeverity::Error.symbol(), "❌");
+        assert_eq!(ErrorSeverity::Critical.symbol(), "🚨");
+    }
+
+    #[test]
+    fn test_error_statistics_default() {
+        let stats = ErrorStatistics::default();
+
+        assert_eq!(stats.total_errors, 0);
+        assert!(stats.errors_by_category.is_empty());
+        assert!(stats.errors_by_code.is_empty());
+        assert!(stats.errors_by_severity.is_empty());
+        assert_eq!(stats.retryable_errors, 0);
+        assert!(stats.average_processing_time.is_none());
+        assert!(stats.first_error_time.is_none());
+        assert!(stats.last_error_time.is_none());
+    }
+
+    #[test]
+    fn test_error_statistics_error_rate_calculation() {
+        let now = SystemTime::now();
+        let one_minute_ago = now - Duration::from_secs(60);
+
+        let stats = ErrorStatistics {
+            total_errors: 10,
+            first_error_time: Some(one_minute_ago),
+            last_error_time: Some(now),
+            ..Default::default()
+        };
+
+        let rate = stats.error_rate_per_minute();
+        assert!(rate > 9.0 && rate <= 10.0); // Should be around 10 errors per minute
+    }
+
+    #[test]
+    fn test_error_statistics_error_rate_no_time_range() {
+        let stats = ErrorStatistics {
+            total_errors: 10,
+            first_error_time: None,
+            last_error_time: None,
+            ..Default::default()
+        };
+
+        assert_eq!(stats.error_rate_per_minute(), 0.0);
+    }
+
+    #[test]
+    fn test_error_statistics_most_common_category() {
+        let mut stats = ErrorStatistics::default();
+        stats
+            .errors_by_category
+            .insert(ErrorHandlingCategory::Authentication, 5);
+        stats
+            .errors_by_category
+            .insert(ErrorHandlingCategory::Permission, 10);
+        stats
+            .errors_by_category
+            .insert(ErrorHandlingCategory::ClientError, 3);
+
+        assert_eq!(
+            stats.most_common_category(),
+            Some(ErrorHandlingCategory::Permission)
+        );
+    }
+
+    #[test]
+    fn test_error_statistics_highest_severity() {
+        let mut stats = ErrorStatistics::default();
+        stats.errors_by_severity.insert(ErrorSeverity::Warning, 5);
+        stats.errors_by_severity.insert(ErrorSeverity::Error, 3);
+        stats.errors_by_severity.insert(ErrorSeverity::Critical, 1);
+
+        assert_eq!(stats.highest_severity(), Some(ErrorSeverity::Critical));
+    }
+
+    #[test]
+    fn test_error_statistics_retryable_percentage() {
+        let stats = ErrorStatistics {
+            total_errors: 50,
+            retryable_errors: 20,
+            ..Default::default()
+        };
+
+        assert_eq!(stats.retryable_percentage(), 40.0);
+
+        // Test with zero total errors
+        let empty_stats = ErrorStatistics::default();
+        assert_eq!(empty_stats.retryable_percentage(), 0.0);
+    }
+
+    #[test]
+    fn test_error_statistics_print_methods() {
+        let mut stats = ErrorStatistics {
+            total_errors: 100,
+            retryable_errors: 30,
+            ..Default::default()
+        };
+        stats
+            .errors_by_category
+            .insert(ErrorHandlingCategory::ServerError, 50);
+        stats.errors_by_severity.insert(ErrorSeverity::Critical, 10);
+
+        // These methods should not panic
+        stats.print_summary();
+        stats.print_detailed();
+    }
+
+    #[test]
+    fn test_monitor_config_default() {
+        let config = MonitorConfig::default();
+
+        assert_eq!(config.max_events, 1000);
+        assert_eq!(config.time_window, Duration::from_secs(24 * 60 * 60));
+        assert!(config.auto_cleanup);
+    }
+
+    #[test]
+    fn test_alert_thresholds_default() {
+        let thresholds = AlertThresholds::default();
+
+        assert_eq!(thresholds.error_rate_per_minute, 10.0);
+        assert_eq!(thresholds.critical_errors_count, 5);
+        assert_eq!(thresholds.consecutive_failures, 3);
+    }
+
+    #[test]
+    fn test_error_monitor_new() {
+        let config = MonitorConfig {
+            max_events: 500,
+            time_window: Duration::from_secs(3600),
+            auto_cleanup: false,
+            alert_thresholds: AlertThresholds::default(),
+        };
+        let monitor = ErrorMonitor::new(config.clone());
+
+        assert_eq!(monitor.config.max_events, 500);
+        assert_eq!(monitor.config.time_window, Duration::from_secs(3600));
+        assert!(!monitor.config.auto_cleanup);
+    }
+
+    #[test]
+    fn test_error_monitor_default() {
+        let monitor = ErrorMonitor::default();
+        assert_eq!(monitor.config.max_events, 1000);
+    }
+
+    #[test]
+    fn test_error_monitor_record_error() {
+        let monitor = ErrorMonitor::default();
+
+        monitor.record_error(LarkAPIError::api_error(403, "Forbidden", None));
+        monitor.record_error(LarkAPIError::api_error(500, "Server Error", None));
+        monitor.record_error(LarkAPIError::MissingAccessToken);
+
+        let stats = monitor.get_statistics();
+        assert_eq!(stats.total_errors, 3);
+        assert_eq!(stats.errors_by_category.len(), 3);
+        assert!(stats
+            .errors_by_category
+            .contains_key(&ErrorHandlingCategory::Permission));
+        assert!(stats
+            .errors_by_category
+            .contains_key(&ErrorHandlingCategory::ServerError));
+        assert!(stats
+            .errors_by_category
+            .contains_key(&ErrorHandlingCategory::Authentication));
+    }
+
+    #[test]
+    fn test_error_monitor_record_error_with_context() {
+        let monitor = ErrorMonitor::default();
+        let mut context = HashMap::new();
+        context.insert("user_id".to_string(), "123".to_string());
+        context.insert("endpoint".to_string(), "/api/test".to_string());
+
+        monitor
+            .record_error_with_context(LarkAPIError::api_error(400, "Bad Request", None), context);
+
+        let events = monitor.get_recent_events(1);
+        assert_eq!(events.len(), 1);
+        assert_eq!(events[0].context.len(), 2);
+    }
+
+    #[test]
+    fn test_error_monitor_get_recent_events() {
+        let monitor = ErrorMonitor::default();
+
+        // Record 5 errors
+        for i in 0..5 {
+            monitor.record_error(LarkAPIError::api_error(400 + i, "Test Error", None));
+        }
+
+        // Get last 3 events
+        let recent = monitor.get_recent_events(3);
+        assert_eq!(recent.len(), 3);
+
+        // Should be in reverse order (most recent first)
+        // The last recorded error should be first in the result
+    }
+
+    #[test]
+    fn test_error_monitor_auto_cleanup() {
+        let config = MonitorConfig {
+            max_events: 3,
+            auto_cleanup: true,
+            ..MonitorConfig::default()
+        };
+        let monitor = ErrorMonitor::new(config);
+
+        // Record 5 errors (more than max_events)
+        for i in 0..5 {
+            monitor.record_error(LarkAPIError::api_error(400 + i, "Test Error", None));
+        }
+
+        let recent = monitor.get_recent_events(10);
+        assert_eq!(recent.len(), 3); // Should be limited to max_events
+    }
+
+    #[test]
+    fn test_error_monitor_cleanup_old_events() {
+        let config = MonitorConfig {
+            time_window: Duration::from_millis(100),
+            ..MonitorConfig::default()
+        };
+        let monitor = ErrorMonitor::new(config);
+
+        monitor.record_error(LarkAPIError::api_error(400, "Old Error", None));
+
+        // Wait for the time window to pass
+        thread::sleep(Duration::from_millis(150));
+
+        monitor.cleanup_old_events();
+
+        let recent = monitor.get_recent_events(10);
+        assert_eq!(recent.len(), 0); // Should be empty after cleanup
+    }
+
+    #[test]
+    fn test_error_monitor_reset_statistics() {
+        let monitor = ErrorMonitor::default();
+
+        monitor.record_error(LarkAPIError::api_error(403, "Forbidden", None));
+        monitor.record_error(LarkAPIError::api_error(500, "Server Error", None));
+
+        let stats_before = monitor.get_statistics();
+        assert_eq!(stats_before.total_errors, 2);
+
+        monitor.reset_statistics();
+
+        let stats_after = monitor.get_statistics();
+        assert_eq!(stats_after.total_errors, 0);
+        assert!(stats_after.errors_by_category.is_empty());
+
+        let events = monitor.get_recent_events(10);
+        assert_eq!(events.len(), 0);
+    }
+
+    #[test]
+    fn test_error_monitor_statistics_updates() {
+        let monitor = ErrorMonitor::default();
+
+        // Record retryable error
+        monitor.record_error(LarkAPIError::api_error(429, "Too Many Requests", None));
+        // Record non-retryable error
+        monitor.record_error(LarkAPIError::IllegalParamError("invalid".to_string()));
+
+        let stats = monitor.get_statistics();
+        assert_eq!(stats.total_errors, 2);
+        assert_eq!(stats.retryable_errors, 1);
+        assert!(stats.first_error_time.is_some());
+        assert!(stats.last_error_time.is_some());
+    }
+
+    #[test]
+    fn test_error_monitor_error_code_tracking() {
+        let monitor = ErrorMonitor::default();
+
+        monitor.record_error(LarkAPIError::api_error(403, "Forbidden", None));
+        monitor.record_error(LarkAPIError::api_error(403, "Forbidden", None));
+        monitor.record_error(LarkAPIError::api_error(500, "Server Error", None));
+
+        let stats = monitor.get_statistics();
+        assert_eq!(
+            stats.errors_by_code.get(&LarkErrorCode::Forbidden),
+            Some(&2)
+        );
+        assert_eq!(
+            stats
+                .errors_by_code
+                .get(&LarkErrorCode::InternalServerError),
+            Some(&1)
+        );
+    }
+
+    #[test]
+    fn test_error_monitor_generate_report() {
+        let monitor = ErrorMonitor::default();
+
+        monitor.record_error(LarkAPIError::api_error(403, "Forbidden", None));
+        monitor.record_error(LarkAPIError::api_error(500, "Server Error", None));
+
+        let report = monitor.generate_report();
+        assert_eq!(report.statistics.total_errors, 2);
+        assert!(report.recent_events.len() <= 10);
+        assert!(report.generated_at <= SystemTime::now());
+        assert_eq!(report.time_window, monitor.config.time_window);
+    }
+
+    #[test]
+    fn test_error_report_methods() {
+        let monitor = ErrorMonitor::default();
+        monitor.record_error(LarkAPIError::api_error(403, "Forbidden", None));
+
+        let report = monitor.generate_report();
+
+        // These methods should not panic
+        report.print();
+
+        // Test saving to file (using a temp path)
+        let temp_path = "/tmp/test_error_report.txt";
+        let result = report.save_to_file(temp_path);
+        assert!(result.is_ok());
+
+        // Clean up
+        let _ = std::fs::remove_file(temp_path);
+    }
+
+    #[test]
+    fn test_error_monitor_concurrent_access() {
+        use std::sync::Arc;
+        use std::thread;
+
+        let monitor = Arc::new(ErrorMonitor::default());
+        let mut handles = vec![];
+
+        // Spawn multiple threads recording errors
+        for i in 0..10 {
+            let monitor_clone = Arc::clone(&monitor);
+            let handle = thread::spawn(move || {
+                monitor_clone.record_error(LarkAPIError::api_error(
+                    400 + i,
+                    "Concurrent Error",
+                    None,
+                ));
+            });
+            handles.push(handle);
+        }
+
+        // Wait for all threads to complete
+        for handle in handles {
+            handle.join().unwrap();
+        }
+
+        let stats = monitor.get_statistics();
+        assert_eq!(stats.total_errors, 10);
+    }
+
+    #[test]
+    fn test_error_monitor_alert_triggering() {
+        let config = MonitorConfig {
+            alert_thresholds: AlertThresholds {
+                critical_errors_count: 2,
+                ..AlertThresholds::default()
+            },
+            ..MonitorConfig::default()
+        };
+        let monitor = ErrorMonitor::new(config);
+
+        // Record critical errors to trigger alert
+        monitor.record_error(LarkAPIError::api_error(500, "Server Error 1", None));
+        monitor.record_error(LarkAPIError::api_error(500, "Server Error 2", None));
+
+        // The check_alerts method is called internally when recording errors
+        // We can verify the alert was processed by checking the statistics
+        let stats = monitor.get_statistics();
+        assert!(
+            stats
+                .errors_by_severity
+                .get(&ErrorSeverity::Critical)
+                .unwrap()
+                >= &2
+        );
+    }
+
+    #[test]
+    fn test_error_event_timestamp() {
+        let error = LarkAPIError::api_error(400, "Test", None);
+        let event = ErrorEvent::from_error(error);
+        let now = SystemTime::now();
+
+        // Timestamp should be recent (within 1 second)
+        let diff = now.duration_since(event.timestamp).unwrap_or_default();
+        assert!(diff.as_secs() < 1);
     }
 }

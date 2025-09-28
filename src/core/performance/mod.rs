@@ -644,4 +644,380 @@ mod tests {
         assert!((metrics.p95_response_time_ms - 95.0).abs() < 2.0);
         assert!((metrics.p99_response_time_ms - 99.0).abs() < 2.0);
     }
+
+    // Additional comprehensive tests for better coverage
+
+    #[test]
+    fn test_optimized_http_config_clone() {
+        let config = OptimizedHttpConfig::production();
+        let cloned_config = config.clone();
+
+        assert_eq!(
+            config.pool_max_idle_per_host,
+            cloned_config.pool_max_idle_per_host
+        );
+        assert_eq!(config.connect_timeout, cloned_config.connect_timeout);
+        assert_eq!(config.user_agent, cloned_config.user_agent);
+    }
+
+    #[test]
+    fn test_optimized_http_config_debug() {
+        let config = OptimizedHttpConfig::default();
+        let debug_str = format!("{:?}", config);
+
+        assert!(debug_str.contains("OptimizedHttpConfig"));
+        assert!(debug_str.contains("pool_max_idle_per_host"));
+        assert!(debug_str.contains("user_agent"));
+    }
+
+    #[test]
+    fn test_optimized_http_config_custom_user_agent() {
+        let config = OptimizedHttpConfig {
+            user_agent: "custom-agent/1.0".to_string(),
+            ..Default::default()
+        };
+
+        assert_eq!(config.user_agent, "custom-agent/1.0");
+    }
+
+    #[test]
+    fn test_optimized_http_config_compression_settings() {
+        let low_latency = OptimizedHttpConfig::low_latency();
+        assert!(!low_latency.gzip);
+        assert!(!low_latency.brotli);
+
+        let production = OptimizedHttpConfig::production();
+        assert!(production.gzip);
+        assert!(production.brotli);
+    }
+
+    #[tokio::test]
+    async fn test_http_config_build_client_with_no_compression() {
+        let config = OptimizedHttpConfig {
+            gzip: false,
+            brotli: false,
+            ..Default::default()
+        };
+
+        let client = config.build_client();
+        assert!(client.is_ok());
+    }
+
+    #[test]
+    fn test_performance_metrics_zero_duration() {
+        let response_times = vec![100.0, 200.0, 150.0];
+        let duration = Duration::from_secs(0);
+        let total_bytes = 1024;
+
+        let metrics = PerformanceMetrics::calculate(
+            "zero_duration_test".to_string(),
+            response_times,
+            duration,
+            total_bytes,
+        );
+
+        assert_eq!(metrics.duration_seconds, 0.0);
+        assert_eq!(metrics.requests_per_second, 0.0);
+        assert_eq!(metrics.throughput_kbps, 0.0);
+    }
+
+    #[test]
+    fn test_performance_metrics_single_request() {
+        let response_times = vec![123.45];
+        let duration = Duration::from_secs(1);
+        let total_bytes = 512;
+
+        let metrics = PerformanceMetrics::calculate(
+            "single_request_test".to_string(),
+            response_times,
+            duration,
+            total_bytes,
+        );
+
+        assert_eq!(metrics.total_requests, 1);
+        assert_eq!(metrics.successful_requests, 1);
+        assert_eq!(metrics.failed_requests, 0);
+        assert_eq!(metrics.avg_response_time_ms, 123.45);
+        assert_eq!(metrics.min_response_time_ms, 123.45);
+        assert_eq!(metrics.max_response_time_ms, 123.45);
+        assert_eq!(metrics.p95_response_time_ms, 123.45);
+        assert_eq!(metrics.p99_response_time_ms, 123.45);
+        assert_eq!(metrics.requests_per_second, 1.0);
+        assert_eq!(metrics.error_rate, 0.0);
+    }
+
+    #[test]
+    fn test_performance_metrics_all_failures() {
+        let response_times = vec![-1.0, -1.0, -1.0];
+        let duration = Duration::from_secs(3);
+        let total_bytes = 0;
+
+        let metrics = PerformanceMetrics::calculate(
+            "all_failures_test".to_string(),
+            response_times,
+            duration,
+            total_bytes,
+        );
+
+        assert_eq!(metrics.total_requests, 3);
+        assert_eq!(metrics.successful_requests, 0);
+        assert_eq!(metrics.failed_requests, 3);
+        assert_eq!(metrics.error_rate, 100.0);
+        assert_eq!(metrics.avg_response_time_ms, 0.0);
+        assert_eq!(metrics.min_response_time_ms, 0.0);
+        assert_eq!(metrics.max_response_time_ms, 0.0);
+    }
+
+    #[test]
+    fn test_performance_metrics_large_dataset() {
+        let response_times: Vec<f64> = (1..=1000).map(|i| i as f64).collect();
+        let duration = Duration::from_secs(100);
+        let total_bytes = 1024 * 1000;
+
+        let metrics = PerformanceMetrics::calculate(
+            "large_dataset_test".to_string(),
+            response_times,
+            duration,
+            total_bytes,
+        );
+
+        assert_eq!(metrics.total_requests, 1000);
+        assert_eq!(metrics.successful_requests, 1000);
+        assert_eq!(metrics.avg_response_time_ms, 500.5); // Average of 1..=1000
+        assert_eq!(metrics.min_response_time_ms, 1.0);
+        assert_eq!(metrics.max_response_time_ms, 1000.0);
+        assert!((metrics.p95_response_time_ms - 950.0).abs() < 5.0);
+        assert!((metrics.p99_response_time_ms - 990.0).abs() < 5.0);
+        assert_eq!(metrics.requests_per_second, 10.0);
+        assert_eq!(metrics.throughput_kbps, 10.0); // 1000KB / 100s = 10KB/s
+    }
+
+    #[test]
+    fn test_performance_metrics_mixed_results() {
+        let response_times = vec![50.0, -1.0, 75.0, 100.0, -1.0, 125.0, 150.0];
+        let duration = Duration::from_secs(7);
+        let total_bytes = 2048;
+
+        let metrics = PerformanceMetrics::calculate(
+            "mixed_results_test".to_string(),
+            response_times,
+            duration,
+            total_bytes,
+        );
+
+        assert_eq!(metrics.total_requests, 7);
+        assert_eq!(metrics.successful_requests, 5);
+        assert_eq!(metrics.failed_requests, 2);
+        assert_eq!(metrics.error_rate, (2.0 / 7.0) * 100.0);
+        assert_eq!(
+            metrics.avg_response_time_ms,
+            (50.0 + 75.0 + 100.0 + 125.0 + 150.0) / 5.0
+        );
+        assert_eq!(metrics.min_response_time_ms, 50.0);
+        assert_eq!(metrics.max_response_time_ms, 150.0);
+    }
+
+    #[test]
+    fn test_benchmark_config_clone() {
+        let config = BenchmarkConfig::default();
+        let cloned_config = config.clone();
+
+        assert_eq!(
+            config.concurrent_connections,
+            cloned_config.concurrent_connections
+        );
+        assert_eq!(
+            config.requests_per_connection,
+            cloned_config.requests_per_connection
+        );
+        assert_eq!(config.target_url, cloned_config.target_url);
+        assert_eq!(config.headers.len(), cloned_config.headers.len());
+    }
+
+    #[test]
+    fn test_benchmark_config_debug() {
+        let config = BenchmarkConfig::default();
+        let debug_str = format!("{:?}", config);
+
+        assert!(debug_str.contains("BenchmarkConfig"));
+        assert!(debug_str.contains("concurrent_connections"));
+        assert!(debug_str.contains("target_url"));
+    }
+
+    #[test]
+    fn test_benchmark_config_custom_headers() {
+        let mut config = BenchmarkConfig::default();
+        config
+            .headers
+            .insert("Authorization".to_string(), "Bearer token".to_string());
+        config
+            .headers
+            .insert("Content-Type".to_string(), "application/json".to_string());
+
+        assert_eq!(config.headers.len(), 2);
+        assert_eq!(
+            config.headers.get("Authorization"),
+            Some(&"Bearer token".to_string())
+        );
+        assert_eq!(
+            config.headers.get("Content-Type"),
+            Some(&"application/json".to_string())
+        );
+    }
+
+    #[test]
+    fn test_benchmark_config_custom_values() {
+        let config = BenchmarkConfig {
+            concurrent_connections: 50,
+            requests_per_connection: 200,
+            warmup_requests: 25,
+            target_url: "https://example.com/api".to_string(),
+            ..Default::default()
+        };
+
+        assert_eq!(config.concurrent_connections, 50);
+        assert_eq!(config.requests_per_connection, 200);
+        assert_eq!(config.warmup_requests, 25);
+        assert_eq!(config.target_url, "https://example.com/api");
+    }
+
+    #[test]
+    fn test_performance_metrics_serialize_deserialize() {
+        let metrics = PerformanceMetrics {
+            test_name: "serialize_test".to_string(),
+            total_requests: 100,
+            successful_requests: 95,
+            failed_requests: 5,
+            avg_response_time_ms: 123.45,
+            p95_response_time_ms: 200.0,
+            p99_response_time_ms: 250.0,
+            min_response_time_ms: 50.0,
+            max_response_time_ms: 300.0,
+            requests_per_second: 10.5,
+            duration_seconds: 9.52,
+            throughput_kbps: 15.3,
+            error_rate: 5.0,
+        };
+
+        // Test serialization
+        let serialized = serde_json::to_string(&metrics);
+        assert!(serialized.is_ok());
+
+        // Test deserialization
+        let deserialized: Result<PerformanceMetrics, _> =
+            serde_json::from_str(&serialized.unwrap());
+        assert!(deserialized.is_ok());
+
+        let deserialized_metrics = deserialized.unwrap();
+        assert_eq!(metrics.test_name, deserialized_metrics.test_name);
+        assert_eq!(metrics.total_requests, deserialized_metrics.total_requests);
+        assert_eq!(
+            metrics.avg_response_time_ms,
+            deserialized_metrics.avg_response_time_ms
+        );
+    }
+
+    #[test]
+    fn test_performance_metrics_edge_case_percentiles() {
+        // Test edge case where we have exactly 1 request
+        let response_times = vec![42.0];
+        let duration = Duration::from_secs(1);
+        let total_bytes = 100;
+
+        let metrics = PerformanceMetrics::calculate(
+            "single_percentile_test".to_string(),
+            response_times,
+            duration,
+            total_bytes,
+        );
+
+        assert_eq!(metrics.p95_response_time_ms, 42.0);
+        assert_eq!(metrics.p99_response_time_ms, 42.0);
+    }
+
+    #[test]
+    fn test_performance_metrics_edge_case_small_dataset() {
+        // Test edge case with 2 requests for percentile calculation
+        let response_times = vec![10.0, 20.0];
+        let duration = Duration::from_secs(1);
+        let total_bytes = 200;
+
+        let metrics = PerformanceMetrics::calculate(
+            "small_dataset_test".to_string(),
+            response_times,
+            duration,
+            total_bytes,
+        );
+
+        assert_eq!(metrics.total_requests, 2);
+        assert_eq!(metrics.avg_response_time_ms, 15.0);
+        // With 2 elements, P95 index = 1.9 -> index 0 (first element)
+        // With 2 elements, P99 index = 1.98 -> index 0 (first element)
+        assert_eq!(metrics.p95_response_time_ms, 10.0);
+        assert_eq!(metrics.p99_response_time_ms, 10.0);
+    }
+
+    #[test]
+    fn test_optimized_http_config_extreme_values() {
+        let config = OptimizedHttpConfig {
+            pool_max_idle_per_host: 0,
+            pool_idle_timeout: Duration::from_secs(0),
+            connect_timeout: Duration::from_millis(1),
+            request_timeout: Duration::from_millis(1),
+            ..Default::default()
+        };
+
+        // Should still be able to build a client with extreme values
+        let client = config.build_client();
+        assert!(client.is_ok());
+    }
+
+    #[test]
+    fn test_optimized_http_config_very_large_values() {
+        let config = OptimizedHttpConfig {
+            pool_max_idle_per_host: 10000,
+            pool_idle_timeout: Duration::from_secs(86400), // 1 day
+            connect_timeout: Duration::from_secs(300),     // 5 minutes
+            request_timeout: Duration::from_secs(3600),    // 1 hour
+            ..Default::default()
+        };
+
+        let client = config.build_client();
+        assert!(client.is_ok());
+    }
+
+    #[test]
+    fn test_performance_metrics_precision() {
+        let response_times = vec![0.001, 0.002, 0.003]; // Very small times
+        let duration = Duration::from_millis(1);
+        let total_bytes = 1;
+
+        let metrics = PerformanceMetrics::calculate(
+            "precision_test".to_string(),
+            response_times,
+            duration,
+            total_bytes,
+        );
+
+        assert_eq!(metrics.avg_response_time_ms, 0.002);
+        assert_eq!(metrics.min_response_time_ms, 0.001);
+        assert_eq!(metrics.max_response_time_ms, 0.003);
+    }
+
+    #[test]
+    fn test_performance_metrics_user_agent_format() {
+        let default_config = OptimizedHttpConfig::default();
+        let production_config = OptimizedHttpConfig::production();
+        let high_throughput_config = OptimizedHttpConfig::high_throughput();
+        let low_latency_config = OptimizedHttpConfig::low_latency();
+
+        // All configs should have the same user agent format
+        let version = env!("CARGO_PKG_VERSION");
+        let expected_user_agent = format!("open-lark/{}", version);
+
+        assert_eq!(default_config.user_agent, expected_user_agent);
+        assert_eq!(production_config.user_agent, expected_user_agent);
+        assert_eq!(high_throughput_config.user_agent, expected_user_agent);
+        assert_eq!(low_latency_config.user_agent, expected_user_agent);
+    }
 }

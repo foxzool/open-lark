@@ -380,6 +380,7 @@ impl ErrorContext {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rstest::rstest;
 
     #[test]
     fn test_error_helper_api_error() {
@@ -408,5 +409,268 @@ mod tests {
 
         assert_eq!(context.category, ErrorHandlingCategory::Authentication);
         assert!(context.is_recoverable);
+    }
+
+    // New comprehensive tests
+
+    #[rstest]
+    #[case(
+        LarkAPIError::MissingAccessToken,
+        ErrorHandlingCategory::Authentication,
+        true,
+        false
+    )]
+    #[case(LarkAPIError::IllegalParamError("invalid param".to_string()), ErrorHandlingCategory::ClientError, true, false)]
+    fn test_handle_error_various_types(
+        #[case] error: LarkAPIError,
+        #[case] expected_category: ErrorHandlingCategory,
+        #[case] expected_recoverable: bool,
+        #[case] expected_retryable: bool,
+    ) {
+        let advice = ErrorHelper::handle_error(&error);
+
+        assert_eq!(advice.category, expected_category);
+        assert_eq!(advice.is_recoverable, expected_recoverable);
+        assert_eq!(advice.is_retryable, expected_retryable);
+        assert!(!advice.message.is_empty());
+    }
+
+    #[rstest]
+    #[case("timeout error", true, Some(5))]
+    #[case("connection failed", true, Some(10))]
+    #[case("invalid request", false, None)]
+    #[case("other network error", false, None)]
+    fn test_handle_request_error(
+        #[case] error_msg: &str,
+        #[case] expected_retryable: bool,
+        #[case] expected_delay: Option<u64>,
+    ) {
+        let advice = ErrorHelper::handle_request_error(error_msg);
+
+        assert_eq!(advice.category, ErrorHandlingCategory::NetworkError);
+        assert!(advice.is_recoverable);
+        assert_eq!(advice.is_retryable, expected_retryable);
+        assert_eq!(advice.retry_delay, expected_delay);
+        assert!(!advice.actions.is_empty());
+    }
+
+    #[test]
+    fn test_handle_api_error_with_different_error_codes() {
+        // Test authentication error - use a valid error code
+        let error_code = LarkErrorCode::AccessTokenInvalid; // 99991671
+        let advice = ErrorHelper::handle_api_error(error_code, "Invalid token");
+
+        assert_eq!(advice.category, ErrorHandlingCategory::Authentication);
+        assert!(advice.is_recoverable);
+        assert!(!advice.actions.is_empty());
+        assert!(advice.actions.iter().any(|a| a.contains("访问令牌")));
+
+        // Test rate limit error
+        let error_code = LarkErrorCode::TooManyRequests;
+        let advice = ErrorHelper::handle_api_error(error_code, "Rate limited");
+
+        assert_eq!(advice.category, ErrorHandlingCategory::RateLimit);
+        assert!(advice.is_recoverable);
+        assert!(advice.is_retryable);
+        assert!(advice.retry_delay.is_some());
+    }
+
+    #[test]
+    fn test_analyze_response_success() {
+        let response: BaseResponse<()> = BaseResponse {
+            raw_response: crate::core::api_resp::RawResponse {
+                code: 0,
+                msg: "ok".to_string(),
+                err: None,
+            },
+            data: None,
+        };
+
+        let advice = ErrorHelper::analyze_response(&response);
+        assert!(advice.is_none());
+    }
+
+    #[test]
+    fn test_analyze_response_error() {
+        let response: BaseResponse<()> = BaseResponse {
+            raw_response: crate::core::api_resp::RawResponse {
+                code: 400,
+                msg: "Bad Request".to_string(),
+                err: None,
+            },
+            data: None,
+        };
+
+        let advice = ErrorHelper::analyze_response(&response);
+        assert!(advice.is_some());
+
+        let advice = advice.unwrap();
+        assert!(!advice.message.is_empty());
+        // 400 is BadRequest, which should be categorized as ClientError
+        assert_eq!(advice.category, ErrorHandlingCategory::ClientError);
+    }
+
+    #[test]
+    fn test_create_retry_strategy_various_errors() {
+        // Test retryable error
+        let error = LarkAPIError::api_error(429, "Too Many Requests", None);
+        let strategy = ErrorHelper::create_retry_strategy(&error);
+        assert!(strategy.is_some());
+
+        // Test non-retryable error
+        let error = LarkAPIError::IllegalParamError("invalid".to_string());
+        let strategy = ErrorHelper::create_retry_strategy(&error);
+        assert!(strategy.is_none());
+
+        // Test timeout request error
+        let error = LarkAPIError::RequestError("timeout error".to_string());
+        let strategy = ErrorHelper::create_retry_strategy(&error);
+        assert!(strategy.is_some());
+
+        let strategy = strategy.unwrap();
+        assert_eq!(strategy.max_attempts, 3);
+        assert_eq!(strategy.base_delay, Duration::from_secs(5));
+    }
+
+    #[test]
+    fn test_format_user_error() {
+        // Test API error with known code
+        let error = LarkAPIError::api_error(403, "Forbidden", None);
+        let message = ErrorHelper::format_user_error(&error);
+        assert!(!message.is_empty());
+
+        // Test API error with unknown code
+        let error = LarkAPIError::api_error(99999, "Unknown", None);
+        let message = ErrorHelper::format_user_error(&error);
+        assert!(message.contains("99999"));
+
+        // Test other error types
+        let error = LarkAPIError::MissingAccessToken;
+        let message = ErrorHelper::format_user_error(&error);
+        assert!(!message.is_empty());
+    }
+
+    #[test]
+    fn test_create_error_context_complete() {
+        let error = LarkAPIError::api_error(500, "Internal Server Error", None);
+        let context = ErrorHelper::create_error_context(&error);
+
+        assert!(!context.error_message.is_empty());
+        assert!(!context.user_friendly_message.is_empty());
+        assert!(!context.suggested_actions.is_empty());
+
+        // Should be retryable for server errors
+        assert!(context.is_retryable);
+        assert!(context.retry_strategy.is_some());
+    }
+
+    #[test]
+    fn test_error_handling_advice_default() {
+        let advice = ErrorHandlingAdvice::default();
+
+        assert!(advice.message.is_empty());
+        assert_eq!(advice.category, ErrorHandlingCategory::Unknown);
+        assert!(advice.error_code.is_none());
+        assert!(!advice.is_recoverable);
+        assert!(!advice.is_retryable);
+        assert!(advice.retry_delay.is_none());
+        assert!(advice.actions.is_empty());
+        assert!(advice.help_url.is_none());
+    }
+
+    #[test]
+    fn test_retry_strategy_default() {
+        let strategy = RetryStrategy::default();
+
+        assert_eq!(strategy.max_attempts, 3);
+        assert_eq!(strategy.base_delay, Duration::from_secs(5));
+        assert!(strategy.use_exponential_backoff);
+        assert_eq!(strategy.max_delay, Duration::from_secs(60));
+    }
+
+    #[test]
+    fn test_retry_strategy_calculate_delay() {
+        let strategy = RetryStrategy::default();
+
+        // Test exponential backoff
+        assert_eq!(strategy.calculate_delay(0), Duration::from_secs(5));
+        assert_eq!(strategy.calculate_delay(1), Duration::from_secs(10));
+        assert_eq!(strategy.calculate_delay(2), Duration::from_secs(20));
+        assert_eq!(strategy.calculate_delay(3), Duration::from_secs(40));
+
+        // Test max delay limit
+        assert_eq!(strategy.calculate_delay(10), Duration::from_secs(60));
+
+        // Test without exponential backoff
+        let strategy = RetryStrategy {
+            use_exponential_backoff: false,
+            ..Default::default()
+        };
+        assert_eq!(strategy.calculate_delay(5), Duration::from_secs(5));
+    }
+
+    #[test]
+    fn test_error_context_print_details() {
+        let context = ErrorContext {
+            error_message: "Original error".to_string(),
+            user_friendly_message: "User friendly error".to_string(),
+            category: ErrorHandlingCategory::NetworkError,
+            is_recoverable: true,
+            is_retryable: true,
+            suggested_actions: vec!["Action 1".to_string(), "Action 2".to_string()],
+            help_url: Some("https://example.com/help".to_string()),
+            retry_strategy: Some(RetryStrategy::default()),
+        };
+
+        // This test just ensures print_details doesn't panic
+        // In a real environment, you might want to capture stdout to verify output
+        context.print_details();
+    }
+
+    #[test]
+    fn test_error_handling_category_equality() {
+        assert_eq!(
+            ErrorHandlingCategory::Authentication,
+            ErrorHandlingCategory::Authentication
+        );
+        assert_ne!(
+            ErrorHandlingCategory::Authentication,
+            ErrorHandlingCategory::Permission
+        );
+    }
+
+    #[test]
+    fn test_unknown_api_error_code() {
+        let error = LarkAPIError::api_error(99999, "Unknown error", None);
+        let advice = ErrorHelper::handle_error(&error);
+
+        assert_eq!(advice.category, ErrorHandlingCategory::Unknown);
+        assert!(advice.message.contains("未知API错误"));
+        assert!(advice.message.contains("99999"));
+    }
+
+    #[test]
+    fn test_request_error_patterns() {
+        // Test various timeout patterns
+        let timeout_errors = vec!["request timeout", "connection timed out", "read timeout"];
+
+        for error_msg in timeout_errors {
+            let advice = ErrorHelper::handle_request_error(error_msg);
+            assert!(advice.is_retryable);
+            assert_eq!(advice.retry_delay, Some(5));
+        }
+
+        // Test various connection patterns
+        let connection_errors = vec![
+            "connection refused",
+            "cannot connect to server",
+            "connection reset",
+        ];
+
+        for error_msg in connection_errors {
+            let advice = ErrorHelper::handle_request_error(error_msg);
+            assert!(advice.is_retryable);
+            assert_eq!(advice.retry_delay, Some(10));
+        }
     }
 }

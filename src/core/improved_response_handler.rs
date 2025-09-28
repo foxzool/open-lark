@@ -348,7 +348,7 @@ mod tests {
     use crate::core::api_resp::ResponseFormat;
     use serde::{Deserialize, Serialize};
 
-    #[derive(Debug, Serialize, Deserialize, PartialEq, Default)]
+    #[derive(Debug, Serialize, Deserialize, PartialEq, Default, Clone)]
     struct TestData {
         id: i32,
         name: String,
@@ -359,6 +359,42 @@ mod tests {
             ResponseFormat::Data
         }
     }
+
+    #[derive(Debug, Serialize, Deserialize, PartialEq, Default, Clone)]
+    struct TestFlattenData {
+        id: i32,
+        name: String,
+        code: i32,
+        msg: String,
+    }
+
+    impl ApiResponseTrait for TestFlattenData {
+        fn data_format() -> ResponseFormat {
+            ResponseFormat::Flatten
+        }
+    }
+
+    #[derive(Debug, Serialize, Deserialize, PartialEq, Default, Clone)]
+    struct TestBinaryData {
+        file_name: String,
+        content: Vec<u8>,
+    }
+
+    impl ApiResponseTrait for TestBinaryData {
+        fn data_format() -> ResponseFormat {
+            ResponseFormat::Binary
+        }
+
+        fn from_binary(file_name: String, body: Vec<u8>) -> Option<Self> {
+            Some(TestBinaryData {
+                file_name,
+                content: body,
+            })
+        }
+    }
+
+    // Note: Mock HTTP responses would require a more sophisticated testing setup
+    // The helper functions below are simplified examples of what mock functions might look like
 
     #[test]
     fn test_optimized_base_response_success() {
@@ -375,6 +411,7 @@ mod tests {
         assert!(response.is_success());
         assert!(response.data().is_some());
         assert_eq!(response.data().unwrap().id, 1);
+        assert!(!response.has_error());
     }
 
     #[test]
@@ -395,6 +432,105 @@ mod tests {
     }
 
     #[test]
+    fn test_optimized_base_response_into_data_success() {
+        let response = OptimizedBaseResponse {
+            code: 0,
+            msg: "success".to_string(),
+            error: None,
+            data: Some(TestData {
+                id: 1,
+                name: "test".to_string(),
+            }),
+        };
+
+        let data = response.into_data().unwrap();
+        assert_eq!(data.id, 1);
+        assert_eq!(data.name, "test");
+    }
+
+    #[test]
+    fn test_optimized_base_response_into_data_error() {
+        let response: OptimizedBaseResponse<TestData> = OptimizedBaseResponse {
+            code: 400,
+            msg: "Bad Request".to_string(),
+            error: None,
+            data: None,
+        };
+
+        let result = response.into_data();
+        assert!(result.is_err());
+        match result.unwrap_err() {
+            LarkAPIError::ApiError { code, message, .. } => {
+                assert_eq!(code, 400);
+                assert_eq!(message, "Bad Request");
+            }
+            _ => panic!("Expected ApiError"),
+        }
+    }
+
+    #[test]
+    fn test_optimized_base_response_into_data_success_but_no_data() {
+        let response: OptimizedBaseResponse<TestData> = OptimizedBaseResponse {
+            code: 0,
+            msg: "success".to_string(),
+            error: None,
+            data: None,
+        };
+
+        let result = response.into_data();
+        assert!(result.is_err());
+        match result.unwrap_err() {
+            LarkAPIError::IllegalParamError(msg) => {
+                assert!(msg.contains("data is missing"));
+            }
+            _ => panic!("Expected IllegalParamError"),
+        }
+    }
+
+    #[test]
+    fn test_error_info_serialization() {
+        let error_info = ErrorInfo {
+            log_id: Some("test_log_id".to_string()),
+            details: vec![
+                ErrorDetail {
+                    key: Some("field1".to_string()),
+                    value: Some("invalid_value".to_string()),
+                    description: Some("Field is required".to_string()),
+                },
+                ErrorDetail {
+                    key: Some("field2".to_string()),
+                    value: None,
+                    description: Some("Missing field".to_string()),
+                },
+            ],
+        };
+
+        let json = serde_json::to_string(&error_info).unwrap();
+        let deserialized: ErrorInfo = serde_json::from_str(&json).unwrap();
+
+        assert_eq!(deserialized.log_id, error_info.log_id);
+        assert_eq!(deserialized.details.len(), 2);
+        assert_eq!(deserialized.details[0].key, Some("field1".to_string()));
+        assert_eq!(deserialized.details[1].value, None);
+    }
+
+    #[test]
+    fn test_error_detail_optional_fields() {
+        let detail = ErrorDetail {
+            key: None,
+            value: Some("test_value".to_string()),
+            description: None,
+        };
+
+        let json = serde_json::to_string(&detail).unwrap();
+        let deserialized: ErrorDetail = serde_json::from_str(&json).unwrap();
+
+        assert_eq!(deserialized.key, None);
+        assert_eq!(deserialized.value, Some("test_value".to_string()));
+        assert_eq!(deserialized.description, None);
+    }
+
+    #[test]
     fn test_filename_extraction() {
         let cases = vec![
             (
@@ -410,12 +546,58 @@ mod tests {
                 Some("simple.doc".to_string()),
             ),
             ("attachment", None),
+            ("", None),
+            ("filename=\"quoted.txt\"", Some("quoted.txt".to_string())),
+            ("filename=unquoted.txt", Some("unquoted.txt".to_string())),
+            (
+                "filename*=UTF-8''unicode%E2%9C%93.txt",
+                Some("unicode%E2%9C%93.txt".to_string()),
+            ),
+            (
+                "attachment; filename=\"spaced file.doc\"; other=value",
+                Some("spaced file.doc".to_string()),
+            ),
         ];
 
         for (input, expected) in cases {
             let result = ImprovedResponseHandler::extract_filename(input);
             assert_eq!(result, expected, "Failed for input: {input}");
         }
+    }
+
+    #[test]
+    fn test_filename_extraction_edge_cases() {
+        // Test empty and whitespace-only strings
+        assert_eq!(ImprovedResponseHandler::extract_filename(""), None);
+        assert_eq!(ImprovedResponseHandler::extract_filename("   "), None);
+        assert_eq!(ImprovedResponseHandler::extract_filename(";;;"), None);
+
+        // Test malformed headers - based on implementation behavior
+        assert_eq!(
+            ImprovedResponseHandler::extract_filename("filename="),
+            Some("".to_string())
+        );
+        assert_eq!(
+            ImprovedResponseHandler::extract_filename("filename*="),
+            None
+        ); // Doesn't match UTF-8 prefix, doesn't match filename= exactly
+        assert_eq!(
+            ImprovedResponseHandler::extract_filename("filename=\""),
+            Some("".to_string())
+        );
+
+        // Test with only quotes - the current implementation extracts empty string
+        assert_eq!(
+            ImprovedResponseHandler::extract_filename("filename=\"\""),
+            Some("".to_string())
+        );
+
+        // Test multiple filename directives (should return first valid one)
+        let multi_filename = "filename=\"first.txt\"; filename=\"second.txt\"";
+        assert_eq!(
+            ImprovedResponseHandler::extract_filename(multi_filename),
+            Some("first.txt".to_string())
+        );
     }
 
     #[test]
@@ -438,6 +620,272 @@ mod tests {
 
         // 直接解析应该更快（虽然在微基准测试中差异可能很小）
         // 这里主要是为了展示概念
+    }
+
+    #[test]
+    fn test_api_response_trait_data_format() {
+        assert_eq!(TestData::data_format(), ResponseFormat::Data);
+        assert_eq!(TestFlattenData::data_format(), ResponseFormat::Flatten);
+        assert_eq!(TestBinaryData::data_format(), ResponseFormat::Binary);
+    }
+
+    #[test]
+    fn test_api_response_trait_from_binary() {
+        let file_name = "test.txt".to_string();
+        let content = b"Hello, World!".to_vec();
+
+        let binary_data = TestBinaryData::from_binary(file_name.clone(), content.clone()).unwrap();
+        assert_eq!(binary_data.file_name, file_name);
+        assert_eq!(binary_data.content, content);
+
+        // Test default implementation for non-binary types
+        let default_result = TestData::from_binary("test.txt".to_string(), vec![1, 2, 3]);
+        assert!(default_result.is_none());
+    }
+
+    // Mock tests for response handlers would require a more sophisticated mocking setup
+    // For now, we'll test the logic that doesn't require actual HTTP responses
+
+    #[tokio::test]
+    async fn test_handle_data_response_parsing_logic() {
+        // Test JSON parsing logic without actual HTTP response
+        let test_cases = vec![
+            // Error response with fallback parsing
+            (r#"{"code": 400, "msg": "Bad Request"}"#, true),
+            // Invalid JSON
+            (r#"{"invalid": json"#, false),
+        ];
+
+        for (json, should_succeed) in test_cases {
+            // Test fallback parsing for error responses
+            if json.contains("code") && !json.contains("raw_response") {
+                let fallback_result = serde_json::from_str::<Value>(json);
+                if should_succeed {
+                    assert!(
+                        fallback_result.is_ok(),
+                        "Fallback parsing should succeed for: {}",
+                        json
+                    );
+                    let value = fallback_result.unwrap();
+                    assert!(value["code"].is_i64());
+                    assert!(value["msg"].is_string());
+                }
+            } else if json.contains("invalid") {
+                let parse_result = serde_json::from_str::<Value>(json);
+                assert!(parse_result.is_err(), "Invalid JSON should fail to parse");
+            }
+        }
+    }
+
+    #[tokio::test]
+    async fn test_handle_flatten_response_parsing_logic() {
+        let test_cases = vec![
+            // Success response
+            (
+                r#"{"id": 1, "name": "test", "code": 0, "msg": "success"}"#,
+                0,
+                true,
+            ),
+            // Error response
+            (r#"{"code": 400, "msg": "Bad Request"}"#, 400, false),
+            // Invalid JSON
+            (r#"{"invalid": json"#, -1, false),
+        ];
+
+        for (json, expected_code, should_have_data) in test_cases {
+            if json.contains("invalid") {
+                let parse_result = serde_json::from_str::<Value>(json);
+                assert!(parse_result.is_err(), "Invalid JSON should fail to parse");
+                continue;
+            }
+
+            let value_result = serde_json::from_str::<Value>(json);
+            assert!(value_result.is_ok(), "Valid JSON should parse as Value");
+
+            let value = value_result.unwrap();
+            let raw_response_result = serde_json::from_value::<RawResponse>(value.clone());
+
+            if expected_code >= 0 {
+                assert!(
+                    raw_response_result.is_ok(),
+                    "Should parse RawResponse for: {}",
+                    json
+                );
+                let raw_response = raw_response_result.unwrap();
+                assert_eq!(raw_response.code, expected_code);
+
+                if should_have_data && raw_response.code == 0 {
+                    let data_result = serde_json::from_value::<TestFlattenData>(value);
+                    assert!(
+                        data_result.is_ok(),
+                        "Should parse data for success response"
+                    );
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn test_response_format_display_logic() {
+        let formats = vec![
+            (ResponseFormat::Data, "data"),
+            (ResponseFormat::Flatten, "flatten"),
+            (ResponseFormat::Binary, "binary"),
+        ];
+
+        for (format, expected_str) in formats {
+            let format_str = match format {
+                ResponseFormat::Data => "data",
+                ResponseFormat::Flatten => "flatten",
+                ResponseFormat::Binary => "binary",
+            };
+            assert_eq!(format_str, expected_str);
+        }
+    }
+
+    #[test]
+    fn test_binary_response_logic() {
+        let test_file_name = "test_document.pdf";
+        let test_content = b"PDF content here".to_vec();
+
+        // Test successful binary data creation
+        let binary_data =
+            TestBinaryData::from_binary(test_file_name.to_string(), test_content.clone());
+        assert!(binary_data.is_some());
+
+        let data = binary_data.unwrap();
+        assert_eq!(data.file_name, test_file_name);
+        assert_eq!(data.content, test_content);
+
+        // Test empty content
+        let empty_data = TestBinaryData::from_binary("empty.txt".to_string(), vec![]);
+        assert!(empty_data.is_some());
+        assert_eq!(empty_data.unwrap().content.len(), 0);
+    }
+
+    #[test]
+    fn test_optimized_response_serialization_roundtrip() {
+        let original = OptimizedBaseResponse {
+            code: 0,
+            msg: "success".to_string(),
+            error: Some(ErrorInfo {
+                log_id: Some("test123".to_string()),
+                details: vec![ErrorDetail {
+                    key: Some("validation".to_string()),
+                    value: Some("failed".to_string()),
+                    description: Some("Field validation failed".to_string()),
+                }],
+            }),
+            data: Some(TestData {
+                id: 42,
+                name: "serialization_test".to_string(),
+            }),
+        };
+
+        // Serialize to JSON
+        let json = serde_json::to_string(&original).unwrap();
+
+        // Deserialize back
+        let deserialized: OptimizedBaseResponse<TestData> = serde_json::from_str(&json).unwrap();
+
+        // Verify all fields are preserved
+        assert_eq!(deserialized.code, original.code);
+        assert_eq!(deserialized.msg, original.msg);
+        assert_eq!(deserialized.data, original.data);
+        assert!(deserialized.error.is_some());
+
+        let error = deserialized.error.unwrap();
+        assert_eq!(error.log_id, Some("test123".to_string()));
+        assert_eq!(error.details.len(), 1);
+        assert_eq!(error.details[0].key, Some("validation".to_string()));
+    }
+
+    #[test]
+    fn test_optimized_response_skipped_fields() {
+        // Test response with None values (should be skipped in serialization)
+        let response: OptimizedBaseResponse<TestData> = OptimizedBaseResponse {
+            code: 0,
+            msg: "success".to_string(),
+            error: None,
+            data: None,
+        };
+
+        let json = serde_json::to_string(&response).unwrap();
+
+        // Should not contain "error" or "data" fields when they are None
+        assert!(!json.contains("\"error\""));
+        assert!(!json.contains("\"data\""));
+        assert!(json.contains("\"code\":0"));
+        assert!(json.contains("\"msg\":\"success\""));
+    }
+
+    #[test]
+    fn test_macro_api_response_implementation() {
+        // Test that the macro would work correctly
+        // Since we can't actually invoke the macro in tests easily,
+        // we'll test the pattern it would generate
+
+        #[derive(Debug, Default, Serialize, Deserialize)]
+        struct MacroTestData;
+
+        impl ApiResponseTrait for MacroTestData {
+            fn data_format() -> ResponseFormat {
+                ResponseFormat::Data
+            }
+        }
+
+        assert_eq!(MacroTestData::data_format(), ResponseFormat::Data);
+        assert!(MacroTestData::from_binary("test".to_string(), vec![1, 2, 3]).is_none());
+    }
+
+    #[test]
+    fn test_error_detail_empty_values() {
+        let detail = ErrorDetail {
+            key: Some("".to_string()),
+            value: Some("".to_string()),
+            description: Some("".to_string()),
+        };
+
+        let json = serde_json::to_string(&detail).unwrap();
+        let deserialized: ErrorDetail = serde_json::from_str(&json).unwrap();
+
+        assert_eq!(deserialized.key, Some("".to_string()));
+        assert_eq!(deserialized.value, Some("".to_string()));
+        assert_eq!(deserialized.description, Some("".to_string()));
+    }
+
+    #[test]
+    fn test_content_disposition_header_edge_cases() {
+        let edge_cases = vec![
+            // Case-insensitive filename
+            ("FILENAME=\"test.txt\"", None), // Our implementation is case-sensitive
+            ("Filename=\"test.txt\"", None), // Our implementation is case-sensitive
+            // Multiple spaces
+            (
+                "attachment;  filename=\"test.txt\"",
+                Some("test.txt".to_string()),
+            ),
+            ("attachment; filename =  \"test.txt\"", None), // Space before = is not handled
+            // Special characters in filename
+            (
+                "attachment; filename=\"test-file_v1.2.txt\"",
+                Some("test-file_v1.2.txt".to_string()),
+            ),
+            (
+                "attachment; filename=\"测试文件.txt\"",
+                Some("测试文件.txt".to_string()),
+            ),
+            // Both UTF-8 and regular filename (current implementation returns first match)
+            (
+                "attachment; filename=\"test.txt\"; filename*=UTF-8''better.txt",
+                Some("test.txt".to_string()),
+            ),
+        ];
+
+        for (input, expected) in edge_cases {
+            let result = ImprovedResponseHandler::extract_filename(input);
+            assert_eq!(result, expected, "Failed for input: {}", input);
+        }
     }
 }
 

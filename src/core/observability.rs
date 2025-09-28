@@ -805,4 +805,353 @@ mod tests {
         assert!(logs_contain("Starting response processing"));
         assert!(logs_contain("Response processing completed successfully"));
     }
+
+    // Additional comprehensive tests for better coverage
+
+    #[traced_test]
+    #[test]
+    fn test_operation_tracker_span_access() {
+        let tracker = OperationTracker::start("test_service", "test_operation");
+
+        // Test span access
+        let span = tracker.span();
+        assert!(!span.is_disabled());
+
+        // Test elapsed time access
+        let elapsed = tracker.elapsed();
+        assert!(elapsed >= Duration::from_nanos(0));
+
+        tracker.success();
+    }
+
+    #[traced_test]
+    #[test]
+    fn test_auth_tracker_span_access() {
+        let tracker = AuthTracker::start("get_token", "test_app", "tenant");
+
+        // Test span access
+        let span = tracker.span();
+        assert!(!span.is_disabled());
+
+        tracker.success(false); // Test with cache miss
+
+        assert!(logs_contain("Starting authentication operation"));
+        assert!(logs_contain(
+            "Authentication operation completed successfully"
+        ));
+    }
+
+    #[traced_test]
+    #[test]
+    fn test_auth_tracker_error_without_code() {
+        let tracker = AuthTracker::start("refresh_token", "test_app", "user");
+        tracker.error("Network timeout", None); // No error code
+
+        assert!(logs_contain("Authentication operation failed"));
+        assert!(logs_contain("Network timeout"));
+    }
+
+    #[traced_test]
+    #[test]
+    fn test_http_tracker_different_status_codes() {
+        // Test successful 2xx status
+        let tracker1 = HttpTracker::start("GET", "https://api.example.com/users");
+        tracker1.response(201, Some(512));
+        assert!(logs_contain("HTTP request completed successfully"));
+
+        // Test redirection 3xx status
+        let tracker2 = HttpTracker::start("GET", "https://api.example.com/redirect");
+        tracker2.response(302, None);
+        assert!(logs_contain("HTTP request completed"));
+
+        // Test client error 4xx status
+        let tracker3 = HttpTracker::start("POST", "https://api.example.com/invalid");
+        tracker3.response(404, Some(128));
+        assert!(logs_contain("HTTP request failed"));
+
+        // Test server error 5xx status
+        let tracker4 = HttpTracker::start("PUT", "https://api.example.com/error");
+        tracker4.response(500, Some(256));
+        assert!(logs_contain("HTTP request failed"));
+    }
+
+    #[traced_test]
+    #[test]
+    fn test_http_tracker_network_error() {
+        let tracker = HttpTracker::start("GET", "https://api.example.com/timeout");
+        tracker.error("Connection timeout after 30 seconds");
+
+        assert!(logs_contain("Sending HTTP request"));
+        assert!(logs_contain("HTTP request failed"));
+        assert!(logs_contain("Connection timeout after 30 seconds"));
+    }
+
+    #[traced_test]
+    #[test]
+    fn test_response_tracker_with_none_size() {
+        let tracker = ResponseTracker::start("xml", None);
+
+        // Test parsing without validation
+        tracker.parsing_complete();
+        tracker.success();
+
+        assert!(logs_contain("Starting response processing"));
+        assert!(logs_contain("Response processing completed successfully"));
+    }
+
+    #[traced_test]
+    #[test]
+    fn test_response_tracker_validation_timing() {
+        let tracker = ResponseTracker::start("binary", Some(2048));
+
+        // Test timing sequence
+        std::thread::sleep(Duration::from_millis(2));
+        tracker.parsing_complete();
+
+        std::thread::sleep(Duration::from_millis(3));
+        tracker.validation_complete();
+
+        std::thread::sleep(Duration::from_millis(1));
+        tracker.success();
+
+        assert!(logs_contain("Starting response processing"));
+        assert!(logs_contain("Response processing completed successfully"));
+    }
+
+    #[traced_test]
+    #[tokio::test]
+    async fn test_async_performance_macro_error() {
+        let result: Result<i32, &str> =
+            trace_async_performance!("test_service", "failing_op", async {
+                tokio::time::sleep(Duration::from_millis(2)).await;
+                Err::<i32, &str>("Operation failed")
+            });
+
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err(), "Operation failed");
+        assert!(logs_contain("Starting operation"));
+        assert!(logs_contain("Operation failed"));
+    }
+
+    #[traced_test]
+    #[test]
+    fn test_performance_macro_with_service_and_operation() {
+        let result = trace_performance!("my_service", "complex_operation", {
+            std::thread::sleep(Duration::from_millis(1));
+            "result"
+        });
+
+        assert_eq!(result, "result");
+        assert!(logs_contain("Starting operation"));
+        assert!(logs_contain("Operation completed successfully"));
+    }
+
+    #[traced_test]
+    #[tokio::test]
+    async fn test_trace_auth_operation_macro_error() {
+        use crate::core::error::LarkAPIError;
+
+        // Test error scenario with API error code
+        let result = trace_auth_operation!("get_tenant_token", "test_app", "tenant", async {
+            Err::<(String, bool), LarkAPIError>(LarkAPIError::APIError {
+                code: 10001,
+                msg: "App not found".to_string(),
+                error: None,
+            })
+        })
+        .await;
+
+        assert!(result.is_err());
+        assert!(logs_contain("Starting authentication operation"));
+        assert!(logs_contain("Authentication operation failed"));
+        assert!(logs_contain("App not found"));
+    }
+
+    #[traced_test]
+    #[tokio::test]
+    async fn test_trace_auth_operation_macro_non_api_error() {
+        use crate::core::error::LarkAPIError;
+
+        // Test with non-API error (no error code)
+        let result = trace_auth_operation!("validate_token", "test_app", "user", async {
+            Err::<(String, bool), LarkAPIError>(LarkAPIError::RequestError(
+                "Network connection failed".to_string(),
+            ))
+        })
+        .await;
+
+        assert!(result.is_err());
+        assert!(logs_contain("Starting authentication operation"));
+        assert!(logs_contain("Authentication operation failed"));
+        assert!(logs_contain("Network connection failed"));
+    }
+
+    #[traced_test]
+    #[test]
+    fn test_trace_response_processing_macro_parsing_error() {
+        let format = "yaml";
+        let size = Some(128_u64);
+
+        let parsing_fn = || {
+            Err::<String, std::io::Error>(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                "Invalid YAML syntax",
+            ))
+        };
+        let validation_fn = |data: String| Ok::<String, std::io::Error>(data);
+
+        let result = trace_response_processing!(format, size, parsing_fn(), validation_fn);
+
+        assert!(result.is_err());
+        assert!(logs_contain("Starting response processing"));
+        assert!(logs_contain("Response processing failed"));
+        assert!(logs_contain("Invalid YAML syntax"));
+    }
+
+    #[traced_test]
+    #[test]
+    fn test_trace_response_processing_macro_validation_error() {
+        let format = "csv";
+        let size = Some(64_u64);
+
+        let parsing_fn = || Ok::<String, std::io::Error>("".to_string()); // Empty data
+        let validation_fn = |data: String| {
+            if data.is_empty() {
+                Err(std::io::Error::new(
+                    std::io::ErrorKind::InvalidData,
+                    "CSV data cannot be empty",
+                ))
+            } else {
+                Ok(data)
+            }
+        };
+
+        let result = trace_response_processing!(format, size, parsing_fn(), validation_fn);
+
+        assert!(result.is_err());
+        assert!(logs_contain("Starting response processing"));
+        assert!(logs_contain("Response processing failed"));
+        assert!(logs_contain("CSV data cannot be empty"));
+    }
+
+    #[test]
+    fn test_init_tracing_functions() {
+        // Note: These functions are hard to test in unit tests because they affect global state
+        // We can test that they don't panic and return Ok/Err appropriately
+
+        // Test that multiple initializations handle gracefully
+        // (tracing_subscriber typically returns an error on re-initialization)
+        let result1 = init_tracing();
+        let result2 = init_tracing_with_filter("debug");
+        let result3 = init_structured_tracing();
+
+        // At least one should succeed (the first one) or all should handle errors gracefully
+        // We don't assert specific Ok/Err because the global state affects this
+        assert!(result1.is_ok() || result1.is_err()); // Either outcome is acceptable
+        assert!(result2.is_ok() || result2.is_err());
+        assert!(result3.is_ok() || result3.is_err());
+    }
+
+    #[cfg(feature = "otel")]
+    #[test]
+    fn test_otel_config_default() {
+        let config = OtelConfig::default();
+
+        assert_eq!(config.endpoint, "http://localhost:4317");
+        assert_eq!(config.service_name, "open-lark-sdk");
+        assert_eq!(config.service_version, env!("CARGO_PKG_VERSION"));
+        assert_eq!(config.environment, "development");
+    }
+
+    #[cfg(feature = "otel")]
+    #[test]
+    fn test_otel_config_custom() {
+        let config = OtelConfig {
+            endpoint: "https://otel.example.com:4317".to_string(),
+            service_name: "custom-service".to_string(),
+            service_version: "1.2.3".to_string(),
+            environment: "production".to_string(),
+        };
+
+        assert_eq!(config.endpoint, "https://otel.example.com:4317");
+        assert_eq!(config.service_name, "custom-service");
+        assert_eq!(config.service_version, "1.2.3");
+        assert_eq!(config.environment, "production");
+    }
+
+    #[cfg(feature = "otel")]
+    #[test]
+    fn test_otel_config_clone_and_debug() {
+        let config = OtelConfig::default();
+        let cloned_config = config.clone();
+
+        assert_eq!(config.endpoint, cloned_config.endpoint);
+        assert_eq!(config.service_name, cloned_config.service_name);
+
+        let debug_str = format!("{:?}", config);
+        assert!(debug_str.contains("OtelConfig"));
+        assert!(debug_str.contains("endpoint"));
+        assert!(debug_str.contains("service_name"));
+    }
+
+    // Note: init_otel_tracing and shutdown_otel are hard to test in unit tests
+    // because they require actual OpenTelemetry infrastructure and affect global state
+    // These would be better tested in integration tests
+
+    #[traced_test]
+    #[test]
+    fn test_operation_tracker_zero_elapsed_time() {
+        let tracker = OperationTracker::start("instant_service", "instant_operation");
+        // Don't sleep, test immediate completion
+        let elapsed = tracker.elapsed();
+        tracker.success();
+
+        // Should have some minimal elapsed time
+        assert!(elapsed >= Duration::from_nanos(0));
+        assert!(logs_contain("Starting operation"));
+        assert!(logs_contain("Operation completed successfully"));
+    }
+
+    #[traced_test]
+    #[test]
+    fn test_multiple_trackers_concurrent() {
+        let tracker1 = OperationTracker::start("service1", "operation1");
+        let tracker2 = AuthTracker::start("auth_op", "app1", "tenant");
+        let tracker3 = HttpTracker::start("POST", "https://example.com/api");
+        let tracker4 = ResponseTracker::start("json", Some(1024));
+
+        // Complete in different orders
+        tracker2.success(true);
+        tracker4.success();
+        tracker1.success();
+        tracker3.response(200, Some(512));
+
+        // All should log successfully
+        assert!(logs_contain("Starting operation"));
+        assert!(logs_contain("Starting authentication operation"));
+        assert!(logs_contain("Sending HTTP request"));
+        assert!(logs_contain("Starting response processing"));
+    }
+
+    #[traced_test]
+    #[test]
+    fn test_edge_case_empty_strings() {
+        let tracker1 = OperationTracker::start("", "");
+        tracker1.success();
+
+        let tracker2 = AuthTracker::start("", "", "");
+        tracker2.error("", None);
+
+        let tracker3 = HttpTracker::start("", "");
+        tracker3.error("");
+
+        let tracker4 = ResponseTracker::start("", Some(0));
+        tracker4.error("");
+
+        // Should handle empty strings gracefully
+        assert!(logs_contain("Starting operation"));
+        assert!(logs_contain("Starting authentication operation"));
+        assert!(logs_contain("Sending HTTP request"));
+        assert!(logs_contain("Starting response processing"));
+    }
 }

@@ -607,7 +607,7 @@ impl WebsiteService {
     ///     }),
     ///     contact_email: Some("careers@techcorp.com".to_string()),
     ///     enabled: Some(true),
-    ///     seo_config: Some(SeoConfig::default()),
+    ///     seo_config: Some(SeoConfig {
     ///         keywords: Some(I18nText {
     ///             zh_cn: Some("招聘,技术,工程师".to_string()),
     ///             en_us: Some("careers,technology,engineer".to_string()),

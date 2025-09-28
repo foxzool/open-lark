@@ -593,6 +593,8 @@ impl Default for LoggerBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rstest::rstest;
+    use std::collections::HashMap;
 
     #[test]
     fn test_log_level_ordering() {
@@ -650,5 +652,345 @@ mod tests {
         assert_eq!(logger.config.min_level, LogLevel::Debug);
         matches!(logger.config.formatter, FormatterType::Json(_));
         matches!(logger.config.output, OutputTarget::Stderr);
+    }
+
+    // New comprehensive tests
+
+    #[rstest]
+    #[case(ErrorSeverity::Info, LogLevel::Info)]
+    #[case(ErrorSeverity::Warning, LogLevel::Warn)]
+    #[case(ErrorSeverity::Error, LogLevel::Error)]
+    #[case(ErrorSeverity::Critical, LogLevel::Critical)]
+    fn test_log_level_from_error_severity(
+        #[case] severity: ErrorSeverity,
+        #[case] expected_level: LogLevel,
+    ) {
+        assert_eq!(LogLevel::from_error_severity(severity), expected_level);
+    }
+
+    #[test]
+    fn test_log_level_color_codes() {
+        assert_eq!(LogLevel::Debug.color_code(), "\x1b[36m");
+        assert_eq!(LogLevel::Info.color_code(), "\x1b[32m");
+        assert_eq!(LogLevel::Warn.color_code(), "\x1b[33m");
+        assert_eq!(LogLevel::Error.color_code(), "\x1b[31m");
+        assert_eq!(LogLevel::Critical.color_code(), "\x1b[35m");
+        assert_eq!(LogLevel::reset_color(), "\x1b[0m");
+    }
+
+    #[test]
+    fn test_log_level_labels() {
+        assert_eq!(LogLevel::Debug.label(), "DEBUG");
+        assert_eq!(LogLevel::Info.label(), "INFO");
+        assert_eq!(LogLevel::Warn.label(), "WARN");
+        assert_eq!(LogLevel::Error.label(), "ERROR");
+        assert_eq!(LogLevel::Critical.label(), "CRITICAL");
+    }
+
+    #[test]
+    fn test_log_level_display() {
+        assert_eq!(format!("{}", LogLevel::Debug), "DEBUG");
+        assert_eq!(format!("{}", LogLevel::Info), "INFO");
+    }
+
+    #[test]
+    fn test_log_entry_with_context() {
+        let entry = LogEntry::new(LogLevel::Error, "Test message".to_string())
+            .with_context("key1", "value1")
+            .with_context("key2", "value2");
+
+        assert_eq!(entry.context.len(), 2);
+        assert_eq!(entry.context.get("key1"), Some(&"value1".to_string()));
+        assert_eq!(entry.context.get("key2"), Some(&"value2".to_string()));
+    }
+
+    #[test]
+    fn test_log_entry_with_caller() {
+        let entry = LogEntry::new(LogLevel::Info, "Test message".to_string())
+            .with_caller("test_function".to_string());
+
+        assert_eq!(entry.caller, Some("test_function".to_string()));
+    }
+
+    #[test]
+    fn test_log_entry_with_error() {
+        let error = LarkAPIError::MissingAccessToken;
+        let entry =
+            LogEntry::new(LogLevel::Error, "Test message".to_string()).with_error(error.clone());
+
+        assert!(entry.error.is_some());
+        match entry.error.unwrap() {
+            LarkAPIError::MissingAccessToken => (),
+            _ => panic!("Wrong error type"),
+        }
+    }
+
+    #[test]
+    fn test_log_entry_from_error_event() {
+        let error = LarkAPIError::api_error(403, "Forbidden", None);
+        let event = ErrorEvent::from_error(error.clone());
+        let entry = LogEntry::from_error_event(&event);
+
+        assert_eq!(entry.level, LogLevel::Error);
+        assert!(entry.message.contains("API调用错误"));
+        assert!(entry.error.is_some());
+        assert!(entry.category.is_some());
+    }
+
+    #[test]
+    fn test_simple_formatter_with_options() {
+        // Test without timestamp
+        let formatter = SimpleFormatter {
+            include_timestamp: false,
+            ..Default::default()
+        };
+        let entry = LogEntry::new(LogLevel::Info, "Test".to_string());
+        let formatted = formatter.format(&entry);
+        // Should still contain [INFO] but not timestamp
+        assert!(formatted.contains("[INFO]"));
+        assert!(!formatted.contains(".")); // No milliseconds timestamp
+
+        // Test without colors
+        let formatter = SimpleFormatter {
+            use_colors: false,
+            ..Default::default()
+        };
+        let formatted = formatter.format(&entry);
+        assert!(!formatted.contains("\x1b["));
+    }
+
+    #[test]
+    fn test_simple_formatter_with_complete_entry() {
+        let formatter = SimpleFormatter::default();
+        let error = LarkAPIError::api_error(400, "Bad Request", None);
+        let mut entry = LogEntry::new(LogLevel::Error, "API call failed".to_string())
+            .with_error(error)
+            .with_context("endpoint", "/api/test")
+            .with_caller("test_function".to_string());
+        entry.error_code = Some(LarkErrorCode::BadRequest);
+
+        let formatted = formatter.format(&entry);
+
+        assert!(formatted.contains("[ERROR]"));
+        assert!(formatted.contains("API call failed"));
+        assert!(formatted.contains("错误:"));
+        assert!(formatted.contains("错误码:"));
+        assert!(formatted.contains("上下文:"));
+        assert!(formatted.contains("调用者:"));
+    }
+
+    #[test]
+    fn test_json_formatter_complete() {
+        let formatter = JsonFormatter;
+        let error = LarkAPIError::IllegalParamError("invalid param".to_string());
+        let mut entry = LogEntry::new(LogLevel::Error, "Validation failed".to_string())
+            .with_error(error)
+            .with_context("field", "username")
+            .with_caller("validate_user".to_string());
+        entry.category = Some(ErrorHandlingCategory::ClientError);
+        entry.error_code = Some(LarkErrorCode::BadRequest);
+
+        let formatted = formatter.format(&entry);
+
+        assert!(formatted.contains("\"level\":\"ERROR\""));
+        assert!(formatted.contains("\"message\":\"Validation failed\""));
+        assert!(formatted.contains("\"error\":"));
+        assert!(formatted.contains("\"category\":\"ClientError\""));
+        assert!(formatted.contains("\"error_code\":400"));
+        assert!(formatted.contains("\"context\":{"));
+        assert!(formatted.contains("\"caller\":\"validate_user\""));
+    }
+
+    #[test]
+    fn test_structured_formatter_custom() {
+        let formatter = StructuredFormatter {
+            separator: " || ".to_string(),
+            kv_separator: ":".to_string(),
+        };
+
+        let entry = LogEntry::new(LogLevel::Warn, "Warning message".to_string())
+            .with_context("module", "auth");
+
+        let formatted = formatter.format(&entry);
+
+        assert!(formatted.contains("level:WARN"));
+        assert!(formatted.contains("msg:Warning message"));
+        assert!(formatted.contains("module:auth"));
+        assert!(formatted.contains(" || "));
+    }
+
+    #[test]
+    fn test_logger_config_default() {
+        let config = LoggerConfig::default();
+
+        assert_eq!(config.min_level, LogLevel::Info);
+        assert!(matches!(config.formatter, FormatterType::Simple(_)));
+        assert!(matches!(config.output, OutputTarget::Stdout));
+        assert!(config.include_context);
+        assert!(!config.include_caller);
+    }
+
+    #[test]
+    fn test_error_logger_default() {
+        let logger = ErrorLogger::default();
+        assert_eq!(logger.config.min_level, LogLevel::Info);
+    }
+
+    #[test]
+    fn test_error_logger_new() {
+        let config = LoggerConfig {
+            min_level: LogLevel::Debug,
+            formatter: FormatterType::Json(JsonFormatter),
+            output: OutputTarget::Stderr,
+            include_context: false,
+            include_caller: true,
+        };
+        let logger = ErrorLogger::new(config);
+        assert_eq!(logger.config.min_level, LogLevel::Debug);
+    }
+
+    #[test]
+    fn test_error_logger_log_level_filtering() {
+        let config = LoggerConfig {
+            min_level: LogLevel::Warn,
+            ..LoggerConfig::default()
+        };
+        let logger = ErrorLogger::new(config);
+
+        // This would normally print, but we can't easily test stdout
+        // Instead we test the logic by checking the min_level
+        assert_eq!(logger.config.min_level, LogLevel::Warn);
+
+        // Debug and Info should be filtered out
+        assert!(LogLevel::Debug < logger.config.min_level);
+        assert!(LogLevel::Info < logger.config.min_level);
+
+        // Warn, Error, Critical should pass
+        assert!(LogLevel::Warn >= logger.config.min_level);
+        assert!(LogLevel::Error >= logger.config.min_level);
+        assert!(LogLevel::Critical >= logger.config.min_level);
+    }
+
+    #[test]
+    fn test_error_logger_convenience_methods() {
+        let logger = ErrorLogger::default();
+
+        // These methods should not panic
+        logger.error("Test error");
+        logger.warn("Test warning");
+        logger.info("Test info");
+        logger.debug("Test debug");
+    }
+
+    #[test]
+    fn test_error_logger_error_with_context() {
+        let logger = ErrorLogger::default();
+        let mut context = HashMap::new();
+        context.insert("user_id".to_string(), "123".to_string());
+        context.insert("action".to_string(), "login".to_string());
+
+        // Should not panic
+        logger.error_with_context("Login failed", context);
+    }
+
+    #[test]
+    fn test_error_logger_log_api_error() {
+        let logger = ErrorLogger::default();
+        let error = LarkAPIError::api_error(429, "Too Many Requests", None);
+
+        // Should not panic
+        logger.log_api_error(&error);
+    }
+
+    #[test]
+    fn test_error_logger_log_error_event() {
+        let logger = ErrorLogger::default();
+        let error = LarkAPIError::RequestError("Network timeout".to_string());
+        let event = ErrorEvent::from_error(error);
+
+        // Should not panic
+        logger.log_error_event(&event);
+    }
+
+    #[test]
+    fn test_logger_builder_complete() {
+        let logger = LoggerBuilder::new()
+            .min_level(LogLevel::Critical)
+            .simple_format()
+            .output_to_file("/tmp/test.log")
+            .include_context(false)
+            .build();
+
+        assert_eq!(logger.config.min_level, LogLevel::Critical);
+        assert!(matches!(logger.config.formatter, FormatterType::Simple(_)));
+        assert!(matches!(logger.config.output, OutputTarget::File(_)));
+        assert!(!logger.config.include_context);
+    }
+
+    #[test]
+    fn test_logger_builder_structured_format() {
+        let logger = LoggerBuilder::new().structured_format().build();
+
+        assert!(matches!(
+            logger.config.formatter,
+            FormatterType::Structured(_)
+        ));
+    }
+
+    #[test]
+    fn test_logger_builder_default() {
+        let builder = LoggerBuilder::default();
+        let logger = builder.build();
+        assert_eq!(logger.config.min_level, LogLevel::Info);
+    }
+
+    #[test]
+    fn test_output_target_multiple() {
+        let targets = vec![
+            OutputTarget::Stdout,
+            OutputTarget::Stderr,
+            OutputTarget::File("/tmp/test.log".to_string()),
+        ];
+        let config = LoggerConfig {
+            output: OutputTarget::Multiple(targets),
+            ..LoggerConfig::default()
+        };
+        let logger = ErrorLogger::new(config);
+
+        // Should not panic when logging to multiple targets
+        logger.info("Test message for multiple targets");
+    }
+
+    #[test]
+    fn test_formatter_type_variants() {
+        let simple = FormatterType::Simple(SimpleFormatter::default());
+        let json = FormatterType::Json(JsonFormatter);
+        let structured = FormatterType::Structured(StructuredFormatter::default());
+
+        // Test that the variants exist and can be matched
+        match simple {
+            FormatterType::Simple(_) => (),
+            _ => panic!("Wrong formatter type"),
+        }
+
+        match json {
+            FormatterType::Json(_) => (),
+            _ => panic!("Wrong formatter type"),
+        }
+
+        match structured {
+            FormatterType::Structured(_) => (),
+            _ => panic!("Wrong formatter type"),
+        }
+    }
+
+    #[test]
+    fn test_log_entry_timestamp() {
+        let entry = LogEntry::new(LogLevel::Info, "Test".to_string());
+        let now = SystemTime::now();
+
+        // Timestamp should be recent (within 1 second)
+        let diff = now.duration_since(entry.timestamp).unwrap_or_default();
+        assert!(diff.as_secs() < 1);
     }
 }
