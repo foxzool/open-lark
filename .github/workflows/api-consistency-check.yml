@@ -12,6 +12,11 @@ on:
       - 'src/service/**/*.rs'
       - 'src/core/**/*.rs'
 
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
 jobs:
   check-api-consistency:
     runs-on: ubuntu-latest
