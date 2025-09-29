@@ -190,9 +190,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         let client_for_echo = Arc::new(client);
         let config = Arc::new(client_for_echo.config.clone());
 
-        // 创建事件处理器，实现增强的 echo bot 功能
+        // 创建事件处理器，实现增强的 echo bot 功能和完整的 IM 事件监控
         let echo_client = client_for_echo.clone();
         let event_handler = match EventDispatcherHandler::builder()
+            // 消息接收事件 - Echo Bot 核心功能
             .register_p2_im_message_receive_v1(move |event| {
                 let client = echo_client.clone();
                 tokio::spawn(async move {
@@ -206,9 +207,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     );
 
                     debug!(
-                        "消息详情 - 类型: {:?}, 内容长度: {}",
+                        "消息详情 - 类型: {:?}, 内容长度: {}, 聊天ID: {}",
                         event.event.message.message_type,
-                        event.event.message.content.len()
+                        event.event.message.content.len(),
+                        event.event.message.chat_id
                     );
 
                     // 检查消息内容是否为空
@@ -241,6 +243,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                 });
             })
+            // 消息已读事件
             .and_then(|builder| {
                 builder.register_p2_im_message_read_v1(|event| {
                     tokio::spawn(async move {
@@ -263,6 +266,167 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         }
 
                         info!("👁️ 消息已读事件处理完成，耗时: {:?}", start_time.elapsed());
+                    });
+                })
+            })
+            // 消息撤回事件
+            .and_then(|builder| {
+                builder.register_p2_im_message_recalled_v1(|event| {
+                    tokio::spawn(async move {
+                        let start_time = Instant::now();
+
+                        warn!(
+                            "↩️ 收到消息撤回事件 - 事件ID: {:?}, 消息ID: {}, 操作者: {:?}",
+                            event.header.event_id,
+                            event.event.message_id,
+                            event.event.operator.operator_id.user_id.unwrap_or_else(|| "未知".to_string())
+                        );
+
+                        debug!(
+                            "撤回事件详情 - 撤回时间: {}, 聊天ID: {}, 操作者类型: {}",
+                            event.event.recall_time,
+                            event.event.chat_info.chat_id,
+                            event.event.operator.operator_type
+                        );
+
+                        info!("↩️ 消息撤回事件处理完成，耗时: {:?}", start_time.elapsed());
+                    });
+                })
+            })
+            // 群聊创建事件
+            .and_then(|builder| {
+                builder.register_p2_im_chat_created_v1(|event| {
+                    tokio::spawn(async move {
+                        let start_time = Instant::now();
+
+                        info!(
+                            "💬 收到群聊创建事件 - 事件ID: {:?}, 群聊ID: {}, 创建者: {:?}",
+                            event.header.event_id,
+                            event.event.chat_id,
+                            event.event.creator.user_id.user_id.unwrap_or_else(|| "未知".to_string())
+                        );
+
+                        debug!(
+                            "群聊创建详情 - 名称: {:?}, 描述: {:?}, 类型: {:?}, 创建时间: {}",
+                            event.event.name,
+                            event.event.description,
+                            event.event.chat_type,
+                            event.event.create_time
+                        );
+
+                        info!("💬 群聊创建事件处理完成，耗时: {:?}", start_time.elapsed());
+                    });
+                })
+            })
+            // 群聊更新事件
+            .and_then(|builder| {
+                builder.register_p2_im_chat_updated_v1(|event| {
+                    tokio::spawn(async move {
+                        let start_time = Instant::now();
+
+                        info!(
+                            "📝 收到群聊更新事件 - 事件ID: {:?}, 群聊ID: {}, 操作者: {:?}",
+                            event.header.event_id,
+                            event.event.chat_id,
+                            event.event.operator.operator_id.user_id.unwrap_or_else(|| "未知".to_string())
+                        );
+
+                        debug!(
+                            "群聊更新详情 - 更新时间: {}, 操作者类型: {:?}",
+                            event.event.update_time,
+                            event.event.operator.operator_type
+                        );
+
+                        info!("📝 群聊更新事件处理完成，耗时: {:?}", start_time.elapsed());
+                    });
+                })
+            })
+            // 群聊解散事件
+            .and_then(|builder| {
+                builder.register_p2_im_chat_disbanded_v1(|event| {
+                    tokio::spawn(async move {
+                        let start_time = Instant::now();
+
+                        warn!(
+                            "❌ 收到群聊解散事件 - 事件ID: {:?}, 群聊ID: {}, 操作者: {:?}",
+                            event.header.event_id,
+                            event.event.chat_id,
+                            event.event.operator.operator_id.user_id.unwrap_or_else(|| "未知".to_string())
+                        );
+
+                        debug!(
+                            "群聊解散详情 - 解散时间: {}, 操作者类型: {:?}",
+                            event.event.disband_time,
+                            event.event.operator.operator_type
+                        );
+
+                        info!("❌ 群聊解散事件处理完成，耗时: {:?}", start_time.elapsed());
+                    });
+                })
+            })
+            // 群聊成员添加事件
+            .and_then(|builder| {
+                builder.register_p2_im_chat_member_user_added_v1(|event| {
+                    tokio::spawn(async move {
+                        let start_time = Instant::now();
+
+                        info!(
+                            "➕ 收到成员添加事件 - 事件ID: {:?}, 群聊ID: {}, 添加了 {} 个成员",
+                            event.header.event_id,
+                            event.event.chat_id,
+                            event.event.users.len()
+                        );
+
+                        debug!(
+                            "成员添加详情 - 操作者: {:?}, 添加时间: {}",
+                            event.event.operator.operator_id.user_id.unwrap_or_else(|| "未知".to_string()),
+                            event.event.add_time
+                        );
+
+                        // 记录添加的用户信息
+                        for (i, user) in event.event.users.iter().enumerate() {
+                            debug!(
+                                "  新成员 {}: {:?} (名称: {:?})",
+                                i + 1,
+                                user.user_id.user_id.as_ref().unwrap_or(&"未知".to_string()),
+                                user.name
+                            );
+                        }
+
+                        info!("➕ 成员添加事件处理完成，耗时: {:?}", start_time.elapsed());
+                    });
+                })
+            })
+            // 群聊成员移除事件
+            .and_then(|builder| {
+                builder.register_p2_im_chat_member_user_deleted_v1(|event| {
+                    tokio::spawn(async move {
+                        let start_time = Instant::now();
+
+                        info!(
+                            "➖ 收到成员移除事件 - 事件ID: {:?}, 群聊ID: {}, 移除了 {} 个成员",
+                            event.header.event_id,
+                            event.event.chat_id,
+                            event.event.users.len()
+                        );
+
+                        debug!(
+                            "成员移除详情 - 操作者: {:?}, 移除时间: {}",
+                            event.event.operator.operator_id.user_id.unwrap_or_else(|| "未知".to_string()),
+                            event.event.delete_time
+                        );
+
+                        // 记录被移除的用户信息
+                        for (i, user) in event.event.users.iter().enumerate() {
+                            debug!(
+                                "  被移除成员 {}: {:?} (名称: {:?})",
+                                i + 1,
+                                user.user_id.user_id.as_ref().unwrap_or(&"未知".to_string()),
+                                user.name
+                            );
+                        }
+
+                        info!("➖ 成员移除事件处理完成，耗时: {:?}", start_time.elapsed());
                     });
                 })
             }) {
