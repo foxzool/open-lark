@@ -82,9 +82,9 @@ impl ImprovedResponseHandler {
                 Ok(base_response)
             }
             Err(direct_parse_err) => {
-                tracing::debug!("Direct parsing failed, attempting fallback parsing");
+                tracing::debug!("Direct parsing failed, attempting structured data extraction");
 
-                // 如果直接解析失败，可能是错误响应，先解析基本信息
+                // 解析基础JSON结构
                 match serde_json::from_str::<Value>(&response_text) {
                     Ok(raw_value) => {
                         let code = raw_value["code"].as_i64().unwrap_or(-1) as i32;
@@ -92,6 +92,48 @@ impl ImprovedResponseHandler {
                             .as_str()
                             .unwrap_or("Unknown error")
                             .to_string();
+
+                        // 如果响应成功，尝试提取并解析data字段
+                        let data = if code == 0 {
+                            if let Some(data_value) = raw_value.get("data") {
+                                // 尝试解析为期望的类型T
+                                match serde_json::from_value::<T>(data_value.clone()) {
+                                    Ok(parsed_data) => {
+                                        tracing::debug!("Successfully parsed data field as type T");
+                                        Some(parsed_data)
+                                    }
+                                    Err(data_parse_err) => {
+                                        tracing::debug!("Failed to parse data field as type T: {data_parse_err:?}");
+
+                                        // 特殊处理：如果T是CreateMessageResp但data直接是Message，尝试包装
+                                        if std::any::type_name::<T>().contains("CreateMessageResp") {
+                                            // 尝试将data值包装为 {"data": data_value} 结构
+                                            let wrapped_value = serde_json::json!({
+                                                "data": data_value
+                                            });
+                                            match serde_json::from_value::<T>(wrapped_value) {
+                                                Ok(wrapped_data) => {
+                                                    tracing::debug!("Successfully parsed data by wrapping Message in CreateMessageResp");
+                                                    Some(wrapped_data)
+                                                }
+                                                Err(_) => {
+                                                    tracing::warn!("Failed to parse even after wrapping, but response contains valid message data");
+                                                    // API调用成功了，数据存在，只是结构不匹配
+                                                    None
+                                                }
+                                            }
+                                        } else {
+                                            None
+                                        }
+                                    }
+                                }
+                            } else {
+                                tracing::debug!("No data field found in successful response");
+                                None
+                            }
+                        } else {
+                            None
+                        };
 
                         tracker.validation_complete();
                         tracker.success();
@@ -102,7 +144,7 @@ impl ImprovedResponseHandler {
                                 msg,
                                 err: None,
                             },
-                            data: None,
+                            data,
                         })
                     }
                     Err(fallback_err) => {
