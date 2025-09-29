@@ -84,7 +84,10 @@ async fn send_echo_message(
     const RETRY_DELAY_MS: u64 = 1000;
 
     for attempt in 1..=MAX_RETRIES {
-        debug!("发送回显消息尝试 {}/{}: {}", attempt, MAX_RETRIES, echo_content);
+        debug!(
+            "发送回显消息尝试 {}/{}: {}",
+            attempt, MAX_RETRIES, echo_content
+        );
 
         // 构建回显消息请求
         let echo_request = CreateMessageRequest::builder()
@@ -101,19 +104,29 @@ async fn send_echo_message(
         // 尝试发送消息
         match client.im.v1.message.create(echo_request, None).await {
             Ok(response) => {
-                info!("✅ Echo 消息发送成功: {} (尝试次数: {})", echo_content, attempt);
-                debug!("响应详情 - 消息ID: {}, 创建时间: {}",
-                       response.message_id, response.create_time);
+                info!(
+                    "✅ Echo 消息发送成功: {} (尝试次数: {})",
+                    echo_content, attempt
+                );
+                debug!(
+                    "响应详情 - 消息ID: {}, 创建时间: {}",
+                    response.message_id, response.create_time
+                );
                 return Ok(());
             }
             Err(e) => {
-                error!("❌ Echo 消息发送失败 (尝试 {}/{}): {e:?}", attempt, MAX_RETRIES);
+                error!(
+                    "❌ Echo 消息发送失败 (尝试 {}/{}): {e:?}",
+                    attempt, MAX_RETRIES
+                );
 
                 if attempt < MAX_RETRIES {
                     warn!("等待 {}ms 后重试...", RETRY_DELAY_MS);
                     tokio::time::sleep(tokio::time::Duration::from_millis(RETRY_DELAY_MS)).await;
                 } else {
-                    return Err(format!("经过 {} 次尝试后仍然无法发送消息: {e:?}", MAX_RETRIES).into());
+                    return Err(
+                        format!("经过 {} 次尝试后仍然无法发送消息: {e:?}", MAX_RETRIES).into(),
+                    );
                 }
             }
         }
@@ -192,9 +205,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         event.event.sender.sender_id.open_id
                     );
 
-                    debug!("消息详情 - 类型: {:?}, 内容长度: {}",
-                           event.event.message.message_type,
-                           event.event.message.content.len());
+                    debug!(
+                        "消息详情 - 类型: {:?}, 内容长度: {}",
+                        event.event.message.message_type,
+                        event.event.message.content.len()
+                    );
 
                     // 检查消息内容是否为空
                     if event.event.message.content.is_empty() {
@@ -203,7 +218,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
 
                     // 解析消息内容并处理回显逻辑
-                    match handle_message_content(&event.event.message.content, &client, &event.event.sender.sender_id.open_id).await {
+                    match handle_message_content(
+                        &event.event.message.content,
+                        &client,
+                        &event.event.sender.sender_id.open_id,
+                    )
+                    .await
+                    {
                         Ok(echo_sent) => {
                             if echo_sent {
                                 info!("✅ Echo 消息处理成功，耗时: {:?}", start_time.elapsed());
@@ -212,7 +233,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             }
                         }
                         Err(e) => {
-                            error!("❌ 处理消息时发生错误: {e:?}，耗时: {:?}", start_time.elapsed());
+                            error!(
+                                "❌ 处理消息时发生错误: {e:?}，耗时: {:?}",
+                                start_time.elapsed()
+                            );
                         }
                     }
                 });
@@ -224,8 +248,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                         info!(
                             "👁️ 收到消息已读事件 - 事件ID: {:?}, 阅读者: {:?}",
-                            event.header.event_id,
-                            event.event.reader.reader_id.open_id
+                            event.header.event_id, event.event.reader.reader_id.open_id
                         );
 
                         debug!(

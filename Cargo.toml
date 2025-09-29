@@ -193,6 +193,11 @@ name = "client_setup"
 path = "examples/basic/client_setup.rs"
 
 [[example]]
+name = "event_handler"
+path = "examples/basic/event_handler.rs"
+required-features = ["websocket", "im", "contact", "cloud-docs", "calendar", "vc", "approval"]
+
+[[example]]
 name = "acs_example"
 path = "examples/api/acs_example.rs"
 required-features = ["acs"]

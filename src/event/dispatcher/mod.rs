@@ -12,7 +12,17 @@ use crate::service::attendance::v1::{
 
 #[cfg(feature = "im")]
 use crate::service::im::v1::{
+    p2_im_chat_created_v1::{P2ImChatCreatedV1, P2ImChatCreatedV1ProcessorImpl},
+    p2_im_chat_disbanded_v1::{P2ImChatDisbandedV1, P2ImChatDisbandedV1ProcessorImpl},
+    p2_im_chat_member_user_added_v1::{
+        P2ImChatMemberUserAddedV1, P2ImChatMemberUserAddedV1ProcessorImpl,
+    },
+    p2_im_chat_member_user_deleted_v1::{
+        P2ImChatMemberUserDeletedV1, P2ImChatMemberUserDeletedV1ProcessorImpl,
+    },
+    p2_im_chat_updated_v1::{P2ImChatUpdatedV1, P2ImChatUpdatedV1ProcessorImpl},
     p2_im_message_read_v1::{P2ImMessageReadV1, P2ImMessageReadV1ProcessorImpl},
+    p2_im_message_recalled_v1::{P2ImMessageRecalledV1, P2ImMessageRecalledV1ProcessorImpl},
     p2_im_message_receive_v1::{P2ImMessageReceiveV1, P2ImMessageReceiveV1ProcessorImpl},
 };
 
@@ -24,6 +34,59 @@ use crate::service::payroll::v1::{
     p2_payroll_payment_activity_status_changed_v1::{
         P2PayrollPaymentActivityStatusChangedV1,
         P2PayrollPaymentActivityStatusChangedV1ProcessorImpl,
+    },
+};
+
+#[cfg(feature = "contact")]
+use crate::service::contact::v3::{
+    p2_contact_department_created_v3::{
+        P2ContactDepartmentCreatedV3, P2ContactDepartmentCreatedV3ProcessorImpl,
+    },
+    p2_contact_department_deleted_v3::{
+        P2ContactDepartmentDeletedV3, P2ContactDepartmentDeletedV3ProcessorImpl,
+    },
+    p2_contact_department_updated_v3::{
+        P2ContactDepartmentUpdatedV3, P2ContactDepartmentUpdatedV3ProcessorImpl,
+    },
+    p2_contact_user_created_v3::{P2ContactUserCreatedV3, P2ContactUserCreatedV3ProcessorImpl},
+    p2_contact_user_deleted_v3::{P2ContactUserDeletedV3, P2ContactUserDeletedV3ProcessorImpl},
+    p2_contact_user_updated_v3::{P2ContactUserUpdatedV3, P2ContactUserUpdatedV3ProcessorImpl},
+};
+
+#[cfg(feature = "cloud-docs")]
+use crate::service::cloud_docs::drive::v1::{
+    p2_drive_file_created_v1::{P2DriveFileCreatedV1, P2DriveFileCreatedV1ProcessorImpl},
+    p2_drive_file_deleted_v1::{P2DriveFileDeletedV1, P2DriveFileDeletedV1ProcessorImpl},
+    p2_drive_file_updated_v1::{P2DriveFileUpdatedV1, P2DriveFileUpdatedV1ProcessorImpl},
+};
+
+#[cfg(feature = "calendar")]
+use crate::service::calendar::v4::p2_calendar_event_created_v4::{
+    P2CalendarEventCreatedV4, P2CalendarEventCreatedV4ProcessorImpl,
+};
+
+#[cfg(feature = "vc")]
+use crate::service::vc::v1::{
+    p2_vc_meeting_ended_v1::{P2VcMeetingEndedV1, P2VcMeetingEndedV1ProcessorImpl},
+    p2_vc_meeting_participant_joined_v1::{
+        P2VcMeetingParticipantJoinedV1, P2VcMeetingParticipantJoinedV1ProcessorImpl,
+    },
+    p2_vc_meeting_participant_left_v1::{
+        P2VcMeetingParticipantLeftV1, P2VcMeetingParticipantLeftV1ProcessorImpl,
+    },
+    p2_vc_meeting_started_v1::{P2VcMeetingStartedV1, P2VcMeetingStartedV1ProcessorImpl},
+};
+
+#[cfg(feature = "approval")]
+use crate::service::approval::v4::{
+    p2_approval_instance_approved_v4::{
+        P2ApprovalInstanceApprovedV4, P2ApprovalInstanceApprovedV4ProcessorImpl,
+    },
+    p2_approval_instance_created_v4::{
+        P2ApprovalInstanceCreatedV4, P2ApprovalInstanceCreatedV4ProcessorImpl,
+    },
+    p2_approval_instance_rejected_v4::{
+        P2ApprovalInstanceRejectedV4, P2ApprovalInstanceRejectedV4ProcessorImpl,
     },
 };
 use log::debug;
@@ -138,6 +201,62 @@ impl EventDispatcherHandlerBuilder {
         Ok(self)
     }
 
+    #[cfg(feature = "im")]
+    pub fn register_p2_im_message_recalled_v1<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2ImMessageRecalledV1) + 'static + Sync + Send,
+    {
+        let key = "p2.im.message.recalled_v1".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2ImMessageRecalledV1ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    #[cfg(feature = "im")]
+    pub fn register_p2_im_chat_created_v1<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2ImChatCreatedV1) + 'static + Sync + Send,
+    {
+        let key = "p2.im.chat.created_v1".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2ImChatCreatedV1ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    #[cfg(feature = "im")]
+    pub fn register_p2_im_chat_disbanded_v1<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2ImChatDisbandedV1) + 'static + Sync + Send,
+    {
+        let key = "p2.im.chat.disbanded_v1".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2ImChatDisbandedV1ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    #[cfg(feature = "im")]
+    pub fn register_p2_im_chat_member_user_added_v1<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2ImChatMemberUserAddedV1) + 'static + Sync + Send,
+    {
+        let key = "p2.im.chat.member.user.added_v1".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2ImChatMemberUserAddedV1ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
     /// 注册考勤打卡流水事件处理器
     #[cfg(feature = "attendance")]
     pub fn register_p2_attendance_user_task_updated_v1<F>(mut self, f: F) -> Result<Self, String>
@@ -206,6 +325,278 @@ impl EventDispatcherHandlerBuilder {
             return Err(format!("processor already registered, type: {key}"));
         }
         let processor = P2PayrollPaymentActivityApprovedV1ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    // IM Events - Additional
+    #[cfg(feature = "im")]
+    pub fn register_p2_im_chat_updated_v1<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2ImChatUpdatedV1) + 'static + Sync + Send,
+    {
+        let key = "p2.im.chat.updated_v1".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2ImChatUpdatedV1ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    #[cfg(feature = "im")]
+    pub fn register_p2_im_chat_member_user_deleted_v1<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2ImChatMemberUserDeletedV1) + 'static + Sync + Send,
+    {
+        let key = "p2.im.chat.member.user.deleted_v1".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2ImChatMemberUserDeletedV1ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    // Contact Events
+    #[cfg(feature = "contact")]
+    pub fn register_p2_contact_user_created_v3<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2ContactUserCreatedV3) + 'static + Sync + Send,
+    {
+        let key = "p2.contact.user.created_v3".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2ContactUserCreatedV3ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    #[cfg(feature = "contact")]
+    pub fn register_p2_contact_user_updated_v3<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2ContactUserUpdatedV3) + 'static + Sync + Send,
+    {
+        let key = "p2.contact.user.updated_v3".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2ContactUserUpdatedV3ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    #[cfg(feature = "contact")]
+    pub fn register_p2_contact_user_deleted_v3<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2ContactUserDeletedV3) + 'static + Sync + Send,
+    {
+        let key = "p2.contact.user.deleted_v3".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2ContactUserDeletedV3ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    #[cfg(feature = "contact")]
+    pub fn register_p2_contact_department_created_v3<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2ContactDepartmentCreatedV3) + 'static + Sync + Send,
+    {
+        let key = "p2.contact.department.created_v3".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2ContactDepartmentCreatedV3ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    #[cfg(feature = "contact")]
+    pub fn register_p2_contact_department_updated_v3<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2ContactDepartmentUpdatedV3) + 'static + Sync + Send,
+    {
+        let key = "p2.contact.department.updated_v3".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2ContactDepartmentUpdatedV3ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    #[cfg(feature = "contact")]
+    pub fn register_p2_contact_department_deleted_v3<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2ContactDepartmentDeletedV3) + 'static + Sync + Send,
+    {
+        let key = "p2.contact.department.deleted_v3".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2ContactDepartmentDeletedV3ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    // Drive Events
+    #[cfg(feature = "cloud-docs")]
+    pub fn register_p2_drive_file_created_v1<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2DriveFileCreatedV1) + 'static + Sync + Send,
+    {
+        let key = "p2.drive.file.created_v1".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2DriveFileCreatedV1ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    #[cfg(feature = "cloud-docs")]
+    pub fn register_p2_drive_file_updated_v1<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2DriveFileUpdatedV1) + 'static + Sync + Send,
+    {
+        let key = "p2.drive.file.updated_v1".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2DriveFileUpdatedV1ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    #[cfg(feature = "cloud-docs")]
+    pub fn register_p2_drive_file_deleted_v1<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2DriveFileDeletedV1) + 'static + Sync + Send,
+    {
+        let key = "p2.drive.file.deleted_v1".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2DriveFileDeletedV1ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    // Calendar Events
+    #[cfg(feature = "calendar")]
+    pub fn register_p2_calendar_event_created_v4<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2CalendarEventCreatedV4) + 'static + Sync + Send,
+    {
+        let key = "p2.calendar.event.created_v4".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2CalendarEventCreatedV4ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    // VC Events
+    #[cfg(feature = "vc")]
+    pub fn register_p2_vc_meeting_started_v1<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2VcMeetingStartedV1) + 'static + Sync + Send,
+    {
+        let key = "p2.vc.meeting.started_v1".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2VcMeetingStartedV1ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    #[cfg(feature = "vc")]
+    pub fn register_p2_vc_meeting_ended_v1<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2VcMeetingEndedV1) + 'static + Sync + Send,
+    {
+        let key = "p2.vc.meeting.ended_v1".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2VcMeetingEndedV1ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    #[cfg(feature = "vc")]
+    pub fn register_p2_vc_meeting_participant_joined_v1<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2VcMeetingParticipantJoinedV1) + 'static + Sync + Send,
+    {
+        let key = "p2.vc.meeting.participant.joined_v1".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2VcMeetingParticipantJoinedV1ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    #[cfg(feature = "vc")]
+    pub fn register_p2_vc_meeting_participant_left_v1<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2VcMeetingParticipantLeftV1) + 'static + Sync + Send,
+    {
+        let key = "p2.vc.meeting.participant.left_v1".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2VcMeetingParticipantLeftV1ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    // Approval Events
+    #[cfg(feature = "approval")]
+    pub fn register_p2_approval_instance_created_v4<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2ApprovalInstanceCreatedV4) + 'static + Sync + Send,
+    {
+        let key = "p2.approval.instance.created_v4".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2ApprovalInstanceCreatedV4ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    #[cfg(feature = "approval")]
+    pub fn register_p2_approval_instance_approved_v4<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2ApprovalInstanceApprovedV4) + 'static + Sync + Send,
+    {
+        let key = "p2.approval.instance.approved_v4".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2ApprovalInstanceApprovedV4ProcessorImpl::new(f);
+        self.processor_map.insert(key, Box::new(processor));
+        Ok(self)
+    }
+
+    #[cfg(feature = "approval")]
+    pub fn register_p2_approval_instance_rejected_v4<F>(mut self, f: F) -> Result<Self, String>
+    where
+        F: Fn(P2ApprovalInstanceRejectedV4) + 'static + Sync + Send,
+    {
+        let key = "p2.approval.instance.rejected_v4".to_string();
+        if self.processor_map.contains_key(&key) {
+            return Err(format!("processor already registered, type: {key}"));
+        }
+        let processor = P2ApprovalInstanceRejectedV4ProcessorImpl::new(f);
         self.processor_map.insert(key, Box::new(processor));
         Ok(self)
     }

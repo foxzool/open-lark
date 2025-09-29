@@ -15,6 +15,14 @@ pub mod message_service;
 pub mod p2_im_message_read_v1;
 pub mod p2_im_message_receive_v1;
 
+// IM 事件模块
+pub mod p2_im_chat_created_v1;
+pub mod p2_im_chat_disbanded_v1;
+pub mod p2_im_chat_member_user_added_v1;
+pub mod p2_im_chat_member_user_deleted_v1;
+pub mod p2_im_chat_updated_v1;
+pub mod p2_im_message_recalled_v1;
+
 // 新增模块
 pub mod batch_message;
 pub mod buzz_messages;
