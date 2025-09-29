@@ -106,7 +106,8 @@ impl ImprovedResponseHandler {
                                         tracing::debug!("Failed to parse data field as type T: {data_parse_err:?}");
 
                                         // 特殊处理：如果T是CreateMessageResp但data直接是Message，尝试包装
-                                        if std::any::type_name::<T>().contains("CreateMessageResp") {
+                                        if std::any::type_name::<T>().contains("CreateMessageResp")
+                                        {
                                             // 尝试将data值包装为 {"data": data_value} 结构
                                             let wrapped_value = serde_json::json!({
                                                 "data": data_value
