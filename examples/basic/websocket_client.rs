@@ -162,7 +162,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     #[cfg(not(feature = "websocket"))]
     {
         println!("❌ WebSocket 功能未启用");
-        println!("💡 使用以下命令启用: cargo run --example websocket_client --features websocket");
+        println!("💡 使用以下命令启用: cargo run --example websocket_client --features websocket,im");
         println!();
         println!("🔧 启用 WebSocket 支持的步骤:");
         println!("  1. 在 Cargo.toml 的 features 中添加 'websocket'");
