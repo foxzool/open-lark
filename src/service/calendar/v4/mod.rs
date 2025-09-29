@@ -10,6 +10,7 @@ pub mod meeting_chat;
 pub mod meeting_minute;
 pub mod meeting_room_event;
 pub mod models;
+pub mod p2_calendar_event_created_v4;
 pub mod setting;
 pub mod timeoff_event;
 

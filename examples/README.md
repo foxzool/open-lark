@@ -118,7 +118,7 @@
 ### 🔰 [basic/](./basic/) - 基础入门 (2个)
 **最简单的入门示例，适合初学者**
 - `client_setup.rs` - 客户端基础配置
-- `websocket_client.rs` - WebSocket连接示例
+- `websocket_client.rs` - WebSocket连接与完整IM事件监控示例
 
 ### 📊 [benchmarks/](./benchmarks/) - 性能测试 (2个)
 **性能基准测试和监控示例**
@@ -167,8 +167,8 @@ cargo run --example client_setup
 如需运行其它服务示例，请显式启用对应 feature：
 
 ```bash
-# WebSocket 示例
-cargo run --example websocket_client --features websocket
+# WebSocket 示例 (包含完整IM事件监控)
+cargo run --example websocket_client --features websocket,im
 
 # 招聘（hire）示例
 cargo run --example hire_v1_example --features hire
