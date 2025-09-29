@@ -162,7 +162,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     #[cfg(not(feature = "websocket"))]
     {
         println!("❌ WebSocket 功能未启用");
-        println!("💡 使用以下命令启用: cargo run --example websocket_client --features websocket,im");
+        println!(
+            "💡 使用以下命令启用: cargo run --example websocket_client --features websocket,im"
+        );
         println!();
         println!("🔧 启用 WebSocket 支持的步骤:");
         println!("  1. 在 Cargo.toml 的 features 中添加 'websocket'");
@@ -279,7 +281,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             "↩️ 收到消息撤回事件 - 事件ID: {:?}, 消息ID: {}, 操作者: {:?}",
                             event.header.event_id,
                             event.event.message_id,
-                            event.event.operator.operator_id.user_id.unwrap_or_else(|| "未知".to_string())
+                            event
+                                .event
+                                .operator
+                                .operator_id
+                                .user_id
+                                .unwrap_or_else(|| "未知".to_string())
                         );
 
                         debug!(
@@ -303,7 +310,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             "💬 收到群聊创建事件 - 事件ID: {:?}, 群聊ID: {}, 创建者: {:?}",
                             event.header.event_id,
                             event.event.chat_id,
-                            event.event.creator.user_id.user_id.unwrap_or_else(|| "未知".to_string())
+                            event
+                                .event
+                                .creator
+                                .user_id
+                                .user_id
+                                .unwrap_or_else(|| "未知".to_string())
                         );
 
                         debug!(
@@ -328,13 +340,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             "📝 收到群聊更新事件 - 事件ID: {:?}, 群聊ID: {}, 操作者: {:?}",
                             event.header.event_id,
                             event.event.chat_id,
-                            event.event.operator.operator_id.user_id.unwrap_or_else(|| "未知".to_string())
+                            event
+                                .event
+                                .operator
+                                .operator_id
+                                .user_id
+                                .unwrap_or_else(|| "未知".to_string())
                         );
 
                         debug!(
                             "群聊更新详情 - 更新时间: {}, 操作者类型: {:?}",
-                            event.event.update_time,
-                            event.event.operator.operator_type
+                            event.event.update_time, event.event.operator.operator_type
                         );
 
                         info!("📝 群聊更新事件处理完成，耗时: {:?}", start_time.elapsed());
@@ -351,13 +367,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             "❌ 收到群聊解散事件 - 事件ID: {:?}, 群聊ID: {}, 操作者: {:?}",
                             event.header.event_id,
                             event.event.chat_id,
-                            event.event.operator.operator_id.user_id.unwrap_or_else(|| "未知".to_string())
+                            event
+                                .event
+                                .operator
+                                .operator_id
+                                .user_id
+                                .unwrap_or_else(|| "未知".to_string())
                         );
 
                         debug!(
                             "群聊解散详情 - 解散时间: {}, 操作者类型: {:?}",
-                            event.event.disband_time,
-                            event.event.operator.operator_type
+                            event.event.disband_time, event.event.operator.operator_type
                         );
 
                         info!("❌ 群聊解散事件处理完成，耗时: {:?}", start_time.elapsed());
@@ -379,7 +399,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                         debug!(
                             "成员添加详情 - 操作者: {:?}, 添加时间: {}",
-                            event.event.operator.operator_id.user_id.unwrap_or_else(|| "未知".to_string()),
+                            event
+                                .event
+                                .operator
+                                .operator_id
+                                .user_id
+                                .unwrap_or_else(|| "未知".to_string()),
                             event.event.add_time
                         );
 
@@ -412,7 +437,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                         debug!(
                             "成员移除详情 - 操作者: {:?}, 移除时间: {}",
-                            event.event.operator.operator_id.user_id.unwrap_or_else(|| "未知".to_string()),
+                            event
+                                .event
+                                .operator
+                                .operator_id
+                                .user_id
+                                .unwrap_or_else(|| "未知".to_string()),
                             event.event.delete_time
                         );
 
