@@ -16,6 +16,14 @@ pub mod unit;
 pub mod user;
 pub mod work_city;
 
+// Contact v3 事件模块
+pub mod p2_contact_department_created_v3;
+pub mod p2_contact_department_deleted_v3;
+pub mod p2_contact_department_updated_v3;
+pub mod p2_contact_user_created_v3;
+pub mod p2_contact_user_deleted_v3;
+pub mod p2_contact_user_updated_v3;
+
 pub use custom_attr::CustomAttrService;
 pub use department::DepartmentService;
 pub use employee_type_enum::EmployeeTypeEnumService;
