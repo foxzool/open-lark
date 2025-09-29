@@ -9,6 +9,11 @@ pub mod like;
 pub mod media;
 pub mod permissions;
 
+// Drive v1 事件模块
+pub mod p2_drive_file_created_v1;
+pub mod p2_drive_file_deleted_v1;
+pub mod p2_drive_file_updated_v1;
+
 pub struct V1 {
     pub event: event::EventService,
     pub file: file::FileService,

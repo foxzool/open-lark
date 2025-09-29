@@ -11,6 +11,11 @@ pub mod message;
 pub mod search;
 pub mod task;
 
+// Approval v4 事件模块
+pub mod p2_approval_instance_approved_v4;
+pub mod p2_approval_instance_created_v4;
+pub mod p2_approval_instance_rejected_v4;
+
 use approval::ApprovalService;
 use external_approval::ExternalApprovalService;
 use external_instance::ExternalInstanceService;
