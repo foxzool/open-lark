@@ -24,7 +24,6 @@ jobs:
           version: 23.4
           include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run cargo test (workspace, all features)
         run: cargo test --workspace --all-features --no-fail-fast
 
@@ -44,7 +43,6 @@ jobs:
           version: 23.4
           include-pre-releases: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run cargo doc
         run: cargo doc --workspace --all-features --no-deps
 
