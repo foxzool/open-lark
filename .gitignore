@@ -12,6 +12,8 @@ Cargo.lock
 
 # Generated reports (CI/local analysis artifacts)
 /reports/
+/tests/compatibility/
+api_check_output.txt
 
 # Code coverage files
 *.lcov
