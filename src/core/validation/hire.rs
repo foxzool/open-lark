@@ -778,13 +778,20 @@ mod tests {
     #[test]
     fn test_validate_offer_info() {
         // 有效Offer信息
+        let future_date = (chrono::Utc::now().date_naive() + chrono::Duration::days(10))
+            .format("%Y-%m-%d")
+            .to_string();
+        let expiry_date = (chrono::Utc::now().date_naive() + chrono::Duration::days(25))
+            .format("%Y-%m-%d")
+            .to_string();
+
         assert!(matches!(
             validate_offer_info(
                 "oc_12345678",
                 "position_123",
                 20000,
-                "2025-10-01",
-                "2025-10-15"
+                &future_date,
+                &expiry_date
             ),
             ValidationResult::Valid
         ));
