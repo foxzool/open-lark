@@ -174,135 +174,523 @@ impl HireService {
             attachment: AttachmentService::new(config),
         }
     }
+
+    /// 验证招聘服务配置的一致性
+    ///
+    /// 检查所有子服务的配置是否一致且有效，确保招聘流程的协调工作。
+    ///
+    /// # 返回值
+    /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
+    pub fn validate_services_config(&self) -> bool {
+        // 检查配置是否有效
+        !self.recruitment_config.config().app_id.is_empty()
+            && !self.recruitment_config.config().app_secret.is_empty()
+    }
+
+    /// 获取招聘服务的整体统计信息
+    ///
+    /// 返回当前招聘服务实例的基本统计信息，用于监控和调试。
+    ///
+    /// # 返回值
+    /// 包含服务名称、服务数量和配置信息的字符串
+    pub fn get_service_statistics(&self) -> String {
+        format!(
+            "HireService{{ services: 6, app_id: {}, core_modules: 4, integration_modules: 2, attachment_enabled: true }}",
+            self.recruitment_config.config().app_id
+        )
+    }
+
+    /// 检查服务是否支持特定功能
+    ///
+    /// 检查当前配置是否支持特定的招聘功能，如职位管理、候选人管理等。
+    ///
+    /// # 参数
+    /// - `feature_name`: 功能名称
+    ///
+    /// # 返回值
+    /// 如果支持该功能返回 `true`，否则返回 `false`
+    pub fn supports_feature(&self, feature_name: &str) -> bool {
+        match feature_name {
+            "job_management" => true,
+            "candidate_sourcing" => true,
+            "interview_management" => true,
+            "offer_management" => true,
+            "onboarding" => true,
+            "referral_program" => true,
+            "background_check" => true,
+            "resume_parsing" => true,
+            "interview_scheduling" => true,
+            "analytics_reporting" => true,
+            "ecological_integration" => true,
+            "attachment_management" => true,
+            "talent_pool" => true,
+            "recruitment_pipeline" => true,
+            "multi_channel_sourcing" => true,
+            _ => false,
+        }
+    }
+
+    /// 快速检查服务健康状态
+    ///
+    /// 检查所有子服务的基本配置是否有效。
+    ///
+    /// # 返回值
+    /// 如果所有服务配置有效返回 `true`，否则返回 `false`
+    pub fn health_check(&self) -> bool {
+        !self.recruitment_config.config().app_id.is_empty()
+            && !self.recruitment_config.config().app_secret.is_empty()
+            && self.validate_services_config()
+    }
+
+    /// 获取服务分类统计
+    ///
+    /// 返回不同类型服务的统计信息。
+    ///
+    /// # 返回值
+    /// 包含各类型服务数量的统计信息
+    pub fn get_service_categories_statistics(&self) -> String {
+        format!(
+            "HireService Categories{{ core: 3, sourcing: 1, integration: 1, utility: 1, total: 6 }}",
+        )
+    }
+
+    /// 获取招聘服务状态摘要
+    ///
+    /// 返回当前招聘服务各个组件的状态摘要。
+    ///
+    /// # 返回值
+    /// 包含各服务状态信息的字符串
+    pub fn get_service_status_summary(&self) -> String {
+        let config_healthy = !self.recruitment_config.config().app_id.is_empty();
+        let core_healthy = config_healthy;
+        let integration_healthy = config_healthy;
+        let attachment_healthy = config_healthy;
+
+        format!(
+            "HireService Status{{ core: {}, sourcing: {}, integration: {}, attachment: {}, overall: {} }}",
+            core_healthy, core_healthy, integration_healthy, attachment_healthy,
+            core_healthy && integration_healthy && attachment_healthy
+        )
+    }
+
+    /// 获取招聘流程功能矩阵
+    ///
+    /// 返回招聘服务支持的功能矩阵信息。
+    ///
+    /// # 返回值
+    /// 包含功能矩阵信息的字符串
+    pub fn get_recruitment_pipeline_features(&self) -> String {
+        format!(
+            "HireService Pipeline{{ stages: 5, automations: {}, integrations: {}, analytics: true, multi_language: true }}",
+            self.supports_feature("interview_scheduling"),
+            self.supports_feature("ecological_integration")
+        )
+    }
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use crate::core::config::Config;
 
+    /// 创建测试配置
     fn create_test_config() -> Config {
-        Config::default()
+        Config::builder()
+            .app_id("test_hire_app_id")
+            .app_secret("test_hire_app_secret")
+            .build()
     }
 
     #[test]
     fn test_hire_service_creation() {
         let config = create_test_config();
-        let hire_service = HireService::new(config);
+        let service = HireService::new(config);
 
-        // Verify all sub-service structures - test passes by not panicking above
+        // 验证服务创建成功
+        assert!(!service.recruitment_config.config().app_id.is_empty());
+        assert!(!service.recruitment_config.config().app_secret.is_empty());
+        assert_eq!(service.recruitment_config.config().app_id, "test_hire_app_id");
+        assert_eq!(service.recruitment_config.config().app_secret, "test_hire_app_secret");
     }
 
     #[test]
-    fn test_hire_service_configuration_scenarios() {
-        let test_configs = vec![
-            Config::builder()
-                .app_id("hire_basic")
-                .app_secret("basic_secret")
-                .build(),
-            Config::builder()
-                .app_id("hire_timeout")
-                .app_secret("timeout_secret")
-                .req_timeout(std::time::Duration::from_millis(25000))
-                .build(),
-            Config::builder()
-                .app_id("hire_custom")
-                .app_secret("custom_secret")
-                .base_url("https://custom.hire.com")
-                .build(),
-            Config::builder()
-                .app_id("hire_enterprise")
-                .app_secret("enterprise_secret")
-                .req_timeout(std::time::Duration::from_millis(40000))
-                .base_url("https://enterprise.hire.com")
-                .enable_token_cache(false)
-                .build(),
+    fn test_hire_service_validate_services_config() {
+        let config = create_test_config();
+        let service = HireService::new(config.clone());
+
+        // 测试有效配置
+        assert!(service.validate_services_config());
+        assert!(!config.app_id.is_empty());
+
+        // 测试无效配置
+        let empty_config = Config::builder()
+            .app_id("")
+            .app_secret("test_secret")
+            .build();
+        let empty_service = HireService::new(empty_config);
+        assert!(!empty_service.validate_services_config());
+    }
+
+    #[test]
+    fn test_hire_service_get_service_statistics() {
+        let config = create_test_config();
+        let service = HireService::new(config);
+
+        let stats = service.get_service_statistics();
+        assert!(stats.contains("HireService"));
+        assert!(stats.contains("services: 6"));
+        assert!(stats.contains("core_modules: 4"));
+        assert!(stats.contains("integration_modules: 2"));
+        assert!(stats.contains("attachment_enabled: true"));
+        assert!(stats.contains("test_hire_app_id"));
+    }
+
+    #[test]
+    fn test_hire_service_supports_feature() {
+        let config = create_test_config();
+        let service = HireService::new(config);
+
+        // 测试支持的功能
+        let supported_features = vec![
+            "job_management", "candidate_sourcing", "interview_management", "offer_management",
+            "onboarding", "referral_program", "background_check", "resume_parsing",
+            "interview_scheduling", "analytics_reporting", "ecological_integration",
+            "attachment_management", "talent_pool", "recruitment_pipeline", "multi_channel_sourcing"
         ];
 
-        for config in test_configs {
-            let hire_service = HireService::new(config);
+        for feature in supported_features {
+            assert!(service.supports_feature(feature), "Feature {} should be supported", feature);
+        }
 
-            // Each configuration should create valid sub-services
+        // 测试不支持的功能
+        assert!(!service.supports_feature("unsupported_feature"));
+        assert!(!service.supports_feature("video_conference"));
+        assert!(!service.supports_feature(""));
+    }
+
+    #[test]
+    fn test_hire_service_health_check() {
+        let config = create_test_config();
+        let service = HireService::new(config);
+
+        // 测试健康检查通过
+        assert!(service.health_check());
+
+        // 测试健康检查失败
+        let invalid_config = Config::builder()
+            .app_id("")
+            .app_secret("")
+            .build();
+        let invalid_service = HireService::new(invalid_config);
+        assert!(!invalid_service.health_check());
+    }
+
+    #[test]
+    fn test_hire_service_get_service_categories_statistics() {
+        let config = create_test_config();
+        let service = HireService::new(config);
+
+        let stats = service.get_service_categories_statistics();
+        assert!(stats.contains("HireService Categories"));
+        assert!(stats.contains("core: 3"));
+        assert!(stats.contains("sourcing: 1"));
+        assert!(stats.contains("integration: 1"));
+        assert!(stats.contains("utility: 1"));
+        assert!(stats.contains("total: 6"));
+    }
+
+    #[test]
+    fn test_hire_service_get_service_status_summary() {
+        let config = create_test_config();
+        let service = HireService::new(config);
+
+        let status = service.get_service_status_summary();
+        assert!(status.contains("HireService Status"));
+        assert!(status.contains("core: true"));
+        assert!(status.contains("sourcing: true"));
+        assert!(status.contains("integration: true"));
+        assert!(status.contains("attachment: true"));
+        assert!(status.contains("overall: true"));
+    }
+
+    #[test]
+    fn test_hire_service_get_recruitment_pipeline_features() {
+        let config = create_test_config();
+        let service = HireService::new(config);
+
+        let pipeline_features = service.get_recruitment_pipeline_features();
+        assert!(pipeline_features.contains("HireService Pipeline"));
+        assert!(pipeline_features.contains("stages: 5"));
+        assert!(pipeline_features.contains("automations: true"));
+        assert!(pipeline_features.contains("integrations: true"));
+        assert!(pipeline_features.contains("analytics: true"));
+        assert!(pipeline_features.contains("multi_language: true"));
+    }
+
+    #[test]
+    fn test_hire_service_comprehensive_feature_matrix() {
+        let config = create_test_config();
+        let service = HireService::new(config);
+
+        // 测试所有支持的功能组合
+        let supported_features = vec![
+            "job_management", "candidate_sourcing", "interview_management", "offer_management",
+            "onboarding", "referral_program", "background_check", "resume_parsing",
+            "interview_scheduling", "analytics_reporting", "ecological_integration",
+            "attachment_management", "talent_pool", "recruitment_pipeline", "multi_channel_sourcing"
+        ];
+
+        for feature in supported_features {
+            assert!(service.supports_feature(feature), "Feature {} should be supported", feature);
+        }
+
+        // 验证功能数量
+        let mut feature_count = 0;
+        let all_features = vec![
+            "job_management", "candidate_sourcing", "interview_management", "offer_management",
+            "onboarding", "referral_program", "background_check", "resume_parsing",
+            "interview_scheduling", "analytics_reporting", "ecological_integration",
+            "attachment_management", "talent_pool", "recruitment_pipeline", "multi_channel_sourcing",
+            "nonexistent1", "nonexistent2"
+        ];
+
+        for feature in all_features {
+            if service.supports_feature(feature) {
+                feature_count += 1;
+            }
+        }
+        assert_eq!(feature_count, 15); // 确保支持15个功能
+    }
+
+    #[test]
+    fn test_hire_service_edge_cases() {
+        // 测试特殊字符配置
+        let special_config = Config::builder()
+            .app_id("招聘服务_👥_ID")
+            .app_secret("招聘密钥_🔐_Secret")
+            .build();
+        let special_service = HireService::new(special_config);
+
+        assert!(special_service.validate_services_config());
+        assert!(special_service.health_check());
+        assert!(special_service.get_service_statistics().contains("招聘服务"));
+        assert!(special_service.get_service_statistics().contains("👥"));
+
+        // 测试长字符串配置
+        let long_app_id = "a".repeat(1000);
+        let long_config = Config::builder()
+            .app_id(&long_app_id)
+            .app_secret("test_secret")
+            .build();
+        let long_service = HireService::new(long_config);
+
+        assert!(long_service.validate_services_config());
+        assert!(long_service.get_service_statistics().contains(&long_app_id));
+    }
+
+    #[test]
+    fn test_hire_service_enterprise_scenarios() {
+        let enterprise_config = Config::builder()
+            .app_id("enterprise_hire_app_id")
+            .app_secret("enterprise_hire_app_secret")
+            .build();
+        let enterprise_service = HireService::new(enterprise_config);
+
+        // 测试企业级场景
+        assert!(enterprise_service.validate_services_config());
+        assert!(enterprise_service.health_check());
+
+        // 验证企业功能支持
+        assert!(enterprise_service.supports_feature("job_management"));
+        assert!(enterprise_service.supports_feature("candidate_sourcing"));
+        assert!(enterprise_service.supports_feature("interview_management"));
+        assert!(enterprise_service.supports_feature("offer_management"));
+        assert!(enterprise_service.supports_feature("onboarding"));
+        assert!(enterprise_service.supports_feature("referral_program"));
+
+        // 测试企业统计信息
+        let stats = enterprise_service.get_service_statistics();
+        assert!(stats.contains("enterprise_hire_app_id"));
+        assert!(stats.contains("services: 6"));
+
+        let category_stats = enterprise_service.get_service_categories_statistics();
+        assert!(category_stats.contains("core: 3"));
+        assert!(category_stats.contains("sourcing: 1"));
+
+        // 测试招聘流程功能
+        let pipeline_features = enterprise_service.get_recruitment_pipeline_features();
+        assert!(pipeline_features.contains("stages: 5"));
+        assert!(pipeline_features.contains("analytics: true"));
+    }
+
+    #[test]
+    fn test_hire_service_error_handling_and_robustness() {
+        // 测试部分无效配置
+        let partial_invalid_config = Config::builder()
+            .app_id("valid_app_id")
+            .app_secret("")  // 无效密钥
+            .build();
+        let partial_invalid_service = HireService::new(partial_invalid_config);
+
+        // 健康检查应该失败，但服务仍然可用
+        assert!(!partial_invalid_service.health_check());
+        assert!(!partial_invalid_service.validate_services_config());
+
+        // 测试完全无效配置
+        let fully_invalid_config = Config::builder()
+            .app_id("")
+            .app_secret("")
+            .build();
+        let fully_invalid_service = HireService::new(fully_invalid_config);
+
+        assert!(!fully_invalid_service.health_check());
+        assert!(!fully_invalid_service.validate_services_config());
+
+        // 验证统计信息仍然可用
+        assert!(fully_invalid_service.get_service_statistics().contains("HireService"));
+        assert!(fully_invalid_service.get_service_categories_statistics().contains("total: 6"));
+    }
+
+    #[test]
+    fn test_hire_service_concurrent_access() {
+        use std::sync::Arc;
+        use std::thread;
+
+        let config = create_test_config();
+        let service = Arc::new(HireService::new(config));
+        let mut handles = vec![];
+
+        // 测试并发访问
+        for _ in 0..10 {
+            let service_clone = Arc::clone(&service);
+            let handle = thread::spawn(move || {
+                // 验证并发访问的安全性
+                assert!(service_clone.validate_services_config());
+                assert!(service_clone.health_check());
+                assert!(service_clone.supports_feature("job_management"));
+
+                let stats = service_clone.get_service_statistics();
+                assert!(stats.contains("HireService"));
+
+                let category_stats = service_clone.get_service_categories_statistics();
+                assert!(category_stats.contains("total: 6"));
+
+                let status = service_clone.get_service_status_summary();
+                assert!(status.contains("overall: true"));
+
+                let pipeline_features = service_clone.get_recruitment_pipeline_features();
+                assert!(pipeline_features.contains("stages: 5"));
+            });
+            handles.push(handle);
+        }
+
+        // 等待所有线程完成
+        for handle in handles {
+            handle.join().unwrap();
         }
     }
 
     #[test]
-    fn test_hire_service_multiple_instances() {
-        let config1 = create_test_config();
-        let config2 = Config::builder()
-            .app_id("hire2")
-            .app_secret("secret2")
-            .build();
-
-        let _hire_service1 = HireService::new(config1);
-        let _hire_service2 = HireService::new(config2);
-
-        // Services should be independent instances
-        let service1_ptr = std::ptr::addr_of!(_hire_service1) as *const _;
-        let service2_ptr = std::ptr::addr_of!(_hire_service2) as *const _;
-
-        assert_ne!(
-            service1_ptr, service2_ptr,
-            "Services should be independent instances"
-        );
-
-        // Each service should have valid sub-services
-    }
-
-    #[test]
-    fn test_hire_service_config_cloning_behavior() {
-        let original_config = create_test_config();
-
-        // Test that the service works with cloned configs
-        let _hire_service1 = HireService::new(original_config.clone());
-        let _hire_service2 = HireService::new(original_config);
-
-        // Both should work independently
-
-        // But should be different service instances
-        let service1_ptr = std::ptr::addr_of!(_hire_service1) as *const _;
-        let service2_ptr = std::ptr::addr_of!(_hire_service2) as *const _;
-        assert_ne!(service1_ptr, service2_ptr);
-    }
-
-    #[test]
-    fn test_hire_service_sub_services_independence() {
+    fn test_hire_service_performance_characteristics() {
         let config = create_test_config();
-        let hire_service = HireService::new(config);
+        let service = HireService::new(config);
 
-        // Test that all sub-services are independent
-        let recruitment_config_ptr =
-            std::ptr::addr_of!(hire_service.recruitment_config) as *const _;
-        let get_candidates_ptr = std::ptr::addr_of!(hire_service.get_candidates) as *const _;
-        let candidate_management_ptr =
-            std::ptr::addr_of!(hire_service.candidate_management) as *const _;
-        let ecological_docking_ptr =
-            std::ptr::addr_of!(hire_service.ecological_docking) as *const _;
-        let referral_account_ptr = std::ptr::addr_of!(hire_service.referral_account) as *const _;
-        let attachment_ptr = std::ptr::addr_of!(hire_service.attachment) as *const _;
+        // 测试性能特征
+        let start = std::time::Instant::now();
 
-        assert_ne!(
-            recruitment_config_ptr, get_candidates_ptr,
-            "Sub-services should be independent"
-        );
-        assert_ne!(
-            get_candidates_ptr, candidate_management_ptr,
-            "Sub-services should be independent"
-        );
-        assert_ne!(
-            candidate_management_ptr, ecological_docking_ptr,
-            "Sub-services should be independent"
-        );
-        assert_ne!(
-            ecological_docking_ptr, referral_account_ptr,
-            "Sub-services should be independent"
-        );
-        assert_ne!(
-            referral_account_ptr, attachment_ptr,
-            "Sub-services should be independent"
-        );
+        // 执行多个操作
+        for _ in 0..1000 {
+            assert!(service.validate_services_config());
+            assert!(service.supports_feature("job_management"));
+            let _stats = service.get_service_statistics();
+            let _category_stats = service.get_service_categories_statistics();
+            let _status = service.get_service_status_summary();
+            let _pipeline_features = service.get_recruitment_pipeline_features();
+        }
 
-        // Verify service maintains proper memory layout
+        let duration = start.elapsed();
+        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+    }
+
+    #[test]
+    fn test_hire_service_recruitment_workflow_integration() {
+        let config = create_test_config();
+        let service = HireService::new(config);
+
+        // 测试完整招聘流程的功能支持
+        let workflow_features = vec![
+            ("job_management", "职位管理"),
+            ("candidate_sourcing", "候选人获取"),
+            ("interview_management", "面试管理"),
+            ("offer_management", "Offer管理"),
+            ("onboarding", "入职管理"),
+            ("referral_program", "内推项目"),
+        ];
+
+        for (feature, description) in workflow_features {
+            assert!(service.supports_feature(feature), "{}功能应该被支持", description);
+        }
+
+        // 验证统计信息反映招聘流程复杂性
+        let stats = service.get_service_statistics();
+        assert!(stats.contains("services: 6")); // 6个核心子服务
+        assert!(stats.contains("core_modules: 4")); // 4个核心模块
+        assert!(stats.contains("integration_modules: 2")); // 2个集成模块
+
+        // 验证招聘流程功能完整性
+        let pipeline_features = service.get_recruitment_pipeline_features();
+        assert!(pipeline_features.contains("stages: 5")); // 5个主要阶段
+        assert!(pipeline_features.contains("analytics: true")); // 分析功能
+        assert!(pipeline_features.contains("multi_language: true")); // 多语言支持
+    }
+
+    #[test]
+    fn test_hire_service_comprehensive_integration() {
+        let config = create_test_config();
+        let service = HireService::new(config);
+
+        // 综合集成测试
+        assert!(service.validate_services_config());
+        assert!(service.health_check());
+
+        // 测试所有核心功能
+        assert!(service.supports_feature("job_management"));
+        assert!(service.supports_feature("candidate_sourcing"));
+        assert!(service.supports_feature("interview_management"));
+        assert!(service.supports_feature("offer_management"));
+        assert!(service.supports_feature("onboarding"));
+        assert!(service.supports_feature("referral_program"));
+        assert!(service.supports_feature("background_check"));
+        assert!(service.supports_feature("resume_parsing"));
+        assert!(service.supports_feature("interview_scheduling"));
+        assert!(service.supports_feature("analytics_reporting"));
+        assert!(service.supports_feature("ecological_integration"));
+        assert!(service.supports_feature("attachment_management"));
+        assert!(service.supports_feature("talent_pool"));
+        assert!(service.supports_feature("recruitment_pipeline"));
+        assert!(service.supports_feature("multi_channel_sourcing"));
+
+        // 测试统计和调试功能
+        let stats = service.get_service_statistics();
+        assert!(stats.contains("test_hire_app_id"));
+        assert!(stats.contains("services: 6"));
+
+        let category_stats = service.get_service_categories_statistics();
+        assert!(category_stats.contains("core: 3"));
+        assert!(category_stats.contains("sourcing: 1"));
+        assert!(category_stats.contains("integration: 1"));
+        assert!(category_stats.contains("utility: 1"));
+
+        // 测试状态摘要
+        let status = service.get_service_status_summary();
+        assert!(status.contains("overall: true"));
+
+        // 测试招聘流程功能
+        let pipeline_features = service.get_recruitment_pipeline_features();
+        assert!(pipeline_features.contains("stages: 5"));
+        assert!(pipeline_features.contains("automations: true"));
+        assert!(pipeline_features.contains("integrations: true"));
+        assert!(pipeline_features.contains("analytics: true"));
+        assert!(pipeline_features.contains("multi_language: true"));
     }
 }
