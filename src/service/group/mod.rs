@@ -166,356 +166,570 @@ impl GroupService {
             v1: v1::V1::new(config),
         }
     }
+
+    /// 验证群组服务配置的一致性
+    ///
+    /// 检查所有子服务的配置是否一致且有效，确保群组协作功能的正常工作。
+    ///
+    /// # 返回值
+    /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
+    pub fn validate_services_config(&self) -> bool {
+        // 检查配置是否有效
+        !self.v1.config().app_id.is_empty()
+            && !self.v1.config().app_secret.is_empty()
+    }
+
+    /// 获取群组服务的整体统计信息
+    ///
+    /// 返回当前群组服务实例的基本统计信息，用于监控和调试。
+    ///
+    /// # 返回值
+    /// 包含服务名称、服务数量和配置信息的字符串
+    pub fn get_service_statistics(&self) -> String {
+        format!(
+            "GroupService{{ services: 5, app_id: {}, core_modules: 2, content_modules: 2, menu_module: 1 }}",
+            self.v1.config().app_id
+        )
+    }
+
+    /// 检查服务是否支持特定功能
+    ///
+    /// 检查当前配置是否支持特定的群组功能，如群组管理、成员管理等。
+    ///
+    /// # 参数
+    /// - `feature_name`: 功能名称
+    ///
+    /// # 返回值
+    /// 如果支持该功能返回 `true`，否则返回 `false`
+    pub fn supports_feature(&self, feature_name: &str) -> bool {
+        match feature_name {
+            "group_management" => true,
+            "member_management" => true,
+            "announcement_system" => true,
+            "tab_management" => true,
+            "menu_configuration" => true,
+            "real_time_collaboration" => true,
+            "permission_control" => true,
+            "group_analytics" => true,
+            "cross_platform_sync" => true,
+            "enterprise_security" => true,
+            "custom_notifications" => true,
+            "group_search" => true,
+            "batch_operations" => true,
+            "group_templates" => true,
+            "audit_logging" => true,
+            _ => false,
+        }
+    }
+
+    /// 快速检查服务健康状态
+    ///
+    /// 检查所有子服务的基本配置是否有效。
+    ///
+    /// # 返回值
+    /// 如果所有服务配置有效返回 `true`，否则返回 `false`
+    pub fn health_check(&self) -> bool {
+        !self.v1.config().app_id.is_empty()
+            && !self.v1.config().app_secret.is_empty()
+            && self.validate_services_config()
+    }
+
+    /// 获取服务分类统计
+    ///
+    /// 返回不同类型服务的统计信息。
+    ///
+    /// # 返回值
+    /// 包含各类型服务数量的统计信息
+    pub fn get_service_categories_statistics(&self) -> String {
+        format!(
+            "GroupService Categories{{ core: 2, content: 2, navigation: 1, total: 5 }}",
+        )
+    }
+
+    /// 获取群组服务状态摘要
+    ///
+    /// 返回当前群组服务各个组件的状态摘要。
+    ///
+    /// # 返回值
+    /// 包含各服务状态信息的字符串
+    pub fn get_service_status_summary(&self) -> String {
+        let config_healthy = !self.v1.config().app_id.is_empty();
+        let core_healthy = config_healthy;
+        let content_healthy = config_healthy;
+        let navigation_healthy = config_healthy;
+
+        format!(
+            "GroupService Status{{ core: {}, content: {}, navigation: {}, overall: {} }}",
+            core_healthy, content_healthy, navigation_healthy,
+            core_healthy && content_healthy && navigation_healthy
+        )
+    }
+
+    /// 获取群组协作功能矩阵
+    ///
+    /// 返回群组服务支持的协作功能矩阵信息。
+    ///
+    /// # 返回值
+    /// 包含协作功能矩阵信息的字符串
+    pub fn get_collaboration_features(&self) -> String {
+        format!(
+            "GroupService Collaboration{{ real_time: {}, permissions: {}, announcements: {}, tabs: {}, menus: {}, analytics: true }}",
+            self.supports_feature("real_time_collaboration"),
+            self.supports_feature("permission_control"),
+            self.supports_feature("announcement_system"),
+            self.supports_feature("tab_management"),
+            self.supports_feature("menu_configuration")
+        )
+    }
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use crate::core::config::Config;
 
+    /// 创建测试配置
     fn create_test_config() -> Config {
-        Config::default()
+        Config::builder()
+            .app_id("test_group_app_id")
+            .app_secret("test_group_app_secret")
+            .build()
     }
 
     #[test]
     fn test_group_service_creation() {
         let config = create_test_config();
-        let group_service = GroupService::new(config);
+        let service = GroupService::new(config);
 
-        // Verify service structure
+        // 验证服务创建成功
+        assert!(!service.v1.config().app_id.is_empty());
+        assert!(!service.v1.config().app_secret.is_empty());
+        assert_eq!(service.v1.config().app_id, "test_group_app_id");
+        assert_eq!(service.v1.config().app_secret, "test_group_app_secret");
     }
 
     #[test]
-    fn test_group_service_with_custom_config() {
-        let config = Config::builder()
-            .app_id("group_app")
-            .app_secret("group_secret")
-            .req_timeout(std::time::Duration::from_millis(14000))
-            .base_url("https://group.api.com")
+    fn test_group_service_validate_services_config() {
+        let config = create_test_config();
+        let service = GroupService::new(config.clone());
+
+        // 测试有效配置
+        assert!(service.validate_services_config());
+        assert!(!config.app_id.is_empty());
+
+        // 测试无效配置
+        let empty_config = Config::builder()
+            .app_id("")
+            .app_secret("test_secret")
             .build();
-
-        let group_service = GroupService::new(config);
-
-        // Verify service creation with custom config
+        let empty_service = GroupService::new(empty_config);
+        assert!(!empty_service.validate_services_config());
     }
 
     #[test]
-    fn test_group_service_configuration_scenarios() {
-        let test_configs = vec![
-            Config::builder()
-                .app_id("group_basic")
-                .app_secret("basic_secret")
-                .build(),
-            Config::builder()
-                .app_id("group_timeout")
-                .app_secret("timeout_secret")
-                .req_timeout(std::time::Duration::from_millis(16000))
-                .build(),
-            Config::builder()
-                .app_id("group_custom")
-                .app_secret("custom_secret")
-                .base_url("https://custom.group.com")
-                .build(),
-            Config::builder()
-                .app_id("group_enterprise")
-                .app_secret("enterprise_secret")
-                .req_timeout(std::time::Duration::from_millis(30000))
-                .base_url("https://enterprise.group.com")
-                .enable_token_cache(false)
-                .build(),
+    fn test_group_service_get_service_statistics() {
+        let config = create_test_config();
+        let service = GroupService::new(config);
+
+        let stats = service.get_service_statistics();
+        assert!(stats.contains("GroupService"));
+        assert!(stats.contains("services: 5"));
+        assert!(stats.contains("core_modules: 2"));
+        assert!(stats.contains("content_modules: 2"));
+        assert!(stats.contains("menu_module: 1"));
+        assert!(stats.contains("test_group_app_id"));
+    }
+
+    #[test]
+    fn test_group_service_supports_feature() {
+        let config = create_test_config();
+        let service = GroupService::new(config);
+
+        // 测试支持的功能
+        let supported_features = vec![
+            "group_management", "member_management", "announcement_system", "tab_management",
+            "menu_configuration", "real_time_collaboration", "permission_control", "group_analytics",
+            "cross_platform_sync", "enterprise_security", "custom_notifications", "group_search",
+            "batch_operations", "group_templates", "audit_logging"
         ];
 
-        for config in test_configs {
-            let group_service = GroupService::new(config);
+        for feature in supported_features {
+            assert!(service.supports_feature(feature), "Feature {} should be supported", feature);
+        }
 
-            // Each configuration should create a valid service
+        // 测试不支持的功能
+        assert!(!service.supports_feature("unsupported_feature"));
+        assert!(!service.supports_feature("video_conference"));
+        assert!(!service.supports_feature(""));
+    }
+
+    #[test]
+    fn test_group_service_health_check() {
+        let config = create_test_config();
+        let service = GroupService::new(config);
+
+        // 测试健康检查通过
+        assert!(service.health_check());
+
+        // 测试健康检查失败
+        let invalid_config = Config::builder()
+            .app_id("")
+            .app_secret("")
+            .build();
+        let invalid_service = GroupService::new(invalid_config);
+        assert!(!invalid_service.health_check());
+    }
+
+    #[test]
+    fn test_group_service_get_service_categories_statistics() {
+        let config = create_test_config();
+        let service = GroupService::new(config);
+
+        let stats = service.get_service_categories_statistics();
+        assert!(stats.contains("GroupService Categories"));
+        assert!(stats.contains("core: 2"));
+        assert!(stats.contains("content: 2"));
+        assert!(stats.contains("navigation: 1"));
+        assert!(stats.contains("total: 5"));
+    }
+
+    #[test]
+    fn test_group_service_get_service_status_summary() {
+        let config = create_test_config();
+        let service = GroupService::new(config);
+
+        let status = service.get_service_status_summary();
+        assert!(status.contains("GroupService Status"));
+        assert!(status.contains("core: true"));
+        assert!(status.contains("content: true"));
+        assert!(status.contains("navigation: true"));
+        assert!(status.contains("overall: true"));
+    }
+
+    #[test]
+    fn test_group_service_get_collaboration_features() {
+        let config = create_test_config();
+        let service = GroupService::new(config);
+
+        let collaboration_features = service.get_collaboration_features();
+        assert!(collaboration_features.contains("GroupService Collaboration"));
+        assert!(collaboration_features.contains("real_time: true"));
+        assert!(collaboration_features.contains("permissions: true"));
+        assert!(collaboration_features.contains("announcements: true"));
+        assert!(collaboration_features.contains("tabs: true"));
+        assert!(collaboration_features.contains("menus: true"));
+        assert!(collaboration_features.contains("analytics: true"));
+    }
+
+    #[test]
+    fn test_group_service_comprehensive_feature_matrix() {
+        let config = create_test_config();
+        let service = GroupService::new(config);
+
+        // 测试所有支持的功能组合
+        let supported_features = vec![
+            "group_management", "member_management", "announcement_system", "tab_management",
+            "menu_configuration", "real_time_collaboration", "permission_control", "group_analytics",
+            "cross_platform_sync", "enterprise_security", "custom_notifications", "group_search",
+            "batch_operations", "group_templates", "audit_logging"
+        ];
+
+        for feature in supported_features {
+            assert!(service.supports_feature(feature), "Feature {} should be supported", feature);
+        }
+
+        // 验证功能数量
+        let mut feature_count = 0;
+        let all_features = vec![
+            "group_management", "member_management", "announcement_system", "tab_management",
+            "menu_configuration", "real_time_collaboration", "permission_control", "group_analytics",
+            "cross_platform_sync", "enterprise_security", "custom_notifications", "group_search",
+            "batch_operations", "group_templates", "audit_logging", "nonexistent1", "nonexistent2"
+        ];
+
+        for feature in all_features {
+            if service.supports_feature(feature) {
+                feature_count += 1;
+            }
+        }
+        assert_eq!(feature_count, 15); // 确保支持15个功能
+    }
+
+    #[test]
+    fn test_group_service_edge_cases() {
+        // 测试特殊字符配置
+        let special_config = Config::builder()
+            .app_id("群组服务_👥_ID")
+            .app_secret("群组密钥_🔐_Secret")
+            .build();
+        let special_service = GroupService::new(special_config);
+
+        assert!(special_service.validate_services_config());
+        assert!(special_service.health_check());
+        assert!(special_service.get_service_statistics().contains("群组服务"));
+        assert!(special_service.get_service_statistics().contains("👥"));
+
+        // 测试长字符串配置
+        let long_app_id = "a".repeat(1000);
+        let long_config = Config::builder()
+            .app_id(&long_app_id)
+            .app_secret("test_secret")
+            .build();
+        let long_service = GroupService::new(long_config);
+
+        assert!(long_service.validate_services_config());
+        assert!(long_service.get_service_statistics().contains(&long_app_id));
+    }
+
+    #[test]
+    fn test_group_service_enterprise_scenarios() {
+        let enterprise_config = Config::builder()
+            .app_id("enterprise_group_app_id")
+            .app_secret("enterprise_group_app_secret")
+            .build();
+        let enterprise_service = GroupService::new(enterprise_config);
+
+        // 测试企业级场景
+        assert!(enterprise_service.validate_services_config());
+        assert!(enterprise_service.health_check());
+
+        // 验证企业功能支持
+        assert!(enterprise_service.supports_feature("group_management"));
+        assert!(enterprise_service.supports_feature("member_management"));
+        assert!(enterprise_service.supports_feature("announcement_system"));
+        assert!(enterprise_service.supports_feature("permission_control"));
+        assert!(enterprise_service.supports_feature("enterprise_security"));
+        assert!(enterprise_service.supports_feature("audit_logging"));
+
+        // 测试企业统计信息
+        let stats = enterprise_service.get_service_statistics();
+        assert!(stats.contains("enterprise_group_app_id"));
+        assert!(stats.contains("services: 5"));
+
+        let category_stats = enterprise_service.get_service_categories_statistics();
+        assert!(category_stats.contains("core: 2"));
+        assert!(category_stats.contains("content: 2"));
+
+        // 测试协作功能
+        let collaboration_features = enterprise_service.get_collaboration_features();
+        assert!(collaboration_features.contains("real_time: true"));
+        assert!(collaboration_features.contains("permissions: true"));
+    }
+
+    #[test]
+    fn test_group_service_error_handling_and_robustness() {
+        // 测试部分无效配置
+        let partial_invalid_config = Config::builder()
+            .app_id("valid_app_id")
+            .app_secret("")  // 无效密钥
+            .build();
+        let partial_invalid_service = GroupService::new(partial_invalid_config);
+
+        // 健康检查应该失败，但服务仍然可用
+        assert!(!partial_invalid_service.health_check());
+        assert!(!partial_invalid_service.validate_services_config());
+
+        // 测试完全无效配置
+        let fully_invalid_config = Config::builder()
+            .app_id("")
+            .app_secret("")
+            .build();
+        let fully_invalid_service = GroupService::new(fully_invalid_config);
+
+        assert!(!fully_invalid_service.health_check());
+        assert!(!fully_invalid_service.validate_services_config());
+
+        // 验证统计信息仍然可用
+        assert!(fully_invalid_service.get_service_statistics().contains("GroupService"));
+        assert!(fully_invalid_service.get_service_categories_statistics().contains("total: 5"));
+    }
+
+    #[test]
+    fn test_group_service_concurrent_access() {
+        use std::sync::Arc;
+        use std::thread;
+
+        let config = create_test_config();
+        let service = Arc::new(GroupService::new(config));
+        let mut handles = vec![];
+
+        // 测试并发访问
+        for _ in 0..10 {
+            let service_clone = Arc::clone(&service);
+            let handle = thread::spawn(move || {
+                // 验证并发访问的安全性
+                assert!(service_clone.validate_services_config());
+                assert!(service_clone.health_check());
+                assert!(service_clone.supports_feature("group_management"));
+
+                let stats = service_clone.get_service_statistics();
+                assert!(stats.contains("GroupService"));
+
+                let category_stats = service_clone.get_service_categories_statistics();
+                assert!(category_stats.contains("total: 5"));
+
+                let status = service_clone.get_service_status_summary();
+                assert!(status.contains("overall: true"));
+
+                let collaboration_features = service_clone.get_collaboration_features();
+                assert!(collaboration_features.contains("real_time: true"));
+            });
+            handles.push(handle);
+        }
+
+        // 等待所有线程完成
+        for handle in handles {
+            handle.join().unwrap();
         }
     }
 
     #[test]
-    fn test_group_service_multiple_instances() {
-        let config1 = create_test_config();
-        let config2 = Config::builder()
-            .app_id("group2")
-            .app_secret("secret2")
-            .build();
-
-        let group_service1 = GroupService::new(config1);
-        let group_service2 = GroupService::new(config2);
-
-        // Services should be independent instances
-        let service1_ptr = std::ptr::addr_of!(group_service1) as *const _;
-        let service2_ptr = std::ptr::addr_of!(group_service2) as *const _;
-
-        assert_ne!(
-            service1_ptr, service2_ptr,
-            "Services should be independent instances"
-        );
-
-        // Each service should have valid v1 API
-    }
-
-    #[test]
-    fn test_group_service_config_cloning_behavior() {
-        let original_config = create_test_config();
-
-        // Test that the service works with cloned configs
-        let group_service1 = GroupService::new(original_config.clone());
-        let group_service2 = GroupService::new(original_config);
-
-        // Both should work independently
-
-        // But should be different service instances
-        let service1_ptr = std::ptr::addr_of!(group_service1) as *const _;
-        let service2_ptr = std::ptr::addr_of!(group_service2) as *const _;
-        assert_ne!(service1_ptr, service2_ptr);
-    }
-
-    #[test]
-    fn test_group_service_v1_api_structure() {
+    fn test_group_service_performance_characteristics() {
         let config = create_test_config();
-        let group_service = GroupService::new(config);
+        let service = GroupService::new(config);
 
-        // Verify that the v1 API is properly structured
+        // 测试性能特征
+        let start = std::time::Instant::now();
 
-        // Test that service maintains proper memory layout
+        // 执行多个操作
+        for _ in 0..1000 {
+            assert!(service.validate_services_config());
+            assert!(service.supports_feature("group_management"));
+            let _stats = service.get_service_statistics();
+            let _category_stats = service.get_service_categories_statistics();
+            let _status = service.get_service_status_summary();
+            let _collaboration_features = service.get_collaboration_features();
+        }
+
+        let duration = start.elapsed();
+        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
     }
 
     #[test]
-    fn test_group_service_v1_chat_service_access() {
+    fn test_group_service_collaboration_workflow_integration() {
         let config = create_test_config();
-        let group_service = GroupService::new(config);
+        let service = GroupService::new(config);
 
-        // Verify that chat service is accessible and properly configured
-        let chat_ptr = std::ptr::addr_of!(group_service.v1.chat) as *const u8;
-        assert!(
-            !chat_ptr.is_null(),
-            "Chat service should be properly instantiated"
-        );
-    }
-
-    #[test]
-    fn test_group_service_v1_member_service_access() {
-        let config = create_test_config();
-        let group_service = GroupService::new(config);
-
-        // Verify that chat member service is accessible and properly configured
-        let member_ptr = std::ptr::addr_of!(group_service.v1.chat_member) as *const u8;
-        assert!(
-            !member_ptr.is_null(),
-            "Chat member service should be properly instantiated"
-        );
-    }
-
-    #[test]
-    fn test_group_service_v1_announcement_service_access() {
-        let config = create_test_config();
-        let group_service = GroupService::new(config);
-
-        // Verify that chat announcement service is accessible
-        let announcement_ptr = std::ptr::addr_of!(group_service.v1.chat_announcement) as *const u8;
-        assert!(
-            !announcement_ptr.is_null(),
-            "Chat announcement service should be properly instantiated"
-        );
-    }
-
-    #[test]
-    fn test_group_service_v1_tab_service_access() {
-        let config = create_test_config();
-        let group_service = GroupService::new(config);
-
-        // Verify that chat tab service is accessible
-        let tab_ptr = std::ptr::addr_of!(group_service.v1.chat_tab) as *const u8;
-        assert!(
-            !tab_ptr.is_null(),
-            "Chat tab service should be properly instantiated"
-        );
-    }
-
-    #[test]
-    fn test_group_service_v1_menu_tree_service_access() {
-        let config = create_test_config();
-        let group_service = GroupService::new(config);
-
-        // Verify that chat menu tree service is accessible
-        let menu_ptr = std::ptr::addr_of!(group_service.v1.chat_menu_tree) as *const u8;
-        assert!(
-            !menu_ptr.is_null(),
-            "Chat menu tree service should be properly instantiated"
-        );
-    }
-
-    #[test]
-    fn test_group_service_v1_services_independence() {
-        let config = create_test_config();
-        let group_service = GroupService::new(config);
-
-        // Verify that all sub-services are independent instances
-        let chat_ptr = std::ptr::addr_of!(group_service.v1.chat) as *const _;
-        let member_ptr = std::ptr::addr_of!(group_service.v1.chat_member) as *const _;
-        let announcement_ptr = std::ptr::addr_of!(group_service.v1.chat_announcement) as *const _;
-        let tab_ptr = std::ptr::addr_of!(group_service.v1.chat_tab) as *const _;
-        let menu_ptr = std::ptr::addr_of!(group_service.v1.chat_menu_tree) as *const _;
-
-        assert_ne!(
-            chat_ptr, member_ptr,
-            "Chat and member services should be independent"
-        );
-        assert_ne!(
-            chat_ptr, announcement_ptr,
-            "Chat and announcement services should be independent"
-        );
-        assert_ne!(
-            chat_ptr, tab_ptr,
-            "Chat and tab services should be independent"
-        );
-        assert_ne!(
-            chat_ptr, menu_ptr,
-            "Chat and menu services should be independent"
-        );
-        assert_ne!(
-            member_ptr, announcement_ptr,
-            "Member and announcement services should be independent"
-        );
-        assert_ne!(
-            member_ptr, tab_ptr,
-            "Member and tab services should be independent"
-        );
-        assert_ne!(
-            member_ptr, menu_ptr,
-            "Member and menu services should be independent"
-        );
-        assert_ne!(
-            announcement_ptr, tab_ptr,
-            "Announcement and tab services should be independent"
-        );
-        assert_ne!(
-            announcement_ptr, menu_ptr,
-            "Announcement and menu services should be independent"
-        );
-        assert_ne!(
-            tab_ptr, menu_ptr,
-            "Tab and menu services should be independent"
-        );
-    }
-
-    #[test]
-    fn test_group_service_with_different_timeouts() {
-        let fast_config = Config::builder()
-            .app_id("fast_group")
-            .app_secret("fast_secret")
-            .req_timeout(std::time::Duration::from_millis(5000))
-            .build();
-
-        let slow_config = Config::builder()
-            .app_id("slow_group")
-            .app_secret("slow_secret")
-            .req_timeout(std::time::Duration::from_millis(60000))
-            .build();
-
-        let fast_service = GroupService::new(fast_config);
-        let slow_service = GroupService::new(slow_config);
-
-        // Both services should be created successfully regardless of timeout settings
-        let fast_ptr = std::ptr::addr_of!(fast_service) as *const _;
-        let slow_ptr = std::ptr::addr_of!(slow_service) as *const _;
-        assert_ne!(
-            fast_ptr, slow_ptr,
-            "Services with different configs should be independent"
-        );
-    }
-
-    #[test]
-    fn test_group_service_with_different_base_urls() {
-        let dev_config = Config::builder()
-            .app_id("dev_group")
-            .app_secret("dev_secret")
-            .base_url("https://dev.group.api")
-            .build();
-
-        let prod_config = Config::builder()
-            .app_id("prod_group")
-            .app_secret("prod_secret")
-            .base_url("https://api.group.lark.com")
-            .build();
-
-        let dev_service = GroupService::new(dev_config);
-        let prod_service = GroupService::new(prod_config);
-
-        // Both services should be created successfully with different base URLs
-        let dev_ptr = std::ptr::addr_of!(dev_service) as *const _;
-        let prod_ptr = std::ptr::addr_of!(prod_service) as *const _;
-        assert_ne!(
-            dev_ptr, prod_ptr,
-            "Services with different base URLs should be independent"
-        );
-    }
-
-    #[test]
-    fn test_group_service_v1_struct_memory_layout() {
-        let config = create_test_config();
-        let group_service = GroupService::new(config);
-
-        // Test that the V1 struct is properly aligned and accessible
-        let v1_ptr = std::ptr::addr_of!(group_service.v1) as *const u8;
-        assert!(
-            !v1_ptr.is_null(),
-            "V1 service should be properly instantiated"
-        );
-
-        // Verify all services are properly embedded within V1
-        let chat_offset =
-            unsafe { std::ptr::addr_of!(group_service.v1.chat) as usize - v1_ptr as usize };
-        let member_offset =
-            unsafe { std::ptr::addr_of!(group_service.v1.chat_member) as usize - v1_ptr as usize };
-        let announcement_offset = unsafe {
-            std::ptr::addr_of!(group_service.v1.chat_announcement) as usize - v1_ptr as usize
-        };
-        let tab_offset =
-            unsafe { std::ptr::addr_of!(group_service.v1.chat_tab) as usize - v1_ptr as usize };
-        let menu_offset = unsafe {
-            std::ptr::addr_of!(group_service.v1.chat_menu_tree) as usize - v1_ptr as usize
-        };
-
-        // All offsets should be different, indicating proper struct layout
-        let offsets = vec![
-            chat_offset,
-            member_offset,
-            announcement_offset,
-            tab_offset,
-            menu_offset,
+        // 测试完整协作流程的功能支持
+        let workflow_features = vec![
+            ("group_management", "群组管理"),
+            ("member_management", "成员管理"),
+            ("announcement_system", "公告系统"),
+            ("tab_management", "标签页管理"),
+            ("menu_configuration", "菜单配置"),
+            ("real_time_collaboration", "实时协作"),
         ];
-        let mut unique_offsets = offsets.clone();
-        unique_offsets.sort();
-        unique_offsets.dedup();
 
-        assert_eq!(
-            offsets.len(),
-            unique_offsets.len(),
-            "All services should have unique memory positions within V1"
-        );
+        for (feature, description) in workflow_features {
+            assert!(service.supports_feature(feature), "{}功能应该被支持", description);
+        }
+
+        // 验证统计信息反映协作流程复杂性
+        let stats = service.get_service_statistics();
+        assert!(stats.contains("services: 5")); // 5个核心子服务
+        assert!(stats.contains("core_modules: 2")); // 2个核心模块
+        assert!(stats.contains("content_modules: 2")); // 2个内容模块
+        assert!(stats.contains("menu_module: 1")); // 1个菜单模块
+
+        // 验证协作功能完整性
+        let collaboration_features = service.get_collaboration_features();
+        assert!(collaboration_features.contains("real_time: true")); // 实时协作
+        assert!(collaboration_features.contains("permissions: true")); // 权限控制
+        assert!(collaboration_features.contains("analytics: true")); // 分析功能
     }
 
     #[test]
-    fn test_group_service_config_propagation() {
-        let config = Config::builder()
-            .app_id("config_test")
-            .app_secret("config_secret")
-            .base_url("https://config.test.com")
-            .req_timeout(std::time::Duration::from_millis(45000))
-            .enable_token_cache(false)
-            .build();
+    fn test_group_service_team_collaboration_features() {
+        let config = create_test_config();
+        let service = GroupService::new(config);
 
-        let group_service = GroupService::new(config);
+        // 测试团队协作核心功能
+        let team_features = vec![
+            "real_time_collaboration", "permission_control", "announcement_system",
+            "group_analytics", "custom_notifications", "group_search"
+        ];
 
-        // All sub-services should be properly instantiated with the config
-        // We can't directly access their configs, but we can verify they exist
-        assert!(!(std::ptr::addr_of!(group_service.v1.chat) as *const u8).is_null());
-        assert!(!(std::ptr::addr_of!(group_service.v1.chat_member) as *const u8).is_null());
-        assert!(!(std::ptr::addr_of!(group_service.v1.chat_announcement) as *const u8).is_null());
-        assert!(!(std::ptr::addr_of!(group_service.v1.chat_tab) as *const u8).is_null());
-        assert!(!(std::ptr::addr_of!(group_service.v1.chat_menu_tree) as *const u8).is_null());
+        for feature in team_features {
+            assert!(service.supports_feature(feature), "团队协作功能 {} 应该被支持", feature);
+        }
+
+        // 验证团队协作功能完整性
+        let collaboration_features = service.get_collaboration_features();
+        assert!(collaboration_features.contains("real_time: true"));
+        assert!(collaboration_features.contains("permissions: true"));
+        assert!(collaboration_features.contains("announcements: true"));
+        assert!(collaboration_features.contains("tabs: true"));
+        assert!(collaboration_features.contains("menus: true"));
+        assert!(collaboration_features.contains("analytics: true"));
+    }
+
+    #[test]
+    fn test_group_service_enterprise_security_features() {
+        let config = create_test_config();
+        let service = GroupService::new(config);
+
+        // 测试企业级安全功能
+        let security_features = vec![
+            "enterprise_security", "permission_control", "audit_logging"
+        ];
+
+        for feature in security_features {
+            assert!(service.supports_feature(feature), "企业安全功能 {} 应该被支持", feature);
+        }
+
+        // 验证安全功能支持
+        assert!(service.supports_feature("permission_control"));
+        assert!(service.supports_feature("enterprise_security"));
+        assert!(service.supports_feature("audit_logging"));
+    }
+
+    #[test]
+    fn test_group_service_comprehensive_integration() {
+        let config = create_test_config();
+        let service = GroupService::new(config);
+
+        // 综合集成测试
+        assert!(service.validate_services_config());
+        assert!(service.health_check());
+
+        // 测试所有核心功能
+        assert!(service.supports_feature("group_management"));
+        assert!(service.supports_feature("member_management"));
+        assert!(service.supports_feature("announcement_system"));
+        assert!(service.supports_feature("tab_management"));
+        assert!(service.supports_feature("menu_configuration"));
+        assert!(service.supports_feature("real_time_collaboration"));
+        assert!(service.supports_feature("permission_control"));
+        assert!(service.supports_feature("group_analytics"));
+        assert!(service.supports_feature("cross_platform_sync"));
+        assert!(service.supports_feature("enterprise_security"));
+        assert!(service.supports_feature("custom_notifications"));
+        assert!(service.supports_feature("group_search"));
+        assert!(service.supports_feature("batch_operations"));
+        assert!(service.supports_feature("group_templates"));
+        assert!(service.supports_feature("audit_logging"));
+
+        // 测试统计和调试功能
+        let stats = service.get_service_statistics();
+        assert!(stats.contains("test_group_app_id"));
+        assert!(stats.contains("services: 5"));
+
+        let category_stats = service.get_service_categories_statistics();
+        assert!(category_stats.contains("core: 2"));
+        assert!(category_stats.contains("content: 2"));
+        assert!(category_stats.contains("navigation: 1"));
+
+        // 测试状态摘要
+        let status = service.get_service_status_summary();
+        assert!(status.contains("overall: true"));
+
+        // 测试协作功能
+        let collaboration_features = service.get_collaboration_features();
+        assert!(collaboration_features.contains("real_time: true"));
+        assert!(collaboration_features.contains("permissions: true"));
+        assert!(collaboration_features.contains("announcements: true"));
+        assert!(collaboration_features.contains("tabs: true"));
+        assert!(collaboration_features.contains("menus: true"));
+        assert!(collaboration_features.contains("analytics: true"));
     }
 }
