@@ -150,7 +150,7 @@ impl EventDispatcherHandler {
     }
 }
 
-pub trait EventHandler {
+pub trait EventHandler: Send + Sync {
     fn handle(&self, payload: &[u8]) -> anyhow::Result<()>;
 }
 
@@ -926,5 +926,457 @@ mod tests {
 
         let result = handler.emit("any.event", b"payload");
         assert!(result.is_err());
+    }
+
+    // ==================== Enhanced Coverage Tests ====================
+
+    // Thread safety and concurrent access tests
+    #[test]
+    fn test_concurrent_handler_access() {
+        use std::sync::Arc;
+        use std::thread;
+
+        let calls = Arc::new(Mutex::new(Vec::new()));
+        let test_handler = TestEventHandler::new(calls.clone());
+
+        let mut handler = EventDispatcherHandler::builder().build();
+        handler
+            .processor_map
+            .insert("concurrent.test".to_string(), Box::new(test_handler));
+
+        let handler = Arc::new(handler);
+        let mut handles = vec![];
+
+        // Spawn multiple threads that call the handler concurrently
+        for i in 0..10 {
+            let handler_clone = handler.clone();
+            let handle = thread::spawn(move || {
+                let payload = format!("concurrent payload {}", i);
+                let result = handler_clone.emit("concurrent.test", payload.as_bytes());
+                assert!(result.is_ok());
+            });
+            handles.push(handle);
+        }
+
+        // Wait for all threads to complete
+        for handle in handles {
+            handle.join().unwrap();
+        }
+
+        // Verify all calls were processed
+        let calls_vec = calls.lock().unwrap();
+        assert_eq!(calls_vec.len(), 10);
+    }
+
+    // Memory management and lifecycle tests
+    #[test]
+    fn test_handler_lifecycle() {
+        let calls = Arc::new(Mutex::new(Vec::new()));
+
+        // Create handler and let it go out of scope
+        {
+            let test_handler = TestEventHandler::new(calls.clone());
+            let mut handler = EventDispatcherHandler::builder().build();
+            handler
+                .processor_map
+                .insert("lifecycle.test".to_string(), Box::new(test_handler));
+
+            let result = handler.emit("lifecycle.test", b"lifecycle payload");
+            assert!(result.is_ok());
+        } // handler and test_handler go out of scope here
+
+        // Verify the call was still processed correctly
+        let calls_vec = calls.lock().unwrap();
+        assert_eq!(calls_vec.len(), 1);
+        assert_eq!(calls_vec[0], "lifecycle payload");
+    }
+
+    // Error handling and edge case tests
+    #[test]
+    fn test_malformed_payload_handling() {
+        let calls = Arc::new(Mutex::new(Vec::new()));
+        let test_handler = TestEventHandler::new(calls.clone());
+
+        let mut handler = EventDispatcherHandler::builder().build();
+        handler
+            .processor_map
+            .insert("malformed.test".to_string(), Box::new(test_handler));
+
+        // Test with various malformed payloads
+        let test_cases = vec![
+            Vec::new(), // Empty payload
+            vec![0x00, 0x01, 0x02], // Binary data
+            b"{".to_vec(), // Incomplete JSON
+        ];
+
+        for payload in &test_cases {
+            let result = handler.emit("malformed.test", payload);
+            // Handler should still succeed as it just processes raw bytes
+            assert!(result.is_ok());
+        }
+
+        // Verify all calls were processed
+        let calls_vec = calls.lock().unwrap();
+        assert_eq!(calls_vec.len(), test_cases.len());
+    }
+
+    // Complex event context tests
+    #[test]
+    fn test_complex_event_context_parsing() {
+        let calls = Arc::new(Mutex::new(Vec::new()));
+        let test_handler = TestEventHandler::new(calls.clone());
+
+        let mut handler = EventDispatcherHandler::builder().build();
+        handler
+            .processor_map
+            .insert("p2.complex.event.type".to_string(), Box::new(test_handler));
+
+        // Create a complex v2 event with all fields populated
+        let event_context = EventContext {
+            ts: Some("1234567890".to_string()),
+            uuid: None,
+            token: Some("original_token".to_string()),
+            type_: Some("original.type".to_string()),
+            schema: Some("2.0".to_string()),
+            header: Some(EventHeader {
+                event_id: Some("complex_event_123".to_string()),
+                event_type: Some("complex.event.type".to_string()),
+                create_time: Some("1234567890".to_string()),
+                token: Some("header_token".to_string()),
+                app_id: Some("complex_app_456".to_string()),
+                tenant_key: Some("complex_tenant_789".to_string()),
+            }),
+            event: {
+                let mut event = HashMap::new();
+                event.insert("custom_field".to_string(), json!("custom_value"));
+                event.insert("nested".to_string(), json!({"key": "value"}));
+                event
+            },
+        };
+
+        let payload = serde_json::to_vec(&event_context).unwrap();
+        let result = handler.do_without_validation(payload.clone());
+
+        assert!(result.is_ok());
+        let calls_vec = calls.lock().unwrap();
+        assert_eq!(calls_vec.len(), 1);
+        assert_eq!(calls_vec[0], String::from_utf8_lossy(&payload));
+    }
+
+    // Builder pattern comprehensive tests
+    #[test]
+    fn test_builder_pattern_comprehensive() {
+        let builder = EventDispatcherHandler::builder();
+
+        // Test builder is initially empty
+        assert!(builder.processor_map.is_empty());
+        assert!(builder.verification_token.is_none());
+        assert!(builder.event_encrypt_key.is_none());
+
+        // Simulate adding processors (we can't actually add them without the specific feature flags)
+        // But we can test the builder structure
+        let handler = builder.build();
+
+        // Built handler should maintain initial state
+        assert!(handler.processor_map.is_empty());
+        assert!(handler.verification_token.is_none());
+        assert!(handler.event_encrypt_key.is_none());
+    }
+
+    // Handler registration edge cases
+    #[test]
+    fn test_processor_map_edge_cases() {
+        let mut handler = EventDispatcherHandler::builder().build();
+
+        // Test adding handler with empty string key
+        let calls = Arc::new(Mutex::new(Vec::new()));
+        let test_handler = TestEventHandler::new(calls.clone());
+        handler
+            .processor_map
+            .insert("".to_string(), Box::new(test_handler));
+
+        let result = handler.emit("", b"empty key test");
+        assert!(result.is_ok());
+
+        // Test adding handler with very long key
+        let long_key = "a".repeat(1000);
+        let test_handler2 = TestEventHandler::new(calls.clone());
+        handler
+            .processor_map
+            .insert(long_key.clone(), Box::new(test_handler2));
+
+        let result = handler.emit(&long_key, b"long key test");
+        assert!(result.is_ok());
+
+        let calls_vec = calls.lock().unwrap();
+        assert_eq!(calls_vec.len(), 2);
+    }
+
+    // Unicode and special character handling
+    #[test]
+    fn test_unicode_payload_handling() {
+        let calls = Arc::new(Mutex::new(Vec::new()));
+        let test_handler = TestEventHandler::new(calls.clone());
+
+        let mut handler = EventDispatcherHandler::builder().build();
+        handler
+            .processor_map
+            .insert("unicode.test".to_string(), Box::new(test_handler));
+
+        // Test with Unicode content
+        let unicode_payloads = vec![
+            "测试中文内容",
+            "🚀 Rocket emoji test",
+            "Mixed English and 中文 content",
+            "Café résumé naïve façade",
+            "العربية العربية",
+            "עברית עברית",
+        ];
+
+        for payload in &unicode_payloads {
+            let result = handler.emit("unicode.test", payload.as_bytes());
+            assert!(result.is_ok());
+        }
+
+        let calls_vec = calls.lock().unwrap();
+        assert_eq!(calls_vec.len(), unicode_payloads.len());
+
+        // Verify Unicode content was preserved correctly
+        for (i, expected) in unicode_payloads.iter().enumerate() {
+            assert_eq!(calls_vec[i], *expected);
+        }
+    }
+
+    // Performance and stress tests
+    #[test]
+    fn test_high_frequency_events() {
+        use std::time::Instant;
+
+        let calls = Arc::new(Mutex::new(Vec::new()));
+        let test_handler = TestEventHandler::new(calls.clone());
+
+        let mut handler = EventDispatcherHandler::builder().build();
+        handler
+            .processor_map
+            .insert("performance.test".to_string(), Box::new(test_handler));
+
+        let start = Instant::now();
+        let num_events = 1000;
+
+        for i in 0..num_events {
+            let payload = format!("performance test payload {}", i);
+            let result = handler.emit("performance.test", payload.as_bytes());
+            assert!(result.is_ok());
+        }
+
+        let duration = start.elapsed();
+        let calls_vec = calls.lock().unwrap();
+        assert_eq!(calls_vec.len(), num_events);
+
+        // Performance should be reasonable (less than 1 second for 1000 events)
+        assert!(duration.as_secs() < 1, "Performance test took too long: {:?}", duration);
+    }
+
+    // Event validation edge cases
+    #[test]
+    fn test_event_context_validation_edge_cases() {
+        let calls = Arc::new(Mutex::new(Vec::new()));
+        let test_handler1 = TestEventHandler::new(calls.clone());
+        let test_handler2 = TestEventHandler::new(calls.clone());
+
+        let mut handler = EventDispatcherHandler::builder().build();
+        handler
+            .processor_map
+            .insert("p1.\"\"".to_string(), Box::new(test_handler1));
+        handler
+            .processor_map
+            .insert("p1.\"complex.type.with.dots\"".to_string(), Box::new(test_handler2));
+
+        // Test v1 event with various edge cases
+        let test_cases = vec![
+            // Event with empty type
+            {
+                let mut event = HashMap::new();
+                event.insert("type".to_string(), json!(""));
+                event
+            },
+            // Event with complex nested type
+            {
+                let mut event = HashMap::new();
+                event.insert("type".to_string(), json!("complex.type.with.dots"));
+                event
+            },
+        ];
+
+        for (i, event) in test_cases.into_iter().enumerate() {
+            let event_context = EventContext {
+                ts: Some("1234567890".to_string()),
+                uuid: Some(format!("uuid_{}", i)),
+                token: Some("test_token".to_string()),
+                type_: None,
+                schema: None,
+                header: None,
+                event,
+            };
+
+            let payload = serde_json::to_vec(&event_context).unwrap();
+            let result = handler.do_without_validation(payload);
+
+            // Should succeed for valid structures
+            assert!(result.is_ok(), "Test case {} failed", i);
+        }
+
+        let calls_vec = calls.lock().unwrap();
+        assert_eq!(calls_vec.len(), 2);
+    }
+
+    // Resource cleanup tests
+    #[test]
+    fn test_resource_cleanup() {
+        use std::sync::atomic::{AtomicUsize, Ordering};
+
+        static DROP_COUNT: AtomicUsize = AtomicUsize::new(0);
+
+        struct CountingDropHandler {
+            calls: Arc<Mutex<Vec<String>>>,
+        }
+
+        impl Drop for CountingDropHandler {
+            fn drop(&mut self) {
+                DROP_COUNT.fetch_add(1, Ordering::SeqCst);
+            }
+        }
+
+        impl EventHandler for CountingDropHandler {
+            fn handle(&self, payload: &[u8]) -> anyhow::Result<()> {
+                let payload_str = String::from_utf8_lossy(payload);
+                self.calls.lock().unwrap().push(payload_str.to_string());
+                Ok(())
+            }
+        }
+
+        let calls = Arc::new(Mutex::new(Vec::new()));
+        let test_handler = CountingDropHandler { calls: calls.clone() };
+
+        {
+            let mut handler = EventDispatcherHandler::builder().build();
+            handler
+                .processor_map
+                .insert("cleanup.test".to_string(), Box::new(test_handler));
+
+            let result = handler.emit("cleanup.test", b"cleanup payload");
+            assert!(result.is_ok());
+
+            // Handler goes out of scope here, should be dropped
+        }
+
+        // Verify handler was called before cleanup
+        let calls_vec = calls.lock().unwrap();
+        assert_eq!(calls_vec.len(), 1);
+        assert_eq!(calls_vec[0], "cleanup payload");
+
+        // Verify handler was dropped (this might take a moment due to Arc)
+        // Note: This test might be flaky due to async drop behavior
+        std::thread::sleep(std::time::Duration::from_millis(10));
+        assert!(DROP_COUNT.load(Ordering::SeqCst) >= 1);
+    }
+
+    // Feature flag compilation tests
+    #[cfg(feature = "im")]
+    #[test]
+    fn test_im_feature_flag_compilation() {
+        // This test verifies that IM-specific event handlers compile correctly
+        // when the "im" feature flag is enabled
+        let builder = EventDispatcherHandler::builder();
+
+        // The fact that this compiles proves the feature flag works
+        assert!(builder.processor_map.is_empty());
+    }
+
+    #[cfg(feature = "attendance")]
+    #[test]
+    fn test_attendance_feature_flag_compilation() {
+        // This test verifies that attendance-specific event handlers compile correctly
+        // when the "attendance" feature flag is enabled
+        let builder = EventDispatcherHandler::builder();
+
+        assert!(builder.processor_map.is_empty());
+    }
+
+    #[cfg(feature = "contact")]
+    #[test]
+    fn test_contact_feature_flag_compilation() {
+        // This test verifies that contact-specific event handlers compile correctly
+        // when the "contact" feature flag is enabled
+        let builder = EventDispatcherHandler::builder();
+
+        assert!(builder.processor_map.is_empty());
+    }
+
+    // Error propagation tests
+    #[test]
+    fn test_error_propagation_chain() {
+        struct ChainErrorHandler {
+            should_fail: bool,
+        }
+
+        impl EventHandler for ChainErrorHandler {
+            fn handle(&self, payload: &[u8]) -> anyhow::Result<()> {
+                if self.should_fail {
+                    Err(anyhow::anyhow!("Chain error: {}", String::from_utf8_lossy(payload)))
+                } else {
+                    Ok(())
+                }
+            }
+        }
+
+        // Test successful handler
+        let success_handler = ChainErrorHandler { should_fail: false };
+        let mut handler = EventDispatcherHandler::builder().build();
+        handler
+            .processor_map
+            .insert("success.chain".to_string(), Box::new(success_handler));
+
+        let result = handler.emit("success.chain", b"success payload");
+        assert!(result.is_ok());
+
+        // Test failing handler
+        let fail_handler = ChainErrorHandler { should_fail: true };
+        handler
+            .processor_map
+            .insert("fail.chain".to_string(), Box::new(fail_handler));
+
+        let result = handler.emit("fail.chain", b"failure payload");
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("Chain error: failure payload"));
+    }
+
+    // Large payload handling tests
+    #[test]
+    fn test_large_payload_handling() {
+        let calls = Arc::new(Mutex::new(Vec::new()));
+        let test_handler = TestEventHandler::new(calls.clone());
+
+        let mut handler = EventDispatcherHandler::builder().build();
+        handler
+            .processor_map
+            .insert("large_payload.test".to_string(), Box::new(test_handler));
+
+        // Test with increasingly large payloads
+        let sizes = vec![1024, 10240, 102400, 1024000]; // 1KB, 10KB, 100KB, 1MB
+
+        for size in &sizes {
+            let large_payload = vec![b'X'; *size];
+            let result = handler.emit("large_payload.test", &large_payload);
+            assert!(result.is_ok(), "Failed for payload size: {}", size);
+        }
+
+        let calls_vec = calls.lock().unwrap();
+        assert_eq!(calls_vec.len(), sizes.len());
+
+        // Verify payload sizes
+        for (i, size) in sizes.iter().enumerate() {
+            assert_eq!(calls_vec[i].len(), *size);
+        }
     }
 }
