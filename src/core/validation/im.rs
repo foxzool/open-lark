@@ -550,116 +550,1046 @@ mod tests {
     use super::*;
     use serde_json::json;
 
+    // ========== validate_message_content 测试 ==========
+
     #[test]
-    fn test_validate_message_content() {
-        // 有效内容
+    fn test_validate_message_content_valid_cases() {
+        // 文本消息 - 各种长度
         assert!(matches!(
             validate_message_content("Hello", "text"),
             ValidationResult::Valid
         ));
 
-        // 空内容
         assert!(matches!(
-            validate_message_content("", "text"),
-            ValidationResult::Invalid(_)
+            validate_message_content("A", "text"),
+            ValidationResult::Valid
         ));
 
-        // 过长内容
-        let long_content = "a".repeat(153_601);
+        // 富文本消息 - 最大长度边界
+        let post_content = "A".repeat(30_720);
         assert!(matches!(
-            validate_message_content(&long_content, "text"),
-            ValidationResult::Invalid(_)
+            validate_message_content(&post_content, "post"),
+            ValidationResult::Valid
+        ));
+
+        // 互动消息 - 最大长度边界
+        let interactive_content = "A".repeat(30_720);
+        assert!(matches!(
+            validate_message_content(&interactive_content, "interactive"),
+            ValidationResult::Valid
+        ));
+
+        // Unicode字符支持
+        assert!(matches!(
+            validate_message_content("🎉 Hello World! 你好世界！", "text"),
+            ValidationResult::Valid
+        ));
+
+        // 边界情况 - 文本消息最大长度
+        let max_text_content = "A".repeat(153_600);
+        assert!(matches!(
+            validate_message_content(&max_text_content, "text"),
+            ValidationResult::Valid
         ));
     }
 
     #[test]
-    fn test_validate_receiver_id() {
-        // 有效ID
+    fn test_validate_message_content_invalid_cases() {
+        // 空内容
+        assert!(matches!(
+            validate_message_content("", "text"),
+            ValidationResult::Invalid(msg) if msg.contains("cannot be empty")
+        ));
+
+        // 不支持的消息类型
+        assert!(matches!(
+            validate_message_content("Hello", "video"),
+            ValidationResult::Invalid(msg) if msg.contains("Unsupported message type")
+        ));
+
+        // 文本消息过长
+        let too_long_text = "A".repeat(153_601);
+        assert!(matches!(
+            validate_message_content(&too_long_text, "text"),
+            ValidationResult::Invalid(msg) if msg.contains("too long")
+        ));
+
+        // 富文本消息过长
+        let too_long_post = "A".repeat(30_721);
+        assert!(matches!(
+            validate_message_content(&too_long_post, "post"),
+            ValidationResult::Invalid(msg) if msg.contains("too long")
+        ));
+
+        // 互动消息过长
+        let too_long_interactive = "A".repeat(30_721);
+        assert!(matches!(
+            validate_message_content(&too_long_interactive, "interactive"),
+            ValidationResult::Invalid(msg) if msg.contains("too long")
+        ));
+    }
+
+    // ========== validate_receiver_id 测试 ==========
+
+    #[test]
+    fn test_validate_receiver_id_valid_cases() {
+        // open_id 有效格式
         assert!(matches!(
             validate_receiver_id("ou_1234567890123456789012345", "open_id"),
             ValidationResult::Valid
         ));
 
-        // 无效前缀
+        // user_id 有效格式
         assert!(matches!(
-            validate_receiver_id("abc123", "open_id"),
-            ValidationResult::Invalid(_)
+            validate_receiver_id("u_1234567890", "user_id"),
+            ValidationResult::Valid
         ));
 
-        // 无效长度
+        // union_id 有效格式
         assert!(matches!(
-            validate_receiver_id("ou_123", "open_id"),
-            ValidationResult::Invalid(_)
+            validate_receiver_id("on_1234567890123456789012345", "union_id"),
+            ValidationResult::Valid
+        ));
+
+        // chat_id 有效格式
+        assert!(matches!(
+            validate_receiver_id("oc_1234567890123456789012345", "chat_id"),
+            ValidationResult::Valid
+        ));
+
+        // 数字和下划线组合
+        assert!(matches!(
+            validate_receiver_id("ou_ABC123def4567890123456789", "open_id"),
+            ValidationResult::Valid
         ));
     }
 
     #[test]
-    fn test_validate_uuid() {
-        // 有效UUID
+    fn test_validate_receiver_id_invalid_cases() {
+        // 空ID
+        assert!(matches!(
+            validate_receiver_id("", "open_id"),
+            ValidationResult::Invalid(msg) if msg.contains("cannot be empty")
+        ));
+
+        // open_id 错误前缀
+        assert!(matches!(
+            validate_receiver_id("u_1234567890123456789012345", "open_id"),
+            ValidationResult::Invalid(msg) if msg.contains("must start with 'ou_'")
+        ));
+
+        // open_id 错误长度
+        assert!(matches!(
+            validate_receiver_id("ou_123", "open_id"),
+            ValidationResult::Invalid(msg) if msg.contains("must be 28 characters long")
+        ));
+
+        // user_id 错误前缀
+        assert!(matches!(
+            validate_receiver_id("ou_1234567890", "user_id"),
+            ValidationResult::Invalid(msg) if msg.contains("must start with 'u_'")
+        ));
+
+        // union_id 错误前缀
+        assert!(matches!(
+            validate_receiver_id("u_1234567890123456789012345", "union_id"),
+            ValidationResult::Invalid(msg) if msg.contains("must start with 'on_'")
+        ));
+
+        // chat_id 错误前缀
+        assert!(matches!(
+            validate_receiver_id("u_1234567890123456789012345", "chat_id"),
+            ValidationResult::Invalid(msg) if msg.contains("must start with 'oc_'")
+        ));
+
+        // 不支持的ID类型
+        assert!(matches!(
+            validate_receiver_id("test123", "invalid_type"),
+            ValidationResult::Invalid(msg) if msg.contains("Unsupported ID type")
+        ));
+
+        // 包含无效字符 - 测试连字符（使用正确的长度）
+        assert!(matches!(
+            validate_receiver_id("ou_123456789-123456789012345", "open_id"),
+            ValidationResult::Invalid(msg) if msg.contains("invalid characters")
+        ));
+
+        // 包含无效字符 - 测试@符号（使用正确的长度）
+        assert!(matches!(
+            validate_receiver_id("ou_123456789@123456789012345", "open_id"),
+            ValidationResult::Invalid(msg) if msg.contains("invalid characters")
+        ));
+    }
+
+    // ========== validate_message_type 测试 ==========
+
+    #[test]
+    fn test_validate_message_type_valid_cases() {
+        let valid_types = [
+            "text", "post", "image", "file", "audio", "media", "sticker", "interactive", "share_chat"
+        ];
+
+        for message_type in valid_types {
+            assert!(matches!(
+                validate_message_type(message_type),
+                ValidationResult::Valid
+            ), "Should be valid: {}", message_type);
+        }
+    }
+
+    #[test]
+    fn test_validate_message_type_invalid_cases() {
+        let invalid_types = ["video", "voice", "document", "unknown", ""];
+
+        for message_type in invalid_types {
+            assert!(matches!(
+                validate_message_type(message_type),
+                ValidationResult::Invalid(msg) if msg.contains("Invalid message type")
+            ), "Should be invalid: {}", message_type);
+        }
+    }
+
+    // ========== validate_uuid 测试 ==========
+
+    #[test]
+    fn test_validate_uuid_valid_cases() {
+        // 标准UUID格式
         assert!(matches!(
             validate_uuid("550e8400-e29b-41d4-a716-446655440000"),
             ValidationResult::Valid
         ));
 
-        // 无效格式
+        // 全零UUID
         assert!(matches!(
-            validate_uuid("invalid-uuid"),
-            ValidationResult::Invalid(_)
-        ));
-    }
-
-    #[test]
-    fn test_validate_file_upload() {
-        // 有效文件
-        assert!(matches!(
-            validate_file_upload("test.jpg", 1024, "image"),
+            validate_uuid("00000000-0000-0000-0000-000000000000"),
             ValidationResult::Valid
         ));
 
-        // 无效文件名
+        // 全F UUID
         assert!(matches!(
-            validate_file_upload("", 1024, "image"),
-            ValidationResult::Invalid(_)
-        ));
-
-        // 文件过大
-        assert!(matches!(
-            validate_file_upload("large.jpg", 200 * 1024 * 1024, "image"),
-            ValidationResult::Invalid(_)
-        ));
-
-        // 无效文件类型
-        assert!(matches!(
-            validate_file_upload("test.exe", 1024, "image"),
-            ValidationResult::Invalid(_)
+            validate_uuid("ffffffff-ffff-ffff-ffff-ffffffffffff"),
+            ValidationResult::Valid
         ));
     }
 
     #[test]
-    fn test_validate_message_receivers() {
-        // 有效接收者
+    fn test_validate_uuid_invalid_cases() {
+        // 空UUID
+        assert!(matches!(
+            validate_uuid(""),
+            ValidationResult::Invalid(msg) if msg.contains("cannot be empty")
+        ));
+
+        // 错误长度
+        assert!(matches!(
+            validate_uuid("550e8400-e29b-41d4-a716"),
+            ValidationResult::Invalid(msg) if msg.contains("must be 36 characters long")
+        ));
+
+        // 缺少连字符
+        assert!(matches!(
+            validate_uuid("550e8400e29b41d4a716446655440000"),
+            ValidationResult::Invalid(msg) if msg.contains("must be 36 characters long")
+        ));
+
+        // 连字符过多
+        assert!(matches!(
+            validate_uuid("550e-8400-e29b-41d4-a716-446655-440000"),
+            ValidationResult::Invalid(msg) if msg.contains("must be 36 characters long")
+        ));
+
+        // 部分长度错误
+        assert!(matches!(
+            validate_uuid("550e84-e29b-41d4-a716-446655440000"),
+            ValidationResult::Invalid(msg) if msg.contains("must be 36 characters long")
+        ));
+
+        // 非十六进制字符
+        assert!(matches!(
+            validate_uuid("550e8400-e29b-41d4-a716-44665544zzzz"),
+            ValidationResult::Invalid(msg) if msg.contains("hexadecimal digits")
+        ));
+
+        // 小写验证
+        assert!(matches!(
+            validate_uuid("550e8400-e29b-41d4-a716-446655440000"),
+            ValidationResult::Valid
+        ));
+    }
+
+    // ========== validate_file_upload 测试 ==========
+
+    #[test]
+    fn test_validate_file_upload_valid_cases() {
+        // 图片文件 - 各种格式
+        let image_formats = ["jpg", "jpeg", "png", "gif", "bmp", "webp"];
+        for format in image_formats {
+            assert!(matches!(
+                validate_file_upload(&format!("test.{}", format), 1024, "image"),
+                ValidationResult::Valid
+            ));
+        }
+
+        // 音频文件
+        let audio_formats = ["mp3", "wav", "amr", "aac", "ogg"];
+        for format in audio_formats {
+            assert!(matches!(
+                validate_file_upload(&format!("audio.{}", format), 2048, "audio"),
+                ValidationResult::Valid
+            ));
+        }
+
+        // 视频文件
+        let video_formats = ["mp4", "mov", "avi", "mkv", "flv"];
+        for format in video_formats {
+            assert!(matches!(
+                validate_file_upload(&format!("video.{}", format), 5_000_000, "video"),
+                ValidationResult::Valid
+            ));
+        }
+
+        // 文档文件
+        let doc_formats = ["pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "txt", "zip", "rar"];
+        for format in doc_formats {
+            assert!(matches!(
+                validate_file_upload(&format!("document.{}", format), 100_000, "file"),
+                ValidationResult::Valid
+            ));
+        }
+
+        // 边界情况 - 最大文件名长度
+        let max_filename = "A".repeat(251); // 251 + ".txt" = 255 characters
+        assert!(matches!(
+            validate_file_upload(&format!("{}.txt", &max_filename), 1024, "file"),
+            ValidationResult::Valid
+        ));
+
+        // 边界情况 - 最大文件大小
+        assert!(matches!(
+            validate_file_upload("large_file.pdf", 100 * 1024 * 1024, "file"),
+            ValidationResult::Valid
+        ));
+
+        // 小写扩展名处理
+        assert!(matches!(
+            validate_file_upload("image.JPG", 1024, "image"),
+            ValidationResult::Valid
+        ));
+    }
+
+    #[test]
+    fn test_validate_file_upload_invalid_cases() {
+        // 空文件名
+        assert!(matches!(
+            validate_file_upload("", 1024, "image"),
+            ValidationResult::Invalid(msg) if msg.contains("File name cannot be empty")
+        ));
+
+        // 文件名过长
+        let too_long_filename = "A".repeat(256);
+        assert!(matches!(
+            validate_file_upload(&too_long_filename, 1024, "image"),
+            ValidationResult::Invalid(msg) if msg.contains("File name too long")
+        ));
+
+        // 文件名包含无效字符
+        let invalid_chars_filenames = [
+            "file/name.txt",
+            "file\\name.txt",
+            "file:name.txt",
+            "file*name.txt",
+            "file?name.txt",
+            "file\"name.txt",
+            "file<name.txt",
+            "file>name.txt",
+            "file|name.txt",
+        ];
+
+        for filename in invalid_chars_filenames {
+            assert!(matches!(
+                validate_file_upload(filename, 1024, "image"),
+                ValidationResult::Invalid(msg) if msg.contains("invalid characters")
+            ));
+        }
+
+        // 文件过大
+        assert!(matches!(
+            validate_file_upload("huge_file.pdf", 101 * 1024 * 1024, "file"),
+            ValidationResult::Invalid(msg) if msg.contains("File too large")
+        ));
+
+        // 不支持的文件类型
+        assert!(matches!(
+            validate_file_upload("test.exe", 1024, "image"),
+            ValidationResult::Invalid(msg) if msg.contains("not allowed")
+        ));
+
+        // 不支持的文件类型类别
+        assert!(matches!(
+            validate_file_upload("test.txt", 1024, "unknown"),
+            ValidationResult::Invalid(msg) if msg.contains("Unsupported file type")
+        ));
+
+        // 缺少扩展名
+        assert!(matches!(
+            validate_file_upload("noextension", 1024, "image"),
+            ValidationResult::Invalid(msg) if msg.contains("not allowed")
+        ));
+    }
+
+    // ========== validate_message_recall 测试 ==========
+
+    #[test]
+    fn test_validate_message_recall_valid_cases() {
+        // 有效参数
+        assert!(matches!(
+            validate_message_recall(
+                "550e8400-e29b-41d4-a716-446655440000",
+                "oc_1234567890123456789012345"
+            ),
+            ValidationResult::Valid
+        ));
+
+        // 使用标准UUID
+        assert!(matches!(
+            validate_message_recall(
+                "00000000-0000-0000-0000-000000000000",
+                "oc_0000000000000000000000000"
+            ),
+            ValidationResult::Valid
+        ));
+    }
+
+    #[test]
+    fn test_validate_message_recall_invalid_cases() {
+        // 空消息ID
+        assert!(matches!(
+            validate_message_recall("", "oc_1234567890123456789012345"),
+            ValidationResult::Invalid(msg) if msg.contains("Message ID cannot be empty")
+        ));
+
+        // 空聊天ID
+        assert!(matches!(
+            validate_message_recall("550e8400-e29b-41d4-a716-446655440000", ""),
+            ValidationResult::Invalid(msg) if msg.contains("Chat ID cannot be empty")
+        ));
+
+        // 无效消息ID格式
+        assert!(matches!(
+            validate_message_recall("invalid-uuid", "oc_1234567890123456789012345"),
+            ValidationResult::Invalid(msg) if msg.contains("Invalid message ID")
+        ));
+
+        // 无效聊天ID格式
+        assert!(matches!(
+            validate_message_recall("550e8400-e29b-41d4-a716-446655440000", "invalid_chat_id"),
+            ValidationResult::Invalid(msg) if msg.contains("Invalid chat ID")
+        ));
+
+        // 聊天ID长度错误
+        assert!(matches!(
+            validate_message_recall("550e8400-e29b-41d4-a716-446655440000", "oc_123"),
+            ValidationResult::Invalid(msg) if msg.contains("Invalid chat ID")
+        ));
+    }
+
+    // ========== validate_message_read_status 测试 ==========
+
+    #[test]
+    fn test_validate_message_read_status_valid_cases() {
+        // 有效时间戳（当前时间）
+        let current_time = chrono::Utc::now().timestamp();
+        assert!(matches!(
+            validate_message_read_status(
+                "550e8400-e29b-41d4-a716-446655440000",
+                "u_1234567890",
+                current_time
+            ),
+            ValidationResult::Valid
+        ));
+
+        // 有效时间戳（过去时间）
+        let past_time = current_time - 3600; // 1小时前
+        assert!(matches!(
+            validate_message_read_status(
+                "550e8400-e29b-41d4-a716-446655440000",
+                "u_1234567890",
+                past_time
+            ),
+            ValidationResult::Valid
+        ));
+
+        // 边界时间戳（2020-01-01）
+        assert!(matches!(
+            validate_message_read_status(
+                "550e8400-e29b-41d4-a716-446655440000",
+                "u_1234567890",
+                1_577_836_800
+            ),
+            ValidationResult::Valid
+        ));
+    }
+
+    #[test]
+    fn test_validate_message_read_status_invalid_cases() {
+        // 空消息ID
+        assert!(matches!(
+            validate_message_read_status("", "u_1234567890", 1234567890),
+            ValidationResult::Invalid(msg) if msg.contains("Message ID cannot be empty")
+        ));
+
+        // 空用户ID
+        assert!(matches!(
+            validate_message_read_status("550e8400-e29b-41d4-a716-446655440000", "", 1234567890),
+            ValidationResult::Invalid(msg) if msg.contains("User ID cannot be empty")
+        ));
+
+        // 未来时间戳
+        let future_time = chrono::Utc::now().timestamp() + 3600;
+        assert!(matches!(
+            validate_message_read_status(
+                "550e8400-e29b-41d4-a716-446655440000",
+                "u_1234567890",
+                future_time
+            ),
+            ValidationResult::Invalid(msg) if msg.contains("cannot be in the future")
+        ));
+
+        // 时间戳太早
+        assert!(matches!(
+            validate_message_read_status(
+                "550e8400-e29b-41d4-a716-446655440000",
+                "u_1234567890",
+                1_500_000_000
+            ),
+            ValidationResult::Invalid(msg) if msg.contains("too early")
+        ));
+    }
+
+    // ========== validate_message_forward 测试 ==========
+
+    #[test]
+    fn test_validate_message_forward_valid_cases() {
+        // 正常转发
+        assert!(matches!(
+            validate_message_forward(
+                "550e8400-e29b-41d4-a716-446655440000",
+                "oc_1234567890123456789012345",
+                "normal"
+            ),
+            ValidationResult::Valid
+        ));
+
+        // 引用转发
+        assert!(matches!(
+            validate_message_forward(
+                "550e8400-e29b-41d4-a716-446655440000",
+                "oc_1234567890123456789012345",
+                "forward_as_quote"
+            ),
+            ValidationResult::Valid
+        ));
+    }
+
+    #[test]
+    fn test_validate_message_forward_invalid_cases() {
+        // 空源消息ID
+        assert!(matches!(
+            validate_message_forward("", "oc_1234567890123456789012345", "normal"),
+            ValidationResult::Invalid(msg) if msg.contains("Source message ID cannot be empty")
+        ));
+
+        // 空目标聊天ID
+        assert!(matches!(
+            validate_message_forward("550e8400-e29b-41d4-a716-446655440000", "", "normal"),
+            ValidationResult::Invalid(msg) if msg.contains("Target chat ID cannot be empty")
+        ));
+
+        // 无效转发类型
+        assert!(matches!(
+            validate_message_forward(
+                "550e8400-e29b-41d4-a716-446655440000",
+                "oc_1234567890123456789012345",
+                "invalid_type"
+            ),
+            ValidationResult::Invalid(msg) if msg.contains("Invalid forward type")
+        ));
+
+        // 无效源消息ID格式
+        assert!(matches!(
+            validate_message_forward(
+                "invalid-uuid",
+                "oc_1234567890123456789012345",
+                "normal"
+            ),
+            ValidationResult::Invalid(msg) if msg.contains("Invalid source message ID")
+        ));
+
+        // 无效目标聊天ID格式
+        assert!(matches!(
+            validate_message_forward(
+                "550e8400-e29b-41d4-a716-446655440000",
+                "invalid_chat_id",
+                "normal"
+            ),
+            ValidationResult::Invalid(msg) if msg.contains("Invalid target chat ID")
+        ));
+    }
+
+    // ========== validate_message_receivers 测试 ==========
+
+    #[test]
+    fn test_validate_message_receivers_valid_cases() {
+        // 单个接收者
+        let single_receiver = vec![json!({"user_id": "u_1234567890"})];
+        assert!(matches!(
+            validate_message_receivers(&single_receiver, 10),
+            ValidationResult::Valid
+        ));
+
+        // 多个接收者，不同ID类型
+        let multiple_receivers = vec![
+            json!({"user_id": "u_1234567890"}),
+            json!({"open_id": "ou_1234567890123456789012345"}),
+            json!({"union_id": "on_1234567890123456789012345"}),
+        ];
+        assert!(matches!(
+            validate_message_receivers(&multiple_receivers, 10),
+            ValidationResult::Valid
+        ));
+
+        // 达到最大接收者数量
+        let mut max_receivers = Vec::new();
+        for i in 0..5 {
+            max_receivers.push(json!({"user_id": format!("u_{}", i)}));
+        }
+        assert!(matches!(
+            validate_message_receivers(&max_receivers, 5),
+            ValidationResult::Valid
+        ));
+
+        // 复杂对象结构
+        let complex_receiver = vec![json!({
+            "user_id": "u_1234567890",
+            "department_id": "od_123456",
+            "name": "John Doe"
+        })];
+        assert!(matches!(
+            validate_message_receivers(&complex_receiver, 10),
+            ValidationResult::Valid
+        ));
+    }
+
+    #[test]
+    fn test_validate_message_receivers_invalid_cases() {
+        // 空接收者列表
+        assert!(matches!(
+            validate_message_receivers(&[], 10),
+            ValidationResult::Invalid(msg) if msg.contains("At least one receiver is required")
+        ));
+
+        // 超过最大接收者数量
+        let mut too_many_receivers = Vec::new();
+        for i in 0..11 {
+            too_many_receivers.push(json!({"user_id": format!("u_{}", i)}));
+        }
+        assert!(matches!(
+            validate_message_receivers(&too_many_receivers, 10),
+            ValidationResult::Invalid(msg) if msg.contains("Too many receivers")
+        ));
+
+        // 接收者缺少必需的ID字段
+        let receiver_without_id = vec![json!({"name": "John Doe"})];
+        assert!(matches!(
+            validate_message_receivers(&receiver_without_id, 10),
+            ValidationResult::Invalid(msg) if msg.contains("must have either user_id, union_id, or open_id")
+        ));
+
+        // 接收者不是对象
+        let non_object_receiver = vec![json!("string_value")];
+        assert!(matches!(
+            validate_message_receivers(&non_object_receiver, 10),
+            ValidationResult::Invalid(msg) if msg.contains("must be an object")
+        ));
+
+        // 接收者包含无效ID
+        let invalid_id_receiver = vec![json!({"user_id": "invalid_user_id"})];
+        assert!(matches!(
+            validate_message_receivers(&invalid_id_receiver, 10),
+            ValidationResult::Invalid(msg) if msg.contains("Invalid user_id")
+        ));
+
+        // 多个无效接收者中的第一个被发现
+        let multiple_invalid_receivers = vec![
+            json!({"user_id": "invalid_user_id"}), // 不以u_开头
+            json!({"open_id": "ou_invalid"}),
+        ];
+        assert!(matches!(
+            validate_message_receivers(&multiple_invalid_receivers, 10),
+            ValidationResult::Invalid(msg) if msg.contains("Invalid user_id")
+        ));
+    }
+
+    // ========== validate_message_template 测试 ==========
+
+    #[test]
+    fn test_validate_message_template_valid_cases() {
+        // 简单JSON模板
+        let simple_template = r#"{"text": "Hello World"}"#;
+        assert!(matches!(
+            validate_message_template(simple_template, "550e8400-e29b-41d4-a716-446655440000"),
+            ValidationResult::Valid
+        ));
+
+        // 复杂JSON模板
+        let complex_template = r#"{
+            "content": {
+                "title": "Welcome",
+                "body": "Thank you for joining!",
+                "actions": [
+                    {"type": "button", "text": "OK", "url": "https://example.com"}
+                ]
+            }
+        }"#;
+        assert!(matches!(
+            validate_message_template(complex_template, "550e8400-e29b-41d4-a716-446655440000"),
+            ValidationResult::Valid
+        ));
+
+        // 最大长度边界
+        let max_template = "A".repeat(50_000);
+        let max_template_json = format!(r#"{{"text": "{}"}}"#, &max_template[..49_980]);
+        assert!(matches!(
+            validate_message_template(&max_template_json, "550e8400-e29b-41d4-a716-446655440000"),
+            ValidationResult::Valid
+        ));
+
+        // Unicode内容
+        let unicode_template = r#"{"message": "🎉 欢迎加入我们的团队！"}"#;
+        assert!(matches!(
+            validate_message_template(unicode_template, "550e8400-e29b-41d4-a716-446655440000"),
+            ValidationResult::Valid
+        ));
+    }
+
+    #[test]
+    fn test_validate_message_template_invalid_cases() {
+        // 空模板内容
+        assert!(matches!(
+            validate_message_template("", "550e8400-e29b-41d4-a716-446655440000"),
+            ValidationResult::Invalid(msg) if msg.contains("Template content cannot be empty")
+        ));
+
+        // 空模板ID
+        assert!(matches!(
+            validate_message_template(r#"{"text": "Hello"}"#, ""),
+            ValidationResult::Invalid(msg) if msg.contains("Template ID cannot be empty")
+        ));
+
+        // 模板内容过长
+        let too_long_template = "A".repeat(50_001);
+        let too_long_json = format!(r#"{{"text": "{}"}}"#, too_long_template);
+        assert!(matches!(
+            validate_message_template(&too_long_json, "550e8400-e29b-41d4-a716-446655440000"),
+            ValidationResult::Invalid(msg) if msg.contains("Template content too long")
+        ));
+
+        // 无效模板ID格式
+        assert!(matches!(
+            validate_message_template(r#"{"text": "Hello"}"#, "invalid-uuid"),
+            ValidationResult::Invalid(msg) if msg.contains("Invalid template ID")
+        ));
+
+        // 无效JSON格式
+        assert!(matches!(
+            validate_message_template(r#"{"text": "Hello", "invalid": }"#, "550e8400-e29b-41d4-a716-446655440000"),
+            ValidationResult::Invalid(msg) if msg.contains("must be valid JSON")
+        ));
+
+        // 非JSON内容
+        assert!(matches!(
+            validate_message_template("plain text content", "550e8400-e29b-41d4-a716-446655440000"),
+            ValidationResult::Invalid(msg) if msg.contains("must be valid JSON")
+        ));
+    }
+
+    // ========== validate_message_reaction 测试 ==========
+
+    #[test]
+    fn test_validate_message_reaction_valid_cases() {
+        // 标准表情
+        assert!(matches!(
+            validate_message_reaction(
+                "550e8400-e29b-41d4-a716-446655440000",
+                "emoji",
+                "👍"
+            ),
+            ValidationResult::Valid
+        ));
+
+        // 自定义表情
+        assert!(matches!(
+            validate_message_reaction(
+                "550e8400-e29b-41d4-a716-446655440000",
+                "custom",
+                "custom_emoji_123"
+            ),
+            ValidationResult::Valid
+        ));
+
+        // 边界情况 - 最大key长度
+        let max_key = "A".repeat(100);
+        assert!(matches!(
+            validate_message_reaction(
+                "550e8400-e29b-41d4-a716-446655440000",
+                "emoji",
+                &max_key
+            ),
+            ValidationResult::Valid
+        ));
+
+        // Unicode表情key
+        assert!(matches!(
+            validate_message_reaction(
+                "550e8400-e29b-41d4-a716-446655440000",
+                "emoji",
+                "😀"
+            ),
+            ValidationResult::Valid
+        ));
+    }
+
+    #[test]
+    fn test_validate_message_reaction_invalid_cases() {
+        // 空消息ID
+        assert!(matches!(
+            validate_message_reaction("", "emoji", "👍"),
+            ValidationResult::Invalid(msg) if msg.contains("Message ID cannot be empty")
+        ));
+
+        // 空表情类型
+        assert!(matches!(
+            validate_message_reaction("550e8400-e29b-41d4-a716-446655440000", "", "👍"),
+            ValidationResult::Invalid(msg) if msg.contains("Emoji type cannot be empty")
+        ));
+
+        // 空表情key
+        assert!(matches!(
+            validate_message_reaction("550e8400-e29b-41d4-a716-446655440000", "emoji", ""),
+            ValidationResult::Invalid(msg) if msg.contains("Emoji key cannot be empty")
+        ));
+
+        // 无效表情类型
+        assert!(matches!(
+            validate_message_reaction(
+                "550e8400-e29b-41d4-a716-446655440000",
+                "invalid_type",
+                "👍"
+            ),
+            ValidationResult::Invalid(msg) if msg.contains("Invalid emoji type")
+        ));
+
+        // 表情key过长
+        let too_long_key = "A".repeat(101);
+        assert!(matches!(
+            validate_message_reaction(
+                "550e8400-e29b-41d4-a716-446655440000",
+                "emoji",
+                &too_long_key
+            ),
+            ValidationResult::Invalid(msg) if msg.contains("Emoji key too long")
+        ));
+    }
+
+    // ========== ValidateImBuilder trait 测试 ==========
+
+    #[test]
+    fn test_validate_im_builder_trait() {
+        // 创建测试用的验证器
+        struct TestValidator;
+        impl ValidateBuilder for TestValidator {
+            fn validate(&self) -> ValidationResult {
+                ValidationResult::Valid
+            }
+        }
+
+        let validator = TestValidator;
+
+        // 测试 trait 方法
+        assert!(matches!(
+            validator.validate_message_content("Hello World", "text"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validator.validate_receiver_id("ou_1234567890123456789012345", "open_id"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validator.validate_file_upload("test.jpg", 1024, "image"),
+            ValidationResult::Valid
+        ));
+
+        let receivers = vec![json!({"user_id": "u_1234567890"})];
+        assert!(matches!(
+            validator.validate_message_receivers(&receivers, 10),
+            ValidationResult::Valid
+        ));
+    }
+
+    // ========== 综合场景测试 ==========
+
+    #[test]
+    fn test_complete_message_workflow_validation() {
+        // 测试完整的消息发送验证流程
+
+        // 1. 验证消息内容
+        let content_result = validate_message_content("Hello, this is a test message", "text");
+        assert!(matches!(content_result, ValidationResult::Valid));
+
+        // 2. 验证消息类型
+        let type_result = validate_message_type("text");
+        assert!(matches!(type_result, ValidationResult::Valid));
+
+        // 3. 验证接收者ID
+        let receiver_result = validate_receiver_id("ou_1234567890123456789012345", "open_id");
+        assert!(matches!(receiver_result, ValidationResult::Valid));
+
+        // 4. 验证接收者列表
         let receivers = vec![
             json!({"user_id": "u_1234567890"}),
             json!({"open_id": "ou_1234567890123456789012345"}),
         ];
+        let receivers_result = validate_message_receivers(&receivers, 10);
+        assert!(matches!(receivers_result, ValidationResult::Valid));
+
+        // 5. 验证消息模板（如果使用模板）
+        let template_content = r#"{"text": "Hello {name}"}"#;
+        let template_id = "550e8400-e29b-41d4-a716-446655440000";
+        let template_result = validate_message_template(template_content, template_id);
+        assert!(matches!(template_result, ValidationResult::Valid));
+    }
+
+    #[test]
+    fn test_error_message_content() {
+        // 测试错误消息的内容是否包含有用信息
+        let result = validate_message_content("", "text");
+        if let ValidationResult::Invalid(msg) = result {
+            assert!(msg.contains("empty"));
+            assert!(msg.contains("content"));
+        }
+
+        let result = validate_receiver_id("invalid", "open_id");
+        if let ValidationResult::Invalid(msg) = result {
+            assert!(msg.contains("must start") || msg.contains("invalid characters"));
+        }
+
+        let result = validate_uuid("invalid");
+        if let ValidationResult::Invalid(msg) = result {
+            assert!(msg.contains("long") || msg.contains("parts") || msg.contains("hexadecimal"));
+        }
+
+        let result = validate_file_upload("bad/file.exe", 1024, "image");
+        if let ValidationResult::Invalid(msg) = result {
+            assert!(msg.contains("characters") || msg.contains("allowed"));
+        }
+    }
+
+    #[test]
+    fn test_unicode_and_special_characters() {
+        // 测试Unicode字符支持
         assert!(matches!(
-            validate_message_receivers(&receivers, 10),
+            validate_message_content("🎉 Hello World! 你好世界！", "text"),
             ValidationResult::Valid
         ));
 
-        // 空列表
         assert!(matches!(
-            validate_message_receivers(&[], 10),
+            validate_message_template(r#"{"message": "🎉 欢迎加入我们的团队！"}"#, "550e8400-e29b-41d4-a716-446655440000"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_message_reaction("550e8400-e29b-41d4-a716-446655440000", "emoji", "😀"),
+            ValidationResult::Valid
+        ));
+
+        // 测试ID中的字母数字组合
+        assert!(matches!(
+            validate_receiver_id("ou_ABC123def4567890123456789", "open_id"),
+            ValidationResult::Valid
+        ));
+
+        // 测试文件名中的合法字符
+        assert!(matches!(
+            validate_file_upload("test_file_v2.1.txt", 1024, "file"),
+            ValidationResult::Valid
+        ));
+    }
+
+    #[test]
+    fn test_boundary_conditions() {
+        // 测试各种边界条件
+
+        // 消息内容长度边界
+        let max_text_content = "A".repeat(153_600);
+        assert!(matches!(
+            validate_message_content(&max_text_content, "text"),
+            ValidationResult::Valid
+        ));
+
+        let too_long_text = "A".repeat(153_601);
+        assert!(matches!(
+            validate_message_content(&too_long_text, "text"),
             ValidationResult::Invalid(_)
         ));
 
-        // 超过限制
-        let mut many_receivers = Vec::new();
-        for i in 0..20 {
-            many_receivers.push(json!({"user_id": format!("u_{}", i)}));
+        // 文件大小边界
+        assert!(matches!(
+            validate_file_upload("test.pdf", 100 * 1024 * 1024, "file"),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_file_upload("test.pdf", 100 * 1024 * 1024 + 1, "file"),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 接收者数量边界
+        let mut max_receivers = Vec::new();
+        for i in 0..50 {
+            max_receivers.push(json!({"user_id": format!("u_{}", i)}));
         }
         assert!(matches!(
-            validate_message_receivers(&many_receivers, 10),
+            validate_message_receivers(&max_receivers, 50),
+            ValidationResult::Valid
+        ));
+
+        let mut too_many_receivers = Vec::new();
+        for i in 0..51 {
+            too_many_receivers.push(json!({"user_id": format!("u_{}", i)}));
+        }
+        assert!(matches!(
+            validate_message_receivers(&too_many_receivers, 50),
+            ValidationResult::Invalid(_)
+        ));
+
+        // 时间戳边界
+        assert!(matches!(
+            validate_message_read_status(
+                "550e8400-e29b-41d4-a716-446655440000",
+                "u_1234567890",
+                1_577_836_800 // 2020-01-01
+            ),
+            ValidationResult::Valid
+        ));
+
+        assert!(matches!(
+            validate_message_read_status(
+                "550e8400-e29b-41d4-a716-446655440000",
+                "u_1234567890",
+                1_577_836_799 // 2019-12-31
+            ),
             ValidationResult::Invalid(_)
         ));
     }
