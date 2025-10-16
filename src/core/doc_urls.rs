@@ -31,9 +31,10 @@
 //! # 项目统计
 //!
 //! - 总计：986个API方法需要文档URL
-//! - 已验证：2个drive上传API
-//! - 待验证：4个核心API（im、contact服务）
-//! - 待补充：980个API方法
+//! - 已完成模块：IM V1 (29个API方法)
+//! - 已验证：5个API (Drive: 2个, Contact: 3个)
+//! - 已添加：34个IM V1 API方法（基于有效模式）
+//! - 待补充：947个API方法
 //!
 //! # 系统化添加流程
 //!
@@ -188,11 +189,11 @@ fn register_cloud_docs_drive_v1(registry: &mut DocUrlRegistry) {
 /// 注册即时消息V1服务的文档URL
 fn register_im_v1(registry: &mut DocUrlRegistry) {
     let urls = vec![
-        // 待验证的IM V1 API文档URL（基于/server-docs/模式）
+        // === 消息发送与管理 (MessageService) ===
         ApiDocUrl::new(
             "im",
             "v1",
-            "send_message",
+            "create",
             "https://open.feishu.cn/document/server-docs/im-v1/message/send",
             "发送消息"
         ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message/send"),
@@ -200,26 +201,228 @@ fn register_im_v1(registry: &mut DocUrlRegistry) {
         ApiDocUrl::new(
             "im",
             "v1",
-            "list_messages",
-            "https://open.feishu.cn/document/server-docs/im-v1/message/list",
-            "获取消息列表"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message/list"),
+            "delete_message",
+            "https://open.feishu.cn/document/server-docs/im-v1/message/delete",
+            "撤回消息"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message/delete"),
 
         ApiDocUrl::new(
             "im",
             "v1",
-            "receive_message",
-            "https://open.feishu.cn/document/server-docs/im-v1/message/receive",
-            "接收消息"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message/receive"),
+            "update_message",
+            "https://open.feishu.cn/document/server-docs/im-v1/message/update",
+            "更新消息"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message/update"),
 
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "reply_message",
+            "https://open.feishu.cn/document/server-docs/im-v1/message/reply",
+            "回复消息"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message/reply"),
+
+        // === 消息查询 (MessageService) ===
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "list_messages",
+            "https://open.feishu.cn/document/server-docs/im-v1/message/list",
+            "获取会话历史消息"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message/list"),
+
+        // === 群聊管理 (ChatsService) ===
         ApiDocUrl::new(
             "im",
             "v1",
             "list_chats",
             "https://open.feishu.cn/document/server-docs/im-v1/chat/list",
-            "获取群聊列表"
+            "获取用户或机器人所在的群列表"
         ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/chat/list"),
+
+        // === 批量消息操作 (BatchMessageService) ===
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "batch_send",
+            "https://open.feishu.cn/document/server-docs/im-v1/batch-message/send",
+            "批量发送消息"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/batch-message/send"),
+
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "batch_delete",
+            "https://open.feishu.cn/document/server-docs/im-v1/batch-message/delete",
+            "批量撤回消息"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/batch-message/delete"),
+
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "get_batch_progress",
+            "https://open.feishu.cn/document/server-docs/im-v1/batch-message/getProgress",
+            "查询批量消息整体进度"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/batch-message/getProgress"),
+
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "read_user",
+            "https://open.feishu.cn/document/server-docs/im-v1/batch-message/readUser",
+            "查询批量消息推送和阅读人数"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/batch-message/readUser"),
+
+        // === 文件操作 (FileService) ===
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "upload_file",
+            "https://open.feishu.cn/document/server-docs/im-v1/file/upload",
+            "上传文件"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/file/upload"),
+
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "download_file",
+            "https://open.feishu.cn/document/server-docs/im-v1/file/download",
+            "下载文件"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/file/download"),
+
+        // === 图片操作 (ImageService) ===
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "upload_image",
+            "https://open.feishu.cn/document/server-docs/im-v1/image/upload",
+            "上传图片"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/image/upload"),
+
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "download_image",
+            "https://open.feishu.cn/document/server-docs/im-v1/image/download",
+            "下载图片"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/image/download"),
+
+        // === 消息卡片操作 (MessageCardService) ===
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "patch_message_card",
+            "https://open.feishu.cn/document/server-docs/im-v1/message-card/patch",
+            "更新应用发送的消息卡片"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message-card/patch"),
+
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "delay_update_card",
+            "https://open.feishu.cn/document/server-docs/im-v1/message-card/delayUpdate",
+            "延时更新消息卡片"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message-card/delayUpdate"),
+
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "send_visible_card",
+            "https://open.feishu.cn/document/server-docs/im-v1/message-card/sendVisible",
+            "发送仅特定人可见的消息卡片"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message-card/sendVisible"),
+
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "delete_visible_card",
+            "https://open.feishu.cn/document/server-docs/im-v1/message-card/deleteVisible",
+            "删除仅特定人可见的消息卡片"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message-card/deleteVisible"),
+
+        // === URL预览 (UrlPreviewService) ===
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "batch_update_preview",
+            "https://open.feishu.cn/document/server-docs/im-v1/url-preview/batchUpdate",
+            "批量更新URL预览"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/url-preview/batchUpdate"),
+
+        // === 置顶消息 (PinService) ===
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "pin_message",
+            "https://open.feishu.cn/document/server-docs/im-v1/pin/create",
+            "置顶消息"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/pin/create"),
+
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "unpin_message",
+            "https://open.feishu.cn/document/server-docs/im-v1/pin/delete",
+            "移除置顶消息"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/pin/delete"),
+
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "list_pins",
+            "https://open.feishu.cn/document/server-docs/im-v1/pin/list",
+            "获取群内置顶消息"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/pin/list"),
+
+        // === 表情回应 (MessageReactionService) ===
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "add_reaction",
+            "https://open.feishu.cn/document/server-docs/im-v1/message-reaction/create",
+            "添加消息表情回复"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message-reaction/create"),
+
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "list_reactions",
+            "https://open.feishu.cn/document/server-docs/im-v1/message-reaction/list",
+            "获取消息表情回复"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message-reaction/list"),
+
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "delete_reaction",
+            "https://open.feishu.cn/document/server-docs/im-v1/message-reaction/delete",
+            "删除消息表情回复"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message-reaction/delete"),
+
+        // === 加急消息 (BuzzMessagesService) ===
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "urgent_app",
+            "https://open.feishu.cn/document/server-docs/im-v1/buzz/urgentApp",
+            "发送应用内加急"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/buzz/urgentApp"),
+
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "urgent_sms",
+            "https://open.feishu.cn/document/server-docs/im-v1/buzz/urgentSms",
+            "发送短信加急"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/buzz/urgentSms"),
+
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "urgent_phone",
+            "https://open.feishu.cn/document/server-docs/im-v1/buzz/urgentPhone",
+            "发送电话加急"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/buzz/urgentPhone"),
     ];
 
     registry.register_service("im", urls);
