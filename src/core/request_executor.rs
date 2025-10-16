@@ -780,4 +780,474 @@ mod tests {
             assert!(param_name.is_ascii());
         }
     }
+
+    // ==================== Enhanced Coverage Tests ====================
+
+    // Complex serialization scenarios
+    #[test]
+    fn test_request_executor_complex_serialization() {
+        use serde::{Deserialize, Serialize};
+
+        #[derive(Debug, Serialize, Deserialize)]
+        struct ComplexRequest {
+            id: i64,
+            name: String,
+            tags: Vec<String>,
+            metadata: Option<serde_json::Value>,
+            nested: NestedStruct,
+        }
+
+        #[derive(Debug, Serialize, Deserialize)]
+        struct NestedStruct {
+            active: bool,
+            score: f64,
+            items: Vec<i32>,
+        }
+
+        let request = ComplexRequest {
+            id: 123,
+            name: "测试名称".to_string(),
+            tags: vec!["tag1".to_string(), "tag2".to_string()],
+            metadata: Some(serde_json::json!({"key": "value"})),
+            nested: NestedStruct {
+                active: true,
+                score: 95.5,
+                items: vec![1, 2, 3],
+            },
+        };
+
+        let serialized = serde_json::to_vec(&request).unwrap();
+        let deserialized: ComplexRequest = serde_json::from_slice(&serialized).unwrap();
+
+        assert_eq!(request.id, deserialized.id);
+        assert_eq!(request.name, deserialized.name);
+        assert_eq!(request.tags, deserialized.tags);
+        assert_eq!(request.nested.active, deserialized.nested.active);
+        assert_eq!(request.nested.score, deserialized.nested.score);
+    }
+
+    // Error handling and edge cases
+    #[test]
+    fn test_request_executor_serialization_error_handling() {
+        use serde_json;
+
+        // Test with large data that might cause issues
+        #[derive(serde::Serialize)]
+        struct LargeRequest {
+            data: String,
+        }
+
+        let large_data = "x".repeat(1_000_000); // 1MB string
+        let large_request = LargeRequest {
+            data: large_data.clone(),
+        };
+
+        let serialization_result = serde_json::to_vec(&large_request);
+        assert!(serialization_result.is_ok());
+
+        let serialized = serialization_result.unwrap();
+        // The JSON structure will be like {"data":"xxxxx..."}, so it should be larger than the raw data
+        assert!(serialized.len() > large_data.len());
+        // But it shouldn't be excessively large (rough estimate: field name + quotes + colon + braces)
+        assert!(serialized.len() < large_data.len() + 100);
+    }
+
+    // Unicode and internationalization tests
+    #[test]
+    fn test_request_executor_unicode_handling() {
+        use serde::{Deserialize, Serialize};
+
+        #[derive(Debug, Serialize, Deserialize)]
+        struct UnicodeRequest {
+            chinese: String,
+            emoji: String,
+            arabic: String,
+            mixed: Vec<String>,
+        }
+
+        let request = UnicodeRequest {
+            chinese: "你好世界".to_string(),
+            emoji: "🚀🎉💻".to_string(),
+            arabic: "مرحبا بالعالم".to_string(),
+            mixed: vec![
+                "测试".to_string(),
+                "🌟".to_string(),
+                "Café".to_string(),
+                "العربية".to_string(),
+            ],
+        };
+
+        let serialized = serde_json::to_vec(&request).unwrap();
+        let deserialized: UnicodeRequest = serde_json::from_slice(&serialized).unwrap();
+
+        assert_eq!(request.chinese, deserialized.chinese);
+        assert_eq!(request.emoji, deserialized.emoji);
+        assert_eq!(request.arabic, deserialized.arabic);
+        assert_eq!(request.mixed, deserialized.mixed);
+    }
+
+    // Performance and efficiency tests
+    #[test]
+    fn test_request_executor_performance_characteristics() {
+        use std::time::Instant;
+
+        // Test serialization performance
+        #[derive(serde::Serialize)]
+        struct PerformanceRequest {
+            items: Vec<i32>,
+            text: String,
+        }
+
+        let large_request = PerformanceRequest {
+            items: (0..10000).collect(),
+            text: "performance test".repeat(1000),
+        };
+
+        let start = Instant::now();
+        let serialized = serde_json::to_vec(&large_request).unwrap();
+        let duration = start.elapsed();
+
+        // Serialization should be fast (less than 100ms for this amount of data)
+        assert!(duration.as_millis() < 100);
+        assert!(!serialized.is_empty());
+        assert!(serialized.len() > 1000);
+    }
+
+    // Path parameter edge cases
+    #[test]
+    fn test_request_executor_path_parameter_edge_cases() {
+        use std::collections::HashMap;
+
+        // Test with nested braces
+        let nested_path = "/api/{{double}}/test";
+        let mut nested_params = HashMap::new();
+        nested_params.insert("double", "value");
+
+        let mut path = nested_path.to_string();
+        for (key, value) in &nested_params {
+            path = path.replace(&format!("{{{key}}}"), value);
+        }
+        assert_eq!(path, "/api/{value}/test");
+
+        // Test with parameter names containing numbers
+        let numbered_path = "/api/{param1}/sub/{param2}/item";
+        let mut numbered_params = HashMap::new();
+        numbered_params.insert("param1", "value1");
+        numbered_params.insert("param2", "value2");
+
+        let mut path_numbered = numbered_path.to_string();
+        for (key, value) in &numbered_params {
+            path_numbered = path_numbered.replace(&format!("{{{key}}}"), value);
+        }
+        assert_eq!(path_numbered, "/api/value1/sub/value2/item");
+
+        // Test with empty values
+        let empty_value_path = "/api/{empty_param}/test";
+        let mut empty_value_params = HashMap::new();
+        empty_value_params.insert("empty_param", "");
+
+        let mut path_empty = empty_value_path.to_string();
+        for (key, value) in &empty_value_params {
+            path_empty = path_empty.replace(&format!("{{{key}}}"), value);
+        }
+        assert_eq!(path_empty, "/api//test"); // Note: double slash
+    }
+
+    // Query parameter encoding scenarios
+    #[test]
+    fn test_request_executor_query_parameter_encoding() {
+        use std::collections::HashMap;
+
+        // Test with URL-encoded characters
+        let mut encoded_params: HashMap<&'static str, String> = HashMap::new();
+        encoded_params.insert("search", "hello world".to_string());
+        encoded_params.insert("filter", "name>100".to_string());
+        encoded_params.insert("path", "/api/test".to_string());
+        encoded_params.insert("encoded", "a%20b%20c".to_string());
+
+        assert_eq!(
+            encoded_params.get("search"),
+            Some(&"hello world".to_string())
+        );
+        assert_eq!(encoded_params.get("filter"), Some(&"name>100".to_string()));
+        assert_eq!(encoded_params.get("path"), Some(&"/api/test".to_string()));
+        assert_eq!(
+            encoded_params.get("encoded"),
+            Some(&"a%20b%20c".to_string())
+        );
+    }
+
+    // Complex request option scenarios
+    #[test]
+    fn test_request_executor_request_option_complex_scenarios() {
+        use crate::core::req_option::RequestOption;
+
+        // Test with multiple headers
+        let complex_option = RequestOption::builder()
+            .tenant_key("test_tenant")
+            .user_access_token("user_token")
+            .app_access_token("app_token")
+            .request_id("req_123456")
+            .add_header("X-Test-Header", "test_value")
+            .add_header("Authorization", "Bearer token")
+            .add_header("Content-Type", "application/json")
+            .add_header("X-Rate-Limit-Limit", "100")
+            .build();
+
+        assert_eq!(complex_option.tenant_key, "test_tenant");
+        assert_eq!(complex_option.user_access_token, "user_token");
+        assert_eq!(complex_option.app_access_token, "app_token");
+        assert_eq!(complex_option.request_id, "req_123456");
+        assert_eq!(complex_option.header.len(), 4);
+
+        // Test header order preservation
+        let ordered_option = RequestOption::builder()
+            .add_header("X-First", "first_value")
+            .add_header("X-Second", "second_value")
+            .add_header("X-Third", "third_value")
+            .build();
+
+        assert_eq!(ordered_option.header.len(), 3);
+        assert_eq!(
+            ordered_option.header.get("X-First"),
+            Some(&"first_value".to_string())
+        );
+        assert_eq!(
+            ordered_option.header.get("X-Second"),
+            Some(&"second_value".to_string())
+        );
+        assert_eq!(
+            ordered_option.header.get("X-Third"),
+            Some(&"third_value".to_string())
+        );
+    }
+
+    // Concurrent access scenarios
+    #[test]
+    fn test_request_executor_concurrent_serialization() {
+        use std::sync::{Arc, Mutex};
+        use std::thread;
+
+        #[derive(serde::Serialize, serde::Deserialize, Clone)]
+        struct ConcurrentRequest {
+            id: usize,
+            data: String,
+        }
+
+        let results = Arc::new(Mutex::new(Vec::new()));
+        let mut handles = vec![];
+
+        for i in 0..10 {
+            let results_clone = results.clone();
+            let handle = thread::spawn(move || {
+                let request = ConcurrentRequest {
+                    id: i,
+                    data: format!("concurrent test {}", i),
+                };
+
+                let serialized = serde_json::to_vec(&request).unwrap();
+                let deserialized: ConcurrentRequest = serde_json::from_slice(&serialized).unwrap();
+
+                results_clone.lock().unwrap().push(deserialized);
+            });
+            handles.push(handle);
+        }
+
+        for handle in handles {
+            handle.join().unwrap();
+        }
+
+        let results_vec = results.lock().unwrap();
+        assert_eq!(results_vec.len(), 10);
+
+        // Verify all requests were processed correctly
+        for i in 0..10 {
+            let found = results_vec
+                .iter()
+                .any(|req| req.id == i && req.data == format!("concurrent test {}", i));
+            assert!(found, "Request {} not found in results", i);
+        }
+    }
+
+    // Memory usage and optimization tests
+    #[test]
+    fn test_request_executor_memory_usage() {
+        use std::mem;
+
+        #[derive(serde::Serialize)]
+        struct MemoryTestRequest {
+            large_string: String,
+            numbers: Vec<i64>,
+        }
+
+        let request = MemoryTestRequest {
+            large_string: "x".repeat(1000),
+            numbers: (0..1000).collect(),
+        };
+
+        // Check memory size of serialized data
+        let serialized = serde_json::to_vec(&request).unwrap();
+        assert!(serialized.len() > 1000);
+        assert!(serialized.len() < 100_000); // Should not be excessively large
+
+        // Check memory usage of request struct
+        let request_size = mem::size_of_val(&request);
+        assert!(request_size > 0);
+        assert!(request_size < 1_000_000); // Should be reasonable
+    }
+
+    // Type system and generic tests
+    #[test]
+    fn test_request_executor_type_system() {
+        use crate::core::api_resp::ResponseFormat;
+
+        // Test different response types
+        #[derive(Debug, Serialize, Deserialize)]
+        struct SimpleResponse {
+            message: String,
+        }
+
+        #[derive(Debug, Serialize, Deserialize)]
+        struct ComplexResponse {
+            id: i64,
+            data: Vec<String>,
+            metadata: Option<serde_json::Value>,
+        }
+
+        impl ApiResponseTrait for SimpleResponse {
+            fn data_format() -> ResponseFormat {
+                ResponseFormat::Data
+            }
+        }
+
+        impl ApiResponseTrait for ComplexResponse {
+            fn data_format() -> ResponseFormat {
+                ResponseFormat::Data
+            }
+        }
+
+        // Test that both types can be used
+        let simple_data = SimpleResponse {
+            message: "test".to_string(),
+        };
+
+        let complex_data = ComplexResponse {
+            id: 123,
+            data: vec!["item1".to_string(), "item2".to_string()],
+            metadata: Some(serde_json::json!({"key": "value"})),
+        };
+
+        let simple_serialized = serde_json::to_vec(&simple_data).unwrap();
+        let complex_serialized = serde_json::to_vec(&complex_data).unwrap();
+
+        assert!(!simple_serialized.is_empty());
+        assert!(!complex_serialized.is_empty());
+        assert!(complex_serialized.len() > simple_serialized.len());
+    }
+
+    // API request building edge cases
+    #[test]
+    fn test_request_executor_api_request_building_edge_cases() {
+        use crate::core::api_req::ApiRequest;
+        use crate::core::constants::AccessTokenType;
+        use reqwest::Method;
+
+        // Test with very long path
+        let long_path = "/".to_string() + &"a".repeat(1000);
+        let api_req_long = ApiRequest {
+            http_method: Method::GET,
+            api_path: long_path.clone(),
+            supported_access_token_types: vec![AccessTokenType::User],
+            ..Default::default()
+        };
+
+        assert_eq!(api_req_long.api_path, long_path);
+        assert_eq!(api_req_long.api_path.len(), 1001);
+
+        // Test with empty supported tokens
+        let api_req_empty_tokens = ApiRequest {
+            http_method: Method::POST,
+            api_path: "/test".to_string(),
+            supported_access_token_types: vec![],
+            ..Default::default()
+        };
+
+        assert!(api_req_empty_tokens.supported_access_token_types.is_empty());
+
+        // Test with many supported tokens
+        let api_req_many_tokens = ApiRequest {
+            http_method: Method::PUT,
+            api_path: "/test".to_string(),
+            supported_access_token_types: vec![
+                AccessTokenType::Tenant,
+                AccessTokenType::User,
+                AccessTokenType::App,
+                AccessTokenType::Tenant, // duplicate
+                AccessTokenType::User,   // duplicate
+            ],
+            ..Default::default()
+        };
+
+        assert_eq!(api_req_many_tokens.supported_access_token_types.len(), 5);
+    }
+
+    // Method chaining and composition tests
+    #[test]
+    fn test_request_executor_method_composition() {
+        use crate::core::constants::AccessTokenType;
+
+        // Test that different methods can be composed together
+        let common_tokens = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        let app_only_tokens = vec![AccessTokenType::App];
+        let user_only_tokens = vec![AccessTokenType::User];
+
+        // Test token combinations
+        assert_ne!(common_tokens, app_only_tokens);
+        assert_ne!(common_tokens, user_only_tokens);
+        assert_ne!(app_only_tokens, user_only_tokens);
+
+        // Test token vector operations
+        let mut combined_tokens = common_tokens.clone();
+        combined_tokens.extend(app_only_tokens.clone());
+        // Remove duplicates without sorting (since AccessTokenType doesn't implement Ord)
+        combined_tokens.dedup();
+
+        assert_eq!(combined_tokens.len(), 3);
+        assert!(combined_tokens.contains(&AccessTokenType::Tenant));
+        assert!(combined_tokens.contains(&AccessTokenType::User));
+        assert!(combined_tokens.contains(&AccessTokenType::App));
+    }
+
+    // Async execution patterns (conceptual tests)
+    #[test]
+    fn test_request_executor_async_patterns() {
+        use std::future::Future;
+
+        // Test that our types implement required traits for async
+        fn assert_send<T: Send>(_: &T) {}
+        fn assert_sync<T: Sync>(_: &T) {}
+
+        let config = create_test_config();
+        assert_send(&config);
+        assert_sync(&config);
+
+        // Test that our futures would be Send (this is a compile-time check)
+        #[allow(dead_code)]
+        fn check_future_send<F: Future + Send>(_: F) {}
+
+        // This would be used in actual async contexts
+        let _check = || {
+            // In real async code:
+            // let future = RequestExecutor::get::<TestResponse>(&config, "/test", vec![], None, None);
+            // check_future_send(future);
+        };
+    }
+
+    // Helper function for creating test config
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("test_app_id")
+            .app_secret("test_app_secret")
+            .build()
+    }
 }

@@ -24,6 +24,7 @@ pub use to_be_resigned::*;
 /// 员工管理服务
 ///
 /// 提供员工的创建、更新、删除、查询等管理功能
+#[derive(Debug)]
 pub struct EmployeeService {
     pub config: Config,
 }

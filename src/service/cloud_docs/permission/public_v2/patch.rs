@@ -544,7 +544,7 @@ impl PermissionUpdateResultV2 {
             match setting.as_str() {
                 "closed" => "最安全",
                 "tenant_readable" => {
-                    if self.allow_share_partner_tenant == Some(false) {
+                    if !self.allow_share_partner_tenant.unwrap_or(true) {
                         "较安全"
                     } else {
                         "中等安全"
@@ -629,7 +629,11 @@ impl PatchPermissionPublicV2Response {
             match setting.as_str() {
                 "closed" => "文档仅限邀请用户访问，安全性最高",
                 "tenant_readable" => {
-                    if self.permission_public.allow_share_partner_tenant == Some(false) {
+                    if !self
+                        .permission_public
+                        .allow_share_partner_tenant
+                        .unwrap_or(true)
+                    {
                         "组织内用户可查看，适合内部分享"
                     } else {
                         "允许组织外分享，注意内容安全"
@@ -653,7 +657,7 @@ impl PatchPermissionPublicV2Response {
             if setting == "anyone_editable" || setting == "anyone_readable" {
                 recommendations.push("建议设置密码保护".to_string());
 
-                if self.permission_public.allow_copy == Some(true) {
+                if matches!(self.permission_public.allow_copy, Some(true)) {
                     recommendations.push("建议禁止复制以防止内容泄露".to_string());
                 }
 
@@ -663,7 +667,10 @@ impl PatchPermissionPublicV2Response {
             }
         }
 
-        if self.permission_public.allow_share_partner_tenant == Some(true) {
+        if matches!(
+            self.permission_public.allow_share_partner_tenant,
+            Some(true)
+        ) {
             recommendations.push("已开启组织外分享，请确保内容合规".to_string());
         }
 
