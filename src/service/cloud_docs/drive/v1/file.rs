@@ -171,6 +171,38 @@ impl FileService {
     /// 创建文件快捷方式
     ///
     /// 该接口用于创建文件的快捷方式。
+    ///
+    /// # API文档
+    ///
+    /// {}
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    ///     let client = LarkClient::builder()
+    ///         .app_id("your_app_id")
+    ///         .app_secret("your_app_secret")
+    ///         .build()?;
+    ///
+    ///     // 创建文件快捷方式
+    ///     let request = CreateFileShortcutRequest {
+    ///         refer_entity: ReferEntity {
+    ///             entity_type: "doc".to_string(),
+    ///             token: "doc_token_123".to_string(),
+    ///         },
+    ///         name: "快捷方式到文档".to_string(),
+    ///         parent_token: "parent_folder_token".to_string(),
+    ///     };
+    ///
+    ///     let response = client.drive.v1.file.create_file_shortcut(request, None).await?;
+    ///     println!("快捷方式创建成功，token: {}", response.token);
+    ///     Ok(())
+    /// }
+    /// ```
     pub async fn create_file_shortcut(
         &self,
         request: CreateFileShortcutRequest,
