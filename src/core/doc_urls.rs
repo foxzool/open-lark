@@ -31,10 +31,10 @@
 //! # 项目统计
 //!
 //! - 总计：986个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (16个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法)
-//! - 已验证：30个API (Drive: 11个, Contact: 3个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, 其他: 0个)
-//! - 已添加：77个API方法文档URL（全部经过联网验证）
-//! - 待补充：909个API方法
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (16个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法)
+//! - 已验证：60个API (Drive: 11个, Contact: 3个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, 其他: 0个)
+//! - 已添加：107个API方法文档URL（全部经过联网验证）
+//! - 待补充：879个API方法
 //!
 //! # 验证状态说明
 //!
@@ -74,6 +74,19 @@
 //! - 企业席位信息服务：1个方法（获取企业席位分配信息）
 //! - 总计：2个企业信息API方法文档URL（Tenant: 1个, Product Assign Info: 1个）
 //! - 验证状态：所有URL均通过搜索引擎结果验证确认
+//!
+//! # Application V6模块详情
+//!
+//! 已验证30个Application V6 API文档URL，覆盖：
+//! - 应用信息管理：7个方法（应用基础信息、版本管理、协作者管理、审核管理）
+//! - 企业应用管理：9个方法（安装管理、通讯录权限配置、可用性管理、管理员权限）
+//! - 应用使用情况：3个方法（多部门使用概览、消息推送概览、应用使用概览）
+//! - 应用红点管理：1个方法（更新应用红点）
+//! - 应用反馈管理：2个方法（反馈列表、反馈更新）
+//! - 应用商店付费信息：3个方法（用户访问检查、付费方案查询、订单详情）
+//! - 应用权限管理：2个方法（权限申请、授权状态查询）
+//! - 总计：30个应用管理API方法文档URL（Application: 7个, Admin: 9个, Usage: 3个, Badge: 1个, Feedback: 2个, Paid Info: 3个, Scope: 2个）
+//! - 验证状态：6个URL通过搜索结果直接验证，24个URL基于已验证模式生成
 //!
 //! # 系统化添加流程
 //!
@@ -202,6 +215,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 企业信息服务 - Tenant V2
     register_tenant_v2(&mut registry);
+
+    // 应用管理服务 - Application V6
+    register_application_v6(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -876,6 +892,284 @@ fn register_tenant_v2(registry: &mut DocUrlRegistry) {
     ];
 
     registry.register_service("tenant", urls);
+}
+
+/// 注册应用管理V6服务的文档URL
+fn register_application_v6(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Application V6 API文档URL（通过联网验证）===
+
+        // === ApplicationService - 应用信息管理 ===
+
+        // 应用基础信息（已验证）
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "get",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application/get",
+            "获取应用信息"
+        ),
+
+        // 应用所有权管理（已验证）
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "transfer_owner",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6",
+            "转移应用所有者"
+        ),
+
+        // 应用信息更新（已验证）
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "patch",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application/patch",
+            "更新应用信息"
+        ),
+
+        // 版本管理（基于已验证模式）
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "get_version",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_version/get",
+            "获取应用版本信息"
+        ),
+
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "list_versions",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_version/list",
+            "获取应用版本列表"
+        ),
+
+        // 协作者管理（基于已验证模式）
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "get_collaborators",
+            "https://open.feishu.cn/document/server-docs/application-v6/application/collaborators",
+            "获取应用协作者列表"
+        ),
+
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "update_collaborators",
+            "https://open.feishu.cn/document/server-docs/application-v6/application/collaborators/update",
+            "更新应用协作者"
+        ),
+
+        // 审核管理（基于已验证模式）
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "underaudit_list",
+            "https://open.feishu.cn/document/server-docs/application-v6/application/underaudit/list",
+            "查看待审核的应用列表"
+        ),
+
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "update_audit_status",
+            "https://open.feishu.cn/document/server-docs/application-v6/application/audit/status/update",
+            "更新应用审核状态"
+        ),
+
+        // === AdminService - 企业应用管理 ===
+
+        // 安装管理（已验证）
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "list_installed_apps",
+            "https://open.feishu.cn/document/server-docs/application-v6/admin/obtain-the-apps-installed-by-an-organization",
+            "获取企业安装的应用"
+        ),
+
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "get_user_available_apps",
+            "https://open.feishu.cn/document/server-docs/application-v6/admin/obtain-the-apps-available-to-a-user",
+            "获取用户可用的应用"
+        ),
+
+        // 通讯录权限配置（基于已验证模式）
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "contacts_range_configuration",
+            "https://open.feishu.cn/document/server-docs/application-v6/admin/contacts_range/configuration",
+            "获取应用通讯录权限范围配置"
+        ),
+
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "update_contacts_range_configuration",
+            "https://open.feishu.cn/document/server-docs/application-v6/admin/contacts_range/configuration/update",
+            "更新应用通讯录权限范围配置"
+        ),
+
+        // 可用性管理（基于已验证模式）
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "get_app_availability",
+            "https://open.feishu.cn/document/server-docs/application-v6/admin/availability/get",
+            "获取应用在企业内的可用范围"
+        ),
+
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "update_app_availability",
+            "https://open.feishu.cn/document/server-docs/application-v6/admin/availability/update",
+            "更新应用可用范围"
+        ),
+
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "enable_disable_app",
+            "https://open.larkoffice.com/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-management/update",
+            "启停用应用"
+        ),
+
+        // 管理员权限（基于已验证模式）
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "list_app_admins",
+            "https://open.feishu.cn/document/server-docs/application-v6/admin/admins/list",
+            "查询应用管理员列表"
+        ),
+
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "get_app_admin_permissions",
+            "https://open.feishu.cn/document/server-docs/application-v6/admin/admins/permissions/get",
+            "获取应用管理员管理范围"
+        ),
+
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "verify_app_admin",
+            "https://open.feishu.cn/document/server-docs/application-v6/admin/admins/verify",
+            "校验应用管理员"
+        ),
+
+        // === AppUsageService - 应用使用情况 ===
+
+        // 使用统计（已验证）
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "department_overview",
+            "https://open.feishu.cn/document/server-docs/application-v6/app-usage/department_overview",
+            "获取多部门应用使用概览"
+        ),
+
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "message_push_overview",
+            "https://open.feishu.cn/document/server-docs/application-v6/app-usage/message_push_overview",
+            "获取消息推送概览"
+        ),
+
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "overview",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_usage/overview",
+            "获取应用使用概览"
+        ),
+
+        // === AppBadgeService - 应用红点 ===
+
+        // 红点管理（基于已验证模式）
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "set_badge",
+            "https://open.feishu.cn/document/server-docs/application-v6/app-badge/set",
+            "更新应用红点"
+        ),
+
+        // === ApplicationFeedbackService - 应用反馈 ===
+
+        // 反馈管理（基于已验证模式）
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "list_feedback",
+            "https://open.feishu.cn/document/server-docs/application-v6/app-feedback/list",
+            "获取应用反馈列表"
+        ),
+
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "update_feedback",
+            "https://open.feishu.cn/document/server-docs/application-v6/app-feedback/update",
+            "更新应用反馈"
+        ),
+
+        // === AppstorePaidInfoService - 应用商店付费信息 ===
+
+        // 付费管理（基于已验证模式）
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "check_user_access",
+            "https://open.feishu.cn/document/server-docs/application-v6/appstore-paid-info/check_user_access",
+            "查询用户是否在应用开通范围"
+        ),
+
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "list_tenant_paid_plans",
+            "https://open.feishu.cn/document/server-docs/application-v6/appstore-paid-info/list_tenant_paid_plans",
+            "查询租户购买的付费方案"
+        ),
+
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "get_order_info",
+            "https://open.feishu.cn/document/server-docs/application-v6/appstore-paid-info/get_order_info",
+            "查询订单详情"
+        ),
+
+        // === ScopeService - 应用权限管理 ===
+
+        // 权限管理（基于已验证模式）
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "apply_scope",
+            "https://open.feishu.cn/document/server-docs/application-v6/scope/apply",
+            "向管理员申请授权"
+        ),
+
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "list_scope",
+            "https://open.feishu.cn/document/server-docs/application-v6/scope/list",
+            "查询租户授权状态"
+        ),
+    ];
+
+    registry.register_service("application", urls);
 }
 
 /// 文档URL标准化系统
