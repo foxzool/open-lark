@@ -31,10 +31,10 @@
 //! # 项目统计
 //!
 //! - 总计：986个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (16个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法)
-//! - 已验证：28个API (Drive: 11个, Contact: 3个, IM: 3个, AI: 6个, Authentication: 5个, 其他: 0个)
-//! - 已添加：75个API方法文档URL（全部经过联网验证）
-//! - 待补充：911个API方法
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (16个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法)
+//! - 已验证：30个API (Drive: 11个, Contact: 3个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, 其他: 0个)
+//! - 已添加：77个API方法文档URL（全部经过联网验证）
+//! - 待补充：909个API方法
 //!
 //! # 验证状态说明
 //!
@@ -65,6 +65,14 @@
 //! - 用户信息服务：1个方法（获取登录用户信息）
 //! - 访问令牌管理：4个方法（获取user_access_token、tenant_access_token、刷新令牌等）
 //! - 总计：5个认证API方法文档URL（UserInfo: 1个, Token Management: 4个）
+//! - 验证状态：所有URL均通过搜索引擎结果验证确认
+//!
+//! # Tenant V2模块详情
+//!
+//! 已验证2个Tenant V2 API文档URL，覆盖：
+//! - 企业信息服务：1个方法（获取企业基本信息）
+//! - 企业席位信息服务：1个方法（获取企业席位分配信息）
+//! - 总计：2个企业信息API方法文档URL（Tenant: 1个, Product Assign Info: 1个）
 //! - 验证状态：所有URL均通过搜索引擎结果验证确认
 //!
 //! # 系统化添加流程
@@ -191,6 +199,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 身份认证服务 - Authentication V1
     register_authentication_v1(&mut registry);
+
+    // 企业信息服务 - Tenant V2
+    register_tenant_v2(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -838,6 +849,33 @@ fn register_authentication_v1(registry: &mut DocUrlRegistry) {
     ];
 
     registry.register_service("authentication", urls);
+}
+
+/// 注册企业信息服务V2的文档URL
+fn register_tenant_v2(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Tenant V2 API文档URL（通过联网验证）===
+
+        // 企业信息服务（已验证）
+        ApiDocUrl::new(
+            "tenant",
+            "v2",
+            "query",
+            "https://open.feishu.cn/document/server-docs/tenant-v2/query",
+            "获取企业信息"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/tenant-v2/tenant/query"),
+
+        // 企业席位信息服务（已验证）
+        ApiDocUrl::new(
+            "tenant",
+            "v2",
+            "query_product_assign_info",
+            "https://open.larkoffice.com/document/server-docs/tenant-v2/tenant-product_assign_info/query",
+            "获取企业席位信息"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/tenant-v2/tenant-product_assign_info/query"),
+    ];
+
+    registry.register_service("tenant", urls);
 }
 
 /// 文档URL标准化系统
