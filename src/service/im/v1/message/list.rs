@@ -46,7 +46,7 @@ impl ListMessageRequestBuilder {
         self
     }
 
-    /// 容器的id，即chat的id，详情参见[群ID 说明](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-id-description)
+    /// 容器的id，即chat的id
     ///
     /// 示例值：oc_234jsi43d3ssi993d43545f
     pub fn container_id(mut self, container_id: impl ToString) -> Self {
@@ -203,8 +203,6 @@ impl MessageService {
     /// 获取会话历史消息
     ///
     /// 获取会话（包括单聊、群组）的历史消息（聊天记录）
-    ///
-    /// <https://open.feishu.cn/document/server-docs/im-v1/message/list>
     pub async fn list(
         &self,
         list_message_request: ListMessageRequest,
