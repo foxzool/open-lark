@@ -31,8 +31,6 @@ impl FileService {
     /// 获取文件元数据
     ///
     /// 该接口用于根据文件token获取文件的元数据信息。
-    ///
-    /// <https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/meta/batch_query>
     pub async fn get_file_meta(
         &self,
         request: GetFileMetaRequest,
@@ -54,8 +52,6 @@ impl FileService {
     /// 获取文件统计信息
     ///
     /// 该接口用于根据文件token获取文件的统计信息，如浏览次数等。
-    ///
-    /// <https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-statistics/get>
     pub async fn get_file_statistics(
         &self,
         request: GetFileStatisticsRequest,
@@ -76,8 +72,6 @@ impl FileService {
     /// 获取文件访问记录
     ///
     /// 该接口用于获取文件的访问记录列表。
-    ///
-    /// <https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-view_record/list>
     pub async fn list_file_view_records(
         &self,
         request: ListFileViewRecordsRequest,
@@ -108,8 +102,6 @@ impl FileService {
     /// 新建文件
     ///
     /// 该接口用于在指定文件夹中新建文件。
-    ///
-    /// <https://open.feishu.cn/document/ukTMukTMukTM/uQTNzUjL0UzM14CN1MTN>
     pub async fn create_file(
         &self,
         request: CreateFileRequest,
@@ -131,8 +123,6 @@ impl FileService {
     /// 复制文件
     ///
     /// 该接口用于复制文件到指定文件夹。
-    ///
-    /// <https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/copy>
     pub async fn copy_file(
         &self,
         request: CopyFileRequest,
@@ -161,8 +151,6 @@ impl FileService {
     /// 删除文件
     ///
     /// 该接口用于删除文件。
-    ///
-    /// <https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/delete>
     pub async fn delete_file(
         &self,
         request: DeleteFileRequest,
@@ -183,8 +171,6 @@ impl FileService {
     /// 创建文件快捷方式
     ///
     /// 该接口用于创建文件的快捷方式。
-    ///
-    /// <https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/create_shortcut>
     pub async fn create_file_shortcut(
         &self,
         request: CreateFileShortcutRequest,
@@ -206,8 +192,6 @@ impl FileService {
     /// 搜索文件
     ///
     /// 该接口用于搜索文件。
-    ///
-    /// <https://open.feishu.cn/document/ukTMukTMukTM/ugDM4UjL4ADO14COwgTN>
     pub async fn search_files(
         &self,
         request: SearchFilesRequest,
