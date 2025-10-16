@@ -57,3 +57,4 @@ pub mod event;
 pub mod prelude;
 /// 所有飞书开放平台API服务的实现
 pub mod service;
+
