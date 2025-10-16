@@ -33,6 +33,10 @@ impl UserService {
     }
 
     /// 创建用户
+    ///
+    /// 该接口用于创建新的用户账号。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/contact-v3/user/create>
     pub async fn create(
         &self,
         req: &CreateUserRequest,
@@ -50,6 +54,10 @@ impl UserService {
     }
 
     /// 修改用户部分信息
+    ///
+    /// 该接口用于修改用户的部分信息。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/contact-v3/user/patch>
     pub async fn patch(
         &self,
         user_id: &str,
@@ -72,6 +80,10 @@ impl UserService {
     }
 
     /// 更新用户 ID
+    ///
+    /// 该接口用于更新用户的用户ID。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/contact-v3/user/update_user_id>
     pub async fn update_user_id(
         &self,
         user_id: &str,
@@ -94,6 +106,10 @@ impl UserService {
     }
 
     /// 获取单个用户信息
+    ///
+    /// 该接口用于获取单个用户的详细信息。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/contact-v3/user/get>
     pub async fn get(
         &self,
         user_id: &str,
@@ -125,6 +141,10 @@ impl UserService {
     }
 
     /// 批量获取用户信息
+    ///
+    /// 该接口用于批量获取多个用户的信息。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/contact-v3/user/batch>
     pub async fn batch(
         &self,
         req: &BatchGetUsersRequest,
@@ -142,6 +162,10 @@ impl UserService {
     }
 
     /// 获取部门直属用户列表
+    ///
+    /// 该接口用于获取部门直属的用户列表。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/contact-v3/user/find_by_department>
     pub async fn find_by_department(
         &self,
         _req: &FindUsersByDepartmentRequest,
@@ -162,6 +186,10 @@ impl UserService {
     }
 
     /// 通过手机号或邮箱获取用户 ID
+    ///
+    /// 该接口用于通过手机号或邮箱批量获取用户ID。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/contact-v3/user/batch_get_id>
     pub async fn batch_get_id(
         &self,
         req: &BatchGetUserIdRequest,
@@ -180,6 +208,10 @@ impl UserService {
     }
 
     /// 搜索用户
+    ///
+    /// 该接口用于根据关键词搜索用户。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/contact-v3/user/search>
     pub async fn search(
         &self,
         req: &SearchUsersRequest,
@@ -197,6 +229,10 @@ impl UserService {
     }
 
     /// 删除用户
+    ///
+    /// 该接口用于删除用户账号。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/contact-v3/user/delete>
     pub async fn delete(
         &self,
         user_id: &str,
@@ -220,6 +256,10 @@ impl UserService {
     }
 
     /// 恢复已删除用户
+    ///
+    /// 该接口用于恢复已删除的用户账号。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/contact-v3/user/resurrect>
     pub async fn resurrect(
         &self,
         user_id: &str,
@@ -242,6 +282,10 @@ impl UserService {
     }
 
     /// 获取用户列表
+    ///
+    /// 该接口用于获取用户列表，支持分页。
+    ///
+    /// <https://open.feishu.cn/document/server-docs/contact-v3/user/list>
     pub async fn list(&self, req: &ListUsersRequest) -> crate::core::SDKResult<ListUsersResponse> {
         let mut query_params = std::collections::HashMap::new();
 
