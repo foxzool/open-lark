@@ -32,9 +32,15 @@
 //!
 //! - 总计：986个API方法需要文档URL
 //! - 已完成模块：IM V1 (29个API方法)
-//! - 已验证：5个API (Drive: 2个, Contact: 3个)
-//! - 已添加：34个IM V1 API方法（基于有效模式）
-//! - 待补充：947个API方法
+//! - 已验证：8个API (Drive: 2个, Contact: 3个, IM: 3个)
+//! - 已添加：16个Contact V3 API方法（3个已验证，13个基于模式）
+//! - 待补充：936个API方法
+//!
+//! # 验证状态说明
+//!
+//! - ✅ 已验证：通过WebFetch工具实际验证可访问的URL
+//! - ⏳ 基于模式：基于已验证URL模式推断，格式正确但需进一步验证
+//! - ❌ 已移除：包含无效编码的URL（uAjLw4CM/ukTMukTMukTM）
 //!
 //! # 系统化添加流程
 //!
@@ -431,7 +437,18 @@ fn register_im_v1(registry: &mut DocUrlRegistry) {
 /// 注册通讯录V3服务的文档URL
 fn register_contact_v3(registry: &mut DocUrlRegistry) {
     let urls = vec![
-        // 已验证的Contact V3 API文档URL（通过搜索引擎验证）
+        // === 已验证的Contact V3 API文档URL（通过联网验证）===
+
+        // 通讯录概述（已验证）
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "resources",
+            "https://open.feishu.cn/document/server-docs/contact-v3/resources",
+            "通讯录概述"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/resources"),
+
+        // 用户管理（已验证）
         ApiDocUrl::new(
             "contact",
             "v3",
@@ -448,15 +465,7 @@ fn register_contact_v3(registry: &mut DocUrlRegistry) {
             "获取部门直属用户列表"
         ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/find_by_department"),
 
-        ApiDocUrl::new(
-            "contact",
-            "v3",
-            "batch_get_user",
-            "https://open.feishu.cn/document/contact-v3/user/batch",
-            "批量获取用户信息"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/batch"),
-
-        // 其他Contact V3 API（基于已知模式）
+        // 基于已验证模式的推断URL（需要进一步验证）
         ApiDocUrl::new(
             "contact",
             "v3",
@@ -465,6 +474,47 @@ fn register_contact_v3(registry: &mut DocUrlRegistry) {
             "获取用户信息"
         ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/get"),
 
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "update_user",
+            "https://open.feishu.cn/document/server-docs/contact-v3/user/update",
+            "更新用户信息"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/update"),
+
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "delete_user",
+            "https://open.feishu.cn/document/server-docs/contact-v3/user/delete",
+            "删除用户"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/delete"),
+
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "batch_get_user",
+            "https://open.feishu.cn/document/contact-v3/user/batch",
+            "批量获取用户信息"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/batch"),
+
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "list_user",
+            "https://open.feishu.cn/document/server-docs/contact-v3/user/list",
+            "获取用户列表"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/list"),
+
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "search_user",
+            "https://open.feishu.cn/document/server-docs/contact-v3/user/search",
+            "搜索用户"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/search"),
+
+        // 部门管理（基于模式推断）
         ApiDocUrl::new(
             "contact",
             "v3",
@@ -480,6 +530,30 @@ fn register_contact_v3(registry: &mut DocUrlRegistry) {
             "https://open.feishu.cn/document/server-docs/contact-v3/department/create",
             "创建部门"
         ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/create"),
+
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "update_department",
+            "https://open.feishu.cn/document/server-docs/contact-v3/department/update",
+            "更新部门信息"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/update"),
+
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "delete_department",
+            "https://open.feishu.cn/document/server-docs/contact-v3/department/delete",
+            "删除部门"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/delete"),
+
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "list_department",
+            "https://open.feishu.cn/document/server-docs/contact-v3/department/list",
+            "获取部门列表"
+        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/list"),
     ];
 
     registry.register_service("contact", urls);

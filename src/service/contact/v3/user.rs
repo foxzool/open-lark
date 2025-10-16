@@ -35,6 +35,44 @@ impl UserService {
     /// 创建用户
     ///
     /// 该接口用于创建新的用户账号。
+    ///
+    /// # API文档
+    ///
+    /// {}
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    /// use open_lark::service::contact::models::User;
+    ///
+    /// #[tokio::main]
+    /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    ///     let client = LarkClient::builder()
+    ///         .app_id("your_app_id")
+    ///         .app_secret("your_app_secret")
+    ///         .build()?;
+    ///
+    ///     // 创建新用户
+    ///     let user = User {
+    ///         name: Some("张三".to_string()),
+    ///         mobile: Some("+8613800138000".to_string()),
+    ///         email: Some("zhangsan@example.com".to_string()),
+    ///         department_ids: Some(vec!["dept_id".to_string()]),
+    ///         ..Default::default()
+    ///     };
+    ///
+    ///     let request = CreateUserRequest {
+    ///         user,
+    ///         user_id_type: Some("open_id".to_string()),
+    ///         department_id_type: Some("department_id".to_string()),
+    ///     };
+    ///
+    ///     let response = client.contact.v3.user.create(&request).await?;
+    ///     println!("用户创建成功，用户ID: {}", response.user.user_id.unwrap_or_default());
+    ///     Ok(())
+    /// }
+    /// ```
     pub async fn create(
         &self,
         req: &CreateUserRequest,
