@@ -231,7 +231,7 @@ impl LingoService {
         }
 
         // 检查配置一致性
-        let app_ids = vec![
+        let app_ids = [
             &self.draft.config.app_id,
             &self.entity.config.app_id,
             &self.classification.config.app_id,
@@ -271,7 +271,10 @@ impl LingoService {
         // 功能支持
         stats.insert("entity_management".to_string(), "enabled".to_string());
         stats.insert("draft_editing".to_string(), "enabled".to_string());
-        stats.insert("classification_management".to_string(), "enabled".to_string());
+        stats.insert(
+            "classification_management".to_string(),
+            "enabled".to_string(),
+        );
         stats.insert("repo_management".to_string(), "enabled".to_string());
         stats.insert("file_management".to_string(), "enabled".to_string());
 
@@ -292,34 +295,34 @@ impl LingoService {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_lingo_feature(&self, feature: &str) -> bool {
-        match feature {
-            "entity_management" => true,
-            "draft_editing" => true,
-            "classification_management" => true,
-            "repo_management" => true,
-            "file_management" => true,
-            "intelligent_search" => true,
-            "collaborative_editing" => true,
-            "content_highlights" => true,
-            "knowledge_analytics" => true,
-            "batch_operations" => true,
-            "real_time_updates" => true,
-            "version_control" => true,
-            "approval_workflow" => true,
-            "content_recommendations" => true,
-            "multi_language_support" => true,
-            "cross_references" => true,
-            "tag_management" => true,
-            "search_indexing" => true,
-            "content_export" => true,
-            "audit_logging" => true,
-            "api_access" => true,
-            "webhook_support" => true,
-            "media_management" => true,
-            "template_support" => true,
-            "access_control" => true,
-            _ => false,
-        }
+        matches!(
+            feature,
+            "entity_management"
+                | "draft_editing"
+                | "classification_management"
+                | "repo_management"
+                | "file_management"
+                | "intelligent_search"
+                | "collaborative_editing"
+                | "content_highlights"
+                | "knowledge_analytics"
+                | "batch_operations"
+                | "real_time_updates"
+                | "version_control"
+                | "approval_workflow"
+                | "content_recommendations"
+                | "multi_language_support"
+                | "cross_references"
+                | "tag_management"
+                | "search_indexing"
+                | "content_export"
+                | "audit_logging"
+                | "api_access"
+                | "webhook_support"
+                | "media_management"
+                | "template_support"
+                | "access_control"
+        )
     }
 
     /// 获取词典功能矩阵
@@ -328,7 +331,9 @@ impl LingoService {
     ///
     /// # 返回值
     /// 包含功能状态信息的字典
-    pub fn get_lingo_features_matrix(&self) -> std::collections::HashMap<String, std::collections::HashMap<String, String>> {
+    pub fn get_lingo_features_matrix(
+        &self,
+    ) -> std::collections::HashMap<String, std::collections::HashMap<String, String>> {
         let mut features = std::collections::HashMap::new();
 
         // 内容管理功能
@@ -342,7 +347,10 @@ impl LingoService {
 
         // 知识组织功能
         let mut knowledge_organization = std::collections::HashMap::new();
-        knowledge_organization.insert("classification_management".to_string(), "✅ 支持".to_string());
+        knowledge_organization.insert(
+            "classification_management".to_string(),
+            "✅ 支持".to_string(),
+        );
         knowledge_organization.insert("tag_management".to_string(), "✅ 支持".to_string());
         knowledge_organization.insert("cross_references".to_string(), "✅ 支持".to_string());
         knowledge_organization.insert("search_indexing".to_string(), "✅ 支持".to_string());
@@ -394,7 +402,10 @@ impl LingoService {
                 health.insert("status".to_string(), "healthy".to_string());
                 health.insert("draft_service".to_string(), "available".to_string());
                 health.insert("entity_service".to_string(), "available".to_string());
-                health.insert("classification_service".to_string(), "available".to_string());
+                health.insert(
+                    "classification_service".to_string(),
+                    "available".to_string(),
+                );
                 health.insert("repo_service".to_string(), "available".to_string());
                 health.insert("file_service".to_string(), "available".to_string());
             }
@@ -421,7 +432,10 @@ impl LingoService {
         let mut summary = std::collections::HashMap::new();
 
         summary.insert("service_name".to_string(), "Lingo".to_string());
-        summary.insert("service_type".to_string(), "Dictionary & Knowledge Management".to_string());
+        summary.insert(
+            "service_type".to_string(),
+            "Dictionary & Knowledge Management".to_string(),
+        );
         summary.insert("app_id".to_string(), self.draft.config.app_id.clone());
         summary.insert("base_url".to_string(), self.draft.config.base_url.clone());
         summary.insert("service_count".to_string(), "5".to_string());
@@ -537,10 +551,7 @@ mod tests {
         assert!(service.validate_lingo_config().is_ok());
 
         // Test with invalid configuration (missing app_id in draft)
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("secret")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("secret").build();
         let invalid_service = LingoService::new(invalid_config);
         assert!(invalid_service.validate_lingo_config().is_err());
     }
@@ -621,7 +632,10 @@ mod tests {
         let summary = service.get_config_summary();
 
         assert_eq!(summary.get("service_name").unwrap(), "Lingo");
-        assert_eq!(summary.get("service_type").unwrap(), "Dictionary & Knowledge Management");
+        assert_eq!(
+            summary.get("service_type").unwrap(),
+            "Dictionary & Knowledge Management"
+        );
         assert_eq!(summary.get("app_id").unwrap(), "lingo_test_app");
         assert_eq!(summary.get("service_count").unwrap(), "5");
         assert_eq!(summary.get("supported_features").unwrap(), "25");
@@ -652,7 +666,10 @@ mod tests {
 
         // Check knowledge organization features
         let knowledge_org = features.get("知识组织功能").unwrap();
-        assert_eq!(knowledge_org.get("classification_management").unwrap(), "✅ 支持");
+        assert_eq!(
+            knowledge_org.get("classification_management").unwrap(),
+            "✅ 支持"
+        );
         assert_eq!(knowledge_org.get("tag_management").unwrap(), "✅ 支持");
         assert_eq!(knowledge_org.get("cross_references").unwrap(), "✅ 支持");
 
@@ -677,7 +694,10 @@ mod tests {
         assert_eq!(service.draft.config.app_id, "custom_lingo_app");
         assert_eq!(service.draft.config.app_secret, "custom_lingo_secret");
         assert_eq!(service.draft.config.base_url, "https://custom.example.com");
-        assert_eq!(service.draft.config.req_timeout, Some(Duration::from_secs(300)));
+        assert_eq!(
+            service.draft.config.req_timeout,
+            Some(Duration::from_secs(300))
+        );
     }
 
     #[test]
@@ -694,14 +714,8 @@ mod tests {
         let service1 = LingoService::new(config1);
         let service2 = LingoService::new(config2);
 
-        assert_ne!(
-            service1.draft.config.app_id,
-            service2.draft.config.app_id
-        );
-        assert_ne!(
-            service1.entity.config.app_id,
-            service2.entity.config.app_id
-        );
+        assert_ne!(service1.draft.config.app_id, service2.draft.config.app_id);
+        assert_ne!(service1.entity.config.app_id, service2.entity.config.app_id);
         assert_ne!(
             service1.classification.config.app_id,
             service2.classification.config.app_id
@@ -736,10 +750,7 @@ mod tests {
     #[test]
     fn test_lingo_service_error_handling_and_robustness() {
         // Test with empty configuration
-        let empty_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let empty_config = Config::builder().app_id("").app_secret("").build();
         let empty_service = LingoService::new(empty_config);
 
         let validation_result = empty_service.validate_lingo_config();
@@ -891,7 +902,7 @@ mod tests {
         let service = LingoService::new(create_test_config());
 
         // Verify all sub-services use the same configuration
-        let app_ids = vec![
+        let app_ids = [
             &service.draft.config.app_id,
             &service.entity.config.app_id,
             &service.classification.config.app_id,

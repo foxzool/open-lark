@@ -824,7 +824,7 @@ mod tests {
         ));
     }
 
-      #[test]
+    #[test]
     fn test_validate_search_params() {
         assert!(matches!(
             validate_search_params("test", Some(10), Some(0)),
@@ -1108,11 +1108,7 @@ mod tests {
     fn test_validate_file_copy_move_params() {
         // Valid case
         assert!(matches!(
-            validate_file_copy_move_params(
-                "src_token_123",
-                "dest_token_456",
-                Some("new_name")
-            ),
+            validate_file_copy_move_params("src_token_123", "dest_token_456", Some("new_name")),
             ValidationResult::Valid
         ));
 
@@ -1164,11 +1160,7 @@ mod tests {
     fn test_validate_file_download_params() {
         // Valid case with all parameters
         assert!(matches!(
-            validate_file_download_params(
-                "file_token_123",
-                "doc",
-                Some(3600)
-            ),
+            validate_file_download_params("file_token_123", "doc", Some(3600)),
             ValidationResult::Valid
         ));
 
@@ -1195,7 +1187,8 @@ mod tests {
     fn test_validate_drive_file_type_edge_cases() {
         // Test all valid file types
         let valid_types = [
-            "doc", "docx", "sheet", "bitable", "wiki", "file", "mindnote", "minutes", "slides", "pdf", "txt",
+            "doc", "docx", "sheet", "bitable", "wiki", "file", "mindnote", "minutes", "slides",
+            "pdf", "txt",
         ];
 
         for file_type in &valid_types {

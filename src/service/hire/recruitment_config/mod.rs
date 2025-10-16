@@ -8,7 +8,7 @@ pub mod location;
 pub mod offer_settings;
 pub mod subject;
 
-use crate::core::config::Config;
+use crate::core::{config::Config, trait_system::Service};
 
 use application::ApplicationConfigService;
 use auth::AuthService;
@@ -58,5 +58,19 @@ impl RecruitmentConfigService {
             interview_settings: InterviewSettingsService::new(config.clone()),
             offer_settings: OfferSettingsService::new(config),
         }
+    }
+}
+
+impl Service for RecruitmentConfigService {
+    fn config(&self) -> &Config {
+        &self.location.config
+    }
+
+    fn service_name() -> &'static str {
+        "recruitment_config"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
     }
 }

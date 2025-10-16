@@ -184,9 +184,7 @@ impl TaskService {
     /// # 返回值
     /// 包含服务名称、服务数量和配置信息的字符串
     pub fn get_task_management_statistics(&self) -> String {
-        format!(
-            "TaskService{{ api_versions: 1, service_modules: 10, task_features: comprehensive, collaboration: full }}",
-        )
+        "TaskService{ api_versions: 1, service_modules: 10, task_features: comprehensive, collaboration: full }".to_string()
     }
 
     /// 检查服务是否支持特定任务功能
@@ -199,30 +197,30 @@ impl TaskService {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_task_feature(&self, task_feature: &str) -> bool {
-        match task_feature {
-            "task_management" => true,
-            "task_lists" => true,
-            "subtasks" => true,
-            "task_comments" => true,
-            "task_attachments" => true,
-            "custom_fields" => true,
-            "task_sections" => true,
-            "activity_subscriptions" => true,
-            "field_options" => true,
-            "task_templates" => true,
-            "task_priorities" => true,
-            "due_dates" => true,
-            "task_assignments" => true,
-            "task_dependencies" => true,
-            "task_progress_tracking" => true,
-            "task_search_filter" => true,
-            "bulk_operations" => true,
-            "task_notifications" => true,
-            "task_analytics" => true,
-            "collaboration_tools" => true,
-            "project_management" => true,
-            _ => false,
-        }
+        matches!(
+            task_feature,
+            "task_management"
+                | "task_lists"
+                | "subtasks"
+                | "task_comments"
+                | "task_attachments"
+                | "custom_fields"
+                | "task_sections"
+                | "activity_subscriptions"
+                | "field_options"
+                | "task_templates"
+                | "task_priorities"
+                | "due_dates"
+                | "task_assignments"
+                | "task_dependencies"
+                | "task_progress_tracking"
+                | "task_search_filter"
+                | "bulk_operations"
+                | "task_notifications"
+                | "task_analytics"
+                | "collaboration_tools"
+                | "project_management"
+        )
     }
 
     /// 快速检查任务管理服务健康状态
@@ -242,9 +240,7 @@ impl TaskService {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_task_service_categories_statistics(&self) -> String {
-        format!(
-            "TaskService Categories{{ core: 2, collaboration: 2, customization: 3, management: 3, total: 10 }}",
-        )
+        "TaskService Categories{ core: 2, collaboration: 2, customization: 3, management: 3, total: 10 }".to_string()
     }
 
     /// 获取任务管理服务状态摘要
@@ -290,9 +286,7 @@ impl TaskService {
     /// # 返回值
     /// 包含任务功能支持信息的字符串
     pub fn get_task_features_matrix(&self) -> String {
-        format!(
-            "TaskService Features{{ create: true, update: true, delete: true, assign: true, comment: true, attach: true, prioritize: true, schedule: true, track: true, collaborate: true }}",
-        )
+        "TaskService Features{ create: true, update: true, delete: true, assign: true, comment: true, attach: true, prioritize: true, schedule: true, track: true, collaborate: true }".to_string()
     }
 
     /// 获取项目管理支持矩阵
@@ -302,9 +296,7 @@ impl TaskService {
     /// # 返回值
     /// 包含项目管理支持信息的字符串
     pub fn get_project_management_support_matrix(&self) -> String {
-        format!(
-            "TaskService ProjectManagement{{ milestones: true, gantt_charts: true, kanban_boards: true, agile_workflows: true, resource_allocation: true, progress_tracking: true }}",
-        )
+        "TaskService ProjectManagement{ milestones: true, gantt_charts: true, kanban_boards: true, agile_workflows: true, resource_allocation: true, progress_tracking: true }".to_string()
     }
 
     /// 获取协作功能支持矩阵
@@ -314,9 +306,7 @@ impl TaskService {
     /// # 返回值
     /// 包含协作功能支持信息的字符串
     pub fn get_collaboration_features_matrix(&self) -> String {
-        format!(
-            "TaskService Collaboration{{ real_time_updates: true, mentions: true, file_sharing: true, comments: true, activity_feeds: true, notifications: true, team_workspaces: true }}",
-        )
+        "TaskService Collaboration{ real_time_updates: true, mentions: true, file_sharing: true, comments: true, activity_feeds: true, notifications: true, team_workspaces: true }".to_string()
     }
 
     /// 获取自定义功能支持矩阵
@@ -326,9 +316,7 @@ impl TaskService {
     /// # 返回值
     /// 包含自定义功能支持信息的字符串
     pub fn get_customization_features_matrix(&self) -> String {
-        format!(
-            "TaskService Customization{{ custom_fields: true, custom_sections: true, field_options: true, templates: true, workflows: true, integrations: true }}",
-        )
+        "TaskService Customization{ custom_fields: true, custom_sections: true, field_options: true, templates: true, workflows: true, integrations: true }".to_string()
     }
 }
 
@@ -405,14 +393,35 @@ mod tests {
 
         // 测试支持的任务功能
         let supported_features = vec![
-            "task_management", "task_lists", "subtasks", "task_comments", "task_attachments",
-            "custom_fields", "task_sections", "activity_subscriptions", "field_options", "task_templates",
-            "task_priorities", "due_dates", "task_assignments", "task_dependencies", "task_progress_tracking",
-            "task_search_filter", "bulk_operations", "task_notifications", "task_analytics", "collaboration_tools", "project_management"
+            "task_management",
+            "task_lists",
+            "subtasks",
+            "task_comments",
+            "task_attachments",
+            "custom_fields",
+            "task_sections",
+            "activity_subscriptions",
+            "field_options",
+            "task_templates",
+            "task_priorities",
+            "due_dates",
+            "task_assignments",
+            "task_dependencies",
+            "task_progress_tracking",
+            "task_search_filter",
+            "bulk_operations",
+            "task_notifications",
+            "task_analytics",
+            "collaboration_tools",
+            "project_management",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_task_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_task_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -544,24 +553,63 @@ mod tests {
 
         // 测试所有支持的任务功能组合
         let supported_features = vec![
-            "task_management", "task_lists", "subtasks", "task_comments", "task_attachments",
-            "custom_fields", "task_sections", "activity_subscriptions", "field_options", "task_templates",
-            "task_priorities", "due_dates", "task_assignments", "task_dependencies", "task_progress_tracking",
-            "task_search_filter", "bulk_operations", "task_notifications", "task_analytics", "collaboration_tools", "project_management"
+            "task_management",
+            "task_lists",
+            "subtasks",
+            "task_comments",
+            "task_attachments",
+            "custom_fields",
+            "task_sections",
+            "activity_subscriptions",
+            "field_options",
+            "task_templates",
+            "task_priorities",
+            "due_dates",
+            "task_assignments",
+            "task_dependencies",
+            "task_progress_tracking",
+            "task_search_filter",
+            "bulk_operations",
+            "task_notifications",
+            "task_analytics",
+            "collaboration_tools",
+            "project_management",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_task_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_task_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量
         let mut feature_count = 0;
         let all_features = vec![
-            "task_management", "task_lists", "subtasks", "task_comments", "task_attachments",
-            "custom_fields", "task_sections", "activity_subscriptions", "field_options", "task_templates",
-            "task_priorities", "due_dates", "task_assignments", "task_dependencies", "task_progress_tracking",
-            "task_search_filter", "bulk_operations", "task_notifications", "task_analytics", "collaboration_tools", "project_management",
-            "nonexistent1", "nonexistent2"
+            "task_management",
+            "task_lists",
+            "subtasks",
+            "task_comments",
+            "task_attachments",
+            "custom_fields",
+            "task_sections",
+            "activity_subscriptions",
+            "field_options",
+            "task_templates",
+            "task_priorities",
+            "due_dates",
+            "task_assignments",
+            "task_dependencies",
+            "task_progress_tracking",
+            "task_search_filter",
+            "bulk_operations",
+            "task_notifications",
+            "task_analytics",
+            "collaboration_tools",
+            "project_management",
+            "nonexistent1",
+            "nonexistent2",
         ];
 
         for feature in all_features {
@@ -627,7 +675,8 @@ mod tests {
         assert!(category_stats.contains("customization: 3"));
 
         // 测试企业任务管理能力
-        let enterprise_capabilities = enterprise_service.get_enterprise_task_management_capabilities();
+        let enterprise_capabilities =
+            enterprise_service.get_enterprise_task_management_capabilities();
         assert!(enterprise_capabilities.contains("task_management: true"));
         assert!(enterprise_capabilities.contains("collaboration: true"));
         assert!(enterprise_capabilities.contains("customization: true"));
@@ -645,8 +694,12 @@ mod tests {
         assert!(default_service.health_check());
 
         // 验证统计信息仍然可用
-        assert!(default_service.get_task_management_statistics().contains("TaskService"));
-        assert!(default_service.get_task_service_categories_statistics().contains("total: 10"));
+        assert!(default_service
+            .get_task_management_statistics()
+            .contains("TaskService"));
+        assert!(default_service
+            .get_task_service_categories_statistics()
+            .contains("total: 10"));
     }
 
     #[test]
@@ -676,7 +729,8 @@ mod tests {
                 let status = service_clone.get_task_service_status_summary();
                 assert!(status.contains("overall: true"));
 
-                let enterprise_capabilities = service_clone.get_enterprise_task_management_capabilities();
+                let enterprise_capabilities =
+                    service_clone.get_enterprise_task_management_capabilities();
                 assert!(enterprise_capabilities.contains("task_management: true"));
             });
             handles.push(handle);
@@ -711,7 +765,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
@@ -729,7 +786,11 @@ mod tests {
         ];
 
         for (feature, description) in workflow_features {
-            assert!(service.supports_task_feature(feature), "{}功能应该被支持", description);
+            assert!(
+                service.supports_task_feature(feature),
+                "{}功能应该被支持",
+                description
+            );
         }
 
         // 验证统计信息反映任务管理复杂性
@@ -751,20 +812,34 @@ mod tests {
 
         // 测试协作功能
         let collaboration_features = vec![
-            "task_comments", "task_attachments", "task_notifications", "collaboration_tools"
+            "task_comments",
+            "task_attachments",
+            "task_notifications",
+            "collaboration_tools",
         ];
 
         for feature in collaboration_features {
-            assert!(service.supports_task_feature(feature), "协作功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_task_feature(feature),
+                "协作功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试自定义功能
         let customization_features = vec![
-            "custom_fields", "task_sections", "field_options", "task_templates"
+            "custom_fields",
+            "task_sections",
+            "field_options",
+            "task_templates",
         ];
 
         for feature in customization_features {
-            assert!(service.supports_task_feature(feature), "自定义功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_task_feature(feature),
+                "自定义功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证协作功能完整性
@@ -787,11 +862,18 @@ mod tests {
 
         // 测试项目管理功能
         let project_mgmt_features = vec![
-            "task_dependencies", "task_progress_tracking", "bulk_operations", "project_management"
+            "task_dependencies",
+            "task_progress_tracking",
+            "bulk_operations",
+            "project_management",
         ];
 
         for feature in project_mgmt_features {
-            assert!(service.supports_task_feature(feature), "项目管理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_task_feature(feature),
+                "项目管理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证项目管理支持完整性

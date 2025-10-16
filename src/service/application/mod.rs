@@ -205,7 +205,10 @@ impl ApplicationService {
         stats.insert("service_name".to_string(), "Application".to_string());
         stats.insert("service_version".to_string(), "v6".to_string());
         stats.insert("api_version".to_string(), "latest".to_string());
-        stats.insert("service_type".to_string(), "Enterprise Application Management".to_string());
+        stats.insert(
+            "service_type".to_string(),
+            "Enterprise Application Management".to_string(),
+        );
 
         // 子服务状态
         stats.insert("v6_service".to_string(), "active".to_string());
@@ -242,64 +245,64 @@ impl ApplicationService {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_application_feature(&self, feature: &str) -> bool {
-        match feature {
-            "application_management" => true,
-            "app_info_query" => true,
-            "app_config_management" => true,
-            "version_management" => true,
-            "permission_management" => true,
-            "store_operations" => true,
-            "appstore_paid_info" => true,
-            "pricing_management" => true,
-            "download_statistics" => true,
-            "rating_management" => true,
-            "usage_analytics" => true,
-            "usage_statistics" => true,
-            "user_activity_tracking" => true,
-            "feature_usage_stats" => true,
-            "behavior_analysis" => true,
-            "feedback_system" => true,
-            "user_feedback" => true,
-            "bug_tracking" => true,
-            "rating_reviews" => true,
-            "customer_support" => true,
-            "badge_system" => true,
-            "badge_design" => true,
-            "badge_awarding" => true,
-            "badge_analytics" => true,
-            "admin_tools" => true,
-            "admin_permissions" => true,
-            "app_review" => true,
-            "app_monitoring" => true,
-            "app_disable_recovery" => true,
-            "platform_analytics" => true,
-            "lifecycle_management" => true,
-            "development_deployment" => true,
-            "maintenance_updates" => true,
-            "decommissioning" => true,
-            "enterprise_features" => true,
-            "multi_tenant_support" => true,
-            "advanced_security" => true,
-            "compliance_management" => true,
-            "api_integration" => true,
-            "webhook_support" => true,
-            "third_party_integration" => true,
-            "real_time_monitoring" => true,
-            "performance_metrics" => true,
-            "revenue_analytics" => true,
-            "marketing_tools" => true,
-            "promotion_campaigns" => true,
-            "user_segmentation" => true,
-            "a_b_testing" => true,
-            "customization" => true,
-            "white_labeling" => true,
-            "branding" => true,
-            "ui_customization" => true,
-            "workflow_automation" => true,
-            "approval_workflows" => true,
-            "notification_systems" => true,
-            _ => false,
-        }
+        matches!(
+            feature,
+            "application_management"
+                | "app_info_query"
+                | "app_config_management"
+                | "version_management"
+                | "permission_management"
+                | "store_operations"
+                | "appstore_paid_info"
+                | "pricing_management"
+                | "download_statistics"
+                | "rating_management"
+                | "usage_analytics"
+                | "usage_statistics"
+                | "user_activity_tracking"
+                | "feature_usage_stats"
+                | "behavior_analysis"
+                | "feedback_system"
+                | "user_feedback"
+                | "bug_tracking"
+                | "rating_reviews"
+                | "customer_support"
+                | "badge_system"
+                | "badge_design"
+                | "badge_awarding"
+                | "badge_analytics"
+                | "admin_tools"
+                | "admin_permissions"
+                | "app_review"
+                | "app_monitoring"
+                | "app_disable_recovery"
+                | "platform_analytics"
+                | "lifecycle_management"
+                | "development_deployment"
+                | "maintenance_updates"
+                | "decommissioning"
+                | "enterprise_features"
+                | "multi_tenant_support"
+                | "advanced_security"
+                | "compliance_management"
+                | "api_integration"
+                | "webhook_support"
+                | "third_party_integration"
+                | "real_time_monitoring"
+                | "performance_metrics"
+                | "revenue_analytics"
+                | "marketing_tools"
+                | "promotion_campaigns"
+                | "user_segmentation"
+                | "a_b_testing"
+                | "customization"
+                | "white_labeling"
+                | "branding"
+                | "ui_customization"
+                | "workflow_automation"
+                | "approval_workflows"
+                | "notification_systems"
+        )
     }
 
     /// 获取应用管理功能矩阵
@@ -308,7 +311,9 @@ impl ApplicationService {
     ///
     /// # 返回值
     /// 包含功能状态信息的字典
-    pub fn get_application_features_matrix(&self) -> std::collections::HashMap<String, std::collections::HashMap<String, String>> {
+    pub fn get_application_features_matrix(
+        &self,
+    ) -> std::collections::HashMap<String, std::collections::HashMap<String, String>> {
         let mut features = std::collections::HashMap::new();
 
         // 应用管理功能
@@ -391,7 +396,10 @@ impl ApplicationService {
             Ok(_) => {
                 health.insert("status".to_string(), "healthy".to_string());
                 health.insert("v6_service".to_string(), "available".to_string());
-                health.insert("application_management".to_string(), "available".to_string());
+                health.insert(
+                    "application_management".to_string(),
+                    "available".to_string(),
+                );
                 health.insert("store_operations".to_string(), "available".to_string());
                 health.insert("usage_analytics".to_string(), "available".to_string());
             }
@@ -418,7 +426,10 @@ impl ApplicationService {
         let mut summary = std::collections::HashMap::new();
 
         summary.insert("service_name".to_string(), "Application".to_string());
-        summary.insert("service_type".to_string(), "Enterprise Application Management".to_string());
+        summary.insert(
+            "service_type".to_string(),
+            "Enterprise Application Management".to_string(),
+        );
         summary.insert("api_version".to_string(), "v6".to_string());
         summary.insert("service_count".to_string(), "1".to_string());
         summary.insert("supported_features".to_string(), "53".to_string());
@@ -440,9 +451,7 @@ impl ApplicationService {
     /// # 返回值
     /// 包含生命周期管理能力信息的字符串
     pub fn get_lifecycle_management_capabilities(&self) -> String {
-        format!(
-            "Application Lifecycle{{ development: true, deployment: true, maintenance: true, updates: true, monitoring: true, decommissioning: true, version_control: true, rollback: true }}",
-        )
+        "Application Lifecycle{{ development: true, deployment: true, maintenance: true, updates: true, monitoring: true, decommissioning: true, version_control: true, rollback: true }}".to_string()
     }
 
     /// 获取商店运营能力
@@ -452,9 +461,7 @@ impl ApplicationService {
     /// # 返回值
     /// 包含商店运营能力信息的字符串
     pub fn get_store_operations_capabilities(&self) -> String {
-        format!(
-            "Application Store{{ listing: true, pricing: true, payments: true, analytics: true, promotions: true, reviews: true, recommendations: true, compliance: true }}",
-        )
+        "Application Store{{ listing: true, pricing: true, payments: true, analytics: true, promotions: true, reviews: true, recommendations: true, compliance: true }}".to_string()
     }
 
     /// 获取用户分析能力
@@ -464,9 +471,7 @@ impl ApplicationService {
     /// # 返回值
     /// 包含用户分析能力信息的字符串
     pub fn get_user_analytics_capabilities(&self) -> String {
-        format!(
-            "Application Analytics{{ usage_tracking: true, engagement_metrics: true, retention_analysis: true, conversion_funnel: true, user_segments: true, behavioral_insights: true, predictive_analytics: true }}",
-        )
+        "Application Analytics{{ usage_tracking: true, engagement_metrics: true, retention_analysis: true, conversion_funnel: true, user_segments: true, behavioral_insights: true, predictive_analytics: true }}".to_string()
     }
 
     /// 获取商业化能力
@@ -476,9 +481,7 @@ impl ApplicationService {
     /// # 返回值
     /// 包含商业化能力信息的字符串
     pub fn get_monetization_capabilities(&self) -> String {
-        format!(
-            "Application Monetization{{ subscription_billing: true, in_app_purchases: true, revenue_tracking: true, payment_processing: true, pricing_models: true, promotion_tools: true, revenue_analytics: true }}",
-        )
+        "Application Monetization{{ subscription_billing: true, in_app_purchases: true, revenue_tracking: true, payment_processing: true, pricing_models: true, promotion_tools: true, revenue_analytics: true }}".to_string()
     }
 
     /// 获取集成能力
@@ -488,9 +491,7 @@ impl ApplicationService {
     /// # 返回值
     /// 包含集成能力信息的字符串
     pub fn get_integration_capabilities(&self) -> String {
-        format!(
-            "Application Integration{{ api_access: true, webhook_support: true, third_party_integrations: true, custom_integrations: true, data_sync: true, sso_integration: true, marketplace_connectivity: true }}",
-        )
+        "Application Integration{{ api_access: true, webhook_support: true, third_party_integrations: true, custom_integrations: true, data_sync: true, sso_integration: true, marketplace_connectivity: true }}".to_string()
     }
 
     /// 获取企业级功能
@@ -500,9 +501,7 @@ impl ApplicationService {
     /// # 返回值
     /// 包含企业级功能信息的字符串
     pub fn get_enterprise_features(&self) -> String {
-        format!(
-            "Application Enterprise{{ multi_tenant: true, advanced_security: true, compliance_management: true, workflow_automation: true, audit_logging: true, role_based_access: true, data_privacy: true, sso_saml: true }}",
-        )
+        "Application Enterprise{{ multi_tenant: true, advanced_security: true, compliance_management: true, workflow_automation: true, audit_logging: true, role_based_access: true, data_privacy: true, sso_saml: true }}".to_string()
     }
 }
 
@@ -676,7 +675,10 @@ mod tests {
         assert_eq!(stats.get("service_name").unwrap(), "Application");
         assert_eq!(stats.get("service_version").unwrap(), "v6");
         assert_eq!(stats.get("api_version").unwrap(), "latest");
-        assert_eq!(stats.get("service_type").unwrap(), "Enterprise Application Management");
+        assert_eq!(
+            stats.get("service_type").unwrap(),
+            "Enterprise Application Management"
+        );
         assert_eq!(stats.get("v6_service").unwrap(), "active");
         assert_eq!(stats.get("application_management").unwrap(), "enabled");
         assert_eq!(stats.get("store_operations").unwrap(), "enabled");
@@ -708,7 +710,10 @@ mod tests {
         let summary = service.get_config_summary();
 
         assert_eq!(summary.get("service_name").unwrap(), "Application");
-        assert_eq!(summary.get("service_type").unwrap(), "Enterprise Application Management");
+        assert_eq!(
+            summary.get("service_type").unwrap(),
+            "Enterprise Application Management"
+        );
         assert_eq!(summary.get("api_version").unwrap(), "v6");
         assert_eq!(summary.get("service_count").unwrap(), "1");
         assert_eq!(summary.get("supported_features").unwrap(), "53");
@@ -1024,12 +1029,24 @@ mod tests {
         }
 
         // Test capability methods
-        assert!(service.get_lifecycle_management_capabilities().contains("development: true"));
-        assert!(service.get_store_operations_capabilities().contains("listing: true"));
-        assert!(service.get_user_analytics_capabilities().contains("usage_tracking: true"));
-        assert!(service.get_monetization_capabilities().contains("subscription_billing: true"));
-        assert!(service.get_integration_capabilities().contains("api_access: true"));
-        assert!(service.get_enterprise_features().contains("multi_tenant: true"));
+        assert!(service
+            .get_lifecycle_management_capabilities()
+            .contains("development: true"));
+        assert!(service
+            .get_store_operations_capabilities()
+            .contains("listing: true"));
+        assert!(service
+            .get_user_analytics_capabilities()
+            .contains("usage_tracking: true"));
+        assert!(service
+            .get_monetization_capabilities()
+            .contains("subscription_billing: true"));
+        assert!(service
+            .get_integration_capabilities()
+            .contains("api_access: true"));
+        assert!(service
+            .get_enterprise_features()
+            .contains("multi_tenant: true"));
     }
 
     #[test]

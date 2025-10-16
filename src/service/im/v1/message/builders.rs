@@ -340,9 +340,7 @@ mod tests {
     #[test]
     fn test_create_message_request_builder_receive_id() {
         let builder = CreateMessageRequestBuilder::default();
-        let request = builder
-            .receive_id("test_receive_id")
-            .build();
+        let request = builder.receive_id("test_receive_id").build();
 
         assert_eq!(
             request.api_req.query_params.get("receive_id"),
@@ -353,9 +351,7 @@ mod tests {
     #[test]
     fn test_create_message_request_builder_msg_type() {
         let builder = CreateMessageRequestBuilder::default();
-        let request = builder
-            .msg_type("text")
-            .build();
+        let request = builder.msg_type("text").build();
 
         assert_eq!(
             request.api_req.query_params.get("msg_type"),
@@ -366,9 +362,7 @@ mod tests {
     #[test]
     fn test_create_message_request_builder_content() {
         let builder = CreateMessageRequestBuilder::default();
-        let request = builder
-            .content("test content")
-            .build();
+        let request = builder.content("test content").build();
 
         assert_eq!(
             request.api_req.query_params.get("content"),
@@ -379,9 +373,7 @@ mod tests {
     #[test]
     fn test_create_message_request_builder_receive_id_type() {
         let builder = CreateMessageRequestBuilder::default();
-        let request = builder
-            .receive_id_type("open_id")
-            .build();
+        let request = builder.receive_id_type("open_id").build();
 
         assert_eq!(
             request.api_req.query_params.get("receive_id_type"),
@@ -427,14 +419,13 @@ mod tests {
         };
 
         let builder = CreateMessageRequestBuilder::default();
-        let request = builder
-            .request_body(body)
-            .build();
+        let request = builder.request_body(body).build();
 
         assert!(!request.api_req.body.is_empty());
 
         // Verify the body was serialized correctly
-        let deserialized: CreateMessageRequestBody = serde_json::from_slice(&request.api_req.body).unwrap();
+        let deserialized: CreateMessageRequestBody =
+            serde_json::from_slice(&request.api_req.body).unwrap();
         assert_eq!(deserialized.receive_id, "user_123");
         assert_eq!(deserialized.msg_type, "text");
         assert_eq!(deserialized.content, "{\"text\":\"Hello\"}");
@@ -456,9 +447,7 @@ mod tests {
 
         // Normal case - this should work fine
         let builder = CreateMessageRequestBuilder::default();
-        let request = builder
-            .request_body(body)
-            .build();
+        let request = builder.request_body(body).build();
 
         // The body should not be empty for normal cases
         assert!(!request.api_req.body.is_empty());
@@ -479,9 +468,7 @@ mod tests {
     #[test]
     fn test_create_message_request_body_builder_receive_id() {
         let builder = CreateMessageRequestBodyBuilder::default();
-        let body = builder
-            .receive_id("test_user")
-            .build();
+        let body = builder.receive_id("test_user").build();
 
         assert_eq!(body.receive_id, "test_user");
     }
@@ -489,9 +476,7 @@ mod tests {
     #[test]
     fn test_create_message_request_body_builder_msg_type() {
         let builder = CreateMessageRequestBodyBuilder::default();
-        let body = builder
-            .msg_type("image")
-            .build();
+        let body = builder.msg_type("image").build();
 
         assert_eq!(body.msg_type, "image");
     }
@@ -499,9 +484,7 @@ mod tests {
     #[test]
     fn test_create_message_request_body_builder_content() {
         let builder = CreateMessageRequestBodyBuilder::default();
-        let body = builder
-            .content("{\"image\":{\"key\":\"img_123\"}}")
-            .build();
+        let body = builder.content("{\"image\":{\"key\":\"img_123\"}}").build();
 
         assert_eq!(body.content, "{\"image\":{\"key\":\"img_123\"}}");
     }
@@ -509,9 +492,7 @@ mod tests {
     #[test]
     fn test_create_message_request_body_builder_uuid() {
         let builder = CreateMessageRequestBodyBuilder::default();
-        let body = builder
-            .uuid("test-uuid-123")
-            .build();
+        let body = builder.uuid("test-uuid-123").build();
 
         assert_eq!(body.uuid, Some("test-uuid-123".to_string()));
     }
@@ -536,10 +517,7 @@ mod tests {
     fn test_create_message_request_body_builder_missing_receive_id() {
         let builder = CreateMessageRequestBodyBuilder::default();
         // Test what happens when receive_id is empty - validation might not panic
-        let body = builder
-            .msg_type("text")
-            .content("test")
-            .build();
+        let body = builder.msg_type("text").content("test").build();
 
         // The validation functions might not panic, let's check the actual behavior
         assert_eq!(body.receive_id, "");
@@ -551,10 +529,7 @@ mod tests {
     fn test_create_message_request_body_builder_missing_msg_type() {
         let builder = CreateMessageRequestBodyBuilder::default();
         // Test what happens when msg_type is empty - validation might not panic
-        let body = builder
-            .receive_id("user_123")
-            .content("test")
-            .build();
+        let body = builder.receive_id("user_123").content("test").build();
 
         // The validation functions might not panic, let's check the actual behavior
         assert_eq!(body.receive_id, "user_123");
@@ -566,10 +541,7 @@ mod tests {
     fn test_create_message_request_body_builder_missing_content() {
         let builder = CreateMessageRequestBodyBuilder::default();
         // Test what happens when content is empty - validation might not panic
-        let body = builder
-            .receive_id("user_123")
-            .msg_type("text")
-            .build();
+        let body = builder.receive_id("user_123").msg_type("text").build();
 
         // The validation functions might not panic, let's check the actual behavior
         assert_eq!(body.receive_id, "user_123");
@@ -589,9 +561,7 @@ mod tests {
     #[test]
     fn test_update_message_request_builder_content() {
         let builder = UpdateMessageRequestBuilder::default();
-        let request = builder
-            .content("updated content")
-            .build();
+        let request = builder.content("updated content").build();
 
         assert_eq!(
             request.api_req.query_params.get("content"),
@@ -633,13 +603,31 @@ mod tests {
         let image_request = CreateMessageRequest::with_msg("chat_2", image_msg, "chat_id");
         let card_request = CreateMessageRequest::with_msg("user_3", card_msg, "union_id");
 
-        assert_eq!(text_request.api_req.query_params.get("msg_type"), Some(&"text".to_string()));
-        assert_eq!(image_request.api_req.query_params.get("msg_type"), Some(&"image".to_string()));
-        assert_eq!(card_request.api_req.query_params.get("msg_type"), Some(&"interactive".to_string()));
+        assert_eq!(
+            text_request.api_req.query_params.get("msg_type"),
+            Some(&"text".to_string())
+        );
+        assert_eq!(
+            image_request.api_req.query_params.get("msg_type"),
+            Some(&"image".to_string())
+        );
+        assert_eq!(
+            card_request.api_req.query_params.get("msg_type"),
+            Some(&"interactive".to_string())
+        );
 
-        assert_eq!(text_request.api_req.query_params.get("receive_id_type"), Some(&"user_id".to_string()));
-        assert_eq!(image_request.api_req.query_params.get("receive_id_type"), Some(&"chat_id".to_string()));
-        assert_eq!(card_request.api_req.query_params.get("receive_id_type"), Some(&"union_id".to_string()));
+        assert_eq!(
+            text_request.api_req.query_params.get("receive_id_type"),
+            Some(&"user_id".to_string())
+        );
+        assert_eq!(
+            image_request.api_req.query_params.get("receive_id_type"),
+            Some(&"chat_id".to_string())
+        );
+        assert_eq!(
+            card_request.api_req.query_params.get("receive_id_type"),
+            Some(&"union_id".to_string())
+        );
     }
 
     // Test serialization and deserialization
@@ -690,8 +678,14 @@ mod tests {
             .receive_id_type("open_id")
             .build();
 
-        assert_eq!(request.api_req.query_params.get("receive_id"), Some(&"用户_123".to_string()));
-        assert_eq!(request.api_req.query_params.get("content"), Some(&"你好，世界！".to_string()));
+        assert_eq!(
+            request.api_req.query_params.get("receive_id"),
+            Some(&"用户_123".to_string())
+        );
+        assert_eq!(
+            request.api_req.query_params.get("content"),
+            Some(&"你好，世界！".to_string())
+        );
     }
 
     #[test]
@@ -704,10 +698,22 @@ mod tests {
             .receive_id_type("")
             .build();
 
-        assert_eq!(request.api_req.query_params.get("receive_id"), Some(&"".to_string()));
-        assert_eq!(request.api_req.query_params.get("msg_type"), Some(&"".to_string()));
-        assert_eq!(request.api_req.query_params.get("content"), Some(&"".to_string()));
-        assert_eq!(request.api_req.query_params.get("receive_id_type"), Some(&"".to_string()));
+        assert_eq!(
+            request.api_req.query_params.get("receive_id"),
+            Some(&"".to_string())
+        );
+        assert_eq!(
+            request.api_req.query_params.get("msg_type"),
+            Some(&"".to_string())
+        );
+        assert_eq!(
+            request.api_req.query_params.get("content"),
+            Some(&"".to_string())
+        );
+        assert_eq!(
+            request.api_req.query_params.get("receive_id_type"),
+            Some(&"".to_string())
+        );
     }
 
     #[test]
@@ -719,10 +725,22 @@ mod tests {
             .receive_id_type("open_id")
             .build();
 
-        assert_eq!(request.api_req.query_params.get("receive_id"), Some(&"user_123".to_string()));
-        assert_eq!(request.api_req.query_params.get("msg_type"), Some(&"text".to_string()));
-        assert_eq!(request.api_req.query_params.get("content"), Some(&"Hello".to_string()));
-        assert_eq!(request.api_req.query_params.get("receive_id_type"), Some(&"open_id".to_string()));
+        assert_eq!(
+            request.api_req.query_params.get("receive_id"),
+            Some(&"user_123".to_string())
+        );
+        assert_eq!(
+            request.api_req.query_params.get("msg_type"),
+            Some(&"text".to_string())
+        );
+        assert_eq!(
+            request.api_req.query_params.get("content"),
+            Some(&"Hello".to_string())
+        );
+        assert_eq!(
+            request.api_req.query_params.get("receive_id_type"),
+            Some(&"open_id".to_string())
+        );
     }
 
     #[test]
@@ -773,7 +791,10 @@ mod tests {
             .build();
 
         let cloned_request = request.clone();
-        assert_eq!(request.api_req.query_params, cloned_request.api_req.query_params);
+        assert_eq!(
+            request.api_req.query_params,
+            cloned_request.api_req.query_params
+        );
         assert_eq!(request.api_req.body, cloned_request.api_req.body);
     }
 
@@ -877,7 +898,8 @@ mod tests {
 
     #[test]
     fn test_message_with_special_characters() {
-        let special_content = r#"{"text":"Special chars: \"quotes\", 'apostrophes', \n\t\r slashes \\//"}"#;
+        let special_content =
+            r#"{"text":"Special chars: \"quotes\", 'apostrophes', \n\t\r slashes \\//"}"#;
 
         let request = CreateMessageRequestBuilder::default()
             .receive_id("user_special")

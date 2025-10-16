@@ -120,7 +120,7 @@ fn test_subscription_service_builder_pattern_compatibility() {
 
     // 测试服务与构建器模式兼容性
     let _config_ref = &service.config;
-    assert!(_config_ref.app_id.len() > 0);
+    assert!(!_config_ref.app_id.is_empty());
 }
 
 #[test]
@@ -145,7 +145,7 @@ fn test_subscription_service_async_method_signatures() {
 #[test]
 fn test_subscription_service_method_parameter_validation() {
     let config = create_test_config();
-    let service = super::SubscriptionService::new(config);
+    let _service = super::SubscriptionService::new(config);
 
     // 字符串转换测试
     let file_token: &str = "test_token";
@@ -173,7 +173,7 @@ fn test_subscription_service_concurrent_access_structure() {
 #[test]
 fn test_subscription_service_memory_layout() {
     let config = create_test_config();
-    let service = super::SubscriptionService::new(config);
+    let _service = super::SubscriptionService::new(config);
 
     // 验证服务内存布局合理
     use std::mem;
@@ -200,14 +200,17 @@ fn test_subscription_service_configuration_validation() {
     for config in configs {
         let service = super::SubscriptionService::new(config);
         // 服务应该能处理各种配置
-        assert_eq!(service.config.app_secret.len(), service.config.app_secret.len());
+        assert_eq!(
+            service.config.app_secret.len(),
+            service.config.app_secret.len()
+        );
     }
 }
 
 #[test]
 fn test_subscription_service_error_messages_structure() {
     let config = create_test_config();
-    let service = super::SubscriptionService::new(config);
+    let _service = super::SubscriptionService::new(config);
 
     // 验证错误消息结构正确
     let error_message = "Response data is missing";
@@ -252,8 +255,8 @@ fn test_subscription_service_debug_formatting() {
     let service = super::SubscriptionService::new(config);
 
     // 测试调试格式化
-    let debug_str = format!("{:?}", service);
-    assert!(debug_str.contains("SubscriptionService"));
+    let _debug_str = format!("{:?}", service);
+    assert!(_debug_str.contains("SubscriptionService"));
 }
 
 #[test]
@@ -271,14 +274,10 @@ fn test_subscription_service_clone_semantics() {
 #[test]
 fn test_subscription_service_error_recovery_structure() {
     let config = create_test_config();
-    let service = super::SubscriptionService::new(config);
+    let _service = super::SubscriptionService::new(config);
 
     // 验证错误恢复结构
-    let error_types = vec![
-        "IllegalParamError",
-        "NetworkError",
-        "AuthenticationError",
-    ];
+    let error_types = vec!["IllegalParamError", "NetworkError", "AuthenticationError"];
 
     for error_type in error_types {
         let error_msg = format!("Simulated {}", error_type);
@@ -292,14 +291,14 @@ fn test_subscription_service_performance_characteristics() {
 
     // 测试性能特征
     let start = std::time::Instant::now();
-    let service = super::SubscriptionService::new(config);
+    let _service = super::SubscriptionService::new(config);
     let creation_time = start.elapsed();
 
     // 服务创建应该很快
     assert!(creation_time.as_millis() < 100);
 
     // 验证服务正常工作
-    assert_eq!(service.config.app_id, "test_app_id");
+    assert_eq!(_service.config.app_id, "test_app_id");
 }
 
 #[test]
@@ -307,25 +306,19 @@ fn test_subscription_service_boundary_conditions() {
     // 测试边界条件
 
     // 空字符串配置
-    let empty_config = Config::builder()
-        .app_id("")
-        .app_secret("")
-        .build();
+    let empty_config = Config::builder().app_id("").app_secret("").build();
     let empty_service = super::SubscriptionService::new(empty_config);
     assert_eq!(empty_service.config.app_id, "");
 
     // 单字符配置
-    let single_config = Config::builder()
-        .app_id("a")
-        .app_secret("b")
-        .build();
+    let single_config = Config::builder().app_id("a").app_secret("b").build();
     let single_service = super::SubscriptionService::new(single_config);
     assert_eq!(single_service.config.app_id, "a");
 
     // 最大长度配置测试（使用合理长度）
     let max_config = Config::builder()
-        .app_id(&"a".repeat(100))
-        .app_secret(&"b".repeat(100))
+        .app_id("a".repeat(100))
+        .app_secret("b".repeat(100))
         .build();
     let max_service = super::SubscriptionService::new(max_config);
     assert_eq!(max_service.config.app_id.len(), 100);
@@ -342,7 +335,7 @@ fn test_subscription_service_concurrent_creation() {
     // 测试并发创建
     let mut handles = vec![];
 
-    for i in 0..5 {
+    for _i in 0..5 {
         let config_clone = Arc::clone(&config_arc);
         let handle = thread::spawn(move || {
             let service = super::SubscriptionService::new((*config_clone).clone());
@@ -446,7 +439,7 @@ fn test_subscription_service_lifetime_compatibility() {
 fn test_subscription_service_error_boundary_conditions() {
     // 测试错误边界条件
     let config = create_test_config();
-    let service = super::SubscriptionService::new(config);
+    let _service = super::SubscriptionService::new(config);
 
     // 模拟各种错误条件
     let error_conditions = vec![
@@ -469,9 +462,9 @@ fn test_subscription_service_configuration_validation_edge_cases() {
     let repeat_y = "y".repeat(1000);
 
     let test_cases = vec![
-        ("", ""),  // 空配置
-        ("a", "b"),  // 最小配置
-        (&repeat_x, &repeat_y),  // 大配置
+        ("", ""),               // 空配置
+        ("a", "b"),             // 最小配置
+        (&repeat_x, &repeat_y), // 大配置
     ];
 
     for (app_id, app_secret) in test_cases {
@@ -524,7 +517,7 @@ fn test_subscription_service_async_context_structure() {
 fn test_subscription_service_error_handling_comprehensive() {
     // 综合错误处理测试
     let config = create_test_config();
-    let service = super::SubscriptionService::new(config);
+    let _service = super::SubscriptionService::new(config);
 
     // 模拟各种错误场景
     let error_scenarios = vec![
@@ -560,11 +553,11 @@ fn test_subscription_service_state_management_structure() {
 fn test_subscription_service_compatibility_with_builder_pattern() {
     // 测试与构建器模式的兼容性
     let config = create_test_config();
-    let service = super::SubscriptionService::new(config);
+    let _service = super::SubscriptionService::new(config);
 
     // 验证服务可以与各种构建器模式配合使用
-    let file_tokens = vec!["token1", "token2", "token3"];
-    let file_types = vec![FileType::Doc, FileType::Sheet, FileType::Bitable];
+    let file_tokens = ["token1", "token2", "token3"];
+    let file_types = [FileType::Doc, FileType::Sheet, FileType::Bitable];
 
     for (i, token) in file_tokens.iter().enumerate() {
         let file_type = &file_types[i % file_types.len()];
@@ -595,7 +588,7 @@ fn test_subscription_service_integration_readiness() {
 fn test_subscription_service_error_message_formatting() {
     // 测试错误消息格式化
     let config = create_test_config();
-    let service = super::SubscriptionService::new(config);
+    let _service = super::SubscriptionService::new(config);
 
     // 测试各种错误消息格式
     let error_messages = vec![
@@ -616,7 +609,7 @@ fn test_subscription_service_error_message_formatting() {
 fn test_subscription_service_request_validation_structure() {
     // 测试请求验证结构
     let config = create_test_config();
-    let service = super::SubscriptionService::new(config);
+    let _service = super::SubscriptionService::new(config);
 
     // 验证请求验证结构正确
     let repeat_long = "a".repeat(1000);
@@ -643,7 +636,7 @@ fn test_subscription_service_request_validation_structure() {
 fn test_subscription_service_response_parsing_structure() {
     // 测试响应解析结构
     let config = create_test_config();
-    let service = super::SubscriptionService::new(config);
+    let _service = super::SubscriptionService::new(config);
 
     // 验证响应解析结构正确
     let response_examples = vec![
@@ -653,7 +646,7 @@ fn test_subscription_service_response_parsing_structure() {
         ("malformed", "invalid json"),
     ];
 
-    for (response_type, response_data) in response_examples {
+    for (_response_type, response_data) in response_examples {
         let formatted_response = format!("Response: {}", response_data);
         assert!(formatted_response.starts_with("Response:"));
         assert!(formatted_response.contains(response_data));
@@ -671,7 +664,7 @@ fn test_subscription_service_concurrent_safety() {
 
     let mut handles = vec![];
 
-    for i in 0..10 {
+    for _i in 0..10 {
         let service_clone = Arc::clone(&service);
         let handle = thread::spawn(move || {
             // 在多个线程中访问服务
@@ -701,9 +694,9 @@ fn test_subscription_service_memory_efficiency() {
         .collect();
 
     // 验证所有服务都正常工作
-    for service in &services {
-        assert_eq!(service.config.app_id, "test_app_id");
-        assert_eq!(service.config.app_secret, "test_app_secret");
+    for _service in &services {
+        assert_eq!(_service.config.app_id, "test_app_id");
+        assert_eq!(_service.config.app_secret, "test_app_secret");
     }
 
     // 验证内存使用合理
@@ -714,7 +707,7 @@ fn test_subscription_service_memory_efficiency() {
 fn test_subscription_service_error_recovery_comprehensive() {
     // 综合错误恢复测试
     let config = create_test_config();
-    let service = super::SubscriptionService::new(config);
+    let _service = super::SubscriptionService::new(config);
 
     // 模拟各种错误恢复场景
     let recovery_scenarios = vec![
@@ -741,17 +734,15 @@ fn test_subscription_service_configuration_validation_comprehensive() {
     let validation_test_cases = vec![
         // (app_id, app_secret, base_url, should_succeed)
         ("valid_id", "valid_secret", "https://api.example.com", true),
-        ("", "valid_secret", "https://api.example.com", true),  // 空app_id允许
-        ("valid_id", "", "https://api.example.com", true),  // 空secret允许
-        ("valid_id", "valid_secret", "", true),  // 空base_url允许
-        ("🚀", "🔐", "https://test.com", true),  // Unicode允许
-        (&repeat_a, &repeat_b, "https://test.com", true),  // 长字符串允许
+        ("", "valid_secret", "https://api.example.com", true), // 空app_id允许
+        ("valid_id", "", "https://api.example.com", true),     // 空secret允许
+        ("valid_id", "valid_secret", "", true),                // 空base_url允许
+        ("🚀", "🔐", "https://test.com", true),                // Unicode允许
+        (&repeat_a, &repeat_b, "https://test.com", true),      // 长字符串允许
     ];
 
     for (app_id, app_secret, base_url, should_succeed) in validation_test_cases {
-        let mut builder = Config::builder()
-            .app_id(app_id)
-            .app_secret(app_secret);
+        let mut builder = Config::builder().app_id(app_id).app_secret(app_secret);
 
         if !base_url.is_empty() {
             builder = builder.base_url(base_url);
@@ -875,24 +866,19 @@ fn test_subscription_service_edge_cases_comprehensive() {
         (" ", " ", " "),
         ("\t", "\n", "\r"),
         ("null", "undefined", "NaN"),
-
         // Unicode边界情况
         ("🚀🦀", "🔐🔑", "🌐💻"),
         ("中文测试", "密码测试", "网址测试"),
         ("🇺🇸🇨🇳", "a🅱️c", "123🔤"),
-
         // 数字和字母组合
         ("123abc", "456def", "789ghi"),
         ("abc123", "def456", "ghi789"),
-
         // 长字符串
         (&repeat_a, &repeat_b, &repeat_c),
     ];
 
     for (app_id, app_secret, extra) in edge_cases {
-        let mut builder = Config::builder()
-            .app_id(app_id)
-            .app_secret(app_secret);
+        let mut builder = Config::builder().app_id(app_id).app_secret(app_secret);
 
         if !extra.is_empty() {
             builder = builder.base_url(format!("https://{}.com", extra));
@@ -911,7 +897,7 @@ fn test_subscription_service_edge_cases_comprehensive() {
 fn test_subscription_service_serialization_edge_cases() {
     // 序列化边界情况测试
     let config = create_test_config();
-    let service = super::SubscriptionService::new(config);
+    let _service = super::SubscriptionService::new(config);
 
     // 测试各种序列化场景
     let repeat_long = "a".repeat(1000);
@@ -944,7 +930,7 @@ fn test_subscription_service_serialization_edge_cases() {
 fn test_subscription_service_error_handling_edge_cases() {
     // 错误处理边界情况测试
     let config = create_test_config();
-    let service = super::SubscriptionService::new(config);
+    let _service = super::SubscriptionService::new(config);
 
     // 测试各种错误消息格式
     let repeat_error = "x".repeat(1000);
@@ -955,7 +941,7 @@ fn test_subscription_service_error_handling_edge_cases() {
         "错误消息",
         "🚨 Error 🚨",
         &repeat_error,
-        "\0\0\0",  // null字符
+        "\0\0\0", // null字符
         "Error: 详细错误信息包含更多内容",
     ];
 
@@ -1007,9 +993,9 @@ fn test_subscription_service_resource_management() {
         .collect();
 
     // 验证所有服务都正常工作
-    for (i, service) in services.iter().enumerate() {
-        assert_eq!(service.config.app_id, "test_app_id");
-        assert_eq!(service.config.app_secret, "test_app_secret");
+    for (i, _service) in services.iter().enumerate() {
+        assert_eq!(_service.config.app_id, "test_app_id");
+        assert_eq!(_service.config.app_secret, "test_app_secret");
 
         // 验证索引正确
         assert!(i < 1000);
@@ -1065,9 +1051,7 @@ fn test_subscription_service_comprehensive_validation() {
     ];
 
     for (app_id, app_secret, base_url, expected_result) in validation_matrix {
-        let mut builder = Config::builder()
-            .app_id(app_id)
-            .app_secret(app_secret);
+        let mut builder = Config::builder().app_id(app_id).app_secret(app_secret);
 
         if !base_url.is_empty() {
             builder = builder.base_url(base_url);
@@ -1100,8 +1084,8 @@ fn test_subscription_service_final_integration_validation() {
     assert!(service_size > 0);
 
     // 验证调试表示
-    let debug_str = format!("{:?}", service);
-    assert!(debug_str.contains("SubscriptionService"));
+    let _debug_str = format!("{:?}", service);
+    assert!(_debug_str.contains("SubscriptionService"));
 
     // 验证类型信息
     use std::any::type_name;
@@ -1109,7 +1093,6 @@ fn test_subscription_service_final_integration_validation() {
     assert!(type_name.contains("SubscriptionService"));
 
     // 所有验证通过
-    assert!(true);
 }
 
 // 注意: 这些只是构造测试。异步方法测试需要mock HTTP传输层，

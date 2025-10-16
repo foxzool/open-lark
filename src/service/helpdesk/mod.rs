@@ -194,9 +194,9 @@ impl HelpdeskService {
             let app_id = &first_config.app_id;
             let app_secret = &first_config.app_secret;
 
-            configs.iter().all(|config| {
-                config.app_id == *app_id && config.app_secret == *app_secret
-            })
+            configs
+                .iter()
+                .all(|config| config.app_id == *app_id && config.app_secret == *app_secret)
         } else {
             false
         }
@@ -366,9 +366,7 @@ impl HelpdeskService {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_helpdesk_categories_statistics(&self) -> String {
-        format!(
-            "HelpdeskService Categories{{ ticket: 15, customer_service: 12, knowledge_base: 12, automation: 12, analytics: 10, integration: 10, security: 10, personalization: 10, enterprise: 10, total: 91 }}",
-        )
+        "HelpdeskService Categories{{ ticket: 15, customer_service: 12, knowledge_base: 12, automation: 12, analytics: 10, integration: 10, security: 10, personalization: 10, enterprise: 10, total: 91 }}".to_string()
     }
 
     /// 获取服务台服务状态摘要
@@ -398,9 +396,7 @@ impl HelpdeskService {
     /// # 返回值
     /// 包含工单管理能力信息的字符串
     pub fn get_ticket_management_capabilities(&self) -> String {
-        format!(
-            "HelpdeskService Ticket{{ creation: true, assignment: true, tracking: true, prioritization: true, sla_management: true, status_control: true, escalation: true, resolution: true, analytics: true }}",
-        )
+        "HelpdeskService Ticket{{ creation: true, assignment: true, tracking: true, prioritization: true, sla_management: true, status_control: true, escalation: true, resolution: true, analytics: true }}".to_string()
     }
 
     /// 获取客户服务能力矩阵
@@ -410,9 +406,7 @@ impl HelpdeskService {
     /// # 返回值
     /// 包含客户服务能力信息的字符串
     pub fn get_customer_service_capabilities(&self) -> String {
-        format!(
-            "HelpdeskService Customer{{ management: true, communication: true, multi_channel: true, agent_management: true, scheduling: true, performance: true, satisfaction: true, quality: true }}",
-        )
+        "HelpdeskService Customer{{ management: true, communication: true, multi_channel: true, agent_management: true, scheduling: true, performance: true, satisfaction: true, quality: true }}".to_string()
     }
 
     /// 获取知识库管理能力矩阵
@@ -422,9 +416,7 @@ impl HelpdeskService {
     /// # 返回值
     /// 包含知识库管理能力信息的字符串
     pub fn get_knowledge_base_capabilities(&self) -> String {
-        format!(
-            "HelpdeskService Knowledge{{ creation: true, management: true, search: true, categorization: true, tagging: true, sharing: true, analytics: true, approval: true }}",
-        )
+        "HelpdeskService Knowledge{{ creation: true, management: true, search: true, categorization: true, tagging: true, sharing: true, analytics: true, approval: true }}".to_string()
     }
 
     /// 获取自动化流程能力矩阵
@@ -434,9 +426,7 @@ impl HelpdeskService {
     /// # 返回值
     /// 包含自动化流程能力信息的字符串
     pub fn get_automation_capabilities(&self) -> String {
-        format!(
-            "HelpdeskService Automation{{ rules: true, assignment: true, responses: true, triggers: true, escalation: true, monitoring: true, notifications: true, workflows: true }}",
-        )
+        "HelpdeskService Automation{{ rules: true, assignment: true, responses: true, triggers: true, escalation: true, monitoring: true, notifications: true, workflows: true }}".to_string()
     }
 
     /// 获取高级分析能力矩阵
@@ -446,9 +436,7 @@ impl HelpdeskService {
     /// # 返回值
     /// 包含高级分析能力信息的字符串
     pub fn get_advanced_analytics_capabilities(&self) -> String {
-        format!(
-            "HelpdeskService Analytics{{ service: true, performance: true, customer: true, trends: true, monitoring: true, dashboards: true, visualization: true, predictive: true }}",
-        )
+        "HelpdeskService Analytics{{ service: true, performance: true, customer: true, trends: true, monitoring: true, dashboards: true, visualization: true, predictive: true }}".to_string()
     }
 
     /// 获取集成能力矩阵
@@ -458,9 +446,7 @@ impl HelpdeskService {
     /// # 返回值
     /// 包含集成能力信息的字符串
     pub fn get_integration_capabilities(&self) -> String {
-        format!(
-            "HelpdeskService Integration{{ api: true, third_party: true, webhook: true, email: true, chat: true, phone: true, social: true, crm: true }}",
-        )
+        "HelpdeskService Integration{{ api: true, third_party: true, webhook: true, email: true, chat: true, phone: true, social: true, crm: true }}".to_string()
     }
 
     /// 获取安全合规能力矩阵
@@ -470,9 +456,7 @@ impl HelpdeskService {
     /// # 返回值
     /// 包含安全合规能力信息的字符串
     pub fn get_security_compliance_capabilities(&self) -> String {
-        format!(
-            "HelpdeskService Security{{ encryption: true, access_control: true, audit_logging: true, compliance: true, privacy: true, permissions: true, gdpr: true, monitoring: true }}",
-        )
+        "HelpdeskService Security{{ encryption: true, access_control: true, audit_logging: true, compliance: true, privacy: true, permissions: true, gdpr: true, monitoring: true }}".to_string()
     }
 
     /// 获取个性化功能能力矩阵
@@ -482,9 +466,7 @@ impl HelpdeskService {
     /// # 返回值
     /// 包含个性化功能能力信息的字符串
     pub fn get_personalization_capabilities(&self) -> String {
-        format!(
-            "HelpdeskService Personalization{{ custom_fields: true, workflows: true, dashboards: true, preferences: true, notifications: true, branding: true, templates: true, reports: true }}",
-        )
+        "HelpdeskService Personalization{{ custom_fields: true, workflows: true, dashboards: true, preferences: true, notifications: true, branding: true, templates: true, reports: true }}".to_string()
     }
 
     /// 获取企业级功能能力矩阵
@@ -494,9 +476,7 @@ impl HelpdeskService {
     /// # 返回值
     /// 包含企业级功能能力信息的字符串
     pub fn get_enterprise_capabilities(&self) -> String {
-        format!(
-            "HelpdeskService Enterprise{{ multi_tenant: true, scalability: true, availability: true, reporting: true, global: true, compliance: true, security: true, recovery: true }}",
-        )
+        "HelpdeskService Enterprise{{ multi_tenant: true, scalability: true, availability: true, reporting: true, global: true, compliance: true, security: true, recovery: true }}".to_string()
     }
 
     /// 获取服务台服务性能指标
@@ -506,9 +486,7 @@ impl HelpdeskService {
     /// # 返回值
     /// 包含性能指标信息的字符串
     pub fn get_helpdesk_performance_metrics(&self) -> String {
-        format!(
-            "HelpdeskService Performance{{ response_time: <2min, resolution_rate: 95%, availability: 99.9%, concurrency: high, scalability: enterprise }}",
-        )
+        "HelpdeskService Performance{{ response_time: <2min, resolution_rate: 95%, availability: 99.9%, concurrency: high, scalability: enterprise }}".to_string()
     }
 
     /// 获取服务台服务应用场景矩阵
@@ -518,9 +496,7 @@ impl HelpdeskService {
     /// # 返回值
     /// 包含应用场景信息的字符串
     pub fn get_helpdesk_use_cases_matrix(&self) -> String {
-        format!(
-            "HelpdeskService UseCases{{ enterprise_support: true, it_service_desk: true, technical_support: true, customer_service: true, complaint_handling: true, knowledge_management: true }}",
-        )
+        "HelpdeskService UseCases{{ enterprise_support: true, it_service_desk: true, technical_support: true, customer_service: true, complaint_handling: true, knowledge_management: true }}".to_string()
     }
 }
 
@@ -904,25 +880,39 @@ mod tests {
 
     #[test]
     fn test_helpdesk_service_with_shared_config() {
-        let config = Arc::new(Config::builder()
-            .app_id("shared_helpdesk_app")
-            .app_secret("shared_helpdesk_secret")
-            .build());
+        let config = Arc::new(
+            Config::builder()
+                .app_id("shared_helpdesk_app")
+                .app_secret("shared_helpdesk_secret")
+                .build(),
+        );
 
         let service = HelpdeskService::new_from_shared(config.clone());
 
         assert_eq!(service.v1.agent.config.app_id, "shared_helpdesk_app");
         assert_eq!(service.v1.agent.config.app_secret, "shared_helpdesk_secret");
-        assert_eq!(service.v1.agent_schedule.config.app_id, "shared_helpdesk_app");
+        assert_eq!(
+            service.v1.agent_schedule.config.app_id,
+            "shared_helpdesk_app"
+        );
         assert_eq!(service.v1.agent_skill.config.app_id, "shared_helpdesk_app");
-        assert_eq!(service.v1.agent_skill_rule.config.app_id, "shared_helpdesk_app");
+        assert_eq!(
+            service.v1.agent_skill_rule.config.app_id,
+            "shared_helpdesk_app"
+        );
         assert_eq!(service.v1.category.config.app_id, "shared_helpdesk_app");
         assert_eq!(service.v1.event.config.app_id, "shared_helpdesk_app");
         assert_eq!(service.v1.faq.config.app_id, "shared_helpdesk_app");
         assert_eq!(service.v1.notification.config.app_id, "shared_helpdesk_app");
         assert_eq!(service.v1.ticket.config.app_id, "shared_helpdesk_app");
-        assert_eq!(service.v1.ticket_customized_field.config.app_id, "shared_helpdesk_app");
-        assert_eq!(service.v1.ticket_message.config.app_id, "shared_helpdesk_app");
+        assert_eq!(
+            service.v1.ticket_customized_field.config.app_id,
+            "shared_helpdesk_app"
+        );
+        assert_eq!(
+            service.v1.ticket_message.config.app_id,
+            "shared_helpdesk_app"
+        );
     }
 
     // === 企业级功能测试 (26个测试) ===
@@ -938,9 +928,7 @@ mod tests {
 
     #[test]
     fn test_get_helpdesk_service_statistics() {
-        let config = Config::builder()
-            .app_id("helpdesk_stats_app")
-            .build();
+        let config = Config::builder().app_id("helpdesk_stats_app").build();
 
         let service = HelpdeskService::new(config);
         let stats = service.get_helpdesk_service_statistics();
@@ -1369,7 +1357,7 @@ mod tests {
     #[test]
     fn test_service_trait_service_name() {
         let config = Config::default();
-        let service = HelpdeskService::new(config);
+        let _service = HelpdeskService::new(config);
 
         assert_eq!(HelpdeskService::service_name(), "helpdesk");
     }
@@ -1377,16 +1365,14 @@ mod tests {
     #[test]
     fn test_service_trait_service_version() {
         let config = Config::default();
-        let service = HelpdeskService::new(config);
+        let _service = HelpdeskService::new(config);
 
         assert_eq!(HelpdeskService::service_version(), "1.0.0");
     }
 
     #[test]
     fn test_service_trait_config() {
-        let config = Config::builder()
-            .app_id("service_trait_app")
-            .build();
+        let config = Config::builder().app_id("service_trait_app").build();
         let service = HelpdeskService::new(config);
 
         assert_eq!(service.config().app_id, "service_trait_app");
@@ -1404,19 +1390,32 @@ mod tests {
         let service1 = HelpdeskService::new(config);
         let service2 = service1.clone();
 
-        assert_eq!(service1.v1.agent.config.app_id, service2.v1.agent.config.app_id);
-        assert_eq!(service1.v1.agent.config.app_secret, service2.v1.agent.config.app_secret);
-        assert_eq!(service1.v1.ticket.config.app_id, service2.v1.ticket.config.app_id);
-        assert_eq!(service1.v1.ticket.config.app_secret, service2.v1.ticket.config.app_secret);
+        assert_eq!(
+            service1.v1.agent.config.app_id,
+            service2.v1.agent.config.app_id
+        );
+        assert_eq!(
+            service1.v1.agent.config.app_secret,
+            service2.v1.agent.config.app_secret
+        );
+        assert_eq!(
+            service1.v1.ticket.config.app_id,
+            service2.v1.ticket.config.app_id
+        );
+        assert_eq!(
+            service1.v1.ticket.config.app_secret,
+            service2.v1.ticket.config.app_secret
+        );
         assert_eq!(service1.v1.faq.config.app_id, service2.v1.faq.config.app_id);
-        assert_eq!(service1.v1.faq.config.app_secret, service2.v1.faq.config.app_secret);
+        assert_eq!(
+            service1.v1.faq.config.app_secret,
+            service2.v1.faq.config.app_secret
+        );
     }
 
     #[test]
     fn test_helpdesk_service_debug() {
-        let config = Config::builder()
-            .app_id("debug_helpdesk_app")
-            .build();
+        let config = Config::builder().app_id("debug_helpdesk_app").build();
 
         let service = HelpdeskService::new(config);
         let debug_str = format!("{:?}", service);
@@ -1436,9 +1435,7 @@ mod tests {
     fn test_helpdesk_service_concurrent_access() {
         use std::thread;
 
-        let config = Config::builder()
-            .app_id("concurrent_helpdesk_app")
-            .build();
+        let config = Config::builder().app_id("concurrent_helpdesk_app").build();
         let service = Arc::new(HelpdeskService::new(config));
 
         let mut handles = vec![];
@@ -1469,9 +1466,7 @@ mod tests {
     fn test_helpdesk_service_arc_sharing() {
         use std::sync::Arc;
 
-        let config = Config::builder()
-            .app_id("arc_helpdesk_app")
-            .build();
+        let config = Config::builder().app_id("arc_helpdesk_app").build();
         let service1 = Arc::new(HelpdeskService::new(config));
         let service2 = Arc::clone(&service1);
 
@@ -1516,10 +1511,7 @@ mod tests {
 
     #[test]
     fn test_helpdesk_service_empty_config() {
-        let config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let config = Config::builder().app_id("").app_secret("").build();
 
         let service = HelpdeskService::new(config);
 

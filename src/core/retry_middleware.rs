@@ -585,13 +585,19 @@ mod tests {
         // Test conservative strategy
         let conservative_config = RetryConfig::new().conservative();
         assert_eq!(conservative_config.default_strategy.max_attempts, 2);
-        assert_eq!(conservative_config.default_strategy.base_delay, Duration::from_secs(2));
+        assert_eq!(
+            conservative_config.default_strategy.base_delay,
+            Duration::from_secs(2)
+        );
         assert!(!conservative_config.default_strategy.use_exponential_backoff);
 
         // Test aggressive strategy
         let aggressive_config = RetryConfig::new().aggressive();
         assert_eq!(aggressive_config.default_strategy.max_attempts, 5);
-        assert_eq!(aggressive_config.default_strategy.base_delay, Duration::from_millis(500));
+        assert_eq!(
+            aggressive_config.default_strategy.base_delay,
+            Duration::from_millis(500)
+        );
         assert!(aggressive_config.default_strategy.use_exponential_backoff);
 
         // Test server errors only filter
@@ -725,9 +731,7 @@ mod tests {
         let middleware = RetryMiddleware::new(config);
 
         let result: Result<&str, LarkAPIError> = middleware
-            .execute(|| {
-                async move { Err(LarkAPIError::api_error(500, "Server Error", None)) }
-            })
+            .execute(|| async move { Err(LarkAPIError::api_error(500, "Server Error", None)) })
             .await;
 
         assert!(result.is_err());
@@ -776,9 +780,11 @@ mod tests {
         };
         use std::time::Instant;
 
-        let config = RetryConfig::new().default_strategy(
-            RetryStrategyBuilder::exponential(3, Duration::from_millis(10), Duration::from_millis(100))
-        );
+        let config = RetryConfig::new().default_strategy(RetryStrategyBuilder::exponential(
+            3,
+            Duration::from_millis(10),
+            Duration::from_millis(100),
+        ));
 
         let middleware = RetryMiddleware::new(config);
         let call_count = Arc::new(AtomicU32::new(0));
@@ -841,7 +847,7 @@ mod tests {
         assert!(stats.total_attempts >= 1);
         assert_eq!(stats.successful_attempts, 1);
         // The retry_count might be 1 if there was one retry, regardless of total counting method
-        assert!(stats.retry_count >= 0);
+        // retry_count is always >= 0 by definition, so this check is redundant
     }
 
     #[tokio::test]
@@ -851,9 +857,7 @@ mod tests {
 
         // Execute a failed operation to generate stats
         let _result: Result<&str, LarkAPIError> = middleware
-            .execute(|| {
-                async move { Err(LarkAPIError::api_error(500, "Server Error", None)) }
-            })
+            .execute(|| async move { Err(LarkAPIError::api_error(500, "Server Error", None)) })
             .await;
 
         let stats_before = middleware.get_stats();

@@ -1004,9 +1004,9 @@ mod tests {
 
         // Test with various malformed payloads
         let test_cases = vec![
-            Vec::new(), // Empty payload
+            Vec::new(),             // Empty payload
             vec![0x00, 0x01, 0x02], // Binary data
-            b"{".to_vec(), // Incomplete JSON
+            b"{".to_vec(),          // Incomplete JSON
         ];
 
         for payload in &test_cases {
@@ -1174,7 +1174,11 @@ mod tests {
         assert_eq!(calls_vec.len(), num_events);
 
         // Performance should be reasonable (less than 1 second for 1000 events)
-        assert!(duration.as_secs() < 1, "Performance test took too long: {:?}", duration);
+        assert!(
+            duration.as_secs() < 1,
+            "Performance test took too long: {:?}",
+            duration
+        );
     }
 
     // Event validation edge cases
@@ -1188,9 +1192,10 @@ mod tests {
         handler
             .processor_map
             .insert("p1.\"\"".to_string(), Box::new(test_handler1));
-        handler
-            .processor_map
-            .insert("p1.\"complex.type.with.dots\"".to_string(), Box::new(test_handler2));
+        handler.processor_map.insert(
+            "p1.\"complex.type.with.dots\"".to_string(),
+            Box::new(test_handler2),
+        );
 
         // Test v1 event with various edge cases
         let test_cases = vec![
@@ -1256,7 +1261,9 @@ mod tests {
         }
 
         let calls = Arc::new(Mutex::new(Vec::new()));
-        let test_handler = CountingDropHandler { calls: calls.clone() };
+        let test_handler = CountingDropHandler {
+            calls: calls.clone(),
+        };
 
         {
             let mut handler = EventDispatcherHandler::builder().build();
@@ -1323,7 +1330,10 @@ mod tests {
         impl EventHandler for ChainErrorHandler {
             fn handle(&self, payload: &[u8]) -> anyhow::Result<()> {
                 if self.should_fail {
-                    Err(anyhow::anyhow!("Chain error: {}", String::from_utf8_lossy(payload)))
+                    Err(anyhow::anyhow!(
+                        "Chain error: {}",
+                        String::from_utf8_lossy(payload)
+                    ))
                 } else {
                     Ok(())
                 }
@@ -1348,7 +1358,10 @@ mod tests {
 
         let result = handler.emit("fail.chain", b"failure payload");
         assert!(result.is_err());
-        assert!(result.unwrap_err().to_string().contains("Chain error: failure payload"));
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("Chain error: failure payload"));
     }
 
     // Large payload handling tests

@@ -175,8 +175,7 @@ impl GroupService {
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
     pub fn validate_services_config(&self) -> bool {
         // 检查配置是否有效
-        !self.v1.config().app_id.is_empty()
-            && !self.v1.config().app_secret.is_empty()
+        !self.v1.config().app_id.is_empty() && !self.v1.config().app_secret.is_empty()
     }
 
     /// 获取群组服务的整体统计信息
@@ -202,24 +201,24 @@ impl GroupService {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_feature(&self, feature_name: &str) -> bool {
-        match feature_name {
-            "group_management" => true,
-            "member_management" => true,
-            "announcement_system" => true,
-            "tab_management" => true,
-            "menu_configuration" => true,
-            "real_time_collaboration" => true,
-            "permission_control" => true,
-            "group_analytics" => true,
-            "cross_platform_sync" => true,
-            "enterprise_security" => true,
-            "custom_notifications" => true,
-            "group_search" => true,
-            "batch_operations" => true,
-            "group_templates" => true,
-            "audit_logging" => true,
-            _ => false,
-        }
+        matches!(
+            feature_name,
+            "group_management"
+                | "member_management"
+                | "announcement_system"
+                | "tab_management"
+                | "menu_configuration"
+                | "real_time_collaboration"
+                | "permission_control"
+                | "group_analytics"
+                | "cross_platform_sync"
+                | "enterprise_security"
+                | "custom_notifications"
+                | "group_search"
+                | "batch_operations"
+                | "group_templates"
+                | "audit_logging"
+        )
     }
 
     /// 快速检查服务健康状态
@@ -241,9 +240,7 @@ impl GroupService {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_service_categories_statistics(&self) -> String {
-        format!(
-            "GroupService Categories{{ core: 2, content: 2, navigation: 1, total: 5 }}",
-        )
+        "GroupService Categories{ core: 2, content: 2, navigation: 1, total: 5 }".to_string()
     }
 
     /// 获取群组服务状态摘要
@@ -260,7 +257,9 @@ impl GroupService {
 
         format!(
             "GroupService Status{{ core: {}, content: {}, navigation: {}, overall: {} }}",
-            core_healthy, content_healthy, navigation_healthy,
+            core_healthy,
+            content_healthy,
+            navigation_healthy,
             core_healthy && content_healthy && navigation_healthy
         )
     }
@@ -347,14 +346,29 @@ mod tests {
 
         // 测试支持的功能
         let supported_features = vec![
-            "group_management", "member_management", "announcement_system", "tab_management",
-            "menu_configuration", "real_time_collaboration", "permission_control", "group_analytics",
-            "cross_platform_sync", "enterprise_security", "custom_notifications", "group_search",
-            "batch_operations", "group_templates", "audit_logging"
+            "group_management",
+            "member_management",
+            "announcement_system",
+            "tab_management",
+            "menu_configuration",
+            "real_time_collaboration",
+            "permission_control",
+            "group_analytics",
+            "cross_platform_sync",
+            "enterprise_security",
+            "custom_notifications",
+            "group_search",
+            "batch_operations",
+            "group_templates",
+            "audit_logging",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -372,10 +386,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = GroupService::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -428,23 +439,51 @@ mod tests {
 
         // 测试所有支持的功能组合
         let supported_features = vec![
-            "group_management", "member_management", "announcement_system", "tab_management",
-            "menu_configuration", "real_time_collaboration", "permission_control", "group_analytics",
-            "cross_platform_sync", "enterprise_security", "custom_notifications", "group_search",
-            "batch_operations", "group_templates", "audit_logging"
+            "group_management",
+            "member_management",
+            "announcement_system",
+            "tab_management",
+            "menu_configuration",
+            "real_time_collaboration",
+            "permission_control",
+            "group_analytics",
+            "cross_platform_sync",
+            "enterprise_security",
+            "custom_notifications",
+            "group_search",
+            "batch_operations",
+            "group_templates",
+            "audit_logging",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量
         let mut feature_count = 0;
         let all_features = vec![
-            "group_management", "member_management", "announcement_system", "tab_management",
-            "menu_configuration", "real_time_collaboration", "permission_control", "group_analytics",
-            "cross_platform_sync", "enterprise_security", "custom_notifications", "group_search",
-            "batch_operations", "group_templates", "audit_logging", "nonexistent1", "nonexistent2"
+            "group_management",
+            "member_management",
+            "announcement_system",
+            "tab_management",
+            "menu_configuration",
+            "real_time_collaboration",
+            "permission_control",
+            "group_analytics",
+            "cross_platform_sync",
+            "enterprise_security",
+            "custom_notifications",
+            "group_search",
+            "batch_operations",
+            "group_templates",
+            "audit_logging",
+            "nonexistent1",
+            "nonexistent2",
         ];
 
         for feature in all_features {
@@ -466,7 +505,9 @@ mod tests {
 
         assert!(special_service.validate_services_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_service_statistics().contains("群组服务"));
+        assert!(special_service
+            .get_service_statistics()
+            .contains("群组服务"));
         assert!(special_service.get_service_statistics().contains("👥"));
 
         // 测试长字符串配置
@@ -521,7 +562,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = GroupService::new(partial_invalid_config);
 
@@ -530,18 +571,19 @@ mod tests {
         assert!(!partial_invalid_service.validate_services_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = GroupService::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_services_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_service_statistics().contains("GroupService"));
-        assert!(fully_invalid_service.get_service_categories_statistics().contains("total: 5"));
+        assert!(fully_invalid_service
+            .get_service_statistics()
+            .contains("GroupService"));
+        assert!(fully_invalid_service
+            .get_service_categories_statistics()
+            .contains("total: 5"));
     }
 
     #[test]
@@ -602,7 +644,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
@@ -621,7 +666,11 @@ mod tests {
         ];
 
         for (feature, description) in workflow_features {
-            assert!(service.supports_feature(feature), "{}功能应该被支持", description);
+            assert!(
+                service.supports_feature(feature),
+                "{}功能应该被支持",
+                description
+            );
         }
 
         // 验证统计信息反映协作流程复杂性
@@ -645,12 +694,20 @@ mod tests {
 
         // 测试团队协作核心功能
         let team_features = vec![
-            "real_time_collaboration", "permission_control", "announcement_system",
-            "group_analytics", "custom_notifications", "group_search"
+            "real_time_collaboration",
+            "permission_control",
+            "announcement_system",
+            "group_analytics",
+            "custom_notifications",
+            "group_search",
         ];
 
         for feature in team_features {
-            assert!(service.supports_feature(feature), "团队协作功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_feature(feature),
+                "团队协作功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证团队协作功能完整性
@@ -669,12 +726,14 @@ mod tests {
         let service = GroupService::new(config);
 
         // 测试企业级安全功能
-        let security_features = vec![
-            "enterprise_security", "permission_control", "audit_logging"
-        ];
+        let security_features = vec!["enterprise_security", "permission_control", "audit_logging"];
 
         for feature in security_features {
-            assert!(service.supports_feature(feature), "企业安全功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_feature(feature),
+                "企业安全功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证安全功能支持

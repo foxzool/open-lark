@@ -786,7 +786,7 @@ mod tests {
     // Complex serialization scenarios
     #[test]
     fn test_request_executor_complex_serialization() {
-        use serde::{Serialize, Deserialize};
+        use serde::{Deserialize, Serialize};
 
         #[derive(Debug, Serialize, Deserialize)]
         struct ComplexRequest {
@@ -855,7 +855,7 @@ mod tests {
     // Unicode and internationalization tests
     #[test]
     fn test_request_executor_unicode_handling() {
-        use serde::{Serialize, Deserialize};
+        use serde::{Deserialize, Serialize};
 
         #[derive(Debug, Serialize, Deserialize)]
         struct UnicodeRequest {
@@ -965,10 +965,16 @@ mod tests {
         encoded_params.insert("path", "/api/test".to_string());
         encoded_params.insert("encoded", "a%20b%20c".to_string());
 
-        assert_eq!(encoded_params.get("search"), Some(&"hello world".to_string()));
+        assert_eq!(
+            encoded_params.get("search"),
+            Some(&"hello world".to_string())
+        );
         assert_eq!(encoded_params.get("filter"), Some(&"name>100".to_string()));
         assert_eq!(encoded_params.get("path"), Some(&"/api/test".to_string()));
-        assert_eq!(encoded_params.get("encoded"), Some(&"a%20b%20c".to_string()));
+        assert_eq!(
+            encoded_params.get("encoded"),
+            Some(&"a%20b%20c".to_string())
+        );
     }
 
     // Complex request option scenarios
@@ -1002,9 +1008,18 @@ mod tests {
             .build();
 
         assert_eq!(ordered_option.header.len(), 3);
-        assert_eq!(ordered_option.header.get("X-First"), Some(&"first_value".to_string()));
-        assert_eq!(ordered_option.header.get("X-Second"), Some(&"second_value".to_string()));
-        assert_eq!(ordered_option.header.get("X-Third"), Some(&"third_value".to_string()));
+        assert_eq!(
+            ordered_option.header.get("X-First"),
+            Some(&"first_value".to_string())
+        );
+        assert_eq!(
+            ordered_option.header.get("X-Second"),
+            Some(&"second_value".to_string())
+        );
+        assert_eq!(
+            ordered_option.header.get("X-Third"),
+            Some(&"third_value".to_string())
+        );
     }
 
     // Concurrent access scenarios
@@ -1047,7 +1062,9 @@ mod tests {
 
         // Verify all requests were processed correctly
         for i in 0..10 {
-            let found = results_vec.iter().any(|req| req.id == i && req.data == format!("concurrent test {}", i));
+            let found = results_vec
+                .iter()
+                .any(|req| req.id == i && req.data == format!("concurrent test {}", i));
             assert!(found, "Request {} not found in results", i);
         }
     }
@@ -1215,6 +1232,7 @@ mod tests {
         assert_sync(&config);
 
         // Test that our futures would be Send (this is a compile-time check)
+        #[allow(dead_code)]
         fn check_future_send<F: Future + Send>(_: F) {}
 
         // This would be used in actual async contexts

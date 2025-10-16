@@ -1,4 +1,4 @@
-use crate::core::{config::Config, constants::AppType, trait_system::Service};
+use crate::core::{config::Config, trait_system::Service};
 
 pub mod approval;
 pub mod external_approval;
@@ -155,7 +155,7 @@ impl V4 {
 
         // 检查所有服务的 app_id 是否一致
         let reference_app_id = self.approval.config.app_id.clone();
-        let services = vec![
+        let services = [
             self.instance.config.app_id.as_str(),
             self.task.config.app_id.as_str(),
             self.file.config.app_id.as_str(),
@@ -193,16 +193,16 @@ impl V4 {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_feature(&self, feature_name: &str) -> bool {
-        match feature_name {
-            "external_approval" => true,
-            "file_management" => true,
-            "comment_system" => true,
-            "search_functionality" => true,
-            "messaging" => true,
-            "instance_management" => true,
-            "task_processing" => true,
-            _ => false,
-        }
+        matches!(
+            feature_name,
+            "external_approval"
+                | "file_management"
+                | "comment_system"
+                | "search_functionality"
+                | "messaging"
+                | "instance_management"
+                | "task_processing"
+        )
     }
 }
 
@@ -230,7 +230,6 @@ mod tests {
         Config::builder()
             .app_id("approval_test_app")
             .app_secret("approval_test_secret")
-            .app_type(AppType::SelfBuild)
             .build()
     }
 
@@ -244,10 +243,22 @@ mod tests {
         assert_eq!(approval_service.instance.config.app_id, "approval_test_app");
         assert_eq!(approval_service.task.config.app_id, "approval_test_app");
         assert_eq!(approval_service.file.config.app_id, "approval_test_app");
-        assert_eq!(approval_service.instance_comment.config.app_id, "approval_test_app");
-        assert_eq!(approval_service.external_approval.config.app_id, "approval_test_app");
-        assert_eq!(approval_service.external_instance.config.app_id, "approval_test_app");
-        assert_eq!(approval_service.external_task.config.app_id, "approval_test_app");
+        assert_eq!(
+            approval_service.instance_comment.config.app_id,
+            "approval_test_app"
+        );
+        assert_eq!(
+            approval_service.external_approval.config.app_id,
+            "approval_test_app"
+        );
+        assert_eq!(
+            approval_service.external_instance.config.app_id,
+            "approval_test_app"
+        );
+        assert_eq!(
+            approval_service.external_task.config.app_id,
+            "approval_test_app"
+        );
         assert_eq!(approval_service.message.config.app_id, "approval_test_app");
         assert_eq!(approval_service.search.config.app_id, "approval_test_app");
     }
@@ -346,14 +357,15 @@ mod tests {
         let unicode_config = Config::builder()
             .app_id("审批_测试_📋_123")
             .app_secret("密钥_🔐_特殊字符")
-            .app_type(AppType::Marketplace)
             .build();
 
         let approval_service = V4::new(unicode_config);
 
         assert_eq!(approval_service.approval.config.app_id, "审批_测试_📋_123");
-        assert_eq!(approval_service.approval.config.app_secret, "密钥_🔐_特殊字符");
-        assert_eq!(approval_service.approval.config.app_type, AppType::Marketplace);
+        assert_eq!(
+            approval_service.approval.config.app_secret,
+            "密钥_🔐_特殊字符"
+        );
         assert_eq!(V4::service_name(), "approval");
         assert_eq!(V4::service_version(), "v4");
     }
@@ -403,9 +415,7 @@ mod tests {
         let config = create_test_config();
 
         // Create multiple service instances
-        let services: Vec<V4> = (0..50)
-            .map(|_| V4::new(config.clone()))
-            .collect();
+        let services: Vec<V4> = (0..50).map(|_| V4::new(config.clone())).collect();
 
         assert_eq!(services.len(), 50);
 
@@ -438,16 +448,20 @@ mod tests {
         let config = Config::builder()
             .app_id("props_approval_app")
             .app_secret("props_approval_secret")
-            .app_type(AppType::SelfBuild)
             .enable_token_cache(false)
             .build();
 
         let approval_service = V4::new(config);
 
         // Test config properties
-        assert_eq!(approval_service.approval.config.app_id, "props_approval_app");
-        assert_eq!(approval_service.approval.config.app_secret, "props_approval_secret");
-        assert_eq!(approval_service.approval.config.app_type, AppType::SelfBuild);
+        assert_eq!(
+            approval_service.approval.config.app_id,
+            "props_approval_app"
+        );
+        assert_eq!(
+            approval_service.approval.config.app_secret,
+            "props_approval_secret"
+        );
         assert!(!approval_service.approval.config.enable_token_cache);
         assert!(!approval_service.approval.config.base_url.is_empty());
     }
@@ -465,8 +479,7 @@ mod tests {
                 thread::spawn(move || {
                     format!(
                         "thread_{}_service_name: {}",
-                        i,
-                        service_clone.approval.config.app_id
+                        i, service_clone.approval.config.app_id
                     )
                 })
             })
@@ -498,16 +511,28 @@ mod tests {
         let approval_service = V4::new(config);
 
         // Verify external services exist
-        assert_eq!(approval_service.external_approval.config.app_id, "approval_test_app");
-        assert_eq!(approval_service.external_instance.config.app_id, "approval_test_app");
-        assert_eq!(approval_service.external_task.config.app_id, "approval_test_app");
+        assert_eq!(
+            approval_service.external_approval.config.app_id,
+            "approval_test_app"
+        );
+        assert_eq!(
+            approval_service.external_instance.config.app_id,
+            "approval_test_app"
+        );
+        assert_eq!(
+            approval_service.external_task.config.app_id,
+            "approval_test_app"
+        );
 
         // Verify internal services exist
         assert_eq!(approval_service.approval.config.app_id, "approval_test_app");
         assert_eq!(approval_service.instance.config.app_id, "approval_test_app");
         assert_eq!(approval_service.task.config.app_id, "approval_test_app");
         assert_eq!(approval_service.file.config.app_id, "approval_test_app");
-        assert_eq!(approval_service.instance_comment.config.app_id, "approval_test_app");
+        assert_eq!(
+            approval_service.instance_comment.config.app_id,
+            "approval_test_app"
+        );
         assert_eq!(approval_service.message.config.app_id, "approval_test_app");
         assert_eq!(approval_service.search.config.app_id, "approval_test_app");
     }
@@ -528,22 +553,24 @@ mod tests {
         let self_build_config = Config::builder()
             .app_id("self_build_approval")
             .app_secret("self_build_secret")
-            .app_type(AppType::SelfBuild)
             .build();
 
         let marketplace_config = Config::builder()
             .app_id("marketplace_approval")
             .app_secret("marketplace_secret")
-            .app_type(AppType::Marketplace)
             .build();
 
         let self_build_service = V4::new(self_build_config);
         let marketplace_service = V4::new(marketplace_config);
 
-        assert_eq!(self_build_service.approval.config.app_type, AppType::SelfBuild);
-        assert_eq!(marketplace_service.approval.config.app_type, AppType::Marketplace);
-        assert_eq!(self_build_service.approval.config.app_id, "self_build_approval");
-        assert_eq!(marketplace_service.approval.config.app_id, "marketplace_approval");
+        assert_eq!(
+            self_build_service.approval.config.app_id,
+            "self_build_approval"
+        );
+        assert_eq!(
+            marketplace_service.approval.config.app_id,
+            "marketplace_approval"
+        );
     }
 
     #[test]
@@ -561,8 +588,14 @@ mod tests {
 
         // Services should be independent
         assert_eq!(original_service.approval.config.app_id, "approval_test_app");
-        assert_eq!(modified_service.approval.config.app_id, "modified_approval_app");
-        assert_ne!(original_service.approval.config.app_id, modified_service.approval.config.app_id);
+        assert_eq!(
+            modified_service.approval.config.app_id,
+            "modified_approval_app"
+        );
+        assert_ne!(
+            original_service.approval.config.app_id,
+            modified_service.approval.config.app_id
+        );
     }
 
     #[test]
@@ -581,8 +614,14 @@ mod tests {
         let service2 = V4::new(config2);
 
         // Services with equivalent configs should have same values
-        assert_eq!(service1.approval.config.app_id, service2.approval.config.app_id);
-        assert_eq!(service1.approval.config.app_secret, service2.approval.config.app_secret);
+        assert_eq!(
+            service1.approval.config.app_id,
+            service2.approval.config.app_id
+        );
+        assert_eq!(
+            service1.approval.config.app_secret,
+            service2.approval.config.app_secret
+        );
         assert_eq!(service1.task.config.app_id, service2.task.config.app_id);
         assert_eq!(service1.file.config.app_id, service2.file.config.app_id);
     }
@@ -595,9 +634,7 @@ mod tests {
         assert!(!minimal_service.validate_services_config()); // Empty app_id should fail validation
 
         // Test with only app_id
-        let partial_config = Config::builder()
-            .app_id("partial_approval")
-            .build();
+        let partial_config = Config::builder().app_id("partial_approval").build();
         let partial_service = V4::new(partial_config);
         assert!(partial_service.validate_services_config()); // Has app_id, should pass validation
     }
@@ -673,7 +710,7 @@ mod tests {
 
         // Test service hierarchy and relationships
         let main_service = approval_service.approval.config.app_id.as_str();
-        let internal_services = vec![
+        let internal_services = [
             approval_service.instance.config.app_id.as_str(),
             approval_service.task.config.app_id.as_str(),
             approval_service.file.config.app_id.as_str(),
@@ -682,7 +719,7 @@ mod tests {
             approval_service.search.config.app_id.as_str(),
         ];
 
-        let external_services = vec![
+        let external_services = [
             approval_service.external_approval.config.app_id.as_str(),
             approval_service.external_instance.config.app_id.as_str(),
             approval_service.external_task.config.app_id.as_str(),

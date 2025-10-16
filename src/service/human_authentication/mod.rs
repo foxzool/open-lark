@@ -164,7 +164,8 @@ impl HumanAuthenticationService {
     /// # 示例
     ///
     /// ```rust
-    /// use open_lark::prelude::*;
+    /// use open_lark::core::config::Config;
+    /// use open_lark::service::human_authentication::HumanAuthenticationService;
     ///
     /// let config = Config::builder()
     ///     .app_id("your_app_id")
@@ -355,9 +356,7 @@ impl HumanAuthenticationService {
     /// # 返回值
     /// 包含安全级别、加密算法、防护措施等信息的字符串
     pub fn get_security_level_info(&self) -> String {
-        format!(
-            "HumanAuthenticationService Security{{ level: enterprise, encryption: AES256, liveness_detection: true, anti_spoofing: true, data_protection: true, compliance: GDPR_PIP }}",
-        )
+        "HumanAuthenticationService Security{ level: enterprise, encryption: AES256, liveness_detection: true, anti_spoofing: true, data_protection: true, compliance: GDPR_PIP }".to_string()
     }
 
     /// 获取支持的认证方式统计
@@ -367,9 +366,7 @@ impl HumanAuthenticationService {
     /// # 返回值
     /// 包含各类型认证方式数量的统计信息
     pub fn get_authentication_methods_statistics(&self) -> String {
-        format!(
-            "HumanAuthenticationService Methods{{ identity: 5, face: 5, biometric: 5, enterprise: 5, security: 5, total: 25 }}",
-        )
+        "HumanAuthenticationService Methods{ identity: 5, face: 5, biometric: 5, enterprise: 5, security: 5, total: 25 }".to_string()
     }
 
     /// 获取合规认证状态信息
@@ -379,9 +376,7 @@ impl HumanAuthenticationService {
     /// # 返回值
     /// 包含各项合规认证状态的字符串
     pub fn get_compliance_status(&self) -> String {
-        format!(
-            "HumanAuthenticationService Compliance{{ PIP: true, ISO30107: true, EAL4: true, GDPR: true, SOC2: true, audit_ready: true }}",
-        )
+        "HumanAuthenticationService Compliance{ PIP: true, ISO30107: true, EAL4: true, GDPR: true, SOC2: true, audit_ready: true }".to_string()
     }
 
     /// 获取认证技术能力矩阵
@@ -391,9 +386,7 @@ impl HumanAuthenticationService {
     /// # 返回值
     /// 包含认证技术能力矩阵信息的字符串
     pub fn get_authentication_capabilities_matrix(&self) -> String {
-        format!(
-            "HumanAuthenticationService Capabilities{{ identity: true, face: true, liveness: true, multimodal: true, encryption: true, monitoring: true }}",
-        )
+        "HumanAuthenticationService Capabilities{ identity: true, face: true, liveness: true, multimodal: true, encryption: true, monitoring: true }".to_string()
     }
 
     /// 获取企业级功能支持矩阵
@@ -403,9 +396,7 @@ impl HumanAuthenticationService {
     /// # 返回值
     /// 包含企业级功能支持矩阵信息的字符串
     pub fn get_enterprise_features_matrix(&self) -> String {
-        format!(
-            "HumanAuthenticationService Enterprise{{ batch: true, concurrent: true, scaling: true, monitoring: true, audit: true, integration: true }}",
-        )
+        "HumanAuthenticationService Enterprise{ batch: true, concurrent: true, scaling: true, monitoring: true, audit: true, integration: true }".to_string()
     }
 
     /// 获取生物特征识别能力矩阵
@@ -415,9 +406,7 @@ impl HumanAuthenticationService {
     /// # 返回值
     /// 包含生物特征识别能力矩阵信息的字符串
     pub fn get_biometric_capabilities_matrix(&self) -> String {
-        format!(
-            "HumanAuthenticationService Biometric{{ face: true, fingerprint: true, voice: true, iris: true, multimodal: true, anti_spoofing: true }}",
-        )
+        "HumanAuthenticationService Biometric{ face: true, fingerprint: true, voice: true, iris: true, multimodal: true, anti_spoofing: true }".to_string()
     }
 
     /// 获取API接口能力矩阵
@@ -427,9 +416,7 @@ impl HumanAuthenticationService {
     /// # 返回值
     /// 包含API接口能力矩阵信息的字符串
     pub fn get_api_capabilities_matrix(&self) -> String {
-        format!(
-            "HumanAuthenticationService API{{ restful: true, webhooks: true, batch: true, realtime: true, monitoring: true, versioning: true }}",
-        )
+        "HumanAuthenticationService API{ restful: true, webhooks: true, batch: true, realtime: true, monitoring: true, versioning: true }".to_string()
     }
 
     /// 录入身份信息
@@ -846,10 +833,7 @@ mod tests {
         assert!(!short_secret_service.validate_authentication_config());
 
         // 测试空配置
-        let empty_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let empty_config = Config::builder().app_id("").app_secret("").build();
         let empty_service = HumanAuthenticationService::new(empty_config);
         assert!(!empty_service.validate_authentication_config());
     }
@@ -879,52 +863,82 @@ mod tests {
 
         // 测试基础身份认证功能
         let identity_features = vec![
-            "identity_verification", "id_card_validation", "name_matching",
-            "identity_binding", "identity_records"
+            "identity_verification",
+            "id_card_validation",
+            "name_matching",
+            "identity_binding",
+            "identity_records",
         ];
         for feature in identity_features {
-            assert!(service.supports_authentication_feature(feature),
-                "Identity feature {} should be supported", feature);
+            assert!(
+                service.supports_authentication_feature(feature),
+                "Identity feature {} should be supported",
+                feature
+            );
         }
 
         // 测试人脸识别功能
         let face_features = vec![
-            "face_recognition", "face_detection", "feature_extraction",
-            "face_matching", "face_quality_check"
+            "face_recognition",
+            "face_detection",
+            "feature_extraction",
+            "face_matching",
+            "face_quality_check",
         ];
         for feature in face_features {
-            assert!(service.supports_authentication_feature(feature),
-                "Face feature {} should be supported", feature);
+            assert!(
+                service.supports_authentication_feature(feature),
+                "Face feature {} should be supported",
+                feature
+            );
         }
 
         // 测试高级安全功能
         let security_features = vec![
-            "liveness_detection", "anti_spoofing", "photo_video_detection",
-            "depth_analysis", "motion_analysis"
+            "liveness_detection",
+            "anti_spoofing",
+            "photo_video_detection",
+            "depth_analysis",
+            "motion_analysis",
         ];
         for feature in security_features {
-            assert!(service.supports_authentication_feature(feature),
-                "Security feature {} should be supported", feature);
+            assert!(
+                service.supports_authentication_feature(feature),
+                "Security feature {} should be supported",
+                feature
+            );
         }
 
         // 测试生物特征识别功能
         let biometric_features = vec![
-            "fingerprint_recognition", "voice_recognition", "iris_recognition",
-            "multimodal_biometrics", "biometric_template"
+            "fingerprint_recognition",
+            "voice_recognition",
+            "iris_recognition",
+            "multimodal_biometrics",
+            "biometric_template",
         ];
         for feature in biometric_features {
-            assert!(service.supports_authentication_feature(feature),
-                "Biometric feature {} should be supported", feature);
+            assert!(
+                service.supports_authentication_feature(feature),
+                "Biometric feature {} should be supported",
+                feature
+            );
         }
 
         // 测试企业级功能
         let enterprise_features = vec![
-            "batch_authentication", "concurrent_processing", "api_rate_limiting",
-            "load_balancing", "auto_scaling"
+            "batch_authentication",
+            "concurrent_processing",
+            "api_rate_limiting",
+            "load_balancing",
+            "auto_scaling",
         ];
         for feature in enterprise_features {
-            assert!(service.supports_authentication_feature(feature),
-                "Enterprise feature {} should be supported", feature);
+            assert!(
+                service.supports_authentication_feature(feature),
+                "Enterprise feature {} should be supported",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -1049,49 +1063,140 @@ mod tests {
         // 测试所有支持的功能组合
         let all_supported_features = vec![
             // 基础身份认证功能 (5个)
-            "identity_verification", "id_card_validation", "name_matching", "identity_binding", "identity_records",
+            "identity_verification",
+            "id_card_validation",
+            "name_matching",
+            "identity_binding",
+            "identity_records",
             // 人脸识别功能 (5个)
-            "face_recognition", "face_detection", "feature_extraction", "face_matching", "face_quality_check",
+            "face_recognition",
+            "face_detection",
+            "feature_extraction",
+            "face_matching",
+            "face_quality_check",
             // 高级安全功能 (5个)
-            "liveness_detection", "anti_spoofing", "photo_video_detection", "depth_analysis", "motion_analysis",
+            "liveness_detection",
+            "anti_spoofing",
+            "photo_video_detection",
+            "depth_analysis",
+            "motion_analysis",
             // 生物特征识别 (5个)
-            "fingerprint_recognition", "voice_recognition", "iris_recognition", "multimodal_biometrics", "biometric_template",
+            "fingerprint_recognition",
+            "voice_recognition",
+            "iris_recognition",
+            "multimodal_biometrics",
+            "biometric_template",
             // 图像处理功能 (5个)
-            "image_enhancement", "face_crop", "quality_assessment", "noise_reduction", "image_compression",
+            "image_enhancement",
+            "face_crop",
+            "quality_assessment",
+            "noise_reduction",
+            "image_compression",
             // 企业级功能 (5个)
-            "batch_authentication", "concurrent_processing", "api_rate_limiting", "load_balancing", "auto_scaling",
+            "batch_authentication",
+            "concurrent_processing",
+            "api_rate_limiting",
+            "load_balancing",
+            "auto_scaling",
             // 合规与审计功能 (5个)
-            "compliance_check", "audit_logging", "data_protection", "privacy_compliance", "regulatory_reporting",
+            "compliance_check",
+            "audit_logging",
+            "data_protection",
+            "privacy_compliance",
+            "regulatory_reporting",
             // 安全与加密功能 (5个)
-            "end_to_end_encryption", "data_masking", "secure_storage", "access_control", "tamper_detection",
+            "end_to_end_encryption",
+            "data_masking",
+            "secure_storage",
+            "access_control",
+            "tamper_detection",
             // 监控与分析功能 (5个)
-            "real_time_monitoring", "performance_analytics", "success_rate_tracking", "error_analysis", "usage_statistics",
+            "real_time_monitoring",
+            "performance_analytics",
+            "success_rate_tracking",
+            "error_analysis",
+            "usage_statistics",
             // 集成与API功能 (5个)
-            "restful_api", "webhook_support", "third_party_integration", "custom_workflows", "api_versioning",
+            "restful_api",
+            "webhook_support",
+            "third_party_integration",
+            "custom_workflows",
+            "api_versioning",
             // 移动端支持 (5个)
-            "mobile_sdk", "offline_mode", "push_notifications", "device_fingerprinting", "location_verification"
+            "mobile_sdk",
+            "offline_mode",
+            "push_notifications",
+            "device_fingerprinting",
+            "location_verification",
         ];
 
         for feature in all_supported_features {
-            assert!(service.supports_authentication_feature(feature),
-                "Feature {} should be supported", feature);
+            assert!(
+                service.supports_authentication_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量 (共11类 * 5个功能 = 55个功能)
         let mut feature_count = 0;
         let all_test_features = vec![
-            "identity_verification", "id_card_validation", "name_matching", "identity_binding", "identity_records",
-            "face_recognition", "face_detection", "feature_extraction", "face_matching", "face_quality_check",
-            "liveness_detection", "anti_spoofing", "photo_video_detection", "depth_analysis", "motion_analysis",
-            "fingerprint_recognition", "voice_recognition", "iris_recognition", "multimodal_biometrics", "biometric_template",
-            "image_enhancement", "face_crop", "quality_assessment", "noise_reduction", "image_compression",
-            "batch_authentication", "concurrent_processing", "api_rate_limiting", "load_balancing", "auto_scaling",
-            "compliance_check", "audit_logging", "data_protection", "privacy_compliance", "regulatory_reporting",
-            "end_to_end_encryption", "data_masking", "secure_storage", "access_control", "tamper_detection",
-            "real_time_monitoring", "performance_analytics", "success_rate_tracking", "error_analysis", "usage_statistics",
-            "restful_api", "webhook_support", "third_party_integration", "custom_workflows", "api_versioning",
-            "mobile_sdk", "offline_mode", "push_notifications", "device_fingerprinting", "location_verification",
-            "nonexistent_feature"  // 测试不支持的功能
+            "identity_verification",
+            "id_card_validation",
+            "name_matching",
+            "identity_binding",
+            "identity_records",
+            "face_recognition",
+            "face_detection",
+            "feature_extraction",
+            "face_matching",
+            "face_quality_check",
+            "liveness_detection",
+            "anti_spoofing",
+            "photo_video_detection",
+            "depth_analysis",
+            "motion_analysis",
+            "fingerprint_recognition",
+            "voice_recognition",
+            "iris_recognition",
+            "multimodal_biometrics",
+            "biometric_template",
+            "image_enhancement",
+            "face_crop",
+            "quality_assessment",
+            "noise_reduction",
+            "image_compression",
+            "batch_authentication",
+            "concurrent_processing",
+            "api_rate_limiting",
+            "load_balancing",
+            "auto_scaling",
+            "compliance_check",
+            "audit_logging",
+            "data_protection",
+            "privacy_compliance",
+            "regulatory_reporting",
+            "end_to_end_encryption",
+            "data_masking",
+            "secure_storage",
+            "access_control",
+            "tamper_detection",
+            "real_time_monitoring",
+            "performance_analytics",
+            "success_rate_tracking",
+            "error_analysis",
+            "usage_statistics",
+            "restful_api",
+            "webhook_support",
+            "third_party_integration",
+            "custom_workflows",
+            "api_versioning",
+            "mobile_sdk",
+            "offline_mode",
+            "push_notifications",
+            "device_fingerprinting",
+            "location_verification",
+            "nonexistent_feature", // 测试不支持的功能
         ];
 
         for feature in all_test_features {
@@ -1113,8 +1218,12 @@ mod tests {
 
         assert!(special_service.validate_authentication_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_authentication_statistics().contains("认证服务"));
-        assert!(special_service.get_authentication_statistics().contains("🔐"));
+        assert!(special_service
+            .get_authentication_statistics()
+            .contains("认证服务"));
+        assert!(special_service
+            .get_authentication_statistics()
+            .contains("🔐"));
 
         // 测试长字符串配置
         let long_app_id = "a".repeat(100);
@@ -1125,7 +1234,9 @@ mod tests {
         let long_service = HumanAuthenticationService::new(long_config);
 
         assert!(long_service.validate_authentication_config());
-        assert!(long_service.get_authentication_statistics().contains(&long_app_id));
+        assert!(long_service
+            .get_authentication_statistics()
+            .contains(&long_app_id));
     }
 
     #[test]
@@ -1167,7 +1278,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id_8")
-            .app_secret("short")  // 无效密钥
+            .app_secret("short") // 无效密钥
             .build();
         let partial_invalid_service = HumanAuthenticationService::new(partial_invalid_config);
 
@@ -1176,18 +1287,19 @@ mod tests {
         assert!(!partial_invalid_service.validate_authentication_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = HumanAuthenticationService::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_authentication_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_authentication_statistics().contains("HumanAuthenticationService"));
-        assert!(fully_invalid_service.get_authentication_methods_statistics().contains("total: 25"));
+        assert!(fully_invalid_service
+            .get_authentication_statistics()
+            .contains("HumanAuthenticationService"));
+        assert!(fully_invalid_service
+            .get_authentication_methods_statistics()
+            .contains("total: 25"));
     }
 
     #[test]
@@ -1252,7 +1364,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
@@ -1263,7 +1378,10 @@ mod tests {
         // 测试Service trait实现
         let service_config = service.config();
         assert_eq!(service_config.app_id, "test_human_auth_app_id");
-        assert_eq!(service_config.app_secret, "test_human_auth_app_secret_at_least_16_chars");
+        assert_eq!(
+            service_config.app_secret,
+            "test_human_auth_app_secret_at_least_16_chars"
+        );
 
         // 测试Debug trait
         let debug_str = format!("{:?}", service);
@@ -1275,7 +1393,10 @@ mod tests {
         // 测试Clone trait
         let cloned_service = service.clone();
         assert_eq!(service.config().app_id, cloned_service.config().app_id);
-        assert_eq!(service.config().app_secret, cloned_service.config().app_secret);
+        assert_eq!(
+            service.config().app_secret,
+            cloned_service.config().app_secret
+        );
     }
 
     #[test]
@@ -1293,7 +1414,11 @@ mod tests {
         ];
 
         for (feature, description) in workflow_features {
-            assert!(service.supports_authentication_feature(feature), "{}功能应该被支持", description);
+            assert!(
+                service.supports_authentication_feature(feature),
+                "{}功能应该被支持",
+                description
+            );
         }
 
         // 验证统计信息反映认证流程复杂性
@@ -1319,12 +1444,19 @@ mod tests {
 
         // 测试生物特征系统功能
         let biometric_features = vec![
-            "face_recognition", "fingerprint_recognition", "voice_recognition",
-            "iris_recognition", "multimodal_biometrics"
+            "face_recognition",
+            "fingerprint_recognition",
+            "voice_recognition",
+            "iris_recognition",
+            "multimodal_biometrics",
         ];
 
         for feature in biometric_features {
-            assert!(service.supports_authentication_feature(feature), "生物特征功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_authentication_feature(feature),
+                "生物特征功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证生物特征能力完整性
@@ -1344,11 +1476,18 @@ mod tests {
 
         // 测试安全核心功能
         let security_features = vec![
-            "liveness_detection", "anti_spoofing", "end_to_end_encryption", "data_protection"
+            "liveness_detection",
+            "anti_spoofing",
+            "end_to_end_encryption",
+            "data_protection",
         ];
 
         for feature in security_features {
-            assert!(service.supports_authentication_feature(feature), "安全功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_authentication_feature(feature),
+                "安全功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证安全管理能力完整性
@@ -1368,11 +1507,18 @@ mod tests {
 
         // 测试合规管理功能
         let compliance_features = vec![
-            "compliance_check", "audit_logging", "data_protection", "privacy_compliance"
+            "compliance_check",
+            "audit_logging",
+            "data_protection",
+            "privacy_compliance",
         ];
 
         for feature in compliance_features {
-            assert!(service.supports_authentication_feature(feature), "合规功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_authentication_feature(feature),
+                "合规功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证合规认证状态

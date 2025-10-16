@@ -152,23 +152,23 @@ impl V1 {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_feature(&self, feature_name: &str) -> bool {
-        match feature_name {
-            "mail_send_receive" => true,
-            "folder_management" => true,
-            "attachment_handling" => true,
-            "event_subscription" => true,
-            "mail_rules" => true,
-            "contact_management" => true,
-            "mail_group_management" => true,
-            "public_mailbox" => true,
-            "alias_management" => true,
-            "address_validation" => true,
-            "permission_management" => true,
-            "enterprise_mail" => true,
-            "team_collaboration" => true,
-            "mail_automation" => true,
-            _ => false,
-        }
+        matches!(
+            feature_name,
+            "mail_send_receive"
+                | "folder_management"
+                | "attachment_handling"
+                | "event_subscription"
+                | "mail_rules"
+                | "contact_management"
+                | "mail_group_management"
+                | "public_mailbox"
+                | "alias_management"
+                | "address_validation"
+                | "permission_management"
+                | "enterprise_mail"
+                | "team_collaboration"
+                | "mail_automation"
+        )
     }
 
     /// 快速检查服务健康状态
@@ -190,9 +190,7 @@ impl V1 {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_service_categories_statistics(&self) -> String {
-        format!(
-            "MailV1 Categories{{ basic: 5, advanced: 5, configuration: 4, total: 14 }}",
-        )
+        "MailV1 Categories{ basic: 5, advanced: 5, configuration: 4, total: 14 }".to_string()
     }
 
     /// 获取邮件服务状态摘要
@@ -208,7 +206,9 @@ impl V1 {
 
         format!(
             "MailV1 Status{{ basic: {}, advanced: {}, config: {}, overall: {} }}",
-            basic_healthy, advanced_healthy, config_healthy,
+            basic_healthy,
+            advanced_healthy,
+            config_healthy,
             basic_healthy && advanced_healthy && config_healthy
         )
     }
@@ -243,7 +243,10 @@ impl std::fmt::Debug for V1 {
             .field("mail_group_manager", &"MailGroupManagerService")
             .field("mail_group_member", &"MailGroupMemberService")
             .field("mail_group_alias", &"MailGroupAliasService")
-            .field("mail_group_permission_member", &"MailGroupPermissionMemberService")
+            .field(
+                "mail_group_permission_member",
+                &"MailGroupPermissionMemberService",
+            )
             .field("public_mailbox", &"PublicMailboxService")
             .field("public_mailbox_member", &"PublicMailboxMemberService")
             .field("public_mailbox_alias", &"PublicMailboxAliasService")
@@ -338,11 +341,15 @@ mod tests {
             "permission_management",
             "enterprise_mail",
             "team_collaboration",
-            "mail_automation"
+            "mail_automation",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -360,10 +367,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = V1::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -413,8 +417,14 @@ mod tests {
         let cloned_service = service.clone();
 
         // 验证克隆功能
-        assert_eq!(service.message.config.app_id, cloned_service.message.config.app_id);
-        assert_eq!(service.message.config.app_secret, cloned_service.message.config.app_secret);
+        assert_eq!(
+            service.message.config.app_id,
+            cloned_service.message.config.app_id
+        );
+        assert_eq!(
+            service.message.config.app_secret,
+            cloned_service.message.config.app_secret
+        );
         assert_eq!(service.config().app_id, cloned_service.config().app_id);
     }
 
@@ -438,23 +448,49 @@ mod tests {
 
         // 测试所有支持的功能组合
         let supported_features = vec![
-            "mail_send_receive", "folder_management", "attachment_handling", "event_subscription",
-            "mail_rules", "contact_management", "mail_group_management", "public_mailbox",
-            "alias_management", "address_validation", "permission_management", "enterprise_mail",
-            "team_collaboration", "mail_automation"
+            "mail_send_receive",
+            "folder_management",
+            "attachment_handling",
+            "event_subscription",
+            "mail_rules",
+            "contact_management",
+            "mail_group_management",
+            "public_mailbox",
+            "alias_management",
+            "address_validation",
+            "permission_management",
+            "enterprise_mail",
+            "team_collaboration",
+            "mail_automation",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量
         let mut feature_count = 0;
         let all_features = vec![
-            "mail_send_receive", "folder_management", "attachment_handling", "event_subscription",
-            "mail_rules", "contact_management", "mail_group_management", "public_mailbox",
-            "alias_management", "address_validation", "permission_management", "enterprise_mail",
-            "team_collaboration", "mail_automation", "nonexistent1", "nonexistent2"
+            "mail_send_receive",
+            "folder_management",
+            "attachment_handling",
+            "event_subscription",
+            "mail_rules",
+            "contact_management",
+            "mail_group_management",
+            "public_mailbox",
+            "alias_management",
+            "address_validation",
+            "permission_management",
+            "enterprise_mail",
+            "team_collaboration",
+            "mail_automation",
+            "nonexistent1",
+            "nonexistent2",
         ];
 
         for feature in all_features {
@@ -476,7 +512,9 @@ mod tests {
 
         assert!(special_service.validate_services_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_service_statistics().contains("邮件服务"));
+        assert!(special_service
+            .get_service_statistics()
+            .contains("邮件服务"));
         assert!(special_service.get_service_statistics().contains("📧"));
 
         // 测试长字符串配置
@@ -498,15 +536,27 @@ mod tests {
 
         // 验证所有子服务使用相同的配置
         assert_eq!(service.message.config.app_id, service.folder.config.app_id);
-        assert_eq!(service.message.config.app_id, service.attachment.config.app_id);
+        assert_eq!(
+            service.message.config.app_id,
+            service.attachment.config.app_id
+        );
         assert_eq!(service.message.config.app_id, service.event.config.app_id);
         assert_eq!(service.message.config.app_id, service.rule.config.app_id);
         assert_eq!(service.message.config.app_id, service.contact.config.app_id);
-        assert_eq!(service.message.config.app_id, service.mail_group.config.app_id);
+        assert_eq!(
+            service.message.config.app_id,
+            service.mail_group.config.app_id
+        );
         assert_eq!(service.message.config.app_id, service.address.config.app_id);
 
-        assert_eq!(service.message.config.app_secret, service.folder.config.app_secret);
-        assert_eq!(service.message.config.app_secret, service.attachment.config.app_secret);
+        assert_eq!(
+            service.message.config.app_secret,
+            service.folder.config.app_secret
+        );
+        assert_eq!(
+            service.message.config.app_secret,
+            service.attachment.config.app_secret
+        );
     }
 
     #[test]
@@ -585,7 +635,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = V1::new(partial_invalid_config);
 
@@ -594,18 +644,19 @@ mod tests {
         assert!(!partial_invalid_service.validate_services_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = V1::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_services_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_service_statistics().contains("MailV1"));
-        assert!(fully_invalid_service.get_service_categories_statistics().contains("total: 14"));
+        assert!(fully_invalid_service
+            .get_service_statistics()
+            .contains("MailV1"));
+        assert!(fully_invalid_service
+            .get_service_categories_statistics()
+            .contains("total: 14"));
     }
 
     #[test]
@@ -662,7 +713,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
