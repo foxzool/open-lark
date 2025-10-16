@@ -570,4 +570,377 @@ mod tests {
         assert!(result.is_err());
         assert_eq!(call_count.load(Ordering::SeqCst), 2);
     }
+
+    #[test]
+    fn test_retry_config_default() {
+        let config = RetryConfig::default();
+        assert!(config.enabled);
+        assert_eq!(config.default_strategy.max_attempts, 3); // Default from RetryStrategy
+        assert!(config.on_retry.is_none());
+        assert!(config.retry_filter.is_none());
+    }
+
+    #[test]
+    fn test_retry_config_builder_patterns() {
+        // Test conservative strategy
+        let conservative_config = RetryConfig::new().conservative();
+        assert_eq!(conservative_config.default_strategy.max_attempts, 2);
+        assert_eq!(
+            conservative_config.default_strategy.base_delay,
+            Duration::from_secs(2)
+        );
+        assert!(!conservative_config.default_strategy.use_exponential_backoff);
+
+        // Test aggressive strategy
+        let aggressive_config = RetryConfig::new().aggressive();
+        assert_eq!(aggressive_config.default_strategy.max_attempts, 5);
+        assert_eq!(
+            aggressive_config.default_strategy.base_delay,
+            Duration::from_millis(500)
+        );
+        assert!(aggressive_config.default_strategy.use_exponential_backoff);
+
+        // Test server errors only filter
+        let server_error_config = RetryConfig::new().server_errors_only();
+        assert!(server_error_config.retry_filter.is_some());
+    }
+
+    #[test]
+    fn test_retry_config_chaining() {
+        let config = RetryConfig::new()
+            .enabled(false)
+            .aggressive()
+            .server_errors_only();
+
+        assert!(!config.enabled); // Note: aggressive() resets to defaults, then server_errors_only adds filter
+        assert_eq!(config.default_strategy.max_attempts, 5);
+        assert!(config.retry_filter.is_some());
+    }
+
+    #[test]
+    fn test_retry_attempt_methods() {
+        let error = LarkAPIError::api_error(500, "Server Error", None);
+        let started_at = Instant::now();
+
+        // Test final attempt
+        let final_attempt = RetryAttempt {
+            attempt: 3,
+            max_attempts: 3,
+            delay: Duration::from_secs(1),
+            error: error.clone(),
+            started_at,
+            elapsed: Duration::from_secs(5),
+        };
+        assert!(final_attempt.is_final_attempt());
+        assert_eq!(final_attempt.remaining_attempts(), 0);
+
+        // Test non-final attempt
+        let non_final_attempt = RetryAttempt {
+            attempt: 1,
+            max_attempts: 3,
+            delay: Duration::from_secs(1),
+            error: error.clone(),
+            started_at,
+            elapsed: Duration::from_secs(2),
+        };
+        assert!(!non_final_attempt.is_final_attempt());
+        assert_eq!(non_final_attempt.remaining_attempts(), 2);
+
+        // Test saturation (remaining attempts can't go negative)
+        let saturated_attempt = RetryAttempt {
+            attempt: 5,
+            max_attempts: 3,
+            delay: Duration::from_secs(1),
+            error,
+            started_at,
+            elapsed: Duration::from_secs(10),
+        };
+        assert_eq!(saturated_attempt.remaining_attempts(), 0);
+    }
+
+    #[test]
+    fn test_retry_stats_edge_cases() {
+        // Test empty stats
+        let empty_stats = RetryStats::default();
+        assert_eq!(empty_stats.success_rate(), 0.0);
+        assert_eq!(empty_stats.total_attempts, 0);
+        assert_eq!(empty_stats.successful_attempts, 0);
+
+        // Test zero division safety
+        let zero_attempt_stats = RetryStats {
+            total_attempts: 0,
+            successful_attempts: 0,
+            retry_count: 0,
+            total_duration: Duration::ZERO,
+            average_delay: Duration::ZERO,
+        };
+        assert_eq!(zero_attempt_stats.success_rate(), 0.0);
+
+        // Test perfect success rate
+        let perfect_stats = RetryStats {
+            total_attempts: 10,
+            successful_attempts: 10,
+            retry_count: 0,
+            total_duration: Duration::from_secs(10),
+            average_delay: Duration::from_millis(100),
+        };
+        assert_eq!(perfect_stats.success_rate(), 1.0);
+
+        // Test zero success rate
+        let zero_success_stats = RetryStats {
+            total_attempts: 10,
+            successful_attempts: 0,
+            retry_count: 10,
+            total_duration: Duration::from_secs(30),
+            average_delay: Duration::from_millis(500),
+        };
+        assert_eq!(zero_success_stats.success_rate(), 0.0);
+    }
+
+    #[tokio::test]
+    async fn test_retry_middleware_disabled() {
+        let config = RetryConfig::new().enabled(false);
+        let middleware = RetryMiddleware::new(config);
+        let call_count = std::sync::atomic::AtomicU32::new(0);
+
+        let result: Result<&str, LarkAPIError> = middleware
+            .execute(|| {
+                call_count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                async move { Err(LarkAPIError::api_error(500, "Server Error", None)) }
+            })
+            .await;
+
+        assert!(result.is_err());
+        assert_eq!(call_count.load(std::sync::atomic::Ordering::SeqCst), 1); // Only called once
+    }
+
+    #[tokio::test]
+    async fn test_retry_middleware_with_callback() {
+        use std::sync::{
+            atomic::{AtomicU32, Ordering},
+            Arc,
+        };
+
+        let callback_count = Arc::new(AtomicU32::new(0));
+        let callback_count_clone = Arc::clone(&callback_count);
+
+        let config = RetryConfig::new().on_retry(move |_attempt| {
+            callback_count_clone.fetch_add(1, Ordering::SeqCst);
+        });
+
+        let middleware = RetryMiddleware::new(config);
+
+        let result: Result<&str, LarkAPIError> = middleware
+            .execute(|| async move { Err(LarkAPIError::api_error(500, "Server Error", None)) })
+            .await;
+
+        assert!(result.is_err());
+        // Should be called max_attempts - 1 times (after first failure, before final attempt)
+        assert_eq!(callback_count.load(Ordering::SeqCst), 2);
+    }
+
+    #[tokio::test]
+    async fn test_retry_middleware_custom_filter() {
+        use std::sync::{
+            atomic::{AtomicU32, Ordering},
+            Arc,
+        };
+
+        // Only retry on specific error codes
+        let config = RetryConfig::new().retry_filter(|error| {
+            match error {
+                LarkAPIError::ApiError { code, .. } => *code == 503, // Only retry on service unavailable
+                _ => false,
+            }
+        });
+
+        let middleware = RetryMiddleware::new(config);
+        let call_count = Arc::new(AtomicU32::new(0));
+
+        let call_count_clone = Arc::clone(&call_count);
+        let result: Result<&str, LarkAPIError> = middleware
+            .execute(move || {
+                let _count = call_count_clone.fetch_add(1, Ordering::SeqCst);
+                async move {
+                    // Return 500 error, which should not be retried according to our filter
+                    Err(LarkAPIError::api_error(500, "Server Error", None))
+                }
+            })
+            .await;
+
+        assert!(result.is_err());
+        assert_eq!(call_count.load(Ordering::SeqCst), 1); // Only called once, no retry
+    }
+
+    #[tokio::test]
+    async fn test_retry_middleware_exponential_backoff() {
+        use std::sync::{
+            atomic::{AtomicU32, Ordering},
+            Arc,
+        };
+        use std::time::Instant;
+
+        let config = RetryConfig::new().default_strategy(RetryStrategyBuilder::exponential(
+            3,
+            Duration::from_millis(10),
+            Duration::from_millis(100),
+        ));
+
+        let middleware = RetryMiddleware::new(config);
+        let call_count = Arc::new(AtomicU32::new(0));
+        let start_time = Arc::new(Instant::now());
+
+        let call_count_clone = Arc::clone(&call_count);
+        let start_time_clone = Arc::clone(&start_time);
+
+        let result: Result<&str, LarkAPIError> = middleware
+            .execute(move || {
+                let count = call_count_clone.fetch_add(1, Ordering::SeqCst);
+                async move {
+                    if count < 2 {
+                        Err(LarkAPIError::api_error(500, "Server Error", None))
+                    } else {
+                        Ok("Success")
+                    }
+                }
+            })
+            .await;
+
+        assert!(result.is_ok());
+        assert_eq!(call_count.load(Ordering::SeqCst), 3);
+
+        // Should have taken some time due to exponential backoff
+        let elapsed = start_time_clone.elapsed();
+        assert!(elapsed >= Duration::from_millis(10)); // At least the first delay
+    }
+
+    #[tokio::test]
+    async fn test_retry_middleware_with_stats() {
+        use std::sync::{
+            atomic::{AtomicU32, Ordering},
+            Arc,
+        };
+
+        let config = RetryConfig::new();
+        let middleware = RetryMiddlewareWithStats::new(config);
+        let call_count = Arc::new(AtomicU32::new(0));
+
+        let call_count_clone = Arc::clone(&call_count);
+        let result: Result<&str, LarkAPIError> = middleware
+            .execute(move || {
+                let count = call_count_clone.fetch_add(1, Ordering::SeqCst);
+                async move {
+                    if count == 1 {
+                        Ok("Success")
+                    } else {
+                        Err(LarkAPIError::api_error(500, "Server Error", None))
+                    }
+                }
+            })
+            .await;
+
+        assert!(result.is_ok());
+
+        let stats = middleware.get_stats();
+        // Note: The stats callback is only called on retries, not on the final successful attempt
+        // So total_attempts might be 1 if the final successful attempt isn't counted in the callback
+        assert!(stats.total_attempts >= 1);
+        assert_eq!(stats.successful_attempts, 1);
+        // The retry_count might be 1 if there was one retry, regardless of total counting method
+        // retry_count is always >= 0 by definition, so this check is redundant
+    }
+
+    #[tokio::test]
+    async fn test_retry_middleware_stats_reset() {
+        let config = RetryConfig::new();
+        let middleware = RetryMiddlewareWithStats::new(config);
+
+        // Execute a failed operation to generate stats
+        let _result: Result<&str, LarkAPIError> = middleware
+            .execute(|| async move { Err(LarkAPIError::api_error(500, "Server Error", None)) })
+            .await;
+
+        let stats_before = middleware.get_stats();
+        assert!(stats_before.total_attempts > 0);
+
+        // Reset stats
+        middleware.reset_stats();
+
+        let stats_after = middleware.get_stats();
+        assert_eq!(stats_after.total_attempts, 0);
+        assert_eq!(stats_after.successful_attempts, 0);
+        assert_eq!(stats_after.retry_count, 0);
+    }
+
+    #[test]
+    fn test_retry_strategy_builder_defaults() {
+        let builder = RetryStrategyBuilder::default();
+        let strategy = builder.build();
+
+        // Should match default RetryStrategy values
+        assert!(strategy.max_attempts > 0);
+        assert!(strategy.base_delay > Duration::ZERO);
+    }
+
+    #[test]
+    fn test_retry_strategy_builder_chaining() {
+        let strategy = RetryStrategyBuilder::new()
+            .max_attempts(5)
+            .base_delay(Duration::from_millis(200))
+            .max_delay(Duration::from_secs(10))
+            .exponential_backoff(true)
+            .build();
+
+        assert_eq!(strategy.max_attempts, 5);
+        assert_eq!(strategy.base_delay, Duration::from_millis(200));
+        assert_eq!(strategy.max_delay, Duration::from_secs(10));
+        assert!(strategy.use_exponential_backoff);
+    }
+
+    #[test]
+    fn test_retry_config_debug_format() {
+        let config = RetryConfig::new()
+            .enabled(true)
+            .on_retry(|_attempt| println!("Retry"));
+
+        let debug_str = format!("{:?}", config);
+        assert!(debug_str.contains("RetryConfig"));
+        assert!(debug_str.contains("enabled: true"));
+    }
+
+    #[tokio::test]
+    async fn test_retry_non_retryable_error() {
+        let config = RetryConfig::new();
+        let middleware = RetryMiddleware::new(config);
+        let call_count = std::sync::atomic::AtomicU32::new(0);
+
+        // Use a non-retryable error (like authentication error)
+        let result: Result<&str, LarkAPIError> = middleware
+            .execute(|| {
+                call_count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                async move { Err(LarkAPIError::illegal_param("Invalid auth token")) }
+            })
+            .await;
+
+        assert!(result.is_err());
+        assert_eq!(call_count.load(std::sync::atomic::Ordering::SeqCst), 1); // Should not retry
+    }
+
+    #[test]
+    fn test_retry_stats_methods() {
+        let mut stats = RetryStats::default();
+
+        // Test print_summary doesn't panic
+        stats.print_summary();
+
+        // Test success rate calculations
+        stats.total_attempts = 5;
+        stats.successful_attempts = 3;
+        assert_eq!(stats.success_rate(), 0.6);
+
+        // Test with large numbers
+        stats.total_attempts = 1000;
+        stats.successful_attempts = 867;
+        assert!((stats.success_rate() - 0.867).abs() < 0.001);
+    }
 }

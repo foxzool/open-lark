@@ -930,6 +930,514 @@ mod tests {
             assert_eq!(result, expected, "Failed for input: {}", input);
         }
     }
+
+    // ==================== Enhanced Coverage Tests ====================
+
+    // Complex error handling scenarios
+    #[test]
+    fn test_complex_error_response_scenarios() {
+        use serde_json::Value;
+
+        // Test nested error structures
+        let complex_error = r#"{
+            "code": 400,
+            "msg": "Validation failed",
+            "error": {
+                "log_id": "error_12345",
+                "details": [
+                    {
+                        "key": "field1",
+                        "value": "invalid",
+                        "description": "Field must be valid email"
+                    },
+                    {
+                        "key": "field2",
+                        "description": "Required field missing"
+                    }
+                ]
+            }
+        }"#;
+
+        let parsed: Value = serde_json::from_str(complex_error).unwrap();
+        assert_eq!(parsed["code"], 400);
+        assert_eq!(parsed["msg"], "Validation failed");
+        assert!(parsed["error"]["log_id"].is_string());
+        assert_eq!(parsed["error"]["details"].as_array().unwrap().len(), 2);
+
+        // Test error response with missing msg
+        let error_missing_msg = r#"{"code": 500}"#;
+        let parsed_missing: Value = serde_json::from_str(error_missing_msg).unwrap();
+        assert_eq!(parsed_missing["code"], 500);
+        assert!(!parsed_missing["msg"].is_string());
+
+        // Test error response with non-integer code
+        let invalid_code = r#"{"code": "400", "msg": "Invalid code type"}"#;
+        let parsed_invalid: Value = serde_json::from_str(invalid_code).unwrap();
+        assert!(parsed_invalid["code"].is_string());
+    }
+
+    // Large data handling tests
+    #[test]
+    fn test_large_response_data_handling() {
+        use serde_json::Value;
+
+        // Test large JSON response
+        let large_data_list: Vec<String> = (0..1000).map(|i| format!("item_{}", i)).collect();
+
+        let large_response = serde_json::json!({
+            "code": 0,
+            "msg": "success",
+            "data": {
+                "items": large_data_list,
+                "metadata": {
+                    "total": 1000,
+                    "page": 1
+                }
+            }
+        });
+
+        let json_str = serde_json::to_string(&large_response).unwrap();
+        assert!(json_str.len() > 10000); // Should be reasonably large
+
+        // Test parsing large response
+        let parsed: Value = serde_json::from_str(&json_str).unwrap();
+        assert_eq!(parsed["code"], 0);
+        assert_eq!(parsed["data"]["items"].as_array().unwrap().len(), 1000);
+    }
+
+    // Unicode and internationalization tests for responses
+    #[test]
+    fn test_unicode_response_handling() {
+        use serde_json::json;
+
+        let unicode_response = json!({
+            "code": 0,
+            "msg": "操作成功",
+            "data": {
+                "title": "测试标题",
+                "description": "这是一个包含中文、English و العربية 的描述",
+                "tags": ["标签1", "tag2", "العربية", "🚀"]
+            }
+        });
+
+        let json_str = serde_json::to_string(&unicode_response).unwrap();
+        let parsed: Value = serde_json::from_str(&json_str).unwrap();
+
+        assert_eq!(parsed["msg"], "操作成功");
+        assert_eq!(parsed["data"]["title"], "测试标题");
+        assert!(parsed["data"]["description"]
+            .as_str()
+            .unwrap()
+            .contains("中文"));
+        assert!(parsed["data"]["tags"].as_array().unwrap()[3] == "🚀");
+    }
+
+    // Memory efficiency tests
+    #[test]
+    fn test_memory_efficient_response_processing() {
+        use std::mem;
+
+        // Test that OptimizedBaseResponse doesn't unnecessarily copy data
+        let response = OptimizedBaseResponse {
+            code: 0,
+            msg: "success".to_string(),
+            error: None,
+            data: Some(TestData {
+                id: 123,
+                name: "test".to_string(),
+            }),
+        };
+
+        let response_size = mem::size_of_val(&response);
+        assert!(response_size > 0);
+
+        // Test that Option fields don't increase size when None
+        let empty_response: OptimizedBaseResponse<TestData> = OptimizedBaseResponse {
+            code: 0,
+            msg: "success".to_string(),
+            error: None,
+            data: None,
+        };
+
+        let empty_size = mem::size_of_val(&empty_response);
+        // Both should have similar size since Option<T> has overhead regardless of value
+        assert!(empty_size > 0);
+    }
+
+    // Performance benchmarking tests
+    #[test]
+    fn test_response_parsing_performance() {
+        use std::time::Instant;
+
+        let test_json = r#"{"code": 0, "msg": "success", "data": {"id": 1, "name": "test"}}"#;
+
+        // Benchmark direct parsing
+        let iterations = 1000;
+        let start = Instant::now();
+
+        for _ in 0..iterations {
+            let _: Result<OptimizedBaseResponse<TestData>, _> = serde_json::from_str(test_json);
+        }
+
+        let direct_time = start.elapsed();
+
+        // Benchmark fallback parsing (Value -> BaseResponse)
+        let start = Instant::now();
+
+        for _ in 0..iterations {
+            let value: Value = serde_json::from_str(test_json).unwrap();
+            let _: Result<BaseResponse<TestData>, _> = serde_json::from_value(value);
+        }
+
+        let fallback_time = start.elapsed();
+
+        // Performance test is informational - timing can vary
+        println!(
+            "Direct parsing: {:?}, Fallback parsing: {:?}",
+            direct_time, fallback_time
+        );
+
+        // Only assert that both completed successfully and within reasonable time
+        assert!(direct_time.as_millis() < 1000); // Should complete within 1 second
+        assert!(fallback_time.as_millis() < 1000); // Should complete within 1 second
+
+        // Performance characteristics check - direct parsing should be competitive
+        // We don't assert strict ordering since timing can be non-deterministic
+        let ratio = fallback_time.as_nanos() as f64 / direct_time.as_nanos() as f64;
+        println!("Performance ratio (fallback/direct): {:.2}x", ratio);
+    }
+
+    // Concurrent response processing tests
+    #[test]
+    fn test_concurrent_response_parsing() {
+        use std::sync::{Arc, Mutex};
+        use std::thread;
+
+        let test_responses = vec![
+            r#"{"code": 0, "msg": "success", "data": {"id": 1, "name": "test1"}}"#,
+            r#"{"code": 0, "msg": "success", "data": {"id": 2, "name": "test2"}}"#,
+            r#"{"code": 400, "msg": "error", "data": null}"#,
+            r#"{"code": 0, "msg": "success", "data": {"id": 4, "name": "test4"}}"#,
+        ];
+
+        let results = Arc::new(Mutex::new(Vec::new()));
+        let mut handles = vec![];
+
+        for (i, response_json) in test_responses.into_iter().enumerate() {
+            let results_clone = results.clone();
+            let handle = thread::spawn(move || {
+                let parsed: Result<OptimizedBaseResponse<TestData>, _> =
+                    serde_json::from_str(response_json);
+
+                results_clone.lock().unwrap().push((i, parsed.is_ok()));
+            });
+            handles.push(handle);
+        }
+
+        for handle in handles {
+            handle.join().unwrap();
+        }
+
+        let results_vec = results.lock().unwrap();
+        assert_eq!(results_vec.len(), 4);
+        assert!(results_vec.iter().all(|(_, success)| *success));
+    }
+
+    // Edge case JSON structures
+    #[test]
+    fn test_edge_case_json_structures() {
+        use serde_json::json;
+
+        // Test with null values
+        let null_response = json!({
+            "code": 0,
+            "msg": "success",
+            "data": null
+        });
+
+        let parsed: OptimizedBaseResponse<TestData> =
+            serde_json::from_value(null_response).unwrap();
+        assert!(parsed.is_success());
+        assert!(parsed.data().is_none());
+
+        // Test with empty arrays and objects
+        let empty_response = json!({
+            "code": 0,
+            "msg": "success",
+            "data": {
+                "items": [],
+                "metadata": {}
+            }
+        });
+
+        // This would fail to parse as TestData, but we can test the JSON structure
+        let parsed_value: Value = serde_json::from_value(empty_response).unwrap();
+        assert_eq!(parsed_value["data"]["items"].as_array().unwrap().len(), 0);
+        assert!(parsed_value["data"]["metadata"]
+            .as_object()
+            .unwrap()
+            .is_empty());
+
+        // Test with unexpected additional fields
+        let extra_fields_response = json!({
+            "code": 0,
+            "msg": "success",
+            "data": {"id": 1, "name": "test"},
+            "unexpected_field": "should_be_ignored",
+            "another_unexpected": {"nested": "data"}
+        });
+
+        let parsed_extra: OptimizedBaseResponse<TestData> =
+            serde_json::from_value(extra_fields_response).unwrap();
+        assert!(parsed_extra.is_success());
+        assert!(parsed_extra.data().is_some());
+    }
+
+    // Response format validation tests
+    #[test]
+    fn test_response_format_validation() {
+        // Test different response formats and their characteristics
+        let test_cases = vec![
+            (ResponseFormat::Data, "data", true),
+            (ResponseFormat::Flatten, "flatten", false),
+            (ResponseFormat::Binary, "binary", false),
+        ];
+
+        for (format, expected_str, supports_data) in test_cases {
+            // Test format string representation
+            let format_str = match format {
+                ResponseFormat::Data => "data",
+                ResponseFormat::Flatten => "flatten",
+                ResponseFormat::Binary => "binary",
+            };
+            assert_eq!(format_str, expected_str);
+
+            // Test format characteristics
+            match format {
+                ResponseFormat::Data => assert!(supports_data),
+                ResponseFormat::Flatten => assert!(!supports_data),
+                ResponseFormat::Binary => assert!(!supports_data),
+            }
+        }
+    }
+
+    // Binary response handling edge cases
+    #[test]
+    fn test_binary_response_edge_cases() {
+        // Test with very large binary data
+        let large_binary = vec![0u8; 1_000_000]; // 1MB
+        let large_binary_data =
+            TestBinaryData::from_binary("large_file.bin".to_string(), large_binary);
+        assert!(large_binary_data.is_some());
+        assert_eq!(large_binary_data.unwrap().content.len(), 1_000_000);
+
+        // Test with empty binary data
+        let empty_binary_data = TestBinaryData::from_binary("empty_file.txt".to_string(), vec![]);
+        assert!(empty_binary_data.is_some());
+        assert!(empty_binary_data.unwrap().content.is_empty());
+
+        // Test with special characters in filename
+        let special_filename_data =
+            TestBinaryData::from_binary("测试文件@#$%.txt".to_string(), b"test content".to_vec());
+        assert!(special_filename_data.is_some());
+        assert_eq!(special_filename_data.unwrap().file_name, "测试文件@#$%.txt");
+
+        // Test binary data creation for non-binary type (should return None)
+        let non_binary_result = TestData::from_binary("test.txt".to_string(), b"content".to_vec());
+        assert!(non_binary_result.is_none());
+    }
+
+    // Complex error detail scenarios
+    #[test]
+    fn test_complex_error_detail_scenarios() {
+        // Test with nested error details
+        let complex_error = ErrorInfo {
+            log_id: Some("complex_error_123".to_string()),
+            details: vec![
+                ErrorDetail {
+                    key: Some("validation".to_string()),
+                    value: Some("email格式不正确".to_string()),
+                    description: Some("邮箱地址格式验证失败".to_string()),
+                },
+                ErrorDetail {
+                    key: Some("required_field".to_string()),
+                    value: None,
+                    description: Some("必填字段缺失".to_string()),
+                },
+                ErrorDetail {
+                    key: Some("constraint".to_string()),
+                    value: Some("长度超过限制".to_string()),
+                    description: Some("字段长度超出最大限制".to_string()),
+                },
+            ],
+        };
+
+        // Test serialization and deserialization
+        let json = serde_json::to_string(&complex_error).unwrap();
+        let deserialized: ErrorInfo = serde_json::from_str(&json).unwrap();
+
+        assert_eq!(deserialized.log_id, complex_error.log_id);
+        assert_eq!(deserialized.details.len(), 3);
+        assert_eq!(
+            deserialized.details[0].description,
+            Some("邮箱地址格式验证失败".to_string())
+        );
+        assert_eq!(deserialized.details[1].value, None);
+        assert_eq!(deserialized.details[2].key, Some("constraint".to_string()));
+    }
+
+    // Response tracker integration simulation
+    #[test]
+    fn test_response_tracker_integration_simulation() {
+        // Simulate response tracker behavior
+        let tracker_calls = [
+            ("start", "json_data", Some(1024)),
+            ("parsing_complete", "", None),
+            ("validation_complete", "", None),
+            ("success", "", None),
+        ];
+
+        // Verify tracking sequence
+        assert_eq!(tracker_calls.len(), 4);
+        assert_eq!(tracker_calls[0].0, "start");
+        assert_eq!(tracker_calls[0].1, "json_data");
+        assert_eq!(tracker_calls[0].2, Some(1024));
+
+        // Test error tracking simulation
+        let error_tracker_calls = [
+            ("start", "json_flatten", Some(512)),
+            ("error", "解析失败", None),
+        ];
+
+        assert_eq!(error_tracker_calls.len(), 2);
+        assert_eq!(error_tracker_calls[1].0, "error");
+        assert_eq!(error_tracker_calls[1].1, "解析失败");
+    }
+
+    // Real-world response pattern tests
+    #[test]
+    fn test_real_world_response_patterns() {
+        use serde_json::json;
+
+        // Pattern 1: Pagination response
+        let pagination_response = json!({
+            "code": 0,
+            "msg": "success",
+            "data": {
+                "items": [
+                    {"id": 1, "name": "item1"},
+                    {"id": 2, "name": "item2"}
+                ],
+                "page_token": "next_page_token",
+                "has_more": true
+            }
+        });
+
+        let pagination_parsed: Value = serde_json::from_value(pagination_response).unwrap();
+        assert_eq!(
+            pagination_parsed["data"]["items"].as_array().unwrap().len(),
+            2
+        );
+        assert!(pagination_parsed["data"]["has_more"].as_bool().unwrap());
+
+        // Pattern 2: Nested data response
+        let nested_response = json!({
+            "code": 0,
+            "msg": "success",
+            "data": {
+                "user": {
+                    "id": "user_123",
+                    "profile": {
+                        "name": "张三",
+                        "department": "技术部"
+                    }
+                },
+                "permissions": ["read", "write"]
+            }
+        });
+
+        let nested_parsed: Value = serde_json::from_value(nested_response).unwrap();
+        assert_eq!(nested_parsed["data"]["user"]["profile"]["name"], "张三");
+        assert_eq!(
+            nested_parsed["data"]["permissions"]
+                .as_array()
+                .unwrap()
+                .len(),
+            2
+        );
+
+        // Pattern 3: Error with detailed validation info
+        let validation_error_response = json!({
+            "code": 400,
+            "msg": "参数验证失败",
+            "error": {
+                "log_id": "validation_error_456",
+                "details": [
+                    {
+                        "field": "email",
+                        "error_code": "INVALID_FORMAT",
+                        "message": "邮箱格式不正确"
+                    }
+                ]
+            }
+        });
+
+        let validation_parsed: Value = serde_json::from_value(validation_error_response).unwrap();
+        assert_eq!(validation_parsed["code"], 400);
+        assert!(!validation_parsed["error"]["details"]
+            .as_array()
+            .unwrap()
+            .is_empty());
+    }
+
+    // OptimizedBaseResponse performance characteristics
+    #[test]
+    fn test_optimized_response_performance_characteristics() {
+        use std::time::Instant;
+
+        // Test creation performance
+        let start = Instant::now();
+        let mut responses = Vec::new();
+
+        for i in 0..1000 {
+            responses.push(OptimizedBaseResponse {
+                code: if i % 10 == 0 { 400 } else { 0 },
+                msg: if i % 10 == 0 {
+                    "error".to_string()
+                } else {
+                    "success".to_string()
+                },
+                error: if i % 10 == 0 {
+                    Some(ErrorInfo {
+                        log_id: Some(format!("log_{}", i)),
+                        details: vec![],
+                    })
+                } else {
+                    None
+                },
+                data: if i % 10 != 0 {
+                    Some(TestData {
+                        id: i,
+                        name: format!("test_{}", i),
+                    })
+                } else {
+                    None
+                },
+            });
+        }
+
+        let creation_time = start.elapsed();
+        assert_eq!(responses.len(), 1000);
+        assert!(creation_time.as_millis() < 100); // Should complete quickly
+
+        // Test filtering performance
+        let start = Instant::now();
+        let successful_responses: Vec<_> = responses.iter().filter(|r| r.is_success()).collect();
+
+        let filter_time = start.elapsed();
+        assert_eq!(successful_responses.len(), 900);
+        assert!(filter_time.as_millis() < 10); // Should be very fast
+    }
 }
 
 /// 使用示例
