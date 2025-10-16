@@ -16,6 +16,36 @@ impl MessageService {
     ///
     /// 给指定用户或者会话发送消息，支持文本、富文本、可交互的消息卡片、群名片、个人名片、图片、
     /// 视频、音频、文件、表情包。
+    ///
+    /// # API文档
+    ///
+    /// {}
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    ///     let client = LarkClient::builder()
+    ///         .app_id("your_app_id")
+    ///         .app_secret("your_app_secret")
+    ///         .build()?;
+    ///
+    ///     // 发送文本消息
+    ///     let message = client.im.v1.message.create_message_builder()
+    ///         .receive_id("user_open_id")
+    ///         .receive_id_type("open_id")
+    ///         .content(r#"{"text":"Hello World"}"#)
+    ///         .msg_type("text")
+    ///         .execute(&client.im.v1.message)
+    ///         .await?;
+    ///
+    ///     println!("发送成功，消息ID: {}", message.message_id);
+    ///     Ok(())
+    /// }
+    /// ```
     pub async fn create(
         &self,
         create_message_request: crate::service::im::v1::message::builders::CreateMessageRequest,
@@ -36,6 +66,30 @@ impl MessageService {
     ///
     /// 撤回已经发送成功的消息。支持撤回应用自身发送的消息、应用管理员撤回群成员的消息、
     /// 撤回指定用户在指定会话的消息等不同场景。
+    ///
+    /// # API文档
+    ///
+    /// {}
+    ///
+    /// # 示例
+    ///
+    /// ```rust,no_run
+    /// use open_lark::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    ///     let client = LarkClient::builder()
+    ///         .app_id("your_app_id")
+    ///         .app_secret("your_app_secret")
+    ///         .build()?;
+    ///
+    ///     // 撤回消息
+    ///     client.im.v1.message.delete("om_1234567890", None).await?;
+    ///
+    ///     println!("消息撤回成功");
+    ///     Ok(())
+    /// }
+    /// ```
     pub async fn delete(&self, message_id: &str, option: Option<RequestOption>) -> SDKResult<()> {
         let api_req = crate::core::api_req::ApiRequest {
             http_method: Method::DELETE,
