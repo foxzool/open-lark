@@ -2,6 +2,7 @@ use crate::core::error::LarkAPIError;
 
 pub mod api_req;
 pub mod api_resp;
+pub mod doc_urls;
 pub mod app_ticket_manager;
 pub mod cache;
 pub mod config;
