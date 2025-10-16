@@ -69,11 +69,11 @@ pub struct UserId {
 /// 事件中包含的消息内容
 #[derive(Debug, Serialize, Deserialize)]
 pub struct EventMessage {
-    /// 消息的open_message_id，说明参见：[消息ID说明](https://open.feishu.cn/document/server-docs/im-v1/message/intro)
+    /// 消息的open_message_id
     pub message_id: String,
-    /// 根消息id，用于回复消息场景，说明参见：[消息ID说明](https://open.feishu.cn/document/server-docs/im-v1/message/intro)
+    /// 根消息id，用于回复消息场景
     pub root_id: Option<String>,
-    /// 根消息id，父消息的id，用于回复消息场景，说明参见：[消息ID说明](https://open.feishu.cn/document/server-docs/im-v1/message/intro)
+    /// 根消息id，父消息的id，用于回复消息场景
     pub parent_id: Option<String>,
     /// 消息创建时间戳（单位：毫秒）
     pub create_time: String,
@@ -81,7 +81,7 @@ pub struct EventMessage {
     pub update_time: String,
     /// 消息所在的群组 ID
     pub chat_id: String,
-    /// 消息所属的话题 ID（不返回说明该消息非话题消息），说明参见：[话题介绍](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/thread-introduction)
+    /// 消息所属的话题 ID（不返回说明该消息非话题消息）
     pub thread_id: Option<String>,
     /// 消息所在的群组类型
     ///

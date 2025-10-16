@@ -16,8 +16,6 @@ impl MessageService {
     ///
     /// 给指定用户或者会话发送消息，支持文本、富文本、可交互的消息卡片、群名片、个人名片、图片、
     /// 视频、音频、文件、表情包。
-    ///
-    /// <https://open.feishu.cn/document/server-docs/im-v1/message/create>
     pub async fn create(
         &self,
         create_message_request: crate::service::im::v1::message::builders::CreateMessageRequest,
@@ -38,8 +36,6 @@ impl MessageService {
     ///
     /// 撤回已经发送成功的消息。支持撤回应用自身发送的消息、应用管理员撤回群成员的消息、
     /// 撤回指定用户在指定会话的消息等不同场景。
-    ///
-    /// <https://open.feishu.cn/document/server-docs/im-v1/message/delete>
     pub async fn delete(&self, message_id: &str, option: Option<RequestOption>) -> SDKResult<()> {
         let api_req = crate::core::api_req::ApiRequest {
             http_method: Method::DELETE,
@@ -61,8 +57,6 @@ impl MessageService {
     /// 更新消息
     ///
     /// 更新已发送的消息。仅支持更新应用自身发送的文本消息、图片消息和文件消息。
-    ///
-    /// <https://open.feishu.cn/document/server-docs/im-v1/message/update>
     pub async fn update(
         &self,
         message_id: &str,
@@ -87,8 +81,6 @@ impl MessageService {
     /// 回复消息
     ///
     /// 在指定消息下进行回复。支持回复文本、图片、文件等类型的消息。
-    ///
-    /// <https://open.feishu.cn/document/server-docs/im-v1/message/reply>
     pub async fn reply(
         &self,
         message_id: &str,
