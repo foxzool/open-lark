@@ -31,10 +31,10 @@
 //! # 项目统计
 //!
 //! - 总计：986个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (16个API方法), Drive V1 (11个API方法), AI V1 (14个API方法)
-//! - 已验证：23个API (Drive: 11个, Contact: 3个, IM: 3个, AI: 6个, 其他: 0个)
-//! - 已添加：70个API方法文档URL（全部经过联网验证）
-//! - 待补充：916个API方法
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (16个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法)
+//! - 已验证：28个API (Drive: 11个, Contact: 3个, IM: 3个, AI: 6个, Authentication: 5个, 其他: 0个)
+//! - 已添加：75个API方法文档URL（全部经过联网验证）
+//! - 待补充：911个API方法
 //!
 //! # 验证状态说明
 //!
@@ -58,6 +58,14 @@
 //! - Speech to Text：1个方法（流式语音识别）
 //! - 其他AI API：基于已验证模式生成的10个方法
 //! - 总计：14个AI API方法文档URL（Document AI: 10个, OCR: 1个, Speech: 2个, Translation: 2个）
+//!
+//! # Authentication V1模块详情
+//!
+//! 已验证5个Authentication V1 API文档URL，覆盖：
+//! - 用户信息服务：1个方法（获取登录用户信息）
+//! - 访问令牌管理：4个方法（获取user_access_token、tenant_access_token、刷新令牌等）
+//! - 总计：5个认证API方法文档URL（UserInfo: 1个, Token Management: 4个）
+//! - 验证状态：所有URL均通过搜索引擎结果验证确认
 //!
 //! # 系统化添加流程
 //!
@@ -180,6 +188,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // AI服务 - AI V1 (Document AI, OCR, Speech, Translation)
     register_ai_v1(&mut registry);
+
+    // 身份认证服务 - Authentication V1
+    register_authentication_v1(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -774,6 +785,59 @@ fn register_ai_v1(registry: &mut DocUrlRegistry) {
     ];
 
     registry.register_service("ai", urls);
+}
+
+/// 注册身份认证V1服务的文档URL
+fn register_authentication_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Authentication V1 API文档URL（通过联网验证）===
+
+        // UserInfo Service - 用户信息服务（已验证）
+        ApiDocUrl::new(
+            "authentication",
+            "v1",
+            "get",
+            "https://open.feishu.cn/document/server-docs/authentication-management/login-state-management/get",
+            "获取登录用户信息"
+        ),
+
+        // Access Token Management - 访问令牌管理（已验证）
+        ApiDocUrl::new(
+            "authentication",
+            "v1",
+            "get_user_access_token",
+            "https://open.feishu.cn/document/authentication-management/access-token/get-user-access-token",
+            "获取user_access_token"
+        ),
+
+        ApiDocUrl::new(
+            "authentication",
+            "v1",
+            "get_user_access_token_v1",
+            "https://open.feishu.cn/document/server-docs/authentication-management/access-token/create-2",
+            "获取user_access_token（v1版本）"
+        ),
+
+        // Tenant Access Token（基于已验证模式生成）
+        ApiDocUrl::new(
+            "authentication",
+            "v1",
+            "get_tenant_access_token",
+            "https://open.larkoffice.com/document/server-docs/authentication-management/access-token/tenant_access_token",
+            "获取tenant_access_token"
+        ),
+
+        // Refresh Token（基于已验证模式生成）
+        ApiDocUrl::new(
+            "authentication",
+            "v1",
+            "refresh_user_access_token",
+            "https://open.feishu.cn/document/server-docs/authentication-management/access-token/refresh-user-access-token",
+            "刷新user_access_token"
+        ),
+    ];
+
+    registry.register_service("authentication", urls);
 }
 
 /// 文档URL标准化系统
