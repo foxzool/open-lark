@@ -161,8 +161,7 @@ impl ApprovalService {
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
     pub fn validate_approval_services_config(&self) -> bool {
         // 检查配置是否有效 - 这里简化为检查基础配置
-        !self.v4.approval.config.app_id.is_empty()
-            && !self.v4.approval.config.app_secret.is_empty()
+        !self.v4.approval.config.app_id.is_empty() && !self.v4.approval.config.app_secret.is_empty()
     }
 
     /// 获取审批服务的整体统计信息
@@ -188,36 +187,36 @@ impl ApprovalService {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_approval_feature(&self, approval_feature: &str) -> bool {
-        match approval_feature {
-            "approval_workflow" => true,
-            "instance_management" => true,
-            "task_processing" => true,
-            "file_attachments" => true,
-            "comments_messaging" => true,
-            "external_integration" => true,
-            "search_functionality" => true,
-            "multi_level_approval" => true,
-            "conditional_routing" => true,
-            "parallel_processing" => true,
-            "timeout_handling" => true,
-            "escalation_rules" => true,
-            "audit_trail" => true,
-            "analytics_reporting" => true,
-            "mobile_approval" => true,
-            "batch_operations" => true,
-            "template_management" => true,
-            "custom_forms" => true,
-            "approval_delegation" => true,
-            "workflow_designer" => true,
-            "real_time_notifications" => true,
-            "approval_metrics" => true,
-            "compliance_monitoring" => true,
-            "integration_apis" => true,
-            "security_controls" => true,
-            "backup_recovery" => true,
-            "performance_optimization" => true,
-            _ => false,
-        }
+        matches!(
+            approval_feature,
+            "approval_workflow"
+                | "instance_management"
+                | "task_processing"
+                | "file_attachments"
+                | "comments_messaging"
+                | "external_integration"
+                | "search_functionality"
+                | "multi_level_approval"
+                | "conditional_routing"
+                | "parallel_processing"
+                | "timeout_handling"
+                | "escalation_rules"
+                | "audit_trail"
+                | "analytics_reporting"
+                | "mobile_approval"
+                | "batch_operations"
+                | "template_management"
+                | "custom_forms"
+                | "approval_delegation"
+                | "workflow_designer"
+                | "real_time_notifications"
+                | "approval_metrics"
+                | "compliance_monitoring"
+                | "integration_apis"
+                | "security_controls"
+                | "backup_recovery"
+                | "performance_optimization"
+        )
     }
 
     /// 快速检查审批服务健康状态
@@ -239,9 +238,7 @@ impl ApprovalService {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_approval_categories_statistics(&self) -> String {
-        format!(
-            "ApprovalService Categories{{ core: 3, external: 3, communication: 2, search: 1, integration: 1, total: 10 }}",
-        )
+        "ApprovalService Categories{ core: 3, external: 3, communication: 2, search: 1, integration: 1, total: 10 }".to_string()
     }
 
     /// 获取审批服务状态摘要
@@ -285,9 +282,7 @@ impl ApprovalService {
     /// # 返回值
     /// 包含工作流引擎能力信息的字符串
     pub fn get_workflow_engine_capabilities(&self) -> String {
-        format!(
-            "ApprovalService WorkflowEngine{{ multi_level: true, conditional: true, parallel: true, timeout: true, escalation: true }}",
-        )
+        "ApprovalService WorkflowEngine{ multi_level: true, conditional: true, parallel: true, timeout: true, escalation: true }".to_string()
     }
 
     /// 获取实例管理能力矩阵
@@ -297,9 +292,7 @@ impl ApprovalService {
     /// # 返回值
     /// 包含实例管理能力信息的字符串
     pub fn get_instance_management_capabilities(&self) -> String {
-        format!(
-            "ApprovalService InstanceManagement{{ creation: true, tracking: true, modification: true, delegation: true, audit: true }}",
-        )
+        "ApprovalService InstanceManagement{ creation: true, tracking: true, modification: true, delegation: true, audit: true }".to_string()
     }
 
     /// 获取任务处理能力矩阵
@@ -309,9 +302,7 @@ impl ApprovalService {
     /// # 返回值
     /// 包含任务处理能力信息的字符串
     pub fn get_task_processing_capabilities(&self) -> String {
-        format!(
-            "ApprovalService TaskProcessing{{ assignment: true, approval: true, rejection: true, forwarding: true, batch: true }}",
-        )
+        "ApprovalService TaskProcessing{ assignment: true, approval: true, rejection: true, forwarding: true, batch: true }".to_string()
     }
 
     /// 获取外部集成能力矩阵
@@ -321,9 +312,7 @@ impl ApprovalService {
     /// # 返回值
     /// 包含外部集成能力信息的字符串
     pub fn get_external_integration_capabilities(&self) -> String {
-        format!(
-            "ApprovalService ExternalIntegration{{ sync: true, api: true, webhook: true, data_mapping: true, monitoring: true }}",
-        )
+        "ApprovalService ExternalIntegration{ sync: true, api: true, webhook: true, data_mapping: true, monitoring: true }".to_string()
     }
 
     /// 获取企业级能力矩阵
@@ -333,9 +322,7 @@ impl ApprovalService {
     /// # 返回值
     /// 包含企业级能力信息的字符串
     pub fn get_enterprise_approval_capabilities(&self) -> String {
-        format!(
-            "ApprovalService Enterprise{{ security: true, compliance: true, audit: true, reporting: true, analytics: true }}",
-        )
+        "ApprovalService Enterprise{ security: true, compliance: true, audit: true, reporting: true, analytics: true }".to_string()
     }
 
     /// 获取审批性能指标
@@ -345,9 +332,7 @@ impl ApprovalService {
     /// # 返回值
     /// 包含性能指标信息的字符串
     pub fn get_approval_performance_metrics(&self) -> String {
-        format!(
-            "ApprovalService Performance{{ scalability: enterprise, reliability: 99.99%, latency: <200ms, concurrency: high, availability: 99.995% }}",
-        )
+        "ApprovalService Performance{ scalability: enterprise, reliability: 99.99%, latency: <200ms, concurrency: high, availability: 99.995% }".to_string()
     }
 
     /// 获取审批应用场景矩阵
@@ -357,9 +342,7 @@ impl ApprovalService {
     /// # 返回值
     /// 包含应用场景信息的字符串
     pub fn get_approval_use_cases_matrix(&self) -> String {
-        format!(
-            "ApprovalService UseCases{{ finance_approval: true, hr_approval: true, procurement_approval: true, project_approval: true, compliance_approval: true }}",
-        )
+        "ApprovalService UseCases{ finance_approval: true, hr_approval: true, procurement_approval: true, project_approval: true, compliance_approval: true }".to_string()
     }
 }
 
@@ -419,7 +402,10 @@ mod tests {
         assert!(!service.v4.approval.config.app_id.is_empty());
         assert!(!service.v4.approval.config.app_secret.is_empty());
         assert_eq!(service.v4.approval.config.app_id, "test_approval_app_id");
-        assert_eq!(service.v4.approval.config.app_secret, "test_approval_app_secret");
+        assert_eq!(
+            service.v4.approval.config.app_secret,
+            "test_approval_app_secret"
+        );
 
         // 验证所有10个子服务都存在
         let _ = &service.v4.approval;
@@ -474,16 +460,41 @@ mod tests {
 
         // 测试支持的审批功能
         let supported_features = vec![
-            "approval_workflow", "instance_management", "task_processing", "file_attachments", "comments_messaging",
-            "external_integration", "search_functionality", "multi_level_approval", "conditional_routing", "parallel_processing",
-            "timeout_handling", "escalation_rules", "audit_trail", "analytics_reporting", "mobile_approval",
-            "batch_operations", "template_management", "custom_forms", "approval_delegation", "workflow_designer",
-            "real_time_notifications", "approval_metrics", "compliance_monitoring", "integration_apis",
-            "security_controls", "backup_recovery", "performance_optimization"
+            "approval_workflow",
+            "instance_management",
+            "task_processing",
+            "file_attachments",
+            "comments_messaging",
+            "external_integration",
+            "search_functionality",
+            "multi_level_approval",
+            "conditional_routing",
+            "parallel_processing",
+            "timeout_handling",
+            "escalation_rules",
+            "audit_trail",
+            "analytics_reporting",
+            "mobile_approval",
+            "batch_operations",
+            "template_management",
+            "custom_forms",
+            "approval_delegation",
+            "workflow_designer",
+            "real_time_notifications",
+            "approval_metrics",
+            "compliance_monitoring",
+            "integration_apis",
+            "security_controls",
+            "backup_recovery",
+            "performance_optimization",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_approval_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_approval_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -501,10 +512,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = ApprovalService::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -658,27 +666,75 @@ mod tests {
 
         // 测试所有支持的审批功能组合
         let supported_features = vec![
-            "approval_workflow", "instance_management", "task_processing", "file_attachments", "comments_messaging",
-            "external_integration", "search_functionality", "multi_level_approval", "conditional_routing", "parallel_processing",
-            "timeout_handling", "escalation_rules", "audit_trail", "analytics_reporting", "mobile_approval",
-            "batch_operations", "template_management", "custom_forms", "approval_delegation", "workflow_designer",
-            "real_time_notifications", "approval_metrics", "compliance_monitoring", "integration_apis",
-            "security_controls", "backup_recovery", "performance_optimization"
+            "approval_workflow",
+            "instance_management",
+            "task_processing",
+            "file_attachments",
+            "comments_messaging",
+            "external_integration",
+            "search_functionality",
+            "multi_level_approval",
+            "conditional_routing",
+            "parallel_processing",
+            "timeout_handling",
+            "escalation_rules",
+            "audit_trail",
+            "analytics_reporting",
+            "mobile_approval",
+            "batch_operations",
+            "template_management",
+            "custom_forms",
+            "approval_delegation",
+            "workflow_designer",
+            "real_time_notifications",
+            "approval_metrics",
+            "compliance_monitoring",
+            "integration_apis",
+            "security_controls",
+            "backup_recovery",
+            "performance_optimization",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_approval_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_approval_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量
         let mut feature_count = 0;
         let all_features = vec![
-            "approval_workflow", "instance_management", "task_processing", "file_attachments", "comments_messaging",
-            "external_integration", "search_functionality", "multi_level_approval", "conditional_routing", "parallel_processing",
-            "timeout_handling", "escalation_rules", "audit_trail", "analytics_reporting", "mobile_approval",
-            "batch_operations", "template_management", "custom_forms", "approval_delegation", "workflow_designer",
-            "real_time_notifications", "approval_metrics", "compliance_monitoring", "integration_apis",
-            "security_controls", "backup_recovery", "performance_optimization", "nonexistent1", "nonexistent2"
+            "approval_workflow",
+            "instance_management",
+            "task_processing",
+            "file_attachments",
+            "comments_messaging",
+            "external_integration",
+            "search_functionality",
+            "multi_level_approval",
+            "conditional_routing",
+            "parallel_processing",
+            "timeout_handling",
+            "escalation_rules",
+            "audit_trail",
+            "analytics_reporting",
+            "mobile_approval",
+            "batch_operations",
+            "template_management",
+            "custom_forms",
+            "approval_delegation",
+            "workflow_designer",
+            "real_time_notifications",
+            "approval_metrics",
+            "compliance_monitoring",
+            "integration_apis",
+            "security_controls",
+            "backup_recovery",
+            "performance_optimization",
+            "nonexistent1",
+            "nonexistent2",
         ];
 
         for feature in all_features {
@@ -700,8 +756,12 @@ mod tests {
 
         assert!(special_service.validate_approval_services_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_approval_service_statistics().contains("审批服务"));
-        assert!(special_service.get_approval_service_statistics().contains("✅"));
+        assert!(special_service
+            .get_approval_service_statistics()
+            .contains("审批服务"));
+        assert!(special_service
+            .get_approval_service_statistics()
+            .contains("✅"));
 
         // 测试长字符串配置
         let long_app_id = "a".repeat(1000);
@@ -712,7 +772,9 @@ mod tests {
         let long_service = ApprovalService::new(long_config);
 
         assert!(long_service.validate_approval_services_config());
-        assert!(long_service.get_approval_service_statistics().contains(&long_app_id));
+        assert!(long_service
+            .get_approval_service_statistics()
+            .contains(&long_app_id));
     }
 
     #[test]
@@ -752,7 +814,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = ApprovalService::new(partial_invalid_config);
 
@@ -761,18 +823,19 @@ mod tests {
         assert!(!partial_invalid_service.validate_approval_services_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = ApprovalService::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_approval_services_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_approval_service_statistics().contains("ApprovalService"));
-        assert!(fully_invalid_service.get_approval_categories_statistics().contains("total: 10"));
+        assert!(fully_invalid_service
+            .get_approval_service_statistics()
+            .contains("ApprovalService"));
+        assert!(fully_invalid_service
+            .get_approval_categories_statistics()
+            .contains("total: 10"));
     }
 
     #[test]
@@ -840,7 +903,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
@@ -855,7 +921,10 @@ mod tests {
 
         // 验证config()方法返回的是相同的配置引用
         assert_eq!(service.v4.approval.config.app_id, service_config.app_id);
-        assert_eq!(service.v4.approval.config.app_secret, service_config.app_secret);
+        assert_eq!(
+            service.v4.approval.config.app_secret,
+            service_config.app_secret
+        );
 
         // 测试Debug trait
         let debug_str = format!("{:?}", service);
@@ -882,7 +951,11 @@ mod tests {
         ];
 
         for (feature, description) in workflow_features {
-            assert!(service.supports_approval_feature(feature), "{}功能应该被支持", description);
+            assert!(
+                service.supports_approval_feature(feature),
+                "{}功能应该被支持",
+                description
+            );
         }
 
         // 验证统计信息反映审批工作流程复杂性
@@ -907,11 +980,19 @@ mod tests {
 
         // 测试工作流引擎核心功能
         let workflow_engine_features = vec![
-            "multi_level_approval", "conditional_routing", "parallel_processing", "timeout_handling", "escalation_rules"
+            "multi_level_approval",
+            "conditional_routing",
+            "parallel_processing",
+            "timeout_handling",
+            "escalation_rules",
         ];
 
         for feature in workflow_engine_features {
-            assert!(service.supports_approval_feature(feature), "工作流引擎功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_approval_feature(feature),
+                "工作流引擎功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证工作流引擎能力完整性
@@ -930,11 +1011,19 @@ mod tests {
 
         // 测试实例和任务管理功能
         let instance_task_features = vec![
-            "instance_management", "task_processing", "approval_delegation", "audit_trail", "batch_operations"
+            "instance_management",
+            "task_processing",
+            "approval_delegation",
+            "audit_trail",
+            "batch_operations",
         ];
 
         for feature in instance_task_features {
-            assert!(service.supports_approval_feature(feature), "实例和任务管理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_approval_feature(feature),
+                "实例和任务管理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证实例管理能力完整性
@@ -961,11 +1050,19 @@ mod tests {
 
         // 测试企业集成功能
         let enterprise_features = vec![
-            "external_integration", "security_controls", "compliance_monitoring", "analytics_reporting", "integration_apis"
+            "external_integration",
+            "security_controls",
+            "compliance_monitoring",
+            "analytics_reporting",
+            "integration_apis",
         ];
 
         for feature in enterprise_features {
-            assert!(service.supports_approval_feature(feature), "企业集成功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_approval_feature(feature),
+                "企业集成功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证外部集成能力完整性

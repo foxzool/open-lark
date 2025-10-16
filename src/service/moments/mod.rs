@@ -214,33 +214,33 @@ impl MomentsService {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_moments_feature(&self, feature: &str) -> bool {
-        match feature {
-            "post_management" => true,
-            "event_handling" => true,
-            "content_interaction" => true,
-            "statistics_tracking" => true,
-            "enterprise_social" => true,
-            "content_moderation" => true,
-            "real_time_notifications" => true,
-            "engagement_analytics" => true,
-            "media_attachments" => true,
-            "visibility_control" => true,
-            "comment_system" => true,
-            "reaction_system" => true,
-            "content_sharing" => true,
-            "search_functionality" => true,
-            "user_tagging" => true,
-            "hashtag_support" => true,
-            "post_scheduling" => true,
-            "content_drafts" => true,
-            "engagement_metrics" => true,
-            "user_activity_tracking" => true,
-            "api_access" => true,
-            "webhook_support" => true,
-            "content_filters" => true,
-            "access_control" => true,
-            _ => false,
-        }
+        matches!(
+            feature,
+            "post_management"
+                | "event_handling"
+                | "content_interaction"
+                | "statistics_tracking"
+                | "enterprise_social"
+                | "content_moderation"
+                | "real_time_notifications"
+                | "engagement_analytics"
+                | "media_attachments"
+                | "visibility_control"
+                | "comment_system"
+                | "reaction_system"
+                | "content_sharing"
+                | "search_functionality"
+                | "user_tagging"
+                | "hashtag_support"
+                | "post_scheduling"
+                | "content_drafts"
+                | "engagement_metrics"
+                | "user_activity_tracking"
+                | "api_access"
+                | "webhook_support"
+                | "content_filters"
+                | "access_control"
+        )
     }
 
     /// 获取公司圈功能矩阵
@@ -249,7 +249,9 @@ impl MomentsService {
     ///
     /// # 返回值
     /// 包含功能状态信息的字典
-    pub fn get_moments_features_matrix(&self) -> std::collections::HashMap<String, std::collections::HashMap<String, String>> {
+    pub fn get_moments_features_matrix(
+        &self,
+    ) -> std::collections::HashMap<String, std::collections::HashMap<String, String>> {
         let mut features = std::collections::HashMap::new();
 
         // 内容管理功能
@@ -348,7 +350,10 @@ impl MomentsService {
         let mut summary = std::collections::HashMap::new();
 
         summary.insert("service_name".to_string(), "Moments".to_string());
-        summary.insert("service_type".to_string(), "Enterprise Social Platform".to_string());
+        summary.insert(
+            "service_type".to_string(),
+            "Enterprise Social Platform".to_string(),
+        );
         summary.insert("app_id".to_string(), self.post.config.app_id.clone());
         summary.insert("base_url".to_string(), self.post.config.base_url.clone());
         summary.insert("service_count".to_string(), "2".to_string());
@@ -451,18 +456,12 @@ mod tests {
         assert!(service.validate_moments_config().is_ok());
 
         // Test with invalid configuration (missing app_id)
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("secret")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("secret").build();
         let invalid_service = MomentsService::new(invalid_config);
         assert!(invalid_service.validate_moments_config().is_err());
 
         // Test with invalid configuration (missing app_secret)
-        let invalid_config2 = Config::builder()
-            .app_id("app")
-            .app_secret("")
-            .build();
+        let invalid_config2 = Config::builder().app_id("app").app_secret("").build();
         let invalid_service2 = MomentsService::new(invalid_config2);
         assert!(invalid_service2.validate_moments_config().is_err());
     }
@@ -537,7 +536,10 @@ mod tests {
         let summary = service.get_config_summary();
 
         assert_eq!(summary.get("service_name").unwrap(), "Moments");
-        assert_eq!(summary.get("service_type").unwrap(), "Enterprise Social Platform");
+        assert_eq!(
+            summary.get("service_type").unwrap(),
+            "Enterprise Social Platform"
+        );
         assert_eq!(summary.get("app_id").unwrap(), "moments_test_app");
         assert_eq!(summary.get("service_count").unwrap(), "2");
         assert_eq!(summary.get("supported_features").unwrap(), "25");
@@ -591,7 +593,10 @@ mod tests {
         assert_eq!(service.post.config.app_id, "custom_moments_app");
         assert_eq!(service.post.config.app_secret, "custom_moments_secret");
         assert_eq!(service.post.config.base_url, "https://custom.example.com");
-        assert_eq!(service.post.config.req_timeout, Some(Duration::from_secs(300)));
+        assert_eq!(
+            service.post.config.req_timeout,
+            Some(Duration::from_secs(300))
+        );
     }
 
     #[test]
@@ -608,10 +613,7 @@ mod tests {
         let service1 = MomentsService::new(config1);
         let service2 = MomentsService::new(config2);
 
-        assert_ne!(
-            service1.post.config.app_id,
-            service2.post.config.app_id
-        );
+        assert_ne!(service1.post.config.app_id, service2.post.config.app_id);
         assert_ne!(
             service1.post.config.app_secret,
             service2.post.config.app_secret
@@ -646,10 +648,7 @@ mod tests {
     #[test]
     fn test_moments_service_error_handling_and_robustness() {
         // Test with empty configuration
-        let empty_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let empty_config = Config::builder().app_id("").app_secret("").build();
         let empty_service = MomentsService::new(empty_config);
 
         let validation_result = empty_service.validate_moments_config();

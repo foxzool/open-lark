@@ -1,4 +1,4 @@
-use crate::core::{config::Config, req_option::RequestOption, SDKResult, trait_system::Service};
+use crate::core::{config::Config, req_option::RequestOption, trait_system::Service, SDKResult};
 
 pub use search_wiki::{search_wiki, SearchWikiRequest, SearchWikiResponse, WikiSearchItem};
 pub use space::SpaceService;
@@ -96,7 +96,6 @@ impl V2 {
         }
     }
 
-    
     /// 搜索Wiki内容
     ///
     /// 在知识空间中进行全文搜索，支持关键词、标签、作者等多种搜索方式。
@@ -159,24 +158,24 @@ impl V2 {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_feature(&self, feature_name: &str) -> bool {
-        match feature_name {
-            "space_management" => true,
-            "member_collaboration" => true,
-            "node_hierarchy" => true,
-            "space_settings" => true,
-            "task_management" => true,
-            "full_text_search" => true,
-            "access_control" => true,
-            "version_control" => true,
-            "collaborative_editing" => true,
-            "knowledge_sharing" => true,
-            "document_organizing" => true,
-            "enterprise_wiki" => true,
-            "team_collaboration" => true,
-            "content_management" => true,
-            "permission_management" => true,
-            _ => false,
-        }
+        matches!(
+            feature_name,
+            "space_management"
+                | "member_collaboration"
+                | "node_hierarchy"
+                | "space_settings"
+                | "task_management"
+                | "full_text_search"
+                | "access_control"
+                | "version_control"
+                | "collaborative_editing"
+                | "knowledge_sharing"
+                | "document_organizing"
+                | "enterprise_wiki"
+                | "team_collaboration"
+                | "content_management"
+                | "permission_management"
+        )
     }
 
     /// 快速检查服务健康状态
@@ -198,9 +197,7 @@ impl V2 {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_service_categories_statistics(&self) -> String {
-        format!(
-            "WikiV2 Categories{{ core: 4, task: 1, total: 5 }}",
-        )
+        "WikiV2 Categories{ core: 4, task: 1, total: 5 }".to_string()
     }
 
     /// 获取Wiki服务状态摘要
@@ -211,12 +208,14 @@ impl V2 {
     /// 包含各服务状态信息的字符串
     pub fn get_service_status_summary(&self) -> String {
         let core_healthy = !self.config.app_id.is_empty();
-        let space_healthy = self.config.app_id == self.config.app_id;
-        let collaboration_healthy = self.config.app_secret == self.config.app_secret;
+        let space_healthy = core_healthy;
+        let collaboration_healthy = core_healthy;
 
         format!(
             "WikiV2 Status{{ core: {}, space: {}, collaboration: {}, overall: {} }}",
-            core_healthy, space_healthy, collaboration_healthy,
+            core_healthy,
+            space_healthy,
+            collaboration_healthy,
             core_healthy && space_healthy && collaboration_healthy
         )
     }
@@ -229,9 +228,24 @@ impl V2 {
     /// 包含支持的内容类型的向量
     pub fn get_supported_content_types(&self) -> Vec<&'static str> {
         vec![
-            "document", "markdown", "rich_text", "spreadsheet", "slide", "mindmap",
-            "flowchart", "image", "video", "audio", "attachment", "link", "code",
-            "table", "formula", "diagram", "template", "form"
+            "document",
+            "markdown",
+            "rich_text",
+            "spreadsheet",
+            "slide",
+            "mindmap",
+            "flowchart",
+            "image",
+            "video",
+            "audio",
+            "attachment",
+            "link",
+            "code",
+            "table",
+            "formula",
+            "diagram",
+            "template",
+            "form",
         ]
     }
 
@@ -299,6 +313,7 @@ mod tests {
     }
 
     /// 创建测试用的共享配置
+    #[allow(dead_code)]
     fn create_shared_test_config() -> std::sync::Arc<Config> {
         std::sync::Arc::new(create_test_config())
     }
@@ -315,7 +330,6 @@ mod tests {
         assert!(!service.config.app_secret.is_empty());
     }
 
-    
     #[test]
     fn test_wiki_v2_validate_services_config() {
         let config = create_test_config();
@@ -355,14 +369,29 @@ mod tests {
 
         // 测试支持的功能
         let supported_features = vec![
-            "space_management", "member_collaboration", "node_hierarchy", "space_settings",
-            "task_management", "full_text_search", "access_control", "version_control",
-            "collaborative_editing", "knowledge_sharing", "document_organizing", "enterprise_wiki",
-            "team_collaboration", "content_management", "permission_management"
+            "space_management",
+            "member_collaboration",
+            "node_hierarchy",
+            "space_settings",
+            "task_management",
+            "full_text_search",
+            "access_control",
+            "version_control",
+            "collaborative_editing",
+            "knowledge_sharing",
+            "document_organizing",
+            "enterprise_wiki",
+            "team_collaboration",
+            "content_management",
+            "permission_management",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -380,10 +409,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = V2::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -487,23 +513,51 @@ mod tests {
 
         // 测试所有支持的功能组合
         let supported_features = vec![
-            "space_management", "member_collaboration", "node_hierarchy", "space_settings",
-            "task_management", "full_text_search", "access_control", "version_control",
-            "collaborative_editing", "knowledge_sharing", "document_organizing", "enterprise_wiki",
-            "team_collaboration", "content_management", "permission_management"
+            "space_management",
+            "member_collaboration",
+            "node_hierarchy",
+            "space_settings",
+            "task_management",
+            "full_text_search",
+            "access_control",
+            "version_control",
+            "collaborative_editing",
+            "knowledge_sharing",
+            "document_organizing",
+            "enterprise_wiki",
+            "team_collaboration",
+            "content_management",
+            "permission_management",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量
         let mut feature_count = 0;
         let all_features = vec![
-            "space_management", "member_collaboration", "node_hierarchy", "space_settings",
-            "task_management", "full_text_search", "access_control", "version_control",
-            "collaborative_editing", "knowledge_sharing", "document_organizing", "enterprise_wiki",
-            "team_collaboration", "content_management", "permission_management", "nonexistent1", "nonexistent2"
+            "space_management",
+            "member_collaboration",
+            "node_hierarchy",
+            "space_settings",
+            "task_management",
+            "full_text_search",
+            "access_control",
+            "version_control",
+            "collaborative_editing",
+            "knowledge_sharing",
+            "document_organizing",
+            "enterprise_wiki",
+            "team_collaboration",
+            "content_management",
+            "permission_management",
+            "nonexistent1",
+            "nonexistent2",
         ];
 
         for feature in all_features {
@@ -525,7 +579,9 @@ mod tests {
 
         assert!(special_service.validate_services_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_service_statistics().contains("Wiki服务"));
+        assert!(special_service
+            .get_service_statistics()
+            .contains("Wiki服务"));
         assert!(special_service.get_service_statistics().contains("📚"));
 
         // 测试长字符串配置
@@ -635,7 +691,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = V2::new(partial_invalid_config);
 
@@ -644,18 +700,19 @@ mod tests {
         assert!(!partial_invalid_service.validate_services_config()); // app_secret为空，验证应该失败
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = V2::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_services_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_service_statistics().contains("WikiV2"));
-        assert!(fully_invalid_service.get_service_categories_statistics().contains("total: 5"));
+        assert!(fully_invalid_service
+            .get_service_statistics()
+            .contains("WikiV2"));
+        assert!(fully_invalid_service
+            .get_service_categories_statistics()
+            .contains("total: 5"));
     }
 
     #[test]
@@ -720,7 +777,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]

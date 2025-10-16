@@ -188,11 +188,20 @@ impl ELearningService {
         // 服务配置信息
         stats.insert("service_name".to_string(), "ELearning".to_string());
         stats.insert("service_version".to_string(), "v1".to_string());
-        stats.insert("app_id".to_string(), self.course_registration.config.app_id.clone());
-        stats.insert("base_url".to_string(), self.course_registration.config.base_url.clone());
+        stats.insert(
+            "app_id".to_string(),
+            self.course_registration.config.app_id.clone(),
+        );
+        stats.insert(
+            "base_url".to_string(),
+            self.course_registration.config.base_url.clone(),
+        );
 
         // 子服务状态
-        stats.insert("course_registration_service".to_string(), "active".to_string());
+        stats.insert(
+            "course_registration_service".to_string(),
+            "active".to_string(),
+        );
 
         // 功能支持
         stats.insert("course_management".to_string(), "enabled".to_string());
@@ -204,7 +213,10 @@ impl ELearningService {
         stats.insert("personalized_learning".to_string(), "enabled".to_string());
         stats.insert("skill_development".to_string(), "enabled".to_string());
         stats.insert("performance_tracking".to_string(), "enabled".to_string());
-        stats.insert("certification_management".to_string(), "enabled".to_string());
+        stats.insert(
+            "certification_management".to_string(),
+            "enabled".to_string(),
+        );
 
         stats
     }
@@ -217,29 +229,29 @@ impl ELearningService {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_elearning_feature(&self, feature: &str) -> bool {
-        match feature {
-            "course_management" => true,
-            "progress_tracking" => true,
-            "learning_analytics" => true,
-            "training_management" => true,
-            "personalized_learning" => true,
-            "skill_development" => true,
-            "performance_tracking" => true,
-            "certification_management" => true,
-            "batch_operations" => true,
-            "real_time_updates" => true,
-            "multi_device_sync" => true,
-            "learning_reminders" => true,
-            "adaptive_learning" => true,
-            "learning_paths" => true,
-            "assessment_tools" => true,
-            "content_management" => true,
-            "user_management" => true,
-            "reporting_analytics" => true,
-            "integration_support" => true,
-            "api_access" => true,
-            _ => false,
-        }
+        matches!(
+            feature,
+            "course_management"
+                | "progress_tracking"
+                | "learning_analytics"
+                | "training_management"
+                | "personalized_learning"
+                | "skill_development"
+                | "performance_tracking"
+                | "certification_management"
+                | "batch_operations"
+                | "real_time_updates"
+                | "multi_device_sync"
+                | "learning_reminders"
+                | "adaptive_learning"
+                | "learning_paths"
+                | "assessment_tools"
+                | "content_management"
+                | "user_management"
+                | "reporting_analytics"
+                | "integration_support"
+                | "api_access"
+        )
     }
 
     /// 获取在线学习功能矩阵
@@ -248,7 +260,9 @@ impl ELearningService {
     ///
     /// # 返回值
     /// 包含功能状态信息的字典
-    pub fn get_elearning_features_matrix(&self) -> std::collections::HashMap<String, std::collections::HashMap<String, String>> {
+    pub fn get_elearning_features_matrix(
+        &self,
+    ) -> std::collections::HashMap<String, std::collections::HashMap<String, String>> {
         let mut features = std::collections::HashMap::new();
 
         // 课程管理功能
@@ -281,7 +295,10 @@ impl ELearningService {
         // 培训管理功能
         let mut training = std::collections::HashMap::new();
         training.insert("training_management".to_string(), "✅ 支持".to_string());
-        training.insert("certification_management".to_string(), "✅ 支持".to_string());
+        training.insert(
+            "certification_management".to_string(),
+            "✅ 支持".to_string(),
+        );
         training.insert("user_management".to_string(), "✅ 支持".to_string());
         training.insert("assessment_tools".to_string(), "✅ 支持".to_string());
         training.insert("reporting_analytics".to_string(), "✅ 支持".to_string());
@@ -312,7 +329,10 @@ impl ELearningService {
         match self.validate_elearning_config() {
             Ok(_) => {
                 health.insert("status".to_string(), "healthy".to_string());
-                health.insert("course_registration_service".to_string(), "available".to_string());
+                health.insert(
+                    "course_registration_service".to_string(),
+                    "available".to_string(),
+                );
             }
             Err(msg) => {
                 health.insert("status".to_string(), "unhealthy".to_string());
@@ -337,9 +357,18 @@ impl ELearningService {
         let mut summary = std::collections::HashMap::new();
 
         summary.insert("service_name".to_string(), "ELearning".to_string());
-        summary.insert("service_type".to_string(), "Online Learning Management".to_string());
-        summary.insert("app_id".to_string(), self.course_registration.config.app_id.clone());
-        summary.insert("base_url".to_string(), self.course_registration.config.base_url.clone());
+        summary.insert(
+            "service_type".to_string(),
+            "Online Learning Management".to_string(),
+        );
+        summary.insert(
+            "app_id".to_string(),
+            self.course_registration.config.app_id.clone(),
+        );
+        summary.insert(
+            "base_url".to_string(),
+            self.course_registration.config.base_url.clone(),
+        );
         summary.insert("service_count".to_string(), "1".to_string());
         summary.insert("supported_features".to_string(), "20".to_string());
 
@@ -348,7 +377,10 @@ impl ELearningService {
             summary.insert("request_timeout".to_string(), format!("{:?}", timeout));
         }
 
-        summary.insert("course_registration_service".to_string(), "enabled".to_string());
+        summary.insert(
+            "course_registration_service".to_string(),
+            "enabled".to_string(),
+        );
 
         summary
     }
@@ -371,7 +403,9 @@ impl Service for ELearningService {
 impl Clone for ELearningService {
     fn clone(&self) -> Self {
         Self {
-            course_registration: CourseRegistrationService::new(self.course_registration.config.clone()),
+            course_registration: CourseRegistrationService::new(
+                self.course_registration.config.clone(),
+            ),
         }
     }
 }
@@ -405,7 +439,10 @@ mod tests {
         let service = ELearningService::new(config.clone());
 
         assert_eq!(service.course_registration.config.app_id, config.app_id);
-        assert_eq!(service.course_registration.config.app_secret, config.app_secret);
+        assert_eq!(
+            service.course_registration.config.app_secret,
+            config.app_secret
+        );
     }
 
     #[test]
@@ -437,18 +474,12 @@ mod tests {
         assert!(service.validate_elearning_config().is_ok());
 
         // Test with invalid configuration (missing app_id)
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("secret")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("secret").build();
         let invalid_service = ELearningService::new(invalid_config);
         assert!(invalid_service.validate_elearning_config().is_err());
 
         // Test with invalid configuration (missing app_secret)
-        let invalid_config2 = Config::builder()
-            .app_id("app")
-            .app_secret("")
-            .build();
+        let invalid_config2 = Config::builder().app_id("app").app_secret("").build();
         let invalid_service2 = ELearningService::new(invalid_config2);
         assert!(invalid_service2.validate_elearning_config().is_err());
     }
@@ -506,7 +537,10 @@ mod tests {
         let health = service.health_check();
 
         assert_eq!(health.get("status").unwrap(), "healthy");
-        assert_eq!(health.get("course_registration_service").unwrap(), "available");
+        assert_eq!(
+            health.get("course_registration_service").unwrap(),
+            "available"
+        );
         assert_eq!(health.get("service_version").unwrap(), "v1");
         assert!(health.contains_key("timestamp"));
     }
@@ -517,11 +551,17 @@ mod tests {
         let summary = service.get_config_summary();
 
         assert_eq!(summary.get("service_name").unwrap(), "ELearning");
-        assert_eq!(summary.get("service_type").unwrap(), "Online Learning Management");
+        assert_eq!(
+            summary.get("service_type").unwrap(),
+            "Online Learning Management"
+        );
         assert_eq!(summary.get("app_id").unwrap(), "elearning_test_app");
         assert_eq!(summary.get("service_count").unwrap(), "1");
         assert_eq!(summary.get("supported_features").unwrap(), "20");
-        assert_eq!(summary.get("course_registration_service").unwrap(), "enabled");
+        assert_eq!(
+            summary.get("course_registration_service").unwrap(),
+            "enabled"
+        );
     }
 
     #[test]
@@ -550,7 +590,10 @@ mod tests {
 
         // Check personalization features
         let personalization = features.get("个性化学习功能").unwrap();
-        assert_eq!(personalization.get("personalized_learning").unwrap(), "✅ 支持");
+        assert_eq!(
+            personalization.get("personalized_learning").unwrap(),
+            "✅ 支持"
+        );
         assert_eq!(personalization.get("adaptive_learning").unwrap(), "✅ 支持");
         assert_eq!(personalization.get("learning_paths").unwrap(), "✅ 支持");
     }
@@ -566,10 +609,22 @@ mod tests {
 
         let service = ELearningService::new(config.clone());
 
-        assert_eq!(service.course_registration.config.app_id, "custom_elearning_app");
-        assert_eq!(service.course_registration.config.app_secret, "custom_elearning_secret");
-        assert_eq!(service.course_registration.config.base_url, "https://custom.example.com");
-        assert_eq!(service.course_registration.config.req_timeout, Some(Duration::from_secs(300)));
+        assert_eq!(
+            service.course_registration.config.app_id,
+            "custom_elearning_app"
+        );
+        assert_eq!(
+            service.course_registration.config.app_secret,
+            "custom_elearning_secret"
+        );
+        assert_eq!(
+            service.course_registration.config.base_url,
+            "https://custom.example.com"
+        );
+        assert_eq!(
+            service.course_registration.config.req_timeout,
+            Some(Duration::from_secs(300))
+        );
     }
 
     #[test]
@@ -624,10 +679,7 @@ mod tests {
     #[test]
     fn test_elearning_service_error_handling_and_robustness() {
         // Test with empty configuration
-        let empty_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let empty_config = Config::builder().app_id("").app_secret("").build();
         let empty_service = ELearningService::new(empty_config);
 
         let validation_result = empty_service.validate_elearning_config();
@@ -753,7 +805,10 @@ mod tests {
 
         // Original creation test
         assert_eq!(service.course_registration.config.app_id, config.app_id);
-        assert_eq!(service.course_registration.config.app_secret, config.app_secret);
+        assert_eq!(
+            service.course_registration.config.app_secret,
+            config.app_secret
+        );
 
         // Original timeout propagation test
         let timeout_config = Config::builder()

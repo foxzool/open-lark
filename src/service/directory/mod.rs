@@ -217,47 +217,47 @@ impl DirectoryService {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_directory_feature(&self, directory_feature: &str) -> bool {
-        match directory_feature {
-            "employee_management" => true,
-            "employee_crud" => true,
-            "employee_search" => true,
-            "employee_statistics" => true,
-            "employee_bulk_operations" => true,
-            "department_management" => true,
-            "department_crud" => true,
-            "department_hierarchy" => true,
-            "department_search" => true,
-            "organization_structure" => true,
-            "hierarchy_management" => true,
-            "org_chart" => true,
-            "data_synchronization" => true,
-            "hr_integration" => true,
-            "permission_management" => true,
-            "audit_logging" => true,
-            "compliance_monitoring" => true,
-            "multi_tenant" => true,
-            "mobile_management" => true,
-            "employee_lifecycle" => true,
-            "organizational_change" => true,
-            "position_management" => true,
-            "role_management" => true,
-            "team_management" => true,
-            "cost_center" => true,
-            "budget_management" => true,
-            "performance_integration" => true,
-            "recruitment_integration" => true,
-            "onboarding_workflow" => true,
-            "offboarding_process" => true,
-            "data_analytics" => true,
-            "reporting" => true,
-            "bulk_import_export" => true,
-            "api_access" => true,
-            "webhook_support" => true,
-            "custom_fields" => true,
-            "workflow_automation" => true,
-            "approval_workflows" => true,
-            _ => false,
-        }
+        matches!(
+            directory_feature,
+            "employee_management"
+                | "employee_crud"
+                | "employee_search"
+                | "employee_statistics"
+                | "employee_bulk_operations"
+                | "department_management"
+                | "department_crud"
+                | "department_hierarchy"
+                | "department_search"
+                | "organization_structure"
+                | "hierarchy_management"
+                | "org_chart"
+                | "data_synchronization"
+                | "hr_integration"
+                | "permission_management"
+                | "audit_logging"
+                | "compliance_monitoring"
+                | "multi_tenant"
+                | "mobile_management"
+                | "employee_lifecycle"
+                | "organizational_change"
+                | "position_management"
+                | "role_management"
+                | "team_management"
+                | "cost_center"
+                | "budget_management"
+                | "performance_integration"
+                | "recruitment_integration"
+                | "onboarding_workflow"
+                | "offboarding_process"
+                | "data_analytics"
+                | "reporting"
+                | "bulk_import_export"
+                | "api_access"
+                | "webhook_support"
+                | "custom_fields"
+                | "workflow_automation"
+                | "approval_workflows"
+        )
     }
 
     /// 快速检查组织架构服务健康状态
@@ -281,9 +281,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_directory_categories_statistics(&self) -> String {
-        format!(
-            "DirectoryService Categories{{ employee: 3, department: 2, organization: 3, integration: 2, total: 10 }}",
-        )
+        "DirectoryService Categories{ employee: 3, department: 2, organization: 3, integration: 2, total: 10 }".to_string()
     }
 
     /// 获取组织架构服务状态摘要
@@ -328,9 +326,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含员工管理能力信息的字符串
     pub fn get_employee_management_capabilities(&self) -> String {
-        format!(
-            "DirectoryService Employee{{ create: true, update: true, delete: true, search: true, bulk: true, lifecycle: true, analytics: true }}",
-        )
+        "DirectoryService Employee{ create: true, update: true, delete: true, search: true, bulk: true, lifecycle: true, analytics: true }".to_string()
     }
 
     /// 获取部门管理能力矩阵
@@ -340,9 +336,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含部门管理能力信息的字符串
     pub fn get_department_management_capabilities(&self) -> String {
-        format!(
-            "DirectoryService Department{{ hierarchy: true, structure: true, permissions: true, reporting: true, analytics: true }}",
-        )
+        "DirectoryService Department{ hierarchy: true, structure: true, permissions: true, reporting: true, analytics: true }".to_string()
     }
 
     /// 获取组织架构管理能力矩阵
@@ -352,9 +346,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含组织架构管理能力信息的字符串
     pub fn get_organization_structure_capabilities(&self) -> String {
-        format!(
-            "DirectoryService Organization{{ tree_view: true, visualization: true, change_management: true, compliance: true, planning: true }}",
-        )
+        "DirectoryService Organization{ tree_view: true, visualization: true, change_management: true, compliance: true, planning: true }".to_string()
     }
 
     /// 获取数据同步能力矩阵
@@ -364,9 +356,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含数据同步能力信息的字符串
     pub fn get_data_synchronization_capabilities(&self) -> String {
-        format!(
-            "DirectoryService Sync{{ real_time: true, scheduled: true, validation: true, audit: true, recovery: true, consistency: true }}",
-        )
+        "DirectoryService Sync{ real_time: true, scheduled: true, validation: true, audit: true, recovery: true, consistency: true }".to_string()
     }
 
     /// 获取HR集成能力矩阵
@@ -376,9 +366,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含HR集成能力信息的字符串
     pub fn get_hr_integration_capabilities(&self) -> String {
-        format!(
-            "DirectoryService HRFIntegration{{ hris: true, performance: true, payroll: true, recruitment: true, onboarding: true, offboarding: true }}",
-        )
+        "DirectoryService HRFIntegration{ hris: true, performance: true, payroll: true, recruitment: true, onboarding: true, offboarding: true }".to_string()
     }
 
     /// 获取企业级能力矩阵
@@ -388,9 +376,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含企业级能力信息的字符串
     pub fn get_enterprise_directory_capabilities(&self) -> String {
-        format!(
-            "DirectoryService Enterprise{{ compliance: true, audit: true, security: true, scalability: true, customization: true }}",
-        )
+        "DirectoryService Enterprise{ compliance: true, audit: true, security: true, scalability: true, customization: true }".to_string()
     }
 
     /// 获取组织架构性能指标
@@ -400,9 +386,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含性能指标信息的字符串
     pub fn get_directory_performance_metrics(&self) -> String {
-        format!(
-            "DirectoryService Performance{{ scalability: enterprise, reliability: 99.9%, latency: <200ms, concurrency: high, availability: 99.95% }}",
-        )
+        "DirectoryService Performance{ scalability: enterprise, reliability: 99.9%, latency: <200ms, concurrency: high, availability: 99.95% }".to_string()
     }
 
     /// 获取组织架构应用场景矩阵
@@ -412,9 +396,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含应用场景信息的字符串
     pub fn get_directory_use_cases_matrix(&self) -> String {
-        format!(
-            "DirectoryService UseCases{{ enterprise_structure: true, hr_management: true, compliance_tracking: true, data_integrity: true, change_management: true }}",
-        )
+        "DirectoryService UseCases{ enterprise_structure: true, hr_management: true, compliance_tracking: true, data_integrity: true, change_management: true }".to_string()
     }
 
     /// 获取员工统计信息
@@ -424,9 +406,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含员工统计信息的字符串
     pub fn get_employee_statistics(&self) -> String {
-        format!(
-            "DirectoryService EmployeeStats{{ total_employees: auto, active_employees: auto, departments_count: auto, new_hires_monthly: auto, turnover_rate: auto }}",
-        )
+        "DirectoryService EmployeeStats{ total_employees: auto, active_employees: auto, departments_count: auto, new_hires_monthly: auto, turnover_rate: auto }".to_string()
     }
 
     /// 获取部门统计信息
@@ -436,9 +416,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含部门统计信息的字符串
     pub fn get_department_statistics(&self) -> String {
-        format!(
-            "DirectoryService DepartmentStats{{ total_departments: auto, avg_team_size: auto, hierarchy_depth: auto, sub_departments: auto, manager_ratio: auto }}",
-        )
+        "DirectoryService DepartmentStats{ total_departments: auto, avg_team_size: auto, hierarchy_depth: auto, sub_departments: auto, manager_ratio: auto }".to_string()
     }
 
     /// 获取组织架构变更统计
@@ -448,9 +426,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含变更统计信息的字符串
     pub fn get_organization_change_statistics(&self) -> String {
-        format!(
-            "DirectoryService ChangeStats{{ structural_changes: auto, employee_movements: auto, department_reorgs: auto, leadership_changes: auto, compliance_impacts: auto }}",
-        )
+        "DirectoryService ChangeStats{ structural_changes: auto, employee_movements: auto, department_reorgs: auto, leadership_changes: auto, compliance_impacts: auto }".to_string()
     }
 
     /// 获取HR集成状态信息
@@ -460,9 +436,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含HR集成状态的字符串
     pub fn get_hr_integration_status(&self) -> String {
-        format!(
-            "DirectoryService HRIntegration{{ hris_connected: true, last_sync: auto, sync_status: active, error_count: 0, data_quality: excellent }}",
-        )
+        "DirectoryService HRIntegration{ hris_connected: true, last_sync: auto, sync_status: active, error_count: 0, data_quality: excellent }".to_string()
     }
 
     /// 获取数据同步状态
@@ -472,9 +446,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含数据同步状态的字符串
     pub fn get_data_sync_status(&self) -> String {
-        format!(
-            "DirectoryService DataSync{{ last_sync: auto, sync_health: excellent, pending_changes: 0, conflict_count: 0, sync_latency: <5min }}",
-        )
+        "DirectoryService DataSync{ last_sync: auto, sync_health: excellent, pending_changes: 0, conflict_count: 0, sync_latency: <5min }".to_string()
     }
 
     /// 获取合规性监控状态
@@ -484,9 +456,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含合规性状态的字符串
     pub fn get_compliance_monitoring_status(&self) -> String {
-        format!(
-            "DirectoryService Compliance{{ gdpr_compliant: true, audit_ready: true, last_audit: auto, policy_violations: 0, risk_level: low }}",
-        )
+        "DirectoryService Compliance{ gdpr_compliant: true, audit_ready: true, last_audit: auto, policy_violations: 0, risk_level: low }".to_string()
     }
 
     /// 获取权限管理状态
@@ -496,9 +466,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含权限管理状态的字符串
     pub fn get_permission_management_status(&self) -> String {
-        format!(
-            "DirectoryService Permissions{{ role_based: true, access_control: fine_grained, privileged_users: monitored, permission_audits: enabled, security_policies: enforced }}",
-        )
+        "DirectoryService Permissions{ role_based: true, access_control: fine_grained, privileged_users: monitored, permission_audits: enabled, security_policies: enforced }".to_string()
     }
 
     /// 获取组织架构容量信息
@@ -508,9 +476,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含容量信息的字符串
     pub fn get_organization_capacity_info(&self) -> String {
-        format!(
-            "DirectoryService Capacity{{ max_employees: enterprise, max_departments: enterprise, storage_usage: optimal, api_quota: sufficient, performance: excellent }}",
-        )
+        "DirectoryService Capacity{ max_employees: enterprise, max_departments: enterprise, storage_usage: optimal, api_quota: sufficient, performance: excellent }".to_string()
     }
 
     /// 获取分析数据概览
@@ -520,9 +486,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含分析数据的字符串
     pub fn get_analytics_overview(&self) -> String {
-        format!(
-            "DirectoryService Analytics{{ growth_rate: auto, efficiency_metrics: auto, engagement_scores: auto, turnover_predictions: auto, org_health: excellent }}",
-        )
+        "DirectoryService Analytics{ growth_rate: auto, efficiency_metrics: auto, engagement_scores: auto, turnover_predictions: auto, org_health: excellent }".to_string()
     }
 
     /// 获取工作流程集成状态
@@ -532,9 +496,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含工作流程状态的字符串
     pub fn get_workflow_integration_status(&self) -> String {
-        format!(
-            "DirectoryService Workflows{{ onboarding: automated, offboarding: automated, transfers: streamlined, approvals: integrated, notifications: real_time }}",
-        )
+        "DirectoryService Workflows{ onboarding: automated, offboarding: automated, transfers: streamlined, approvals: integrated, notifications: real_time }".to_string()
     }
 
     /// 获取移动端管理支持状态
@@ -544,9 +506,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含移动端支持状态的字符串
     pub fn get_mobile_management_status(&self) -> String {
-        format!(
-            "DirectoryService Mobile{{ native_apps: true, push_notifications: true, offline_access: limited, security: enterprise_grade, user_experience: optimized }}",
-        )
+        "DirectoryService Mobile{ native_apps: true, push_notifications: true, offline_access: limited, security: enterprise_grade, user_experience: optimized }".to_string()
     }
 
     /// 获取API访问统计
@@ -556,9 +516,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含API访问统计的字符串
     pub fn get_api_access_statistics(&self) -> String {
-        format!(
-            "DirectoryService APIAccess{{ daily_requests: auto, success_rate: 99.9%, avg_response_time: <100ms, rate_limit_utilization: normal, error_rate: 0.1% }}",
-        )
+        "DirectoryService APIAccess{ daily_requests: auto, success_rate: 99.9%, avg_response_time: <100ms, rate_limit_utilization: normal, error_rate: 0.1% }".to_string()
     }
 
     /// 获取Webhook支持状态
@@ -568,9 +526,7 @@ impl DirectoryService {
     /// # 返回值
     /// 包含Webhook状态的字符串
     pub fn get_webhook_support_status(&self) -> String {
-        format!(
-            "DirectoryService Webhooks{{ event_subscriptions: true, delivery_reliability: 99.95%, retry_logic: exponential_backoff, authentication: secure, latency: <1s }}",
-        )
+        "DirectoryService Webhooks{ event_subscriptions: true, delivery_reliability: 99.95%, retry_logic: exponential_backoff, authentication: secure, latency: <1s }".to_string()
     }
 }
 
@@ -628,9 +584,15 @@ mod tests {
         assert!(!service.v1.employee.config.app_id.is_empty());
         assert!(!service.v1.employee.config.app_secret.is_empty());
         assert_eq!(service.v1.employee.config.app_id, "test_directory_app_id");
-        assert_eq!(service.v1.employee.config.app_secret, "test_directory_app_secret");
+        assert_eq!(
+            service.v1.employee.config.app_secret,
+            "test_directory_app_secret"
+        );
         assert_eq!(service.v1.department.config.app_id, "test_directory_app_id");
-        assert_eq!(service.v1.department.config.app_secret, "test_directory_app_secret");
+        assert_eq!(
+            service.v1.department.config.app_secret,
+            "test_directory_app_secret"
+        );
     }
 
     #[test]
@@ -673,31 +635,56 @@ mod tests {
 
         // 测试支持的员工管理功能
         let employee_features = vec![
-            "employee_management", "employee_crud", "employee_search", "employee_statistics",
-            "employee_bulk_operations", "employee_lifecycle"
+            "employee_management",
+            "employee_crud",
+            "employee_search",
+            "employee_statistics",
+            "employee_bulk_operations",
+            "employee_lifecycle",
         ];
 
         for feature in employee_features {
-            assert!(service.supports_directory_feature(feature), "员工功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_directory_feature(feature),
+                "员工功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试支持的部门管理功能
         let department_features = vec![
-            "department_management", "department_crud", "department_hierarchy", "department_search"
+            "department_management",
+            "department_crud",
+            "department_hierarchy",
+            "department_search",
         ];
 
         for feature in department_features {
-            assert!(service.supports_directory_feature(feature), "部门功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_directory_feature(feature),
+                "部门功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试支持的组织架构功能
         let organization_features = vec![
-            "organization_structure", "hierarchy_management", "org_chart", "data_synchronization",
-            "hr_integration", "permission_management", "audit_logging", "compliance_monitoring"
+            "organization_structure",
+            "hierarchy_management",
+            "org_chart",
+            "data_synchronization",
+            "hr_integration",
+            "permission_management",
+            "audit_logging",
+            "compliance_monitoring",
         ];
 
         for feature in organization_features {
-            assert!(service.supports_directory_feature(feature), "组织功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_directory_feature(feature),
+                "组织功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -715,10 +702,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = DirectoryService::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -1071,38 +1055,104 @@ mod tests {
         // 测试所有支持的组织架构功能组合
         let supported_features = vec![
             // 员工管理功能
-            "employee_management", "employee_crud", "employee_search", "employee_statistics", "employee_bulk_operations", "employee_lifecycle",
+            "employee_management",
+            "employee_crud",
+            "employee_search",
+            "employee_statistics",
+            "employee_bulk_operations",
+            "employee_lifecycle",
             // 部门管理功能
-            "department_management", "department_crud", "department_hierarchy", "department_search",
+            "department_management",
+            "department_crud",
+            "department_hierarchy",
+            "department_search",
             // 组织架构功能
-            "organization_structure", "hierarchy_management", "org_chart",
+            "organization_structure",
+            "hierarchy_management",
+            "org_chart",
             // 集成功能
-            "data_synchronization", "hr_integration", "permission_management", "audit_logging", "compliance_monitoring",
+            "data_synchronization",
+            "hr_integration",
+            "permission_management",
+            "audit_logging",
+            "compliance_monitoring",
             // 企业级功能
-            "multi_tenant", "mobile_management", "organizational_change", "position_management", "role_management",
+            "multi_tenant",
+            "mobile_management",
+            "organizational_change",
+            "position_management",
+            "role_management",
             // 高级功能
-            "team_management", "cost_center", "budget_management", "performance_integration", "recruitment_integration",
+            "team_management",
+            "cost_center",
+            "budget_management",
+            "performance_integration",
+            "recruitment_integration",
             // 工作流程功能
-            "onboarding_workflow", "offboarding_process", "data_analytics", "reporting", "bulk_import_export",
+            "onboarding_workflow",
+            "offboarding_process",
+            "data_analytics",
+            "reporting",
+            "bulk_import_export",
             // 开发者功能
-            "api_access", "webhook_support", "custom_fields", "workflow_automation", "approval_workflows"
+            "api_access",
+            "webhook_support",
+            "custom_fields",
+            "workflow_automation",
+            "approval_workflows",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_directory_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_directory_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量
         let mut feature_count = 0;
         let all_features = vec![
-            "employee_management", "employee_crud", "employee_search", "employee_statistics", "employee_bulk_operations", "employee_lifecycle",
-            "department_management", "department_crud", "department_hierarchy", "department_search",
-            "organization_structure", "hierarchy_management", "org_chart",
-            "data_synchronization", "hr_integration", "permission_management", "audit_logging", "compliance_monitoring",
-            "multi_tenant", "mobile_management", "organizational_change", "position_management", "role_management",
-            "team_management", "cost_center", "budget_management", "performance_integration", "recruitment_integration",
-            "onboarding_workflow", "offboarding_process", "data_analytics", "reporting", "bulk_import_export",
-            "api_access", "webhook_support", "custom_fields", "workflow_automation", "approval_workflows", "nonexistent1", "nonexistent2"
+            "employee_management",
+            "employee_crud",
+            "employee_search",
+            "employee_statistics",
+            "employee_bulk_operations",
+            "employee_lifecycle",
+            "department_management",
+            "department_crud",
+            "department_hierarchy",
+            "department_search",
+            "organization_structure",
+            "hierarchy_management",
+            "org_chart",
+            "data_synchronization",
+            "hr_integration",
+            "permission_management",
+            "audit_logging",
+            "compliance_monitoring",
+            "multi_tenant",
+            "mobile_management",
+            "organizational_change",
+            "position_management",
+            "role_management",
+            "team_management",
+            "cost_center",
+            "budget_management",
+            "performance_integration",
+            "recruitment_integration",
+            "onboarding_workflow",
+            "offboarding_process",
+            "data_analytics",
+            "reporting",
+            "bulk_import_export",
+            "api_access",
+            "webhook_support",
+            "custom_fields",
+            "workflow_automation",
+            "approval_workflows",
+            "nonexistent1",
+            "nonexistent2",
         ];
 
         for feature in all_features {
@@ -1110,7 +1160,7 @@ mod tests {
                 feature_count += 1;
             }
         }
-        assert_eq!(feature_count, 42); // 确保支持42个功能
+        assert_eq!(feature_count, 38); // 确保支持38个功能
     }
 
     #[test]
@@ -1124,8 +1174,12 @@ mod tests {
 
         assert!(special_service.validate_directory_services_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_directory_service_statistics().contains("组织架构服务"));
-        assert!(special_service.get_directory_service_statistics().contains("🏢"));
+        assert!(special_service
+            .get_directory_service_statistics()
+            .contains("组织架构服务"));
+        assert!(special_service
+            .get_directory_service_statistics()
+            .contains("🏢"));
 
         // 测试长字符串配置
         let long_app_id = "a".repeat(1000);
@@ -1136,7 +1190,9 @@ mod tests {
         let long_service = DirectoryService::new(long_config);
 
         assert!(long_service.validate_directory_services_config());
-        assert!(long_service.get_directory_service_statistics().contains(&long_app_id));
+        assert!(long_service
+            .get_directory_service_statistics()
+            .contains(&long_app_id));
     }
 
     #[test]
@@ -1178,7 +1234,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = DirectoryService::new(partial_invalid_config);
 
@@ -1187,18 +1243,19 @@ mod tests {
         assert!(!partial_invalid_service.validate_directory_services_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = DirectoryService::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_directory_services_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_directory_service_statistics().contains("DirectoryService"));
-        assert!(fully_invalid_service.get_directory_categories_statistics().contains("total: 10"));
+        assert!(fully_invalid_service
+            .get_directory_service_statistics()
+            .contains("DirectoryService"));
+        assert!(fully_invalid_service
+            .get_directory_categories_statistics()
+            .contains("total: 10"));
     }
 
     #[test]
@@ -1280,7 +1337,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
@@ -1295,7 +1355,10 @@ mod tests {
 
         // 验证config()方法返回的是相同的配置引用
         assert_eq!(service.v1.employee.config.app_id, service_config.app_id);
-        assert_eq!(service.v1.employee.config.app_secret, service_config.app_secret);
+        assert_eq!(
+            service.v1.employee.config.app_secret,
+            service_config.app_secret
+        );
 
         // 测试Debug trait
         let debug_str = format!("{:?}", service);

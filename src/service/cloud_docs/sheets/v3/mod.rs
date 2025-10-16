@@ -381,8 +381,14 @@ mod tests {
         // Verify all sub-services are created
         assert_eq!(v3_service.spreadsheet.config.app_id, "test_app_id");
         assert_eq!(v3_service.spreadsheet_sheet.config.app_id, "test_app_id");
-        assert_eq!(v3_service.spreadsheet_sheet_filter.config.app_id, "test_app_id");
-        assert_eq!(v3_service.spreadsheet_sheet_filter_view.config.app_id, "test_app_id");
+        assert_eq!(
+            v3_service.spreadsheet_sheet_filter.config.app_id,
+            "test_app_id"
+        );
+        assert_eq!(
+            v3_service.spreadsheet_sheet_filter_view.config.app_id,
+            "test_app_id"
+        );
         assert_eq!(v3_service.data_operation.config.app_id, "test_app_id");
         assert_eq!(v3_service.sheet_row_col.config.app_id, "test_app_id");
     }
@@ -469,7 +475,10 @@ mod tests {
 
         // Verify all services use the modified config
         assert_eq!(v3_service.spreadsheet.config.app_id, "modified_app_id");
-        assert_eq!(v3_service.spreadsheet_sheet.config.app_id, "modified_app_id");
+        assert_eq!(
+            v3_service.spreadsheet_sheet.config.app_id,
+            "modified_app_id"
+        );
         assert_eq!(v3_service.data_operation.config.app_id, "modified_app_id");
     }
 
@@ -498,7 +507,8 @@ mod tests {
         let _spreadsheet: &SpreadsheetService = &v3_service.spreadsheet;
         let _sheet: &SpreadsheetSheetService = &v3_service.spreadsheet_sheet;
         let _filter: &SpreadsheetSheetFilterService = &v3_service.spreadsheet_sheet_filter;
-        let _filter_view: &SpreadsheetSheetFilterViewService = &v3_service.spreadsheet_sheet_filter_view;
+        let _filter_view: &SpreadsheetSheetFilterViewService =
+            &v3_service.spreadsheet_sheet_filter_view;
         let _data: &DataOperationService = &v3_service.data_operation;
         let _row_col: &SheetRowColService = &v3_service.sheet_row_col;
     }
@@ -571,9 +581,7 @@ mod tests {
     fn test_service_config_memory_efficiency() {
         // Test that creating multiple services doesn't use excessive memory
         let config = create_test_config();
-        let services: Vec<V3> = (0..100)
-            .map(|_| V3::new(config.clone()))
-            .collect();
+        let services: Vec<V3> = (0..100).map(|_| V3::new(config.clone())).collect();
 
         assert_eq!(services.len(), 100);
 
@@ -606,7 +614,7 @@ mod tests {
         let v3_service = V3::new(config);
 
         // All sub-services should have consistent config
-        let configs = vec![
+        let configs = [
             &v3_service.spreadsheet.config,
             &v3_service.spreadsheet_sheet.config,
             &v3_service.spreadsheet_sheet_filter.config,
@@ -617,8 +625,17 @@ mod tests {
 
         for (i, config_ref) in configs.iter().enumerate() {
             assert_eq!(config_ref.app_id, "test_app_id", "Config {} mismatch", i);
-            assert_eq!(config_ref.app_secret, "test_app_secret", "Config {} mismatch", i);
-            assert_eq!(config_ref.app_type, AppType::SelfBuild, "Config {} mismatch", i);
+            assert_eq!(
+                config_ref.app_secret, "test_app_secret",
+                "Config {} mismatch",
+                i
+            );
+            assert_eq!(
+                config_ref.app_type,
+                AppType::SelfBuild,
+                "Config {} mismatch",
+                i
+            );
         }
     }
 
@@ -637,7 +654,7 @@ mod tests {
     fn test_service_config_clone_behavior() {
         let config = create_test_config();
         let original_service = SpreadsheetService::new(config);
-        let cloned_config = original_service.config.clone();
+        let _cloned_config = original_service.config.clone();
 
         // Create a new config with different values instead of modifying
         let modified_config = Config::builder()
@@ -678,9 +695,7 @@ mod tests {
         assert!(service.config.app_secret.is_empty());
 
         // Test with partial config
-        let partial_config = Config::builder()
-            .app_id("partial_app")
-            .build();
+        let partial_config = Config::builder().app_id("partial_app").build();
         let service = SheetRowColService::new(partial_config);
 
         assert_eq!(service.config.app_id, "partial_app");
@@ -698,7 +713,10 @@ mod tests {
             .map(|i| {
                 let service_clone = Arc::clone(&service);
                 thread::spawn(move || {
-                    format!("thread_{}_app_id: {}", i, service_clone.spreadsheet.config.app_id)
+                    format!(
+                        "thread_{}_app_id: {}",
+                        i, service_clone.spreadsheet.config.app_id
+                    )
                 })
             })
             .collect();
@@ -721,8 +739,8 @@ mod tests {
 
         assert_eq!(app_id_str, "test_app_id");
         assert_eq!(secret_str, "test_app_secret");
-        assert!(app_id_str.len() > 0);
-        assert!(secret_str.len() > 0);
+        assert!(!app_id_str.is_empty());
+        assert!(!secret_str.is_empty());
     }
 
     #[test]

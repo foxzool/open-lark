@@ -28,7 +28,7 @@ impl V1 {
             chat_announcement: chat_announcement::ChatAnnouncementService::new(config.clone()),
             chat_tab: chat_tab::ChatTabService::new(config.clone()),
             chat_menu_tree: chat_menu_tree::ChatMenuTreeService::new(config.clone()),
-            config: config,
+            config,
         }
     }
 

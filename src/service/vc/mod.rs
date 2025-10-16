@@ -192,7 +192,10 @@ impl VcService {
         stats.insert("service_name".to_string(), "VideoConference".to_string());
         stats.insert("service_version".to_string(), "v1".to_string());
         stats.insert("app_id".to_string(), self.v1.meeting.config.app_id.clone());
-        stats.insert("base_url".to_string(), self.v1.meeting.config.base_url.clone());
+        stats.insert(
+            "base_url".to_string(),
+            self.v1.meeting.config.base_url.clone(),
+        );
 
         // 子服务状态
         stats.insert("v1_service".to_string(), "active".to_string());
@@ -227,71 +230,71 @@ impl VcService {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_vc_feature(&self, feature: &str) -> bool {
-        match feature {
-            "meeting_management" => true,
-            "meeting_creation" => true,
-            "meeting_scheduling" => true,
-            "meeting_joining" => true,
-            "meeting_control" => true,
-            "room_management" => true,
-            "room_booking" => true,
-            "room_monitoring" => true,
-            "equipment_control" => true,
-            "recording_service" => true,
-            "recording_start" => true,
-            "recording_management" => true,
-            "recording_sharing" => true,
-            "reservation_system" => true,
-            "time_slot_booking" => true,
-            "conflict_detection" => true,
-            "auto_reminders" => true,
-            "hd_video" => true,
-            "multi_participant" => true,
-            "screen_sharing" => true,
-            "whiteboard" => true,
-            "chat_function" => true,
-            "file_transfer" => true,
-            "live_streaming" => true,
-            "webinar_support" => true,
-            "breakout_rooms" => true,
-            "polling" => true,
-            "reaction_emoji" => true,
-            "enterprise_security" => true,
-            "end_to_end_encryption" => true,
-            "access_control" => true,
-            "meeting_lock" => true,
-            "participant_authentication" => true,
-            "large_meeting" => true,
-            "capacity_1000" => true,
-            "webinar_10000" => true,
-            "performance_optimization" => true,
-            "meeting_analytics" => true,
-            "attendance_tracking" => true,
-            "engagement_metrics" => true,
-            "quality_monitoring" => true,
-            "api_integration" => true,
-            "webhook_support" => true,
-            "third_party_integration" => true,
-            "custom_branding" => true,
-            "sso_integration" => true,
-            "mobile_support" => true,
-            "desktop_support" => true,
-            "cross_platform" => true,
-            "ai_features" => true,
-            "noise_cancellation" => true,
-            "background_blur" => true,
-            "auto_transcription" => true,
-            "real_time_translation" => true,
-            "meeting_recording" => true,
-            "cloud_storage" => true,
-            "local_recording" => true,
-            "recording_editing" => true,
-            "multi_language" => true,
-            "accessibility" => true,
-            "closed_captions" => true,
-            "sign_language" => true,
-            _ => false,
-        }
+        matches!(
+            feature,
+            "meeting_management"
+                | "meeting_creation"
+                | "meeting_scheduling"
+                | "meeting_joining"
+                | "meeting_control"
+                | "room_management"
+                | "room_booking"
+                | "room_monitoring"
+                | "equipment_control"
+                | "recording_service"
+                | "recording_start"
+                | "recording_management"
+                | "recording_sharing"
+                | "reservation_system"
+                | "time_slot_booking"
+                | "conflict_detection"
+                | "auto_reminders"
+                | "hd_video"
+                | "multi_participant"
+                | "screen_sharing"
+                | "whiteboard"
+                | "chat_function"
+                | "file_transfer"
+                | "live_streaming"
+                | "webinar_support"
+                | "breakout_rooms"
+                | "polling"
+                | "reaction_emoji"
+                | "enterprise_security"
+                | "end_to_end_encryption"
+                | "access_control"
+                | "meeting_lock"
+                | "participant_authentication"
+                | "large_meeting"
+                | "capacity_1000"
+                | "webinar_10000"
+                | "performance_optimization"
+                | "meeting_analytics"
+                | "attendance_tracking"
+                | "engagement_metrics"
+                | "quality_monitoring"
+                | "api_integration"
+                | "webhook_support"
+                | "third_party_integration"
+                | "custom_branding"
+                | "sso_integration"
+                | "mobile_support"
+                | "desktop_support"
+                | "cross_platform"
+                | "ai_features"
+                | "noise_cancellation"
+                | "background_blur"
+                | "auto_transcription"
+                | "real_time_translation"
+                | "meeting_recording"
+                | "cloud_storage"
+                | "local_recording"
+                | "recording_editing"
+                | "multi_language"
+                | "accessibility"
+                | "closed_captions"
+                | "sign_language"
+        )
     }
 
     /// 获取视频会议功能矩阵
@@ -300,7 +303,9 @@ impl VcService {
     ///
     /// # 返回值
     /// 包含功能状态信息的字典
-    pub fn get_vc_features_matrix(&self) -> std::collections::HashMap<String, std::collections::HashMap<String, String>> {
+    pub fn get_vc_features_matrix(
+        &self,
+    ) -> std::collections::HashMap<String, std::collections::HashMap<String, String>> {
         let mut features = std::collections::HashMap::new();
 
         // 会议管理功能
@@ -409,9 +414,15 @@ impl VcService {
         let mut summary = std::collections::HashMap::new();
 
         summary.insert("service_name".to_string(), "VideoConference".to_string());
-        summary.insert("service_type".to_string(), "Enterprise Video Collaboration".to_string());
+        summary.insert(
+            "service_type".to_string(),
+            "Enterprise Video Collaboration".to_string(),
+        );
         summary.insert("app_id".to_string(), self.v1.meeting.config.app_id.clone());
-        summary.insert("base_url".to_string(), self.v1.meeting.config.base_url.clone());
+        summary.insert(
+            "base_url".to_string(),
+            self.v1.meeting.config.base_url.clone(),
+        );
         summary.insert("service_count".to_string(), "1".to_string());
         summary.insert("supported_features".to_string(), "58".to_string());
 
@@ -434,9 +445,7 @@ impl VcService {
     /// # 返回值
     /// 包含质量管理能力信息的字符串
     pub fn get_quality_management_capabilities(&self) -> String {
-        format!(
-            "VideoConference Quality{{ hd_video: true, audio_quality: professional, bandwidth_optimization: true, latency: <50ms, reliability: 99.9% }}",
-        )
+        "VideoConference Quality{ hd_video: true, audio_quality: professional, bandwidth_optimization: true, latency: <50ms, reliability: 99.9% }".to_string()
     }
 
     /// 获取安全管理能力
@@ -446,9 +455,7 @@ impl VcService {
     /// # 返回值
     /// 包含安全管理能力信息的字符串
     pub fn get_security_capabilities(&self) -> String {
-        format!(
-            "VideoConference Security{{ encryption: end_to_end, authentication: multi_factor, access_control: granular, audit_logging: comprehensive, compliance: enterprise }}",
-        )
+        "VideoConference Security{ encryption: end_to_end, authentication: multi_factor, access_control: granular, audit_logging: comprehensive, compliance: enterprise }".to_string()
     }
 
     /// 获取集成能力信息
@@ -458,9 +465,7 @@ impl VcService {
     /// # 返回值
     /// 包含集成能力信息的字符串
     pub fn get_integration_capabilities(&self) -> String {
-        format!(
-            "VideoConference Integration{{ calendar: true, sso: true, webhook: true, api: restful, third_party: zoom_teams_webex }}",
-        )
+        "VideoConference Integration{ calendar: true, sso: true, webhook: true, api: restful, third_party: zoom_teams_webex }".to_string()
     }
 
     /// 获取会议分析能力
@@ -470,9 +475,7 @@ impl VcService {
     /// # 返回值
     /// 包含分析能力信息的字符串
     pub fn get_analytics_capabilities(&self) -> String {
-        format!(
-            "VideoConference Analytics{{ attendance: true, engagement: true, quality_metrics: true, usage_statistics: true, cost_optimization: true }}",
-        )
+        "VideoConference Analytics{ attendance: true, engagement: true, quality_metrics: true, usage_statistics: true, cost_optimization: true }".to_string()
     }
 
     /// 获取设备兼容性信息
@@ -482,9 +485,7 @@ impl VcService {
     /// # 返回值
     /// 包含设备兼容性信息的字符串
     pub fn get_device_compatibility(&self) -> String {
-        format!(
-            "VideoConference Devices{{ desktop: windows_mac_linux, mobile: ios_android, web: chrome_safari_firefox, hardware: polycom_cisco_yealink }}",
-        )
+        "VideoConference Devices{ desktop: windows_mac_linux, mobile: ios_android, web: chrome_safari_firefox, hardware: polycom_cisco_yealink }".to_string()
     }
 
     /// 获取协作功能能力
@@ -494,9 +495,7 @@ impl VcService {
     /// # 返回值
     /// 包含协作功能能力的字符串
     pub fn get_collaboration_capabilities(&self) -> String {
-        format!(
-            "VideoConference Collaboration{{ screen_share: true, whiteboard: true, file_share: true, chat: true, polling: true, breakout_rooms: true }}",
-        )
+        "VideoConference Collaboration{ screen_share: true, whiteboard: true, file_share: true, chat: true, polling: true, breakout_rooms: true }".to_string()
     }
 
     /// 获取录制功能能力
@@ -506,9 +505,7 @@ impl VcService {
     /// # 返回值
     /// 包含录制功能能力的字符串
     pub fn get_recording_capabilities(&self) -> String {
-        format!(
-            "VideoConference Recording{{ cloud_storage: true, local_recording: true, editing: true, transcription: true, sharing: true, retention: custom }}",
-        )
+        "VideoConference Recording{ cloud_storage: true, local_recording: true, editing: true, transcription: true, sharing: true, retention: custom }".to_string()
     }
 }
 
@@ -598,18 +595,12 @@ mod tests {
         assert!(service.validate_vc_config().is_ok());
 
         // Test with invalid configuration (missing app_id)
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("secret")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("secret").build();
         let invalid_service = VcService::new(invalid_config);
         assert!(invalid_service.validate_vc_config().is_err());
 
         // Test with invalid configuration (missing app_secret)
-        let invalid_config2 = Config::builder()
-            .app_id("app")
-            .app_secret("")
-            .build();
+        let invalid_config2 = Config::builder().app_id("app").app_secret("").build();
         let invalid_service2 = VcService::new(invalid_config2);
         assert!(invalid_service2.validate_vc_config().is_err());
     }
@@ -680,7 +671,10 @@ mod tests {
         let summary = service.get_config_summary();
 
         assert_eq!(summary.get("service_name").unwrap(), "VideoConference");
-        assert_eq!(summary.get("service_type").unwrap(), "Enterprise Video Collaboration");
+        assert_eq!(
+            summary.get("service_type").unwrap(),
+            "Enterprise Video Collaboration"
+        );
         assert_eq!(summary.get("app_id").unwrap(), "test_vc_app_id");
         assert_eq!(summary.get("service_count").unwrap(), "1");
         assert_eq!(summary.get("supported_features").unwrap(), "58");
@@ -774,8 +768,14 @@ mod tests {
 
         assert_eq!(service.v1.meeting.config.app_id, "custom_vc_app");
         assert_eq!(service.v1.meeting.config.app_secret, "custom_vc_secret");
-        assert_eq!(service.v1.meeting.config.base_url, "https://custom.example.com");
-        assert_eq!(service.v1.meeting.config.req_timeout, Some(std::time::Duration::from_secs(300)));
+        assert_eq!(
+            service.v1.meeting.config.base_url,
+            "https://custom.example.com"
+        );
+        assert_eq!(
+            service.v1.meeting.config.req_timeout,
+            Some(std::time::Duration::from_secs(300))
+        );
     }
 
     #[test]
@@ -838,10 +838,7 @@ mod tests {
     #[test]
     fn test_vc_service_error_handling_and_robustness() {
         // Test with empty configuration
-        let empty_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let empty_config = Config::builder().app_id("").app_secret("").build();
         let empty_service = VcService::new(empty_config);
 
         let validation_result = empty_service.validate_vc_config();

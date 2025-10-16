@@ -71,9 +71,14 @@ mod tests {
             self
         }
 
-        async fn process_request(&self, request: TestRequest) -> crate::core::SDKResult<TestResponse> {
+        async fn process_request(
+            &self,
+            request: TestRequest,
+        ) -> crate::core::SDKResult<TestResponse> {
             if self.should_fail {
-                return Err(crate::core::error::LarkAPIError::illegal_param("模拟失败".to_string()));
+                return Err(crate::core::error::LarkAPIError::illegal_param(
+                    "模拟失败".to_string(),
+                ));
             }
 
             let response = TestResponse {
@@ -255,6 +260,7 @@ mod tests {
     }
 
     #[derive(Debug, Serialize, Deserialize)]
+    #[allow(dead_code)]
     struct GenericResponse {
         result: String,
     }
@@ -267,12 +273,16 @@ mod tests {
 
     impl<T> GenericBuilder<T> {
         fn new(item: T) -> Self {
-            Self { item: GenericItem { value: item } }
+            Self {
+                item: GenericItem { value: item },
+            }
         }
     }
 
     #[async_trait]
-    impl<T: Send + Sync> ExecutableBuilder<GenericService<T>, GenericItem<T>, String> for GenericBuilder<T> {
+    impl<T: Send + Sync> ExecutableBuilder<GenericService<T>, GenericItem<T>, String>
+        for GenericBuilder<T>
+    {
         fn build(self) -> GenericItem<T> {
             self.item
         }
@@ -299,9 +309,7 @@ mod tests {
     #[tokio::test]
     async fn test_executable_builder_basic_execution() {
         let service = MockService::new().with_response("test_data".to_string());
-        let builder = TestBuilder::new()
-            .id("test_id")
-            .message("test_message");
+        let builder = TestBuilder::new().id("test_id").message("test_message");
 
         let result = builder.execute(&service).await.unwrap();
         assert_eq!(result.id, "test_id");
@@ -320,7 +328,10 @@ mod tests {
             .message("test_message")
             .with_option(&option);
 
-        let result = builder.execute_with_options(&service, option).await.unwrap();
+        let result = builder
+            .execute_with_options(&service, option)
+            .await
+            .unwrap();
         assert_eq!(result.id, "test_id");
         assert_eq!(result.message, "test_message");
     }
@@ -328,9 +339,7 @@ mod tests {
     #[tokio::test]
     async fn test_executable_builder_failure_handling() {
         let service = MockService::new().with_failure();
-        let builder = TestBuilder::new()
-            .id("test_id")
-            .message("test_message");
+        let builder = TestBuilder::new().id("test_id").message("test_message");
 
         let result = builder.execute(&service).await;
         assert!(result.is_err());
@@ -369,9 +378,7 @@ mod tests {
 
     #[test]
     fn test_executable_builder_build_method() {
-        let builder = TestBuilder::new()
-            .id("build_test")
-            .message("build_message");
+        let builder = TestBuilder::new().id("build_test").message("build_message");
 
         let request = builder.build();
         assert_eq!(request.id, "build_test");
@@ -390,9 +397,7 @@ mod tests {
     #[tokio::test]
     async fn test_executable_builder_arc_service() {
         let service = Arc::new(MockService::new().with_response("arc_test".to_string()));
-        let builder = TestBuilder::new()
-            .id("arc_id")
-            .message("arc_message");
+        let builder = TestBuilder::new().id("arc_id").message("arc_message");
 
         // 确保可以与 Arc 共享的服务一起工作
         let result = builder.execute(&*service).await.unwrap();
@@ -474,9 +479,7 @@ mod tests {
         let service = MockService::new();
 
         // 步骤1：创建基础请求
-        let base_request = TestBuilder::new()
-            .id("complex_id")
-            .build();
+        let base_request = TestBuilder::new().id("complex_id").build();
 
         // 步骤2：基于基础请求创建builder（模拟复杂构建逻辑）
         let complex_builder = TestBuilder::new()
@@ -493,9 +496,7 @@ mod tests {
     #[tokio::test]
     async fn test_executable_builder_serialization_roundtrip() {
         // 测试序列化和反序列化的一致性
-        let builder = TestBuilder::new()
-            .id("serde_test")
-            .message("serde_message");
+        let builder = TestBuilder::new().id("serde_test").message("serde_message");
 
         let request = builder.build();
         let serialized = serde_json::to_string(&request).unwrap();
@@ -538,13 +539,9 @@ mod tests {
         assert_eq!(builder1.build(), builder2.build());
 
         // 测试链式调用的顺序独立性
-        let builder3 = TestBuilder::new()
-            .message("msg_first")
-            .id("id_second");
+        let builder3 = TestBuilder::new().message("msg_first").id("id_second");
 
-        let builder4 = TestBuilder::new()
-            .id("id_second")
-            .message("msg_first");
+        let builder4 = TestBuilder::new().id("id_second").message("msg_first");
 
         assert_eq!(builder3.build(), builder4.build());
     }

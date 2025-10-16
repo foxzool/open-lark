@@ -142,7 +142,6 @@ impl V4 {
         }
     }
 
-  
     /// 验证日历服务配置的一致性
     ///
     /// 检查所有子服务的配置是否一致且有效，确保服务间的协调工作。
@@ -177,26 +176,26 @@ impl V4 {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_feature(&self, feature_name: &str) -> bool {
-        match feature_name {
-            "event_scheduling" => true,
-            "meeting_management" => true,
-            "room_booking" => true,
-            "attendee_coordination" => true,
-            "calendar_sharing" => true,
-            "access_control" => true,
-            "timezone_support" => true,
-            "recurring_events" => true,
-            "meeting_minutes" => true,
-            "timeoff_management" => true,
-            "exchange_integration" => true,
-            "meeting_chat" => true,
-            "resource_management" => true,
-            "calendar_settings" => true,
-            "enterprise_features" => true,
-            "team_collaboration" => true,
-            "calendar_automation" => true,
-            _ => false,
-        }
+        matches!(
+            feature_name,
+            "event_scheduling"
+                | "meeting_management"
+                | "room_booking"
+                | "attendee_coordination"
+                | "calendar_sharing"
+                | "access_control"
+                | "timezone_support"
+                | "recurring_events"
+                | "meeting_minutes"
+                | "timeoff_management"
+                | "exchange_integration"
+                | "meeting_chat"
+                | "resource_management"
+                | "calendar_settings"
+                | "enterprise_features"
+                | "team_collaboration"
+                | "calendar_automation"
+        )
     }
 
     /// 快速检查服务健康状态
@@ -218,9 +217,7 @@ impl V4 {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_service_categories_statistics(&self) -> String {
-        format!(
-            "CalendarV4 Categories{{ core: 4, collaboration: 3, integration: 3, total: 10 }}",
-        )
+        "CalendarV4 Categories{ core: 4, collaboration: 3, integration: 3, total: 10 }".to_string()
     }
 
     /// 获取日历服务状态摘要
@@ -232,11 +229,14 @@ impl V4 {
     pub fn get_service_status_summary(&self) -> String {
         let core_healthy = !self.calendar.config.app_id.is_empty();
         let collaboration_healthy = self.meeting_chat.config.app_id == self.calendar.config.app_id;
-        let integration_healthy = self.exchange_binding.config.app_id == self.calendar.config.app_id;
+        let integration_healthy =
+            self.exchange_binding.config.app_id == self.calendar.config.app_id;
 
         format!(
             "CalendarV4 Status{{ core: {}, collaboration: {}, integration: {}, overall: {} }}",
-            core_healthy, collaboration_healthy, integration_healthy,
+            core_healthy,
+            collaboration_healthy,
+            integration_healthy,
             core_healthy && collaboration_healthy && integration_healthy
         )
     }
@@ -249,9 +249,24 @@ impl V4 {
     /// 包含支持的事件类型的向量
     pub fn get_supported_event_types(&self) -> Vec<&'static str> {
         vec![
-            "meeting", "appointment", "task", "reminder", "birthday", "holiday",
-            "interview", "review", "training", "conference", "webinar", "workshop",
-            "travel", "personal", "team_meeting", "one_on_one", "all_hands", "standup"
+            "meeting",
+            "appointment",
+            "task",
+            "reminder",
+            "birthday",
+            "holiday",
+            "interview",
+            "review",
+            "training",
+            "conference",
+            "webinar",
+            "workshop",
+            "travel",
+            "personal",
+            "team_meeting",
+            "one_on_one",
+            "all_hands",
+            "standup",
         ]
     }
 
@@ -323,7 +338,6 @@ mod tests {
             .build()
     }
 
-    
     #[test]
     fn test_calendar_v4_service_creation() {
         let config = create_test_config();
@@ -334,7 +348,6 @@ mod tests {
         assert!(!service.calendar.config.app_id.is_empty());
     }
 
-    
     #[test]
     fn test_calendar_v4_validate_services_config() {
         let config = create_test_config();
@@ -374,15 +387,31 @@ mod tests {
 
         // 测试支持的功能
         let supported_features = vec![
-            "event_scheduling", "meeting_management", "room_booking", "attendee_coordination",
-            "calendar_sharing", "access_control", "timezone_support", "recurring_events",
-            "meeting_minutes", "timeoff_management", "exchange_integration", "meeting_chat",
-            "resource_management", "calendar_settings", "enterprise_features",
-            "team_collaboration", "calendar_automation"
+            "event_scheduling",
+            "meeting_management",
+            "room_booking",
+            "attendee_coordination",
+            "calendar_sharing",
+            "access_control",
+            "timezone_support",
+            "recurring_events",
+            "meeting_minutes",
+            "timeoff_management",
+            "exchange_integration",
+            "meeting_chat",
+            "resource_management",
+            "calendar_settings",
+            "enterprise_features",
+            "team_collaboration",
+            "calendar_automation",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -400,10 +429,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = V4::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -482,8 +508,14 @@ mod tests {
         let cloned_service = service.clone();
 
         // 验证克隆功能
-        assert_eq!(service.calendar.config.app_id, cloned_service.calendar.config.app_id);
-        assert_eq!(service.calendar_event.config.app_id, cloned_service.calendar_event.config.app_id);
+        assert_eq!(
+            service.calendar.config.app_id,
+            cloned_service.calendar.config.app_id
+        );
+        assert_eq!(
+            service.calendar_event.config.app_id,
+            cloned_service.calendar_event.config.app_id
+        );
         assert_eq!(service.config().app_id, cloned_service.config().app_id);
     }
 
@@ -507,25 +539,55 @@ mod tests {
 
         // 测试所有支持的功能组合
         let supported_features = vec![
-            "event_scheduling", "meeting_management", "room_booking", "attendee_coordination",
-            "calendar_sharing", "access_control", "timezone_support", "recurring_events",
-            "meeting_minutes", "timeoff_management", "exchange_integration", "meeting_chat",
-            "resource_management", "calendar_settings", "enterprise_features",
-            "team_collaboration", "calendar_automation"
+            "event_scheduling",
+            "meeting_management",
+            "room_booking",
+            "attendee_coordination",
+            "calendar_sharing",
+            "access_control",
+            "timezone_support",
+            "recurring_events",
+            "meeting_minutes",
+            "timeoff_management",
+            "exchange_integration",
+            "meeting_chat",
+            "resource_management",
+            "calendar_settings",
+            "enterprise_features",
+            "team_collaboration",
+            "calendar_automation",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量
         let mut feature_count = 0;
         let all_features = vec![
-            "event_scheduling", "meeting_management", "room_booking", "attendee_coordination",
-            "calendar_sharing", "access_control", "timezone_support", "recurring_events",
-            "meeting_minutes", "timeoff_management", "exchange_integration", "meeting_chat",
-            "resource_management", "calendar_settings", "enterprise_features",
-            "team_collaboration", "calendar_automation", "nonexistent1", "nonexistent2"
+            "event_scheduling",
+            "meeting_management",
+            "room_booking",
+            "attendee_coordination",
+            "calendar_sharing",
+            "access_control",
+            "timezone_support",
+            "recurring_events",
+            "meeting_minutes",
+            "timeoff_management",
+            "exchange_integration",
+            "meeting_chat",
+            "resource_management",
+            "calendar_settings",
+            "enterprise_features",
+            "team_collaboration",
+            "calendar_automation",
+            "nonexistent1",
+            "nonexistent2",
         ];
 
         for feature in all_features {
@@ -547,7 +609,9 @@ mod tests {
 
         assert!(special_service.validate_services_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_service_statistics().contains("日历服务"));
+        assert!(special_service
+            .get_service_statistics()
+            .contains("日历服务"));
         assert!(special_service.get_service_statistics().contains("📅"));
 
         // 测试长字符串配置
@@ -568,11 +632,26 @@ mod tests {
         let service = V4::new(config);
 
         // 验证所有子服务使用相同的配置
-        assert_eq!(service.calendar.config.app_id, service.calendar_event.config.app_id);
-        assert_eq!(service.calendar.config.app_id, service.meeting_chat.config.app_id);
-        assert_eq!(service.calendar.config.app_id, service.exchange_binding.config.app_id);
-        assert_eq!(service.calendar.config.app_id, service.timeoff_event.config.app_id);
-        assert_eq!(service.calendar.config.app_id, service.attendee.config.app_id);
+        assert_eq!(
+            service.calendar.config.app_id,
+            service.calendar_event.config.app_id
+        );
+        assert_eq!(
+            service.calendar.config.app_id,
+            service.meeting_chat.config.app_id
+        );
+        assert_eq!(
+            service.calendar.config.app_id,
+            service.exchange_binding.config.app_id
+        );
+        assert_eq!(
+            service.calendar.config.app_id,
+            service.timeoff_event.config.app_id
+        );
+        assert_eq!(
+            service.calendar.config.app_id,
+            service.attendee.config.app_id
+        );
     }
 
     #[test]
@@ -656,7 +735,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = V4::new(partial_invalid_config);
 
@@ -665,18 +744,19 @@ mod tests {
         assert!(partial_invalid_service.validate_services_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = V4::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_services_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_service_statistics().contains("CalendarV4"));
-        assert!(fully_invalid_service.get_service_categories_statistics().contains("total: 10"));
+        assert!(fully_invalid_service
+            .get_service_statistics()
+            .contains("CalendarV4"));
+        assert!(fully_invalid_service
+            .get_service_categories_statistics()
+            .contains("total: 10"));
     }
 
     #[test]
@@ -741,7 +821,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]

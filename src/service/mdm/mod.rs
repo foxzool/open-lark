@@ -198,16 +198,31 @@ impl MdmService {
         // 服务配置信息
         stats.insert("service_name".to_string(), "MDM".to_string());
         stats.insert("service_version".to_string(), "v1".to_string());
-        stats.insert("app_id".to_string(), self.country_region.config.app_id.clone());
-        stats.insert("base_url".to_string(), self.country_region.config.base_url.clone());
+        stats.insert(
+            "app_id".to_string(),
+            self.country_region.config.app_id.clone(),
+        );
+        stats.insert(
+            "base_url".to_string(),
+            self.country_region.config.base_url.clone(),
+        );
 
         // 子服务状态
         stats.insert("country_region_service".to_string(), "active".to_string());
-        stats.insert("user_auth_data_relation_service".to_string(), "active".to_string());
+        stats.insert(
+            "user_auth_data_relation_service".to_string(),
+            "active".to_string(),
+        );
 
         // 功能支持
-        stats.insert("country_region_management".to_string(), "enabled".to_string());
-        stats.insert("user_data_dimension_management".to_string(), "enabled".to_string());
+        stats.insert(
+            "country_region_management".to_string(),
+            "enabled".to_string(),
+        );
+        stats.insert(
+            "user_data_dimension_management".to_string(),
+            "enabled".to_string(),
+        );
         stats.insert("data_standardization".to_string(), "enabled".to_string());
         stats.insert("data_integration".to_string(), "enabled".to_string());
 
@@ -227,29 +242,29 @@ impl MdmService {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_mdm_feature(&self, feature: &str) -> bool {
-        match feature {
-            "country_region_management" => true,
-            "user_data_dimension_management" => true,
-            "data_standardization" => true,
-            "data_integration" => true,
-            "global_data_support" => true,
-            "data_quality_monitoring" => true,
-            "compliance_management" => true,
-            "data_governance" => true,
-            "data_lineage" => true,
-            "data_validation" => true,
-            "data_synchronization" => true,
-            "batch_operations" => true,
-            "real_time_updates" => true,
-            "audit_logging" => true,
-            "security_management" => true,
-            "multi_region_support" => true,
-            "data_analytics" => true,
-            "reporting" => true,
-            "api_access" => true,
-            "webhook_support" => true,
-            _ => false,
-        }
+        matches!(
+            feature,
+            "country_region_management"
+                | "user_data_dimension_management"
+                | "data_standardization"
+                | "data_integration"
+                | "global_data_support"
+                | "data_quality_monitoring"
+                | "compliance_management"
+                | "data_governance"
+                | "data_lineage"
+                | "data_validation"
+                | "data_synchronization"
+                | "batch_operations"
+                | "real_time_updates"
+                | "audit_logging"
+                | "security_management"
+                | "multi_region_support"
+                | "data_analytics"
+                | "reporting"
+                | "api_access"
+                | "webhook_support"
+        )
     }
 
     /// 获取主数据管理功能矩阵
@@ -258,13 +273,21 @@ impl MdmService {
     ///
     /// # 返回值
     /// 包含功能状态信息的字典
-    pub fn get_mdm_features_matrix(&self) -> std::collections::HashMap<String, std::collections::HashMap<String, String>> {
+    pub fn get_mdm_features_matrix(
+        &self,
+    ) -> std::collections::HashMap<String, std::collections::HashMap<String, String>> {
         let mut features = std::collections::HashMap::new();
 
         // 数据管理功能
         let mut data_management = std::collections::HashMap::new();
-        data_management.insert("country_region_management".to_string(), "✅ 支持".to_string());
-        data_management.insert("user_data_dimension_management".to_string(), "✅ 支持".to_string());
+        data_management.insert(
+            "country_region_management".to_string(),
+            "✅ 支持".to_string(),
+        );
+        data_management.insert(
+            "user_data_dimension_management".to_string(),
+            "✅ 支持".to_string(),
+        );
         data_management.insert("data_standardization".to_string(), "✅ 支持".to_string());
         data_management.insert("data_validation".to_string(), "✅ 支持".to_string());
         data_management.insert("data_lineage".to_string(), "✅ 支持".to_string());
@@ -322,8 +345,14 @@ impl MdmService {
         match self.validate_mdm_config() {
             Ok(_) => {
                 health.insert("status".to_string(), "healthy".to_string());
-                health.insert("country_region_service".to_string(), "available".to_string());
-                health.insert("user_auth_data_relation_service".to_string(), "available".to_string());
+                health.insert(
+                    "country_region_service".to_string(),
+                    "available".to_string(),
+                );
+                health.insert(
+                    "user_auth_data_relation_service".to_string(),
+                    "available".to_string(),
+                );
             }
             Err(msg) => {
                 health.insert("status".to_string(), "unhealthy".to_string());
@@ -348,9 +377,18 @@ impl MdmService {
         let mut summary = std::collections::HashMap::new();
 
         summary.insert("service_name".to_string(), "MDM".to_string());
-        summary.insert("service_type".to_string(), "Master Data Management".to_string());
-        summary.insert("app_id".to_string(), self.country_region.config.app_id.clone());
-        summary.insert("base_url".to_string(), self.country_region.config.base_url.clone());
+        summary.insert(
+            "service_type".to_string(),
+            "Master Data Management".to_string(),
+        );
+        summary.insert(
+            "app_id".to_string(),
+            self.country_region.config.app_id.clone(),
+        );
+        summary.insert(
+            "base_url".to_string(),
+            self.country_region.config.base_url.clone(),
+        );
         summary.insert("service_count".to_string(), "2".to_string());
         summary.insert("supported_features".to_string(), "20".to_string());
 
@@ -360,7 +398,10 @@ impl MdmService {
         }
 
         summary.insert("country_region_service".to_string(), "enabled".to_string());
-        summary.insert("user_auth_data_relation_service".to_string(), "enabled".to_string());
+        summary.insert(
+            "user_auth_data_relation_service".to_string(),
+            "enabled".to_string(),
+        );
 
         summary
     }
@@ -384,7 +425,9 @@ impl Clone for MdmService {
     fn clone(&self) -> Self {
         Self {
             country_region: CountryRegionService::new(self.country_region.config.clone()),
-            user_auth_data_relation: UserAuthDataRelationService::new(self.user_auth_data_relation.config.clone()),
+            user_auth_data_relation: UserAuthDataRelationService::new(
+                self.user_auth_data_relation.config.clone(),
+            ),
         }
     }
 }
@@ -396,7 +439,10 @@ impl std::fmt::Debug for MdmService {
             .field("service_version", &Self::service_version())
             .field("app_id", &self.country_region.config.app_id)
             .field("country_region_service", &"CountryRegionService")
-            .field("user_auth_data_relation_service", &"UserAuthDataRelationService")
+            .field(
+                "user_auth_data_relation_service",
+                &"UserAuthDataRelationService",
+            )
             .finish()
     }
 }
@@ -451,10 +497,7 @@ mod tests {
         assert!(service.validate_mdm_config().is_ok());
 
         // Test with invalid configuration
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("secret")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("secret").build();
         let invalid_service = MdmService::new(invalid_config);
         assert!(invalid_service.validate_mdm_config().is_err());
     }
@@ -500,9 +543,15 @@ mod tests {
         assert_eq!(stats.get("service_version").unwrap(), "v1");
         assert_eq!(stats.get("app_id").unwrap(), "mdm_test_app");
         assert_eq!(stats.get("country_region_service").unwrap(), "active");
-        assert_eq!(stats.get("user_auth_data_relation_service").unwrap(), "active");
+        assert_eq!(
+            stats.get("user_auth_data_relation_service").unwrap(),
+            "active"
+        );
         assert_eq!(stats.get("country_region_management").unwrap(), "enabled");
-        assert_eq!(stats.get("user_data_dimension_management").unwrap(), "enabled");
+        assert_eq!(
+            stats.get("user_data_dimension_management").unwrap(),
+            "enabled"
+        );
         assert_eq!(stats.get("data_standardization").unwrap(), "enabled");
         assert_eq!(stats.get("global_data_support").unwrap(), "enabled");
     }
@@ -514,7 +563,10 @@ mod tests {
 
         assert_eq!(health.get("status").unwrap(), "healthy");
         assert_eq!(health.get("country_region_service").unwrap(), "available");
-        assert_eq!(health.get("user_auth_data_relation_service").unwrap(), "available");
+        assert_eq!(
+            health.get("user_auth_data_relation_service").unwrap(),
+            "available"
+        );
         assert_eq!(health.get("service_version").unwrap(), "v1");
         assert!(health.contains_key("timestamp"));
     }
@@ -525,12 +577,18 @@ mod tests {
         let summary = service.get_config_summary();
 
         assert_eq!(summary.get("service_name").unwrap(), "MDM");
-        assert_eq!(summary.get("service_type").unwrap(), "Master Data Management");
+        assert_eq!(
+            summary.get("service_type").unwrap(),
+            "Master Data Management"
+        );
         assert_eq!(summary.get("app_id").unwrap(), "mdm_test_app");
         assert_eq!(summary.get("service_count").unwrap(), "2");
         assert_eq!(summary.get("supported_features").unwrap(), "20");
         assert_eq!(summary.get("country_region_service").unwrap(), "enabled");
-        assert_eq!(summary.get("user_auth_data_relation_service").unwrap(), "enabled");
+        assert_eq!(
+            summary.get("user_auth_data_relation_service").unwrap(),
+            "enabled"
+        );
     }
 
     #[test]
@@ -547,8 +605,14 @@ mod tests {
 
         // Check data management features
         let data_mgmt = features.get("数据管理").unwrap();
-        assert_eq!(data_mgmt.get("country_region_management").unwrap(), "✅ 支持");
-        assert_eq!(data_mgmt.get("user_data_dimension_management").unwrap(), "✅ 支持");
+        assert_eq!(
+            data_mgmt.get("country_region_management").unwrap(),
+            "✅ 支持"
+        );
+        assert_eq!(
+            data_mgmt.get("user_data_dimension_management").unwrap(),
+            "✅ 支持"
+        );
         assert_eq!(data_mgmt.get("data_standardization").unwrap(), "✅ 支持");
 
         // Check integration features
@@ -560,7 +624,10 @@ mod tests {
         // Check governance features
         let governance = features.get("治理功能").unwrap();
         assert_eq!(governance.get("data_governance").unwrap(), "✅ 支持");
-        assert_eq!(governance.get("data_quality_monitoring").unwrap(), "✅ 支持");
+        assert_eq!(
+            governance.get("data_quality_monitoring").unwrap(),
+            "✅ 支持"
+        );
         assert_eq!(governance.get("compliance_management").unwrap(), "✅ 支持");
     }
 
@@ -576,9 +643,18 @@ mod tests {
         let service = MdmService::new(config.clone());
 
         assert_eq!(service.country_region.config.app_id, "custom_mdm_app");
-        assert_eq!(service.country_region.config.app_secret, "custom_mdm_secret");
-        assert_eq!(service.country_region.config.base_url, "https://custom.example.com");
-        assert_eq!(service.country_region.config.req_timeout, Some(Duration::from_secs(300)));
+        assert_eq!(
+            service.country_region.config.app_secret,
+            "custom_mdm_secret"
+        );
+        assert_eq!(
+            service.country_region.config.base_url,
+            "https://custom.example.com"
+        );
+        assert_eq!(
+            service.country_region.config.req_timeout,
+            Some(Duration::from_secs(300))
+        );
     }
 
     #[test]
@@ -626,10 +702,7 @@ mod tests {
     #[test]
     fn test_mdm_service_error_handling_and_robustness() {
         // Test with empty configuration
-        let empty_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let empty_config = Config::builder().app_id("").app_secret("").build();
         let empty_service = MdmService::new(empty_config);
 
         let validation_result = empty_service.validate_mdm_config();

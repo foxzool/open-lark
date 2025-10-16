@@ -256,7 +256,8 @@ mod tests {
 
     #[test]
     fn test_send_message_trait_complex_content() {
-        let complex_content = r#"{"text":{"type":"plain","content":"复杂消息内容\n换行符\"引号\""}}"#;
+        let complex_content =
+            r#"{"text":{"type":"plain","content":"复杂消息内容\n换行符\"引号\""}}"#;
         let msg = TestMessage::new("post", complex_content);
         assert_eq!(msg.msg_type(), "post");
         assert_eq!(msg.content(), complex_content);
@@ -265,7 +266,9 @@ mod tests {
     #[test]
     fn test_create_message_resp_serialization() {
         let message = create_test_message();
-        let resp = CreateMessageResp { data: message.clone() };
+        let resp = CreateMessageResp {
+            data: message.clone(),
+        };
 
         let json = serde_json::to_string(&resp).unwrap();
         let parsed: CreateMessageResp = serde_json::from_str(&json).unwrap();
@@ -611,7 +614,11 @@ mod tests {
         let duration = start.elapsed();
 
         // Performance assertion - should process 1000 messages quickly
-        assert!(duration.as_millis() < 100, "Processing 1000 messages took too long: {:?}", duration);
+        assert!(
+            duration.as_millis() < 100,
+            "Processing 1000 messages took too long: {:?}",
+            duration
+        );
     }
 
     #[test]
@@ -635,7 +642,11 @@ mod tests {
         let duration = start.elapsed();
 
         // Should serialize 100 messages quickly
-        assert!(duration.as_millis() < 200, "Serializing 100 messages took too long: {:?}", duration);
+        assert!(
+            duration.as_millis() < 200,
+            "Serializing 100 messages took too long: {:?}",
+            duration
+        );
         assert_eq!(json_results.len(), 100);
     }
 
@@ -678,7 +689,12 @@ mod tests {
         let mut message = create_test_message();
 
         // Test valid message IDs
-        let valid_ids = ["msg_123", "abc-def-ghi", "MSG_UPPERCASE", "msg_with_numbers_123"];
+        let valid_ids = [
+            "msg_123",
+            "abc-def-ghi",
+            "MSG_UPPERCASE",
+            "msg_with_numbers_123",
+        ];
         for valid_id in valid_ids {
             message.message_id = valid_id.to_string();
             let json = serde_json::to_string(&message).unwrap();

@@ -285,9 +285,7 @@ impl SearchService {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_search_categories_statistics(&self) -> String {
-        format!(
-            "SearchService Categories{{ basic_search: 1, advanced_search: 1, data_management: unlimited, total: 2+ }}",
-        )
+        "SearchService Categories{ basic_search: 1, advanced_search: 1, data_management: unlimited, total: 2+ }".to_string()
     }
 
     /// 获取搜索服务状态摘要
@@ -303,7 +301,9 @@ impl SearchService {
 
         format!(
             "SearchService Status{{ v1: {}, v2: {}, overall: {} }}",
-            v1_healthy, v2_healthy, v1_healthy && v2_healthy
+            v1_healthy,
+            v2_healthy,
+            v1_healthy && v2_healthy
         )
     }
 
@@ -328,9 +328,7 @@ impl SearchService {
     /// # 返回值
     /// 包含数据源管理能力信息的字符串
     pub fn get_data_source_management_capabilities(&self) -> String {
-        format!(
-            "SearchService DataSource{{ management: true, sync: true, classification: true, permissions: true, quality: true }}",
-        )
+        "SearchService DataSource{ management: true, sync: true, classification: true, permissions: true, quality: true }".to_string()
     }
 
     /// 获取索引管理能力矩阵
@@ -340,9 +338,7 @@ impl SearchService {
     /// # 返回值
     /// 包含索引管理能力信息的字符串
     pub fn get_index_management_capabilities(&self) -> String {
-        format!(
-            "SearchService Index{{ automatic: true, real_time: true, optimization: true, maintenance: true, reindexing: true }}",
-        )
+        "SearchService Index{ automatic: true, real_time: true, optimization: true, maintenance: true, reindexing: true }".to_string()
     }
 
     /// 获取搜索分析能力矩阵
@@ -352,9 +348,7 @@ impl SearchService {
     /// # 返回值
     /// 包含搜索分析能力信息的字符串
     pub fn get_search_analytics_capabilities(&self) -> String {
-        format!(
-            "SearchService Analytics{{ performance: true, patterns: true, content: true, trends: true, effectiveness: true }}",
-        )
+        "SearchService Analytics{ performance: true, patterns: true, content: true, trends: true, effectiveness: true }".to_string()
     }
 
     /// 获取企业级搜索能力矩阵
@@ -364,9 +358,7 @@ impl SearchService {
     /// # 返回值
     /// 包含企业级搜索能力信息的字符串
     pub fn get_enterprise_search_capabilities(&self) -> String {
-        format!(
-            "SearchService Enterprise{{ multi_tenant: true, distributed: true, high_availability: true, scalable: true, secure: true }}",
-        )
+        "SearchService Enterprise{ multi_tenant: true, distributed: true, high_availability: true, scalable: true, secure: true }".to_string()
     }
 
     /// 获取搜索性能指标
@@ -376,9 +368,7 @@ impl SearchService {
     /// # 返回值
     /// 包含性能指标信息的字符串
     pub fn get_search_performance_metrics(&self) -> String {
-        format!(
-            "SearchService Performance{{ response_time: <100ms, throughput: high, scalability: enterprise, reliability: 99.9%, concurrency: unlimited }}",
-        )
+        "SearchService Performance{ response_time: <100ms, throughput: high, scalability: enterprise, reliability: 99.9%, concurrency: unlimited }".to_string()
     }
 
     /// 获取搜索应用场景矩阵
@@ -388,9 +378,7 @@ impl SearchService {
     /// # 返回值
     /// 包含应用场景信息的字符串
     pub fn get_search_use_cases_matrix(&self) -> String {
-        format!(
-            "SearchService UseCases{{ knowledge_base: true, document_management: true, content_discovery: true, data_analytics: true, cross_system: true }}",
-        )
+        "SearchService UseCases{ knowledge_base: true, document_management: true, content_discovery: true, data_analytics: true, cross_system: true }".to_string()
     }
 
     /// 获取搜索API版本兼容性矩阵
@@ -400,9 +388,7 @@ impl SearchService {
     /// # 返回值
     /// 包含API版本兼容性信息的字符串
     pub fn get_api_compatibility_matrix(&self) -> String {
-        format!(
-            "SearchService APICompatibility{{ v1_supported: true, v2_supported: true, migration: true, backward_compatible: true }}",
-        )
+        "SearchService APICompatibility{ v1_supported: true, v2_supported: true, migration: true, backward_compatible: true }".to_string()
     }
 
     /// 获取搜索安全能力矩阵
@@ -412,9 +398,7 @@ impl SearchService {
     /// # 返回值
     /// 包含搜索安全能力信息的字符串
     pub fn get_search_security_capabilities(&self) -> String {
-        format!(
-            "SearchService Security{{ authentication: true, authorization: true, encryption: true, audit_logging: true, compliance: true }}",
-        )
+        "SearchService Security{ authentication: true, authorization: true, encryption: true, audit_logging: true, compliance: true }".to_string()
     }
 
     /// 获取搜索集成能力矩阵
@@ -424,9 +408,7 @@ impl SearchService {
     /// # 返回值
     /// 包含搜索集成能力信息的字符串
     pub fn get_search_integration_capabilities(&self) -> String {
-        format!(
-            "SearchService Integration{{ third_party: true, api: true, webhooks: true, plugins: true, custom: true }}",
-        )
+        "SearchService Integration{ third_party: true, api: true, webhooks: true, plugins: true, custom: true }".to_string()
     }
 }
 
@@ -534,54 +516,100 @@ mod tests {
 
         // 测试支持的基础搜索功能
         let basic_features = vec![
-            "full_text_search", "exact_match", "fuzzy_search", "wildcard_search",
-            "phrase_search", "boolean_search", "range_search", "regex_search"
+            "full_text_search",
+            "exact_match",
+            "fuzzy_search",
+            "wildcard_search",
+            "phrase_search",
+            "boolean_search",
+            "range_search",
+            "regex_search",
         ];
 
         for feature in basic_features {
-            assert!(service.supports_search_feature(feature), "基础搜索功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_search_feature(feature),
+                "基础搜索功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试支持的数据源管理功能
         let data_source_features = vec![
-            "data_source_management", "custom_data_source", "data_source_sync",
-            "data_classification", "data_tagging", "permission_control", "data_quality_monitoring"
+            "data_source_management",
+            "custom_data_source",
+            "data_source_sync",
+            "data_classification",
+            "data_tagging",
+            "permission_control",
+            "data_quality_monitoring",
         ];
 
         for feature in data_source_features {
-            assert!(service.supports_search_feature(feature), "数据源功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_search_feature(feature),
+                "数据源功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试支持的索引管理功能
         let index_features = vec![
-            "automatic_indexing", "real_time_indexing", "schema_management",
-            "field_mapping", "index_optimization", "index_maintenance", "reindexing"
+            "automatic_indexing",
+            "real_time_indexing",
+            "schema_management",
+            "field_mapping",
+            "index_optimization",
+            "index_maintenance",
+            "reindexing",
         ];
 
         for feature in index_features {
-            assert!(service.supports_search_feature(feature), "索引功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_search_feature(feature),
+                "索引功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试支持的搜索增强功能
         let enhanced_features = vec![
-            "intelligent_recommendation", "relevance_ranking", "cross_data_source_search",
-            "search_analytics", "search_statistics", "user_behavior_tracking",
-            "search_suggestions", "auto_complete"
+            "intelligent_recommendation",
+            "relevance_ranking",
+            "cross_data_source_search",
+            "search_analytics",
+            "search_statistics",
+            "user_behavior_tracking",
+            "search_suggestions",
+            "auto_complete",
         ];
 
         for feature in enhanced_features {
-            assert!(service.supports_search_feature(feature), "增强功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_search_feature(feature),
+                "增强功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试支持的企业级功能
         let enterprise_features = vec![
-            "enterprise_search", "multi_tenant_support", "distributed_search",
-            "high_availability", "scalability", "security_compliance",
-            "audit_logging", "performance_monitoring"
+            "enterprise_search",
+            "multi_tenant_support",
+            "distributed_search",
+            "high_availability",
+            "scalability",
+            "security_compliance",
+            "audit_logging",
+            "performance_monitoring",
         ];
 
         for feature in enterprise_features {
-            assert!(service.supports_search_feature(feature), "企业功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_search_feature(feature),
+                "企业功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -599,10 +627,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = SearchService::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -778,41 +803,145 @@ mod tests {
         // 测试所有支持的搜索功能组合
         let supported_features = vec![
             // 基础搜索功能
-            "full_text_search", "exact_match", "fuzzy_search", "wildcard_search", "phrase_search", "boolean_search", "range_search", "regex_search",
+            "full_text_search",
+            "exact_match",
+            "fuzzy_search",
+            "wildcard_search",
+            "phrase_search",
+            "boolean_search",
+            "range_search",
+            "regex_search",
             // 数据源管理功能
-            "data_source_management", "custom_data_source", "data_source_sync", "data_classification", "data_tagging", "permission_control", "data_quality_monitoring",
+            "data_source_management",
+            "custom_data_source",
+            "data_source_sync",
+            "data_classification",
+            "data_tagging",
+            "permission_control",
+            "data_quality_monitoring",
             // 索引管理功能
-            "automatic_indexing", "real_time_indexing", "schema_management", "field_mapping", "index_optimization", "index_maintenance", "reindexing",
+            "automatic_indexing",
+            "real_time_indexing",
+            "schema_management",
+            "field_mapping",
+            "index_optimization",
+            "index_maintenance",
+            "reindexing",
             // 搜索增强功能
-            "intelligent_recommendation", "relevance_ranking", "cross_data_source_search", "search_analytics", "search_statistics", "user_behavior_tracking", "search_suggestions", "auto_complete",
+            "intelligent_recommendation",
+            "relevance_ranking",
+            "cross_data_source_search",
+            "search_analytics",
+            "search_statistics",
+            "user_behavior_tracking",
+            "search_suggestions",
+            "auto_complete",
             // 企业级功能
-            "enterprise_search", "multi_tenant_support", "distributed_search", "high_availability", "scalability", "security_compliance", "audit_logging", "performance_monitoring",
+            "enterprise_search",
+            "multi_tenant_support",
+            "distributed_search",
+            "high_availability",
+            "scalability",
+            "security_compliance",
+            "audit_logging",
+            "performance_monitoring",
             // API版本功能
-            "v1_basic_search", "v2_advanced_search", "api_version_compatibility", "backward_compatibility", "version_migration",
+            "v1_basic_search",
+            "v2_advanced_search",
+            "api_version_compatibility",
+            "backward_compatibility",
+            "version_migration",
             // 数据处理功能
-            "data_indexing", "data_extraction", "data_transformation", "data_validation", "data_enrichment",
+            "data_indexing",
+            "data_extraction",
+            "data_transformation",
+            "data_validation",
+            "data_enrichment",
             // 搜索分析功能
-            "search_performance_analytics", "user_search_patterns", "content_analysis", "trend_analysis", "search_effectiveness",
+            "search_performance_analytics",
+            "user_search_patterns",
+            "content_analysis",
+            "trend_analysis",
+            "search_effectiveness",
             // 集成功能
-            "third_party_integration", "api_integration", "webhook_support", "custom_plugins", "search_api"
+            "third_party_integration",
+            "api_integration",
+            "webhook_support",
+            "custom_plugins",
+            "search_api",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_search_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_search_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量
         let mut feature_count = 0;
         let all_features = vec![
-            "full_text_search", "exact_match", "fuzzy_search", "wildcard_search", "phrase_search", "boolean_search", "range_search", "regex_search",
-            "data_source_management", "custom_data_source", "data_source_sync", "data_classification", "data_tagging", "permission_control", "data_quality_monitoring",
-            "automatic_indexing", "real_time_indexing", "schema_management", "field_mapping", "index_optimization", "index_maintenance", "reindexing",
-            "intelligent_recommendation", "relevance_ranking", "cross_data_source_search", "search_analytics", "search_statistics", "user_behavior_tracking", "search_suggestions", "auto_complete",
-            "enterprise_search", "multi_tenant_support", "distributed_search", "high_availability", "scalability", "security_compliance", "audit_logging", "performance_monitoring",
-            "v1_basic_search", "v2_advanced_search", "api_version_compatibility", "backward_compatibility", "version_migration",
-            "data_indexing", "data_extraction", "data_transformation", "data_validation", "data_enrichment",
-            "search_performance_analytics", "user_search_patterns", "content_analysis", "trend_analysis", "search_effectiveness",
-            "third_party_integration", "api_integration", "webhook_support", "custom_plugins", "search_api", "nonexistent1", "nonexistent2"
+            "full_text_search",
+            "exact_match",
+            "fuzzy_search",
+            "wildcard_search",
+            "phrase_search",
+            "boolean_search",
+            "range_search",
+            "regex_search",
+            "data_source_management",
+            "custom_data_source",
+            "data_source_sync",
+            "data_classification",
+            "data_tagging",
+            "permission_control",
+            "data_quality_monitoring",
+            "automatic_indexing",
+            "real_time_indexing",
+            "schema_management",
+            "field_mapping",
+            "index_optimization",
+            "index_maintenance",
+            "reindexing",
+            "intelligent_recommendation",
+            "relevance_ranking",
+            "cross_data_source_search",
+            "search_analytics",
+            "search_statistics",
+            "user_behavior_tracking",
+            "search_suggestions",
+            "auto_complete",
+            "enterprise_search",
+            "multi_tenant_support",
+            "distributed_search",
+            "high_availability",
+            "scalability",
+            "security_compliance",
+            "audit_logging",
+            "performance_monitoring",
+            "v1_basic_search",
+            "v2_advanced_search",
+            "api_version_compatibility",
+            "backward_compatibility",
+            "version_migration",
+            "data_indexing",
+            "data_extraction",
+            "data_transformation",
+            "data_validation",
+            "data_enrichment",
+            "search_performance_analytics",
+            "user_search_patterns",
+            "content_analysis",
+            "trend_analysis",
+            "search_effectiveness",
+            "third_party_integration",
+            "api_integration",
+            "webhook_support",
+            "custom_plugins",
+            "search_api",
+            "nonexistent1",
+            "nonexistent2",
         ];
 
         for feature in all_features {
@@ -834,8 +963,12 @@ mod tests {
 
         assert!(special_service.validate_search_services_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_search_service_statistics().contains("搜索服务"));
-        assert!(special_service.get_search_service_statistics().contains("🔍"));
+        assert!(special_service
+            .get_search_service_statistics()
+            .contains("搜索服务"));
+        assert!(special_service
+            .get_search_service_statistics()
+            .contains("🔍"));
 
         // 测试长字符串配置
         let long_app_id = "a".repeat(1000);
@@ -846,7 +979,9 @@ mod tests {
         let long_service = SearchService::new(long_config);
 
         assert!(long_service.validate_search_services_config());
-        assert!(long_service.get_search_service_statistics().contains(&long_app_id));
+        assert!(long_service
+            .get_search_service_statistics()
+            .contains(&long_app_id));
     }
 
     #[test]
@@ -887,7 +1022,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = SearchService::new(partial_invalid_config);
 
@@ -896,18 +1031,19 @@ mod tests {
         assert!(!partial_invalid_service.validate_search_services_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = SearchService::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_search_services_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_search_service_statistics().contains("SearchService"));
-        assert!(fully_invalid_service.get_search_categories_statistics().contains("total: 2+"));
+        assert!(fully_invalid_service
+            .get_search_service_statistics()
+            .contains("SearchService"));
+        assert!(fully_invalid_service
+            .get_search_categories_statistics()
+            .contains("total: 2+"));
     }
 
     #[test]
@@ -977,7 +1113,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
@@ -1019,7 +1158,11 @@ mod tests {
         ];
 
         for (feature, description) in workflow_features {
-            assert!(service.supports_search_feature(feature), "{}功能应该被支持", description);
+            assert!(
+                service.supports_search_feature(feature),
+                "{}功能应该被支持",
+                description
+            );
         }
 
         // 验证统计信息反映搜索工作流程复杂性
@@ -1043,11 +1186,18 @@ mod tests {
 
         // 测试数据源管理核心功能
         let data_source_features = vec![
-            "data_source_management", "custom_data_source", "data_source_sync", "data_classification"
+            "data_source_management",
+            "custom_data_source",
+            "data_source_sync",
+            "data_classification",
         ];
 
         for feature in data_source_features {
-            assert!(service.supports_search_feature(feature), "数据源功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_search_feature(feature),
+                "数据源功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证数据源管理能力完整性
@@ -1066,11 +1216,18 @@ mod tests {
 
         // 测试索引管理功能
         let index_features = vec![
-            "automatic_indexing", "real_time_indexing", "schema_management", "index_optimization"
+            "automatic_indexing",
+            "real_time_indexing",
+            "schema_management",
+            "index_optimization",
         ];
 
         for feature in index_features {
-            assert!(service.supports_search_feature(feature), "索引功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_search_feature(feature),
+                "索引功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证索引管理能力完整性
@@ -1089,11 +1246,18 @@ mod tests {
 
         // 测试企业搜索功能
         let enterprise_features = vec![
-            "enterprise_search", "multi_tenant_support", "distributed_search", "high_availability"
+            "enterprise_search",
+            "multi_tenant_support",
+            "distributed_search",
+            "high_availability",
         ];
 
         for feature in enterprise_features {
-            assert!(service.supports_search_feature(feature), "企业功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_search_feature(feature),
+                "企业功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证企业搜索能力完整性
@@ -1199,14 +1363,8 @@ mod tests {
 
         assert_eq!(service1.v1.config().app_id, "search_app_1");
         assert_eq!(service2.v1.config().app_id, "search_app_2");
-        assert_ne!(
-            service1.v1.config().app_id,
-            service2.v1.config().app_id
-        );
-        assert_ne!(
-            service1.v2.config().app_id,
-            service2.v2.config().app_id
-        );
+        assert_ne!(service1.v1.config().app_id, service2.v1.config().app_id);
+        assert_ne!(service1.v2.config().app_id, service2.v2.config().app_id);
     }
 
     #[test]
@@ -1258,18 +1416,12 @@ mod tests {
         let service1 = SearchService::new(config.clone());
         let service2 = SearchService::new(config.clone());
 
-        assert_eq!(
-            service1.v1.config().app_id,
-            service2.v1.config().app_id
-        );
+        assert_eq!(service1.v1.config().app_id, service2.v1.config().app_id);
         assert_eq!(
             service1.v1.config().app_secret,
             service2.v1.config().app_secret
         );
-        assert_eq!(
-            service1.v2.config().app_id,
-            service2.v2.config().app_id
-        );
+        assert_eq!(service1.v2.config().app_id, service2.v2.config().app_id);
         assert_eq!(
             service1.v2.config().app_secret,
             service2.v2.config().app_secret
@@ -1286,10 +1438,7 @@ mod tests {
 
         let service = SearchService::new(config);
 
-        let configs = [
-            service.v1.config(),
-            service.v2.config(),
-        ];
+        let configs = [service.v1.config(), service.v2.config()];
 
         for config in &configs {
             assert_eq!(config.app_id, "consistency_test");
@@ -1377,6 +1526,8 @@ mod tests {
         // Test Unicode functionality
         assert!(search_service.validate_search_services_config());
         assert!(search_service.health_check());
-        assert!(search_service.get_search_service_statistics().contains("搜索应用"));
+        assert!(search_service
+            .get_search_service_statistics()
+            .contains("搜索应用"));
     }
 }

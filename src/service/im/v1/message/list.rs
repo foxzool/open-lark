@@ -257,12 +257,8 @@ impl MessageService {
 mod tests {
     use super::*;
     use crate::{
-        core::{
-            config::Config,
-            constants::AccessTokenType,
-            req_option::RequestOption,
-        },
-        service::im::v1::message::{MessageService, Message},
+        core::{config::Config, constants::AccessTokenType, req_option::RequestOption},
+        service::im::v1::message::{Message, MessageService},
     };
     use reqwest::Method;
     use serde_json;
@@ -324,11 +320,14 @@ mod tests {
 
     #[test]
     fn test_builder_container_id_type() {
-        let builder = ListMessageRequest::builder()
-            .container_id_type("chat");
+        let builder = ListMessageRequest::builder().container_id_type("chat");
 
         assert_eq!(
-            builder.request.api_req.query_params.get("container_id_type"),
+            builder
+                .request
+                .api_req
+                .query_params
+                .get("container_id_type"),
             Some(&"chat".to_string())
         );
     }
@@ -336,8 +335,7 @@ mod tests {
     #[test]
     fn test_builder_container_id() {
         let chat_id = "oc_123456789";
-        let builder = ListMessageRequest::builder()
-            .container_id(chat_id);
+        let builder = ListMessageRequest::builder().container_id(chat_id);
 
         assert_eq!(
             builder.request.api_req.query_params.get("container_id"),
@@ -367,8 +365,7 @@ mod tests {
     #[test]
     fn test_builder_sort_type() {
         let sort_type = "ByCreateTimeAsc";
-        let builder = ListMessageRequest::builder()
-            .sort_type(sort_type);
+        let builder = ListMessageRequest::builder().sort_type(sort_type);
 
         assert_eq!(
             builder.request.api_req.query_params.get("sort_type"),
@@ -379,8 +376,7 @@ mod tests {
     #[test]
     fn test_builder_page_token() {
         let page_token = "next_page_token_123";
-        let builder = ListMessageRequest::builder()
-            .page_token(page_token);
+        let builder = ListMessageRequest::builder().page_token(page_token);
 
         assert_eq!(
             builder.request.api_req.query_params.get("page_token"),
@@ -393,8 +389,7 @@ mod tests {
         let page_sizes = [1, 10, 50, 100, 500]; // All valid sizes
 
         for size in page_sizes {
-            let builder = ListMessageRequest::builder()
-                .page_size(size);
+            let builder = ListMessageRequest::builder().page_size(size);
 
             assert_eq!(
                 builder.request.api_req.query_params.get("page_size"),
@@ -409,8 +404,14 @@ mod tests {
         let min_builder = ListMessageRequest::builder().page_size(1);
         let max_builder = ListMessageRequest::builder().page_size(500);
 
-        assert_eq!(min_builder.request.api_req.query_params.get("page_size"), Some(&"1".to_string()));
-        assert_eq!(max_builder.request.api_req.query_params.get("page_size"), Some(&"500".to_string()));
+        assert_eq!(
+            min_builder.request.api_req.query_params.get("page_size"),
+            Some(&"1".to_string())
+        );
+        assert_eq!(
+            max_builder.request.api_req.query_params.get("page_size"),
+            Some(&"500".to_string())
+        );
     }
 
     #[test]
@@ -445,7 +446,10 @@ mod tests {
         assert_eq!(params.get("container_id"), Some(&"oc_test123".to_string()));
         assert_eq!(params.get("start_time"), Some(&"1609296809".to_string()));
         assert_eq!(params.get("end_time"), Some(&"1609383209".to_string()));
-        assert_eq!(params.get("sort_type"), Some(&"ByCreateTimeAsc".to_string()));
+        assert_eq!(
+            params.get("sort_type"),
+            Some(&"ByCreateTimeAsc".to_string())
+        );
         assert_eq!(params.get("page_token"), Some(&"test_token".to_string()));
         assert_eq!(params.get("page_size"), Some(&"50".to_string()));
     }
@@ -504,8 +508,16 @@ mod tests {
 
         // Should not add pagination params if they are None
         let built_builder = result.unwrap();
-        assert!(!built_builder.request.api_req.query_params.contains_key("page_size"));
-        assert!(!built_builder.request.api_req.query_params.contains_key("page_token"));
+        assert!(!built_builder
+            .request
+            .api_req
+            .query_params
+            .contains_key("page_size"));
+        assert!(!built_builder
+            .request
+            .api_req
+            .query_params
+            .contains_key("page_token"));
     }
 
     #[test]
@@ -515,16 +527,13 @@ mod tests {
             create_test_message("msg_2", "chat_1"),
         ];
 
-        let response = create_test_response_data(
-            true,
-            Some("next_page".to_string()),
-            messages.clone(),
-        );
+        let response =
+            create_test_response_data(true, Some("next_page".to_string()), messages.clone());
 
         let json = serde_json::to_string(&response).unwrap();
         let parsed: ListMessageRespData = serde_json::from_str(&json).unwrap();
 
-        assert_eq!(parsed.has_more, true);
+        assert!(parsed.has_more);
         assert_eq!(parsed.page_token, Some("next_page".to_string()));
         assert_eq!(parsed.items.len(), 2);
         assert_eq!(parsed.items[0].message_id, "msg_1");
@@ -619,7 +628,7 @@ mod tests {
 
     #[test]
     fn test_access_token_types_configuration() {
-        let expected_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        let expected_types = [AccessTokenType::Tenant, AccessTokenType::User];
 
         // Verify list operations support both token types
         assert_eq!(expected_types.len(), 2);
@@ -700,8 +709,7 @@ mod tests {
         // Test with negative timestamps (before Unix epoch)
         let negative_time = -86400i64; // One day before Unix epoch
 
-        let builder = ListMessageRequest::builder()
-            .start_time(negative_time);
+        let builder = ListMessageRequest::builder().start_time(negative_time);
 
         assert_eq!(
             builder.request.api_req.query_params.get("start_time"),
@@ -795,7 +803,7 @@ mod tests {
         let single_message_response = create_test_response_data(
             false,
             None,
-            vec![create_test_message("single", "chat_single")]
+            vec![create_test_message("single", "chat_single")],
         );
 
         // Verify empty response is lightweight
@@ -818,8 +826,7 @@ mod tests {
         ];
 
         for sort_type in sort_types {
-            let builder = ListMessageRequest::builder()
-                .sort_type(sort_type);
+            let builder = ListMessageRequest::builder().sort_type(sort_type);
 
             assert_eq!(
                 builder.request.api_req.query_params.get("sort_type"),
@@ -833,11 +840,14 @@ mod tests {
         let container_types = ["chat", "p2p", "group"];
 
         for container_type in container_types {
-            let builder = ListMessageRequest::builder()
-                .container_id_type(container_type);
+            let builder = ListMessageRequest::builder().container_id_type(container_type);
 
             assert_eq!(
-                builder.request.api_req.query_params.get("container_id_type"),
+                builder
+                    .request
+                    .api_req
+                    .query_params
+                    .get("container_id_type"),
                 Some(&container_type.to_string())
             );
         }
@@ -846,17 +856,16 @@ mod tests {
     #[test]
     fn test_page_token_edge_cases() {
         let edge_cases = [
-            "", // Empty token
-            "a", // Single character
+            "",                                                           // Empty token
+            "a",                                                          // Single character
             "very_long_token_with_many_characters_and_numbers_123456789", // Long token
-            "特殊字符令牌", // Unicode token
-            "token.with.dots", // Token with dots
-            "token/with/slashes", // Token with slashes
+            "特殊字符令牌",                                               // Unicode token
+            "token.with.dots",                                            // Token with dots
+            "token/with/slashes",                                         // Token with slashes
         ];
 
         for token in edge_cases {
-            let builder = ListMessageRequest::builder()
-                .page_token(token);
+            let builder = ListMessageRequest::builder().page_token(token);
 
             assert_eq!(
                 builder.request.api_req.query_params.get("page_token"),
@@ -880,9 +889,7 @@ mod tests {
     #[test]
     fn test_builder_parameter_overriding() {
         // Test that parameters can be overridden
-        let mut builder = ListMessageRequest::builder()
-            .page_size(10)
-            .page_size(20); // Override previous value
+        let mut builder = ListMessageRequest::builder().page_size(10).page_size(20); // Override previous value
 
         assert_eq!(
             builder.request.api_req.query_params.get("page_size"),
@@ -908,11 +915,8 @@ mod tests {
             .map(|i| create_test_message(&format!("msg_{}", i), "large_chat"))
             .collect();
 
-        let response = create_test_response_data(
-            true,
-            Some("large_list_token".to_string()),
-            messages.clone(),
-        );
+        let response =
+            create_test_response_data(true, Some("large_list_token".to_string()), messages.clone());
 
         assert_eq!(response.items.len(), 100);
         assert!(response.has_more);

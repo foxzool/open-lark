@@ -190,35 +190,35 @@ impl AttendanceService {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_attendance_feature(&self, attendance_feature: &str) -> bool {
-        match attendance_feature {
-            "attendance_tracking" => true,
-            "punch_in_out" => true,
-            "shift_management" => true,
-            "daily_shift" => true,
-            "user_settings" => true,
-            "attendance_statistics" => true,
-            "approval_workflow" => true,
-            "task_management" => true,
-            "task_remedy" => true,
-            "archive_rules" => true,
-            "leave_management" => true,
-            "leave_balance" => true,
-            "overtime_tracking" => true,
-            "attendance_report" => true,
-            "compliance_monitoring" => true,
-            "geo_fencing" => true,
-            "mobile_attendance" => true,
-            "biometric_integration" => true,
-            "auto_scheduling" => true,
-            "exception_handling" => true,
-            "data_analytics" => true,
-            "hr_integration" => true,
-            "payroll_integration" => true,
-            "real_time_monitoring" => true,
-            "custom_rules" => true,
-            "multi_location" => true,
-            _ => false,
-        }
+        matches!(
+            attendance_feature,
+            "attendance_tracking"
+                | "punch_in_out"
+                | "shift_management"
+                | "daily_shift"
+                | "user_settings"
+                | "attendance_statistics"
+                | "approval_workflow"
+                | "task_management"
+                | "task_remedy"
+                | "archive_rules"
+                | "leave_management"
+                | "leave_balance"
+                | "overtime_tracking"
+                | "attendance_report"
+                | "compliance_monitoring"
+                | "geo_fencing"
+                | "mobile_attendance"
+                | "biometric_integration"
+                | "auto_scheduling"
+                | "exception_handling"
+                | "data_analytics"
+                | "hr_integration"
+                | "payroll_integration"
+                | "real_time_monitoring"
+                | "custom_rules"
+                | "multi_location"
+        )
     }
 
     /// 快速检查考勤服务健康状态
@@ -250,9 +250,7 @@ impl AttendanceService {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_attendance_categories_statistics(&self) -> String {
-        format!(
-            "AttendanceService Categories{{ core: 2, user: 4, approval: 2, leave: 2, archive: 1, total: 11 }}",
-        )
+        "AttendanceService Categories{ core: 2, user: 4, approval: 2, leave: 2, archive: 1, total: 11 }".to_string()
     }
 
     /// 获取考勤服务状态摘要
@@ -297,9 +295,7 @@ impl AttendanceService {
     /// # 返回值
     /// 包含打卡管理能力信息的字符串
     pub fn get_clock_in_capabilities(&self) -> String {
-        format!(
-            "AttendanceService ClockIn{{ punch_in: true, punch_out: true, location: true, time_tracking: true, mobile: true }}",
-        )
+        "AttendanceService ClockIn{ punch_in: true, punch_out: true, location: true, time_tracking: true, mobile: true }".to_string()
     }
 
     /// 获取班次管理能力矩阵
@@ -309,9 +305,7 @@ impl AttendanceService {
     /// # 返回值
     /// 包含班次管理能力信息的字符串
     pub fn get_shift_management_capabilities(&self) -> String {
-        format!(
-            "AttendanceService Shift{{ scheduling: true, rotation: true, flexible: true, auto_assign: true, optimization: true }}",
-        )
+        "AttendanceService Shift{ scheduling: true, rotation: true, flexible: true, auto_assign: true, optimization: true }".to_string()
     }
 
     /// 获取假期管理能力矩阵
@@ -321,9 +315,7 @@ impl AttendanceService {
     /// # 返回值
     /// 包含假期管理能力信息的字符串
     pub fn get_leave_management_capabilities(&self) -> String {
-        format!(
-            "AttendanceService Leave{{ balance: true, application: true, approval: true, accrual: true, policy: true }}",
-        )
+        "AttendanceService Leave{ balance: true, application: true, approval: true, accrual: true, policy: true }".to_string()
     }
 
     /// 获取审批流程能力矩阵
@@ -333,9 +325,7 @@ impl AttendanceService {
     /// # 返回值
     /// 包含审批流程能力信息的字符串
     pub fn get_approval_workflow_capabilities(&self) -> String {
-        format!(
-            "AttendanceService Approval{{ multi_level: true, automation: true, routing: true, tracking: true, notification: true }}",
-        )
+        "AttendanceService Approval{ multi_level: true, automation: true, routing: true, tracking: true, notification: true }".to_string()
     }
 
     /// 获取企业级能力矩阵
@@ -345,9 +335,7 @@ impl AttendanceService {
     /// # 返回值
     /// 包含企业级能力信息的字符串
     pub fn get_enterprise_attendance_capabilities(&self) -> String {
-        format!(
-            "AttendanceService Enterprise{{ compliance: true, audit: true, reporting: true, integration: true, analytics: true }}",
-        )
+        "AttendanceService Enterprise{ compliance: true, audit: true, reporting: true, integration: true, analytics: true }".to_string()
     }
 
     /// 获取考勤性能指标
@@ -357,9 +345,7 @@ impl AttendanceService {
     /// # 返回值
     /// 包含性能指标信息的字符串
     pub fn get_attendance_performance_metrics(&self) -> String {
-        format!(
-            "AttendanceService Performance{{ scalability: enterprise, reliability: 99.95%, latency: <100ms, concurrency: high, availability: 99.99% }}",
-        )
+        "AttendanceService Performance{ scalability: enterprise, reliability: 99.95%, latency: <100ms, concurrency: high, availability: 99.99% }".to_string()
     }
 
     /// 获取考勤应用场景矩阵
@@ -369,9 +355,7 @@ impl AttendanceService {
     /// # 返回值
     /// 包含应用场景信息的字符串
     pub fn get_attendance_use_cases_matrix(&self) -> String {
-        format!(
-            "AttendanceService UseCases{{ enterprise_management: true, remote_work: true, multi_shift: true, compliance_tracking: true, payroll_integration: true }}",
-        )
+        "AttendanceService UseCases{ enterprise_management: true, remote_work: true, multi_shift: true, compliance_tracking: true, payroll_integration: true }".to_string()
     }
 }
 
@@ -430,7 +414,10 @@ mod tests {
         assert!(!service.v1.shift.config.app_id.is_empty());
         assert!(!service.v1.shift.config.app_secret.is_empty());
         assert_eq!(service.v1.shift.config.app_id, "test_attendance_app_id");
-        assert_eq!(service.v1.shift.config.app_secret, "test_attendance_app_secret");
+        assert_eq!(
+            service.v1.shift.config.app_secret,
+            "test_attendance_app_secret"
+        );
     }
 
     #[test]
@@ -473,15 +460,40 @@ mod tests {
 
         // 测试支持的考勤功能
         let supported_features = vec![
-            "attendance_tracking", "punch_in_out", "shift_management", "daily_shift", "user_settings",
-            "attendance_statistics", "approval_workflow", "task_management", "task_remedy", "archive_rules",
-            "leave_management", "leave_balance", "overtime_tracking", "attendance_report", "compliance_monitoring",
-            "geo_fencing", "mobile_attendance", "biometric_integration", "auto_scheduling", "exception_handling",
-            "data_analytics", "hr_integration", "payroll_integration", "real_time_monitoring", "custom_rules", "multi_location"
+            "attendance_tracking",
+            "punch_in_out",
+            "shift_management",
+            "daily_shift",
+            "user_settings",
+            "attendance_statistics",
+            "approval_workflow",
+            "task_management",
+            "task_remedy",
+            "archive_rules",
+            "leave_management",
+            "leave_balance",
+            "overtime_tracking",
+            "attendance_report",
+            "compliance_monitoring",
+            "geo_fencing",
+            "mobile_attendance",
+            "biometric_integration",
+            "auto_scheduling",
+            "exception_handling",
+            "data_analytics",
+            "hr_integration",
+            "payroll_integration",
+            "real_time_monitoring",
+            "custom_rules",
+            "multi_location",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_attendance_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_attendance_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -499,10 +511,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = AttendanceService::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -656,25 +665,73 @@ mod tests {
 
         // 测试所有支持的考勤功能组合
         let supported_features = vec![
-            "attendance_tracking", "punch_in_out", "shift_management", "daily_shift", "user_settings",
-            "attendance_statistics", "approval_workflow", "task_management", "task_remedy", "archive_rules",
-            "leave_management", "leave_balance", "overtime_tracking", "attendance_report", "compliance_monitoring",
-            "geo_fencing", "mobile_attendance", "biometric_integration", "auto_scheduling", "exception_handling",
-            "data_analytics", "hr_integration", "payroll_integration", "real_time_monitoring", "custom_rules", "multi_location"
+            "attendance_tracking",
+            "punch_in_out",
+            "shift_management",
+            "daily_shift",
+            "user_settings",
+            "attendance_statistics",
+            "approval_workflow",
+            "task_management",
+            "task_remedy",
+            "archive_rules",
+            "leave_management",
+            "leave_balance",
+            "overtime_tracking",
+            "attendance_report",
+            "compliance_monitoring",
+            "geo_fencing",
+            "mobile_attendance",
+            "biometric_integration",
+            "auto_scheduling",
+            "exception_handling",
+            "data_analytics",
+            "hr_integration",
+            "payroll_integration",
+            "real_time_monitoring",
+            "custom_rules",
+            "multi_location",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_attendance_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_attendance_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量
         let mut feature_count = 0;
         let all_features = vec![
-            "attendance_tracking", "punch_in_out", "shift_management", "daily_shift", "user_settings",
-            "attendance_statistics", "approval_workflow", "task_management", "task_remedy", "archive_rules",
-            "leave_management", "leave_balance", "overtime_tracking", "attendance_report", "compliance_monitoring",
-            "geo_fencing", "mobile_attendance", "biometric_integration", "auto_scheduling", "exception_handling",
-            "data_analytics", "hr_integration", "payroll_integration", "real_time_monitoring", "custom_rules", "multi_location", "nonexistent1", "nonexistent2"
+            "attendance_tracking",
+            "punch_in_out",
+            "shift_management",
+            "daily_shift",
+            "user_settings",
+            "attendance_statistics",
+            "approval_workflow",
+            "task_management",
+            "task_remedy",
+            "archive_rules",
+            "leave_management",
+            "leave_balance",
+            "overtime_tracking",
+            "attendance_report",
+            "compliance_monitoring",
+            "geo_fencing",
+            "mobile_attendance",
+            "biometric_integration",
+            "auto_scheduling",
+            "exception_handling",
+            "data_analytics",
+            "hr_integration",
+            "payroll_integration",
+            "real_time_monitoring",
+            "custom_rules",
+            "multi_location",
+            "nonexistent1",
+            "nonexistent2",
         ];
 
         for feature in all_features {
@@ -696,8 +753,12 @@ mod tests {
 
         assert!(special_service.validate_attendance_services_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_attendance_service_statistics().contains("考勤服务"));
-        assert!(special_service.get_attendance_service_statistics().contains("🕐"));
+        assert!(special_service
+            .get_attendance_service_statistics()
+            .contains("考勤服务"));
+        assert!(special_service
+            .get_attendance_service_statistics()
+            .contains("🕐"));
 
         // 测试长字符串配置
         let long_app_id = "a".repeat(1000);
@@ -708,7 +769,9 @@ mod tests {
         let long_service = AttendanceService::new(long_config);
 
         assert!(long_service.validate_attendance_services_config());
-        assert!(long_service.get_attendance_service_statistics().contains(&long_app_id));
+        assert!(long_service
+            .get_attendance_service_statistics()
+            .contains(&long_app_id));
     }
 
     #[test]
@@ -748,7 +811,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = AttendanceService::new(partial_invalid_config);
 
@@ -757,18 +820,19 @@ mod tests {
         assert!(!partial_invalid_service.validate_attendance_services_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = AttendanceService::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_attendance_services_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_attendance_service_statistics().contains("AttendanceService"));
-        assert!(fully_invalid_service.get_attendance_categories_statistics().contains("total: 11"));
+        assert!(fully_invalid_service
+            .get_attendance_service_statistics()
+            .contains("AttendanceService"));
+        assert!(fully_invalid_service
+            .get_attendance_categories_statistics()
+            .contains("total: 11"));
     }
 
     #[test]
@@ -836,7 +900,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
@@ -851,7 +918,10 @@ mod tests {
 
         // 验证config()方法返回的是相同的配置引用
         assert_eq!(service.v1.shift.config.app_id, service_config.app_id);
-        assert_eq!(service.v1.shift.config.app_secret, service_config.app_secret);
+        assert_eq!(
+            service.v1.shift.config.app_secret,
+            service_config.app_secret
+        );
 
         // 测试Debug trait
         let debug_str = format!("{:?}", service);
@@ -878,7 +948,11 @@ mod tests {
         ];
 
         for (feature, description) in workflow_features {
-            assert!(service.supports_attendance_feature(feature), "{}功能应该被支持", description);
+            assert!(
+                service.supports_attendance_feature(feature),
+                "{}功能应该被支持",
+                description
+            );
         }
 
         // 验证统计信息反映考勤工作流程复杂性
@@ -903,11 +977,19 @@ mod tests {
 
         // 测试打卡管理核心功能
         let clock_in_features = vec![
-            "attendance_tracking", "punch_in_out", "geo_fencing", "mobile_attendance", "biometric_integration"
+            "attendance_tracking",
+            "punch_in_out",
+            "geo_fencing",
+            "mobile_attendance",
+            "biometric_integration",
         ];
 
         for feature in clock_in_features {
-            assert!(service.supports_attendance_feature(feature), "打卡管理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_attendance_feature(feature),
+                "打卡管理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证打卡管理能力完整性
@@ -926,11 +1008,19 @@ mod tests {
 
         // 测试班次和假期管理功能
         let shift_leave_features = vec![
-            "shift_management", "daily_shift", "auto_scheduling", "leave_management", "leave_balance"
+            "shift_management",
+            "daily_shift",
+            "auto_scheduling",
+            "leave_management",
+            "leave_balance",
         ];
 
         for feature in shift_leave_features {
-            assert!(service.supports_attendance_feature(feature), "班次和假期管理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_attendance_feature(feature),
+                "班次和假期管理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证班次管理能力完整性
@@ -957,11 +1047,19 @@ mod tests {
 
         // 测试企业集成功能
         let enterprise_features = vec![
-            "hr_integration", "payroll_integration", "compliance_monitoring", "real_time_monitoring", "data_analytics"
+            "hr_integration",
+            "payroll_integration",
+            "compliance_monitoring",
+            "real_time_monitoring",
+            "data_analytics",
         ];
 
         for feature in enterprise_features {
-            assert!(service.supports_attendance_feature(feature), "企业集成功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_attendance_feature(feature),
+                "企业集成功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证企业级能力完整性

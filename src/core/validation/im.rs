@@ -726,14 +726,23 @@ mod tests {
     #[test]
     fn test_validate_message_type_valid_cases() {
         let valid_types = [
-            "text", "post", "image", "file", "audio", "media", "sticker", "interactive", "share_chat"
+            "text",
+            "post",
+            "image",
+            "file",
+            "audio",
+            "media",
+            "sticker",
+            "interactive",
+            "share_chat",
         ];
 
         for message_type in valid_types {
-            assert!(matches!(
-                validate_message_type(message_type),
-                ValidationResult::Valid
-            ), "Should be valid: {}", message_type);
+            assert!(
+                matches!(validate_message_type(message_type), ValidationResult::Valid),
+                "Should be valid: {}",
+                message_type
+            );
         }
     }
 
@@ -742,10 +751,14 @@ mod tests {
         let invalid_types = ["video", "voice", "document", "unknown", ""];
 
         for message_type in invalid_types {
-            assert!(matches!(
-                validate_message_type(message_type),
-                ValidationResult::Invalid(msg) if msg.contains("Invalid message type")
-            ), "Should be invalid: {}", message_type);
+            assert!(
+                matches!(
+                    validate_message_type(message_type),
+                    ValidationResult::Invalid(msg) if msg.contains("Invalid message type")
+                ),
+                "Should be invalid: {}",
+                message_type
+            );
         }
     }
 
@@ -849,7 +862,9 @@ mod tests {
         }
 
         // 文档文件
-        let doc_formats = ["pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "txt", "zip", "rar"];
+        let doc_formats = [
+            "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "txt", "zip", "rar",
+        ];
         for format in doc_formats {
             assert!(matches!(
                 validate_file_upload(&format!("document.{}", format), 100_000, "file"),
@@ -1319,11 +1334,7 @@ mod tests {
     fn test_validate_message_reaction_valid_cases() {
         // 标准表情
         assert!(matches!(
-            validate_message_reaction(
-                "550e8400-e29b-41d4-a716-446655440000",
-                "emoji",
-                "👍"
-            ),
+            validate_message_reaction("550e8400-e29b-41d4-a716-446655440000", "emoji", "👍"),
             ValidationResult::Valid
         ));
 
@@ -1340,21 +1351,13 @@ mod tests {
         // 边界情况 - 最大key长度
         let max_key = "A".repeat(100);
         assert!(matches!(
-            validate_message_reaction(
-                "550e8400-e29b-41d4-a716-446655440000",
-                "emoji",
-                &max_key
-            ),
+            validate_message_reaction("550e8400-e29b-41d4-a716-446655440000", "emoji", &max_key),
             ValidationResult::Valid
         ));
 
         // Unicode表情key
         assert!(matches!(
-            validate_message_reaction(
-                "550e8400-e29b-41d4-a716-446655440000",
-                "emoji",
-                "😀"
-            ),
+            validate_message_reaction("550e8400-e29b-41d4-a716-446655440000", "emoji", "😀"),
             ValidationResult::Valid
         ));
     }
@@ -1505,7 +1508,10 @@ mod tests {
         ));
 
         assert!(matches!(
-            validate_message_template(r#"{"message": "🎉 欢迎加入我们的团队！"}"#, "550e8400-e29b-41d4-a716-446655440000"),
+            validate_message_template(
+                r#"{"message": "🎉 欢迎加入我们的团队！"}"#,
+                "550e8400-e29b-41d4-a716-446655440000"
+            ),
             ValidationResult::Valid
         ));
 

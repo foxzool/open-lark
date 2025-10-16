@@ -116,10 +116,8 @@ mod tests {
     use super::*;
     use crate::{
         core::{
-            api_req::ApiRequest,
-            config::Config,
+            api_req::ApiRequest, config::Config, constants::AccessTokenType,
             req_option::RequestOption,
-            constants::AccessTokenType,
         },
         service::im::v1::message::builders::CreateMessageRequest,
     };
@@ -128,12 +126,14 @@ mod tests {
 
     // Mock Transport for testing
     #[derive(Debug)]
+    #[allow(dead_code)]
     struct MockTransport {
         should_fail: bool,
         response_data: Option<serde_json::Value>,
         captured_request: Option<ApiRequest>,
     }
 
+    #[allow(dead_code)]
     impl MockTransport {
         fn new() -> Self {
             Self {
@@ -185,7 +185,8 @@ mod tests {
     }
 
     // Helper function to create test update message request
-    fn create_test_update_message_request() -> crate::service::im::v1::message::builders::UpdateMessageRequest {
+    fn create_test_update_message_request(
+    ) -> crate::service::im::v1::message::builders::UpdateMessageRequest {
         let mut api_req = ApiRequest::default();
         let body_json = serde_json::json!({
             "content": "{\"text\":\"Updated message\"}"
@@ -217,8 +218,8 @@ mod tests {
     #[test]
     fn test_delete_message_endpoint_construction() {
         let message_id = "test_msg_123";
-        let expected_path = crate::core::endpoints::im::IM_V1_DELETE_MESSAGE
-            .replace("{message_id}", message_id);
+        let expected_path =
+            crate::core::endpoints::im::IM_V1_DELETE_MESSAGE.replace("{message_id}", message_id);
 
         let constructed_path = crate::core::endpoints::EndpointBuilder::replace_param(
             crate::core::endpoints::im::IM_V1_DELETE_MESSAGE,
@@ -246,15 +247,19 @@ mod tests {
         assert_eq!(api_req.http_method, Method::DELETE);
         assert!(api_req.api_path.contains(message_id));
         assert_eq!(api_req.supported_access_token_types.len(), 2);
-        assert!(api_req.supported_access_token_types.contains(&AccessTokenType::Tenant));
-        assert!(api_req.supported_access_token_types.contains(&AccessTokenType::User));
+        assert!(api_req
+            .supported_access_token_types
+            .contains(&AccessTokenType::Tenant));
+        assert!(api_req
+            .supported_access_token_types
+            .contains(&AccessTokenType::User));
     }
 
     #[test]
     fn test_update_message_endpoint_construction() {
         let message_id = "update_msg_123";
-        let expected_path = crate::core::endpoints::im::IM_V1_UPDATE_MESSAGE
-            .replace("{message_id}", message_id);
+        let expected_path =
+            crate::core::endpoints::im::IM_V1_UPDATE_MESSAGE.replace("{message_id}", message_id);
 
         let constructed_path = crate::core::endpoints::EndpointBuilder::replace_param(
             crate::core::endpoints::im::IM_V1_UPDATE_MESSAGE,
@@ -268,8 +273,8 @@ mod tests {
     #[test]
     fn test_reply_message_endpoint_construction() {
         let message_id = "reply_msg_123";
-        let expected_path = crate::core::endpoints::im::IM_V1_REPLY_MESSAGE
-            .replace("{message_id}", message_id);
+        let expected_path =
+            crate::core::endpoints::im::IM_V1_REPLY_MESSAGE.replace("{message_id}", message_id);
 
         let constructed_path = crate::core::endpoints::EndpointBuilder::replace_param(
             crate::core::endpoints::im::IM_V1_REPLY_MESSAGE,
@@ -306,7 +311,7 @@ mod tests {
 
     #[test]
     fn test_access_token_types_configuration() {
-        let expected_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        let expected_types = [AccessTokenType::Tenant, AccessTokenType::User];
 
         // Verify all message operations support both token types
         assert_eq!(expected_types.len(), 2);
@@ -353,11 +358,7 @@ mod tests {
 
     #[test]
     fn test_special_characters_in_message_id() {
-        let special_ids = [
-            "msg_with.dots",
-            "msg_with@symbols",
-            "msg_with-utf8-测试",
-        ];
+        let special_ids = ["msg_with.dots", "msg_with@symbols", "msg_with-utf8-测试"];
 
         for message_id in special_ids {
             let path = crate::core::endpoints::EndpointBuilder::replace_param(
@@ -468,9 +469,7 @@ mod tests {
     #[test]
     fn test_message_types_import() {
         // Verify we can import required types
-        use crate::service::im::v1::message::{
-            CreateMessageResp, Message, MessageService
-        };
+        use crate::service::im::v1::message::{CreateMessageResp, Message, MessageService};
 
         // If this compiles, all imports are available
         let _message: Option<Message> = None;
@@ -485,8 +484,10 @@ mod tests {
         let update_request = create_test_update_message_request();
 
         // Verify builder-created requests have expected structure (parse as JSON)
-        let create_body: serde_json::Value = serde_json::from_slice(&create_request.api_req.body).unwrap();
-        let update_body: serde_json::Value = serde_json::from_slice(&update_request.api_req.body).unwrap();
+        let create_body: serde_json::Value =
+            serde_json::from_slice(&create_request.api_req.body).unwrap();
+        let update_body: serde_json::Value =
+            serde_json::from_slice(&update_request.api_req.body).unwrap();
 
         assert!(create_body.is_object());
         assert!(update_body.is_object());
@@ -520,7 +521,8 @@ mod tests {
 
         // Verify service methods exist (compile-time check)
         // Just verify the service can be created and has the expected methods
-        assert!(!service.config.app_id.is_empty() || service.config.app_id.is_empty()); // Basic verification
+        assert!(!service.config.app_id.is_empty() || service.config.app_id.is_empty());
+        // Basic verification
 
         // This is mainly a compile-time verification test
     }

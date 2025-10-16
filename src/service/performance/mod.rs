@@ -159,7 +159,8 @@ impl PerformanceService {
     /// # 示例
     ///
     /// ```rust
-    /// use open_lark::prelude::*;
+    /// use open_lark::core::config::Config;
+    /// use open_lark::service::performance::PerformanceService;
     ///
     /// let config = Config::builder()
     ///     .app_id("your_app_id")
@@ -387,9 +388,7 @@ impl PerformanceService {
     /// # 返回值
     /// 包含绩效管理能力矩阵信息的字符串
     pub fn get_performance_capabilities_matrix(&self) -> String {
-        format!(
-            "PerformanceService Capabilities{{ goal: true, assessment: true, analytics: true, development: true, incentive: true, mobile: true }}",
-        )
+        "PerformanceService Capabilities{ goal: true, assessment: true, analytics: true, development: true, incentive: true, mobile: true }".to_string()
     }
 
     /// 获取企业级功能支持矩阵
@@ -399,9 +398,7 @@ impl PerformanceService {
     /// # 返回值
     /// 包含企业级功能支持矩阵信息的字符串
     pub fn get_enterprise_features_matrix(&self) -> String {
-        format!(
-            "PerformanceService Enterprise{{ multi_entity: true, global: true, scalable: true, integrated: true, compliant: true, secure: true }}",
-        )
+        "PerformanceService Enterprise{ multi_entity: true, global: true, scalable: true, integrated: true, compliant: true, secure: true }".to_string()
     }
 
     /// 获取分析能力矩阵
@@ -411,9 +408,7 @@ impl PerformanceService {
     /// # 返回值
     /// 包含分析能力矩阵信息的字符串
     pub fn get_analytics_capabilities_matrix(&self) -> String {
-        format!(
-            "PerformanceService Analytics{{ performance: true, predictive: true, comparative: true, talent: true, trend: true, anomaly: true }}",
-        )
+        "PerformanceService Analytics{ performance: true, predictive: true, comparative: true, talent: true, trend: true, anomaly: true }".to_string()
     }
 
     /// 获取评估系统能力矩阵
@@ -423,9 +418,7 @@ impl PerformanceService {
     /// # 返回值
     /// 包含评估系统能力矩阵信息的字符串
     pub fn get_assessment_systems_matrix(&self) -> String {
-        format!(
-            "PerformanceService Assessment{{ degree_360: true, custom_templates: true, workflows: true, calibration: true, continuous: true, automated: true }}",
-        )
+        "PerformanceService Assessment{ degree_360: true, custom_templates: true, workflows: true, calibration: true, continuous: true, automated: true }".to_string()
     }
 
     /// 获取技术架构能力矩阵
@@ -435,9 +428,7 @@ impl PerformanceService {
     /// # 返回值
     /// 包含技术架构能力矩阵信息的字符串
     pub fn get_technical_architecture_matrix(&self) -> String {
-        format!(
-            "PerformanceService Architecture{{ cloud_native: true, microservices: true, api_first: true, secure: true, scalable: true, ai_enabled: true }}",
-        )
+        "PerformanceService Architecture{ cloud_native: true, microservices: true, api_first: true, secure: true, scalable: true, ai_enabled: true }".to_string()
     }
 
     /// 获取绩效管理模块统计
@@ -447,9 +438,7 @@ impl PerformanceService {
     /// # 返回值
     /// 包含各类型管理模块数量的统计信息
     pub fn get_performance_modules_statistics(&self) -> String {
-        format!(
-            "PerformanceService Modules{{ goal: 7, assessment: 7, analytics: 7, development: 7, configuration: 7, enterprise: 7, total: 42 }}",
-        )
+        "PerformanceService Modules{ goal: 7, assessment: 7, analytics: 7, development: 7, configuration: 7, enterprise: 7, total: 42 }".to_string()
     }
 
     /// 获取绩效数据安全状态信息
@@ -459,9 +448,7 @@ impl PerformanceService {
     /// # 返回值
     /// 包含绩效数据安全状态的字符串
     pub fn get_data_security_status(&self) -> String {
-        format!(
-            "PerformanceService Security{{ encryption: AES256, access_control: RBAC, audit_logging: true, data_masking: true, privacy: GDPR_COMPLIANT, backup: true }}",
-        )
+        "PerformanceService Security{ encryption: AES256, access_control: RBAC, audit_logging: true, data_masking: true, privacy: GDPR_COMPLIANT, backup: true }".to_string()
     }
 
     /// 获取绩效管理集成能力矩阵
@@ -471,9 +458,7 @@ impl PerformanceService {
     /// # 返回值
     /// 包含绩效管理集成能力矩阵信息的字符串
     pub fn get_integration_capabilities_matrix(&self) -> String {
-        format!(
-            "PerformanceService Integration{{ restful_api: true, webhooks: true, sso: true, hr_systems: true, bi_tools: true, collaboration: true, learning_platforms: true }}",
-        )
+        "PerformanceService Integration{ restful_api: true, webhooks: true, sso: true, hr_systems: true, bi_tools: true, collaboration: true, learning_platforms: true }".to_string()
     }
 
     /// 获取目标管理能力矩阵
@@ -483,9 +468,7 @@ impl PerformanceService {
     /// # 返回值
     /// 包含目标管理能力矩阵信息的字符串
     pub fn get_goal_management_matrix(&self) -> String {
-        format!(
-            "PerformanceService Goals{{ okr: true, kpi: true, alignment: true, cascading: true, tracking: true, monitoring: true, reporting: true }}",
-        )
+        "PerformanceService Goals{ okr: true, kpi: true, alignment: true, cascading: true, tracking: true, monitoring: true, reporting: true }".to_string()
     }
 
     /// 获取人才发展能力矩阵
@@ -495,9 +478,7 @@ impl PerformanceService {
     /// # 返回值
     /// 包含人才发展能力矩阵信息的字符串
     pub fn get_talent_development_matrix(&self) -> String {
-        format!(
-            "PerformanceService Development{{ planning: true, training: true, coaching: true, succession: true, career_pathing: true, skill_gap: true, mentorship: true }}",
-        )
+        "PerformanceService Development{ planning: true, training: true, coaching: true, succession: true, career_pathing: true, skill_gap: true, mentorship: true }".to_string()
     }
 }
 
@@ -597,10 +578,7 @@ mod tests {
         assert!(!empty_secret_service.validate_performance_config());
 
         // 测试完全空配置
-        let empty_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let empty_config = Config::builder().app_id("").app_secret("").build();
         let empty_service = PerformanceService::new(empty_config);
         assert!(!empty_service.validate_performance_config());
     }
@@ -629,112 +607,200 @@ mod tests {
 
         // 测试目标管理体系功能
         let goal_features = vec![
-            "goal_management", "okr_system", "kpi_tracking",
-            "goal_alignment", "progress_monitoring", "strategic_cascade", "objective_setting"
+            "goal_management",
+            "okr_system",
+            "kpi_tracking",
+            "goal_alignment",
+            "progress_monitoring",
+            "strategic_cascade",
+            "objective_setting",
         ];
         for feature in goal_features {
-            assert!(service.supports_performance_feature(feature),
-                "Goal feature {} should be supported", feature);
+            assert!(
+                service.supports_performance_feature(feature),
+                "Goal feature {} should be supported",
+                feature
+            );
         }
 
         // 测试绩效评估系统功能
         let assessment_features = vec![
-            "performance_assessment", "degree_360_feedback", "custom_templates",
-            "assessment_workflows", "weight_configuration", "result_calibration", "evaluation_periods"
+            "performance_assessment",
+            "degree_360_feedback",
+            "custom_templates",
+            "assessment_workflows",
+            "weight_configuration",
+            "result_calibration",
+            "evaluation_periods",
         ];
         for feature in assessment_features {
-            assert!(service.supports_performance_feature(feature),
-                "Assessment feature {} should be supported", feature);
+            assert!(
+                service.supports_performance_feature(feature),
+                "Assessment feature {} should be supported",
+                feature
+            );
         }
 
         // 测试数据分析与洞察功能
         let analytics_features = vec![
-            "data_analytics", "performance_analysis", "trend_prediction",
-            "talent_identification", "comparative_analysis", "anomaly_detection", "dashboard_reporting"
+            "data_analytics",
+            "performance_analysis",
+            "trend_prediction",
+            "talent_identification",
+            "comparative_analysis",
+            "anomaly_detection",
+            "dashboard_reporting",
         ];
         for feature in analytics_features {
-            assert!(service.supports_performance_feature(feature),
-                "Analytics feature {} should be supported", feature);
+            assert!(
+                service.supports_performance_feature(feature),
+                "Analytics feature {} should be supported",
+                feature
+            );
         }
 
         // 测试人才发展与激励功能
         let development_features = vec![
-            "talent_development", "development_planning", "training_recommendations",
-            "career_progression", "incentive_programs", "recognition_system", "coaching_tools"
+            "talent_development",
+            "development_planning",
+            "training_recommendations",
+            "career_progression",
+            "incentive_programs",
+            "recognition_system",
+            "coaching_tools",
         ];
         for feature in development_features {
-            assert!(service.supports_performance_feature(feature),
-                "Development feature {} should be supported", feature);
+            assert!(
+                service.supports_performance_feature(feature),
+                "Development feature {} should be supported",
+                feature
+            );
         }
 
         // 测试评估配置与管理功能
         let config_features = vec![
-            "review_configuration", "assessment_cycles", "review_templates",
-            "metric_definitions", "rating_scales", "workflow_automation", "approval_processes"
+            "review_configuration",
+            "assessment_cycles",
+            "review_templates",
+            "metric_definitions",
+            "rating_scales",
+            "workflow_automation",
+            "approval_processes",
         ];
         for feature in config_features {
-            assert!(service.supports_performance_feature(feature),
-                "Config feature {} should be supported", feature);
+            assert!(
+                service.supports_performance_feature(feature),
+                "Config feature {} should be supported",
+                feature
+            );
         }
 
         // 测试高级分析功能
         let advanced_features = vec![
-            "advanced_analytics", "predictive_modeling", "performance_benchmarks",
-            "correlation_analysis", "segmentation_analysis", "root_cause_analysis", "impact_assessment"
+            "advanced_analytics",
+            "predictive_modeling",
+            "performance_benchmarks",
+            "correlation_analysis",
+            "segmentation_analysis",
+            "root_cause_analysis",
+            "impact_assessment",
         ];
         for feature in advanced_features {
-            assert!(service.supports_performance_feature(feature),
-                "Advanced feature {} should be supported", feature);
+            assert!(
+                service.supports_performance_feature(feature),
+                "Advanced feature {} should be supported",
+                feature
+            );
         }
 
         // 测试企业级功能
         let enterprise_features = vec![
-            "multi_entity_support", "global_performance", "localization_support",
-            "scalability_features", "integration_capabilities", "api_management", "workflow_customization"
+            "multi_entity_support",
+            "global_performance",
+            "localization_support",
+            "scalability_features",
+            "integration_capabilities",
+            "api_management",
+            "workflow_customization",
         ];
         for feature in enterprise_features {
-            assert!(service.supports_performance_feature(feature),
-                "Enterprise feature {} should be supported", feature);
+            assert!(
+                service.supports_performance_feature(feature),
+                "Enterprise feature {} should be supported",
+                feature
+            );
         }
 
         // 测试移动端与协作功能
         let mobile_features = vec![
-            "mobile_performance", "real_time_feedback", "collaborative_reviews",
-            "social_recognition", "team_analytics", "peer_feedback", "continuous_performance"
+            "mobile_performance",
+            "real_time_feedback",
+            "collaborative_reviews",
+            "social_recognition",
+            "team_analytics",
+            "peer_feedback",
+            "continuous_performance",
         ];
         for feature in mobile_features {
-            assert!(service.supports_performance_feature(feature),
-                "Mobile feature {} should be supported", feature);
+            assert!(
+                service.supports_performance_feature(feature),
+                "Mobile feature {} should be supported",
+                feature
+            );
         }
 
         // 测试安全与合规功能
         let security_features = vec![
-            "data_security", "privacy_compliance", "audit_logging",
-            "access_control", "data_encryption", "consent_management", "regulatory_compliance"
+            "data_security",
+            "privacy_compliance",
+            "audit_logging",
+            "access_control",
+            "data_encryption",
+            "consent_management",
+            "regulatory_compliance",
         ];
         for feature in security_features {
-            assert!(service.supports_performance_feature(feature),
-                "Security feature {} should be supported", feature);
+            assert!(
+                service.supports_performance_feature(feature),
+                "Security feature {} should be supported",
+                feature
+            );
         }
 
         // 测试智能化功能
         let ai_features = vec![
-            "ai_assisted_reviews", "smart_recommendations", "automated_insights",
-            "natural_language_processing", "machine_learning_models", "behavioral_analysis", "performance_optimization"
+            "ai_assisted_reviews",
+            "smart_recommendations",
+            "automated_insights",
+            "natural_language_processing",
+            "machine_learning_models",
+            "behavioral_analysis",
+            "performance_optimization",
         ];
         for feature in ai_features {
-            assert!(service.supports_performance_feature(feature),
-                "AI feature {} should be supported", feature);
+            assert!(
+                service.supports_performance_feature(feature),
+                "AI feature {} should be supported",
+                feature
+            );
         }
 
         // 测试报表与可视化功能
         let reporting_features = vec![
-            "performance_dashboards", "custom_reports", "data_visualization",
-            "executive_reporting", "drill_down_analysis", "interactive_charts", "scheduled_reporting"
+            "performance_dashboards",
+            "custom_reports",
+            "data_visualization",
+            "executive_reporting",
+            "drill_down_analysis",
+            "interactive_charts",
+            "scheduled_reporting",
         ];
         for feature in reporting_features {
-            assert!(service.supports_performance_feature(feature),
-                "Reporting feature {} should be supported", feature);
+            assert!(
+                service.supports_performance_feature(feature),
+                "Reporting feature {} should be supported",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -752,10 +818,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败 - 无效配置
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = PerformanceService::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -903,49 +966,184 @@ mod tests {
         // 测试所有支持的功能组合
         let all_supported_features = vec![
             // 目标管理体系功能 (7个)
-            "goal_management", "okr_system", "kpi_tracking", "goal_alignment", "progress_monitoring", "strategic_cascade", "objective_setting",
+            "goal_management",
+            "okr_system",
+            "kpi_tracking",
+            "goal_alignment",
+            "progress_monitoring",
+            "strategic_cascade",
+            "objective_setting",
             // 绩效评估系统功能 (7个)
-            "performance_assessment", "degree_360_feedback", "custom_templates", "assessment_workflows", "weight_configuration", "result_calibration", "evaluation_periods",
+            "performance_assessment",
+            "degree_360_feedback",
+            "custom_templates",
+            "assessment_workflows",
+            "weight_configuration",
+            "result_calibration",
+            "evaluation_periods",
             // 数据分析与洞察功能 (7个)
-            "data_analytics", "performance_analysis", "trend_prediction", "talent_identification", "comparative_analysis", "anomaly_detection", "dashboard_reporting",
+            "data_analytics",
+            "performance_analysis",
+            "trend_prediction",
+            "talent_identification",
+            "comparative_analysis",
+            "anomaly_detection",
+            "dashboard_reporting",
             // 人才发展与激励功能 (7个)
-            "talent_development", "development_planning", "training_recommendations", "career_progression", "incentive_programs", "recognition_system", "coaching_tools",
+            "talent_development",
+            "development_planning",
+            "training_recommendations",
+            "career_progression",
+            "incentive_programs",
+            "recognition_system",
+            "coaching_tools",
             // 评估配置与管理功能 (7个)
-            "review_configuration", "assessment_cycles", "review_templates", "metric_definitions", "rating_scales", "workflow_automation", "approval_processes",
+            "review_configuration",
+            "assessment_cycles",
+            "review_templates",
+            "metric_definitions",
+            "rating_scales",
+            "workflow_automation",
+            "approval_processes",
             // 高级分析功能 (7个)
-            "advanced_analytics", "predictive_modeling", "performance_benchmarks", "correlation_analysis", "segmentation_analysis", "root_cause_analysis", "impact_assessment",
+            "advanced_analytics",
+            "predictive_modeling",
+            "performance_benchmarks",
+            "correlation_analysis",
+            "segmentation_analysis",
+            "root_cause_analysis",
+            "impact_assessment",
             // 企业级功能 (7个)
-            "multi_entity_support", "global_performance", "localization_support", "scalability_features", "integration_capabilities", "api_management", "workflow_customization",
+            "multi_entity_support",
+            "global_performance",
+            "localization_support",
+            "scalability_features",
+            "integration_capabilities",
+            "api_management",
+            "workflow_customization",
             // 移动端与协作功能 (7个)
-            "mobile_performance", "real_time_feedback", "collaborative_reviews", "social_recognition", "team_analytics", "peer_feedback", "continuous_performance",
+            "mobile_performance",
+            "real_time_feedback",
+            "collaborative_reviews",
+            "social_recognition",
+            "team_analytics",
+            "peer_feedback",
+            "continuous_performance",
             // 安全与合规功能 (7个)
-            "data_security", "privacy_compliance", "audit_logging", "access_control", "data_encryption", "consent_management", "regulatory_compliance",
+            "data_security",
+            "privacy_compliance",
+            "audit_logging",
+            "access_control",
+            "data_encryption",
+            "consent_management",
+            "regulatory_compliance",
             // 智能化功能 (7个)
-            "ai_assisted_reviews", "smart_recommendations", "automated_insights", "natural_language_processing", "machine_learning_models", "behavioral_analysis", "performance_optimization",
+            "ai_assisted_reviews",
+            "smart_recommendations",
+            "automated_insights",
+            "natural_language_processing",
+            "machine_learning_models",
+            "behavioral_analysis",
+            "performance_optimization",
             // 报表与可视化功能 (7个)
-            "performance_dashboards", "custom_reports", "data_visualization", "executive_reporting", "drill_down_analysis", "interactive_charts", "scheduled_reporting"
+            "performance_dashboards",
+            "custom_reports",
+            "data_visualization",
+            "executive_reporting",
+            "drill_down_analysis",
+            "interactive_charts",
+            "scheduled_reporting",
         ];
 
         for feature in all_supported_features {
-            assert!(service.supports_performance_feature(feature),
-                "Feature {} should be supported", feature);
+            assert!(
+                service.supports_performance_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量 (共10类 * 7个功能 = 70个功能)
         let mut feature_count = 0;
         let all_test_features = vec![
-            "goal_management", "okr_system", "kpi_tracking", "goal_alignment", "progress_monitoring", "strategic_cascade", "objective_setting",
-            "performance_assessment", "degree_360_feedback", "custom_templates", "assessment_workflows", "weight_configuration", "result_calibration", "evaluation_periods",
-            "data_analytics", "performance_analysis", "trend_prediction", "talent_identification", "comparative_analysis", "anomaly_detection", "dashboard_reporting",
-            "talent_development", "development_planning", "training_recommendations", "career_progression", "incentive_programs", "recognition_system", "coaching_tools",
-            "review_configuration", "assessment_cycles", "review_templates", "metric_definitions", "rating_scales", "workflow_automation", "approval_processes",
-            "advanced_analytics", "predictive_modeling", "performance_benchmarks", "correlation_analysis", "segmentation_analysis", "root_cause_analysis", "impact_assessment",
-            "multi_entity_support", "global_performance", "localization_support", "scalability_features", "integration_capabilities", "api_management", "workflow_customization",
-            "mobile_performance", "real_time_feedback", "collaborative_reviews", "social_recognition", "team_analytics", "peer_feedback", "continuous_performance",
-            "data_security", "privacy_compliance", "audit_logging", "access_control", "data_encryption", "consent_management", "regulatory_compliance",
-            "ai_assisted_reviews", "smart_recommendations", "automated_insights", "natural_language_processing", "machine_learning_models", "behavioral_analysis", "performance_optimization",
-            "performance_dashboards", "custom_reports", "data_visualization", "executive_reporting", "drill_down_analysis", "interactive_charts", "scheduled_reporting",
-            "nonexistent_feature"  // 测试不支持的功能
+            "goal_management",
+            "okr_system",
+            "kpi_tracking",
+            "goal_alignment",
+            "progress_monitoring",
+            "strategic_cascade",
+            "objective_setting",
+            "performance_assessment",
+            "degree_360_feedback",
+            "custom_templates",
+            "assessment_workflows",
+            "weight_configuration",
+            "result_calibration",
+            "evaluation_periods",
+            "data_analytics",
+            "performance_analysis",
+            "trend_prediction",
+            "talent_identification",
+            "comparative_analysis",
+            "anomaly_detection",
+            "dashboard_reporting",
+            "talent_development",
+            "development_planning",
+            "training_recommendations",
+            "career_progression",
+            "incentive_programs",
+            "recognition_system",
+            "coaching_tools",
+            "review_configuration",
+            "assessment_cycles",
+            "review_templates",
+            "metric_definitions",
+            "rating_scales",
+            "workflow_automation",
+            "approval_processes",
+            "advanced_analytics",
+            "predictive_modeling",
+            "performance_benchmarks",
+            "correlation_analysis",
+            "segmentation_analysis",
+            "root_cause_analysis",
+            "impact_assessment",
+            "multi_entity_support",
+            "global_performance",
+            "localization_support",
+            "scalability_features",
+            "integration_capabilities",
+            "api_management",
+            "workflow_customization",
+            "mobile_performance",
+            "real_time_feedback",
+            "collaborative_reviews",
+            "social_recognition",
+            "team_analytics",
+            "peer_feedback",
+            "continuous_performance",
+            "data_security",
+            "privacy_compliance",
+            "audit_logging",
+            "access_control",
+            "data_encryption",
+            "consent_management",
+            "regulatory_compliance",
+            "ai_assisted_reviews",
+            "smart_recommendations",
+            "automated_insights",
+            "natural_language_processing",
+            "machine_learning_models",
+            "behavioral_analysis",
+            "performance_optimization",
+            "performance_dashboards",
+            "custom_reports",
+            "data_visualization",
+            "executive_reporting",
+            "drill_down_analysis",
+            "interactive_charts",
+            "scheduled_reporting",
+            "nonexistent_feature", // 测试不支持的功能
         ];
 
         for feature in all_test_features {
@@ -953,7 +1151,7 @@ mod tests {
                 feature_count += 1;
             }
         }
-        assert_eq!(feature_count, 70); // 确保支持70个功能
+        assert_eq!(feature_count, 77); // 确保支持77个功能
     }
 
     #[test]
@@ -967,7 +1165,9 @@ mod tests {
 
         assert!(special_service.validate_performance_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_performance_statistics().contains("绩效服务"));
+        assert!(special_service
+            .get_performance_statistics()
+            .contains("绩效服务"));
         assert!(special_service.get_performance_statistics().contains("📊"));
 
         // 测试长字符串配置
@@ -979,7 +1179,9 @@ mod tests {
         let long_service = PerformanceService::new(long_config);
 
         assert!(long_service.validate_performance_config());
-        assert!(long_service.get_performance_statistics().contains(&long_app_id));
+        assert!(long_service
+            .get_performance_statistics()
+            .contains(&long_app_id));
     }
 
     #[test]
@@ -1023,7 +1225,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = PerformanceService::new(partial_invalid_config);
 
@@ -1032,18 +1234,19 @@ mod tests {
         assert!(!partial_invalid_service.validate_performance_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = PerformanceService::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_performance_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_performance_statistics().contains("PerformanceService"));
-        assert!(fully_invalid_service.get_performance_modules_statistics().contains("total: 42"));
+        assert!(fully_invalid_service
+            .get_performance_statistics()
+            .contains("PerformanceService"));
+        assert!(fully_invalid_service
+            .get_performance_modules_statistics()
+            .contains("total: 42"));
     }
 
     #[test]
@@ -1111,7 +1314,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
@@ -1137,7 +1343,10 @@ mod tests {
         // 测试Clone trait
         let cloned_service = service.clone();
         assert_eq!(service.config().app_id, cloned_service.config().app_id);
-        assert_eq!(service.config().app_secret, cloned_service.config().app_secret);
+        assert_eq!(
+            service.config().app_secret,
+            cloned_service.config().app_secret
+        );
     }
 
     #[test]
@@ -1155,7 +1364,11 @@ mod tests {
         ];
 
         for (feature, description) in workflow_features {
-            assert!(service.supports_performance_feature(feature), "{}功能应该被支持", description);
+            assert!(
+                service.supports_performance_feature(feature),
+                "{}功能应该被支持",
+                description
+            );
         }
 
         // 验证目标管理能力
@@ -1174,12 +1387,21 @@ mod tests {
 
         // 测试评估系统功能
         let assessment_features = vec![
-            "performance_assessment", "degree_360_feedback", "custom_templates",
-            "assessment_workflows", "weight_configuration", "result_calibration", "evaluation_periods"
+            "performance_assessment",
+            "degree_360_feedback",
+            "custom_templates",
+            "assessment_workflows",
+            "weight_configuration",
+            "result_calibration",
+            "evaluation_periods",
         ];
 
         for feature in assessment_features {
-            assert!(service.supports_performance_feature(feature), "评估系统功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_performance_feature(feature),
+                "评估系统功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证评估系统能力完整性
@@ -1199,12 +1421,21 @@ mod tests {
 
         // 测试分析洞察功能
         let analytics_features = vec![
-            "data_analytics", "performance_analysis", "trend_prediction",
-            "talent_identification", "comparative_analysis", "anomaly_detection", "dashboard_reporting"
+            "data_analytics",
+            "performance_analysis",
+            "trend_prediction",
+            "talent_identification",
+            "comparative_analysis",
+            "anomaly_detection",
+            "dashboard_reporting",
         ];
 
         for feature in analytics_features {
-            assert!(service.supports_performance_feature(feature), "分析洞察功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_performance_feature(feature),
+                "分析洞察功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证分析能力完整性
@@ -1224,12 +1455,21 @@ mod tests {
 
         // 测试企业集成功能
         let integration_features = vec![
-            "multi_entity_support", "global_performance", "localization_support",
-            "scalability_features", "integration_capabilities", "api_management", "workflow_customization"
+            "multi_entity_support",
+            "global_performance",
+            "localization_support",
+            "scalability_features",
+            "integration_capabilities",
+            "api_management",
+            "workflow_customization",
         ];
 
         for feature in integration_features {
-            assert!(service.supports_performance_feature(feature), "企业集成功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_performance_feature(feature),
+                "企业集成功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证企业级功能支持
@@ -1298,20 +1538,44 @@ mod tests {
 
         // 验证自定义配置正确应用
         assert_eq!(service.review_config.config.app_id, "performance_test_app");
-        assert_eq!(service.review_config.config.app_secret, "performance_test_secret");
-        assert_eq!(service.review_config.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.review_config.config.app_secret,
+            "performance_test_secret"
+        );
+        assert_eq!(
+            service.review_config.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
 
         assert_eq!(service.stage_task.config.app_id, "performance_test_app");
-        assert_eq!(service.stage_task.config.app_secret, "performance_test_secret");
-        assert_eq!(service.stage_task.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.stage_task.config.app_secret,
+            "performance_test_secret"
+        );
+        assert_eq!(
+            service.stage_task.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
 
         assert_eq!(service.metric_detail.config.app_id, "performance_test_app");
-        assert_eq!(service.metric_detail.config.app_secret, "performance_test_secret");
-        assert_eq!(service.metric_detail.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.metric_detail.config.app_secret,
+            "performance_test_secret"
+        );
+        assert_eq!(
+            service.metric_detail.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
 
         assert_eq!(service.review_data.config.app_id, "performance_test_app");
-        assert_eq!(service.review_data.config.app_secret, "performance_test_secret");
-        assert_eq!(service.review_data.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.review_data.config.app_secret,
+            "performance_test_secret"
+        );
+        assert_eq!(
+            service.review_data.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
 
         // 验证功能支持
         assert!(service.validate_performance_config());
@@ -1335,10 +1599,22 @@ mod tests {
 
         assert_eq!(service1.review_config.config.app_id, "performance_app_1");
         assert_eq!(service2.review_config.config.app_id, "performance_app_2");
-        assert_ne!(service1.review_config.config.app_id, service2.review_config.config.app_id);
-        assert_ne!(service1.stage_task.config.app_id, service2.stage_task.config.app_id);
-        assert_ne!(service1.metric_detail.config.app_id, service2.metric_detail.config.app_id);
-        assert_ne!(service1.review_data.config.app_id, service2.review_data.config.app_id);
+        assert_ne!(
+            service1.review_config.config.app_id,
+            service2.review_config.config.app_id
+        );
+        assert_ne!(
+            service1.stage_task.config.app_id,
+            service2.stage_task.config.app_id
+        );
+        assert_ne!(
+            service1.metric_detail.config.app_id,
+            service2.metric_detail.config.app_id
+        );
+        assert_ne!(
+            service1.review_data.config.app_id,
+            service2.review_data.config.app_id
+        );
     }
 
     #[test]
@@ -1376,10 +1652,22 @@ mod tests {
 
         let service = PerformanceService::new(config);
 
-        assert_eq!(service.review_config.config.req_timeout, Some(Duration::from_secs(200)));
-        assert_eq!(service.stage_task.config.req_timeout, Some(Duration::from_secs(200)));
-        assert_eq!(service.metric_detail.config.req_timeout, Some(Duration::from_secs(200)));
-        assert_eq!(service.review_data.config.req_timeout, Some(Duration::from_secs(200)));
+        assert_eq!(
+            service.review_config.config.req_timeout,
+            Some(Duration::from_secs(200))
+        );
+        assert_eq!(
+            service.stage_task.config.req_timeout,
+            Some(Duration::from_secs(200))
+        );
+        assert_eq!(
+            service.metric_detail.config.req_timeout,
+            Some(Duration::from_secs(200))
+        );
+        assert_eq!(
+            service.review_data.config.req_timeout,
+            Some(Duration::from_secs(200))
+        );
     }
 
     #[test]

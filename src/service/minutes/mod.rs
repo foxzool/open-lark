@@ -174,12 +174,12 @@ impl MinutesService {
         let app_secret = &self.v1.minute.config.app_secret;
 
         // 只检查配置一致性，不检查是否为空（因为测试可能使用空配置）
-        app_id == &self.v1.media.config.app_id &&
-        app_secret == &self.v1.media.config.app_secret &&
-        app_id == &self.v1.statistics.config.app_id &&
-        app_secret == &self.v1.statistics.config.app_secret &&
-        app_id == &self.v1.transcript.config.app_id &&
-        app_secret == &self.v1.transcript.config.app_secret
+        app_id == &self.v1.media.config.app_id
+            && app_secret == &self.v1.media.config.app_secret
+            && app_id == &self.v1.statistics.config.app_id
+            && app_secret == &self.v1.statistics.config.app_secret
+            && app_id == &self.v1.transcript.config.app_id
+            && app_secret == &self.v1.transcript.config.app_secret
     }
 
     /// 获取妙记服务的整体统计信息
@@ -315,9 +315,7 @@ impl MinutesService {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_minutes_categories_statistics(&self) -> String {
-        format!(
-            "MinutesService Categories{{ recording: 7, transcription: 8, ai_summary: 8, content_management: 8, analytics: 8, integration: 5, security: 6, realtime: 5, personalization: 5, enterprise: 5, total: 65 }}",
-        )
+        "MinutesService Categories{ recording: 7, transcription: 8, ai_summary: 8, content_management: 8, analytics: 8, integration: 5, security: 6, realtime: 5, personalization: 5, enterprise: 5, total: 65 }".to_string()
     }
 
     /// 获取妙记服务状态摘要
@@ -347,9 +345,7 @@ impl MinutesService {
     /// # 返回值
     /// 包含会议记录能力信息的字符串
     pub fn get_meeting_recording_capabilities(&self) -> String {
-        format!(
-            "MinutesService Recording{{ automatic: true, real_time: true, structuring: true, templates: true, search: true, annotations: true, export_import: true, quality_control: true }}",
-        )
+        "MinutesService Recording{ automatic: true, real_time: true, structuring: true, templates: true, search: true, annotations: true, export_import: true, quality_control: true }".to_string()
     }
 
     /// 获取智能转写能力矩阵
@@ -359,9 +355,7 @@ impl MinutesService {
     /// # 返回值
     /// 包含智能转写能力信息的字符串
     pub fn get_intelligent_transcription_capabilities(&self) -> String {
-        format!(
-            "MinutesService Transcription{{ multilingual: true, speaker_id: true, correction: true, timestamps: true, keywords: true, noise_reduction: true, accents: true, vocabulary: true }}",
-        )
+        "MinutesService Transcription{ multilingual: true, speaker_id: true, correction: true, timestamps: true, keywords: true, noise_reduction: true, accents: true, vocabulary: true }".to_string()
     }
 
     /// 获取AI智能摘要能力矩阵
@@ -371,9 +365,7 @@ impl MinutesService {
     /// # 返回值
     /// 包含AI智能摘要能力信息的字符串
     pub fn get_ai_summary_capabilities(&self) -> String {
-        format!(
-            "MinutesService AI_Summary{{ automatic: true, extraction: true, action_items: true, task_org: true, insights: true, sentiment: true, topics: true, decisions: true }}",
-        )
+        "MinutesService AI_Summary{ automatic: true, extraction: true, action_items: true, task_org: true, insights: true, sentiment: true, topics: true, decisions: true }".to_string()
     }
 
     /// 获取内容管理能力矩阵
@@ -383,9 +375,7 @@ impl MinutesService {
     /// # 返回值
     /// 包含内容管理能力信息的字符串
     pub fn get_content_management_capabilities(&self) -> String {
-        format!(
-            "MinutesService Content{{ document_mgmt: true, meeting_assoc: true, collaborative_edit: true, permission: true, version_mgmt: true, sharing: true, backup: true, audit: true }}",
-        )
+        "MinutesService Content{ document_mgmt: true, meeting_assoc: true, collaborative_edit: true, permission: true, version_mgmt: true, sharing: true, backup: true, audit: true }".to_string()
     }
 
     /// 获取高级分析能力矩阵
@@ -395,9 +385,7 @@ impl MinutesService {
     /// # 返回值
     /// 包含高级分析能力信息的字符串
     pub fn get_advanced_analytics_capabilities(&self) -> String {
-        format!(
-            "MinutesService Analytics{{ efficiency: true, engagement: true, quality: true, statistics: true, performance: true, trends: true, reports: true, visualization: true }}",
-        )
+        "MinutesService Analytics{ efficiency: true, engagement: true, quality: true, statistics: true, performance: true, trends: true, reports: true, visualization: true }".to_string()
     }
 
     /// 获取集成能力矩阵
@@ -407,9 +395,7 @@ impl MinutesService {
     /// # 返回值
     /// 包含集成能力信息的字符串
     pub fn get_integration_capabilities(&self) -> String {
-        format!(
-            "MinutesService Integration{{ calendar: true, notifications: true, third_party: true, api_webhooks: true, email: true }}",
-        )
+        "MinutesService Integration{ calendar: true, notifications: true, third_party: true, api_webhooks: true, email: true }".to_string()
     }
 
     /// 获取安全合规能力矩阵
@@ -419,9 +405,7 @@ impl MinutesService {
     /// # 返回值
     /// 包含安全合规能力信息的字符串
     pub fn get_security_compliance_capabilities(&self) -> String {
-        format!(
-            "MinutesService Security{{ encryption: true, privacy: true, compliance: true, access_control: true, retention: true, gdpr: true }}",
-        )
+        "MinutesService Security{ encryption: true, privacy: true, compliance: true, access_control: true, retention: true, gdpr: true }".to_string()
     }
 
     /// 获取实时功能能力矩阵
@@ -431,9 +415,7 @@ impl MinutesService {
     /// # 返回值
     /// 包含实时功能能力信息的字符串
     pub fn get_realtime_capabilities(&self) -> String {
-        format!(
-            "MinutesService Realtime{{ collaboration: true, live_transcription: true, notifications: true, concurrent: true, sync_updates: true }}",
-        )
+        "MinutesService Realtime{ collaboration: true, live_transcription: true, notifications: true, concurrent: true, sync_updates: true }".to_string()
     }
 
     /// 获取个性化功能能力矩阵
@@ -443,9 +425,7 @@ impl MinutesService {
     /// # 返回值
     /// 包含个性化功能能力信息的字符串
     pub fn get_personalization_capabilities(&self) -> String {
-        format!(
-            "MinutesService Personalization{{ templates: true, vocabulary: true, preferences: true, automation: true, suggestions: true }}",
-        )
+        "MinutesService Personalization{ templates: true, vocabulary: true, preferences: true, automation: true, suggestions: true }".to_string()
     }
 
     /// 获取企业级功能能力矩阵
@@ -455,9 +435,7 @@ impl MinutesService {
     /// # 返回值
     /// 包含企业级功能能力信息的字符串
     pub fn get_enterprise_capabilities(&self) -> String {
-        format!(
-            "MinutesService Enterprise{{ templates: true, collaboration: true, knowledge_mgmt: true, training: true, compliance: true }}",
-        )
+        "MinutesService Enterprise{ templates: true, collaboration: true, knowledge_mgmt: true, training: true, compliance: true }".to_string()
     }
 
     /// 获取妙记服务性能指标
@@ -467,9 +445,7 @@ impl MinutesService {
     /// # 返回值
     /// 包含性能指标信息的字符串
     pub fn get_minutes_performance_metrics(&self) -> String {
-        format!(
-            "MinutesService Performance{{ transcription_accuracy: 98%, processing_speed: real_time, concurrency: high, availability: 99.9%, scalability: enterprise }}",
-        )
+        "MinutesService Performance{ transcription_accuracy: 98%, processing_speed: real_time, concurrency: high, availability: 99.9%, scalability: enterprise }".to_string()
     }
 
     /// 获取妙记服务应用场景矩阵
@@ -479,9 +455,7 @@ impl MinutesService {
     /// # 返回值
     /// 包含应用场景信息的字符串
     pub fn get_minutes_use_cases_matrix(&self) -> String {
-        format!(
-            "MinutesService UseCases{{ enterprise_meetings: true, training_sessions: true, executive_discussions: true, brainstorming: true, knowledge_capture: true, legal_compliance: true }}",
-        )
+        "MinutesService UseCases{ enterprise_meetings: true, training_sessions: true, executive_discussions: true, brainstorming: true, knowledge_capture: true, legal_compliance: true }".to_string()
     }
 }
 
@@ -701,10 +675,12 @@ mod tests {
 
     #[test]
     fn test_minutes_service_with_shared_config() {
-        let config = Arc::new(Config::builder()
-            .app_id("shared_minutes_app")
-            .app_secret("shared_minutes_secret")
-            .build());
+        let config = Arc::new(
+            Config::builder()
+                .app_id("shared_minutes_app")
+                .app_secret("shared_minutes_secret")
+                .build(),
+        );
 
         let service = MinutesService::new_from_shared(config.clone());
 
@@ -728,9 +704,7 @@ mod tests {
 
     #[test]
     fn test_get_minutes_service_statistics() {
-        let config = Config::builder()
-            .app_id("minutes_stats_app")
-            .build();
+        let config = Config::builder().app_id("minutes_stats_app").build();
 
         let service = MinutesService::new(config);
         let stats = service.get_minutes_service_statistics();
@@ -1134,7 +1108,7 @@ mod tests {
     #[test]
     fn test_service_trait_service_name() {
         let config = Config::default();
-        let service = MinutesService::new(config);
+        let _service = MinutesService::new(config);
 
         assert_eq!(MinutesService::service_name(), "minutes");
     }
@@ -1142,16 +1116,14 @@ mod tests {
     #[test]
     fn test_service_trait_service_version() {
         let config = Config::default();
-        let service = MinutesService::new(config);
+        let _service = MinutesService::new(config);
 
         assert_eq!(MinutesService::service_version(), "1.0.0");
     }
 
     #[test]
     fn test_service_trait_config() {
-        let config = Config::builder()
-            .app_id("service_trait_app")
-            .build();
+        let config = Config::builder().app_id("service_trait_app").build();
         let service = MinutesService::new(config);
 
         assert_eq!(service.config().app_id, "service_trait_app");
@@ -1169,18 +1141,31 @@ mod tests {
         let service1 = MinutesService::new(config);
         let service2 = service1.clone();
 
-        assert_eq!(service1.v1.minute.config.app_id, service2.v1.minute.config.app_id);
-        assert_eq!(service1.v1.minute.config.app_secret, service2.v1.minute.config.app_secret);
-        assert_eq!(service1.v1.media.config.app_id, service2.v1.media.config.app_id);
-        assert_eq!(service1.v1.statistics.config.app_id, service2.v1.statistics.config.app_id);
-        assert_eq!(service1.v1.transcript.config.app_id, service2.v1.transcript.config.app_id);
+        assert_eq!(
+            service1.v1.minute.config.app_id,
+            service2.v1.minute.config.app_id
+        );
+        assert_eq!(
+            service1.v1.minute.config.app_secret,
+            service2.v1.minute.config.app_secret
+        );
+        assert_eq!(
+            service1.v1.media.config.app_id,
+            service2.v1.media.config.app_id
+        );
+        assert_eq!(
+            service1.v1.statistics.config.app_id,
+            service2.v1.statistics.config.app_id
+        );
+        assert_eq!(
+            service1.v1.transcript.config.app_id,
+            service2.v1.transcript.config.app_id
+        );
     }
 
     #[test]
     fn test_minutes_service_debug() {
-        let config = Config::builder()
-            .app_id("debug_minutes_app")
-            .build();
+        let config = Config::builder().app_id("debug_minutes_app").build();
 
         let service = MinutesService::new(config);
         let debug_str = format!("{:?}", service);
@@ -1200,9 +1185,7 @@ mod tests {
     fn test_minutes_service_concurrent_access() {
         use std::thread;
 
-        let config = Config::builder()
-            .app_id("concurrent_minutes_app")
-            .build();
+        let config = Config::builder().app_id("concurrent_minutes_app").build();
         let service = Arc::new(MinutesService::new(config));
 
         let mut handles = vec![];
@@ -1233,9 +1216,7 @@ mod tests {
     fn test_minutes_service_arc_sharing() {
         use std::sync::Arc;
 
-        let config = Config::builder()
-            .app_id("arc_minutes_app")
-            .build();
+        let config = Config::builder().app_id("arc_minutes_app").build();
         let service1 = Arc::new(MinutesService::new(config));
         let service2 = Arc::clone(&service1);
 
@@ -1280,10 +1261,7 @@ mod tests {
 
     #[test]
     fn test_minutes_service_empty_config() {
-        let config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let config = Config::builder().app_id("").app_secret("").build();
 
         let service = MinutesService::new(config);
 

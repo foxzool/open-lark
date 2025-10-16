@@ -662,10 +662,7 @@ mod tests {
         ));
 
         // 边界情况 - 最小长度
-        assert!(matches!(
-            validate_calendar_id("a"),
-            ValidationResult::Valid
-        ));
+        assert!(matches!(validate_calendar_id("a"), ValidationResult::Valid));
     }
 
     #[test]
@@ -1159,10 +1156,11 @@ mod tests {
         // 标准提醒时间
         let valid_times = [0, 5, 10, 15, 30, 60, 120, 1440, 2880, 10080];
         for minutes in valid_times {
-            assert!(matches!(
-                validate_reminder_minutes(minutes),
-                ValidationResult::Valid
-            ), "Should be valid: {} minutes", minutes);
+            assert!(
+                matches!(validate_reminder_minutes(minutes), ValidationResult::Valid),
+                "Should be valid: {} minutes",
+                minutes
+            );
         }
 
         // 边界情况 - 最大值（7天）
@@ -1208,10 +1206,14 @@ mod tests {
         // 非标准但有效的提醒时间
         let non_standard_times = [1, 2, 3, 4, 6, 7, 8, 9, 20, 45, 90, 200, 1000];
         for minutes in non_standard_times {
-            assert!(matches!(
-                validate_reminder_minutes(minutes),
-                ValidationResult::Warning(msg) if msg.contains("建议使用常用提醒时间")
-            ), "Should generate warning for: {} minutes", minutes);
+            assert!(
+                matches!(
+                    validate_reminder_minutes(minutes),
+                    ValidationResult::Warning(msg) if msg.contains("建议使用常用提醒时间")
+                ),
+                "Should generate warning for: {} minutes",
+                minutes
+            );
         }
     }
 
@@ -1266,7 +1268,10 @@ mod tests {
         ));
 
         // 边界情况 - 最大长度
-        let max_rule = "RRULE:FREQ=DAILY;".chars().chain("A".repeat(470).chars()).collect::<String>();
+        let max_rule = "RRULE:FREQ=DAILY;"
+            .chars()
+            .chain("A".repeat(470).chars())
+            .collect::<String>();
         assert!(matches!(
             validate_recurrence_rule(&max_rule),
             ValidationResult::Valid
@@ -1316,7 +1321,10 @@ mod tests {
         ));
 
         // 超过最大长度
-        let too_long_rule = "RRULE:FREQ=DAILY;".chars().chain("A".repeat(500).chars()).collect::<String>();
+        let too_long_rule = "RRULE:FREQ=DAILY;"
+            .chars()
+            .chain("A".repeat(500).chars())
+            .collect::<String>();
         assert!(matches!(
             validate_recurrence_rule(&too_long_rule),
             ValidationResult::Invalid(msg) if msg.contains("不能超过")
@@ -1527,7 +1535,10 @@ mod tests {
 
         // 包含特殊字符的地址
         assert!(matches!(
-            validate_location("公司总部", Some("北京市朝阳区建国路88号SOHO现代城A座10层1001室")),
+            validate_location(
+                "公司总部",
+                Some("北京市朝阳区建国路88号SOHO现代城A座10层1001室")
+            ),
             ValidationResult::Valid
         ));
     }
@@ -1594,10 +1605,11 @@ mod tests {
         // 所有有效状态
         let valid_statuses = ["confirmed", "tentative", "cancelled"];
         for status in valid_statuses {
-            assert!(matches!(
-                validate_event_status(status),
-                ValidationResult::Valid
-            ), "Should be valid: {}", status);
+            assert!(
+                matches!(validate_event_status(status), ValidationResult::Valid),
+                "Should be valid: {}",
+                status
+            );
         }
 
         // 大小写混合
@@ -1622,10 +1634,14 @@ mod tests {
         // 无效状态
         let invalid_statuses = ["pending", "completed", "unknown", ""];
         for status in invalid_statuses {
-            assert!(matches!(
-                validate_event_status(status),
-                ValidationResult::Invalid(msg) if msg.contains("无效的日程状态")
-            ), "Should be invalid: {}", status);
+            assert!(
+                matches!(
+                    validate_event_status(status),
+                    ValidationResult::Invalid(msg) if msg.contains("无效的日程状态")
+                ),
+                "Should be invalid: {}",
+                status
+            );
         }
     }
 
@@ -1873,7 +1889,9 @@ mod tests {
         ));
 
         assert!(matches!(
-            validate_event_description("讨论内容包括：\n📊 业绩回顾\n🎯 目标达成情况\n📈 增长趋势分析"),
+            validate_event_description(
+                "讨论内容包括：\n📊 业绩回顾\n🎯 目标达成情况\n📈 增长趋势分析"
+            ),
             ValidationResult::Valid
         ));
 
@@ -1885,7 +1903,10 @@ mod tests {
 
         // 位置地址包含详细Unicode信息
         assert!(matches!(
-            validate_location("北京总部", Some("北京市朝阳区建国路88号SOHO现代城A座10层1001室")),
+            validate_location(
+                "北京总部",
+                Some("北京市朝阳区建国路88号SOHO现代城A座10层1001室")
+            ),
             ValidationResult::Valid
         ));
 

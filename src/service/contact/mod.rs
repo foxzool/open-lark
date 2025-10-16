@@ -159,92 +159,38 @@ impl ContactService {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_contact_feature(&self, contact_feature: &str) -> bool {
-        match contact_feature {
+        matches!(
+            contact_feature,
             // 用户管理功能
-            "user_management" => true,
-            "user_crud_operations" => true,
-            "user_profile_management" => true,
-            "user_status_management" => true,
-            "user_authentication" => true,
-            "user_email_management" => true,
-            "user_tag_management" => true,
-            "user_group_management" => true,
-            "batch_user_operations" => true,
-            "user_import_export" => true,
-
-            // 部门管理功能
-            "department_management" => true,
-            "department_crud_operations" => true,
-            "department_hierarchy" => true,
-            "department_member_management" => true,
-            "department_leader_assignment" => true,
-            "department_restructuring" => true,
-            "department_merge_split" => true,
-            "batch_department_operations" => true,
-            "department_import_export" => true,
-
-            // 组织架构功能
-            "organization_structure" => true,
-            "org_chart_visualization" => true,
-            "hierarchy_management" => true,
-            "org_planning" => true,
-            "org_optimization" => true,
-            "org_analysis" => true,
-            "org_change_management" => true,
-
-            // 权限和角色功能
-            "permission_management" => true,
-            "role_assignment" => true,
-            "access_control" => true,
-            "security_policies" => true,
-            "fine_grained_permissions" => true,
-            "privilege_management" => true,
-            "audit_logging" => true,
-
-            // 职级职务功能
-            "rank_management" => true,
-            "position_management" => true,
-            "job_title_assignment" => true,
-            "career_progression" => true,
-            "promotion_management" => true,
-            "job_description" => true,
-            "skill_management" => true,
-
-            // 数据同步功能
-            "data_synchronization" => true,
-            "real_time_sync" => true,
-            "batch_sync" => true,
-            "incremental_sync" => true,
-            "data_validation" => true,
-            "conflict_resolution" => true,
-            "sync_monitoring" => true,
-
-            // 集成功能
-            "hr_system_integration" => true,
-            "third_party_integration" => true,
-            "api_integration" => true,
-            "webhook_support" => true,
-            "custom_fields" => true,
-            "data_mapping" => true,
-
-            // 分析功能
-            "contact_analytics" => true,
-            "user_statistics" => true,
-            "department_analytics" => true,
-            "org_health_analysis" => true,
-            "activity_tracking" => true,
-            "performance_metrics" => true,
-
-            // 企业级功能
-            "enterprise_grade" => true,
-            "multi_tenant_support" => true,
-            "scalability" => true,
-            "high_availability" => true,
-            "security_compliance" => true,
-            "data_privacy" => true,
-
-            _ => false,
-        }
+            "user_management" | "user_crud_operations" | "user_profile_management" | "user_status_management"
+                | "user_authentication" | "user_email_management" | "user_tag_management" | "user_group_management"
+                | "batch_user_operations" | "user_import_export"
+                // 部门管理功能
+                | "department_management" | "department_crud_operations" | "department_hierarchy" | "department_member_management"
+                | "department_leader_assignment" | "department_restructuring" | "department_merge_split"
+                | "batch_department_operations" | "department_import_export"
+                // 组织架构功能
+                | "organization_structure" | "org_chart_visualization" | "hierarchy_management" | "org_planning"
+                | "org_optimization" | "org_analysis" | "org_change_management"
+                // 权限和角色功能
+                | "permission_management" | "role_assignment" | "access_control" | "security_policies"
+                | "fine_grained_permissions" | "privilege_management" | "audit_logging"
+                // 职级职务功能
+                | "rank_management" | "position_management" | "job_title_assignment" | "career_progression"
+                | "promotion_management" | "job_description" | "skill_management"
+                // 数据同步功能
+                | "data_synchronization" | "real_time_sync" | "batch_sync" | "incremental_sync"
+                | "data_validation" | "conflict_resolution" | "sync_monitoring"
+                // 集成功能
+                | "hr_system_integration" | "third_party_integration" | "api_integration" | "webhook_support"
+                | "custom_fields" | "data_mapping"
+                // 分析功能
+                | "contact_analytics" | "user_statistics" | "department_analytics" | "org_health_analysis"
+                | "activity_tracking" | "performance_metrics"
+                // 企业级功能
+                | "enterprise_grade" | "multi_tenant_support" | "scalability" | "high_availability"
+                | "security_compliance" | "data_privacy"
+        )
     }
 
     /// 快速检查通讯录服务健康状态
@@ -268,9 +214,7 @@ impl ContactService {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_contact_categories_statistics(&self) -> String {
-        format!(
-            "ContactService Categories{{ user_management: 6, department_management: 5, organization: 4, permissions: 4, total: 19 }}",
-        )
+        "ContactService Categories{ user_management: 6, department_management: 5, organization: 4, permissions: 4, total: 19 }".to_string()
     }
 
     /// 获取通讯录服务状态摘要
@@ -300,9 +244,7 @@ impl ContactService {
     /// # 返回值
     /// 包含用户管理能力信息的字符串
     pub fn get_user_management_capabilities(&self) -> String {
-        format!(
-            "ContactService UserManagement{{ crud: true, profile: true, status: true, authentication: true, batch: true, import_export: true }}",
-        )
+        "ContactService UserManagement{ crud: true, profile: true, status: true, authentication: true, batch: true, import_export: true }".to_string()
     }
 
     /// 获取部门管理能力矩阵
@@ -312,9 +254,7 @@ impl ContactService {
     /// # 返回值
     /// 包含部门管理能力信息的字符串
     pub fn get_department_management_capabilities(&self) -> String {
-        format!(
-            "ContactService DepartmentManagement{{ crud: true, hierarchy: true, members: true, leaders: true, restructuring: true, batch: true }}",
-        )
+        "ContactService DepartmentManagement{ crud: true, hierarchy: true, members: true, leaders: true, restructuring: true, batch: true }".to_string()
     }
 
     /// 获取组织架构能力矩阵
@@ -324,9 +264,7 @@ impl ContactService {
     /// # 返回值
     /// 包含组织架构管理能力信息的字符串
     pub fn get_organization_structure_capabilities(&self) -> String {
-        format!(
-            "ContactService Organization{{ chart: true, hierarchy: true, planning: true, optimization: true, analysis: true, change_management: true }}",
-        )
+        "ContactService Organization{ chart: true, hierarchy: true, planning: true, optimization: true, analysis: true, change_management: true }".to_string()
     }
 
     /// 获取权限管理能力矩阵
@@ -336,9 +274,7 @@ impl ContactService {
     /// # 返回值
     /// 包含权限管理能力信息的字符串
     pub fn get_permission_management_capabilities(&self) -> String {
-        format!(
-            "ContactService Permission{{ roles: true, access_control: true, security: true, fine_grained: true, audit: true, policies: true }}",
-        )
+        "ContactService Permission{ roles: true, access_control: true, security: true, fine_grained: true, audit: true, policies: true }".to_string()
     }
 
     /// 获取数据同步能力矩阵
@@ -348,9 +284,7 @@ impl ContactService {
     /// # 返回值
     /// 包含数据同步能力信息的字符串
     pub fn get_data_synchronization_capabilities(&self) -> String {
-        format!(
-            "ContactService Sync{{ real_time: true, batch: true, incremental: true, validation: true, monitoring: true, conflict_resolution: true }}",
-        )
+        "ContactService Sync{ real_time: true, batch: true, incremental: true, validation: true, monitoring: true, conflict_resolution: true }".to_string()
     }
 
     /// 获取HR集成能力矩阵
@@ -360,9 +294,7 @@ impl ContactService {
     /// # 返回值
     /// 包含HR集成能力信息的字符串
     pub fn get_hr_integration_capabilities(&self) -> String {
-        format!(
-            "ContactService HRIntegration{{ hris: true, payroll: true, performance: true, recruitment: true, onboarding: true, offboarding: true }}",
-        )
+        "ContactService HRIntegration{ hris: true, payroll: true, performance: true, recruitment: true, onboarding: true, offboarding: true }".to_string()
     }
 
     /// 获取企业级能力矩阵
@@ -372,9 +304,7 @@ impl ContactService {
     /// # 返回值
     /// 包含企业级能力信息的字符串
     pub fn get_enterprise_contact_capabilities(&self) -> String {
-        format!(
-            "ContactService Enterprise{{ multi_tenant: true, scalable: true, available: true, secure: true, compliant: true, private: true }}",
-        )
+        "ContactService Enterprise{ multi_tenant: true, scalable: true, available: true, secure: true, compliant: true, private: true }".to_string()
     }
 
     /// 获取通讯录性能指标
@@ -384,9 +314,7 @@ impl ContactService {
     /// # 返回值
     /// 包含性能指标信息的字符串
     pub fn get_contact_performance_metrics(&self) -> String {
-        format!(
-            "ContactService Performance{{ query_latency: <50ms, batch_throughput: high, sync_latency: <100ms, scalability: enterprise, availability: 99.95% }}",
-        )
+        "ContactService Performance{ query_latency: <50ms, batch_throughput: high, sync_latency: <100ms, scalability: enterprise, availability: 99.95% }".to_string()
     }
 
     /// 获取通讯录应用场景矩阵
@@ -396,9 +324,7 @@ impl ContactService {
     /// # 返回值
     /// 包含应用场景信息的字符串
     pub fn get_contact_use_cases_matrix(&self) -> String {
-        format!(
-            "ContactService UseCases{{ hr_management: true, org_structure: true, access_control: true, data_sync: true, compliance: true }}",
-        )
+        "ContactService UseCases{ hr_management: true, org_structure: true, access_control: true, data_sync: true, compliance: true }".to_string()
     }
 }
 
@@ -464,9 +390,15 @@ mod tests {
         assert!(!service.v3.department.config().app_id.is_empty());
         assert!(!service.v3.department.config().app_secret.is_empty());
         assert_eq!(service.v3.user.config().app_id, "test_contact_app_id");
-        assert_eq!(service.v3.user.config().app_secret, "test_contact_app_secret");
+        assert_eq!(
+            service.v3.user.config().app_secret,
+            "test_contact_app_secret"
+        );
         assert_eq!(service.v3.department.config().app_id, "test_contact_app_id");
-        assert_eq!(service.v3.department.config().app_secret, "test_contact_app_secret");
+        assert_eq!(
+            service.v3.department.config().app_secret,
+            "test_contact_app_secret"
+        );
     }
 
     #[test]
@@ -508,44 +440,83 @@ mod tests {
 
         // 测试支持的用户管理功能
         let user_features = vec![
-            "user_management", "user_crud_operations", "user_profile_management",
-            "user_status_management", "user_authentication", "user_email_management",
-            "user_tag_management", "user_group_management", "batch_user_operations", "user_import_export"
+            "user_management",
+            "user_crud_operations",
+            "user_profile_management",
+            "user_status_management",
+            "user_authentication",
+            "user_email_management",
+            "user_tag_management",
+            "user_group_management",
+            "batch_user_operations",
+            "user_import_export",
         ];
 
         for feature in user_features {
-            assert!(service.supports_contact_feature(feature), "用户管理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_contact_feature(feature),
+                "用户管理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试支持的部门管理功能
         let department_features = vec![
-            "department_management", "department_crud_operations", "department_hierarchy",
-            "department_member_management", "department_leader_assignment", "department_restructuring",
-            "department_merge_split", "batch_department_operations", "department_import_export"
+            "department_management",
+            "department_crud_operations",
+            "department_hierarchy",
+            "department_member_management",
+            "department_leader_assignment",
+            "department_restructuring",
+            "department_merge_split",
+            "batch_department_operations",
+            "department_import_export",
         ];
 
         for feature in department_features {
-            assert!(service.supports_contact_feature(feature), "部门管理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_contact_feature(feature),
+                "部门管理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试支持的组织架构功能
         let org_features = vec![
-            "organization_structure", "org_chart_visualization", "hierarchy_management",
-            "org_planning", "org_optimization", "org_analysis", "org_change_management"
+            "organization_structure",
+            "org_chart_visualization",
+            "hierarchy_management",
+            "org_planning",
+            "org_optimization",
+            "org_analysis",
+            "org_change_management",
         ];
 
         for feature in org_features {
-            assert!(service.supports_contact_feature(feature), "组织架构功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_contact_feature(feature),
+                "组织架构功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试支持的权限管理功能
         let permission_features = vec![
-            "permission_management", "role_assignment", "access_control", "security_policies",
-            "fine_grained_permissions", "privilege_management", "audit_logging"
+            "permission_management",
+            "role_assignment",
+            "access_control",
+            "security_policies",
+            "fine_grained_permissions",
+            "privilege_management",
+            "audit_logging",
         ];
 
         for feature in permission_features {
-            assert!(service.supports_contact_feature(feature), "权限管理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_contact_feature(feature),
+                "权限管理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -563,10 +534,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = ContactService::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -740,41 +708,159 @@ mod tests {
         // 测试所有支持的通讯录功能组合
         let supported_features = vec![
             // 用户管理功能
-            "user_management", "user_crud_operations", "user_profile_management", "user_status_management", "user_authentication", "user_email_management", "user_tag_management", "user_group_management", "batch_user_operations", "user_import_export",
+            "user_management",
+            "user_crud_operations",
+            "user_profile_management",
+            "user_status_management",
+            "user_authentication",
+            "user_email_management",
+            "user_tag_management",
+            "user_group_management",
+            "batch_user_operations",
+            "user_import_export",
             // 部门管理功能
-            "department_management", "department_crud_operations", "department_hierarchy", "department_member_management", "department_leader_assignment", "department_restructuring", "department_merge_split", "batch_department_operations", "department_import_export",
+            "department_management",
+            "department_crud_operations",
+            "department_hierarchy",
+            "department_member_management",
+            "department_leader_assignment",
+            "department_restructuring",
+            "department_merge_split",
+            "batch_department_operations",
+            "department_import_export",
             // 组织架构功能
-            "organization_structure", "org_chart_visualization", "hierarchy_management", "org_planning", "org_optimization", "org_analysis", "org_change_management",
+            "organization_structure",
+            "org_chart_visualization",
+            "hierarchy_management",
+            "org_planning",
+            "org_optimization",
+            "org_analysis",
+            "org_change_management",
             // 权限和角色功能
-            "permission_management", "role_assignment", "access_control", "security_policies", "fine_grained_permissions", "privilege_management", "audit_logging",
+            "permission_management",
+            "role_assignment",
+            "access_control",
+            "security_policies",
+            "fine_grained_permissions",
+            "privilege_management",
+            "audit_logging",
             // 职级职务功能
-            "rank_management", "position_management", "job_title_assignment", "career_progression", "promotion_management", "job_description", "skill_management",
+            "rank_management",
+            "position_management",
+            "job_title_assignment",
+            "career_progression",
+            "promotion_management",
+            "job_description",
+            "skill_management",
             // 数据同步功能
-            "data_synchronization", "real_time_sync", "batch_sync", "incremental_sync", "data_validation", "conflict_resolution", "sync_monitoring",
+            "data_synchronization",
+            "real_time_sync",
+            "batch_sync",
+            "incremental_sync",
+            "data_validation",
+            "conflict_resolution",
+            "sync_monitoring",
             // 集成功能
-            "hr_system_integration", "third_party_integration", "api_integration", "webhook_support", "custom_fields", "data_mapping",
+            "hr_system_integration",
+            "third_party_integration",
+            "api_integration",
+            "webhook_support",
+            "custom_fields",
+            "data_mapping",
             // 分析功能
-            "contact_analytics", "user_statistics", "department_analytics", "org_health_analysis", "activity_tracking", "performance_metrics",
+            "contact_analytics",
+            "user_statistics",
+            "department_analytics",
+            "org_health_analysis",
+            "activity_tracking",
+            "performance_metrics",
             // 企业级功能
-            "enterprise_grade", "multi_tenant_support", "scalability", "high_availability", "security_compliance", "data_privacy"
+            "enterprise_grade",
+            "multi_tenant_support",
+            "scalability",
+            "high_availability",
+            "security_compliance",
+            "data_privacy",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_contact_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_contact_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量
         let mut feature_count = 0;
         let all_features = vec![
-            "user_management", "user_crud_operations", "user_profile_management", "user_status_management", "user_authentication", "user_email_management", "user_tag_management", "user_group_management", "batch_user_operations", "user_import_export",
-            "department_management", "department_crud_operations", "department_hierarchy", "department_member_management", "department_leader_assignment", "department_restructuring", "department_merge_split", "batch_department_operations", "department_import_export",
-            "organization_structure", "org_chart_visualization", "hierarchy_management", "org_planning", "org_optimization", "org_analysis", "org_change_management",
-            "permission_management", "role_assignment", "access_control", "security_policies", "fine_grained_permissions", "privilege_management", "audit_logging",
-            "rank_management", "position_management", "job_title_assignment", "career_progression", "promotion_management", "job_description", "skill_management",
-            "data_synchronization", "real_time_sync", "batch_sync", "incremental_sync", "data_validation", "conflict_resolution", "sync_monitoring",
-            "hr_system_integration", "third_party_integration", "api_integration", "webhook_support", "custom_fields", "data_mapping",
-            "contact_analytics", "user_statistics", "department_analytics", "org_health_analysis", "activity_tracking", "performance_metrics",
-            "enterprise_grade", "multi_tenant_support", "scalability", "high_availability", "security_compliance", "data_privacy", "nonexistent1", "nonexistent2"
+            "user_management",
+            "user_crud_operations",
+            "user_profile_management",
+            "user_status_management",
+            "user_authentication",
+            "user_email_management",
+            "user_tag_management",
+            "user_group_management",
+            "batch_user_operations",
+            "user_import_export",
+            "department_management",
+            "department_crud_operations",
+            "department_hierarchy",
+            "department_member_management",
+            "department_leader_assignment",
+            "department_restructuring",
+            "department_merge_split",
+            "batch_department_operations",
+            "department_import_export",
+            "organization_structure",
+            "org_chart_visualization",
+            "hierarchy_management",
+            "org_planning",
+            "org_optimization",
+            "org_analysis",
+            "org_change_management",
+            "permission_management",
+            "role_assignment",
+            "access_control",
+            "security_policies",
+            "fine_grained_permissions",
+            "privilege_management",
+            "audit_logging",
+            "rank_management",
+            "position_management",
+            "job_title_assignment",
+            "career_progression",
+            "promotion_management",
+            "job_description",
+            "skill_management",
+            "data_synchronization",
+            "real_time_sync",
+            "batch_sync",
+            "incremental_sync",
+            "data_validation",
+            "conflict_resolution",
+            "sync_monitoring",
+            "hr_system_integration",
+            "third_party_integration",
+            "api_integration",
+            "webhook_support",
+            "custom_fields",
+            "data_mapping",
+            "contact_analytics",
+            "user_statistics",
+            "department_analytics",
+            "org_health_analysis",
+            "activity_tracking",
+            "performance_metrics",
+            "enterprise_grade",
+            "multi_tenant_support",
+            "scalability",
+            "high_availability",
+            "security_compliance",
+            "data_privacy",
+            "nonexistent1",
+            "nonexistent2",
         ];
 
         for feature in all_features {
@@ -796,8 +882,12 @@ mod tests {
 
         assert!(special_service.validate_contact_services_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_contact_service_statistics().contains("通讯录服务"));
-        assert!(special_service.get_contact_service_statistics().contains("👥"));
+        assert!(special_service
+            .get_contact_service_statistics()
+            .contains("通讯录服务"));
+        assert!(special_service
+            .get_contact_service_statistics()
+            .contains("👥"));
 
         // 测试长字符串配置
         let long_app_id = "a".repeat(1000);
@@ -808,7 +898,9 @@ mod tests {
         let long_service = ContactService::new(long_config);
 
         assert!(long_service.validate_contact_services_config());
-        assert!(long_service.get_contact_service_statistics().contains(&long_app_id));
+        assert!(long_service
+            .get_contact_service_statistics()
+            .contains(&long_app_id));
     }
 
     #[test]
@@ -853,7 +945,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = ContactService::new(partial_invalid_config);
 
@@ -862,18 +954,19 @@ mod tests {
         assert!(!partial_invalid_service.validate_contact_services_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = ContactService::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_contact_services_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_contact_service_statistics().contains("ContactService"));
-        assert!(fully_invalid_service.get_contact_categories_statistics().contains("total: 19"));
+        assert!(fully_invalid_service
+            .get_contact_service_statistics()
+            .contains("ContactService"));
+        assert!(fully_invalid_service
+            .get_contact_categories_statistics()
+            .contains("total: 19"));
     }
 
     #[test]
@@ -942,7 +1035,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
@@ -957,7 +1053,10 @@ mod tests {
 
         // 验证config()方法返回的是相同的配置引用
         assert_eq!(service.v3.user.config().app_id, service_config.app_id);
-        assert_eq!(service.v3.user.config().app_secret, service_config.app_secret);
+        assert_eq!(
+            service.v3.user.config().app_secret,
+            service_config.app_secret
+        );
 
         // 测试Debug trait
         let debug_str = format!("{:?}", service);
@@ -985,7 +1084,11 @@ mod tests {
         ];
 
         for (feature, description) in workflow_features {
-            assert!(service.supports_contact_feature(feature), "{}功能应该被支持", description);
+            assert!(
+                service.supports_contact_feature(feature),
+                "{}功能应该被支持",
+                description
+            );
         }
 
         // 验证统计信息反映通讯录工作流程复杂性
@@ -1008,12 +1111,20 @@ mod tests {
 
         // 测试用户管理核心功能
         let user_features = vec![
-            "user_management", "user_crud_operations", "user_profile_management",
-            "user_authentication", "batch_user_operations", "user_import_export"
+            "user_management",
+            "user_crud_operations",
+            "user_profile_management",
+            "user_authentication",
+            "batch_user_operations",
+            "user_import_export",
         ];
 
         for feature in user_features {
-            assert!(service.supports_contact_feature(feature), "用户管理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_contact_feature(feature),
+                "用户管理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证用户管理能力完整性
@@ -1033,12 +1144,20 @@ mod tests {
 
         // 测试部门管理功能
         let department_features = vec![
-            "department_management", "department_crud_operations", "department_hierarchy",
-            "department_member_management", "department_restructuring", "batch_department_operations"
+            "department_management",
+            "department_crud_operations",
+            "department_hierarchy",
+            "department_member_management",
+            "department_restructuring",
+            "batch_department_operations",
         ];
 
         for feature in department_features {
-            assert!(service.supports_contact_feature(feature), "部门管理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_contact_feature(feature),
+                "部门管理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证部门管理能力完整性
@@ -1058,12 +1177,20 @@ mod tests {
 
         // 测试组织架构功能
         let org_features = vec![
-            "organization_structure", "org_chart_visualization", "hierarchy_management",
-            "org_planning", "org_optimization", "org_change_management"
+            "organization_structure",
+            "org_chart_visualization",
+            "hierarchy_management",
+            "org_planning",
+            "org_optimization",
+            "org_change_management",
         ];
 
         for feature in org_features {
-            assert!(service.supports_contact_feature(feature), "组织架构功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_contact_feature(feature),
+                "组织架构功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证组织架构能力完整性
@@ -1161,7 +1288,10 @@ mod tests {
             Some(Duration::from_secs(45))
         );
         assert_eq!(service.v3.department.config().app_id, "contact_test_app");
-        assert_eq!(service.v3.department.config().app_secret, "contact_test_secret");
+        assert_eq!(
+            service.v3.department.config().app_secret,
+            "contact_test_secret"
+        );
         assert_eq!(
             service.v3.department.config().req_timeout,
             Some(Duration::from_secs(45))
@@ -1209,7 +1339,10 @@ mod tests {
         assert_eq!(service.v3.user.config().app_id, "clone_test_app");
         assert_eq!(service.v3.user.config().app_secret, "clone_test_secret");
         assert_eq!(service.v3.department.config().app_id, "clone_test_app");
-        assert_eq!(service.v3.department.config().app_secret, "clone_test_secret");
+        assert_eq!(
+            service.v3.department.config().app_secret,
+            "clone_test_secret"
+        );
     }
 
     #[test]
@@ -1265,10 +1398,7 @@ mod tests {
 
         let service = ContactService::new(config);
 
-        let configs = [
-            service.v3.user.config(),
-            service.v3.department.config(),
-        ];
+        let configs = [service.v3.user.config(), service.v3.department.config()];
 
         for config in &configs {
             assert_eq!(config.app_id, "consistency_test");
@@ -1303,7 +1433,10 @@ mod tests {
 
         // Test that V3 API is properly instantiated
         let v3_ptr = std::ptr::addr_of!(service.v3) as *const u8;
-        assert!(!v3_ptr.is_null(), "V3 service should be properly instantiated");
+        assert!(
+            !v3_ptr.is_null(),
+            "V3 service should be properly instantiated"
+        );
     }
 
     #[test]
@@ -1347,6 +1480,8 @@ mod tests {
         // Test Unicode functionality
         assert!(contact_service.validate_contact_services_config());
         assert!(contact_service.health_check());
-        assert!(contact_service.get_contact_service_statistics().contains("通讯录应用"));
+        assert!(contact_service
+            .get_contact_service_statistics()
+            .contains("通讯录应用"));
     }
 }

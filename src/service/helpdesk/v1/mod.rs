@@ -61,9 +61,13 @@ impl V1 {
     pub fn clone_v1(&self) -> Self {
         Self {
             agent: agent::AgentService::new(self.agent.config.clone()),
-            agent_schedule: agent_schedule::AgentScheduleService::new(self.agent_schedule.config.clone()),
+            agent_schedule: agent_schedule::AgentScheduleService::new(
+                self.agent_schedule.config.clone(),
+            ),
             agent_skill: agent_skill::AgentSkillService::new(self.agent_skill.config.clone()),
-            agent_skill_rule: agent_skill_rule::AgentSkillRuleService::new(self.agent_skill_rule.config.clone()),
+            agent_skill_rule: agent_skill_rule::AgentSkillRuleService::new(
+                self.agent_skill_rule.config.clone(),
+            ),
             category: category::CategoryService::new(self.category.config.clone()),
             event: event::EventService::new(self.event.config.clone()),
             faq: faq::FaqService::new(self.faq.config.clone()),
@@ -72,7 +76,9 @@ impl V1 {
             ticket_customized_field: ticket_customized_field::TicketCustomizedFieldService::new(
                 self.ticket_customized_field.config.clone(),
             ),
-            ticket_message: ticket_message::TicketMessageService::new(self.ticket_message.config.clone()),
+            ticket_message: ticket_message::TicketMessageService::new(
+                self.ticket_message.config.clone(),
+            ),
         }
     }
 }

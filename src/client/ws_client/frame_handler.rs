@@ -91,7 +91,7 @@ impl FrameHandler {
         );
 
         match msg_type.as_str() {
-            "event" => {
+            "event" | "" => {
                 let response = Self::process_event(payload, event_handler).await;
 
                 // 添加处理时间到响应头
@@ -129,9 +129,11 @@ impl FrameHandler {
     ) -> NewWsResponse {
         let start = Instant::now();
 
-        match event_handler.do_without_validation(payload) {
+        let result = event_handler.do_without_validation(payload);
+        let elapsed = start.elapsed().as_millis();
+
+        match result {
             Ok(_) => {
-                let elapsed = start.elapsed().as_millis();
                 let mut response = NewWsResponse::ok();
                 response
                     .headers
@@ -140,7 +142,11 @@ impl FrameHandler {
             }
             Err(err) => {
                 error!("Failed to handle event: {err:?}");
-                NewWsResponse::error()
+                let mut response = NewWsResponse::error();
+                response
+                    .headers
+                    .insert("biz_rt".to_string(), elapsed.to_string());
+                response
             }
         }
     }
@@ -220,7 +226,6 @@ mod tests {
     use lark_websocket_protobuf::pbbp2::Header;
     use tokio::sync::mpsc;
 
-    
     fn create_test_frame(method: i32, headers: Vec<Header>, payload: Option<Vec<u8>>) -> Frame {
         Frame {
             seq_id: 1,
@@ -295,8 +300,14 @@ mod tests {
     #[test]
     fn test_get_header_value_existing() {
         let headers = vec![
-            Header { key: "type".to_string(), value: "ping".to_string() },
-            Header { key: "message_id".to_string(), value: "123".to_string() },
+            Header {
+                key: "type".to_string(),
+                value: "ping".to_string(),
+            },
+            Header {
+                key: "message_id".to_string(),
+                value: "123".to_string(),
+            },
         ];
 
         let result = FrameHandler::get_header_value(&headers, "type");
@@ -308,9 +319,10 @@ mod tests {
 
     #[test]
     fn test_get_header_value_nonexistent() {
-        let headers = vec![
-            Header { key: "type".to_string(), value: "ping".to_string() },
-        ];
+        let headers = vec![Header {
+            key: "type".to_string(),
+            value: "ping".to_string(),
+        }];
 
         let result = FrameHandler::get_header_value(&headers, "nonexistent");
         assert_eq!(result, None);
@@ -326,8 +338,14 @@ mod tests {
     #[test]
     fn test_get_header_value_duplicate_keys() {
         let headers = vec![
-            Header { key: "type".to_string(), value: "first".to_string() },
-            Header { key: "type".to_string(), value: "second".to_string() },
+            Header {
+                key: "type".to_string(),
+                value: "first".to_string(),
+            },
+            Header {
+                key: "type".to_string(),
+                value: "second".to_string(),
+            },
         ];
 
         let result = FrameHandler::get_header_value(&headers, "type");
@@ -349,9 +367,10 @@ mod tests {
 
     #[test]
     fn test_build_response_frame() {
-        let headers = vec![
-            Header { key: "status".to_string(), value: "ok".to_string() },
-        ];
+        let headers = vec![Header {
+            key: "status".to_string(),
+            value: "ok".to_string(),
+        }];
         let payload = b"test response".to_vec();
 
         let frame = FrameHandler::build_response_frame(99, headers, payload.clone());
@@ -381,7 +400,9 @@ mod tests {
         let (event_tx, _event_rx) = mpsc::unbounded_channel();
 
         // Create a JSON payload that matches what would be expected for ClientConfig
-        let payload = br#"{"reconnect_count":3,"reconnect_interval":5,"reconnect_nonce":123,"ping_interval":30}"#.to_vec();
+        let payload =
+            br#"{"ReconnectCount":3,"ReconnectInterval":5,"ReconnectNonce":123,"PingInterval":30}"#
+                .to_vec();
 
         let frame = create_control_frame("pong", Some(payload));
         let result = FrameHandler::handle_frame(frame, &event_handler, &event_tx).await;
@@ -452,10 +473,14 @@ mod tests {
         assert_eq!(returned_frame.method, 1); // Data frame
         assert!(returned_frame.payload.is_some());
 
-        // Check that biz_rt header was added
+        // Check that biz_rt header was added (even for error responses to track processing time)
         let biz_rt_header = returned_frame.headers.iter().find(|h| h.key == "biz_rt");
         assert!(biz_rt_header.is_some());
         assert!(biz_rt_header.unwrap().value.parse::<u64>().is_ok());
+
+        // The payload should contain error response since no handler is registered
+        let response_json = String::from_utf8(returned_frame.payload.unwrap()).unwrap();
+        assert!(response_json.contains("\"code\":500"));
     }
 
     #[tokio::test]
@@ -548,7 +573,7 @@ mod tests {
         let response = FrameHandler::process_event(large_payload, &event_handler).await;
 
         assert_eq!(response.code, 500);
-        assert!(!response.headers.contains_key("biz_rt"));
+        assert!(response.headers.contains_key("biz_rt"));
     }
 
     #[tokio::test]
@@ -561,7 +586,7 @@ mod tests {
         let elapsed = start_time.elapsed();
 
         assert_eq!(response.code, 500); // Error since no handler registered
-        assert!(!response.headers.contains_key("biz_rt"));
+        assert!(response.headers.contains_key("biz_rt"));
 
         // Should still complete quickly even with error
         assert!(elapsed.as_millis() < 1000);
@@ -599,7 +624,9 @@ mod tests {
     #[test]
     fn test_new_ws_response_with_headers() {
         let mut response = NewWsResponse::ok();
-        response.headers.insert("test_key".to_string(), "test_value".to_string());
+        response
+            .headers
+            .insert("test_key".to_string(), "test_value".to_string());
 
         assert_eq!(response.code, 200);
         assert_eq!(response.headers.len(), 1);
@@ -629,7 +656,7 @@ mod tests {
             let frame = create_data_frame("event", Some(payload));
 
             let handle = tokio::spawn(async move {
-                FrameHandler::handle_frame(frame, &*handler_clone, &tx_clone).await
+                FrameHandler::handle_frame(frame, &handler_clone, &tx_clone).await
             });
 
             handles.push(handle);
@@ -648,11 +675,26 @@ mod tests {
         let (event_tx, _event_rx) = mpsc::unbounded_channel();
 
         let complex_headers = vec![
-            Header { key: "type".to_string(), value: "event".to_string() },
-            Header { key: "message_id".to_string(), value: "msg_12345".to_string() },
-            Header { key: "trace_id".to_string(), value: "trace_67890".to_string() },
-            Header { key: "user_id".to_string(), value: "user_abc".to_string() },
-            Header { key: "timestamp".to_string(), value: "1234567890".to_string() },
+            Header {
+                key: "type".to_string(),
+                value: "event".to_string(),
+            },
+            Header {
+                key: "message_id".to_string(),
+                value: "msg_12345".to_string(),
+            },
+            Header {
+                key: "trace_id".to_string(),
+                value: "trace_67890".to_string(),
+            },
+            Header {
+                key: "user_id".to_string(),
+                value: "user_abc".to_string(),
+            },
+            Header {
+                key: "timestamp".to_string(),
+                value: "1234567890".to_string(),
+            },
         ];
 
         let frame = create_test_frame(1, complex_headers, Some(b"complex data".to_vec()));
@@ -666,11 +708,11 @@ mod tests {
         let unicode_headers = vec![
             Header {
                 key: "type".to_string(),
-                value: "事件".to_string() // Chinese characters
+                value: "事件".to_string(), // Chinese characters
             },
             Header {
                 key: "message".to_string(),
-                value: "测试消息".to_string()
+                value: "测试消息".to_string(),
             },
         ];
 
@@ -705,20 +747,24 @@ mod tests {
     fn test_header_value_edge_cases() {
         // Test header with empty value
         let headers = vec![
-            Header { key: "empty".to_string(), value: "".to_string() },
-            Header { key: "normal".to_string(), value: "value".to_string() },
+            Header {
+                key: "empty".to_string(),
+                value: "".to_string(),
+            },
+            Header {
+                key: "normal".to_string(),
+                value: "value".to_string(),
+            },
         ];
 
         let result = FrameHandler::get_header_value(&headers, "empty");
         assert_eq!(result, Some("".to_string()));
 
         // Test header with special characters
-        let special_headers = vec![
-            Header {
-                key: "special".to_string(),
-                value: "!@#$%^&*()_+-=[]{}|;':\",./<>?".to_string()
-            },
-        ];
+        let special_headers = vec![Header {
+            key: "special".to_string(),
+            value: "!@#$%^&*()_+-=[]{}|;':\",./<>?".to_string(),
+        }];
 
         let result = FrameHandler::get_header_value(&special_headers, "special");
         assert_eq!(result, Some("!@#$%^&*()_+-=[]{}|;':\",./<>?".to_string()));

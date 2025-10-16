@@ -188,36 +188,36 @@ impl CalendarService {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_calendar_feature(&self, calendar_feature: &str) -> bool {
-        match calendar_feature {
-            "calendar_management" => true,
-            "event_scheduling" => true,
-            "meeting_room_booking" => true,
-            "attendee_management" => true,
-            "recurring_events" => true,
-            "event_reminders" => true,
-            "calendar_sharing" => true,
-            "acl_management" => true,
-            "meeting_minutes" => true,
-            "meeting_chat" => true,
-            "timeoff_management" => true,
-            "exchange_integration" => true,
-            "caldav_support" => true,
-            "bulk_operations" => true,
-            "conflict_detection" => true,
-            "notification_system" => true,
-            "permission_control" => true,
-            "data_export" => true,
-            "calendar_sync" => true,
-            "mobile_support" => true,
-            "enterprise_features" => true,
-            "analytics_dashboard" => true,
-            "customization" => true,
-            "integration_apis" => true,
-            "security_compliance" => true,
-            "multi_timezone" => true,
-            "resource_management" => true,
-            _ => false,
-        }
+        matches!(
+            calendar_feature,
+            "calendar_management"
+                | "event_scheduling"
+                | "meeting_room_booking"
+                | "attendee_management"
+                | "recurring_events"
+                | "event_reminders"
+                | "calendar_sharing"
+                | "acl_management"
+                | "meeting_minutes"
+                | "meeting_chat"
+                | "timeoff_management"
+                | "exchange_integration"
+                | "caldav_support"
+                | "bulk_operations"
+                | "conflict_detection"
+                | "notification_system"
+                | "permission_control"
+                | "data_export"
+                | "calendar_sync"
+                | "mobile_support"
+                | "enterprise_features"
+                | "analytics_dashboard"
+                | "customization"
+                | "integration_apis"
+                | "security_compliance"
+                | "multi_timezone"
+                | "resource_management"
+        )
     }
 
     /// 快速检查日历服务健康状态
@@ -248,9 +248,7 @@ impl CalendarService {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_calendar_categories_statistics(&self) -> String {
-        format!(
-            "CalendarService Categories{{ core: 1, acl: 1, events: 1, meetings: 2, attendees: 1, settings: 1, integrations: 2, total: 10 }}",
-        )
+        "CalendarService Categories{ core: 1, acl: 1, events: 1, meetings: 2, attendees: 1, settings: 1, integrations: 2, total: 10 }".to_string()
     }
 
     /// 获取日历服务状态摘要
@@ -297,9 +295,7 @@ impl CalendarService {
     /// # 返回值
     /// 包含日程管理能力信息的字符串
     pub fn get_scheduling_capabilities(&self) -> String {
-        format!(
-            "CalendarService Scheduling{{ events: true, recurring: true, reminders: true, conflicts: true, bulk: true }}",
-        )
+        "CalendarService Scheduling{ events: true, recurring: true, reminders: true, conflicts: true, bulk: true }".to_string()
     }
 
     /// 获取会议管理能力矩阵
@@ -309,9 +305,7 @@ impl CalendarService {
     /// # 返回值
     /// 包含会议管理能力信息的字符串
     pub fn get_meeting_management_capabilities(&self) -> String {
-        format!(
-            "CalendarService Meeting{{ rooms: true, minutes: true, chat: true, attendees: true, resources: true }}",
-        )
+        "CalendarService Meeting{ rooms: true, minutes: true, chat: true, attendees: true, resources: true }".to_string()
     }
 
     /// 获取协作功能能力矩阵
@@ -321,9 +315,7 @@ impl CalendarService {
     /// # 返回值
     /// 包含协作功能能力信息的字符串
     pub fn get_collaboration_capabilities(&self) -> String {
-        format!(
-            "CalendarService Collaboration{{ sharing: true, permissions: true, notifications: true, sync: true, multi_user: true }}",
-        )
+        "CalendarService Collaboration{ sharing: true, permissions: true, notifications: true, sync: true, multi_user: true }".to_string()
     }
 
     /// 获取集成能力矩阵
@@ -333,9 +325,7 @@ impl CalendarService {
     /// # 返回值
     /// 包含集成能力信息的字符串
     pub fn get_integration_capabilities(&self) -> String {
-        format!(
-            "CalendarService Integration{{ exchange: true, caldav: true, apis: true, mobile: true, third_party: true }}",
-        )
+        "CalendarService Integration{ exchange: true, caldav: true, apis: true, mobile: true, third_party: true }".to_string()
     }
 
     /// 获取企业级能力矩阵
@@ -345,9 +335,7 @@ impl CalendarService {
     /// # 返回值
     /// 包含企业级能力信息的字符串
     pub fn get_enterprise_capabilities(&self) -> String {
-        format!(
-            "CalendarService Enterprise{{ security: true, compliance: true, analytics: true, admin: true, custom_policies: true }}",
-        )
+        "CalendarService Enterprise{ security: true, compliance: true, analytics: true, admin: true, custom_policies: true }".to_string()
     }
 
     /// 获取日历性能指标
@@ -357,9 +345,7 @@ impl CalendarService {
     /// # 返回值
     /// 包含性能指标信息的字符串
     pub fn get_calendar_performance_metrics(&self) -> String {
-        format!(
-            "CalendarService Performance{{ scalability: enterprise, reliability: 99.9%, latency: <50ms, concurrency: high, availability: 99.95% }}",
-        )
+        "CalendarService Performance{ scalability: enterprise, reliability: 99.9%, latency: <50ms, concurrency: high, availability: 99.95% }".to_string()
     }
 
     /// 获取日历应用场景矩阵
@@ -369,9 +355,7 @@ impl CalendarService {
     /// # 返回值
     /// 包含应用场景信息的字符串
     pub fn get_calendar_use_cases_matrix(&self) -> String {
-        format!(
-            "CalendarService UseCases{{ team_coordination: true, resource_booking: true, project_planning: true, executive_assistance: true, cross_department: true }}",
-        )
+        "CalendarService UseCases{ team_coordination: true, resource_booking: true, project_planning: true, executive_assistance: true, cross_department: true }".to_string()
     }
 }
 
@@ -431,7 +415,10 @@ mod tests {
         assert!(!service.v4.calendar.config.app_id.is_empty());
         assert!(!service.v4.calendar.config.app_secret.is_empty());
         assert_eq!(service.v4.calendar.config.app_id, "test_calendar_app_id");
-        assert_eq!(service.v4.calendar.config.app_secret, "test_calendar_app_secret");
+        assert_eq!(
+            service.v4.calendar.config.app_secret,
+            "test_calendar_app_secret"
+        );
     }
 
     #[test]
@@ -474,16 +461,41 @@ mod tests {
 
         // 测试支持的日历功能
         let supported_features = vec![
-            "calendar_management", "event_scheduling", "meeting_room_booking", "attendee_management", "recurring_events",
-            "event_reminders", "calendar_sharing", "acl_management", "meeting_minutes", "meeting_chat",
-            "timeoff_management", "exchange_integration", "caldav_support", "bulk_operations", "conflict_detection",
-            "notification_system", "permission_control", "data_export", "calendar_sync", "mobile_support",
-            "enterprise_features", "analytics_dashboard", "customization", "integration_apis", "security_compliance",
-            "multi_timezone", "resource_management"
+            "calendar_management",
+            "event_scheduling",
+            "meeting_room_booking",
+            "attendee_management",
+            "recurring_events",
+            "event_reminders",
+            "calendar_sharing",
+            "acl_management",
+            "meeting_minutes",
+            "meeting_chat",
+            "timeoff_management",
+            "exchange_integration",
+            "caldav_support",
+            "bulk_operations",
+            "conflict_detection",
+            "notification_system",
+            "permission_control",
+            "data_export",
+            "calendar_sync",
+            "mobile_support",
+            "enterprise_features",
+            "analytics_dashboard",
+            "customization",
+            "integration_apis",
+            "security_compliance",
+            "multi_timezone",
+            "resource_management",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_calendar_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_calendar_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -501,10 +513,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = CalendarService::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -662,27 +671,75 @@ mod tests {
 
         // 测试所有支持的日历功能组合
         let supported_features = vec![
-            "calendar_management", "event_scheduling", "meeting_room_booking", "attendee_management", "recurring_events",
-            "event_reminders", "calendar_sharing", "acl_management", "meeting_minutes", "meeting_chat",
-            "timeoff_management", "exchange_integration", "caldav_support", "bulk_operations", "conflict_detection",
-            "notification_system", "permission_control", "data_export", "calendar_sync", "mobile_support",
-            "enterprise_features", "analytics_dashboard", "customization", "integration_apis", "security_compliance",
-            "multi_timezone", "resource_management"
+            "calendar_management",
+            "event_scheduling",
+            "meeting_room_booking",
+            "attendee_management",
+            "recurring_events",
+            "event_reminders",
+            "calendar_sharing",
+            "acl_management",
+            "meeting_minutes",
+            "meeting_chat",
+            "timeoff_management",
+            "exchange_integration",
+            "caldav_support",
+            "bulk_operations",
+            "conflict_detection",
+            "notification_system",
+            "permission_control",
+            "data_export",
+            "calendar_sync",
+            "mobile_support",
+            "enterprise_features",
+            "analytics_dashboard",
+            "customization",
+            "integration_apis",
+            "security_compliance",
+            "multi_timezone",
+            "resource_management",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_calendar_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_calendar_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量
         let mut feature_count = 0;
         let all_features = vec![
-            "calendar_management", "event_scheduling", "meeting_room_booking", "attendee_management", "recurring_events",
-            "event_reminders", "calendar_sharing", "acl_management", "meeting_minutes", "meeting_chat",
-            "timeoff_management", "exchange_integration", "caldav_support", "bulk_operations", "conflict_detection",
-            "notification_system", "permission_control", "data_export", "calendar_sync", "mobile_support",
-            "enterprise_features", "analytics_dashboard", "customization", "integration_apis", "security_compliance",
-            "multi_timezone", "resource_management", "nonexistent1", "nonexistent2"
+            "calendar_management",
+            "event_scheduling",
+            "meeting_room_booking",
+            "attendee_management",
+            "recurring_events",
+            "event_reminders",
+            "calendar_sharing",
+            "acl_management",
+            "meeting_minutes",
+            "meeting_chat",
+            "timeoff_management",
+            "exchange_integration",
+            "caldav_support",
+            "bulk_operations",
+            "conflict_detection",
+            "notification_system",
+            "permission_control",
+            "data_export",
+            "calendar_sync",
+            "mobile_support",
+            "enterprise_features",
+            "analytics_dashboard",
+            "customization",
+            "integration_apis",
+            "security_compliance",
+            "multi_timezone",
+            "resource_management",
+            "nonexistent1",
+            "nonexistent2",
         ];
 
         for feature in all_features {
@@ -704,8 +761,12 @@ mod tests {
 
         assert!(special_service.validate_calendar_services_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_calendar_service_statistics().contains("日历服务"));
-        assert!(special_service.get_calendar_service_statistics().contains("📅"));
+        assert!(special_service
+            .get_calendar_service_statistics()
+            .contains("日历服务"));
+        assert!(special_service
+            .get_calendar_service_statistics()
+            .contains("📅"));
 
         // 测试长字符串配置
         let long_app_id = "a".repeat(1000);
@@ -716,7 +777,9 @@ mod tests {
         let long_service = CalendarService::new(long_config);
 
         assert!(long_service.validate_calendar_services_config());
-        assert!(long_service.get_calendar_service_statistics().contains(&long_app_id));
+        assert!(long_service
+            .get_calendar_service_statistics()
+            .contains(&long_app_id));
     }
 
     #[test]
@@ -756,7 +819,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = CalendarService::new(partial_invalid_config);
 
@@ -765,18 +828,19 @@ mod tests {
         assert!(!partial_invalid_service.validate_calendar_services_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = CalendarService::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_calendar_services_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_calendar_service_statistics().contains("CalendarService"));
-        assert!(fully_invalid_service.get_calendar_categories_statistics().contains("total: 10"));
+        assert!(fully_invalid_service
+            .get_calendar_service_statistics()
+            .contains("CalendarService"));
+        assert!(fully_invalid_service
+            .get_calendar_categories_statistics()
+            .contains("total: 10"));
     }
 
     #[test]
@@ -844,7 +908,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
@@ -859,7 +926,10 @@ mod tests {
 
         // 验证config()方法返回的是相同的配置引用
         assert_eq!(service.v4.calendar.config.app_id, service_config.app_id);
-        assert_eq!(service.v4.calendar.config.app_secret, service_config.app_secret);
+        assert_eq!(
+            service.v4.calendar.config.app_secret,
+            service_config.app_secret
+        );
 
         // 测试Debug trait
         let debug_str = format!("{:?}", service);
@@ -886,7 +956,11 @@ mod tests {
         ];
 
         for (feature, description) in workflow_features {
-            assert!(service.supports_calendar_feature(feature), "{}功能应该被支持", description);
+            assert!(
+                service.supports_calendar_feature(feature),
+                "{}功能应该被支持",
+                description
+            );
         }
 
         // 验证统计信息反映日历工作流程复杂性
@@ -911,11 +985,19 @@ mod tests {
 
         // 测试日程管理核心功能
         let scheduling_features = vec![
-            "event_scheduling", "recurring_events", "event_reminders", "conflict_detection", "bulk_operations"
+            "event_scheduling",
+            "recurring_events",
+            "event_reminders",
+            "conflict_detection",
+            "bulk_operations",
         ];
 
         for feature in scheduling_features {
-            assert!(service.supports_calendar_feature(feature), "日程管理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_calendar_feature(feature),
+                "日程管理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证日程管理能力完整性
@@ -934,11 +1016,18 @@ mod tests {
 
         // 测试会议管理功能
         let meeting_features = vec![
-            "meeting_room_booking", "meeting_minutes", "meeting_chat", "attendee_management"
+            "meeting_room_booking",
+            "meeting_minutes",
+            "meeting_chat",
+            "attendee_management",
         ];
 
         for feature in meeting_features {
-            assert!(service.supports_calendar_feature(feature), "会议管理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_calendar_feature(feature),
+                "会议管理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证会议管理能力完整性
@@ -957,11 +1046,18 @@ mod tests {
 
         // 测试协作集成功能
         let collaboration_features = vec![
-            "calendar_sharing", "acl_management", "notification_system", "calendar_sync"
+            "calendar_sharing",
+            "acl_management",
+            "notification_system",
+            "calendar_sync",
         ];
 
         for feature in collaboration_features {
-            assert!(service.supports_calendar_feature(feature), "协作集成功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_calendar_feature(feature),
+                "协作集成功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证协作能力完整性

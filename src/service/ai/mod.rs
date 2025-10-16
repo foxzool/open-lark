@@ -221,38 +221,38 @@ impl AiService {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_ai_feature(&self, ai_feature: &str) -> bool {
-        match ai_feature {
-            "document_processing" => true,
-            "resume_parsing" => true,
-            "id_card_recognition" => true,
-            "invoice_recognition" => true,
-            "contract_analysis" => true,
-            "business_card_extraction" => true,
-            "text_recognition" => true,
-            "image_ocr" => true,
-            "handwriting_recognition" => true,
-            "table_extraction" => true,
-            "speech_to_text" => true,
-            "real_time_transcription" => true,
-            "multi_language_speech" => true,
-            "audio_processing" => true,
-            "voice_translation" => true,
-            "machine_translation" => true,
-            "auto_language_detection" => true,
-            "batch_translation" => true,
-            "real_time_translation" => true,
-            "domain_specific_translation" => true,
-            "multi_language_support" => true,
-            "intelligent_extraction" => true,
-            "data_structuring" => true,
-            "semantic_analysis" => true,
-            "content_understanding" => true,
-            "automated_processing" => true,
-            "ai_assistance" => true,
-            "smart_features" => true,
-            "enterprise_ai" => true,
-            _ => false,
-        }
+        matches!(
+            ai_feature,
+            "document_processing"
+                | "resume_parsing"
+                | "id_card_recognition"
+                | "invoice_recognition"
+                | "contract_analysis"
+                | "business_card_extraction"
+                | "text_recognition"
+                | "image_ocr"
+                | "handwriting_recognition"
+                | "table_extraction"
+                | "speech_to_text"
+                | "real_time_transcription"
+                | "multi_language_speech"
+                | "audio_processing"
+                | "voice_translation"
+                | "machine_translation"
+                | "auto_language_detection"
+                | "batch_translation"
+                | "real_time_translation"
+                | "domain_specific_translation"
+                | "multi_language_support"
+                | "intelligent_extraction"
+                | "data_structuring"
+                | "semantic_analysis"
+                | "content_understanding"
+                | "automated_processing"
+                | "ai_assistance"
+                | "smart_features"
+                | "enterprise_ai"
+        )
     }
 
     /// 快速检查AI服务健康状态
@@ -280,9 +280,8 @@ impl AiService {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_ai_categories_statistics(&self) -> String {
-        format!(
-            "AiService Categories{{ document: 1, vision: 1, speech: 1, language: 1, total: 4 }}",
-        )
+        "AiService Categories{ document: 1, vision: 1, speech: 1, language: 1, total: 4 }"
+            .to_string()
     }
 
     /// 获取AI服务状态摘要
@@ -300,7 +299,10 @@ impl AiService {
 
         format!(
             "AiService Status{{ document: {}, vision: {}, speech: {}, language: {}, overall: {} }}",
-            document_healthy, vision_healthy, speech_healthy, language_healthy,
+            document_healthy,
+            vision_healthy,
+            speech_healthy,
+            language_healthy,
             document_healthy && vision_healthy && speech_healthy && language_healthy
         )
     }
@@ -328,9 +330,7 @@ impl AiService {
     /// # 返回值
     /// 包含文档AI能力信息的字符串
     pub fn get_document_ai_capabilities(&self) -> String {
-        format!(
-            "AiService DocumentAI{{ resume: true, id_card: true, invoice: true, contract: true, business_card: true, table: true }}",
-        )
+        "AiService DocumentAI{ resume: true, id_card: true, invoice: true, contract: true, business_card: true, table: true }".to_string()
     }
 
     /// 获取视觉识别能力矩阵
@@ -340,9 +340,7 @@ impl AiService {
     /// # 返回值
     /// 包含视觉识别能力信息的字符串
     pub fn get_vision_recognition_capabilities(&self) -> String {
-        format!(
-            "AiService Vision{{ text: true, handwriting: true, table: true, image: true, multi_language: true }}",
-        )
+        "AiService Vision{ text: true, handwriting: true, table: true, image: true, multi_language: true }".to_string()
     }
 
     /// 获取语音处理能力矩阵
@@ -352,9 +350,7 @@ impl AiService {
     /// # 返回值
     /// 包含语音处理能力信息的字符串
     pub fn get_speech_processing_capabilities(&self) -> String {
-        format!(
-            "AiService Speech{{ recognition: true, real_time: true, multi_language: true, audio: true, transcription: true }}",
-        )
+        "AiService Speech{ recognition: true, real_time: true, multi_language: true, audio: true, transcription: true }".to_string()
     }
 
     /// 获取语言处理能力矩阵
@@ -364,9 +360,7 @@ impl AiService {
     /// # 返回值
     /// 包含语言处理能力信息的字符串
     pub fn get_language_processing_capabilities(&self) -> String {
-        format!(
-            "AiService Language{{ translation: true, detection: true, batch: true, real_time: true, domain: true }}",
-        )
+        "AiService Language{ translation: true, detection: true, batch: true, real_time: true, domain: true }".to_string()
     }
 
     /// 获取AI性能指标
@@ -376,9 +370,7 @@ impl AiService {
     /// # 返回值
     /// 包含性能指标信息的字符串
     pub fn get_ai_performance_metrics(&self) -> String {
-        format!(
-            "AiService Performance{{ accuracy: high, speed: fast, scalability: enterprise, reliability: 99.9%, latency: <100ms }}",
-        )
+        "AiService Performance{ accuracy: high, speed: fast, scalability: enterprise, reliability: 99.9%, latency: <100ms }".to_string()
     }
 
     /// 获取AI应用场景矩阵
@@ -388,9 +380,7 @@ impl AiService {
     /// # 返回值
     /// 包含应用场景信息的字符串
     pub fn get_ai_use_cases_matrix(&self) -> String {
-        format!(
-            "AiService UseCases{{ hr_automation: true, office_digitization: true, meeting_transcription: true, multilingual_communication: true, data_extraction: true }}",
-        )
+        "AiService UseCases{ hr_automation: true, office_digitization: true, meeting_transcription: true, multilingual_communication: true, data_extraction: true }".to_string()
     }
 }
 
@@ -413,7 +403,9 @@ impl Clone for AiService {
     fn clone(&self) -> Self {
         Self {
             document_ai: DocumentAiService::new(self.document_ai.config.clone()),
-            optical_char_recognition: OpticalCharRecognitionService::new(self.optical_char_recognition.config.clone()),
+            optical_char_recognition: OpticalCharRecognitionService::new(
+                self.optical_char_recognition.config.clone(),
+            ),
             speech_to_text: SpeechToTextService::new(self.speech_to_text.config.clone()),
             translation: TranslationService::new(self.translation.config.clone()),
         }
@@ -426,7 +418,10 @@ impl std::fmt::Debug for AiService {
             .field("service_name", &Self::service_name())
             .field("app_id", &self.document_ai.config.app_id)
             .field("document_ai_service", &"DocumentAiService")
-            .field("optical_char_recognition_service", &"OpticalCharRecognitionService")
+            .field(
+                "optical_char_recognition_service",
+                &"OpticalCharRecognitionService",
+            )
             .field("speech_to_text_service", &"SpeechToTextService")
             .field("translation_service", &"TranslationService")
             .finish()
@@ -499,16 +494,43 @@ mod tests {
 
         // 测试支持的AI功能
         let supported_features = vec![
-            "document_processing", "resume_parsing", "id_card_recognition", "invoice_recognition", "contract_analysis",
-            "business_card_extraction", "text_recognition", "image_ocr", "handwriting_recognition", "table_extraction",
-            "speech_to_text", "real_time_transcription", "multi_language_speech", "audio_processing", "voice_translation",
-            "machine_translation", "auto_language_detection", "batch_translation", "real_time_translation",
-            "domain_specific_translation", "multi_language_support", "intelligent_extraction", "data_structuring",
-            "semantic_analysis", "content_understanding", "automated_processing", "ai_assistance", "smart_features", "enterprise_ai"
+            "document_processing",
+            "resume_parsing",
+            "id_card_recognition",
+            "invoice_recognition",
+            "contract_analysis",
+            "business_card_extraction",
+            "text_recognition",
+            "image_ocr",
+            "handwriting_recognition",
+            "table_extraction",
+            "speech_to_text",
+            "real_time_transcription",
+            "multi_language_speech",
+            "audio_processing",
+            "voice_translation",
+            "machine_translation",
+            "auto_language_detection",
+            "batch_translation",
+            "real_time_translation",
+            "domain_specific_translation",
+            "multi_language_support",
+            "intelligent_extraction",
+            "data_structuring",
+            "semantic_analysis",
+            "content_understanding",
+            "automated_processing",
+            "ai_assistance",
+            "smart_features",
+            "enterprise_ai",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_ai_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_ai_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -526,10 +548,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = AiService::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -668,27 +687,79 @@ mod tests {
 
         // 测试所有支持的AI功能组合
         let supported_features = vec![
-            "document_processing", "resume_parsing", "id_card_recognition", "invoice_recognition", "contract_analysis",
-            "business_card_extraction", "text_recognition", "image_ocr", "handwriting_recognition", "table_extraction",
-            "speech_to_text", "real_time_transcription", "multi_language_speech", "audio_processing", "voice_translation",
-            "machine_translation", "auto_language_detection", "batch_translation", "real_time_translation",
-            "domain_specific_translation", "multi_language_support", "intelligent_extraction", "data_structuring",
-            "semantic_analysis", "content_understanding", "automated_processing", "ai_assistance", "smart_features", "enterprise_ai"
+            "document_processing",
+            "resume_parsing",
+            "id_card_recognition",
+            "invoice_recognition",
+            "contract_analysis",
+            "business_card_extraction",
+            "text_recognition",
+            "image_ocr",
+            "handwriting_recognition",
+            "table_extraction",
+            "speech_to_text",
+            "real_time_transcription",
+            "multi_language_speech",
+            "audio_processing",
+            "voice_translation",
+            "machine_translation",
+            "auto_language_detection",
+            "batch_translation",
+            "real_time_translation",
+            "domain_specific_translation",
+            "multi_language_support",
+            "intelligent_extraction",
+            "data_structuring",
+            "semantic_analysis",
+            "content_understanding",
+            "automated_processing",
+            "ai_assistance",
+            "smart_features",
+            "enterprise_ai",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_ai_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_ai_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量
         let mut feature_count = 0;
         let all_features = vec![
-            "document_processing", "resume_parsing", "id_card_recognition", "invoice_recognition", "contract_analysis",
-            "business_card_extraction", "text_recognition", "image_ocr", "handwriting_recognition", "table_extraction",
-            "speech_to_text", "real_time_transcription", "multi_language_speech", "audio_processing", "voice_translation",
-            "machine_translation", "auto_language_detection", "batch_translation", "real_time_translation",
-            "domain_specific_translation", "multi_language_support", "intelligent_extraction", "data_structuring",
-            "semantic_analysis", "content_understanding", "automated_processing", "ai_assistance", "smart_features", "enterprise_ai", "nonexistent1", "nonexistent2"
+            "document_processing",
+            "resume_parsing",
+            "id_card_recognition",
+            "invoice_recognition",
+            "contract_analysis",
+            "business_card_extraction",
+            "text_recognition",
+            "image_ocr",
+            "handwriting_recognition",
+            "table_extraction",
+            "speech_to_text",
+            "real_time_transcription",
+            "multi_language_speech",
+            "audio_processing",
+            "voice_translation",
+            "machine_translation",
+            "auto_language_detection",
+            "batch_translation",
+            "real_time_translation",
+            "domain_specific_translation",
+            "multi_language_support",
+            "intelligent_extraction",
+            "data_structuring",
+            "semantic_analysis",
+            "content_understanding",
+            "automated_processing",
+            "ai_assistance",
+            "smart_features",
+            "enterprise_ai",
+            "nonexistent1",
+            "nonexistent2",
         ];
 
         for feature in all_features {
@@ -710,7 +781,9 @@ mod tests {
 
         assert!(special_service.validate_ai_services_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_ai_service_statistics().contains("AI服务"));
+        assert!(special_service
+            .get_ai_service_statistics()
+            .contains("AI服务"));
         assert!(special_service.get_ai_service_statistics().contains("🤖"));
 
         // 测试长字符串配置
@@ -722,7 +795,9 @@ mod tests {
         let long_service = AiService::new(long_config);
 
         assert!(long_service.validate_ai_services_config());
-        assert!(long_service.get_ai_service_statistics().contains(&long_app_id));
+        assert!(long_service
+            .get_ai_service_statistics()
+            .contains(&long_app_id));
     }
 
     #[test]
@@ -763,7 +838,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = AiService::new(partial_invalid_config);
 
@@ -772,18 +847,19 @@ mod tests {
         assert!(!partial_invalid_service.validate_ai_services_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = AiService::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_ai_services_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_ai_service_statistics().contains("AiService"));
-        assert!(fully_invalid_service.get_ai_categories_statistics().contains("total: 4"));
+        assert!(fully_invalid_service
+            .get_ai_service_statistics()
+            .contains("AiService"));
+        assert!(fully_invalid_service
+            .get_ai_categories_statistics()
+            .contains("total: 4"));
     }
 
     #[test]
@@ -850,7 +926,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
@@ -865,7 +944,10 @@ mod tests {
 
         // 验证config()方法返回的是相同的配置引用
         assert_eq!(service.document_ai.config.app_id, service_config.app_id);
-        assert_eq!(service.document_ai.config.app_secret, service_config.app_secret);
+        assert_eq!(
+            service.document_ai.config.app_secret,
+            service_config.app_secret
+        );
 
         // 测试Debug trait
         let debug_str = format!("{:?}", service);
@@ -892,7 +974,11 @@ mod tests {
         ];
 
         for (feature, description) in workflow_features {
-            assert!(service.supports_ai_feature(feature), "{}功能应该被支持", description);
+            assert!(
+                service.supports_ai_feature(feature),
+                "{}功能应该被支持",
+                description
+            );
         }
 
         // 验证统计信息反映AI工作流程复杂性
@@ -916,11 +1002,19 @@ mod tests {
 
         // 测试文档AI核心功能
         let document_ai_features = vec![
-            "document_processing", "resume_parsing", "id_card_recognition", "invoice_recognition", "contract_analysis"
+            "document_processing",
+            "resume_parsing",
+            "id_card_recognition",
+            "invoice_recognition",
+            "contract_analysis",
         ];
 
         for feature in document_ai_features {
-            assert!(service.supports_ai_feature(feature), "文档AI功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_ai_feature(feature),
+                "文档AI功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证文档AI能力完整性
@@ -940,11 +1034,19 @@ mod tests {
 
         // 测试多媒体处理功能
         let multimedia_features = vec![
-            "text_recognition", "image_ocr", "handwriting_recognition", "speech_to_text", "real_time_transcription"
+            "text_recognition",
+            "image_ocr",
+            "handwriting_recognition",
+            "speech_to_text",
+            "real_time_transcription",
         ];
 
         for feature in multimedia_features {
-            assert!(service.supports_ai_feature(feature), "多媒体处理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_ai_feature(feature),
+                "多媒体处理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证视觉识别能力完整性
@@ -971,11 +1073,18 @@ mod tests {
 
         // 测试语言智能功能
         let language_features = vec![
-            "machine_translation", "auto_language_detection", "batch_translation", "real_time_translation"
+            "machine_translation",
+            "auto_language_detection",
+            "batch_translation",
+            "real_time_translation",
         ];
 
         for feature in language_features {
-            assert!(service.supports_ai_feature(feature), "语言智能功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_ai_feature(feature),
+                "语言智能功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证语言处理能力完整性

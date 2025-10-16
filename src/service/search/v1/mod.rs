@@ -24,7 +24,7 @@ impl V1 {
     pub fn new(config: Config) -> Self {
         Self {
             user: user::UserService::new(config.clone()),
-            config: config,
+            config,
         }
     }
 

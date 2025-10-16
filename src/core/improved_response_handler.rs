@@ -982,9 +982,7 @@ mod tests {
         use serde_json::Value;
 
         // Test large JSON response
-        let large_data_list: Vec<String> = (0..1000)
-            .map(|i| format!("item_{}", i))
-            .collect();
+        let large_data_list: Vec<String> = (0..1000).map(|i| format!("item_{}", i)).collect();
 
         let large_response = serde_json::json!({
             "code": 0,
@@ -1027,7 +1025,10 @@ mod tests {
 
         assert_eq!(parsed["msg"], "操作成功");
         assert_eq!(parsed["data"]["title"], "测试标题");
-        assert!(parsed["data"]["description"].as_str().unwrap().contains("中文"));
+        assert!(parsed["data"]["description"]
+            .as_str()
+            .unwrap()
+            .contains("中文"));
         assert!(parsed["data"]["tags"].as_array().unwrap()[3] == "🚀");
     }
 
@@ -1091,7 +1092,10 @@ mod tests {
         let fallback_time = start.elapsed();
 
         // Performance test is informational - timing can vary
-        println!("Direct parsing: {:?}, Fallback parsing: {:?}", direct_time, fallback_time);
+        println!(
+            "Direct parsing: {:?}, Fallback parsing: {:?}",
+            direct_time, fallback_time
+        );
 
         // Only assert that both completed successfully and within reasonable time
         assert!(direct_time.as_millis() < 1000); // Should complete within 1 second
@@ -1151,7 +1155,8 @@ mod tests {
             "data": null
         });
 
-        let parsed: OptimizedBaseResponse<TestData> = serde_json::from_value(null_response).unwrap();
+        let parsed: OptimizedBaseResponse<TestData> =
+            serde_json::from_value(null_response).unwrap();
         assert!(parsed.is_success());
         assert!(parsed.data().is_none());
 
@@ -1168,7 +1173,10 @@ mod tests {
         // This would fail to parse as TestData, but we can test the JSON structure
         let parsed_value: Value = serde_json::from_value(empty_response).unwrap();
         assert_eq!(parsed_value["data"]["items"].as_array().unwrap().len(), 0);
-        assert!(parsed_value["data"]["metadata"].as_object().unwrap().is_empty());
+        assert!(parsed_value["data"]["metadata"]
+            .as_object()
+            .unwrap()
+            .is_empty());
 
         // Test with unexpected additional fields
         let extra_fields_response = json!({
@@ -1179,7 +1187,8 @@ mod tests {
             "another_unexpected": {"nested": "data"}
         });
 
-        let parsed_extra: OptimizedBaseResponse<TestData> = serde_json::from_value(extra_fields_response).unwrap();
+        let parsed_extra: OptimizedBaseResponse<TestData> =
+            serde_json::from_value(extra_fields_response).unwrap();
         assert!(parsed_extra.is_success());
         assert!(parsed_extra.data().is_some());
     }
@@ -1217,26 +1226,19 @@ mod tests {
     fn test_binary_response_edge_cases() {
         // Test with very large binary data
         let large_binary = vec![0u8; 1_000_000]; // 1MB
-        let large_binary_data = TestBinaryData::from_binary(
-            "large_file.bin".to_string(),
-            large_binary
-        );
+        let large_binary_data =
+            TestBinaryData::from_binary("large_file.bin".to_string(), large_binary);
         assert!(large_binary_data.is_some());
         assert_eq!(large_binary_data.unwrap().content.len(), 1_000_000);
 
         // Test with empty binary data
-        let empty_binary_data = TestBinaryData::from_binary(
-            "empty_file.txt".to_string(),
-            vec![]
-        );
+        let empty_binary_data = TestBinaryData::from_binary("empty_file.txt".to_string(), vec![]);
         assert!(empty_binary_data.is_some());
         assert!(empty_binary_data.unwrap().content.is_empty());
 
         // Test with special characters in filename
-        let special_filename_data = TestBinaryData::from_binary(
-            "测试文件@#$%.txt".to_string(),
-            b"test content".to_vec()
-        );
+        let special_filename_data =
+            TestBinaryData::from_binary("测试文件@#$%.txt".to_string(), b"test content".to_vec());
         assert!(special_filename_data.is_some());
         assert_eq!(special_filename_data.unwrap().file_name, "测试文件@#$%.txt");
 
@@ -1276,7 +1278,10 @@ mod tests {
 
         assert_eq!(deserialized.log_id, complex_error.log_id);
         assert_eq!(deserialized.details.len(), 3);
-        assert_eq!(deserialized.details[0].description, Some("邮箱地址格式验证失败".to_string()));
+        assert_eq!(
+            deserialized.details[0].description,
+            Some("邮箱地址格式验证失败".to_string())
+        );
         assert_eq!(deserialized.details[1].value, None);
         assert_eq!(deserialized.details[2].key, Some("constraint".to_string()));
     }
@@ -1285,13 +1290,12 @@ mod tests {
     #[test]
     fn test_response_tracker_integration_simulation() {
         // Simulate response tracker behavior
-        let mut tracker_calls = Vec::new();
-
-        // Simulate tracking phases
-        tracker_calls.push(("start", "json_data", Some(1024)));
-        tracker_calls.push(("parsing_complete", "", None));
-        tracker_calls.push(("validation_complete", "", None));
-        tracker_calls.push(("success", "", None));
+        let tracker_calls = [
+            ("start", "json_data", Some(1024)),
+            ("parsing_complete", "", None),
+            ("validation_complete", "", None),
+            ("success", "", None),
+        ];
 
         // Verify tracking sequence
         assert_eq!(tracker_calls.len(), 4);
@@ -1300,9 +1304,10 @@ mod tests {
         assert_eq!(tracker_calls[0].2, Some(1024));
 
         // Test error tracking simulation
-        let mut error_tracker_calls = Vec::new();
-        error_tracker_calls.push(("start", "json_flatten", Some(512)));
-        error_tracker_calls.push(("error", "解析失败", None));
+        let error_tracker_calls = [
+            ("start", "json_flatten", Some(512)),
+            ("error", "解析失败", None),
+        ];
 
         assert_eq!(error_tracker_calls.len(), 2);
         assert_eq!(error_tracker_calls[1].0, "error");
@@ -1329,7 +1334,10 @@ mod tests {
         });
 
         let pagination_parsed: Value = serde_json::from_value(pagination_response).unwrap();
-        assert_eq!(pagination_parsed["data"]["items"].as_array().unwrap().len(), 2);
+        assert_eq!(
+            pagination_parsed["data"]["items"].as_array().unwrap().len(),
+            2
+        );
         assert!(pagination_parsed["data"]["has_more"].as_bool().unwrap());
 
         // Pattern 2: Nested data response
@@ -1350,7 +1358,13 @@ mod tests {
 
         let nested_parsed: Value = serde_json::from_value(nested_response).unwrap();
         assert_eq!(nested_parsed["data"]["user"]["profile"]["name"], "张三");
-        assert_eq!(nested_parsed["data"]["permissions"].as_array().unwrap().len(), 2);
+        assert_eq!(
+            nested_parsed["data"]["permissions"]
+                .as_array()
+                .unwrap()
+                .len(),
+            2
+        );
 
         // Pattern 3: Error with detailed validation info
         let validation_error_response = json!({
@@ -1370,7 +1384,10 @@ mod tests {
 
         let validation_parsed: Value = serde_json::from_value(validation_error_response).unwrap();
         assert_eq!(validation_parsed["code"], 400);
-        assert!(validation_parsed["error"]["details"].as_array().unwrap().len() > 0);
+        assert!(!validation_parsed["error"]["details"]
+            .as_array()
+            .unwrap()
+            .is_empty());
     }
 
     // OptimizedBaseResponse performance characteristics
@@ -1385,7 +1402,11 @@ mod tests {
         for i in 0..1000 {
             responses.push(OptimizedBaseResponse {
                 code: if i % 10 == 0 { 400 } else { 0 },
-                msg: if i % 10 == 0 { "error".to_string() } else { "success".to_string() },
+                msg: if i % 10 == 0 {
+                    "error".to_string()
+                } else {
+                    "success".to_string()
+                },
                 error: if i % 10 == 0 {
                     Some(ErrorInfo {
                         log_id: Some(format!("log_{}", i)),
@@ -1411,10 +1432,7 @@ mod tests {
 
         // Test filtering performance
         let start = Instant::now();
-        let successful_responses: Vec<_> = responses
-            .iter()
-            .filter(|r| r.is_success())
-            .collect();
+        let successful_responses: Vec<_> = responses.iter().filter(|r| r.is_success()).collect();
 
         let filter_time = start.elapsed();
         assert_eq!(successful_responses.len(), 900);

@@ -94,7 +94,7 @@ pub mod referral_account;
 /// 招聘服务 v1 版本
 pub mod v1;
 
-use crate::core::config::Config;
+use crate::core::{config::Config, trait_system::Service};
 
 use attachment::AttachmentService;
 use candidate_management::CandidateManagementService;
@@ -210,24 +210,24 @@ impl HireService {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_feature(&self, feature_name: &str) -> bool {
-        match feature_name {
-            "job_management" => true,
-            "candidate_sourcing" => true,
-            "interview_management" => true,
-            "offer_management" => true,
-            "onboarding" => true,
-            "referral_program" => true,
-            "background_check" => true,
-            "resume_parsing" => true,
-            "interview_scheduling" => true,
-            "analytics_reporting" => true,
-            "ecological_integration" => true,
-            "attachment_management" => true,
-            "talent_pool" => true,
-            "recruitment_pipeline" => true,
-            "multi_channel_sourcing" => true,
-            _ => false,
-        }
+        matches!(
+            feature_name,
+            "job_management"
+                | "candidate_sourcing"
+                | "interview_management"
+                | "offer_management"
+                | "onboarding"
+                | "referral_program"
+                | "background_check"
+                | "resume_parsing"
+                | "interview_scheduling"
+                | "analytics_reporting"
+                | "ecological_integration"
+                | "attachment_management"
+                | "talent_pool"
+                | "recruitment_pipeline"
+                | "multi_channel_sourcing"
+        )
     }
 
     /// 快速检查服务健康状态
@@ -249,9 +249,8 @@ impl HireService {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_service_categories_statistics(&self) -> String {
-        format!(
-            "HireService Categories{{ core: 3, sourcing: 1, integration: 1, utility: 1, total: 6 }}",
-        )
+        "HireService Categories{ core: 3, sourcing: 1, integration: 1, utility: 1, total: 6 }"
+            .to_string()
     }
 
     /// 获取招聘服务状态摘要
@@ -288,6 +287,20 @@ impl HireService {
     }
 }
 
+impl Service for HireService {
+    fn config(&self) -> &Config {
+        self.recruitment_config.config()
+    }
+
+    fn service_name() -> &'static str {
+        "hire"
+    }
+
+    fn service_version() -> &'static str {
+        "v1"
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -309,8 +322,14 @@ mod tests {
         // 验证服务创建成功
         assert!(!service.recruitment_config.config().app_id.is_empty());
         assert!(!service.recruitment_config.config().app_secret.is_empty());
-        assert_eq!(service.recruitment_config.config().app_id, "test_hire_app_id");
-        assert_eq!(service.recruitment_config.config().app_secret, "test_hire_app_secret");
+        assert_eq!(
+            service.recruitment_config.config().app_id,
+            "test_hire_app_id"
+        );
+        assert_eq!(
+            service.recruitment_config.config().app_secret,
+            "test_hire_app_secret"
+        );
     }
 
     #[test]
@@ -352,14 +371,29 @@ mod tests {
 
         // 测试支持的功能
         let supported_features = vec![
-            "job_management", "candidate_sourcing", "interview_management", "offer_management",
-            "onboarding", "referral_program", "background_check", "resume_parsing",
-            "interview_scheduling", "analytics_reporting", "ecological_integration",
-            "attachment_management", "talent_pool", "recruitment_pipeline", "multi_channel_sourcing"
+            "job_management",
+            "candidate_sourcing",
+            "interview_management",
+            "offer_management",
+            "onboarding",
+            "referral_program",
+            "background_check",
+            "resume_parsing",
+            "interview_scheduling",
+            "analytics_reporting",
+            "ecological_integration",
+            "attachment_management",
+            "talent_pool",
+            "recruitment_pipeline",
+            "multi_channel_sourcing",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -377,10 +411,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = HireService::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -434,24 +465,51 @@ mod tests {
 
         // 测试所有支持的功能组合
         let supported_features = vec![
-            "job_management", "candidate_sourcing", "interview_management", "offer_management",
-            "onboarding", "referral_program", "background_check", "resume_parsing",
-            "interview_scheduling", "analytics_reporting", "ecological_integration",
-            "attachment_management", "talent_pool", "recruitment_pipeline", "multi_channel_sourcing"
+            "job_management",
+            "candidate_sourcing",
+            "interview_management",
+            "offer_management",
+            "onboarding",
+            "referral_program",
+            "background_check",
+            "resume_parsing",
+            "interview_scheduling",
+            "analytics_reporting",
+            "ecological_integration",
+            "attachment_management",
+            "talent_pool",
+            "recruitment_pipeline",
+            "multi_channel_sourcing",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量
         let mut feature_count = 0;
         let all_features = vec![
-            "job_management", "candidate_sourcing", "interview_management", "offer_management",
-            "onboarding", "referral_program", "background_check", "resume_parsing",
-            "interview_scheduling", "analytics_reporting", "ecological_integration",
-            "attachment_management", "talent_pool", "recruitment_pipeline", "multi_channel_sourcing",
-            "nonexistent1", "nonexistent2"
+            "job_management",
+            "candidate_sourcing",
+            "interview_management",
+            "offer_management",
+            "onboarding",
+            "referral_program",
+            "background_check",
+            "resume_parsing",
+            "interview_scheduling",
+            "analytics_reporting",
+            "ecological_integration",
+            "attachment_management",
+            "talent_pool",
+            "recruitment_pipeline",
+            "multi_channel_sourcing",
+            "nonexistent1",
+            "nonexistent2",
         ];
 
         for feature in all_features {
@@ -473,7 +531,9 @@ mod tests {
 
         assert!(special_service.validate_services_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_service_statistics().contains("招聘服务"));
+        assert!(special_service
+            .get_service_statistics()
+            .contains("招聘服务"));
         assert!(special_service.get_service_statistics().contains("👥"));
 
         // 测试长字符串配置
@@ -528,7 +588,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = HireService::new(partial_invalid_config);
 
@@ -537,18 +597,19 @@ mod tests {
         assert!(!partial_invalid_service.validate_services_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = HireService::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_services_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_service_statistics().contains("HireService"));
-        assert!(fully_invalid_service.get_service_categories_statistics().contains("total: 6"));
+        assert!(fully_invalid_service
+            .get_service_statistics()
+            .contains("HireService"));
+        assert!(fully_invalid_service
+            .get_service_categories_statistics()
+            .contains("total: 6"));
     }
 
     #[test]
@@ -609,7 +670,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
@@ -628,7 +692,11 @@ mod tests {
         ];
 
         for (feature, description) in workflow_features {
-            assert!(service.supports_feature(feature), "{}功能应该被支持", description);
+            assert!(
+                service.supports_feature(feature),
+                "{}功能应该被支持",
+                description
+            );
         }
 
         // 验证统计信息反映招聘流程复杂性
