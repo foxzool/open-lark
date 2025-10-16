@@ -33,6 +33,8 @@ impl DepartmentService {
     }
 
     /// 创建部门
+    ///
+    /// 该接口用于创建新的部门。
     pub async fn create(
         &self,
         req: &CreateDepartmentRequest,
@@ -51,6 +53,8 @@ impl DepartmentService {
     }
 
     /// 修改部门部分信息
+    ///
+    /// 该接口用于修改部门的部分信息。
     pub async fn patch(
         &self,
         department_id: &str,
@@ -74,6 +78,8 @@ impl DepartmentService {
     }
 
     /// 更新部门所有信息
+    ///
+    /// 该接口用于更新部门的所有信息。
     pub async fn update(
         &self,
         department_id: &str,
@@ -97,6 +103,8 @@ impl DepartmentService {
     }
 
     /// 更新部门 ID
+    ///
+    /// 该接口用于更新部门的部门ID。
     pub async fn update_department_id(
         &self,
         department_id: &str,
@@ -120,6 +128,8 @@ impl DepartmentService {
     }
 
     /// 获取单个部门信息
+    ///
+    /// 该接口用于获取单个部门的详细信息。
     pub async fn get(
         &self,
         department_id: &str,
