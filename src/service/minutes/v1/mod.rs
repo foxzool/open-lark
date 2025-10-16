@@ -32,3 +32,15 @@ impl V1 {
         }
     }
 }
+
+impl V1 {
+    /// 克隆V1服务实例（手动实现）
+    pub fn clone_v1(&self) -> Self {
+        Self {
+            media: MediaService::new(self.media.config.clone()),
+            minute: MinuteService::new(self.minute.config.clone()),
+            statistics: StatisticsService::new(self.statistics.config.clone()),
+            transcript: TranscriptService::new(self.transcript.config.clone()),
+        }
+    }
+}

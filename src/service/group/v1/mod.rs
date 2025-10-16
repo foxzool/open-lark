@@ -16,6 +16,8 @@ pub struct V1 {
     pub chat_announcement: chat_announcement::ChatAnnouncementService,
     pub chat_tab: chat_tab::ChatTabService,
     pub chat_menu_tree: chat_menu_tree::ChatMenuTreeService,
+    /// 客户端配置
+    config: Config,
 }
 
 impl V1 {
@@ -25,7 +27,13 @@ impl V1 {
             chat_member: chat_member::ChatMemberService::new(config.clone()),
             chat_announcement: chat_announcement::ChatAnnouncementService::new(config.clone()),
             chat_tab: chat_tab::ChatTabService::new(config.clone()),
-            chat_menu_tree: chat_menu_tree::ChatMenuTreeService::new(config),
+            chat_menu_tree: chat_menu_tree::ChatMenuTreeService::new(config.clone()),
+            config,
         }
+    }
+
+    /// 获取客户端配置
+    pub fn config(&self) -> &Config {
+        &self.config
     }
 }

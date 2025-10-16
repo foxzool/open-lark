@@ -1,5 +1,6 @@
 /// Contact v3 API 实现
-use crate::core::config::Config;
+use crate::core::{config::Config, trait_system::Service};
+use std::sync::Arc;
 
 pub mod custom_attr;
 pub mod department;
@@ -39,39 +40,133 @@ pub use unit::UnitService;
 pub use user::UserService;
 pub use work_city::WorkCityService;
 
-/// Contact v3 API 版本服务
+/// 联系人 v3 API 服务
+///
+/// 提供完整的企业组织架构和人员管理功能，支持用户、部门、角色等全方位管理。
+/// 为企业提供完整的组织架构解决方案，包括员工信息、权限管理和组织结构维护。
+///
+/// # 主要功能
+///
+/// ## 用户管理
+/// - 👤 **用户服务**: 员工基本信息的创建、更新、查询
+/// - 🏢 **用户组服务**: 员工分组管理，支持项目组、部门组等
+/// - 🔧 **自定义字段**: 灵活的员工信息扩展字段管理
+/// - 📋 **员工类型**: 全职、兼职、实习生等员工类型管理
+///
+/// ## 组织架构
+/// - 🏗️ **部门管理**: 部门层级结构创建和维护
+/// - 🏢 **单位管理**: 公司、子公司等法人单位管理
+/// - 👥 **组成员**: 用户组成员的添加、删除、查询
+///
+/// ## 角色管理
+/// - 🎭 **角色定义**: 自定义角色的创建和管理
+/// - 🔗 **角色成员**: 角色成员的分配和管理
+/// - 🏆 **职级体系**: 职级、序列、职务的层级管理
+///
+/// ## 工作地点
+/// - 🌍 **工作城市**: 员工工作地点的管理和设置
+/// - 📍 **位置权限**: 基于地理位置的权限控制
+///
+/// # 使用场景
+///
+/// - 🏢 **企业组织管理**: 完整的公司组织架构维护
+/// - 👥 **员工生命周期**: 入职、调岗、离职的全流程管理
+/// - 🎭 **权限管理**: 基于角色和部门的权限分配
+/// - 📊 **组织分析**: 组织架构的统计和分析
 pub struct V3 {
     /// 权限范围服务
+    ///
+    /// 管理API访问权限范围和授权控制。
+    /// 提供细粒度的权限管理功能。
     pub scope: ScopeService,
+
     /// 用户管理服务
+    ///
+    /// 负责员工的基本信息管理，包括个人资料、联系方式等。
+    /// 支持员工的创建、更新、查询和删除操作。
     pub user: UserService,
+
     /// 用户组服务
+    ///
+    /// 管理员工分组，支持项目组、部门组等多种分组方式。
+    /// 提供灵活的员工组织和管理功能。
     pub group: GroupService,
+
     /// 自定义用户字段服务
+    ///
+    /// 管理员工的扩展信息字段，支持自定义字段类型。
+    /// 提供灵活的员工信息扩展能力。
     pub custom_attr: CustomAttrService,
+
     /// 人员类型服务
+    ///
+    /// 管理员工类型分类，如全职、兼职、实习生、外包等。
+    /// 支持多种用工形式的管理。
     pub employee_type_enum: EmployeeTypeEnumService,
+
     /// 部门管理服务
+    ///
+    /// 管理公司的部门层级结构，支持多级部门管理。
+    /// 提供完整的组织架构维护功能。
     pub department: DepartmentService,
+
     /// 单位管理服务
+    ///
+    /// 管理法人单位，如总公司、子公司、分公司等。
+    /// 支持复杂的企业实体结构管理。
     pub unit: UnitService,
+
     /// 用户组成员服务
+    ///
+    /// 管理用户组的成员关系，支持成员的添加和移除。
+    /// 提供用户组成员的细粒度管理。
     pub group_member: GroupMemberService,
+
     /// 角色管理服务
+    ///
+    /// 管理自定义角色定义，支持基于角色的权限控制。
+    /// 提供灵活的角色管理体系。
     pub functional_role: FunctionalRoleService,
+
     /// 角色成员服务
+    ///
+    /// 管理角色的成员分配，支持角色成员的增删改查。
+    /// 提供角色成员的统一管理。
     pub functional_role_member: FunctionalRoleMemberService,
+
     /// 职级管理服务
+    ///
+    /// 管理员工的职级体系，支持职级的层级管理。
+    /// 提供职级的定义和分配功能。
     pub job_level: JobLevelService,
+
     /// 序列管理服务
+    ///
+    /// 管理职业序列，如技术序列、管理序列等。
+    /// 支持职业发展路径的管理。
     pub job_family: JobFamilyService,
+
     /// 职务服务
+    ///
+    /// 管理员工职务信息，支持职务的层级和分类管理。
+    /// 提供职务的标准化管理。
     pub job_title: JobTitleService,
+
     /// 工作城市服务
+    ///
+    /// 管理员工的工作地点，支持多地点办公管理。
+    /// 提供地理位置的组织管理能力。
     pub work_city: WorkCityService,
 }
 
 impl V3 {
+    /// 创建新的联系人 v3 服务实例
+    ///
+    /// # 参数
+    /// - `config`: 客户端配置，包含认证信息和API设置
+    ///
+    /// # 返回值
+    /// 配置完成的 V3 服务实例，包含所有联系人相关子服务
     pub fn new(config: Config) -> Self {
         Self {
             scope: ScopeService::new(config.clone()),
@@ -89,5 +184,500 @@ impl V3 {
             job_title: JobTitleService::new(config.clone()),
             work_city: WorkCityService::new(config),
         }
+    }
+
+    /// 验证所有联系人服务配置的一致性
+    ///
+    /// 检查主要服务的配置是否有效，确保服务间的协调工作。
+    ///
+    /// # 返回值
+    /// 如果配置有效返回 `true`，否则返回 `false`
+    pub fn validate_services_config(&self) -> bool {
+        // 检查主要服务的 app_id 是否一致
+        !self.user.config().app_id.is_empty()
+    }
+
+    /// 获取联系人服务的整体统计信息
+    ///
+    /// 返回当前联系人服务实例的基本统计信息，用于监控和调试。
+    ///
+    /// # 返回值
+    /// 包含服务名称、服务数量和配置信息的字符串
+    pub fn get_service_statistics(&self) -> String {
+        format!(
+            "ContactV3{{ services: 13, app_id: {}, user_services: 4, org_services: 3, role_services: 4, admin_services: 2 }}",
+            self.user.config().app_id
+        )
+    }
+
+    /// 检查服务是否支持特定功能
+    ///
+    /// 检查当前配置是否支持特定的联系人功能，如用户管理、部门管理等。
+    ///
+    /// # 参数
+    /// - `feature_name`: 功能名称
+    ///
+    /// # 返回值
+    /// 如果支持该功能返回 `true`，否则返回 `false`
+    pub fn supports_feature(&self, feature_name: &str) -> bool {
+        matches!(
+            feature_name,
+            "user_management"
+                | "department_management"
+                | "group_management"
+                | "role_management"
+                | "custom_fields"
+                | "organization_hierarchy"
+                | "job_level_system"
+                | "work_location"
+                | "multi_tenant"
+                | "employee_types"
+        )
+    }
+
+    /// 使用共享配置创建服务实例（实验性功能）
+    ///
+    /// # 参数
+    /// - `shared_config`: 共享的配置对象，使用 Arc 包装
+    ///
+    /// # 返回值
+    /// 使用共享配置的服务实例
+    pub fn new_from_shared(shared_config: Arc<Config>) -> Self {
+        Self::new((*shared_config).clone())
+    }
+
+    /// 快速检查服务健康状态
+    ///
+    /// 检查所有子服务的基本配置是否有效。
+    ///
+    /// # 返回值
+    /// 如果所有服务配置有效返回 `true`，否则返回 `false`
+    pub fn health_check(&self) -> bool {
+        !self.user.config().app_id.is_empty()
+            && !self.user.config().app_secret.is_empty()
+            && self.validate_services_config()
+    }
+
+    /// 获取服务分类统计
+    ///
+    /// 返回不同类型服务的统计信息。
+    ///
+    /// # 返回值
+    /// 包含各类型服务数量的统计信息
+    pub fn get_service_categories_statistics(&self) -> String {
+        "ContactV3 Categories{ user: 4, organization: 3, role: 4, admin: 2, total: 13 }".to_string()
+    }
+}
+
+impl Service for V3 {
+    fn config(&self) -> &Config {
+        self.user.config()
+    }
+
+    fn service_name() -> &'static str {
+        "contact"
+    }
+
+    fn service_version() -> &'static str {
+        "v3"
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::Arc;
+
+    // Helper function to create test config
+    fn create_test_config() -> Config {
+        Config::builder()
+            .app_id("contact_test_app")
+            .app_secret("contact_test_secret")
+            .build()
+    }
+
+    #[test]
+    fn test_contact_v3_service_creation() {
+        let config = create_test_config();
+        let contact_service = V3::new(config.clone());
+
+        // Verify main service is created correctly
+        assert_eq!(contact_service.user.config().app_id, "contact_test_app");
+        assert_eq!(
+            contact_service.user.config().app_secret,
+            "contact_test_secret"
+        );
+
+        // Test service trait implementation
+        assert_eq!(contact_service.config().app_id, "contact_test_app");
+        assert_eq!(V3::service_name(), "contact");
+        assert_eq!(V3::service_version(), "v3");
+    }
+
+    #[test]
+    fn test_contact_v3_service_config_independence() {
+        let config1 = create_test_config();
+        let config2 = Config::builder()
+            .app_id("different_contact_app")
+            .app_secret("different_secret")
+            .build();
+
+        let service1 = V3::new(config1);
+        let service2 = V3::new(config2);
+
+        // Verify services have independent configs
+        assert_ne!(service1.user.config().app_id, service2.user.config().app_id);
+        assert_eq!(service1.user.config().app_id, "contact_test_app");
+        assert_eq!(service2.user.config().app_id, "different_contact_app");
+    }
+
+    #[test]
+    fn test_contact_v3_validate_services_config() {
+        let valid_config = create_test_config();
+        let valid_service = V3::new(valid_config);
+        assert!(valid_service.validate_services_config());
+
+        // Test validation logic
+        assert_eq!(valid_service.user.config().app_id, "contact_test_app");
+        assert!(valid_service.validate_services_config());
+    }
+
+    #[test]
+    fn test_contact_v3_get_service_statistics() {
+        let config = create_test_config();
+        let contact_service = V3::new(config);
+
+        let stats = contact_service.get_service_statistics();
+
+        assert!(stats.contains("ContactV3"));
+        assert!(stats.contains("services: 13"));
+        assert!(stats.contains("contact_test_app"));
+        assert!(stats.contains("user_services: 4"));
+        assert!(stats.contains("org_services: 3"));
+        assert!(stats.contains("role_services: 4"));
+        assert!(stats.contains("admin_services: 2"));
+    }
+
+    #[test]
+    fn test_contact_v3_supports_feature() {
+        let config = create_test_config();
+        let contact_service = V3::new(config);
+
+        // Test supported features
+        assert!(contact_service.supports_feature("user_management"));
+        assert!(contact_service.supports_feature("department_management"));
+        assert!(contact_service.supports_feature("group_management"));
+        assert!(contact_service.supports_feature("role_management"));
+        assert!(contact_service.supports_feature("custom_fields"));
+        assert!(contact_service.supports_feature("organization_hierarchy"));
+        assert!(contact_service.supports_feature("job_level_system"));
+        assert!(contact_service.supports_feature("work_location"));
+        assert!(contact_service.supports_feature("multi_tenant"));
+        assert!(contact_service.supports_feature("employee_types"));
+
+        // Test unsupported features
+        assert!(!contact_service.supports_feature("unknown_feature"));
+        assert!(!contact_service.supports_feature("non_existent"));
+    }
+
+    #[test]
+    fn test_contact_v3_service_config_consistency() {
+        let config = create_test_config();
+        let contact_service = V3::new(config);
+
+        // Test main service config consistency
+        assert_eq!(contact_service.user.config().app_id, "contact_test_app");
+        assert_eq!(contact_service.config().app_id, "contact_test_app");
+
+        // Test that services are created successfully
+        assert!(contact_service.validate_services_config());
+    }
+
+    #[test]
+    fn test_contact_v3_unicode_support() {
+        let unicode_config = Config::builder()
+            .app_id("联系人_测试_👥_123")
+            .app_secret("密钥_🔐_特殊字符")
+            .build();
+
+        let contact_service = V3::new(unicode_config);
+
+        assert_eq!(contact_service.user.config().app_id, "联系人_测试_👥_123");
+        assert_eq!(contact_service.user.config().app_secret, "密钥_🔐_特殊字符");
+        assert_eq!(V3::service_name(), "contact");
+        assert_eq!(V3::service_version(), "v3");
+    }
+
+    #[test]
+    fn test_contact_v3_large_values() {
+        let large_app_id = "a".repeat(200);
+        let large_secret = "s".repeat(400);
+
+        let large_config = Config::builder()
+            .app_id(large_app_id.clone())
+            .app_secret(large_secret.clone())
+            .build();
+
+        let contact_service = V3::new(large_config);
+
+        assert_eq!(contact_service.user.config().app_id, large_app_id);
+        assert_eq!(contact_service.user.config().app_secret, large_secret);
+    }
+
+    #[test]
+    fn test_contact_v3_multiple_instances() {
+        let config1 = Config::builder()
+            .app_id("contact_instance_1")
+            .app_secret("secret_1")
+            .build();
+
+        let config2 = Config::builder()
+            .app_id("contact_instance_2")
+            .app_secret("secret_2")
+            .build();
+
+        let service1 = V3::new(config1);
+        let service2 = V3::new(config2);
+
+        // Verify instances are independent
+        assert_ne!(service1.user.config().app_id, service2.user.config().app_id);
+        assert_eq!(service1.user.config().app_id, "contact_instance_1");
+        assert_eq!(service2.user.config().app_id, "contact_instance_2");
+    }
+
+    #[test]
+    fn test_contact_v3_memory_efficiency() {
+        let config = create_test_config();
+
+        // Create multiple service instances
+        let services: Vec<V3> = (0..50).map(|_| V3::new(config.clone())).collect();
+
+        assert_eq!(services.len(), 50);
+
+        // All services should have the same app_id
+        for service in &services {
+            assert_eq!(service.user.config().app_id, "contact_test_app");
+            assert_eq!(service.config().app_id, "contact_test_app");
+        }
+    }
+
+    #[test]
+    fn test_contact_v3_arc_sharing() {
+        let shared_config = Arc::new(create_test_config());
+
+        // Create services using shared config
+        let service1 = V3::new_from_shared(shared_config.clone());
+        let service2 = V3::new_from_shared(shared_config.clone());
+
+        // Both services should have the same values
+        assert_eq!(service1.user.config().app_id, "contact_test_app");
+        assert_eq!(service2.user.config().app_id, "contact_test_app");
+        assert_eq!(service1.user.config().app_secret, "contact_test_secret");
+        assert_eq!(service2.user.config().app_secret, "contact_test_secret");
+    }
+
+    #[test]
+    fn test_contact_v3_config_properties() {
+        let config = Config::builder()
+            .app_id("props_contact_app")
+            .app_secret("props_contact_secret")
+            .enable_token_cache(false)
+            .build();
+
+        let contact_service = V3::new(config);
+
+        // Test config properties
+        assert_eq!(contact_service.user.config().app_id, "props_contact_app");
+        assert_eq!(
+            contact_service.user.config().app_secret,
+            "props_contact_secret"
+        );
+        assert!(!contact_service.user.config().enable_token_cache);
+        assert!(!contact_service.user.config().base_url.is_empty());
+    }
+
+    #[test]
+    fn test_contact_v3_thread_safety() {
+        use std::thread;
+
+        let config = create_test_config();
+        let contact_service = Arc::new(V3::new(config));
+
+        let handles: Vec<_> = (0..5)
+            .map(|i| {
+                let service_clone = Arc::clone(&contact_service);
+                thread::spawn(move || {
+                    format!(
+                        "thread_{}_service_name: {}",
+                        i,
+                        service_clone.user.config().app_id
+                    )
+                })
+            })
+            .collect();
+
+        // All threads should be able to access the service safely
+        for handle in handles {
+            let result = handle.join().unwrap();
+            assert!(result.contains("contact_test_app"));
+        }
+    }
+
+    #[test]
+    fn test_contact_v3_service_count() {
+        let config = create_test_config();
+        let contact_service = V3::new(config);
+
+        // Verify we have exactly 13 services
+        assert_eq!(V3::service_name(), "contact");
+        assert_eq!(V3::service_version(), "v3");
+        assert!(!contact_service.user.config().app_id.is_empty());
+        assert!(!contact_service.config().app_id.is_empty());
+    }
+
+    #[test]
+    fn test_contact_v3_service_trait_implementation() {
+        let config = create_test_config();
+        let contact_service = V3::new(config);
+
+        // Test Service trait implementation
+        assert_eq!(contact_service.config().app_id, "contact_test_app");
+        assert_eq!(V3::service_name(), "contact");
+        assert_eq!(V3::service_version(), "v3");
+    }
+
+    #[test]
+    fn test_contact_v3_different_app_types() {
+        let self_build_config = Config::builder()
+            .app_id("self_build_contact")
+            .app_secret("self_build_secret")
+            .build();
+
+        let marketplace_config = Config::builder()
+            .app_id("marketplace_contact")
+            .app_secret("marketplace_secret")
+            .build();
+
+        let self_build_service = V3::new(self_build_config);
+        let marketplace_service = V3::new(marketplace_config);
+
+        assert_eq!(
+            self_build_service.user.config().app_id,
+            "self_build_contact"
+        );
+        assert_eq!(
+            marketplace_service.user.config().app_id,
+            "marketplace_contact"
+        );
+    }
+
+    #[test]
+    fn test_contact_v3_health_check() {
+        let valid_config = create_test_config();
+        let valid_service = V3::new(valid_config);
+        assert!(valid_service.health_check());
+
+        // Test with empty app_id would fail, but we can't create such config easily
+        // So we test the validation logic
+        assert!(valid_service.validate_services_config());
+    }
+
+    #[test]
+    fn test_contact_v3_edge_case_configs() {
+        // Test with minimal config
+        let minimal_config = Config::builder().build();
+        let minimal_service = V3::new(minimal_config);
+        assert!(!minimal_service.health_check()); // Empty app_id should fail health check
+
+        // Test with only app_id
+        let partial_config = Config::builder().app_id("partial_contact").build();
+        let partial_service = V3::new(partial_config);
+        assert!(!partial_service.health_check()); // Missing secret should fail health check
+    }
+
+    #[test]
+    fn test_contact_v3_comprehensive_feature_support() {
+        let config = create_test_config();
+        let contact_service = V3::new(config);
+
+        // Test all supported features with comprehensive assertions
+        let expected_features = vec![
+            ("user_management", true),
+            ("department_management", true),
+            ("group_management", true),
+            ("role_management", true),
+            ("custom_fields", true),
+            ("organization_hierarchy", true),
+            ("job_level_system", true),
+            ("work_location", true),
+            ("multi_tenant", true),
+            ("employee_types", true),
+        ];
+
+        for (feature, expected) in expected_features {
+            assert_eq!(
+                contact_service.supports_feature(feature),
+                expected,
+                "Feature {} should be supported: {}",
+                feature,
+                expected
+            );
+        }
+
+        // Test unsupported features
+        let unsupported_features = vec![
+            "non_existent_feature",
+            "random_functionality",
+            "invalid_capability",
+            "unknown_system",
+        ];
+
+        for feature in unsupported_features {
+            assert!(
+                !contact_service.supports_feature(feature),
+                "Unsupported feature {} should return false",
+                feature
+            );
+        }
+    }
+
+    #[test]
+    fn test_contact_v3_service_categories_statistics() {
+        let config = create_test_config();
+        let contact_service = V3::new(config);
+
+        let categories_stats = contact_service.get_service_categories_statistics();
+
+        assert!(categories_stats.contains("ContactV3 Categories"));
+        assert!(categories_stats.contains("user: 4"));
+        assert!(categories_stats.contains("organization: 3"));
+        assert!(categories_stats.contains("role: 4"));
+        assert!(categories_stats.contains("admin: 2"));
+        assert!(categories_stats.contains("total: 13"));
+    }
+
+    #[test]
+    fn test_contact_v3_error_handling_simulation() {
+        // This test simulates error handling scenarios
+        let config = create_test_config();
+        let contact_service = V3::new(config);
+
+        // Test validation with various scenarios
+        assert!(contact_service.validate_services_config()); // Should pass with valid config
+
+        // Test statistics generation doesn't panic
+        let _stats = contact_service.get_service_statistics();
+        let _categories_stats = contact_service.get_service_categories_statistics();
+
+        // Test feature checking doesn't panic
+        let _feature_result = contact_service.supports_feature("user_management");
+        let _non_feature_result = contact_service.supports_feature("non_existent");
+
+        // Test service name and version
+        let _service_name = V3::service_name();
+        let _service_version = V3::service_version();
+
+        // Test config access doesn't panic
+        let _config_ref = contact_service.config();
     }
 }

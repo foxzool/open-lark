@@ -24,6 +24,14 @@ impl DepartmentService {
         Self { config }
     }
 
+    /// 获取客户端配置
+    ///
+    /// # 返回值
+    /// 配置对象的引用
+    pub fn config(&self) -> &Config {
+        &self.config
+    }
+
     /// 创建部门
     pub async fn create(
         &self,
