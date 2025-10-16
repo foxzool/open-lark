@@ -18,6 +18,7 @@ pub use search::*;
 /// 部门管理服务
 ///
 /// 提供部门的创建、更新、删除、查询等管理功能
+#[derive(Debug)]
 pub struct DepartmentService {
     pub config: Config,
 }

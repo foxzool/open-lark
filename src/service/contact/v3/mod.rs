@@ -1,5 +1,5 @@
 /// Contact v3 API 实现
-use crate::core::{config::Config, constants::AppType, trait_system::Service};
+use crate::core::{config::Config, trait_system::Service};
 use std::sync::Arc;
 
 pub mod custom_attr;
@@ -220,19 +220,19 @@ impl V3 {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_feature(&self, feature_name: &str) -> bool {
-        match feature_name {
-            "user_management" => true,
-            "department_management" => true,
-            "group_management" => true,
-            "role_management" => true,
-            "custom_fields" => true,
-            "organization_hierarchy" => true,
-            "job_level_system" => true,
-            "work_location" => true,
-            "multi_tenant" => true,
-            "employee_types" => true,
-            _ => false,
-        }
+        matches!(
+            feature_name,
+            "user_management"
+                | "department_management"
+                | "group_management"
+                | "role_management"
+                | "custom_fields"
+                | "organization_hierarchy"
+                | "job_level_system"
+                | "work_location"
+                | "multi_tenant"
+                | "employee_types"
+        )
     }
 
     /// 使用共享配置创建服务实例（实验性功能）
@@ -265,9 +265,7 @@ impl V3 {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_service_categories_statistics(&self) -> String {
-        format!(
-            "ContactV3 Categories{{ user: 4, organization: 3, role: 4, admin: 2, total: 13 }}",
-        )
+        "ContactV3 Categories{ user: 4, organization: 3, role: 4, admin: 2, total: 13 }".to_string()
     }
 }
 
@@ -295,7 +293,6 @@ mod tests {
         Config::builder()
             .app_id("contact_test_app")
             .app_secret("contact_test_secret")
-            .app_type(AppType::SelfBuild)
             .build()
     }
 
@@ -306,7 +303,10 @@ mod tests {
 
         // Verify main service is created correctly
         assert_eq!(contact_service.user.config().app_id, "contact_test_app");
-        assert_eq!(contact_service.user.config().app_secret, "contact_test_secret");
+        assert_eq!(
+            contact_service.user.config().app_secret,
+            "contact_test_secret"
+        );
 
         // Test service trait implementation
         assert_eq!(contact_service.config().app_id, "contact_test_app");
@@ -326,10 +326,7 @@ mod tests {
         let service2 = V3::new(config2);
 
         // Verify services have independent configs
-        assert_ne!(
-            service1.user.config().app_id,
-            service2.user.config().app_id
-        );
+        assert_ne!(service1.user.config().app_id, service2.user.config().app_id);
         assert_eq!(service1.user.config().app_id, "contact_test_app");
         assert_eq!(service2.user.config().app_id, "different_contact_app");
     }
@@ -401,14 +398,12 @@ mod tests {
         let unicode_config = Config::builder()
             .app_id("联系人_测试_👥_123")
             .app_secret("密钥_🔐_特殊字符")
-            .app_type(AppType::Marketplace)
             .build();
 
         let contact_service = V3::new(unicode_config);
 
         assert_eq!(contact_service.user.config().app_id, "联系人_测试_👥_123");
         assert_eq!(contact_service.user.config().app_secret, "密钥_🔐_特殊字符");
-        assert_eq!(contact_service.user.config().app_type, AppType::Marketplace);
         assert_eq!(V3::service_name(), "contact");
         assert_eq!(V3::service_version(), "v3");
     }
@@ -445,10 +440,7 @@ mod tests {
         let service2 = V3::new(config2);
 
         // Verify instances are independent
-        assert_ne!(
-            service1.user.config().app_id,
-            service2.user.config().app_id
-        );
+        assert_ne!(service1.user.config().app_id, service2.user.config().app_id);
         assert_eq!(service1.user.config().app_id, "contact_instance_1");
         assert_eq!(service2.user.config().app_id, "contact_instance_2");
     }
@@ -458,9 +450,7 @@ mod tests {
         let config = create_test_config();
 
         // Create multiple service instances
-        let services: Vec<V3> = (0..50)
-            .map(|_| V3::new(config.clone()))
-            .collect();
+        let services: Vec<V3> = (0..50).map(|_| V3::new(config.clone())).collect();
 
         assert_eq!(services.len(), 50);
 
@@ -491,7 +481,6 @@ mod tests {
         let config = Config::builder()
             .app_id("props_contact_app")
             .app_secret("props_contact_secret")
-            .app_type(AppType::SelfBuild)
             .enable_token_cache(false)
             .build();
 
@@ -499,8 +488,10 @@ mod tests {
 
         // Test config properties
         assert_eq!(contact_service.user.config().app_id, "props_contact_app");
-        assert_eq!(contact_service.user.config().app_secret, "props_contact_secret");
-        assert_eq!(contact_service.user.config().app_type, AppType::SelfBuild);
+        assert_eq!(
+            contact_service.user.config().app_secret,
+            "props_contact_secret"
+        );
         assert!(!contact_service.user.config().enable_token_cache);
         assert!(!contact_service.user.config().base_url.is_empty());
     }
@@ -560,22 +551,24 @@ mod tests {
         let self_build_config = Config::builder()
             .app_id("self_build_contact")
             .app_secret("self_build_secret")
-            .app_type(AppType::SelfBuild)
             .build();
 
         let marketplace_config = Config::builder()
             .app_id("marketplace_contact")
             .app_secret("marketplace_secret")
-            .app_type(AppType::Marketplace)
             .build();
 
         let self_build_service = V3::new(self_build_config);
         let marketplace_service = V3::new(marketplace_config);
 
-        assert_eq!(self_build_service.user.config().app_type, AppType::SelfBuild);
-        assert_eq!(marketplace_service.user.config().app_type, AppType::Marketplace);
-        assert_eq!(self_build_service.user.config().app_id, "self_build_contact");
-        assert_eq!(marketplace_service.user.config().app_id, "marketplace_contact");
+        assert_eq!(
+            self_build_service.user.config().app_id,
+            "self_build_contact"
+        );
+        assert_eq!(
+            marketplace_service.user.config().app_id,
+            "marketplace_contact"
+        );
     }
 
     #[test]
@@ -597,9 +590,7 @@ mod tests {
         assert!(!minimal_service.health_check()); // Empty app_id should fail health check
 
         // Test with only app_id
-        let partial_config = Config::builder()
-            .app_id("partial_contact")
-            .build();
+        let partial_config = Config::builder().app_id("partial_contact").build();
         let partial_service = V3::new(partial_config);
         assert!(!partial_service.health_check()); // Missing secret should fail health check
     }

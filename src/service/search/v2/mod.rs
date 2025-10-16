@@ -37,7 +37,7 @@ impl V2 {
             data_source: data_source::DataSourceService::new(config.clone()),
             data_item: data_item::DataItemService::new(config.clone()),
             schema: schema::SchemaService::new(config.clone()),
-            config: config,
+            config,
         }
     }
 

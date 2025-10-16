@@ -195,7 +195,7 @@ use payment_detail::PaymentDetailService;
 ///
 /// - **集团化企业**: 多子公司、多地域的统一薪酬管理
 /// - **跨国企业**: 多国别税务法规和薪酬标准管理
-/// **快速成长企业**: 灵活的薪酬体系快速部署
+/// - **快速成长企业**: 灵活的薪酬体系快速部署
 /// - **上市公司**: 严格的薪酬合规和审计要求
 /// - **传统企业**: 薪酬管理数字化转型
 ///
@@ -248,7 +248,8 @@ impl PayrollService {
     /// # 示例
     ///
     /// ```rust
-    /// use open_lark::prelude::*;
+    /// use open_lark::core::config::Config;
+    /// use open_lark::service::payroll::PayrollService;
     ///
     /// let config = Config::builder()
     ///     .app_id("your_app_id")
@@ -537,9 +538,7 @@ impl PayrollService {
     /// # 返回值
     /// 包含薪酬管理能力矩阵信息的字符串
     pub fn get_payroll_capabilities_matrix(&self) -> String {
-        format!(
-            "PayrollService Capabilities{{ calculation: true, payment: true, allocation: true, integration: true, analytics: true, compliance: true }}",
-        )
+        "PayrollService Capabilities{ calculation: true, payment: true, allocation: true, integration: true, analytics: true, compliance: true }".to_string()
     }
 
     /// 获取企业级功能支持矩阵
@@ -549,9 +548,7 @@ impl PayrollService {
     /// # 返回值
     /// 包含企业级功能支持矩阵信息的字符串
     pub fn get_enterprise_features_matrix(&self) -> String {
-        format!(
-            "PayrollService Enterprise{{ multi_entity: true, global: true, scalable: true, integrated: true, compliant: true, secure: true }}",
-        )
+        "PayrollService Enterprise{ multi_entity: true, global: true, scalable: true, integrated: true, compliant: true, secure: true }".to_string()
     }
 
     /// 获取计算引擎能力矩阵
@@ -561,9 +558,7 @@ impl PayrollService {
     /// # 返回值
     /// 包含计算引擎能力矩阵信息的字符串
     pub fn get_calculation_engine_matrix(&self) -> String {
-        format!(
-            "PayrollService Calculation{{ salary: true, overtime: true, deduction: true, bonus: true, tax: true, social_insurance: true }}",
-        )
+        "PayrollService Calculation{ salary: true, overtime: true, deduction: true, bonus: true, tax: true, social_insurance: true }".to_string()
     }
 
     /// 获取成本分摊能力矩阵
@@ -573,9 +568,7 @@ impl PayrollService {
     /// # 返回值
     /// 包含成本分摊能力矩阵信息的字符串
     pub fn get_cost_allocation_matrix(&self) -> String {
-        format!(
-            "PayrollService Allocation{{ cost_center: true, rules: true, reporting: true, budget: true, analysis: true, trending: true }}",
-        )
+        "PayrollService Allocation{ cost_center: true, rules: true, reporting: true, budget: true, analysis: true, trending: true }".to_string()
     }
 
     /// 获取数据集成能力矩阵
@@ -585,9 +578,7 @@ impl PayrollService {
     /// # 返回值
     /// 包含数据集成能力矩阵信息的字符串
     pub fn get_data_integration_matrix(&self) -> String {
-        format!(
-            "PayrollService Integration{{ external_sources: true, sync: true, validation: true, mapping: true, security: true, api: true }}",
-        )
+        "PayrollService Integration{ external_sources: true, sync: true, validation: true, mapping: true, security: true, api: true }".to_string()
     }
 
     /// 获取技术架构能力矩阵
@@ -597,9 +588,7 @@ impl PayrollService {
     /// # 返回值
     /// 包含技术架构能力矩阵信息的字符串
     pub fn get_technical_architecture_matrix(&self) -> String {
-        format!(
-            "PayrollService Architecture{{ cloud_native: true, microservices: true, api_first: true, secure: true, scalable: true, compliant: true }}",
-        )
+        "PayrollService Architecture{ cloud_native: true, microservices: true, api_first: true, secure: true, scalable: true, compliant: true }".to_string()
     }
 
     /// 获取薪酬管理模块统计
@@ -609,9 +598,7 @@ impl PayrollService {
     /// # 返回值
     /// 包含各类型管理模块数量的统计信息
     pub fn get_payroll_modules_statistics(&self) -> String {
-        format!(
-            "PayrollService Modules{{ calculation: 8, payment: 8, allocation: 8, integration: 8, compliance: 8, enterprise: 8, total: 48 }}",
-        )
+        "PayrollService Modules{ calculation: 8, payment: 8, allocation: 8, integration: 8, compliance: 8, enterprise: 8, total: 48 }".to_string()
     }
 
     /// 获取薪酬数据安全状态信息
@@ -621,9 +608,7 @@ impl PayrollService {
     /// # 返回值
     /// 包含薪酬数据安全状态的字符串
     pub fn get_data_security_status(&self) -> String {
-        format!(
-            "PayrollService Security{{ encryption: AES256, access_control: RBAC, audit_logging: true, data_masking: true, compliance: GDPR_SOC2, backup: true }}",
-        )
+        "PayrollService Security{ encryption: AES256, access_control: RBAC, audit_logging: true, data_masking: true, compliance: GDPR_SOC2, backup: true }".to_string()
     }
 
     /// 获取薪酬管理集成能力矩阵
@@ -633,9 +618,7 @@ impl PayrollService {
     /// # 返回值
     /// 包含薪酬管理集成能力矩阵信息的字符串
     pub fn get_integration_capabilities_matrix(&self) -> String {
-        format!(
-            "PayrollService Integration{{ hr_systems: true, accounting_systems: true, tax_systems: true, banking: true, erp: true, bi_tools: true, api: true }}",
-        )
+        "PayrollService Integration{ hr_systems: true, accounting_systems: true, tax_systems: true, banking: true, erp: true, bi_tools: true, api: true }".to_string()
     }
 
     /// 获取薪酬核算能力矩阵
@@ -645,9 +628,7 @@ impl PayrollService {
     /// # 返回值
     /// 包含薪酬核算能力矩阵信息的字符串
     pub fn get_salary_calculation_matrix(&self) -> String {
-        format!(
-            "PayrollService Calculation{{ base_salary: true, overtime: true, deductions: true, bonuses: true, allowances: true, taxes: true, net_pay: true }}",
-        )
+        "PayrollService Calculation{ base_salary: true, overtime: true, deductions: true, bonuses: true, allowances: true, taxes: true, net_pay: true }".to_string()
     }
 
     /// 获取合规管理能力矩阵
@@ -657,9 +638,7 @@ impl PayrollService {
     /// # 返回值
     /// 包含合规管理能力矩阵信息的字符串
     pub fn get_compliance_management_matrix(&self) -> String {
-        format!(
-            "PayrollService Compliance{{ tax_compliance: true, labor_law: true, audit_ready: true, reporting: true, risk_management: true, internal_controls: true }}",
-        )
+        "PayrollService Compliance{ tax_compliance: true, labor_law: true, audit_ready: true, reporting: true, risk_management: true, internal_controls: true }".to_string()
     }
 }
 
@@ -686,8 +665,12 @@ impl Clone for PayrollService {
             datasource_record: DatasourceRecordService::new(self.datasource_record.config.clone()),
             datasource: DatasourceService::new(self.datasource.config.clone()),
             acct_item: AcctItemService::new(self.acct_item.config.clone()),
-            cost_allocation_report: CostAllocationReportService::new(self.cost_allocation_report.config.clone()),
-            cost_allocation_plan: CostAllocationPlanService::new(self.cost_allocation_plan.config.clone()),
+            cost_allocation_report: CostAllocationReportService::new(
+                self.cost_allocation_report.config.clone(),
+            ),
+            cost_allocation_plan: CostAllocationPlanService::new(
+                self.cost_allocation_plan.config.clone(),
+            ),
             paygroup: PaygroupService::new(self.paygroup.config.clone()),
         }
     }
@@ -768,10 +751,7 @@ mod tests {
         assert!(!empty_secret_service.validate_payroll_config());
 
         // 测试完全空配置
-        let empty_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let empty_config = Config::builder().app_id("").app_secret("").build();
         let empty_service = PayrollService::new(empty_config);
         assert!(!empty_service.validate_payroll_config());
     }
@@ -800,142 +780,268 @@ mod tests {
 
         // 测试薪酬核算管理功能
         let calculation_features = vec![
-            "salary_calculation", "overtime_calculation", "deduction_management",
-            "bonus_calculation", "allowance_subsidy", "tax_calculation", "social_insurance", "housing_fund"
+            "salary_calculation",
+            "overtime_calculation",
+            "deduction_management",
+            "bonus_calculation",
+            "allowance_subsidy",
+            "tax_calculation",
+            "social_insurance",
+            "housing_fund",
         ];
         for feature in calculation_features {
-            assert!(service.supports_payroll_feature(feature),
-                "Calculation feature {} should be supported", feature);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "Calculation feature {} should be supported",
+                feature
+            );
         }
 
         // 测试发薪流程管理功能
         let payment_features = vec![
-            "payment_management", "payment_activities", "payment_details",
-            "payment_approval", "payment_execution", "exception_handling", "payment_scheduling", "batch_processing"
+            "payment_management",
+            "payment_activities",
+            "payment_details",
+            "payment_approval",
+            "payment_execution",
+            "exception_handling",
+            "payment_scheduling",
+            "batch_processing",
         ];
         for feature in payment_features {
-            assert!(service.supports_payroll_feature(feature),
-                "Payment feature {} should be supported", feature);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "Payment feature {} should be supported",
+                feature
+            );
         }
 
         // 测试成本分摊管理功能
         let allocation_features = vec![
-            "cost_allocation", "cost_center_management", "allocation_rules",
-            "allocation_reports", "budget_control", "cost_analysis", "multi_dimension_analysis", "cost_trending"
+            "cost_allocation",
+            "cost_center_management",
+            "allocation_rules",
+            "allocation_reports",
+            "budget_control",
+            "cost_analysis",
+            "multi_dimension_analysis",
+            "cost_trending",
         ];
         for feature in allocation_features {
-            assert!(service.supports_payroll_feature(feature),
-                "Allocation feature {} should be supported", feature);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "Allocation feature {} should be supported",
+                feature
+            );
         }
 
         // 测试外部数据集成功能
         let integration_features = vec![
-            "data_integration", "external_datasources", "data_synchronization",
-            "data_validation", "data_mapping", "data_security", "api_integration", "file_import_export"
+            "data_integration",
+            "external_datasources",
+            "data_synchronization",
+            "data_validation",
+            "data_mapping",
+            "data_security",
+            "api_integration",
+            "file_import_export",
         ];
         for feature in integration_features {
-            assert!(service.supports_payroll_feature(feature),
-                "Integration feature {} should be supported", feature);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "Integration feature {} should be supported",
+                feature
+            );
         }
 
         // 测试薪酬分析洞察功能
         let analytics_features = vec![
-            "analytics_insights", "salary_analysis", "market_benchmarking",
-            "cost_trends", "salary_disparities", "prediction_models", "what_if_analysis", "executive_reporting"
+            "analytics_insights",
+            "salary_analysis",
+            "market_benchmarking",
+            "cost_trends",
+            "salary_disparities",
+            "prediction_models",
+            "what_if_analysis",
+            "executive_reporting",
         ];
         for feature in analytics_features {
-            assert!(service.supports_payroll_feature(feature),
-                "Analytics feature {} should be supported", feature);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "Analytics feature {} should be supported",
+                feature
+            );
         }
 
         // 测试算薪项配置功能
         let acct_features = vec![
-            "acct_item_config", "calculation_rules", "item_categories",
-            "formula_editor", "conditional_logic", "variable_mapping", "validation_rules", "template_management"
+            "acct_item_config",
+            "calculation_rules",
+            "item_categories",
+            "formula_editor",
+            "conditional_logic",
+            "variable_mapping",
+            "validation_rules",
+            "template_management",
         ];
         for feature in acct_features {
-            assert!(service.supports_payroll_feature(feature),
-                "Acct feature {} should be supported", feature);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "Acct feature {} should be supported",
+                feature
+            );
         }
 
         // 测试薪资组管理功能
         let paygroup_features = vec![
-            "paygroup_management", "group_configuration", "member_management",
-            "group_permissions", "group_reporting", "group_analytics", "multi_group_support", "group_hierarchy"
+            "paygroup_management",
+            "group_configuration",
+            "member_management",
+            "group_permissions",
+            "group_reporting",
+            "group_analytics",
+            "multi_group_support",
+            "group_hierarchy",
         ];
         for feature in paygroup_features {
-            assert!(service.supports_payroll_feature(feature),
-                "Paygroup feature {} should be supported", feature);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "Paygroup feature {} should be supported",
+                feature
+            );
         }
 
         // 测试高级薪酬功能
         let advanced_features = vec![
-            "advanced_payroll", "variable_pay", "equity_compensation",
-            "commission_calculation", "incentive_management", "deferred_compensation", "executive_compensation", "global_mobility"
+            "advanced_payroll",
+            "variable_pay",
+            "equity_compensation",
+            "commission_calculation",
+            "incentive_management",
+            "deferred_compensation",
+            "executive_compensation",
+            "global_mobility",
         ];
         for feature in advanced_features {
-            assert!(service.supports_payroll_feature(feature),
-                "Advanced feature {} should be supported", feature);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "Advanced feature {} should be supported",
+                feature
+            );
         }
 
         // 测试合规与审计功能
         let compliance_features = vec![
-            "compliance_audit", "tax_compliance", "labor_law_compliance",
-            "audit_trail", "regulatory_reporting", "risk_assessment", "internal_controls", "external_audit"
+            "compliance_audit",
+            "tax_compliance",
+            "labor_law_compliance",
+            "audit_trail",
+            "regulatory_reporting",
+            "risk_assessment",
+            "internal_controls",
+            "external_audit",
         ];
         for feature in compliance_features {
-            assert!(service.supports_payroll_feature(feature),
-                "Compliance feature {} should be supported", feature);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "Compliance feature {} should be supported",
+                feature
+            );
         }
 
         // 测试企业级功能
         let enterprise_features = vec![
-            "multi_entity_support", "global_payroll", "localization_support",
-            "scalability_features", "integration_capabilities", "workflow_automation", "mobile_access", "self_service_portal"
+            "multi_entity_support",
+            "global_payroll",
+            "localization_support",
+            "scalability_features",
+            "integration_capabilities",
+            "workflow_automation",
+            "mobile_access",
+            "self_service_portal",
         ];
         for feature in enterprise_features {
-            assert!(service.supports_payroll_feature(feature),
-                "Enterprise feature {} should be supported", feature);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "Enterprise feature {} should be supported",
+                feature
+            );
         }
 
         // 测试安全与权限功能
         let security_features = vec![
-            "security_permissions", "role_based_access", "data_encryption",
-            "audit_logging", "access_control", "data_masking", "secure_storage", "compliance_monitoring"
+            "security_permissions",
+            "role_based_access",
+            "data_encryption",
+            "audit_logging",
+            "access_control",
+            "data_masking",
+            "secure_storage",
+            "compliance_monitoring",
         ];
         for feature in security_features {
-            assert!(service.supports_payroll_feature(feature),
-                "Security feature {} should be supported", feature);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "Security feature {} should be supported",
+                feature
+            );
         }
 
         // 测试技术集成功能
         let technical_features = vec![
-            "api_management", "webhook_support", "data_warehousing",
-            "real_time_processing", "batch_operations", "data_backup", "disaster_recovery", "performance_monitoring"
+            "api_management",
+            "webhook_support",
+            "data_warehousing",
+            "real_time_processing",
+            "batch_operations",
+            "data_backup",
+            "disaster_recovery",
+            "performance_monitoring",
         ];
         for feature in technical_features {
-            assert!(service.supports_payroll_feature(feature),
-                "Technical feature {} should be supported", feature);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "Technical feature {} should be supported",
+                feature
+            );
         }
 
         // 测试报表与分析功能
         let reporting_features = vec![
-            "payroll_reporting", "custom_reports", "data_visualization",
-            "dashboards", "scheduled_reports", "drill_down_analysis", "kpi_tracking", "alerting_system"
+            "payroll_reporting",
+            "custom_reports",
+            "data_visualization",
+            "dashboards",
+            "scheduled_reports",
+            "drill_down_analysis",
+            "kpi_tracking",
+            "alerting_system",
         ];
         for feature in reporting_features {
-            assert!(service.supports_payroll_feature(feature),
-                "Reporting feature {} should be supported", feature);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "Reporting feature {} should be supported",
+                feature
+            );
         }
 
         // 测试员工自助服务功能
         let self_service_features = vec![
-            "employee_self_service", "payslip_access", "tax_document_access",
-            "benefit_selection", "leave_balance", "personal_info_update", "document_upload", "notification_preferences"
+            "employee_self_service",
+            "payslip_access",
+            "tax_document_access",
+            "benefit_selection",
+            "leave_balance",
+            "personal_info_update",
+            "document_upload",
+            "notification_preferences",
         ];
         for feature in self_service_features {
-            assert!(service.supports_payroll_feature(feature),
-                "Self-service feature {} should be supported", feature);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "Self-service feature {} should be supported",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -953,10 +1059,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败 - 无效配置
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = PayrollService::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -1113,58 +1216,257 @@ mod tests {
         // 测试所有支持的功能组合
         let all_supported_features = vec![
             // 薪酬核算管理功能 (8个)
-            "salary_calculation", "overtime_calculation", "deduction_management", "bonus_calculation", "allowance_subsidy", "tax_calculation", "social_insurance", "housing_fund",
+            "salary_calculation",
+            "overtime_calculation",
+            "deduction_management",
+            "bonus_calculation",
+            "allowance_subsidy",
+            "tax_calculation",
+            "social_insurance",
+            "housing_fund",
             // 发薪流程管理功能 (8个)
-            "payment_management", "payment_activities", "payment_details", "payment_approval", "payment_execution", "exception_handling", "payment_scheduling", "batch_processing",
+            "payment_management",
+            "payment_activities",
+            "payment_details",
+            "payment_approval",
+            "payment_execution",
+            "exception_handling",
+            "payment_scheduling",
+            "batch_processing",
             // 成本分摊管理功能 (8个)
-            "cost_allocation", "cost_center_management", "allocation_rules", "allocation_reports", "budget_control", "cost_analysis", "multi_dimension_analysis", "cost_trending",
+            "cost_allocation",
+            "cost_center_management",
+            "allocation_rules",
+            "allocation_reports",
+            "budget_control",
+            "cost_analysis",
+            "multi_dimension_analysis",
+            "cost_trending",
             // 外部数据集成功能 (8个)
-            "data_integration", "external_datasources", "data_synchronization", "data_validation", "data_mapping", "data_security", "api_integration", "file_import_export",
+            "data_integration",
+            "external_datasources",
+            "data_synchronization",
+            "data_validation",
+            "data_mapping",
+            "data_security",
+            "api_integration",
+            "file_import_export",
             // 薪酬分析洞察功能 (8个)
-            "analytics_insights", "salary_analysis", "market_benchmarking", "cost_trends", "salary_disparities", "prediction_models", "what_if_analysis", "executive_reporting",
+            "analytics_insights",
+            "salary_analysis",
+            "market_benchmarking",
+            "cost_trends",
+            "salary_disparities",
+            "prediction_models",
+            "what_if_analysis",
+            "executive_reporting",
             // 算薪项配置功能 (8个)
-            "acct_item_config", "calculation_rules", "item_categories", "formula_editor", "conditional_logic", "variable_mapping", "validation_rules", "template_management",
+            "acct_item_config",
+            "calculation_rules",
+            "item_categories",
+            "formula_editor",
+            "conditional_logic",
+            "variable_mapping",
+            "validation_rules",
+            "template_management",
             // 薪资组管理功能 (8个)
-            "paygroup_management", "group_configuration", "member_management", "group_permissions", "group_reporting", "group_analytics", "multi_group_support", "group_hierarchy",
+            "paygroup_management",
+            "group_configuration",
+            "member_management",
+            "group_permissions",
+            "group_reporting",
+            "group_analytics",
+            "multi_group_support",
+            "group_hierarchy",
             // 高级薪酬功能 (8个)
-            "advanced_payroll", "variable_pay", "equity_compensation", "commission_calculation", "incentive_management", "deferred_compensation", "executive_compensation", "global_mobility",
+            "advanced_payroll",
+            "variable_pay",
+            "equity_compensation",
+            "commission_calculation",
+            "incentive_management",
+            "deferred_compensation",
+            "executive_compensation",
+            "global_mobility",
             // 合规与审计功能 (8个)
-            "compliance_audit", "tax_compliance", "labor_law_compliance", "audit_trail", "regulatory_reporting", "risk_assessment", "internal_controls", "external_audit",
+            "compliance_audit",
+            "tax_compliance",
+            "labor_law_compliance",
+            "audit_trail",
+            "regulatory_reporting",
+            "risk_assessment",
+            "internal_controls",
+            "external_audit",
             // 企业级功能 (8个)
-            "multi_entity_support", "global_payroll", "localization_support", "scalability_features", "integration_capabilities", "workflow_automation", "mobile_access", "self_service_portal",
+            "multi_entity_support",
+            "global_payroll",
+            "localization_support",
+            "scalability_features",
+            "integration_capabilities",
+            "workflow_automation",
+            "mobile_access",
+            "self_service_portal",
             // 安全与权限功能 (8个)
-            "security_permissions", "role_based_access", "data_encryption", "audit_logging", "access_control", "data_masking", "secure_storage", "compliance_monitoring",
+            "security_permissions",
+            "role_based_access",
+            "data_encryption",
+            "audit_logging",
+            "access_control",
+            "data_masking",
+            "secure_storage",
+            "compliance_monitoring",
             // 技术与集成功能 (8个)
-            "api_management", "webhook_support", "data_warehousing", "real_time_processing", "batch_operations", "data_backup", "disaster_recovery", "performance_monitoring",
+            "api_management",
+            "webhook_support",
+            "data_warehousing",
+            "real_time_processing",
+            "batch_operations",
+            "data_backup",
+            "disaster_recovery",
+            "performance_monitoring",
             // 报表与分析功能 (8个)
-            "payroll_reporting", "custom_reports", "data_visualization", "dashboards", "scheduled_reports", "drill_down_analysis", "kpi_tracking", "alerting_system",
+            "payroll_reporting",
+            "custom_reports",
+            "data_visualization",
+            "dashboards",
+            "scheduled_reports",
+            "drill_down_analysis",
+            "kpi_tracking",
+            "alerting_system",
             // 员工自助服务功能 (8个)
-            "employee_self_service", "payslip_access", "tax_document_access", "benefit_selection", "leave_balance", "personal_info_update", "document_upload", "notification_preferences"
+            "employee_self_service",
+            "payslip_access",
+            "tax_document_access",
+            "benefit_selection",
+            "leave_balance",
+            "personal_info_update",
+            "document_upload",
+            "notification_preferences",
         ];
 
         for feature in all_supported_features {
-            assert!(service.supports_payroll_feature(feature),
-                "Feature {} should be supported", feature);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量 (共10类 * 8个功能 = 80个功能)
         let mut feature_count = 0;
         let all_test_features = vec![
-            "salary_calculation", "overtime_calculation", "deduction_management", "bonus_calculation", "allowance_subsidy", "tax_calculation", "social_insurance", "housing_fund",
-            "payment_management", "payment_activities", "payment_details", "payment_approval", "payment_execution", "exception_handling", "payment_scheduling", "batch_processing",
-            "cost_allocation", "cost_center_management", "allocation_rules", "allocation_reports", "budget_control", "cost_analysis", "multi_dimension_analysis", "cost_trending",
-            "data_integration", "external_datasources", "data_synchronization", "data_validation", "data_mapping", "data_security", "api_integration", "file_import_export",
-            "analytics_insights", "salary_analysis", "market_benchmarking", "cost_trends", "salary_disparities", "prediction_models", "what_if_analysis", "executive_reporting",
-            "acct_item_config", "calculation_rules", "item_categories", "formula_editor", "conditional_logic", "variable_mapping", "validation_rules", "template_management",
-            "paygroup_management", "group_configuration", "member_management", "group_permissions", "group_reporting", "group_analytics", "multi_group_support", "group_hierarchy",
-            "advanced_payroll", "variable_pay", "equity_compensation", "commission_calculation", "incentive_management", "deferred_compensation", "executive_compensation", "global_mobility",
-            "compliance_audit", "tax_compliance", "labor_law_compliance", "audit_trail", "regulatory_reporting", "risk_assessment", "internal_controls", "external_audit",
-            "multi_entity_support", "global_payroll", "localization_support", "scalability_features", "integration_capabilities", "workflow_automation", "mobile_access", "self_service_portal",
-            "security_permissions", "role_based_access", "data_encryption", "audit_logging", "access_control", "data_masking", "secure_storage", "compliance_monitoring",
-            "api_management", "webhook_support", "data_warehousing", "real_time_processing", "batch_operations", "data_backup", "disaster_recovery", "performance_monitoring",
-            "payroll_reporting", "custom_reports", "data_visualization", "dashboards", "scheduled_reports", "drill_down_analysis", "kpi_tracking", "alerting_system",
-            "employee_self_service", "payslip_access", "tax_document_access", "benefit_selection", "leave_balance", "personal_info_update", "document_upload", "notification_preferences",
-            "nonexistent_feature"  // 测试不支持的功能
+            "salary_calculation",
+            "overtime_calculation",
+            "deduction_management",
+            "bonus_calculation",
+            "allowance_subsidy",
+            "tax_calculation",
+            "social_insurance",
+            "housing_fund",
+            "payment_management",
+            "payment_activities",
+            "payment_details",
+            "payment_approval",
+            "payment_execution",
+            "exception_handling",
+            "payment_scheduling",
+            "batch_processing",
+            "cost_allocation",
+            "cost_center_management",
+            "allocation_rules",
+            "allocation_reports",
+            "budget_control",
+            "cost_analysis",
+            "multi_dimension_analysis",
+            "cost_trending",
+            "data_integration",
+            "external_datasources",
+            "data_synchronization",
+            "data_validation",
+            "data_mapping",
+            "data_security",
+            "api_integration",
+            "file_import_export",
+            "analytics_insights",
+            "salary_analysis",
+            "market_benchmarking",
+            "cost_trends",
+            "salary_disparities",
+            "prediction_models",
+            "what_if_analysis",
+            "executive_reporting",
+            "acct_item_config",
+            "calculation_rules",
+            "item_categories",
+            "formula_editor",
+            "conditional_logic",
+            "variable_mapping",
+            "validation_rules",
+            "template_management",
+            "paygroup_management",
+            "group_configuration",
+            "member_management",
+            "group_permissions",
+            "group_reporting",
+            "group_analytics",
+            "multi_group_support",
+            "group_hierarchy",
+            "advanced_payroll",
+            "variable_pay",
+            "equity_compensation",
+            "commission_calculation",
+            "incentive_management",
+            "deferred_compensation",
+            "executive_compensation",
+            "global_mobility",
+            "compliance_audit",
+            "tax_compliance",
+            "labor_law_compliance",
+            "audit_trail",
+            "regulatory_reporting",
+            "risk_assessment",
+            "internal_controls",
+            "external_audit",
+            "multi_entity_support",
+            "global_payroll",
+            "localization_support",
+            "scalability_features",
+            "integration_capabilities",
+            "workflow_automation",
+            "mobile_access",
+            "self_service_portal",
+            "security_permissions",
+            "role_based_access",
+            "data_encryption",
+            "audit_logging",
+            "access_control",
+            "data_masking",
+            "secure_storage",
+            "compliance_monitoring",
+            "api_management",
+            "webhook_support",
+            "data_warehousing",
+            "real_time_processing",
+            "batch_operations",
+            "data_backup",
+            "disaster_recovery",
+            "performance_monitoring",
+            "payroll_reporting",
+            "custom_reports",
+            "data_visualization",
+            "dashboards",
+            "scheduled_reports",
+            "drill_down_analysis",
+            "kpi_tracking",
+            "alerting_system",
+            "employee_self_service",
+            "payslip_access",
+            "tax_document_access",
+            "benefit_selection",
+            "leave_balance",
+            "personal_info_update",
+            "document_upload",
+            "notification_preferences",
+            "nonexistent_feature", // 测试不支持的功能
         ];
 
         for feature in all_test_features {
@@ -1172,7 +1474,7 @@ mod tests {
                 feature_count += 1;
             }
         }
-        assert_eq!(feature_count, 80); // 确保支持80个功能
+        assert_eq!(feature_count, 112); // 确保支持112个功能
     }
 
     #[test]
@@ -1186,7 +1488,9 @@ mod tests {
 
         assert!(special_service.validate_payroll_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_payroll_statistics().contains("薪酬服务"));
+        assert!(special_service
+            .get_payroll_statistics()
+            .contains("薪酬服务"));
         assert!(special_service.get_payroll_statistics().contains("💰"));
 
         // 测试长字符串配置
@@ -1242,7 +1546,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = PayrollService::new(partial_invalid_config);
 
@@ -1251,18 +1555,19 @@ mod tests {
         assert!(!partial_invalid_service.validate_payroll_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = PayrollService::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_payroll_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_payroll_statistics().contains("PayrollService"));
-        assert!(fully_invalid_service.get_payroll_modules_statistics().contains("total: 48"));
+        assert!(fully_invalid_service
+            .get_payroll_statistics()
+            .contains("PayrollService"));
+        assert!(fully_invalid_service
+            .get_payroll_modules_statistics()
+            .contains("total: 48"));
     }
 
     #[test]
@@ -1288,7 +1593,10 @@ mod tests {
         // 测试Clone trait
         let cloned_service = service.clone();
         assert_eq!(service.config().app_id, cloned_service.config().app_id);
-        assert_eq!(service.config().app_secret, cloned_service.config().app_secret);
+        assert_eq!(
+            service.config().app_secret,
+            cloned_service.config().app_secret
+        );
     }
 
     #[test]
@@ -1306,7 +1614,11 @@ mod tests {
         ];
 
         for (feature, description) in workflow_features {
-            assert!(service.supports_payroll_feature(feature), "{}功能应该被支持", description);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "{}功能应该被支持",
+                description
+            );
         }
 
         // 验证薪酬核算能力
@@ -1325,12 +1637,22 @@ mod tests {
 
         // 测试成本分摊功能
         let allocation_features = vec![
-            "cost_allocation", "cost_center_management", "allocation_rules",
-            "allocation_reports", "budget_control", "cost_analysis", "multi_dimension_analysis", "cost_trending"
+            "cost_allocation",
+            "cost_center_management",
+            "allocation_rules",
+            "allocation_reports",
+            "budget_control",
+            "cost_analysis",
+            "multi_dimension_analysis",
+            "cost_trending",
         ];
 
         for feature in allocation_features {
-            assert!(service.supports_payroll_feature(feature), "成本分摊功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "成本分摊功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证成本分摊能力完整性
@@ -1350,12 +1672,22 @@ mod tests {
 
         // 测试数据集成功能
         let integration_features = vec![
-            "data_integration", "external_datasources", "data_synchronization",
-            "data_validation", "data_mapping", "data_security", "api_integration", "file_import_export"
+            "data_integration",
+            "external_datasources",
+            "data_synchronization",
+            "data_validation",
+            "data_mapping",
+            "data_security",
+            "api_integration",
+            "file_import_export",
         ];
 
         for feature in integration_features {
-            assert!(service.supports_payroll_feature(feature), "数据集成功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "数据集成功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证数据集成能力完整性
@@ -1375,12 +1707,22 @@ mod tests {
 
         // 测试合规管理功能
         let compliance_features = vec![
-            "compliance_audit", "tax_compliance", "labor_law_compliance",
-            "audit_trail", "regulatory_reporting", "risk_assessment", "internal_controls", "external_audit"
+            "compliance_audit",
+            "tax_compliance",
+            "labor_law_compliance",
+            "audit_trail",
+            "regulatory_reporting",
+            "risk_assessment",
+            "internal_controls",
+            "external_audit",
         ];
 
         for feature in compliance_features {
-            assert!(service.supports_payroll_feature(feature), "合规管理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_payroll_feature(feature),
+                "合规管理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证合规管理能力完整性
@@ -1405,36 +1747,81 @@ mod tests {
 
         // 验证自定义配置正确应用
         assert_eq!(service.payment_detail.config.app_id, "payroll_test_app");
-        assert_eq!(service.payment_detail.config.app_secret, "payroll_test_secret");
-        assert_eq!(service.payment_detail.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.payment_detail.config.app_secret,
+            "payroll_test_secret"
+        );
+        assert_eq!(
+            service.payment_detail.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
 
         assert_eq!(service.payment_activity.config.app_id, "payroll_test_app");
-        assert_eq!(service.payment_activity.config.app_secret, "payroll_test_secret");
-        assert_eq!(service.payment_activity.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.payment_activity.config.app_secret,
+            "payroll_test_secret"
+        );
+        assert_eq!(
+            service.payment_activity.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
 
         assert_eq!(service.datasource_record.config.app_id, "payroll_test_app");
-        assert_eq!(service.datasource_record.config.app_secret, "payroll_test_secret");
-        assert_eq!(service.datasource_record.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.datasource_record.config.app_secret,
+            "payroll_test_secret"
+        );
+        assert_eq!(
+            service.datasource_record.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
 
         assert_eq!(service.datasource.config.app_id, "payroll_test_app");
         assert_eq!(service.datasource.config.app_secret, "payroll_test_secret");
-        assert_eq!(service.datasource.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.datasource.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
 
         assert_eq!(service.acct_item.config.app_id, "payroll_test_app");
         assert_eq!(service.acct_item.config.app_secret, "payroll_test_secret");
-        assert_eq!(service.acct_item.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.acct_item.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
 
-        assert_eq!(service.cost_allocation_report.config.app_id, "payroll_test_app");
-        assert_eq!(service.cost_allocation_report.config.app_secret, "payroll_test_secret");
-        assert_eq!(service.cost_allocation_report.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.cost_allocation_report.config.app_id,
+            "payroll_test_app"
+        );
+        assert_eq!(
+            service.cost_allocation_report.config.app_secret,
+            "payroll_test_secret"
+        );
+        assert_eq!(
+            service.cost_allocation_report.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
 
-        assert_eq!(service.cost_allocation_plan.config.app_id, "payroll_test_app");
-        assert_eq!(service.cost_allocation_plan.config.app_secret, "payroll_test_secret");
-        assert_eq!(service.cost_allocation_plan.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.cost_allocation_plan.config.app_id,
+            "payroll_test_app"
+        );
+        assert_eq!(
+            service.cost_allocation_plan.config.app_secret,
+            "payroll_test_secret"
+        );
+        assert_eq!(
+            service.cost_allocation_plan.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
 
         assert_eq!(service.paygroup.config.app_id, "payroll_test_app");
         assert_eq!(service.paygroup.config.app_secret, "payroll_test_secret");
-        assert_eq!(service.paygroup.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.paygroup.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
 
         // 验证功能支持
         assert!(service.validate_payroll_config());
@@ -1458,14 +1845,38 @@ mod tests {
 
         assert_eq!(service1.payment_detail.config.app_id, "payroll_app_1");
         assert_eq!(service2.payment_detail.config.app_id, "payroll_app_2");
-        assert_ne!(service1.payment_detail.config.app_id, service2.payment_detail.config.app_id);
-        assert_ne!(service1.payment_activity.config.app_id, service2.payment_activity.config.app_id);
-        assert_ne!(service1.datasource_record.config.app_id, service2.datasource_record.config.app_id);
-        assert_ne!(service1.datasource.config.app_id, service2.datasource.config.app_id);
-        assert_ne!(service1.acct_item.config.app_id, service2.acct_item.config.app_id);
-        assert_ne!(service1.cost_allocation_report.config.app_id, service2.cost_allocation_report.config.app_id);
-        assert_ne!(service1.cost_allocation_plan.config.app_id, service2.cost_allocation_plan.config.app_id);
-        assert_ne!(service1.paygroup.config.app_id, service2.paygroup.config.app_id);
+        assert_ne!(
+            service1.payment_detail.config.app_id,
+            service2.payment_detail.config.app_id
+        );
+        assert_ne!(
+            service1.payment_activity.config.app_id,
+            service2.payment_activity.config.app_id
+        );
+        assert_ne!(
+            service1.datasource_record.config.app_id,
+            service2.datasource_record.config.app_id
+        );
+        assert_ne!(
+            service1.datasource.config.app_id,
+            service2.datasource.config.app_id
+        );
+        assert_ne!(
+            service1.acct_item.config.app_id,
+            service2.acct_item.config.app_id
+        );
+        assert_ne!(
+            service1.cost_allocation_report.config.app_id,
+            service2.cost_allocation_report.config.app_id
+        );
+        assert_ne!(
+            service1.cost_allocation_plan.config.app_id,
+            service2.cost_allocation_plan.config.app_id
+        );
+        assert_ne!(
+            service1.paygroup.config.app_id,
+            service2.paygroup.config.app_id
+        );
     }
 
     #[test]

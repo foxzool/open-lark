@@ -215,34 +215,34 @@ impl AdminService {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_admin_feature(&self, admin_feature: &str) -> bool {
-        match admin_feature {
-            "password_management" => true,
-            "password_reset" => true,
-            "security_policy" => true,
-            "data_report" => true,
-            "data_analytics" => true,
-            "badge_management" => true,
-            "badge_design" => true,
-            "badge_grant" => true,
-            "bulk_operations" => true,
-            "user_management" => true,
-            "permission_control" => true,
-            "audit_logging" => true,
-            "compliance_monitoring" => true,
-            "statistics_analysis" => true,
-            "batch_processing" => true,
-            "admin_dashboard" => true,
-            "role_management" => true,
-            "security_monitoring" => true,
-            "data_export" => true,
-            "system_settings" => true,
-            "user_feedback" => true,
-            "performance_monitoring" => true,
-            "access_control" => true,
-            "notification_management" => true,
-            "workflow_automation" => true,
-            _ => false,
-        }
+        matches!(
+            admin_feature,
+            "password_management"
+                | "password_reset"
+                | "security_policy"
+                | "data_report"
+                | "data_analytics"
+                | "badge_management"
+                | "badge_design"
+                | "badge_grant"
+                | "bulk_operations"
+                | "user_management"
+                | "permission_control"
+                | "audit_logging"
+                | "compliance_monitoring"
+                | "statistics_analysis"
+                | "batch_processing"
+                | "admin_dashboard"
+                | "role_management"
+                | "security_monitoring"
+                | "data_export"
+                | "system_settings"
+                | "user_feedback"
+                | "performance_monitoring"
+                | "access_control"
+                | "notification_management"
+                | "workflow_automation"
+        )
     }
 
     /// 快速检查管理服务健康状态
@@ -270,9 +270,7 @@ impl AdminService {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_admin_categories_statistics(&self) -> String {
-        format!(
-            "AdminService Categories{{ security: 1, data: 1, badge: 2, total: 4 }}",
-        )
+        "AdminService Categories{ security: 1, data: 1, badge: 2, total: 4 }".to_string()
     }
 
     /// 获取管理后台服务状态摘要
@@ -289,7 +287,9 @@ impl AdminService {
 
         format!(
             "AdminService Status{{ security: {}, data: {}, badge: {}, overall: {} }}",
-            security_healthy, data_healthy, badge_healthy,
+            security_healthy,
+            data_healthy,
+            badge_healthy,
             security_healthy && data_healthy && badge_healthy
         )
     }
@@ -317,9 +317,7 @@ impl AdminService {
     /// # 返回值
     /// 包含安全管理能力信息的字符串
     pub fn get_security_management_matrix(&self) -> String {
-        format!(
-            "AdminService Security{{ password: true, policy: true, audit: true, access_control: true, monitoring: true }}",
-        )
+        "AdminService Security{ password: true, policy: true, audit: true, access_control: true, monitoring: true }".to_string()
     }
 
     /// 获取数据管理能力矩阵
@@ -329,9 +327,7 @@ impl AdminService {
     /// # 返回值
     /// 包含数据管理能力信息的字符串
     pub fn get_data_management_matrix(&self) -> String {
-        format!(
-            "AdminService Data{{ reports: true, analytics: true, export: true, visualization: true, real_time: true }}",
-        )
+        "AdminService Data{ reports: true, analytics: true, export: true, visualization: true, real_time: true }".to_string()
     }
 
     /// 获取勋章管理能力矩阵
@@ -341,9 +337,7 @@ impl AdminService {
     /// # 返回值
     /// 包含勋章管理能力信息的字符串
     pub fn get_badge_management_matrix(&self) -> String {
-        format!(
-            "AdminService Badge{{ design: true, creation: true, grant: true, tracking: true, analytics: true }}",
-        )
+        "AdminService Badge{ design: true, creation: true, grant: true, tracking: true, analytics: true }".to_string()
     }
 }
 
@@ -451,16 +445,39 @@ mod tests {
 
         // 测试支持的管理功能
         let supported_features = vec![
-            "password_management", "password_reset", "security_policy", "data_report", "data_analytics",
-            "badge_management", "badge_design", "badge_grant", "bulk_operations", "user_management",
-            "permission_control", "audit_logging", "compliance_monitoring", "statistics_analysis",
-            "batch_processing", "admin_dashboard", "role_management", "security_monitoring",
-            "data_export", "system_settings", "user_feedback", "performance_monitoring",
-            "access_control", "notification_management", "workflow_automation"
+            "password_management",
+            "password_reset",
+            "security_policy",
+            "data_report",
+            "data_analytics",
+            "badge_management",
+            "badge_design",
+            "badge_grant",
+            "bulk_operations",
+            "user_management",
+            "permission_control",
+            "audit_logging",
+            "compliance_monitoring",
+            "statistics_analysis",
+            "batch_processing",
+            "admin_dashboard",
+            "role_management",
+            "security_monitoring",
+            "data_export",
+            "system_settings",
+            "user_feedback",
+            "performance_monitoring",
+            "access_control",
+            "notification_management",
+            "workflow_automation",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_admin_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_admin_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -478,10 +495,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = AdminService::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -575,27 +589,71 @@ mod tests {
 
         // 测试所有支持的管理功能组合
         let supported_features = vec![
-            "password_management", "password_reset", "security_policy", "data_report", "data_analytics",
-            "badge_management", "badge_design", "badge_grant", "bulk_operations", "user_management",
-            "permission_control", "audit_logging", "compliance_monitoring", "statistics_analysis",
-            "batch_processing", "admin_dashboard", "role_management", "security_monitoring",
-            "data_export", "system_settings", "user_feedback", "performance_monitoring",
-            "access_control", "notification_management", "workflow_automation"
+            "password_management",
+            "password_reset",
+            "security_policy",
+            "data_report",
+            "data_analytics",
+            "badge_management",
+            "badge_design",
+            "badge_grant",
+            "bulk_operations",
+            "user_management",
+            "permission_control",
+            "audit_logging",
+            "compliance_monitoring",
+            "statistics_analysis",
+            "batch_processing",
+            "admin_dashboard",
+            "role_management",
+            "security_monitoring",
+            "data_export",
+            "system_settings",
+            "user_feedback",
+            "performance_monitoring",
+            "access_control",
+            "notification_management",
+            "workflow_automation",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_admin_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_admin_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量
         let mut feature_count = 0;
         let all_features = vec![
-            "password_management", "password_reset", "security_policy", "data_report", "data_analytics",
-            "badge_management", "badge_design", "badge_grant", "bulk_operations", "user_management",
-            "permission_control", "audit_logging", "compliance_monitoring", "statistics_analysis",
-            "batch_processing", "admin_dashboard", "role_management", "security_monitoring",
-            "data_export", "system_settings", "user_feedback", "performance_monitoring",
-            "access_control", "notification_management", "workflow_automation", "nonexistent1", "nonexistent2"
+            "password_management",
+            "password_reset",
+            "security_policy",
+            "data_report",
+            "data_analytics",
+            "badge_management",
+            "badge_design",
+            "badge_grant",
+            "bulk_operations",
+            "user_management",
+            "permission_control",
+            "audit_logging",
+            "compliance_monitoring",
+            "statistics_analysis",
+            "batch_processing",
+            "admin_dashboard",
+            "role_management",
+            "security_monitoring",
+            "data_export",
+            "system_settings",
+            "user_feedback",
+            "performance_monitoring",
+            "access_control",
+            "notification_management",
+            "workflow_automation",
+            "nonexistent1",
+            "nonexistent2",
         ];
 
         for feature in all_features {
@@ -673,7 +731,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = AdminService::new(partial_invalid_config);
 
@@ -682,18 +740,19 @@ mod tests {
         assert!(!partial_invalid_service.validate_admin_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = AdminService::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_admin_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_admin_statistics().contains("AdminService"));
-        assert!(fully_invalid_service.get_admin_categories_statistics().contains("total: 4"));
+        assert!(fully_invalid_service
+            .get_admin_statistics()
+            .contains("AdminService"));
+        assert!(fully_invalid_service
+            .get_admin_categories_statistics()
+            .contains("total: 4"));
     }
 
     #[test]
@@ -757,7 +816,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
@@ -772,7 +834,10 @@ mod tests {
 
         // 验证config()方法返回的是相同的配置引用
         assert_eq!(service.password.config.app_id, service_config.app_id);
-        assert_eq!(service.password.config.app_secret, service_config.app_secret);
+        assert_eq!(
+            service.password.config.app_secret,
+            service_config.app_secret
+        );
 
         // 测试Debug trait
         let debug_str = format!("{:?}", service);
@@ -799,7 +864,11 @@ mod tests {
         ];
 
         for (feature, description) in workflow_features {
-            assert!(service.supports_admin_feature(feature), "{}功能应该被支持", description);
+            assert!(
+                service.supports_admin_feature(feature),
+                "{}功能应该被支持",
+                description
+            );
         }
 
         // 验证统计信息反映管理流程复杂性
@@ -825,20 +894,33 @@ mod tests {
 
         // 测试安全管理核心功能
         let security_features = vec![
-            "password_management", "security_policy", "security_monitoring", "access_control"
+            "password_management",
+            "security_policy",
+            "security_monitoring",
+            "access_control",
         ];
 
         for feature in security_features {
-            assert!(service.supports_admin_feature(feature), "安全管理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_admin_feature(feature),
+                "安全管理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试合规管理功能
         let compliance_features = vec![
-            "audit_logging", "compliance_monitoring", "permission_control"
+            "audit_logging",
+            "compliance_monitoring",
+            "permission_control",
         ];
 
         for feature in compliance_features {
-            assert!(service.supports_admin_feature(feature), "合规管理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_admin_feature(feature),
+                "合规管理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证安全管理能力完整性
@@ -857,11 +939,18 @@ mod tests {
 
         // 测试数据分析功能
         let analytics_features = vec![
-            "data_report", "data_analytics", "statistics_analysis", "data_export"
+            "data_report",
+            "data_analytics",
+            "statistics_analysis",
+            "data_export",
         ];
 
         for feature in analytics_features {
-            assert!(service.supports_admin_feature(feature), "数据分析功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_admin_feature(feature),
+                "数据分析功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证数据管理能力完整性
@@ -880,11 +969,18 @@ mod tests {
 
         // 测试勋章系统功能
         let badge_features = vec![
-            "badge_management", "badge_design", "badge_grant", "bulk_operations"
+            "badge_management",
+            "badge_design",
+            "badge_grant",
+            "bulk_operations",
         ];
 
         for feature in badge_features {
-            assert!(service.supports_admin_feature(feature), "勋章系统功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_admin_feature(feature),
+                "勋章系统功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证勋章管理能力完整性

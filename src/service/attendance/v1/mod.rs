@@ -1,5 +1,5 @@
 use crate::{
-    core::{config::Config, constants::AppType, trait_system::Service},
+    core::{config::Config, trait_system::Service},
     service::attendance::v1::{
         archive_rule::ArchiveRuleService, group::GroupService,
         leave_accrual_record::LeaveAccrualRecordService,
@@ -186,7 +186,7 @@ impl V1 {
 
         // 检查所有服务的 app_id 是否一致
         let reference_app_id = self.shift.config.app_id.clone();
-        let services = vec![
+        let services = [
             self.user_daily_shift.config.app_id.as_str(),
             self.group.config.app_id.as_str(),
             self.user_setting.config.app_id.as_str(),
@@ -225,17 +225,17 @@ impl V1 {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_feature(&self, feature_name: &str) -> bool {
-        match feature_name {
-            "shift_management" => true,
-            "user_attendance" => true,
-            "group_management" => true,
-            "statistics" => true,
-            "approval_workflow" => true,
-            "task_management" => true,
-            "leave_management" => true,
-            "data_archiving" => true,
-            _ => false,
-        }
+        matches!(
+            feature_name,
+            "shift_management"
+                | "user_attendance"
+                | "group_management"
+                | "statistics"
+                | "approval_workflow"
+                | "task_management"
+                | "leave_management"
+                | "data_archiving"
+        )
     }
 
     /// 使用共享配置创建服务实例（实验性功能）
@@ -286,7 +286,6 @@ mod tests {
         Config::builder()
             .app_id("attendance_test_app")
             .app_secret("attendance_test_secret")
-            .app_type(AppType::SelfBuild)
             .build()
     }
 
@@ -296,17 +295,50 @@ mod tests {
         let attendance_service = V1::new(config.clone());
 
         // Verify all sub-services are created
-        assert_eq!(attendance_service.shift.config.app_id, "attendance_test_app");
-        assert_eq!(attendance_service.user_daily_shift.config.app_id, "attendance_test_app");
-        assert_eq!(attendance_service.group.config.app_id, "attendance_test_app");
-        assert_eq!(attendance_service.user_setting.config.app_id, "attendance_test_app");
-        assert_eq!(attendance_service.user_stats_data.config.app_id, "attendance_test_app");
-        assert_eq!(attendance_service.user_approval.config.app_id, "attendance_test_app");
-        assert_eq!(attendance_service.user_task.config.app_id, "attendance_test_app");
-        assert_eq!(attendance_service.user_task_remedy.config.app_id, "attendance_test_app");
-        assert_eq!(attendance_service.archive_rule.config.app_id, "attendance_test_app");
-        assert_eq!(attendance_service.leave_employ_expire_record.config.app_id, "attendance_test_app");
-        assert_eq!(attendance_service.leave_accrual_record.config.app_id, "attendance_test_app");
+        assert_eq!(
+            attendance_service.shift.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            attendance_service.user_daily_shift.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            attendance_service.group.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            attendance_service.user_setting.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            attendance_service.user_stats_data.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            attendance_service.user_approval.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            attendance_service.user_task.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            attendance_service.user_task_remedy.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            attendance_service.archive_rule.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            attendance_service.leave_employ_expire_record.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            attendance_service.leave_accrual_record.config.app_id,
+            "attendance_test_app"
+        );
     }
 
     #[test]
@@ -321,10 +353,7 @@ mod tests {
         let service2 = V1::new(config2);
 
         // Verify services have independent configs
-        assert_ne!(
-            service1.shift.config.app_id,
-            service2.shift.config.app_id
-        );
+        assert_ne!(service1.shift.config.app_id, service2.shift.config.app_id);
         assert_eq!(service1.shift.config.app_id, "attendance_test_app");
         assert_eq!(service2.shift.config.app_id, "different_attendance_app");
     }
@@ -391,8 +420,16 @@ mod tests {
             attendance_service.user_task.config.app_id.as_str(),
             attendance_service.user_task_remedy.config.app_id.as_str(),
             attendance_service.archive_rule.config.app_id.as_str(),
-            attendance_service.leave_employ_expire_record.config.app_id.as_str(),
-            attendance_service.leave_accrual_record.config.app_id.as_str(),
+            attendance_service
+                .leave_employ_expire_record
+                .config
+                .app_id
+                .as_str(),
+            attendance_service
+                .leave_accrual_record
+                .config
+                .app_id
+                .as_str(),
         ];
 
         // All should be the same
@@ -406,14 +443,15 @@ mod tests {
         let unicode_config = Config::builder()
             .app_id("考勤_测试_🕐_123")
             .app_secret("密钥_🔐_特殊字符")
-            .app_type(AppType::Marketplace)
             .build();
 
         let attendance_service = V1::new(unicode_config);
 
         assert_eq!(attendance_service.shift.config.app_id, "考勤_测试_🕐_123");
-        assert_eq!(attendance_service.shift.config.app_secret, "密钥_🔐_特殊字符");
-        assert_eq!(attendance_service.shift.config.app_type, AppType::Marketplace);
+        assert_eq!(
+            attendance_service.shift.config.app_secret,
+            "密钥_🔐_特殊字符"
+        );
         assert_eq!(V1::service_name(), "attendance");
         assert_eq!(V1::service_version(), "v1");
     }
@@ -450,10 +488,7 @@ mod tests {
         let service2 = V1::new(config2);
 
         // Verify instances are independent
-        assert_ne!(
-            service1.shift.config.app_id,
-            service2.shift.config.app_id
-        );
+        assert_ne!(service1.shift.config.app_id, service2.shift.config.app_id);
         assert_eq!(service1.shift.config.app_id, "attendance_instance_1");
         assert_eq!(service2.shift.config.app_id, "attendance_instance_2");
     }
@@ -463,16 +498,17 @@ mod tests {
         let config = create_test_config();
 
         // Create multiple service instances
-        let services: Vec<V1> = (0..50)
-            .map(|_| V1::new(config.clone()))
-            .collect();
+        let services: Vec<V1> = (0..50).map(|_| V1::new(config.clone())).collect();
 
         assert_eq!(services.len(), 50);
 
         // All services should have the same app_id
         for service in &services {
             assert_eq!(service.shift.config.app_id, "attendance_test_app");
-            assert_eq!(service.leave_accrual_record.config.app_id, "attendance_test_app");
+            assert_eq!(
+                service.leave_accrual_record.config.app_id,
+                "attendance_test_app"
+            );
         }
     }
 
@@ -487,8 +523,14 @@ mod tests {
         // Both services should have the same values
         assert_eq!(service1.shift.config.app_id, "attendance_test_app");
         assert_eq!(service2.shift.config.app_id, "attendance_test_app");
-        assert_eq!(service1.user_approval.config.app_secret, "attendance_test_secret");
-        assert_eq!(service2.user_approval.config.app_secret, "attendance_test_secret");
+        assert_eq!(
+            service1.user_approval.config.app_secret,
+            "attendance_test_secret"
+        );
+        assert_eq!(
+            service2.user_approval.config.app_secret,
+            "attendance_test_secret"
+        );
     }
 
     #[test]
@@ -496,16 +538,20 @@ mod tests {
         let config = Config::builder()
             .app_id("props_attendance_app")
             .app_secret("props_attendance_secret")
-            .app_type(AppType::SelfBuild)
             .enable_token_cache(false)
             .build();
 
         let attendance_service = V1::new(config);
 
         // Test config properties
-        assert_eq!(attendance_service.shift.config.app_id, "props_attendance_app");
-        assert_eq!(attendance_service.shift.config.app_secret, "props_attendance_secret");
-        assert_eq!(attendance_service.shift.config.app_type, AppType::SelfBuild);
+        assert_eq!(
+            attendance_service.shift.config.app_id,
+            "props_attendance_app"
+        );
+        assert_eq!(
+            attendance_service.shift.config.app_secret,
+            "props_attendance_secret"
+        );
         assert!(!attendance_service.shift.config.enable_token_cache);
         assert!(!attendance_service.shift.config.base_url.is_empty());
     }
@@ -523,8 +569,7 @@ mod tests {
                 thread::spawn(move || {
                     format!(
                         "thread_{}_service_name: {}",
-                        i,
-                        service_clone.shift.config.app_id
+                        i, service_clone.shift.config.app_id
                     )
                 })
             })
@@ -546,7 +591,11 @@ mod tests {
         assert_eq!(V1::service_name(), "attendance");
         assert_eq!(V1::service_version(), "v1");
         assert!(!attendance_service.shift.config.app_id.is_empty());
-        assert!(!attendance_service.leave_accrual_record.config.app_id.is_empty());
+        assert!(!attendance_service
+            .leave_accrual_record
+            .config
+            .app_id
+            .is_empty());
     }
 
     #[test]
@@ -555,21 +604,54 @@ mod tests {
         let attendance_service = V1::new(config);
 
         // Verify shift services (3 services)
-        assert_eq!(attendance_service.shift.config.app_id, "attendance_test_app");
-        assert_eq!(attendance_service.user_daily_shift.config.app_id, "attendance_test_app");
-        assert_eq!(attendance_service.group.config.app_id, "attendance_test_app");
+        assert_eq!(
+            attendance_service.shift.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            attendance_service.user_daily_shift.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            attendance_service.group.config.app_id,
+            "attendance_test_app"
+        );
 
         // Verify user services (5 services)
-        assert_eq!(attendance_service.user_setting.config.app_id, "attendance_test_app");
-        assert_eq!(attendance_service.user_stats_data.config.app_id, "attendance_test_app");
-        assert_eq!(attendance_service.user_approval.config.app_id, "attendance_test_app");
-        assert_eq!(attendance_service.user_task.config.app_id, "attendance_test_app");
-        assert_eq!(attendance_service.user_task_remedy.config.app_id, "attendance_test_app");
+        assert_eq!(
+            attendance_service.user_setting.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            attendance_service.user_stats_data.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            attendance_service.user_approval.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            attendance_service.user_task.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            attendance_service.user_task_remedy.config.app_id,
+            "attendance_test_app"
+        );
 
         // Verify admin services (3 services)
-        assert_eq!(attendance_service.archive_rule.config.app_id, "attendance_test_app");
-        assert_eq!(attendance_service.leave_employ_expire_record.config.app_id, "attendance_test_app");
-        assert_eq!(attendance_service.leave_accrual_record.config.app_id, "attendance_test_app");
+        assert_eq!(
+            attendance_service.archive_rule.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            attendance_service.leave_employ_expire_record.config.app_id,
+            "attendance_test_app"
+        );
+        assert_eq!(
+            attendance_service.leave_accrual_record.config.app_id,
+            "attendance_test_app"
+        );
     }
 
     #[test]
@@ -588,22 +670,24 @@ mod tests {
         let self_build_config = Config::builder()
             .app_id("self_build_attendance")
             .app_secret("self_build_secret")
-            .app_type(AppType::SelfBuild)
             .build();
 
         let marketplace_config = Config::builder()
             .app_id("marketplace_attendance")
             .app_secret("marketplace_secret")
-            .app_type(AppType::Marketplace)
             .build();
 
         let self_build_service = V1::new(self_build_config);
         let marketplace_service = V1::new(marketplace_config);
 
-        assert_eq!(self_build_service.shift.config.app_type, AppType::SelfBuild);
-        assert_eq!(marketplace_service.shift.config.app_type, AppType::Marketplace);
-        assert_eq!(self_build_service.shift.config.app_id, "self_build_attendance");
-        assert_eq!(marketplace_service.shift.config.app_id, "marketplace_attendance");
+        assert_eq!(
+            self_build_service.shift.config.app_id,
+            "self_build_attendance"
+        );
+        assert_eq!(
+            marketplace_service.shift.config.app_id,
+            "marketplace_attendance"
+        );
     }
 
     #[test]
@@ -632,8 +716,14 @@ mod tests {
 
         // Services should be independent
         assert_eq!(original_service.shift.config.app_id, "attendance_test_app");
-        assert_eq!(modified_service.shift.config.app_id, "modified_attendance_app");
-        assert_ne!(original_service.shift.config.app_id, modified_service.shift.config.app_id);
+        assert_eq!(
+            modified_service.shift.config.app_id,
+            "modified_attendance_app"
+        );
+        assert_ne!(
+            original_service.shift.config.app_id,
+            modified_service.shift.config.app_id
+        );
     }
 
     #[test]
@@ -653,9 +743,18 @@ mod tests {
 
         // Services with equivalent configs should have same values
         assert_eq!(service1.shift.config.app_id, service2.shift.config.app_id);
-        assert_eq!(service1.shift.config.app_secret, service2.shift.config.app_secret);
-        assert_eq!(service1.user_task.config.app_id, service2.user_task.config.app_id);
-        assert_eq!(service1.leave_accrual_record.config.app_id, service2.leave_accrual_record.config.app_id);
+        assert_eq!(
+            service1.shift.config.app_secret,
+            service2.shift.config.app_secret
+        );
+        assert_eq!(
+            service1.user_task.config.app_id,
+            service2.user_task.config.app_id
+        );
+        assert_eq!(
+            service1.leave_accrual_record.config.app_id,
+            service2.leave_accrual_record.config.app_id
+        );
     }
 
     #[test]
@@ -666,9 +765,7 @@ mod tests {
         assert!(!minimal_service.health_check()); // Empty app_id should fail health check
 
         // Test with only app_id
-        let partial_config = Config::builder()
-            .app_id("partial_attendance")
-            .build();
+        let partial_config = Config::builder().app_id("partial_attendance").build();
         let partial_service = V1::new(partial_config);
         assert!(!partial_service.health_check()); // Missing secret should fail health check
     }
@@ -746,13 +843,13 @@ mod tests {
         // Test service hierarchy and relationships
         let main_service = attendance_service.shift.config.app_id.as_str();
 
-        let shift_services = vec![
+        let shift_services = [
             attendance_service.shift.config.app_id.as_str(),
             attendance_service.user_daily_shift.config.app_id.as_str(),
             attendance_service.group.config.app_id.as_str(),
         ];
 
-        let user_services = vec![
+        let user_services = [
             attendance_service.user_setting.config.app_id.as_str(),
             attendance_service.user_stats_data.config.app_id.as_str(),
             attendance_service.user_approval.config.app_id.as_str(),
@@ -760,14 +857,23 @@ mod tests {
             attendance_service.user_task_remedy.config.app_id.as_str(),
         ];
 
-        let admin_services = vec![
+        let admin_services = [
             attendance_service.archive_rule.config.app_id.as_str(),
-            attendance_service.leave_employ_expire_record.config.app_id.as_str(),
-            attendance_service.leave_accrual_record.config.app_id.as_str(),
+            attendance_service
+                .leave_employ_expire_record
+                .config
+                .app_id
+                .as_str(),
+            attendance_service
+                .leave_accrual_record
+                .config
+                .app_id
+                .as_str(),
         ];
 
         // All services should have the same config as the main service
-        for service_config in shift_services.iter()
+        for service_config in shift_services
+            .iter()
             .chain(user_services.iter())
             .chain(admin_services.iter())
         {
@@ -778,7 +884,10 @@ mod tests {
         assert_eq!(shift_services.len(), 3);
         assert_eq!(user_services.len(), 5);
         assert_eq!(admin_services.len(), 3);
-        assert_eq!(shift_services.len() + user_services.len() + admin_services.len(), 11);
+        assert_eq!(
+            shift_services.len() + user_services.len() + admin_services.len(),
+            11
+        );
     }
 
     #[test]

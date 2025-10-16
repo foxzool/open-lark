@@ -899,12 +899,7 @@ mod tests {
 
         // 边界情况 - 最小长度姓名
         assert!(matches!(
-            validate_candidate_basic_info(
-                "A",
-                "a@b.com",
-                "1234567",
-                None
-            ),
+            validate_candidate_basic_info("A", "a@b.com", "1234567", None),
             ValidationResult::Valid
         ));
 
@@ -922,23 +917,13 @@ mod tests {
 
         // 无简历URL
         assert!(matches!(
-            validate_candidate_basic_info(
-                "李四",
-                "lisi@example.com",
-                "+86-13987654321",
-                None
-            ),
+            validate_candidate_basic_info("李四", "lisi@example.com", "+86-13987654321", None),
             ValidationResult::Valid
         ));
 
         // 空简历URL字符串
         assert!(matches!(
-            validate_candidate_basic_info(
-                "王五",
-                "wangwu@example.com",
-                "13812345678",
-                Some("")
-            ),
+            validate_candidate_basic_info("王五", "wangwu@example.com", "13812345678", Some("")),
             ValidationResult::Valid
         ));
     }
@@ -1068,39 +1053,50 @@ mod tests {
         // 有效生日 - 各种年龄（使用固定日期避免时间依赖）
         let current_year = chrono::Utc::now().year();
         let valid_birthdays = [
-            format!("{}-01-01", current_year - 20),  // 20岁
-            format!("{}-06-15", current_year - 30),  // 30岁
-            format!("{}-12-31", current_year - 40),  // 40岁
-            format!("{}-05-20", current_year - 50),  // 50岁
-            format!("{}-01-01", current_year - 68),  // 68岁
+            format!("{}-01-01", current_year - 20), // 20岁
+            format!("{}-06-15", current_year - 30), // 30岁
+            format!("{}-12-31", current_year - 40), // 40岁
+            format!("{}-05-20", current_year - 50), // 50岁
+            format!("{}-01-01", current_year - 68), // 68岁
         ];
 
         for birthday in valid_birthdays {
-            assert!(matches!(
-                validate_birthday(&birthday),
-                ValidationResult::Valid
-            ), "Should be valid: {}", birthday);
+            assert!(
+                matches!(validate_birthday(&birthday), ValidationResult::Valid),
+                "Should be valid: {}",
+                birthday
+            );
         }
 
         // 18岁生日（边界）
-        let birthday_18 = format!("{}-{}", current_year - 18, chrono::Utc::now().format("%m-%d"));
-        assert!(matches!(
-            validate_birthday(&birthday_18),
-            ValidationResult::Valid
-        ), "Should be valid (18 years): {}", birthday_18);
+        let birthday_18 = format!(
+            "{}-{}",
+            current_year - 18,
+            chrono::Utc::now().format("%m-%d")
+        );
+        assert!(
+            matches!(validate_birthday(&birthday_18), ValidationResult::Valid),
+            "Should be valid (18 years): {}",
+            birthday_18
+        );
 
         // 70岁生日（边界）
-        let birthday_70 = format!("{}-{}", current_year - 70, chrono::Utc::now().format("%m-%d"));
-        assert!(matches!(
-            validate_birthday(&birthday_70),
-            ValidationResult::Valid
-        ), "Should be valid (70 years): {}", birthday_70);
+        let birthday_70 = format!(
+            "{}-{}",
+            current_year - 70,
+            chrono::Utc::now().format("%m-%d")
+        );
+        assert!(
+            matches!(validate_birthday(&birthday_70), ValidationResult::Valid),
+            "Should be valid (70 years): {}",
+            birthday_70
+        );
 
         // 测试单月/单日格式也是有效的（chrono接受这种格式）
-        assert!(matches!(
-            validate_birthday("1990-1-1"),
-            ValidationResult::Valid
-        ), "Single digit month/day should be valid");
+        assert!(
+            matches!(validate_birthday("1990-1-1"), ValidationResult::Valid),
+            "Single digit month/day should be valid"
+        );
     }
 
     #[test]
@@ -1131,13 +1127,18 @@ mod tests {
                 }
                 ValidationResult::Invalid(msg) => {
                     // This is expected, verify error message
-                    assert!(matches!(
-                        validate_birthday(birthday),
-                        ValidationResult::Invalid(err_msg) if
-                            err_msg.contains("Invalid birthday format") ||
-                            err_msg.contains("Age must be between") ||
-                            err_msg.contains("Birthday cannot be earlier than 1900")
-                    ), "Should have validation error for: {} (got: {})", birthday, msg);
+                    assert!(
+                        matches!(
+                            validate_birthday(birthday),
+                            ValidationResult::Invalid(err_msg) if
+                                err_msg.contains("Invalid birthday format") ||
+                                err_msg.contains("Age must be between") ||
+                                err_msg.contains("Birthday cannot be earlier than 1900")
+                        ),
+                        "Should have validation error for: {} (got: {})",
+                        birthday,
+                        msg
+                    );
                 }
                 ValidationResult::Warning(_) => {
                     // This should not happen - print debug info
@@ -1162,14 +1163,22 @@ mod tests {
 
         // 年龄太小（17岁）
         let current_year = chrono::Utc::now().year();
-        let young_birthday = format!("{}-{}", current_year - 17, chrono::Utc::now().format("%m-%d"));
+        let young_birthday = format!(
+            "{}-{}",
+            current_year - 17,
+            chrono::Utc::now().format("%m-%d")
+        );
         assert!(matches!(
             validate_birthday(&young_birthday),
             ValidationResult::Invalid(msg) if msg.contains("Age must be between 18 and 70 years")
         ));
 
         // 年龄太大（71岁）
-        let old_birthday = format!("{}-{}", current_year - 71, chrono::Utc::now().format("%m-%d"));
+        let old_birthday = format!(
+            "{}-{}",
+            current_year - 71,
+            chrono::Utc::now().format("%m-%d")
+        );
         assert!(matches!(
             validate_birthday(&old_birthday),
             ValidationResult::Invalid(msg) if msg.contains("Age must be between 18 and 70 years")
@@ -1184,12 +1193,7 @@ mod tests {
         let valid_degrees = ["高中", "大专", "本科", "硕士", "博士", "博士后"];
         for degree in valid_degrees {
             assert!(matches!(
-                validate_education_background(
-                    "北京大学",
-                    degree,
-                    "计算机科学与技术",
-                    2020
-                ),
+                validate_education_background("北京大学", degree, "计算机科学与技术", 2020),
                 ValidationResult::Valid
             ));
         }
@@ -1496,29 +1500,41 @@ mod tests {
         ));
 
         // 开始日期不是未来
-        let today = chrono::Utc::now().date_naive().format("%Y-%m-%d").to_string();
-        let future_expiry = (chrono::Utc::now().date_naive() + chrono::Duration::days(20)).format("%Y-%m-%d").to_string();
+        let today = chrono::Utc::now()
+            .date_naive()
+            .format("%Y-%m-%d")
+            .to_string();
+        let future_expiry = (chrono::Utc::now().date_naive() + chrono::Duration::days(20))
+            .format("%Y-%m-%d")
+            .to_string();
         assert!(matches!(
             validate_offer_info("oc_123", "position_123", 20000, &today, &future_expiry),
             ValidationResult::Invalid(msg) if msg.contains("Start date must be in the future")
         ));
 
         // 有效期不是未来
-        let past_expiry = chrono::Utc::now().date_naive().format("%Y-%m-%d").to_string();
+        let past_expiry = chrono::Utc::now()
+            .date_naive()
+            .format("%Y-%m-%d")
+            .to_string();
         assert!(matches!(
             validate_offer_info("oc_123", "position_123", 20000, &start_date_str, &past_expiry),
             ValidationResult::Invalid(msg) if msg.contains("Expiry date must be in the future")
         ));
 
         // 有效期早于开始日期
-        let early_expiry = (start_date - chrono::Duration::days(5)).format("%Y-%m-%d").to_string();
+        let early_expiry = (start_date - chrono::Duration::days(5))
+            .format("%Y-%m-%d")
+            .to_string();
         assert!(matches!(
             validate_offer_info("oc_123", "position_123", 20000, &start_date_str, &early_expiry),
             ValidationResult::Invalid(msg) if msg.contains("Expiry date must be after start date")
         ));
 
         // 有效期超过30天
-        let late_expiry = (start_date + chrono::Duration::days(31)).format("%Y-%m-%d").to_string();
+        let late_expiry = (start_date + chrono::Duration::days(31))
+            .format("%Y-%m-%d")
+            .to_string();
         assert!(matches!(
             validate_offer_info("oc_123", "position_123", 20000, &start_date_str, &late_expiry),
             ValidationResult::Invalid(msg) if msg.contains("Offer expiry date cannot be more than 30 days")
@@ -1556,15 +1572,15 @@ mod tests {
     fn test_validate_hiring_status_transition_invalid_cases() {
         // 无效状态流转
         let invalid_transitions = [
-            ("初试", "简历筛选"),  // 逆向流转
-            ("复试", "初试"),      // 跨越阶段
-            ("不合适", "初试"),    // 从不合适恢复
-            ("Offer已发", "复试"), // 逆向流转
-            ("已接受", "Offer已发"), // 逆向流转
-            ("已拒绝", "初试"),    // 从拒绝恢复
+            ("初试", "简历筛选"),     // 逆向流转
+            ("复试", "初试"),         // 跨越阶段
+            ("不合适", "初试"),       // 从不合适恢复
+            ("Offer已发", "复试"),    // 逆向流转
+            ("已接受", "Offer已发"),  // 逆向流转
+            ("已拒绝", "初试"),       // 从拒绝恢复
             ("简历筛选", "简历筛选"), // 相同状态
-            ("初试", "终试"),      // 跨越阶段
-            ("Offer审批", "不合适"), // 不合理的流转
+            ("初试", "终试"),         // 跨越阶段
+            ("Offer审批", "不合适"),  // 不合理的流转
         ];
 
         for (current, new) in invalid_transitions {
@@ -1710,13 +1726,13 @@ mod tests {
         ));
 
         // 包含无效字符
-        let invalid_chars_tags = vec![
+        let invalid_chars_tags = [
             "tag@symbol".to_string(),
             "tag#hash".to_string(),
             "tag*star".to_string(),
             "tag space!".to_string(),
         ];
-        for (_i, tag) in invalid_chars_tags.iter().enumerate() {
+        for tag in invalid_chars_tags.iter() {
             let tags = vec![tag.clone()];
             assert!(matches!(
                 validate_candidate_tags(&tags, 5),
@@ -1816,12 +1832,7 @@ mod tests {
 
         // 测试 trait 方法
         assert!(matches!(
-            validator.validate_job_position(
-                "测试职位",
-                "测试描述",
-                "od_123",
-                "ou_123"
-            ),
+            validator.validate_job_position("测试职位", "测试描述", "od_123", "ou_123"),
             ValidationResult::Valid
         ));
 
@@ -1838,12 +1849,7 @@ mod tests {
         let interviewers = vec!["ou_123".to_string()];
         let future_time = chrono::Utc::now().timestamp() + 24 * 60 * 60;
         assert!(matches!(
-            validator.validate_interview_arrangement(
-                &interviewers,
-                future_time,
-                60,
-                "视频面试"
-            ),
+            validator.validate_interview_arrangement(&interviewers, future_time, 60, "视频面试"),
             ValidationResult::Valid
         ));
 
@@ -1876,7 +1882,7 @@ mod tests {
             "高级Rust开发工程师",
             "负责分布式系统开发，要求精通Rust和系统编程",
             "od_6889b3c12345678",
-            "ou_6889b3c12345678"
+            "ou_6889b3c12345678",
         );
         assert!(matches!(position_result, ValidationResult::Valid));
 
@@ -1893,7 +1899,7 @@ mod tests {
             "李明",
             "liming@example.com",
             "+86-13812345678",
-            Some("https://drive.google.com/resume.pdf")
+            Some("https://drive.google.com/resume.pdf"),
         );
         assert!(matches!(candidate_result, ValidationResult::Valid));
 
@@ -1902,12 +1908,8 @@ mod tests {
         assert!(matches!(birthday_result, ValidationResult::Valid));
 
         // 6. 验证教育背景
-        let education_result = validate_education_background(
-            "清华大学",
-            "硕士",
-            "计算机科学与技术",
-            2018
-        );
+        let education_result =
+            validate_education_background("清华大学", "硕士", "计算机科学与技术", 2018);
         assert!(matches!(education_result, ValidationResult::Valid));
 
         // 7. 验证面试安排
@@ -1916,12 +1918,8 @@ mod tests {
             "ou_6889b3c87654321".to_string(),
         ];
         let interview_time = chrono::Utc::now().timestamp() + 3 * 24 * 60 * 60;
-        let interview_result = validate_interview_arrangement(
-            &interviewers,
-            interview_time,
-            90,
-            "视频面试"
-        );
+        let interview_result =
+            validate_interview_arrangement(&interviewers, interview_time, 90, "视频面试");
         assert!(matches!(interview_result, ValidationResult::Valid));
 
         // 8. 验证状态流转
@@ -1932,7 +1930,7 @@ mod tests {
         let feedback_result = validate_interview_feedback(
             "技术功底扎实，系统设计思路清晰，沟通表达能力强，符合高级工程师要求",
             5,
-            "复试"
+            "复试",
         );
         assert!(matches!(feedback_result, ValidationResult::Valid));
 
@@ -1944,7 +1942,7 @@ mod tests {
             "position_rust_senior_001",
             30000,
             &start_date.format("%Y-%m-%d").to_string(),
-            &expiry_date.format("%Y-%m-%d").to_string()
+            &expiry_date.format("%Y-%m-%d").to_string(),
         );
         assert!(matches!(offer_result, ValidationResult::Valid));
 
@@ -1974,7 +1972,9 @@ mod tests {
 
         let result = validate_candidate_basic_info("张三", "invalid-email", "abc", None);
         if let ValidationResult::Invalid(msg) = result {
-            assert!(msg.contains("email") || msg.contains("Phone number contains invalid characters"));
+            assert!(
+                msg.contains("email") || msg.contains("Phone number contains invalid characters")
+            );
         }
     }
 
@@ -1994,9 +1994,9 @@ mod tests {
         assert!(matches!(
             validate_candidate_basic_info(
                 "张三 🌟",
-                "zhangsan@example.com",  // 使用ASCII邮箱避免Unicode问题
+                "zhangsan@example.com", // 使用ASCII邮箱避免Unicode问题
                 "+86-13812345678",
-                Some("https://example.com/resume.pdf")  // 使用ASCII URL
+                Some("https://example.com/resume.pdf") // 使用ASCII URL
             ),
             ValidationResult::Valid
         ));
@@ -2004,15 +2004,14 @@ mod tests {
         // 测试各种语言的姓名
         let names = ["John Smith", "張偉", "김철수", "田中太郎", "José García"];
         for name in names {
-            assert!(matches!(
-                validate_candidate_basic_info(
-                    name,
-                    "test@example.com",
-                    "1234567890",
-                    None
+            assert!(
+                matches!(
+                    validate_candidate_basic_info(name, "test@example.com", "1234567890", None),
+                    ValidationResult::Valid
                 ),
-                ValidationResult::Valid
-            ), "Should be valid for name: {}", name);
+                "Should be valid for name: {}",
+                name
+            );
         }
     }
 }

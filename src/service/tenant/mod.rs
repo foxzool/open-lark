@@ -163,9 +163,10 @@ impl TenantService {
         let app_id = &self.v2.tenant.config.app_id;
         let app_secret = &self.v2.tenant.config.app_secret;
 
-        !app_id.is_empty() && !app_secret.is_empty() &&
-        app_id == &self.v2.tenant_product_assign_info.config.app_id &&
-        app_secret == &self.v2.tenant_product_assign_info.config.app_secret
+        !app_id.is_empty()
+            && !app_secret.is_empty()
+            && app_id == &self.v2.tenant_product_assign_info.config.app_id
+            && app_secret == &self.v2.tenant_product_assign_info.config.app_secret
     }
 
     /// 获取企业信息服务的整体统计信息
@@ -290,9 +291,7 @@ impl TenantService {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_tenant_categories_statistics(&self) -> String {
-        format!(
-            "TenantService Categories{{ enterprise: 5, product: 5, admin: 4, multi_tenant: 3, security: 4, monitoring: 4, integration: 4, advanced: 4, total: 33 }}",
-        )
+        "TenantService Categories{ enterprise: 5, product: 5, admin: 4, multi_tenant: 3, security: 4, monitoring: 4, integration: 4, advanced: 4, total: 33 }".to_string()
     }
 
     /// 获取企业信息服务状态摘要
@@ -321,9 +320,7 @@ impl TenantService {
     /// # 返回值
     /// 包含企业管理能力信息的字符串
     pub fn get_enterprise_management_capabilities(&self) -> String {
-        format!(
-            "TenantService Enterprise{{ info_management: true, profile_config: true, settings_management: true, branding_customization: true, localization_support: true, compliance_management: true }}",
-        )
+        "TenantService Enterprise{ info_management: true, profile_config: true, settings_management: true, branding_customization: true, localization_support: true, compliance_management: true }".to_string()
     }
 
     /// 获取产品配置能力矩阵
@@ -333,9 +330,7 @@ impl TenantService {
     /// # 返回值
     /// 包含产品配置能力信息的字符串
     pub fn get_product_configuration_capabilities(&self) -> String {
-        format!(
-            "TenantService Product{{ assignment: true, license_management: true, feature_config: true, entitlement_tracking: true, subscription_mgmt: true, billing_integration: true, usage_analytics: true, quota_management: true }}",
-        )
+        "TenantService Product{ assignment: true, license_management: true, feature_config: true, entitlement_tracking: true, subscription_mgmt: true, billing_integration: true, usage_analytics: true, quota_management: true }".to_string()
     }
 
     /// 获取管理员管理能力矩阵
@@ -345,9 +340,7 @@ impl TenantService {
     /// # 返回值
     /// 包含管理员管理能力信息的字符串
     pub fn get_admin_management_capabilities(&self) -> String {
-        format!(
-            "TenantService Admin{{ management: true, role_assignment: true, permission_control: true, audit_logging: true, security_policy: true, access_control: true, workflow_automation: true, delegation_support: true }}",
-        )
+        "TenantService Admin{ management: true, role_assignment: true, permission_control: true, audit_logging: true, security_policy: true, access_control: true, workflow_automation: true, delegation_support: true }".to_string()
     }
 
     /// 获取多租户能力矩阵
@@ -357,9 +350,7 @@ impl TenantService {
     /// # 返回值
     /// 包含多租户能力信息的字符串
     pub fn get_multi_tenant_capabilities(&self) -> String {
-        format!(
-            "TenantService MultiTenant{{ support: true, isolation: true, resource_sharing: true, cross_tenant_access: true, hierarchy_management: true, sub_tenant_mgmt: true, federation_support: true }}",
-        )
+        "TenantService MultiTenant{ support: true, isolation: true, resource_sharing: true, cross_tenant_access: true, hierarchy_management: true, sub_tenant_mgmt: true, federation_support: true }".to_string()
     }
 
     /// 获取安全合规能力矩阵
@@ -369,9 +360,7 @@ impl TenantService {
     /// # 返回值
     /// 包含安全合规能力信息的字符串
     pub fn get_security_compliance_capabilities(&self) -> String {
-        format!(
-            "TenantService Security{{ compliance: true, audit_logging: true, data_protection: true, privacy_controls: true, risk_assessment: true, compliance_reporting: true, security_monitoring: true }}",
-        )
+        "TenantService Security{ compliance: true, audit_logging: true, data_protection: true, privacy_controls: true, risk_assessment: true, compliance_reporting: true, security_monitoring: true }".to_string()
     }
 
     /// 获取监控分析能力矩阵
@@ -381,9 +370,7 @@ impl TenantService {
     /// # 返回值
     /// 包含监控分析能力信息的字符串
     pub fn get_monitoring_analytics_capabilities(&self) -> String {
-        format!(
-            "TenantService Monitoring{{ usage_analytics: true, performance_monitoring: true, health_monitoring: true, alert_management: true, reporting_dashboard: true, metrics_collection: true, trend_analysis: true }}",
-        )
+        "TenantService Monitoring{ usage_analytics: true, performance_monitoring: true, health_monitoring: true, alert_management: true, reporting_dashboard: true, metrics_collection: true, trend_analysis: true }".to_string()
     }
 
     /// 获取集成能力矩阵
@@ -393,9 +380,7 @@ impl TenantService {
     /// # 返回值
     /// 包含集成能力信息的字符串
     pub fn get_integration_capabilities(&self) -> String {
-        format!(
-            "TenantService Integration{{ api_integration: true, webhook_support: true, third_party_sync: true, sso_integration: true, directory_sync: true, custom_connectors: true, data_exchange: true }}",
-        )
+        "TenantService Integration{ api_integration: true, webhook_support: true, third_party_sync: true, sso_integration: true, directory_sync: true, custom_connectors: true, data_exchange: true }".to_string()
     }
 
     /// 获取高级功能能力矩阵
@@ -405,9 +390,7 @@ impl TenantService {
     /// # 返回值
     /// 包含高级功能能力信息的字符串
     pub fn get_advanced_capabilities(&self) -> String {
-        format!(
-            "TenantService Advanced{{ custom_workflows: true, automation_rules: true, bulk_operations: true, data_export_import: true, advanced_config: true, business_rules: true, custom_fields: true }}",
-        )
+        "TenantService Advanced{ custom_workflows: true, automation_rules: true, bulk_operations: true, data_export_import: true, advanced_config: true, business_rules: true, custom_fields: true }".to_string()
     }
 
     /// 获取企业信息服务性能指标
@@ -417,9 +400,7 @@ impl TenantService {
     /// # 返回值
     /// 包含性能指标信息的字符串
     pub fn get_tenant_performance_metrics(&self) -> String {
-        format!(
-            "TenantService Performance{{ scalability: enterprise, reliability: 99.9%, latency: <300ms, concurrency: high, availability: 99.95%, data_consistency: strong }}",
-        )
+        "TenantService Performance{ scalability: enterprise, reliability: 99.9%, latency: <300ms, concurrency: high, availability: 99.95%, data_consistency: strong }".to_string()
     }
 
     /// 获取企业信息服务应用场景矩阵
@@ -429,9 +410,7 @@ impl TenantService {
     /// # 返回值
     /// 包含应用场景信息的字符串
     pub fn get_tenant_use_cases_matrix(&self) -> String {
-        format!(
-            "TenantService UseCases{{ enterprise_management: true, product_configuration: true, admin_management: true, multi_tenant_ops: true, security_compliance: true, monitoring_analytics: true, integration: true, advanced_features: true }}",
-        )
+        "TenantService UseCases{ enterprise_management: true, product_configuration: true, admin_management: true, multi_tenant_ops: true, security_compliance: true, monitoring_analytics: true, integration: true, advanced_features: true }".to_string()
     }
 }
 
@@ -655,10 +634,12 @@ mod tests {
 
     #[test]
     fn test_tenant_service_with_shared_config() {
-        let config = Arc::new(Config::builder()
-            .app_id("shared_tenant_app")
-            .app_secret("shared_tenant_secret")
-            .build());
+        let config = Arc::new(
+            Config::builder()
+                .app_id("shared_tenant_app")
+                .app_secret("shared_tenant_secret")
+                .build(),
+        );
 
         let service = TenantService::new_from_shared(config.clone());
 
@@ -674,7 +655,10 @@ mod tests {
 
     #[test]
     fn test_validate_tenant_services_config() {
-        let config = Config::default();
+        let config = Config::builder()
+            .app_id("validate_tenant_app")
+            .app_secret("validate_tenant_secret")
+            .build();
         let service = TenantService::new(config);
 
         // 测试配置验证功能
@@ -683,9 +667,7 @@ mod tests {
 
     #[test]
     fn test_get_tenant_service_statistics() {
-        let config = Config::builder()
-            .app_id("tenant_stats_app")
-            .build();
+        let config = Config::builder().app_id("tenant_stats_app").build();
 
         let service = TenantService::new(config);
         let stats = service.get_tenant_service_statistics();
@@ -832,7 +814,10 @@ mod tests {
 
     #[test]
     fn test_health_check() {
-        let config = Config::default();
+        let config = Config::builder()
+            .app_id("test_tenant_app")
+            .app_secret("test_tenant_secret")
+            .build();
         let service = TenantService::new(config);
 
         // 测试健康检查
@@ -1037,7 +1022,7 @@ mod tests {
     #[test]
     fn test_service_trait_service_name() {
         let config = Config::default();
-        let service = TenantService::new(config);
+        let _service = TenantService::new(config);
 
         assert_eq!(TenantService::service_name(), "tenant");
     }
@@ -1045,16 +1030,14 @@ mod tests {
     #[test]
     fn test_service_trait_service_version() {
         let config = Config::default();
-        let service = TenantService::new(config);
+        let _service = TenantService::new(config);
 
         assert_eq!(TenantService::service_version(), "2.0.0");
     }
 
     #[test]
     fn test_service_trait_config() {
-        let config = Config::builder()
-            .app_id("service_trait_app")
-            .build();
+        let config = Config::builder().app_id("service_trait_app").build();
         let service = TenantService::new(config);
 
         assert_eq!(service.config().app_id, "service_trait_app");
@@ -1072,8 +1055,14 @@ mod tests {
         let service1 = TenantService::new(config);
         let service2 = service1.clone();
 
-        assert_eq!(service1.v2.tenant.config.app_id, service2.v2.tenant.config.app_id);
-        assert_eq!(service1.v2.tenant.config.app_secret, service2.v2.tenant.config.app_secret);
+        assert_eq!(
+            service1.v2.tenant.config.app_id,
+            service2.v2.tenant.config.app_id
+        );
+        assert_eq!(
+            service1.v2.tenant.config.app_secret,
+            service2.v2.tenant.config.app_secret
+        );
         assert_eq!(
             service1.v2.tenant_product_assign_info.config.app_id,
             service2.v2.tenant_product_assign_info.config.app_id
@@ -1082,9 +1071,7 @@ mod tests {
 
     #[test]
     fn test_tenant_service_debug() {
-        let config = Config::builder()
-            .app_id("debug_tenant_app")
-            .build();
+        let config = Config::builder().app_id("debug_tenant_app").build();
 
         let service = TenantService::new(config);
         let debug_str = format!("{:?}", service);
@@ -1104,14 +1091,12 @@ mod tests {
         use std::sync::Arc;
         use std::thread;
 
-        let config = Config::builder()
-            .app_id("concurrent_tenant_app")
-            .build();
+        let config = Config::builder().app_id("concurrent_tenant_app").build();
         let service = Arc::new(TenantService::new(config));
 
         let mut handles = vec![];
 
-        for i in 0..5 {
+        for _i in 0..5 {
             let service_clone = Arc::clone(&service);
             let handle = thread::spawn(move || {
                 // 测试并发访问各种功能
@@ -1137,9 +1122,7 @@ mod tests {
     fn test_tenant_service_arc_sharing() {
         use std::sync::Arc;
 
-        let config = Config::builder()
-            .app_id("arc_tenant_app")
-            .build();
+        let config = Config::builder().app_id("arc_tenant_app").build();
         let service1 = Arc::new(TenantService::new(config));
         let service2 = Arc::clone(&service1);
 
@@ -1184,10 +1167,7 @@ mod tests {
 
     #[test]
     fn test_tenant_service_empty_config() {
-        let config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let config = Config::builder().app_id("").app_secret("").build();
 
         let service = TenantService::new(config);
 

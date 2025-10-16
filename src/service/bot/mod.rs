@@ -147,8 +147,7 @@ impl BotService {
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
     pub fn validate_bot_services_config(&self) -> bool {
         // 检查配置是否有效
-        !self.v3.info.config.app_id.is_empty()
-            && !self.v3.info.config.app_secret.is_empty()
+        !self.v3.info.config.app_id.is_empty() && !self.v3.info.config.app_secret.is_empty()
     }
 
     /// 获取机器人服务的整体统计信息
@@ -261,9 +260,8 @@ impl BotService {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_bot_categories_statistics(&self) -> String {
-        format!(
-            "BotService Categories{{ management: 1, messaging: 1, events: 1, api: 1, total: 4 }}",
-        )
+        "BotService Categories{ management: 1, messaging: 1, events: 1, api: 1, total: 4 }"
+            .to_string()
     }
 
     /// 获取机器人服务状态摘要
@@ -309,9 +307,7 @@ impl BotService {
     /// # 返回值
     /// 包含机器人管理能力信息的字符串
     pub fn get_bot_management_capabilities(&self) -> String {
-        format!(
-            "BotService Management{{ info: true, configuration: true, status: true, permissions: true, statistics: true }}",
-        )
+        "BotService Management{ info: true, configuration: true, status: true, permissions: true, statistics: true }".to_string()
     }
 
     /// 获取消息处理能力矩阵
@@ -321,9 +317,7 @@ impl BotService {
     /// # 返回值
     /// 包含消息处理能力信息的字符串
     pub fn get_messaging_capabilities(&self) -> String {
-        format!(
-            "BotService Messaging{{ receive: true, send: true, rich_text: true, multimedia: true, interactive: true }}",
-        )
+        "BotService Messaging{ receive: true, send: true, rich_text: true, multimedia: true, interactive: true }".to_string()
     }
 
     /// 获取事件处理能力矩阵
@@ -333,9 +327,7 @@ impl BotService {
     /// # 返回值
     /// 包含事件处理能力信息的字符串
     pub fn get_event_processing_capabilities(&self) -> String {
-        format!(
-            "BotService Events{{ listening: true, callback: true, async: true, monitoring: true, webhook: true }}",
-        )
+        "BotService Events{ listening: true, callback: true, async: true, monitoring: true, webhook: true }".to_string()
     }
 
     /// 获取集成能力矩阵
@@ -345,9 +337,7 @@ impl BotService {
     /// # 返回值
     /// 包含集成能力信息的字符串
     pub fn get_integration_capabilities(&self) -> String {
-        format!(
-            "BotService Integration{{ api_calls: true, external: true, webhooks: true, workflows: true, third_party: true }}",
-        )
+        "BotService Integration{ api_calls: true, external: true, webhooks: true, workflows: true, third_party: true }".to_string()
     }
 
     /// 获取智能交互能力矩阵
@@ -357,9 +347,7 @@ impl BotService {
     /// # 返回值
     /// 包含智能交互能力信息的字符串
     pub fn get_intelligent_interaction_capabilities(&self) -> String {
-        format!(
-            "BotService Intelligence{{ dialogue: true, nlp: true, context: true, learning: true, intent: true }}",
-        )
+        "BotService Intelligence{ dialogue: true, nlp: true, context: true, learning: true, intent: true }".to_string()
     }
 
     /// 获取企业级能力矩阵
@@ -369,9 +357,7 @@ impl BotService {
     /// # 返回值
     /// 包含企业级能力信息的字符串
     pub fn get_enterprise_capabilities(&self) -> String {
-        format!(
-            "BotService Enterprise{{ multi_tenant: true, security: true, compliance: true, audit: true, scalability: true }}",
-        )
+        "BotService Enterprise{ multi_tenant: true, security: true, compliance: true, audit: true, scalability: true }".to_string()
     }
 
     /// 获取机器人性能指标
@@ -381,9 +367,7 @@ impl BotService {
     /// # 返回值
     /// 包含性能指标信息的字符串
     pub fn get_bot_performance_metrics(&self) -> String {
-        format!(
-            "BotService Performance{{ response_time: <100ms, throughput: high, reliability: 99.9%, concurrency: enterprise, availability: 99.95% }}",
-        )
+        "BotService Performance{ response_time: <100ms, throughput: high, reliability: 99.9%, concurrency: enterprise, availability: 99.95% }".to_string()
     }
 
     /// 获取机器人应用场景矩阵
@@ -393,9 +377,7 @@ impl BotService {
     /// # 返回值
     /// 包含应用场景信息的字符串
     pub fn get_bot_use_cases_matrix(&self) -> String {
-        format!(
-            "BotService UseCases{{ enterprise_assistant: true, workflow_automation: true, customer_service: true, data_analytics: true, notification_system: true }}",
-        )
+        "BotService UseCases{ enterprise_assistant: true, workflow_automation: true, customer_service: true, data_analytics: true, notification_system: true }".to_string()
     }
 
     /// 获取机器人开发者工具能力矩阵
@@ -405,9 +387,7 @@ impl BotService {
     /// # 返回值
     /// 包含开发者工具能力信息的字符串
     pub fn get_developer_tools_capabilities(&self) -> String {
-        format!(
-            "BotService DeveloperTools{{ debugging: true, testing: true, documentation: true, code_generation: true, monitoring: true }}",
-        )
+        "BotService DeveloperTools{ debugging: true, testing: true, documentation: true, code_generation: true, monitoring: true }".to_string()
     }
 
     /// 获取机器人安全能力矩阵
@@ -417,9 +397,7 @@ impl BotService {
     /// # 返回值
     /// 包含安全能力信息的字符串
     pub fn get_security_capabilities(&self) -> String {
-        format!(
-            "BotService Security{{ authentication: true, authorization: true, encryption: true, audit_logging: true, compliance: true }}",
-        )
+        "BotService Security{ authentication: true, authorization: true, encryption: true, audit_logging: true, compliance: true }".to_string()
     }
 
     /// 获取机器人扩展能力矩阵
@@ -429,9 +407,7 @@ impl BotService {
     /// # 返回值
     /// 包含扩展能力信息的字符串
     pub fn get_extensibility_capabilities(&self) -> String {
-        format!(
-            "BotService Extensibility{{ plugins: true, custom_handlers: true, webhooks: true, apis: true, integrations: true }}",
-        )
+        "BotService Extensibility{ plugins: true, custom_handlers: true, webhooks: true, apis: true, integrations: true }".to_string()
     }
 }
 
@@ -534,52 +510,93 @@ mod tests {
 
         // 测试支持的机器人基础管理功能
         let management_features = vec![
-            "bot_info_management", "bot_configuration", "bot_status_monitoring",
-            "bot_permission_management", "bot_usage_statistics"
+            "bot_info_management",
+            "bot_configuration",
+            "bot_status_monitoring",
+            "bot_permission_management",
+            "bot_usage_statistics",
         ];
 
         for feature in management_features {
-            assert!(service.supports_bot_feature(feature), "管理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_bot_feature(feature),
+                "管理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试支持的消息处理功能
         let messaging_features = vec![
-            "message_receive", "message_send", "rich_text_message", "multimedia_message",
-            "message_routing", "message_statistics", "interactive_message", "card_message"
+            "message_receive",
+            "message_send",
+            "rich_text_message",
+            "multimedia_message",
+            "message_routing",
+            "message_statistics",
+            "interactive_message",
+            "card_message",
         ];
 
         for feature in messaging_features {
-            assert!(service.supports_bot_feature(feature), "消息功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_bot_feature(feature),
+                "消息功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试支持的事件监听功能
         let event_features = vec![
-            "event_listening", "event_callback_handling", "event_type_management",
-            "async_event_processing", "event_monitoring", "webhook_events"
+            "event_listening",
+            "event_callback_handling",
+            "event_type_management",
+            "async_event_processing",
+            "event_monitoring",
+            "webhook_events",
         ];
 
         for feature in event_features {
-            assert!(service.supports_bot_feature(feature), "事件功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_bot_feature(feature),
+                "事件功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试支持的API调用功能
         let api_features = vec![
-            "active_api_calls", "external_system_integration", "api_call_statistics",
-            "api_request_retry", "api_security_authentication", "batch_api_calls"
+            "active_api_calls",
+            "external_system_integration",
+            "api_call_statistics",
+            "api_request_retry",
+            "api_security_authentication",
+            "batch_api_calls",
         ];
 
         for feature in api_features {
-            assert!(service.supports_bot_feature(feature), "API功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_bot_feature(feature),
+                "API功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试支持的智能交互功能
         let ai_features = vec![
-            "intelligent_dialogue", "intent_recognition", "context_management",
-            "multi_round_dialogue", "learning_optimization", "natural_language_processing"
+            "intelligent_dialogue",
+            "intent_recognition",
+            "context_management",
+            "multi_round_dialogue",
+            "learning_optimization",
+            "natural_language_processing",
         ];
 
         for feature in ai_features {
-            assert!(service.supports_bot_feature(feature), "智能功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_bot_feature(feature),
+                "智能功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -597,10 +614,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = BotService::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -809,38 +823,122 @@ mod tests {
         // 测试所有支持的机器人功能组合
         let supported_features = vec![
             // 机器人基础管理功能
-            "bot_info_management", "bot_configuration", "bot_status_monitoring", "bot_permission_management", "bot_usage_statistics",
+            "bot_info_management",
+            "bot_configuration",
+            "bot_status_monitoring",
+            "bot_permission_management",
+            "bot_usage_statistics",
             // 消息处理功能
-            "message_receive", "message_send", "rich_text_message", "multimedia_message", "message_routing", "message_statistics", "interactive_message", "card_message",
+            "message_receive",
+            "message_send",
+            "rich_text_message",
+            "multimedia_message",
+            "message_routing",
+            "message_statistics",
+            "interactive_message",
+            "card_message",
             // 事件监听功能
-            "event_listening", "event_callback_handling", "event_type_management", "async_event_processing", "event_monitoring", "webhook_events",
+            "event_listening",
+            "event_callback_handling",
+            "event_type_management",
+            "async_event_processing",
+            "event_monitoring",
+            "webhook_events",
             // API调用功能
-            "active_api_calls", "external_system_integration", "api_call_statistics", "api_request_retry", "api_security_authentication", "batch_api_calls",
+            "active_api_calls",
+            "external_system_integration",
+            "api_call_statistics",
+            "api_request_retry",
+            "api_security_authentication",
+            "batch_api_calls",
             // 智能交互功能
-            "intelligent_dialogue", "intent_recognition", "context_management", "multi_round_dialogue", "learning_optimization", "natural_language_processing",
+            "intelligent_dialogue",
+            "intent_recognition",
+            "context_management",
+            "multi_round_dialogue",
+            "learning_optimization",
+            "natural_language_processing",
             // 企业级功能
-            "enterprise_bot_management", "multi_tenant_support", "security_compliance", "audit_logging", "performance_monitoring", "scalability_support",
+            "enterprise_bot_management",
+            "multi_tenant_support",
+            "security_compliance",
+            "audit_logging",
+            "performance_monitoring",
+            "scalability_support",
             // 开发者功能
-            "developer_tools", "debugging_support", "testing_framework", "documentation_generation", "code_generation",
+            "developer_tools",
+            "debugging_support",
+            "testing_framework",
+            "documentation_generation",
+            "code_generation",
             // 集成功能
-            "third_party_integration", "custom_webhooks", "data_sync", "workflow_automation", "notification_systems"
+            "third_party_integration",
+            "custom_webhooks",
+            "data_sync",
+            "workflow_automation",
+            "notification_systems",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_bot_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_bot_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量
         let mut feature_count = 0;
         let all_features = vec![
-            "bot_info_management", "bot_configuration", "bot_status_monitoring", "bot_permission_management", "bot_usage_statistics",
-            "message_receive", "message_send", "rich_text_message", "multimedia_message", "message_routing", "message_statistics", "interactive_message", "card_message",
-            "event_listening", "event_callback_handling", "event_type_management", "async_event_processing", "event_monitoring", "webhook_events",
-            "active_api_calls", "external_system_integration", "api_call_statistics", "api_request_retry", "api_security_authentication", "batch_api_calls",
-            "intelligent_dialogue", "intent_recognition", "context_management", "multi_round_dialogue", "learning_optimization", "natural_language_processing",
-            "enterprise_bot_management", "multi_tenant_support", "security_compliance", "audit_logging", "performance_monitoring", "scalability_support",
-            "developer_tools", "debugging_support", "testing_framework", "documentation_generation", "code_generation",
-            "third_party_integration", "custom_webhooks", "data_sync", "workflow_automation", "notification_systems", "nonexistent1", "nonexistent2"
+            "bot_info_management",
+            "bot_configuration",
+            "bot_status_monitoring",
+            "bot_permission_management",
+            "bot_usage_statistics",
+            "message_receive",
+            "message_send",
+            "rich_text_message",
+            "multimedia_message",
+            "message_routing",
+            "message_statistics",
+            "interactive_message",
+            "card_message",
+            "event_listening",
+            "event_callback_handling",
+            "event_type_management",
+            "async_event_processing",
+            "event_monitoring",
+            "webhook_events",
+            "active_api_calls",
+            "external_system_integration",
+            "api_call_statistics",
+            "api_request_retry",
+            "api_security_authentication",
+            "batch_api_calls",
+            "intelligent_dialogue",
+            "intent_recognition",
+            "context_management",
+            "multi_round_dialogue",
+            "learning_optimization",
+            "natural_language_processing",
+            "enterprise_bot_management",
+            "multi_tenant_support",
+            "security_compliance",
+            "audit_logging",
+            "performance_monitoring",
+            "scalability_support",
+            "developer_tools",
+            "debugging_support",
+            "testing_framework",
+            "documentation_generation",
+            "code_generation",
+            "third_party_integration",
+            "custom_webhooks",
+            "data_sync",
+            "workflow_automation",
+            "notification_systems",
+            "nonexistent1",
+            "nonexistent2",
         ];
 
         for feature in all_features {
@@ -862,7 +960,9 @@ mod tests {
 
         assert!(special_service.validate_bot_services_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_bot_service_statistics().contains("机器人服务"));
+        assert!(special_service
+            .get_bot_service_statistics()
+            .contains("机器人服务"));
         assert!(special_service.get_bot_service_statistics().contains("🤖"));
 
         // 测试长字符串配置
@@ -874,7 +974,9 @@ mod tests {
         let long_service = BotService::new(long_config);
 
         assert!(long_service.validate_bot_services_config());
-        assert!(long_service.get_bot_service_statistics().contains(&long_app_id));
+        assert!(long_service
+            .get_bot_service_statistics()
+            .contains(&long_app_id));
     }
 
     #[test]
@@ -914,7 +1016,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = BotService::new(partial_invalid_config);
 
@@ -923,18 +1025,19 @@ mod tests {
         assert!(!partial_invalid_service.validate_bot_services_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = BotService::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_bot_services_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_bot_service_statistics().contains("BotService"));
-        assert!(fully_invalid_service.get_bot_categories_statistics().contains("total: 4"));
+        assert!(fully_invalid_service
+            .get_bot_service_statistics()
+            .contains("BotService"));
+        assert!(fully_invalid_service
+            .get_bot_categories_statistics()
+            .contains("total: 4"));
     }
 
     #[test]
@@ -1006,7 +1109,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
@@ -1048,7 +1154,11 @@ mod tests {
         ];
 
         for (feature, description) in workflow_features {
-            assert!(service.supports_bot_feature(feature), "{}功能应该被支持", description);
+            assert!(
+                service.supports_bot_feature(feature),
+                "{}功能应该被支持",
+                description
+            );
         }
 
         // 验证统计信息反映机器人工作流程复杂性
@@ -1073,11 +1183,19 @@ mod tests {
 
         // 测试消息处理核心功能
         let messaging_features = vec![
-            "message_receive", "message_send", "rich_text_message", "multimedia_message", "interactive_message"
+            "message_receive",
+            "message_send",
+            "rich_text_message",
+            "multimedia_message",
+            "interactive_message",
         ];
 
         for feature in messaging_features {
-            assert!(service.supports_bot_feature(feature), "消息处理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_bot_feature(feature),
+                "消息处理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证消息处理能力完整性
@@ -1096,11 +1214,18 @@ mod tests {
 
         // 测试事件处理功能
         let event_features = vec![
-            "event_listening", "event_callback_handling", "async_event_processing", "webhook_events"
+            "event_listening",
+            "event_callback_handling",
+            "async_event_processing",
+            "webhook_events",
         ];
 
         for feature in event_features {
-            assert!(service.supports_bot_feature(feature), "事件处理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_bot_feature(feature),
+                "事件处理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证事件处理能力完整性
@@ -1119,11 +1244,18 @@ mod tests {
 
         // 测试智能交互功能
         let intelligence_features = vec![
-            "intelligent_dialogue", "intent_recognition", "context_management", "natural_language_processing"
+            "intelligent_dialogue",
+            "intent_recognition",
+            "context_management",
+            "natural_language_processing",
         ];
 
         for feature in intelligence_features {
-            assert!(service.supports_bot_feature(feature), "智能交互功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_bot_feature(feature),
+                "智能交互功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证智能交互能力完整性

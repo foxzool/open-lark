@@ -458,7 +458,7 @@ impl PatchPermissionPublicResponse {
             if setting == "anyone_editable" || setting == "anyone_readable" {
                 recommendations.push("建议设置密码保护".to_string());
 
-                if self.permission_public.allow_copy == Some(true) {
+                if matches!(self.permission_public.allow_copy, Some(true)) {
                     recommendations.push("建议禁止复制以防止内容泄露".to_string());
                 }
 

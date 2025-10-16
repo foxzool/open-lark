@@ -163,17 +163,17 @@ impl TranslationService {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_feature(&self, feature_name: &str) -> bool {
-        match feature_name {
-            "language_detection" => true,
-            "text_translation" => true,
-            "batch_translation" => true,
-            "real_time_translation" => true,
-            "confidence_scoring" => true,
-            "multi_language_support" => true,
-            "enterprise_translation" => true,
-            "api_translation" => true,
-            _ => false,
-        }
+        matches!(
+            feature_name,
+            "language_detection"
+                | "text_translation"
+                | "batch_translation"
+                | "real_time_translation"
+                | "confidence_scoring"
+                | "multi_language_support"
+                | "enterprise_translation"
+                | "api_translation"
+        )
     }
 
     /// 健康检查
@@ -196,10 +196,10 @@ impl TranslationService {
     /// 支持的语言代码列表
     pub fn get_supported_languages(&self) -> Vec<&'static str> {
         vec![
-            "zh", "zh-CN", "zh-TW", "en", "ja", "ko", "fr", "de", "es", "pt", "ru", "ar",
-            "hi", "th", "vi", "id", "ms", "tl", "ne", "si", "ta", "te", "ml", "kn", "gu", "pa",
-            "mr", "bn", "as", "or", "ur", "ps", "sd", "ku", "fa", "tr", "az", "ka", "hy", "he",
-            "yi", "ug", "kk", "ky", "uz", "tg", "mn", "bo", "dz", "my", "km", "lo", "th", "kh"
+            "zh", "zh-CN", "zh-TW", "en", "ja", "ko", "fr", "de", "es", "pt", "ru", "ar", "hi",
+            "th", "vi", "id", "ms", "tl", "ne", "si", "ta", "te", "ml", "kn", "gu", "pa", "mr",
+            "bn", "as", "or", "ur", "ps", "sd", "ku", "fa", "tr", "az", "ka", "hy", "he", "yi",
+            "ug", "kk", "ky", "uz", "tg", "mn", "bo", "dz", "my", "km", "lo", "th", "kh",
         ]
     }
 
@@ -215,7 +215,9 @@ impl TranslationService {
     /// 如果支持该语言对翻译返回 `true`，否则返回 `false`
     pub fn supports_language_pair(&self, source_lang: &str, target_lang: &str) -> bool {
         let supported = self.get_supported_languages();
-        supported.contains(&source_lang) && supported.contains(&target_lang) && source_lang != target_lang
+        supported.contains(&source_lang)
+            && supported.contains(&target_lang)
+            && source_lang != target_lang
     }
 }
 
@@ -256,7 +258,6 @@ impl Clone for TranslationService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::trait_system::Service;
 
     /// 创建测试配置
     fn create_test_config() -> Config {
@@ -331,11 +332,15 @@ mod tests {
             "confidence_scoring",
             "multi_language_support",
             "enterprise_translation",
-            "api_translation"
+            "api_translation",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -353,10 +358,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = TranslationService::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -433,7 +435,10 @@ mod tests {
 
         // 验证克隆功能
         assert_eq!(service.config().app_id, cloned_service.config().app_id);
-        assert_eq!(service.config().app_secret, cloned_service.config().app_secret);
+        assert_eq!(
+            service.config().app_secret,
+            cloned_service.config().app_secret
+        );
         assert!(cloned_service.validate_config());
     }
 
@@ -448,7 +453,9 @@ mod tests {
 
         assert!(special_service.validate_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_service_statistics().contains("翻译服务"));
+        assert!(special_service
+            .get_service_statistics()
+            .contains("翻译服务"));
         assert!(special_service.get_service_statistics().contains("🌐"));
 
         // 测试长字符串配置
@@ -536,7 +543,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = TranslationService::new(partial_invalid_config);
 
@@ -545,17 +552,16 @@ mod tests {
         assert!(!partial_invalid_service.validate_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = TranslationService::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_service_statistics().contains("AITranslation"));
+        assert!(fully_invalid_service
+            .get_service_statistics()
+            .contains("AITranslation"));
     }
 
     #[test]
@@ -610,7 +616,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
@@ -698,7 +707,13 @@ mod tests {
 
         // 测试反序列化
         let deserialized: TranslateResponse = serde_json::from_str(&json).unwrap();
-        assert_eq!(deserialized.translate_result.translated_text, "Hello World".to_string());
-        assert_eq!(deserialized.translate_result.detected_language, Some("zh-CN".to_string()));
+        assert_eq!(
+            deserialized.translate_result.translated_text,
+            "Hello World".to_string()
+        );
+        assert_eq!(
+            deserialized.translate_result.detected_language,
+            Some("zh-CN".to_string())
+        );
     }
 }

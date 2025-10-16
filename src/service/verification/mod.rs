@@ -167,8 +167,7 @@ impl VerificationService {
     /// 如果所有配置一致且有效返回 `true`，否则返回 `false`
     pub fn verify_services_integrity(&self) -> bool {
         // 检查配置是否有效
-        !self.v1.config.app_id.is_empty()
-            && !self.v1.config.app_secret.is_empty()
+        !self.v1.config.app_id.is_empty() && !self.v1.config.app_secret.is_empty()
     }
 
     /// 获取认证信息服务的整体统计信息
@@ -194,24 +193,24 @@ impl VerificationService {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_auth_feature(&self, auth_feature: &str) -> bool {
-        match auth_feature {
-            "user_verification" => true,
-            "permission_check" => true,
-            "multi_factor_auth" => true,
-            "token_validation" => true,
-            "security_audit" => true,
-            "risk_assessment" => true,
-            "compliance_check" => true,
-            "session_management" => true,
-            "access_control" => true,
-            "identity_verification" => true,
-            "credential_management" => true,
-            "security_monitoring" => true,
-            "audit_logging" => true,
-            "threat_detection" => true,
-            "policy_enforcement" => true,
-            _ => false,
-        }
+        matches!(
+            auth_feature,
+            "user_verification"
+                | "permission_check"
+                | "multi_factor_auth"
+                | "token_validation"
+                | "security_audit"
+                | "risk_assessment"
+                | "compliance_check"
+                | "session_management"
+                | "access_control"
+                | "identity_verification"
+                | "credential_management"
+                | "security_monitoring"
+                | "audit_logging"
+                | "threat_detection"
+                | "policy_enforcement"
+        )
     }
 
     /// 快速检查认证服务健康状态
@@ -233,9 +232,7 @@ impl VerificationService {
     /// # 返回值
     /// 包含各安全级别服务数量的统计信息
     pub fn get_security_level_statistics(&self) -> String {
-        format!(
-            "VerificationService Security{{ enterprise: 1, standard: 0, basic: 0, total: 1 }}",
-        )
+        "VerificationService Security{ enterprise: 1, standard: 0, basic: 0, total: 1 }".to_string()
     }
 
     /// 获取认证服务状态摘要
@@ -279,9 +276,7 @@ impl VerificationService {
     /// # 返回值
     /// 包含认证方法支持信息的字符串
     pub fn get_authentication_methods_matrix(&self) -> String {
-        format!(
-            "VerificationService Methods{{ password: true, token: true, mfa: true, oauth: true, sso: true, biometric: true }}",
-        )
+        "VerificationService Methods{ password: true, token: true, mfa: true, oauth: true, sso: true, biometric: true }".to_string()
     }
 
     /// 获取合规性支持矩阵
@@ -291,9 +286,7 @@ impl VerificationService {
     /// # 返回值
     /// 包含合规性支持信息的字符串
     pub fn get_compliance_support_matrix(&self) -> String {
-        format!(
-            "VerificationService Compliance{{ gdpr: true, hipaa: true, sox: true, iso27001: true, audit_trail: true }}",
-        )
+        "VerificationService Compliance{ gdpr: true, hipaa: true, sox: true, iso27001: true, audit_trail: true }".to_string()
     }
 }
 
@@ -373,14 +366,29 @@ mod tests {
 
         // 测试支持的认证功能
         let supported_features = vec![
-            "user_verification", "permission_check", "multi_factor_auth", "token_validation",
-            "security_audit", "risk_assessment", "compliance_check", "session_management",
-            "access_control", "identity_verification", "credential_management", "security_monitoring",
-            "audit_logging", "threat_detection", "policy_enforcement"
+            "user_verification",
+            "permission_check",
+            "multi_factor_auth",
+            "token_validation",
+            "security_audit",
+            "risk_assessment",
+            "compliance_check",
+            "session_management",
+            "access_control",
+            "identity_verification",
+            "credential_management",
+            "security_monitoring",
+            "audit_logging",
+            "threat_detection",
+            "policy_enforcement",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_auth_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_auth_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -398,10 +406,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = VerificationService::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -482,23 +487,51 @@ mod tests {
 
         // 测试所有支持的认证功能组合
         let supported_features = vec![
-            "user_verification", "permission_check", "multi_factor_auth", "token_validation",
-            "security_audit", "risk_assessment", "compliance_check", "session_management",
-            "access_control", "identity_verification", "credential_management", "security_monitoring",
-            "audit_logging", "threat_detection", "policy_enforcement"
+            "user_verification",
+            "permission_check",
+            "multi_factor_auth",
+            "token_validation",
+            "security_audit",
+            "risk_assessment",
+            "compliance_check",
+            "session_management",
+            "access_control",
+            "identity_verification",
+            "credential_management",
+            "security_monitoring",
+            "audit_logging",
+            "threat_detection",
+            "policy_enforcement",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_auth_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_auth_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量
         let mut feature_count = 0;
         let all_features = vec![
-            "user_verification", "permission_check", "multi_factor_auth", "token_validation",
-            "security_audit", "risk_assessment", "compliance_check", "session_management",
-            "access_control", "identity_verification", "credential_management", "security_monitoring",
-            "audit_logging", "threat_detection", "policy_enforcement", "nonexistent1", "nonexistent2"
+            "user_verification",
+            "permission_check",
+            "multi_factor_auth",
+            "token_validation",
+            "security_audit",
+            "risk_assessment",
+            "compliance_check",
+            "session_management",
+            "access_control",
+            "identity_verification",
+            "credential_management",
+            "security_monitoring",
+            "audit_logging",
+            "threat_detection",
+            "policy_enforcement",
+            "nonexistent1",
+            "nonexistent2",
         ];
 
         for feature in all_features {
@@ -520,7 +553,9 @@ mod tests {
 
         assert!(special_service.verify_services_integrity());
         assert!(special_service.health_check());
-        assert!(special_service.get_auth_service_statistics().contains("认证服务"));
+        assert!(special_service
+            .get_auth_service_statistics()
+            .contains("认证服务"));
         assert!(special_service.get_auth_service_statistics().contains("🔐"));
 
         // 测试长字符串配置
@@ -532,7 +567,9 @@ mod tests {
         let long_service = VerificationService::new(long_config);
 
         assert!(long_service.verify_services_integrity());
-        assert!(long_service.get_auth_service_statistics().contains(&long_app_id));
+        assert!(long_service
+            .get_auth_service_statistics()
+            .contains(&long_app_id));
     }
 
     #[test]
@@ -574,7 +611,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = VerificationService::new(partial_invalid_config);
 
@@ -583,18 +620,19 @@ mod tests {
         assert!(!partial_invalid_service.verify_services_integrity());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = VerificationService::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.verify_services_integrity());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_auth_service_statistics().contains("VerificationService"));
-        assert!(fully_invalid_service.get_security_level_statistics().contains("total: 1"));
+        assert!(fully_invalid_service
+            .get_auth_service_statistics()
+            .contains("VerificationService"));
+        assert!(fully_invalid_service
+            .get_security_level_statistics()
+            .contains("total: 1"));
     }
 
     #[test]
@@ -657,7 +695,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
@@ -675,7 +716,11 @@ mod tests {
         ];
 
         for (feature, description) in workflow_features {
-            assert!(service.supports_auth_feature(feature), "{}功能应该被支持", description);
+            assert!(
+                service.supports_auth_feature(feature),
+                "{}功能应该被支持",
+                description
+            );
         }
 
         // 验证统计信息反映安全认证复杂性
@@ -697,20 +742,30 @@ mod tests {
 
         // 测试身份验证核心功能
         let auth_features = vec![
-            "user_verification", "identity_verification", "credential_management", "session_management"
+            "user_verification",
+            "identity_verification",
+            "credential_management",
+            "session_management",
         ];
 
         for feature in auth_features {
-            assert!(service.supports_auth_feature(feature), "身份验证功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_auth_feature(feature),
+                "身份验证功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试权限控制功能
-        let authorization_features = vec![
-            "permission_check", "access_control", "policy_enforcement"
-        ];
+        let authorization_features =
+            vec!["permission_check", "access_control", "policy_enforcement"];
 
         for feature in authorization_features {
-            assert!(service.supports_auth_feature(feature), "权限控制功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_auth_feature(feature),
+                "权限控制功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证认证方法完整性
@@ -726,21 +781,25 @@ mod tests {
         let service = VerificationService::new(config);
 
         // 测试安全监控功能
-        let monitoring_features = vec![
-            "security_monitoring", "audit_logging", "threat_detection"
-        ];
+        let monitoring_features = vec!["security_monitoring", "audit_logging", "threat_detection"];
 
         for feature in monitoring_features {
-            assert!(service.supports_auth_feature(feature), "安全监控功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_auth_feature(feature),
+                "安全监控功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试合规管理功能
-        let compliance_features = vec![
-            "compliance_check", "security_audit"
-        ];
+        let compliance_features = vec!["compliance_check", "security_audit"];
 
         for feature in compliance_features {
-            assert!(service.supports_auth_feature(feature), "合规管理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_auth_feature(feature),
+                "合规管理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证合规支持完整性

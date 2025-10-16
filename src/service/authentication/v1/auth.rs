@@ -413,7 +413,8 @@ mod tests {
     #[test]
     fn test_user_info_with_very_long_fields() {
         let long_string = "a".repeat(1000);
-        let json_str = format!(r#"{{
+        let json_str = format!(
+            r#"{{
             "name": "{}",
             "en_name": "{}",
             "avatar_url": "https://example.com/avatar.jpg",
@@ -426,7 +427,9 @@ mod tests {
             "user_id": "user123",
             "tenant_key": "tenant123",
             "employee_no": "EMP001"
-        }}"#, long_string, long_string);
+        }}"#,
+            long_string, long_string
+        );
 
         let user_info: UserInfo = serde_json::from_str(&json_str).unwrap();
 
@@ -472,13 +475,17 @@ mod tests {
             ("standard@example.com", Some("standard@example.com")),
             ("user.name@domain.co.uk", Some("user.name@domain.co.uk")),
             ("user+tag@example.org", Some("user+tag@example.org")),
-            ("international@xn--fsq.xn--p1ai", Some("international@xn--fsq.xn--p1ai")),
+            (
+                "international@xn--fsq.xn--p1ai",
+                Some("international@xn--fsq.xn--p1ai"),
+            ),
             // Note: quoted emails need special handling in JSON
             ("simple@example.com", Some("simple@example.com")),
         ];
 
         for (email_input, expected) in test_cases {
-            let json_str = format!(r#"{{
+            let json_str = format!(
+                r#"{{
                 "name": "test",
                 "en_name": "test",
                 "avatar_url": "url",
@@ -491,7 +498,9 @@ mod tests {
                 "user_id": "user_id",
                 "tenant_key": "tenant",
                 "employee_no": "emp"
-            }}"#, email_input);
+            }}"#,
+                email_input
+            );
 
             let user_info: UserInfo = serde_json::from_str(&json_str).unwrap();
             assert_eq!(user_info.email, expected.map(String::from));
@@ -509,7 +518,8 @@ mod tests {
         ];
 
         for (phone_input, expected) in test_cases {
-            let json_str = format!(r#"{{
+            let json_str = format!(
+                r#"{{
                 "name": "test",
                 "en_name": "test",
                 "avatar_url": "url",
@@ -522,7 +532,9 @@ mod tests {
                 "user_id": "user_id",
                 "tenant_key": "tenant",
                 "employee_no": "emp"
-            }}"#, phone_input);
+            }}"#,
+                phone_input
+            );
 
             let user_info: UserInfo = serde_json::from_str(&json_str).unwrap();
             assert_eq!(user_info.mobile, expected.map(String::from));
@@ -584,10 +596,12 @@ mod tests {
 
     #[test]
     fn test_user_info_service_arc_sharing() {
-        let shared_config = Arc::new(Config::builder()
-            .app_id("arc_test_app")
-            .app_secret("arc_test_secret")
-            .build());
+        let shared_config = Arc::new(
+            Config::builder()
+                .app_id("arc_test_app")
+                .app_secret("arc_test_secret")
+                .build(),
+        );
 
         // Create services using shared config
         let config1 = (*shared_config).clone();
@@ -621,8 +635,14 @@ mod tests {
         // Services with equivalent configs should have same values
         assert_eq!(service1.config.app_id, service2.config.app_id);
         assert_eq!(service1.config.app_secret, service2.config.app_secret);
-        assert_eq!(UserInfoService::service_name(), UserInfoService::service_name());
-        assert_eq!(UserInfoService::service_version(), UserInfoService::service_version());
+        assert_eq!(
+            UserInfoService::service_name(),
+            UserInfoService::service_name()
+        );
+        assert_eq!(
+            UserInfoService::service_version(),
+            UserInfoService::service_version()
+        );
     }
 
     #[test]
@@ -637,7 +657,8 @@ mod tests {
         ];
 
         for (avatar_url, _should_be_valid) in test_urls {
-            let json_str = format!(r#"{{
+            let json_str = format!(
+                r#"{{
                 "name": "test",
                 "en_name": "test",
                 "avatar_url": "{}",
@@ -649,7 +670,9 @@ mod tests {
                 "user_id": "user_id",
                 "tenant_key": "tenant",
                 "employee_no": "emp"
-            }}"#, avatar_url);
+            }}"#,
+                avatar_url
+            );
 
             let user_info: UserInfo = serde_json::from_str(&json_str).unwrap();
             assert_eq!(user_info.avatar_url, avatar_url);
@@ -663,7 +686,8 @@ mod tests {
 
         for length in name_lengths {
             let name = "x".repeat(length);
-            let json_str = format!(r#"{{
+            let json_str = format!(
+                r#"{{
                 "name": "{}",
                 "en_name": "test",
                 "avatar_url": "url",
@@ -675,7 +699,9 @@ mod tests {
                 "user_id": "user_id",
                 "tenant_key": "tenant",
                 "employee_no": "emp"
-            }}"#, name);
+            }}"#,
+                name
+            );
 
             let user_info: UserInfo = serde_json::from_str(&json_str).unwrap();
             assert_eq!(user_info.name.len(), length);
@@ -749,7 +775,10 @@ mod tests {
         // Services should be independent
         assert_eq!(original_service.config.app_id, "original_app");
         assert_eq!(modified_service.config.app_id, "modified_app");
-        assert_ne!(original_service.config.app_id, modified_service.config.app_id);
+        assert_ne!(
+            original_service.config.app_id,
+            modified_service.config.app_id
+        );
     }
 
     #[test]
@@ -763,7 +792,8 @@ mod tests {
         ];
 
         for encoded_url in encoded_urls {
-            let json_str = format!(r#"{{
+            let json_str = format!(
+                r#"{{
                 "name": "test",
                 "en_name": "test",
                 "avatar_url": "{}",
@@ -775,7 +805,9 @@ mod tests {
                 "user_id": "user_id",
                 "tenant_key": "tenant",
                 "employee_no": "emp"
-            }}"#, encoded_url);
+            }}"#,
+                encoded_url
+            );
 
             let user_info: UserInfo = serde_json::from_str(&json_str).unwrap();
             assert_eq!(user_info.avatar_url, encoded_url);
@@ -811,7 +843,11 @@ mod tests {
         let duration = start.elapsed();
 
         // Should complete 1000 serializations quickly (less than 1 second)
-        assert!(duration.as_secs() < 1, "Serialization too slow: {:?}", duration);
+        assert!(
+            duration.as_secs() < 1,
+            "Serialization too slow: {:?}",
+            duration
+        );
     }
 
     #[test]
@@ -843,7 +879,11 @@ mod tests {
         let duration = start.elapsed();
 
         // Should complete 1000 deserializations quickly (less than 1 second)
-        assert!(duration.as_secs() < 1, "Deserialization too slow: {:?}", duration);
+        assert!(
+            duration.as_secs() < 1,
+            "Deserialization too slow: {:?}",
+            duration
+        );
     }
 
     #[test]
@@ -862,17 +902,28 @@ mod tests {
         // Create new service with cloned config
         let cloned_service = UserInfoService::new(cloned_config);
         assert_eq!(service.config.app_id, cloned_service.config.app_id);
-        assert_eq!(UserInfoService::service_name(), UserInfoService::service_name());
+        assert_eq!(
+            UserInfoService::service_name(),
+            UserInfoService::service_name()
+        );
     }
 
     #[test]
     fn test_user_info_with_enterprise_scenarios() {
         // Test typical enterprise user scenarios
         let scenarios = vec![
-            ("Executive User", "exec@enterprise.com", Some("exec@enterprise.internal")),
+            (
+                "Executive User",
+                "exec@enterprise.com",
+                Some("exec@enterprise.internal"),
+            ),
             ("Regular Employee", "emp@company.com", None),
             ("Contractor", "contractor@vendor.com", None),
-            ("System Admin", "admin@company.com", Some("admin@company.internal")),
+            (
+                "System Admin",
+                "admin@company.com",
+                Some("admin@company.internal"),
+            ),
         ];
 
         for (name, email, enterprise_email) in scenarios {
@@ -886,7 +937,8 @@ mod tests {
                 None => "null".to_string(),
             };
 
-            let json_str = format!(r#"{{
+            let json_str = format!(
+                r#"{{
                 "name": "{}",
                 "en_name": "{}",
                 "avatar_url": "https://company.com/avatar.jpg",
@@ -901,13 +953,23 @@ mod tests {
                 "tenant_key": "company_tenant",
                 "employee_no": "{}"
             }}"#,
-                name, en_name, open_id, union_id, email, enterprise_email_json, user_id, employee_no
+                name,
+                en_name,
+                open_id,
+                union_id,
+                email,
+                enterprise_email_json,
+                user_id,
+                employee_no
             );
 
             let user_info: UserInfo = serde_json::from_str(&json_str).unwrap();
             assert_eq!(user_info.name, name);
             assert_eq!(user_info.email, Some(email.to_string()));
-            assert_eq!(user_info.enterprise_email, enterprise_email.map(String::from));
+            assert_eq!(
+                user_info.enterprise_email,
+                enterprise_email.map(String::from)
+            );
         }
     }
 }

@@ -192,7 +192,8 @@ impl EhrService {
     /// # 示例
     ///
     /// ```rust
-    /// use open_lark::prelude::*;
+    /// use open_lark::core::config::Config;
+    /// use open_lark::service::ehr::EhrService;
     ///
     /// let config = Config::builder()
     ///     .app_id("your_app_id")
@@ -417,9 +418,7 @@ impl EhrService {
     /// # 返回值
     /// 包含HR管理能力矩阵信息的字符串
     pub fn get_hr_capabilities_matrix(&self) -> String {
-        format!(
-            "EhrService Capabilities{{ employee: true, organization: true, analytics: true, compliance: true, automation: true, mobile: true }}",
-        )
+        "EhrService Capabilities{{ employee: true, organization: true, analytics: true, compliance: true, automation: true, mobile: true }}".to_string()
     }
 
     /// 获取企业级功能支持矩阵
@@ -429,9 +428,7 @@ impl EhrService {
     /// # 返回值
     /// 包含企业级功能支持矩阵信息的字符串
     pub fn get_enterprise_features_matrix(&self) -> String {
-        format!(
-            "EhrService Enterprise{{ multi_entity: true, global: true, scalable: true, integrated: true, compliant: true, secure: true }}",
-        )
+        "EhrService Enterprise{{ multi_entity: true, global: true, scalable: true, integrated: true, compliant: true, secure: true }}".to_string()
     }
 
     /// 获取数据分析能力矩阵
@@ -441,9 +438,7 @@ impl EhrService {
     /// # 返回值
     /// 包含数据分析能力矩阵信息的字符串
     pub fn get_analytics_capabilities_matrix(&self) -> String {
-        format!(
-            "EhrService Analytics{{ workforce: true, compensation: true, performance: true, turnover: true, predictive: true, real_time: true }}",
-        )
+        "EhrService Analytics{{ workforce: true, compensation: true, performance: true, turnover: true, predictive: true, real_time: true }}".to_string()
     }
 
     /// 获取合规管理能力矩阵
@@ -453,9 +448,7 @@ impl EhrService {
     /// # 返回值
     /// 包含合规管理能力矩阵信息的字符串
     pub fn get_compliance_capabilities_matrix(&self) -> String {
-        format!(
-            "EhrService Compliance{{ labor_law: true, data_protection: true, audit_ready: true, privacy: true, reporting: true, risk_management: true }}",
-        )
+        "EhrService Compliance{{ labor_law: true, data_protection: true, audit_ready: true, privacy: true, reporting: true, risk_management: true }}".to_string()
     }
 
     /// 获取技术架构能力矩阵
@@ -465,9 +458,7 @@ impl EhrService {
     /// # 返回值
     /// 包含技术架构能力矩阵信息的字符串
     pub fn get_technical_architecture_matrix(&self) -> String {
-        format!(
-            "EhrService Architecture{{ cloud_native: true, microservices: true, api_first: true, secure: true, scalable: true, integrated: true }}",
-        )
+        "EhrService Architecture{{ cloud_native: true, microservices: true, api_first: true, secure: true, scalable: true, integrated: true }}".to_string()
     }
 
     /// 获取EHR管理模块统计
@@ -477,9 +468,7 @@ impl EhrService {
     /// # 返回值
     /// 包含各类型管理模块数量的统计信息
     pub fn get_ehr_modules_statistics(&self) -> String {
-        format!(
-            "EhrService Modules{{ employee: 7, organization: 7, attachment: 7, analytics: 7, compliance: 7, enterprise: 7, total: 42 }}",
-        )
+        "EhrService Modules{{ employee: 7, organization: 7, attachment: 7, analytics: 7, compliance: 7, enterprise: 7, total: 42 }}".to_string()
     }
 
     /// 获取HR数据安全状态信息
@@ -489,9 +478,7 @@ impl EhrService {
     /// # 返回值
     /// 包含HR数据安全状态的字符串
     pub fn get_data_security_status(&self) -> String {
-        format!(
-            "EhrService Security{{ encryption: AES256, access_control: RBAC, audit_logging: true, data_masking: true, backup: true, compliance: GDPR_LABOR }}",
-        )
+        "EhrService Security{{ encryption: AES256, access_control: RBAC, audit_logging: true, data_masking: true, backup: true, compliance: GDPR_LABOR }}".to_string()
     }
 
     /// 获取HR集成能力矩阵
@@ -501,9 +488,7 @@ impl EhrService {
     /// # 返回值
     /// 包含HR集成能力矩阵信息的字符串
     pub fn get_integration_capabilities_matrix(&self) -> String {
-        format!(
-            "EhrService Integration{{ restful_api: true, webhooks: true, sso: true, ldap: true, sftp: true, database: true, third_party: true }}",
-        )
+        "EhrService Integration{{ restful_api: true, webhooks: true, sso: true, ldap: true, sftp: true, database: true, third_party: true }}".to_string()
     }
 }
 
@@ -600,10 +585,7 @@ mod tests {
         assert!(!empty_secret_service.validate_ehr_config());
 
         // 测试完全空配置
-        let empty_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let empty_config = Config::builder().app_id("").app_secret("").build();
         let empty_service = EhrService::new(empty_config);
         assert!(!empty_service.validate_ehr_config());
     }
@@ -632,102 +614,182 @@ mod tests {
 
         // 测试员工全生命周期管理功能
         let lifecycle_features = vec![
-            "employee_lifecycle", "onboarding_process", "employment_management",
-            "offboarding_process", "employee_records", "position_changes", "performance_management"
+            "employee_lifecycle",
+            "onboarding_process",
+            "employment_management",
+            "offboarding_process",
+            "employee_records",
+            "position_changes",
+            "performance_management",
         ];
         for feature in lifecycle_features {
-            assert!(service.supports_ehr_feature(feature),
-                "Lifecycle feature {} should be supported", feature);
+            assert!(
+                service.supports_ehr_feature(feature),
+                "Lifecycle feature {} should be supported",
+                feature
+            );
         }
 
         // 测试组织架构管理功能
         let organization_features = vec![
-            "organization_structure", "department_management", "position_hierarchy",
-            "reporting_relationships", "cost_centers", "role_management", "access_control"
+            "organization_structure",
+            "department_management",
+            "position_hierarchy",
+            "reporting_relationships",
+            "cost_centers",
+            "role_management",
+            "access_control",
         ];
         for feature in organization_features {
-            assert!(service.supports_ehr_feature(feature),
-                "Organization feature {} should be supported", feature);
+            assert!(
+                service.supports_ehr_feature(feature),
+                "Organization feature {} should be supported",
+                feature
+            );
         }
 
         // 测试附件与文档管理功能
         let attachment_features = vec![
-            "attachment_management", "document_storage", "file_security",
-            "version_control", "digital_signatures", "compliance_documents", "archival_system"
+            "attachment_management",
+            "document_storage",
+            "file_security",
+            "version_control",
+            "digital_signatures",
+            "compliance_documents",
+            "archival_system",
         ];
         for feature in attachment_features {
-            assert!(service.supports_ehr_feature(feature),
-                "Attachment feature {} should be supported", feature);
+            assert!(
+                service.supports_ehr_feature(feature),
+                "Attachment feature {} should be supported",
+                feature
+            );
         }
 
         // 测试数据分析与决策支持功能
         let analytics_features = vec![
-            "hr_analytics", "workforce_planning", "compensation_analysis",
-            "turnover_analysis", "performance_metrics", "productivity_analysis", "predictive_analytics"
+            "hr_analytics",
+            "workforce_planning",
+            "compensation_analysis",
+            "turnover_analysis",
+            "performance_metrics",
+            "productivity_analysis",
+            "predictive_analytics",
         ];
         for feature in analytics_features {
-            assert!(service.supports_ehr_feature(feature),
-                "Analytics feature {} should be supported", feature);
+            assert!(
+                service.supports_ehr_feature(feature),
+                "Analytics feature {} should be supported",
+                feature
+            );
         }
 
         // 测试合规与审计功能
         let compliance_features = vec![
-            "labor_compliance", "data_protection", "audit_support",
-            "policy_enforcement", "risk_management", "regulatory_reporting", "privacy_compliance"
+            "labor_compliance",
+            "data_protection",
+            "audit_support",
+            "policy_enforcement",
+            "risk_management",
+            "regulatory_reporting",
+            "privacy_compliance",
         ];
         for feature in compliance_features {
-            assert!(service.supports_ehr_feature(feature),
-                "Compliance feature {} should be supported", feature);
+            assert!(
+                service.supports_ehr_feature(feature),
+                "Compliance feature {} should be supported",
+                feature
+            );
         }
 
         // 测试企业级功能
         let enterprise_features = vec![
-            "multi_entity_support", "global_hr_management", "localization_support",
-            "scalability_features", "integration_capabilities", "workflow_automation", "mobile_access"
+            "multi_entity_support",
+            "global_hr_management",
+            "localization_support",
+            "scalability_features",
+            "integration_capabilities",
+            "workflow_automation",
+            "mobile_access",
         ];
         for feature in enterprise_features {
-            assert!(service.supports_ehr_feature(feature),
-                "Enterprise feature {} should be supported", feature);
+            assert!(
+                service.supports_ehr_feature(feature),
+                "Enterprise feature {} should be supported",
+                feature
+            );
         }
 
         // 测试高级HR功能
         let advanced_hr_features = vec![
-            "talent_acquisition", "learning_development", "succession_planning",
-            "employee_engagement", "diversity_inclusion", "wellness_programs", "benefits_administration"
+            "talent_acquisition",
+            "learning_development",
+            "succession_planning",
+            "employee_engagement",
+            "diversity_inclusion",
+            "wellness_programs",
+            "benefits_administration",
         ];
         for feature in advanced_hr_features {
-            assert!(service.supports_ehr_feature(feature),
-                "Advanced HR feature {} should be supported", feature);
+            assert!(
+                service.supports_ehr_feature(feature),
+                "Advanced HR feature {} should be supported",
+                feature
+            );
         }
 
         // 测试技术与安全功能
         let tech_security_features = vec![
-            "data_encryption", "api_integration", "real_time_sync",
-            "backup_recovery", "single_sign_on", "multi_factor_auth", "access_logging"
+            "data_encryption",
+            "api_integration",
+            "real_time_sync",
+            "backup_recovery",
+            "single_sign_on",
+            "multi_factor_auth",
+            "access_logging",
         ];
         for feature in tech_security_features {
-            assert!(service.supports_ehr_feature(feature),
-                "Tech security feature {} should be supported", feature);
+            assert!(
+                service.supports_ehr_feature(feature),
+                "Tech security feature {} should be supported",
+                feature
+            );
         }
 
         // 测试报表与可视化功能
         let reporting_features = vec![
-            "hr_dashboards", "custom_reports", "data_visualization",
-            "scheduled_reports", "export_capabilities", "drill_down_analysis", "kpi_tracking"
+            "hr_dashboards",
+            "custom_reports",
+            "data_visualization",
+            "scheduled_reports",
+            "export_capabilities",
+            "drill_down_analysis",
+            "kpi_tracking",
         ];
         for feature in reporting_features {
-            assert!(service.supports_ehr_feature(feature),
-                "Reporting feature {} should be supported", feature);
+            assert!(
+                service.supports_ehr_feature(feature),
+                "Reporting feature {} should be supported",
+                feature
+            );
         }
 
         // 测试智能化功能
         let ai_features = vec![
-            "ai_assisted_recruitment", "smart_recommendations", "automated_workflows",
-            "intelligent_search", "pattern_recognition", "anomaly_detection", "natural_language_processing"
+            "ai_assisted_recruitment",
+            "smart_recommendations",
+            "automated_workflows",
+            "intelligent_search",
+            "pattern_recognition",
+            "anomaly_detection",
+            "natural_language_processing",
         ];
         for feature in ai_features {
-            assert!(service.supports_ehr_feature(feature),
-                "AI feature {} should be supported", feature);
+            assert!(
+                service.supports_ehr_feature(feature),
+                "AI feature {} should be supported",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -745,10 +807,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败 - 无效配置
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = EhrService::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -864,46 +923,169 @@ mod tests {
         // 测试所有支持的功能组合
         let all_supported_features = vec![
             // 员工全生命周期管理功能 (7个)
-            "employee_lifecycle", "onboarding_process", "employment_management", "offboarding_process", "employee_records", "position_changes", "performance_management",
+            "employee_lifecycle",
+            "onboarding_process",
+            "employment_management",
+            "offboarding_process",
+            "employee_records",
+            "position_changes",
+            "performance_management",
             // 组织架构管理功能 (7个)
-            "organization_structure", "department_management", "position_hierarchy", "reporting_relationships", "cost_centers", "role_management", "access_control",
+            "organization_structure",
+            "department_management",
+            "position_hierarchy",
+            "reporting_relationships",
+            "cost_centers",
+            "role_management",
+            "access_control",
             // 附件与文档管理功能 (7个)
-            "attachment_management", "document_storage", "file_security", "version_control", "digital_signatures", "compliance_documents", "archival_system",
+            "attachment_management",
+            "document_storage",
+            "file_security",
+            "version_control",
+            "digital_signatures",
+            "compliance_documents",
+            "archival_system",
             // 数据分析与决策支持功能 (7个)
-            "hr_analytics", "workforce_planning", "compensation_analysis", "turnover_analysis", "performance_metrics", "productivity_analysis", "predictive_analytics",
+            "hr_analytics",
+            "workforce_planning",
+            "compensation_analysis",
+            "turnover_analysis",
+            "performance_metrics",
+            "productivity_analysis",
+            "predictive_analytics",
             // 合规与审计功能 (7个)
-            "labor_compliance", "data_protection", "audit_support", "policy_enforcement", "risk_management", "regulatory_reporting", "privacy_compliance",
+            "labor_compliance",
+            "data_protection",
+            "audit_support",
+            "policy_enforcement",
+            "risk_management",
+            "regulatory_reporting",
+            "privacy_compliance",
             // 企业级功能 (7个)
-            "multi_entity_support", "global_hr_management", "localization_support", "scalability_features", "integration_capabilities", "workflow_automation", "mobile_access",
+            "multi_entity_support",
+            "global_hr_management",
+            "localization_support",
+            "scalability_features",
+            "integration_capabilities",
+            "workflow_automation",
+            "mobile_access",
             // 高级HR功能 (7个)
-            "talent_acquisition", "learning_development", "succession_planning", "employee_engagement", "diversity_inclusion", "wellness_programs", "benefits_administration",
+            "talent_acquisition",
+            "learning_development",
+            "succession_planning",
+            "employee_engagement",
+            "diversity_inclusion",
+            "wellness_programs",
+            "benefits_administration",
             // 技术与安全功能 (7个)
-            "data_encryption", "api_integration", "real_time_sync", "backup_recovery", "single_sign_on", "multi_factor_auth", "access_logging",
+            "data_encryption",
+            "api_integration",
+            "real_time_sync",
+            "backup_recovery",
+            "single_sign_on",
+            "multi_factor_auth",
+            "access_logging",
             // 报表与可视化功能 (7个)
-            "hr_dashboards", "custom_reports", "data_visualization", "scheduled_reports", "export_capabilities", "drill_down_analysis", "kpi_tracking",
+            "hr_dashboards",
+            "custom_reports",
+            "data_visualization",
+            "scheduled_reports",
+            "export_capabilities",
+            "drill_down_analysis",
+            "kpi_tracking",
             // 智能化功能 (7个)
-            "ai_assisted_recruitment", "smart_recommendations", "automated_workflows", "intelligent_search", "pattern_recognition", "anomaly_detection", "natural_language_processing"
+            "ai_assisted_recruitment",
+            "smart_recommendations",
+            "automated_workflows",
+            "intelligent_search",
+            "pattern_recognition",
+            "anomaly_detection",
+            "natural_language_processing",
         ];
 
         for feature in all_supported_features {
-            assert!(service.supports_ehr_feature(feature),
-                "Feature {} should be supported", feature);
+            assert!(
+                service.supports_ehr_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量 (共10类 * 7个功能 = 70个功能)
         let mut feature_count = 0;
         let all_test_features = vec![
-            "employee_lifecycle", "onboarding_process", "employment_management", "offboarding_process", "employee_records", "position_changes", "performance_management",
-            "organization_structure", "department_management", "position_hierarchy", "reporting_relationships", "cost_centers", "role_management", "access_control",
-            "attachment_management", "document_storage", "file_security", "version_control", "digital_signatures", "compliance_documents", "archival_system",
-            "hr_analytics", "workforce_planning", "compensation_analysis", "turnover_analysis", "performance_metrics", "productivity_analysis", "predictive_analytics",
-            "labor_compliance", "data_protection", "audit_support", "policy_enforcement", "risk_management", "regulatory_reporting", "privacy_compliance",
-            "multi_entity_support", "global_hr_management", "localization_support", "scalability_features", "integration_capabilities", "workflow_automation", "mobile_access",
-            "talent_acquisition", "learning_development", "succession_planning", "employee_engagement", "diversity_inclusion", "wellness_programs", "benefits_administration",
-            "data_encryption", "api_integration", "real_time_sync", "backup_recovery", "single_sign_on", "multi_factor_auth", "access_logging",
-            "hr_dashboards", "custom_reports", "data_visualization", "scheduled_reports", "export_capabilities", "drill_down_analysis", "kpi_tracking",
-            "ai_assisted_recruitment", "smart_recommendations", "automated_workflows", "intelligent_search", "pattern_recognition", "anomaly_detection", "natural_language_processing",
-            "nonexistent_feature"  // 测试不支持的功能
+            "employee_lifecycle",
+            "onboarding_process",
+            "employment_management",
+            "offboarding_process",
+            "employee_records",
+            "position_changes",
+            "performance_management",
+            "organization_structure",
+            "department_management",
+            "position_hierarchy",
+            "reporting_relationships",
+            "cost_centers",
+            "role_management",
+            "access_control",
+            "attachment_management",
+            "document_storage",
+            "file_security",
+            "version_control",
+            "digital_signatures",
+            "compliance_documents",
+            "archival_system",
+            "hr_analytics",
+            "workforce_planning",
+            "compensation_analysis",
+            "turnover_analysis",
+            "performance_metrics",
+            "productivity_analysis",
+            "predictive_analytics",
+            "labor_compliance",
+            "data_protection",
+            "audit_support",
+            "policy_enforcement",
+            "risk_management",
+            "regulatory_reporting",
+            "privacy_compliance",
+            "multi_entity_support",
+            "global_hr_management",
+            "localization_support",
+            "scalability_features",
+            "integration_capabilities",
+            "workflow_automation",
+            "mobile_access",
+            "talent_acquisition",
+            "learning_development",
+            "succession_planning",
+            "employee_engagement",
+            "diversity_inclusion",
+            "wellness_programs",
+            "benefits_administration",
+            "data_encryption",
+            "api_integration",
+            "real_time_sync",
+            "backup_recovery",
+            "single_sign_on",
+            "multi_factor_auth",
+            "access_logging",
+            "hr_dashboards",
+            "custom_reports",
+            "data_visualization",
+            "scheduled_reports",
+            "export_capabilities",
+            "drill_down_analysis",
+            "kpi_tracking",
+            "ai_assisted_recruitment",
+            "smart_recommendations",
+            "automated_workflows",
+            "intelligent_search",
+            "pattern_recognition",
+            "anomaly_detection",
+            "natural_language_processing",
+            "nonexistent_feature", // 测试不支持的功能
         ];
 
         for feature in all_test_features {
@@ -981,7 +1163,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = EhrService::new(partial_invalid_config);
 
@@ -990,18 +1172,19 @@ mod tests {
         assert!(!partial_invalid_service.validate_ehr_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = EhrService::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_ehr_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_ehr_statistics().contains("EhrService"));
-        assert!(fully_invalid_service.get_ehr_modules_statistics().contains("total: 42"));
+        assert!(fully_invalid_service
+            .get_ehr_statistics()
+            .contains("EhrService"));
+        assert!(fully_invalid_service
+            .get_ehr_modules_statistics()
+            .contains("total: 42"));
     }
 
     #[test]
@@ -1067,7 +1250,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
@@ -1091,7 +1277,10 @@ mod tests {
         // 测试Clone trait
         let cloned_service = service.clone();
         assert_eq!(service.config().app_id, cloned_service.config().app_id);
-        assert_eq!(service.config().app_secret, cloned_service.config().app_secret);
+        assert_eq!(
+            service.config().app_secret,
+            cloned_service.config().app_secret
+        );
     }
 
     #[test]
@@ -1109,7 +1298,11 @@ mod tests {
         ];
 
         for (feature, description) in workflow_features {
-            assert!(service.supports_ehr_feature(feature), "{}功能应该被支持", description);
+            assert!(
+                service.supports_ehr_feature(feature),
+                "{}功能应该被支持",
+                description
+            );
         }
 
         // 验证统计信息反映HR工作流复杂性
@@ -1135,12 +1328,21 @@ mod tests {
 
         // 测试数据分析功能
         let analytics_features = vec![
-            "hr_analytics", "workforce_planning", "compensation_analysis",
-            "turnover_analysis", "performance_metrics", "productivity_analysis", "predictive_analytics"
+            "hr_analytics",
+            "workforce_planning",
+            "compensation_analysis",
+            "turnover_analysis",
+            "performance_metrics",
+            "productivity_analysis",
+            "predictive_analytics",
         ];
 
         for feature in analytics_features {
-            assert!(service.supports_ehr_feature(feature), "数据分析功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_ehr_feature(feature),
+                "数据分析功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证数据分析能力完整性
@@ -1160,12 +1362,21 @@ mod tests {
 
         // 测试合规管理功能
         let compliance_features = vec![
-            "labor_compliance", "data_protection", "audit_support",
-            "policy_enforcement", "risk_management", "regulatory_reporting", "privacy_compliance"
+            "labor_compliance",
+            "data_protection",
+            "audit_support",
+            "policy_enforcement",
+            "risk_management",
+            "regulatory_reporting",
+            "privacy_compliance",
         ];
 
         for feature in compliance_features {
-            assert!(service.supports_ehr_feature(feature), "合规管理功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_ehr_feature(feature),
+                "合规管理功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证合规管理能力完整性
@@ -1185,12 +1396,21 @@ mod tests {
 
         // 测试企业集成功能
         let integration_features = vec![
-            "multi_entity_support", "global_hr_management", "localization_support",
-            "scalability_features", "integration_capabilities", "workflow_automation", "mobile_access"
+            "multi_entity_support",
+            "global_hr_management",
+            "localization_support",
+            "scalability_features",
+            "integration_capabilities",
+            "workflow_automation",
+            "mobile_access",
         ];
 
         for feature in integration_features {
-            assert!(service.supports_ehr_feature(feature), "企业集成功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_ehr_feature(feature),
+                "企业集成功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证企业级功能支持
@@ -1259,11 +1479,17 @@ mod tests {
         // 验证自定义配置正确应用
         assert_eq!(service.employee.config.app_id, "ehr_test_app");
         assert_eq!(service.employee.config.app_secret, "ehr_test_secret");
-        assert_eq!(service.employee.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.employee.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
 
         assert_eq!(service.attachment.config.app_id, "ehr_test_app");
         assert_eq!(service.attachment.config.app_secret, "ehr_test_secret");
-        assert_eq!(service.attachment.config.req_timeout, Some(Duration::from_secs(120)));
+        assert_eq!(
+            service.attachment.config.req_timeout,
+            Some(Duration::from_secs(120))
+        );
 
         // 验证功能支持
         assert!(service.validate_ehr_config());
@@ -1287,8 +1513,14 @@ mod tests {
 
         assert_eq!(service1.employee.config.app_id, "ehr_app_1");
         assert_eq!(service2.employee.config.app_id, "ehr_app_2");
-        assert_ne!(service1.employee.config.app_id, service2.employee.config.app_id);
-        assert_ne!(service1.attachment.config.app_id, service2.attachment.config.app_id);
+        assert_ne!(
+            service1.employee.config.app_id,
+            service2.employee.config.app_id
+        );
+        assert_ne!(
+            service1.attachment.config.app_id,
+            service2.attachment.config.app_id
+        );
     }
 
     #[test]
@@ -1323,8 +1555,14 @@ mod tests {
 
         let service = EhrService::new(config);
 
-        assert_eq!(service.employee.config.req_timeout, Some(Duration::from_secs(200)));
-        assert_eq!(service.attachment.config.req_timeout, Some(Duration::from_secs(200)));
+        assert_eq!(
+            service.employee.config.req_timeout,
+            Some(Duration::from_secs(200))
+        );
+        assert_eq!(
+            service.attachment.config.req_timeout,
+            Some(Duration::from_secs(200))
+        );
     }
 
     #[test]
@@ -1334,10 +1572,22 @@ mod tests {
         let service1 = EhrService::new(config.clone());
         let service2 = EhrService::new(config.clone());
 
-        assert_eq!(service1.employee.config.app_id, service2.employee.config.app_id);
-        assert_eq!(service1.employee.config.app_secret, service2.employee.config.app_secret);
-        assert_eq!(service1.attachment.config.app_id, service2.attachment.config.app_id);
-        assert_eq!(service1.attachment.config.app_secret, service2.attachment.config.app_secret);
+        assert_eq!(
+            service1.employee.config.app_id,
+            service2.employee.config.app_id
+        );
+        assert_eq!(
+            service1.employee.config.app_secret,
+            service2.employee.config.app_secret
+        );
+        assert_eq!(
+            service1.attachment.config.app_id,
+            service2.attachment.config.app_id
+        );
+        assert_eq!(
+            service1.attachment.config.app_secret,
+            service2.attachment.config.app_secret
+        );
     }
 
     #[test]
@@ -1352,11 +1602,17 @@ mod tests {
 
         assert_eq!(service.employee.config.app_id, "consistency_test");
         assert_eq!(service.employee.config.app_secret, "consistency_secret");
-        assert_eq!(service.employee.config.req_timeout, Some(Duration::from_secs(250)));
+        assert_eq!(
+            service.employee.config.req_timeout,
+            Some(Duration::from_secs(250))
+        );
 
         assert_eq!(service.attachment.config.app_id, "consistency_test");
         assert_eq!(service.attachment.config.app_secret, "consistency_secret");
-        assert_eq!(service.attachment.config.req_timeout, Some(Duration::from_secs(250)));
+        assert_eq!(
+            service.attachment.config.req_timeout,
+            Some(Duration::from_secs(250))
+        );
     }
 
     #[test]

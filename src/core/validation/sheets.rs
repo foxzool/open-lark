@@ -289,7 +289,10 @@ mod tests {
 
         // 单个单元格
         assert!(matches!(validate_cell_range("A1"), ValidationResult::Valid));
-        assert!(matches!(validate_cell_range("Z100"), ValidationResult::Valid));
+        assert!(matches!(
+            validate_cell_range("Z100"),
+            ValidationResult::Valid
+        ));
 
         // 大范围
         assert!(matches!(
@@ -516,10 +519,14 @@ mod tests {
     fn test_validate_value_render_option_valid() {
         let valid_options = ["DisplayValue", "Unformatted", "FormattedString"];
         for option in valid_options {
-            assert!(matches!(
-                validate_value_render_option(&Some(option.to_string())),
-                ValidationResult::Valid
-            ), "Should be valid: {}", option);
+            assert!(
+                matches!(
+                    validate_value_render_option(&Some(option.to_string())),
+                    ValidationResult::Valid
+                ),
+                "Should be valid: {}",
+                option
+            );
         }
 
         // None 选项
@@ -533,10 +540,14 @@ mod tests {
     fn test_validate_value_render_option_invalid() {
         let invalid_options = ["Invalid", "displayvalue", "Formatted", "", "Custom"];
         for option in invalid_options {
-            assert!(matches!(
-                validate_value_render_option(&Some(option.to_string())),
-                ValidationResult::Invalid(msg) if msg.contains("Invalid valueRenderOption")
-            ), "Should be invalid: {}", option);
+            assert!(
+                matches!(
+                    validate_value_render_option(&Some(option.to_string())),
+                    ValidationResult::Invalid(msg) if msg.contains("Invalid valueRenderOption")
+                ),
+                "Should be invalid: {}",
+                option
+            );
         }
     }
 
@@ -564,10 +575,14 @@ mod tests {
     fn test_validate_date_time_render_option_invalid() {
         let invalid_options = ["Invalid", "formatted", "DateTime", "Number"];
         for option in invalid_options {
-            assert!(matches!(
-                validate_date_time_render_option(&Some(option.to_string())),
-                ValidationResult::Invalid(msg) if msg.contains("Invalid dateTimeRenderOption")
-            ), "Should be invalid: {}", option);
+            assert!(
+                matches!(
+                    validate_date_time_render_option(&Some(option.to_string())),
+                    ValidationResult::Invalid(msg) if msg.contains("Invalid dateTimeRenderOption")
+                ),
+                "Should be invalid: {}",
+                option
+            );
         }
     }
 
@@ -576,10 +591,7 @@ mod tests {
     #[test]
     fn test_validate_data_matrix_consistency_valid() {
         // 一致的2x2矩阵
-        let data1 = vec![
-            vec![json!("A"), json!("B")],
-            vec![json!("C"), json!("D")],
-        ];
+        let data1 = vec![vec![json!("A"), json!("B")], vec![json!("C"), json!("D")]];
         assert!(matches!(
             validate_data_matrix_consistency(&data1),
             ValidationResult::Valid
@@ -604,11 +616,7 @@ mod tests {
         ));
 
         // 单列矩阵
-        let data4 = vec![
-            vec![json!("A")],
-            vec![json!("B")],
-            vec![json!("C")],
-        ];
+        let data4 = vec![vec![json!("A")], vec![json!("B")], vec![json!("C")]];
         assert!(matches!(
             validate_data_matrix_consistency(&data4),
             ValidationResult::Valid
@@ -743,15 +751,26 @@ mod tests {
 
         // 1. 数据范围验证
         let data_range = "'Sales Report Q1'!A1:Z100";
-        assert!(matches!(validate_cell_range(data_range), ValidationResult::Valid));
+        assert!(matches!(
+            validate_cell_range(data_range),
+            ValidationResult::Valid
+        ));
 
         // 2. 合并单元格验证
         let merge_range = "A1:E1"; // 标题行合并
-        assert!(matches!(validate_merge_range(merge_range), ValidationResult::Valid));
+        assert!(matches!(
+            validate_merge_range(merge_range),
+            ValidationResult::Valid
+        ));
 
         // 3. 数据矩阵一致性检查
         let sales_data = vec![
-            vec![json!("Product"), json!("January"), json!("February"), json!("March")],
+            vec![
+                json!("Product"),
+                json!("January"),
+                json!("February"),
+                json!("March"),
+            ],
             vec![json!("Product A"), json!(1000), json!(1200), json!(1100)],
             vec![json!("Product B"), json!(800), json!(900), json!(950)],
             vec![json!("Product C"), json!(1500), json!(1600), json!(1550)],
@@ -763,10 +782,16 @@ mod tests {
 
         // 4. 渲染选项验证
         let value_option = Some("FormattedString".to_string());
-        assert!(matches!(validate_value_render_option(&value_option), ValidationResult::Valid));
+        assert!(matches!(
+            validate_value_render_option(&value_option),
+            ValidationResult::Valid
+        ));
 
         let date_option = Some("FormattedString".to_string());
-        assert!(matches!(validate_date_time_render_option(&date_option), ValidationResult::Valid));
+        assert!(matches!(
+            validate_date_time_render_option(&date_option),
+            ValidationResult::Valid
+        ));
     }
 
     #[test]
@@ -788,10 +813,8 @@ mod tests {
             assert!(msg.contains("valueRenderOption"));
         }
 
-        let result = validate_data_matrix_consistency(&vec![
-            vec![json!("A"), json!("B")],
-            vec![json!("C")]
-        ]);
+        let result =
+            validate_data_matrix_consistency(&[vec![json!("A"), json!("B")], vec![json!("C")]]);
         if let ValidationResult::Invalid(msg) = result {
             assert!(msg.contains("dimensions"));
         }
@@ -812,7 +835,10 @@ mod tests {
 
         // 3. 最长有效工作表名
         let long_sheet_name = "'".to_string() + &"A".repeat(200) + "'!A1:B10";
-        assert!(matches!(validate_cell_range(&long_sheet_name), ValidationResult::Valid));
+        assert!(matches!(
+            validate_cell_range(&long_sheet_name),
+            ValidationResult::Valid
+        ));
 
         // 4. 复杂的工作表名
         assert!(matches!(

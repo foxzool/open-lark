@@ -392,9 +392,7 @@ impl MailService {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_mail_categories_statistics(&self) -> String {
-        format!(
-            "MailService Categories{{ basic: 10, advanced: 10, enterprise: 8, integration: 8, security: 8, total: 44 }}",
-        )
+        "MailService Categories{ basic: 10, advanced: 10, enterprise: 8, integration: 8, security: 8, total: 44 }".to_string()
     }
 
     /// 获取邮件服务状态摘要
@@ -410,7 +408,10 @@ impl MailService {
 
         format!(
             "MailService Status{{ v1: {}, config: {}, services: {}, overall: {} }}",
-            v1_healthy, config_healthy, services_healthy, v1_healthy && config_healthy && services_healthy
+            v1_healthy,
+            config_healthy,
+            services_healthy,
+            v1_healthy && config_healthy && services_healthy
         )
     }
 
@@ -437,9 +438,7 @@ impl MailService {
     /// # 返回值
     /// 包含邮件管理能力信息的字符串
     pub fn get_mail_management_capabilities(&self) -> String {
-        format!(
-            "MailService Management{{ send_receive: true, folders: true, attachments: true, rules: true, contacts: true }}",
-        )
+        "MailService Management{ send_receive: true, folders: true, attachments: true, rules: true, contacts: true }".to_string()
     }
 
     /// 获取邮件组管理能力矩阵
@@ -449,9 +448,7 @@ impl MailService {
     /// # 返回值
     /// 包含邮件组管理能力信息的字符串
     pub fn get_mail_group_management_capabilities(&self) -> String {
-        format!(
-            "MailService GroupManagement{{ creation: true, members: true, permissions: true, statistics: true, policies: true }}",
-        )
+        "MailService GroupManagement{ creation: true, members: true, permissions: true, statistics: true, policies: true }".to_string()
     }
 
     /// 获取公共邮箱能力矩阵
@@ -461,9 +458,7 @@ impl MailService {
     /// # 返回值
     /// 包含公共邮箱能力信息的字符串
     pub fn get_public_mailbox_capabilities(&self) -> String {
-        format!(
-            "MailService PublicMailbox{{ creation: true, members: true, aliases: true, workflows: true, automation: true }}",
-        )
+        "MailService PublicMailbox{ creation: true, members: true, aliases: true, workflows: true, automation: true }".to_string()
     }
 
     /// 获取邮件安全能力矩阵
@@ -473,9 +468,7 @@ impl MailService {
     /// # 返回值
     /// 包含邮件安全能力信息的字符串
     pub fn get_mail_security_capabilities(&self) -> String {
-        format!(
-            "MailService Security{{ encryption: true, spam_filtering: true, virus_scanning: true, phishing_detection: true, compliance: true }}",
-        )
+        "MailService Security{ encryption: true, spam_filtering: true, virus_scanning: true, phishing_detection: true, compliance: true }".to_string()
     }
 
     /// 获取邮件企业级能力矩阵
@@ -485,9 +478,7 @@ impl MailService {
     /// # 返回值
     /// 包含邮件企业级能力信息的字符串
     pub fn get_enterprise_mail_capabilities(&self) -> String {
-        format!(
-            "MailService Enterprise{{ compliance: true, legal_hold: true, e_discovery: true, retention: true, monitoring: true }}",
-        )
+        "MailService Enterprise{ compliance: true, legal_hold: true, e_discovery: true, retention: true, monitoring: true }".to_string()
     }
 
     /// 获取邮件协作能力矩阵
@@ -497,9 +488,7 @@ impl MailService {
     /// # 返回值
     /// 包含邮件协作能力信息的字符串
     pub fn get_mail_collaboration_capabilities(&self) -> String {
-        format!(
-            "MailService Collaboration{{ shared_mailboxes: true, collaborative_drafts: true, workflows: true, approvals: true, integration: true }}",
-        )
+        "MailService Collaboration{ shared_mailboxes: true, collaborative_drafts: true, workflows: true, approvals: true, integration: true }".to_string()
     }
 
     /// 获取邮件自动化能力矩阵
@@ -509,9 +498,7 @@ impl MailService {
     /// # 返回值
     /// 包含邮件自动化能力信息的字符串
     pub fn get_mail_automation_capabilities(&self) -> String {
-        format!(
-            "MailService Automation{{ auto_responders: true, scheduled_sending: true, templates: true, workflows: true, ai_assistance: true }}",
-        )
+        "MailService Automation{ auto_responders: true, scheduled_sending: true, templates: true, workflows: true, ai_assistance: true }".to_string()
     }
 
     /// 获取邮件集成能力矩阵
@@ -521,9 +508,7 @@ impl MailService {
     /// # 返回值
     /// 包含邮件集成能力信息的字符串
     pub fn get_mail_integration_capabilities(&self) -> String {
-        format!(
-            "MailService Integration{{ calendar: true, contacts: true, documents: true, workflows: true, third_party: true }}",
-        )
+        "MailService Integration{ calendar: true, contacts: true, documents: true, workflows: true, third_party: true }".to_string()
     }
 
     /// 获取邮件性能指标
@@ -533,9 +518,7 @@ impl MailService {
     /// # 返回值
     /// 包含性能指标信息的字符串
     pub fn get_mail_performance_metrics(&self) -> String {
-        format!(
-            "MailService Performance{{ delivery_time: <5s, attachment_size: 25MB, throughput: high, reliability: 99.9%, concurrency: enterprise }}",
-        )
+        "MailService Performance{ delivery_time: <5s, attachment_size: 25MB, throughput: high, reliability: 99.9%, concurrency: enterprise }".to_string()
     }
 
     /// 获取邮件应用场景矩阵
@@ -545,9 +528,7 @@ impl MailService {
     /// # 返回值
     /// 包含应用场景信息的字符串
     pub fn get_mail_use_cases_matrix(&self) -> String {
-        format!(
-            "MailService UseCases{{ enterprise_communication: true, team_collaboration: true, customer_support: true, marketing: true, automation: true }}",
-        )
+        "MailService UseCases{ enterprise_communication: true, team_collaboration: true, customer_support: true, marketing: true, automation: true }".to_string()
     }
 
     /// 获取邮件API能力矩阵
@@ -557,9 +538,7 @@ impl MailService {
     /// # 返回值
     /// 包含邮件API能力信息的字符串
     pub fn get_mail_api_capabilities(&self) -> String {
-        format!(
-            "MailService API{{ restful: true, webhooks: true, batch_operations: true, rate_limiting: true, monitoring: true }}",
-        )
+        "MailService API{ restful: true, webhooks: true, batch_operations: true, rate_limiting: true, monitoring: true }".to_string()
     }
 
     /// 获取邮件合规能力矩阵
@@ -569,9 +548,7 @@ impl MailService {
     /// # 返回值
     /// 包含邮件合规能力信息的字符串
     pub fn get_mail_compliance_capabilities(&self) -> String {
-        format!(
-            "MailService Compliance{{ gdpr: true, sox: true, hipaa: true, data_retention: true, audit_logging: true }}",
-        )
+        "MailService Compliance{ gdpr: true, sox: true, hipaa: true, data_retention: true, audit_logging: true }".to_string()
     }
 }
 
@@ -675,62 +652,124 @@ mod tests {
 
         // 测试支持的基础邮件功能
         let basic_features = vec![
-            "mail_send_receive", "mail_compose", "mail_forward", "mail_reply",
-            "mail_delete", "mail_search", "mail_filter", "mail_sort", "mail_mark_read", "mail_import_export"
+            "mail_send_receive",
+            "mail_compose",
+            "mail_forward",
+            "mail_reply",
+            "mail_delete",
+            "mail_search",
+            "mail_filter",
+            "mail_sort",
+            "mail_mark_read",
+            "mail_import_export",
         ];
 
         for feature in basic_features {
-            assert!(service.supports_mail_feature(feature), "基础邮件功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_mail_feature(feature),
+                "基础邮件功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试支持的文件夹管理功能
         let folder_features = vec![
-            "folder_management", "folder_creation", "folder_deletion", "folder_rename",
-            "folder_move", "folder_hierarchy", "folder_permissions", "folder_statistics"
+            "folder_management",
+            "folder_creation",
+            "folder_deletion",
+            "folder_rename",
+            "folder_move",
+            "folder_hierarchy",
+            "folder_permissions",
+            "folder_statistics",
         ];
 
         for feature in folder_features {
-            assert!(service.supports_mail_feature(feature), "文件夹功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_mail_feature(feature),
+                "文件夹功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试支持的附件处理功能
         let attachment_features = vec![
-            "attachment_handling", "attachment_upload", "attachment_download", "attachment_preview",
-            "attachment_compression", "attachment_security_scan", "attachment_management", "attachment_search"
+            "attachment_handling",
+            "attachment_upload",
+            "attachment_download",
+            "attachment_preview",
+            "attachment_compression",
+            "attachment_security_scan",
+            "attachment_management",
+            "attachment_search",
         ];
 
         for feature in attachment_features {
-            assert!(service.supports_mail_feature(feature), "附件功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_mail_feature(feature),
+                "附件功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试支持的邮件组管理功能
         let group_features = vec![
-            "mail_group_management", "group_creation", "group_member_management", "group_permissions",
-            "group_statistics", "group_policies", "group_archiving", "group_integration"
+            "mail_group_management",
+            "group_creation",
+            "group_member_management",
+            "group_permissions",
+            "group_statistics",
+            "group_policies",
+            "group_archiving",
+            "group_integration",
         ];
 
         for feature in group_features {
-            assert!(service.supports_mail_feature(feature), "邮件组功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_mail_feature(feature),
+                "邮件组功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试支持的公共邮箱功能
         let mailbox_features = vec![
-            "public_mailbox", "mailbox_creation", "mailbox_member_management", "mailbox_alias_management",
-            "mailbox_statistics", "mailbox_permissions", "mailbox_workflows", "mailbox_automation"
+            "public_mailbox",
+            "mailbox_creation",
+            "mailbox_member_management",
+            "mailbox_alias_management",
+            "mailbox_statistics",
+            "mailbox_permissions",
+            "mailbox_workflows",
+            "mailbox_automation",
         ];
 
         for feature in mailbox_features {
-            assert!(service.supports_mail_feature(feature), "公共邮箱功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_mail_feature(feature),
+                "公共邮箱功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试支持的企业级功能
         let enterprise_features = vec![
-            "enterprise_mail", "compliance_management", "legal_hold", "data_retention",
-            "e_discovery", "security_monitoring", "policy_enforcement", "risk_assessment"
+            "enterprise_mail",
+            "compliance_management",
+            "legal_hold",
+            "data_retention",
+            "e_discovery",
+            "security_monitoring",
+            "policy_enforcement",
+            "risk_assessment",
         ];
 
         for feature in enterprise_features {
-            assert!(service.supports_mail_feature(feature), "企业功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_mail_feature(feature),
+                "企业功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 测试不支持的功能
@@ -748,10 +787,7 @@ mod tests {
         assert!(service.health_check());
 
         // 测试健康检查失败
-        let invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let invalid_config = Config::builder().app_id("").app_secret("").build();
         let invalid_service = MailService::new(invalid_config);
         assert!(!invalid_service.health_check());
     }
@@ -973,65 +1009,312 @@ mod tests {
         // 测试所有支持的邮件功能组合
         let supported_features = vec![
             // 基础邮件功能
-            "mail_send_receive", "mail_compose", "mail_forward", "mail_reply", "mail_delete", "mail_search", "mail_filter", "mail_sort", "mail_mark_read", "mail_import_export",
+            "mail_send_receive",
+            "mail_compose",
+            "mail_forward",
+            "mail_reply",
+            "mail_delete",
+            "mail_search",
+            "mail_filter",
+            "mail_sort",
+            "mail_mark_read",
+            "mail_import_export",
             // 文件夹管理功能
-            "folder_management", "folder_creation", "folder_deletion", "folder_rename", "folder_move", "folder_hierarchy", "folder_permissions", "folder_statistics",
+            "folder_management",
+            "folder_creation",
+            "folder_deletion",
+            "folder_rename",
+            "folder_move",
+            "folder_hierarchy",
+            "folder_permissions",
+            "folder_statistics",
             // 附件处理功能
-            "attachment_handling", "attachment_upload", "attachment_download", "attachment_preview", "attachment_compression", "attachment_security_scan", "attachment_management", "attachment_search",
+            "attachment_handling",
+            "attachment_upload",
+            "attachment_download",
+            "attachment_preview",
+            "attachment_compression",
+            "attachment_security_scan",
+            "attachment_management",
+            "attachment_search",
             // 邮件组管理功能
-            "mail_group_management", "group_creation", "group_member_management", "group_permissions", "group_statistics", "group_policies", "group_archiving", "group_integration",
+            "mail_group_management",
+            "group_creation",
+            "group_member_management",
+            "group_permissions",
+            "group_statistics",
+            "group_policies",
+            "group_archiving",
+            "group_integration",
             // 公共邮箱功能
-            "public_mailbox", "mailbox_creation", "mailbox_member_management", "mailbox_alias_management", "mailbox_statistics", "mailbox_permissions", "mailbox_workflows", "mailbox_automation",
+            "public_mailbox",
+            "mailbox_creation",
+            "mailbox_member_management",
+            "mailbox_alias_management",
+            "mailbox_statistics",
+            "mailbox_permissions",
+            "mailbox_workflows",
+            "mailbox_automation",
             // 收信规则功能
-            "mail_rules", "rule_creation", "rule_conditions", "rule_actions", "rule_priority", "rule_testing", "rule_statistics", "rule_templates",
+            "mail_rules",
+            "rule_creation",
+            "rule_conditions",
+            "rule_actions",
+            "rule_priority",
+            "rule_testing",
+            "rule_statistics",
+            "rule_templates",
             // 联系人管理功能
-            "contact_management", "contact_sync", "contact_groups", "contact_import_export", "contact_duplicates", "contact_search", "contact_privacy", "contact_integration",
+            "contact_management",
+            "contact_sync",
+            "contact_groups",
+            "contact_import_export",
+            "contact_duplicates",
+            "contact_search",
+            "contact_privacy",
+            "contact_integration",
             // 事件处理功能
-            "event_subscription", "real_time_notifications", "event_webhooks", "event_filters", "event_retries", "event_logging", "event_statistics", "event_processing",
+            "event_subscription",
+            "real_time_notifications",
+            "event_webhooks",
+            "event_filters",
+            "event_retries",
+            "event_logging",
+            "event_statistics",
+            "event_processing",
             // 别名管理功能
-            "alias_management", "user_alias_creation", "mailbox_alias_creation", "alias_permissions", "alias_routing", "alias_statistics", "alias_validation", "alias_integration",
+            "alias_management",
+            "user_alias_creation",
+            "mailbox_alias_creation",
+            "alias_permissions",
+            "alias_routing",
+            "alias_statistics",
+            "alias_validation",
+            "alias_integration",
             // 地址验证功能
-            "address_validation", "email_syntax_check", "domain_verification", "mailbox_existence_check", "spam_detection", "security_analysis", "delivery_verification", "reputation_check",
+            "address_validation",
+            "email_syntax_check",
+            "domain_verification",
+            "mailbox_existence_check",
+            "spam_detection",
+            "security_analysis",
+            "delivery_verification",
+            "reputation_check",
             // 权限管理功能
-            "permission_management", "access_control", "role_based_permissions", "delegation_management", "audit_logging", "permission_inheritance", "fine_grained_permissions", "security_policies",
+            "permission_management",
+            "access_control",
+            "role_based_permissions",
+            "delegation_management",
+            "audit_logging",
+            "permission_inheritance",
+            "fine_grained_permissions",
+            "security_policies",
             // 企业级功能
-            "enterprise_mail", "compliance_management", "legal_hold", "data_retention", "e_discovery", "security_monitoring", "policy_enforcement", "risk_assessment",
+            "enterprise_mail",
+            "compliance_management",
+            "legal_hold",
+            "data_retention",
+            "e_discovery",
+            "security_monitoring",
+            "policy_enforcement",
+            "risk_assessment",
             // 团队协作功能
-            "team_collaboration", "shared_mailboxes", "collaborative_drafts", "team_workflows", "approval_processes", "knowledge_integration", "project_management", "communication_channels",
+            "team_collaboration",
+            "shared_mailboxes",
+            "collaborative_drafts",
+            "team_workflows",
+            "approval_processes",
+            "knowledge_integration",
+            "project_management",
+            "communication_channels",
             // 邮件自动化功能
-            "mail_automation", "auto_responders", "scheduled_sending", "template_management", "workflow_automation", "ai_assistance", "smart_suggestions", "process_optimization",
+            "mail_automation",
+            "auto_responders",
+            "scheduled_sending",
+            "template_management",
+            "workflow_automation",
+            "ai_assistance",
+            "smart_suggestions",
+            "process_optimization",
             // API版本功能
-            "v1_api", "restful_api", "webhook_api", "sdk_support", "batch_operations", "rate_limiting", "api_monitoring", "documentation_support",
+            "v1_api",
+            "restful_api",
+            "webhook_api",
+            "sdk_support",
+            "batch_operations",
+            "rate_limiting",
+            "api_monitoring",
+            "documentation_support",
             // 集成功能
-            "calendar_integration", "contact_sync", "document_integration", "workflow_integration", "third_party_integration", "api_integration", "notification_channels", "data_analytics",
+            "calendar_integration",
+            "contact_sync",
+            "document_integration",
+            "workflow_integration",
+            "third_party_integration",
+            "api_integration",
+            "notification_channels",
+            "data_analytics",
             // 安全功能
-            "encryption_support", "two_factor_auth", "spam_filtering", "virus_scanning", "phishing_detection", "secure_transmission", "access_logging", "security_compliance"
+            "encryption_support",
+            "two_factor_auth",
+            "spam_filtering",
+            "virus_scanning",
+            "phishing_detection",
+            "secure_transmission",
+            "access_logging",
+            "security_compliance",
         ];
 
         for feature in supported_features {
-            assert!(service.supports_mail_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_mail_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量
         let mut feature_count = 0;
         let all_features = vec![
-            "mail_send_receive", "mail_compose", "mail_forward", "mail_reply", "mail_delete", "mail_search", "mail_filter", "mail_sort", "mail_mark_read", "mail_import_export",
-            "folder_management", "folder_creation", "folder_deletion", "folder_rename", "folder_move", "folder_hierarchy", "folder_permissions", "folder_statistics",
-            "attachment_handling", "attachment_upload", "attachment_download", "attachment_preview", "attachment_compression", "attachment_security_scan", "attachment_management", "attachment_search",
-            "mail_group_management", "group_creation", "group_member_management", "group_permissions", "group_statistics", "group_policies", "group_archiving", "group_integration",
-            "public_mailbox", "mailbox_creation", "mailbox_member_management", "mailbox_alias_management", "mailbox_statistics", "mailbox_permissions", "mailbox_workflows", "mailbox_automation",
-            "mail_rules", "rule_creation", "rule_conditions", "rule_actions", "rule_priority", "rule_testing", "rule_statistics", "rule_templates",
-            "contact_management", "contact_sync", "contact_groups", "contact_import_export", "contact_duplicates", "contact_search", "contact_privacy", "contact_integration",
-            "event_subscription", "real_time_notifications", "event_webhooks", "event_filters", "event_retries", "event_logging", "event_statistics", "event_processing",
-            "alias_management", "user_alias_creation", "mailbox_alias_creation", "alias_permissions", "alias_routing", "alias_statistics", "alias_validation", "alias_integration",
-            "address_validation", "email_syntax_check", "domain_verification", "mailbox_existence_check", "spam_detection", "security_analysis", "delivery_verification", "reputation_check",
-            "permission_management", "access_control", "role_based_permissions", "delegation_management", "audit_logging", "permission_inheritance", "fine_grained_permissions", "security_policies",
-            "enterprise_mail", "compliance_management", "legal_hold", "data_retention", "e_discovery", "security_monitoring", "policy_enforcement", "risk_assessment",
-            "team_collaboration", "shared_mailboxes", "collaborative_drafts", "team_workflows", "approval_processes", "knowledge_integration", "project_management", "communication_channels",
-            "mail_automation", "auto_responders", "scheduled_sending", "template_management", "workflow_automation", "ai_assistance", "smart_suggestions", "process_optimization",
-            "v1_api", "restful_api", "webhook_api", "sdk_support", "batch_operations", "rate_limiting", "api_monitoring", "documentation_support",
-            "calendar_integration", "document_integration", "workflow_integration", "third_party_integration", "api_integration", "notification_channels", "data_analytics",
-            "encryption_support", "two_factor_auth", "spam_filtering", "virus_scanning", "phishing_detection", "secure_transmission", "access_logging", "security_compliance", "nonexistent1", "nonexistent2"
+            "mail_send_receive",
+            "mail_compose",
+            "mail_forward",
+            "mail_reply",
+            "mail_delete",
+            "mail_search",
+            "mail_filter",
+            "mail_sort",
+            "mail_mark_read",
+            "mail_import_export",
+            "folder_management",
+            "folder_creation",
+            "folder_deletion",
+            "folder_rename",
+            "folder_move",
+            "folder_hierarchy",
+            "folder_permissions",
+            "folder_statistics",
+            "attachment_handling",
+            "attachment_upload",
+            "attachment_download",
+            "attachment_preview",
+            "attachment_compression",
+            "attachment_security_scan",
+            "attachment_management",
+            "attachment_search",
+            "mail_group_management",
+            "group_creation",
+            "group_member_management",
+            "group_permissions",
+            "group_statistics",
+            "group_policies",
+            "group_archiving",
+            "group_integration",
+            "public_mailbox",
+            "mailbox_creation",
+            "mailbox_member_management",
+            "mailbox_alias_management",
+            "mailbox_statistics",
+            "mailbox_permissions",
+            "mailbox_workflows",
+            "mailbox_automation",
+            "mail_rules",
+            "rule_creation",
+            "rule_conditions",
+            "rule_actions",
+            "rule_priority",
+            "rule_testing",
+            "rule_statistics",
+            "rule_templates",
+            "contact_management",
+            "contact_sync",
+            "contact_groups",
+            "contact_import_export",
+            "contact_duplicates",
+            "contact_search",
+            "contact_privacy",
+            "contact_integration",
+            "event_subscription",
+            "real_time_notifications",
+            "event_webhooks",
+            "event_filters",
+            "event_retries",
+            "event_logging",
+            "event_statistics",
+            "event_processing",
+            "alias_management",
+            "user_alias_creation",
+            "mailbox_alias_creation",
+            "alias_permissions",
+            "alias_routing",
+            "alias_statistics",
+            "alias_validation",
+            "alias_integration",
+            "address_validation",
+            "email_syntax_check",
+            "domain_verification",
+            "mailbox_existence_check",
+            "spam_detection",
+            "security_analysis",
+            "delivery_verification",
+            "reputation_check",
+            "permission_management",
+            "access_control",
+            "role_based_permissions",
+            "delegation_management",
+            "audit_logging",
+            "permission_inheritance",
+            "fine_grained_permissions",
+            "security_policies",
+            "enterprise_mail",
+            "compliance_management",
+            "legal_hold",
+            "data_retention",
+            "e_discovery",
+            "security_monitoring",
+            "policy_enforcement",
+            "risk_assessment",
+            "team_collaboration",
+            "shared_mailboxes",
+            "collaborative_drafts",
+            "team_workflows",
+            "approval_processes",
+            "knowledge_integration",
+            "project_management",
+            "communication_channels",
+            "mail_automation",
+            "auto_responders",
+            "scheduled_sending",
+            "template_management",
+            "workflow_automation",
+            "ai_assistance",
+            "smart_suggestions",
+            "process_optimization",
+            "v1_api",
+            "restful_api",
+            "webhook_api",
+            "sdk_support",
+            "batch_operations",
+            "rate_limiting",
+            "api_monitoring",
+            "documentation_support",
+            "calendar_integration",
+            "document_integration",
+            "workflow_integration",
+            "third_party_integration",
+            "api_integration",
+            "notification_channels",
+            "data_analytics",
+            "encryption_support",
+            "two_factor_auth",
+            "spam_filtering",
+            "virus_scanning",
+            "phishing_detection",
+            "secure_transmission",
+            "access_logging",
+            "security_compliance",
+            "nonexistent1",
+            "nonexistent2",
         ];
 
         for feature in all_features {
@@ -1053,7 +1336,9 @@ mod tests {
 
         assert!(special_service.validate_mail_services_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_mail_service_statistics().contains("邮件服务"));
+        assert!(special_service
+            .get_mail_service_statistics()
+            .contains("邮件服务"));
         assert!(special_service.get_mail_service_statistics().contains("📧"));
 
         // 测试长字符串配置
@@ -1065,7 +1350,9 @@ mod tests {
         let long_service = MailService::new(long_config);
 
         assert!(long_service.validate_mail_services_config());
-        assert!(long_service.get_mail_service_statistics().contains(&long_app_id));
+        assert!(long_service
+            .get_mail_service_statistics()
+            .contains(&long_app_id));
     }
 
     #[test]
@@ -1108,7 +1395,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = MailService::new(partial_invalid_config);
 
@@ -1117,18 +1404,19 @@ mod tests {
         assert!(!partial_invalid_service.validate_mail_services_config());
 
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder()
-            .app_id("")
-            .app_secret("")
-            .build();
+        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = MailService::new(fully_invalid_config);
 
         assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_mail_services_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_mail_service_statistics().contains("MailService"));
-        assert!(fully_invalid_service.get_mail_categories_statistics().contains("total: 44"));
+        assert!(fully_invalid_service
+            .get_mail_service_statistics()
+            .contains("MailService"));
+        assert!(fully_invalid_service
+            .get_mail_categories_statistics()
+            .contains("total: 44"));
     }
 
     #[test]
@@ -1201,7 +1489,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
@@ -1246,7 +1537,11 @@ mod tests {
         ];
 
         for (feature, description) in workflow_features {
-            assert!(service.supports_mail_feature(feature), "{}功能应该被支持", description);
+            assert!(
+                service.supports_mail_feature(feature),
+                "{}功能应该被支持",
+                description
+            );
         }
 
         // 验证统计信息反映邮件工作流程复杂性
@@ -1270,12 +1565,22 @@ mod tests {
 
         // 测试企业合规功能
         let compliance_features = vec![
-            "compliance_management", "legal_hold", "data_retention", "e_discovery",
-            "security_monitoring", "policy_enforcement", "risk_assessment", "audit_logging"
+            "compliance_management",
+            "legal_hold",
+            "data_retention",
+            "e_discovery",
+            "security_monitoring",
+            "policy_enforcement",
+            "risk_assessment",
+            "audit_logging",
         ];
 
         for feature in compliance_features {
-            assert!(service.supports_mail_feature(feature), "合规功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_mail_feature(feature),
+                "合规功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证合规能力完整性
@@ -1294,12 +1599,22 @@ mod tests {
 
         // 测试安全功能
         let security_features = vec![
-            "encryption_support", "two_factor_auth", "spam_filtering", "virus_scanning",
-            "phishing_detection", "secure_transmission", "access_logging", "security_compliance"
+            "encryption_support",
+            "two_factor_auth",
+            "spam_filtering",
+            "virus_scanning",
+            "phishing_detection",
+            "secure_transmission",
+            "access_logging",
+            "security_compliance",
         ];
 
         for feature in security_features {
-            assert!(service.supports_mail_feature(feature), "安全功能 {} 应该被支持", feature);
+            assert!(
+                service.supports_mail_feature(feature),
+                "安全功能 {} 应该被支持",
+                feature
+            );
         }
 
         // 验证安全能力完整性
@@ -1339,10 +1654,7 @@ mod tests {
 
         assert_eq!(service1.v1.config().app_id, "mail_app_1");
         assert_eq!(service2.v1.config().app_id, "mail_app_2");
-        assert_ne!(
-            service1.v1.config().app_id,
-            service2.v1.config().app_id
-        );
+        assert_ne!(service1.v1.config().app_id, service2.v1.config().app_id);
     }
 
     #[test]
@@ -1376,7 +1688,9 @@ mod tests {
         // Test Unicode functionality
         assert!(mail_service.validate_mail_services_config());
         assert!(mail_service.health_check());
-        assert!(mail_service.get_mail_service_statistics().contains("邮件应用"));
+        assert!(mail_service
+            .get_mail_service_statistics()
+            .contains("邮件应用"));
     }
 
     #[test]

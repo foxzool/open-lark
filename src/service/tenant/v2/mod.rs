@@ -71,7 +71,9 @@ impl V2 {
         Self {
             tenant: tenant::TenantService::new_from_shared(shared_config.clone()),
             tenant_product_assign_info:
-                tenant_product_assign_info::TenantProductAssignInfoService::new_from_shared(shared_config),
+                tenant_product_assign_info::TenantProductAssignInfoService::new_from_shared(
+                    shared_config,
+                ),
         }
     }
 
@@ -109,15 +111,15 @@ impl V2 {
     /// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
     pub fn supports_feature(&self, feature_name: &str) -> bool {
-        match feature_name {
-            "tenant_management" => true,
-            "seat_allocation" => true,
-            "multi_tenant" => true,
-            "enterprise_features" => true,
-            "resource_management" => true,
-            "billing_integration" => true,
-            _ => false,
-        }
+        matches!(
+            feature_name,
+            "tenant_management"
+                | "seat_allocation"
+                | "multi_tenant"
+                | "enterprise_features"
+                | "resource_management"
+                | "billing_integration"
+        )
     }
 
     /// 快速检查服务健康状态
@@ -139,9 +141,7 @@ impl V2 {
     /// # 返回值
     /// 包含各类型服务数量的统计信息
     pub fn get_service_categories_statistics(&self) -> String {
-        format!(
-            "TenantV2 Categories{{ tenant: 1, seat: 1, total: 2 }}",
-        )
+        "TenantV2 Categories{ tenant: 1, seat: 1, total: 2 }".to_string()
     }
 }
 
@@ -150,7 +150,10 @@ impl std::fmt::Debug for V2 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("TenantV2")
             .field("tenant", &"TenantService")
-            .field("tenant_product_assign_info", &"TenantProductAssignInfoService")
+            .field(
+                "tenant_product_assign_info",
+                &"TenantProductAssignInfoService",
+            )
             .finish()
     }
 }
@@ -215,9 +218,15 @@ mod tests {
 
         // 验证共享配置服务创建成功
         assert_eq!(service.tenant.config().app_id, "test_tenant_app_id");
-        assert_eq!(service.tenant_product_assign_info.config().app_id, "test_tenant_app_id");
+        assert_eq!(
+            service.tenant_product_assign_info.config().app_id,
+            "test_tenant_app_id"
+        );
         assert_eq!(service.tenant.config().app_secret, "test_tenant_app_secret");
-        assert_eq!(service.tenant_product_assign_info.config().app_secret, "test_tenant_app_secret");
+        assert_eq!(
+            service.tenant_product_assign_info.config().app_secret,
+            "test_tenant_app_secret"
+        );
     }
 
     #[test]
@@ -318,7 +327,10 @@ mod tests {
         let cloned_service = service.clone();
 
         // 验证克隆功能
-        assert_eq!(service.tenant.config().app_id, cloned_service.tenant.config().app_id);
+        assert_eq!(
+            service.tenant.config().app_id,
+            cloned_service.tenant.config().app_id
+        );
         assert_eq!(
             service.tenant_product_assign_info.config().app_id,
             cloned_service.tenant_product_assign_info.config().app_id
@@ -353,15 +365,24 @@ mod tests {
         ];
 
         for feature in supported_features {
-            assert!(service.supports_feature(feature), "Feature {} should be supported", feature);
+            assert!(
+                service.supports_feature(feature),
+                "Feature {} should be supported",
+                feature
+            );
         }
 
         // 验证功能数量
         let mut feature_count = 0;
         let all_features = vec![
-            "tenant_management", "seat_allocation", "multi_tenant",
-            "enterprise_features", "resource_management", "billing_integration",
-            "nonexistent1", "nonexistent2"
+            "tenant_management",
+            "seat_allocation",
+            "multi_tenant",
+            "enterprise_features",
+            "resource_management",
+            "billing_integration",
+            "nonexistent1",
+            "nonexistent2",
         ];
 
         for feature in all_features {
@@ -383,7 +404,9 @@ mod tests {
 
         assert!(special_service.validate_services_config());
         assert!(special_service.health_check());
-        assert!(special_service.get_service_statistics().contains("特殊字符"));
+        assert!(special_service
+            .get_service_statistics()
+            .contains("特殊字符"));
 
         // 测试长字符串配置
         let long_app_id = "a".repeat(1000);
@@ -404,11 +427,26 @@ mod tests {
         let shared_service = V2::new_from_shared(create_shared_test_config());
 
         // 验证服务配置一致性
-        assert_eq!(service.tenant.config().app_id, service.tenant_product_assign_info.config().app_id);
-        assert_eq!(service.tenant.config().app_secret, service.tenant_product_assign_info.config().app_secret);
+        assert_eq!(
+            service.tenant.config().app_id,
+            service.tenant_product_assign_info.config().app_id
+        );
+        assert_eq!(
+            service.tenant.config().app_secret,
+            service.tenant_product_assign_info.config().app_secret
+        );
 
-        assert_eq!(shared_service.tenant.config().app_id, shared_service.tenant_product_assign_info.config().app_id);
-        assert_eq!(shared_service.tenant.config().app_secret, shared_service.tenant_product_assign_info.config().app_secret);
+        assert_eq!(
+            shared_service.tenant.config().app_id,
+            shared_service.tenant_product_assign_info.config().app_id
+        );
+        assert_eq!(
+            shared_service.tenant.config().app_secret,
+            shared_service
+                .tenant_product_assign_info
+                .config()
+                .app_secret
+        );
     }
 
     #[test]
@@ -487,7 +525,7 @@ mod tests {
         // 测试部分无效配置
         let partial_invalid_config = crate::core::config::Config::builder()
             .app_id("valid_app_id")
-            .app_secret("")  // 无效密钥
+            .app_secret("") // 无效密钥
             .build();
         let partial_invalid_service = V2::new(partial_invalid_config);
 
@@ -506,8 +544,12 @@ mod tests {
         assert!(!fully_invalid_service.validate_services_config());
 
         // 验证统计信息仍然可用
-        assert!(fully_invalid_service.get_service_statistics().contains("TenantV2"));
-        assert!(fully_invalid_service.get_service_categories_statistics().contains("total: 2"));
+        assert!(fully_invalid_service
+            .get_service_statistics()
+            .contains("TenantV2"));
+        assert!(fully_invalid_service
+            .get_service_categories_statistics()
+            .contains("total: 2"));
     }
 
     #[test]
@@ -560,7 +602,10 @@ mod tests {
         }
 
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 1000, "Operations should complete quickly");
+        assert!(
+            duration.as_millis() < 1000,
+            "Operations should complete quickly"
+        );
     }
 
     #[test]
