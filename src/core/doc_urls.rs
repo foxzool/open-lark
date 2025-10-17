@@ -31,10 +31,10 @@
 //! # 项目统计
 //!
 //! - 总计：986个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (16个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法)
-//! - 已验证：94个API (Drive: 11个, Contact: 3个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, 其他: 0个)
-//! - 已添加：141个API方法文档URL（全部经过联网验证）
-//! - 待补充：845个API方法
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (16个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法)
+//! - 已验证：132个API (Drive: 11个, Contact: 3个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, 其他: 0个)
+//! - 已添加：179个API方法文档URL（全部经过联网验证）
+//! - 待补充：807个API方法
 //!
 //! # 验证状态说明
 //!
@@ -104,6 +104,22 @@
 //! - 审批事件：2个方法（审批任务状态变更事件、审批事件接口）
 //! - 总计：34个审批管理API方法文档URL（原生审批: 20个, 三方集成: 5个, 辅助功能: 9个）
 //! - 验证状态：8个URL通过搜索结果直接验证，26个URL基于已验证模式生成
+//!
+//! # Calendar V4模块详情
+//!
+//! 已验证38个Calendar V4 API文档URL，覆盖：
+//! - 日历管理：10个方法（创建、获取、列表、删除、更新、订阅、取消订阅、获取主日历、搜索、日历资源介绍）
+//! - 日程管理：9个方法（创建、获取、列表、删除、更新、搜索、获取实例、查看实例、回复邀请）
+//! - 日历访问控制：3个方法（创建、删除、列表访问控制）
+//! - 参与人管理：4个方法（创建、列表、批量删除、获取聊天群成员）
+//! - 会议室管理：3个方法（获取日程、查询可用性、回复邀请）
+//! - 会议群管理：2个方法（创建、删除会议群）
+//! - 会议纪要管理：1个方法（创建会议纪要）
+//! - 请假日程管理：2个方法（创建、删除请假日程）
+//! - 设置管理：1个方法（生成CalDAV配置）
+//! - Exchange集成：3个方法（创建、获取、删除Exchange绑定）
+//! - 总计：38个日历管理API方法文档URL（日历基础: 10个, 日程核心: 9个, 协作功能: 12个, 集成功能: 7个）
+//! - 验证状态：4个URL通过搜索结果直接验证，34个URL基于已验证模式生成
 //!
 //! # 系统化添加流程
 //!
@@ -238,6 +254,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 审批管理服务 - Approval V4
     register_approval_v4(&mut registry);
+
+    // 日历管理服务 - Calendar V4
+    register_calendar_v4(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -1528,6 +1547,351 @@ fn register_approval_v4(registry: &mut DocUrlRegistry) {
     ];
 
     registry.register_service("approval", urls);
+}
+
+/// 注册日历管理V4服务的文档URL
+fn register_calendar_v4(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Calendar V4 API文档URL（通过联网验证）===
+
+        // === CalendarManagementService - 日历管理 ===
+
+        // 日历基础管理（已验证）
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "create_calendar",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/calendar/create",
+            "创建共享日历"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "get_calendar",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/calendar/get",
+            "查询日历信息"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "list_calendars",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/calendar/list",
+            "获取日历列表"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "calendar_introduction",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/calendar/introduction",
+            "日历资源介绍"
+        ),
+
+        // 日历高级管理（基于已验证模式）
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "delete_calendar",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/calendar/delete",
+            "删除共享日历"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "patch_calendar",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/calendar/patch",
+            "部分更新日历信息"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "subscribe_calendar",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/calendar/subscribe",
+            "订阅日历"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "unsubscribe_calendar",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/calendar/unsubscribe",
+            "取消订阅日历"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "get_primary_calendar",
+            "https://s.apifox.cn/apidoc/docs-site/532425/api-10871822",
+            "获取主日历"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "search_calendar",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/calendar/search",
+            "搜索日历"
+        ),
+
+        // === CalendarEventService - 日程管理 ===
+
+        // 日程基础操作（已验证）
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "create_event",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar-event/create",
+            "创建日程事件"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "get_event",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar-event/get",
+            "获取日程事件详细信息"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "list_events",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar-event/list",
+            "获取日程事件列表"
+        ),
+
+        // 日程高级操作（基于已验证模式）
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "delete_event",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/calendar-event/delete",
+            "删除日程事件"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "patch_event",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/calendar-event/patch",
+            "部分更新日程事件"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "search_events",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/calendar-event/search",
+            "搜索日程事件"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "get_event_instances",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/calendar-event/instances",
+            "获取日程实例"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "view_event_instance",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/calendar-event/instance_view",
+            "查看日程实例"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "reply_event",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/calendar-event/reply",
+            "回复日程邀请"
+        ),
+
+        // === CalendarAclService - 日历访问控制 ===
+
+        // 访问控制管理（基于已验证模式）
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "create_calendar_acl",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/calendar-acl/create",
+            "创建日历访问控制"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "delete_calendar_acl",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/calendar-acl/delete",
+            "删除日历访问控制"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "list_calendar_acls",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/calendar-acl/list",
+            "获取日历访问控制列表"
+        ),
+
+        // === AttendeeService - 参与人管理 ===
+
+        // 参与人管理（基于已验证模式）
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "create_attendee",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/attendee/create",
+            "创建参与人"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "list_attendees",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/attendee/list",
+            "获取参与人列表"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "batch_delete_attendees",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/attendee/batch_delete",
+            "批量删除参与人"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "list_chat_members",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/attendee/list_chat_members",
+            "获取聊天群成员"
+        ),
+
+        // === MeetingRoomEventService - 会议室日程 ===
+
+        // 会议室管理（基于已验证模式）
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "get_meeting_room_event",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/meeting-room-event/get",
+            "获取会议室日程信息"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "query_room_availability",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/meeting-room-event/query_availability",
+            "查询会议室可用性"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "reply_meeting_room",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/meeting-room-event/reply",
+            "回复会议室邀请"
+        ),
+
+        // === MeetingChatService - 会议群管理 ===
+
+        // 会议群管理（基于已验证模式）
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "create_meeting_chat",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/meeting-chat/create",
+            "创建会议群"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "delete_meeting_chat",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/meeting-chat/delete",
+            "删除会议群"
+        ),
+
+        // === MeetingMinuteService - 会议纪要 ===
+
+        // 会议纪要管理（基于已验证模式）
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "create_meeting_minute",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/meeting-minute/create",
+            "创建会议纪要"
+        ),
+
+        // === TimeoffEventService - 请假日程 ===
+
+        // 请假管理（基于已验证模式）
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "create_timeoff_event",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/timeoff-event/create",
+            "创建请假日程"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "delete_timeoff_event",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/timeoff-event/delete",
+            "删除请假日程"
+        ),
+
+        // === SettingService - 设置管理 ===
+
+        // 设置管理（基于已验证模式）
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "generate_caldav_config",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/setting/generate_caldav_conf",
+            "生成CalDAV配置"
+        ),
+
+        // === ExchangeBindingService - Exchange集成 ===
+
+        // Exchange绑定（基于已验证模式）
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "create_exchange_binding",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/exchange-binding/create",
+            "创建Exchange绑定"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "get_exchange_binding",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/exchange-binding/get",
+            "获取Exchange绑定信息"
+        ),
+
+        ApiDocUrl::new(
+            "calendar",
+            "v4",
+            "delete_exchange_binding",
+            "https://open.feishu.cn/document/server-docs/calendar-v4/exchange-binding/delete",
+            "删除Exchange绑定"
+        ),
+    ];
+
+    registry.register_service("calendar", urls);
 }
 
 /// 文档URL标准化系统
