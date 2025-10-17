@@ -30,10 +30,10 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：1305个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法)
-//! - 已验证：665个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, 其他: 0个)
-//! - 已添加：665个API方法文档URL（全部经过联网验证）
+//! - 总计：1320个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Directory V1 (15个API方法)
+//! - 已验证：680个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Directory: 15个, 其他: 0个)
+//! - 已添加：680个API方法文档URL（全部经过联网验证）
 //! - 待补充：640个API方法
 //!
 //! # 验证状态说明
@@ -435,6 +435,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // OKR目标管理服务 - OKR V1
     register_okr_v1(&mut registry);
+
+    // 组织架构服务 - Directory V1
+    register_directory_v1(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -5623,6 +5626,141 @@ fn register_okr_v1(registry: &mut DocUrlRegistry) {
         ),
     ];
     registry.register_service("okr", urls);
+}
+
+/// 注册Directory V1服务的文档URL
+fn register_directory_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === EmployeeService - 员工管理服务 ===
+
+        // 员工基本信息管理
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "create_employee",
+            "https://open.feishu.cn/document/directory-v1/employee/create",
+            "创建员工"
+        ),
+
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "delete_employee",
+            "https://open.feishu.cn/document/directory-v1/employee/delete",
+            "删除员工"
+        ),
+
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "patch_employee",
+            "https://open.feishu.cn/document/directory-v1/employee/patch",
+            "更新员工信息"
+        ),
+
+        // 员工查询操作
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "filter_employee",
+            "https://open.feishu.cn/document/directory-v1/employee/filter",
+            "批量获取员工列表"
+        ),
+
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "mget_employee",
+            "https://open.feishu.cn/document/directory-v1/employee/mget",
+            "批量获取员工信息"
+        ),
+
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "search_employee",
+            "https://open.feishu.cn/document/directory-v1/employee/search",
+            "搜索员工"
+        ),
+
+        // 员工状态管理
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "regular_employee",
+            "https://open.feishu.cn/document/directory-v1/employee/regular",
+            "员工转正"
+        ),
+
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "resurrect_employee",
+            "https://open.feishu.cn/document/directory-v1/employee/resurrect",
+            "员工复职"
+        ),
+
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "to_be_resigned_employee",
+            "https://open.feishu.cn/document/directory-v1/employee/to_be_resigned",
+            "员工待离职"
+        ),
+
+        // === DepartmentService - 部门管理服务 ===
+
+        // 部门基本信息管理
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "create_department",
+            "https://open.feishu.cn/document/directory-v1/department/create",
+            "创建部门"
+        ),
+
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "delete_department",
+            "https://open.feishu.cn/document/directory-v1/department/delete",
+            "删除部门"
+        ),
+
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "patch_department",
+            "https://open.feishu.cn/document/directory-v1/department/patch",
+            "更新部门信息"
+        ),
+
+        // 部门查询操作
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "filter_department",
+            "https://open.feishu.cn/document/directory-v1/department/filter",
+            "批量获取部门列表"
+        ),
+
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "mget_department",
+            "https://open.feishu.cn/document/directory-v1/department/mget",
+            "批量获取部门信息"
+        ),
+
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "search_department",
+            "https://open.feishu.cn/document/directory-v1/department/search",
+            "搜索部门"
+        ),
+    ];
+    registry.register_service("directory", urls);
 }
 
 /// 文档URL标准化系统
