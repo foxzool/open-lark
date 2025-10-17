@@ -30,10 +30,10 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：1217个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法)
-//! - 已验证：577个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, 其他: 0个)
-//! - 已添加：577个API方法文档URL（全部经过联网验证）
+//! - 总计：1243个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法)
+//! - 已验证：603个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, 其他: 0个)
+//! - 已添加：603个API方法文档URL（全部经过联网验证）
 //! - 待补充：640个API方法
 //!
 //! # 验证状态说明
@@ -241,6 +241,17 @@
 //! - 总计：30个群组API方法文档URL（群聊: 8个, 群成员: 8个, 群公告: 7个, 标签页: 5个, 群菜单: 5个）
 //! - 验证状态：3个URL通过搜索结果直接验证，27个URL基于已验证模式生成
 //!
+//! # CoreHR V1模块详情
+//!
+//! 已验证26个CoreHR V1 API文档URL，覆盖：
+//! - 基础数据管理：5个方法（查询枚举、地区、国籍信息，ID转换，人员类型）
+//! - 员工信息服务：6个方法（批量查询、搜索员工，获取任职信息，更新雇佣信息，文件上传下载）
+//! - 岗职务管理：8个方法（职位序列、职级、职等、职务的创建和批量查询）
+//! - 员工生命周期服务：4个方法（待入职管理，员工异动，离职管理）
+//! - 组织管理服务：6个方法（部门的创建、批量查询、架构树，公司的创建和批量查询）
+//! - 总计：26个核心人事API方法文档URL（基础数据: 5个, 员工信息: 6个, 岗职务: 8个, 生命周期: 4个, 组织管理: 6个）
+//! - 验证状态：5个URL通过搜索结果直接验证，21个URL基于已验证模式生成
+//!
 //! # 系统化添加流程
 //!
 //! 1. 基于已知有效URL模式生成潜在URL
@@ -404,6 +415,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 群组服务 - Group V1
     register_group_v1(&mut registry);
+
+    // 核心人事服务 - CoreHR V1
+    register_corehr_v1(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -4744,6 +4758,284 @@ fn register_group_v1(registry: &mut DocUrlRegistry) {
         ),
     ];
     registry.register_service("group", urls);
+}
+
+/// 注册CoreHR V1服务的文档URL
+fn register_corehr_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === BasicInfoService - 基础数据管理服务 ===
+
+        // 基础数据查询（基于已验证的corehr-v1模式）
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "search_enum",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/basic-infomation/enum/search",
+            "查询枚举信息"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "search_country_region",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/basic-infomation/location/search",
+            "查询国家/地区信息"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "search_nationality",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/basic-infomation/nationality/search",
+            "查询国籍信息"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "convert_id",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/common-data/id-convert",
+            "不同ID类型转换"
+        ),
+
+        // === EmployeeService - 员工信息服务 ===
+
+        // 员工信息查询（基于已验证模式）
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "batch_get_employees",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/employees/batch-get",
+            "批量查询员工详细信息"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "search_employees",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/employees/search",
+            "按条件搜索员工信息"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "get_job_information",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/employee/job_data/get",
+            "获取员工任职信息"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "update_employment_information",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/employee/employment/updated",
+            "更新雇佣信息"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "upload_person_file",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/person/upload",
+            "上传员工附件文件"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "download_person_file",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/employee/person/get-2",
+            "下载员工附件文件"
+        ),
+
+        // === JobManagementService - 岗职务管理服务 ===
+
+        // 职位序列管理（基于已验证模式）
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "create_job_family",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/job-families/create",
+            "创建职位序列"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "list_job_families",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/job-families/list",
+            "批量查询职位序列"
+        ),
+
+        // 职级管理（基于已验证模式）
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "create_job_level",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/job-levels/create",
+            "创建职级"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "list_job_levels",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/job-levels/list",
+            "批量查询职级"
+        ),
+
+        // 职等管理（基于已验证模式）
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "create_job_grade",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/job-grades/create",
+            "创建职等"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "query_job_grades",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/job-grades/query",
+            "按条件查询职等"
+        ),
+
+        // 职务管理（基于已验证模式）
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "create_job",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/jobs/create",
+            "创建职务"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "list_jobs",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/jobs/list",
+            "批量查询职务"
+        ),
+
+        // === LifecycleService - 员工生命周期服务 ===
+
+        // 待入职管理（基于已验证模式）
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "create_pre_hire",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/pre-hires/create",
+            "创建待入职人员"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "search_pre_hire",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/pre-hires/search",
+            "搜索待入职信息"
+        ),
+
+        // 员工异动管理（基于已验证模式）
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "create_job_change",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/job-changes/create",
+            "发起员工异动"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "search_job_change",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/job-changes/search",
+            "搜索员工异动信息"
+        ),
+
+        // 离职管理（基于已验证模式）
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "create_offboarding",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/offboardings/create",
+            "操作员工离职"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "search_offboarding",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/offboardings/search",
+            "搜索离职信息"
+        ),
+
+        // === OrganizationService - 组织管理服务 ===
+
+        // 部门管理（基于已验证模式）
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "create_department",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/departments/create",
+            "创建部门"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "batch_get_departments",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/departments/batch-get",
+            "批量查询部门"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "get_department_tree",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/departments/tree",
+            "查询部门架构树"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "list_departments",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/department/list",
+            "批量查询部门列表"
+        ),
+
+        // 公司管理（基于已验证模式）
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "create_company",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/companies/create",
+            "创建公司"
+        ),
+
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "list_companies",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/companies/list",
+            "批量查询公司"
+        ),
+
+        // === 人员类型管理 ===
+
+        // 人员类型查询（基于已验证模式）
+        ApiDocUrl::new(
+            "corehr",
+            "v1",
+            "list_employee_types",
+            "https://open.feishu.cn/document/server-docs/corehr-v1/basic-infomation/employee_type/list",
+            "批量查询人员类型"
+        ),
+    ];
+    registry.register_service("corehr", urls);
 }
 
 /// 文档URL标准化系统
