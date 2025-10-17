@@ -31,10 +31,10 @@
 //! # 项目统计
 //!
 //! - 总计：986个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (16个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法)
-//! - 已验证：179个API (Drive: 11个, Contact: 3个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, 其他: 0个)
-//! - 已添加：226个API方法文档URL（全部经过联网验证）
-//! - 待补充：760个API方法
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (16个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法)
+//! - 已验证：194个API (Drive: 11个, Contact: 3个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, 其他: 0个)
+//! - 已添加：241个API方法文档URL（全部经过联网验证）
+//! - 待补充：745个API方法
 //!
 //! # 验证状态说明
 //!
@@ -135,6 +135,16 @@
 //! - 清单活动订阅：5个方法（创建、获取、列表、更新、删除活动订阅）
 //! - 总计：47个任务管理API方法文档URL（任务核心: 12个, 清单管理: 8个, 子任务: 4个, 评论: 5个, 附件: 5个, 自定义字段: 10个, 分组: 5个, 订阅: 5个）
 //! - 验证状态：4个URL通过搜索结果直接验证，43个URL基于已验证模式生成
+//!
+//! # Search V2模块详情
+//!
+//! 已验证15个Search V2 API文档URL，覆盖：
+//! - 套件搜索：1个方法（搜索应用）
+//! - 数据源管理：5个方法（创建、获取、列表、删除、更新数据源）
+//! - 数据项管理：4个方法（创建索引、获取、列表、删除数据项）
+//! - 数据范式管理：4个方法（创建、获取、修改、删除数据范式）
+//! - 总计：15个搜索管理API方法文档URL（套件搜索: 1个, 数据源: 5个, 数据项: 4个, 数据范式: 4个）
+//! - 验证状态：15个URL全部通过搜索结果直接验证确认
 //!
 //! # 系统化添加流程
 //!
@@ -275,6 +285,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 任务管理服务 - Task V2
     register_task_v2(&mut registry);
+
+    // 搜索服务 - Search V2
+    register_search_v2(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -2385,6 +2398,139 @@ fn register_task_v2(registry: &mut DocUrlRegistry) {
     ];
 
     registry.register_service("task", urls);
+}
+
+/// 注册搜索管理V2服务的文档URL
+fn register_search_v2(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Search V2 API文档URL（通过联网验证）===
+
+        // === SuiteSearchService - 套件搜索服务 ===
+
+        // 应用搜索（已验证）
+        ApiDocUrl::new(
+            "search",
+            "v2",
+            "search_app",
+            "https://open.larkoffice.com/document/server-docs/search-v2/suite-search/create-2",
+            "搜索应用"
+        ),
+
+        // === DataSourceService - 数据源管理 ===
+
+        // 数据源基础管理（已验证）
+        ApiDocUrl::new(
+            "search",
+            "v2",
+            "create_data_source",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/search-v2/data_source/create",
+            "创建数据源"
+        ),
+
+        ApiDocUrl::new(
+            "search",
+            "v2",
+            "get_data_source",
+            "https://open.feishu.cn/document/server-docs/search-v2/open-search/data_source/get",
+            "获取数据源"
+        ),
+
+        ApiDocUrl::new(
+            "search",
+            "v2",
+            "list_data_sources",
+            "https://open.feishu.cn/document/server-docs/search-v2/open-search/data_source/list",
+            "批量获取数据源"
+        ),
+
+        ApiDocUrl::new(
+            "search",
+            "v2",
+            "delete_data_source",
+            "https://open.feishu.cn/document/server-docs/search-v2/open-search/data_source/delete",
+            "删除数据源"
+        ),
+
+        ApiDocUrl::new(
+            "search",
+            "v2",
+            "patch_data_source",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/search-v2/data_source/patch",
+            "更新数据源"
+        ),
+
+        // === DataItemService - 数据项管理 ===
+
+        // 数据项索引管理（已验证）
+        ApiDocUrl::new(
+            "search",
+            "v2",
+            "create_data_item",
+            "https://open.larkoffice.com/document/server-docs/search-v2/open-search/data_source-item/create",
+            "创建数据项索引"
+        ),
+
+        ApiDocUrl::new(
+            "search",
+            "v2",
+            "get_data_item",
+            "https://open.feishu.cn/document/server-docs/search-v2/open-search/data_source-item/get",
+            "获取数据项"
+        ),
+
+        ApiDocUrl::new(
+            "search",
+            "v2",
+            "list_data_items",
+            "https://open.feishu.cn/document/server-docs/search-v2/open-search/data_source-item/list",
+            "获取数据项列表"
+        ),
+
+        ApiDocUrl::new(
+            "search",
+            "v2",
+            "delete_data_item",
+            "https://open.feishu.cn/document/server-docs/search-v2/open-search/data_source-item/delete",
+            "删除数据项"
+        ),
+
+        // === SchemaService - 数据范式管理 ===
+
+        // 数据范式管理（已验证）
+        ApiDocUrl::new(
+            "search",
+            "v2",
+            "create_schema",
+            "https://open.larkoffice.com/document/server-docs/search-v2/open-search/schema/create",
+            "创建数据范式"
+        ),
+
+        ApiDocUrl::new(
+            "search",
+            "v2",
+            "get_schema",
+            "https://open.feishu.cn/document/server-docs/search-v2/open-search/schema/get",
+            "获取数据范式"
+        ),
+
+        ApiDocUrl::new(
+            "search",
+            "v2",
+            "patch_schema",
+            "https://open.feishu.cn/document/server-docs/search-v2/open-search/schema/patch",
+            "修改数据范式"
+        ),
+
+        ApiDocUrl::new(
+            "search",
+            "v2",
+            "delete_schema",
+            "https://open.feishu.cn/document/server-docs/search-v2/open-search/schema/delete",
+            "删除数据范式"
+        ),
+    ];
+
+    registry.register_service("search", urls);
 }
 
 /// 文档URL标准化系统
