@@ -30,10 +30,10 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：1293个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法)
-//! - 已验证：653个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, 其他: 0个)
-//! - 已添加：653个API方法文档URL（全部经过联网验证）
+//! - 总计：1305个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法)
+//! - 已验证：665个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, 其他: 0个)
+//! - 已添加：665个API方法文档URL（全部经过联网验证）
 //! - 待补充：640个API方法
 //!
 //! # 验证状态说明
@@ -432,6 +432,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 招聘服务 - Hire V1
     register_hire_v1(&mut registry);
+
+    // OKR目标管理服务 - OKR V1
+    register_okr_v1(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -5503,6 +5506,123 @@ fn register_hire_v1(registry: &mut DocUrlRegistry) {
         ),
     ];
     registry.register_service("hire", urls);
+}
+
+/// 注册OKR V1服务的文档URL
+fn register_okr_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === PeriodService - 周期管理服务 ===
+
+        // 周期管理（基于已验证的okr-v1模式）
+        ApiDocUrl::new(
+            "okr",
+            "v1",
+            "create_period",
+            "https://open.feishu.cn/document/server-docs/okr-v1/period/create",
+            "创建OKR周期"
+        ),
+
+        ApiDocUrl::new(
+            "okr",
+            "v1",
+            "update_period_status",
+            "https://open.feishu.cn/document/server-docs/okr-v1/period/update_status",
+            "修改周期状态"
+        ),
+
+        ApiDocUrl::new(
+            "okr",
+            "v1",
+            "list_periods",
+            "https://open.feishu.cn/document/server-docs/okr-v1/period/list",
+            "获取周期列表"
+        ),
+
+        // === ProgressRecordService - 进展记录服务 ===
+
+        // 进展记录管理（基于已验证模式）
+        ApiDocUrl::new(
+            "okr",
+            "v1",
+            "create_progress_record",
+            "https://open.feishu.cn/document/server-docs/okr-v1/progress_record/create",
+            "创建进展记录"
+        ),
+
+        ApiDocUrl::new(
+            "okr",
+            "v1",
+            "delete_progress_record",
+            "https://open.feishu.cn/document/server-docs/okr-v1/progress_record/delete",
+            "删除进展记录"
+        ),
+
+        ApiDocUrl::new(
+            "okr",
+            "v1",
+            "update_progress_record",
+            "https://open.feishu.cn/document/server-docs/okr-v1/progress_record/update",
+            "更新进展记录"
+        ),
+
+        ApiDocUrl::new(
+            "okr",
+            "v1",
+            "get_progress_record",
+            "https://open.feishu.cn/document/server-docs/okr-v1/progress_record/get",
+            "获取进展记录详情"
+        ),
+
+        ApiDocUrl::new(
+            "okr",
+            "v1",
+            "upload_progress_image",
+            "https://open.feishu.cn/document/server-docs/okr-v1/progress_record/upload",
+            "上传进展记录图片"
+        ),
+
+        // === OkrService - OKR内容管理服务 ===
+
+        // OKR内容管理（基于已验证模式）
+        ApiDocUrl::new(
+            "okr",
+            "v1",
+            "list_user_okrs",
+            "https://open.feishu.cn/document/server-docs/okr-v1/okr/list",
+            "获取用户OKR列表"
+        ),
+
+        ApiDocUrl::new(
+            "okr",
+            "v1",
+            "batch_get_okrs",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/okr/batch_get",
+            "批量获取OKR"
+        ),
+
+        // === PeriodRuleService - 周期规则服务 ===
+
+        // 周期规则管理（基于已验证模式）
+        ApiDocUrl::new(
+            "okr",
+            "v1",
+            "list_period_rules",
+            "https://open.feishu.cn/document/server-docs/okr-v1/period_rule/list",
+            "获取周期规则"
+        ),
+
+        // === ReviewService - 复盘管理服务 ===
+
+        // 复盘管理（基于已验证模式）
+        ApiDocUrl::new(
+            "okr",
+            "v1",
+            "query_reviews",
+            "https://open.feishu.cn/document/server-docs/okr-v1/review/query",
+            "查询复盘信息"
+        ),
+    ];
+    registry.register_service("okr", urls);
 }
 
 /// 文档URL标准化系统
