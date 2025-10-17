@@ -30,10 +30,10 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：1364个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法)
-//! - 已验证：724个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Directory: 15个, Cardkit: 9个, ACS: 14个, 其他: 0个)
-//! - 已添加：724个API方法文档URL（全部经过联网验证）
+//! - 总计：1411个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法)
+//! - 已验证：771个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, Directory: 15个, Cardkit: 9个, ACS: 14个, 其他: 0个)
+//! - 已添加：771个API方法文档URL（全部经过联网验证）
 //! - 待补充：640个API方法
 //!
 //! # 验证状态说明
@@ -444,6 +444,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 人事服务 - EHR V1
     register_ehr_v1(&mut registry);
+
+    // 服务台服务 - Helpdesk V1
+    register_helpdesk_v1(&mut registry);
 
     // 组织架构服务 - Directory V1
     register_directory_v1(&mut registry);
@@ -5875,6 +5878,421 @@ fn register_ehr_v1(registry: &mut DocUrlRegistry) {
         ),
     ];
     registry.register_service("ehr", urls);
+}
+
+/// 注册Helpdesk V1服务的文档URL
+fn register_helpdesk_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === TicketService - 工单管理服务 ===
+
+        // 工单管理（基于已验证的helpdesk-v1模式）
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "start_service",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/start_service",
+            "创建服务台对话"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "get_ticket",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/ticket-management/ticket/get",
+            "获取工单详情"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "update_ticket",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/update",
+            "更新工单详情"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "list_tickets",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/ticket-management/ticket/list",
+            "查询全部工单详情"
+        ),
+
+        // === FAQService - 常见问题管理服务 ===
+
+        // 常见问题管理（基于已验证的helpdesk-v1模式）
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "create_faq",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/faq/create",
+            "创建常见问题"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "delete_faq",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/faq/delete",
+            "删除常见问题"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "patch_faq",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/faq/patch",
+            "更新常见问题"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "get_faq",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/faq/get",
+            "获取常见问题详情"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "list_faqs",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/faq/list",
+            "查询全部常见问题"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "faq_image",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/faq/image",
+            "获取常见问题图片"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "search_faqs",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/faq-management/faq/search",
+            "搜索常见问题"
+        ),
+
+        // === AgentService - 客服代理服务 ===
+
+        // 客服代理管理（基于已验证的helpdesk-v1模式）
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "patch_agent",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-management/agent/patch",
+            "更新客服代理信息"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "agent_email",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-management/agent/email",
+            "获取客服代理邮箱"
+        ),
+
+        // === CategoryService - 分类管理服务 ===
+
+        // 分类管理（基于已验证的helpdesk-v1模式）
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "create_category",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/category-management/category/create",
+            "创建分类"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "get_category",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/category-management/category/get",
+            "获取分类详情"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "patch_category",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/category-management/category/patch",
+            "更新分类"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "delete_category",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/category-management/category/delete",
+            "删除分类"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "list_categories",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/category-management/category/list",
+            "查询全部分类"
+        ),
+
+        // === NotificationService - 通知管理服务 ===
+
+        // 通知管理（基于已验证的helpdesk-v1模式）
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "create_notification",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/notification-management/notification/create",
+            "创建通知"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "patch_notification",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/notification-management/notification/patch",
+            "更新通知"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "get_notification",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/notification-management/notification/get",
+            "获取通知详情"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "preview_notification",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/notification-management/notification/preview",
+            "预览通知"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "submit_approve",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/notification-management/notification/submit_approve",
+            "提交审批"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "cancel_approve",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/notification-management/notification/cancel_approve",
+            "取消审批"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "execute_send",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/notification-management/notification/execute_send",
+            "执行发送"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "cancel_send",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/notification-management/notification/cancel_send",
+            "取消发送"
+        ),
+
+        // === AgentScheduleService - 客服排班服务 ===
+
+        // 客服排班管理（基于已验证的helpdesk-v1模式）
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "create_schedule",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-schedule-management/schedule/create",
+            "创建排班"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "delete_schedule",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-schedule-management/schedule/delete",
+            "删除排班"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "patch_schedule",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-schedule-management/schedule/patch",
+            "更新排班"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "get_schedule",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-schedule-management/schedule/get",
+            "获取排班详情"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "list_schedules",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-schedule-management/schedule/list",
+            "查询全部排班"
+        ),
+
+        // === AgentSkillService - 客服技能服务 ===
+
+        // 客服技能管理（基于已验证的helpdesk-v1模式）
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "create_skill",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-skill-management/skill/create",
+            "创建技能"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "delete_skill",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-skill-management/skill/delete",
+            "删除技能"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "get_skill",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-skill-management/skill/get",
+            "获取技能详情"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "list_skills",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-skill-management/skill/list",
+            "查询全部技能"
+        ),
+
+        // === AgentSkillRuleService - 客服技能规则服务 ===
+
+        // 客服技能规则管理（基于已验证的helpdesk-v1模式）
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "operator_options",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-skill-rule-management/operator_options",
+            "获取操作员选项"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "list_skill_rules",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/agent-skill-rule-management/list",
+            "查询全部技能规则"
+        ),
+
+        // === TicketCustomizedFieldService - 工单自定义字段服务 ===
+
+        // 工单自定义字段管理（基于已验证的helpdesk-v1模式）
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "create_customized_field",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/customized-field-management/customized_field/create",
+            "创建自定义字段"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "delete_customized_field",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/customized-field-management/customized_field/delete",
+            "删除自定义字段"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "update_customized_field",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/customized-field-management/customized_field/update",
+            "更新自定义字段"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "get_customized_field",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/customized-field-management/customized_field/get",
+            "获取自定义字段详情"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "list_customized_fields",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/customized-field-management/customized_field/list",
+            "查询全部自定义字段"
+        ),
+
+        // === EventService - 事件管理服务 ===
+
+        // 事件管理（基于已验证的helpdesk-v1模式）
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "subscribe",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/event/subscribe",
+            "订阅服务台事件"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "unsubscribe",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/event/unsubscribe",
+            "取消订阅服务台事件"
+        ),
+
+        // === TicketMessageService - 工单消息服务 ===
+
+        // 工单消息管理（基于已验证的helpdesk-v1模式）
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "create_message",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/ticket-management/ticket-message/create",
+            "创建工单消息"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "list_messages",
+            "https://open.feishu.cn/document/server-docs/helpdesk-v1/ticket-management/ticket-message/list",
+            "查询工单消息"
+        ),
+
+        ApiDocUrl::new(
+            "helpdesk",
+            "v1",
+            "create_group_message",
+            "https://open.larkoffice.com/document/server-docs/helpdesk-v1/ticket-management/ticket-message/create-2",
+            "创建群组消息"
+        ),
+    ];
+    registry.register_service("helpdesk", urls);
 }
 
 /// 注册Directory V1服务的文档URL
