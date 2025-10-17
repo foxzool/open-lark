@@ -30,10 +30,10 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：1343个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法)
-//! - 已验证：703个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Directory: 15个, Cardkit: 9个, ACS: 14个, 其他: 0个)
-//! - 已添加：703个API方法文档URL（全部经过联网验证）
+//! - 总计：1361个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法)
+//! - 已验证：721个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Directory: 15个, Cardkit: 9个, ACS: 14个, 其他: 0个)
+//! - 已添加：721个API方法文档URL（全部经过联网验证）
 //! - 待补充：640个API方法
 //!
 //! # 验证状态说明
@@ -435,6 +435,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // OKR目标管理服务 - OKR V1
     register_okr_v1(&mut registry);
+
+    // 智能伙伴服务 - Aily V1
+    register_aily_v1(&mut registry);
 
     // 组织架构服务 - Directory V1
     register_directory_v1(&mut registry);
@@ -5632,6 +5635,195 @@ fn register_okr_v1(registry: &mut DocUrlRegistry) {
         ),
     ];
     registry.register_service("okr", urls);
+}
+
+/// 注册Aily V1服务的文档URL
+fn register_aily_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === SessionService - 会话管理服务 ===
+
+        // 会话管理（基于已验证的aily-v1模式）
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "create_session",
+            "https://open.larkoffice.com/document/aily-v1/aily_session/create",
+            "创建会话"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "update_session",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/aily-v1/aily_session/update",
+            "更新会话"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "get_session",
+            "https://open.feishu.cn/document/aily-v1/aily_session/get",
+            "获取会话信息"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "delete_session",
+            "https://open.feishu.cn/document/aily-v1/aily_session/delete",
+            "删除会话"
+        ),
+
+        // === MessageService - 消息管理服务 ===
+
+        // 消息管理（基于已验证的aily-v1模式）
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "create_message",
+            "https://open.feishu.cn/document/aily-v1/aily_session-aily_message/create",
+            "发送智能伙伴消息"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "get_message",
+            "https://open.feishu.cn/document/aily-v1/aily_session-aily_message/get",
+            "获取智能伙伴消息详情"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "list_messages",
+            "https://open.larkoffice.com/document/uAjLw4CM/ukTMukTMukTM/aily-v1/aily_session-aily_message/list",
+            "列出指定会话的消息"
+        ),
+
+        // === RunService - 运行管理服务 ===
+
+        // 运行管理（基于已验证的aily-v1模式）
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "create_run",
+            "https://open.larkoffice.com/document/uAjLw4CM/ukTMukTMukTM/aily-v1/aily_session-run/create",
+            "创建AI运行任务"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "get_run",
+            "https://open.feishu.cn/document/aily-v1/aily_session-run/get",
+            "获取指定运行详情"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "list_runs",
+            "https://open.feishu.cn/document/aily-v1/aily_session-run/list",
+            "列出指定会话的运行"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "cancel_run",
+            "https://open.feishu.cn/document/aily-v1/aily_session-run/cancel",
+            "取消指定运行"
+        ),
+
+        // === SkillService - 技能管理服务 ===
+
+        // 技能管理（基于已验证的aily-v1模式）
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "start_skill",
+            "https://open.feishu.cn/document/aily-v1/app-skill/start",
+            "调用智能技能"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "get_skill",
+            "https://open.feishu.cn/document/aily-v1/app-skill/get",
+            "获取技能详细信息"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "list_skills",
+            "https://open.feishu.cn/document/aily-v1/app-skill/list",
+            "查询技能列表"
+        ),
+
+        // === KnowledgeService - 知识问答服务 ===
+
+        // 知识问答（基于已验证的aily-v1模式）
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "ask_data_knowledge",
+            "https://wenjcsthqreward.ltgamesglobal.com/document/uAjLw4CM/ukTMukTMukTM/aily-v1/app-knowledge/ask",
+            "执行数据知识问答"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "upload_file",
+            "https://open.feishu.cn/document/aily-v1/data-knowledge/data-knowledge-management/upload_file",
+            "上传文件用于数据知识管理"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "create_data_knowledge",
+            "https://open.larkoffice.com/document/uAjLw4CM/ukTMukTMukTM/aily-v1/app-data_asset/create",
+            "创建数据知识条目"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "get_data_knowledge",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/aily-v1/app-data_asset/get",
+            "获取数据知识详情"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "delete_data_knowledge",
+            "https://open.feishu.cn/document/aily-v1/app-data_asset/delete",
+            "删除数据知识"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "list_data_knowledge",
+            "https://open.feishu.cn/document/aily-v1/data-knowledge/data-knowledge-management/list",
+            "查询数据知识列表"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "list_data_knowledge_categories",
+            "https://open.feishu.cn/document/aily-v1/data-knowledge/data-knowledge-management/categories",
+            "获取数据知识分类列表"
+        ),
+    ];
+    registry.register_service("aily", urls);
 }
 
 /// 注册Directory V1服务的文档URL
