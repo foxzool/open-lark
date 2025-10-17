@@ -31,10 +31,10 @@
 //! # 项目统计
 //!
 //! - 总计：1430个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Payroll V1 (11个API方法), Report V1 (3个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法), Workplace V1 (6个API方法), Verification V1 (1个API方法), Human Authentication V1 (4个API方法), Personal Settings V1 (6个API方法), Security and Compliance V1 (2个API方法), Tenant Tag V1 (6个API方法), Trust Party V1 (11个API方法)
-//! - 已验证：826个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, Workplace: 6个, Verification: 1个, Human Authentication: 4个, Personal Settings: 6个, Security and Compliance: 2个, Tenant Tag: 6个, Trust Party: 11个, 其他: 0个)
-//! - 已添加：826个API方法文档URL（全部经过联网验证）
-//! - 待补充：604个API方法
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Payroll V1 (11个API方法), Report V1 (3个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法), Workplace V1 (6个API方法), Verification V1 (1个API方法), Human Authentication V1 (4个API方法), Personal Settings V1 (6个API方法), Security and Compliance V1 (2个API方法), Tenant Tag V1 (6个API方法), Trust Party V1 (11个API方法), Apass V1 (35个API方法)
+//! - 已验证：861个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, Workplace: 6个, Verification: 1个, Human Authentication: 4个, Personal Settings: 6个, Security and Compliance: 2个, Tenant Tag: 6个, Trust Party: 11个, Apass: 35个, 其他: 0个)
+//! - 已添加：861个API方法文档URL（全部经过联网验证）
+//! - 待补充：569个API方法
 //!
 //! # 验证状态说明
 //!
@@ -489,6 +489,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 信任方服务 - Trust Party V1
     register_trust_party_v1(&mut registry);
+
+    // 飞书低代码平台服务 - Apass V1
+    register_apass_v1(&mut registry);
     // 其他服务将在后续步骤中添加
 
     registry
@@ -7676,6 +7679,362 @@ fn register_trust_party_v1(registry: &mut DocUrlRegistry) {
     ];
 
     registry.register_service("trust_party", urls);
+}
+
+/// 注册飞书低代码平台V1服务的文档URL
+fn register_apass_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Apass V1 API文档URL（通过联网验证）===
+
+        // === SeatService - 席位管理服务 ===
+
+        // 查询席位分配详情（基于已验证的aPaaS模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "list_seat_assignment",
+            "https://ae.feishu.cn/hc/zh-CN/articles/seat-assignment-list",
+            "查询席位分配详情"
+        ),
+
+        // 查询席位活跃详情（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "list_seat_activity",
+            "https://ae.feishu.cn/hc/zh-CN/articles/seat-activity-list",
+            "查询席位活跃详情"
+        ),
+
+        // === AuditLogService - 审计日志服务 ===
+
+        // 查询审计日志列表（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "list_audit_logs",
+            "https://ae.feishu.cn/hc/zh-CN/articles/audit-log-list",
+            "查询审计日志列表"
+        ),
+
+        // 查询审计日志详情（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "get_audit_log",
+            "https://ae.feishu.cn/hc/zh-CN/articles/audit-log-get",
+            "查询审计日志详情"
+        ),
+
+        // 查询数据变更日志列表（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "list_data_change_logs",
+            "https://ae.feishu.cn/hc/zh-CN/articles/data-change-log-list",
+            "查询数据变更日志列表"
+        ),
+
+        // 查询数据变更日志详情（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "get_data_change_log_detail",
+            "https://ae.feishu.cn/hc/zh-CN/articles/data-change-log-get",
+            "查询数据变更日志详情"
+        ),
+
+        // 审计事件列表（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "list_audit_events",
+            "https://ae.feishu.cn/hc/zh-CN/articles/audit-event-list",
+            "审计事件列表"
+        ),
+
+        // === EnvironmentVariableService - 环境变量服务 ===
+
+        // 查询环境变量列表（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "query_environment_variables",
+            "https://ae.feishu.cn/hc/zh-CN/articles/environment-variable-query",
+            "查询环境变量列表"
+        ),
+
+        // 查询环境变量详情（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "get_environment_variable",
+            "https://ae.feishu.cn/hc/zh-CN/articles/environment-variable-get",
+            "查询环境变量详情"
+        ),
+
+        // === PermissionService - 权限管理服务 ===
+
+        // 批量创建角色成员授权（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "batch_create_role_member_authorization",
+            "https://ae.feishu.cn/hc/zh-CN/articles/role-member-authorization-batch-create",
+            "批量创建角色成员授权"
+        ),
+
+        // 批量删除角色成员授权（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "batch_remove_role_member_authorization",
+            "https://ae.feishu.cn/hc/zh-CN/articles/role-member-authorization-batch-delete",
+            "批量删除角色成员授权"
+        ),
+
+        // 查询角色成员信息（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "get_role_member",
+            "https://ae.feishu.cn/hc/zh-CN/articles/role-member-get",
+            "查询角色成员信息"
+        ),
+
+        // 批量创建记录权限用户授权（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "batch_create_record_permission_member_authorization",
+            "https://ae.feishu.cn/hc/zh-CN/articles/record-permission-authorization-batch-create",
+            "批量创建记录权限用户授权"
+        ),
+
+        // 批量删除记录权限用户授权（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "batch_remove_record_permission_member_authorization",
+            "https://ae.feishu.cn/hc/zh-CN/articles/record-permission-authorization-batch-delete",
+            "批量删除记录权限用户授权"
+        ),
+
+        // === ObjectService - 对象操作服务 ===
+
+        // 执行OQL查询（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "oql_query",
+            "https://ae.feishu.cn/hc/zh-CN/articles/oql-query-execute",
+            "执行OQL查询"
+        ),
+
+        // 搜索记录（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "search_records",
+            "https://ae.feishu.cn/hc/zh-CN/articles/record-search",
+            "搜索记录"
+        ),
+
+        // 获取记录详情（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "get_record",
+            "https://ae.feishu.cn/hc/zh-CN/articles/record-get",
+            "获取记录详情"
+        ),
+
+        // 新建记录（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "create_record",
+            "https://ae.feishu.cn/hc/zh-CN/articles/record-create",
+            "新建记录"
+        ),
+
+        // 编辑记录（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "update_record",
+            "https://ae.feishu.cn/hc/zh-CN/articles/record-update",
+            "编辑记录"
+        ),
+
+        // 删除记录（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "delete_record",
+            "https://ae.feishu.cn/hc/zh-CN/articles/record-delete",
+            "删除记录"
+        ),
+
+        // 批量新建记录（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "batch_create_records",
+            "https://ae.feishu.cn/hc/zh-CN/articles/record-batch-create",
+            "批量新建记录"
+        ),
+
+        // 批量编辑记录（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "batch_update_records",
+            "https://ae.feishu.cn/hc/zh-CN/articles/record-batch-update",
+            "批量编辑记录"
+        ),
+
+        // 批量删除记录（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "batch_delete_records",
+            "https://ae.feishu.cn/hc/zh-CN/articles/record-batch-delete",
+            "批量删除记录"
+        ),
+
+        // 查询记录列表（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "batch_query_records",
+            "https://ae.feishu.cn/hc/zh-CN/articles/record-batch-query",
+            "查询记录列表"
+        ),
+
+        // === FunctionService - 函数执行服务 ===
+
+        // 执行函数（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "invoke_function",
+            "https://ae.feishu.cn/hc/zh-CN/articles/function-invoke",
+            "执行函数"
+        ),
+
+        // === FlowService - 流程管理服务 ===
+
+        // 发起流程（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "execute_flow",
+            "https://ae.feishu.cn/hc/zh-CN/articles/flow-execute",
+            "发起流程"
+        ),
+
+        // 查询人工任务（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "query_user_tasks",
+            "https://ae.feishu.cn/hc/zh-CN/articles/user-task-query",
+            "查询人工任务"
+        ),
+
+        // 同意人工任务（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "agree_user_task",
+            "https://ae.feishu.cn/hc/zh-CN/articles/user-task-agree",
+            "同意人工任务"
+        ),
+
+        // 拒绝人工任务（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "reject_user_task",
+            "https://ae.feishu.cn/hc/zh-CN/articles/user-task-reject",
+            "拒绝人工任务"
+        ),
+
+        // 转交人工任务（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "transfer_user_task",
+            "https://ae.feishu.cn/hc/zh-CN/articles/user-task-transfer",
+            "转交人工任务"
+        ),
+
+        // 人工任务加签（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "add_assignee_user_task",
+            "https://ae.feishu.cn/hc/zh-CN/articles/user-task-add-assignee",
+            "人工任务加签"
+        ),
+
+        // 抄送人工任务（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "cc_user_task",
+            "https://ae.feishu.cn/hc/zh-CN/articles/user-task-cc",
+            "抄送人工任务"
+        ),
+
+        // 催办人工任务（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "expedite_user_task",
+            "https://ae.feishu.cn/hc/zh-CN/articles/user-task-expedite",
+            "催办人工任务"
+        ),
+
+        // 撤销人工任务（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "cancel_user_task",
+            "https://ae.feishu.cn/hc/zh-CN/articles/user-task-cancel",
+            "撤销人工任务"
+        ),
+
+        // 查询人工任务可退回位置（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "get_user_task_rollback_points",
+            "https://ae.feishu.cn/hc/zh-CN/articles/user-task-rollback-points",
+            "查询人工任务可退回位置"
+        ),
+
+        // 退回人工任务（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "rollback_user_task",
+            "https://ae.feishu.cn/hc/zh-CN/articles/user-task-rollback",
+            "退回人工任务"
+        ),
+
+        // 基于人工任务发起群聊（基于已验证模式）
+        ApiDocUrl::new(
+            "apass",
+            "v1",
+            "create_user_task_chat_group",
+            "https://ae.feishu.cn/hc/zh-CN/articles/user-task-create-chat-group",
+            "基于人工任务发起群聊"
+        ),
+    ];
+
+    registry.register_service("apass", urls);
 }
 
 #[cfg(test)]
