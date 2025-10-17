@@ -31,10 +31,10 @@
 //! # 项目统计
 //!
 //! - 总计：986个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (16个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法)
-//! - 已验证：194个API (Drive: 11个, Contact: 3个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, 其他: 0个)
-//! - 已添加：241个API方法文档URL（全部经过联网验证）
-//! - 待补充：745个API方法
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (44个API方法)
+//! - 已验证：356个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 44个, 其他: 0个)
+//! - 已添加：356个API方法文档URL（全部经过联网验证）
+//! - 待补充：630个API方法
 //!
 //! # 验证状态说明
 //!
