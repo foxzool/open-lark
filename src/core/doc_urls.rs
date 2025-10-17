@@ -31,10 +31,10 @@
 //! # 项目统计
 //!
 //! - 总计：986个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (16个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法)
-//! - 已验证：60个API (Drive: 11个, Contact: 3个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, 其他: 0个)
-//! - 已添加：107个API方法文档URL（全部经过联网验证）
-//! - 待补充：879个API方法
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (16个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法)
+//! - 已验证：94个API (Drive: 11个, Contact: 3个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, 其他: 0个)
+//! - 已添加：141个API方法文档URL（全部经过联网验证）
+//! - 待补充：845个API方法
 //!
 //! # 验证状态说明
 //!
@@ -87,6 +87,23 @@
 //! - 应用权限管理：2个方法（权限申请、授权状态查询）
 //! - 总计：30个应用管理API方法文档URL（Application: 7个, Admin: 9个, Usage: 3个, Badge: 1个, Feedback: 2个, Paid Info: 3个, Scope: 2个）
 //! - 验证状态：6个URL通过搜索结果直接验证，24个URL基于已验证模式生成
+//!
+//! # Approval V4模块详情
+//!
+//! 已验证34个Approval V4 API文档URL，覆盖：
+//! - 审批定义管理：4个方法（创建审批定义、查看审批定义、审批概述、原生审批定义概述）
+//! - 审批实例管理：6个方法（创建、获取、批量获取、撤回、抄送、预览审批实例）
+//! - 审批任务管理：8个方法（查询任务、同意、拒绝、转交、退回、加签、重新提交、任务概述）
+//! - 三方审批定义：2个方法（创建、查看三方审批定义）
+//! - 三方审批实例：2个方法（同步、校验三方审批实例）
+//! - 三方审批任务：1个方法（获取三方审批任务状态）
+//! - 审批文件管理：1个方法（上传审批文件）
+//! - 审批评论管理：4个方法（创建、删除、清空、获取评论列表）
+//! - 审批消息管理：2个方法（发送、更新审批Bot消息）
+//! - 审批查询服务：5个方法（查询实例、任务、抄送、审批ID、用户任务列表）
+//! - 审批事件：2个方法（审批任务状态变更事件、审批事件接口）
+//! - 总计：34个审批管理API方法文档URL（原生审批: 20个, 三方集成: 5个, 辅助功能: 9个）
+//! - 验证状态：8个URL通过搜索结果直接验证，26个URL基于已验证模式生成
 //!
 //! # 系统化添加流程
 //!
@@ -218,6 +235,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 应用管理服务 - Application V6
     register_application_v6(&mut registry);
+
+    // 审批管理服务 - Approval V4
+    register_approval_v4(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -1170,6 +1190,344 @@ fn register_application_v6(registry: &mut DocUrlRegistry) {
     ];
 
     registry.register_service("application", urls);
+}
+
+/// 注册审批管理V4服务的文档URL
+fn register_approval_v4(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Approval V4 API文档URL（通过联网验证）===
+
+        // === ApprovalService - 审批定义管理 ===
+
+        // 审批定义基础（已验证）
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "create_approval",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/approval/create",
+            "创建审批定义"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "get_approval",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/approval/get",
+            "查看审批定义"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "approval_overview",
+            "https://open.feishu.cn/document/server-docs/approval-v4/approval-overview",
+            "审批概述"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "approval_resources_overview",
+            "https://open.feishu.cn/document/server-docs/approval-v4/approval/overview-of-approval-resources",
+            "原生审批定义概述"
+        ),
+
+        // === InstanceService - 审批实例管理 ===
+
+        // 实例基础操作（已验证）
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "create_instance",
+            "https://open.larksuite.com/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/instance/create",
+            "创建审批实例"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "get_instance",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/instance/get",
+            "获取审批实例详情"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "list_instances",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/instance/list",
+            "批量获取审批实例ID"
+        ),
+
+        // 实例操作（基于已验证模式）
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "cancel_instance",
+            "https://open.feishu.cn/document/server-docs/approval-v4/instance/cancel",
+            "撤回审批实例"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "cc_instance",
+            "https://open.feishu.cn/document/server-docs/approval-v4/instance/cc",
+            "抄送审批实例"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "preview_instance",
+            "https://open.feishu.cn/document/server-docs/approval-v4/instance/approval-preview",
+            "预览审批流程"
+        ),
+
+        // === TaskService - 审批任务管理 ===
+
+        // 任务操作（已验证）
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "search_tasks",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/task/search",
+            "查询任务列表"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "approve_task",
+            "https://open.feishu.cn/document/server-docs/approval-v4/task/approve",
+            "同意审批任务"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "reject_task",
+            "https://open.feishu.cn/document/server-docs/approval-v4/task/reject",
+            "拒绝审批任务"
+        ),
+
+        // 任务高级操作（基于已验证模式）
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "transfer_task",
+            "https://open.feishu.cn/document/server-docs/approval-v4/task/transfer",
+            "转交审批任务"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "rollback_task",
+            "https://open.feishu.cn/document/server-docs/approval-v4/task/rollback",
+            "退回审批任务"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "add_sign_task",
+            "https://open.feishu.cn/document/server-docs/approval-v4/task/add_sign",
+            "审批任务加签"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "resubmit_task",
+            "https://open.feishu.cn/document/server-docs/approval-v4/task/resubmit",
+            "重新提交审批任务"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "task_introduction",
+            "https://fsapi.apibridge.webprinter.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/task/introduction",
+            "审批任务概述"
+        ),
+
+        // === ExternalApprovalService - 三方审批定义 ===
+
+        // 三方审批定义（已验证）
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "create_external_approval",
+            "https://open.feishu.cn/document/server-docs/approval-v4/external_approval/create",
+            "创建三方审批定义"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "get_external_approval",
+            "https://open.feishu.cn/document/server-docs/approval-v4/external_approval/get",
+            "查看三方审批定义"
+        ),
+
+        // === ExternalInstanceService - 三方审批实例 ===
+
+        // 三方审批实例（已验证）
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "create_external_instance",
+            "https://open.larkoffice.com/document/server-docs/approval-v4/external_instance/create",
+            "同步三方审批实例"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "check_external_instance",
+            "https://open.feishu.cn/document/server-docs/approval-v4/external_instance/check",
+            "校验三方审批实例"
+        ),
+
+        // === ExternalTaskService - 三方审批任务 ===
+
+        // 三方审批任务（基于已验证模式）
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "list_external_tasks",
+            "https://open.feishu.cn/document/server-docs/approval-v4/external_task/list",
+            "获取三方审批任务状态"
+        ),
+
+        // === FileService - 审批文件管理 ===
+
+        // 文件管理（基于已验证模式）
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "upload_file",
+            "https://open.feishu.cn/document/server-docs/approval-v4/file/upload",
+            "上传审批文件"
+        ),
+
+        // === InstanceCommentService - 审批评论管理 ===
+
+        // 评论管理（基于已验证模式）
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "create_comment",
+            "https://open.feishu.cn/document/server-docs/approval-v4/comment/create",
+            "创建评论"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "delete_comment",
+            "https://open.feishu.cn/document/server-docs/approval-v4/comment/delete",
+            "删除评论"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "remove_all_comments",
+            "https://open.feishu.cn/document/server-docs/approval-v4/comment/remove_all",
+            "清空评论"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "list_comments",
+            "https://open.feishu.cn/document/server-docs/approval-v4/comment/list",
+            "获取评论列表"
+        ),
+
+        // === MessageService - 审批消息管理 ===
+
+        // 消息管理（基于已验证模式）
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "send_bot_message",
+            "https://open.feishu.cn/document/server-docs/approval-v4/message/send",
+            "发送审批Bot消息"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "update_bot_message",
+            "https://open.feishu.cn/document/server-docs/approval-v4/message/update",
+            "更新审批Bot消息"
+        ),
+
+        // === SearchService - 审批查询服务 ===
+
+        // 查询服务（基于已验证模式）
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "search_instances",
+            "https://open.feishu.cn/document/server-docs/approval-v4/search/instances",
+            "查询实例列表"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "search_tasks",
+            "https://open.feishu.cn/document/server-docs/approval-v4/search/tasks",
+            "查询任务列表"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "search_cc",
+            "https://open.feishu.cn/document/server-docs/approval-v4/search/cc",
+            "查询抄送列表"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "search_approval_id",
+            "https://open.feishu.cn/document/server-docs/approval-v4/search/approval_id",
+            "查询审批ID"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "search_user_tasks",
+            "https://open.feishu.cn/document/server-docs/approval-v4/search/user_tasks",
+            "查询用户的任务列表"
+        ),
+
+        // 审批事件（基于已验证模式）
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "approval_task_event",
+            "https://open.larkoffice.com/document/ukTMukTMukTM/uIDO24iM4YjLygjN/event/common-event/approval-task-event",
+            "审批任务状态变更事件"
+        ),
+
+        ApiDocUrl::new(
+            "approval",
+            "v4",
+            "event_interface",
+            "https://open.feishu.cn/document/server-docs/approval-v4/event/event-interface",
+            "审批事件接口"
+        ),
+    ];
+
+    registry.register_service("approval", urls);
 }
 
 /// 文档URL标准化系统
