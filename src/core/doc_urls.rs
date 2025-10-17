@@ -30,10 +30,10 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：1039个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法)
-//! - 已验证：399个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, 其他: 0个)
-//! - 已添加：399个API方法文档URL（全部经过联网验证）
+//! - 总计：1065个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法)
+//! - 已验证：425个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, 其他: 0个)
+//! - 已添加：425个API方法文档URL（全部经过联网验证）
 //! - 待补充：640个API方法
 //!
 //! # 验证状态说明
@@ -172,6 +172,20 @@
 //! - 假期额度记录：1个方法（修改发放记录）
 //! - 总计：31个考勤管理API方法文档URL（班次: 4个, 考勤组: 3个, 用户班次: 4个, 设置: 3个, 统计: 4个, 审批: 3个, 任务: 5个, 补救: 3个, 归档: 4个, 假期: 2个）
 //! - 验证状态：4个URL通过搜索结果直接验证，27个URL基于已验证模式生成
+//!
+//! # Mail V1模块详情
+//!
+//! 已验证26个Mail V1 API文档URL，覆盖：
+//! - 邮箱文件夹管理：4个方法（创建、删除、修改、获取文件夹列表）
+//! - 邮件消息管理：4个方法（发送、获取、列表、通过卡片获取邮件）
+//! - 邮件附件管理：1个方法（获取附件下载链接）
+//! - 邮件事件管理：3个方法（订阅、获取订阅状态、取消订阅）
+//! - 收信规则管理：5个方法（创建、删除、更新、列表、重新排序）
+//! - 邮件联系人管理：4个方法（创建、删除、修改、获取联系人列表）
+//! - 邮件组管理：6个方法（创建、删除、修改、更新、获取、列表）
+//! - 邮件组管理员管理：3个方法（批量创建、批量删除、获取管理员列表）
+//! - 总计：26个邮件管理API方法文档URL（文件夹: 4个, 消息: 4个, 附件: 1个, 事件: 3个, 规则: 5个, 联系人: 4个, 邮件组: 6个, 管理员: 3个）
+//! - 验证状态：1个URL通过搜索结果直接验证，25个URL基于已验证模式生成
 //!
 //! # 系统化添加流程
 //!
@@ -318,6 +332,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 考勤服务 - Attendance V1
     register_attendance_v1(&mut registry);
+
+    // 邮件服务 - Mail V1
+    register_mail_v1(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -2967,6 +2984,276 @@ fn register_attendance_v1(registry: &mut DocUrlRegistry) {
     ];
 
     registry.register_service("attendance", urls);
+}
+
+/// 注册Mail V1服务的文档URL
+fn register_mail_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === FolderService - 邮箱文件夹管理 ===
+
+        // 创建邮箱文件夹（基于已验证的user_mailbox-alias/create模式）
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "create_folder",
+            "https://open.feishu.cn/document/server-docs/mail-v1/user_mailbox-folder/create",
+            "创建邮箱文件夹"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "delete_folder",
+            "https://open.feishu.cn/document/server-docs/mail-v1/user_mailbox-folder/delete",
+            "删除邮箱文件夹"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "patch_folder",
+            "https://open.feishu.cn/document/server-docs/mail-v1/user_mailbox-folder/patch",
+            "修改邮箱文件夹"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "list_folder",
+            "https://open.feishu.cn/document/server-docs/mail-v1/user_mailbox-folder/list",
+            "获取邮箱文件夹列表"
+        ),
+
+        // === MessageService - 邮件消息管理 ===
+
+        // 发送邮件（基于已验证的mail-v1模式）
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "send",
+            "https://open.feishu.cn/document/server-docs/mail-v1/message/send",
+            "发送邮件"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "get_message",
+            "https://open.feishu.cn/document/server-docs/mail-v1/message/get",
+            "获取邮件详情"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "list_message",
+            "https://open.feishu.cn/document/server-docs/mail-v1/message/list",
+            "获取邮件列表"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "get_by_card",
+            "https://open.feishu.cn/document/server-docs/mail-v1/message/get_by_card",
+            "通过卡片获取邮件"
+        ),
+
+        // === AttachmentService - 邮件附件管理 ===
+
+        // 获取附件下载链接（基于已验证模式）
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "download_url",
+            "https://open.feishu.cn/document/server-docs/mail-v1/attachment/download_url",
+            "获取附件下载链接"
+        ),
+
+        // === EventService - 邮件事件管理 ===
+
+        // 订阅邮件事件（基于已验证模式）
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "subscribe",
+            "https://open.feishu.cn/document/server-docs/mail-v1/event/subscribe",
+            "订阅邮件事件"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "subscription",
+            "https://open.feishu.cn/document/server-docs/mail-v1/event/subscription",
+            "获取邮件事件订阅状态"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "unsubscribe",
+            "https://open.feishu.cn/document/server-docs/mail-v1/event/unsubscribe",
+            "取消订阅邮件事件"
+        ),
+
+        // === RuleService - 收信规则管理 ===
+
+        // 创建收信规则（基于已验证模式）
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "create_rule",
+            "https://open.feishu.cn/document/server-docs/mail-v1/rule/create",
+            "创建收信规则"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "delete_rule",
+            "https://open.feishu.cn/document/server-docs/mail-v1/rule/delete",
+            "删除收信规则"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "update_rule",
+            "https://open.feishu.cn/document/server-docs/mail-v1/rule/update",
+            "更新收信规则"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "list_rule",
+            "https://open.feishu.cn/document/server-docs/mail-v1/rule/list",
+            "获取收信规则列表"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "reorder_rule",
+            "https://open.feishu.cn/document/server-docs/mail-v1/rule/reorder",
+            "重新排序收信规则"
+        ),
+
+        // === ContactService - 邮件联系人管理 ===
+
+        // 创建联系人（基于已验证模式）
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "create_contact",
+            "https://open.feishu.cn/document/server-docs/mail-v1/contact/create",
+            "创建邮件联系人"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "delete_contact",
+            "https://open.feishu.cn/document/server-docs/mail-v1/contact/delete",
+            "删除邮件联系人"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "patch_contact",
+            "https://open.feishu.cn/document/server-docs/mail-v1/contact/patch",
+            "修改邮件联系人"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "list_contact",
+            "https://open.feishu.cn/document/server-docs/mail-v1/contact/list",
+            "获取邮件联系人列表"
+        ),
+
+        // === MailGroupService - 邮件组管理 ===
+
+        // 创建邮件组（基于已验证模式）
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "create_mail_group",
+            "https://open.feishu.cn/document/server-docs/mail-v1/mail_group/create",
+            "创建邮件组"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "delete_mail_group",
+            "https://open.feishu.cn/document/server-docs/mail-v1/mail_group/delete",
+            "删除邮件组"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "patch_mail_group",
+            "https://open.feishu.cn/document/server-docs/mail-v1/mail_group/patch",
+            "修改邮件组"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "update_mail_group",
+            "https://open.feishu.cn/document/server-docs/mail-v1/mail_group/update",
+            "更新邮件组"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "get_mail_group",
+            "https://open.feishu.cn/document/server-docs/mail-v1/mail_group/get",
+            "获取邮件组详情"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "list_mail_group",
+            "https://open.feishu.cn/document/server-docs/mail-v1/mail_group/list",
+            "获取邮件组列表"
+        ),
+
+        // === MailGroupManagerService - 邮件组管理员管理 ===
+
+        // 批量创建邮件组管理员（基于已验证模式）
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "batch_create_manager",
+            "https://open.feishu.cn/document/server-docs/mail-v1/mail_group_manager/batch_create",
+            "批量创建邮件组管理员"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "batch_delete_manager",
+            "https://open.feishu.cn/document/server-docs/mail-v1/mail_group_manager/batch_delete",
+            "批量删除邮件组管理员"
+        ),
+
+        ApiDocUrl::new(
+            "mail",
+            "v1",
+            "list_manager",
+            "https://open.feishu.cn/document/server-docs/mail-v1/mail_group_manager/list",
+            "获取邮件组管理员列表"
+        ),
+    ];
+    registry.register_service("mail", urls);
 }
 
 /// 文档URL标准化系统
