@@ -30,10 +30,10 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：1320个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Directory V1 (15个API方法)
-//! - 已验证：680个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Directory: 15个, 其他: 0个)
-//! - 已添加：680个API方法文档URL（全部经过联网验证）
+//! - 总计：1329个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法)
+//! - 已验证：689个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Directory: 15个, Cardkit: 9个, 其他: 0个)
+//! - 已添加：689个API方法文档URL（全部经过联网验证）
 //! - 待补充：640个API方法
 //!
 //! # 验证状态说明
@@ -438,6 +438,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 组织架构服务 - Directory V1
     register_directory_v1(&mut registry);
+
+    // 卡片组件服务 - Cardkit V1
+    register_cardkit_v1(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -5761,6 +5764,90 @@ fn register_directory_v1(registry: &mut DocUrlRegistry) {
         ),
     ];
     registry.register_service("directory", urls);
+}
+
+/// 注册Cardkit V1服务的文档URL
+fn register_cardkit_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === CardService - 卡片管理服务 ===
+
+        // 卡片创建和管理
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "create_card",
+            "https://open.feishu.cn/document/cardkit-v1/card/create",
+            "创建卡片"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "update_card",
+            "https://open.feishu.cn/document/cardkit-v1/card/update",
+            "更新卡片"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "batch_update_card",
+            "https://open.feishu.cn/document/cardkit-v1/card/batch_update",
+            "批量更新卡片"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "card_settings",
+            "https://open.feishu.cn/document/cardkit-v1/card/settings",
+            "卡片设置"
+        ),
+
+        // === CardElementService - 卡片元素管理服务 ===
+
+        // 卡片元素操作
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "create_card_element",
+            "https://open.feishu.cn/document/cardkit-v1/card-element/create",
+            "创建卡片元素"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "card_element_content",
+            "https://open.feishu.cn/document/cardkit-v1/card-element/content",
+            "元素内容管理"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "update_card_element",
+            "https://open.feishu.cn/document/cardkit-v1/card-element/update",
+            "更新卡片元素"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "patch_card_element",
+            "https://open.feishu.cn/document/cardkit-v1/card-element/patch",
+            "修改卡片元素"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "delete_card_element",
+            "https://open.feishu.cn/document/cardkit-v1/card-element/delete",
+            "删除卡片元素"
+        ),
+    ];
+    registry.register_service("cardkit", urls);
 }
 
 /// 文档URL标准化系统
