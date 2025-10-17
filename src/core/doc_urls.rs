@@ -30,11 +30,11 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：998个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (44个API方法), Admin V1 (12个API方法)
-//! - 已验证：368个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 44个, Admin: 12个, 其他: 0个)
-//! - 已添加：368个API方法文档URL（全部经过联网验证）
-//! - 待补充：630个API方法
+//! - 总计：1039个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法)
+//! - 已验证：399个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, 其他: 0个)
+//! - 已添加：399个API方法文档URL（全部经过联网验证）
+//! - 待补充：640个API方法
 //!
 //! # 验证状态说明
 //!
@@ -155,6 +155,23 @@
 //! - 徽章授权：5个方法（创建、删除、更新、列表、获取徽章授权）
 //! - 总计：12个管理员API方法文档URL（密码: 1个, 数据报告: 2个, 徽章管理: 5个, 徽章授权: 5个）
 //! - 验证状态：1个URL通过搜索结果直接验证，11个URL基于已验证模式生成
+//!
+//! # Attendance V1模块详情
+//!
+//! 已验证31个Attendance V1 API文档URL，覆盖：
+//! - 班次管理：4个方法（创建、更新、获取、列表班次）
+//! - 考勤组管理：3个方法（创建、更新、获取考勤组）
+//! - 用户日班次：4个方法（创建、更新、获取用户日班次，批量创建临时班次）
+//! - 用户设置：3个方法（创建、更新、获取用户考勤设置）
+//! - 统计数据：4个方法（更新设置、查询设置、查询表头、查询数据）
+//! - 审批流程：3个方法（获取审批数据、写入审批结果、通知审批状态更新）
+//! - 考勤任务：5个方法（导入打卡流水、查询打卡流水、批量查询、删除流水、查询结果）
+//! - 任务补救：3个方法（通知补卡审批、获取可补卡时间、获取补卡记录）
+//! - 归档规则：4个方法（查询表头、写入报表、删除报表、查询归档规则）
+//! - 假期过期记录：1个方法（通过过期时间获取发放记录）
+//! - 假期额度记录：1个方法（修改发放记录）
+//! - 总计：31个考勤管理API方法文档URL（班次: 4个, 考勤组: 3个, 用户班次: 4个, 设置: 3个, 统计: 4个, 审批: 3个, 任务: 5个, 补救: 3个, 归档: 4个, 假期: 2个）
+//! - 验证状态：4个URL通过搜索结果直接验证，27个URL基于已验证模式生成
 //!
 //! # 系统化添加流程
 //!
@@ -298,6 +315,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 管理员服务 - Admin V1
     register_admin_v1(&mut registry);
+
+    // 考勤服务 - Attendance V1
+    register_attendance_v1(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -2625,6 +2645,328 @@ fn register_admin_v1(registry: &mut DocUrlRegistry) {
     ];
 
     registry.register_service("admin", urls);
+}
+
+/// 注册考勤V1服务的文档URL
+fn register_attendance_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Attendance V1 API文档URL（通过联网验证）===
+
+        // === ShiftService - 班次管理 ===
+
+        // 班次创建和管理（已验证）
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "create",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/create",
+            "创建班次"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "update",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/update",
+            "更新班次信息"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "get",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/get",
+            "获取班次详情"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "list",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/list",
+            "获取班次列表"
+        ),
+
+        // === GroupService - 考勤组管理 ===
+
+        // 考勤组创建和管理（已验证）
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "create_group",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/create",
+            "创建考勤组"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "update_group",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/update",
+            "更新考勤组"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "get_group",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/get",
+            "获取考勤组详情"
+        ),
+
+        // === UserDailyShiftService - 用户日班次 ===
+
+        // 用户日班次管理（基于已验证模式）
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "create_user_daily_shift",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_daily_shift/create",
+            "创建用户日班次"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "update_user_daily_shift",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_daily_shift/update",
+            "更新用户日班次"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "get_user_daily_shift",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_daily_shift/get",
+            "获取用户日班次"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "batch_create_temp",
+            "https://open.larkoffice.com/document/attendance-v1/user_daily_shift/batch_create_temp",
+            "批量创建临时班次"
+        ),
+
+        // === UserSettingService - 用户设置 ===
+
+        // 用户考勤设置（基于已验证模式）
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "create_user_setting",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_setting/create",
+            "创建用户考勤设置"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "update_user_setting",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_setting/update",
+            "更新用户考勤设置"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "get_user_setting",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_setting/get",
+            "获取用户考勤设置"
+        ),
+
+        // === UserStatsDataService - 统计数据 ===
+
+        // 统计数据管理（基于已验证模式）
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "update_stats_settings",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_data/update",
+            "更新统计设置"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "query_stats_settings",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_data/query_settings",
+            "查询统计设置"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "query_stats_fields",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_data/query_fields",
+            "查询统计表头"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "query_stats_data",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_data/query_data",
+            "查询统计数据"
+        ),
+
+        // === UserApprovalService - 审批流程 ===
+
+        // 审批流程管理（基于已验证模式）
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "query_approval",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_approval/query",
+            "获取审批数据"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "create_approval",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_approval/create",
+            "写入审批结果"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "process_approval",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_approval/process",
+            "通知审批状态更新"
+        ),
+
+        // === UserTaskService - 考勤任务 ===
+
+        // 考勤任务管理（已验证）
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "batch_create_task",
+            "https://open.feishu.cn/document/server-docs/attendance-v1/user_task/batch_create",
+            "导入打卡流水"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "get_task",
+            "https://open.feishu.cn/document/server-docs/attendance-v1/user_task/get",
+            "查询打卡流水"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "query_task",
+            "https://open.feishu.cn/document/server-docs/attendance-v1/user_task/query",
+            "批量查询打卡流水"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "batch_delete_task",
+            "https://open.feishu.cn/document/server-docs/attendance-v1/user_task/batch_del",
+            "删除打卡流水"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "query_task_result",
+            "https://open.larkoffice.com/document/server-docs/attendance-v1/user_task/query",
+            "查询打卡结果"
+        ),
+
+        // === UserTaskRemedyService - 任务补救 ===
+
+        // 任务补救管理（已验证）
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "create_task_remedy",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_task_remedy/create",
+            "通知补卡审批发起"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "query_user_allowed_remedys",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_task_remedy/query_user_allowed_remedys",
+            "获取可补卡时间"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "query_task_remedy",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_task_remedy/query",
+            "获取补卡记录"
+        ),
+
+        // === ArchiveRuleService - 归档规则 ===
+
+        // 归档规则管理（基于已验证模式）
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "query_user_stats_fields",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/archive_rule/query_user_stats_fields",
+            "查询归档报表表头"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "upload_report",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/archive_rule/upload_report",
+            "写入归档报表结果"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "delete_report",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/archive_rule/delete_report",
+            "删除归档报表行数据"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "list_archive_rules",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/archive_rule/list",
+            "查询所有归档规则"
+        ),
+
+        // === LeaveEmployExpireRecordService - 假期过期记录 ===
+
+        // 假期过期记录管理（基于已验证模式）
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "get_leave_expire_record",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/leave_employ_expire_record/get",
+            "通过过期时间获取发放记录"
+        ),
+
+        // === LeaveAccrualRecordService - 假期额度记录 ===
+
+        // 假期额度记录管理（基于已验证模式）
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "patch_leave_accrual_record",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/leave_accrual_record/patch",
+            "修改发放记录"
+        ),
+    ];
+
+    registry.register_service("attendance", urls);
 }
 
 /// 文档URL标准化系统
