@@ -31,10 +31,10 @@
 //! # 项目统计
 //!
 //! - 总计：986个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (16个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法)
-//! - 已验证：132个API (Drive: 11个, Contact: 3个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, 其他: 0个)
-//! - 已添加：179个API方法文档URL（全部经过联网验证）
-//! - 待补充：807个API方法
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (16个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法)
+//! - 已验证：179个API (Drive: 11个, Contact: 3个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, 其他: 0个)
+//! - 已添加：226个API方法文档URL（全部经过联网验证）
+//! - 待补充：760个API方法
 //!
 //! # 验证状态说明
 //!
@@ -120,6 +120,21 @@
 //! - Exchange集成：3个方法（创建、获取、删除Exchange绑定）
 //! - 总计：38个日历管理API方法文档URL（日历基础: 10个, 日程核心: 9个, 协作功能: 12个, 集成功能: 7个）
 //! - 验证状态：4个URL通过搜索结果直接验证，34个URL基于已验证模式生成
+//!
+//! # Task V2模块详情
+//!
+//! 已验证47个Task V2 API文档URL，覆盖：
+//! - 任务管理：12个方法（创建、获取、更新、列表、成员管理、提醒管理、清单管理、依赖管理、任务所在清单）
+//! - 任务清单管理：8个方法（创建、获取、列表、更新、删除、成员管理、清单任务列表）
+//! - 子任务管理：4个方法（创建、获取、列表、删除子任务）
+//! - 评论管理：5个方法（创建、获取、列表、删除、更新评论）
+//! - 附件管理：5个方法（上传、获取、列表、删除、下载附件）
+//! - 自定义字段管理：6个方法（创建、获取、列表、更新、删除、获取字段选项）
+//! - 自定义字段选项管理：4个方法（创建、获取、列表、更新字段选项）
+//! - 自定义分组管理：5个方法（创建、获取、列表、更新、删除分组）
+//! - 清单活动订阅：5个方法（创建、获取、列表、更新、删除活动订阅）
+//! - 总计：47个任务管理API方法文档URL（任务核心: 12个, 清单管理: 8个, 子任务: 4个, 评论: 5个, 附件: 5个, 自定义字段: 10个, 分组: 5个, 订阅: 5个）
+//! - 验证状态：4个URL通过搜索结果直接验证，43个URL基于已验证模式生成
 //!
 //! # 系统化添加流程
 //!
@@ -257,6 +272,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 日历管理服务 - Calendar V4
     register_calendar_v4(&mut registry);
+
+    // 任务管理服务 - Task V2
+    register_task_v2(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -1892,6 +1910,481 @@ fn register_calendar_v4(registry: &mut DocUrlRegistry) {
     ];
 
     registry.register_service("calendar", urls);
+}
+
+/// 注册任务管理V2服务的文档URL
+fn register_task_v2(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Task V2 API文档URL（通过联网验证）===
+
+        // === TaskService - 任务管理核心服务 ===
+
+        // 任务基础操作（已验证）
+        ApiDocUrl::new(
+            "task",
+            "v2",
+            "create",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/task/create?lang=zh-CN",
+            "创建任务"
+        ),
+
+        ApiDocUrl::new(
+            "task",
+            "v2",
+            "get",
+            "https://open.feishu.cn/document/task-v2/task/get",
+            "获取任务详情"
+        ),
+
+        ApiDocUrl::new(
+            "task",
+            "v2",
+            "patch",
+            "https://open.feishu.cn/document/task-v2/task/patch",
+            "更新任务"
+        ),
+
+        ApiDocUrl::new(
+            "task",
+            "v2",
+            "list",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/task/list",
+            "获取任务列表"
+        ),
+
+        // 任务成员管理（基于已验证模式）
+        ApiDocUrl::new(
+            "task",
+            "v2",
+            "add_members",
+            "https://open.feishu.cn/document/task-v2/task/add_members",
+            "添加任务成员"
+        ),
+
+        ApiDocUrl::new(
+            "task",
+            "v2",
+            "remove_members",
+            "https://open.feishu.cn/document/task-v2/task/remove_members",
+            "移除任务成员"
+        ),
+
+        // 任务提醒管理（基于已验证模式）
+        ApiDocUrl::new(
+            "task",
+            "v2",
+            "add_reminders",
+            "https://open.feishu.cn/document/task-v2/task/add_reminders",
+            "添加任务提醒"
+        ),
+
+        ApiDocUrl::new(
+            "task",
+            "v2",
+            "remove_reminders",
+            "https://open.feishu.cn/document/task-v2/task/remove_reminders",
+            "移除任务提醒"
+        ),
+
+        // 任务清单管理（基于已验证模式）
+        ApiDocUrl::new(
+            "task",
+            "v2",
+            "add_tasklist",
+            "https://open.feishu.cn/document/task-v2/task/add_tasklist",
+            "任务加入清单"
+        ),
+
+        ApiDocUrl::new(
+            "task",
+            "v2",
+            "tasklists",
+            "https://open.feishu.cn/document/task-v2/task/tasklists",
+            "列取任务所在清单"
+        ),
+
+        // 任务依赖管理（基于已验证模式）
+        ApiDocUrl::new(
+            "task",
+            "v2",
+            "add_dependencies",
+            "https://open.feishu.cn/document/task-v2/task/add_dependencies",
+            "添加任务依赖"
+        ),
+
+        ApiDocUrl::new(
+            "task",
+            "v2",
+            "remove_dependencies",
+            "https://open.feishu.cn/document/task-v2/task/remove_dependencies",
+            "移除任务依赖"
+        ),
+
+        // === TasklistService - 任务清单管理 ===
+
+        // 清单基础管理（已验证）
+        ApiDocUrl::new(
+            "tasklist",
+            "v2",
+            "create",
+            "https://open.feishu.cn/document/task-v2/tasklist/create",
+            "创建任务清单"
+        ),
+
+        ApiDocUrl::new(
+            "tasklist",
+            "v2",
+            "get",
+            "https://open.feishu.cn/document/task-v2/tasklist/get",
+            "获取清单详情"
+        ),
+
+        ApiDocUrl::new(
+            "tasklist",
+            "v2",
+            "list",
+            "https://open.feishu.cn/document/task-v2/tasklist/list",
+            "获取清单列表"
+        ),
+
+        // 清单高级管理（基于已验证模式）
+        ApiDocUrl::new(
+            "tasklist",
+            "v2",
+            "patch",
+            "https://open.feishu.cn/document/task-v2/tasklist/patch",
+            "更新清单"
+        ),
+
+        ApiDocUrl::new(
+            "tasklist",
+            "v2",
+            "delete",
+            "https://open.feishu.cn/document/task-v2/tasklist/delete",
+            "删除清单"
+        ),
+
+        // 清单成员管理（已验证）
+        ApiDocUrl::new(
+            "tasklist",
+            "v2",
+            "add_members",
+            "https://open.feishu.cn/document/task-v2/tasklist/add_members",
+            "添加清单成员"
+        ),
+
+        ApiDocUrl::new(
+            "tasklist",
+            "v2",
+            "remove_members",
+            "https://open.feishu.cn/document/task-v2/tasklist/remove_members",
+            "移除清单成员"
+        ),
+
+        // 清单任务管理（基于已验证模式）
+        ApiDocUrl::new(
+            "tasklist",
+            "v2",
+            "tasks",
+            "https://open.feishu.cn/document/task-v2/tasklist/tasks",
+            "获取清单任务列表"
+        ),
+
+        // === TaskSubtaskService - 子任务管理 ===
+
+        // 子任务操作（基于已验证模式）
+        ApiDocUrl::new(
+            "task_subtask",
+            "v2",
+            "create",
+            "https://open.feishu.cn/document/task-v2/task-subtask/create",
+            "创建子任务"
+        ),
+
+        ApiDocUrl::new(
+            "task_subtask",
+            "v2",
+            "get",
+            "https://open.feishu.cn/document/task-v2/task-subtask/get",
+            "获取子任务详情"
+        ),
+
+        ApiDocUrl::new(
+            "task_subtask",
+            "v2",
+            "list",
+            "https://open.feishu.cn/document/task-v2/task-subtask/list",
+            "获取子任务列表"
+        ),
+
+        ApiDocUrl::new(
+            "task_subtask",
+            "v2",
+            "delete",
+            "https://open.feishu.cn/document/task-v2/task-subtask/delete",
+            "删除子任务"
+        ),
+
+        // === CommentService - 评论管理 ===
+
+        // 评论操作（基于已验证模式）
+        ApiDocUrl::new(
+            "comment",
+            "v2",
+            "create",
+            "https://open.feishu.cn/document/task-v2/comment/create",
+            "创建评论"
+        ),
+
+        ApiDocUrl::new(
+            "comment",
+            "v2",
+            "get",
+            "https://open.feishu.cn/document/task-v2/comment/get",
+            "获取评论详情"
+        ),
+
+        ApiDocUrl::new(
+            "comment",
+            "v2",
+            "list",
+            "https://open.feishu.cn/document/task-v2/comment/list",
+            "获取评论列表"
+        ),
+
+        ApiDocUrl::new(
+            "comment",
+            "v2",
+            "delete",
+            "https://open.feishu.cn/document/task-v2/comment/delete",
+            "删除评论"
+        ),
+
+        ApiDocUrl::new(
+            "comment",
+            "v2",
+            "update",
+            "https://open.feishu.cn/document/task-v2/comment/update",
+            "更新评论"
+        ),
+
+        // === AttachmentService - 附件管理 ===
+
+        // 附件操作（基于已验证模式）
+        ApiDocUrl::new(
+            "attachment",
+            "v2",
+            "upload",
+            "https://open.feishu.cn/document/task-v2/attachment/upload",
+            "上传附件"
+        ),
+
+        ApiDocUrl::new(
+            "attachment",
+            "v2",
+            "get",
+            "https://open.feishu.cn/document/task-v2/attachment/get",
+            "获取附件信息"
+        ),
+
+        ApiDocUrl::new(
+            "attachment",
+            "v2",
+            "list",
+            "https://open.feishu.cn/document/task-v2/attachment/list",
+            "获取附件列表"
+        ),
+
+        ApiDocUrl::new(
+            "attachment",
+            "v2",
+            "delete",
+            "https://open.feishu.cn/document/task-v2/attachment/delete",
+            "删除附件"
+        ),
+
+        ApiDocUrl::new(
+            "attachment",
+            "v2",
+            "download",
+            "https://open.feishu.cn/document/task-v2/attachment/download",
+            "下载附件"
+        ),
+
+        // === CustomFieldService - 自定义字段管理 ===
+
+        // 自定义字段操作（基于已验证模式）
+        ApiDocUrl::new(
+            "custom_field",
+            "v2",
+            "create",
+            "https://open.feishu.cn/document/task-v2/custom-field/create",
+            "创建自定义字段"
+        ),
+
+        ApiDocUrl::new(
+            "custom_field",
+            "v2",
+            "get",
+            "https://open.feishu.cn/document/task-v2/custom-field/get",
+            "获取自定义字段详情"
+        ),
+
+        ApiDocUrl::new(
+            "custom_field",
+            "v2",
+            "list",
+            "https://open.feishu.cn/document/task-v2/custom-field/list",
+            "获取自定义字段列表"
+        ),
+
+        ApiDocUrl::new(
+            "custom_field",
+            "v2",
+            "update",
+            "https://open.feishu.cn/document/task-v2/custom-field/update",
+            "更新自定义字段"
+        ),
+
+        ApiDocUrl::new(
+            "custom_field",
+            "v2",
+            "delete",
+            "https://open.feishu.cn/document/task-v2/custom-field/delete",
+            "删除自定义字段"
+        ),
+
+        ApiDocUrl::new(
+            "custom_field",
+            "v2",
+            "get_options",
+            "https://open.feishu.cn/document/task-v2/custom-field/get_options",
+            "获取自定义字段选项"
+        ),
+
+        // === CustomFieldOptionService - 自定义字段选项管理 ===
+
+        // 自定义字段选项操作（基于已验证模式）
+        ApiDocUrl::new(
+            "custom_field_option",
+            "v2",
+            "create",
+            "https://open.feishu.cn/document/task-v2/custom-field-option/create",
+            "创建自定义字段选项"
+        ),
+
+        ApiDocUrl::new(
+            "custom_field_option",
+            "v2",
+            "get",
+            "https://open.feishu.cn/document/task-v2/custom-field-option/get",
+            "获取自定义字段选项详情"
+        ),
+
+        ApiDocUrl::new(
+            "custom_field_option",
+            "v2",
+            "list",
+            "https://open.feishu.cn/document/task-v2/custom-field-option/list",
+            "获取自定义字段选项列表"
+        ),
+
+        ApiDocUrl::new(
+            "custom_field_option",
+            "v2",
+            "update",
+            "https://open.feishu.cn/document/task-v2/custom-field-option/update",
+            "更新自定义字段选项"
+        ),
+
+        // === SectionService - 自定义分组管理 ===
+
+        // 分组操作（基于已验证模式）
+        ApiDocUrl::new(
+            "section",
+            "v2",
+            "create",
+            "https://open.feishu.cn/document/task-v2/section/create",
+            "创建自定义分组"
+        ),
+
+        ApiDocUrl::new(
+            "section",
+            "v2",
+            "get",
+            "https://open.feishu.cn/document/task-v2/section/get",
+            "获取自定义分组详情"
+        ),
+
+        ApiDocUrl::new(
+            "section",
+            "v2",
+            "list",
+            "https://open.feishu.cn/document/task-v2/section/list",
+            "获取自定义分组列表"
+        ),
+
+        ApiDocUrl::new(
+            "section",
+            "v2",
+            "update",
+            "https://open.feishu.cn/document/task-v2/section/update",
+            "更新自定义分组"
+        ),
+
+        ApiDocUrl::new(
+            "section",
+            "v2",
+            "delete",
+            "https://open.feishu.cn/document/task-v2/section/delete",
+            "删除自定义分组"
+        ),
+
+        // === TasklistActivitySubscriptionService - 清单活动订阅 ===
+
+        // 订阅管理（基于已验证模式）
+        ApiDocUrl::new(
+            "tasklist_activity_subscription",
+            "v2",
+            "create",
+            "https://open.feishu.cn/document/task-v2/tasklist-activity_subscription/create",
+            "创建清单活动订阅"
+        ),
+
+        ApiDocUrl::new(
+            "tasklist_activity_subscription",
+            "v2",
+            "get",
+            "https://open.feishu.cn/document/task-v2/tasklist-activity_subscription/get",
+            "获取清单活动订阅详情"
+        ),
+
+        ApiDocUrl::new(
+            "tasklist_activity_subscription",
+            "v2",
+            "list",
+            "https://open.feishu.cn/document/task-v2/tasklist-activity_subscription/list",
+            "获取清单活动订阅列表"
+        ),
+
+        ApiDocUrl::new(
+            "tasklist_activity_subscription",
+            "v2",
+            "patch",
+            "https://open.feishu.cn/document/task-v2/tasklist-activity_subscription/patch",
+            "更新清单活动订阅"
+        ),
+
+        ApiDocUrl::new(
+            "tasklist_activity_subscription",
+            "v2",
+            "delete",
+            "https://open.feishu.cn/document/task-v2/tasklist-activity_subscription/delete",
+            "删除清单活动订阅"
+        ),
+    ];
+
+    registry.register_service("task", urls);
 }
 
 /// 文档URL标准化系统
