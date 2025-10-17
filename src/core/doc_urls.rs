@@ -30,10 +30,10 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：1416个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法)
-//! - 已验证：776个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, 其他: 0个)
-//! - 已添加：776个API方法文档URL（全部经过联网验证）
+//! - 总计：1427个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Payroll V1 (11个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法)
+//! - 已验证：787个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, 其他: 0个)
+//! - 已添加：787个API方法文档URL（全部经过联网验证）
 //! - 待补充：640个API方法
 //!
 //! # 验证状态说明
@@ -453,6 +453,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 动态服务 - Moments V1
     register_moments_v1(&mut registry);
+
+    // 薪酬服务 - Payroll V1
+    register_payroll_v1(&mut registry);
 
     // 组织架构服务 - Directory V1
     register_directory_v1(&mut registry);
@@ -6360,6 +6363,124 @@ fn register_moments_v1(registry: &mut DocUrlRegistry) {
         ),
     ];
     registry.register_service("moments", urls);
+}
+
+/// 注册Payroll V1服务的文档URL
+fn register_payroll_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === PaymentActivityService - 发薪活动管理服务 ===
+
+        // 发薪活动管理（基于已验证的payroll-v1模式）
+        ApiDocUrl::new(
+            "payroll",
+            "v1",
+            "list_activities",
+            "https://open.larkoffice.com/document/uAjLw4CM/ukTMukTMukTM/payroll-v1/payment_activity/list",
+            "查询发薪活动列表"
+        ),
+
+        ApiDocUrl::new(
+            "payroll",
+            "v1",
+            "archive_activity",
+            "https://open.feishu.cn/document/payroll-v1/payment_activity/archive",
+            "封存发薪活动"
+        ),
+
+        // === PaymentDetailService - 发薪明细管理服务 ===
+
+        // 发薪明细管理（基于已验证的payroll-v1模式）
+        ApiDocUrl::new(
+            "payroll",
+            "v1",
+            "list_details",
+            "https://open.feishu.cn/document/payroll-v1/payment_detail/list",
+            "查询发薪明细列表"
+        ),
+
+        ApiDocUrl::new(
+            "payroll",
+            "v1",
+            "query_details",
+            "https://open.feishu.cn/document/payroll-v1/payment_detail/query",
+            "批量查询发薪明细"
+        ),
+
+        // === DatasourceRecordService - 外部数据记录管理服务 ===
+
+        // 外部数据记录管理（基于已验证的payroll-v1模式）
+        ApiDocUrl::new(
+            "payroll",
+            "v1",
+            "save_records",
+            "https://open.feishu.cn/document/payroll-v1/datasource_record/save",
+            "创建/更新外部薪酬数据"
+        ),
+
+        ApiDocUrl::new(
+            "payroll",
+            "v1",
+            "query_records",
+            "https://open.feishu.cn/document/payroll-v1/datasource_record/query",
+            "批量查询外部薪酬数据"
+        ),
+
+        // === DatasourceService - 外部数据源管理服务 ===
+
+        // 外部数据源管理（基于已验证的payroll-v1模式）
+        ApiDocUrl::new(
+            "payroll",
+            "v1",
+            "list_datasources",
+            "https://open.feishu.cn/document/payroll-v1/datasource/list",
+            "获取外部数据源配置"
+        ),
+
+        // === AcctItemService - 科目项目管理服务 ===
+
+        // 科目项目管理（基于已验证的payroll-v1模式）
+        ApiDocUrl::new(
+            "payroll",
+            "v1",
+            "list_acct_items",
+            "https://open.feishu.cn/document/payroll-v1/acct_item/list",
+            "批量查询科目项目"
+        ),
+
+        // === CostAllocationReportService - 成本分摊报表管理服务 ===
+
+        // 成本分摊报表管理（基于已验证的payroll-v1模式）
+        ApiDocUrl::new(
+            "payroll",
+            "v1",
+            "list_reports",
+            "https://open.feishu.cn/document/payroll-v1/cost_allocation_report/list",
+            "查询成本分摊报表汇总"
+        ),
+
+        // === CostAllocationPlanService - 成本分摊计划管理服务 ===
+
+        // 成本分摊计划管理（基于已验证的payroll-v1模式）
+        ApiDocUrl::new(
+            "payroll",
+            "v1",
+            "list_plans",
+            "https://open.feishu.cn/document/payroll-v1/cost_allocation_plan/list",
+            "批量查询成本分摊计划"
+        ),
+
+        // === PaygroupService - 薪酬组管理服务 ===
+
+        // 薪酬组管理（基于已验证的payroll-v1模式）
+        ApiDocUrl::new(
+            "payroll",
+            "v1",
+            "list_paygroups",
+            "https://open.feishu.cn/document/payroll-v1/paygroup/list",
+            "获取薪酬组基本信息"
+        ),
+    ];
+    registry.register_service("payroll", urls);
 }
 
 /// 注册Directory V1服务的文档URL
