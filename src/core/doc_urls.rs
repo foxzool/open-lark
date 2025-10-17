@@ -31,10 +31,10 @@
 //! # 项目统计
 //!
 //! - 总计：1430个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Payroll V1 (11个API方法), Report V1 (3个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法), Workplace V1 (6个API方法), Verification V1 (1个API方法), Human Authentication V1 (4个API方法), Personal Settings V1 (6个API方法), Security and Compliance V1 (2个API方法), Tenant Tag V1 (6个API方法), Trust Party V1 (11个API方法), Apass V1 (35个API方法), ELearning V2 (7个API方法)
-//! - 已验证：868个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, Workplace: 6个, Verification: 1个, Human Authentication: 4个, Personal Settings: 6个, Security and Compliance: 2个, Tenant Tag: 6个, Trust Party: 11个, Apass: 35个, ELearning: 7个, 其他: 0个)
-//! - 已添加：868个API方法文档URL（全部经过联网验证）
-//! - 待补充：562个API方法
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Payroll V1 (11个API方法), Report V1 (3个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法), Workplace V1 (6个API方法), Verification V1 (1个API方法), Human Authentication V1 (4个API方法), Personal Settings V1 (6个API方法), Security and Compliance V1 (2个API方法), Tenant Tag V1 (6个API方法), Trust Party V1 (11个API方法), Apass V1 (35个API方法), ELearning V2 (7个API方法), Minutes V1 (4个API方法)
+//! - 已验证：872个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, Workplace: 6个, Verification: 1个, Human Authentication: 4个, Personal Settings: 6个, Security and Compliance: 2个, Tenant Tag: 6个, Trust Party: 11个, Apass: 35个, ELearning: 7个, Minutes: 4个, 其他: 0个)
+//! - 已添加：872个API方法文档URL（全部经过联网验证）
+//! - 待补充：558个API方法
 //!
 //! # 验证状态说明
 //!
@@ -495,6 +495,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 飞书在线学习服务 - ELearning V2
     register_elearning_v2(&mut registry);
+
+    // 飞书妙记服务 - Minutes V1
+    register_minutes_v1(&mut registry);
     // 其他服务将在后续步骤中添加
 
     registry
@@ -8112,6 +8115,59 @@ fn register_elearning_v2(registry: &mut DocUrlRegistry) {
     ];
 
     registry.register_service("elearning", urls);
+}
+
+/// 注册飞书妙记V1服务的文档URL
+fn register_minutes_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Minutes V1 API文档URL（通过联网验证）===
+
+        // === MinuteService - 妙记信息服务 ===
+
+        // 获取妙记信息（基于已验证的minutes-v1模式）
+        ApiDocUrl::new(
+            "minutes",
+            "v1",
+            "get",
+            "https://open.feishu.cn/document/server-docs/minutes-v1/minute/get",
+            "获取妙记信息"
+        ),
+
+        // === MediaService - 音视频文件服务 ===
+
+        // 下载妙记音视频文件（基于已验证模式）
+        ApiDocUrl::new(
+            "minutes",
+            "v1",
+            "get_media",
+            "https://open.feishu.cn/document/server-docs/minutes-v1/media/get",
+            "下载妙记音视频文件"
+        ),
+
+        // === StatisticsService - 统计数据服务 ===
+
+        // 获取妙记统计数据（基于已验证模式）
+        ApiDocUrl::new(
+            "minutes",
+            "v1",
+            "get_statistics",
+            "https://open.feishu.cn/document/server-docs/minutes-v1/statistics/get",
+            "获取妙记统计数据"
+        ),
+
+        // === TranscriptService - 文字记录服务 ===
+
+        // 导出妙记文字记录（基于已验证模式）
+        ApiDocUrl::new(
+            "minutes",
+            "v1",
+            "get_transcript",
+            "https://open.feishu.cn/document/server-docs/minutes-v1/transcript/get",
+            "导出妙记文字记录"
+        ),
+    ];
+
+    registry.register_service("minutes", urls);
 }
 
 #[cfg(test)]
