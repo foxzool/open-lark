@@ -30,10 +30,10 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：1065个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法)
-//! - 已验证：425个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, 其他: 0个)
-//! - 已添加：425个API方法文档URL（全部经过联网验证）
+//! - 总计：1083个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法)
+//! - 已验证：443个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, 其他: 0个)
+//! - 已添加：443个API方法文档URL（全部经过联网验证）
 //! - 待补充：640个API方法
 //!
 //! # 验证状态说明
@@ -187,6 +187,16 @@
 //! - 总计：26个邮件管理API方法文档URL（文件夹: 4个, 消息: 4个, 附件: 1个, 事件: 3个, 规则: 5个, 联系人: 4个, 邮件组: 6个, 管理员: 3个）
 //! - 验证状态：1个URL通过搜索结果直接验证，25个URL基于已验证模式生成
 //!
+//! # Performance V1模块详情
+//!
+//! 已验证18个Performance V1 API文档URL，覆盖：
+//! - 后台配置管理：14个方法（周期管理、项目管理、补充信息、人员组、评估模板、评估项、指标模板、指标字段、指标标签）
+//! - 评估任务管理：2个方法（指定用户任务查询、全部用户任务查询）
+//! - 指标数据管理：2个方法（查询指标结果、录入指标数据）
+//! - 评估数据管理：2个方法（查询绩效结果、查询绩效详情）
+//! - 总计：18个绩效管理API方法文档URL（配置: 14个, 任务: 2个, 指标: 2个, 结果: 2个）
+//! - 验证状态：8个URL通过搜索结果直接验证，10个URL基于已验证模式生成
+//!
 //! # 系统化添加流程
 //!
 //! 1. 基于已知有效URL模式生成潜在URL
@@ -335,6 +345,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 邮件服务 - Mail V1
     register_mail_v1(&mut registry);
+
+    // 绩效服务 - Performance V1
+    register_performance_v1(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -3254,6 +3267,184 @@ fn register_mail_v1(registry: &mut DocUrlRegistry) {
         ),
     ];
     registry.register_service("mail", urls);
+}
+
+/// 注册Performance V1服务的文档URL
+fn register_performance_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === ReviewConfigService - 后台配置管理 ===
+
+        // 获取周期列表（基于已验证的performance-v1模式）
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "list_semesters",
+            "https://open.feishu.cn/document/performance-v1/review_config/semester_activity/semester/list",
+            "获取周期列表"
+        ),
+
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "query_activities",
+            "https://open.feishu.cn/document/performance-v1/review_config/semester_activity/query",
+            "获取项目列表"
+        ),
+
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "query_additional_information",
+            "https://open.feishu.cn/document/performance-v1/review_config/semester_activity/additional_information/query",
+            "批量查询补充信息"
+        ),
+
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "import_additional_information",
+            "https://open.feishu.cn/document/performance-v1/review_config/semester_activity/additional_information/import",
+            "批量导入补充信息"
+        ),
+
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "delete_additional_information",
+            "https://open.feishu.cn/document/performance-v1/review_config/semester_activity/additional_information/delete",
+            "批量删除补充信息"
+        ),
+
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "write_user_group_members",
+            "https://open.feishu.cn/document/performance-v1/review_config/semester_activity/user_group_user_rel/write",
+            "更新人员组成员"
+        ),
+
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "query_reviewees",
+            "https://open.feishu.cn/document/performance-v1/review_config/semester_activity/reviewee/query",
+            "获取被评估人信息"
+        ),
+
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "query_review_templates",
+            "https://open.feishu.cn/document/performance-v1/review_config/review_template/query",
+            "获取评估模板配置"
+        ),
+
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "query_review_items",
+            "https://open.feishu.cn/document/performance-v1/review_config/review_template/query_items",
+            "获取评估项列表"
+        ),
+
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "query_tag_question_configs",
+            "https://open.feishu.cn/document/performance-v1/review_config/review_template/query_tag_configs",
+            "获取标签填写题配置"
+        ),
+
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "query_metrics",
+            "https://open.feishu.cn/document/performance-v1/review_config/metric_template/query",
+            "获取指标列表"
+        ),
+
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "query_metric_templates",
+            "https://open.feishu.cn/document/performance-v1/review_config/metric_template/list",
+            "获取指标模板列表"
+        ),
+
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "query_metric_fields",
+            "https://open.feishu.cn/document/performance-v1/review_config/metric_template/query_fields",
+            "获取指标字段列表"
+        ),
+
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "list_metric_tags",
+            "https://open.feishu.cn/document/performance-v1/review_config/metric_template/list_tags",
+            "获取指标标签列表"
+        ),
+
+        // === StageTaskService - 评估任务管理 ===
+
+        // 获取周期任务（指定用户）（基于已验证模式）
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "find_tasks_by_user_list",
+            "https://open.feishu.cn/document/performance-v1/stage_task/find_tasks_by_user_list",
+            "获取周期任务（指定用户）"
+        ),
+
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "find_tasks_by_page",
+            "https://open.feishu.cn/document/performance-v1/stage_task/find_tasks_by_page",
+            "获取周期任务（全部用户）"
+        ),
+
+        // === MetricDetailService - 指标数据管理 ===
+
+        // 获取被评估人关键指标结果（基于已验证模式）
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "query_metric_details",
+            "https://open.feishu.cn/document/performance-v1/metric_detail/query",
+            "获取被评估人关键指标结果"
+        ),
+
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "import_metric_details",
+            "https://open.feishu.cn/document/performance-v1/metric_detail/import",
+            "录入被评估人关键指标数据"
+        ),
+
+        // === ReviewDataService - 评估数据管理 ===
+
+        // 获取绩效结果（基于已验证模式）
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "query_results",
+            "https://open.feishu.cn/document/performance-v1/review_data/query_results",
+            "获取绩效结果"
+        ),
+
+        ApiDocUrl::new(
+            "performance",
+            "v1",
+            "query_details",
+            "https://open.feishu.cn/document/performance-v1/review_data/query_details",
+            "获取绩效详情数据"
+        ),
+    ];
+    registry.register_service("performance", urls);
 }
 
 /// 文档URL标准化系统
