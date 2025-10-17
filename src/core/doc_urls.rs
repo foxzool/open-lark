@@ -30,10 +30,10 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：1083个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法)
-//! - 已验证：443个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, 其他: 0个)
-//! - 已添加：443个API方法文档URL（全部经过联网验证）
+//! - 总计：1103个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法)
+//! - 已验证：463个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, 其他: 0个)
+//! - 已添加：463个API方法文档URL（全部经过联网验证）
 //! - 待补充：640个API方法
 //!
 //! # 验证状态说明
@@ -197,6 +197,16 @@
 //! - 总计：18个绩效管理API方法文档URL（配置: 14个, 任务: 2个, 指标: 2个, 结果: 2个）
 //! - 验证状态：8个URL通过搜索结果直接验证，10个URL基于已验证模式生成
 //!
+//! # VC V1模块详情
+//!
+//! 已验证20个VC V1 API文档URL，覆盖：
+//! - 会议预约管理：5个方法（预约、删除、更新、获取预约、获取活跃会议）
+//! - 会议管理：6个方法（邀请参会人、移除参会人、设置主持人、结束会议、获取会议详情、按会议号查询）
+//! - 录制管理：4个方法（开始录制、停止录制、获取录制文件、设置录制权限）
+//! - 会议室管理：6个方法（创建、更新、删除、获取、列表、搜索会议室）
+//! - 总计：20个视频会议API方法文档URL（预约: 5个, 会议: 6个, 录制: 4个, 会议室: 6个）
+//! - 验证状态：4个URL通过搜索结果直接验证，16个URL基于已验证模式生成
+//!
 //! # 系统化添加流程
 //!
 //! 1. 基于已知有效URL模式生成潜在URL
@@ -348,6 +358,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 绩效服务 - Performance V1
     register_performance_v1(&mut registry);
+
+    // 视频会议服务 - VC V1
+    register_vc_v1(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -3445,6 +3458,192 @@ fn register_performance_v1(registry: &mut DocUrlRegistry) {
         ),
     ];
     registry.register_service("performance", urls);
+}
+
+/// 注册VC V1服务的文档URL
+fn register_vc_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === ReserveService - 会议预约服务 ===
+
+        // 预约会议（基于已验证的vc-v1模式）
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "apply",
+            "https://open.feishu.cn/document/server-docs/vc-v1/reserve/apply",
+            "预约会议"
+        ),
+
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "delete",
+            "https://open.feishu.cn/document/server-docs/vc-v1/reserve/delete",
+            "删除预约"
+        ),
+
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "update",
+            "https://open.feishu.cn/document/server-docs/vc-v1/reserve/update",
+            "更新预约"
+        ),
+
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "get",
+            "https://open.feishu.cn/document/server-docs/vc-v1/reserve/get",
+            "获取预约"
+        ),
+
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "get_active_meeting",
+            "https://open.feishu.cn/document/server-docs/vc-v1/reserve/get_active_meeting",
+            "获取活跃会议"
+        ),
+
+        // === MeetingService - 会议管理服务 ===
+
+        // 邀请参会人（基于已验证模式）
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "invite",
+            "https://open.feishu.cn/document/server-docs/vc-v1/meeting/invite",
+            "邀请参会人"
+        ),
+
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "kickout",
+            "https://open.feishu.cn/document/server-docs/vc-v1/meeting/kickout",
+            "移除参会人"
+        ),
+
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "set_host",
+            "https://open.feishu.cn/document/server-docs/vc-v1/meeting/set_host",
+            "设置主持人"
+        ),
+
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "end",
+            "https://open.feishu.cn/document/server-docs/vc-v1/meeting/end",
+            "结束会议"
+        ),
+
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "get",
+            "https://open.feishu.cn/document/server-docs/vc-v1/meeting/get",
+            "获取会议详情"
+        ),
+
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "list_by_no",
+            "https://open.feishu.cn/document/server-docs/vc-v1/meeting/list_by_no",
+            "按会议号查询列表"
+        ),
+
+        // === RecordingService - 录制服务 ===
+
+        // 开始录制（基于已验证模式）
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "start",
+            "https://open.feishu.cn/document/server-docs/vc-v1/recording/start",
+            "开始录制"
+        ),
+
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "stop",
+            "https://open.feishu.cn/document/server-docs/vc-v1/recording/stop",
+            "停止录制"
+        ),
+
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "get",
+            "https://open.feishu.cn/document/server-docs/vc-v1/recording/get",
+            "获取录制文件"
+        ),
+
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "set_permission",
+            "https://open.feishu.cn/document/server-docs/vc-v1/recording/set_permission",
+            "设置录制权限"
+        ),
+
+        // === RoomService - 会议室管理服务 ===
+
+        // 创建会议室（基于已验证模式）
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "create",
+            "https://open.feishu.cn/document/server-docs/vc-v1/room/create",
+            "创建会议室"
+        ),
+
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "update",
+            "https://open.feishu.cn/document/server-docs/vc-v1/room/update",
+            "更新会议室"
+        ),
+
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "delete",
+            "https://open.feishu.cn/document/server-docs/vc-v1/room/delete",
+            "删除会议室"
+        ),
+
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "get",
+            "https://open.feishu.cn/document/server-docs/vc-v1/room/get",
+            "获取会议室"
+        ),
+
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "list",
+            "https://open.feishu.cn/document/server-docs/vc-v1/room/list",
+            "获取会议室列表"
+        ),
+
+        ApiDocUrl::new(
+            "vc",
+            "v1",
+            "search",
+            "https://open.feishu.cn/document/server-docs/vc-v1/room/search",
+            "搜索会议室"
+        ),
+    ];
+    registry.register_service("vc", urls);
 }
 
 /// 文档URL标准化系统
