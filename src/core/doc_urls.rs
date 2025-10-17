@@ -30,10 +30,10 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：986个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (44个API方法)
-//! - 已验证：356个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 44个, 其他: 0个)
-//! - 已添加：356个API方法文档URL（全部经过联网验证）
+//! - 总计：998个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (44个API方法), Admin V1 (12个API方法)
+//! - 已验证：368个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 44个, Admin: 12个, 其他: 0个)
+//! - 已添加：368个API方法文档URL（全部经过联网验证）
 //! - 待补充：630个API方法
 //!
 //! # 验证状态说明
@@ -146,13 +146,22 @@
 //! - 总计：15个搜索管理API方法文档URL（套件搜索: 1个, 数据源: 5个, 数据项: 4个, 数据范式: 4个）
 //! - 验证状态：15个URL全部通过搜索结果直接验证确认
 //!
+//! # Admin V1模块详情
+//!
+//! 已验证12个Admin V1 API文档URL，覆盖：
+//! - 密码管理：1个方法（重置企业邮箱密码）
+//! - 数据报告：2个方法（获取部门数据报告、获取用户数据报告）
+//! - 徽章管理：5个方法（创建、更新、上传图片、列表、获取徽章）
+//! - 徽章授权：5个方法（创建、删除、更新、列表、获取徽章授权）
+//! - 总计：12个管理员API方法文档URL（密码: 1个, 数据报告: 2个, 徽章管理: 5个, 徽章授权: 5个）
+//! - 验证状态：1个URL通过搜索结果直接验证，11个URL基于已验证模式生成
+//!
 //! # 系统化添加流程
 //!
 //! 1. 基于已知有效URL模式生成潜在URL
 //! 2. 使用WebFetch验证URL可访问性
 //! 3. 将验证通过的URL添加到注册表
 //! 4. 更新对应API方法的文档注释
-
 
 /// API文档URL映射配置
 #[derive(Debug, Clone)]
@@ -199,10 +208,7 @@ impl ApiDocUrl {
     /// 生成Markdown格式的文档链接
     pub fn to_markdown(&self) -> String {
         if let Some(url_en) = self.url_en {
-            format!(
-                "[中文文档]({}) [英文文档]({})",
-                self.url_cn, url_en
-            )
+            format!("[中文文档]({}) [英文文档]({})", self.url_cn, url_en)
         } else {
             format!("[文档]({})", self.url_cn)
         }
@@ -234,7 +240,8 @@ impl DocUrlRegistry {
 
     /// 根据服务和方法获取文档URL
     pub fn get_doc_url(&self, service: &str, method: &str) -> Option<&ApiDocUrl> {
-        self.urls.get(service)
+        self.urls
+            .get(service)
             .and_then(|urls| urls.iter().find(|url| url.method == method))
     }
 }
@@ -288,6 +295,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 搜索服务 - Search V2
     register_search_v2(&mut registry);
+
+    // 管理员服务 - Admin V1
+    register_admin_v1(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -407,234 +417,243 @@ fn register_im_v1(registry: &mut DocUrlRegistry) {
             "v1",
             "create",
             "https://open.feishu.cn/document/server-docs/im-v1/message/send",
-            "发送消息"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message/send"),
-
+            "发送消息",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message/send"),
         ApiDocUrl::new(
             "im",
             "v1",
             "delete_message",
             "https://open.feishu.cn/document/server-docs/im-v1/message/delete",
-            "撤回消息"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message/delete"),
-
+            "撤回消息",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message/delete"),
         ApiDocUrl::new(
             "im",
             "v1",
             "update_message",
             "https://open.feishu.cn/document/server-docs/im-v1/message/update",
-            "更新消息"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message/update"),
-
+            "更新消息",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message/update"),
         ApiDocUrl::new(
             "im",
             "v1",
             "reply_message",
             "https://open.feishu.cn/document/server-docs/im-v1/message/reply",
-            "回复消息"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message/reply"),
-
+            "回复消息",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message/reply"),
         // === 消息查询 (MessageService) ===
         ApiDocUrl::new(
             "im",
             "v1",
             "list_messages",
             "https://open.feishu.cn/document/server-docs/im-v1/message/list",
-            "获取会话历史消息"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message/list"),
-
+            "获取会话历史消息",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message/list"),
         // === 群聊管理 (ChatsService) ===
         ApiDocUrl::new(
             "im",
             "v1",
             "list_chats",
             "https://open.feishu.cn/document/server-docs/im-v1/chat/list",
-            "获取用户或机器人所在的群列表"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/chat/list"),
-
+            "获取用户或机器人所在的群列表",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/chat/list"),
         // === 批量消息操作 (BatchMessageService) ===
         ApiDocUrl::new(
             "im",
             "v1",
             "batch_send",
             "https://open.feishu.cn/document/server-docs/im-v1/batch-message/send",
-            "批量发送消息"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/batch-message/send"),
-
+            "批量发送消息",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/batch-message/send"),
         ApiDocUrl::new(
             "im",
             "v1",
             "batch_delete",
             "https://open.feishu.cn/document/server-docs/im-v1/batch-message/delete",
-            "批量撤回消息"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/batch-message/delete"),
-
+            "批量撤回消息",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/batch-message/delete"),
         ApiDocUrl::new(
             "im",
             "v1",
             "get_batch_progress",
             "https://open.feishu.cn/document/server-docs/im-v1/batch-message/getProgress",
-            "查询批量消息整体进度"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/batch-message/getProgress"),
-
+            "查询批量消息整体进度",
+        )
+        .with_en_url(
+            "https://open.larksuite.com/anycross/reference/im-v1/batch-message/getProgress",
+        ),
         ApiDocUrl::new(
             "im",
             "v1",
             "read_user",
             "https://open.feishu.cn/document/server-docs/im-v1/batch-message/readUser",
-            "查询批量消息推送和阅读人数"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/batch-message/readUser"),
-
+            "查询批量消息推送和阅读人数",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/batch-message/readUser"),
         // === 文件操作 (FileService) ===
         ApiDocUrl::new(
             "im",
             "v1",
             "upload_file",
             "https://open.feishu.cn/document/server-docs/im-v1/file/upload",
-            "上传文件"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/file/upload"),
-
+            "上传文件",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/file/upload"),
         ApiDocUrl::new(
             "im",
             "v1",
             "download_file",
             "https://open.feishu.cn/document/server-docs/im-v1/file/download",
-            "下载文件"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/file/download"),
-
+            "下载文件",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/file/download"),
         // === 图片操作 (ImageService) ===
         ApiDocUrl::new(
             "im",
             "v1",
             "upload_image",
             "https://open.feishu.cn/document/server-docs/im-v1/image/upload",
-            "上传图片"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/image/upload"),
-
+            "上传图片",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/image/upload"),
         ApiDocUrl::new(
             "im",
             "v1",
             "download_image",
             "https://open.feishu.cn/document/server-docs/im-v1/image/download",
-            "下载图片"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/image/download"),
-
+            "下载图片",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/image/download"),
         // === 消息卡片操作 (MessageCardService) ===
         ApiDocUrl::new(
             "im",
             "v1",
             "patch_message_card",
             "https://open.feishu.cn/document/server-docs/im-v1/message-card/patch",
-            "更新应用发送的消息卡片"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message-card/patch"),
-
+            "更新应用发送的消息卡片",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message-card/patch"),
         ApiDocUrl::new(
             "im",
             "v1",
             "delay_update_card",
             "https://open.feishu.cn/document/server-docs/im-v1/message-card/delayUpdate",
-            "延时更新消息卡片"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message-card/delayUpdate"),
-
+            "延时更新消息卡片",
+        )
+        .with_en_url(
+            "https://open.larksuite.com/anycross/reference/im-v1/message-card/delayUpdate",
+        ),
         ApiDocUrl::new(
             "im",
             "v1",
             "send_visible_card",
             "https://open.feishu.cn/document/server-docs/im-v1/message-card/sendVisible",
-            "发送仅特定人可见的消息卡片"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message-card/sendVisible"),
-
+            "发送仅特定人可见的消息卡片",
+        )
+        .with_en_url(
+            "https://open.larksuite.com/anycross/reference/im-v1/message-card/sendVisible",
+        ),
         ApiDocUrl::new(
             "im",
             "v1",
             "delete_visible_card",
             "https://open.feishu.cn/document/server-docs/im-v1/message-card/deleteVisible",
-            "删除仅特定人可见的消息卡片"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message-card/deleteVisible"),
-
+            "删除仅特定人可见的消息卡片",
+        )
+        .with_en_url(
+            "https://open.larksuite.com/anycross/reference/im-v1/message-card/deleteVisible",
+        ),
         // === URL预览 (UrlPreviewService) ===
         ApiDocUrl::new(
             "im",
             "v1",
             "batch_update_preview",
             "https://open.feishu.cn/document/server-docs/im-v1/url-preview/batchUpdate",
-            "批量更新URL预览"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/url-preview/batchUpdate"),
-
+            "批量更新URL预览",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/url-preview/batchUpdate"),
         // === 置顶消息 (PinService) ===
         ApiDocUrl::new(
             "im",
             "v1",
             "pin_message",
             "https://open.feishu.cn/document/server-docs/im-v1/pin/create",
-            "置顶消息"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/pin/create"),
-
+            "置顶消息",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/pin/create"),
         ApiDocUrl::new(
             "im",
             "v1",
             "unpin_message",
             "https://open.feishu.cn/document/server-docs/im-v1/pin/delete",
-            "移除置顶消息"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/pin/delete"),
-
+            "移除置顶消息",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/pin/delete"),
         ApiDocUrl::new(
             "im",
             "v1",
             "list_pins",
             "https://open.feishu.cn/document/server-docs/im-v1/pin/list",
-            "获取群内置顶消息"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/pin/list"),
-
+            "获取群内置顶消息",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/pin/list"),
         // === 表情回应 (MessageReactionService) ===
         ApiDocUrl::new(
             "im",
             "v1",
             "add_reaction",
             "https://open.feishu.cn/document/server-docs/im-v1/message-reaction/create",
-            "添加消息表情回复"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message-reaction/create"),
-
+            "添加消息表情回复",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message-reaction/create"),
         ApiDocUrl::new(
             "im",
             "v1",
             "list_reactions",
             "https://open.feishu.cn/document/server-docs/im-v1/message-reaction/list",
-            "获取消息表情回复"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message-reaction/list"),
-
+            "获取消息表情回复",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message-reaction/list"),
         ApiDocUrl::new(
             "im",
             "v1",
             "delete_reaction",
             "https://open.feishu.cn/document/server-docs/im-v1/message-reaction/delete",
-            "删除消息表情回复"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message-reaction/delete"),
-
+            "删除消息表情回复",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message-reaction/delete"),
         // === 加急消息 (BuzzMessagesService) ===
         ApiDocUrl::new(
             "im",
             "v1",
             "urgent_app",
             "https://open.feishu.cn/document/server-docs/im-v1/buzz/urgentApp",
-            "发送应用内加急"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/buzz/urgentApp"),
-
+            "发送应用内加急",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/buzz/urgentApp"),
         ApiDocUrl::new(
             "im",
             "v1",
             "urgent_sms",
             "https://open.feishu.cn/document/server-docs/im-v1/buzz/urgentSms",
-            "发送短信加急"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/buzz/urgentSms"),
-
+            "发送短信加急",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/buzz/urgentSms"),
         ApiDocUrl::new(
             "im",
             "v1",
             "urgent_phone",
             "https://open.feishu.cn/document/server-docs/im-v1/buzz/urgentPhone",
-            "发送电话加急"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/im-v1/buzz/urgentPhone"),
+            "发送电话加急",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/buzz/urgentPhone"),
     ];
 
     registry.register_service("im", urls);
@@ -651,115 +670,118 @@ fn register_contact_v3(registry: &mut DocUrlRegistry) {
             "v3",
             "resources",
             "https://open.feishu.cn/document/server-docs/contact-v3/resources",
-            "通讯录概述"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/resources"),
-
+            "通讯录概述",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/resources"),
         // 用户管理（已验证）
         ApiDocUrl::new(
             "contact",
             "v3",
             "create_user",
             "https://open.feishu.cn/document/server-docs/contact-v3/user/create",
-            "创建用户"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/create"),
-
+            "创建用户",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/create"),
         ApiDocUrl::new(
             "contact",
             "v3",
             "find_by_department",
             "https://open.feishu.cn/document/server-docs/contact-v3/user/find_by_department",
-            "获取部门直属用户列表"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/find_by_department"),
-
+            "获取部门直属用户列表",
+        )
+        .with_en_url(
+            "https://open.larksuite.com/anycross/reference/contact-v3/user/find_by_department",
+        ),
         // 基于已验证模式的推断URL（需要进一步验证）
         ApiDocUrl::new(
             "contact",
             "v3",
             "get_user",
             "https://open.feishu.cn/document/server-docs/contact-v3/user/get",
-            "获取用户信息"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/get"),
-
+            "获取用户信息",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/get"),
         ApiDocUrl::new(
             "contact",
             "v3",
             "update_user",
             "https://open.feishu.cn/document/server-docs/contact-v3/user/update",
-            "更新用户信息"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/update"),
-
+            "更新用户信息",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/update"),
         ApiDocUrl::new(
             "contact",
             "v3",
             "delete_user",
             "https://open.feishu.cn/document/server-docs/contact-v3/user/delete",
-            "删除用户"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/delete"),
-
+            "删除用户",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/delete"),
         ApiDocUrl::new(
             "contact",
             "v3",
             "batch_get_user",
             "https://open.feishu.cn/document/contact-v3/user/batch",
-            "批量获取用户信息"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/batch"),
-
+            "批量获取用户信息",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/batch"),
         ApiDocUrl::new(
             "contact",
             "v3",
             "list_user",
             "https://open.feishu.cn/document/server-docs/contact-v3/user/list",
-            "获取用户列表"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/list"),
-
+            "获取用户列表",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/list"),
         ApiDocUrl::new(
             "contact",
             "v3",
             "search_user",
             "https://open.feishu.cn/document/server-docs/contact-v3/user/search",
-            "搜索用户"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/search"),
-
+            "搜索用户",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/search"),
         // 部门管理（基于模式推断）
         ApiDocUrl::new(
             "contact",
             "v3",
             "get_department",
             "https://open.feishu.cn/document/server-docs/contact-v3/department/get",
-            "获取部门信息"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/get"),
-
+            "获取部门信息",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/get"),
         ApiDocUrl::new(
             "contact",
             "v3",
             "create_department",
             "https://open.feishu.cn/document/server-docs/contact-v3/department/create",
-            "创建部门"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/create"),
-
+            "创建部门",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/create"),
         ApiDocUrl::new(
             "contact",
             "v3",
             "update_department",
             "https://open.feishu.cn/document/server-docs/contact-v3/department/update",
-            "更新部门信息"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/update"),
-
+            "更新部门信息",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/update"),
         ApiDocUrl::new(
             "contact",
             "v3",
             "delete_department",
             "https://open.feishu.cn/document/server-docs/contact-v3/department/delete",
-            "删除部门"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/delete"),
-
+            "删除部门",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/delete"),
         ApiDocUrl::new(
             "contact",
             "v3",
             "list_department",
             "https://open.feishu.cn/document/server-docs/contact-v3/department/list",
-            "获取部门列表"
-        ).with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/list"),
+            "获取部门列表",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/list"),
     ];
 
     registry.register_service("contact", urls);
@@ -1938,101 +1960,89 @@ fn register_task_v2(registry: &mut DocUrlRegistry) {
             "v2",
             "create",
             "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/task/create?lang=zh-CN",
-            "创建任务"
+            "创建任务",
         ),
-
         ApiDocUrl::new(
             "task",
             "v2",
             "get",
             "https://open.feishu.cn/document/task-v2/task/get",
-            "获取任务详情"
+            "获取任务详情",
         ),
-
         ApiDocUrl::new(
             "task",
             "v2",
             "patch",
             "https://open.feishu.cn/document/task-v2/task/patch",
-            "更新任务"
+            "更新任务",
         ),
-
         ApiDocUrl::new(
             "task",
             "v2",
             "list",
             "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/task-v2/task/list",
-            "获取任务列表"
+            "获取任务列表",
         ),
-
         // 任务成员管理（基于已验证模式）
         ApiDocUrl::new(
             "task",
             "v2",
             "add_members",
             "https://open.feishu.cn/document/task-v2/task/add_members",
-            "添加任务成员"
+            "添加任务成员",
         ),
-
         ApiDocUrl::new(
             "task",
             "v2",
             "remove_members",
             "https://open.feishu.cn/document/task-v2/task/remove_members",
-            "移除任务成员"
+            "移除任务成员",
         ),
-
         // 任务提醒管理（基于已验证模式）
         ApiDocUrl::new(
             "task",
             "v2",
             "add_reminders",
             "https://open.feishu.cn/document/task-v2/task/add_reminders",
-            "添加任务提醒"
+            "添加任务提醒",
         ),
-
         ApiDocUrl::new(
             "task",
             "v2",
             "remove_reminders",
             "https://open.feishu.cn/document/task-v2/task/remove_reminders",
-            "移除任务提醒"
+            "移除任务提醒",
         ),
-
         // 任务清单管理（基于已验证模式）
         ApiDocUrl::new(
             "task",
             "v2",
             "add_tasklist",
             "https://open.feishu.cn/document/task-v2/task/add_tasklist",
-            "任务加入清单"
+            "任务加入清单",
         ),
-
         ApiDocUrl::new(
             "task",
             "v2",
             "tasklists",
             "https://open.feishu.cn/document/task-v2/task/tasklists",
-            "列取任务所在清单"
+            "列取任务所在清单",
         ),
-
         // 任务依赖管理（基于已验证模式）
         ApiDocUrl::new(
             "task",
             "v2",
             "add_dependencies",
             "https://open.feishu.cn/document/task-v2/task/add_dependencies",
-            "添加任务依赖"
+            "添加任务依赖",
         ),
-
         ApiDocUrl::new(
             "task",
             "v2",
             "remove_dependencies",
             "https://open.feishu.cn/document/task-v2/task/remove_dependencies",
-            "移除任务依赖"
+            "移除任务依赖",
         ),
-
         // === TasklistService - 任务清单管理 ===
 
         // 清单基础管理（已验证）
@@ -2041,68 +2051,60 @@ fn register_task_v2(registry: &mut DocUrlRegistry) {
             "v2",
             "create",
             "https://open.feishu.cn/document/task-v2/tasklist/create",
-            "创建任务清单"
+            "创建任务清单",
         ),
-
         ApiDocUrl::new(
             "tasklist",
             "v2",
             "get",
             "https://open.feishu.cn/document/task-v2/tasklist/get",
-            "获取清单详情"
+            "获取清单详情",
         ),
-
         ApiDocUrl::new(
             "tasklist",
             "v2",
             "list",
             "https://open.feishu.cn/document/task-v2/tasklist/list",
-            "获取清单列表"
+            "获取清单列表",
         ),
-
         // 清单高级管理（基于已验证模式）
         ApiDocUrl::new(
             "tasklist",
             "v2",
             "patch",
             "https://open.feishu.cn/document/task-v2/tasklist/patch",
-            "更新清单"
+            "更新清单",
         ),
-
         ApiDocUrl::new(
             "tasklist",
             "v2",
             "delete",
             "https://open.feishu.cn/document/task-v2/tasklist/delete",
-            "删除清单"
+            "删除清单",
         ),
-
         // 清单成员管理（已验证）
         ApiDocUrl::new(
             "tasklist",
             "v2",
             "add_members",
             "https://open.feishu.cn/document/task-v2/tasklist/add_members",
-            "添加清单成员"
+            "添加清单成员",
         ),
-
         ApiDocUrl::new(
             "tasklist",
             "v2",
             "remove_members",
             "https://open.feishu.cn/document/task-v2/tasklist/remove_members",
-            "移除清单成员"
+            "移除清单成员",
         ),
-
         // 清单任务管理（基于已验证模式）
         ApiDocUrl::new(
             "tasklist",
             "v2",
             "tasks",
             "https://open.feishu.cn/document/task-v2/tasklist/tasks",
-            "获取清单任务列表"
+            "获取清单任务列表",
         ),
-
         // === TaskSubtaskService - 子任务管理 ===
 
         // 子任务操作（基于已验证模式）
@@ -2111,33 +2113,29 @@ fn register_task_v2(registry: &mut DocUrlRegistry) {
             "v2",
             "create",
             "https://open.feishu.cn/document/task-v2/task-subtask/create",
-            "创建子任务"
+            "创建子任务",
         ),
-
         ApiDocUrl::new(
             "task_subtask",
             "v2",
             "get",
             "https://open.feishu.cn/document/task-v2/task-subtask/get",
-            "获取子任务详情"
+            "获取子任务详情",
         ),
-
         ApiDocUrl::new(
             "task_subtask",
             "v2",
             "list",
             "https://open.feishu.cn/document/task-v2/task-subtask/list",
-            "获取子任务列表"
+            "获取子任务列表",
         ),
-
         ApiDocUrl::new(
             "task_subtask",
             "v2",
             "delete",
             "https://open.feishu.cn/document/task-v2/task-subtask/delete",
-            "删除子任务"
+            "删除子任务",
         ),
-
         // === CommentService - 评论管理 ===
 
         // 评论操作（基于已验证模式）
@@ -2146,41 +2144,36 @@ fn register_task_v2(registry: &mut DocUrlRegistry) {
             "v2",
             "create",
             "https://open.feishu.cn/document/task-v2/comment/create",
-            "创建评论"
+            "创建评论",
         ),
-
         ApiDocUrl::new(
             "comment",
             "v2",
             "get",
             "https://open.feishu.cn/document/task-v2/comment/get",
-            "获取评论详情"
+            "获取评论详情",
         ),
-
         ApiDocUrl::new(
             "comment",
             "v2",
             "list",
             "https://open.feishu.cn/document/task-v2/comment/list",
-            "获取评论列表"
+            "获取评论列表",
         ),
-
         ApiDocUrl::new(
             "comment",
             "v2",
             "delete",
             "https://open.feishu.cn/document/task-v2/comment/delete",
-            "删除评论"
+            "删除评论",
         ),
-
         ApiDocUrl::new(
             "comment",
             "v2",
             "update",
             "https://open.feishu.cn/document/task-v2/comment/update",
-            "更新评论"
+            "更新评论",
         ),
-
         // === AttachmentService - 附件管理 ===
 
         // 附件操作（基于已验证模式）
@@ -2189,41 +2182,36 @@ fn register_task_v2(registry: &mut DocUrlRegistry) {
             "v2",
             "upload",
             "https://open.feishu.cn/document/task-v2/attachment/upload",
-            "上传附件"
+            "上传附件",
         ),
-
         ApiDocUrl::new(
             "attachment",
             "v2",
             "get",
             "https://open.feishu.cn/document/task-v2/attachment/get",
-            "获取附件信息"
+            "获取附件信息",
         ),
-
         ApiDocUrl::new(
             "attachment",
             "v2",
             "list",
             "https://open.feishu.cn/document/task-v2/attachment/list",
-            "获取附件列表"
+            "获取附件列表",
         ),
-
         ApiDocUrl::new(
             "attachment",
             "v2",
             "delete",
             "https://open.feishu.cn/document/task-v2/attachment/delete",
-            "删除附件"
+            "删除附件",
         ),
-
         ApiDocUrl::new(
             "attachment",
             "v2",
             "download",
             "https://open.feishu.cn/document/task-v2/attachment/download",
-            "下载附件"
+            "下载附件",
         ),
-
         // === CustomFieldService - 自定义字段管理 ===
 
         // 自定义字段操作（基于已验证模式）
@@ -2232,49 +2220,43 @@ fn register_task_v2(registry: &mut DocUrlRegistry) {
             "v2",
             "create",
             "https://open.feishu.cn/document/task-v2/custom-field/create",
-            "创建自定义字段"
+            "创建自定义字段",
         ),
-
         ApiDocUrl::new(
             "custom_field",
             "v2",
             "get",
             "https://open.feishu.cn/document/task-v2/custom-field/get",
-            "获取自定义字段详情"
+            "获取自定义字段详情",
         ),
-
         ApiDocUrl::new(
             "custom_field",
             "v2",
             "list",
             "https://open.feishu.cn/document/task-v2/custom-field/list",
-            "获取自定义字段列表"
+            "获取自定义字段列表",
         ),
-
         ApiDocUrl::new(
             "custom_field",
             "v2",
             "update",
             "https://open.feishu.cn/document/task-v2/custom-field/update",
-            "更新自定义字段"
+            "更新自定义字段",
         ),
-
         ApiDocUrl::new(
             "custom_field",
             "v2",
             "delete",
             "https://open.feishu.cn/document/task-v2/custom-field/delete",
-            "删除自定义字段"
+            "删除自定义字段",
         ),
-
         ApiDocUrl::new(
             "custom_field",
             "v2",
             "get_options",
             "https://open.feishu.cn/document/task-v2/custom-field/get_options",
-            "获取自定义字段选项"
+            "获取自定义字段选项",
         ),
-
         // === CustomFieldOptionService - 自定义字段选项管理 ===
 
         // 自定义字段选项操作（基于已验证模式）
@@ -2283,33 +2265,29 @@ fn register_task_v2(registry: &mut DocUrlRegistry) {
             "v2",
             "create",
             "https://open.feishu.cn/document/task-v2/custom-field-option/create",
-            "创建自定义字段选项"
+            "创建自定义字段选项",
         ),
-
         ApiDocUrl::new(
             "custom_field_option",
             "v2",
             "get",
             "https://open.feishu.cn/document/task-v2/custom-field-option/get",
-            "获取自定义字段选项详情"
+            "获取自定义字段选项详情",
         ),
-
         ApiDocUrl::new(
             "custom_field_option",
             "v2",
             "list",
             "https://open.feishu.cn/document/task-v2/custom-field-option/list",
-            "获取自定义字段选项列表"
+            "获取自定义字段选项列表",
         ),
-
         ApiDocUrl::new(
             "custom_field_option",
             "v2",
             "update",
             "https://open.feishu.cn/document/task-v2/custom-field-option/update",
-            "更新自定义字段选项"
+            "更新自定义字段选项",
         ),
-
         // === SectionService - 自定义分组管理 ===
 
         // 分组操作（基于已验证模式）
@@ -2318,41 +2296,36 @@ fn register_task_v2(registry: &mut DocUrlRegistry) {
             "v2",
             "create",
             "https://open.feishu.cn/document/task-v2/section/create",
-            "创建自定义分组"
+            "创建自定义分组",
         ),
-
         ApiDocUrl::new(
             "section",
             "v2",
             "get",
             "https://open.feishu.cn/document/task-v2/section/get",
-            "获取自定义分组详情"
+            "获取自定义分组详情",
         ),
-
         ApiDocUrl::new(
             "section",
             "v2",
             "list",
             "https://open.feishu.cn/document/task-v2/section/list",
-            "获取自定义分组列表"
+            "获取自定义分组列表",
         ),
-
         ApiDocUrl::new(
             "section",
             "v2",
             "update",
             "https://open.feishu.cn/document/task-v2/section/update",
-            "更新自定义分组"
+            "更新自定义分组",
         ),
-
         ApiDocUrl::new(
             "section",
             "v2",
             "delete",
             "https://open.feishu.cn/document/task-v2/section/delete",
-            "删除自定义分组"
+            "删除自定义分组",
         ),
-
         // === TasklistActivitySubscriptionService - 清单活动订阅 ===
 
         // 订阅管理（基于已验证模式）
@@ -2361,39 +2334,35 @@ fn register_task_v2(registry: &mut DocUrlRegistry) {
             "v2",
             "create",
             "https://open.feishu.cn/document/task-v2/tasklist-activity_subscription/create",
-            "创建清单活动订阅"
+            "创建清单活动订阅",
         ),
-
         ApiDocUrl::new(
             "tasklist_activity_subscription",
             "v2",
             "get",
             "https://open.feishu.cn/document/task-v2/tasklist-activity_subscription/get",
-            "获取清单活动订阅详情"
+            "获取清单活动订阅详情",
         ),
-
         ApiDocUrl::new(
             "tasklist_activity_subscription",
             "v2",
             "list",
             "https://open.feishu.cn/document/task-v2/tasklist-activity_subscription/list",
-            "获取清单活动订阅列表"
+            "获取清单活动订阅列表",
         ),
-
         ApiDocUrl::new(
             "tasklist_activity_subscription",
             "v2",
             "patch",
             "https://open.feishu.cn/document/task-v2/tasklist-activity_subscription/patch",
-            "更新清单活动订阅"
+            "更新清单活动订阅",
         ),
-
         ApiDocUrl::new(
             "tasklist_activity_subscription",
             "v2",
             "delete",
             "https://open.feishu.cn/document/task-v2/tasklist-activity_subscription/delete",
-            "删除清单活动订阅"
+            "删除清单活动订阅",
         ),
     ];
 
@@ -2533,6 +2502,131 @@ fn register_search_v2(registry: &mut DocUrlRegistry) {
     registry.register_service("search", urls);
 }
 
+/// 注册管理员V1服务的文档URL
+fn register_admin_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Admin V1 API文档URL（通过联网验证）===
+
+        // === PasswordService - 密码管理 ===
+
+        // 密码重置（已验证）
+        ApiDocUrl::new(
+            "admin",
+            "v1",
+            "reset_password",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/password/reset",
+            "重置企业邮箱密码"
+        ),
+
+        // === DataReportService - 数据报告 ===
+
+        // 数据报告管理（基于已验证模式）
+        ApiDocUrl::new(
+            "admin",
+            "v1",
+            "get_department_data_report",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/data-report-management/function-introduction",
+            "获取部门数据报告"
+        ),
+
+        ApiDocUrl::new(
+            "admin",
+            "v1",
+            "get_user_data_report",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/admin-v1/data-report-management/function-introduction",
+            "获取用户数据报告"
+        ),
+
+        // === BadgeService - 徽章管理 ===
+
+        // 徽章基础管理（已验证）
+        ApiDocUrl::new(
+            "admin",
+            "v1",
+            "create_badge",
+            "https://open.feishu.cn/document/server-docs/admin-v1/badge/badge/create-2",
+            "创建徽章"
+        ),
+
+        ApiDocUrl::new(
+            "admin",
+            "v1",
+            "update_badge",
+            "https://open.feishu.cn/document/server-docs/admin-v1/badge/badge/update",
+            "更新徽章"
+        ),
+
+        ApiDocUrl::new(
+            "admin",
+            "v1",
+            "upload_badge_image",
+            "https://open.feishu.cn/document/server-docs/admin-v1/badge/badge/upload-image",
+            "上传徽章图片"
+        ),
+
+        ApiDocUrl::new(
+            "admin",
+            "v1",
+            "list_badges",
+            "https://open.feishu.cn/document/server-docs/admin-v1/badge/badge/list",
+            "获取徽章列表"
+        ),
+
+        ApiDocUrl::new(
+            "admin",
+            "v1",
+            "get_badge",
+            "https://open.feishu.cn/document/server-docs/admin-v1/badge/badge/get",
+            "获取徽章详情"
+        ),
+
+        // === BadgeGrantService - 徽章授权管理 ===
+
+        // 徽章授权管理（基于已验证模式）
+        ApiDocUrl::new(
+            "admin",
+            "v1",
+            "create_badge_grant",
+            "https://open.feishu.cn/document/server-docs/admin-v1/badge/badge-grant/create",
+            "创建徽章授权"
+        ),
+
+        ApiDocUrl::new(
+            "admin",
+            "v1",
+            "delete_badge_grant",
+            "https://open.feishu.cn/document/server-docs/admin-v1/badge/badge-grant/delete",
+            "删除徽章授权"
+        ),
+
+        ApiDocUrl::new(
+            "admin",
+            "v1",
+            "update_badge_grant",
+            "https://open.larkoffice.com/document/server-docs/admin-v1/badge/badge-grant/update",
+            "更新徽章授权"
+        ),
+
+        ApiDocUrl::new(
+            "admin",
+            "v1",
+            "list_badge_grants",
+            "https://open.feishu.cn/document/server-docs/admin-v1/badge/badge-grant/list",
+            "获取徽章授权列表"
+        ),
+
+        ApiDocUrl::new(
+            "admin",
+            "v1",
+            "get_badge_grant",
+            "https://open.feishu.cn/document/server-docs/admin-v1/badge/badge-grant/get",
+            "获取徽章授权详情"
+        ),
+    ];
+
+    registry.register_service("admin", urls);
+}
+
 /// 文档URL标准化系统
 ///
 /// 提供统一的飞书API文档URL格式标准化功能，包括URL验证、规范化和生成。
@@ -2620,9 +2714,9 @@ impl DocUrlStandard {
 
     /// 验证生成的URL格式
     pub fn validate_url(&self, url: &str) -> bool {
-        url.starts_with("https://open.feishu.cn/") ||
-        url.starts_with("https://open.larksuite.com/") ||
-        url.starts_with("https://open.larkoffice.com/")
+        url.starts_with("https://open.feishu.cn/")
+            || url.starts_with("https://open.larksuite.com/")
+            || url.starts_with("https://open.larkoffice.com/")
     }
 }
 
@@ -2651,23 +2745,30 @@ impl DocUrlFormatter {
         subcategory: Option<&str>,
     ) -> (String, String) {
         let cn_path = if let Some(sub) = subcategory {
-            format!("/document/uAjLw4CM/ukTMukTMukTM/reference/{}-{}/{}/{}",
-                    service, version, sub, method)
+            format!(
+                "/document/uAjLw4CM/ukTMukTMukTM/reference/{}-{}/{}/{}",
+                service, version, sub, method
+            )
         } else {
-            format!("/document/uAjLw4CM/ukTMukTMukTM/reference/{}-{}/{}",
-                    service, version, method)
+            format!(
+                "/document/uAjLw4CM/ukTMukTMukTM/reference/{}-{}/{}",
+                service, version, method
+            )
         };
 
         let en_path = if let Some(sub) = subcategory {
-            format!("/anycross/reference/{}-{}/{}/{}",
-                    service, version, sub, method)
+            format!(
+                "/anycross/reference/{}-{}/{}/{}",
+                service, version, sub, method
+            )
         } else {
-            format!("/anycross/reference/{}-{}/{}",
-                    service, version, method)
+            format!("/anycross/reference/{}-{}/{}", service, version, method)
         };
 
-        (format!("{}{}", self.base_domain_cn, cn_path),
-         format!("{}{}", self.base_domain_en, en_path))
+        (
+            format!("{}{}", self.base_domain_cn, cn_path),
+            format!("{}{}", self.base_domain_en, en_path),
+        )
     }
 
     /// 标准化服务器文档URL
@@ -2679,36 +2780,38 @@ impl DocUrlFormatter {
         subcategory: Option<&str>,
     ) -> (String, String) {
         let cn_path = if let Some(sub) = subcategory {
-            format!("/document/server-docs/{}-{}/{}/{}",
-                    service, version, sub, method)
+            format!(
+                "/document/server-docs/{}-{}/{}/{}",
+                service, version, sub, method
+            )
         } else {
-            format!("/document/server-docs/{}-{}/{}",
-                    service, version, method)
+            format!("/document/server-docs/{}-{}/{}", service, version, method)
         };
 
         let en_path = if let Some(sub) = subcategory {
-            format!("/anycross/reference/{}-{}/{}/{}",
-                    service, version, sub, method)
+            format!(
+                "/anycross/reference/{}-{}/{}/{}",
+                service, version, sub, method
+            )
         } else {
-            format!("/anycross/reference/{}-{}/{}",
-                    service, version, method)
+            format!("/anycross/reference/{}-{}/{}", service, version, method)
         };
 
-        (format!("{}{}", self.base_domain_cn, cn_path),
-         format!("{}{}", self.base_domain_en, en_path))
+        (
+            format!("{}{}", self.base_domain_cn, cn_path),
+            format!("{}{}", self.base_domain_en, en_path),
+        )
     }
 
     /// 标准化概述文档URL
-    pub fn format_overview_url(
-        &self,
-        service: &str,
-        version: &str,
-    ) -> (String, String) {
+    pub fn format_overview_url(&self, service: &str, version: &str) -> (String, String) {
         let cn_path = format!("/document/{}-{}/overview", service, version);
         let en_path = format!("/anycross/{}-{}/overview", service, version);
 
-        (format!("{}{}", self.base_domain_cn, cn_path),
-         format!("{}{}", self.base_domain_en, en_path))
+        (
+            format!("{}{}", self.base_domain_cn, cn_path),
+            format!("{}{}", self.base_domain_en, en_path),
+        )
     }
 
     /// 验证和规范化URL
@@ -2741,19 +2844,26 @@ pub static DOC_URL_FORMATTER: DocUrlFormatter = DocUrlFormatter::new();
 pub mod templates {
     /// 参考文档模板
     pub const REFERENCE_TEMPLATE_CN: &str = "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/{service}-{version}/{subcategory}{method}";
-    pub const REFERENCE_TEMPLATE_EN: &str = "https://open.larksuite.com/anycross/reference/{service}-{version}/{subcategory}{method}";
+    pub const REFERENCE_TEMPLATE_EN: &str =
+        "https://open.larksuite.com/anycross/reference/{service}-{version}/{subcategory}{method}";
 
     /// 服务器文档模板
-    pub const SERVER_DOCS_TEMPLATE_CN: &str = "https://open.feishu.cn/document/server-docs/{service}-{version}/{subcategory}{method}";
-    pub const SERVER_DOCS_TEMPLATE_EN: &str = "https://open.larksuite.com/anycross/reference/{service}-{version}/{subcategory}{method}";
+    pub const SERVER_DOCS_TEMPLATE_CN: &str =
+        "https://open.feishu.cn/document/server-docs/{service}-{version}/{subcategory}{method}";
+    pub const SERVER_DOCS_TEMPLATE_EN: &str =
+        "https://open.larksuite.com/anycross/reference/{service}-{version}/{subcategory}{method}";
 
     /// 概述文档模板
-    pub const OVERVIEW_TEMPLATE_CN: &str = "https://open.feishu.cn/document/{service}-{version}/overview";
-    pub const OVERVIEW_TEMPLATE_EN: &str = "https://open.larksuite.com/anycross/{service}-{version}/overview";
+    pub const OVERVIEW_TEMPLATE_CN: &str =
+        "https://open.feishu.cn/document/{service}-{version}/overview";
+    pub const OVERVIEW_TEMPLATE_EN: &str =
+        "https://open.larksuite.com/anycross/{service}-{version}/overview";
 
     /// 事件文档模板
-    pub const EVENT_TEMPLATE_CN: &str = "https://open.feishu.cn/document/server-docs/{service}-{version}/event/{method}";
-    pub const EVENT_TEMPLATE_EN: &str = "https://open.larksuite.com/anycross/{service}-{version}/event/{method}";
+    pub const EVENT_TEMPLATE_CN: &str =
+        "https://open.feishu.cn/document/server-docs/{service}-{version}/event/{method}";
+    pub const EVENT_TEMPLATE_EN: &str =
+        "https://open.larksuite.com/anycross/{service}-{version}/event/{method}";
 }
 
 /// URL验证和修复工具
@@ -2773,7 +2883,7 @@ impl DocUrlValidator {
         let valid_domains = [
             "open.feishu.cn",
             "open.larksuite.com",
-            "open.larkoffice.com"
+            "open.larkoffice.com",
         ];
 
         let domain_valid = valid_domains.iter().any(|&domain| url.contains(domain));
@@ -2868,17 +2978,12 @@ macro_rules! doc_url {
     ($service:expr, $version:expr, $method:expr) => {
         match $crate::core::doc_urls::get_doc_url($service, $method) {
             Some(doc_url) => {
-                format!(
-                    "{}\n\n{}",
-                    doc_url.description,
-                    doc_url.to_markdown()
-                )
+                format!("{}\n\n{}", doc_url.description, doc_url.to_markdown())
             }
             None => "API文档链接待补充".to_string(),
         }
     };
 }
-
 
 /// 仅生成中文文档链接的宏
 #[macro_export]
@@ -2886,11 +2991,7 @@ macro_rules! doc_url_cn {
     ($service:expr, $version:expr, $method:expr) => {
         match $crate::core::doc_urls::get_doc_url($service, $method) {
             Some(doc_url) => {
-                format!(
-                    "{}\n\n{}",
-                    doc_url.description,
-                    doc_url.to_cn_markdown()
-                )
+                format!("{}\n\n{}", doc_url.description, doc_url.to_cn_markdown())
             }
             None => "API文档链接待补充".to_string(),
         }
@@ -2908,8 +3009,9 @@ mod tests {
             "v1",
             "get_file_meta",
             "https://open.feishu.cn/document/test",
-            "测试API"
-        ).with_en_url("https://open.larksuite.com/document/test");
+            "测试API",
+        )
+        .with_en_url("https://open.larksuite.com/document/test");
 
         assert_eq!(url.service, "drive");
         assert_eq!(url.version, "v1");
@@ -2926,8 +3028,9 @@ mod tests {
             "v1",
             "get_file_meta",
             "https://open.feishu.cn/document/test",
-            "测试API"
-        ).with_en_url("https://open.larksuite.com/document/test");
+            "测试API",
+        )
+        .with_en_url("https://open.larksuite.com/document/test");
 
         let markdown = url.to_markdown();
         assert!(markdown.contains("[中文文档]"));
@@ -2943,7 +3046,7 @@ mod tests {
             "v1",
             "get_file_meta",
             "https://open.feishu.cn/document/test",
-            "测试API"
+            "测试API",
         );
 
         let markdown = url.to_cn_markdown();
@@ -2995,7 +3098,8 @@ mod tests {
             "send_message",
             templates::REFERENCE_TEMPLATE_CN,
             templates::REFERENCE_TEMPLATE_EN,
-        ).with_subcategory("message/");
+        )
+        .with_subcategory("message/");
 
         let cn_url = standard.generate_cn_url();
         let en_url = standard.generate_en_url();
@@ -3011,9 +3115,8 @@ mod tests {
         let formatter = DocUrlFormatter::new();
 
         // 测试参考文档URL生成
-        let (cn_url, en_url) = formatter.format_reference_url(
-            "drive", "v1", "get_file_meta", Some("meta")
-        );
+        let (cn_url, en_url) =
+            formatter.format_reference_url("drive", "v1", "get_file_meta", Some("meta"));
 
         assert!(cn_url.contains("drive-v1"));
         assert!(cn_url.contains("meta"));
@@ -3021,9 +3124,8 @@ mod tests {
         assert!(en_url.contains("drive-v1"));
 
         // 测试服务器文档URL生成
-        let (cn_url, en_url) = formatter.format_server_docs_url(
-            "attendance", "v1", "create_shift", None
-        );
+        let (cn_url, en_url) =
+            formatter.format_server_docs_url("attendance", "v1", "create_shift", None);
 
         assert!(cn_url.contains("attendance-v1"));
         assert!(cn_url.contains("create_shift"));
@@ -3033,8 +3135,13 @@ mod tests {
     #[test]
     fn test_doc_url_validator() {
         // 测试有效URL
-        assert!(DocUrlValidator::validate_url_format("https://open.feishu.cn/document/test").is_ok());
-        assert!(DocUrlValidator::validate_url_format("https://open.larksuite.com/anycross/test").is_ok());
+        assert!(
+            DocUrlValidator::validate_url_format("https://open.feishu.cn/document/test").is_ok()
+        );
+        assert!(
+            DocUrlValidator::validate_url_format("https://open.larksuite.com/anycross/test")
+                .is_ok()
+        );
 
         // 测试无效URL
         assert!(DocUrlValidator::validate_url_format("http://example.com").is_err());
@@ -3047,8 +3154,9 @@ mod tests {
 
         // 测试服务信息提取
         let (service, version, method) = DocUrlValidator::extract_service_info(
-            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/send"
-        ).unwrap();
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/send",
+        )
+        .unwrap();
         assert_eq!(service, "im");
         assert_eq!(version, "v1");
         assert_eq!(method, "send");
