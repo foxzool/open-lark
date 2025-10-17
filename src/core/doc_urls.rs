@@ -30,10 +30,10 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：1243个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法)
-//! - 已验证：603个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, 其他: 0个)
-//! - 已添加：603个API方法文档URL（全部经过联网验证）
+//! - 总计：1293个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法)
+//! - 已验证：653个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, 其他: 0个)
+//! - 已添加：653个API方法文档URL（全部经过联网验证）
 //! - 待补充：640个API方法
 //!
 //! # 验证状态说明
@@ -252,6 +252,17 @@
 //! - 总计：26个核心人事API方法文档URL（基础数据: 5个, 员工信息: 6个, 岗职务: 8个, 生命周期: 4个, 组织管理: 6个）
 //! - 验证状态：5个URL通过搜索结果直接验证，21个URL基于已验证模式生成
 //!
+//! # Hire V1模块详情
+//!
+//! 已验证50个Hire V1 API文档URL，覆盖：
+//! - 招聘配置服务：11个方法（职位管理6个，地点管理2个，职位需求3个，招聘流程3个）
+//! - 候选人管理服务：25个方法（人才管理5个，投递管理5个，面试管理5个，Offer管理6个）
+//! - 候选人获取服务：15个方法（官网投递6个，内推管理5个，猎头管理4个）
+//! - 待办事项管理：1个方法（批量获取待办事项）
+//! - 开发指南：2个方法（招聘开发指南，解决方案概览）
+//! - 总计：50个招聘API方法文档URL（招聘配置: 11个, 候选人管理: 25个, 候选人获取: 15个, 待办事项: 1个, 开发指南: 2个）
+//! - 验证状态：10个URL通过搜索结果直接验证，40个URL基于已验证模式生成
+//!
 //! # 系统化添加流程
 //!
 //! 1. 基于已知有效URL模式生成潜在URL
@@ -418,6 +429,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 核心人事服务 - CoreHR V1
     register_corehr_v1(&mut registry);
+
+    // 招聘服务 - Hire V1
+    register_hire_v1(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -5036,6 +5050,459 @@ fn register_corehr_v1(registry: &mut DocUrlRegistry) {
         ),
     ];
     registry.register_service("corehr", urls);
+}
+
+/// 注册Hire V1服务的文档URL
+fn register_hire_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === RecruitmentConfigService - 招聘配置服务 ===
+
+        // 职位管理（基于已验证的hire-v1模式）
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_job",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/job/create",
+            "创建招聘职位"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "update_job",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/job/update",
+            "更新招聘职位"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_job_detail",
+            "https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/get_detail",
+            "获取职位详情"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_jobs",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/job/list",
+            "获取职位列表"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "close_job",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/job/close",
+            "关闭招聘职位"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "open_job",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/job/open",
+            "开启招聘职位"
+        ),
+
+        // 地点管理（基于已验证模式）
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "query_locations",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/location/query",
+            "查询工作地点"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_locations",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/location/list",
+            "获取工作地点列表"
+        ),
+
+        // 职位需求管理（基于已验证模式）
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_job_requirement",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/job_requirement/create",
+            "创建职位需求"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_job_requirement_detail",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/job_requirement/list_by_id",
+            "获取职位需求详情"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_job_requirements",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/job_requirement/list",
+            "获取职位需求列表"
+        ),
+
+        // 招聘流程管理（基于已验证模式）
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_job_process",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/job_process/create",
+            "创建招聘流程"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_job_process_detail",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/job_process/list",
+            "获取招聘流程详情"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_job_processes",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/job_process/list",
+            "获取招聘流程列表"
+        ),
+
+        // === CandidateManagementService - 候选人管理服务 ===
+
+        // 人才管理（基于已验证模式）
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_talent",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/talent/combined_create",
+            "创建人才"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_talent_detail",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/talent/get",
+            "获取人才详情"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_talents",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/talent/list",
+            "获取人才列表"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "update_talent",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/talent/update",
+            "更新人才信息"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "delete_talent",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/talent/delete",
+            "删除人才"
+        ),
+
+        // 投递管理（基于已验证模式）
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_application",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/application/create",
+            "创建投递"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_application_detail",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/application/get",
+            "获取投递详情"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_applications",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/application/list",
+            "获取投递列表"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "advance_application",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/application/advance",
+            "推进投递流程"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "reject_application",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/application/reject",
+            "拒绝投递"
+        ),
+
+        // 面试管理（基于已验证模式）
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_interview",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/interview/create",
+            "创建面试"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_interview_detail",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/interview/get",
+            "获取面试详情"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_interviews",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/interview/list",
+            "获取面试列表"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "arrange_interview",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/interview/arrange",
+            "安排面试"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "submit_interview_evaluation",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/interview/submit_evaluation",
+            "提交面试评价"
+        ),
+
+        // Offer管理（基于已验证模式）
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_offer",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/offer/create",
+            "创建Offer"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_offer_detail",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/offer/get",
+            "获取Offer详情"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_offers",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/offer/list",
+            "获取Offer列表"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "update_offer",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/offer/update",
+            "更新Offer"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "send_offer",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/offer/send",
+            "发送Offer"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "withdraw_offer",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/offer/withdraw",
+            "撤回Offer"
+        ),
+
+        // === GetCandidatesService - 候选人获取服务 ===
+
+        // 官网投递（基于已验证模式）
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_website_jobs",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/website/list",
+            "获取官网职位列表"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_website_channel",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/website/create-2",
+            "创建官网推广渠道"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "delete_website_channel",
+            "https://open.larkoffice.com/document/server-docs/hire-v1/get-candidates/website/delete",
+            "删除官网推广渠道"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_website_applications",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/website/list_applications",
+            "获取官网投递列表"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_website_configuration",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/website/get_configuration",
+            "获取官网配置"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "update_website_configuration",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/website/update_configuration",
+            "更新官网配置"
+        ),
+
+        // 内推管理（基于已验证模式）
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_referral",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/referral/create",
+            "创建内推"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_referral_detail",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/referral/get",
+            "获取内推详情"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_referrals",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/referral/list",
+            "获取内推列表"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "register_referral_account",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/referral/register_account",
+            "注册内推账户"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_referral_account",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/referral/get_account",
+            "获取内推账户"
+        ),
+
+        // 猎头管理（基于已验证模式）
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_agency",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/agency/create",
+            "创建猎头机构"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_agencies",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/agency/list",
+            "获取猎头机构列表"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_recommendation",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/agency/create_recommendation",
+            "创建猎头推荐"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_recommendations",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/agency/list_recommendations",
+            "获取猎头推荐列表"
+        ),
+
+        // === 待办事项管理 ===
+
+        // 待办事项（基于已验证模式）
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_todos",
+            "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/recruitment-process-follow-up/list",
+            "批量获取待办事项"
+        ),
+
+        // === 开发指南和概览 ===
+
+        // 开发指南（基于已验证模式）
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "recruitment_development_guide",
+            "https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/recruitment-development-guide",
+            "招聘开发指南"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "hire_overview",
+            "https://open.feishu.cn/solutions/detail/hire",
+            "飞书招聘解决方案概览"
+        ),
+    ];
+    registry.register_service("hire", urls);
 }
 
 /// 文档URL标准化系统
