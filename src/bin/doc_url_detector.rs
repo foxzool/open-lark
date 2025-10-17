@@ -21,11 +21,7 @@ struct ApiMethod {
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let root_path = if args.len() > 1 {
-        &args[1]
-    } else {
-        "."
-    };
+    let root_path = if args.len() > 1 { &args[1] } else { "." };
 
     println!("🔍 开始扫描项目: {}", root_path);
     println!();
@@ -58,9 +54,8 @@ fn scan_directory(dir_path: &str, apis: &mut Vec<ApiMethod>) {
 
 fn scan_file(file_path: &str, apis: &mut Vec<ApiMethod>) {
     if let Ok(content) = fs::read_to_string(file_path) {
-        let (service, version) = extract_service_info_from_path(file_path).unwrap_or_else(|_| {
-            ("unknown".to_string(), "v1".to_string())
-        });
+        let (service, version) = extract_service_info_from_path(file_path)
+            .unwrap_or_else(|_| ("unknown".to_string(), "v1".to_string()));
 
         let lines: Vec<&str> = content.lines().collect();
 
@@ -89,7 +84,8 @@ fn scan_file(file_path: &str, apis: &mut Vec<ApiMethod>) {
 fn extract_service_info_from_path(file_path: &str) -> Result<(String, String), String> {
     let path_parts: Vec<&str> = file_path.split('/').collect();
 
-    let service_index = path_parts.iter()
+    let service_index = path_parts
+        .iter()
         .position(|&part| part == "service")
         .ok_or("找不到service目录")?;
 
@@ -111,9 +107,9 @@ fn extract_service_info_from_path(file_path: &str) -> Result<(String, String), S
 
 fn is_api_method(line: &str) -> bool {
     let trimmed = line.trim();
-    trimmed.starts_with("pub async fn") ||
-    trimmed.starts_with("pub fn") ||
-    (trimmed.starts_with("async fn") && trimmed.contains("-> SDKResult"))
+    trimmed.starts_with("pub async fn")
+        || trimmed.starts_with("pub fn")
+        || (trimmed.starts_with("async fn") && trimmed.contains("-> SDKResult"))
 }
 
 fn extract_method_name(line: &str) -> String {
@@ -154,8 +150,9 @@ fn check_has_documentation_url(content: &str, method_line_num: usize) -> bool {
             break;
         }
 
-        if line.starts_with("///") &&
-           (line.contains("open.feishu.cn") || line.contains("open.larksuite.com")) {
+        if line.starts_with("///")
+            && (line.contains("open.feishu.cn") || line.contains("open.larksuite.com"))
+        {
             return true;
         }
     }
@@ -185,7 +182,10 @@ fn generate_report(apis: &[ApiMethod]) {
 
     let mut service_stats: HashMap<String, Vec<&ApiMethod>> = HashMap::new();
     for api in apis {
-        service_stats.entry(api.service.clone()).or_default().push(api);
+        service_stats
+            .entry(api.service.clone())
+            .or_default()
+            .push(api);
     }
 
     println!("## 按服务统计");
@@ -211,9 +211,7 @@ fn generate_report(apis: &[ApiMethod]) {
         println!();
     }
 
-    let missing_apis: Vec<&ApiMethod> = apis.iter()
-        .filter(|api| !api.has_doc_url)
-        .collect();
+    let missing_apis: Vec<&ApiMethod> = apis.iter().filter(|api| !api.has_doc_url).collect();
 
     println!("## 缺少文档URL的API列表");
     if missing_apis.is_empty() {
@@ -224,7 +222,10 @@ fn generate_report(apis: &[ApiMethod]) {
 
         let mut missing_by_service: HashMap<String, Vec<&ApiMethod>> = HashMap::new();
         for api in &missing_apis {
-            missing_by_service.entry(api.service.clone()).or_default().push(api);
+            missing_by_service
+                .entry(api.service.clone())
+                .or_default()
+                .push(api);
         }
 
         let mut services: Vec<_> = missing_by_service.keys().collect();
@@ -235,8 +236,10 @@ fn generate_report(apis: &[ApiMethod]) {
             println!("### {}", service);
 
             for api in service_apis {
-                println!("**{}** `{}::{}` (行 {})",
-                        api.name, api.service, api.version, api.line_number);
+                println!(
+                    "**{}** `{}::{}` (行 {})",
+                    api.name, api.service, api.version, api.line_number
+                );
                 println!("```rust");
                 println!("{}", api.signature);
                 println!("```");
