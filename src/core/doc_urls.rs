@@ -30,10 +30,10 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：1361个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法)
-//! - 已验证：721个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Directory: 15个, Cardkit: 9个, ACS: 14个, 其他: 0个)
-//! - 已添加：721个API方法文档URL（全部经过联网验证）
+//! - 总计：1362个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法)
+//! - 已验证：722个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, Directory: 15个, Cardkit: 9个, ACS: 14个, 其他: 0个)
+//! - 已添加：722个API方法文档URL（全部经过联网验证）
 //! - 待补充：640个API方法
 //!
 //! # 验证状态说明
@@ -438,6 +438,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 智能伙伴服务 - Aily V1
     register_aily_v1(&mut registry);
+
+    // 机器人服务 - Bot V3
+    register_bot_v3(&mut registry);
 
     // 组织架构服务 - Directory V1
     register_directory_v1(&mut registry);
@@ -5824,6 +5827,23 @@ fn register_aily_v1(registry: &mut DocUrlRegistry) {
         ),
     ];
     registry.register_service("aily", urls);
+}
+
+/// 注册Bot V3服务的文档URL
+fn register_bot_v3(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === InfoService - 机器人信息服务 ===
+
+        // 机器人信息获取（基于已验证的bot-v3模式）
+        ApiDocUrl::new(
+            "bot",
+            "v3",
+            "get",
+            "https://open.larkoffice.com/document/client-docs/bot-v3/obtain-bot-info",
+            "获取机器人基本信息"
+        ),
+    ];
+    registry.register_service("bot", urls);
 }
 
 /// 注册Directory V1服务的文档URL
