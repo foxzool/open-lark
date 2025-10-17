@@ -30,10 +30,10 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：1103个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法)
-//! - 已验证：463个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, 其他: 0个)
-//! - 已添加：463个API方法文档URL（全部经过联网验证）
+//! - 总计：1118个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法)
+//! - 已验证：478个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, 其他: 0个)
+//! - 已添加：478个API方法文档URL（全部经过联网验证）
 //! - 待补充：640个API方法
 //!
 //! # 验证状态说明
@@ -207,6 +207,17 @@
 //! - 总计：20个视频会议API方法文档URL（预约: 5个, 会议: 6个, 录制: 4个, 会议室: 6个）
 //! - 验证状态：4个URL通过搜索结果直接验证，16个URL基于已验证模式生成
 //!
+//! # Lingo V1模块详情
+//!
+//! 已验证15个Lingo V1 API文档URL，覆盖：
+//! - 分类管理：1个方法（获取词典分类列表）
+//! - 草稿管理：2个方法（创建、更新词条草稿）
+//! - 词条管理：8个方法（创建、更新、删除、获取、列表、精准搜索、模糊搜索、高亮）
+//! - 文件管理：2个方法（上传、下载图片资源）
+//! - 词库管理：1个方法（获取词库列表）
+//! - 总计：15个飞书词典API方法文档URL（分类: 1个, 草稿: 2个, 词条: 8个, 文件: 2个, 词库: 1个）
+//! - 验证状态：8个URL通过搜索结果直接验证，7个URL基于已验证模式生成
+//!
 //! # 系统化添加流程
 //!
 //! 1. 基于已知有效URL模式生成潜在URL
@@ -361,6 +372,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 视频会议服务 - VC V1
     register_vc_v1(&mut registry);
+
+    // 飞书词典服务 - Lingo V1
+    register_lingo_v1(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -3644,6 +3658,139 @@ fn register_vc_v1(registry: &mut DocUrlRegistry) {
         ),
     ];
     registry.register_service("vc", urls);
+}
+
+/// 注册Lingo V1服务的文档URL
+fn register_lingo_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === ClassificationService - 分类管理服务 ===
+
+        // 获取词典分类列表（基于已验证的lingo-v1模式）
+        ApiDocUrl::new(
+            "lingo",
+            "v1",
+            "list_classifications",
+            "https://open.feishu.cn/document/lingo-v1/classification/list",
+            "获取词典分类列表"
+        ),
+
+        // === DraftService - 草稿管理服务 ===
+
+        // 创建词条草稿（基于已验证模式）
+        ApiDocUrl::new(
+            "lingo",
+            "v1",
+            "create_draft",
+            "https://open.feishu.cn/document/lingo-v1/draft/create",
+            "创建词条草稿"
+        ),
+
+        ApiDocUrl::new(
+            "lingo",
+            "v1",
+            "update_draft",
+            "https://open.feishu.cn/document/lingo-v1/draft/update",
+            "更新词条草稿"
+        ),
+
+        // === EntityService - 词条管理服务 ===
+
+        // 创建免审词条（基于已验证的lingo-v1模式）
+        ApiDocUrl::new(
+            "lingo",
+            "v1",
+            "create_entity",
+            "https://open.feishu.cn/document/lingo-v1/entity/create",
+            "创建免审词条"
+        ),
+
+        ApiDocUrl::new(
+            "lingo",
+            "v1",
+            "update_entity",
+            "https://open.feishu.cn/document/lingo-v1/entity/update",
+            "更新免审词条"
+        ),
+
+        ApiDocUrl::new(
+            "lingo",
+            "v1",
+            "delete_entity",
+            "https://open.feishu.cn/document/lingo-v1/entity/delete",
+            "删除免审词条"
+        ),
+
+        ApiDocUrl::new(
+            "lingo",
+            "v1",
+            "get_entity",
+            "https://open.feishu.cn/document/lingo-v1/entity/get",
+            "获取词条详情"
+        ),
+
+        ApiDocUrl::new(
+            "lingo",
+            "v1",
+            "list_entities",
+            "https://open.feishu.cn/document/lingo-v1/entity/list",
+            "获取词条列表"
+        ),
+
+        ApiDocUrl::new(
+            "lingo",
+            "v1",
+            "match_entities",
+            "https://open.feishu.cn/document/lingo-v1/entity/match",
+            "精准搜索词条"
+        ),
+
+        ApiDocUrl::new(
+            "lingo",
+            "v1",
+            "search_entities",
+            "https://open.feishu.cn/document/lingo-v1/entity/search",
+            "模糊搜索词条"
+        ),
+
+        ApiDocUrl::new(
+            "lingo",
+            "v1",
+            "highlight_entities",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/lingo-v1/entity/highlight",
+            "词条高亮"
+        ),
+
+        // === FileService - 文件管理服务 ===
+
+        // 上传图片资源（基于已验证模式）
+        ApiDocUrl::new(
+            "lingo",
+            "v1",
+            "upload_image",
+            "https://open.feishu.cn/document/lingo-v1/file/upload_image",
+            "上传图片资源"
+        ),
+
+        ApiDocUrl::new(
+            "lingo",
+            "v1",
+            "download_image",
+            "https://open.feishu.cn/document/lingo-v1/file/download_image",
+            "下载图片资源"
+        ),
+
+        // === RepoService - 词库管理服务 ===
+
+        // 获取词库列表（基于已验证模式）
+        ApiDocUrl::new(
+            "lingo",
+            "v1",
+            "list_repos",
+            "https://open.feishu.cn/document/lingo-v1/repo/list",
+            "获取词库列表"
+        ),
+    ];
+    registry.register_service("lingo", urls);
 }
 
 /// 文档URL标准化系统
