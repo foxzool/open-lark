@@ -30,10 +30,10 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：1329个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法)
-//! - 已验证：689个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Directory: 15个, Cardkit: 9个, 其他: 0个)
-//! - 已添加：689个API方法文档URL（全部经过联网验证）
+//! - 总计：1343个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法)
+//! - 已验证：703个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Directory: 15个, Cardkit: 9个, ACS: 14个, 其他: 0个)
+//! - 已添加：703个API方法文档URL（全部经过联网验证）
 //! - 待补充：640个API方法
 //!
 //! # 验证状态说明
@@ -441,6 +441,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 卡片组件服务 - Cardkit V1
     register_cardkit_v1(&mut registry);
+
+    // 智能门禁服务 - ACS V1
+    register_acs_v1(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -5848,6 +5851,140 @@ fn register_cardkit_v1(registry: &mut DocUrlRegistry) {
         ),
     ];
     registry.register_service("cardkit", urls);
+}
+
+/// 注册ACS V1服务的文档URL
+fn register_acs_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === UserService - 用户管理服务 ===
+
+        // 用户信息管理
+        ApiDocUrl::new(
+            "acs",
+            "v1",
+            "patch_user",
+            "https://open.feishu.cn/document/server-docs/acs-v1/user/patch",
+            "更新用户部分信息"
+        ),
+
+        ApiDocUrl::new(
+            "acs",
+            "v1",
+            "get_user",
+            "https://open.feishu.cn/document/server-docs/acs-v1/user/get",
+            "获取用户详情"
+        ),
+
+        ApiDocUrl::new(
+            "acs",
+            "v1",
+            "list_users",
+            "https://open.feishu.cn/document/server-docs/acs-v1/user/list",
+            "获取用户列表"
+        ),
+
+        // 人脸图片管理
+        ApiDocUrl::new(
+            "acs",
+            "v1",
+            "upload_face_image",
+            "https://open.feishu.cn/document/server-docs/acs-v1/user/upload_face_image",
+            "上传人脸图片"
+        ),
+
+        ApiDocUrl::new(
+            "acs",
+            "v1",
+            "download_face_image",
+            "https://open.feishu.cn/document/server-docs/acs-v1/user/download_face_image",
+            "下载人脸图片"
+        ),
+
+        // === RuleExternalService - 权限组管理服务 ===
+
+        // 权限组管理
+        ApiDocUrl::new(
+            "acs",
+            "v1",
+            "create_or_update_rule",
+            "https://open.feishu.cn/document/server-docs/acs-v1/rule_external/create_or_update",
+            "创建或更新权限组"
+        ),
+
+        ApiDocUrl::new(
+            "acs",
+            "v1",
+            "get_rule",
+            "https://open.feishu.cn/document/server-docs/acs-v1/rule_external/get",
+            "获取权限组详情"
+        ),
+
+        ApiDocUrl::new(
+            "acs",
+            "v1",
+            "delete_rule",
+            "https://open.feishu.cn/document/server-docs/acs-v1/rule_external/delete",
+            "删除权限组"
+        ),
+
+        ApiDocUrl::new(
+            "acs",
+            "v1",
+            "bind_device",
+            "https://open.feishu.cn/document/server-docs/acs-v1/rule_external/bind_device",
+            "绑定设备"
+        ),
+
+        // === VisitorService - 访客管理服务 ===
+
+        // 访客管理
+        ApiDocUrl::new(
+            "acs",
+            "v1",
+            "create_visitor",
+            "https://open.feishu.cn/document/server-docs/acs-v1/visitor/create",
+            "创建访客"
+        ),
+
+        ApiDocUrl::new(
+            "acs",
+            "v1",
+            "delete_visitor",
+            "https://open.feishu.cn/document/server-docs/acs-v1/visitor/delete",
+            "删除访客"
+        ),
+
+        // === DeviceService - 设备管理服务 ===
+
+        // 设备管理
+        ApiDocUrl::new(
+            "acs",
+            "v1",
+            "list_devices",
+            "https://open.feishu.cn/document/server-docs/acs-v1/device/list",
+            "获取设备列表"
+        ),
+
+        // === AccessRecordService - 访问记录服务 ===
+
+        // 访问记录管理
+        ApiDocUrl::new(
+            "acs",
+            "v1",
+            "list_access_records",
+            "https://open.feishu.cn/document/server-docs/acs-v1/access_record/list",
+            "获取访问记录列表"
+        ),
+
+        ApiDocUrl::new(
+            "acs",
+            "v1",
+            "download_record_face_image",
+            "https://open.feishu.cn/document/server-docs/acs-v1/access_record/download_face_image",
+            "下载访问记录人脸图片"
+        ),
+    ];
+    registry.register_service("acs", urls);
 }
 
 /// 文档URL标准化系统
