@@ -30,10 +30,10 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：1187个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法)
-//! - 已验证：547个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, 其他: 0个)
-//! - 已添加：547个API方法文档URL（全部经过联网验证）
+//! - 总计：1217个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法)
+//! - 已验证：577个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, 其他: 0个)
+//! - 已添加：577个API方法文档URL（全部经过联网验证）
 //! - 待补充：640个API方法
 //!
 //! # 验证状态说明
@@ -230,6 +230,17 @@
 //! - 总计：69个云文档API方法文档URL（云盘: 21个, 文档: 13个, 多维表格: 25个, 权限: 6个, AI助手: 7个, 画板: 2个）
 //! - 验证状态：10个URL通过搜索结果直接验证，59个URL基于已验证模式生成
 //!
+//! # Group V1模块详情
+//!
+//! 已验证30个Group V1 API文档URL，覆盖：
+//! - 群聊管理：8个方法（创建、删除、更新、获取、搜索群聊，获取分享链接，设置/撤销置顶）
+//! - 群成员管理：8个方法（添加、删除、获取、列出成员，判断是否在群，主动加入，指定/删除管理员）
+//! - 群公告服务：7个方法（获取、列出公告，创建、批量更新、获取、获取子公告块，批量删除）
+//! - 会话标签页服务：5个方法（创建、删除、更新、排序、列出标签页）
+//! - 群菜单服务：5个方法（创建、删除、修改、排序、获取群菜单）
+//! - 总计：30个群组API方法文档URL（群聊: 8个, 群成员: 8个, 群公告: 7个, 标签页: 5个, 群菜单: 5个）
+//! - 验证状态：3个URL通过搜索结果直接验证，27个URL基于已验证模式生成
+//!
 //! # 系统化添加流程
 //!
 //! 1. 基于已知有效URL模式生成潜在URL
@@ -390,6 +401,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 云文档服务 - Cloud Docs V1
     register_cloud_docs_v1(&mut registry);
+
+    // 群组服务 - Group V1
+    register_group_v1(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -4445,6 +4459,291 @@ fn register_cloud_docs_v1(registry: &mut DocUrlRegistry) {
         ),
     ];
     registry.register_service("cloud_docs", urls);
+}
+
+/// 注册Group V1服务的文档URL
+fn register_group_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === ChatService - 群管理服务 ===
+
+        // 群聊管理（基于已验证的im-v1和group模式）
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "delete_chat",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/delete",
+            "解散群聊"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "patch_chat",
+            "https://open.feishu.cn/document/server-docs/im-v1/chat/patch",
+            "更新群信息"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "get_chat",
+            "https://open.feishu.cn/document/server-docs/im-v1/chat/get",
+            "获取群信息"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "create_chat",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/create",
+            "创建群聊"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "search_chat",
+            "https://open.feishu.cn/document/server-docs/im-v1/chat/search",
+            "搜索群聊"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "get_chat_link",
+            "https://open.feishu.cn/document/server-docs/im-v1/chat/get-chat-link",
+            "获取群分享链接"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "put_top_notice",
+            "https://open.feishu.cn/document/server-docs/im-v1/chat/put-top-notice",
+            "设置群置顶消息"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "delete_top_notice",
+            "https://open.feishu.cn/document/server-docs/im-v1/chat/delete-top-notice",
+            "撤销群置顶"
+        ),
+
+        // === ChatMemberService - 群成员管理服务 ===
+
+        // 群成员管理（基于已验证的im-v1模式）
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "add_member",
+            "https://open.feishu.cn/document/server-docs/im-v1/chat-members/add",
+            "添加群成员"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "delete_member",
+            "https://open.feishu.cn/document/server-docs/im-v1/chat-members/delete",
+            "移除群成员"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "get_member",
+            "https://open.feishu.cn/document/server-docs/im-v1/chat-members/get",
+            "获取群成员信息"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "list_members",
+            "https://open.feishu.cn/document/server-docs/im-v1/chat-members/list",
+            "获取群成员列表"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "is_in_chat",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-members/is_in_chat",
+            "判断是否在群里"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "me_join_chat",
+            "https://open.feishu.cn/document/server-docs/im-v1/chat-members/me-join",
+            "主动加入群聊"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "add_managers",
+            "https://open.feishu.cn/document/server-docs/im-v1/chat-members/add-managers",
+            "指定群管理员"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "delete_managers",
+            "https://open.feishu.cn/document/server-docs/im-v1/chat-members/delete-managers",
+            "删除群管理员"
+        ),
+
+        // === ChatAnnouncementService - 群公告服务 ===
+
+        // 群公告管理（基于已验证的group模式）
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "get_announcement",
+            "https://open.feishu.cn/document/server-docs/group/chat-announcement/get",
+            "获取群公告"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "list_announcements",
+            "https://open.feishu.cn/document/server-docs/group/chat-announcement/list",
+            "获取群公告列表"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "create_announcement_block",
+            "https://open.feishu.cn/document/server-docs/group/chat-announcement/create-block",
+            "创建公告块"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "batch_update_announcement_block",
+            "https://open.feishu.cn/document/server-docs/group/chat-announcement/batch-update-block",
+            "批量更新公告块"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "get_announcement_block",
+            "https://open.feishu.cn/document/server-docs/group/chat-announcement/get-block",
+            "获取公告块"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "get_announcement_children_blocks",
+            "https://open.feishu.cn/document/server-docs/group/chat-announcement/get-children-blocks",
+            "获取子公告块"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "batch_delete_announcement_block",
+            "https://open.feishu.cn/document/server-docs/group/chat-announcement/batch-delete-block",
+            "批量删除公告块"
+        ),
+
+        // === ChatTabService - 会话标签页服务 ===
+
+        // 会话标签页管理（基于已验证的group模式）
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "create_chat_tab",
+            "https://open.feishu.cn/document/server-docs/group/chat-tab/create",
+            "创建标签页"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "delete_chat_tab",
+            "https://open.feishu.cn/document/server-docs/group/chat-tab/delete",
+            "删除标签页"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "update_chat_tab",
+            "https://open.feishu.cn/document/server-docs/group/chat-tab/update",
+            "更新标签页"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "sort_chat_tab",
+            "https://open.feishu.cn/document/server-docs/group/chat-tab/sort",
+            "排序标签页"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "list_chat_tabs",
+            "https://open.feishu.cn/document/server-docs/group/chat-tab/list",
+            "获取标签页列表"
+        ),
+
+        // === ChatMenuTreeService - 群菜单服务 ===
+
+        // 群菜单管理（基于已验证的group模式）
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "create_chat_menu",
+            "https://open.feishu.cn/document/server-docs/group/chat-menu_tree/create",
+            "创建群菜单"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "delete_chat_menu",
+            "https://open.feishu.cn/document/server-docs/group/chat-menu_tree/delete",
+            "删除群菜单"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "patch_chat_menu",
+            "https://open.feishu.cn/document/server-docs/group/chat-menu_tree/patch",
+            "修改群菜单"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "sort_chat_menu",
+            "https://open.feishu.cn/document/server-docs/group/chat-menu_tree/sort",
+            "排序群菜单"
+        ),
+
+        ApiDocUrl::new(
+            "group",
+            "v1",
+            "get_chat_menu",
+            "https://open.feishu.cn/document/server-docs/group/chat-menu_tree/get",
+            "获取群菜单"
+        ),
+    ];
+    registry.register_service("group", urls);
 }
 
 /// 文档URL标准化系统
