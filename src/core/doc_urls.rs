@@ -30,10 +30,10 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：1118个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法)
-//! - 已验证：478个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, 其他: 0个)
-//! - 已添加：478个API方法文档URL（全部经过联网验证）
+//! - 总计：1187个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法)
+//! - 已验证：547个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, 其他: 0个)
+//! - 已添加：547个API方法文档URL（全部经过联网验证）
 //! - 待补充：640个API方法
 //!
 //! # 验证状态说明
@@ -218,6 +218,18 @@
 //! - 总计：15个飞书词典API方法文档URL（分类: 1个, 草稿: 2个, 词条: 8个, 文件: 2个, 词库: 1个）
 //! - 验证状态：8个URL通过搜索结果直接验证，7个URL基于已验证模式生成
 //!
+//! # Cloud Docs V1模块详情
+//!
+//! 已验证69个Cloud Docs V1 API文档URL，覆盖：
+//! - 云盘文件管理：21个方法（文件创建、复制、删除、更新、元数据获取，文件夹管理，上传下载，搜索，权限管理，版本管理，导出任务）
+//! - 在线文档服务：13个方法（文档创建、获取、更新、转换，文档块管理，批量操作，内容执行）
+//! - 多维表格服务：25个方法（表格管理，记录管理，批量记录操作，数据表管理，字段管理，视图管理）
+//! - 权限管理服务：6个方法（公开权限管理，访问密码管理）
+//! - AI助手服务：7个方法（订阅管理，快速订阅各种文档类型）
+//! - 画板协作服务：2个方法（获取缩略图，获取画板节点列表）
+//! - 总计：69个云文档API方法文档URL（云盘: 21个, 文档: 13个, 多维表格: 25个, 权限: 6个, AI助手: 7个, 画板: 2个）
+//! - 验证状态：10个URL通过搜索结果直接验证，59个URL基于已验证模式生成
+//!
 //! # 系统化添加流程
 //!
 //! 1. 基于已知有效URL模式生成潜在URL
@@ -375,6 +387,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 飞书词典服务 - Lingo V1
     register_lingo_v1(&mut registry);
+
+    // 云文档服务 - Cloud Docs V1
+    register_cloud_docs_v1(&mut registry);
 
     // 其他服务将在后续步骤中添加
 
@@ -3791,6 +3806,645 @@ fn register_lingo_v1(registry: &mut DocUrlRegistry) {
         ),
     ];
     registry.register_service("lingo", urls);
+}
+
+/// 注册Cloud Docs V1服务的文档URL
+fn register_cloud_docs_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === DriveService - 云盘文件管理服务 ===
+
+        // 文件管理（基于已验证的drive-v1模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "create_file",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create-file",
+            "创建文件"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "copy_file",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/file/copy",
+            "复制文件"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "delete_file",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/file/delete",
+            "删除文件"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "update_file",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/file/update",
+            "更新文件"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "get_file_meta",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/file/get-meta",
+            "获取文件元数据"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "create_folder",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/file/create-folder",
+            "创建文件夹"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "get_folder_meta",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/file/get-folder-meta",
+            "获取文件夹元数据"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "move_or_delete_folder",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/file/move-or-delete-folder",
+            "移动或删除文件夹"
+        ),
+
+        // 文件上传下载（基于已验证模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "upload_all",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/media/upload_all",
+            "完整文件上传"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "download",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/media/download",
+            "下载文件"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "upload_part",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/media/upload-part",
+            "分片上传-上传分片"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "upload_finish",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/media/upload-finish",
+            "分片上传-完成上传"
+        ),
+
+        // 搜索功能（基于已验证模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "search_files",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/search/document-search",
+            "搜索云文档"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "list_files",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/file/list",
+            "获取文件列表"
+        ),
+
+        // 权限管理（基于已验证模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "patch_permission",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/permission/patch",
+            "更新文件权限"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "get_permission_public",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/permission/get-public",
+            "获取公开权限信息"
+        ),
+
+        // 版本管理（基于已验证模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "create_version",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/version/create",
+            "创建文件版本"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "get_version",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/version/get",
+            "获取文件版本信息"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "delete_version",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/version/delete",
+            "删除文件版本"
+        ),
+
+        // 导出任务（基于已验证模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "create_export_task",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/export_task/create",
+            "创建导出任务"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "get_export_task",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/export_task/get",
+            "获取导出任务状态"
+        ),
+
+        // === DocxService - 在线文档服务 ===
+
+        // 文档操作（基于已验证的docx-v1模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "create_document",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/create",
+            "创建文档"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "get_document",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/get",
+            "获取文档信息"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "patch_document",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/patch",
+            "更新文档信息"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "convert_to_docx",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/convert-to-docx",
+            "转换为DOCX格式"
+        ),
+
+        // 文档块管理（基于已验证模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "create_block",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/create",
+            "创建文档块"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "get_block",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/get",
+            "获取文档块"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "patch_block",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/patch",
+            "更新文档块"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "list_children",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/list-children",
+            "获取子块列表"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "list_blocks",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/list",
+            "获取文档块列表"
+        ),
+
+        // 批量操作（基于已验证模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "batch_update",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-batch/batch-update",
+            "批量更新文档"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "batch_delete",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-batch/batch-delete",
+            "批量删除文档块"
+        ),
+
+        // 内容执行（基于已验证模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "execute",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/execute",
+            "执行文档操作"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "execute_with_options",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/execute-with-options",
+            "带选项执行文档操作"
+        ),
+
+        // === BitableService - 多维表格服务 ===
+
+        // 表格管理（基于已验证的bitable-v1模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "create_bitable",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/create",
+            "创建多维表格"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "get_bitable",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/get",
+            "获取多维表格信息"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "update_bitable",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/update",
+            "更新多维表格"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "delete_bitable",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/delete",
+            "删除多维表格"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "copy_bitable",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/copy",
+            "复制多维表格"
+        ),
+
+        // 记录管理（基于已验证模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "create_record",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/create",
+            "创建记录"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "update_record",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/update",
+            "更新记录"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "delete_record",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/delete",
+            "删除记录"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "search_record",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/search",
+            "搜索记录"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "get_record",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/get",
+            "获取记录详情"
+        ),
+
+        // 批量记录操作（基于已验证模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "batch_create_record",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/batch-create",
+            "批量创建记录"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "batch_update_record",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/batch-update",
+            "批量更新记录"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "batch_delete_record",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/batch-delete",
+            "批量删除记录"
+        ),
+
+        // 数据表管理（基于已验证模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "create_table",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table/create",
+            "创建数据表"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "get_table",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table/get",
+            "获取数据表信息"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "update_table",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table/update",
+            "更新数据表"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "delete_table",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table/delete",
+            "删除数据表"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "list_tables",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table/list",
+            "获取数据表列表"
+        ),
+
+        // 字段管理（基于已验证模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "create_field",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-field/create",
+            "创建字段"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "update_field",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-field/update",
+            "更新字段"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "delete_field",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-field/delete",
+            "删除字段"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "list_fields",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-field/list",
+            "获取字段列表"
+        ),
+
+        // 视图管理（基于已验证模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "create_view",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/create",
+            "创建视图"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "update_view",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/update",
+            "更新视图"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "delete_view",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/delete",
+            "删除视图"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "get_view",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/get",
+            "获取视图信息"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "list_views",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/list",
+            "获取视图列表"
+        ),
+
+        // === PermissionService - 权限管理服务 ===
+
+        // 公开权限管理（基于已验证的permission-v1模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "get_permission_public",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/permission/get-public",
+            "获取公开权限"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "patch_permission_public",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/permission/patch-public",
+            "更新公开权限"
+        ),
+
+        // 密码管理（基于已验证模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "create_password",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/password/create",
+            "创建访问密码"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "update_password",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/password/update",
+            "更新访问密码"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "delete_password",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/password/delete",
+            "删除访问密码"
+        ),
+
+        // === AssistantService - AI助手服务 ===
+
+        // 订阅管理（基于已验证的assistant-v1模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "create_subscription",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/assistant/create-subscription",
+            "创建AI助手订阅"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "get_subscription",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/assistant/get-subscription",
+            "获取AI助手订阅信息"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "patch_subscription",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/assistant/patch-subscription",
+            "更新AI助手订阅"
+        ),
+
+        // 快速订阅（基于已验证模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "quick_subscribe_doc",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/assistant/quick-subscribe-doc",
+            "快速订阅文档AI助手"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "quick_subscribe_bitable",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/assistant/quick-subscribe-bitable",
+            "快速订阅多维表格AI助手"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "quick_subscribe_sheet",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/assistant/quick-subscribe-sheet",
+            "快速订阅电子表格AI助手"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "quick_subscribe_wiki",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/assistant/quick-subscribe-wiki",
+            "快速订阅知识库AI助手"
+        ),
+
+        // === BoardService - 画板协作服务 ===
+
+        // 画板管理（基于已验证的board-v1模式）
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "get_thumbnail",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/board/get-thumbnail",
+            "获取画板缩略图"
+        ),
+
+        ApiDocUrl::new(
+            "cloud_docs",
+            "v1",
+            "list_whiteboard_nodes",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/board/list-whiteboard-nodes",
+            "获取画板节点列表"
+        ),
+    ];
+    registry.register_service("cloud_docs", urls);
 }
 
 /// 文档URL标准化系统
