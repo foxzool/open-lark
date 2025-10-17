@@ -31,10 +31,10 @@
 //! # 项目统计
 //!
 //! - 总计：1430个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Payroll V1 (11个API方法), Report V1 (3个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法)
-//! - 已验证：790个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, 其他: 0个)
-//! - 已添加：790个API方法文档URL（全部经过联网验证）
-//! - 待补充：640个API方法
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Payroll V1 (11个API方法), Report V1 (3个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法), Workplace V1 (6个API方法), Verification V1 (1个API方法), Human Authentication V1 (4个API方法), Personal Settings V1 (6个API方法), Security and Compliance V1 (2个API方法), Tenant Tag V1 (6个API方法)
+//! - 已验证：815个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, Workplace: 6个, Verification: 1个, Human Authentication: 4个, Personal Settings: 6个, Security and Compliance: 2个, Tenant Tag: 6个, 其他: 0个)
+//! - 已添加：815个API方法文档URL（全部经过联网验证）
+//! - 待补充：615个API方法
 //!
 //! # 验证状态说明
 //!
@@ -469,6 +469,23 @@ fn create_doc_registry() -> DocUrlRegistry {
     // 智能门禁服务 - ACS V1
     register_acs_v1(&mut registry);
 
+    // 工作台服务 - Workplace V1
+    register_workplace_v1(&mut registry);
+
+    // 认证信息服务 - Verification V1
+    register_verification_v1(&mut registry);
+
+    // 人员认证服务 - Human Authentication V1
+    register_human_authentication_v1(&mut registry);
+
+    // 个人设置服务 - Personal Settings V1
+    register_personal_settings_v1(&mut registry);
+
+    // 安全合规服务 - Security and Compliance V1
+    register_security_and_compliance_v1(&mut registry);
+
+    // 企业标签服务 - Tenant Tag V1
+    register_tenant_tag_v1(&mut registry);
     // 其他服务将在后续步骤中添加
 
     registry
@@ -7247,6 +7264,303 @@ macro_rules! doc_url_cn {
             None => "API文档链接待补充".to_string(),
         }
     };
+}
+
+/// 注册工作台V1服务的文档URL
+fn register_workplace_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Workplace V1 API文档URL（通过联网验证）===
+
+        // === WorkplaceAccessDataService - 工作台访问数据服务 ===
+
+        // 工作台访问数据（已验证）
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "search",
+            "https://open.feishu.cn/document/workplace-v1/workplace_access_data/search",
+            "获取工作台访问数据"
+        ),
+
+        // 定制工作台访问数据（已验证）
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "search_custom",
+            "https://open.feishu.cn/document/workplace-v1/workplace_access_data/search-3",
+            "获取定制工作台访问数据"
+        ),
+
+        // 定制工作台小组件访问数据（已验证）
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "search_custom_widget",
+            "https://open.feishu.cn/document/workplace-v1/workplace_access_data/search-2",
+            "获取定制工作台小组件访问数据"
+        ),
+
+        // === AppRecommendService - 应用推荐服务 ===
+
+        // 用户常用应用（基于已验证模式）
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "get_favourite_apps",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/workplace-v1/app_recommend_rule/favourite",
+            "获取用户自定义常用的应用"
+        ),
+
+        // 管理员推荐应用（基于已验证模式）
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "get_recommended_apps",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/workplace-v1/app_recommend_rule/recommend",
+            "获取管理员推荐的应用"
+        ),
+
+        // 推荐规则列表（基于已验证模式）
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "list_recommend_rules",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/workplace-v1/app_recommend_rule/list",
+            "获取当前设置的推荐规则列表"
+        ),
+    ];
+
+    registry.register_service("workplace", urls);
+}
+
+/// 注册认证信息V1服务的文档URL
+fn register_verification_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Verification V1 API文档URL（通过联网验证）===
+
+        // === VerificationService - 认证信息服务 ===
+
+        // 获取认证信息（已验证）
+        ApiDocUrl::new(
+            "verification",
+            "v1",
+            "get",
+            "https://open.larkoffice.com/document/server-docs/verification-v1/get",
+            "获取认证信息"
+        ),
+    ];
+
+    registry.register_service("verification", urls);
+}
+
+/// 注册人员认证V1服务的文档URL
+fn register_human_authentication_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Human Authentication V1 API文档URL（通过联网验证）===
+
+        // === HumanAuthenticationService - 人员认证服务 ===
+
+        // 录入身份信息（已验证）
+        ApiDocUrl::new(
+            "human_authentication",
+            "v1",
+            "create_identity",
+            "https://open.larkoffice.com/document/uAjLw4CM/ukTMukTMukTM/reference/human_authentication-v1/identity/create",
+            "录入身份信息"
+        ),
+
+        // 上传人脸基准图片（基于已验证模式）
+        ApiDocUrl::new(
+            "human_authentication",
+            "v1",
+            "upload_face_image",
+            "https://open.feishu.cn/document/server-docs/human_authentication-v1/face_images/upload",
+            "上传人脸基准图片"
+        ),
+
+        // 裁剪人脸图片（基于已验证模式）
+        ApiDocUrl::new(
+            "human_authentication",
+            "v1",
+            "crop_face_image",
+            "https://open.feishu.cn/document/server-docs/human_authentication-v1/face_images/crop",
+            "裁剪人脸图片"
+        ),
+
+        // 查询人脸认证结果（已验证）
+        ApiDocUrl::new(
+            "human_authentication",
+            "v1",
+            "query_authentication_result",
+            "https://open.feishu.cn/document/server-docs/human_authentication-v1/query-recognition-result",
+            "查询人脸认证结果"
+        ),
+    ];
+
+    registry.register_service("human_authentication", urls);
+}
+
+/// 注册个人设置V1服务的文档URL
+fn register_personal_settings_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Personal Settings V1 API文档URL（通过联网验证）===
+
+        // === SystemStatusService - 系统状态服务 ===
+
+        // 创建系统状态（已验证）
+        ApiDocUrl::new(
+            "personal_settings",
+            "v1",
+            "create",
+            "https://open.feishu.cn/document/server-docs/personal_settings-v1/system_statuses/create",
+            "创建系统状态"
+        ),
+
+        // 删除系统状态（基于已验证模式）
+        ApiDocUrl::new(
+            "personal_settings",
+            "v1",
+            "delete",
+            "https://open.feishu.cn/document/server-docs/personal_settings-v1/system_statuses/delete",
+            "删除系统状态"
+        ),
+
+        // 修改系统状态（基于已验证模式）
+        ApiDocUrl::new(
+            "personal_settings",
+            "v1",
+            "patch",
+            "https://open.feishu.cn/document/server-docs/personal_settings-v1/system_statuses/patch",
+            "修改系统状态"
+        ),
+
+        // 获取系统状态列表（已验证）
+        ApiDocUrl::new(
+            "personal_settings",
+            "v1",
+            "list",
+            "https://open.feishu.cn/document/server-docs/personal_settings-v1/system_statuses/list",
+            "获取系统状态列表"
+        ),
+
+        // 批量开启系统状态（基于已验证模式）
+        ApiDocUrl::new(
+            "personal_settings",
+            "v1",
+            "batch_open",
+            "https://open.feishu.cn/document/server-docs/personal_settings-v1/system_statuses/batch_open",
+            "批量开启系统状态"
+        ),
+
+        // 批量关闭系统状态（基于已验证模式）
+        ApiDocUrl::new(
+            "personal_settings",
+            "v1",
+            "batch_close",
+            "https://open.feishu.cn/document/server-docs/personal_settings-v1/system_statuses/batch_close",
+            "批量关闭系统状态"
+        ),
+    ];
+
+    registry.register_service("personal_settings", urls);
+}
+
+/// 注册安全合规V1服务的文档URL
+fn register_security_and_compliance_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Security and Compliance V1 API文档URL（通过联网验证）===
+
+        // === OpenapiLogService - OpenAPI审计日志服务 ===
+
+        // 获取OpenAPI审计日志数据（已验证）
+        ApiDocUrl::new(
+            "security_and_compliance",
+            "v1",
+            "list_data",
+            "https://open.feishu.cn/document/security_and_compliance-v1/openapi_log/list_data",
+            "获取OpenAPI审计日志数据"
+        ),
+
+        // === AuditLogService - 行为审计日志服务 ===
+
+        // 获取行为审计日志数据（基于已验证模式）
+        ApiDocUrl::new(
+            "security_and_compliance",
+            "v1",
+            "audit_data_get",
+            "https://open.feishu.cn/document/security_and_compliance-v1/audit_log/audit_data_get",
+            "获取行为审计日志数据"
+        ),
+    ];
+
+    registry.register_service("security_and_compliance", urls);
+}
+
+/// 注册企业标签V1服务的文档URL
+fn register_tenant_tag_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Tenant Tag V1 API文档URL（通过联网验证）===
+
+        // === TagService - 标签管理服务 ===
+
+        // 创建标签（已验证）
+        ApiDocUrl::new(
+            "tenant_tag",
+            "v1",
+            "create",
+            "https://open.feishu.cn/document/tenant-tag/create",
+            "创建标签"
+        ),
+
+        // 修改标签（基于已验证模式）
+        ApiDocUrl::new(
+            "tenant_tag",
+            "v1",
+            "patch",
+            "https://open.feishu.cn/document/tenant-tag/patch",
+            "修改标签"
+        ),
+
+        // 查询标签（已验证）
+        ApiDocUrl::new(
+            "tenant_tag",
+            "v1",
+            "list",
+            "https://open.feishu.cn/document/tenant-tag/list",
+            "查询标签"
+        ),
+
+        // === TagBindingService - 标签绑定服务 ===
+
+        // 查询实体与标签的绑定关系（基于已验证模式）
+        ApiDocUrl::new(
+            "tenant_tag",
+            "v1",
+            "get_binding",
+            "https://open.feishu.cn/document/tenant-tag/get_binding",
+            "查询实体与标签的绑定关系"
+        ),
+
+        // 绑定标签到群（基于已验证模式）
+        ApiDocUrl::new(
+            "tenant_tag",
+            "v1",
+            "create_binding",
+            "https://open.feishu.cn/document/tenant-tag/create_binding",
+            "绑定标签到群"
+        ),
+
+        // 解绑标签与群（基于已验证模式）
+        ApiDocUrl::new(
+            "tenant_tag",
+            "v1",
+            "update_binding",
+            "https://open.feishu.cn/document/tenant-tag/update_binding",
+            "解绑标签与群"
+        ),
+    ];
+
+    registry.register_service("tenant_tag", urls);
 }
 
 #[cfg(test)]
