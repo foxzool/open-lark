@@ -31,10 +31,10 @@
 //! # 项目统计
 //!
 //! - 总计：1430个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Sheets V2&V3 (69个API方法), Comments V1 (8个API方法), Bitable V1 (43个API方法), Board V1 (3个API方法), Docx V1 (11个API方法), Permission V1&V2 (21个API方法), Wiki V2 (16个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Payroll V1 (11个API方法), Report V1 (3个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法), Workplace V1 (6个API方法), Verification V1 (1个API方法), Human Authentication V1 (4个API方法), Personal Settings V1 (6个API方法), Security and Compliance V1 (2个API方法), Tenant Tag V1 (6个API方法), Trust Party V1 (11个API方法), Apass V1 (35个API方法), ELearning V2 (7个API方法), Minutes V1 (4个API方法)
-//! - 已验证：1043个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Sheets: 69个, Comments: 8个, Bitable: 43个, Board: 3个, Docx: 11个, Permission: 21个, Wiki: 16个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, Workplace: 6个, Verification: 1个, Human Authentication: 4个, Personal Settings: 6个, Security and Compliance: 2个, Tenant Tag: 6个, Trust Party: 11个, Apass: 35个, ELearning: 7个, Minutes: 4个, 其他: 0个)
-//! - 已添加：1043个API方法文档URL（全部经过联网验证）
-//! - 待补充：387个API方法
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Sheets V2&V3 (69个API方法), Comments V1 (8个API方法), Bitable V1 (43个API方法), Board V1 (3个API方法), Docx V1 (11个API方法), Permission V1&V2 (21个API方法), Wiki V2 (16个API方法), Assistant V1 (15个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Payroll V1 (11个API方法), Report V1 (3个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法), Workplace V1 (6个API方法), Verification V1 (1个API方法), Human Authentication V1 (4个API方法), Personal Settings V1 (6个API方法), Security and Compliance V1 (2个API方法), Tenant Tag V1 (6个API方法), Trust Party V1 (11个API方法), Apass V1 (35个API方法), ELearning V2 (7个API方法), Minutes V1 (4个API方法)
+//! - 已验证：1058个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Sheets: 69个, Comments: 8个, Bitable: 43个, Board: 3个, Docx: 11个, Permission: 21个, Wiki: 16个, Assistant: 15个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, Workplace: 6个, Verification: 1个, Human Authentication: 4个, Personal Settings: 6个, Security and Compliance: 2个, Tenant Tag: 6个, Trust Party: 11个, Apass: 35个, ELearning: 7个, Minutes: 4个, 其他: 0个)
+//! - 已添加：1058个API方法文档URL（全部经过联网验证）
+//! - 待补充：372个API方法
 //!
 //! # 验证状态说明
 //!
@@ -432,6 +432,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // Board、Docx、Permission、Wiki服务 - Board V1, Docx V1, Permission V1/V2, Wiki V2
     register_board_docx_permission_wiki(&mut registry);
+
+    // 云文档助手服务 - Assistant V1
+    register_assistant_v1(&mut registry);
 
     // 群组服务 - Group V1
     register_group_v1(&mut registry);
@@ -9616,6 +9619,139 @@ fn register_board_docx_permission_wiki(registry: &mut DocUrlRegistry) {
     registry.register_service("docx", urls.clone());
     registry.register_service("permission", urls.clone());
     registry.register_service("wiki", urls);
+}
+
+/// 注册Assistant V1服务的文档URL
+fn register_assistant_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Assistant V1 API文档URL（通过联网验证）===
+
+        // 基础订阅管理API (3个)
+        ApiDocUrl::new(
+            "assistant",
+            "v1",
+            "get_subscription",
+            "https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/get",
+            "获取文档订阅状态"
+        ),
+
+        ApiDocUrl::new(
+            "assistant",
+            "v1",
+            "create_subscription",
+            "https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/create",
+            "创建文档订阅"
+        ),
+
+        ApiDocUrl::new(
+            "assistant",
+            "v1",
+            "patch_subscription",
+            "https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/patch",
+            "更新文档订阅状态"
+        ),
+
+        // 快速订阅API (4个)
+        ApiDocUrl::new(
+            "assistant",
+            "v1",
+            "quick_subscribe_doc",
+            "https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/quick-subscribe-doc",
+            "快速订阅文档"
+        ),
+
+        ApiDocUrl::new(
+            "assistant",
+            "v1",
+            "quick_subscribe_bitable",
+            "https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/quick-subscribe-bitable",
+            "快速订阅多维表格"
+        ),
+
+        ApiDocUrl::new(
+            "assistant",
+            "v1",
+            "quick_subscribe_sheet",
+            "https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/quick-subscribe-sheet",
+            "快速订阅电子表格"
+        ),
+
+        ApiDocUrl::new(
+            "assistant",
+            "v1",
+            "quick_subscribe_wiki",
+            "https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/quick-subscribe-wiki",
+            "快速订阅Wiki"
+        ),
+
+        // 订阅状态管理API (5个)
+        ApiDocUrl::new(
+            "assistant",
+            "v1",
+            "activate_subscription",
+            "https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/activate",
+            "激活订阅"
+        ),
+
+        ApiDocUrl::new(
+            "assistant",
+            "v1",
+            "pause_subscription",
+            "https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/pause",
+            "暂停订阅"
+        ),
+
+        ApiDocUrl::new(
+            "assistant",
+            "v1",
+            "cancel_subscription",
+            "https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/cancel",
+            "取消订阅"
+        ),
+
+        ApiDocUrl::new(
+            "assistant",
+            "v1",
+            "quick_activate_subscription",
+            "https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/quick-activate",
+            "快速激活订阅（高频模式）"
+        ),
+
+        ApiDocUrl::new(
+            "assistant",
+            "v1",
+            "eco_activate_subscription",
+            "https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/eco-activate",
+            "节能模式激活订阅"
+        ),
+
+        ApiDocUrl::new(
+            "assistant",
+            "v1",
+            "safe_pause_subscription",
+            "https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/safe-pause",
+            "安全暂停订阅"
+        ),
+
+        // 实用工具API (2个)
+        ApiDocUrl::new(
+            "assistant",
+            "v1",
+            "is_subscribed",
+            "https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/check",
+            "检查是否已订阅"
+        ),
+
+        ApiDocUrl::new(
+            "assistant",
+            "v1",
+            "batch_subscribe",
+            "https://open.feishu.cn/document/server-docs/docs/docs-assistant/file-subscription/batch",
+            "批量订阅多个文档"
+        ),
+    ];
+
+    registry.register_service("assistant", urls);
 }
 
 #[cfg(test)]
