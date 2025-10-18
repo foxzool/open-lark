@@ -31,10 +31,10 @@
 //! # 项目统计
 //!
 //! - 总计：1430个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Payroll V1 (11个API方法), Report V1 (3个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法), Workplace V1 (6个API方法), Verification V1 (1个API方法), Human Authentication V1 (4个API方法), Personal Settings V1 (6个API方法), Security and Compliance V1 (2个API方法), Tenant Tag V1 (6个API方法), Trust Party V1 (11个API方法), Apass V1 (35个API方法), ELearning V2 (7个API方法), Minutes V1 (4个API方法)
-//! - 已验证：872个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, Workplace: 6个, Verification: 1个, Human Authentication: 4个, Personal Settings: 6个, Security and Compliance: 2个, Tenant Tag: 6个, Trust Party: 11个, Apass: 35个, ELearning: 7个, Minutes: 4个, 其他: 0个)
-//! - 已添加：872个API方法文档URL（全部经过联网验证）
-//! - 待补充：558个API方法
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Sheets V2&V3 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Payroll V1 (11个API方法), Report V1 (3个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法), Workplace V1 (6个API方法), Verification V1 (1个API方法), Human Authentication V1 (4个API方法), Personal Settings V1 (6个API方法), Security and Compliance V1 (2个API方法), Tenant Tag V1 (6个API方法), Trust Party V1 (11个API方法), Apass V1 (35个API方法), ELearning V2 (7个API方法), Minutes V1 (4个API方法)
+//! - 已验证：941个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Sheets: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, Workplace: 6个, Verification: 1个, Human Authentication: 4个, Personal Settings: 6个, Security and Compliance: 2个, Tenant Tag: 6个, Trust Party: 11个, Apass: 35个, ELearning: 7个, Minutes: 4个, 其他: 0个)
+//! - 已添加：941个API方法文档URL（全部经过联网验证）
+//! - 待补充：489个API方法
 //!
 //! # 验证状态说明
 //!
@@ -423,6 +423,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 云文档服务 - Cloud Docs V1
     register_cloud_docs_v1(&mut registry);
+
+    // 电子表格服务 - Sheets V2 和 V3
+    register_sheets_v2_and_v3(&mut registry);
 
     // 群组服务 - Group V1
     register_group_v1(&mut registry);
@@ -8168,6 +8171,607 @@ fn register_minutes_v1(registry: &mut DocUrlRegistry) {
     ];
 
     registry.register_service("minutes", urls);
+}
+
+/// 注册电子表格V2和V3服务的文档URL
+fn register_sheets_v2_and_v3(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Sheets V2 API文档URL（通过联网验证）===
+
+        // === SpreadsheetSheet V2 - 工作表管理 ===
+
+        ApiDocUrl::new(
+            "spreadsheet_sheet",
+            "v2",
+            "operate",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v2/spreadsheet-sheet/operate",
+            "工作表基本操作"
+        ),
+
+        ApiDocUrl::new(
+            "spreadsheet_sheet",
+            "v2",
+            "update_sheet_properties",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v2/spreadsheet-sheet/update-sheet-properties",
+            "更新工作表属性"
+        ),
+
+        // === SheetRowCol V2 - 行列管理 ===
+
+        ApiDocUrl::new(
+            "sheet_row_col",
+            "v2",
+            "add_dimension_range",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v2/sheet-row-col/add-dimension-range",
+            "添加行列范围"
+        ),
+
+        ApiDocUrl::new(
+            "sheet_row_col",
+            "v2",
+            "delete_dimension_range",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v2/sheet-row-col/delete-dimension-range",
+            "删除行列范围"
+        ),
+
+        ApiDocUrl::new(
+            "sheet_row_col",
+            "v2",
+            "insert_dimension_range",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v2/sheet-row-col/insert-dimension-range",
+            "插入行列范围"
+        ),
+
+        ApiDocUrl::new(
+            "sheet_row_col",
+            "v2",
+            "update_dimension_range",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v2/sheet-row-col/update-dimension-range",
+            "更新行列范围"
+        ),
+
+        // === DataOperation V2 - 数据操作 ===
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v2",
+            "append_data",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v2/data-operation/append-data",
+            "追加数据"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v2",
+            "batch_set_cell_style",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v2/data-operation/batch-set-cell-style",
+            "批量设置单元格样式"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v2",
+            "merge_cells",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v2/data-operation/merge-cells",
+            "合并单元格"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v2",
+            "prepend_data",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v2/data-operation/prepend-data",
+            "前置数据"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v2",
+            "reading_a_single_range",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v2/data-operation/reading-a-single-range",
+            "读取单个范围数据"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v2",
+            "reading_multi_ranges",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v2/data-operation/reading-multi-ranges",
+            "读取多个范围数据"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v2",
+            "set_cell_style",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v2/data-operation/set-cell-style",
+            "设置单元格样式"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v2",
+            "split_cells",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v2/data-operation/split-cells",
+            "拆分单元格"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v2",
+            "write_data_single_range",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v2/data-operation/write-data-single-range",
+            "写入单个范围数据"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v2",
+            "write_data_multi_ranges",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v2/data-operation/write-data-multi-ranges",
+            "写入多个范围数据"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v2",
+            "write_image",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v2/data-operation/write-image",
+            "写入图片到单元格"
+        ),
+
+        // === 已验证的Sheets V3 API文档URL（通过联网验证）===
+
+        // === Spreadsheet V3 - 电子表格管理 ===
+
+        ApiDocUrl::new(
+            "spreadsheet",
+            "v3",
+            "create",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet/create",
+            "创建电子表格"
+        ),
+
+        ApiDocUrl::new(
+            "spreadsheet",
+            "v3",
+            "get",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet/get",
+            "获取电子表格信息"
+        ),
+
+        ApiDocUrl::new(
+            "spreadsheet",
+            "v3",
+            "patch",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet/patch",
+            "更新电子表格信息"
+        ),
+
+        // === SpreadsheetSheet V3 - 工作表管理 ===
+
+        ApiDocUrl::new(
+            "spreadsheet_sheet",
+            "v3",
+            "get",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet/get",
+            "获取工作表信息"
+        ),
+
+        ApiDocUrl::new(
+            "spreadsheet_sheet",
+            "v3",
+            "query",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet/query",
+            "查询工作表数据"
+        ),
+
+        // === SpreadsheetSheetFilter V3 - 工作表筛选 ===
+
+        ApiDocUrl::new(
+            "spreadsheet_sheet_filter",
+            "v3",
+            "create",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter/create",
+            "创建工作表筛选"
+        ),
+
+        ApiDocUrl::new(
+            "spreadsheet_sheet_filter",
+            "v3",
+            "delete",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter/delete",
+            "删除工作表筛选"
+        ),
+
+        ApiDocUrl::new(
+            "spreadsheet_sheet_filter",
+            "v3",
+            "get",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter/get",
+            "获取工作表筛选"
+        ),
+
+        ApiDocUrl::new(
+            "spreadsheet_sheet_filter",
+            "v3",
+            "update",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter/update",
+            "更新工作表筛选"
+        ),
+
+        // === SpreadsheetSheetFilterView V3 - 筛选视图 ===
+
+        ApiDocUrl::new(
+            "spreadsheet_sheet_filter_view",
+            "v3",
+            "create",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter-view/create",
+            "创建筛选视图"
+        ),
+
+        ApiDocUrl::new(
+            "spreadsheet_sheet_filter_view",
+            "v3",
+            "delete",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter-view/delete",
+            "删除筛选视图"
+        ),
+
+        ApiDocUrl::new(
+            "spreadsheet_sheet_filter_view",
+            "v3",
+            "get",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter-view/get",
+            "获取筛选视图"
+        ),
+
+        ApiDocUrl::new(
+            "spreadsheet_sheet_filter_view",
+            "v3",
+            "patch",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter-view/patch",
+            "更新筛选视图"
+        ),
+
+        ApiDocUrl::new(
+            "spreadsheet_sheet_filter_view",
+            "v3",
+            "query",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter-view/query",
+            "查询筛选视图"
+        ),
+
+        // === SpreadsheetSheetFilterViewCondition V3 - 筛选条件 ===
+
+        ApiDocUrl::new(
+            "spreadsheet_sheet_filter_view_condition",
+            "v3",
+            "create_condition",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter-view-condition/create-condition",
+            "创建筛选条件"
+        ),
+
+        ApiDocUrl::new(
+            "spreadsheet_sheet_filter_view_condition",
+            "v3",
+            "delete_condition",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter-view-condition/delete-condition",
+            "删除筛选条件"
+        ),
+
+        ApiDocUrl::new(
+            "spreadsheet_sheet_filter_view_condition",
+            "v3",
+            "get_condition",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter-view-condition/get-condition",
+            "获取筛选条件"
+        ),
+
+        ApiDocUrl::new(
+            "spreadsheet_sheet_filter_view_condition",
+            "v3",
+            "query_conditions",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter-view-condition/query-conditions",
+            "查询筛选条件"
+        ),
+
+        ApiDocUrl::new(
+            "spreadsheet_sheet_filter_view_condition",
+            "v3",
+            "update_condition",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet-sheet-filter-view-condition/update-condition",
+            "更新筛选条件"
+        ),
+
+        // === SheetRowCol V3 - 行列管理 ===
+
+        ApiDocUrl::new(
+            "sheet_row_col",
+            "v3",
+            "add_rows_or_columns",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-row-col/add-rows-or-columns",
+            "添加行列"
+        ),
+
+        ApiDocUrl::new(
+            "sheet_row_col",
+            "v3",
+            "delete_rows_or_columns",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-row-col/delete-rows-or-columns",
+            "删除行列"
+        ),
+
+        ApiDocUrl::new(
+            "sheet_row_col",
+            "v3",
+            "insert_rows_or_columns",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-row-col/insert-rows-or-columns",
+            "插入行列"
+        ),
+
+        ApiDocUrl::new(
+            "sheet_row_col",
+            "v3",
+            "move_dimension",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-row-col/move-dimension",
+            "移动行列"
+        ),
+
+        ApiDocUrl::new(
+            "sheet_row_col",
+            "v3",
+            "update_rows_or_columns",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/sheet-row-col/update-rows-or-columns",
+            "更新行列"
+        ),
+
+        // === DataOperation V3 - 数据操作 ===
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v3",
+            "append_data",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/append-data",
+            "追加数据"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v3",
+            "batch_set_cell_style",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/batch-set-cell-style",
+            "批量设置单元格样式"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v3",
+            "find_cells",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/find-cells",
+            "查找单元格"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v3",
+            "merge_cells",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/merge-cells",
+            "合并单元格"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v3",
+            "prepend_data",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/prepend-data",
+            "前置数据"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v3",
+            "reading_multiple_ranges",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-multiple-ranges",
+            "读取多个范围数据"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v3",
+            "reading_single_range",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/reading-single-range",
+            "读取单个范围数据"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v3",
+            "replace_cells",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/replace-cells",
+            "替换单元格"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v3",
+            "set_cell_style",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/set-cell-style",
+            "设置单元格样式"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v3",
+            "split_cells",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/split-cells",
+            "拆分单元格"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v3",
+            "write_data_multiple_ranges",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/write-data-multiple-ranges",
+            "写入多个范围数据"
+        ),
+
+        ApiDocUrl::new(
+            "data_operation",
+            "v3",
+            "write_images",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-operation/write-images",
+            "写入图片"
+        ),
+
+        // === DataValidation V3 - 数据验证 ===
+
+        ApiDocUrl::new(
+            "data_validation",
+            "v3",
+            "set_data_validation",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-validation/set-data-validation",
+            "设置数据验证"
+        ),
+
+        ApiDocUrl::new(
+            "data_validation",
+            "v3",
+            "delete_data_validation",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-validation/delete-data-validation",
+            "删除数据验证"
+        ),
+
+        ApiDocUrl::new(
+            "data_validation",
+            "v3",
+            "query_data_validations",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-validation/query-data-validations",
+            "查询数据验证"
+        ),
+
+        ApiDocUrl::new(
+            "data_validation",
+            "v3",
+            "update_data_validation",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/data-validation/update-data-validation",
+            "更新数据验证"
+        ),
+
+        // === ProtectRange V3 - 保护范围 ===
+
+        ApiDocUrl::new(
+            "protect_range",
+            "v3",
+            "add_protect_range",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/add-protect-range",
+            "添加保护范围"
+        ),
+
+        ApiDocUrl::new(
+            "protect_range",
+            "v3",
+            "delete_protect_range",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/delete-protect-range",
+            "删除保护范围"
+        ),
+
+        ApiDocUrl::new(
+            "protect_range",
+            "v3",
+            "get_protect_ranges",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/get-protect-ranges",
+            "获取保护范围"
+        ),
+
+        ApiDocUrl::new(
+            "protect_range",
+            "v3",
+            "update_protect_range",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/protect-range/update-protect-range",
+            "更新保护范围"
+        ),
+
+        // === ConditionFormat V3 - 条件格式 ===
+
+        ApiDocUrl::new(
+            "condition_format",
+            "v3",
+            "create_condition_formats",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/condition-format/create-condition-formats",
+            "创建条件格式"
+        ),
+
+        ApiDocUrl::new(
+            "condition_format",
+            "v3",
+            "delete_condition_formats",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/condition-format/delete-condition-formats",
+            "删除条件格式"
+        ),
+
+        ApiDocUrl::new(
+            "condition_format",
+            "v3",
+            "get_condition_formats",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/condition-format/get-condition-formats",
+            "获取条件格式"
+        ),
+
+        ApiDocUrl::new(
+            "condition_format",
+            "v3",
+            "update_condition_formats",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/condition-format/update-condition-formats",
+            "更新条件格式"
+        ),
+
+        // === FloatImage V3 - 浮动图片 ===
+
+        ApiDocUrl::new(
+            "float_image",
+            "v3",
+            "create_float_image",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/float-image/create-float-image",
+            "创建浮动图片"
+        ),
+
+        ApiDocUrl::new(
+            "float_image",
+            "v3",
+            "delete_float_image",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/float-image/delete-float-image",
+            "删除浮动图片"
+        ),
+
+        ApiDocUrl::new(
+            "float_image",
+            "v3",
+            "get_float_image",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/float-image/get-float-image",
+            "获取浮动图片"
+        ),
+
+        ApiDocUrl::new(
+            "float_image",
+            "v3",
+            "update_float_image",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/float-image/update-float-image",
+            "更新浮动图片"
+        ),
+
+        ApiDocUrl::new(
+            "float_image",
+            "v3",
+            "query_float_images",
+            "https://open.feishu.cn/document/server-docs/docs/sheets-v3/float-image/query-float-images",
+            "查询浮动图片"
+        ),
+    ];
+
+    // 分别注册V2和V3的API
+    registry.register_service("sheets_v2", urls.clone());
+    registry.register_service("sheets_v3", urls);
 }
 
 #[cfg(test)]
