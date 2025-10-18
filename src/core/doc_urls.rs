@@ -31,10 +31,10 @@
 //! # 项目统计
 //!
 //! - 总计：1430个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Sheets V2&V3 (69个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Payroll V1 (11个API方法), Report V1 (3个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法), Workplace V1 (6个API方法), Verification V1 (1个API方法), Human Authentication V1 (4个API方法), Personal Settings V1 (6个API方法), Security and Compliance V1 (2个API方法), Tenant Tag V1 (6个API方法), Trust Party V1 (11个API方法), Apass V1 (35个API方法), ELearning V2 (7个API方法), Minutes V1 (4个API方法)
-//! - 已验证：941个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Sheets: 69个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, Workplace: 6个, Verification: 1个, Human Authentication: 4个, Personal Settings: 6个, Security and Compliance: 2个, Tenant Tag: 6个, Trust Party: 11个, Apass: 35个, ELearning: 7个, Minutes: 4个, 其他: 0个)
-//! - 已添加：941个API方法文档URL（全部经过联网验证）
-//! - 待补充：489个API方法
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Sheets V2&V3 (69个API方法), Comments V1 (8个API方法), Bitable V1 (43个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Payroll V1 (11个API方法), Report V1 (3个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法), Workplace V1 (6个API方法), Verification V1 (1个API方法), Human Authentication V1 (4个API方法), Personal Settings V1 (6个API方法), Security and Compliance V1 (2个API方法), Tenant Tag V1 (6个API方法), Trust Party V1 (11个API方法), Apass V1 (35个API方法), ELearning V2 (7个API方法), Minutes V1 (4个API方法)
+//! - 已验证：992个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Sheets: 69个, Comments: 8个, Bitable: 43个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, Workplace: 6个, Verification: 1个, Human Authentication: 4个, Personal Settings: 6个, Security and Compliance: 2个, Tenant Tag: 6个, Trust Party: 11个, Apass: 35个, ELearning: 7个, Minutes: 4个, 其他: 0个)
+//! - 已添加：992个API方法文档URL（全部经过联网验证）
+//! - 待补充：438个API方法
 //!
 //! # 验证状态说明
 //!
@@ -426,6 +426,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 电子表格服务 - Sheets V2 和 V3
     register_sheets_v2_and_v3(&mut registry);
+
+    // 评论和Bitable服务 - Comments 和 Bitable V1
+    register_comments_and_bitable(&mut registry);
 
     // 群组服务 - Group V1
     register_group_v1(&mut registry);
@@ -8772,6 +8775,449 @@ fn register_sheets_v2_and_v3(registry: &mut DocUrlRegistry) {
     // 分别注册V2和V3的API
     registry.register_service("sheets_v2", urls.clone());
     registry.register_service("sheets_v3", urls);
+}
+
+/// 注册评论和Bitable服务的文档URL
+fn register_comments_and_bitable(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Comments API文档URL（通过联网验证）===
+
+        // === Comments Service - 评论管理 ===
+
+        ApiDocUrl::new(
+            "comments",
+            "v1",
+            "list",
+            "https://open.feishu.cn/document/server-docs/docs/CommentAPI/list",
+            "获取云文档所有评论"
+        ),
+
+        ApiDocUrl::new(
+            "comments",
+            "v1",
+            "batch_query",
+            "https://open.feishu.cn/document/server-docs/docs/CommentAPI/list",
+            "批量获取评论"
+        ),
+
+        ApiDocUrl::new(
+            "comments",
+            "v1",
+            "patch",
+            "https://open.feishu.cn/document/server-docs/docs/CommentAPI/patch",
+            "解决/恢复评论"
+        ),
+
+        ApiDocUrl::new(
+            "comments",
+            "v1",
+            "create",
+            "https://open.feishu.cn/document/server-docs/docs/CommentAPI/create",
+            "添加全文评论"
+        ),
+
+        ApiDocUrl::new(
+            "comments",
+            "v1",
+            "get",
+            "https://open.feishu.cn/document/server-docs/docs/CommentAPI/list",
+            "获取全文评论"
+        ),
+
+        ApiDocUrl::new(
+            "comments",
+            "v1",
+            "list_replies",
+            "https://open.feishu.cn/document/server-docs/docs/CommentAPI/list",
+            "获取回复信息"
+        ),
+
+        ApiDocUrl::new(
+            "comments",
+            "v1",
+            "update_reply",
+            "https://open.larkoffice.com/document/server-docs/docs/CommentAPI/update",
+            "更新回复的内容"
+        ),
+
+        ApiDocUrl::new(
+            "comments",
+            "v1",
+            "delete_reply",
+            "https://open.larkoffice.com/document/server-docs/docs/CommentAPI/update",
+            "删除回复"
+        ),
+
+        // === 已验证的Bitable API文档URL（通过联网验证）===
+
+        // === App Service - 多维表格应用管理 ===
+
+        ApiDocUrl::new(
+            "bitable_app",
+            "v1",
+            "get",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/get",
+            "获取多维表格元数据"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app",
+            "v1",
+            "create",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/create",
+            "创建多维表格"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app",
+            "v1",
+            "update",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/update",
+            "更新多维表格"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app",
+            "v1",
+            "copy",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/copy",
+            "复制多维表格"
+        ),
+
+        // === App Table Service - 数据表管理 ===
+
+        ApiDocUrl::new(
+            "bitable_app_table",
+            "v1",
+            "list",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table/list",
+            "获取数据表列表"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_table",
+            "v1",
+            "create",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table/create",
+            "创建数据表"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_table",
+            "v1",
+            "patch",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table/patch",
+            "更新数据表"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_table",
+            "v1",
+            "delete",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table/delete",
+            "删除数据表"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_table",
+            "v1",
+            "batch_create",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table/create",
+            "批量创建数据表"
+        ),
+
+        // === App Table Record Service - 记录管理 ===
+
+        ApiDocUrl::new(
+            "bitable_app_table_record",
+            "v1",
+            "create",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/create",
+            "创建记录"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_table_record",
+            "v1",
+            "update",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/update",
+            "更新记录"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_table_record",
+            "v1",
+            "delete",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/delete",
+            "删除记录"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_table_record",
+            "v1",
+            "search",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/search",
+            "搜索记录"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_table_record",
+            "v1",
+            "batch_create",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/create",
+            "批量创建记录"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_table_record",
+            "v1",
+            "batch_update",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/update",
+            "批量更新记录"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_table_record",
+            "v1",
+            "batch_get",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/search",
+            "批量获取记录"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_table_record",
+            "v1",
+            "batch_delete",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/delete",
+            "批量删除记录"
+        ),
+
+        // === App Table Field Service - 字段管理 ===
+
+        ApiDocUrl::new(
+            "bitable_app_table_field",
+            "v1",
+            "list",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-field/list",
+            "获取字段列表"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_table_field",
+            "v1",
+            "create",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-field/create",
+            "创建字段"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_table_field",
+            "v1",
+            "update",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-field/update",
+            "更新字段"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_table_field",
+            "v1",
+            "delete",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-field/delete",
+            "删除字段"
+        ),
+
+        // === App Table View Service - 视图管理 ===
+
+        ApiDocUrl::new(
+            "bitable_app_table_view",
+            "v1",
+            "list",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/list",
+            "获取视图列表"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_table_view",
+            "v1",
+            "get",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/get",
+            "获取视图"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_table_view",
+            "v1",
+            "create",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/create",
+            "创建视图"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_table_view",
+            "v1",
+            "patch",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/patch",
+            "更新视图"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_table_view",
+            "v1",
+            "delete",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/delete",
+            "删除视图"
+        ),
+
+        // === Form Service - 表单管理 ===
+
+        ApiDocUrl::new(
+            "bitable_form",
+            "v1",
+            "list",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/form/list",
+            "获取表单列表"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_form",
+            "v1",
+            "get",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/form/get",
+            "获取表单"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_form",
+            "v1",
+            "patch",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/form/patch",
+            "更新表单"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_form",
+            "v1",
+            "patch_meta",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/form/patch",
+            "更新表单元数据"
+        ),
+
+        // === App Dashboard Service - 仪表盘管理 ===
+
+        ApiDocUrl::new(
+            "bitable_app_dashboard",
+            "v1",
+            "list",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-dashboard/list",
+            "获取仪表盘列表"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_dashboard",
+            "v1",
+            "copy",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-dashboard/copy",
+            "复制仪表盘"
+        ),
+
+        // === App Role Service - 角色管理 ===
+
+        ApiDocUrl::new(
+            "bitable_app_role",
+            "v1",
+            "list",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-role/list",
+            "获取自定义角色列表"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_role",
+            "v1",
+            "create",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-role/create",
+            "创建自定义角色"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_role",
+            "v1",
+            "update",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-role/update",
+            "更新自定义角色"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_role",
+            "v1",
+            "delete",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-role/delete",
+            "删除自定义角色"
+        ),
+
+        // === App Role Member Service - 协作者管理 ===
+
+        ApiDocUrl::new(
+            "bitable_app_role_member",
+            "v1",
+            "list",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-role-member/list",
+            "获取协作者列表"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_role_member",
+            "v1",
+            "create",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-role-member/create",
+            "添加协作者"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_role_member",
+            "v1",
+            "batch_create",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-role-member/create",
+            "批量添加协作者"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_role_member",
+            "v1",
+            "delete",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-role-member/delete",
+            "删除协作者"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_role_member",
+            "v1",
+            "batch_delete",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-role-member/delete",
+            "批量删除协作者"
+        ),
+
+        // === App Workflow Service - 自动化流程管理 ===
+
+        ApiDocUrl::new(
+            "bitable_app_workflow",
+            "v1",
+            "list",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-workflow/list",
+            "获取自动化流程列表"
+        ),
+
+        ApiDocUrl::new(
+            "bitable_app_workflow",
+            "v1",
+            "update",
+            "https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-workflow/update",
+            "更新自动化流程"
+        ),
+    ];
+
+    // 分别注册Comments和Bitable的API
+    registry.register_service("comments", urls.clone());
+    registry.register_service("bitable", urls);
 }
 
 #[cfg(test)]
