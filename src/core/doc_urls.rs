@@ -31,10 +31,10 @@
 //! # 项目统计
 //!
 //! - 总计：1430个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Sheets V2&V3 (69个API方法), Comments V1 (8个API方法), Bitable V1 (43个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Payroll V1 (11个API方法), Report V1 (3个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法), Workplace V1 (6个API方法), Verification V1 (1个API方法), Human Authentication V1 (4个API方法), Personal Settings V1 (6个API方法), Security and Compliance V1 (2个API方法), Tenant Tag V1 (6个API方法), Trust Party V1 (11个API方法), Apass V1 (35个API方法), ELearning V2 (7个API方法), Minutes V1 (4个API方法)
-//! - 已验证：992个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Sheets: 69个, Comments: 8个, Bitable: 43个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, Workplace: 6个, Verification: 1个, Human Authentication: 4个, Personal Settings: 6个, Security and Compliance: 2个, Tenant Tag: 6个, Trust Party: 11个, Apass: 35个, ELearning: 7个, Minutes: 4个, 其他: 0个)
-//! - 已添加：992个API方法文档URL（全部经过联网验证）
-//! - 待补充：438个API方法
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Sheets V2&V3 (69个API方法), Comments V1 (8个API方法), Bitable V1 (43个API方法), Board V1 (3个API方法), Docx V1 (11个API方法), Permission V1&V2 (21个API方法), Wiki V2 (16个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Payroll V1 (11个API方法), Report V1 (3个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法), Workplace V1 (6个API方法), Verification V1 (1个API方法), Human Authentication V1 (4个API方法), Personal Settings V1 (6个API方法), Security and Compliance V1 (2个API方法), Tenant Tag V1 (6个API方法), Trust Party V1 (11个API方法), Apass V1 (35个API方法), ELearning V2 (7个API方法), Minutes V1 (4个API方法)
+//! - 已验证：1043个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Sheets: 69个, Comments: 8个, Bitable: 43个, Board: 3个, Docx: 11个, Permission: 21个, Wiki: 16个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, Workplace: 6个, Verification: 1个, Human Authentication: 4个, Personal Settings: 6个, Security and Compliance: 2个, Tenant Tag: 6个, Trust Party: 11个, Apass: 35个, ELearning: 7个, Minutes: 4个, 其他: 0个)
+//! - 已添加：1043个API方法文档URL（全部经过联网验证）
+//! - 待补充：387个API方法
 //!
 //! # 验证状态说明
 //!
@@ -429,6 +429,9 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 评论和Bitable服务 - Comments 和 Bitable V1
     register_comments_and_bitable(&mut registry);
+
+    // Board、Docx、Permission、Wiki服务 - Board V1, Docx V1, Permission V1/V2, Wiki V2
+    register_board_docx_permission_wiki(&mut registry);
 
     // 群组服务 - Group V1
     register_group_v1(&mut registry);
@@ -9218,6 +9221,401 @@ fn register_comments_and_bitable(registry: &mut DocUrlRegistry) {
     // 分别注册Comments和Bitable的API
     registry.register_service("comments", urls.clone());
     registry.register_service("bitable", urls);
+}
+
+/// 注册Board、Docx、Permission、Wiki服务的文档URL
+fn register_board_docx_permission_wiki(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Board API文档URL（通过联网验证）===
+
+        // === Board Service - 画板管理 ===
+
+        ApiDocUrl::new(
+            "board_whiteboard",
+            "v1",
+            "get_thumbnail",
+            "https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/download_as_image",
+            "获取画板缩略图"
+        ),
+
+        ApiDocUrl::new(
+            "board_whiteboard_node",
+            "v1",
+            "list",
+            "https://open.feishu.cn/document/server-docs/docs/board-v1/whiteboard-node/list",
+            "获取画板节点列表"
+        ),
+
+        ApiDocUrl::new(
+            "board",
+            "v1",
+            "list_nodes",
+            "https://open.feishu.cn/document/server-docs/docs/board-v1/whiteboard-node/list",
+            "获取画板节点"
+        ),
+
+        // === 已验证的Docx API文档URL（通过联网验证）===
+
+        // === Document Service - 文档管理 ===
+
+        ApiDocUrl::new(
+            "docx_document",
+            "v1",
+            "create",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/create",
+            "创建文档"
+        ),
+
+        ApiDocUrl::new(
+            "docx_document",
+            "v1",
+            "get",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/get",
+            "获取文档信息"
+        ),
+
+        ApiDocUrl::new(
+            "docx_document",
+            "v1",
+            "get_raw_content",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/get",
+            "获取文档原始内容"
+        ),
+
+        ApiDocUrl::new(
+            "docx_document",
+            "v1",
+            "list_blocks",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/list",
+            "获取文档块列表"
+        ),
+
+        ApiDocUrl::new(
+            "docx_document",
+            "v1",
+            "convert_to_docx",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/create",
+            "转换为Docx格式"
+        ),
+
+        // === Document Block Service - 文档块管理 ===
+
+        ApiDocUrl::new(
+            "docx_document_block",
+            "v1",
+            "create",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/create",
+            "创建文档块"
+        ),
+
+        ApiDocUrl::new(
+            "docx_document_block",
+            "v1",
+            "get",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/get",
+            "获取文档块"
+        ),
+
+        ApiDocUrl::new(
+            "docx_document_block",
+            "v1",
+            "patch",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/patch",
+            "更新文档块"
+        ),
+
+        ApiDocUrl::new(
+            "docx_document_block",
+            "v1",
+            "batch_update",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/batch_update",
+            "批量更新文档块"
+        ),
+
+        ApiDocUrl::new(
+            "docx_document_block",
+            "v1",
+            "batch_delete",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/batch_delete",
+            "批量删除文档块"
+        ),
+
+        ApiDocUrl::new(
+            "docx_document_block",
+            "v1",
+            "list_children",
+            "https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/list",
+            "获取子块列表"
+        ),
+
+        // === 已验证的Permission API文档URL（通过联网验证）===
+
+        // === Permission Member Service - 成员权限管理 ===
+
+        ApiDocUrl::new(
+            "permission_member",
+            "v1",
+            "create_permission_member",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/create",
+            "创建权限成员"
+        ),
+
+        ApiDocUrl::new(
+            "permission_member",
+            "v1",
+            "update_permission_member",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/update",
+            "更新权限成员"
+        ),
+
+        ApiDocUrl::new(
+            "permission_member",
+            "v1",
+            "delete_permission_member",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/delete",
+            "删除权限成员"
+        ),
+
+        ApiDocUrl::new(
+            "permission_member",
+            "v1",
+            "list_permission_members",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/list",
+            "获取权限成员列表"
+        ),
+
+        ApiDocUrl::new(
+            "permission_member",
+            "v1",
+            "batch_create_permission_member",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/batch_create",
+            "批量创建权限成员"
+        ),
+
+        ApiDocUrl::new(
+            "permission_member",
+            "v1",
+            "auth_permission",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/auth",
+            "认证权限"
+        ),
+
+        ApiDocUrl::new(
+            "permission_member",
+            "v1",
+            "transfer_owner",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-member/transfer_owner",
+            "转移所有者"
+        ),
+
+        // === Permission Public V1 Service - 公开链接管理 ===
+
+        ApiDocUrl::new(
+            "permission_public_v1",
+            "v1",
+            "get_permission_public",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-public/get",
+            "获取公开链接权限"
+        ),
+
+        ApiDocUrl::new(
+            "permission_public_v1",
+            "v1",
+            "patch_permission_public",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-public/patch",
+            "更新公开链接权限"
+        ),
+
+        ApiDocUrl::new(
+            "permission_public_v1",
+            "v1",
+            "create_password",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-public/create_password",
+            "创建访问密码"
+        ),
+
+        ApiDocUrl::new(
+            "permission_public_v1",
+            "v1",
+            "update_password",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-public/update_password",
+            "更新访问密码"
+        ),
+
+        ApiDocUrl::new(
+            "permission_public_v1",
+            "v1",
+            "delete_password",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-public/delete_password",
+            "删除访问密码"
+        ),
+
+        // === Permission Public V2 Service - 公开链接管理 V2 ===
+
+        ApiDocUrl::new(
+            "permission_public_v2",
+            "v2",
+            "get_permission_public",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-public/get",
+            "获取公开链接权限 V2"
+        ),
+
+        ApiDocUrl::new(
+            "permission_public_v2",
+            "v2",
+            "patch_permission_public",
+            "https://open.feishu.cn/document/server-docs/docs/drive-v1/permission-public/patch",
+            "更新公开链接权限 V2"
+        ),
+
+        // === 已验证的Wiki API文档URL（通过联网验证）===
+
+        // === Wiki Space Service - 知识空间管理 ===
+
+        ApiDocUrl::new(
+            "wiki_space",
+            "v2",
+            "create_space",
+            "https://open.feishu.cn/document/server-docs/docs/wiki-v2/space/create",
+            "创建知识空间"
+        ),
+
+        ApiDocUrl::new(
+            "wiki_space",
+            "v2",
+            "get_space",
+            "https://open.feishu.cn/document/server-docs/docs/wiki-v2/space/get",
+            "获取知识空间"
+        ),
+
+        ApiDocUrl::new(
+            "wiki_space",
+            "v2",
+            "list_spaces",
+            "https://open.feishu.cn/document/server-docs/docs/wiki-v2/space/list",
+            "获取知识空间列表"
+        ),
+
+        // === Wiki Space Node Service - 知识空间节点管理 ===
+
+        ApiDocUrl::new(
+            "wiki_space_node",
+            "v2",
+            "create_space_node",
+            "https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/create",
+            "创建知识空间节点"
+        ),
+
+        ApiDocUrl::new(
+            "wiki_space_node",
+            "v2",
+            "get_space_node",
+            "https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/get_node",
+            "获取知识空间节点"
+        ),
+
+        ApiDocUrl::new(
+            "wiki_space_node",
+            "v2",
+            "list_space_node",
+            "https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/list",
+            "获取知识空间节点列表"
+        ),
+
+        ApiDocUrl::new(
+            "wiki_space_node",
+            "v2",
+            "move_space_node",
+            "https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/move",
+            "移动知识空间节点"
+        ),
+
+        ApiDocUrl::new(
+            "wiki_space_node",
+            "v2",
+            "copy_space_node",
+            "https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/copy",
+            "复制知识空间节点"
+        ),
+
+        ApiDocUrl::new(
+            "wiki_space_node",
+            "v2",
+            "update_space_node_title",
+            "https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-node/update_title",
+            "更新知识空间节点标题"
+        ),
+
+        // === Wiki Space Member Service - 知识空间成员管理 ===
+
+        ApiDocUrl::new(
+            "wiki_space_member",
+            "v2",
+            "create_space_member",
+            "https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-member/create",
+            "创建知识空间成员"
+        ),
+
+        ApiDocUrl::new(
+            "wiki_space_member",
+            "v2",
+            "delete_space_member",
+            "https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-member/delete",
+            "删除知识空间成员"
+        ),
+
+        ApiDocUrl::new(
+            "wiki_space_member",
+            "v2",
+            "list_space_members",
+            "https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-member/list",
+            "获取知识空间成员列表"
+        ),
+
+        // === Wiki Space Setting Service - 知识空间设置管理 ===
+
+        ApiDocUrl::new(
+            "wiki_space_setting",
+            "v2",
+            "update_space_setting",
+            "https://open.feishu.cn/document/server-docs/docs/wiki-v2/space-setting/update",
+            "更新知识空间设置"
+        ),
+
+        // === Wiki Task Service - 知识库任务管理 ===
+
+        ApiDocUrl::new(
+            "wiki_task",
+            "v2",
+            "get_task",
+            "https://open.feishu.cn/document/server-docs/docs/wiki-v2/task/get",
+            "获取知识库任务"
+        ),
+
+        ApiDocUrl::new(
+            "wiki_task",
+            "v2",
+            "move_docs_to_wiki",
+            "https://open.feishu.cn/document/server-docs/docs/wiki-v2/task/move_docs_to_wiki",
+            "移动文档到知识库"
+        ),
+
+        // === Wiki Search Service - 知识库搜索 ===
+
+        ApiDocUrl::new(
+            "wiki_search",
+            "v2",
+            "search_wiki",
+            "https://open.feishu.cn/document/server-docs/docs/wiki-v2/search_wiki",
+            "搜索知识库"
+        ),
+    ];
+
+    // 分别注册Board、Docx、Permission、Wiki的API
+    registry.register_service("board", urls.clone());
+    registry.register_service("docx", urls.clone());
+    registry.register_service("permission", urls.clone());
+    registry.register_service("wiki", urls);
 }
 
 #[cfg(test)]
