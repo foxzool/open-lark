@@ -730,18 +730,18 @@ fn register_im_v1(registry: &mut DocUrlRegistry) {
             "im",
             "v1",
             "upload_image",
-            "https://open.feishu.cn/document/server-docs/im-v1/image/upload",
+            "https://open.feishu.cn/document/server-docs/im-v1/image/create",
             "上传图片",
         )
-        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/image/upload"),
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/image/create"),
         ApiDocUrl::new(
             "im",
             "v1",
             "download_image",
-            "https://open.feishu.cn/document/server-docs/im-v1/image/download",
+            "https://open.larkoffice.com/document/server-docs/im-v1/image/get",
             "下载图片",
         )
-        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/image/download"),
+        .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/image/get"),
         // === 消息卡片操作 (MessageCardService) ===
         ApiDocUrl::new(
             "im",
