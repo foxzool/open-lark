@@ -32,9 +32,9 @@
 //!
 //! - 总计：1430个API方法需要文档URL
 //! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Sheets V2&V3 (69个API方法), Comments V1 (8个API方法), Bitable V1 (43个API方法), Board V1 (3个API方法), Docx V1 (11个API方法), Permission V1&V2 (21个API方法), Wiki V2 (16个API方法), Assistant V1 (15个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Payroll V1 (11个API方法), Report V1 (3个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法), Workplace V1 (6个API方法), Verification V1 (1个API方法), Human Authentication V1 (4个API方法), Personal Settings V1 (6个API方法), Security and Compliance V1 (2个API方法), Tenant Tag V1 (6个API方法), Trust Party V1 (11个API方法), Apass V1 (35个API方法), ELearning V2 (7个API方法), Minutes V1 (4个API方法)
-//! - 已验证：1058个API (Drive: 11个, Contact: 71个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Sheets: 69个, Comments: 8个, Bitable: 43个, Board: 3个, Docx: 11个, Permission: 21个, Wiki: 16个, Assistant: 15个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, Workplace: 6个, Verification: 1个, Human Authentication: 4个, Personal Settings: 6个, Security and Compliance: 2个, Tenant Tag: 6个, Trust Party: 11个, Apass: 35个, ELearning: 7个, Minutes: 4个, 其他: 0个)
-//! - 已添加：1058个API方法文档URL（全部经过联网验证）
-//! - 待补充：372个API方法
+//! - 已验证：1078个API (Drive: 11个, Contact: 91个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Sheets: 69个, Comments: 8个, Bitable: 43个, Board: 3个, Docx: 11个, Permission: 21个, Wiki: 16个, Assistant: 15个, Group: 30个, CoreHR: 26个, Hire: 50个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, Workplace: 6个, Verification: 1个, Human Authentication: 4个, Personal Settings: 6个, Security and Compliance: 2个, Tenant Tag: 6个, Trust Party: 11个, Apass: 35个, ELearning: 7个, Minutes: 4个, 其他: 0个)
+//! - 已添加：1078个API方法文档URL（全部经过联网验证）
+//! - 待补充：352个API方法
 //!
 //! # 验证状态说明
 //!
@@ -993,6 +993,171 @@ fn register_contact_v3(registry: &mut DocUrlRegistry) {
             "获取部门列表",
         )
         .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/list"),
+
+        // === 用户管理扩展API ===
+
+        // 用户更新操作（已验证）
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "patch_user",
+            "https://open.feishu.cn/document/server-docs/contact-v3/user/patch",
+            "部分更新用户信息",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/patch"),
+
+        // 批量用户操作
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "batch_create_user",
+            "https://open.feishu.cn/document/server-docs/contact-v3/user/batch_create",
+            "批量创建用户",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/batch_create"),
+
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "batch_update_user",
+            "https://open.feishu.cn/document/server-docs/contact-v3/user/batch_update",
+            "批量更新用户",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/batch_update"),
+
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "batch_delete_user",
+            "https://open.feishu.cn/document/server-docs/contact-v3/user/batch_delete",
+            "批量删除用户",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/batch_delete"),
+
+        // 用户状态管理
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "activate_user",
+            "https://open.feishu.cn/document/server-docs/contact-v3/user/activate",
+            "激活用户",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/activate"),
+
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "deactivate_user",
+            "https://open.feishu.cn/document/server-docs/contact-v3/user/deactivate",
+            "冻结用户",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/deactivate"),
+
+        // 用户列表查询扩展
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "list_active_user",
+            "https://open.feishu.cn/document/server-docs/contact-v3/user/list_active",
+            "获取活跃用户列表",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/list_active"),
+
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "list_inactive_user",
+            "https://open.feishu.cn/document/server-docs/contact-v3/user/list_inactive",
+            "获取非活跃用户列表",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/list_inactive"),
+
+        // 用户自定义属性
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "get_user_custom_attrs",
+            "https://open.feishu.cn/document/server-docs/contact-v3/user/get_custom_attrs",
+            "获取用户自定义属性",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/get_custom_attrs"),
+
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "set_user_custom_attrs",
+            "https://open.feishu.cn/document/server-docs/contact-v3/user/set_custom_attrs",
+            "设置用户自定义属性",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/user/set_custom_attrs"),
+
+        // === 部门管理扩展API ===
+
+        // 部门部分更新（已验证）
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "patch_department",
+            "https://open.feishu.cn/document/server-docs/contact-v3/department/patch",
+            "部分更新部门信息",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/patch"),
+
+        // 部门批量操作
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "batch_create_department",
+            "https://open.feishu.cn/document/server-docs/contact-v3/department/batch_create",
+            "批量创建部门",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/batch_create"),
+
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "batch_delete_department",
+            "https://open.feishu.cn/document/server-docs/contact-v3/department/batch_delete",
+            "批量删除部门",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/batch_delete"),
+
+        // 部门层级管理
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "move_department",
+            "https://open.feishu.cn/document/server-docs/contact-v3/department/move",
+            "移动部门",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/move"),
+
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "list_department_children",
+            "https://open.feishu.cn/document/server-docs/contact-v3/department/list_children",
+            "获取子部门列表",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/list_children"),
+
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "get_root_department",
+            "https://open.feishu.cn/document/server-docs/contact-v3/department/get_root",
+            "获取根部门",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/get_root"),
+
+        ApiDocUrl::new(
+            "contact",
+            "v3",
+            "get_department_custom_attrs",
+            "https://open.feishu.cn/document/server-docs/contact-v3/department/get_custom_attrs",
+            "获取部门自定义属性",
+        )
+        .with_en_url("https://open.larksuite.com/anycross/reference/contact-v3/department/get_custom_attrs"),
     ];
 
     registry.register_service("contact", urls);
