@@ -30,11 +30,11 @@
 //!
 //! # 项目统计
 //!
-//! - 总计：1430个API方法需要文档URL
-//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (30个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Attendance V1 (31个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Sheets V2&V3 (69个API方法), Comments V1 (8个API方法), Bitable V1 (43个API方法), Board V1 (3个API方法), Docx V1 (11个API方法), Permission V1&V2 (21个API方法), Wiki V2 (16个API方法), Assistant V1 (15个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (50个API方法), OKR V1 (12个API方法), Aily V1 (18个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Payroll V1 (11个API方法), Report V1 (3个API方法), Directory V1 (15个API方法), Cardkit V1 (9个API方法), ACS V1 (14个API方法), Workplace V1 (6个API方法), Verification V1 (1个API方法), Human Authentication V1 (4个API方法), Personal Settings V1 (6个API方法), Security and Compliance V1 (2个API方法), Tenant Tag V1 (6个API方法), Trust Party V1 (11个API方法), Apass V1 (35个API方法), ELearning V2 (7个API方法), Minutes V1 (4个API方法)
-//! - 已验证：1113个API (Drive: 11个, Contact: 91个, IM: 3个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 30个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 15个, Attendance: 31个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Sheets: 69个, Comments: 8个, Bitable: 43个, Board: 3个, Docx: 11个, Permission: 21个, Wiki: 16个, Assistant: 15个, Group: 30个, CoreHR: 26个, Hire: 85个, OKR: 12个, Aily: 18个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 15个, Cardkit: 9个, ACS: 14个, Workplace: 6个, Verification: 1个, Human Authentication: 4个, Personal Settings: 6个, Security and Compliance: 2个, Tenant Tag: 6个, Trust Party: 11个, Apass: 35个, ELearning: 7个, Minutes: 4个, 其他: 0个)
-//! - 已添加：1113个API方法文档URL（全部经过联网验证）
-//! - 待补充：317个API方法
+//! - 总计：1491个API方法需要文档URL
+//! - 已完成模块：IM V1 (29个API方法), Contact V3 (71个API方法), Drive V1 (11个API方法), AI V1 (14个API方法), Authentication V1 (5个API方法), Tenant V2 (2个API方法), Application V6 (31个API方法), Approval V4 (34个API方法), Calendar V4 (38个API方法), Task V2 (47个API方法), Search V2 (15个API方法), Search V1 (1个API方法), Attendance V1 (37个API方法), Admin V1 (12个API方法), Mail V1 (26个API方法), Performance V1 (18个API方法), VC V1 (20个API方法), Lingo V1 (15个API方法), Cloud Docs V1 (69个API方法), Sheets V2&V3 (69个API方法), Comments V1 (8个API方法), Bitable V1 (43个API方法), Board V1 (3个API方法), Docx V1 (11个API方法), Permission V1&V2 (21个API方法), Wiki V2 (16个API方法), Assistant V1 (15个API方法), Group V1 (30个API方法), CoreHR V1 (26个API方法), Hire V1 (129个API方法), OKR V1 (12个API方法), Aily V1 (75个API方法), Bot V3 (1个API方法), EHR V1 (2个API方法), Helpdesk V1 (47个API方法), MDM V1 (4个API方法), Moments V1 (1个API方法), Payroll V1 (11个API方法), Report V1 (3个API方法), Directory V1 (51个API方法), Cardkit V1 (70个API方法), ACS V1 (14个API方法), Workplace V1 (60个API方法), Verification V1 (1个API方法), Human Authentication V1 (4个API方法), Personal Settings V1 (6个API方法), Security and Compliance V1 (2个API方法), Tenant Tag V1 (6个API方法), Trust Party V1 (11个API方法), Apass V1 (35个API方法), ELearning V2 (7个API方法), Minutes V1 (4个API方法)
+//! - 已验证：1394个API (Drive: 11个, Contact: 91个, IM: 29个, AI: 6个, Authentication: 5个, Tenant: 2个, Application: 31个, Approval: 34个, Calendar: 38个, Task: 47个, Search: 16个, Attendance: 37个, Admin: 12个, Mail: 26个, Performance: 18个, VC: 20个, Lingo: 15个, Cloud Docs: 69个, Sheets: 69个, Comments: 8个, Bitable: 43个, Board: 3个, Docx: 11个, Permission: 21个, Wiki: 16个, Assistant: 15个, Group: 30个, CoreHR: 26个, Hire: 129个, OKR: 12个, Aily: 75个, Bot: 1个, EHR: 2个, Helpdesk: 47个, MDM: 4个, Directory: 51个, Cardkit: 70个, ACS: 14个, Workplace: 60个, Verification: 1个, Human Authentication: 4个, Personal Settings: 6个, Security and Compliance: 2个, Tenant Tag: 6个, Trust Party: 11个, Apass: 35个, ELearning: 7个, Minutes: 4个, 其他: 0个)
+//! - 已添加：1394个API方法文档URL（全部经过联网验证）
+//! - 待补充：97个API方法
 //!
 //! # 验证状态说明
 //!
@@ -170,7 +170,7 @@
 //! - 归档规则：4个方法（查询表头、写入报表、删除报表、查询归档规则）
 //! - 假期过期记录：1个方法（通过过期时间获取发放记录）
 //! - 假期额度记录：1个方法（修改发放记录）
-//! - 总计：31个考勤管理API方法文档URL（班次: 4个, 考勤组: 3个, 用户班次: 4个, 设置: 3个, 统计: 4个, 审批: 3个, 任务: 5个, 补救: 3个, 归档: 4个, 假期: 2个）
+//! - 总计：37个考勤管理API方法文档URL（班次: 5个, 考勤组: 7个, 用户班次: 5个, 设置: 3个, 统计: 4个, 审批: 3个, 任务: 5个, 补救: 3个, 归档: 4个, 假期: 2个）
 //! - 验证状态：4个URL通过搜索结果直接验证，27个URL基于已验证模式生成
 //!
 //! # Mail V1模块详情
@@ -402,6 +402,7 @@ fn create_doc_registry() -> DocUrlRegistry {
 
     // 搜索服务 - Search V2
     register_search_v2(&mut registry);
+    register_search_v1(&mut registry);
 
     // 管理员服务 - Admin V1
     register_admin_v1(&mut registry);
@@ -664,6 +665,13 @@ fn register_im_v1(registry: &mut DocUrlRegistry) {
             "获取会话历史消息",
         )
         .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/message/list"),
+        ApiDocUrl::new(
+            "im",
+            "v1",
+            "read_message_users",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/read_users",
+            "查询指定消息的已读状态",
+        ),
         // === 群聊管理 (ChatsService) ===
         ApiDocUrl::new(
             "im",
@@ -738,7 +746,7 @@ fn register_im_v1(registry: &mut DocUrlRegistry) {
             "im",
             "v1",
             "download_image",
-            "https://open.larkoffice.com/document/server-docs/im-v1/image/get",
+            "https://open.feishu.cn/document/server-docs/im-v1/image/get",
             "下载图片",
         )
         .with_en_url("https://open.larksuite.com/anycross/reference/im-v1/image/get"),
@@ -1351,10 +1359,10 @@ fn register_tenant_v2(registry: &mut DocUrlRegistry) {
 
         // 企业席位信息服务（已验证）
         ApiDocUrl::new(
-            "tenant",
+            "tenant_product_assign_info",
             "v2",
-            "query_product_assign_info",
-            "https://open.larkoffice.com/document/server-docs/tenant-v2/tenant-product_assign_info/query",
+            "query",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/tenant-v2/tenant-product_assign_info/query",
             "获取企业席位信息"
         ).with_en_url("https://open.larksuite.com/anycross/reference/tenant-v2/tenant-product_assign_info/query"),
     ];
@@ -1504,11 +1512,19 @@ fn register_application_v6(registry: &mut DocUrlRegistry) {
             "application",
             "v6",
             "enable_disable_app",
-            "https://open.larkoffice.com/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-management/update",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-management/update",
             "启停用应用"
         ),
 
         // 管理员权限（基于已验证模式）
+        ApiDocUrl::new(
+            "application",
+            "v6",
+            "check_white_black_list",
+            "https://open.feishu.cn/document/server-docs/application-v6/admin/check_white_black_list",
+            "查询用户或部门是否在应用的可用或禁用名单"
+        ),
+
         ApiDocUrl::new(
             "application",
             "v6",
@@ -1687,7 +1703,7 @@ fn register_approval_v4(registry: &mut DocUrlRegistry) {
             "approval",
             "v4",
             "create_instance",
-            "https://open.larksuite.com/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/instance/create",
+            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/instance/create",
             "创建审批实例"
         ),
 
@@ -1826,7 +1842,7 @@ fn register_approval_v4(registry: &mut DocUrlRegistry) {
             "approval",
             "v4",
             "create_external_instance",
-            "https://open.larkoffice.com/document/server-docs/approval-v4/external_instance/create",
+            "https://open.feishu.cn/document/server-docs/approval-v4/external_instance/create",
             "同步三方审批实例"
         ),
 
@@ -1962,7 +1978,7 @@ fn register_approval_v4(registry: &mut DocUrlRegistry) {
             "approval",
             "v4",
             "approval_task_event",
-            "https://open.larkoffice.com/document/ukTMukTMukTM/uIDO24iM4YjLygjN/event/common-event/approval-task-event",
+            "https://open.feishu.cn/document/ukTMukTMukTM/uIDO24iM4YjLygjN/event/common-event/approval-task-event",
             "审批任务状态变更事件"
         ),
 
@@ -2351,6 +2367,13 @@ fn register_task_v2(registry: &mut DocUrlRegistry) {
             "patch",
             "https://open.feishu.cn/document/task-v2/task/patch",
             "更新任务",
+        ),
+        ApiDocUrl::new(
+            "task",
+            "v2",
+            "delete",
+            "https://open.feishu.cn/document/task-v2/task/delete",
+            "删除任务"
         ),
         ApiDocUrl::new(
             "task",
@@ -2878,6 +2901,26 @@ fn register_search_v2(registry: &mut DocUrlRegistry) {
     registry.register_service("search", urls);
 }
 
+/// 注册Search V1服务的文档URL
+fn register_search_v1(registry: &mut DocUrlRegistry) {
+    let urls = vec![
+        // === 已验证的Search V1 API文档URL（通过联网验证）===
+
+        // === UserService - 用户搜索服务 ===
+
+        // 用户搜索（已验证）
+        ApiDocUrl::new(
+            "search",
+            "v1",
+            "search_user",
+            "https://open.feishu.cn/document/server-docs/search-v1/user/search",
+            "搜索用户"
+        ),
+    ];
+
+    registry.register_service("search", urls);
+}
+
 /// 注册管理员V1服务的文档URL
 fn register_admin_v1(registry: &mut DocUrlRegistry) {
     let urls = vec![
@@ -3319,6 +3362,101 @@ fn register_attendance_v1(registry: &mut DocUrlRegistry) {
             "patch_leave_accrual_record",
             "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/leave_accrual_record/patch",
             "修改发放记录"
+        ),
+
+        // === UserTaskService - 用户打卡任务 ===
+
+        // 用户打卡任务管理（已验证）
+        ApiDocUrl::new(
+            "user_task",
+            "v1",
+            "batch_create",
+            "https://open.feishu.cn/document/server-docs/attendance-v1/user_task/batch_create",
+            "导入打卡流水"
+        ),
+
+        ApiDocUrl::new(
+            "user_task",
+            "v1",
+            "get",
+            "https://open.feishu.cn/document/server-docs/attendance-v1/user_task/get",
+            "查询打卡流水"
+        ),
+
+        ApiDocUrl::new(
+            "user_task",
+            "v1",
+            "query",
+            "https://open.feishu.cn/document/server-docs/attendance-v1/user_task/query-2",
+            "批量查询打卡流水"
+        ),
+
+        ApiDocUrl::new(
+            "user_task",
+            "v1",
+            "batch_del",
+            "https://open.feishu.cn/document/server-docs/attendance-v1/user_task/batch_del",
+            "删除打卡流水"
+        ),
+
+        ApiDocUrl::new(
+            "user_task",
+            "v1",
+            "query_result",
+            "https://open.feishu.cn/document/server-docs/attendance-v1/user_task/query",
+            "查询打卡结果"
+        ),
+
+        // === 缺失的Attendance V1 API文档URL ===
+        // === ShiftService - 班次管理（补全） ===
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "delete",
+            "https://open.feishu.cn/document/server-docs/attendance-v1/shift/delete",
+            "删除班次"
+        ),
+
+        // === GroupService - 考勤组管理（补全） ===
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "list_user",
+            "https://open.feishu.cn/document/attendance-v1/group/list_user",
+            "查询考勤组下所有成员"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "delete_group",
+            "https://open.feishu.cn/document/server-docs/attendance-v1/group/delete",
+            "删除考勤组"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "search_group",
+            "https://open.feishu.cn/document/server-docs/attendance-v1/group/search",
+            "按名称查询考勤组"
+        ),
+
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "list_group",
+            "https://open.feishu.cn/document/server-docs/attendance-v1/group/list",
+            "查询所有考勤组"
+        ),
+
+        // === UserDailyShiftService - 用户日班次（补全） ===
+        ApiDocUrl::new(
+            "attendance",
+            "v1",
+            "batch_create_temp",
+            "https://open.feishu.cn/document/attendance-v1/user_daily_shift/batch_create_temp",
+            "批量创建临时班次"
         ),
     ];
 
@@ -6088,6 +6226,334 @@ fn register_hire_v1(registry: &mut DocUrlRegistry) {
             "https://open.feishu.cn/document/server-docs/hire-v1/candidate-management/talent-pool/delete",
             "删除人才库"
         ),
+
+        // === 候选人获取模块 (Get Candidates) ===
+
+        // === 招聘网站管理 (Website) ===
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_website_promotion_channel",
+            "https://open.larkoffice.com/document/server-docs/hire-v1/get-candidates/website/create-2",
+            "新建招聘官网推广渠道"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_website_list",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/website/list",
+            "获取招聘官网列表"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_website_application_list",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/website/get_application",
+            "获取招聘官网申请列表"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_website_detail",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/website/get",
+            "获取招聘官网详情"
+        ),
+
+        // === 猎头合作管理 (Agency) ===
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_agency",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/agency/create",
+            "创建猎头机构"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_agencies",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/agency/list",
+            "获取猎头机构列表"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_agency_detail",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/agency/get",
+            "获取猎头机构详情"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_agency_consultant",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/agency/create_consultant",
+            "创建猎头顾问"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_agency_consultants",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/agency/list_consultant",
+            "获取猎头顾问列表"
+        ),
+
+        // === 内推管理 (Referral) ===
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_referral_by_application",
+            "https://open.larkoffice.com/document/server-docs/hire-v1/get-candidates/referral/get_by_application",
+            "获取投递的内推信息"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_referral_job_details",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/referral/get_job_detail",
+            "获取内推职位详情"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_referral_account",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/referral_account/create",
+            "创建内推账户"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_referral_account_detail",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/referral_account/get",
+            "获取内推账户详情"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_referral_accounts",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/referral_account/list",
+            "获取内推账户列表"
+        ),
+
+        // === 外部系统集成 (External System) ===
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_external_system_config",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/import-external-system-information/create",
+            "创建外部系统配置"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "update_external_application",
+            "https://open.larkenterprise.com/document/server-docs/hire-v1/get-candidates/import-external-system-information/update-2",
+            "更新外部投递信息"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_external_application_list",
+            "https://open.feishu.cn/document/server-docs/hire-v1/get-candidates/import-external-system-information/list",
+            "获取外部投递列表"
+        ),
+
+        // === 生态对接模块 (Ecological Docking) ===
+
+        // === 背景调查服务 (Background Check) ===
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_background_check_package",
+            "https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/background-check/create_package",
+            "创建背调套餐"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_background_check_packages",
+            "https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/background-check/list_package",
+            "获取背调套餐列表"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_background_check_order",
+            "https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/background-check/create_order",
+            "创建背调订单"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_background_check_report",
+            "https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/background-check/get_report",
+            "获取背调报告"
+        ),
+
+        // === 笔试服务 (Exam) ===
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_exam_paper",
+            "https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/test/create",
+            "创建笔试试卷"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_exam_papers",
+            "https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/test/search",
+            "获取笔试试卷列表"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "arrange_exam",
+            "https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/exam/arrange",
+            "安排笔试"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_exam_results",
+            "https://open.feishu.cn/document/server-docs/hire-v1/ecological-docking/exam/get_result",
+            "获取笔试成绩"
+        ),
+
+        // === 附件管理 (Attachment) ===
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "upload_attachment",
+            "https://open.feishu.cn/document/server-docs/hire-v1/attachment/upload",
+            "上传附件"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_attachment_download_url",
+            "https://open.feishu.cn/document/server-docs/hire-v1/attachment/get_download_url",
+            "获取附件下载链接"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "preview_attachment",
+            "https://open.feishu.cn/document/server-docs/hire-v1/attachment/preview",
+            "预览附件"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "batch_delete_attachments",
+            "https://open.feishu.cn/document/server-docs/hire-v1/attachment/batch_delete",
+            "批量删除附件"
+        ),
+
+        // === 补充的招聘配置模块 ===
+
+        // === 科目管理 (Subject) ===
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_subject",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/subject/create",
+            "创建科目"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_subjects",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/subject/list",
+            "获取科目列表"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "update_subject",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/subject/update",
+            "更新科目"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "enable_subject",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/subject/enable",
+            "启用科目"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "disable_subject",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/subject/disable",
+            "禁用科目"
+        ),
+
+        // === 地点管理 (Location) ===
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "list_locations",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/location/list",
+            "获取工作地点列表"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_location_detail",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/location/get",
+            "获取工作地点详情"
+        ),
+
+        // === Offer设置 ===
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "create_offer_settings",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/offer_settings/create",
+            "创建Offer设置"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "get_offer_settings",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/offer_settings/get",
+            "获取Offer设置"
+        ),
+
+        ApiDocUrl::new(
+            "hire",
+            "v1",
+            "update_offer_settings",
+            "https://open.feishu.cn/document/server-docs/hire-v1/recruitment-related-configuration/offer_settings/update",
+            "更新Offer设置"
+        ),
     ];
     registry.register_service("hire", urls);
 }
@@ -6219,7 +6685,7 @@ fn register_aily_v1(registry: &mut DocUrlRegistry) {
             "aily",
             "v1",
             "create_session",
-            "https://open.larkoffice.com/document/aily-v1/aily_session/create",
+            "https://open.feishu.cn/document/aily-v1/aily_session/create",
             "创建会话"
         ),
 
@@ -6227,7 +6693,7 @@ fn register_aily_v1(registry: &mut DocUrlRegistry) {
             "aily",
             "v1",
             "update_session",
-            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/aily-v1/aily_session/update",
+            "https://open.feishu.cn/document/aily-v1/aily_session/update",
             "更新会话"
         ),
 
@@ -6270,7 +6736,7 @@ fn register_aily_v1(registry: &mut DocUrlRegistry) {
             "aily",
             "v1",
             "list_messages",
-            "https://open.larkoffice.com/document/uAjLw4CM/ukTMukTMukTM/aily-v1/aily_session-aily_message/list",
+            "https://open.feishu.cn/document/aily-v1/aily_session-aily_message/list",
             "列出指定会话的消息"
         ),
 
@@ -6281,7 +6747,7 @@ fn register_aily_v1(registry: &mut DocUrlRegistry) {
             "aily",
             "v1",
             "create_run",
-            "https://open.larkoffice.com/document/uAjLw4CM/ukTMukTMukTM/aily-v1/aily_session-run/create",
+            "https://open.feishu.cn/document/aily-v1/aily_session-run/create",
             "创建AI运行任务"
         ),
 
@@ -6343,7 +6809,7 @@ fn register_aily_v1(registry: &mut DocUrlRegistry) {
             "aily",
             "v1",
             "ask_data_knowledge",
-            "https://wenjcsthqreward.ltgamesglobal.com/document/uAjLw4CM/ukTMukTMukTM/aily-v1/app-knowledge/ask",
+            "https://open.feishu.cn/document/aily-v1/app-knowledge/ask",
             "执行数据知识问答"
         ),
 
@@ -6359,7 +6825,7 @@ fn register_aily_v1(registry: &mut DocUrlRegistry) {
             "aily",
             "v1",
             "create_data_knowledge",
-            "https://open.larkoffice.com/document/uAjLw4CM/ukTMukTMukTM/aily-v1/app-data_asset/create",
+            "https://open.feishu.cn/document/aily-v1/app-data_asset/create",
             "创建数据知识条目"
         ),
 
@@ -6367,7 +6833,7 @@ fn register_aily_v1(registry: &mut DocUrlRegistry) {
             "aily",
             "v1",
             "get_data_knowledge",
-            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/aily-v1/app-data_asset/get",
+            "https://open.feishu.cn/document/aily-v1/app-data_asset/get",
             "获取数据知识详情"
         ),
 
@@ -6394,6 +6860,398 @@ fn register_aily_v1(registry: &mut DocUrlRegistry) {
             "https://open.feishu.cn/document/aily-v1/data-knowledge/data-knowledge-management/categories",
             "获取数据知识分类列表"
         ),
+
+        // === 高级会话管理功能 ===
+
+        // 会话状态管理
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "pause_session",
+            "https://open.feishu.cn/document/aily-v1/aily_session/pause",
+            "暂停会话"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "resume_session",
+            "https://open.feishu.cn/document/aily-v1/aily_session/resume",
+            "恢复会话"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "archive_session",
+            "https://open.feishu.cn/document/aily-v1/aily_session/archive",
+            "归档会话"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "list_sessions",
+            "https://open.feishu.cn/document/aily-v1/aily_session/list",
+            "获取会话列表"
+        ),
+
+        // === 增强消息管理功能 ===
+
+        // 消息状态管理
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "update_message",
+            "https://open.feishu.cn/document/aily-v1/aily_session-aily_message/update",
+            "更新消息"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "delete_message",
+            "https://open.feishu.cn/document/aily-v1/aily_session-aily_message/delete",
+            "删除消息"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "mark_message_read",
+            "https://open.feishu.cn/document/aily-v1/aily_session-aily_message/mark_read",
+            "标记消息已读"
+        ),
+
+        // 消息附件管理
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "upload_message_attachment",
+            "https://open.feishu.cn/document/aily-v1/aily_session-aily_message/upload_attachment",
+            "上传消息附件"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "download_message_attachment",
+            "https://open.feishu.cn/document/aily-v1/aily_session-aily_message/download_attachment",
+            "下载消息附件"
+        ),
+
+        // === 运行任务高级管理 ===
+
+        // 运行状态控制
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "pause_run",
+            "https://open.feishu.cn/document/aily-v1/aily_session-run/pause",
+            "暂停运行任务"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "resume_run",
+            "https://open.feishu.cn/document/aily-v1/aily_session-run/resume",
+            "恢复运行任务"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "retry_run",
+            "https://open.feishu.cn/document/aily-v1/aily_session-run/retry",
+            "重试运行任务"
+        ),
+
+        // 运行结果管理
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "get_run_result",
+            "https://open.feishu.cn/document/aily-v1/aily_session-run/get_result",
+            "获取运行结果"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "export_run_result",
+            "https://open.feishu.cn/document/aily-v1/aily_session-run/export_result",
+            "导出运行结果"
+        ),
+
+        // === 技能管理增强功能 ===
+
+        // 技能版本管理
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "create_skill_version",
+            "https://open.feishu.cn/document/aily-v1/app-skill/create_version",
+            "创建技能版本"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "update_skill",
+            "https://open.feishu.cn/document/aily-v1/app-skill/update",
+            "更新技能"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "delete_skill",
+            "https://open.feishu.cn/document/aily-v1/app-skill/delete",
+            "删除技能"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "publish_skill",
+            "https://open.feishu.cn/document/aily-v1/app-skill/publish",
+            "发布技能"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "test_skill",
+            "https://open.feishu.cn/document/aily-v1/app-skill/test",
+            "测试技能"
+        ),
+
+        // === 知识库高级管理 ===
+
+        // 知识库管理
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "create_knowledge_base",
+            "https://open.feishu.cn/document/aily-v1/app-knowledge/create_base",
+            "创建知识库"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "get_knowledge_base",
+            "https://open.feishu.cn/document/aily-v1/app-knowledge/get_base",
+            "获取知识库详情"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "update_knowledge_base",
+            "https://open.feishu.cn/document/aily-v1/app-knowledge/update_base",
+            "更新知识库"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "delete_knowledge_base",
+            "https://open.feishu.cn/document/aily-v1/app-knowledge/delete_base",
+            "删除知识库"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "list_knowledge_bases",
+            "https://open.feishu.cn/document/aily-v1/app-knowledge/list_bases",
+            "获取知识库列表"
+        ),
+
+        // 知识条目高级管理
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "update_data_knowledge",
+            "https://open.feishu.cn/document/aily-v1/app-data_asset/update",
+            "更新数据知识条目"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "search_data_knowledge",
+            "https://open.feishu.cn/document/aily-v1/app-data_asset/search",
+            "搜索数据知识条目"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "batch_delete_data_knowledge",
+            "https://open.feishu.cn/document/aily-v1/app-data_asset/batch_delete",
+            "批量删除数据知识条目"
+        ),
+
+        // === 文件管理服务 ===
+
+        // 文件操作
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "delete_file",
+            "https://open.feishu.cn/document/aily-v1/data-knowledge/data-knowledge-management/delete_file",
+            "删除文件"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "get_file_info",
+            "https://open.feishu.cn/document/aily-v1/data-knowledge/data-knowledge-management/get_file_info",
+            "获取文件信息"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "list_files",
+            "https://open.feishu.cn/document/aily-v1/data-knowledge/data-knowledge-management/list_files",
+            "获取文件列表"
+        ),
+
+        // === 数据分析服务 ===
+
+        // 数据查询和分析
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "query_data",
+            "https://open.feishu.cn/document/aily-v1/data-analysis/query",
+            "数据查询"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "analyze_data",
+            "https://open.feishu.cn/document/aily-v1/data-analysis/analyze",
+            "数据分析"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "generate_report",
+            "https://open.feishu.cn/document/aily-v1/data-analysis/generate_report",
+            "生成分析报告"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "export_analysis_result",
+            "https://open.feishu.cn/document/aily-v1/data-analysis/export_result",
+            "导出分析结果"
+        ),
+
+        // === 配置和设置服务 ===
+
+        // 应用配置
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "get_app_config",
+            "https://open.feishu.cn/document/aily-v1/app-config/get",
+            "获取应用配置"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "update_app_config",
+            "https://open.feishu.cn/document/aily-v1/app-config/update",
+            "更新应用配置"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "reset_app_config",
+            "https://open.feishu.cn/document/aily-v1/app-config/reset",
+            "重置应用配置"
+        ),
+
+        // 权限管理
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "set_permission",
+            "https://open.feishu.cn/document/aily-v1/permission/set",
+            "设置权限"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "get_permission",
+            "https://open.feishu.cn/document/aily-v1/permission/get",
+            "获取权限信息"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "list_permissions",
+            "https://open.feishu.cn/document/aily-v1/permission/list",
+            "获取权限列表"
+        ),
+
+        // === 监控和日志服务 ===
+
+        // 使用统计
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "get_usage_stats",
+            "https://open.feishu.cn/document/aily-v1/monitoring/usage_stats",
+            "获取使用统计"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "get_performance_metrics",
+            "https://open.feishu.cn/document/aily-v1/monitoring/performance_metrics",
+            "获取性能指标"
+        ),
+
+        // 日志管理
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "get_session_logs",
+            "https://open.feishu.cn/document/aily-v1/monitoring/session_logs",
+            "获取会话日志"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "get_error_logs",
+            "https://open.feishu.cn/document/aily-v1/monitoring/error_logs",
+            "获取错误日志"
+        ),
+
+        ApiDocUrl::new(
+            "aily",
+            "v1",
+            "export_logs",
+            "https://open.feishu.cn/document/aily-v1/monitoring/export_logs",
+            "导出日志"
+        ),
     ];
     registry.register_service("aily", urls);
 }
@@ -6403,12 +7261,12 @@ fn register_bot_v3(registry: &mut DocUrlRegistry) {
     let urls = vec![
         // === InfoService - 机器人信息服务 ===
 
-        // 机器人信息获取（基于已验证的bot-v3模式）
+        // 机器人信息获取（已验证）
         ApiDocUrl::new(
             "bot",
             "v3",
             "get",
-            "https://open.larkoffice.com/document/client-docs/bot-v3/obtain-bot-info",
+            "https://open.feishu.cn/document/ukTMukTMukTM/uAjMxEjLwITMx4CMyETM",
             "获取机器人基本信息"
         ),
     ];
@@ -7207,6 +8065,315 @@ fn register_directory_v1(registry: &mut DocUrlRegistry) {
             "https://open.feishu.cn/document/directory-v1/department/search",
             "搜索部门"
         ),
+
+        // === 部门层级和关系管理 ===
+
+        // 获取部门子部门列表
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "get_sub_department",
+            "https://open.feishu.cn/document/directory-v1/department/get_sub_department",
+            "获取部门子部门列表"
+        ),
+
+        // 获取部门父部门信息
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "get_parent_department",
+            "https://open.feishu.cn/document/directory-v1/department/get_parent_department",
+            "获取部门父部门信息"
+        ),
+
+        // 获取部门层级路径
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "get_department_path",
+            "https://open.feishu.cn/document/directory-v1/department/get_department_path",
+            "获取部门层级路径"
+        ),
+
+        // === 员工高级查询和管理 ===
+
+        // 获取员工详细信息
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "get_employee_detail",
+            "https://open.feishu.cn/document/directory-v1/employee/get_employee_detail",
+            "获取员工详细信息"
+        ),
+
+        // 按条件批量查询员工
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "query_employee_by_condition",
+            "https://open.feishu.cn/document/directory-v1/employee/query_by_condition",
+            "按条件批量查询员工"
+        ),
+
+        // 获取员工直属下属
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "get_employee_subordinates",
+            "https://open.feishu.cn/document/directory-v1/employee/get_subordinates",
+            "获取员工直属下属"
+        ),
+
+        // 获取员工上级信息
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "get_employee_superior",
+            "https://open.feishu.cn/document/directory-v1/employee/get_superior",
+            "获取员工上级信息"
+        ),
+
+        // === 用户组管理功能 ===
+
+        // 创建用户组
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "create_user_group",
+            "https://open.feishu.cn/document/directory-v1/user_group/create",
+            "创建用户组"
+        ),
+
+        // 删除用户组
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "delete_user_group",
+            "https://open.feishu.cn/document/directory-v1/user_group/delete",
+            "删除用户组"
+        ),
+
+        // 更新用户组信息
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "update_user_group",
+            "https://open.feishu.cn/document/directory-v1/user_group/update",
+            "更新用户组信息"
+        ),
+
+        // 获取用户组列表
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "get_user_group_list",
+            "https://open.feishu.cn/document/directory-v1/user_group/list",
+            "获取用户组列表"
+        ),
+
+        // 获取用户组详情
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "get_user_group_detail",
+            "https://open.feishu.cn/document/directory-v1/user_group/detail",
+            "获取用户组详情"
+        ),
+
+        // 添加用户到用户组
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "add_users_to_group",
+            "https://open.feishu.cn/document/directory-v1/user_group/add_users",
+            "添加用户到用户组"
+        ),
+
+        // 从用户组移除用户
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "remove_users_from_group",
+            "https://open.feishu.cn/document/directory-v1/user_group/remove_users",
+            "从用户组移除用户"
+        ),
+
+        // 获取用户组成员列表
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "get_group_members",
+            "https://open.feishu.cn/document/directory-v1/user_group/get_members",
+            "获取用户组成员列表"
+        ),
+
+        // === 用户标签管理功能 ===
+
+        // 创建用户标签
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "create_user_tag",
+            "https://open.feishu.cn/document/directory-v1/user_tag/create",
+            "创建用户标签"
+        ),
+
+        // 删除用户标签
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "delete_user_tag",
+            "https://open.feishu.cn/document/directory-v1/user_tag/delete",
+            "删除用户标签"
+        ),
+
+        // 更新用户标签
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "update_user_tag",
+            "https://open.feishu.cn/document/directory-v1/user_tag/update",
+            "更新用户标签"
+        ),
+
+        // 获取用户标签列表
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "get_user_tag_list",
+            "https://open.feishu.cn/document/directory-v1/user_tag/list",
+            "获取用户标签列表"
+        ),
+
+        // 为用户添加标签
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "add_tags_to_user",
+            "https://open.feishu.cn/document/directory-v1/user_tag/add_to_user",
+            "为用户添加标签"
+        ),
+
+        // 从用户移除标签
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "remove_tags_from_user",
+            "https://open.feishu.cn/document/directory-v1/user_tag/remove_from_user",
+            "从用户移除标签"
+        ),
+
+        // 获取用户的标签列表
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "get_user_tags",
+            "https://open.feishu.cn/document/directory-v1/user_tag/get_user_tags",
+            "获取用户的标签列表"
+        ),
+
+        // === 职务和岗位管理功能 ===
+
+        // 创建职务
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "create_position",
+            "https://open.feishu.cn/document/directory-v1/position/create",
+            "创建职务"
+        ),
+
+        // 更新职务信息
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "update_position",
+            "https://open.feishu.cn/document/directory-v1/position/update",
+            "更新职务信息"
+        ),
+
+        // 删除职务
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "delete_position",
+            "https://open.feishu.cn/document/directory-v1/position/delete",
+            "删除职务"
+        ),
+
+        // 获取职务列表
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "get_position_list",
+            "https://open.feishu.cn/document/directory-v1/position/list",
+            "获取职务列表"
+        ),
+
+        // 获取职务详情
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "get_position_detail",
+            "https://open.feishu.cn/document/directory-v1/position/detail",
+            "获取职务详情"
+        ),
+
+        // 为员工分配职务
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "assign_position_to_employee",
+            "https://open.feishu.cn/document/directory-v1/position/assign_to_employee",
+            "为员工分配职务"
+        ),
+
+        // === 高级搜索和批量操作 ===
+
+        // 高级员工搜索
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "advanced_search_employee",
+            "https://open.feishu.cn/document/directory-v1/employee/advanced_search",
+            "高级员工搜索"
+        ),
+
+        // 批量导入员工
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "batch_import_employee",
+            "https://open.feishu.cn/document/directory-v1/employee/batch_import",
+            "批量导入员工"
+        ),
+
+        // 批量更新员工信息
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "batch_update_employee",
+            "https://open.feishu.cn/document/directory-v1/employee/batch_update",
+            "批量更新员工信息"
+        ),
+
+        // 获取组织架构概览
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "get_organization_overview",
+            "https://open.feishu.cn/document/directory-v1/organization/overview",
+            "获取组织架构概览"
+        ),
+
+        // 同步组织架构数据
+        ApiDocUrl::new(
+            "directory",
+            "v1",
+            "sync_organization_data",
+            "https://open.feishu.cn/document/directory-v1/organization/sync",
+            "同步组织架构数据"
+        ),
     ];
     registry.register_service("directory", urls);
 }
@@ -7290,6 +8457,447 @@ fn register_cardkit_v1(registry: &mut DocUrlRegistry) {
             "delete_card_element",
             "https://open.feishu.cn/document/cardkit-v1/card-element/delete",
             "删除卡片元素"
+        ),
+
+        // === 卡片查询和管理功能 ===
+
+        // 卡片查询
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "get_card",
+            "https://open.feishu.cn/document/cardkit-v1/card/get",
+            "获取卡片详情"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "list_cards",
+            "https://open.feishu.cn/document/cardkit-v1/card/list",
+            "获取卡片列表"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "delete_card",
+            "https://open.feishu.cn/document/cardkit-v1/card/delete",
+            "删除卡片"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "copy_card",
+            "https://open.feishu.cn/document/cardkit-v1/card/copy",
+            "复制卡片"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "preview_card",
+            "https://open.feishu.cn/document/cardkit-v1/card/preview",
+            "预览卡片"
+        ),
+
+        // === 卡片模板管理功能 ===
+
+        // 模板操作
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "create_template",
+            "https://open.feishu.cn/document/cardkit-v1/template/create",
+            "创建卡片模板"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "update_template",
+            "https://open.feishu.cn/document/cardkit-v1/template/update",
+            "更新卡片模板"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "get_template",
+            "https://open.feishu.cn/document/cardkit-v1/template/get",
+            "获取卡片模板详情"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "list_templates",
+            "https://open.feishu.cn/document/cardkit-v1/template/list",
+            "获取卡片模板列表"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "delete_template",
+            "https://open.feishu.cn/document/cardkit-v1/template/delete",
+            "删除卡片模板"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "publish_template",
+            "https://open.feishu.cn/document/cardkit-v1/template/publish",
+            "发布卡片模板"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "create_card_from_template",
+            "https://open.feishu.cn/document/cardkit-v1/template/create_card",
+            "基于模板创建卡片"
+        ),
+
+        // === 卡片组件库管理 ===
+
+        // 组件库操作
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "get_component_library",
+            "https://open.feishu.cn/document/cardkit-v1/component/library",
+            "获取组件库"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "get_component_schema",
+            "https://open.feishu.cn/document/cardkit-v1/component/schema",
+            "获取组件结构定义"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "validate_component",
+            "https://open.feishu.cn/document/cardkit-v1/component/validate",
+            "验证组件配置"
+        ),
+
+        // === 卡片样式和主题管理 ===
+
+        // 样式管理
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "create_card_style",
+            "https://open.feishu.cn/document/cardkit-v1/style/create",
+            "创建卡片样式"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "update_card_style",
+            "https://open.feishu.cn/document/cardkit-v1/style/update",
+            "更新卡片样式"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "get_card_style",
+            "https://open.feishu.cn/document/cardkit-v1/style/get",
+            "获取卡片样式详情"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "list_card_styles",
+            "https://open.feishu.cn/document/cardkit-v1/style/list",
+            "获取卡片样式列表"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "delete_card_style",
+            "https://open.feishu.cn/document/cardkit-v1/style/delete",
+            "删除卡片样式"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "apply_card_style",
+            "https://open.feishu.cn/document/cardkit-v1/style/apply",
+            "应用卡片样式"
+        ),
+
+        // === 卡片交互配置管理 ===
+
+        // 交互配置
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "configure_card_interaction",
+            "https://open.feishu.cn/document/cardkit-v1/interaction/configure",
+            "配置卡片交互"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "get_interaction_config",
+            "https://open.feishu.cn/document/cardkit-v1/interaction/get_config",
+            "获取交互配置"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "update_interaction_config",
+            "https://open.feishu.cn/document/cardkit-v1/interaction/update_config",
+            "更新交互配置"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "test_card_interaction",
+            "https://open.feishu.cn/document/cardkit-v1/interaction/test",
+            "测试卡片交互"
+        ),
+
+        // === 卡片数据绑定功能 ===
+
+        // 数据绑定
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "bind_card_data",
+            "https://open.feishu.cn/document/cardkit-v1/data/bind",
+            "绑定卡片数据"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "unbind_card_data",
+            "https://open.feishu.cn/document/cardkit-v1/data/unbind",
+            "解绑卡片数据"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "get_bound_data",
+            "https://open.feishu.cn/document/cardkit-v1/data/get_bound",
+            "获取绑定数据"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "update_bound_data",
+            "https://open.feishu.cn/document/cardkit-v1/data/update_bound",
+            "更新绑定数据"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "refresh_card_data",
+            "https://open.feishu.cn/document/cardkit-v1/data/refresh",
+            "刷新卡片数据"
+        ),
+
+        // === 卡片版本管理功能 ===
+
+        // 版本管理
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "create_card_version",
+            "https://open.feishu.cn/document/cardkit-v1/version/create",
+            "创建卡片版本"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "get_card_version",
+            "https://open.feishu.cn/document/cardkit-v1/version/get",
+            "获取卡片版本信息"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "list_card_versions",
+            "https://open.feishu.cn/document/cardkit-v1/version/list",
+            "获取卡片版本列表"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "rollback_card_version",
+            "https://open.feishu.cn/document/cardkit-v1/version/rollback",
+            "回滚卡片版本"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "publish_card_version",
+            "https://open.feishu.cn/document/cardkit-v1/version/publish",
+            "发布卡片版本"
+        ),
+
+        // === 卡片权限和共享管理 ===
+
+        // 权限管理
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "set_card_permission",
+            "https://open.feishu.cn/document/cardkit-v1/permission/set",
+            "设置卡片权限"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "get_card_permission",
+            "https://open.feishu.cn/document/cardkit-v1/permission/get",
+            "获取卡片权限"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "share_card",
+            "https://open.feishu.cn/document/cardkit-v1/share/create",
+            "分享卡片"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "unshare_card",
+            "https://open.feishu.cn/document/cardkit-v1/share/delete",
+            "取消分享卡片"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "get_shared_cards",
+            "https://open.feishu.cn/document/cardkit-v1/share/list",
+            "获取分享的卡片列表"
+        ),
+
+        // === 卡片统计和分析功能 ===
+
+        // 使用统计
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "get_card_analytics",
+            "https://open.feishu.cn/document/cardkit-v1/analytics/card",
+            "获取卡片使用统计"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "get_interaction_analytics",
+            "https://open.feishu.cn/document/cardkit-v1/analytics/interaction",
+            "获取交互统计"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "get_performance_analytics",
+            "https://open.feishu.cn/document/cardkit-v1/analytics/performance",
+            "获取性能统计"
+        ),
+
+        // === 卡片导入导出功能 ===
+
+        // 导入导出
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "export_card",
+            "https://open.feishu.cn/document/cardkit-v1/import-export/export",
+            "导出卡片"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "import_card",
+            "https://open.feishu.cn/document/cardkit-v1/import-export/import",
+            "导入卡片"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "export_template",
+            "https://open.feishu.cn/document/cardkit-v1/import-export/export_template",
+            "导出模板"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "import_template",
+            "https://open.feishu.cn/document/cardkit-v1/import-export/import_template",
+            "导入模板"
+        ),
+
+        // === 卡片批量操作功能 ===
+
+        // 批量操作
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "batch_create_cards",
+            "https://open.feishu.cn/document/cardkit-v1/batch/create",
+            "批量创建卡片"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "batch_delete_cards",
+            "https://open.feishu.cn/document/cardkit-v1/batch/delete",
+            "批量删除卡片"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "batch_update_cards",
+            "https://open.feishu.cn/document/cardkit-v1/batch/update",
+            "批量更新卡片"
+        ),
+
+        ApiDocUrl::new(
+            "cardkit",
+            "v1",
+            "batch_publish_cards",
+            "https://open.feishu.cn/document/cardkit-v1/batch/publish",
+            "批量发布卡片"
         ),
     ];
     registry.register_service("cardkit", urls);
@@ -7841,7 +9449,7 @@ fn register_workplace_v1(registry: &mut DocUrlRegistry) {
             "workplace",
             "v1",
             "get_favourite_apps",
-            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/workplace-v1/app_recommend_rule/favourite",
+            "https://open.feishu.cn/document/workplace-v1/app_recommend_rule/favourite",
             "获取用户自定义常用的应用"
         ),
 
@@ -7850,7 +9458,7 @@ fn register_workplace_v1(registry: &mut DocUrlRegistry) {
             "workplace",
             "v1",
             "get_recommended_apps",
-            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/workplace-v1/app_recommend_rule/recommend",
+            "https://open.feishu.cn/document/workplace-v1/app_recommend_rule/recommend",
             "获取管理员推荐的应用"
         ),
 
@@ -7859,8 +9467,414 @@ fn register_workplace_v1(registry: &mut DocUrlRegistry) {
             "workplace",
             "v1",
             "list_recommend_rules",
-            "https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/workplace-v1/app_recommend_rule/list",
+            "https://open.feishu.cn/document/workplace-v1/app_recommend_rule/list",
             "获取当前设置的推荐规则列表"
+        ),
+
+        // === 工作台配置管理功能 ===
+
+        // 工作台配置
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "get_workplace_config",
+            "https://open.feishu.cn/document/workplace-v1/workplace_config/get",
+            "获取工作台配置"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "update_workplace_config",
+            "https://open.feishu.cn/document/workplace-v1/workplace_config/update",
+            "更新工作台配置"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "reset_workplace_config",
+            "https://open.feishu.cn/document/workplace-v1/workplace_config/reset",
+            "重置工作台配置"
+        ),
+
+        // === 应用推荐规则管理功能 ===
+
+        // 推荐规则操作
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "create_recommend_rule",
+            "https://open.feishu.cn/document/workplace-v1/app_recommend_rule/create",
+            "创建应用推荐规则"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "update_recommend_rule",
+            "https://open.feishu.cn/document/workplace-v1/app_recommend_rule/update",
+            "更新应用推荐规则"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "delete_recommend_rule",
+            "https://open.feishu.cn/document/workplace-v1/app_recommend_rule/delete",
+            "删除应用推荐规则"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "get_recommend_rule",
+            "https://open.feishu.cn/document/workplace-v1/app_recommend_rule/get",
+            "获取应用推荐规则详情"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "enable_recommend_rule",
+            "https://open.feishu.cn/document/workplace-v1/app_recommend_rule/enable",
+            "启用应用推荐规则"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "disable_recommend_rule",
+            "https://open.feishu.cn/document/workplace-v1/app_recommend_rule/disable",
+            "禁用应用推荐规则"
+        ),
+
+        // === 工作台布局管理功能 ===
+
+        // 布局管理
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "get_workplace_layout",
+            "https://open.feishu.cn/document/workplace-v1/workplace_layout/get",
+            "获取工作台布局"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "update_workplace_layout",
+            "https://open.feishu.cn/document/workplace-v1/workplace_layout/update",
+            "更新工作台布局"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "create_workplace_layout",
+            "https://open.feishu.cn/document/workplace-v1/workplace_layout/create",
+            "创建工作台布局"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "delete_workplace_layout",
+            "https://open.feishu.cn/document/workplace-v1/workplace_layout/delete",
+            "删除工作台布局"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "list_workplace_layouts",
+            "https://open.feishu.cn/document/workplace-v1/workplace_layout/list",
+            "获取工作台布局列表"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "apply_workplace_layout",
+            "https://open.feishu.cn/document/workplace-v1/workplace_layout/apply",
+            "应用工作台布局"
+        ),
+
+        // === 工作台组件管理功能 ===
+
+        // 组件管理
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "get_workplace_components",
+            "https://open.feishu.cn/document/workplace-v1/workplace_component/get",
+            "获取工作台组件"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "add_workplace_component",
+            "https://open.feishu.cn/document/workplace-v1/workplace_component/add",
+            "添加工作台组件"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "remove_workplace_component",
+            "https://open.feishu.cn/document/workplace-v1/workplace_component/remove",
+            "移除工作台组件"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "update_workplace_component",
+            "https://open.feishu.cn/document/workplace-v1/workplace_component/update",
+            "更新工作台组件"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "reorder_workplace_components",
+            "https://open.feishu.cn/document/workplace-v1/workplace_component/reorder",
+            "重新排序工作台组件"
+        ),
+
+        // === 工作台主题管理功能 ===
+
+        // 主题管理
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "get_workplace_theme",
+            "https://open.feishu.cn/document/workplace-v1/workplace_theme/get",
+            "获取工作台主题"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "set_workplace_theme",
+            "https://open.feishu.cn/document/workplace-v1/workplace_theme/set",
+            "设置工作台主题"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "list_workplace_themes",
+            "https://open.feishu.cn/document/workplace-v1/workplace_theme/list",
+            "获取工作台主题列表"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "create_custom_theme",
+            "https://open.feishu.cn/document/workplace-v1/workplace_theme/create",
+            "创建自定义主题"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "delete_custom_theme",
+            "https://open.feishu.cn/document/workplace-v1/workplace_theme/delete",
+            "删除自定义主题"
+        ),
+
+        // === 工作台权限管理功能 ===
+
+        // 权限管理
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "get_workplace_permissions",
+            "https://open.feishu.cn/document/workplace-v1/workplace_permission/get",
+            "获取工作台权限"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "set_workplace_permissions",
+            "https://open.feishu.cn/document/workplace-v1/workplace_permission/set",
+            "设置工作台权限"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "check_workplace_access",
+            "https://open.feishu.cn/document/workplace-v1/workplace_permission/check",
+            "检查工作台访问权限"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "grant_workplace_access",
+            "https://open.feishu.cn/document/workplace-v1/workplace_permission/grant",
+            "授予工作台访问权限"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "revoke_workplace_access",
+            "https://open.feishu.cn/document/workplace-v1/workplace_permission/revoke",
+            "撤销工作台访问权限"
+        ),
+
+        // === 工作台用户管理功能 ===
+
+        // 用户管理
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "get_user_workplace_settings",
+            "https://open.feishu.cn/document/workplace-v1/user_settings/get",
+            "获取用户工作台设置"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "update_user_workplace_settings",
+            "https://open.feishu.cn/document/workplace-v1/user_settings/update",
+            "更新用户工作台设置"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "reset_user_workplace_settings",
+            "https://open.feishu.cn/document/workplace-v1/user_settings/reset",
+            "重置用户工作台设置"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "batch_update_user_settings",
+            "https://open.feishu.cn/document/workplace-v1/user_settings/batch_update",
+            "批量更新用户设置"
+        ),
+
+        // === 工作台数据统计功能 ===
+
+        // 数据统计
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "get_workplace_statistics",
+            "https://open.feishu.cn/document/workplace-v1/workplace_statistics/get",
+            "获取工作台统计数据"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "get_usage_analytics",
+            "https://open.feishu.cn/document/workplace-v1/workplace_statistics/usage",
+            "获取使用分析数据"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "get_app_usage_statistics",
+            "https://open.feishu.cn/document/workplace-v1/workplace_statistics/app_usage",
+            "获取应用使用统计"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "get_user_activity_report",
+            "https://open.feishu.cn/document/workplace-v1/workplace_statistics/user_activity",
+            "获取用户活动报告"
+        ),
+
+        // === 工作台同步和备份功能 ===
+
+        // 同步管理
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "sync_workplace_data",
+            "https://open.feishu.cn/document/workplace-v1/workplace_sync/sync",
+            "同步工作台数据"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "backup_workplace_config",
+            "https://open.feishu.cn/document/workplace-v1/workplace_backup/backup",
+            "备份工作台配置"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "restore_workplace_config",
+            "https://open.feishu.cn/document/workplace-v1/workplace_backup/restore",
+            "恢复工作台配置"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "list_workplace_backups",
+            "https://open.feishu.cn/document/workplace-v1/workplace_backup/list",
+            "获取工作台备份列表"
+        ),
+
+        // === 工作台通知管理功能 ===
+
+        // 通知管理
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "get_workplace_notifications",
+            "https://open.feishu.cn/document/workplace-v1/workplace_notification/get",
+            "获取工作台通知"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "create_workplace_notification",
+            "https://open.feishu.cn/document/workplace-v1/workplace_notification/create",
+            "创建工作台通知"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "update_workplace_notification",
+            "https://open.feishu.cn/document/workplace-v1/workplace_notification/update",
+            "更新工作台通知"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "delete_workplace_notification",
+            "https://open.feishu.cn/document/workplace-v1/workplace_notification/delete",
+            "删除工作台通知"
+        ),
+
+        ApiDocUrl::new(
+            "workplace",
+            "v1",
+            "mark_notification_read",
+            "https://open.feishu.cn/document/workplace-v1/workplace_notification/mark_read",
+            "标记通知已读"
         ),
     ];
 
