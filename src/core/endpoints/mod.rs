@@ -34,7 +34,10 @@
 pub mod acs;
 pub mod admin;
 pub mod ai;
+pub mod ai_embedding;
+pub mod ai_workflow;
 pub mod aily;
+pub mod analytics;
 pub mod apass;
 pub mod application;
 pub mod approval;
@@ -59,6 +62,7 @@ pub mod okr;
 pub mod payroll;
 pub mod performance;
 pub mod personal_settings;
+pub mod platform_integration;
 pub mod report;
 pub mod search;
 pub mod security_and_compliance;
@@ -69,6 +73,7 @@ pub mod trust_party;
 pub mod vc;
 pub mod verification;
 pub mod workplace;
+pub mod zero_trust;
 
 // 重新导出原始端点文件中的所有常量，确保向后兼容性
 // 这是一个临时措施，在完成所有域模块迁移后将移除
