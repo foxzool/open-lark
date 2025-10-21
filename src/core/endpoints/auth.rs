@@ -33,3 +33,8 @@ pub const AUTH_V3_TENANT_ACCESS_TOKEN_INTERNAL: &str = "/open-apis/auth/v3/tenan
 
 /// 重新获取App Ticket
 pub const AUTH_V3_APP_TICKET_RESEND: &str = "/open-apis/auth/v3/app_ticket/resend";
+
+// ===== 用户访问令牌管理端点 =====
+
+/// 刷新用户访问令牌
+pub const AUTH_V3_REFRESH_USER_ACCESS_TOKEN: &str = "/open-apis/auth/v3/refresh_user_access_token";
