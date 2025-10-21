@@ -104,7 +104,6 @@ impl BadgeGrantService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 创建授予名单
     ///
     /// 该接口用于创建勋章授予名单。
@@ -128,7 +127,6 @@ impl BadgeGrantService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 删除授予名单
     ///
     /// 该接口用于删除指定的勋章授予名单。
@@ -156,7 +154,6 @@ impl BadgeGrantService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 修改授予名单
     ///
     /// 该接口用于修改指定勋章授予名单的信息。
@@ -188,7 +185,6 @@ impl BadgeGrantService {
             }))?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

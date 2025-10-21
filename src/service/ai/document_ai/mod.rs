@@ -156,7 +156,6 @@ impl DocumentAiService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 识别文件中的简历信息
     ///
     /// 该接口用于解析简历文件，提取关键信息如姓名、联系方式、教育经历、工作经历等。
@@ -180,7 +179,6 @@ impl DocumentAiService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 识别文件中的身份证
     ///
     /// 该接口用于识别身份证图片，提取身份证上的关键信息。
@@ -204,7 +202,6 @@ impl DocumentAiService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 识别文件中的驾驶证
     ///
     /// 该接口用于识别驾驶证图片，提取驾驶证上的关键信息。
@@ -225,7 +222,6 @@ impl DocumentAiService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -276,7 +272,6 @@ impl DocumentAiService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 识别文件中的增值税发票
     ///
     /// 该接口用于识别增值税发票图片，提取发票上的关键信息。
@@ -300,7 +295,6 @@ impl DocumentAiService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 提取文件中的合同字段
     ///
     /// 该接口用于识别合同文档，提取合同中的关键字段信息。
@@ -324,7 +318,6 @@ impl DocumentAiService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 识别文件中的名片
     ///
     /// 该接口用于识别名片图片，提取名片上的关键信息。
@@ -345,7 +338,6 @@ impl DocumentAiService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -396,7 +388,6 @@ impl DocumentAiService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 识别文件中的港澳居民来往内地通行证
     ///
     /// 该接口用于识别港澳居民来往内地通行证图片。
@@ -420,7 +411,6 @@ impl DocumentAiService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 识别文件中的台湾居民来往大陆通行证
     ///
     /// 该接口用于识别台湾居民来往大陆通行证图片。
@@ -444,7 +434,6 @@ impl DocumentAiService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 识别文件中的中国护照
     ///
     /// 该接口用于识别中国护照图片。
@@ -465,7 +454,6 @@ impl DocumentAiService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

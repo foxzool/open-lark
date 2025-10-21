@@ -312,7 +312,6 @@ impl JobRequirementService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 删除招聘需求
     ///
     /// 该接口用于删除指定的招聘需求。删除后的需求

@@ -138,6 +138,13 @@ impl SearchService {
     }
 
     /// 查询实例列表
+    ///
+    /// 根据指定条件查询审批实例列表，支持按审批编码、状态、时间范围、用户等条件筛选。
+    /// 用于获取特定的审批流程实例，便于后续的统计分析和跟踪管理。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/approval/create
     pub async fn instances(
         &self,
         params: Option<SearchInstanceParams>,
@@ -183,6 +190,13 @@ impl SearchService {
     }
 
     /// 查询任务列表
+    ///
+    /// 根据指定条件查询审批任务列表，支持按审批编码、实例编码、状态、时间范围、用户等条件筛选。
+    /// 用于获取需要处理的审批任务或查看已处理的任务记录，支持分页查询。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/approval/create
     pub async fn tasks(
         &self,
         params: Option<SearchTaskParams>,
@@ -231,6 +245,13 @@ impl SearchService {
     }
 
     /// 查询抄送列表
+    ///
+    /// 根据指定条件查询审批抄送列表，支持按审批编码、实例编码、用户等条件筛选。
+    /// 用于获取用户被抄送的审批记录，帮助用户了解相关审批的进展情况。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/approval/create-cc
     pub async fn cc(
         &self,
         params: Option<SearchCcParams>,
@@ -270,6 +291,13 @@ impl SearchService {
     }
 
     /// 查询审批ID
+    ///
+    /// 根据审批名称查询审批定义ID，支持模糊搜索。用于获取特定审批模板的标识符，
+    /// 便于后续发起审批流程或查询相关实例。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/approval/create
     pub async fn approval_id(
         &self,
         approval_name: Option<&str>,
@@ -296,6 +324,13 @@ impl SearchService {
     }
 
     /// 查询用户的任务列表
+    ///
+    /// 查询指定用户的审批任务列表，支持按审批编码、状态、时间范围等条件筛选。
+    /// 用于获取用户需要处理的待办任务或已处理的历史任务，便于任务管理和统计。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/approval/create
     pub async fn user_tasks(
         &self,
         user_id: &str,

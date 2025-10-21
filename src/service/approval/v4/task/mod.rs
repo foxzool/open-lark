@@ -92,6 +92,13 @@ impl TaskService {
     }
 
     /// 同意审批任务
+    ///
+    /// 同意指定的审批任务，支持添加审批意见和修改表单数据。
+    /// 同意后审批流程将继续流转到下一节点或完成审批。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/definition/createstance/create
     pub async fn approve(
         &self,
         task_id: &str,
@@ -117,6 +124,13 @@ impl TaskService {
     }
 
     /// 拒绝审批任务
+    ///
+    /// 拒绝指定的审批任务，需要提供拒绝原因，支持修改表单数据。
+    /// 拒绝后审批流程将终止，发起人可以重新提交或修改后再次发起。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/definition/createstance/create
     pub async fn reject(
         &self,
         task_id: &str,
@@ -142,6 +156,13 @@ impl TaskService {
     }
 
     /// 转交审批任务
+    ///
+    /// 将审批任务转交给其他用户处理，需要提供转交用户ID和转交原因。
+    /// 转交后原审批人将不再负责此任务，新用户将接管审批权限。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/definition/createstance/create
     pub async fn transfer(
         &self,
         task_id: &str,
@@ -167,6 +188,13 @@ impl TaskService {
     }
 
     /// 退回审批任务
+    ///
+    /// 将审批任务退回到指定节点，需要提供目标节点ID和退回原因。
+    /// 用于将审批任务退回给上级或发起人重新处理，适用于需要补充材料或修正的情况。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/definition/createstance/create
     pub async fn rollback(
         &self,
         task_id: &str,
@@ -196,6 +224,13 @@ impl TaskService {
     }
 
     /// 审批任务加签
+    ///
+    /// 为审批任务添加加签用户，支持设置加签类型和选择加签用户。
+    /// 加签用户将在当前节点完成后参与审批，用于征求额外意见或协同审批。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/definition/createstance/create
     pub async fn add_sign(
         &self,
         task_id: &str,
@@ -221,6 +256,13 @@ impl TaskService {
     }
 
     /// 重新提交审批任务
+    ///
+    /// 重新提交被拒绝或退回的审批任务，支持修改表单数据和添加提交意见。
+    /// 用于根据拒绝原因补充材料或修正问题后重新发起审批。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/definition/createstance/create
     pub async fn resubmit(
         &self,
         task_id: &str,

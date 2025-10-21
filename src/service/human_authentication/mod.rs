@@ -422,6 +422,11 @@ impl HumanAuthenticationService {
     /// 录入身份信息
     ///
     /// 创建新的身份认证记录，录入用户的身份证号、姓名等基本信息。
+    /// 这是实名认证流程的第一步，用于建立身份档案。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/human_authentication-v1/identity/create
     ///
     /// # Arguments
     ///
@@ -475,6 +480,11 @@ impl HumanAuthenticationService {
     /// 上传人脸基准图片
     ///
     /// 为指定的身份记录上传人脸基准图片，用于后续的人脸识别比对。
+    /// 支持多种图片格式，图片将进行质量检测和预处理。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/human_authentication-v1/face/upload-facial-reference-image
     ///
     /// # Arguments
     ///
@@ -528,6 +538,11 @@ impl HumanAuthenticationService {
     /// 裁剪人脸图片
     ///
     /// 对上传的人脸图片进行裁剪处理，提取人脸区域以提高识别准确率。
+    /// 支持自动人脸检测和手动指定裁剪区域两种方式。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/human_authentication-v1/face/facial-image-cropping
     ///
     /// # Arguments
     ///
@@ -585,6 +600,11 @@ impl HumanAuthenticationService {
     /// 查询人脸认证结果
     ///
     /// 查询指定身份记录的人脸认证进度和结果。
+    /// 支持实时查询认证状态、置信度分数等详细信息。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/human_authentication-v1/face/query-recognition-result
     ///
     /// # Arguments
     ///
@@ -608,7 +628,7 @@ impl HumanAuthenticationService {
     ///
     ///     let response = client.human_authentication
     ///         .query_authentication_result("identity_123", None).await?;
-    ///     
+    ///
     ///     if let Some(data) = response.data {
     ///         println!("认证状态: {:?}", data.status);
     ///         println!("置信度: {:?}", data.confidence_score);

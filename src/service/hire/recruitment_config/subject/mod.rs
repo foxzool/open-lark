@@ -393,7 +393,6 @@ impl SubjectService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 删除项目
     ///
     /// 该接口用于删除指定的项目。删除后的项目
@@ -422,7 +421,6 @@ impl SubjectService {
             body: vec![],
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

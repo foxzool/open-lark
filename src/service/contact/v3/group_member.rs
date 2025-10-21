@@ -17,7 +17,6 @@ impl GroupMemberService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 添加用户组成员
     pub async fn add(
         &self,

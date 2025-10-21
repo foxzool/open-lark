@@ -108,7 +108,6 @@ impl RuleService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 创建收信规则
     pub async fn create(
         &self,
@@ -134,7 +133,6 @@ impl RuleService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -223,7 +221,6 @@ impl RuleService {
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
-
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(

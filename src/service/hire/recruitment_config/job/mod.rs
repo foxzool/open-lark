@@ -330,7 +330,6 @@ impl JobService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 关闭职位
     ///
     /// 该接口用于关闭指定的招聘职位。关闭后的职位将停止
@@ -359,7 +358,6 @@ impl JobService {
             body: vec![],
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

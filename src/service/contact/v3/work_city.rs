@@ -16,6 +16,9 @@ impl WorkCityService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get
 
     /// 获取单个工作城市信息
     pub async fn get(&self, work_city_id: &str) -> crate::core::SDKResult<GetWorkCityResponse> {

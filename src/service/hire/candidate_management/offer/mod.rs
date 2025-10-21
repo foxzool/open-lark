@@ -607,7 +607,6 @@ impl OfferService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 撤回Offer
     ///
     /// 该接口用于撤回已发送的Offer，设置撤回原因
@@ -652,7 +651,6 @@ impl OfferService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 创建入职记录
     ///
     /// 该接口用于为接受Offer的候选人创建入职记录，
@@ -694,7 +692,6 @@ impl OfferService {
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -756,7 +753,6 @@ impl OfferService {
         if let Some(department) = department {
             api_req.query_params.insert("department", department);
         }
-
         Transport::request(api_req, &self.config, option).await
     }
 

@@ -75,7 +75,6 @@ impl PinService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// Pin消息
     pub async fn create(
         &self,

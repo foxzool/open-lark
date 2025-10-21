@@ -29,7 +29,9 @@ impl DocumentService {
     ///
     /// 该接口用于创建一个新的文档。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/create>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/portal_apply_schema/list
     pub async fn create(
         &self,
         request: CreateDocumentRequest,
@@ -51,7 +53,9 @@ impl DocumentService {
     ///
     /// 该接口用于获取文档的基本信息。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/get>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/portal_apply_schema/list
     pub async fn get(
         &self,
         document_id: impl Into<String>,
@@ -72,7 +76,9 @@ impl DocumentService {
     ///
     /// 该接口用于获取文档的纯文本内容。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/raw_content>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/portal_apply_schema/list
     pub async fn get_raw_content(
         &self,
         document_id: impl Into<String>,
@@ -93,7 +99,9 @@ impl DocumentService {
     ///
     /// 该接口用于获取文档的所有块。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document/list>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/portal_apply_schema/list
     pub async fn list_blocks(
         &self,
         request: ListDocumentBlocksRequest,
@@ -124,7 +132,9 @@ impl DocumentService {
     ///
     /// 该接口用于将旧版文档转换为新版文档块格式。
     ///
-    /// <https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/convert>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/document/convert
     pub async fn convert_to_docx(
         &self,
         document_id: impl Into<String>,

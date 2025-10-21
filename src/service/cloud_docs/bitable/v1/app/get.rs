@@ -19,7 +19,9 @@ use super::AppService;
 impl AppService {
     /// 获取多维表格元数据
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/get>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/portal_apply_schema/list
     pub async fn get(
         &self,
         request: GetAppRequest,

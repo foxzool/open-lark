@@ -117,7 +117,6 @@ impl BatchMessageService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 批量发送消息
     pub async fn send(
         &self,

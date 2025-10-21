@@ -65,7 +65,6 @@ impl InstanceCommentService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 创建评论
     pub async fn create(
         &self,
@@ -91,7 +90,6 @@ impl InstanceCommentService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

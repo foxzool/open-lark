@@ -79,7 +79,6 @@ impl TranslationService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 识别文本语种
     ///
     /// 该接口用于识别输入文本的语言种类。
@@ -103,7 +102,6 @@ impl TranslationService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 翻译文本
     ///
     /// 该接口用于将文本翻译为指定的目标语言。

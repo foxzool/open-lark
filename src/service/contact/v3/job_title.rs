@@ -16,6 +16,9 @@ impl JobTitleService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get
 
     /// 获取单个职务信息
     pub async fn get(&self, job_title_id: &str) -> crate::core::SDKResult<GetJobTitleResponse> {

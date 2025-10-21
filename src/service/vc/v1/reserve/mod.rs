@@ -125,7 +125,6 @@ impl ReserveService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 预约会议
     pub async fn apply(
         &self,
@@ -146,7 +145,6 @@ impl ReserveService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

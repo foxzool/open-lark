@@ -255,7 +255,9 @@ impl EmployeeService {
     /// ).await?;
     /// ```
     ///
-    /// 参考: <https://open.feishu.cn/document/directory-v1/employee/create>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/create>
     pub async fn create(
         &self,
         request: CreateEmployeeRequest,

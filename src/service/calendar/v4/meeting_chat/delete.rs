@@ -4,8 +4,9 @@
 //! ❌ **未实现** - 此功能等待实现
 //!
 //! ## API文档
-//! 参考: <https://open.feishu.cn/document/server-docs/calendar-v4/meeting-chat/>
-
+/// # API文档
+///
+/// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/portal_apply_schema/list>
 use crate::core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},

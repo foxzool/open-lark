@@ -256,7 +256,6 @@ impl MessageService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取邮件卡片的邮件列表
     ///
     /// 该接口用于根据邮件卡片获取相关的邮件列表。

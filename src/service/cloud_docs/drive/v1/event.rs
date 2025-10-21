@@ -29,7 +29,9 @@ impl EventService {
     ///
     /// 该接口用于订阅云文档的相关事件。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/event-subscription/create>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/combined_create
     pub async fn subscribe_file_events(
         &self,
         request: SubscribeFileEventsRequest,
@@ -51,7 +53,9 @@ impl EventService {
     ///
     /// 该接口用于查询云文档的事件订阅状态。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/event-subscription/get>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/role/get
     pub async fn get_file_subscription(
         &self,
         request: GetFileSubscriptionRequest,
@@ -74,7 +78,9 @@ impl EventService {
     ///
     /// 该接口用于取消云文档的事件订阅。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/event-subscription/delete>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job_requirement/delete
     pub async fn unsubscribe_file_events(
         &self,
         request: UnsubscribeFileEventsRequest,

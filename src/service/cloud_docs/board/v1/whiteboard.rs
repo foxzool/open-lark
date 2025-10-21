@@ -26,7 +26,9 @@ impl WhiteboardService {
     ///
     /// 该接口用于获取画板的缩略图片。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/whiteboard-v1/whiteboard/get_thumbnail>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn get_thumbnail(
         &self,
         request: GetWhiteboardThumbnailRequest,

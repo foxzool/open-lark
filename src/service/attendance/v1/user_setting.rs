@@ -28,7 +28,9 @@ impl UserSettingService {
     ///
     /// 该接口用于修改用户的人脸识别设置，包括开启/关闭人脸识别打卡、设置活体检测等级等。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_setting/modify>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_setting/modify
     pub async fn modify(
         &self,
         request: ModifyUserSettingRequest,
@@ -74,7 +76,9 @@ impl UserSettingService {
     ///
     /// 该接口用于批量查询用户的人脸识别设置信息。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_setting/query>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/query
     pub async fn query(
         &self,
         request: QueryUserSettingRequest,
@@ -105,7 +109,9 @@ impl UserSettingService {
     ///
     /// 该接口用于上传用户的人脸识别照片，返回文件 key 用于后续设置。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_setting/upload>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_setting/modify
     pub async fn upload_photo(
         &self,
         request: UploadUserPhotoRequest,
@@ -152,7 +158,9 @@ impl UserSettingService {
     ///
     /// 该接口用于下载用户的人脸识别照片。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_setting/download>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_setting/modify
     pub async fn download_photo(
         &self,
         request: DownloadUserPhotoRequest,

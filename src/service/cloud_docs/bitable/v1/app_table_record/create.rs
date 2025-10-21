@@ -149,7 +149,9 @@ impl ApiResponseTrait for CreateRecordResponse {
 
 /// 新增记录
 ///
-/// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/create>
+/// # API文档
+///
+/// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/combined_create
 pub async fn create_record(
     request: CreateRecordRequest,
     config: &Config,

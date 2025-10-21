@@ -46,7 +46,10 @@ impl MediaService {
     ///
     /// 该接口用于上传素材文件。
     ///
-    /// <https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_all>
+    /// # API文档
+    ///
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn upload_all(
         &self,
         request: UploadMediaRequest,
@@ -65,7 +68,10 @@ impl MediaService {
     ///
     /// 该接口用于分片上传的预上传步骤。
     ///
-    /// <https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_prepare>
+    /// # API文档
+    ///
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn upload_prepare(
         &self,
         request: UploadPrepareRequest,
@@ -87,7 +93,10 @@ impl MediaService {
     ///
     /// 该接口用于上传文件分片。
     ///
-    /// <https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_part>
+    /// # API文档
+    ///
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn upload_part(
         &self,
         request: UploadPartRequest,
@@ -106,7 +115,10 @@ impl MediaService {
     ///
     /// 该接口用于完成分片上传。
     ///
-    /// <https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_finish>
+    /// # API文档
+    ///
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn upload_finish(
         &self,
         request: UploadFinishRequest,
@@ -128,7 +140,10 @@ impl MediaService {
     ///
     /// 该接口用于下载素材文件。
     ///
-    /// <https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/download>
+    /// # API文档
+    ///
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn download(
         &self,
         request: DownloadMediaRequest,
@@ -149,7 +164,10 @@ impl MediaService {
     ///
     /// 该接口用于获取素材的临时下载链接。
     ///
-    /// <https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/batch_get_tmp_download_url>
+    /// # API文档
+    ///
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn batch_get_tmp_download_url(
         &self,
         request: BatchGetTmpDownloadUrlRequest,

@@ -504,7 +504,6 @@ impl ReferralService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 发放内推奖励
     ///
     /// 该接口用于为符合条件的内推记录发放奖励，
@@ -563,7 +562,6 @@ impl ReferralService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 创建内推奖励设置
     ///
     /// 该接口用于创建内推奖励设置，定义不同职位类型
@@ -605,7 +603,6 @@ impl ReferralService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取内推奖励设置列表
     ///
     /// 该接口用于获取企业的内推奖励设置列表，

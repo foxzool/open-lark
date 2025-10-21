@@ -679,7 +679,6 @@ impl AgencyService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 确认猎头推荐
     ///
     /// 该接口用于确认接受猎头推荐，将推荐转换为

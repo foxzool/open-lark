@@ -147,7 +147,6 @@ impl AuthService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取用户角色列表
     ///
     /// 该接口用于获取用户的角色分配情况，可以查看

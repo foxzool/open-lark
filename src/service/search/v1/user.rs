@@ -26,7 +26,9 @@ impl UserService {
 
     /// 搜索用户
     ///
-    /// <https://open.feishu.cn/document/server-docs/search-v1/user/search>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uMTM4UjLzEDO14yMxgTN
     pub async fn search_user(
         &self,
         search_user_request: SearchUserRequest,
@@ -68,7 +70,6 @@ impl UserService {
             has_more: true,
         }
     }
-
     /// 使用分页验证搜索用户
     ///
     /// 提供一个更安全的方式来搜索用户，自动验证分页参数
@@ -267,6 +268,10 @@ pub struct SearchUserIterator<'a> {
     option: Option<RequestOption>,
     has_more: bool,
 }
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/search
+
 
 impl SearchUserIterator<'_> {
     pub async fn next(&mut self) -> Option<Vec<UserInSearchResponse>> {

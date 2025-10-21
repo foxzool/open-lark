@@ -25,7 +25,6 @@ impl AppUsageService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 获取多部门应用使用概览
     pub async fn department_overview(
         &self,
@@ -62,7 +61,6 @@ impl AppUsageService {
             query_params,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

@@ -53,7 +53,6 @@ impl SpeechToTextService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 识别语音文件
     ///
     /// 该接口用于识别语音文件中的语音内容，将语音转换为文本。
@@ -77,7 +76,6 @@ impl SpeechToTextService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 识别流式语音
     ///
     /// 该接口用于识别流式语音数据，支持实时语音识别。

@@ -112,7 +112,6 @@ impl MailGroupService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 创建邮件组
     pub async fn create(
         &self,
@@ -133,7 +132,6 @@ impl MailGroupService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

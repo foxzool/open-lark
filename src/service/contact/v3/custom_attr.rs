@@ -16,7 +16,6 @@ impl CustomAttrService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 获取企业自定义用户字段
     pub async fn list(
         &self,

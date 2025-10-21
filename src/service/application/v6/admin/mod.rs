@@ -25,7 +25,6 @@ impl AdminService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 获取企业安装的应用
     pub async fn list_installed_apps(
         &self,
@@ -56,7 +55,6 @@ impl AdminService {
             query_params,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -296,7 +294,6 @@ impl AdminService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 查询应用管理员列表
     pub async fn list_app_admins(
         &self,

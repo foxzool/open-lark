@@ -151,7 +151,9 @@ impl CalendarManagementService {
     /// ).await?;
     /// ```
     ///
-    /// 参考: <https://open.feishu.cn/document/server-docs/calendar-v4/calendar/list>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/portal_apply_schema/list>
     pub async fn list(
         &self,
         request: ListCalendarRequest,

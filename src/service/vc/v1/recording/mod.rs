@@ -87,7 +87,6 @@ impl RecordingService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 开始录制
     pub async fn start(
         &self,
@@ -113,7 +112,6 @@ impl RecordingService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -151,7 +149,6 @@ impl RecordingService {
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
-
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(VC_RECORDING_GET, "{meeting_id}", meeting_id),

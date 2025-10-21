@@ -107,7 +107,6 @@ impl SchemaService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 删除数据范式
     ///
     /// 该接口用于删除指定的数据范式。
@@ -135,7 +134,6 @@ impl SchemaService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 修改数据范式
     ///
     /// 该接口用于修改指定数据范式的信息。
@@ -163,7 +161,6 @@ impl SchemaService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

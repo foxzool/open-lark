@@ -68,7 +68,6 @@ impl MessageService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 发送智能伙伴消息
     ///
     /// 该接口用于向指定的智能伙伴会话发送消息。
@@ -101,7 +100,6 @@ impl MessageService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取智能伙伴消息
     ///
     /// 该接口用于获取指定的智能伙伴消息详情。
@@ -134,7 +132,6 @@ impl MessageService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 列出智能伙伴消息
     ///
     /// 该接口用于获取指定会话的消息列表。

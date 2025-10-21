@@ -18,7 +18,9 @@ use crate::{
 impl SpreadsheetService {
     /// 创建表格
     ///
-    /// <https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet/create>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet/create
     pub async fn create(
         &self,
         request: CreateSpreedSheetRequest,

@@ -113,7 +113,6 @@ impl AccessRecordService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 下载开门时的人脸识别图片
     ///
     /// 下载指定访问记录的人脸识别图片。

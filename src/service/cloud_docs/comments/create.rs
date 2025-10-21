@@ -230,7 +230,9 @@ impl ApiResponseTrait for CreateCommentResponse {
 
 /// 添加全文评论
 ///
-/// <https://open.feishu.cn/document/server-docs/docs/comment/create>
+/// # API文档
+///
+/// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/combined_create
 pub async fn create_comment(
     request: CreateCommentRequest,
     config: &Config,

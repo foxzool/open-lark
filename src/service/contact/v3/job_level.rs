@@ -16,7 +16,6 @@ impl JobLevelService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 创建职级
     pub async fn create(
         &self,
@@ -57,6 +56,10 @@ impl JobLevelService {
             Transport::<UpdateJobLevelResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
     }
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get
+
 
     /// 获取单个职级信息
     pub async fn get(&self, job_level_id: &str) -> crate::core::SDKResult<GetJobLevelResponse> {

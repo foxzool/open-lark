@@ -212,7 +212,6 @@ impl FaqService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 修改知识库
     ///
     /// 该接口用于修改指定的知识库条目。
@@ -252,7 +251,6 @@ impl FaqService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取指定知识库详情
     ///
     /// 该接口用于获取指定知识库的详细信息。
@@ -289,7 +287,6 @@ impl FaqService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取全部知识库详情
     ///
     /// 该接口用于获取全部知识库条目列表。
@@ -340,7 +337,6 @@ impl FaqService {
             query_params,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

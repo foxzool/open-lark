@@ -110,7 +110,6 @@ impl GroupsBotsService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 机器人单聊即时提醒
     pub async fn bot_time_sentive(
         &self,
@@ -129,7 +128,6 @@ impl GroupsBotsService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

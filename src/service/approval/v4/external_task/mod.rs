@@ -54,7 +54,6 @@ impl ExternalTaskService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 获取三方审批任务状态
     pub async fn list(
         &self,

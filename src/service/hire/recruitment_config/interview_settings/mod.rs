@@ -429,7 +429,6 @@ impl InterviewSettingsService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 删除面试设置
     ///
     /// 该接口用于删除指定的面试设置。删除后的设置

@@ -185,7 +185,6 @@ impl TicketMessageService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 服务台机器人向工单绑定的群内发送消息
     ///
     /// 该接口用于服务台机器人向工单绑定的群内发送消息。

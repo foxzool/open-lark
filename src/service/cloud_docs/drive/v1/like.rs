@@ -29,7 +29,9 @@ impl LikeService {
     ///
     /// 该接口用于获取云文档的点赞者列表。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/file-like_record/list>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/portal_apply_schema/list
     pub async fn list_file_likes(
         &self,
         request: ListFileLikesRequest,

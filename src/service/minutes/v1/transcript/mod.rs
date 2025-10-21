@@ -38,7 +38,6 @@ impl TranscriptService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 导出妙记文字记录
     pub async fn get(
         &self,

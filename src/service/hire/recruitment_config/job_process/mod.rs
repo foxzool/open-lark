@@ -432,7 +432,6 @@ impl JobProcessService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 删除招聘流程
     ///
     /// 该接口用于删除指定的招聘流程。删除后的流程

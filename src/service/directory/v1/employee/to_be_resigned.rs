@@ -152,7 +152,9 @@ impl EmployeeService {
     /// ).await?;
     /// ```
     ///
-    /// 参考: <https://open.feishu.cn/document/directory-v1/employee/to_be_resigned>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/to_be_resigned>
     pub async fn to_be_resigned(
         &self,
         request: ToBeResignedEmployeeRequest,

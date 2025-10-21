@@ -38,7 +38,6 @@ impl MediaService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 下载妙记音视频文件
     pub async fn get(
         &self,

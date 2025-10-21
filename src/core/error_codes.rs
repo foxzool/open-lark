@@ -335,21 +335,8 @@ impl LarkErrorCode {
 
     /// 获取相关的帮助文档链接
     pub fn help_url(&self) -> Option<&'static str> {
-        match self {
-            Self::AppTicketInvalid
-            | Self::AccessTokenInvalid
-            | Self::AppAccessTokenInvalid
-            | Self::TenantAccessTokenInvalid => {
-                Some("https://open.feishu.cn/document/server-docs/authentication/access-token")
-            }
-            Self::Forbidden => {
-                Some("https://open.feishu.cn/document/home/introduction-to-scope-and-authorization")
-            }
-            Self::TooManyRequests => {
-                Some("https://open.feishu.cn/document/server-docs/api-call-guide/rate-limiting")
-            }
-            _ => Some("https://open.feishu.cn/document/"),
-        }
+        // TODO: 添加有效的帮助文档链接
+        None
     }
 }
 
@@ -607,16 +594,12 @@ mod tests {
 
     #[test]
     fn test_help_urls() {
-        // 测试帮助链接
-        assert!(LarkErrorCode::AccessTokenInvalid.help_url().is_some());
-        assert!(LarkErrorCode::TooManyRequests.help_url().is_some());
-        assert!(LarkErrorCode::Forbidden.help_url().is_some());
-
-        let auth_url = LarkErrorCode::AppAccessTokenInvalid.help_url().unwrap();
-        assert!(auth_url.contains("authentication"));
-
-        let rate_limit_url = LarkErrorCode::TooManyRequests.help_url().unwrap();
-        assert!(rate_limit_url.contains("rate-limiting"));
+        // 测试帮助链接 - 目前所有URL都返回None
+        assert!(LarkErrorCode::AccessTokenInvalid.help_url().is_none());
+        assert!(LarkErrorCode::TooManyRequests.help_url().is_none());
+        assert!(LarkErrorCode::Forbidden.help_url().is_none());
+        assert!(LarkErrorCode::AppAccessTokenInvalid.help_url().is_none());
+        assert!(LarkErrorCode::UserNotFound.help_url().is_none());
     }
 
     #[test]
@@ -1317,27 +1300,28 @@ mod tests {
 
     #[test]
     fn test_all_help_urls() {
-        // 测试有帮助链接的错误
-        let auth_errors = [
+        // 测试帮助链接 - 目前所有错误都返回None
+        let all_errors = [
             LarkErrorCode::AppTicketInvalid,
             LarkErrorCode::AccessTokenInvalid,
             LarkErrorCode::AppAccessTokenInvalid,
             LarkErrorCode::TenantAccessTokenInvalid,
+            LarkErrorCode::Forbidden,
+            LarkErrorCode::TooManyRequests,
+            LarkErrorCode::UserNotFound,
+            LarkErrorCode::BadRequest,
+            LarkErrorCode::NotFound,
+            LarkErrorCode::InternalServerError,
         ];
-        for error in &auth_errors {
-            let url = error.help_url().unwrap();
-            assert!(url.contains("authentication"));
+
+        for error in &all_errors {
+            assert!(
+                error.help_url().is_none(),
+                "Expected None for error {:?}, but got {:?}",
+                error,
+                error.help_url()
+            );
         }
-
-        let forbidden_url = LarkErrorCode::Forbidden.help_url().unwrap();
-        assert!(forbidden_url.contains("scope-and-authorization"));
-
-        let rate_limit_url = LarkErrorCode::TooManyRequests.help_url().unwrap();
-        assert!(rate_limit_url.contains("rate-limiting"));
-
-        // 测试默认帮助链接
-        let default_url = LarkErrorCode::UserNotFound.help_url().unwrap();
-        assert!(default_url.contains("open.feishu.cn/document"));
     }
 
     #[test]

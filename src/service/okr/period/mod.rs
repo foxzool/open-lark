@@ -124,7 +124,6 @@ impl PeriodService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 修改 OKR 周期状态
     ///
     /// 修改指定周期的状态，如将草稿状态的周期激活，或结束正在进行的周期。
@@ -158,7 +157,6 @@ impl PeriodService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取 OKR 周期列表
     ///
     /// 查询系统中的 OKR 周期列表，支持按状态筛选和分页查询。

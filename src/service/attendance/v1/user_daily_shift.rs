@@ -24,7 +24,9 @@ impl UserDailyShiftService {
     /// 该接口用于批量创建或修改排班表。排班表是用来描述考勤组内人员在某天需要按照哪个班次进行上班。
     /// 目前排班表支持到2099年。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_daily_shift/batch_create>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_daily_shift/batch_create
     pub async fn batch_create(
         &self,
         request: BatchCreateUserDailyShiftRequest,
@@ -55,7 +57,9 @@ impl UserDailyShiftService {
     ///
     /// 该接口用于根据日期和用户 ID 查询排班表。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_daily_shift/query>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/query
     pub async fn query(
         &self,
         request: QueryUserDailyShiftRequest,
@@ -89,7 +93,9 @@ impl UserDailyShiftService {
     /// 该接口用于批量创建或修改临时排班。临时排班是指在特定日期临时安排的班次，
     /// 优先级高于正常排班。
     ///
-    /// <https://open.feishu.cn/document/attendance-v1/user_daily_shift/batch_create_temp>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/createser_daily_shift/batch_create_temp
     pub async fn batch_create_temp(
         &self,
         request: BatchCreateTempUserDailyShiftRequest,

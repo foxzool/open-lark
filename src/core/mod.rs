@@ -6,7 +6,6 @@ pub mod app_ticket_manager;
 pub mod cache;
 pub mod config;
 pub mod constants;
-pub mod doc_urls;
 pub mod endpoints;
 pub mod endpoints_original;
 pub mod error;

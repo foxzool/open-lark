@@ -303,6 +303,10 @@ impl PasswordUpdateResult {
 
 impl UpdatePasswordResponse {
     /// 获取密码更新信息
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM
+
     pub fn password_info(&self) -> &PasswordUpdateResult {
         &self.password
     }

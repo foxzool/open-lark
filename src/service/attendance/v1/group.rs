@@ -28,7 +28,9 @@ impl GroupService {
     ///
     /// 该接口用于查询考勤组下所有成员的信息，支持分页查询。
     ///
-    /// <https://open.feishu.cn/document/attendance-v1/group/list_user>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/attendance-v1/group/list_user
     pub async fn list_user(
         &self,
         request: ListGroupUserRequest,
@@ -72,7 +74,9 @@ impl GroupService {
     ///
     /// 该接口用于创建或修改考勤组，支持设置考勤规则、工作日安排、成员管理等。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/group/create>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_daily_shift/batch_create
     pub async fn create(
         &self,
         request: CreateGroupRequest,
@@ -138,7 +142,9 @@ impl GroupService {
     ///
     /// 删除指定的考勤组。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/group/delete>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/list_user
     pub async fn delete(
         &self,
         request: DeleteGroupRequest,
@@ -161,7 +167,9 @@ impl GroupService {
     ///
     /// 根据考勤组 ID 查询考勤组的详细信息。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/group/get>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/list_user
     pub async fn get(
         &self,
         request: GetGroupRequest,
@@ -193,7 +201,9 @@ impl GroupService {
     ///
     /// 根据考勤组名称查询考勤组信息。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/group/search>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/list_user
     pub async fn search(
         &self,
         request: SearchGroupRequest,
@@ -228,7 +238,9 @@ impl GroupService {
     ///
     /// 查询企业内所有考勤组的信息，支持分页查询。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/group/list>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/list_user
     pub async fn list(
         &self,
         request: ListGroupRequest,

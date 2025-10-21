@@ -19,7 +19,9 @@ use super::AppService;
 impl AppService {
     /// 更新多维表格元数据
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/update>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/portal_apply_schema/list
     pub async fn update(
         &self,
         request: UpdateAppRequest,

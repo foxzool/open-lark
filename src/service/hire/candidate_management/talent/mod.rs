@@ -126,6 +126,10 @@ impl TalentService {
     /// 工作经历、教育背景、技能标签等详细数据。
     /// 创建的人才档案可用于后续的匹配和推荐。
     ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/combined_create
+    ///
     /// # 参数
     ///
     /// - `request`: 人才创建请求参数，包括：
@@ -194,6 +198,10 @@ impl TalentService {
     /// 基本信息、工作经历、教育背景、投递历史等
     /// 完整数据。
     ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/get
+    ///
     /// # 参数
     ///
     /// - `talent_id`: 人才ID
@@ -242,6 +250,10 @@ impl TalentService {
     /// 该接口用于获取企业的人才列表，支持按姓名、邮箱、
     /// 电话、工作年限、学历、标签等条件筛选。返回的
     /// 列表包含人才基本信息，可用于人才管理和匹配。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/list
     ///
     /// # 参数
     ///
@@ -358,6 +370,10 @@ impl TalentService {
     /// 该接口用于更新现有人才档案的信息，支持修改
     /// 人才的基本信息、工作经历、技能标签等数据。
     ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/combined_update
+    ///
     /// # 参数
     ///
     /// - `talent_id`: 人才ID
@@ -398,11 +414,14 @@ impl TalentService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 删除人才档案
     ///
     /// 该接口用于删除指定的人才档案。删除后的人才
     /// 档案将不再可用，相关的投递记录也会受到影响。
+    ///
+    /// # API文档
+    ///
+    /// 注意：此功能在官方API文档中未找到对应的删除接口，可能不支持直接删除人才档案
     ///
     /// # 参数
     ///
@@ -435,6 +454,10 @@ impl TalentService {
     ///
     /// 该接口用于获取指定人才的投递历史记录，
     /// 包括投递的职位、状态、时间等信息。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/interview/get_by_talent
     ///
     /// # 参数
     ///
@@ -499,7 +522,6 @@ impl TalentService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 批量导入人才
     ///
     /// 该接口用于批量导入人才档案，支持一次性
@@ -554,7 +576,6 @@ impl TalentService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 创建人才档案（使用构建器模式）
     ///
     /// 该接口使用构建器模式创建新的人才档案，提供链式调用和内置验证功能。

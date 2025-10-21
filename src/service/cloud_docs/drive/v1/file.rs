@@ -261,7 +261,9 @@ impl FileService {
     ///
     /// 该接口用于分片上传的预上传步骤，获取上传事务ID和分片信息。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/multipart-upload-file-/upload_prepare>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/list
     pub async fn upload_prepare(
         &self,
         request: FileUploadPrepareRequest,
@@ -284,7 +286,9 @@ impl FileService {
     ///
     /// 该接口用于上传文件分片。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/multipart-upload-file-/upload_part>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/list
     pub async fn upload_part(
         &self,
         request: FileUploadPartRequest,
@@ -304,7 +308,9 @@ impl FileService {
     ///
     /// 该接口用于完成分片上传。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/upload/multipart-upload-file-/upload_finish>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/list
     pub async fn upload_finish(
         &self,
         request: FileUploadFinishRequest,
@@ -327,7 +333,9 @@ impl FileService {
     ///
     /// 该接口用于创建文档导入任务。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/import_task/create>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/combined_create
     pub async fn create_import_task(
         &self,
         request: CreateImportTaskRequest,
@@ -350,7 +358,9 @@ impl FileService {
     ///
     /// 该接口用于查询导入任务的执行结果。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/import_task/get>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/role/get
     pub async fn get_import_task(
         &self,
         request: GetImportTaskRequest,

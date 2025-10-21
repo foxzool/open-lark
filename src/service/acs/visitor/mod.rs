@@ -54,7 +54,6 @@ impl VisitorService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 删除访客
     ///
     /// 删除指定的访客记录，撤销访客的门禁权限。

@@ -16,7 +16,6 @@ impl UnitService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 创建单位
     pub async fn create(
         &self,
@@ -120,13 +119,15 @@ impl UnitService {
             query_params: std::collections::HashMap::new(),
             ..Default::default()
         };
-
         let resp =
             Transport::<ListUnitDepartmentsResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
     }
-
     /// 获取单位信息
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get
     pub async fn get(&self, unit_id: &str) -> crate::core::SDKResult<GetUnitResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
@@ -144,7 +145,11 @@ impl UnitService {
         Ok(resp.data.unwrap_or_default())
     }
 
-    /// 获取单位列表
+  /// 获取单位列表
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/list
     pub async fn list(&self, _req: &ListUnitsRequest) -> crate::core::SDKResult<ListUnitsResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::GET,
@@ -160,6 +165,10 @@ impl UnitService {
     }
 
     /// 删除单位
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/delete
     pub async fn delete(&self, unit_id: &str) -> crate::core::SDKResult<DeleteUnitResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::DELETE,

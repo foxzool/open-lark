@@ -28,7 +28,9 @@ impl LeaveAccrualRecordService {
     /// 该接口用于修改指定的休假发放记录信息，包括发放数量、过期时间、发放原因等。
     /// 支持部分字段更新，只需要传入需要修改的字段即可。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/leave_accrual_record/patch>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/leave_accrual_record/patch
     pub async fn patch(
         &self,
         request: PatchLeaveAccrualRecordRequest,

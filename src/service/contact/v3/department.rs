@@ -31,7 +31,6 @@ impl DepartmentService {
     pub fn config(&self) -> &Config {
         &self.config
     }
-
     /// 创建部门
     ///
     /// 该接口用于创建新的部门。
@@ -51,7 +50,6 @@ impl DepartmentService {
             Transport::<CreateDepartmentResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
     }
-
     /// 修改部门部分信息
     ///
     /// 该接口用于修改部门的部分信息。
@@ -71,7 +69,6 @@ impl DepartmentService {
             body: serde_json::to_vec(req)?,
             ..Default::default()
         };
-
         let resp =
             Transport::<PatchDepartmentResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -147,7 +144,6 @@ impl DepartmentService {
             query_params: std::collections::HashMap::new(),
             ..Default::default()
         };
-
         let resp = Transport::<GetDepartmentResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
     }

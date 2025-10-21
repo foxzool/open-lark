@@ -60,7 +60,6 @@ impl EventService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 订阅事件
     pub async fn subscribe(
         &self,
@@ -86,7 +85,6 @@ impl EventService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

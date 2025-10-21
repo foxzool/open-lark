@@ -118,7 +118,6 @@ impl SectionService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 创建自定义分组
     pub async fn create(
         &self,
@@ -139,7 +138,6 @@ impl SectionService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -210,7 +208,6 @@ impl SectionService {
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
-
         let api_req = ApiRequest {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(

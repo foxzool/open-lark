@@ -82,7 +82,6 @@ impl RunService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 创建运行
     ///
     /// 该接口用于在指定的智能伙伴会话中创建一个新的运行。
@@ -116,7 +115,6 @@ impl RunService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取运行
     ///
     /// 该接口用于获取指定的智能伙伴运行详情。
@@ -149,7 +147,6 @@ impl RunService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 列出运行
     ///
     /// 该接口用于获取指定会话的运行列表。
@@ -189,7 +186,6 @@ impl RunService {
         if let Some(order) = request.order {
             api_req.query_params.insert("order", order);
         }
-
         Transport::request(api_req, &self.config, option).await
     }
 

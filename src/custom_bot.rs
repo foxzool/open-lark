@@ -19,7 +19,7 @@ use crate::service::im::v1::message::{MessageCardTemplate, SendMessageTrait};
 
 /// 自定义机器人
 ///
-/// [使用指南](https://open.feishu.cn/document/client-docs/bot-v3/add-custom-bot)
+/// [使用指南](https://open.feishu.cn/documents/bot-v3/add-custom-bot)
 #[allow(dead_code)]
 pub struct CustomBot<'a> {
     /// webhook 地址

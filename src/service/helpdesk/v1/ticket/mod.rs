@@ -116,6 +116,13 @@ impl TicketService {
     }
 
     /// 创建服务台对话
+    ///
+    /// 为用户创建新的服务台对话，支持指定问题描述。创建成功后会返回聊天群ID和工单信息。
+    /// 用户可以通过返回的聊天群与客服进行实时沟通，解决相关问题。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/start_service
     pub async fn start_service(
         &self,
         request: StartServiceRequest,
@@ -140,6 +147,13 @@ impl TicketService {
     }
 
     /// 查询指定工单详情
+    ///
+    /// 根据工单ID查询特定工单的详细信息，包括工单状态、优先级、问题描述、负责人等。
+    /// 用于获取工单的完整信息，便于客服人员了解工单背景和处理进展。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/get
     pub async fn get(
         &self,
         ticket_id: &str,
@@ -167,6 +181,13 @@ impl TicketService {
     }
 
     /// 更新工单详情
+    ///
+    /// 更新指定工单的信息，支持修改工单状态、添加标签、添加评论等操作。
+    /// 用于工单的日常管理，包括状态变更、优先级调整和处理记录等。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/update
     pub async fn update(
         &self,
         ticket_id: &str,
@@ -196,6 +217,13 @@ impl TicketService {
     }
 
     /// 查询全部工单详情
+    ///
+    /// 分页查询所有工单的详细信息，支持按分页参数获取工单列表。
+    /// 用于获取工单的全局视图，便于进行统计分析和管理监控。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/ticket/list
     pub async fn list(
         &self,
         user_id_type: Option<UserIdType>,

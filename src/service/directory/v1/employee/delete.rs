@@ -154,7 +154,9 @@ impl EmployeeService {
     /// ).await?;
     /// ```
     ///
-    /// 参考: <https://open.feishu.cn/document/directory-v1/employee/delete>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/delete>
     pub async fn delete(
         &self,
         request: DeleteEmployeeRequest,

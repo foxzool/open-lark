@@ -68,7 +68,6 @@ impl ReviewConfigService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取项目列表
     ///
     /// 查询指定周期下的绩效项目列表。
@@ -111,7 +110,6 @@ impl ReviewConfigService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 批量查询补充信息
     ///
     /// 查询指定项目下的补充信息。
@@ -139,7 +137,6 @@ impl ReviewConfigService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 批量导入补充信息
     ///
     /// 批量导入或更新补充信息。
@@ -164,7 +161,6 @@ impl ReviewConfigService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -251,7 +247,6 @@ impl ReviewConfigService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取评估模板配置
     ///
     /// 查询指定项目的评估模板配置。
@@ -279,7 +274,6 @@ impl ReviewConfigService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取评估项列表
     ///
     /// 查询指定评估模板的评估项列表。
@@ -307,7 +301,6 @@ impl ReviewConfigService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取标签填写题配置
     ///
     /// 查询标签填写题的详细配置。
@@ -332,7 +325,6 @@ impl ReviewConfigService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

@@ -30,7 +30,9 @@ impl AppTableRecordService {
 
     /// 新增记录
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/create>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/combined_create
     pub async fn create(
         &self,
         request: CreateRecordRequest,
@@ -41,7 +43,9 @@ impl AppTableRecordService {
 
     /// 更新记录
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/update>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/combined_update
     pub async fn update(
         &self,
         request: UpdateRecordRequest,
@@ -52,7 +56,9 @@ impl AppTableRecordService {
 
     /// 查询记录
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/search>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job_publish_record/search
     pub async fn search(
         &self,
         request: SearchRecordRequest,
@@ -63,7 +69,9 @@ impl AppTableRecordService {
 
     /// 删除记录
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/delete>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job_requirement/delete
     pub async fn delete(
         &self,
         request: DeleteRecordRequest,
@@ -74,7 +82,9 @@ impl AppTableRecordService {
 
     /// 新增多条记录
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/batch_create>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/move_docs_to_wiki
     pub async fn batch_create(
         &self,
         request: BatchCreateRecordRequest,
@@ -86,7 +96,9 @@ impl AppTableRecordService {
 
     /// 更新多条记录
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/batch_update>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job-manager/batch_update
     pub async fn batch_update(
         &self,
         request: BatchUpdateRecordRequest,
@@ -98,7 +110,9 @@ impl AppTableRecordService {
 
     /// 批量获取记录
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/batch_get>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/batch_get_id
     pub async fn batch_get(
         &self,
         request: BatchGetRecordRequest,
@@ -109,7 +123,9 @@ impl AppTableRecordService {
 
     /// 删除多条记录
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/batch_delete>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_account_custom_field/batch_delete
     pub async fn batch_delete(
         &self,
         request: BatchDeleteRecordRequest,

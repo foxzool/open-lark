@@ -25,7 +25,9 @@ impl UserTaskRemedyService {
     ///
     /// 该接口用于提交员工的补卡申请，启动审批流程。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_task_remedy/create>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_daily_shift/batch_create
     pub async fn create(
         &self,
         request: CreateUserTaskRemedyRequest,
@@ -61,7 +63,9 @@ impl UserTaskRemedyService {
     ///
     /// 该接口用于查询指定用户在特定时间范围内的可补卡时间段。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_task_remedy/query_user_allowed_remedys>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_task_remedy/create
     pub async fn query_user_allowed_remedys(
         &self,
         request: QueryUserAllowedRemedysRequest,
@@ -94,7 +98,9 @@ impl UserTaskRemedyService {
     ///
     /// 该接口用于查询员工的补卡申请记录，支持按状态、时间范围等条件筛选。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_task_remedy/query>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/query
     pub async fn query(
         &self,
         request: QueryUserTaskRemedyRequest,

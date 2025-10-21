@@ -22,7 +22,9 @@ impl LeaveEmployExpireRecordService {
     /// 该接口用于通过过期时间范围查询员工休假发放记录，支持分页查询。
     /// 可以查询指定时间范围内即将过期或已过期的休假发放记录。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/leave_employ_expire_record/get>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/leave_employ_expire_record/get
     pub async fn get(
         &self,
         request: GetLeaveEmployExpireRecordRequest,

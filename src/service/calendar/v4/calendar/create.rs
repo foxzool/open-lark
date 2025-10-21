@@ -156,7 +156,9 @@ impl CalendarManagementService {
     /// ).await?;
     /// ```
     ///
-    /// 参考: <https://open.feishu.cn/document/server-docs/calendar-v4/calendar/create>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/create
     pub async fn create(
         &self,
         request: CreateCalendarRequest,

@@ -25,7 +25,6 @@ impl AppstorePaidInfoService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 查询用户是否在应用开通范围
     pub async fn check_user_access(
         &self,
@@ -54,7 +53,6 @@ impl AppstorePaidInfoService {
             query_params,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

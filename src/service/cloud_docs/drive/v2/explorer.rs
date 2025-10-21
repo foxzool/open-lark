@@ -123,6 +123,10 @@ pub struct ListFolderIterator<'a> {
 }
 
 impl ListFolderIterator<'_> {
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM
+
     pub async fn next(&mut self) -> Option<Vec<FileInFolder>> {
         if !self.has_more {
             return None;

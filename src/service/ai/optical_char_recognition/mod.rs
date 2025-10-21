@@ -39,7 +39,6 @@ impl OpticalCharRecognitionService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 识别图片中的文字
     ///
     /// 该接口用于识别图片中的文字内容，返回文字及其位置信息。

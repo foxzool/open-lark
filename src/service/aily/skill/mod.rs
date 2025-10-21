@@ -68,7 +68,6 @@ impl SkillService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 调用技能
     ///
     /// 该接口用于调用指定的智能伙伴技能。
@@ -100,7 +99,6 @@ impl SkillService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取技能信息
     ///
     /// 该接口用于获取指定的技能详细信息。
@@ -131,7 +129,6 @@ impl SkillService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 查询技能列表
     ///
     /// 该接口用于查询智能伙伴的技能列表。

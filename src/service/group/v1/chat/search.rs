@@ -5,4 +5,6 @@
 //! ## 实现状态
 //! 
 //! 🚧 **待实现** - 此功能尚未实现，敬请期待。
-// 参考: https://open.feishu.cn/document/server-docs/group/chat/search
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job_publish_record/search

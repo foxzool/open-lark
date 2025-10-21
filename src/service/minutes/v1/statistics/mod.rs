@@ -38,7 +38,6 @@ impl StatisticsService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 获取妙记统计数据
     pub async fn get(
         &self,

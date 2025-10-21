@@ -133,7 +133,9 @@ impl EmployeeService {
     /// ).await?;
     /// ```
     ///
-    /// 参考: <https://open.feishu.cn/document/directory-v1/employee/mget>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/mget>
     pub async fn mget(
         &self,
         request: MgetEmployeeRequest,

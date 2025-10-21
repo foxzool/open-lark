@@ -52,7 +52,6 @@ impl ImageService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 上传图片
     pub async fn create(
         &self,

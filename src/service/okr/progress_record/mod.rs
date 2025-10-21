@@ -146,7 +146,6 @@ impl ProgressRecordService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 删除 OKR 进展记录
     ///
     /// 删除指定的进展记录。
@@ -178,7 +177,6 @@ impl ProgressRecordService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 更新 OKR 进展记录
     ///
     /// 更新指定进展记录的内容和进度信息。
@@ -212,7 +210,6 @@ impl ProgressRecordService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取 OKR 进展记录
     ///
     /// 获取指定进展记录的详细信息。
@@ -241,7 +238,6 @@ impl ProgressRecordService {
             body: vec![],
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

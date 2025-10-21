@@ -74,7 +74,6 @@ impl AppRecommendService {
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
-
     /// 获取管理员推荐的应用
     ///
     /// 获取管理员设置的推荐应用列表。
@@ -127,7 +126,6 @@ impl AppRecommendService {
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
-
     /// 获取当前设置的推荐规则列表
     ///
     /// 获取当前系统中配置的应用推荐规则列表。

@@ -328,6 +328,10 @@ impl BatchCreatePermissionMemberResponse {
     }
 
     /// 获取成功的操作
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM
     pub fn successful_members(&self) -> Vec<&MemberResult> {
         self.members
             .iter()
@@ -336,6 +340,10 @@ impl BatchCreatePermissionMemberResponse {
     }
 
     /// 获取失败的操作
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM
     pub fn failed_members(&self) -> Vec<&MemberResult> {
         self.members
             .iter()

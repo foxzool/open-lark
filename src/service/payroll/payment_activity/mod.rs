@@ -65,6 +65,10 @@ impl PaymentActivityService {
     /// 发薪周期等条件筛选。可以获取发薪活动的基本信息、
     /// 状态、关联员工数量、发薪金额等数据。
     ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/payroll-v1/payment_activity/list
+    ///
     /// # 参数
     ///
     /// - `request`: 发薪活动列表查询请求参数，包括：
@@ -149,6 +153,10 @@ impl PaymentActivityService {
     /// 该接口用于封存指定的发薪活动，封存后的活动将不能再进行
     /// 修改操作。通常在发薪完成并确认数据无误后进行封存操作，
     /// 用于数据归档和合规管理。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/payroll-v1/payment_activity/archive
     ///
     /// # 参数
     ///
