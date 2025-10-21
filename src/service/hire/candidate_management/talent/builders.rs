@@ -195,6 +195,10 @@ impl TalentCreateRequestBuilder {
     ///
     /// # 验证规则
     ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/hire
+
     /// - 姓名：必填，2-100字符
     /// - 邮箱：格式必须正确
     /// - 电话：格式必须正确

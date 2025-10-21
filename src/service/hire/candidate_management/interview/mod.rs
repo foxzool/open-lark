@@ -576,7 +576,6 @@ impl InterviewService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取面试评估列表
     ///
     /// 该接口用于获取指定面试的评估记录列表，
@@ -632,7 +631,6 @@ impl InterviewService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 取消面试
     ///
     /// 该接口用于取消已安排的面试，设置取消原因

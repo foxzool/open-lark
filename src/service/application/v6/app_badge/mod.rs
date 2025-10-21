@@ -25,7 +25,6 @@ impl AppBadgeService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 更新应用红点
     pub async fn set(
         &self,

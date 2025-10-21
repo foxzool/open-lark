@@ -111,7 +111,6 @@ impl DataSourceService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 删除数据源
     ///
     /// 该接口用于删除指定的数据源。
@@ -138,7 +137,6 @@ impl DataSourceService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 修改数据源
     ///
     /// 该接口用于修改指定数据源的信息。
@@ -165,7 +163,6 @@ impl DataSourceService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -226,8 +223,7 @@ impl DataSourceService {
             if let Some(page_token) = req.page_token {
                 api_req.query_params.insert("page_token", page_token);
             }
-        }
-
+        };
         Transport::request(api_req, &self.config, option).await
     }
 }

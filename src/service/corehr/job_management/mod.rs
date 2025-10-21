@@ -405,7 +405,6 @@ impl JobManagementService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 查询职等
     ///
     /// 该接口用于查询职等信息，支持按多种条件筛选职等。
@@ -505,7 +504,6 @@ impl JobManagementService {
         };
 
         // Content-Type 由 Transport 层自动设置
-
         Transport::request(api_req, &self.config, option).await
     }
 

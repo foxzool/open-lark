@@ -28,16 +28,12 @@ impl StageTaskService {
 
     /// 获取周期任务（指定用户）
     ///
-    /// 根据用户列表获取其周期任务信息。
+    /// 根据用户列表获取其周期任务信息，支持按周期ID、项目ID、任务状态等条件筛选。
+    /// 用于批量查询指定用户的评估任务，便于任务管理和进度跟踪。
     ///
-    /// # Arguments
+    /// # API文档
     ///
-    /// * `request` - 用户任务查询请求
-    /// * `option` - 请求选项，可选
-    ///
-    /// # Returns
-    ///
-    /// 返回指定用户的任务列表
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/performance-v1/stage_task/find_by_user_list
     pub async fn find_tasks_by_user_list(
         &self,
         request: TaskFindByUserListRequest,
@@ -56,16 +52,12 @@ impl StageTaskService {
 
     /// 获取周期任务（全部用户）
     ///
-    /// 分页获取全部用户的周期任务信息。
+    /// 分页获取全部用户的周期任务信息，支持按周期ID、项目ID、任务状态等条件筛选。
+    ///用于获取全局的任务视图，便于统计分析和绩效管理。
     ///
-    /// # Arguments
+    /// # API文档
     ///
-    /// * `request` - 任务分页查询请求
-    /// * `option` - 请求选项，可选
-    ///
-    /// # Returns
-    ///
-    /// 返回分页任务列表
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/performance-v1/stage_task/find_by_page
     pub async fn find_tasks_by_page(
         &self,
         request: TaskFindByPageRequest,

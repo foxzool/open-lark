@@ -64,7 +64,6 @@ impl BuzzMessagesService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 发送应用内加急
     pub async fn urgent_app(
         &self,

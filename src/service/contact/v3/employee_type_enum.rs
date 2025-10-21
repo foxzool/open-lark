@@ -16,7 +16,6 @@ impl EmployeeTypeEnumService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 新增人员类型
     pub async fn create(
         &self,

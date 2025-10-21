@@ -54,7 +54,6 @@ impl RuleExternalService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取权限组信息
     ///
     /// 根据权限组ID获取权限组的详细信息。
@@ -86,7 +85,6 @@ impl RuleExternalService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 删除权限组
     ///
     /// 删除指定的权限组。
@@ -118,7 +116,6 @@ impl RuleExternalService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 设备绑定权限组
     ///
     /// 将指定设备绑定到权限组，或修改设备的权限组绑定关系。

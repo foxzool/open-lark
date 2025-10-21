@@ -83,7 +83,6 @@ impl SessionService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 创建会话
     ///
     /// 该接口用于创建一个新的智能伙伴会话。
@@ -111,7 +110,6 @@ impl SessionService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 更新会话
     ///
     /// 该接口用于更新指定的智能伙伴会话。
@@ -143,7 +141,6 @@ impl SessionService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取会话
     ///
     /// 该接口用于获取指定的智能伙伴会话信息。
@@ -171,7 +168,6 @@ impl SessionService {
 
         // 添加查询参数
         api_req.query_params.insert("app_id", request.app_id);
-
         Transport::request(api_req, &self.config, option).await
     }
 

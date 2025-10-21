@@ -25,7 +25,6 @@ impl ApplicationFeedbackService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 更新应用反馈
     pub async fn update(
         &self,

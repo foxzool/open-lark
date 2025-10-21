@@ -127,7 +127,6 @@ impl KnowledgeService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 执行数据知识问答
     ///
     /// 该接口用于基于数据知识库进行智能问答。
@@ -157,7 +156,6 @@ impl KnowledgeService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 上传文件用于数据知识管理
     ///
     /// 该接口用于上传文件以创建数据知识。
@@ -186,7 +184,6 @@ impl KnowledgeService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 创建数据知识
     ///
     /// 该接口用于创建新的数据知识条目。
@@ -214,7 +211,6 @@ impl KnowledgeService {
             }))?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

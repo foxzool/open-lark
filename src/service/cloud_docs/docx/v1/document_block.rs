@@ -28,7 +28,9 @@ impl DocumentBlockService {
     ///
     /// 该接口用于在文档中创建一个新的块。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/create>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/combined_create
     pub async fn create(
         &self,
         document_id: impl Into<String>,
@@ -51,7 +53,9 @@ impl DocumentBlockService {
     ///
     /// 该接口用于获取块的详细内容。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/get>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/role/get
     pub async fn get(
         &self,
         document_id: impl Into<String>,
@@ -75,7 +79,9 @@ impl DocumentBlockService {
     ///
     /// 该接口用于更新块的内容。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/patch>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/interviewer/patch
     pub async fn patch(
         &self,
         document_id: impl Into<String>,
@@ -101,7 +107,9 @@ impl DocumentBlockService {
     ///
     /// 该接口用于批量更新多个块的内容。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/batch_update>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job-manager/batch_update
     pub async fn batch_update(
         &self,
         document_id: impl Into<String>,
@@ -125,7 +133,9 @@ impl DocumentBlockService {
     ///
     /// 该接口用于批量删除块。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/batch_delete>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_account_custom_field/batch_delete
     pub async fn batch_delete(
         &self,
         document_id: impl Into<String>,
@@ -152,7 +162,9 @@ impl DocumentBlockService {
     ///
     /// 该接口用于获取指定块的所有子块。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/docs/docx-v1/document-block/get-2>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement/get
     pub async fn list_children(
         &self,
         document_id: impl Into<String>,

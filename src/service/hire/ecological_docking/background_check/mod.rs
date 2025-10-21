@@ -593,7 +593,6 @@ impl BackgroundCheckService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 取消背调订单
     ///
     /// 该接口用于取消尚未完成的背调订单，
@@ -639,7 +638,6 @@ impl BackgroundCheckService {
             body: serde_json::to_vec(&request).unwrap_or_default(),
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -678,7 +676,6 @@ impl BackgroundCheckService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 批量创建背调订单
     ///
     /// 该接口用于批量为多个候选人创建背调订单，

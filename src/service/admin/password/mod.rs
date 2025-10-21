@@ -48,7 +48,6 @@ impl PasswordService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 重置用户的企业邮箱密码
     ///
     /// 该接口用于重置企业用户的邮箱登录密码。

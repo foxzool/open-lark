@@ -39,7 +39,6 @@ impl MinuteService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 获取妙记信息
     pub async fn get(
         &self,

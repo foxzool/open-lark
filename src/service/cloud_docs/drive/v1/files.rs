@@ -237,16 +237,37 @@ impl FilesService {
     }
 
     /// 创建上传文件Builder
+    ///
+    /// 创建一个用于上传文件的构建器，支持设置文件名、上传位置、文件大小等参数。
+    /// 构建器会自动验证参数的有效性，确保文件名合法、大小合理等。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub fn upload_all_builder(&self) -> UploadAllRequestBuilder {
         UploadAllRequestBuilder::default()
     }
 
-    /// 创建下载文件Builder  
+    /// 创建下载文件Builder
+    ///
+    /// 创建一个用于下载文件的构建器，只需要提供文件 token 即可。
+    /// 文件 token 可以从上传文件、文件列表等接口获取。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub fn download_builder(&self) -> DownloadRequestBuilder {
         DownloadRequestBuilder::default()
     }
 
     /// 使用Builder上传文件（带验证）
+    ///
+    /// 使用构建器方式上传文件，自动进行参数验证。这是推荐的上传方式，
+    /// 可以确保上传参数的合法性，提供更好的错误提示。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn upload_all_with_builder(
         &self,
         builder_result: SDKResult<UploadAllRequest>,
@@ -257,6 +278,13 @@ impl FilesService {
     }
 
     /// 上传文件
+    ///
+    /// 上传文件至云文档，支持各种文件格式包括文档、图片、视频等。上传成功后返回文件 token，
+    /// 可用于后续的文件访问、分享等操作。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn upload_all(
         &self,
         upload_all_request: UploadAllRequest,
@@ -274,6 +302,13 @@ impl FilesService {
     }
 
     /// 下载文件
+    ///
+    /// 根据文件 token 下载云文档中的文件内容。支持下载各种文件格式，包括文档、图片、视频等。
+    /// 下载返回的是文件的二进制内容，可直接保存为文件。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn download(
         &self,
         request: DownloadRequest,

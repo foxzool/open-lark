@@ -13,7 +13,6 @@ impl FunctionalRoleMemberService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 添加角色成员
     pub async fn create(
         &self,
@@ -54,7 +53,6 @@ impl FunctionalRoleMemberService {
             body: serde_json::to_vec(req)?,
             ..Default::default()
         };
-
         let resp =
             Transport::<BatchCreateRoleMembersResponse>::request(api_req, &self.config, None)
                 .await?;

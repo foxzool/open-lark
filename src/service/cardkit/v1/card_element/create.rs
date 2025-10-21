@@ -161,7 +161,9 @@ impl CardElementService {
     /// ).await?;
     /// ```
     ///
-    /// 参考: <https://open.feishu.cn/document/cardkit-v1/card-element/create>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/create>
     pub async fn create(
         &self,
         request: CreateElementRequest,

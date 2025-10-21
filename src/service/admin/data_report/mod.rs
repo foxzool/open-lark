@@ -54,7 +54,6 @@ impl DataReportService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 获取部门维度的用户活跃和功能使用数据
     ///
     /// 该接口用于获取部门维度的用户活跃度和功能使用统计数据。
@@ -101,7 +100,6 @@ impl DataReportService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取用户维度的用户活跃和功能使用数据
     ///
     /// 该接口用于获取用户维度的活跃度和功能使用统计数据。

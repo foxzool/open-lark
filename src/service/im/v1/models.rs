@@ -815,3 +815,56 @@ mod tests {
         assert!(debug_string.contains("Success"));
     }
 }
+
+/// 消息结构体
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Message {
+    /// 消息 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message_id: Option<String>,
+    /// 会话 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chat_id: Option<String>,
+    /// 消息类型
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message_type: Option<String>,
+    /// 消息内容
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<String>,
+    /// 消息创建时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<String>,
+    /// 消息更新时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_time: Option<String>,
+    /// 消息删除时间
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete_time: Option<String>,
+    /// 发送者信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sender: Option<serde_json::Value>,
+    /// 被@的用户或机器人信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mentions: Option<Vec<serde_json::Value>>,
+    /// 父消息信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent: Option<serde_json::Value>,
+    /// 回复消息（话题消息）
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replies: Option<Vec<serde_json::Value>>,
+    /// 话题 ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thread_id: Option<String>,
+    /// 消息状态
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statue: Option<String>,
+    /// 转发次数
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub forward_count: Option<i32>,
+    /// 回复次数
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reply_count: Option<i32>,
+    /// 额外信息
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub extra: Option<serde_json::Value>,
+}

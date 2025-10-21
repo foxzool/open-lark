@@ -53,7 +53,6 @@ impl UrlPreviewService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 批量更新URL预览
     pub async fn batch_update(
         &self,

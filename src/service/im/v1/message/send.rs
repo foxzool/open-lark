@@ -19,7 +19,7 @@ impl MessageService {
     ///
     /// # API文档
     ///
-    /// {}
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create
     ///
     /// # 示例
     ///
@@ -69,7 +69,7 @@ impl MessageService {
     ///
     /// # API文档
     ///
-    /// {}
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create
     ///
     /// # 示例
     ///
@@ -81,6 +81,10 @@ impl MessageService {
     ///     let client = LarkClient::builder()
     ///         .app_id("your_app_id")
     ///         .app_secret("your_app_secret")
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/im/delete
+
     ///         .build()?;
     ///
     ///     // 撤回消息
@@ -111,6 +115,10 @@ impl MessageService {
     /// 更新消息
     ///
     /// 更新已发送的消息。仅支持更新应用自身发送的文本消息、图片消息和文件消息。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create
     pub async fn update(
         &self,
         message_id: &str,
@@ -135,6 +143,10 @@ impl MessageService {
     /// 回复消息
     ///
     /// 在指定消息下进行回复。支持回复文本、图片、文件等类型的消息。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create
     pub async fn reply(
         &self,
         message_id: &str,

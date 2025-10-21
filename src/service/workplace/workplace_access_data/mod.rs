@@ -102,7 +102,6 @@ impl WorkplaceAccessDataService {
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
-
     /// 获取定制工作台访问数据
     ///
     /// 获取定制工作台的访问数据统计信息。
@@ -167,7 +166,6 @@ impl WorkplaceAccessDataService {
             Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
-
     /// 获取定制工作台小组件访问数据
     ///
     /// 获取定制工作台小组件的访问数据统计信息。

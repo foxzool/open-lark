@@ -710,7 +710,6 @@ impl ReferralAccountService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 审批提现申请
     ///
     /// 该接口用于审批提现申请，设置审批结果

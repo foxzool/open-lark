@@ -54,7 +54,6 @@ impl ReviewDataService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取绩效详情数据
     ///
     /// 查询绩效评估的详细数据，包括各评估项的具体回答。

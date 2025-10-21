@@ -64,6 +64,13 @@ impl MessageService {
     }
 
     /// 发送审批Bot消息
+    ///
+    /// 向用户发送审批相关的消息通知，包括审批进度、结果、提醒等。
+    /// 支持多种消息类型，可以发送文本、卡片、图片等格式的内容。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/ugDNyYjL4QjM24CO0IjN
     pub async fn send(
         &self,
         request: SendBotMessageRequest,
@@ -88,6 +95,13 @@ impl MessageService {
     }
 
     /// 更新审批Bot消息
+    ///
+    /// 更新已发送的审批Bot消息内容，用于修正错误信息或更新状态。
+    /// 支持更新消息内容、消息类型等信息。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uAjNyYjLwYjM24CM2IjN
     pub async fn update(
         &self,
         message_id: &str,

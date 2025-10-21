@@ -152,6 +152,13 @@ impl InstanceService {
     }
 
     /// 创建审批实例
+    ///
+    /// 根据审批定义创建新的审批实例，支持指定表单数据、发起人、部门等信息。
+    /// 创建成功后会生成审批实例编码，并按照预设的审批流程进行流转。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/definition/createstance/create
     pub async fn create(
         &self,
         request: CreateInstanceRequest,
@@ -183,6 +190,13 @@ impl InstanceService {
     }
 
     /// 撤回审批实例
+    ///
+    /// 撤回当前用户发起的审批实例，撤回后审批流程将终止。
+    /// 只有在特定状态下才能撤回，如已开始审批或已完成的实例无法撤回。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/definition/createstance/create
     pub async fn cancel(
         &self,
         instance_code: &str,
@@ -210,6 +224,13 @@ impl InstanceService {
     }
 
     /// 抄送审批实例
+    ///
+    /// 将审批实例抄送给指定用户，支持添加抄送消息。
+    /// 抄送用户可以查看审批进度和结果，但不参与审批决策。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/definition/createstance/create
     pub async fn cc(
         &self,
         instance_code: &str,
@@ -239,6 +260,13 @@ impl InstanceService {
     }
 
     /// 预览审批流程
+    ///
+    /// 根据审批定义和表单数据预览审批流程节点，显示完整的审批路径。
+    /// 用于在发起审批前了解审批流程，包括各个节点和审批人信息。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/definition/createstance/create
     pub async fn preview(
         &self,
         request: PreviewInstanceRequest,
@@ -270,6 +298,13 @@ impl InstanceService {
     }
 
     /// 获取单个审批实例详情
+    ///
+    /// 根据实例编码获取指定审批实例的详细信息，包括实例状态、表单数据、
+    /// 审批记录、当前节点等完整信息。用于查看审批进展和历史记录。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/definition/createstance/create
     pub async fn get(
         &self,
         instance_code: &str,
@@ -297,6 +332,13 @@ impl InstanceService {
     }
 
     /// 批量获取审批实例ID
+    ///
+    /// 根据指定条件批量查询审批实例ID列表，支持按审批编码、状态、用户等筛选。
+    /// 用于快速获取符合条件审批实例的标识符，便于后续的详细查询或批量处理。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/definition/createstance/create
     pub async fn list(
         &self,
         params: Option<ListInstanceParams>,

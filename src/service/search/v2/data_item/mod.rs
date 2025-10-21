@@ -110,7 +110,6 @@ impl DataItemService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 批量为数据项创建索引
     ///
     /// 该接口用于批量为数据项创建搜索索引。
@@ -144,7 +143,6 @@ impl DataItemService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 删除数据项
     ///
     /// 该接口用于删除指定的数据项及其索引。
@@ -172,7 +170,6 @@ impl DataItemService {
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

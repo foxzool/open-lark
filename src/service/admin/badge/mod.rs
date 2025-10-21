@@ -102,7 +102,6 @@ impl BadgeService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 创建勋章
     ///
     /// 该接口用于创建企业勋章。
@@ -126,7 +125,6 @@ impl BadgeService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 修改勋章信息
     ///
     /// 该接口用于修改指定勋章的信息。
@@ -163,7 +161,6 @@ impl BadgeService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 上传勋章图片
     ///
     /// 该接口用于上传勋章图片并获取图片key。

@@ -5,4 +5,6 @@
 //! ## 实现状态
 //! 
 //! 🚧 **待实现** - 此功能尚未实现，敬请期待。
-// 参考: https://open.feishu.cn/document/server-docs/group/chat/delete_top_notice
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/document-docx/docx-v1/chat-announcement/get

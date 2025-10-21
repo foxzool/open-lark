@@ -100,7 +100,6 @@ impl ApplicationConfigService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取信息登记表列表
     ///
     /// 查询系统中可用的信息登记表模板，用于收集候选人的详细信息。

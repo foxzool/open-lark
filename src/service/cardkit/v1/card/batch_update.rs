@@ -136,7 +136,9 @@ impl CardService {
     /// ).await?;
     /// ```
     ///
-    /// 参考: <https://open.feishu.cn/document/cardkit-v1/card/batch_update>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/batch_update>
     pub async fn batch_update(
         &self,
         request: BatchUpdateCardRequest,

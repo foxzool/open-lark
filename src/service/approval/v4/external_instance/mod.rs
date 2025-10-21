@@ -76,7 +76,6 @@ impl ExternalInstanceService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 同步三方审批实例
     pub async fn create(
         &self,
@@ -104,7 +103,6 @@ impl ExternalInstanceService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

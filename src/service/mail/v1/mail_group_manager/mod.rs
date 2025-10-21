@@ -71,7 +71,6 @@ impl MailGroupManagerService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 批量创建邮件组管理员
     pub async fn batch_create(
         &self,
@@ -97,7 +96,6 @@ impl MailGroupManagerService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

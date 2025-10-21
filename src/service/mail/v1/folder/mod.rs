@@ -182,7 +182,6 @@ impl FolderService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 修改邮箱文件夹
     ///
     /// 该接口用于修改指定的邮箱文件夹信息，如名称、上级文件夹等。
@@ -232,7 +231,6 @@ impl FolderService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 列出邮箱文件夹
     ///
     /// 该接口用于获取用户邮箱中的所有文件夹列表。

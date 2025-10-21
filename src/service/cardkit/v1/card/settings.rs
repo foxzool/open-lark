@@ -149,7 +149,9 @@ impl CardService {
     /// ).await?;
     /// ```
     ///
-    /// 参考: <https://open.feishu.cn/document/cardkit-v1/card/settings>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/createsettings>
     pub async fn settings(
         &self,
         request: UpdateCardSettingsRequest,

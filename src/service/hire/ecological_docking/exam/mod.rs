@@ -644,7 +644,6 @@ impl ExamService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 取消笔试
     ///
     /// 该接口用于取消已安排的笔试，设置取消原因
@@ -693,7 +692,6 @@ impl ExamService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 重新安排笔试
     ///
     /// 该接口用于重新安排笔试时间，为候选人

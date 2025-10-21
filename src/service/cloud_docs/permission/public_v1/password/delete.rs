@@ -242,6 +242,10 @@ impl PasswordDeletionResult {
 
 impl DeletePasswordResponse {
     /// 获取密码删除信息
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM
+
     pub fn deletion_info(&self) -> &PasswordDeletionResult {
         &self.password_deletion
     }

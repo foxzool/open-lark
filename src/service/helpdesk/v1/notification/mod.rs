@@ -109,7 +109,6 @@ impl NotificationService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 创建推送
     pub async fn create(
         &self,
@@ -130,7 +129,6 @@ impl NotificationService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -201,7 +199,6 @@ impl NotificationService {
         if let Some(user_id_type) = user_id_type {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
-
         let api_req = ApiRequest {
             http_method: Method::POST,
             api_path: EndpointBuilder::replace_param(
@@ -270,7 +267,6 @@ impl NotificationService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 执行推送
     pub async fn execute_send(
         &self,

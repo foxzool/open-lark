@@ -190,7 +190,9 @@ impl EmployeeService {
     /// ).await?;
     /// ```
     ///
-    /// 参考: <https://open.feishu.cn/document/directory-v1/employee/resurrect>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/directory-v1/employee/resurrect>
     pub async fn resurrect(
         &self,
         request: ResurrectEmployeeRequest,

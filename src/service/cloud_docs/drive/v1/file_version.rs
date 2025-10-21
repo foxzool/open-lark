@@ -29,7 +29,9 @@ impl FileVersionService {
     ///
     /// 该接口用于创建文档版本。
     ///
-    /// <https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/create>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn create_version(
         &self,
         request: CreateVersionRequest,
@@ -56,7 +58,9 @@ impl FileVersionService {
     ///
     /// 该接口用于删除文档版本。
     ///
-    /// <https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/delete>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn delete_version(
         &self,
         request: DeleteVersionRequest,
@@ -79,7 +83,9 @@ impl FileVersionService {
     ///
     /// 该接口用于获取文档版本信息。
     ///
-    /// <https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/get>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn get_version(
         &self,
         request: GetVersionRequest,
@@ -102,7 +108,9 @@ impl FileVersionService {
     ///
     /// 该接口用于获取文档的版本列表。
     ///
-    /// <https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-version/list>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn list_versions(
         &self,
         request: ListVersionsRequest,

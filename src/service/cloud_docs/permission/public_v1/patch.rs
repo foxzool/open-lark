@@ -401,6 +401,10 @@ impl PermissionUpdateResult {
 
 impl PatchPermissionPublicResponse {
     /// 获取更新结果
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/update
+
     pub fn update_result(&self) -> &PermissionUpdateResult {
         &self.permission_public
     }

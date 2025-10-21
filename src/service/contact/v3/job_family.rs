@@ -17,7 +17,6 @@ impl JobFamilyService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 创建序列
     pub async fn create(
         &self,
@@ -58,6 +57,10 @@ impl JobFamilyService {
             Transport::<UpdateJobFamilyResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
     }
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get
+
 
     /// 获取单个序列信息
     pub async fn get(&self, job_family_id: &str) -> crate::core::SDKResult<GetJobFamilyResponse> {

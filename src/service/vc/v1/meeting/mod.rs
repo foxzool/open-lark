@@ -139,7 +139,6 @@ impl MeetingService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 邀请参会人
     pub async fn invite(
         &self,
@@ -161,7 +160,6 @@ impl MeetingService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

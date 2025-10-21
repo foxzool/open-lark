@@ -31,7 +31,9 @@ impl ArchiveRuleService {
     ///
     /// 该接口用于查询指定归档规则的报表字段定义信息。
     ///
-    /// <https://open.feishu.cn/document/attendance-v1/archive_rule/user_stats_fields_query>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/archive_rule/user_stats_fields_query
     pub async fn query_user_stats_fields(
         &self,
         request: QueryArchiveStatsFieldsRequest,
@@ -59,7 +61,9 @@ impl ArchiveRuleService {
     ///
     /// 该接口用于向指定归档规则写入报表数据，支持批量上传考勤统计结果。
     ///
-    /// <https://open.feishu.cn/document/attendance-v1/archive_rule/upload_report>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/archive_rule/upload_report
     pub async fn upload_report(
         &self,
         request: UploadArchiveReportRequest,
@@ -94,7 +98,9 @@ impl ArchiveRuleService {
     ///
     /// 该接口用于删除指定的归档报表数据记录。
     ///
-    /// <https://open.feishu.cn/document/attendance-v1/archive_rule/del_report>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/archive_rule/del_report
     pub async fn del_report(
         &self,
         request: DelArchiveReportRequest,
@@ -129,7 +135,9 @@ impl ArchiveRuleService {
     ///
     /// 该接口用于获取企业的所有归档规则列表，包括规则名称、状态等信息。
     ///
-    /// <https://open.feishu.cn/document/attendance-v1/archive_rule/list>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/archive_rule/list
     pub async fn list(
         &self,
         request: ListArchiveRulesRequest,

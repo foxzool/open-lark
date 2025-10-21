@@ -53,6 +53,10 @@ impl WriteDataToMultipleRangesRequest {
     pub fn builder() -> WriteDataToMultipleRangesRequestBuilder {
         WriteDataToMultipleRangesRequestBuilder::default()
     }
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM
+
 
     /// 验证请求参数
     pub fn validate(&self) -> SDKResult<()> {

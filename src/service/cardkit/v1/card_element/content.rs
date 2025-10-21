@@ -5,4 +5,7 @@
 //! ## 实现状态
 //!
 //! 🚧 **待实现** - 此功能尚未实现，敬请期待。
-// 参考: https://open.feishu.cn/document/cardkit-v1/card-element/content
+//!
+//! ## API文档
+//!
+//! https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card-element/content

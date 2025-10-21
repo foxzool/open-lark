@@ -122,7 +122,6 @@ impl CustomFieldService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 创建自定义字段
     pub async fn create(
         &self,
@@ -143,7 +142,6 @@ impl CustomFieldService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

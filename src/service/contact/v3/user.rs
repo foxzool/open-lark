@@ -88,7 +88,6 @@ impl UserService {
         let resp = Transport::<CreateUserResponse>::request(api_req, &self.config, None).await?;
         resp.into_result()
     }
-
     /// 修改用户部分信息
     ///
     /// 该接口用于修改用户的部分信息。
@@ -108,7 +107,6 @@ impl UserService {
             body: serde_json::to_vec(req)?,
             ..Default::default()
         };
-
         let resp = Transport::<PatchUserResponse>::request(api_req, &self.config, None).await?;
         resp.into_result()
     }
@@ -169,7 +167,6 @@ impl UserService {
         let resp = Transport::<GetUserResponse>::request(api_req, &self.config, None).await?;
         resp.into_result()
     }
-
     /// 批量获取用户信息
     ///
     /// 该接口用于批量获取多个用户的信息。
@@ -188,7 +185,6 @@ impl UserService {
         let resp = Transport::<BatchGetUsersResponse>::request(api_req, &self.config, None).await?;
         resp.into_result()
     }
-
     /// 获取部门直属用户列表
     ///
     /// 该接口用于获取部门直属的用户列表。
@@ -205,7 +201,6 @@ impl UserService {
             query_params: std::collections::HashMap::new(),
             ..Default::default()
         };
-
         let resp = Transport::<FindUsersByDepartmentResponse>::request(api_req, &self.config, None)
             .await?;
         resp.into_result()
@@ -298,6 +293,10 @@ impl UserService {
         let resp = Transport::<ResurrectUserResponse>::request(api_req, &self.config, None).await?;
         resp.into_result()
     }
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/list
+
 
     /// 获取用户列表
     ///

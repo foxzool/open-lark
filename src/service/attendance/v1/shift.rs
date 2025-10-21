@@ -30,7 +30,9 @@ impl ShiftService {
     ///
     /// 创建一个班次，班次是管理考勤打卡规则的载体
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/shift/create>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/create
     pub async fn create(
         &self,
         request: CreateShiftRequest,
@@ -112,7 +114,9 @@ impl ShiftService {
     ///
     /// 删除一个班次
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/shift/delete>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/delete
     pub async fn delete(
         &self,
         request: DeleteShiftRequest,
@@ -135,7 +139,9 @@ impl ShiftService {
     ///
     /// 通过班次的 ID 获取班次详情
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/shift/get>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/get
     pub async fn get(
         &self,
         request: GetShiftRequest,
@@ -155,7 +161,9 @@ impl ShiftService {
     ///
     /// 通过班次的名称查询班次信息
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/shift/query>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/query
     pub async fn query(
         &self,
         request: QueryShiftRequest,
@@ -201,7 +209,9 @@ impl ShiftService {
     ///
     /// 分页查询所有班次
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/shift/list>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/list
     pub async fn list(
         &self,
         request: ListShiftRequest,

@@ -150,7 +150,9 @@ impl CardService {
     /// ).await?;
     /// ```
     ///
-    /// 参考: <https://open.feishu.cn/document/cardkit-v1/card/update>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/cardkit-v1/card/update
     pub async fn update(
         &self,
         request: UpdateCardRequest,

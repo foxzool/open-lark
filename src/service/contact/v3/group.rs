@@ -17,7 +17,6 @@ impl GroupService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 创建用户组
     pub async fn create(
         &self,
@@ -97,7 +96,6 @@ impl GroupService {
         let resp = Transport::<ListGroupsResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
     }
-
     /// 查询用户所属用户组
     pub async fn member_belong(
         &self,
@@ -111,10 +109,13 @@ impl GroupService {
             query_params: std::collections::HashMap::new(),
             ..Default::default()
         };
-
         let resp = Transport::<GetUserGroupsResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
     }
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/delete
+
 
     /// 删除用户组
     pub async fn delete(&self, group_id: &str) -> crate::core::SDKResult<DeleteGroupResponse> {

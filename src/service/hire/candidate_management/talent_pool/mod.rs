@@ -462,7 +462,6 @@ impl TalentPoolService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 向人才库添加人才
     ///
     /// 该接口用于将指定的人才添加到人才库中，
@@ -540,7 +539,6 @@ impl TalentPoolService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 更新人才库
     ///
     /// 该接口用于更新现有人才库的信息，支持修改人才库

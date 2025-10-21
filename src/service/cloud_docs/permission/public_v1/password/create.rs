@@ -254,6 +254,10 @@ impl PasswordResult {
 
 impl CreatePasswordResponse {
     /// 获取密码信息
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM
+
     pub fn password_info(&self) -> &PasswordResult {
         &self.password
     }

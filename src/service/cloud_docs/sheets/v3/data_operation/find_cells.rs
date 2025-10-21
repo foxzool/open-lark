@@ -42,6 +42,10 @@ impl FindCellsRequest {
     pub fn builder() -> FindCellsRequestBuilder {
         FindCellsRequestBuilder::default()
     }
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM
+
 
     /// 验证请求参数
     pub fn validate(&self) -> SDKResult<()> {
@@ -146,6 +150,11 @@ impl FindCellsRequestBuilder {
         self
     }
 
+    /// 构建查找单元格请求
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM
     pub fn build(self) -> FindCellsRequest {
         let mut request = self.request;
         request.api_request.body = serde_json::to_vec(&request).unwrap();

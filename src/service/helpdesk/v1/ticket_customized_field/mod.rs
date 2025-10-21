@@ -197,7 +197,6 @@ impl TicketCustomizedFieldService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 更新工单自定义字段
     ///
     /// 该接口用于更新指定的工单自定义字段。
@@ -241,7 +240,6 @@ impl TicketCustomizedFieldService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取指定工单自定义字段
     ///
     /// 该接口用于获取指定的工单自定义字段详情。
@@ -282,7 +280,6 @@ impl TicketCustomizedFieldService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取全部工单自定义字段
     ///
     /// 该接口用于获取全部工单自定义字段列表。

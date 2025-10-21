@@ -329,7 +329,6 @@ impl TaskService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 创建任务
     pub async fn create(
         &self,
@@ -350,7 +349,6 @@ impl TaskService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

@@ -9,7 +9,9 @@
 //! 
 //! ## API 文档
 //! 
-//! 参考飞书开放平台文档: <https://open.feishu.cn/document/server-docs/group/chat/delete>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job_requirement/delete>
 //! 
 //! ## 实现状态
 //! 

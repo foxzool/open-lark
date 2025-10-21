@@ -29,7 +29,9 @@ impl FolderService {
     ///
     /// 该接口用于根据用户的访问凭证获取用户的根目录信息，包括根目录的token等。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-root-folder-meta>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/add_to_folder
     pub async fn get_root_folder_meta(
         &self,
         option: Option<RequestOption>,
@@ -49,7 +51,9 @@ impl FolderService {
     ///
     /// 该接口用于根据文件夹的token获取文件夹中的文件清单。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/list>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/portal_apply_schema/list
     pub async fn list_files(
         &self,
         request: ListFilesRequest,
@@ -86,7 +90,9 @@ impl FolderService {
     ///
     /// 该接口用于根据文件夹的token获取文件夹的详细元数据信息。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/get-folder-meta>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/add_to_folder
     pub async fn get_folder_meta(
         &self,
         request: GetFolderMetaRequest,
@@ -107,7 +113,9 @@ impl FolderService {
     ///
     /// 该接口用于根据父文件夹的token在其中创建一个新的空文件夹。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/create_folder>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/add_to_folder
     pub async fn create_folder(
         &self,
         request: CreateFolderRequest,
@@ -129,7 +137,9 @@ impl FolderService {
     ///
     /// 该接口用于根据文件夹的token移动或删除文件夹。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/folder/move-delete-folder>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/add_to_folder
     pub async fn move_or_delete_folder(
         &self,
         request: MoveOrDeleteFolderRequest,
@@ -157,7 +167,9 @@ impl FolderService {
     ///
     /// 该接口用于查询异步任务的执行状态，如移动或删除文件夹等操作。
     ///
-    /// <https://open.feishu.cn/document/server-docs/docs/drive-v1/file/async-task/task_check>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/list
     pub async fn check_async_task(
         &self,
         request: CheckAsyncTaskRequest,

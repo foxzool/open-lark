@@ -138,7 +138,6 @@ impl OkrContentService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 批量获取 OKR
     ///
     /// 根据提供的 OKR ID 列表批量获取 OKR 详细信息。

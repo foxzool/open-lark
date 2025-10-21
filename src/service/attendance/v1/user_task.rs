@@ -28,7 +28,9 @@ impl UserTaskService {
     ///
     /// 该接口用于批量导入员工的打卡记录，支持补录历史打卡数据。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_task/batch_create>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_daily_shift/batch_create
     pub async fn batch_create(
         &self,
         request: BatchCreateUserTaskRequest,
@@ -59,7 +61,9 @@ impl UserTaskService {
     ///
     /// 该接口用于查询指定用户在特定日期的打卡流水记录。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_task/get>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_task_remedy/create
     pub async fn get(
         &self,
         request: GetUserTaskRequest,
@@ -90,7 +94,9 @@ impl UserTaskService {
     ///
     /// 该接口用于批量查询多个用户的打卡流水记录，支持按时间范围和打卡类型筛选。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_task/query-2>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_task_remedy/create
     pub async fn query(
         &self,
         request: QueryUserTaskRequest,
@@ -144,7 +150,9 @@ impl UserTaskService {
     ///
     /// 该接口用于批量删除指定的打卡流水记录。
     ///
-    /// <https://open.feishu.cn/document/attendance-v1/user_task/batch_del>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/createser_task/batch_del
     pub async fn batch_del(
         &self,
         request: BatchDelUserTaskRequest,
@@ -175,7 +183,9 @@ impl UserTaskService {
     ///
     /// 该接口用于查询员工的考勤结果，包括工作时长、加班时长、考勤状态等汇总信息。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_task/query>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/query
     pub async fn query_result(
         &self,
         request: QueryUserTaskResultRequest,

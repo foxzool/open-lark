@@ -54,7 +54,6 @@ impl CountryRegionService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 分页批量查询国家/地区
     ///
     /// 分页查询所有国家/地区信息，支持条件筛选。

@@ -380,7 +380,6 @@ impl WebsiteService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 从官网下架职位
     ///
     /// 该接口用于将已发布的职位从官网下架，

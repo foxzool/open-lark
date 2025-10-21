@@ -56,7 +56,6 @@ impl UserService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取单个用户信息
     ///
     /// 根据用户ID获取门禁用户的详细信息。
@@ -84,7 +83,6 @@ impl UserService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取用户列表
     ///
     /// 分页获取门禁用户列表，支持多种筛选条件。
@@ -139,7 +137,6 @@ impl UserService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 上传人脸图片
     ///
     /// 为指定用户上传人脸图片，用于人脸识别门禁。

@@ -474,7 +474,6 @@ impl AttachmentService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 删除附件
     ///
     /// 该接口用于删除指定的附件文件，删除后
@@ -507,7 +506,6 @@ impl AttachmentService {
             body: vec![],
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

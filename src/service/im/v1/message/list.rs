@@ -229,7 +229,6 @@ impl MessageService {
     ) -> ListMessageIterator<'_> {
         ListMessageIterator::new(self, list_message_request)
     }
-
     /// 使用分页验证创建消息列表请求
     ///
     /// 提供一个更安全的方式来创建消息列表请求，自动验证分页参数

@@ -84,7 +84,6 @@ impl AttachmentService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 上传附件
     pub async fn upload(
         &self,
@@ -105,7 +104,6 @@ impl AttachmentService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

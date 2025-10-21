@@ -70,7 +70,6 @@ impl MessageCardService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 更新应用发送的消息卡片
     pub async fn patch(
         &self,
@@ -89,7 +88,6 @@ impl MessageCardService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

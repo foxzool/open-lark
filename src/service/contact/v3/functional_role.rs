@@ -14,7 +14,6 @@ impl FunctionalRoleService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 创建角色
     pub async fn create(
         &self,
@@ -55,6 +54,10 @@ impl FunctionalRoleService {
             Transport::<UpdateFunctionalRoleResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
     }
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get
+
 
     /// 获取单个角色信息
     pub async fn get(&self, role_id: &str) -> crate::core::SDKResult<GetFunctionalRoleResponse> {

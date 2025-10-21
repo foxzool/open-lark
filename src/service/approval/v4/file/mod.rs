@@ -40,6 +40,13 @@ impl FileService {
     }
 
     /// 上传文件
+    ///
+    /// 上传文件到审批系统，支持各种文件格式，为审批流程提供附件支持。
+    /// 上传的文件可以在审批单中引用，提供审批依据和材料支撑。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDOyUjL1gjM14SN4ITN
     pub async fn upload(
         &self,
         file_name: &str,

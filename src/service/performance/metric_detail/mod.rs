@@ -53,7 +53,6 @@ impl MetricDetailService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 录入被评估人关键指标数据
     ///
     /// 批量录入或更新被评估人的关键指标数据。

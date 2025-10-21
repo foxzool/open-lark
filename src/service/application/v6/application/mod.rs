@@ -26,7 +26,6 @@ impl ApplicationService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 转移应用所有者
     pub async fn transfer_owner(
         &self,
@@ -45,7 +44,6 @@ impl ApplicationService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -109,7 +107,6 @@ impl ApplicationService {
         if let Some(lang) = lang {
             query_params.insert("lang", lang);
         }
-
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -186,7 +183,6 @@ impl ApplicationService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取应用版本中开发者申请的通讯录权限范围
     pub async fn contacts_range_suggest(
         &self,
@@ -213,7 +209,6 @@ impl ApplicationService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 查看待审核的应用列表
     pub async fn underaudit_list(
         &self,
@@ -232,7 +227,6 @@ impl ApplicationService {
         if let Some(page_token) = page_token {
             query_params.insert("page_token", page_token);
         }
-
         let api_req = ApiRequest {
             http_method: Method::GET,
             api_path: crate::core::endpoints::application::APPLICATION_V6_APPS_UNDERAUDITLIST

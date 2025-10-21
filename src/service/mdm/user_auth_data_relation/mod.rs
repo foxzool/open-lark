@@ -54,7 +54,6 @@ impl UserAuthDataRelationService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 用户数据维度解绑
     ///
     /// 解除用户与指定数据维度的绑定关系，取消用户对该数据维度的访问权限。

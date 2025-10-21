@@ -54,7 +54,6 @@ impl FileService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 上传文件
     pub async fn create(
         &self,
@@ -150,12 +149,15 @@ impl FileUploadBuilder {
         self.request.file_name = file_name.to_string();
         self
     }
-
     /// 设置文件数据
     pub fn file_data(mut self, file_data: Vec<u8>) -> Self {
         self.request.file_data = file_data;
         self
     }
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/im
+
 
     /// 构建文件上传请求
     pub fn build(self) -> SDKResult<FileUploadRequest> {

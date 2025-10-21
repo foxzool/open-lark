@@ -27,6 +27,13 @@ impl SpaceNodeService {
     }
 
     /// 创建知识空间节点
+    ///
+    /// 在知识空间中创建新的节点，可以是文档、文件夹或其他类型的内容节点。
+    /// 支持设置节点标题、父节点、节点类型等属性。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn create(
         &self,
         request: CreateSpaceNodeRequest,
@@ -41,6 +48,13 @@ impl SpaceNodeService {
     }
 
     /// 获取知识空间节点
+    ///
+    /// 获取指定知识空间节点的详细信息，包括节点标题、类型、创建时间、
+    /// 子节点数量等。需要提供节点 ID 或节点路径。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn get(
         &self,
         request: GetSpaceNodeRequest,
@@ -55,6 +69,13 @@ impl SpaceNodeService {
     }
 
     /// 获取知识空间子节点列表
+    ///
+    /// 获取指定知识空间节点的直接子节点列表，包括子节点的标题、类型、
+    /// 创建时间等信息。支持分页查询和节点类型过滤。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn list(
         &self,
         request: ListSpaceNodeRequest,
@@ -69,6 +90,13 @@ impl SpaceNodeService {
     }
 
     /// 移动知识空间节点
+    ///
+    /// 将知识空间节点移动到新的父节点下，可以重新组织知识库的层级结构。
+    /// 支持跨父节点移动，但需要注意避免循环引用。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn r#move(
         &self,
         request: MoveSpaceNodeRequest,
@@ -83,6 +111,13 @@ impl SpaceNodeService {
     }
 
     /// 更新知识空间节点标题
+    ///
+    /// 更新知识空间节点的标题，支持修改文档或文件夹的名称。
+    /// 标题更新会立即生效，并在知识库中同步显示。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn update_title(
         &self,
         request: UpdateSpaceNodeTitleRequest,
@@ -97,6 +132,13 @@ impl SpaceNodeService {
     }
 
     /// 复制知识空间节点
+    ///
+    /// 复制知识空间节点到指定的目标位置，包括节点内容和子节点。
+    /// 支持跨空间复制，会保留原有的文档结构和内容。
+    ///
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/board-v1/whiteboard/theme
     pub async fn copy(
         &self,
         request: CopySpaceNodeRequest,

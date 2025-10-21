@@ -508,7 +508,6 @@ impl ApplicationService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 创建Offer
     ///
     /// 该接口用于为通过面试的投递创建Offer，
@@ -552,7 +551,6 @@ impl ApplicationService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 获取投递的Offer信息
     ///
     /// 该接口用于获取指定投递的Offer详细信息，

@@ -92,7 +92,6 @@ impl SuiteSearchService {
 
         Transport::request(api_req, &self.config, option).await
     }
-
     /// 搜索应用
     ///
     /// 该接口用于搜索飞书平台内的应用。

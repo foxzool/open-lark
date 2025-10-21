@@ -107,7 +107,9 @@ impl CalendarManagementService {
     /// ).await?;
     /// ```
     ///
-    /// 参考: <https://open.feishu.cn/document/server-docs/calendar-v4/calendar/get>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/role/get>
     pub async fn get(
         &self,
         request: GetCalendarRequest,

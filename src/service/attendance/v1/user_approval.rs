@@ -27,7 +27,9 @@ impl UserApprovalService {
     ///
     /// 该接口用于查询假勤审批数据，支持按状态、时间范围、用户等条件筛选。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_approval/query>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/query
     pub async fn query(
         &self,
         request: QueryUserApprovalRequest,
@@ -77,7 +79,9 @@ impl UserApprovalService {
     ///
     /// 该接口用于写入假勤审批的处理结果，包括通过或拒绝审批。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_approval/create>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_daily_shift/batch_create
     pub async fn create(
         &self,
         request: CreateUserApprovalRequest,
@@ -113,7 +117,9 @@ impl UserApprovalService {
     ///
     /// 该接口用于通知假勤审批状态的更新，支持审批通过、拒绝、撤回等操作。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_approval/process>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_approval/query
     pub async fn process(
         &self,
         request: ProcessUserApprovalRequest,

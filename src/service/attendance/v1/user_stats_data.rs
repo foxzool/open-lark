@@ -26,7 +26,9 @@ impl UserStatsDataService {
     ///
     /// 该接口用于更新考勤统计的设置，包括统计范围、日期、用户和字段等。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_stats_data/update>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_data/query
     pub async fn update(
         &self,
         request: UpdateUserStatsDataRequest,
@@ -57,7 +59,9 @@ impl UserStatsDataService {
     ///
     /// 该接口用于查询当前考勤统计的设置信息。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_stats_data/query>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/shift/query
     pub async fn query_settings(
         &self,
         request: QueryStatsSettingsRequest,
@@ -81,7 +85,9 @@ impl UserStatsDataService {
     ///
     /// 该接口用于查询考勤统计的可用字段信息，包括字段名称、类型等。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_stats_data/query-2>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_data/query
     pub async fn query_fields(
         &self,
         request: QueryStatsFieldsRequest,
@@ -109,7 +115,9 @@ impl UserStatsDataService {
     ///
     /// 该接口用于查询用户的考勤统计数据，支持按日期范围、用户和字段进行筛选。
     ///
-    /// <https://open.feishu.cn/document/server-docs/attendance-v1/user_stats_data/query-3>
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_stats_data/query
     pub async fn query_data(
         &self,
         request: QueryUserStatsDataRequest,

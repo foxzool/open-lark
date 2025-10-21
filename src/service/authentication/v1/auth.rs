@@ -12,7 +12,23 @@ use crate::core::{
 };
 use serde::{Deserialize, Serialize};
 
+/// 用户信息服务
 pub struct UserInfoService {
+    config: Config,
+}
+
+/// App访问令牌服务
+pub struct AppAccessTokenService {
+    config: Config,
+}
+
+/// Tenant访问令牌服务
+pub struct TenantAccessTokenService {
+    config: Config,
+}
+
+/// App Ticket服务
+pub struct AppTicketService {
     config: Config,
 }
 
@@ -20,6 +36,9 @@ impl UserInfoService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/get
 
     /// 获取登录用户信息
     pub async fn get(&self, user_access_token: impl ToString) -> SDKResult<UserInfo> {
@@ -35,6 +54,129 @@ impl UserInfoService {
         let api_resp: BaseResponse<UserInfo> =
             Transport::request(api_req, &self.config, Some(option)).await?;
         api_resp.into_result()
+    }
+}
+
+impl AppAccessTokenService {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/auth-v3/auth/app_access_token
+
+    /// 商店应用获取App Access Token
+    ///
+    /// 应用商店应用通过app_id和app_secret获取应用访问令牌。
+    /// App Access Token用于访问不需要用户授权的API接口。
+    pub async fn get(&self, req: &GetAppAccessTokenRequest) -> SDKResult<AppAccessTokenResponse> {
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
+            api_path: AUTH_V3_APP_ACCESS_TOKEN.to_string(),
+            supported_access_token_types: vec![],
+            body: serde_json::to_vec(req)?,
+            ..Default::default()
+        };
+
+        let resp = Transport::<AppAccessTokenResponse>::request(api_req, &self.config, None).await?;
+        resp.into_result()
+    }
+
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/auth-v3/auth/app_access_token/internal
+
+    /// 自建应用获取App Access Token
+    ///
+    /// 企业自建应用通过app_id和app_secret获取应用访问令牌。
+    /// App Access Token用于访问不需要用户授权的API接口。
+    pub async fn get_internal(&self, req: &GetAppAccessTokenInternalRequest) -> SDKResult<AppAccessTokenResponse> {
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
+            api_path: AUTH_V3_APP_ACCESS_TOKEN_INTERNAL.to_string(),
+            supported_access_token_types: vec![],
+            body: serde_json::to_vec(req)?,
+            ..Default::default()
+        };
+
+        let resp = Transport::<AppAccessTokenResponse>::request(api_req, &self.config, None).await?;
+        resp.into_result()
+    }
+}
+
+impl TenantAccessTokenService {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/auth-v3/auth/tenant_access_token
+
+    /// 商店应用获取Tenant Access Token
+    ///
+    /// 应用商店应用获取租户访问令牌，用于访问特定企业的资源和数据。
+    /// 需要企业管理员的授权和配置。
+    pub async fn get(&self, req: &GetTenantAccessTokenRequest) -> SDKResult<TenantAccessTokenResponse> {
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
+            api_path: AUTH_V3_TENANT_ACCESS_TOKEN.to_string(),
+            supported_access_token_types: vec![],
+            body: serde_json::to_vec(req)?,
+            ..Default::default()
+        };
+
+        let resp = Transport::<TenantAccessTokenResponse>::request(api_req, &self.config, None).await?;
+        resp.into_result()
+    }
+
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/auth-v3/auth/tenant_access_token/internal
+
+    /// 自建应用获取Tenant Access Token
+    ///
+    /// 企业自建应用获取租户访问令牌，用于访问特定企业的资源和数据。
+    /// 需要企业管理员的授权和配置。
+    pub async fn get_internal(&self, req: &GetTenantAccessTokenInternalRequest) -> SDKResult<TenantAccessTokenResponse> {
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
+            api_path: AUTH_V3_TENANT_ACCESS_TOKEN_INTERNAL.to_string(),
+            supported_access_token_types: vec![],
+            body: serde_json::to_vec(req)?,
+            ..Default::default()
+        };
+
+        let resp = Transport::<TenantAccessTokenResponse>::request(api_req, &self.config, None).await?;
+        resp.into_result()
+    }
+}
+
+impl AppTicketService {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/auth-v3/app_ticket/resend
+
+    /// 重新获取App Ticket
+    ///
+    /// 触发飞书重新推送app_ticket，用于解决ticket丢失或失效的问题。
+    /// App Ticket是应用接收事件推送的重要凭证。
+    pub async fn resend(&self, req: &ResendAppTicketRequest) -> SDKResult<ResendAppTicketResponse> {
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
+            api_path: AUTH_V3_APP_TICKET_RESEND.to_string(),
+            supported_access_token_types: vec![],
+            body: serde_json::to_vec(req)?,
+            ..Default::default()
+        };
+
+        let resp = Transport::<ResendAppTicketResponse>::request(api_req, &self.config, None).await?;
+        resp.into_result()
     }
 }
 
@@ -971,3 +1113,172 @@ mod tests {
         }
     }
 }
+
+// ===== 新增的令牌管理API请求和响应结构体 =====
+
+/// 商店应用获取App Access Token请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetAppAccessTokenRequest {
+    /// 应用ID
+    pub app_id: String,
+    /// 应用密钥
+    pub app_secret: String,
+    /// 应用类型，app_access_token接口可传递app_type为self_build或marketplace
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_type: Option<String>,
+}
+
+/// 自建应用获取App Access Token请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetAppAccessTokenInternalRequest {
+    /// 应用ID
+    pub app_id: String,
+    /// 应用密钥
+    pub app_secret: String,
+}
+
+/// 商店应用获取Tenant Access Token请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetTenantAccessTokenRequest {
+    /// 应用ID
+    pub app_id: String,
+    /// 应用密钥
+    pub app_secret: String,
+    /// 企业标识
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tenant_key: Option<String>,
+}
+
+/// 自建应用获取Tenant Access Token请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetTenantAccessTokenInternalRequest {
+    /// 应用ID
+    pub app_id: String,
+    /// 应用密钥
+    pub app_secret: String,
+    /// 企业标识
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tenant_key: Option<String>,
+}
+
+/// 重新获取App Ticket请求
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ResendAppTicketRequest {
+    /// 应用ID
+    pub app_id: String,
+    /// 应用密钥
+    pub app_secret: String,
+    /// 接收ticket的回调地址
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub callback_address: Option<String>,
+}
+
+/// App Access Token响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct AppAccessTokenResponse {
+    /// 应用访问令牌
+    pub app_access_token: String,
+    /// 令牌类型，目前固定为"bearer"
+    pub token_type: String,
+    /// 令牌有效期，秒数
+    #[serde(rename = "expire")]
+    pub expires_in: i64,
+    /// 刷新令牌，用于获取新的app_access_token
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub refresh_token: Option<String>,
+    /// 刷新令牌有效期，秒数
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub refresh_expires_in: Option<i64>,
+}
+
+/// Tenant Access Token响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct TenantAccessTokenResponse {
+    /// 租户访问令牌
+    pub tenant_access_token: String,
+    /// 令牌类型，目前固定为"bearer"
+    pub token_type: String,
+    /// 令牌有效期，秒数
+    #[serde(rename = "expire")]
+    pub expires_in: i64,
+    /// 刷新令牌，用于获取新的tenant_access_token
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub refresh_token: Option<String>,
+    /// 刷新令牌有效期，秒数
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub refresh_expires_in: Option<i64>,
+}
+
+/// 重新获取App Ticket响应
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct ResendAppTicketResponse {
+    /// App ticket，用于接收事件推送
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_ticket: Option<String>,
+    /// 重新发送的状态
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+// ApiResponse Trait implementations
+impl ApiResponseTrait for AppAccessTokenResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for TenantAccessTokenResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+impl ApiResponseTrait for ResendAppTicketResponse {
+    fn data_format() -> ResponseFormat {
+        ResponseFormat::Data
+    }
+}
+
+// Service Trait implementations
+impl Service for AppAccessTokenService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "app_access_token"
+    }
+
+    fn service_version() -> &'static str {
+        "v3"
+    }
+}
+
+impl Service for TenantAccessTokenService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "tenant_access_token"
+    }
+
+    fn service_version() -> &'static str {
+        "v3"
+    }
+}
+
+impl Service for AppTicketService {
+    fn config(&self) -> &Config {
+        &self.config
+    }
+
+    fn service_name() -> &'static str {
+        "app_ticket"
+    }
+
+    fn service_version() -> &'static str {
+        "v3"
+    }
+}
+  

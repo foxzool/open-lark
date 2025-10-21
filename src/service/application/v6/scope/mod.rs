@@ -25,7 +25,6 @@ impl ScopeService {
     pub fn new(config: Config) -> Self {
         Self { config }
     }
-
     /// 向管理员申请授权
     pub async fn apply(
         &self,
@@ -44,7 +43,6 @@ impl ScopeService {
             body: serde_json::to_vec(&request)?,
             ..Default::default()
         };
-
         Transport::request(api_req, &self.config, option).await
     }
 

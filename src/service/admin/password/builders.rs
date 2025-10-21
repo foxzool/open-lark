@@ -30,6 +30,9 @@ impl PasswordResetRequestBuilder {
         self.request.password = password.to_string();
         self
     }
+    /// # API文档
+    ///
+    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM
 
     /// 构建密码重置请求
     pub fn build(self) -> SDKResult<PasswordResetRequest> {
