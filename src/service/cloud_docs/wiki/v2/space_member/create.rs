@@ -145,10 +145,9 @@ pub async fn create_space_member(
     option: Option<RequestOption>,
 ) -> SDKResult<BaseResponse<CreateSpaceMemberResponse>> {
     let mut api_req = request.api_request;
-    api_req.http_method = Method::POST;
-    api_req.api_path =
-        EndpointBuilder::replace_param(WIKI_V2_SPACE_MEMBER_CREATE, "space_id", &request.space_id);
-    api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+    api_req.set_http_method(Method::POST);
+    api_req.set_api_path(EndpointBuilder::replace_param(WIKI_V2_SPACE_MEMBER_CREATE, "space_id", &request.space_id));
+    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
     let api_resp = Transport::request(api_req, config, option).await?;
     Ok(api_resp)

@@ -33,9 +33,9 @@ impl UserDailyShiftService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BatchCreateUserDailyShiftRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = ATTENDANCE_V1_USER_DAILY_SHIFTS_BATCH_CREATE.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(ATTENDANCE_V1_USER_DAILY_SHIFTS_BATCH_CREATE.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加必需的查询参数
         api_req
@@ -66,9 +66,9 @@ impl UserDailyShiftService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<QueryUserDailyShiftRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = ATTENDANCE_V1_USER_DAILY_SHIFTS_QUERY.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(ATTENDANCE_V1_USER_DAILY_SHIFTS_QUERY.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加必需的查询参数
         api_req
@@ -102,9 +102,9 @@ impl UserDailyShiftService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BatchCreateTempUserDailyShiftRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = ATTENDANCE_V1_USER_DAILY_SHIFTS_BATCH_CREATE_TEMP.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(ATTENDANCE_V1_USER_DAILY_SHIFTS_BATCH_CREATE_TEMP.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加必需的查询参数
         api_req

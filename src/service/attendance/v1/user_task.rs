@@ -37,9 +37,9 @@ impl UserTaskService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BatchCreateUserTaskRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = ATTENDANCE_V1_USER_TASKS_BATCH_CREATE.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(ATTENDANCE_V1_USER_TASKS_BATCH_CREATE.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -70,13 +70,13 @@ impl UserTaskService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetUserTaskRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::GET;
-        api_req.api_path = EndpointBuilder::replace_param(
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(
             ATTENDANCE_V1_USER_TASK_GET,
             "user_id",
             &request.user_id,
-        );
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -103,9 +103,9 @@ impl UserTaskService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<QueryUserTaskRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::GET;
-        api_req.api_path = ATTENDANCE_V1_USER_TASKS_QUERY.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(ATTENDANCE_V1_USER_TASKS_QUERY.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -159,9 +159,9 @@ impl UserTaskService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BatchDelUserTaskRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = ATTENDANCE_V1_USER_TASKS_BATCH_DELETE.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(ATTENDANCE_V1_USER_TASKS_BATCH_DELETE.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -192,9 +192,9 @@ impl UserTaskService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<QueryUserTaskResultRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::GET;
-        api_req.api_path = ATTENDANCE_V1_USER_TASK_RESULTS_QUERY.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(ATTENDANCE_V1_USER_TASK_RESULTS_QUERY.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req

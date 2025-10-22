@@ -107,12 +107,12 @@ pub async fn delete_record(
     option: Option<RequestOption>,
 ) -> SDKResult<BaseResponse<DeleteRecordResponse>> {
     let mut api_req = request.api_request;
-    api_req.http_method = Method::DELETE;
+    api_req.set_http_method(Method::DELETE);
     api_req.api_path = BITABLE_V1_RECORD_DELETE
         .replace("{app_token}", &request.app_token)
         .replace("{table_id}", &request.table_id)
         .replace("{record_id}", &request.record_id);
-    api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
     let api_resp = Transport::request(api_req, config, option).await?;
     Ok(api_resp)

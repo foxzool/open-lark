@@ -40,13 +40,13 @@ impl ArchiveRuleService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<QueryArchiveStatsFieldsRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::GET;
-        api_req.api_path = EndpointBuilder::replace_param(
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(
             ATTENDANCE_V1_ARCHIVE_RULE_USER_STATS_FIELDS,
             "archive_rule_id",
             &request.archive_rule_id,
-        );
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -70,13 +70,13 @@ impl ArchiveRuleService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UploadArchiveReportRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = EndpointBuilder::replace_param(
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(
             ATTENDANCE_V1_ARCHIVE_RULE_UPLOAD_REPORT,
             "archive_rule_id",
             &request.archive_rule_id,
-        );
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -107,13 +107,13 @@ impl ArchiveRuleService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<DelArchiveReportRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = EndpointBuilder::replace_param(
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(
             ATTENDANCE_V1_ARCHIVE_RULE_DEL_REPORT,
             "archive_rule_id",
             &request.archive_rule_id,
-        );
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -144,9 +144,9 @@ impl ArchiveRuleService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListArchiveRulesRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::GET;
-        api_req.api_path = ATTENDANCE_V1_ARCHIVE_RULES.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(ATTENDANCE_V1_ARCHIVE_RULES.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req

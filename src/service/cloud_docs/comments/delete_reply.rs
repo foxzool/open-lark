@@ -184,7 +184,7 @@ pub async fn delete_reply(
     option: Option<RequestOption>,
 ) -> SDKResult<BaseResponse<DeleteReplyResponse>> {
     let mut api_req = request.api_request;
-    api_req.http_method = Method::DELETE;
+    api_req.set_http_method(Method::DELETE);
     use std::collections::HashMap;
     let mut params = HashMap::new();
     params.insert("comment_id".to_string(), request.comment_id.clone());
@@ -197,10 +197,10 @@ pub async fn delete_reply(
 
     // 添加用户ID类型查询参数
     if let Some(user_id_type) = request.user_id_type {
-        api_req.api_path = format!("{}&user_id_type={}", api_req.api_path, user_id_type);
+        api_req.set_api_path(format!("{}&user_id_type={}", api_req.api_path, user_id_type));
     }
 
-    api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
     let api_resp = Transport::request(api_req, config, option).await?;
     Ok(api_resp)

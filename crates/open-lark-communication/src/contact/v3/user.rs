@@ -15,6 +15,11 @@ impl UserService {
         Self { config }
     }
 
+    /// 获取配置引用
+    pub fn config(&self) -> &Config {
+        &self.config
+    }
+
     /// 创建用户
     pub async fn create(
         &self,

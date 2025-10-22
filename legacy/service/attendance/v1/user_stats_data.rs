@@ -35,9 +35,9 @@ impl UserStatsDataService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UpdateUserStatsDataRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = ATTENDANCE_V1_USER_STATS_DATAS_UPDATE.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(ATTENDANCE_V1_USER_STATS_DATAS_UPDATE.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -68,9 +68,9 @@ impl UserStatsDataService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<QueryStatsSettingsRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::GET;
-        api_req.api_path = ATTENDANCE_V1_USER_STATS_DATAS_QUERY.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(ATTENDANCE_V1_USER_STATS_DATAS_QUERY.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -94,9 +94,9 @@ impl UserStatsDataService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<QueryStatsFieldsRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::GET;
-        api_req.api_path = ATTENDANCE_V1_USER_STATS_DATAS_QUERY_FIELDS.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(ATTENDANCE_V1_USER_STATS_DATAS_QUERY_FIELDS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -124,9 +124,9 @@ impl UserStatsDataService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<QueryUserStatsDataRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = ATTENDANCE_V1_USER_STATS_DATAS_QUERY_DATA.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(ATTENDANCE_V1_USER_STATS_DATAS_QUERY_DATA.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req

@@ -31,9 +31,9 @@ impl PermissionsService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetPermissionResponse>> {
         let mut api_req = request.api_request;
-        api_req.http_method = Method::GET;
-        api_req.api_path = DRIVE_V2_PERMISSIONS_PUBLIC.replace("{}", &request.token);
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(DRIVE_V2_PERMISSIONS_PUBLIC.replace("{}", &request.token));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 
@@ -47,9 +47,9 @@ impl PermissionsService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetPermissionResponse>> {
         let mut api_req = request.api_request;
-        api_req.http_method = Method::PATCH;
-        api_req.api_path = DRIVE_V2_PERMISSIONS_PUBLIC.replace("{}", &request.token);
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        api_req.set_http_method(Method::PATCH);
+        api_req.set_api_path(DRIVE_V2_PERMISSIONS_PUBLIC.replace("{}", &request.token));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 

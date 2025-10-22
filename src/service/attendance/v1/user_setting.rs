@@ -37,13 +37,13 @@ impl UserSettingService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ModifyUserSettingRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = EndpointBuilder::replace_param(
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(
             ATTENDANCE_V1_USER_SETTINGS_MODIFY,
             "user_id",
             &request.user_id,
-        );
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -85,9 +85,9 @@ impl UserSettingService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<QueryUserSettingRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = ATTENDANCE_V1_USER_SETTINGS_QUERY.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(ATTENDANCE_V1_USER_SETTINGS_QUERY.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -118,13 +118,13 @@ impl UserSettingService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UploadUserPhotoRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = EndpointBuilder::replace_param(
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(
             ATTENDANCE_V1_USER_SETTINGS_UPLOAD,
             "user_id",
             &request.user_id,
-        );
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -167,13 +167,13 @@ impl UserSettingService {
         option: Option<RequestOption>,
     ) -> SDKResult<Vec<u8>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::GET;
-        api_req.api_path = EndpointBuilder::replace_param(
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(
             ATTENDANCE_V1_USER_SETTINGS_DOWNLOAD,
             "user_id",
             &request.user_id,
-        );
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req

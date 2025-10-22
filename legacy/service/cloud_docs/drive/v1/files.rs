@@ -291,9 +291,9 @@ impl FilesService {
         option: Option<RequestOption>,
     ) -> SDKResult<UploadAllResponse> {
         let mut api_req = upload_all_request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = DRIVE_V1_FILES_UPLOAD_ALL.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(DRIVE_V1_FILES_UPLOAD_ALL.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<UploadAllResponse> =
             Transport::request(api_req, &self.config, option).await?;
@@ -315,9 +315,9 @@ impl FilesService {
         option: Option<RequestOption>,
     ) -> SDKResult<BinaryResponse> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::GET;
-        api_req.api_path = DRIVE_V1_FILE_DOWNLOAD.replace("{}", &request.file_token);
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(DRIVE_V1_FILE_DOWNLOAD.replace("{}", &request.file_token));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<BinaryResponse> =
             Transport::request(api_req, &self.config, option).await?;

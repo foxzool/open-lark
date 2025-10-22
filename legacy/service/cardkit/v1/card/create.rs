@@ -153,9 +153,9 @@ impl CardService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateCardResponse>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = CARDKIT_V1_CARDS.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(CARDKIT_V1_CARDS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)

@@ -191,9 +191,9 @@ impl DepartmentService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<FilterDepartmentResponse>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::GET;
-        api_req.api_path = DIRECTORY_V1_DEPARTMENTS_FILTER.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(DIRECTORY_V1_DEPARTMENTS_FILTER.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)

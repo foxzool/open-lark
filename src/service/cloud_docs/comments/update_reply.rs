@@ -198,7 +198,7 @@ pub async fn update_reply(
     option: Option<RequestOption>,
 ) -> SDKResult<BaseResponse<UpdateReplyResponse>> {
     let mut api_req = request.api_request;
-    api_req.http_method = Method::PUT;
+    api_req.set_http_method(Method::PUT);
     api_req.api_path = format!(
         "{}?file_type={}&file_token={}",
         EndpointBuilder::replace_params_from_array(
@@ -214,10 +214,10 @@ pub async fn update_reply(
 
     // 添加用户ID类型查询参数
     if let Some(user_id_type) = request.user_id_type {
-        api_req.api_path = format!("{}&user_id_type={}", api_req.api_path, user_id_type);
+        api_req.set_api_path(format!("{}&user_id_type={}", api_req.api_path, user_id_type));
     }
 
-    api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
     let api_resp = Transport::request(api_req, config, option).await?;
     Ok(api_resp)

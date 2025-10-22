@@ -161,13 +161,13 @@ impl EmployeeService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ToBeResignedEmployeeResponse>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::POST;
+        api_req.set_http_method(Method::POST);
         api_req.api_path = EndpointBuilder::replace_param(
             DIRECTORY_V1_EMPLOYEE_TO_BE_RESIGNED,
             "employee_id",
             &request.employee_id,
         );
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)

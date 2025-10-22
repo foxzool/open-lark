@@ -31,9 +31,9 @@ impl LeaveEmployExpireRecordService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetLeaveEmployExpireRecordRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::GET;
-        api_req.api_path = ATTENDANCE_V1_LEAVE_EMPLOY_EXPIRE_RECORDS.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(ATTENDANCE_V1_LEAVE_EMPLOY_EXPIRE_RECORDS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req

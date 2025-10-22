@@ -24,13 +24,13 @@ impl SpreadsheetSheetFilterViewService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UpdateFilterViewConditionResponseData>> {
         let mut api_req = request.api_request;
-        api_req.http_method = Method::PUT;
+        api_req.set_http_method(Method::PUT);
         api_req.api_path = SHEETS_V3_SPREADSHEET_FILTER_VIEW_CONDITION_GET
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id)
             .replace("{}", &request.filter_view_id)
             .replace("{}", &request.condition_id);
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 

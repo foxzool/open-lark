@@ -164,8 +164,8 @@ impl SpreadsheetService {
         api_req.api_path = SHEETS_V2_SPREADSHEET_VALUES_RANGE
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.range);
-        api_req.http_method = reqwest::Method::GET;
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::App];
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::App]);
 
         let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
 

@@ -256,7 +256,7 @@ pub async fn create_permission_member(
     option: Option<RequestOption>,
 ) -> SDKResult<BaseResponse<CreatePermissionMemberResponse>> {
     let mut api_req = request.api_request;
-    api_req.http_method = Method::POST;
+    api_req.set_http_method(Method::POST);
     api_req.api_path = format!(
         "{}?type={}",
         EndpointBuilder::replace_param(DRIVE_V1_PERMISSIONS_MEMBERS, "token", &request.token),
@@ -271,7 +271,7 @@ pub async fn create_permission_member(
         );
     }
 
-    api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
     let api_resp = Transport::request(api_req, config, option).await?;
     Ok(api_resp)

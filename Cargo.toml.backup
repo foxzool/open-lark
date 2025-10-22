@@ -1,0 +1,593 @@
+[package]
+name = "open-lark"
+version = "0.14.0"
+edition = "2021"
+authors = ["ZoOL <zhooul@gmail.com>"]
+readme = "README.md"
+description = "Enterprise-grade Lark/Feishu Open API SDK with comprehensive Chinese documentation and advanced error handling"
+keywords = ["sdk", "feishu", "lark", "api"]
+categories = ["api-bindings"]
+documentation = "https://docs.rs/open-lark"
+repository = "https://github.com/foxzool/open-lark"
+homepage = "https://github.com/foxzool/open-lark"
+license = "Apache-2.0"
+
+[features]
+default = ["im", "cloud-docs", "contact", "group", "authentication", "search"]
+benchmarks = []
+dev-tests = []
+integration-tests = []
+full = [
+    "acs", "admin", "ai", "aily", "apass", "application", "approval", "attendance",
+    "authentication", "bot", "calendar", "cardkit", "cloud-docs", "contact", 
+    "corehr", "directory", "ehr", "elearning", "group", "helpdesk", "hire",
+    "human-authentication", "im", "lingo", "mail", "mdm", "minutes", "moments",
+    "okr", "payroll", "performance", "personal-settings", "report", "search",
+    "security-and-compliance", "task", "tenant", "tenant-tag", "trust-party",
+    "vc", "verification", "workplace"
+]
+
+# Core services - most commonly used
+im = []
+cloud-docs = []
+contact = []
+group = []
+authentication = []
+search = []
+
+# Advanced services
+acs = []
+admin = []
+ai = []
+aily = []
+apass = []
+application = []
+approval = []
+attendance = []
+bot = []
+calendar = []
+cardkit = []
+corehr = []
+directory = []
+ehr = []
+elearning = []
+helpdesk = []
+hire = []
+human-authentication = []
+lingo = []
+mail = []
+mdm = []
+minutes = []
+moments = []
+okr = []
+payroll = []
+performance = []
+personal-settings = []
+report = []
+security-and-compliance = []
+task = []
+tenant = []
+tenant-tag = []
+trust-party = []
+vc = []
+verification = []
+workplace = []
+
+# WebSocket support
+websocket = ["tokio-tungstenite", "prost", "lark-websocket-protobuf"]
+
+# OpenTelemetry support
+otel = ["opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-opentelemetry"]
+
+[workspace]
+members = ["crates/*"]
+
+[dependencies]
+lark-websocket-protobuf = { path = "crates/protobuf", version = "0.1.1", optional = true }
+
+anyhow = "1.0.86"
+async-trait = "0.1.83"
+base64 = "0.22.1"
+chrono = { version = "0.4.38", features = ["serde"] }
+futures-util = { version = "0.3.30", default-features = false, features = [
+    "sink",
+    "std",
+] }
+hmac = "0.12.1"
+log = "0.4.21"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+opentelemetry = { version = "0.24", optional = true }
+opentelemetry_sdk = { version = "0.24", features = ["rt-tokio"], optional = true }
+opentelemetry-otlp = { version = "0.17", optional = true }
+tracing-opentelemetry = { version = "0.25", optional = true }
+prost = { version = "0.13", optional = true }
+quick_cache = { version = "0.6.3", features = [] }
+reqwest = { version = "0.12.7", default-features = false, features = [
+    "json",
+    "multipart",
+    "rustls-tls",
+] }
+rand = "0.8"
+simd-adler32 = "0.3.7"
+serde_repr = "0.1.19"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha2 = "0.10.8"
+strum = "0.27"
+strum_macros = "0.27"
+thiserror = "2.0"
+tokio = { version = "1.38", features = ["rt", "rt-multi-thread", "macros"] }
+url = { version = "2.5.0", features = ["serde"] }
+tokio-tungstenite = { version = "0.23", features = [
+    "rustls-tls-native-roots",
+], optional = true }
+walkdir = "2.4"
+regex = "1.10"
+
+
+[dev-dependencies]
+dotenvy = "0.15.7"
+env_logger = "0.11.3"
+uuid = { version = "1.8.0", features = ["v4"] }
+criterion = { version = "0.5", features = ["html_reports", "async_tokio"] }
+rstest = "0.18"
+proptest = "1"
+serial_test = "3"
+tempfile = "3"
+test-log = { version = "0.2", features = ["trace"] }
+tracing-test = "0.2"
+wiremock = "0.6"
+once_cell = "1.19"
+mockall = "0.12"
+
+# -------------------------------------------
+# Benches
+# -------------------------------------------
+
+[[bench]]
+name = "json_parsing_bench"
+harness = false
+required-features = ["benchmarks"]
+
+[[bench]]
+name = "websocket_frame_bench"
+harness = false
+required-features = ["benchmarks", "websocket"]
+
+[[bench]]
+name = "token_performance_bench"
+harness = false
+required-features = ["benchmarks"]
+
+[[bench]]
+name = "api_throughput_bench"
+harness = false
+required-features = ["benchmarks"]
+
+# ===========================================
+# Tools
+# ===========================================
+
+[[bin]]
+name = "api_consistency_checker"
+path = "tools/api_consistency_checker.rs"
+
+
+[[bin]]
+name = "enhanced_api_checker"
+path = "tools/enhanced_api_checker.rs"
+[[bin]]
+name = "api_compatibility_tester"
+path = "tools/api_compatibility_tester.rs"
+
+# ===========================================
+# Examples
+# ===========================================
+
+[[example]]
+name = "client_setup"
+path = "examples/basic/client_setup.rs"
+
+[[example]]
+name = "event_handler"
+path = "examples/basic/event_handler.rs"
+required-features = ["websocket", "im", "contact", "cloud-docs", "calendar", "vc", "approval"]
+
+[[example]]
+name = "acs_example"
+path = "examples/api/acs_example.rs"
+required-features = ["acs"]
+
+[[example]]
+name = "apass_example"
+path = "examples/api/apass_example.rs"
+required-features = ["apass"]
+
+[[example]]
+name = "websocket_client"
+path = "examples/basic/websocket_client.rs"
+required-features = ["websocket"]
+
+
+[[example]]
+name = "enhanced_drive_operations"
+path = "examples/api/enhanced_drive_operations.rs"
+required-features = ["cloud-docs"]
+
+[[example]]
+name = "drive_builder_execute_demo"
+path = "examples/api/drive_builder_execute_demo.rs"
+required-features = ["cloud-docs"]
+
+[[example]]
+name = "enterprise_scenario_with_enhanced_builder"
+path = "examples/api/enterprise_scenario_with_enhanced_builder.rs"
+required-features = ["cloud-docs"]
+
+[[example]]
+name = "multi_service_integration_enhanced"
+path = "examples/api/multi_service_integration_enhanced.rs"
+required-features = ["cloud-docs", "im", "contact"]
+
+[[example]]
+name = "enhanced_error_handling"
+path = "examples/api/enhanced_error_handling.rs"
+required-features = ["im"]
+
+# Core API Examples
+# [[example]]
+# name = "core_send_message"
+# path = "examples/core/send_message.rs"
+
+[[example]]
+name = "core_get_chat_history"
+path = "examples/core/get_chat_history.rs"
+required-features = ["im"]
+
+# [[example]]
+# name = "core_upload_file"
+# path = "examples/core/upload_file.rs"
+
+[[example]]
+name = "core_download_file"
+path = "examples/core/download_file.rs"
+required-features = ["cloud-docs"]
+
+[[example]]
+name = "core_list_folder"
+path = "examples/core/list_folder.rs"
+required-features = ["cloud-docs"]
+
+[[example]]
+name = "core_query_records"
+path = "examples/core/query_records.rs"
+required-features = ["cloud-docs"]
+
+[[example]]
+name = "core_create_record"
+path = "examples/core/create_record.rs"
+required-features = ["cloud-docs"]
+
+[[example]]
+name = "core_read_write_sheet"
+path = "examples/core/read_write_sheet.rs"
+required-features = ["cloud-docs"]
+
+[[example]]
+name = "core_create_sheet"
+path = "examples/core/create_sheet.rs"
+required-features = ["cloud-docs"]
+
+[[example]]
+name = "core_query_attendance"
+path = "examples/core/query_attendance.rs"
+required-features = ["attendance"]
+
+[[example]]
+name = "core_process_leave_approval"
+path = "examples/core/process_leave_approval.rs"
+required-features = ["attendance"]
+
+[[example]]
+name = "core_search_user"
+path = "examples/core/search_user.rs"
+required-features = ["search"]
+
+[[example]]
+name = "core_refresh_token"
+path = "examples/core/refresh_token.rs"
+required-features = ["authentication"]
+
+[[example]]
+name = "permission_owned_demo"
+path = "examples/api/permission_owned_demo.rs"
+required-features = ["cloud-docs"]
+
+
+[[example]]
+name = "calendar_demo"
+path = "examples/api/calendar_demo.rs"
+required-features = ["calendar"]
+
+[[example]]
+name = "cardkit_demo"
+path = "examples/api/cardkit_demo.rs"
+required-features = ["cardkit"]
+
+[[example]]
+name = "directory_demo"
+path = "examples/api/directory_demo.rs"
+required-features = ["directory"]
+
+[[example]]
+name = "directory_v1_employee_extended"
+path = "examples/api/directory_v1_employee_extended.rs"
+required-features = ["directory"]
+
+[[example]]
+name = "directory_v1_department_extended"
+path = "examples/api/directory_v1_department_extended.rs"
+required-features = ["directory"]
+
+# [[example]]
+# name = "contact_v3_comprehensive"
+# path = "examples/api/contact_v3_comprehensive.rs"
+
+[[example]]
+name = "group_demo"
+path = "examples/api/group_demo.rs"
+required-features = ["group"]
+
+[[example]]
+name = "im_v1_demo"
+path = "examples/api/im_v1_demo.rs"
+required-features = ["im"]
+
+[[example]]
+name = "im_v2_demo"
+path = "examples/api/im_v2_demo.rs"
+required-features = ["im"]
+
+[[example]]
+name = "tenant_tag_demo"
+path = "examples/api/tenant_tag_demo.rs"
+required-features = ["tenant-tag"]
+
+[[example]]
+name = "tenant_v2_query"
+path = "examples/api/tenant_v2_query.rs"
+required-features = ["tenant"]
+
+[[example]]
+name = "verification_v1_get"
+path = "examples/api/verification_v1_get.rs"
+required-features = ["verification"]
+
+[[example]]
+name = "personal_settings_v1_system_status"
+path = "examples/api/personal_settings_v1_system_status.rs"
+required-features = ["personal-settings"]
+
+[[example]]
+name = "search_v2_comprehensive"
+path = "examples/api/search_v2_comprehensive.rs"
+required-features = ["search"]
+
+[[example]]
+name = "vc_v1"
+path = "examples/api/vc_v1.rs"
+required-features = ["vc"]
+
+[[example]]
+name = "minutes_v1"
+path = "examples/api/minutes_v1.rs"
+required-features = ["minutes"]
+
+[[example]]
+name = "approval_demo"
+path = "examples/api/approval_demo.rs"
+required-features = ["approval"]
+
+[[example]]
+name = "bot_demo"
+path = "examples/api/bot_demo.rs"
+required-features = ["bot"]
+
+[[example]]
+name = "helpdesk_demo"
+path = "examples/api/helpdesk_demo.rs"
+required-features = ["helpdesk"]
+
+[[example]]
+name = "task_demo"
+path = "examples/api/task_demo.rs"
+required-features = ["task"]
+
+[[example]]
+name = "mail_demo"
+path = "examples/api/mail_demo.rs"
+required-features = ["mail"]
+
+[[example]]
+name = "application_demo"
+path = "examples/api/application_demo.rs"
+required-features = ["application"]
+
+[[example]]
+name = "ai_comprehensive"
+path = "examples/api/ai_comprehensive.rs"
+required-features = ["ai"]
+
+[[example]]
+name = "aily_v1_example"
+path = "examples/api/aily_v1_example.rs"
+required-features = ["aily"]
+
+[[example]]
+name = "admin_demo"
+path = "examples/api/admin_demo.rs"
+required-features = ["admin"]
+
+[[example]]
+name = "moments_demo"
+path = "examples/api/moments_demo.rs"
+required-features = ["moments"]
+
+
+[[example]]
+name = "ehr_v1_demo"
+path = "examples/api/ehr_v1_demo.rs"
+required-features = ["ehr"]
+
+[[example]]
+name = "corehr_demo"
+path = "examples/api/corehr_demo.rs"
+required-features = ["corehr"]
+
+[[example]]
+name = "payroll_demo"
+path = "examples/api/payroll_demo.rs"
+required-features = ["payroll"]
+
+[[example]]
+name = "hire_v1_example"
+path = "examples/api/hire_v1_example.rs"
+required-features = ["hire"]
+
+[[example]]
+name = "human_authentication_example"
+path = "examples/api/human_authentication_example.rs"
+required-features = ["human-authentication"]
+
+[[example]]
+name = "lingo_classification_repo"
+path = "examples/api/lingo_classification_repo.rs"
+required-features = ["lingo"]
+
+[[example]]
+name = "lingo_draft"
+path = "examples/api/lingo_draft.rs"
+required-features = ["lingo"]
+
+[[example]]
+name = "lingo_entity"
+path = "examples/api/lingo_entity.rs"
+required-features = ["lingo"]
+
+[[example]]
+name = "okr_example"
+path = "examples/api/okr_example.rs"
+required-features = ["okr"]
+
+[[example]]
+name = "performance_example"
+path = "examples/api/performance_example.rs"
+required-features = ["performance"]
+
+[[example]]
+name = "trust_party_organization"
+path = "examples/api/trust_party_organization.rs"
+required-features = ["trust-party"]
+
+[[example]]
+name = "trust_party_rules"
+path = "examples/api/trust_party_rules.rs"
+required-features = ["trust-party"]
+
+[[example]]
+name = "workplace_access_data"
+path = "examples/api/workplace_access_data.rs"
+required-features = ["workplace"]
+
+[[example]]
+name = "workplace_app_recommend"
+path = "examples/api/workplace_app_recommend.rs"
+required-features = ["workplace"]
+
+[[example]]
+name = "mdm_country_region"
+path = "examples/api/mdm_country_region.rs"
+required-features = ["mdm"]
+
+[[example]]
+name = "mdm_user_data_relation"
+path = "examples/api/mdm_user_data_relation.rs"
+required-features = ["mdm"]
+
+[[example]]
+name = "report_v1_query_rules"
+path = "examples/api/report_v1_query_rules.rs"
+required-features = ["report"]
+
+[[example]]
+name = "report_v1_query_tasks"
+path = "examples/api/report_v1_query_tasks.rs"
+required-features = ["report"]
+
+[[example]]
+name = "report_v1_remove_rule_view"
+path = "examples/api/report_v1_remove_rule_view.rs"
+required-features = ["report"]
+
+[[example]]
+name = "elearning_v2_course_registration"
+path = "examples/api/elearning_v2_course_registration.rs"
+required-features = ["elearning"]
+
+[[example]]
+name = "elearning_v2_management"
+path = "examples/api/elearning_v2_management.rs"
+required-features = ["elearning"]
+
+[[example]]
+name = "security_and_compliance_openapi_log"
+path = "examples/api/security_and_compliance_openapi_log.rs"
+required-features = ["security-and-compliance"]
+
+[[example]]
+name = "security_and_compliance_audit_log"
+path = "examples/api/security_and_compliance_audit_log.rs"
+required-features = ["security-and-compliance"]
+
+
+[[example]]
+name = "contact_v3_role_management"
+path = "examples/api/contact_v3_role_management.rs"
+required-features = ["contact"]
+
+[[example]]
+name = "unified_builder_pattern"
+path = "examples/api/unified_builder_pattern.rs"
+required-features = ["contact"]
+
+[[example]]
+name = "service_observability_demo"
+path = "examples/tracing/service_observability_demo.rs"
+required-features = ["lingo"]
+
+[[example]]
+name = "opentelemetry_demo"
+path = "examples/tracing/opentelemetry_demo.rs"
+required-features = ["otel"]
+
+[[example]]
+name = "drive_builder_pattern"
+path = "examples/api/drive_builder_pattern.rs"
+required-features = ["cloud-docs"]
+
+[[example]]
+name = "im_modern_builder_pattern"
+path = "examples/api/im_modern_builder_pattern.rs"
+required-features = ["im"]
+
+[[example]]
+name = "im_file_image_builder_pattern"
+path = "examples/api/im_file_image_builder_pattern.rs"
+required-features = ["im"]
+
+
+# ===========================================
+# Benchmarks
+# ===========================================
+# (Benchmarks removed due to missing implementation files)

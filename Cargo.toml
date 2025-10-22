@@ -1,90 +1,39 @@
-[package]
-name = "open-lark"
-version = "0.14.0"
-edition = "2021"
-authors = ["ZoOL <zhooul@gmail.com>"]
-readme = "README.md"
-description = "Enterprise-grade Lark/Feishu Open API SDK with comprehensive Chinese documentation and advanced error handling"
-keywords = ["sdk", "feishu", "lark", "api"]
-categories = ["api-bindings"]
-documentation = "https://docs.rs/open-lark"
-repository = "https://github.com/foxzool/open-lark"
-homepage = "https://github.com/foxzool/open-lark"
-license = "Apache-2.0"
-
-[features]
-default = ["im", "cloud-docs", "contact", "group", "authentication", "search"]
-benchmarks = []
-dev-tests = []
-integration-tests = []
-full = [
-    "acs", "admin", "ai", "aily", "apass", "application", "approval", "attendance",
-    "authentication", "bot", "calendar", "cardkit", "cloud-docs", "contact", 
-    "corehr", "directory", "ehr", "elearning", "group", "helpdesk", "hire",
-    "human-authentication", "im", "lingo", "mail", "mdm", "minutes", "moments",
-    "okr", "payroll", "performance", "personal-settings", "report", "search",
-    "security-and-compliance", "task", "tenant", "tenant-tag", "trust-party",
-    "vc", "verification", "workplace"
+[workspace]
+resolver = "2"
+members = [
+    "crates/open-lark-core",
+    "crates/open-lark-communication",
+    "crates/open-lark-collaboration",
+    "crates/open-lark-hr-suite",
+    "crates/open-lark-ai-platform",
+    "crates/open-lark-enterprise",
+    "crates/open-lark-integrations",
+    "crates/open-lark-extensions",
+    "crates/protobuf",
 ]
 
-# Core services - most commonly used
-im = []
-cloud-docs = []
-contact = []
-group = []
-authentication = []
-search = []
+[workspace.package]
+version = "0.15.0"
+edition = "2021"
+authors = ["ZoOL <zhooul@gmail.com>"]
+license = "Apache-2.0"
+repository = "https://github.com/foxzool/open-lark"
+homepage = "https://github.com/foxzool/open-lark"
+documentation = "https://docs.rs/open-lark"
 
-# Advanced services
-acs = []
-admin = []
-ai = []
-aily = []
-apass = []
-application = []
-approval = []
-attendance = []
-bot = []
-calendar = []
-cardkit = []
-corehr = []
-directory = []
-ehr = []
-elearning = []
-helpdesk = []
-hire = []
-human-authentication = []
-lingo = []
-mail = []
-mdm = []
-minutes = []
-moments = []
-okr = []
-payroll = []
-performance = []
-personal-settings = []
-report = []
-security-and-compliance = []
-task = []
-tenant = []
-tenant-tag = []
-trust-party = []
-vc = []
-verification = []
-workplace = []
+[workspace.dependencies]
+# Internal dependencies (shared version management)
+open-lark-core = { path = "crates/open-lark-core", version = "0.15.0" }
+open-lark-communication = { path = "crates/open-lark-communication", version = "0.15.0" }
+open-lark-collaboration = { path = "crates/open-lark-collaboration", version = "0.15.0" }
+open-lark-hr-suite = { path = "crates/open-lark-hr-suite", version = "0.15.0" }
+open-lark-ai-platform = { path = "crates/open-lark-ai-platform", version = "0.15.0" }
+open-lark-enterprise = { path = "crates/open-lark-enterprise", version = "0.15.0" }
+open-lark-integrations = { path = "crates/open-lark-integrations", version = "0.15.0" }
+open-lark-extensions = { path = "crates/open-lark-extensions", version = "0.15.0" }
+lark-websocket-protobuf = { path = "crates/protobuf", version = "0.1.1" }
 
-# WebSocket support
-websocket = ["tokio-tungstenite", "prost", "lark-websocket-protobuf"]
-
-# OpenTelemetry support
-otel = ["opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-opentelemetry"]
-
-[workspace]
-members = ["crates/*"]
-
-[dependencies]
-lark-websocket-protobuf = { path = "crates/protobuf", version = "0.1.1", optional = true }
-
+# External dependencies (shared version management)
 anyhow = "1.0.86"
 async-trait = "0.1.83"
 base64 = "0.22.1"
@@ -97,11 +46,11 @@ hmac = "0.12.1"
 log = "0.4.21"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
-opentelemetry = { version = "0.24", optional = true }
-opentelemetry_sdk = { version = "0.24", features = ["rt-tokio"], optional = true }
-opentelemetry-otlp = { version = "0.17", optional = true }
-tracing-opentelemetry = { version = "0.25", optional = true }
-prost = { version = "0.13", optional = true }
+opentelemetry = { version = "0.24" }
+opentelemetry_sdk = { version = "0.24", features = ["rt-tokio"] }
+opentelemetry-otlp = { version = "0.17" }
+tracing-opentelemetry = { version = "0.25" }
+prost = { version = "0.13" }
 quick_cache = { version = "0.6.3", features = [] }
 reqwest = { version = "0.12.7", default-features = false, features = [
     "json",
@@ -121,12 +70,11 @@ tokio = { version = "1.38", features = ["rt", "rt-multi-thread", "macros"] }
 url = { version = "2.5.0", features = ["serde"] }
 tokio-tungstenite = { version = "0.23", features = [
     "rustls-tls-native-roots",
-], optional = true }
+] }
 walkdir = "2.4"
 regex = "1.10"
 
-
-[dev-dependencies]
+# Dev dependencies
 dotenvy = "0.15.7"
 env_logger = "0.11.3"
 uuid = { version = "1.8.0", features = ["v4"] }
@@ -140,6 +88,142 @@ tracing-test = "0.2"
 wiremock = "0.6"
 once_cell = "1.19"
 mockall = "0.12"
+
+# Legacy package configuration for backward compatibility
+[package]
+name = "open-lark"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+readme = "README.md"
+description = "Enterprise-grade Lark/Feishu Open API SDK with comprehensive Chinese documentation and advanced error handling"
+keywords = ["sdk", "feishu", "lark", "api"]
+categories = ["api-bindings"]
+documentation.workspace = true
+repository.workspace = true
+homepage.workspace = true
+license.workspace = true
+
+[features]
+default = ["communication"]
+benchmarks = []
+dev-tests = []
+integration-tests = []
+
+# New feature system based on crate groups
+communication = ["open-lark-communication"]
+collaboration = ["communication", "open-lark-collaboration"]
+hr-suite = ["communication", "open-lark-hr-suite"]
+ai-platform = ["communication", "open-lark-ai-platform"]
+enterprise = ["communication", "open-lark-enterprise"]
+complete = ["communication", "collaboration", "hr-suite", "ai-platform", "enterprise"]
+
+# Legacy feature mapping for backward compatibility
+im = ["communication"]
+cloud-docs = ["collaboration"]
+contact = ["communication"]
+group = ["communication"]
+authentication = ["communication"]
+search = ["communication"]
+acs = ["open-lark-extensions"]
+admin = ["enterprise"]
+ai = ["ai-platform"]
+aily = ["ai-platform"]
+apass = ["open-lark-extensions"]
+application = ["open-lark-integrations"]
+approval = ["collaboration"]
+attendance = ["hr-suite"]
+bot = ["open-lark-integrations"]
+calendar = ["collaboration"]
+cardkit = ["open-lark-integrations"]
+corehr = ["hr-suite"]
+directory = ["enterprise"]
+ehr = ["hr-suite"]
+elearning = ["open-lark-extensions"]
+helpdesk = ["open-lark-extensions"]
+hire = ["hr-suite"]
+human-authentication = ["open-lark-extensions"]
+lingo = ["ai-platform"]
+mail = ["open-lark-integrations"]
+mdm = ["open-lark-extensions"]
+minutes = ["collaboration"]
+moments = ["open-lark-extensions"]
+okr = ["hr-suite"]
+payroll = ["hr-suite"]
+performance = ["hr-suite"]
+personal-settings = ["open-lark-extensions"]
+report = ["open-lark-extensions"]
+security-and-compliance = ["enterprise"]
+task = ["collaboration"]
+tenant = ["enterprise"]
+tenant-tag = ["enterprise"]
+trust-party = ["open-lark-extensions"]
+vc = ["open-lark-integrations"]
+verification = ["open-lark-extensions"]
+workplace = ["open-lark-extensions"]
+
+# WebSocket support
+websocket = ["tokio-tungstenite", "prost"]
+
+# OpenTelemetry support
+otel = ["opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-opentelemetry"]
+
+[dependencies]
+open-lark-core = { workspace = true }
+open-lark-communication = { workspace = true, optional = true }
+open-lark-collaboration = { workspace = true, optional = true }
+open-lark-hr-suite = { workspace = true, optional = true }
+open-lark-ai-platform = { workspace = true, optional = true }
+open-lark-enterprise = { workspace = true, optional = true }
+open-lark-integrations = { workspace = true, optional = true }
+open-lark-extensions = { workspace = true, optional = true }
+
+# Re-export workspace dependencies for compatibility
+anyhow = { workspace = true }
+async-trait = { workspace = true }
+base64 = { workspace = true }
+chrono = { workspace = true }
+futures-util = { workspace = true }
+hmac = { workspace = true }
+log = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+opentelemetry = { workspace = true, optional = true }
+opentelemetry_sdk = { workspace = true, optional = true }
+opentelemetry-otlp = { workspace = true, optional = true }
+tracing-opentelemetry = { workspace = true, optional = true }
+prost = { workspace = true, optional = true }
+quick_cache = { workspace = true }
+reqwest = { workspace = true }
+rand = { workspace = true }
+simd-adler32 = { workspace = true }
+serde_repr = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+sha2 = { workspace = true }
+strum = { workspace = true }
+strum_macros = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+url = { workspace = true }
+tokio-tungstenite = { workspace = true, optional = true }
+walkdir = { workspace = true }
+regex = { workspace = true }
+
+[dev-dependencies]
+dotenvy = { workspace = true }
+env_logger = { workspace = true }
+uuid = { workspace = true }
+criterion = { workspace = true }
+rstest = { workspace = true }
+proptest = { workspace = true }
+serial_test = { workspace = true }
+tempfile = { workspace = true }
+test-log = { workspace = true }
+tracing-test = { workspace = true }
+wiremock = { workspace = true }
+once_cell = { workspace = true }
+mockall = { workspace = true }
 
 # -------------------------------------------
 # Benches
@@ -172,7 +256,6 @@ required-features = ["benchmarks"]
 [[bin]]
 name = "api_consistency_checker"
 path = "tools/api_consistency_checker.rs"
-
 
 [[bin]]
 name = "enhanced_api_checker"
@@ -209,7 +292,6 @@ name = "websocket_client"
 path = "examples/basic/websocket_client.rs"
 required-features = ["websocket"]
 
-
 [[example]]
 name = "enhanced_drive_operations"
 path = "examples/api/enhanced_drive_operations.rs"
@@ -236,18 +318,10 @@ path = "examples/api/enhanced_error_handling.rs"
 required-features = ["im"]
 
 # Core API Examples
-# [[example]]
-# name = "core_send_message"
-# path = "examples/core/send_message.rs"
-
 [[example]]
 name = "core_get_chat_history"
 path = "examples/core/get_chat_history.rs"
 required-features = ["im"]
-
-# [[example]]
-# name = "core_upload_file"
-# path = "examples/core/upload_file.rs"
 
 [[example]]
 name = "core_download_file"
@@ -304,7 +378,6 @@ name = "permission_owned_demo"
 path = "examples/api/permission_owned_demo.rs"
 required-features = ["cloud-docs"]
 
-
 [[example]]
 name = "calendar_demo"
 path = "examples/api/calendar_demo.rs"
@@ -329,10 +402,6 @@ required-features = ["directory"]
 name = "directory_v1_department_extended"
 path = "examples/api/directory_v1_department_extended.rs"
 required-features = ["directory"]
-
-# [[example]]
-# name = "contact_v3_comprehensive"
-# path = "examples/api/contact_v3_comprehensive.rs"
 
 [[example]]
 name = "group_demo"
@@ -433,7 +502,6 @@ required-features = ["admin"]
 name = "moments_demo"
 path = "examples/api/moments_demo.rs"
 required-features = ["moments"]
-
 
 [[example]]
 name = "ehr_v1_demo"
@@ -550,7 +618,6 @@ name = "security_and_compliance_audit_log"
 path = "examples/api/security_and_compliance_audit_log.rs"
 required-features = ["security-and-compliance"]
 
-
 [[example]]
 name = "contact_v3_role_management"
 path = "examples/api/contact_v3_role_management.rs"
@@ -585,7 +652,6 @@ required-features = ["im"]
 name = "im_file_image_builder_pattern"
 path = "examples/api/im_file_image_builder_pattern.rs"
 required-features = ["im"]
-
 
 # ===========================================
 # Benchmarks

@@ -99,7 +99,7 @@ pub async fn delete_space_member(
     option: Option<RequestOption>,
 ) -> SDKResult<BaseResponse<DeleteSpaceMemberResponse>> {
     let mut api_req = request.api_request;
-    api_req.http_method = Method::DELETE;
+    api_req.set_http_method(Method::DELETE);
     api_req.api_path = {
         let mut path = EndpointBuilder::replace_param(
             WIKI_V2_SPACE_MEMBER_DELETE,
@@ -109,7 +109,7 @@ pub async fn delete_space_member(
         path = EndpointBuilder::replace_param(&path, "member_id", &request.member_id);
         path
     };
-    api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
     let api_resp = Transport::request(api_req, config, option).await?;
     Ok(api_resp)

@@ -36,9 +36,9 @@ impl UserApprovalService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<QueryUserApprovalRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::GET;
-        api_req.api_path = ATTENDANCE_V1_USER_APPROVALS.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(ATTENDANCE_V1_USER_APPROVALS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -88,9 +88,9 @@ impl UserApprovalService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateUserApprovalRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = ATTENDANCE_V1_USER_APPROVALS.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(ATTENDANCE_V1_USER_APPROVALS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -126,13 +126,13 @@ impl UserApprovalService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ProcessUserApprovalRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = EndpointBuilder::replace_param(
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(
             ATTENDANCE_V1_USER_APPROVAL_PROCESS,
             "approval_id",
             &request.approval_id,
-        );
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req

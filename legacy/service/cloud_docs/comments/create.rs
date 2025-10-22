@@ -239,7 +239,7 @@ pub async fn create_comment(
     option: Option<RequestOption>,
 ) -> SDKResult<BaseResponse<CreateCommentResponse>> {
     let mut api_req = request.api_request;
-    api_req.http_method = Method::POST;
+    api_req.set_http_method(Method::POST);
     api_req.api_path = format!(
         "{}?file_type={}&file_token={}",
         COMMENT_V1_COMMENTS, request.file_type, request.file_token
@@ -247,10 +247,10 @@ pub async fn create_comment(
 
     // 添加用户ID类型查询参数
     if let Some(user_id_type) = request.user_id_type {
-        api_req.api_path = format!("{}&user_id_type={}", api_req.api_path, user_id_type);
+        api_req.set_api_path(format!("{}&user_id_type={}", api_req.api_path, user_id_type));
     }
 
-    api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
     let api_resp = Transport::request(api_req, config, option).await?;
     Ok(api_resp)

@@ -12,84 +12,142 @@ pub struct FunctionalRoleMemberService {
 
 impl FunctionalRoleMemberService {
     pub fn new(config: Config) -> Self {
-    Self { config }
+        Self { config }
     }
+
     /// 添加角色成员
     pub async fn create(
-    &self,
-    role_id: &str,
-    req: &CreateRoleMemberRequest,
+        &self,
+        role_id: &str,
+        req: &CreateRoleMemberRequest,
     ) -> open_lark_core::core::SDKResult<CreateRoleMemberResponse> {
-            let api_req = ApiRequest {
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
+            api_path: EndpointBuilder::replace_param(
+                open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS,
+                "role_id",
+                role_id,
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: serde_json::to_vec(req)?,
+            ..Default::default()
         };
 
-    let resp =
-    Ok(resp.data.unwrap_or_default());
+        let resp = Transport::<CreateRoleMemberResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 
     /// 批量添加角色成员
     pub async fn batch_create(
-    &self,
-    role_id: &str,
-    req: &BatchCreateRoleMembersRequest,
+        &self,
+        role_id: &str,
+        req: &BatchCreateRoleMembersRequest,
     ) -> open_lark_core::core::SDKResult<BatchCreateRoleMembersResponse> {
-            let api_req = ApiRequest {
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::POST,
+            api_path: EndpointBuilder::replace_param(
+                open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_CREATE,
+                "role_id",
+                role_id,
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: serde_json::to_vec(req)?,
+            ..Default::default()
         };
-    let resp =
-    Ok(resp.data.unwrap_or_default());
+
+        let resp = Transport::<BatchCreateRoleMembersResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 
     /// 批量设置角色成员管理范围
     pub async fn scopes(
-    &self,
-    role_id: &str,
-    req: &SetRoleMemberScopesRequest,
+        &self,
+        role_id: &str,
+        req: &SetRoleMemberScopesRequest,
     ) -> open_lark_core::core::SDKResult<SetRoleMemberScopesResponse> {
-            let api_req = ApiRequest {
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::PUT,
+            api_path: EndpointBuilder::replace_param(
+                open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_SCOPES,
+                "role_id",
+                role_id,
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: serde_json::to_vec(req)?,
+            ..Default::default()
         };
 
-    let resp =
-    Ok(resp.data.unwrap_or_default());
+        let resp = Transport::<SetRoleMemberScopesResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 
     /// 查询角色下某个成员的管理范围
     pub async fn get(
-    &self,
-    role_id: &str,
-    member_id: &str,
-    _req: &GetRoleMemberRequest,
+        &self,
+        role_id: &str,
+        member_id: &str,
+        _req: &GetRoleMemberRequest,
     ) -> open_lark_core::core::SDKResult<GetRoleMemberResponse> {
-            let api_req = ApiRequest {
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: EndpointBuilder::replace_param(
+                open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBER_GET,
+                "role_id",
+                role_id,
+            ).replace_param("member_id", member_id),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
+            query_params: std::collections::HashMap::new(),
+            ..Default::default()
         };
 
-    let resp = Transport::<GetRoleMemberResponse>::request(api_req, &self.config, None).await?;
-    Ok(resp.data.unwrap_or_default());
+        let resp = Transport::<GetRoleMemberResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 
     /// 查询角色下的所有成员信息
     pub async fn list(
-    &self,
-    role_id: &str,
-    _req: &ListRoleMembersRequest,
+        &self,
+        role_id: &str,
+        _req: &ListRoleMembersRequest,
     ) -> open_lark_core::core::SDKResult<ListRoleMembersResponse> {
-            let api_req = ApiRequest {
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::GET,
+            api_path: EndpointBuilder::replace_param(
+                open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS,
+                "role_id",
+                role_id,
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: Vec::new(),
+            query_params: std::collections::HashMap::new(),
+            ..Default::default()
         };
 
-    let resp =
-    Ok(resp.data.unwrap_or_default());
+        let resp = Transport::<ListRoleMembersResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 
     /// 删除角色下的成员
     pub async fn batch_delete(
-    &self,
-    role_id: &str,
-    req: &BatchDeleteRoleMembersRequest,
+        &self,
+        role_id: &str,
+        req: &BatchDeleteRoleMembersRequest,
     ) -> open_lark_core::core::SDKResult<BatchDeleteRoleMembersResponse> {
-            let api_req = ApiRequest {
+        let api_req = ApiRequest {
+            http_method: reqwest::Method::DELETE,
+            api_path: EndpointBuilder::replace_param(
+                open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_DELETE,
+                "role_id",
+                role_id,
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant],
+            body: serde_json::to_vec(req)?,
+            ..Default::default()
         };
 
-    let resp =
-    Ok(resp.data.unwrap_or_default());
+        let resp = Transport::<BatchDeleteRoleMembersResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 }
 
@@ -110,7 +168,7 @@ pub struct CreateRoleMemberResponse {
 
 impl ApiResponseTrait for CreateRoleMemberResponse {
     fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-    open_lark_core::core::api_resp::ResponseFormat::Data
+        open_lark_core::core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -130,7 +188,7 @@ pub struct BatchCreateRoleMembersResponse {
 
 impl ApiResponseTrait for BatchCreateRoleMembersResponse {
     fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-    open_lark_core::core::api_resp::ResponseFormat::Data
+        open_lark_core::core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -148,7 +206,7 @@ pub struct SetRoleMemberScopesResponse {}
 
 impl ApiResponseTrait for SetRoleMemberScopesResponse {
     fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-    open_lark_core::core::api_resp::ResponseFormat::Data
+        open_lark_core::core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -167,7 +225,7 @@ pub struct GetRoleMemberResponse {
 
 impl ApiResponseTrait for GetRoleMemberResponse {
     fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-    open_lark_core::core::api_resp::ResponseFormat::Data
+        open_lark_core::core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -194,7 +252,7 @@ pub struct ListRoleMembersResponse {
 
 impl ApiResponseTrait for ListRoleMembersResponse {
     fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-    open_lark_core::core::api_resp::ResponseFormat::Data
+        open_lark_core::core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -212,7 +270,7 @@ pub struct BatchDeleteRoleMembersResponse {
 
 impl ApiResponseTrait for BatchDeleteRoleMembersResponse {
     fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-    open_lark_core::core::api_resp::ResponseFormat::Data
+        open_lark_core::core::api_resp::ResponseFormat::Data
     }
 }
 

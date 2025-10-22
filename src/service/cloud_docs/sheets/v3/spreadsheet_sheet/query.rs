@@ -31,10 +31,9 @@ impl SpreadsheetSheetService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<QuerySpreadsheetSheetResponse>> {
         let mut api_req = request.api_request;
-        api_req.api_path =
-            SHEETS_V3_SPREADSHEET_SHEETS_QUERY.replace("{}", &request.spreadsheet_token);
-        api_req.http_method = reqwest::Method::GET;
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        api_req.set_api_path(SHEETS_V3_SPREADSHEET_SHEETS_QUERY.replace("{}", &request.spreadsheet_token));
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
 

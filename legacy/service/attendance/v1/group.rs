@@ -37,13 +37,13 @@ impl GroupService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListGroupUserRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::GET;
+        api_req.set_http_method(Method::GET);
         api_req.api_path = EndpointBuilder::replace_param(
             ATTENDANCE_V1_GROUP_USERS,
             "group_id",
             &request.group_id,
         );
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -83,9 +83,9 @@ impl GroupService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateGroupRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = ATTENDANCE_V1_GROUPS.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(ATTENDANCE_V1_GROUPS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -151,13 +151,13 @@ impl GroupService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::DELETE;
+        api_req.set_http_method(Method::DELETE);
         api_req.api_path = EndpointBuilder::replace_param(
             ATTENDANCE_V1_GROUP_DELETE,
             "group_id",
             &request.group_id,
         );
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -176,13 +176,13 @@ impl GroupService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<Group>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::GET;
+        api_req.set_http_method(Method::GET);
         api_req.api_path = EndpointBuilder::replace_param(
             ATTENDANCE_V1_GROUP_DELETE,
             "group_id",
             &request.group_id,
         );
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -210,9 +210,9 @@ impl GroupService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SearchGroupRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = ATTENDANCE_V1_GROUPS_SEARCH.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(ATTENDANCE_V1_GROUPS_SEARCH.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req
@@ -247,9 +247,9 @@ impl GroupService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListGroupRespData>> {
         let mut api_req = request.api_req;
-        api_req.http_method = Method::GET;
-        api_req.api_path = ATTENDANCE_V1_GROUPS.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant];
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(ATTENDANCE_V1_GROUPS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         api_req

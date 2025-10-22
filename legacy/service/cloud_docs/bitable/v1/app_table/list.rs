@@ -21,9 +21,9 @@ impl AppTableService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ListTablesResponse>> {
         let mut api_req = request.api_request;
-        api_req.http_method = Method::GET;
-        api_req.api_path = BITABLE_V1_TABLES.replace("{app_token}", &request.app_token);
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(BITABLE_V1_TABLES.replace("{app_token}", &request.app_token));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {

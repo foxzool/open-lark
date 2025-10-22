@@ -1,0 +1,99 @@
+[package]
+name = "open-lark-core"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Core infrastructure for OpenLark SDK"
+
+[dependencies]
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+reqwest = { workspace = true }
+chrono = { workspace = true }
+url = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+uuid = { workspace = true }
+async-trait = { workspace = true }
+hmac = { workspace = true }
+sha2 = { workspace = true }
+base64 = { workspace = true }
+rand = { workspace = true }
+quick_cache = { workspace = true }
+futures-util = { workspace = true }
+log = { workspace = true }
+regex = { workspace = true }
+tokio-tungstenite = { workspace = true, optional = true }
+prost = { workspace = true, optional = true }
+lark-websocket-protobuf = { workspace = true, optional = true }
+
+[features]
+# WebSocket support
+websocket = ["tokio-tungstenite", "prost", "lark-websocket-protobuf"]
+
+# OpenTelemetry support
+otel = ["opentelemetry", "opentelemetry_sdk", "opentelemetry-otlp", "tracing-opentelemetry"]
+
+# Service modules (for conditional compilation in client)
+acs = []
+admin = []
+ai = []
+aily = []
+apass = []
+application = []
+approval = []
+attendance = []
+authentication = []
+bot = []
+calendar = []
+cardkit = []
+cloud-docs = []
+contact = []
+corehr = []
+directory = []
+ehr = []
+elearning = []
+group = []
+helpdesk = []
+hire = []
+human-authentication = []
+im = []
+lingo = []
+mail = []
+mdm = []
+minutes = []
+moments = []
+okr = []
+payroll = []
+performance = []
+personal-settings = []
+report = []
+search = []
+security-and-compliance = []
+task = []
+tenant = []
+tenant-tag = []
+trust-party = []
+vc = []
+verification = []
+workplace = []
+
+[dependencies.opentelemetry]
+workspace = true
+optional = true
+
+[dependencies.opentelemetry_sdk]
+workspace = true
+optional = true
+
+[dependencies.opentelemetry-otlp]
+workspace = true
+optional = true
+
+[dependencies.tracing-opentelemetry]
+workspace = true
+optional = true

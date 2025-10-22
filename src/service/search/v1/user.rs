@@ -35,9 +35,9 @@ impl UserService {
         option: Option<RequestOption>,
     ) -> SDKResult<SearchUserResponse> {
         let mut api_req = search_user_request.api_request;
-        api_req.http_method = Method::GET;
-        api_req.api_path = crate::core::endpoints::search::SEARCH_V1_USER.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::User];
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(crate::core::endpoints::search::SEARCH_V1_USER.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::User]);
 
         let api_resp: BaseResponse<SearchUserResponse> =
             Transport::request(api_req, &self.config, option).await?;
@@ -51,9 +51,9 @@ impl UserService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SearchUserResponse>> {
         let mut api_req = search_user_request.api_request;
-        api_req.http_method = Method::GET;
-        api_req.api_path = crate::core::endpoints::search::SEARCH_V1_USER.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::User];
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(crate::core::endpoints::search::SEARCH_V1_USER.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::User]);
 
         Transport::request(api_req, &self.config, option).await
     }

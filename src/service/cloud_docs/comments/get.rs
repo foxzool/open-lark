@@ -162,7 +162,7 @@ pub async fn get_comment(
     option: Option<RequestOption>,
 ) -> SDKResult<BaseResponse<GetCommentResponse>> {
     let mut api_req = request.api_request;
-    api_req.http_method = Method::GET;
+    api_req.set_http_method(Method::GET);
     api_req.api_path = format!(
         "{}?file_type={}&file_token={}",
         COMMENT_V1_COMMENT_GET.replace("{}", &request.comment_id),
@@ -172,10 +172,10 @@ pub async fn get_comment(
 
     // 添加用户ID类型查询参数
     if let Some(user_id_type) = request.user_id_type {
-        api_req.api_path = format!("{}&user_id_type={}", api_req.api_path, user_id_type);
+        api_req.set_api_path(format!("{}&user_id_type={}", api_req.api_path, user_id_type));
     }
 
-    api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
     let api_resp = Transport::request(api_req, config, option).await?;
     Ok(api_resp)

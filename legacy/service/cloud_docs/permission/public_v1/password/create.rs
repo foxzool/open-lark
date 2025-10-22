@@ -168,7 +168,7 @@ pub async fn create_password(
     option: Option<RequestOption>,
 ) -> SDKResult<BaseResponse<CreatePasswordResponse>> {
     let mut api_req = request.api_request;
-    api_req.http_method = Method::POST;
+    api_req.set_http_method(Method::POST);
     api_req.api_path = EndpointBuilder::replace_param(
         DRIVE_V1_PERMISSIONS_PUBLIC_PASSWORD,
         "token",
@@ -180,7 +180,7 @@ pub async fn create_password(
         .query_params
         .insert(QueryParams::TYPE, request.obj_type);
 
-    api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+    api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
     let api_resp = Transport::request(api_req, config, option).await?;
     Ok(api_resp)

@@ -52,9 +52,9 @@ impl MessageService {
         option: Option<RequestOption>,
     ) -> SDKResult<Message> {
         let mut api_req = create_message_request.api_req;
-        api_req.http_method = Method::POST;
-        api_req.api_path = crate::core::endpoints::im::IM_V1_SEND_MESSAGE.to_string();
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(crate::core::endpoints::im::IM_V1_SEND_MESSAGE.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<CreateMessageResp> =
             Transport::request(api_req, &self.config, option).await?;
@@ -126,13 +126,13 @@ impl MessageService {
         option: Option<RequestOption>,
     ) -> SDKResult<Message> {
         let mut api_req = update_message_request.api_req;
-        api_req.http_method = Method::PATCH;
+        api_req.set_http_method(Method::PATCH);
         api_req.api_path = EndpointBuilder::replace_param(
             crate::core::endpoints::im::IM_V1_UPDATE_MESSAGE,
             "message_id",
             message_id,
         );
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<CreateMessageResp> =
             Transport::request(api_req, &self.config, option).await?;
@@ -154,13 +154,13 @@ impl MessageService {
         option: Option<RequestOption>,
     ) -> SDKResult<Message> {
         let mut api_req = reply_message_request.api_req;
-        api_req.http_method = Method::POST;
+        api_req.set_http_method(Method::POST);
         api_req.api_path = EndpointBuilder::replace_param(
             crate::core::endpoints::im::IM_V1_REPLY_MESSAGE,
             "message_id",
             message_id,
         );
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<CreateMessageResp> =
             Transport::request(api_req, &self.config, option).await?;

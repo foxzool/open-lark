@@ -73,7 +73,7 @@ impl FileVersionService {
                 .replace("{}", &request.version_id),
             ..Default::default()
         };
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        api_req.set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -98,7 +98,7 @@ impl FileVersionService {
                 .replace("{}", &request.version_id),
             ..Default::default()
         };
-        api_req.supported_access_token_types = vec![AccessTokenType::User, AccessTokenType::Tenant];
+        api_req.set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)

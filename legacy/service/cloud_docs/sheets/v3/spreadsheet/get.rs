@@ -27,9 +27,9 @@ impl SpreadsheetService {
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<GetSpreadsheetResponseData>> {
         let mut api_req = request.api_request;
-        api_req.http_method = Method::GET;
-        api_req.api_path = SHEETS_V3_SPREADSHEET_GET.replace("{}", &request.spreadsheet_token);
-        api_req.supported_access_token_types = vec![AccessTokenType::Tenant, AccessTokenType::User];
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(SHEETS_V3_SPREADSHEET_GET.replace("{}", &request.spreadsheet_token));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 
