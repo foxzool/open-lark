@@ -168,14 +168,11 @@ impl ApplicationService {
         request: ApplicationCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ApplicationOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_APPLICATIONS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_APPLICATIONS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -216,18 +213,10 @@ impl ApplicationService {
         application_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ApplicationDetailResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_APPLICATION_GET,
-                "application_id",
-                application_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+                api_req.set_api_path(HIRE_V1_APPLICATION_GET.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -285,13 +274,10 @@ impl ApplicationService {
         request: ApplicationListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ApplicationListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_APPLICATIONS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_APPLICATIONS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -364,18 +350,11 @@ impl ApplicationService {
         request: ApplicationAdvanceRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ApplicationOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_APPLICATION_ADVANCE,
-                "application_id",
-                &request.application_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+                api_req.set_api_path(HIRE_V1_APPLICATION_GET.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -423,18 +402,11 @@ impl ApplicationService {
             remark,
         };
 
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_APPLICATION_REJECT,
-                "application_id",
-                application_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+                api_req.set_api_path(HIRE_V1_APPLICATION_GET.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -481,17 +453,14 @@ impl ApplicationService {
         page_token: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<InterviewListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_APPLICATION_INTERVIEWS,
-                "application_id",
-                application_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            HIRE_V1_APPLICATION_INTERVIEWS,
+            "application_id",
+            application_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = page_size {
@@ -539,14 +508,11 @@ impl ApplicationService {
         request: OfferCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ApplicationOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_OFFERS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_OFFERS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
     /// 获取投递的Offer信息
@@ -584,18 +550,10 @@ impl ApplicationService {
         application_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OfferDetailResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_APPLICATION_OFFER,
-                "application_id",
-                application_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+                api_req.set_api_path(HIRE_V1_APPLICATION_GET.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -629,18 +587,11 @@ impl ApplicationService {
         request: ApplicationEvaluationRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ApplicationOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_APPLICATION_EVALUATIONS,
-                "application_id",
-                &request.application_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+                api_req.set_api_path(HIRE_V1_APPLICATION_GET.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 }

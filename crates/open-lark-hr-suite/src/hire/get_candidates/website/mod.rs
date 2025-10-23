@@ -290,13 +290,10 @@ impl WebsiteService {
         location: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<WebsiteJobListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_WEBSITE_JOBS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_WEBSITE_JOBS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = page_size {
@@ -369,14 +366,11 @@ impl WebsiteService {
         request: WebsiteJobPublishRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_WEBSITE_JOBS_PUBLISH.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_WEBSITE_JOBS_PUBLISH.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
     /// 从官网下架职位
@@ -400,18 +394,14 @@ impl WebsiteService {
         job_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_WEBSITE_JOB_UNPUBLISH,
-                "job_id",
-                job_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+                api_req.set_api_path(EndpointBuilder::replace_param(
+            HIRE_V1_WEBSITE_JOB_UNPUBLISH,
+            "job_id",
+            job_id
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -469,13 +459,10 @@ impl WebsiteService {
         request: WebsiteApplicationListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<WebsiteApplicationListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_WEBSITE_APPLICATIONS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_WEBSITE_APPLICATIONS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -556,14 +543,10 @@ impl WebsiteService {
         &self,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<WebsiteConfigurationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_WEBSITE_CONFIGURATION.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_WEBSITE_CONFIGURATION.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -624,14 +607,11 @@ impl WebsiteService {
         request: WebsiteConfigurationUpdateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_WEBSITE_CONFIGURATION.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_WEBSITE_CONFIGURATION.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -656,18 +636,14 @@ impl WebsiteService {
         website_application_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<WebsiteOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_WEBSITE_APPLICATION_CONVERT,
-                "website_application_id",
-                website_application_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+                api_req.set_api_path(EndpointBuilder::replace_param(
+            HIRE_V1_WEBSITE_APPLICATION_CONVERT,
+            "application_id",
+            website_application_id
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -704,13 +680,10 @@ impl WebsiteService {
         end_date: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<serde_json::Value>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_WEBSITE_STATISTICS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_WEBSITE_STATISTICS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(job_id) = job_id {

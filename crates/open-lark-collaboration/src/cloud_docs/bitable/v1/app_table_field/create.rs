@@ -2,22 +2,22 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use super::AppTableFieldService;
-use crate::{
-    open_lark_core::core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
-        constants::AccessTokenType,
-        endpoints::cloud_docs::*,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
-    },
-    impl_executable_builder_owned,
-    service::bitable::v1::app_table_field::{
-        AppTableField, AppTableFieldDescription, AppTableFieldProperty, FieldType, UiType,
-    },
+use open_lark_core::core::{
+    api_req::ApiRequest,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    endpoints::cloud_docs::BITABLE_V1_FIELDS,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
+
+use super::v1::app_table_field::{
+    AppTableField, AppTableFieldDescription, AppTableFieldProperty, FieldType, UiType,
+};
+
+use crate::impl_executable_builder_owned;
 
 /// 新增字段请求
 #[derive(Debug, Serialize, Default)]

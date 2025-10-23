@@ -441,7 +441,7 @@ impl ValidateBuilder for TalentCreateRequestBuilder {
 /// 提供链式调用来构建人才列表查询请求，支持各种筛选条件。
 #[derive(Debug, Clone, Default)]
 pub struct TalentListRequestBuilder {
-    request: crate::service::hire::candidate_management::talent::TalentListRequest,
+    request: crate::hire::candidate_management::talent::TalentListRequest,
 }
 
 impl TalentListRequestBuilder {
@@ -512,7 +512,7 @@ impl TalentListRequestBuilder {
     }
 
     /// 构建人才列表请求
-    pub fn build(self) -> crate::service::hire::candidate_management::talent::TalentListRequest {
+    pub fn build(self) -> crate::hire::candidate_management::talent::TalentListRequest {
         self.request
     }
 }

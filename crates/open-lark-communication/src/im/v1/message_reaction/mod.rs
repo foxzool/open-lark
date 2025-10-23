@@ -89,7 +89,7 @@ impl MessageReactionService {
     /// 获取消息表情回复
     pub async fn list(
         &self,
-        message_id: &str,
+        _message_id: &str,
         user_id_type: Option<UserIdType>,
         page_size: Option<i32>,
         page_token: Option<String>,
@@ -131,9 +131,13 @@ impl MessageReactionService {
 
         let mut api_req = ApiRequest::default();
         api_req.set_http_method(Method::DELETE);
+        let params = HashMap::from([
+            (String::from("message_id"), message_id.to_string()),
+            (String::from("reaction_id"), reaction_id.to_string()),
+        ]);
         api_req.set_api_path(EndpointBuilder::replace_params(
             open_lark_core::core::endpoints::im::IM_V1_MESSAGE_REACTIONS_DELETE,
-            &[("message_id", message_id), ("reaction_id", reaction_id)],
+            &params,
         ));
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 

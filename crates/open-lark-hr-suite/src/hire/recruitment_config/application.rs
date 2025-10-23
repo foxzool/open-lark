@@ -72,13 +72,10 @@ impl ApplicationConfigService {
         request: TalentTagListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentTagListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_TALENT_TAGS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_TALENT_TAGS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(tag_type) = request.tag_type {
@@ -116,13 +113,10 @@ impl ApplicationConfigService {
         request: RegistrationFormListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<RegistrationFormListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_REGISTRATION_FORMS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_REGISTRATION_FORMS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(form_type) = request.form_type {

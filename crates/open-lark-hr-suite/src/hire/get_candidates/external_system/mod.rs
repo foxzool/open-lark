@@ -293,14 +293,11 @@ impl ExternalSystemService {
         request: ExternalSystemConfigCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_EXTERNAL_SYSTEMS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_EXTERNAL_SYSTEMS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -351,14 +348,10 @@ impl ExternalSystemService {
         enabled: Option<bool>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExternalSystemConfigListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_EXTERNAL_SYSTEMS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_EXTERNAL_SYSTEMS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         // 添加查询参数
         if let Some(page_size) = page_size {
             api_req
@@ -416,14 +409,11 @@ impl ExternalSystemService {
         request: SyncTaskCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_EXTERNAL_SYSTEMS_SYNC_TASKS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_EXTERNAL_SYSTEMS_SYNC_TASKS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -478,14 +468,10 @@ impl ExternalSystemService {
         page_token: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExternalSystemSyncRecordListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_EXTERNAL_SYSTEMS_SYNC_RECORDS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_EXTERNAL_SYSTEMS_SYNC_RECORDS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         // 添加查询参数
         if let Some(system_config_id) = system_config_id {
             api_req
@@ -559,14 +545,11 @@ impl ExternalSystemService {
         request: ExternalCandidateImportRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_IMPORT.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_IMPORT.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -620,14 +603,10 @@ impl ExternalSystemService {
         page_token: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExternalCandidateListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         // 添加查询参数
         if let Some(system_config_id) = system_config_id {
             api_req
@@ -680,18 +659,10 @@ impl ExternalSystemService {
         external_candidate_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_CONVERT,
-                "external_candidate_id",
-                external_candidate_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+                api_req.set_api_path(HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_CONVERT.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -719,18 +690,10 @@ impl ExternalSystemService {
         system_config_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExternalSystemOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_EXTERNAL_SYSTEMS_TEST_CONNECTION,
-                "system_config_id",
-                system_config_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+                api_req.set_api_path(HIRE_V1_EXTERNAL_SYSTEMS_CANDIDATES_CONVERT.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 }

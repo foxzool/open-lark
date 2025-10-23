@@ -178,14 +178,11 @@ impl TalentService {
         request: TalentCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_TALENTS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_TALENTS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -231,14 +228,10 @@ impl TalentService {
         talent_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentDetailResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(HIRE_V1_TALENT_GET, "talent_id", talent_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_TALENT_GET, "talent_id", talent_id));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -302,13 +295,10 @@ impl TalentService {
         request: TalentListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_TALENTS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_TALENTS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -401,14 +391,11 @@ impl TalentService {
         request: TalentCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(HIRE_V1_TALENT_GET, "talent_id", talent_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_TALENT_GET, "talent_id", talent_id));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
     /// 删除人才档案
@@ -436,14 +423,10 @@ impl TalentService {
         talent_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(HIRE_V1_TALENT_GET, "talent_id", talent_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::DELETE);
+        api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_TALENT_GET, "talent_id", talent_id));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -494,17 +477,14 @@ impl TalentService {
         page_token: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentApplicationHistoryResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_TALENT_APPLICATIONS,
-                "talent_id",
-                talent_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            HIRE_V1_TALENT_APPLICATIONS,
+            "talent_id",
+            talent_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = page_size {
@@ -563,14 +543,11 @@ impl TalentService {
 
         let request = BatchImportRequest { talents };
 
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_TALENTS_BATCH_IMPORT.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_TALENTS_BATCH_IMPORT.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
     /// 创建人才档案（使用构建器模式）

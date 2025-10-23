@@ -2,18 +2,20 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use open_lark_core::core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
-        constants::AccessTokenType,
-        endpoints::hire::*,
-        endpoints::EndpointBuilder,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
-    },
-    crate::hire::models::{
-        CommonResponse, JobRequirement, JobRequirementCreateRequest, PageResponse,};
+    api_req::ApiRequest,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    endpoints::hire::*,
+    endpoints::EndpointBuilder,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
+
+use crate::hire::models::{
+    CommonResponse, JobRequirement, JobRequirementCreateRequest, PageResponse
+};
 
 /// 招聘需求服务
 pub struct JobRequirementService {
@@ -124,14 +126,11 @@ impl JobRequirementService {
         request: JobRequirementCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobRequirementOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_JOB_REQUIREMENTS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_JOB_REQUIREMENTS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -170,18 +169,10 @@ impl JobRequirementService {
         requirement_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobRequirementDetailResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_JOB_REQUIREMENT_GET,
-                "requirement_id",
-                requirement_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_JOB_REQUIREMENT_GET.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -232,13 +223,10 @@ impl JobRequirementService {
         request: JobRequirementListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobRequirementListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_JOB_REQUIREMENTS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_JOB_REQUIREMENTS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -295,18 +283,15 @@ impl JobRequirementService {
         request: JobRequirementCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobRequirementOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_JOB_REQUIREMENT_GET,
-                "requirement_id",
-                requirement_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            HIRE_V1_JOB_REQUIREMENT_UPDATE,
+            "job_requirement_id",
+            requirement_id
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
     /// 删除招聘需求
@@ -330,18 +315,14 @@ impl JobRequirementService {
         requirement_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobRequirementOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_JOB_REQUIREMENT_GET,
-                "requirement_id",
-                requirement_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::DELETE);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            HIRE_V1_JOB_REQUIREMENT_DELETE,
+            "job_requirement_id",
+            requirement_id
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 }

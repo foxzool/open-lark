@@ -346,13 +346,10 @@ impl ExamService {
         request: ExamPaperListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExamPaperListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_EXAM_PAPERS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_EXAM_PAPERS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -435,14 +432,11 @@ impl ExamService {
         request: ExamArrangementRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExamOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_EXAM_ARRANGEMENTS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_EXAM_ARRANGEMENTS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -481,18 +475,10 @@ impl ExamService {
         record_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExamRecordDetailResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_EXAM_RECORD_GET,
-                "record_id",
-                record_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_EXAM_RECORD_GET.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -549,13 +535,10 @@ impl ExamService {
         request: ExamRecordListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExamRecordListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_EXAM_RECORDS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_EXAM_RECORDS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -632,14 +615,11 @@ impl ExamService {
         request: ExamSubmissionRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ExamOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_EXAM_SUBMISSIONS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_EXAM_SUBMISSIONS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
     /// 取消笔试
@@ -676,18 +656,11 @@ impl ExamService {
             reason: reason.to_string(),
         };
 
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_EXAM_RECORD_CANCEL,
-                "record_id",
-                record_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_EXAM_RECORD_CANCEL.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
     /// 重新安排笔试
@@ -734,18 +707,11 @@ impl ExamService {
             new_end_time: new_end_time.to_string(),
         };
 
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_EXAM_RECORD_RESCHEDULE,
-                "record_id",
-                record_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_EXAM_RECORD_RESCHEDULE.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -782,13 +748,10 @@ impl ExamService {
         end_date: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<serde_json::Value>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_EXAM_STATISTICS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_EXAM_STATISTICS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(paper_id) = paper_id {

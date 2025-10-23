@@ -88,16 +88,14 @@ impl MessageService {
     /// }
     /// ```
     pub async fn delete(&self, message_id: &str, option: Option<RequestOption>) -> SDKResult<()> {
-        let api_req = open_lark_core::core::api_req::ApiRequest {
-            http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::im::IM_V1_DELETE_MESSAGE,
-                "message_id",
-                message_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            ..Default::default()
-        };
+        let mut api_req = open_lark_core::core::api_req::ApiRequest::default();
+        api_req.set_http_method(Method::DELETE);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::im::IM_V1_DELETE_MESSAGE,
+            "message_id",
+            message_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<serde_json::Value> =
             Transport::request(api_req, &self.config, option).await?;

@@ -2,18 +2,18 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use open_lark_core::core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
-        constants::AccessTokenType,
-        endpoints::hire::*,
-        endpoints::EndpointBuilder,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
-    },
-    crate::hire::models::{CommonResponse, I18nText, PageResponse, UserId},
+    api_req::ApiRequest,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    endpoints::hire::*,
+    endpoints::EndpointBuilder,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
+
+use crate::hire::models::{CommonResponse, I18nText, PageResponse, UserId};
 
 /// 项目服务
 pub struct SubjectService {
@@ -204,14 +204,11 @@ impl SubjectService {
         request: SubjectCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_SUBJECTS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_SUBJECTS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -251,14 +248,10 @@ impl SubjectService {
         subject_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SubjectDetailResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(HIRE_V1_SUBJECT_GET, "subject_id", subject_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_SUBJECT_GET, "subject_id", subject_id));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -311,13 +304,10 @@ impl SubjectService {
         request: SubjectListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SubjectListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_SUBJECTS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_SUBJECTS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -382,14 +372,11 @@ impl SubjectService {
         request: SubjectCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(HIRE_V1_SUBJECT_GET, "subject_id", subject_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_SUBJECT_GET, "subject_id", subject_id));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
     /// 删除项目
@@ -413,13 +400,10 @@ impl SubjectService {
         subject_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(HIRE_V1_SUBJECT_GET, "subject_id", subject_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::DELETE);
+        api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_SUBJECT_GET, "subject_id", subject_id));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -444,18 +428,10 @@ impl SubjectService {
         subject_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_SUBJECT_ENABLE,
-                "subject_id",
-                subject_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_SUBJECT_ENABLE.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -480,18 +456,10 @@ impl SubjectService {
         subject_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SubjectOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_SUBJECT_DISABLE,
-                "subject_id",
-                subject_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_SUBJECT_DISABLE.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 }

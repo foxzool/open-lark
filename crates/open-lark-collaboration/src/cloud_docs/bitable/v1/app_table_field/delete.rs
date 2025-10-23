@@ -1,19 +1,12 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    open_lark_core::core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
-        constants::AccessTokenType,
-        endpoints::cloud_docs::*,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
-    },
+use open_lark_core::core::{
+
     impl_executable_builder_config,
 };
+
+use crate::impl_executable_builder_owned;
 
 /// 删除字段请求
 #[derive(Debug, Serialize, Default)]

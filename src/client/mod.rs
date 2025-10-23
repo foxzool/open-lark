@@ -48,7 +48,7 @@ use crate::service::group::GroupService;
 #[cfg(feature = "helpdesk")]
 use crate::service::helpdesk::HelpdeskService;
 #[cfg(feature = "hire")]
-use crate::service::hire::HireService;
+use open_lark_hr_suite::hire::HireService;
 #[cfg(feature = "human-authentication")]
 use crate::service::human_authentication::HumanAuthenticationService;
 #[cfg(feature = "im")]

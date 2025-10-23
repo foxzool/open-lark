@@ -48,6 +48,7 @@ pub const CONTACT_V3_FUNCTIONAL_ROLE_MEMBER_GET: &str =
 // ==================== 群组与成员 ====================
 pub const CONTACT_V3_GROUPS: &str = "/open-apis/contact/v3/groups";
 pub const CONTACT_V3_GROUPS_SIMPLELIST: &str = "/open-apis/contact/v3/groups/simplelist";
+pub const CONTACT_V3_GROUP_MEMBERS: &str = "/open-apis/contact/v3/groups/{group_id}/members";
 pub const CONTACT_V3_GROUPS_MEMBER_BELONG: &str = "/open-apis/contact/v3/groups/member_belong";
 pub const CONTACT_V3_GROUP_GET: &str = "/open-apis/contact/v3/groups/{group_id}";
 pub const CONTACT_V3_GROUP_DETAIL: &str = "/open-apis/contact/v3/groups/{group_id}/detail";

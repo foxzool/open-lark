@@ -228,14 +228,11 @@ impl TalentPoolService {
         request: TalentPoolCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_TALENT_POOLS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_TALENT_POOLS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -275,14 +272,10 @@ impl TalentPoolService {
         pool_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentPoolDetailResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(HIRE_V1_TALENT_POOL_GET, "pool_id", pool_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_TALENT_POOL_GET, "pool_id", pool_id));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -335,13 +328,10 @@ impl TalentPoolService {
         request: TalentPoolListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentPoolListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_TALENT_POOLS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_TALENT_POOLS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -421,17 +411,14 @@ impl TalentPoolService {
         request: TalentPoolTalentListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentPoolTalentListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_TALENT_POOL_TALENTS,
-                "pool_id",
-                pool_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            HIRE_V1_TALENT_POOL_TALENTS,
+            "pool_id",
+            pool_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -484,18 +471,14 @@ impl TalentPoolService {
         talent_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                &EndpointBuilder::replace_param(HIRE_V1_TALENT_POOL_TALENT_GET, "pool_id", pool_id),
-                "talent_id",
-                talent_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            HIRE_V1_TALENT_POOL_ADD_TALENT,
+            "talent_pool_id",
+            pool_id
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -523,18 +506,16 @@ impl TalentPoolService {
         talent_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                &EndpointBuilder::replace_param(HIRE_V1_TALENT_POOL_TALENT_GET, "pool_id", pool_id),
-                "talent_id",
-                talent_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::DELETE);
+        api_req.set_api_path(EndpointBuilder::replace_params(
+            HIRE_V1_TALENT_POOL_REMOVE_TALENT,
+            &std::collections::HashMap::from([
+                ("talent_pool_id", pool_id.to_string()),
+                ("talent_id", talent_id.to_string()),
+            ])
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
     /// 更新人才库
@@ -574,14 +555,11 @@ impl TalentPoolService {
         request: TalentPoolCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(HIRE_V1_TALENT_POOL_GET, "pool_id", pool_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_TALENT_POOL_GET, "pool_id", pool_id));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -606,14 +584,10 @@ impl TalentPoolService {
         pool_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TalentPoolOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(HIRE_V1_TALENT_POOL_GET, "pool_id", pool_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::DELETE);
+        api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_TALENT_POOL_GET, "pool_id", pool_id));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 }

@@ -2,17 +2,17 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use open_lark_core::core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
-        constants::AccessTokenType,
-        endpoints::hire::*,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
-    },
-    crate::hire::models::{Location, LocationQueryRequest, PageResponse},
+    api_req::ApiRequest,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    endpoints::hire::*,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
+
+use crate::hire::models::{Location, LocationQueryRequest, PageResponse};
 
 /// 地址服务
 pub struct LocationService {
@@ -71,13 +71,10 @@ impl LocationService {
         request: LocationQueryRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<LocationListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_LOCATIONS_QUERY.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_LOCATIONS_QUERY.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(location_type) = request.location_type {
@@ -119,14 +116,10 @@ impl LocationService {
         &self,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<LocationListResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_LOCATIONS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_LOCATIONS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 }

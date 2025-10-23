@@ -249,14 +249,11 @@ impl ReferralService {
         request: ReferralCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_REFERRALS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_REFERRALS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -296,18 +293,14 @@ impl ReferralService {
         referral_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralDetailResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_REFERRAL_GET,
-                "referral_id",
-                referral_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+                api_req.set_api_path(EndpointBuilder::replace_param(
+            HIRE_V1_REFERRAL_GET,
+            "referral_id",
+            referral_id
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -364,13 +357,10 @@ impl ReferralService {
         request: ReferralListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_REFERRALS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_REFERRALS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -443,14 +433,11 @@ impl ReferralService {
         request: ReferralAccountCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_REFERRAL_ACCOUNTS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_REFERRAL_ACCOUNTS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -489,18 +476,14 @@ impl ReferralService {
         user_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralAccountDetailResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_REFERRAL_ACCOUNT_GET,
-                "user_id",
-                user_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+                api_req.set_api_path(EndpointBuilder::replace_param(
+            HIRE_V1_REFERRAL_ACCOUNT_GET,
+            "account_id",
+            user_id
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
     /// 发放内推奖励
@@ -547,18 +530,11 @@ impl ReferralService {
             remark,
         };
 
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_REFERRAL_GRANT_REWARD,
-                "referral_id",
-                referral_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+                api_req.set_api_path(HIRE_V1_REFERRAL_GET.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
     /// 创建内推奖励设置
@@ -592,14 +568,11 @@ impl ReferralService {
         request: ReferralRewardSettingsCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_REFERRAL_REWARD_SETTINGS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_REFERRAL_REWARD_SETTINGS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
     /// 获取内推奖励设置列表
@@ -637,13 +610,10 @@ impl ReferralService {
         page_token: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralRewardSettingsListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_REFERRAL_REWARD_SETTINGS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_REFERRAL_REWARD_SETTINGS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = page_size {

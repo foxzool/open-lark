@@ -1,19 +1,19 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    open_lark_core::core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
-        constants::AccessTokenType,
-        endpoints::cloud_docs::*,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
-    },
-    service::bitable::v1::app_role::AppRole,
+use open_lark_core::core::{
+    api_req::ApiRequest,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    endpoints::cloud_docs::BITABLE_V1_ROLES,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
+
+use crate::impl_executable_builder_owned;
+use crate::cloud_docs::bitable::v1::app_role::AppRole;
 
 /// 列出自定义角色请求
 #[derive(Debug, Serialize, Default, Clone)]

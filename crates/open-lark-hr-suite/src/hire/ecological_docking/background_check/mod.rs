@@ -339,13 +339,10 @@ impl BackgroundCheckService {
         request: BackgroundCheckPackageListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BackgroundCheckPackageListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_BACKGROUND_CHECK_PACKAGES.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_BACKGROUND_CHECK_PACKAGES.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -438,14 +435,11 @@ impl BackgroundCheckService {
         request: BackgroundCheckOrderCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BackgroundCheckOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_BACKGROUND_CHECK_ORDERS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_BACKGROUND_CHECK_ORDERS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -484,18 +478,10 @@ impl BackgroundCheckService {
         order_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BackgroundCheckOrderDetailResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_BACKGROUND_CHECK_ORDER_GET,
-                "order_id",
-                order_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_BACKGROUND_CHECK_ORDER_GET.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -550,13 +536,10 @@ impl BackgroundCheckService {
         request: BackgroundCheckOrderListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BackgroundCheckOrderListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_BACKGROUND_CHECK_ORDERS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_BACKGROUND_CHECK_ORDERS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -625,17 +608,11 @@ impl BackgroundCheckService {
             reason: reason.to_string(),
         };
 
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_BACKGROUND_CHECK_ORDER_CANCEL,
-                "order_id",
-                order_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_BACKGROUND_CHECK_ORDER_CANCEL.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -660,18 +637,10 @@ impl BackgroundCheckService {
         order_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<serde_json::Value>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_BACKGROUND_CHECK_ORDER_REPORT,
-                "order_id",
-                order_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_BACKGROUND_CHECK_ORDER_REPORT.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
     /// 批量创建背调订单
@@ -714,14 +683,11 @@ impl BackgroundCheckService {
 
         let request = BatchCreateRequest { orders };
 
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_BACKGROUND_CHECK_ORDERS_BATCH.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_BACKGROUND_CHECK_ORDERS_BATCH.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 }

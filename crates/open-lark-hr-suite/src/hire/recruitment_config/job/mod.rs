@@ -2,18 +2,20 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use open_lark_core::core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
-        constants::AccessTokenType,
-        endpoints::hire::*,
-        endpoints::EndpointBuilder,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
-    },
-    crate::hire::models::{
-        CommonResponse, Job, JobCreateRequest, JobListRequest, JobUpdateRequest, PageResponse,};
+    api_req::ApiRequest,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    endpoints::hire::*,
+    endpoints::EndpointBuilder,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
+};
+
+use crate::hire::models::{
+    CommonResponse, Job, JobCreateRequest, JobListRequest, JobUpdateRequest, PageResponse,
+};
 
 /// 职位服务
 pub struct JobService {
@@ -118,14 +120,11 @@ impl JobService {
         request: JobCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_JOB_COMBINED_CREATE.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_JOB_COMBINED_CREATE.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -167,18 +166,11 @@ impl JobService {
         request: JobUpdateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_JOB_COMBINED_UPDATE,
-                "job_id",
-                &request.job_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_JOB_COMBINED_UPDATE.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -219,14 +211,10 @@ impl JobService {
         job_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobDetailResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(HIRE_V1_JOB_GET_DETAIL, "job_id", job_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_JOB_GET_DETAIL, "job_id", job_id));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -282,13 +270,10 @@ impl JobService {
         request: JobListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_JOBS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_JOBS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -348,13 +333,10 @@ impl JobService {
         job_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(HIRE_V1_JOB_CLOSE, "job_id", job_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_JOB_CLOSE, "job_id", job_id));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -379,14 +361,10 @@ impl JobService {
         job_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<JobOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(HIRE_V1_JOB_OPEN, "job_id", job_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(HIRE_V1_JOB_OPEN, "job_id", job_id));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 }

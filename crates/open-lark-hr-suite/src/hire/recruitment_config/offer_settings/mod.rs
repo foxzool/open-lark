@@ -2,18 +2,18 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use open_lark_core::core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
-        constants::AccessTokenType,
-        endpoints::hire::*,
-        endpoints::EndpointBuilder,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
-    },
-    crate::hire::models::{CommonResponse, I18nText, PageResponse, UserId},
+    api_req::ApiRequest,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    endpoints::hire::*,
+    endpoints::EndpointBuilder,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
+
+use crate::hire::models::{CommonResponse, I18nText, PageResponse, UserId};
 
 /// Offer设置服务
 pub struct OfferSettingsService {
@@ -250,14 +250,11 @@ impl OfferSettingsService {
         request: OfferSettingsCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OfferSettingsOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_OFFER_SETTINGS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_OFFER_SETTINGS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -299,18 +296,10 @@ impl OfferSettingsService {
         settings_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OfferSettingsDetailResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_OFFER_SETTING_GET,
-                "settings_id",
-                settings_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_OFFER_SETTING_GET.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -361,13 +350,10 @@ impl OfferSettingsService {
         request: OfferSettingsListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OfferSettingsListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_OFFER_SETTINGS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_OFFER_SETTINGS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -430,18 +416,15 @@ impl OfferSettingsService {
         request: OfferSettingsCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OfferSettingsOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_OFFER_SETTING_GET,
-                "settings_id",
-                settings_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            HIRE_V1_OFFER_SETTING_UPDATE,
+            "offer_setting_id",
+            settings_id
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
     /// 删除Offer设置
@@ -465,18 +448,14 @@ impl OfferSettingsService {
         settings_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OfferSettingsOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_V1_OFFER_SETTING_GET,
-                "settings_id",
-                settings_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::DELETE);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            HIRE_V1_OFFER_SETTING_DELETE,
+            "offer_setting_id",
+            settings_id
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 }

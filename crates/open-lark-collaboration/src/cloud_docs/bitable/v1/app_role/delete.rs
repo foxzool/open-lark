@@ -2,19 +2,18 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use super::AppRoleService;
-use crate::{
-    open_lark_core::core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
-        constants::AccessTokenType,
-        endpoints::cloud_docs::*,
-        http::Transport,
-        req_option::RequestOption,
-        SDKResult,
-    },
-    impl_executable_builder_owned,
+use open_lark_core::core::{
+    api_req::ApiRequest,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    endpoints::cloud_docs::BITABLE_V1_ROLE_DELETE,
+    http::Transport,
+    req_option::RequestOption,
+    SDKResult,
 };
+
+use crate::impl_executable_builder_owned;
 
 /// 删除自定义角色请求
 #[derive(Debug, Serialize, Default)]

@@ -56,6 +56,12 @@ pub const IM_V1_MESSAGE_URGENT_SMS: &str = "/open-apis/im/v1/messages/{message_i
 /// 消息加急 - 电话加急
 pub const IM_V1_MESSAGE_URGENT_PHONE: &str = "/open-apis/im/v1/messages/{message_id}/urgent_phone";
 
+/// 消息卡片端点
+pub const IM_V1_CARDS: &str = "/open-apis/im/v1/cards/{message_id}";
+
+/// URL 预览端点
+pub const IM_V1_URL_PREVIEW: &str = "/open-apis/im/v1/url_preview/resolve";
+
 /// 延迟更新消息
 pub const IM_V1_MESSAGE_DELAY_UPDATE: &str = "/open-apis/im/v1/messages/{message_id}/delay_update";
 
@@ -111,11 +117,17 @@ pub const IM_V1_FILES: &str = "/open-apis/im/v1/files";
 /// 下载文件
 pub const IM_V1_DOWNLOAD_FILE: &str = "/open-apis/im/v1/files/{file_key}";
 
+/// 下载文件（别名）
+pub const IM_V1_FILES_DOWNLOAD: &str = "/open-apis/im/v1/files/{file_key}";
+
 /// 上传图片
 pub const IM_V1_IMAGES: &str = "/open-apis/im/v1/images";
 
 /// 下载图片
 pub const IM_V1_DOWNLOAD_IMAGE: &str = "/open-apis/im/v1/images/{image_key}";
+
+/// 下载图片（别名）
+pub const IM_V1_IMAGES_DOWNLOAD: &str = "/open-apis/im/v1/images/{image_key}";
 
 // ==================== IM V2 端点 ====================
 

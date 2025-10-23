@@ -2,19 +2,19 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use open_lark_core::core::{
-        api_req::ApiRequest,
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
-        constants::AccessTokenType,
-        endpoints::hire::*,
-        endpoints::EndpointBuilder,
-        http::Transport,
-        query_params::QueryParams,
-        req_option::RequestOption,
-        SDKResult,
-    },
-    crate::hire::models::{CommonResponse, PageResponse, ReferralAccount},
+    api_req::ApiRequest,
+    api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+    config::Config,
+    constants::AccessTokenType,
+    endpoints::hire::*,
+    endpoints::EndpointBuilder,
+    http::Transport,
+    query_params::QueryParams,
+    req_option::RequestOption,
+    SDKResult,
 };
+
+use crate::hire::models::{CommonResponse, PageResponse, ReferralAccount};
 
 /// 内推账户服务
 pub struct ReferralAccountService {
@@ -322,14 +322,11 @@ impl ReferralAccountService {
         request: ReferralAccountCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_V1_REFERRAL_ACCOUNTS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_V1_REFERRAL_ACCOUNTS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -380,13 +377,10 @@ impl ReferralAccountService {
         request: ReferralAccountListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralAccountListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_V1_REFERRAL_ACCOUNTS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_V1_REFERRAL_ACCOUNTS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -446,18 +440,10 @@ impl ReferralAccountService {
         user_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralAccountBalanceResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_REFERRAL_ACCOUNT_BALANCE,
-                "user_id",
-                user_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+                api_req.set_api_path(HIRE_REFERRAL_ACCOUNT_BALANCE.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -512,13 +498,10 @@ impl ReferralAccountService {
         request: IncomeRecordListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<IncomeRecordListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_REFERRAL_INCOME_RECORDS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_REFERRAL_INCOME_RECORDS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -606,14 +589,11 @@ impl ReferralAccountService {
         request: WithdrawalApplicationRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: HIRE_REFERRAL_WITHDRAWALS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(HIRE_REFERRAL_WITHDRAWALS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -668,13 +648,10 @@ impl ReferralAccountService {
         request: WithdrawalRecordListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<WithdrawalRecordListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_REFERRAL_WITHDRAWALS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_REFERRAL_WITHDRAWALS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -750,18 +727,11 @@ impl ReferralAccountService {
 
         let request = ApprovalRequest { approved, remark };
 
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_REFERRAL_WITHDRAWAL_APPROVE,
-                "withdrawal_id",
-                withdrawal_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+                api_req.set_api_path(HIRE_REFERRAL_ACCOUNT_BALANCE.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -786,18 +756,10 @@ impl ReferralAccountService {
         user_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<ReferralAccountOperationResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_REFERRAL_ACCOUNT_ENABLE,
-                "user_id",
-                user_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+                api_req.set_api_path(HIRE_REFERRAL_ACCOUNT_BALANCE.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -835,18 +797,11 @@ impl ReferralAccountService {
             reason: reason.to_string(),
         };
 
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                HIRE_REFERRAL_ACCOUNT_DISABLE,
-                "user_id",
-                user_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request).unwrap_or_default(),
-            ..Default::default()
-        };
-
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+                api_req.set_api_path(HIRE_REFERRAL_ACCOUNT_BALANCE.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&request).unwrap_or_default();
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -879,13 +834,10 @@ impl ReferralAccountService {
         end_date: Option<String>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<serde_json::Value>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: HIRE_REFERRAL_STATISTICS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(HIRE_REFERRAL_STATISTICS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(start_date) = start_date {
