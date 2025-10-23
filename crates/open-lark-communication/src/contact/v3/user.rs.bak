@@ -1,0 +1,88 @@
+use open_lark_core::core::{
+use serde_json;    api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
+    constants::AccessTokenType, endpoints::EndpointBuilder, http::Transport,
+};
+use crate::contact::models::*;
+use serde::{Deserialize, Serialize};
+
+/// 用户管理服务
+pub struct UserService {
+    config: Config,
+}
+impl UserService {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+    /// 获取配置引用
+    pub fn config(&self) -> &Config {
+        &self.config
+    /// 创建用户
+    pub async fn create(
+        &self,
+        req: &CreateUserRequest,
+    ) -> open_lark_core::core::SDKResult<CreateUserResponse> {
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::POST);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_USERS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
+        let resp = Transport::<CreateUserResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
+    /// 获取单个用户信息
+    pub async fn get(
+        user_id: &str,
+        _req: &GetUserRequest,
+    ) -> open_lark_core::core::SDKResult<GetUserResponse> {
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::contact::CONTACT_V3_USER_GET,
+            "user_id",
+            user_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
+        let resp = Transport::<GetUserResponse>::request(api_req, &self.config, None).await?;
+    /// 获取用户列表
+    pub async fn list(&self, _req: &ListUsersRequest) -> open_lark_core::core::SDKResult<ListUsersResponse> {
+        let resp = Transport::<ListUsersResponse>::request(api_req, &self.config, None).await?;
+    /// 更新用户
+    pub async fn patch(
+        req: &PatchUserRequest,
+    ) -> open_lark_core::core::SDKResult<PatchUserResponse> {
+        api_req.set_http_method(reqwest::Method::PATCH);
+        let resp = Transport::<PatchUserResponse>::request(api_req, &self.config, None).await?;
+    /// 删除用户
+    pub async fn delete(
+        _req: &DeleteUserRequest,
+    ) -> open_lark_core::core::SDKResult<DeleteUserResponse> {
+        api_req.set_http_method(reqwest::Method::DELETE);
+        let resp = Transport::<DeleteUserResponse>::request(api_req, &self.config, None).await?;
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateUserRequest {
+    pub user: User,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id_type: Option<String>,
+    pub department_id_type: Option<String>,
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct CreateUserResponse {
+impl ApiResponseTrait for CreateUserResponse {
+    fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
+        open_lark_core::core::api_resp::ResponseFormat::Data
+pub struct PatchUserRequest {
+pub struct PatchUserResponse {
+impl ApiResponseTrait for PatchUserResponse {
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct GetUserRequest {
+pub struct GetUserResponse {
+impl ApiResponseTrait for GetUserResponse {
+pub struct ListUsersRequest {
+    pub page_size: Option<i32>,
+    pub page_token: Option<String>,
+pub struct ListUsersResponse {
+    pub items: Vec<User>,
+    pub has_more: Option<bool>,
+impl ApiResponseTrait for ListUsersResponse {
+pub struct DeleteUserRequest {
+pub struct DeleteUserResponse {}
+impl ApiResponseTrait for DeleteUserResponse {

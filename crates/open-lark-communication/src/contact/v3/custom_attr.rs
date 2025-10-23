@@ -1,7 +1,7 @@
 use open_lark_core::core::{
-    api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
     constants::AccessTokenType, http::Transport,
-};
+    api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
+},
 use crate::contact::models::*;
 use serde::{Deserialize, Serialize};
 
@@ -9,7 +9,6 @@ use serde::{Deserialize, Serialize};
 pub struct CustomAttrService {
     config: Config,
 }
-
 impl CustomAttrService {
     pub fn new(config: Config) -> Self {
         Self { config }
@@ -17,40 +16,3 @@ impl CustomAttrService {
     /// 获取企业自定义用户字段
     pub async fn list(
         &self,
-        _req: &ListCustomAttrsRequest,
-    ) -> open_lark_core::core::SDKResult<ListCustomAttrsResponse> {
-        let mut api_req = ApiRequest::default();
-        api_req.set_http_method(reqwest::Method::GET);
-        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_CUSTOM_ATTRS.to_string());
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
-        api_req.body = Vec::new();
-        api_req.query_params = std::collections::HashMap::new();
-
-        let resp =
-            Transport::<ListCustomAttrsResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
-    }
-}
-
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-pub struct ListCustomAttrsRequest {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_size: Option<i32>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct ListCustomAttrsResponse {
-    pub items: Vec<CustomAttr>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub has_more: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
-
-impl ApiResponseTrait for ListCustomAttrsResponse {
-    fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-        open_lark_core::core::api_resp::ResponseFormat::Data
-    }
-}

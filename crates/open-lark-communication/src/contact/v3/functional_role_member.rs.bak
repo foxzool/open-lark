@@ -1,0 +1,136 @@
+use open_lark_core::core::{
+use serde_json;    constants::AccessTokenType, http::Transport,
+    api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config, constants::AccessTokenType,
+    endpoints::EndpointBuilder, http::Transport,
+};
+use serde::{Deserialize, Serialize};
+
+/// 角色成员服务
+pub struct FunctionalRoleMemberService {
+    config: Config,
+}
+impl FunctionalRoleMemberService {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+    /// 添加角色成员
+    pub async fn create(
+        &self,
+        role_id: &str,
+        req: &CreateRoleMemberRequest,
+    ) -> open_lark_core::core::SDKResult<CreateRoleMemberResponse> {
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS,
+            "role_id",
+            role_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
+        let resp = Transport::<CreateRoleMemberResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
+    /// 批量添加角色成员
+    pub async fn batch_create(
+        req: &BatchCreateRoleMembersRequest,
+    ) -> open_lark_core::core::SDKResult<BatchCreateRoleMembersResponse> {
+            open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_CREATE,
+        let resp = Transport::<BatchCreateRoleMembersResponse>::request(api_req, &self.config, None).await?;
+    /// 批量设置角色成员管理范围
+    pub async fn scopes(
+        req: &SetRoleMemberScopesRequest,
+    ) -> open_lark_core::core::SDKResult<SetRoleMemberScopesResponse> {
+        api_req.set_http_method(reqwest::Method::PUT);
+            open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_SCOPES,
+        let resp = Transport::<SetRoleMemberScopesResponse>::request(api_req, &self.config, None).await?;
+    /// 查询角色下某个成员的管理范围
+    pub async fn get(
+        member_id: &str,
+        _req: &GetRoleMemberRequest,
+    ) -> open_lark_core::core::SDKResult<GetRoleMemberResponse> {
+        api_req.set_http_method(reqwest::Method::GET);
+            &EndpointBuilder::replace_param(
+                open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBER_GET,
+                "role_id",
+                role_id,
+            ),
+            "member_id",
+            member_id,
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
+        let resp = Transport::<GetRoleMemberResponse>::request(api_req, &self.config, None).await?;
+    /// 查询角色下的所有成员信息
+    pub async fn list(
+        _req: &ListRoleMembersRequest,
+    ) -> open_lark_core::core::SDKResult<ListRoleMembersResponse> {
+        let resp = Transport::<ListRoleMembersResponse>::request(api_req, &self.config, None).await?;
+    /// 删除角色下的成员
+    pub async fn batch_delete(
+        req: &BatchDeleteRoleMembersRequest,
+    ) -> open_lark_core::core::SDKResult<BatchDeleteRoleMembersResponse> {
+        api_req.set_http_method(reqwest::Method::DELETE);
+            open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_DELETE,
+        let resp = Transport::<BatchDeleteRoleMembersResponse>::request(api_req, &self.config, None).await?;
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateRoleMemberRequest {
+    /// 成员信息
+    pub member: RoleMemberInfo,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id_type: Option<String>,
+    pub department_id_type: Option<String>,
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct CreateRoleMemberResponse {
+    pub member_id: String,
+impl ApiResponseTrait for CreateRoleMemberResponse {
+    fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
+        open_lark_core::core::api_resp::ResponseFormat::Data
+pub struct BatchCreateRoleMembersRequest {
+    pub members: Vec<RoleMemberInfo>,
+pub struct BatchCreateRoleMembersResponse {
+    pub results: Vec<RoleMemberResult>,
+impl ApiResponseTrait for BatchCreateRoleMembersResponse {
+pub struct SetRoleMemberScopesRequest {
+    pub members: Vec<RoleMemberScope>,
+pub struct SetRoleMemberScopesResponse {}
+impl ApiResponseTrait for SetRoleMemberScopesResponse {
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct GetRoleMemberRequest {
+pub struct GetRoleMemberResponse {
+    pub member: RoleMember,
+impl ApiResponseTrait for GetRoleMemberResponse {
+pub struct ListRoleMembersRequest {
+    pub page_size: Option<i32>,
+    pub page_token: Option<String>,
+pub struct ListRoleMembersResponse {
+    pub members: Vec<RoleMember>,
+    pub has_more: Option<bool>,
+impl ApiResponseTrait for ListRoleMembersResponse {
+pub struct BatchDeleteRoleMembersRequest {
+    pub member_ids: Vec<String>,
+pub struct BatchDeleteRoleMembersResponse {
+impl ApiResponseTrait for BatchDeleteRoleMembersResponse {
+// 公共数据结构
+pub struct RoleMemberInfo {
+    /// 成员ID
+    pub member_id: Option<String>,
+    /// 成员类型 (user/department)
+    pub member_type: Option<String>,
+    /// 管理范围
+    pub scope: Option<String>,
+pub struct RoleMember {
+    /// 成员类型
+    pub member_info: Option<RoleMemberDetail>,
+    pub scopes: Option<Vec<String>>,
+pub struct RoleMemberDetail {
+    /// 成员名称
+    pub name: Option<String>,
+    /// 成员邮箱
+    pub email: Option<String>,
+pub struct RoleMemberScope {
+    /// 管理范围列表
+    pub scopes: Vec<String>,
+pub struct RoleMemberResult {
+    /// 操作是否成功
+    pub success: bool,
+    /// 错误信息
+    pub error: Option<String>,

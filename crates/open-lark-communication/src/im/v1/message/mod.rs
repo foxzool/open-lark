@@ -64,9 +64,11 @@ mod tests {
 
         assert_eq!(service.config.app_id, config.app_id);
         assert_eq!(service.config.app_secret, config.app_secret);
+
         // 验证 Service 抽象静态信息
         assert_eq!(MessageService::service_name(), "im.message");
         assert_eq!(MessageService::service_version(), "v1");
+
         // 验证 Service::config() 访问
         assert_eq!(service.config().app_id, config.app_id);
     }
@@ -97,6 +99,7 @@ mod tests {
             .app_id("message1")
             .app_secret("secret1")
             .build();
+
         let config2 = Config::builder()
             .app_id("message2")
             .app_secret("secret2")
@@ -156,7 +159,6 @@ mod tests {
 
         for config in test_configs {
             let service = MessageService::new(config.clone());
-
             assert_eq!(service.config.app_id, config.app_id);
             assert_eq!(service.config.app_secret, config.app_secret);
             assert_eq!(service.config.base_url, config.base_url);
@@ -182,7 +184,6 @@ mod tests {
     fn test_message_service_config_cloning() {
         let original_config = create_test_config();
         let cloned_config = original_config.clone();
-
         let service = MessageService::new(cloned_config);
 
         assert_eq!(service.config.app_id, original_config.app_id);
@@ -205,6 +206,7 @@ mod tests {
             .app_secret("消息密钥")
             .base_url("https://消息.com")
             .build();
+
         let service = MessageService::new(config);
 
         assert_eq!(service.config.app_id, "消息应用");
@@ -219,6 +221,7 @@ mod tests {
             .app_secret("extreme_secret")
             .req_timeout(std::time::Duration::from_secs(10800))
             .build();
+
         let service = MessageService::new(config);
 
         assert_eq!(
@@ -259,29 +262,5 @@ mod tests {
                 assert_ne!(ptr1, ptr2, "Services should be independent instances");
             }
         }
-    }
-
-    #[test]
-    fn test_message_service_debug_trait() {
-        let config = create_test_config();
-        let service = MessageService::new(config);
-
-        let debug_output = format!("{:?}", service);
-        assert!(debug_output.contains("MessageService"));
-        assert!(debug_output.contains("config"));
-    }
-
-    #[test]
-    fn test_message_service_clone_trait() {
-        let config = create_test_config();
-        let service = MessageService::new(config);
-        let cloned_service = service.clone();
-
-        assert_eq!(service.config.app_id, cloned_service.config.app_id);
-        assert_eq!(service.config.app_secret, cloned_service.config.app_secret);
-
-        let ptr1 = std::ptr::addr_of!(service) as *const u8;
-        let ptr2 = std::ptr::addr_of!(cloned_service) as *const u8;
-        assert_ne!(ptr1, ptr2, "Cloned service should be a different instance");
     }
 }

@@ -4,14 +4,11 @@
 //! instant messaging, contacts, and other communication-related services.
 
 #![allow(missing_docs)]
-
 // Include macros first
 #[macro_use]
 mod macros;
-
 pub mod im;
 pub mod contact;
-
 /// Re-exports from open-lark-core for convenience.
 pub mod prelude {
     pub use open_lark_core::*;

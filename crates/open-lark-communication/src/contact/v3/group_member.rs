@@ -1,16 +1,17 @@
 use open_lark_core::core::{
-    api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
-    constants::AccessTokenType, endpoints::EndpointBuilder, http::Transport,
-};
-use crate::contact::models::*;
-use serde::{Deserialize, Serialize};
+    constants::AccessTokenType, http::Transport,
+    api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config, constants::AccessTokenType, http::Transport,
+},
+use serde::{Deserialize, Serialize },
+use serde_json;
 
+// Import shared types from user module
+use super::user::{GroupMember, GroupMemberInfo, GroupMemberResult};
 /// 用户组成员服务
 #[derive(Debug)]
 pub struct GroupMemberService {
     config: Config,
 }
-
 impl GroupMemberService {
     pub fn new(config: Config) -> Self {
         Self { config }
@@ -20,180 +21,3 @@ impl GroupMemberService {
         &self,
         group_id: &str,
         req: &AddGroupMemberRequest,
-    ) -> open_lark_core::core::SDKResult<AddGroupMemberResponse> {
-        let mut api_req = ApiRequest::default();
-        api_req.set_http_method(reqwest::Method::POST);
-        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_GROUP_MEMBERS.to_string());
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
-        api_req.body = serde_json::to_vec(req)?;
-
-        let resp =
-            Transport::<AddGroupMemberResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
-    }
-
-    /// 批量添加用户组成员
-    pub async fn batch_add(
-        &self,
-        group_id: &str,
-        req: &BatchAddGroupMembersRequest,
-    ) -> open_lark_core::core::SDKResult<BatchAddGroupMembersResponse> {
-        let mut api_req = ApiRequest::default();
-        api_req.set_http_method(reqwest::Method::POST);
-        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_GROUP_MEMBERS.to_string());
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
-        api_req.body = serde_json::to_vec(req)?;
-
-        let resp =
-            Transport::<BatchAddGroupMembersResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
-    }
-
-    /// 查询用户组成员列表
-    pub async fn simplelist(
-        &self,
-        group_id: &str,
-        _req: &ListGroupMembersRequest,
-    ) -> open_lark_core::core::SDKResult<ListGroupMembersResponse> {
-        let mut api_req = ApiRequest::default();
-        api_req.set_http_method(reqwest::Method::GET);
-        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_GROUP_MEMBERS.to_string());
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
-        api_req.body = Vec::new();
-        api_req.query_params = std::collections::HashMap::new();
-
-        let resp =
-            Transport::<ListGroupMembersResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
-    }
-
-    /// 移除用户组成员
-    pub async fn remove(
-        &self,
-        group_id: &str,
-        req: &RemoveGroupMemberRequest,
-    ) -> open_lark_core::core::SDKResult<RemoveGroupMemberResponse> {
-        let mut api_req = ApiRequest::default();
-        api_req.set_http_method(reqwest::Method::POST);
-        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_GROUP_MEMBERS.to_string());
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
-        api_req.body = serde_json::to_vec(req)?;
-
-        let resp =
-            Transport::<RemoveGroupMemberResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
-    }
-
-    /// 批量移除用户组成员
-    pub async fn batch_remove(
-        &self,
-        group_id: &str,
-        req: &BatchRemoveGroupMembersRequest,
-    ) -> open_lark_core::core::SDKResult<BatchRemoveGroupMembersResponse> {
-        let mut api_req = ApiRequest::default();
-        api_req.set_http_method(reqwest::Method::POST);
-        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_GROUP_MEMBERS.to_string());
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
-        api_req.body = serde_json::to_vec(req)?;
-
-        let resp =
-            Transport::<BatchRemoveGroupMembersResponse>::request(api_req, &self.config, None)
-                .await?;
-        Ok(resp.data.unwrap_or_default())
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AddGroupMemberRequest {
-    pub member_id: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub member_id_type: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub member_type: Option<String>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct AddGroupMemberResponse {}
-
-impl ApiResponseTrait for AddGroupMemberResponse {
-    fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-        open_lark_core::core::api_resp::ResponseFormat::Data
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BatchAddGroupMembersRequest {
-    pub members: Vec<GroupMemberInfo>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct BatchAddGroupMembersResponse {
-    pub results: Vec<GroupMemberResult>,
-}
-
-impl ApiResponseTrait for BatchAddGroupMembersResponse {
-    fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-        open_lark_core::core::api_resp::ResponseFormat::Data
-    }
-}
-
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-pub struct ListGroupMembersRequest {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub member_id_type: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub member_type: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_size: Option<i32>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct ListGroupMembersResponse {
-    pub memberlist: Vec<GroupMember>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub has_more: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_token: Option<String>,
-}
-
-impl ApiResponseTrait for ListGroupMembersResponse {
-    fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-        open_lark_core::core::api_resp::ResponseFormat::Data
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct RemoveGroupMemberRequest {
-    pub member_id: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub member_id_type: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub member_type: Option<String>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct RemoveGroupMemberResponse {}
-
-impl ApiResponseTrait for RemoveGroupMemberResponse {
-    fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-        open_lark_core::core::api_resp::ResponseFormat::Data
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BatchRemoveGroupMembersRequest {
-    pub members: Vec<GroupMemberInfo>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct BatchRemoveGroupMembersResponse {
-    pub results: Vec<GroupMemberResult>,
-}
-
-impl ApiResponseTrait for BatchRemoveGroupMembersResponse {
-    fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-        open_lark_core::core::api_resp::ResponseFormat::Data
-    }
-}

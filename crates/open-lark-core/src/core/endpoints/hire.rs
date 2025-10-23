@@ -65,8 +65,12 @@ pub const HIRE_V1_JOB_OPEN: &str = "/open-apis/hire/v1/jobs/{job_id}/open";
 pub const HIRE_V1_JOB_CLOSE: &str = "/open-apis/hire/v1/jobs/{job_id}/close";
 pub const HIRE_V1_JOB_PROCESSES: &str = "/open-apis/hire/v1/job_processes";
 pub const HIRE_V1_JOB_PROCESS_GET: &str = "/open-apis/hire/v1/job_processes/{job_process_id}";
+pub const HIRE_V1_JOB_PROCESS_UPDATE: &str = "/open-apis/hire/v1/job_processes/{job_process_id}";
+pub const HIRE_V1_JOB_PROCESS_DELETE: &str = "/open-apis/hire/v1/job_processes/{job_process_id}";
 pub const HIRE_V1_JOB_REQUIREMENTS: &str = "/open-apis/hire/v1/job_requirements";
 pub const HIRE_V1_JOB_REQUIREMENT_GET: &str =
+    "/open-apis/hire/v1/job_requirements/{job_requirement_id}";
+pub const HIRE_V1_JOB_REQUIREMENT_UPDATE: &str =
     "/open-apis/hire/v1/job_requirements/{job_requirement_id}";
 
 /// 人才库管理
@@ -76,6 +80,10 @@ pub const HIRE_V1_TALENT_POOL_TALENTS: &str =
     "/open-apis/hire/v1/talent_pools/{talent_pool_id}/talents";
 pub const HIRE_V1_TALENT_POOL_TALENT_GET: &str =
     "/open-apis/hire/v1/talent_pools/{talent_pool_id}/talents/{talent_id}";
+pub const HIRE_V1_TALENT_POOL_ADD_TALENT: &str =
+    "/open-apis/hire/v1/talent_pools/{talent_pool_id}/talents";
+pub const HIRE_V1_TALENT_POOL_REMOVE_TALENT: &str =
+    "/open-apis/hire/v1/talent_pools/{talent_pool_id}/talents/{talent_id}/remove";
 
 /// 标签管理
 pub const HIRE_V1_TALENT_TAGS: &str = "/open-apis/hire/v1/talent_tags";
@@ -132,6 +140,10 @@ pub const HIRE_V1_EXTERNAL_SYSTEMS_TEST_CONNECTION: &str =
 /// 面试设置
 pub const HIRE_V1_INTERVIEW_SETTINGS: &str = "/open-apis/hire/v1/interview_settings";
 pub const HIRE_V1_INTERVIEW_SETTING_GET: &str =
+    "/open-apis/hire/v1/interview_settings/{interview_setting_id}";
+pub const HIRE_V1_INTERVIEW_SETTING_UPDATE: &str =
+    "/open-apis/hire/v1/interview_settings/{interview_setting_id}";
+pub const HIRE_V1_INTERVIEW_SETTING_DELETE: &str =
     "/open-apis/hire/v1/interview_settings/{interview_setting_id}";
 
 /// 地点管理
