@@ -20,13 +20,11 @@ impl UnitService {
         &self,
         req: &CreateUnitRequest,
     ) -> open_lark_core::core::SDKResult<CreateUnitResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_UNITS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::POST);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_UNITS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp = Transport::<CreateUnitResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -38,17 +36,11 @@ impl UnitService {
         unit_id: &str,
         req: &PatchUnitRequest,
     ) -> open_lark_core::core::SDKResult<PatchUnitResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::PATCH,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_UNIT_GET,
-                "unit_id",
-                unit_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::PATCH);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_UNITS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp = Transport::<PatchUnitResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -60,17 +52,11 @@ impl UnitService {
         unit_id: &str,
         req: &BindDepartmentRequest,
     ) -> open_lark_core::core::SDKResult<BindDepartmentResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_UNIT_BIND_DEPARTMENT,
-                "unit_id",
-                unit_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::POST);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_UNITS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp = Transport::<BindDepartmentResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -82,17 +68,11 @@ impl UnitService {
         unit_id: &str,
         req: &UnbindDepartmentRequest,
     ) -> open_lark_core::core::SDKResult<UnbindDepartmentResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_UNIT_UNBIND_DEPARTMENT,
-                "unit_id",
-                unit_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::DELETE);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_UNITS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp = Transport::<UnbindDepartmentResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -104,18 +84,12 @@ impl UnitService {
         unit_id: &str,
         _req: &ListUnitDepartmentsRequest,
     ) -> open_lark_core::core::SDKResult<ListUnitDepartmentsResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_UNIT_LIST_DEPARTMENTS,
-                "unit_id",
-                unit_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_UNITS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
         let resp = Transport::<ListUnitDepartmentsResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
     }
@@ -126,18 +100,12 @@ impl UnitService {
     ///
     /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get
     pub async fn get(&self, unit_id: &str) -> open_lark_core::core::SDKResult<GetUnitResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_UNIT_GET,
-                "unit_id",
-                unit_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_UNITS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
 
         let resp = Transport::<GetUnitResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -149,14 +117,12 @@ impl UnitService {
     ///
     /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/list
     pub async fn list(&self, _req: &ListUnitsRequest) -> open_lark_core::core::SDKResult<ListUnitsResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_UNITS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_UNITS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
 
         let resp = Transport::<ListUnitsResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -168,17 +134,11 @@ impl UnitService {
     ///
     /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/delete
     pub async fn delete(&self, unit_id: &str) -> open_lark_core::core::SDKResult<DeleteUnitResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_UNIT_GET,
-                "unit_id",
-                unit_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: Vec::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::DELETE);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_UNITS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
 
         let resp = Transport::<DeleteUnitResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())

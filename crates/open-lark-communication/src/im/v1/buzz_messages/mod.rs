@@ -17,7 +17,7 @@ use open_lark_core::{
     },
 };
 
-use crate::im::models::UserIdType;
+use crate::im::models::UserIdTypeV1 as UserIdType;
 
 /// 消息加急服务
 pub struct BuzzMessagesService {
@@ -73,18 +73,16 @@ impl BuzzMessagesService {
         request: UrgentAppRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<UrgentResponse> {
-        let api_req = ApiRequest {
-            http_method: Method::PATCH,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::im::IM_V1_MESSAGE_URGENT_APP,
-                "message_id",
-                message_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params: HashMap::from([("user_id_type", user_id_type.as_str().to_string())]),
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::PATCH);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::im::IM_V1_MESSAGE_URGENT_APP,
+            "message_id",
+            message_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.query_params = HashMap::from([("user_id_type", user_id_type.as_str().to_string())]);
+        api_req.body = serde_json::to_vec(&request)?;
 
         let api_resp: BaseResponse<UrgentResponse> =
             Transport::request(api_req, &self.config, option).await?;
@@ -99,18 +97,16 @@ impl BuzzMessagesService {
         request: UrgentSmsRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<UrgentResponse> {
-        let api_req = ApiRequest {
-            http_method: Method::PATCH,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::im::IM_V1_MESSAGE_URGENT_SMS,
-                "message_id",
-                message_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params: HashMap::from([("user_id_type", user_id_type.as_str().to_string())]),
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::PATCH);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::im::IM_V1_MESSAGE_URGENT_SMS,
+            "message_id",
+            message_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.query_params = HashMap::from([("user_id_type", user_id_type.as_str().to_string())]);
+        api_req.body = serde_json::to_vec(&request)?;
 
         let api_resp: BaseResponse<UrgentResponse> =
             Transport::request(api_req, &self.config, option).await?;
@@ -125,18 +121,16 @@ impl BuzzMessagesService {
         request: UrgentPhoneRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<UrgentResponse> {
-        let api_req = ApiRequest {
-            http_method: Method::PATCH,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::im::IM_V1_MESSAGE_URGENT_PHONE,
-                "message_id",
-                message_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params: HashMap::from([("user_id_type", user_id_type.as_str().to_string())]),
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::PATCH);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::im::IM_V1_MESSAGE_URGENT_PHONE,
+            "message_id",
+            message_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.query_params = HashMap::from([("user_id_type", user_id_type.as_str().to_string())]);
+        api_req.body = serde_json::to_vec(&request)?;
 
         let api_resp: BaseResponse<UrgentResponse> =
             Transport::request(api_req, &self.config, option).await?;

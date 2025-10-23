@@ -36,13 +36,11 @@ impl DepartmentService {
         &self,
         req: &CreateDepartmentRequest,
     ) -> open_lark_core::core::SDKResult<CreateDepartmentResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENTS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::POST);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENTS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp =
             Transport::<CreateDepartmentResponse>::request(api_req, &self.config, None).await?;
@@ -56,17 +54,15 @@ impl DepartmentService {
         department_id: &str,
         req: &PatchDepartmentRequest,
     ) -> open_lark_core::core::SDKResult<PatchDepartmentResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::PATCH,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENT_GET,
-                "department_id",
-                department_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::PATCH);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENT_GET,
+            "department_id",
+            department_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
         let resp =
             Transport::<PatchDepartmentResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -80,17 +76,15 @@ impl DepartmentService {
         department_id: &str,
         req: &UpdateDepartmentRequest,
     ) -> open_lark_core::core::SDKResult<UpdateDepartmentResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::PUT,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENT_GET,
-                "department_id",
-                department_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::PUT);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENT_GET,
+            "department_id",
+            department_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp =
             Transport::<UpdateDepartmentResponse>::request(api_req, &self.config, None).await?;
@@ -105,17 +99,15 @@ impl DepartmentService {
         department_id: &str,
         req: &UpdateDepartmentIdRequest,
     ) -> open_lark_core::core::SDKResult<UpdateDepartmentIdResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::PATCH,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENT_UPDATE_ID,
-                "department_id",
-                department_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::PATCH);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENT_UPDATE_ID,
+            "department_id",
+            department_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp =
             Transport::<UpdateDepartmentIdResponse>::request(api_req, &self.config, None).await?;
@@ -130,18 +122,16 @@ impl DepartmentService {
         department_id: &str,
         _req: &GetDepartmentRequest,
     ) -> open_lark_core::core::SDKResult<GetDepartmentResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENT_GET,
-                "department_id",
-                department_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENT_GET,
+            "department_id",
+            department_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
         let resp = Transport::<GetDepartmentResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
     }
@@ -151,13 +141,11 @@ impl DepartmentService {
         &self,
         req: &BatchGetDepartmentsRequest,
     ) -> open_lark_core::core::SDKResult<BatchGetDepartmentsResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENTS_BATCH.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::POST);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENTS_BATCH.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp =
             Transport::<BatchGetDepartmentsResponse>::request(api_req, &self.config, None).await?;
@@ -169,14 +157,12 @@ impl DepartmentService {
         &self,
         _req: &GetChildrenDepartmentsRequest,
     ) -> open_lark_core::core::SDKResult<GetChildrenDepartmentsResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENTS_CHILDREN.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENTS_CHILDREN.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
 
         let resp =
             Transport::<GetChildrenDepartmentsResponse>::request(api_req, &self.config, None)
@@ -189,14 +175,12 @@ impl DepartmentService {
         &self,
         _req: &GetParentDepartmentRequest,
     ) -> open_lark_core::core::SDKResult<GetParentDepartmentResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENTS_PARENT.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENTS_PARENT.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
 
         let resp =
             Transport::<GetParentDepartmentResponse>::request(api_req, &self.config, None).await?;
@@ -208,13 +192,11 @@ impl DepartmentService {
         &self,
         req: &SearchDepartmentsRequest,
     ) -> open_lark_core::core::SDKResult<SearchDepartmentsResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENTS_SEARCH.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::POST);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENTS_SEARCH.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp =
             Transport::<SearchDepartmentsResponse>::request(api_req, &self.config, None).await?;
@@ -227,18 +209,16 @@ impl DepartmentService {
         department_id: &str,
         _req: &DeleteDepartmentRequest,
     ) -> open_lark_core::core::SDKResult<DeleteDepartmentResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENT_GET,
-                "department_id",
-                department_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::DELETE);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::contact::CONTACT_V3_DEPARTMENT_GET,
+            "department_id",
+            department_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
 
         let resp =
             Transport::<DeleteDepartmentResponse>::request(api_req, &self.config, None).await?;

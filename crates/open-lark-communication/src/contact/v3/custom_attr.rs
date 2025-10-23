@@ -19,14 +19,12 @@ impl CustomAttrService {
         &self,
         _req: &ListCustomAttrsRequest,
     ) -> open_lark_core::core::SDKResult<ListCustomAttrsResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_CUSTOM_ATTRS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_CUSTOM_ATTRS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
 
         let resp =
             Transport::<ListCustomAttrsResponse>::request(api_req, &self.config, None).await?;

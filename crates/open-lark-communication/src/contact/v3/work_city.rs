@@ -20,21 +20,19 @@ impl WorkCityService {
 
     /// 获取单个工作城市信息
     pub async fn get(&self, work_city_id: &str) -> open_lark_core::core::SDKResult<GetWorkCityResponse> {
-            let api_req = ApiRequest {
-                http_method: reqwest::Method::GET,
-                api_path: EndpointBuilder::replace_param(
-                    open_lark_core::core::endpoints::contact::CONTACT_V3_WORK_CITIES_GET,
-                    "work_city_id",
-                    work_city_id,
-                ),
-                supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-                body: Vec::new(),
-                query_params: std::collections::HashMap::new(),
-                ..Default::default()
-            };
+            let mut api_req = ApiRequest::default();
+            api_req.set_http_method(reqwest::Method::GET);
+            api_req.set_api_path(EndpointBuilder::replace_param(
+                open_lark_core::core::endpoints::contact::CONTACT_V3_WORK_CITY_GET,
+                "work_city_id",
+                work_city_id,
+            ));
+            api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+            api_req.body = Vec::new();
+            api_req.query_params = std::collections::HashMap::new();
 
-    let resp = Transport::<GetWorkCityResponse>::request(api_req, &self.config, None).await?;
-    Ok(resp.data.unwrap_or_default());
+          let resp = Transport::<GetWorkCityResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 
     /// 获取租户工作城市列表
@@ -42,17 +40,15 @@ impl WorkCityService {
     &self,
     _req: &ListWorkCitiesRequest,
     ) -> open_lark_core::core::SDKResult<ListWorkCitiesResponse> {
-            let api_req = ApiRequest {
-                http_method: reqwest::Method::GET,
-                api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_WORK_CITIES.to_string(),
-                supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-                body: Vec::new(),
-                query_params: std::collections::HashMap::new(),
-                ..Default::default()
-            };
+            let mut api_req = ApiRequest::default();
+            api_req.set_http_method(reqwest::Method::GET);
+            api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_WORK_CITIES.to_string());
+            api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+            api_req.body = Vec::new();
+            api_req.query_params = std::collections::HashMap::new();
 
-    let resp = Transport::<ListWorkCitiesResponse>::request(api_req, &self.config, None).await?;
-    Ok(resp.data.unwrap_or_default());
+      let resp = Transport::<ListWorkCitiesResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 }
 

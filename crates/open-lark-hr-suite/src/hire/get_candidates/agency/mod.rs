@@ -11,9 +11,9 @@ use open_lark_core::core::{
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    },
-    crate::hire::models::{CommonResponse, PageResponse, Talent},
-};
+    };
+
+use crate::hire::models::{CommonResponse, PageResponse, Talent};
 
 /// 猎头服务
 pub struct AgencyService {

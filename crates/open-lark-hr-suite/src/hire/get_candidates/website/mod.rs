@@ -11,9 +11,9 @@ use open_lark_core::core::{
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    },
-    crate::hire::models::{CommonResponse, I18nText, PageResponse},
-};
+    };
+
+use crate::hire::models::{CommonResponse, I18nText, PageResponse};
 
 /// 官网服务
 pub struct WebsiteService {

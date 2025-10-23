@@ -20,13 +20,11 @@ impl FunctionalRoleService {
         &self,
         req: &CreateFunctionalRoleRequest,
     ) -> open_lark_core::core::SDKResult<CreateFunctionalRoleResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLES.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::POST);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLES.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp =
             Transport::<CreateFunctionalRoleResponse>::request(api_req, &self.config, None).await?;
@@ -39,17 +37,15 @@ impl FunctionalRoleService {
         role_id: &str,
         req: &UpdateFunctionalRoleRequest,
     ) -> open_lark_core::core::SDKResult<UpdateFunctionalRoleResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::PUT,
-            api_path: EndpointBuilder::replace_param(
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::PUT);
+        api_req.set_api_path(EndpointBuilder::replace_param(
                 open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_GET,
                 "role_id",
                 role_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+            ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp =
             Transport::<UpdateFunctionalRoleResponse>::request(api_req, &self.config, None).await?;
@@ -62,17 +58,15 @@ impl FunctionalRoleService {
 
     /// 获取单个角色信息
     pub async fn get(&self, role_id: &str) -> open_lark_core::core::SDKResult<GetFunctionalRoleResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: EndpointBuilder::replace_param(
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(
                 open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_GET,
                 "role_id",
                 role_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: Vec::new(),
-            ..Default::default()
-        };
+            ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
 
         let resp =
             Transport::<GetFunctionalRoleResponse>::request(api_req, &self.config, None).await?;
@@ -84,13 +78,12 @@ impl FunctionalRoleService {
         &self,
         req: &ListFunctionalRolesRequest,
     ) -> open_lark_core::core::SDKResult<ListFunctionalRolesResponse> {
-        let mut api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLES.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: Vec::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLES.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
 
         // 添加查询参数
         if let Some(page_size) = req.page_size {
@@ -114,17 +107,15 @@ impl FunctionalRoleService {
         &self,
         role_id: &str,
     ) -> open_lark_core::core::SDKResult<DeleteFunctionalRoleResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::DELETE);
+        api_req.set_api_path(EndpointBuilder::replace_param(
                 open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_GET,
                 "role_id",
                 role_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: Vec::new(),
-            ..Default::default()
-        };
+            ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
 
         let resp =
             Transport::<DeleteFunctionalRoleResponse>::request(api_req, &self.config, None).await?;

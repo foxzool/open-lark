@@ -17,7 +17,7 @@ use open_lark_core::{
     },
 };
 
-use crate::im::models::{Pin, UserIdType};
+use crate::im::models::{Pin, UserIdTypeV1 as UserIdType};
 
 /// Pin消息服务
 pub struct PinService {
@@ -89,13 +89,10 @@ impl PinService {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: open_lark_core::core::endpoints::im::IM_V1_PINS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(open_lark_core::core::endpoints::im::IM_V1_PINS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<CreatePinResponse> =
             Transport::request(api_req, &self.config, option).await?;
@@ -115,17 +112,10 @@ impl PinService {
             HashMap::new()
         };
 
-        let api_req = ApiRequest {
-            http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::im::IM_V1_DELETE_PIN,
-                "pin_id",
-                pin_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::DELETE);
+        api_req.set_api_path(open_lark_core::core::endpoints::im::IM_V1_PINS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<EmptyResponse> =
             Transport::request(api_req, &self.config, option).await?;
@@ -153,13 +143,10 @@ impl PinService {
             query_params.insert("page_token", page_token);
         }
 
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: open_lark_core::core::endpoints::im::IM_V1_PINS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(open_lark_core::core::endpoints::im::IM_V1_PINS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<ListPinResponse> =
             Transport::request(api_req, &self.config, option).await?;

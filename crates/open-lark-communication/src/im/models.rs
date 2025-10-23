@@ -2,5 +2,18 @@
 //!
 //! 重新导出 v1 和 v2 中的所有模型类型，提供统一的访问接口。
 
-pub use crate::im::v1::models::*;
-pub use crate::im::v2::models::*;
+// 导入 v1 特有的类型
+pub use crate::im::v1::models::{
+    MessageType, ReceiveIdType, BatchMessageStatus, EmojiType, MessageReaction,
+    ReactionUser, Pin, BatchMessage, ImageInfo, FileInfo, MessageCard, UrgentType,
+    UrgentInfo, UrlPreview, PageInfo, MessageReadInfo, ReadUser, Message
+};
+
+// 导入 v2 特有的类型（如果有不同的）
+pub use crate::im::v2::models::{
+    ButtonInfo,
+};
+
+// 为冲突的类型添加版本前缀
+pub use crate::im::v1::models::UserIdType as UserIdTypeV1;
+pub use crate::im::v2::models::UserIdType as UserIdTypeV2;

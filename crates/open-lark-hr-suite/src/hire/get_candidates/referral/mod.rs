@@ -11,10 +11,12 @@ use open_lark_core::core::{
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    },
-    crate::hire::models::{
-        Application, CommonResponse, PageResponse, ReferralAccount, ReferralAccountCreateRequest,
-        Talent, UserId,};
+    };
+
+use crate::hire::models::{
+    Application, CommonResponse, PageResponse, ReferralAccount, ReferralAccountCreateRequest,
+    Talent, UserId,
+};
 
 /// 内推服务
 pub struct ReferralService {

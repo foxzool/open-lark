@@ -11,9 +11,8 @@ use open_lark_core::core::{
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    },
-    crate::hire::models::{CommonResponse, PageResponse},
-};
+    };
+use crate::hire::models::{CommonResponse, PageResponse};
 
 /// 背调服务
 pub struct BackgroundCheckService {

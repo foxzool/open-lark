@@ -1,7 +1,8 @@
 use open_lark_core::core::{
     api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config, constants::AccessTokenType,
-    http::Transport, trait_system::Service,
+    endpoints::EndpointBuilder, http::Transport,
 };
+use crate::contact::models::*;
 use serde::{Deserialize, Serialize};
 
 /// 权限范围服务
@@ -15,7 +16,7 @@ pub struct ScopeService {
 
 impl ScopeService {
     pub fn new(config: Config) -> Self {
-    Self { config }
+        Self { config }
     }
 
     /// 获取通讯录授权范围
@@ -27,11 +28,15 @@ impl ScopeService {
     ///
     /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/scope/listscope/listscope/list
     pub async fn list(&self, _req: &GetScopeRequest) -> open_lark_core::core::SDKResult<GetScopeResponse> {
-            let api_req = ApiRequest {
-    };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_SCOPES.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
 
-    let resp = Transport::<GetScopeResponse>::request(api_req, &self.config, None).await?;
-    Ok(resp.data.unwrap_or_default());
+        let resp = Transport::<GetScopeResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 
     /// 获取通讯录授权范围详情
@@ -42,14 +47,33 @@ impl ScopeService {
     ///
     /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/scope/listscope/listscope/get
     pub async fn get_authority(
-    &self,
-    req: &GetScopeAuthorityRequest,
+        &self,
+        req: &GetScopeAuthorityRequest,
     ) -> open_lark_core::core::SDKResult<GetScopeAuthorityResponse> {
-            let api_req = ApiRequest {
-    };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_SCOPES.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
 
-    let resp =
-    Ok(resp.data.unwrap_or_default());
+        let mut params = std::collections::HashMap::new();
+        if let Some(user_id_type) = &req.user_id_type {
+            params.insert("user_id_type", user_id_type.clone());
+        }
+        if let Some(department_id_type) = &req.department_id_type {
+            params.insert("department_id_type", department_id_type.clone());
+        }
+        if let Some(page_size) = req.page_size {
+            params.insert("page_size", page_size.to_string());
+        }
+        if let Some(page_token) = &req.page_token {
+            params.insert("page_token", page_token.clone());
+        }
+        api_req.query_params = params;
+
+        let resp =
+            Transport::<GetScopeAuthorityResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 
     /// 更新通讯录授权范围
@@ -60,28 +84,19 @@ impl ScopeService {
     ///
     /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/scope/listscope/listscope/update
     pub async fn update_authority(
-    &self,
-    req: &UpdateScopeAuthorityRequest,
+        &self,
+        req: &UpdateScopeAuthorityRequest,
     ) -> open_lark_core::core::SDKResult<UpdateScopeAuthorityResponse> {
-            let api_req = ApiRequest {
-    };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::PUT);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_SCOPES.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(&req).unwrap_or_default();
+        api_req.query_params = std::collections::HashMap::new();
 
-    let resp =
-    Ok(resp.data.unwrap_or_default());
-    }
-}
-
-impl Service for ScopeService {
-    fn config(&self) -> &Config {
-    &self.config
-    }
-
-    fn service_name() -> &'static str {
-    "scope"
-    }
-
-    fn service_version() -> &'static str {
-    "v3"
+        let resp =
+            Transport::<UpdateScopeAuthorityResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 }
 
@@ -91,7 +106,7 @@ pub struct GetScopeRequest {
     /// 用户 ID 类型
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
-    /// 部门 ID 类型  
+    /// 部门 ID 类型
     #[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
     /// 分页大小
@@ -117,7 +132,7 @@ pub struct GetScopeResponse {
 
 impl ApiResponseTrait for GetScopeResponse {
     fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-    open_lark_core::core::api_resp::ResponseFormat::Data
+        open_lark_core::core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -273,7 +288,7 @@ pub struct GroupScope {
 
 impl ApiResponseTrait for GetScopeAuthorityResponse {
     fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-    open_lark_core::core::api_resp::ResponseFormat::Data
+        open_lark_core::core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -293,14 +308,14 @@ pub struct UpdateScopeAuthorityResponse {
 
 impl ApiResponseTrait for UpdateScopeAuthorityResponse {
     fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-    open_lark_core::core::api_resp::ResponseFormat::Data
+        open_lark_core::core::api_resp::ResponseFormat::Data
     }
 }
 
 impl GetScopeAuthorityRequest {
     /// 创建获取权限范围详情的请求
     pub fn builder() -> GetScopeAuthorityRequestBuilder {
-    GetScopeAuthorityRequestBuilder::default()
+        GetScopeAuthorityRequestBuilder::default()
     }
 }
 
@@ -313,38 +328,38 @@ pub struct GetScopeAuthorityRequestBuilder {
 impl GetScopeAuthorityRequestBuilder {
     /// 设置用户 ID 类型
     pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
-    self.request.user_id_type = Some(user_id_type.to_string());
-    self
+        self.request.user_id_type = Some(user_id_type.to_string());
+        self
     }
 
     /// 设置部门 ID 类型
     pub fn department_id_type(mut self, department_id_type: impl ToString) -> Self {
-    self.request.department_id_type = Some(department_id_type.to_string());
-    self
+        self.request.department_id_type = Some(department_id_type.to_string());
+        self
     }
 
     /// 设置分页大小
     pub fn page_size(mut self, page_size: i32) -> Self {
-    self.request.page_size = Some(page_size);
-    self
+        self.request.page_size = Some(page_size);
+        self
     }
 
     /// 设置分页标记
     pub fn page_token(mut self, page_token: impl ToString) -> Self {
-    self.request.page_token = Some(page_token.to_string());
-    self
+        self.request.page_token = Some(page_token.to_string());
+        self
     }
 
     /// 构建请求
     pub fn build(self) -> GetScopeAuthorityRequest {
-    self.request
+        self.request
     }
     /// 执行获取权限范围详情
     pub async fn execute(
-    self,
-    service: &ScopeService,
+        self,
+        service: &ScopeService,
     ) -> open_lark_core::core::SDKResult<GetScopeAuthorityResponse> {
-    service.get_authority(&self.build()).await
+        service.get_authority(&self.build()).await
     }
 }
 
@@ -357,49 +372,49 @@ pub struct UpdateScopeAuthorityRequestBuilder {
 impl UpdateScopeAuthorityRequestBuilder {
     /// 创建更新权限范围的请求
     pub fn new() -> Self {
-    Self::default()
+        Self::default()
     }
 
     /// 设置权限范围详情
     pub fn scope_details(mut self, scope_details: ScopeDetails) -> Self {
-    self.request.scope_details = Some(scope_details);
-    self
+        self.request.scope_details = Some(scope_details);
+        self
     }
 
     /// 设置部门权限范围
     pub fn department_scope(mut self, department_scope: DepartmentScope) -> Self {
-    let mut scope_details = self.request.scope_details.unwrap_or_default();
-    scope_details.department_scope = Some(department_scope);
-    self.request.scope_details = Some(scope_details);
-    self
+        let mut scope_details = self.request.scope_details.unwrap_or_default();
+        scope_details.department_scope = Some(department_scope);
+        self.request.scope_details = Some(scope_details);
+        self
     }
 
     /// 设置用户权限范围
     pub fn user_scope(mut self, user_scope: UserScope) -> Self {
-    let mut scope_details = self.request.scope_details.unwrap_or_default();
-    scope_details.user_scope = Some(user_scope);
-    self.request.scope_details = Some(scope_details);
-    self
+        let mut scope_details = self.request.scope_details.unwrap_or_default();
+        scope_details.user_scope = Some(user_scope);
+        self.request.scope_details = Some(scope_details);
+        self
     }
 
     /// 设置用户组权限范围
     pub fn group_scope(mut self, group_scope: GroupScope) -> Self {
-    let mut scope_details = self.request.scope_details.unwrap_or_default();
-    scope_details.group_scope = Some(group_scope);
-    self.request.scope_details = Some(scope_details);
-    self
+        let mut scope_details = self.request.scope_details.unwrap_or_default();
+        scope_details.group_scope = Some(group_scope);
+        self.request.scope_details = Some(scope_details);
+        self
     }
 
     /// 构建请求
     pub fn build(self) -> UpdateScopeAuthorityRequest {
-    self.request
+        self.request
     }
 
     /// 执行更新权限范围
     pub async fn execute(
-    self,
-    service: &ScopeService,
+        self,
+        service: &ScopeService,
     ) -> open_lark_core::core::SDKResult<UpdateScopeAuthorityResponse> {
-    service.update_authority(&self.build()).await
+        service.update_authority(&self.build()).await
     }
 }

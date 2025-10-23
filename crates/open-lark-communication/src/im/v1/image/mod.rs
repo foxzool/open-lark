@@ -59,14 +59,12 @@ impl ImageService {
         image_data: Vec<u8>,
         option: Option<RequestOption>,
     ) -> SDKResult<CreateImageResponse> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: open_lark_core::core::endpoints::im::IM_V1_IMAGES.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params: HashMap::from([("image_type", image_type.to_string())]),
-            body: image_data,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(open_lark_core::core::endpoints::im::IM_V1_IMAGES.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.query_params = HashMap::from([("image_type", image_type.to_string())]);
+        api_req.body = image_data;
 
         let api_resp: BaseResponse<CreateImageResponse> =
             Transport::request(api_req, &self.config, option).await?;
@@ -79,16 +77,14 @@ impl ImageService {
         image_key: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<GetImageResponse> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::im::IM_V1_DOWNLOAD_IMAGE,
-                "image_key",
-                image_key,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::im::IM_V1_IMAGES_DOWNLOAD,
+            "image_key",
+            image_key,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<GetImageResponse> =
             Transport::request(api_req, &self.config, option).await?;

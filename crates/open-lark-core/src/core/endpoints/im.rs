@@ -27,7 +27,7 @@ pub const IM_V1_REPLY_MESSAGE: &str = "/open-apis/im/v1/messages/{message_id}/re
 pub const IM_V1_MESSAGE_REACTIONS: &str = "/open-apis/im/v1/messages/{message_id}/reactions";
 
 /// 删除消息表情回复
-pub const IM_V1_DELETE_MESSAGE_REACTION: &str =
+pub const IM_V1_MESSAGE_REACTIONS_DELETE: &str =
     "/open-apis/im/v1/messages/{message_id}/reactions/{reaction_id}";
 
 /// 批量发送消息
@@ -35,6 +35,9 @@ pub const IM_V1_BATCH_MESSAGES: &str = "/open-apis/im/v1/batch_messages";
 
 /// 删除批量消息
 pub const IM_V1_DELETE_BATCH_MESSAGE: &str = "/open-apis/im/v1/batch_messages/{batch_message_id}";
+
+/// 删除批量消息（别名）
+pub const IM_V1_BATCH_MESSAGES_DELETE: &str = "/open-apis/im/v1/batch_messages/{batch_message_id}";
 
 /// 获取批量消息发送进度
 pub const IM_V1_BATCH_MESSAGE_PROGRESS: &str =
@@ -125,11 +128,17 @@ pub const IM_V2_GET_APP_FEED_CARD: &str = "/open-apis/im/v2/app_feed_card/{card_
 /// 删除应用推送卡片
 pub const IM_V2_DELETE_APP_FEED_CARD: &str = "/open-apis/im/v2/app_feed_card/{card_id}";
 
+/// 管理（更新/删除）应用推送卡片
+pub const IM_V2_APP_FEED_CARDS: &str = "/open-apis/im/v2/app_feed_card/{card_id}";
+
 /// 机器人时间敏感消息
 pub const IM_V2_GROUPS_BOTS_TIME_SENSITIVE: &str = "/open-apis/im/v2/groups-bots/bot_time_sentive";
 
 /// 更新机器人消息
 pub const IM_V2_GROUPS_BOTS_UPDATE: &str = "/open-apis/im/v2/groups-bots/{message_id}/update";
+
+/// 群聊机器人基础端点
+pub const IM_V2_GROUPS_BOTS: &str = "/open-apis/im/v2/groups-bots/{message_id}/update";
 
 /// 机器人消息补丁
 pub const IM_V2_GROUPS_BOTS_PATCH: &str = "/open-apis/im/v2/groups-bots/patch";

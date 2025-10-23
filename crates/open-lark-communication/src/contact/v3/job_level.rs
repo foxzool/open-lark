@@ -12,31 +12,39 @@ pub struct JobLevelService {
 
 impl JobLevelService {
     pub fn new(config: Config) -> Self {
-    Self { config }
+        Self { config }
     }
     /// 创建职级
     pub async fn create(
-    &self,
-    req: &CreateJobLevelRequest,
+        &self,
+        req: &CreateJobLevelRequest,
     ) -> open_lark_core::core::SDKResult<CreateJobLevelResponse> {
-            let api_req = ApiRequest {
-    };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::POST);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_JOB_LEVELS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
-    let resp =
-    Ok(resp.data.unwrap_or_default());
+        let resp =
+            Transport::<CreateJobLevelResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 
     /// 更新职级
     pub async fn update(
-    &self,
-    job_level_id: &str,
-    req: &UpdateJobLevelRequest,
+        &self,
+        job_level_id: &str,
+        req: &UpdateJobLevelRequest,
     ) -> open_lark_core::core::SDKResult<UpdateJobLevelResponse> {
-            let api_req = ApiRequest {
-    };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::PUT);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_JOB_LEVELS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
-    let resp =
-    Ok(resp.data.unwrap_or_default());
+        let resp =
+            Transport::<UpdateJobLevelResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
     /// # API文档
     ///
@@ -45,35 +53,46 @@ impl JobLevelService {
 
     /// 获取单个职级信息
     pub async fn get(&self, job_level_id: &str) -> open_lark_core::core::SDKResult<GetJobLevelResponse> {
-            let api_req = ApiRequest {
-    };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_JOB_LEVELS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
 
-    let resp = Transport::<GetJobLevelResponse>::request(api_req, &self.config, None).await?;
-    Ok(resp.data.unwrap_or_default());
+        let resp = Transport::<GetJobLevelResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 
     /// 获取租户职级列表
     pub async fn list(
-    &self,
-    _req: &ListJobLevelsRequest,
+        &self,
+        _req: &ListJobLevelsRequest,
     ) -> open_lark_core::core::SDKResult<ListJobLevelsResponse> {
-            let api_req = ApiRequest {
-    };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_JOB_LEVELS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
 
-    let resp = Transport::<ListJobLevelsResponse>::request(api_req, &self.config, None).await?;
-    Ok(resp.data.unwrap_or_default());
+        let resp = Transport::<ListJobLevelsResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 
     /// 删除职级
     pub async fn delete(
-    &self,
-    job_level_id: &str,
+        &self,
+        job_level_id: &str,
     ) -> open_lark_core::core::SDKResult<DeleteJobLevelResponse> {
-            let api_req = ApiRequest {
-    };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::DELETE);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_JOB_LEVELS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
 
-    let resp =
-    Ok(resp.data.unwrap_or_default());
+        let resp =
+            Transport::<DeleteJobLevelResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 }
 
@@ -89,7 +108,7 @@ pub struct CreateJobLevelResponse {
 
 impl ApiResponseTrait for CreateJobLevelResponse {
     fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-    open_lark_core::core::api_resp::ResponseFormat::Data
+        open_lark_core::core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -105,7 +124,7 @@ pub struct UpdateJobLevelResponse {
 
 impl ApiResponseTrait for UpdateJobLevelResponse {
     fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-    open_lark_core::core::api_resp::ResponseFormat::Data
+        open_lark_core::core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -116,7 +135,7 @@ pub struct GetJobLevelResponse {
 
 impl ApiResponseTrait for GetJobLevelResponse {
     fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-    open_lark_core::core::api_resp::ResponseFormat::Data
+        open_lark_core::core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -139,7 +158,7 @@ pub struct ListJobLevelsResponse {
 
 impl ApiResponseTrait for ListJobLevelsResponse {
     fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-    open_lark_core::core::api_resp::ResponseFormat::Data
+        open_lark_core::core::api_resp::ResponseFormat::Data
     }
 }
 
@@ -148,6 +167,6 @@ pub struct DeleteJobLevelResponse {}
 
 impl ApiResponseTrait for DeleteJobLevelResponse {
     fn data_format() -> open_lark_core::core::api_resp::ResponseFormat {
-    open_lark_core::core::api_resp::ResponseFormat::Data
+        open_lark_core::core::api_resp::ResponseFormat::Data
     }
 }

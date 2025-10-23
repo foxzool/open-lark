@@ -20,21 +20,19 @@ impl JobTitleService {
 
     /// 获取单个职务信息
     pub async fn get(&self, job_title_id: &str) -> open_lark_core::core::SDKResult<GetJobTitleResponse> {
-            let api_req = ApiRequest {
-                http_method: reqwest::Method::GET,
-                api_path: EndpointBuilder::replace_param(
-                    open_lark_core::core::endpoints::contact::CONTACT_V3_JOB_TITLES_GET,
-                    "job_title_id",
-                    job_title_id,
-                ),
-                supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-                body: Vec::new(),
-                query_params: std::collections::HashMap::new(),
-                ..Default::default()
-            };
+            let mut api_req = ApiRequest::default();
+            api_req.set_http_method(reqwest::Method::GET);
+            api_req.set_api_path(EndpointBuilder::replace_param(
+                open_lark_core::core::endpoints::contact::CONTACT_V3_JOB_TITLE_GET,
+                "job_title_id",
+                job_title_id,
+            ));
+            api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+            api_req.body = Vec::new();
+            api_req.query_params = std::collections::HashMap::new();
 
-    let resp = Transport::<GetJobTitleResponse>::request(api_req, &self.config, None).await?;
-    Ok(resp.data.unwrap_or_default());
+        let resp = Transport::<GetJobTitleResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 
     /// 获取租户职务列表
@@ -42,17 +40,15 @@ impl JobTitleService {
     &self,
     _req: &ListJobTitlesRequest,
     ) -> open_lark_core::core::SDKResult<ListJobTitlesResponse> {
-            let api_req = ApiRequest {
-                http_method: reqwest::Method::GET,
-                api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_JOB_TITLES.to_string(),
-                supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-                body: Vec::new(),
-                query_params: std::collections::HashMap::new(),
-                ..Default::default()
-            };
+            let mut api_req = ApiRequest::default();
+            api_req.set_http_method(reqwest::Method::GET);
+            api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_JOB_TITLES.to_string());
+            api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+            api_req.body = Vec::new();
+            api_req.query_params = std::collections::HashMap::new();
 
-    let resp = Transport::<ListJobTitlesResponse>::request(api_req, &self.config, None).await?;
-    Ok(resp.data.unwrap_or_default());
+        let resp = Transport::<ListJobTitlesResponse>::request(api_req, &self.config, None).await?;
+        Ok(resp.data.unwrap_or_default())
     }
 }
 

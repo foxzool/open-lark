@@ -25,13 +25,11 @@ impl UserService {
         &self,
         req: &CreateUserRequest,
     ) -> open_lark_core::core::SDKResult<CreateUserResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_USERS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::POST);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_USERS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp = Transport::<CreateUserResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -43,18 +41,16 @@ impl UserService {
         user_id: &str,
         _req: &GetUserRequest,
     ) -> open_lark_core::core::SDKResult<GetUserResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_USER_GET,
-                "user_id",
-                user_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::contact::CONTACT_V3_USER_GET,
+            "user_id",
+            user_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
 
         let resp = Transport::<GetUserResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -62,14 +58,12 @@ impl UserService {
 
     /// 获取用户列表
     pub async fn list(&self, _req: &ListUsersRequest) -> open_lark_core::core::SDKResult<ListUsersResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_USERS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_USERS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
 
         let resp = Transport::<ListUsersResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -81,17 +75,15 @@ impl UserService {
         user_id: &str,
         req: &PatchUserRequest,
     ) -> open_lark_core::core::SDKResult<PatchUserResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::PATCH,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_USER_GET,
-                "user_id",
-                user_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::PATCH);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::contact::CONTACT_V3_USER_GET,
+            "user_id",
+            user_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp = Transport::<PatchUserResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -103,17 +95,15 @@ impl UserService {
         user_id: &str,
         _req: &DeleteUserRequest,
     ) -> open_lark_core::core::SDKResult<DeleteUserResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_USER_GET,
-                "user_id",
-                user_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: Vec::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::DELETE);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::contact::CONTACT_V3_USER_GET,
+            "user_id",
+            user_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
 
         let resp = Transport::<DeleteUserResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())

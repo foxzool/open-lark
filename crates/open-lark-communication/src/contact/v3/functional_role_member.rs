@@ -21,17 +21,15 @@ impl FunctionalRoleMemberService {
         role_id: &str,
         req: &CreateRoleMemberRequest,
     ) -> open_lark_core::core::SDKResult<CreateRoleMemberResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS,
-                "role_id",
-                role_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS,
+            "role_id",
+            role_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp = Transport::<CreateRoleMemberResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -43,17 +41,15 @@ impl FunctionalRoleMemberService {
         role_id: &str,
         req: &BatchCreateRoleMembersRequest,
     ) -> open_lark_core::core::SDKResult<BatchCreateRoleMembersResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_CREATE,
-                "role_id",
-                role_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_CREATE,
+            "role_id",
+            role_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp = Transport::<BatchCreateRoleMembersResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -65,17 +61,15 @@ impl FunctionalRoleMemberService {
         role_id: &str,
         req: &SetRoleMemberScopesRequest,
     ) -> open_lark_core::core::SDKResult<SetRoleMemberScopesResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::PUT,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_SCOPES,
-                "role_id",
-                role_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::PUT);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_SCOPES,
+            "role_id",
+            role_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp = Transport::<SetRoleMemberScopesResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -88,18 +82,20 @@ impl FunctionalRoleMemberService {
         member_id: &str,
         _req: &GetRoleMemberRequest,
     ) -> open_lark_core::core::SDKResult<GetRoleMemberResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: EndpointBuilder::replace_param(
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            &EndpointBuilder::replace_param(
                 open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBER_GET,
                 "role_id",
                 role_id,
-            ).replace_param("member_id", member_id),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
-            ..Default::default()
-        };
+            ),
+            "member_id",
+            member_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
 
         let resp = Transport::<GetRoleMemberResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -111,18 +107,16 @@ impl FunctionalRoleMemberService {
         role_id: &str,
         _req: &ListRoleMembersRequest,
     ) -> open_lark_core::core::SDKResult<ListRoleMembersResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS,
-                "role_id",
-                role_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS,
+            "role_id",
+            role_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
 
         let resp = Transport::<ListRoleMembersResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -134,17 +128,15 @@ impl FunctionalRoleMemberService {
         role_id: &str,
         req: &BatchDeleteRoleMembersRequest,
     ) -> open_lark_core::core::SDKResult<BatchDeleteRoleMembersResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_DELETE,
-                "role_id",
-                role_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::DELETE);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            open_lark_core::core::endpoints::contact::CONTACT_V3_FUNCTIONAL_ROLE_MEMBERS_BATCH_DELETE,
+            "role_id",
+            role_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp = Transport::<BatchDeleteRoleMembersResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())

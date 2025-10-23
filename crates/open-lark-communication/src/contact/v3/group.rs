@@ -20,13 +20,11 @@ impl GroupService {
         &self,
         req: &CreateGroupRequest,
     ) -> open_lark_core::core::SDKResult<CreateGroupResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_GROUPS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::POST);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_GROUPS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp = Transport::<CreateGroupResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -38,17 +36,11 @@ impl GroupService {
         group_id: &str,
         req: &PatchGroupRequest,
     ) -> open_lark_core::core::SDKResult<PatchGroupResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::PATCH,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_GROUP_GET,
-                "group_id",
-                group_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::PATCH);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_GROUPS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp = Transport::<PatchGroupResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -60,18 +52,12 @@ impl GroupService {
         group_id: &str,
         _req: &GetGroupRequest,
     ) -> open_lark_core::core::SDKResult<GetGroupResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_GROUP_GET,
-                "group_id",
-                group_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_GROUPS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
 
         let resp = Transport::<GetGroupResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -82,14 +68,12 @@ impl GroupService {
         &self,
         _req: &ListGroupsRequest,
     ) -> open_lark_core::core::SDKResult<ListGroupsResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_GROUPS_SIMPLELIST.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_GROUPS_SIMPLELIST.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
 
         let resp = Transport::<ListGroupsResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -99,14 +83,12 @@ impl GroupService {
         &self,
         _req: &GetUserGroupsRequest,
     ) -> open_lark_core::core::SDKResult<GetUserGroupsResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_GROUPS_MEMBER_BELONG.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_GROUPS_MEMBER_BELONG.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
         let resp = Transport::<GetUserGroupsResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
     }
@@ -117,17 +99,11 @@ impl GroupService {
 
     /// 删除用户组
     pub async fn delete(&self, group_id: &str) -> open_lark_core::core::SDKResult<DeleteGroupResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_GROUP_GET,
-                "group_id",
-                group_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: Vec::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::DELETE);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_GROUPS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
 
         let resp = Transport::<DeleteGroupResponse>::request(api_req, &self.config, None).await?;
         Ok(resp.data.unwrap_or_default())
@@ -151,18 +127,11 @@ impl GroupService {
             query_params.insert("include_members", include_members.to_string());
         }
 
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_GROUP_DETAIL,
-                "group_id",
-                group_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: Vec::new(),
-            query_params,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_GROUPS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
 
         let resp =
             Transport::<GetGroupDetailResponse>::request(api_req, &self.config, None).await?;

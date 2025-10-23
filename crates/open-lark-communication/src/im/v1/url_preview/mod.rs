@@ -60,17 +60,11 @@ impl UrlPreviewService {
         request: BatchUpdateUrlPreviewRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<EmptyResponse> {
-        let api_req = ApiRequest {
-            http_method: Method::PATCH,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::im::IM_V1_MESSAGE_URL_PREVIEW_BATCH_UPDATE,
-                "message_id",
-                message_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::PATCH);
+        api_req.set_api_path(open_lark_core::core::endpoints::im::IM_V1_URL_PREVIEW.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.body = serde_json::to_vec(&request)?;
 
         let api_resp: BaseResponse<EmptyResponse> =
             Transport::request(api_req, &self.config, option).await?;

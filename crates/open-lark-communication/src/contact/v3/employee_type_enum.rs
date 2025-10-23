@@ -19,13 +19,11 @@ impl EmployeeTypeEnumService {
         &self,
         req: &CreateEmployeeTypeRequest,
     ) -> open_lark_core::core::SDKResult<CreateEmployeeTypeResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_EMPLOYEE_TYPE_ENUMS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::POST);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_EMPLOYEE_TYPE_ENUMS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp =
             Transport::<CreateEmployeeTypeResponse>::request(api_req, &self.config, None).await?;
@@ -38,17 +36,11 @@ impl EmployeeTypeEnumService {
         enum_id: &str,
         req: &UpdateEmployeeTypeRequest,
     ) -> open_lark_core::core::SDKResult<UpdateEmployeeTypeResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::PUT,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_EMPLOYEE_TYPE_ENUM_GET,
-                "enum_id",
-                enum_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::PUT);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_EMPLOYEE_TYPE_ENUMS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = serde_json::to_vec(req)?;
 
         let resp =
             Transport::<UpdateEmployeeTypeResponse>::request(api_req, &self.config, None).await?;
@@ -60,14 +52,12 @@ impl EmployeeTypeEnumService {
         &self,
         _req: &ListEmployeeTypesRequest,
     ) -> open_lark_core::core::SDKResult<ListEmployeeTypesResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::GET,
-            api_path: open_lark_core::core::endpoints::contact::CONTACT_V3_EMPLOYEE_TYPE_ENUMS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: Vec::new(),
-            query_params: std::collections::HashMap::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::GET);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_EMPLOYEE_TYPE_ENUMS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
+        api_req.query_params = std::collections::HashMap::new();
 
         let resp =
             Transport::<ListEmployeeTypesResponse>::request(api_req, &self.config, None).await?;
@@ -79,17 +69,11 @@ impl EmployeeTypeEnumService {
         &self,
         enum_id: &str,
     ) -> open_lark_core::core::SDKResult<DeleteEmployeeTypeResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                open_lark_core::core::endpoints::contact::CONTACT_V3_EMPLOYEE_TYPE_ENUM_GET,
-                "enum_id",
-                enum_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: Vec::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(reqwest::Method::DELETE);
+        api_req.set_api_path(open_lark_core::core::endpoints::contact::CONTACT_V3_EMPLOYEE_TYPE_ENUMS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.body = Vec::new();
 
         let resp =
             Transport::<DeleteEmployeeTypeResponse>::request(api_req, &self.config, None).await?;
