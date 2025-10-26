@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-
 /// Offer状态变更事件数据
 ///
 /// 当Offer状态发生变更时触发此事件，包含状态变更的详细信息。

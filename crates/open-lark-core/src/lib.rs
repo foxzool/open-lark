@@ -5,8 +5,8 @@
 
 #![allow(missing_docs)]
 
-pub mod core;
 pub mod client;
+pub mod core;
 pub mod event;
 
 /// Prelude module for convenient imports.

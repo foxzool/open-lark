@@ -1,5 +1,5 @@
 //! open-lark-ai-platform module for OpenLark SDK
-//! 
+//!
 //! This crate provides open-lark-ai-platform functionality for the OpenLark SDK.
 
 #![deny(missing_docs)]

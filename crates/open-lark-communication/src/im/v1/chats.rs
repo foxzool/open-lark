@@ -1,6 +1,4 @@
-use reqwest::Method;
-use serde::{Deserialize, Serialize};
-
+use open_lark_core::core::standard_response::StandardResponse;
 use open_lark_core::core::{
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
@@ -11,8 +9,8 @@ use open_lark_core::core::{
     req_option::RequestOption,
     SDKResult,
 };
-
-use crate::impl_full_service;
+use reqwest::Method;
+use serde::Deserialize;
 
 /// 群聊服务
 pub struct ChatsService {
@@ -20,6 +18,9 @@ pub struct ChatsService {
 }
 
 impl ChatsService {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
     /// 获取用户或机器人所在的群列表
     ///
     /// 获取当前用户或机器人参与的所有群聊列表，包括群的基本信息、群主、
@@ -34,10 +35,12 @@ impl ChatsService {
     ) -> SDKResult<ListChatRespData> {
         let mut api_req = list_chat_request.api_req;
         api_req.set_http_method(Method::GET);
-        api_req.set_api_path(im::IM_CHAT_LIST.to_string());
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.set_api_path(im::IM_CHAT_GET.to_string());
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
-        let api_resp: BaseResponse<ListChatRespData> = Transport::request(api_req, &self.config, option).await?;
+        let api_resp: BaseResponse<ListChatRespData> =
+            Transport::request(api_req, &self.config, option).await?;
         api_resp.into_result()
     }
 
@@ -52,7 +55,7 @@ impl ChatsService {
 }
 
 // 接入统一 Service 抽象（IM v1 - ChatsService）
-impl_full_service!(ChatsService, "im.chats", "v1");
+// impl_full_service!(ChatsService, "im.chats", "v1");
 
 /// 分页迭代器
 pub struct ListChatIterator<'a> {
@@ -91,7 +94,7 @@ impl ListChatIterator<'_> {
 /// 获取群列表请求
 #[derive(Debug, Clone, Default)]
 pub struct ListChatRequest {
-    #[serde(skip)]
+    // #[serde(skip)]
     pub api_req: ApiRequest,
 }
 
@@ -110,25 +113,37 @@ pub struct ListChatRequestBuilder {
 impl ListChatRequestBuilder {
     /// 群大小过滤
     pub fn page_size(mut self, page_size: i32) -> Self {
-        self.request.api_req.query_params.insert("page_size", page_size.to_string());
+        self.request
+            .api_req
+            .query_params
+            .insert("page_size", page_size.to_string());
         self
     }
 
     /// 分页token
     pub fn page_token(mut self, page_token: impl ToString) -> Self {
-        self.request.api_req.query_params.insert("page_token", page_token.to_string());
+        self.request
+            .api_req
+            .query_params
+            .insert("page_token", page_token.to_string());
         self
     }
 
     /// 排序字段
     pub fn sort_field(mut self, sort_field: impl ToString) -> Self {
-        self.request.api_req.query_params.insert("sort_field", sort_field.to_string());
+        self.request
+            .api_req
+            .query_params
+            .insert("sort_field", sort_field.to_string());
         self
     }
 
     /// 排序方向
     pub fn sort_direction(mut self, sort_direction: impl ToString) -> Self {
-        self.request.api_req.query_params.insert("sort_direction", sort_direction.to_string());
+        self.request
+            .api_req
+            .query_params
+            .insert("sort_direction", sort_direction.to_string());
         self
     }
 
@@ -193,10 +208,22 @@ mod tests {
             .sort_direction("asc")
             .build();
 
-        assert_eq!(request.api_req.query_params.get("page_size"), Some(&"20".to_string()));
-        assert_eq!(request.api_req.query_params.get("page_token"), Some(&"token123".to_string()));
-        assert_eq!(request.api_req.query_params.get("sort_field"), Some(&"name".to_string()));
-        assert_eq!(request.api_req.query_params.get("sort_direction"), Some(&"asc".to_string()));
+        assert_eq!(
+            request.api_req.query_params.get("page_size"),
+            Some(&"20".to_string())
+        );
+        assert_eq!(
+            request.api_req.query_params.get("page_token"),
+            Some(&"token123".to_string())
+        );
+        assert_eq!(
+            request.api_req.query_params.get("sort_field"),
+            Some(&"name".to_string())
+        );
+        assert_eq!(
+            request.api_req.query_params.get("sort_direction"),
+            Some(&"asc".to_string())
+        );
     }
 
     #[test]

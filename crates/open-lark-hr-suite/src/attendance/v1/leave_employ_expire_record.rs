@@ -1,14 +1,14 @@
 use crate::{
+    core::{
+        api_resp::BaseResponse, config::Config, constants::AccessTokenType,
+        endpoints::attendance::*, http::Transport, req_option::RequestOption,
+        trait_system::Service, SDKResult,
+    },
     impl_executable_builder_owned,
-},
-use open_lark_core::core::{
-    api_resp::BaseResponse, config::Config, constants::AccessTokenType,
-    endpoints::attendance::*, http::Transport, req_option::RequestOption,
-    trait_system::Service, SDKResult,
-},
+};
 use reqwest::Method;
 
-use super::models::{GetLeaveEmployExpireRecordRequest, GetLeaveEmployExpireRecordRespData },
+use super::models::{GetLeaveEmployExpireRecordRequest, GetLeaveEmployExpireRecordRespData};
 
 /// 休假获取过期发放记录服务
 #[derive(Debug)]
@@ -109,7 +109,7 @@ mod tests {
     #[test]
     fn test_debug_implementation() {
         let config = Config::default();
-        let service = LeaveEmployExpireRecordService { config },
+        let service = LeaveEmployExpireRecordService { config };
         let debug_string = format!("{:?}", service);
         assert!(!debug_string.is_empty());
         assert!(debug_string.contains("LeaveEmployExpireRecordService"));
@@ -118,7 +118,7 @@ mod tests {
     #[test]
     fn test_service_config_access() {
         let config = Config::builder().app_id("test_config_access").build();
-        let service = LeaveEmployExpireRecordService { config },
+        let service = LeaveEmployExpireRecordService { config };
         assert_eq!(service.config.app_id, "test_config_access");
     }
 
@@ -127,7 +127,7 @@ mod tests {
         let config1 = Config::default();
         let config2 = Config::default();
         let service1 = LeaveEmployExpireRecordService { config: config1 };
-        let service2 = LeaveEmployExpireRecordService { config: config2 },
+        let service2 = LeaveEmployExpireRecordService { config: config2 };
         assert!(!format!("{:?}", service1).is_empty());
         assert!(!format!("{:?}", service2).is_empty());
     }

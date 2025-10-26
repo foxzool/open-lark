@@ -201,3 +201,11 @@ pub const HIRE_V1_WEBSITE_JOBS_PUBLISH: &str = "/open-apis/hire/v1/website/jobs/
 pub const HIRE_V1_WEBSITE_JOB_UNPUBLISH: &str =
     "/open-apis/hire/v1/website/jobs/{job_id}/unpublish";
 pub const HIRE_V1_WEBSITE_STATISTICS: &str = "/open-apis/hire/v1/website/statistics";
+
+// 添加缺失的端点常量
+pub const HIRE_V1_JOB_REQUIREMENT_DELETE: &str =
+    "/open-apis/hire/v1/job_requirements/{job_requirement_id}";
+pub const HIRE_V1_OFFER_SETTING_UPDATE: &str =
+    "/open-apis/hire/v1/offer_settings/{offer_setting_id}";
+pub const HIRE_V1_OFFER_SETTING_DELETE: &str =
+    "/open-apis/hire/v1/offer_settings/{offer_setting_id}";

@@ -1,6 +1,4 @@
-use serde::{Deserialize, Serialize },
 use serde_json::json;
-use std::collections::HashMap;
 
 use crate::im::v1::message::SendMessageTrait;
 /// 文本消息
@@ -18,10 +16,16 @@ impl SendMessageTrait for MessageText {
     fn msg_type(&self) -> String {
         "text".to_string()
     }
+
     fn content(&self) -> String {
         json!({ "text": self.text }).to_string()
+    }
+}
+
 impl MessageText {
     pub fn new(text: &str) -> Self {
         Self {
             text: text.to_string(),
         }
+    }
+}

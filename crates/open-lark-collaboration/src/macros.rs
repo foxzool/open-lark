@@ -19,7 +19,10 @@ macro_rules! impl_executable_builder {
                 self.build()
             }
 
-            async fn execute(self, service: &$service) -> open_lark_core::core::SDKResult<$response> {
+            async fn execute(
+                self,
+                service: &$service,
+            ) -> open_lark_core::core::SDKResult<$response> {
                 service.$method(&self.build(), None).await
             }
 
@@ -52,7 +55,10 @@ macro_rules! impl_executable_builder_owned {
                 self.build()
             }
 
-            async fn execute(self, service: &$service) -> open_lark_core::core::SDKResult<$response> {
+            async fn execute(
+                self,
+                service: &$service,
+            ) -> open_lark_core::core::SDKResult<$response> {
                 service.$method(self.build(), None).await
             }
 
@@ -66,3 +72,4 @@ macro_rules! impl_executable_builder_owned {
         }
     };
 }
+// pub use impl_executable_builder_owned; // 暂时注释掉未使用的导入

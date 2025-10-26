@@ -1,7 +1,7 @@
 use reqwest::Method;
 use serde_json::json;
 
-use crate::{
+use open_lark_core::{
     impl_executable_builder_owned,
     open_lark_core::core::{
         api_resp::BaseResponse, config::Config, constants::AccessTokenType,

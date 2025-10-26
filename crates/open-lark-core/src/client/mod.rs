@@ -14,19 +14,19 @@ use crate::core::{
 
 // 条件导入服务
 #[cfg(feature = "acs")]
-use crate::service::acs::AcsService;
+use crate::prelude::trait_system::service::acs::AcsService;
 #[cfg(feature = "admin")]
-use crate::service::admin::AdminService;
+use crate::prelude::trait_system::service::admin::AdminService;
 #[cfg(feature = "ai")]
-use crate::service::ai::AiService;
+use crate::prelude::trait_system::service::ai::AiService;
 #[cfg(feature = "aily")]
-use crate::service::aily::AilyService;
+use crate::prelude::trait_system::service::aily::AilyService;
 #[cfg(feature = "apass")]
-use crate::service::apass::ApassService;
+use crate::prelude::trait_system::service::apass::ApassService;
 #[cfg(feature = "application")]
-use crate::service::application::ApplicationService;
+use crate::prelude::trait_system::service::application::ApplicationService;
 #[cfg(feature = "approval")]
-use crate::service::approval::ApprovalService;
+use crate::prelude::trait_system::service::approval::ApprovalService;
 #[cfg(feature = "attendance")]
 use crate::service::attendance::AttendanceService;
 #[cfg(feature = "authentication")]

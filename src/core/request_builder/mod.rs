@@ -7,7 +7,7 @@ pub use header_builder::HeaderBuilder;
 pub use multipart_builder::MultipartBuilder;
 
 use crate::core::{
-    api_req::ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
+    ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
     req_option::RequestOption,
 };
 use reqwest::RequestBuilder;
@@ -66,7 +66,7 @@ impl UnifiedRequestBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{api_req::ApiRequest, constants::AppType};
+    use crate::core::{ApiRequest, constants::AppType};
     use reqwest::Method;
     use std::collections::HashMap;
 
@@ -80,14 +80,11 @@ mod tests {
     }
 
     fn create_test_api_request() -> ApiRequest {
-        ApiRequest {
-            http_method: Method::GET,
-            api_path: "/open-apis/test".to_string(),
-            body: vec![],
-            file: vec![],
-            query_params: HashMap::new(),
-            ..Default::default()
-        }
+        let mut api_req = ApiRequest::with_method_and_path(Method::GET, "/open-apis/test");
+        api_req.body = vec![];
+        api_req.file = vec![];
+        api_req.query_params = HashMap::new();
+        api_req
     }
 
     #[test]
@@ -335,14 +332,10 @@ mod tests {
 
     #[tokio::test]
     async fn test_build_request_complex_scenario() {
-        let mut api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: "/open-apis/complex/test".to_string(),
-            body: b"{\"complex\": \"data\", \"nested\": {\"value\": 123}}".to_vec(),
-            file: vec![],
-            query_params: HashMap::new(),
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::with_method_and_path(Method::POST, "/open-apis/complex/test");
+        api_req.body = b"{\"complex\": \"data\", \"nested\": {\"value\": 123}}".to_vec();
+        api_req.file = vec![];
+        api_req.query_params = HashMap::new();
         api_req.query_params.insert("version", "v1".to_string());
         api_req.query_params.insert("format", "json".to_string());
 

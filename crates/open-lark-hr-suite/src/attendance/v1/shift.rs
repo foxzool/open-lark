@@ -1,23 +1,25 @@
 use reqwest::Method;
 use serde_json::json;
 
-use open_lark_core::core::{
-    api_req::ApiRequest,
-    api_resp::BaseResponse,
-    config::Config,
-    constants::AccessTokenType,
-    endpoints::{attendance::*, EndpointBuilder},
-    http::Transport,
-    req_option::RequestOption,
-    trait_system::Service,
-    SDKResult,
-},
-use crate::impl_executable_builder_owned;
+use crate::{
+    core::{
+        api_req::ApiRequest,
+        api_resp::BaseResponse,
+        config::Config,
+        constants::AccessTokenType,
+        endpoints::{attendance::*, EndpointBuilder},
+        http::Transport,
+        req_option::RequestOption,
+        trait_system::Service,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
+};
 
 use super::models::{
     CreateShiftRequest, CreateShiftRespData, DeleteShiftRequest, EmptyResponse, GetShiftRequest,
     ListShiftRequest, QueryShiftRequest, Shift, ShiftListData,
-},
+};
 
 pub struct ShiftService {
     pub config: Config,
@@ -445,7 +447,7 @@ mod tests {
         let config = Config::default();
         let service = ShiftService {
             config: config.clone(),
-        },
+        };
 
         assert_eq!(service.config.app_id, config.app_id);
         assert_eq!(service.config.app_secret, config.app_secret);
@@ -460,7 +462,7 @@ mod tests {
 
         let service = ShiftService {
             config: config.clone(),
-        },
+        };
 
         assert_eq!(service.config.app_id, "shift_test_app");
         assert_eq!(service.config.app_secret, "shift_test_secret");
@@ -561,8 +563,8 @@ mod tests {
 
         let config2 = Config::builder().app_id("shift_app_2").build();
 
-        let service1 = ShiftService { config: config1 },
-        let service2 = ShiftService { config: config2 },
+        let service1 = ShiftService { config: config1 };
+        let service2 = ShiftService { config: config2 };
 
         assert_eq!(service1.config.app_id, "shift_app_1");
         assert_eq!(service2.config.app_id, "shift_app_2");
@@ -693,3 +695,4 @@ mod tests {
         assert_eq!(request.allow_outside_apply, Some(false));
         assert_eq!(request.allow_face_punch, Some(false));
     }
+}

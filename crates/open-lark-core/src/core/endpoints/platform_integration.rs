@@ -7,7 +7,8 @@
 //! - API网关管理
 
 /// 第三方服务连接管理
-pub const THIRD_PARTY_SERVICE_CONNECTION: &str = "/open-apis/platform_integration/v1/third_party/connection";
+pub const THIRD_PARTY_SERVICE_CONNECTION: &str =
+    "/open-apis/platform_integration/v1/third_party/connection";
 
 /// API网关配置
 pub const API_GATEWAY_CONFIG: &str = "/open-apis/platform_integration/v1/gateway/config";
@@ -28,20 +29,25 @@ pub const NO_CODE_APP_BUILDER: &str = "/open-apis/platform_integration/v1/no_cod
 pub const WORKFLOW_ENGINE_INTEGRATION: &str = "/open-apis/platform_integration/v1/workflow/engine";
 
 /// DevOps和CI/CD集成
-pub const CONTINUOUS_INTEGRATION_PIPELINE: &str = "/open-apis/platform_integration/v1/devops/ci_pipeline";
+pub const CONTINUOUS_INTEGRATION_PIPELINE: &str =
+    "/open-apis/platform_integration/v1/devops/ci_pipeline";
 
 /// 持续部署管理
-pub const CONTINUOUS_DEPLOYMENT_MANAGEMENT: &str = "/open-apis/platform_integration/v1/devops/cd_management";
+pub const CONTINUOUS_DEPLOYMENT_MANAGEMENT: &str =
+    "/open-apis/platform_integration/v1/devops/cd_management";
 
 /// 基础设施即代码
-pub const INFRASTRUCTURE_AS_CODE: &str = "/open-apis/platform_integration/v1/devops/infrastructure_as_code";
+pub const INFRASTRUCTURE_AS_CODE: &str =
+    "/open-apis/platform_integration/v1/devops/infrastructure_as_code";
 
 /// 容器编排集成
-pub const CONTAINER_ORCHESTRATION: &str = "/open-apis/platform_integration/v1/devops/container_orchestration";
+pub const CONTAINER_ORCHESTRATION: &str =
+    "/open-apis/platform_integration/v1/devops/container_orchestration";
 
 /// 监控和可观测性
 /// 应用性能监控
-pub const APPLICATION_PERFORMANCE_MONITORING: &str = "/open-apis/platform_integration/v1/monitoring/apm";
+pub const APPLICATION_PERFORMANCE_MONITORING: &str =
+    "/open-apis/platform_integration/v1/monitoring/apm";
 
 /// 分布式追踪
 pub const DISTRIBUTED_TRACING: &str = "/open-apis/platform_integration/v1/monitoring/tracing";
@@ -50,7 +56,8 @@ pub const DISTRIBUTED_TRACING: &str = "/open-apis/platform_integration/v1/monito
 pub const LOG_AGGREGATION: &str = "/open-apis/platform_integration/v1/monitoring/log_aggregation";
 
 /// 指标收集和告警
-pub const METRICS_COLLECTION_ALERTING: &str = "/open-apis/platform_integration/v1/monitoring/metrics";
+pub const METRICS_COLLECTION_ALERTING: &str =
+    "/open-apis/platform_integration/v1/monitoring/metrics";
 
 /// 数据集成和同步
 
@@ -75,7 +82,8 @@ pub const CRM_SYSTEM_INTEGRATION: &str = "/open-apis/platform_integration/v1/ent
 pub const HR_SYSTEM_INTEGRATION: &str = "/open-apis/platform_integration/v1/enterprise/hr";
 
 /// 财务系统集成
-pub const FINANCE_SYSTEM_INTEGRATION: &str = "/open-apis/platform_integration/v1/enterprise/finance";
+pub const FINANCE_SYSTEM_INTEGRATION: &str =
+    "/open-apis/platform_integration/v1/enterprise/finance";
 
 /// API市场和管理
 
@@ -91,7 +99,8 @@ pub const API_VERSION_MANAGEMENT: &str = "/open-apis/platform_integration/v1/api
 /// 安全和合规集成
 
 /// 统一身份认证
-pub const UNIFIED_IDENTITY_AUTHENTICATION: &str = "/open-apis/platform_integration/v1/security/unified_auth";
+pub const UNIFIED_IDENTITY_AUTHENTICATION: &str =
+    "/open-apis/platform_integration/v1/security/unified_auth";
 
 /// OAuth2.0和SAML集成
 pub const OAUTH_SAML_INTEGRATION: &str = "/open-apis/platform_integration/v1/security/oauth_saml";
@@ -105,7 +114,8 @@ pub const WEBHOOK_MANAGEMENT: &str = "/open-apis/platform_integration/v1/webhook
 pub const API_TESTING_SUITE: &str = "/open-apis/platform_integration/v1/developer/api_testing";
 
 /// 文档自动生成
-pub const AUTO_DOCUMENTATION_GENERATION: &str = "/open-apis/platform_integration/v1/developer/doc_generation";
+pub const AUTO_DOCUMENTATION_GENERATION: &str =
+    "/open-apis/platform_integration/v1/developer/doc_generation";
 
 /// SDK生成器
 pub const SDK_GENERATOR: &str = "/open-apis/platform_integration/v1/developer/sdk_generator";

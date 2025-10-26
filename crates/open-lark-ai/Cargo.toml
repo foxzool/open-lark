@@ -1,0 +1,28 @@
+[package]
+name = "open-lark-ai-platform"
+version = "0.15.0"
+edition = "2021"
+
+[dependencies]
+# 内部依赖
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.0", features = ["full"] }
+serde_json = { version = "1.0", features = ["derive"] }
+
+# Open Lark 核心依赖
+open-lark-core = { path = "../open-lark-core", version = "0.15.0" }
+open-lark-communication = { path = "../open-lark-communication", version = "0.15.0", optional = true }
+open-lark-collaboration = { path = "../open-lark-collaboration", version = "0.15.0", optional = true }
+open-lark-hr-suite = { path = "../open-lark-hr-suite", version = "0.15.0", optional = true }
+open-lark-enterprise = { path = "../open-lark-enterprise", version = "0.15.0", optional = true }
+
+[features]
+# 默认功能
+default = ["document_ai", "optical_char_recognition", "speech_to_text", "translation"]
+
+[features]
+default = ["document_ai", "optical_char_recognition", "speech_to_text", "translation"]
+document_ai = ["document_ai"]
+optical_char_recognition = ["optical_char_recognition"]
+speech_to_text = ["speech_to_text"]
+translation = ["translation"]

@@ -1,4 +1,4 @@
-use crate::core::{config::Config, trait_system::Service },
+use open_lark_core::{config::Config, trait_system::Service },
 
 pub mod approval;
 pub mod external_approval;

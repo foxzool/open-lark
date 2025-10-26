@@ -10,13 +10,13 @@ use open_lark_core::core::{
     req_option::RequestOption,
     trait_system::Service,
     SDKResult,
-},
+};
 
 use super::models::{
     DownloadUserPhotoRequest, ModifyUserSettingRequest, ModifyUserSettingRespData,
     QueryUserSettingRequest, QueryUserSettingRespData, UploadUserPhotoRequest,
     UploadUserPhotoRespData,
-},
+};
 
 /// 用户设置服务
 pub struct UserSettingService {
@@ -211,14 +211,14 @@ impl Service for UserSettingService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::core::{api_req::ApiRequest, config::Config },
+    use open_lark_core::core::{api_req::ApiRequest, config::Config};
 
     #[test]
     fn test_user_setting_service_creation() {
         let config = Config::default();
         let service = UserSettingService {
             config: config.clone(),
-        },
+        };
 
         assert_eq!(service.config.app_id, config.app_id);
         assert_eq!(service.config.app_secret, config.app_secret);
@@ -233,7 +233,7 @@ mod tests {
 
         let service = UserSettingService {
             config: config.clone(),
-        },
+        };
 
         assert_eq!(service.config.app_id, "setting_test_app");
         assert_eq!(service.config.app_secret, "setting_test_secret");
@@ -249,7 +249,7 @@ mod tests {
             face_key: Some("face_key_456".to_string()),
             face_live_need_action: Some(true),
             face_downgrade: Some(false),
-        },
+        };
 
         assert_eq!(request.user_id, "user_123");
         assert_eq!(request.employee_type, "1");
@@ -269,7 +269,7 @@ mod tests {
             face_key: None,
             face_live_need_action: None,
             face_downgrade: None,
-        },
+        };
 
         assert_eq!(request.user_id, "user_789");
         assert_eq!(request.employee_type, "2");
@@ -289,7 +289,7 @@ mod tests {
                 "user_2".to_string(),
                 "user_3".to_string(),
             ],
-        },
+        };
 
         assert_eq!(request.employee_type, "1");
         assert_eq!(request.user_ids.len(), 3);
@@ -303,7 +303,7 @@ mod tests {
             api_req: ApiRequest::default(),
             employee_type: "2".to_string(),
             user_ids: vec!["single_user".to_string()],
-        },
+        };
 
         assert_eq!(request.employee_type, "2");
         assert_eq!(request.user_ids.len(), 1);
@@ -316,7 +316,7 @@ mod tests {
             api_req: ApiRequest::default(),
             employee_type: "3".to_string(),
             user_ids: vec![],
-        },
+        };
 
         assert_eq!(request.employee_type, "3");
         assert!(request.user_ids.is_empty());
@@ -331,7 +331,7 @@ mod tests {
             employee_type: "1".to_string(),
             photo_data: photo_data.clone(),
             photo_name: "profile.jpg".to_string(),
-        },
+        };
 
         assert_eq!(request.user_id, "user_photo_123");
         assert_eq!(request.employee_type, "1");
@@ -348,7 +348,7 @@ mod tests {
             employee_type: "2".to_string(),
             photo_data: large_photo_data.clone(),
             photo_name: "large_profile.png".to_string(),
-        },
+        };
 
         assert_eq!(request.user_id, "user_large_photo");
         assert_eq!(request.employee_type, "2");
@@ -363,7 +363,7 @@ mod tests {
             user_id: "user_download_456".to_string(),
             employee_type: "1".to_string(),
             face_key: "download_face_key_789".to_string(),
-        },
+        };
 
         assert_eq!(request.user_id, "user_download_456");
         assert_eq!(request.employee_type, "1");
@@ -376,8 +376,8 @@ mod tests {
 
         let config2 = Config::builder().app_id("setting_app_2").build();
 
-        let service1 = UserSettingService { config: config1 },
-        let service2 = UserSettingService { config: config2 },
+        let service1 = UserSettingService { config: config1 };
+        let service2 = UserSettingService { config: config2 };
 
         assert_eq!(service1.config.app_id, "setting_app_1");
         assert_eq!(service2.config.app_id, "setting_app_2");
@@ -394,7 +394,7 @@ mod tests {
             face_key: Some("debug_face_key".to_string()),
             face_live_need_action: Some(true),
             face_downgrade: Some(true),
-        },
+        };
 
         let debug_str = format!("{:?}", modify_request);
         assert!(debug_str.contains("ModifyUserSettingRequest"));
@@ -413,7 +413,7 @@ mod tests {
             face_key: Some("key_level_0".to_string()),
             face_live_need_action: Some(false), // No action required
             face_downgrade: Some(false),
-        },
+        };
 
         assert_eq!(request_level_0.face_live_need_action, Some(false));
 
@@ -425,7 +425,7 @@ mod tests {
             face_key: Some("key_level_2".to_string()),
             face_live_need_action: Some(true), // High action required
             face_downgrade: Some(true),
-        },
+        };
 
         assert_eq!(request_level_2.face_live_need_action, Some(true));
     }
@@ -438,7 +438,7 @@ mod tests {
             api_req: ApiRequest::default(),
             employee_type: "1".to_string(),
             user_ids: large_user_list.clone(),
-        },
+        };
 
         assert_eq!(request_large.user_ids.len(), 1000);
         assert_eq!(request_large.user_ids[999], "user_999");
@@ -449,7 +449,7 @@ mod tests {
             api_req: ApiRequest::default(),
             employee_type: "2".to_string(),
             user_ids: vec![long_user_id.clone()],
-        },
+        };
 
         assert_eq!(request_long.user_ids[0], long_user_id);
     }
@@ -463,7 +463,7 @@ mod tests {
             employee_type: "1".to_string(),
             photo_data: vec![],
             photo_name: "empty.jpg".to_string(),
-        },
+        };
 
         assert!(request_empty.photo_data.is_empty());
         assert_eq!(request_empty.photo_name, "empty.jpg");
@@ -476,7 +476,7 @@ mod tests {
             employee_type: "2".to_string(),
             photo_data: vec![0xFF, 0xD8],
             photo_name: long_name.clone(),
-        },
+        };
 
         assert_eq!(request_long_name.photo_name, long_name);
 
@@ -487,7 +487,7 @@ mod tests {
             employee_type: "1".to_string(),
             photo_data: vec![0x89, 0x50, 0x4E, 0x47], // PNG header
             photo_name: "profile.png".to_string(),
-        },
+        };
 
         assert_eq!(request_png.photo_name, "profile.png");
         assert_eq!(request_png.photo_data[0], 0x89); // PNG signature
@@ -502,7 +502,7 @@ mod tests {
             user_id: "user_long_key".to_string(),
             employee_type: "1".to_string(),
             face_key: long_face_key.clone(),
-        },
+        };
 
         assert_eq!(request_long_key.face_key, long_face_key);
 
@@ -512,7 +512,7 @@ mod tests {
             user_id: "user_empty_key".to_string(),
             employee_type: "2".to_string(),
             face_key: "".to_string(),
-        },
+        };
 
         assert_eq!(request_empty_key.face_key, "");
     }
@@ -528,7 +528,7 @@ mod tests {
             face_key: Some("disabled_key".to_string()),
             face_live_need_action: Some(false),
             face_downgrade: Some(true),
-        },
+        };
 
         assert_eq!(request_disabled.face_key_open, Some(false));
         assert_eq!(request_disabled.face_key, Some("disabled_key".to_string()));
@@ -542,7 +542,7 @@ mod tests {
             face_key: Some("negative_key".to_string()),
             face_live_need_action: Some(false),
             face_downgrade: Some(false),
-        },
+        };
 
         assert_eq!(request_negative.face_live_need_action, Some(false));
 
@@ -555,7 +555,7 @@ mod tests {
             face_key: Some("large_action_key".to_string()),
             face_live_need_action: Some(true),
             face_downgrade: Some(true),
-        },
+        };
 
         assert_eq!(request_large_action.face_live_need_action, Some(true));
     }
@@ -571,13 +571,13 @@ mod tests {
             face_key: None,
             face_live_need_action: None,
             face_downgrade: None,
-        },
+        };
 
         let query_request = QueryUserSettingRequest {
             api_req: ApiRequest::default(),
             employee_type: "open_id".to_string(),
             user_ids: vec!["test_user".to_string()],
-        },
+        };
 
         let upload_request = UploadUserPhotoRequest {
             api_req: ApiRequest::default(),
@@ -585,17 +585,18 @@ mod tests {
             employee_type: "union_id".to_string(),
             photo_data: vec![0xFF, 0xD8],
             photo_name: "test.jpg".to_string(),
-        },
+        };
 
         let download_request = DownloadUserPhotoRequest {
             api_req: ApiRequest::default(),
             user_id: "download_user".to_string(),
             employee_type: "user_id".to_string(),
             face_key: "test_key".to_string(),
-        },
+        };
 
         assert_eq!(modify_request.employee_type, "employee_id");
         assert_eq!(query_request.employee_type, "open_id");
         assert_eq!(upload_request.employee_type, "union_id");
         assert_eq!(download_request.employee_type, "user_id");
     }
+}

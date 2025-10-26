@@ -10,12 +10,12 @@ use open_lark_core::core::{
     req_option::RequestOption,
     trait_system::Service,
     SDKResult,
-},
+};
 
 use super::models::{
     CreateUserApprovalRequest, CreateUserApprovalRespData, ProcessUserApprovalRequest,
     ProcessUserApprovalRespData, QueryUserApprovalRequest, QueryUserApprovalRespData,
-},
+};
 
 /// 用户审批服务
 pub struct UserApprovalService {
@@ -172,14 +172,14 @@ impl Service for UserApprovalService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::core::{api_req::ApiRequest, config::Config },
+    use open_lark_core::core::{api_req::ApiRequest, config::Config};
 
     #[test]
     fn test_user_approval_service_creation() {
         let config = Config::default();
         let service = UserApprovalService {
             config: config.clone(),
-        },
+        };
 
         assert_eq!(service.config.app_id, config.app_id);
         assert_eq!(service.config.app_secret, config.app_secret);
@@ -194,7 +194,7 @@ mod tests {
 
         let service = UserApprovalService {
             config: config.clone(),
-        },
+        };
 
         assert_eq!(service.config.app_id, "approval_test_app");
         assert_eq!(service.config.app_secret, "approval_test_secret");
@@ -215,7 +215,7 @@ mod tests {
             ]),
             page_size: Some(50),
             page_token: Some("page_token_123".to_string()),
-        },
+        };
 
         assert_eq!(request.employee_type, "1");
         assert_eq!(request.status, Some(1));
@@ -244,7 +244,7 @@ mod tests {
             user_ids: None,
             page_size: None,
             page_token: None,
-        },
+        };
 
         assert_eq!(request.employee_type, "2");
         assert_eq!(request.status, None);
@@ -263,7 +263,7 @@ mod tests {
             approval_id: "approval_123".to_string(),
             status: 1,
             approval_note: Some("审批通过".to_string()),
-        },
+        };
 
         assert_eq!(request.employee_type, "1");
         assert_eq!(request.approval_id, "approval_123");
@@ -279,7 +279,7 @@ mod tests {
             approval_id: "approval_456".to_string(),
             status: 0,
             approval_note: None,
-        },
+        };
 
         assert_eq!(request.employee_type, "2");
         assert_eq!(request.approval_id, "approval_456");
@@ -295,7 +295,7 @@ mod tests {
             approval_id: "approval_789".to_string(),
             action: 1, // 审批通过
             message: Some("同意该申请".to_string()),
-        },
+        };
 
         assert_eq!(request.employee_type, "1");
         assert_eq!(request.approval_id, "approval_789");
@@ -311,7 +311,7 @@ mod tests {
             approval_id: "approval_101".to_string(),
             action: 2, // 审批拒绝
             message: None,
-        },
+        };
 
         assert_eq!(request.employee_type, "2");
         assert_eq!(request.approval_id, "approval_101");
@@ -330,7 +330,7 @@ mod tests {
             user_ids: Some(vec!["single_user".to_string()]),
             page_size: Some(10),
             page_token: None,
-        },
+        };
 
         assert_eq!(request.employee_type, "1");
         assert_eq!(request.status, Some(2));
@@ -345,8 +345,8 @@ mod tests {
 
         let config2 = Config::builder().app_id("approval_app_2").build();
 
-        let service1 = UserApprovalService { config: config1 },
-        let service2 = UserApprovalService { config: config2 },
+        let service1 = UserApprovalService { config: config1 };
+        let service2 = UserApprovalService { config: config2 };
 
         assert_eq!(service1.config.app_id, "approval_app_1");
         assert_eq!(service2.config.app_id, "approval_app_2");
@@ -364,7 +364,7 @@ mod tests {
             user_ids: Some(vec!["debug_user".to_string()]),
             page_size: Some(20),
             page_token: Some("debug_token".to_string()),
-        },
+        };
 
         let debug_str = format!("{:?}", query_request);
         assert!(debug_str.contains("QueryUserApprovalRequest"));
@@ -385,7 +385,7 @@ mod tests {
             user_ids: Some(large_user_list.clone()),
             page_size: Some(1000),
             page_token: None,
-        },
+        };
 
         assert_eq!(request_large.user_ids.as_ref().unwrap().len(), 1000);
         assert_eq!(request_large.user_ids.as_ref().unwrap()[999], "user_999");
@@ -400,7 +400,7 @@ mod tests {
             user_ids: None,
             page_size: Some(0),
             page_token: None,
-        },
+        };
 
         assert_eq!(request_zero_page.page_size, Some(0));
 
@@ -414,7 +414,7 @@ mod tests {
             user_ids: None,
             page_size: None,
             page_token: None,
-        },
+        };
 
         assert_eq!(request_negative_status.status, Some(-1));
     }
@@ -429,7 +429,7 @@ mod tests {
             approval_id: "approval_long_note".to_string(),
             status: 1,
             approval_note: Some(long_note.clone()),
-        },
+        };
 
         assert_eq!(request_long_note.approval_note, Some(long_note));
 
@@ -441,7 +441,7 @@ mod tests {
             approval_id: long_approval_id.clone(),
             status: 0,
             approval_note: None,
-        },
+        };
 
         assert_eq!(request_long_id.approval_id, long_approval_id);
 
@@ -452,7 +452,7 @@ mod tests {
             approval_id: "approval_extreme".to_string(),
             status: 999,
             approval_note: Some("极端状态测试".to_string()),
-        },
+        };
 
         assert_eq!(request_extreme_status.status, 999);
     }
@@ -467,7 +467,7 @@ mod tests {
             approval_id: "approval_long_msg".to_string(),
             action: 1, // 审批通过
             message: Some(long_message.clone()),
-        },
+        };
 
         assert_eq!(request_long_message.message, Some(long_message));
 
@@ -484,7 +484,7 @@ mod tests {
                 approval_id: format!("approval_{}", action_name),
                 action: action_code,
                 message: Some(format!("{}操作", action_desc)),
-            },
+            };
 
             assert_eq!(request.action, action_code);
             assert_eq!(request.message, Some(format!("{}操作", action_desc)));
@@ -497,7 +497,7 @@ mod tests {
             approval_id: "approval_invalid_action".to_string(),
             action: 0, // 无效的动作类型
             message: None,
-        },
+        };
 
         assert_eq!(request_invalid_action.action, 0);
     }
@@ -513,7 +513,7 @@ mod tests {
             user_ids: Some(vec![]),
             page_size: Some(20),
             page_token: Some("empty_users_token".to_string()),
-        },
+        };
 
         assert!(request.user_ids.as_ref().unwrap().is_empty());
         assert_eq!(request.employee_type, "1");
@@ -532,7 +532,7 @@ mod tests {
             user_ids: None,
             page_size: None,
             page_token: None,
-        },
+        };
 
         let create_request = CreateUserApprovalRequest {
             api_req: ApiRequest::default(),
@@ -540,7 +540,7 @@ mod tests {
             approval_id: "test_approval".to_string(),
             status: 1,
             approval_note: None,
-        },
+        };
 
         let process_request = ProcessUserApprovalRequest {
             api_req: ApiRequest::default(),
@@ -548,7 +548,7 @@ mod tests {
             approval_id: "test_process".to_string(),
             action: 1, // 审批通过
             message: None,
-        },
+        };
 
         assert_eq!(query_request.employee_type, "employee_id");
         assert_eq!(create_request.employee_type, "open_id");

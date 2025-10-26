@@ -116,7 +116,9 @@ collaboration = ["communication", "open-lark-collaboration"]
 hr-suite = ["communication", "open-lark-hr-suite"]
 ai-platform = ["communication", "open-lark-ai-platform"]
 enterprise = ["communication", "open-lark-enterprise"]
-complete = ["communication", "collaboration", "hr-suite", "ai-platform", "enterprise"]
+extensions = ["open-lark-extensions"]
+integrations = ["open-lark-integrations"]
+complete = ["communication", "collaboration", "hr-suite", "ai-platform", "enterprise", "extensions", "integrations"]
 
 # Legacy feature mapping for backward compatibility
 im = ["communication"]

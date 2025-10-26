@@ -98,6 +98,8 @@ use open_lark_core::core::config::Config;
 pub mod models;
 /// 审批服务 v4 版本
 pub mod v4;
+/// 安全合规服务
+pub mod security_and_compliance;
 
 use v4::V4;
 
@@ -346,7 +348,7 @@ impl ApprovalService {
     }
 }
 
-use crate::core::trait_system::Service;
+use open_lark_core::trait_system::Service;
 
 impl Service for ApprovalService {
     fn config(&self) -> &Config {

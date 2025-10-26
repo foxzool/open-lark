@@ -8,22 +8,14 @@ description = "open-lark-collaboration module for OpenLark SDK"
 
 [dependencies]
 open-lark-core = { workspace = true }
-tokio = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
-anyhow = { workspace = true }
-thiserror = { workspace = true }
-async-trait = { workspace = true }
-chrono = { workspace = true }
-url = { workspace = true }
-uuid = { workspace = true }
-base64 = { workspace = true }
 reqwest = { workspace = true }
-tracing = { workspace = true }
-simd-adler32 = { workspace = true }
-walkdir = { workspace = true }
-log = { workspace = true }
+chrono = { workspace = true }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+rand = { workspace = true }
 serde_repr = { workspace = true }
-regex = { workspace = true }
-strum = { workspace = true }
-strum_macros = { workspace = true }
+log = { workspace = true }
+anyhow = { workspace = true }
+

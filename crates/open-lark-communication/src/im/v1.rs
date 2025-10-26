@@ -1,15 +1,14 @@
-use open_lark_core::core::config::Config;
 use crate::im::v1::{
-    batch_message::BatchMessageService, buzz_messages::BuzzMessagesService,
-    chats::ChatsService, file::FileService, image::ImageService, message::MessageService,
-    message_card::MessageCardService, message_reaction::MessageReactionService,
-    pin::PinService, url_preview::UrlPreviewService,
+    batch_message::BatchMessageService, buzz_messages::BuzzMessagesService, chats::ChatsService,
+    file::FileService, image::ImageService, message::MessageService,
+    message_card::MessageCardService, message_reaction::MessageReactionService, pin::PinService,
+    url_preview::UrlPreviewService,
 };
+use open_lark_core::core::config::Config;
 
 // 现有模块
 pub mod chats;
 pub mod message;
-pub mod message_service;
 pub mod p2_im_message_read_v1;
 pub mod p2_im_message_receive_v1;
 // IM 事件模块

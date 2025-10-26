@@ -4,13 +4,13 @@ use serde_json::json;
 use open_lark_core::core::{
     api_resp::BaseResponse, config::Config, constants::AccessTokenType, endpoints::attendance::*,
     http::Transport, req_option::RequestOption, trait_system::Service, SDKResult,
-},
+};
 
 use super::models::{
     BatchCreateTempUserDailyShiftRequest, BatchCreateTempUserDailyShiftRespData,
     BatchCreateUserDailyShiftRequest, BatchCreateUserDailyShiftRespData,
     QueryUserDailyShiftRequest, QueryUserDailyShiftRespData,
-},
+};
 
 /// 用户排班服务
 #[derive(Debug)]
@@ -145,7 +145,7 @@ mod tests {
     #[test]
     fn test_user_daily_shift_service_creation() {
         let config = Config::default();
-        let service = UserDailyShiftService { config },
+        let service = UserDailyShiftService { config };
         assert!(!format!("{:?}", service).is_empty());
     }
 
@@ -162,7 +162,7 @@ mod tests {
     #[test]
     fn test_debug_implementation() {
         let config = Config::default();
-        let service = UserDailyShiftService { config },
+        let service = UserDailyShiftService { config };
         let debug_string = format!("{:?}", service);
         assert!(!debug_string.is_empty());
         assert!(debug_string.contains("UserDailyShiftService"));
@@ -171,7 +171,7 @@ mod tests {
     #[test]
     fn test_service_config_access() {
         let config = Config::builder().app_id("test_config_access").build();
-        let service = UserDailyShiftService { config },
+        let service = UserDailyShiftService { config };
         assert_eq!(service.config.app_id, "test_config_access");
     }
 
@@ -180,7 +180,7 @@ mod tests {
         let config1 = Config::default();
         let config2 = Config::default();
         let service1 = UserDailyShiftService { config: config1 };
-        let service2 = UserDailyShiftService { config: config2 },
+        let service2 = UserDailyShiftService { config: config2 };
         assert!(!format!("{:?}", service1).is_empty());
         assert!(!format!("{:?}", service2).is_empty());
     }

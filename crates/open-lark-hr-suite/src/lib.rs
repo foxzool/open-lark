@@ -7,6 +7,6 @@ mod macros;
 pub mod hire;
 
 pub mod prelude {
-    pub use open_lark_core::*;
     pub use crate::hire::*;
+    pub use open_lark_core::*;
 }

@@ -29,7 +29,8 @@ pub const AUTH_V3_APP_ACCESS_TOKEN_INTERNAL: &str = "/open-apis/auth/v3/app_acce
 pub const AUTH_V3_TENANT_ACCESS_TOKEN: &str = "/open-apis/auth/v3/tenant_access_token";
 
 /// 自建应用获取Tenant Access Token
-pub const AUTH_V3_TENANT_ACCESS_TOKEN_INTERNAL: &str = "/open-apis/auth/v3/tenant_access_token/internal";
+pub const AUTH_V3_TENANT_ACCESS_TOKEN_INTERNAL: &str =
+    "/open-apis/auth/v3/tenant_access_token/internal";
 
 /// 重新获取App Ticket
 pub const AUTH_V3_APP_TICKET_RESEND: &str = "/open-apis/auth/v3/app_ticket/resend";

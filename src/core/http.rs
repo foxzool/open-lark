@@ -5,17 +5,18 @@ use reqwest::RequestBuilder;
 use tracing::{info_span, Instrument};
 
 use crate::core::{
-    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse},
     app_ticket_manager::apply_app_ticket,
     config::Config,
-    constants::*,
+    constants::{AccessTokenType, *},
     error::LarkAPIError,
     improved_response_handler::ImprovedResponseHandler,
     req_option::RequestOption,
     req_translator::ReqTranslator,
     SDKResult,
 };
+// Re-export ApiRequest from open-lark-core
+pub use open_lark_core::core::api_req::ApiRequest;
 
 pub struct Transport<T> {
     phantom_data: PhantomData<T>,
@@ -41,14 +42,14 @@ impl<T: ApiResponseTrait> Transport<T> {
             let start_time = std::time::Instant::now();
             let option = option.unwrap_or_default();
 
-            if req.supported_access_token_types.is_empty() {
-                req.supported_access_token_types = vec![AccessTokenType::None];
+            if req.get_supported_access_token_types().is_empty() {
+                req.set_supported_access_token_types(vec![AccessTokenType::None]);
             }
 
             let result = async {
-                validate_token_type(&req.supported_access_token_types, &option)?;
+                validate_token_type(req.get_supported_access_token_types(), &option)?;
                 let access_token_type = determine_token_type(
-                    &req.supported_access_token_types,
+                    req.get_supported_access_token_types(),
                     &option,
                     config.enable_token_cache,
                 );

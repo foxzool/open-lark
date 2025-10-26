@@ -1,18 +1,19 @@
 use reqwest::Method;
 use serde_json::json;
 
-use open_lark_core::core::{
-    api_resp::BaseResponse,
-    config::Config,
-    constants::AccessTokenType,
-    endpoints::{attendance::*, EndpointBuilder},
-    http::Transport,
-    req_option::RequestOption,
-    trait_system::Service,
-    SDKResult,
-},
-
-use crate::impl_executable_builder_owned;
+use crate::{
+    core::{
+        api_resp::BaseResponse,
+        config::Config,
+        constants::AccessTokenType,
+        endpoints::{attendance::*, EndpointBuilder},
+        http::Transport,
+        req_option::RequestOption,
+        trait_system::Service,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
+};
 
 use super::models::{PatchLeaveAccrualRecordRequest, PatchLeaveAccrualRecordRespData};
 
@@ -89,7 +90,7 @@ impl Service for LeaveAccrualRecordService {
 mod tests {
     use super::*;
     use open_lark_core::core::{api_req::ApiRequest, config::Config};
-    use crate::attendance::v1::models::LeaveAccrualRecordPatch;
+    use crate::service::attendance::v1::models::LeaveAccrualRecordPatch;
 
     fn create_test_config() -> Config {
         Config::builder()
@@ -183,7 +184,7 @@ mod tests {
             granted_amount: Some(16.0),
             granted_reason: Some("Updated allocation".to_string()),
             ..Default::default()
-        },
+        };
 
         assert!(partial_patch.employee_id.is_none());
         assert!(partial_patch.leave_type_id.is_none());
@@ -208,7 +209,7 @@ mod tests {
                 employee_type: emp_type.to_string(),
                 leave_accrual_record_id: "record123".to_string(),
                 leave_accrual_record: LeaveAccrualRecordPatch::default(),
-            },
+            };
 
             assert_eq!(request.employee_type, emp_type);
         }
@@ -231,7 +232,7 @@ mod tests {
                 employee_type: "employee_id".to_string(),
                 leave_accrual_record_id: record_id.to_string(),
                 leave_accrual_record: LeaveAccrualRecordPatch::default(),
-            },
+            };
 
             assert_eq!(request.leave_accrual_record_id, record_id);
         }
@@ -253,7 +254,7 @@ mod tests {
             let patch = LeaveAccrualRecordPatch {
                 granted_amount: amount,
                 ..Default::default()
-            },
+            };
 
             assert_eq!(patch.granted_amount, amount);
         }
@@ -274,7 +275,7 @@ mod tests {
             let patch = LeaveAccrualRecordPatch {
                 expire_time: timestamp,
                 ..Default::default()
-            },
+            };
             assert_eq!(patch.expire_time, timestamp);
         }
 
@@ -282,7 +283,7 @@ mod tests {
             let patch = LeaveAccrualRecordPatch {
                 granted_time: timestamp,
                 ..Default::default()
-            },
+            };
             assert_eq!(patch.granted_time, timestamp);
         }
     }
@@ -302,7 +303,7 @@ mod tests {
             let patch = LeaveAccrualRecordPatch {
                 validity_type,
                 ..Default::default()
-            },
+            };
 
             assert_eq!(patch.validity_type, validity_type);
         }
@@ -324,7 +325,7 @@ mod tests {
             let patch = LeaveAccrualRecordPatch {
                 granted_type,
                 ..Default::default()
-            },
+            };
 
             assert_eq!(patch.granted_type, granted_type);
         }
@@ -348,7 +349,7 @@ mod tests {
             let patch = LeaveAccrualRecordPatch {
                 granted_reason: reason.clone(),
                 ..Default::default()
-            },
+            };
 
             assert_eq!(patch.granted_reason, reason);
         }
@@ -371,7 +372,7 @@ mod tests {
             let patch = LeaveAccrualRecordPatch {
                 employee_id: employee_id.clone(),
                 ..Default::default()
-            },
+            };
 
             assert_eq!(patch.employee_id, employee_id);
         }
@@ -395,7 +396,7 @@ mod tests {
             let patch = LeaveAccrualRecordPatch {
                 leave_type_id: leave_type_id.clone(),
                 ..Default::default()
-            },
+            };
 
             assert_eq!(patch.leave_type_id, leave_type_id);
         }
@@ -413,7 +414,7 @@ mod tests {
             validity_type: Some(2),
             granted_type: Some(1),
             granted_description: Some("Test clone".to_string()),
-        },
+        };
 
         let cloned_patch = original_patch.clone();
 
@@ -433,7 +434,7 @@ mod tests {
             employee_id: Some("emp001".to_string()),
             granted_amount: Some(8.0),
             ..Default::default()
-        },
+        };
 
         let debug_str = format!("{:?}", patch);
         assert!(debug_str.contains("LeaveAccrualRecordPatch"));
@@ -462,7 +463,7 @@ mod tests {
             validity_type: Some(2),
             granted_type: Some(1),
             granted_description: Some("Test serialization".to_string()),
-        },
+        };
 
         // Test serialization
         let json_result = serde_json::to_string(&patch);
@@ -502,7 +503,7 @@ mod tests {
             validity_type: None,
             granted_type: Some(1),
             granted_description: None,
-        },
+        };
 
         let json_result = serde_json::to_string(&patch);
         assert!(json_result.is_ok());

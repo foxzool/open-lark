@@ -1,25 +1,15 @@
 #!/bin/bash
 
-# Comprehensive fix script for communication module imports
+echo "=== 修复communication模块的导入路径问题 ==="
 
-echo "Fixing communication module imports..."
+# 修复 crate 开头的导入路径
+find crates/open-lark-communication -name "*.rs" -type f -exec sed -i '' 's/use crate::{/use open_lark_core::{/g' {} \;
 
-# Fix all crate::service imports
-find /Users/zool/RustroverProjects/open-lark/crates/open-lark-communication/src -name "*.rs" -type f | while read file; do
-  # Replace crate::service:: with appropriate paths
-  sed -i '' 's/crate::service::im::/crate::im::/g' "$file"
-  sed -i '' 's/crate::service::contact::/crate::contact::/g' "$file"
-  sed -i '' 's/open_lark_core::service::/open_lark_core::/g' "$file"
+# 修复 core:: 开头的导入路径
+find crates/open-lark-communication -name "*.rs" -type f -exec sed -i '' 's/use core::/use open_lark_core::core::/g' {} \;
 
-  # Replace any remaining service:: references
-  sed -i '' 's/service::im::models::/im::models::/g' "$file"
-  sed -i '' 's/service::contact::models::/contact::models::/g' "$file"
-done
+# 修复具体的模块导入路径
+find crates/open-lark-communication -name "*.rs" -type f -exec sed -i '' 's/crate::service::contact::models::/use crate::contact::models::/g' {} \;
+find crates/open-lark-communication -name "*.rs" -type f -exec sed -i '' 's/crate::service::contact::v3::/use crate::contact::v3::/g' {} \;
 
-# Fix contact module imports specifically
-find /Users/zool/RustroverProjects/open-lark/crates/open-lark-communication/src/contact -name "*.rs" -type f | while read file; do
-  # Fix open_lark_core::contact:: to contact::
-  sed -i '' 's/open_lark_core::contact::/contact::/g' "$file"
-done
-
-echo "Import fixes completed"
+echo "修复完成！"

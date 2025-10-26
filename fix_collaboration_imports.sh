@@ -1,38 +1,32 @@
 #!/bin/bash
 
-# Script to fix import issues in collaboration module files
+echo "=== 修复collaboration模块的导入路径问题 ==="
 
-files=(
-    "/Users/zool/RustroverProjects/open-lark/crates/open-lark-collaboration/src/cloud_docs/bitable/v1/app_role_member/list.rs"
-    "/Users/zool/RustroverProjects/open-lark/crates/open-lark-collaboration/src/cloud_docs/bitable/v1/app_role_member/batch_create.rs"
-    "/Users/zool/RustroverProjects/open-lark/crates/open-lark-collaboration/src/cloud_docs/bitable/v1/app_role_member/create.rs"
-    "/Users/zool/RustroverProjects/open-lark/crates/open-lark-collaboration/src/cloud_docs/bitable/v1/app_role_member/delete.rs"
-    "/Users/zool/RustroverProjects/open-lark/crates/open-lark-collaboration/src/cloud_docs/bitable/v1/app_role_member/batch_delete.rs"
-    "/Users/zool/RustroverProjects/open-lark/crates/open-lark-collaboration/src/cloud_docs/bitable/v1/app_table_field/list.rs"
-    "/Users/zool/RustroverProjects/open-lark/crates/open-lark-collaboration/src/cloud_docs/bitable/v1/app_table_field/create.rs"
-    "/Users/zool/RustroverProjects/open-lark/crates/open-lark-collaboration/src/cloud_docs/bitable/v1/app_table_field/delete.rs"
-    "/Users/zool/RustroverProjects/open-lark/crates/open-lark-collaboration/src/cloud_docs/bitable/v1/app_table_field/update.rs"
-)
+# 查找所有包含 "open_lark_core::core" 的文件
+echo "查找需要修复的文件..."
+find crates/open-lark-collaboration -name "*.rs" -type f -exec grep -l "open_lark_core::core" {} \;
 
-for file in "${files[@]}"; do
-    if [ -f "$file" ]; then
-        echo "Fixing imports in $file"
+echo ""
+echo "=== 修复导入路径 ==="
 
-        # Create backup
-        cp "$file" "$file.backup"
+# 修复 open_lark_core::core 导入路径问题
+find crates/open-lark-collaboration -name "*.rs" -type f -exec sed -i '' 's/use open_lark_core::core::{/use open_lark_core::core::{/g' {} \;
 
-        # Fix the malformed import pattern
-        sed -i '' 's/use open_lark_core::core{$/use open_lark_core::core::{/g' "$file"
-        sed -i '' '/^use crate::impl_executable_builder_owned;$/d' "$file"
-        sed -i '' '/^    impl_executable_builder_owned,$/d' "$file"
-        sed -i '' 's/^};$/};\
-\
-use crate::impl_executable_builder_owned;/g' "$file"
+# 修复 crate 开头的路径问题（只能在起始位置使用）
+find crates/open-lark-collaboration -name "*.rs" -type f -exec sed -i '' 's/    crate::/    super::/g' {} \;
 
-        echo "Fixed $file"
-    else
-        echo "File not found: $file"
-    fi
-done
+# 修复 service:: 开头的导入路径
+find crates/open-lark-collaboration -name "*.rs" -type f -exec sed -i '' 's/service::bitable/crate::cloud_docs::bitable/g' {} \;
+find crates/open-lark-collaboration -name "*.rs" -type f -exec sed -i '' 's/service::sheets/crate::cloud_docs::sheets/g' {} \;
+find crates/open-lark-collaboration -name "*.rs" -type f -exec sed -i '' 's/service::drive/crate::cloud_docs::drive/g' {} \;
 
-echo "Import fixing completed!"
+# 修复 core:: 导入路径
+find crates/open-lark-collaboration -name "*.rs" -type f -exec sed -i '' 's/use core::/use open_lark_core::core::/g' {} \;
+
+# 修复 event:: 导入路径
+find crates/open-lark-collaboration -name "*.rs" -type f -exec sed -i '' 's/use crate::event::/use open_lark_core::event::/g' {} \;
+
+# 修复 impl_executable_builder_config 导入问题
+find crates/open-lark-collaboration -name "*.rs" -type f -exec sed -i '' 's/impl_executable_builder_config/impl_executable_builder_owned/g' {} \;
+
+echo "修复完成！"

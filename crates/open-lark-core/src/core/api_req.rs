@@ -31,7 +31,7 @@ use crate::core::constants::AccessTokenType;
 ///     api_path: "/open-apis/drive/v1/files".to_string(),
 ///     body: serde_json::to_vec(&request_data).unwrap(),
 ///     ..Default::default()
-/// };
+/// }
 ///
 /// // 文件上传请求（multipart）
 /// let mut api_req = ApiRequest {
@@ -40,7 +40,7 @@ use crate::core::constants::AccessTokenType;
 ///     body: serde_json::to_vec(&metadata).unwrap(),  // JSON元数据
 ///     file: file_bytes,  // 文件内容
 ///     ..Default::default()
-/// };
+/// }
 /// ```
 #[derive(Debug, Clone, Default)]
 pub struct ApiRequest {
@@ -48,7 +48,7 @@ pub struct ApiRequest {
     ///
     /// 由服务层根据具体API的要求设置。
     /// 使用 `pub(crate)` 限制只能在crate内部修改，保证一致性。
-    pub(crate) http_method: Method,
+    pub http_method: Method,
 
     /// API的相对路径
     ///

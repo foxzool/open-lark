@@ -10,10 +10,12 @@
 pub const DEVICE_TRUST_ASSESSMENT: &str = "/open-apis/zero_trust/v1/device/trust/assess";
 
 /// 用户身份增强验证
-pub const ENHANCED_IDENTITY_VERIFICATION: &str = "/open-apis/zero_trust/v1/identity/enhanced_verify";
+pub const ENHANCED_IDENTITY_VERIFICATION: &str =
+    "/open-apis/zero_trust/v1/identity/enhanced_verify";
 
 /// 持续身份验证
-pub const CONTINUOUS_IDENTITY_VERIFICATION: &str = "/open-apis/zero_trust/v1/identity/continuous_verify";
+pub const CONTINUOUS_IDENTITY_VERIFICATION: &str =
+    "/open-apis/zero_trust/v1/identity/continuous_verify";
 
 /// 微分段访问控制
 pub const MICRO_SEGMENTATION_ACCESS: &str = "/open-apis/zero_trust/v1/access/micro_segment";
@@ -80,7 +82,8 @@ pub const SECURE_ACCESS_TUNNEL: &str = "/open-apis/zero_trust/v1/network/tunnel"
 /// 高级权限管理
 
 /// 细粒度权限控制
-pub const FINE_GRAINED_PERMISSION_CONTROL: &str = "/open-apis/zero_trust/v1/permission/fine_grained";
+pub const FINE_GRAINED_PERMISSION_CONTROL: &str =
+    "/open-apis/zero_trust/v1/permission/fine_grained";
 
 /// 动态权限调整
 pub const DYNAMIC_PERMISSION_ADJUSTMENT: &str = "/open-apis/zero_trust/v1/permission/dynamic";

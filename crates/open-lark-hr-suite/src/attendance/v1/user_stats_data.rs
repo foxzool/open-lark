@@ -1,18 +1,20 @@
 use reqwest::Method;
 use serde_json::json;
 
-use open_lark_core::core::{
-    api_resp::BaseResponse, config::Config, constants::AccessTokenType,
-    endpoints::attendance::*, http::Transport, req_option::RequestOption,
-    trait_system::Service, SDKResult,
-},
-use crate::impl_executable_builder_owned;
+use crate::{
+    core::{
+        api_resp::BaseResponse, config::Config, constants::AccessTokenType,
+        endpoints::attendance::*, http::Transport, req_option::RequestOption,
+        trait_system::Service, SDKResult,
+    },
+    impl_executable_builder_owned,
+};
 
 use super::models::{
     QueryStatsFieldsRequest, QueryStatsFieldsRespData, QueryStatsSettingsRequest,
     QueryStatsSettingsRespData, QueryUserStatsDataRequest, QueryUserStatsDataRespData,
     UpdateUserStatsDataRequest, UpdateUserStatsDataRespData,
-},
+};
 
 /// 用户统计数据服务
 pub struct UserStatsDataService {
@@ -201,8 +203,8 @@ impl_executable_builder_owned!(
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use open_lark_core::core::{api_req::ApiRequest, config::Config },
-    use crate::attendance::v1::models::StatsSettings;
+    use open_lark_core::core::{api_req::ApiRequest, config::Config};
+    use crate::service::attendance::v1::models::StatsSettings;
 
     fn create_test_config() -> Config {
         Config::builder()
@@ -242,7 +244,7 @@ mod tests {
             api_req: ApiRequest::default(),
             employee_type: "employee_id".to_string(),
             stats_setting: create_test_stats_settings(),
-        },
+        };
 
         assert_eq!(request.employee_type, "employee_id");
         assert_eq!(request.stats_setting.stats_scope, 1);
@@ -257,7 +259,7 @@ mod tests {
         let request = QueryStatsSettingsRequest {
             api_req: ApiRequest::default(),
             employee_type: "employee_no".to_string(),
-        },
+        };
 
         assert_eq!(request.employee_type, "employee_no");
     }
@@ -268,7 +270,7 @@ mod tests {
             api_req: ApiRequest::default(),
             employee_type: "open_id".to_string(),
             locale: Some("zh-CN".to_string()),
-        },
+        };
 
         assert_eq!(request.employee_type, "open_id");
         assert_eq!(request.locale, Some("zh-CN".to_string()));
@@ -280,7 +282,7 @@ mod tests {
             api_req: ApiRequest::default(),
             employee_type: "union_id".to_string(),
             locale: None,
-        },
+        };
 
         assert_eq!(request.employee_type, "union_id");
         assert!(request.locale.is_none());
@@ -300,7 +302,7 @@ mod tests {
             ],
             need_fields: vec!["attendance_days".to_string(), "work_hours".to_string()],
             locale: Some("en-US".to_string()),
-        },
+        };
 
         assert_eq!(request.employee_type, "employee_id");
         assert_eq!(request.start_date, "2023-01-01");
@@ -319,7 +321,7 @@ mod tests {
             end_date: "2023-12-31".to_string(),
             user_ids: vec!["user001".to_string()],
             need_fields: vec!["field1".to_string()],
-        },
+        };
 
         let settings2 = StatsSettings {
             stats_scope: 2, // 全部
@@ -327,7 +329,7 @@ mod tests {
             end_date: "2023-12-31".to_string(),
             user_ids: vec![],
             need_fields: vec![],
-        },
+        };
 
         assert_eq!(settings1.stats_scope, 1);
         assert_eq!(settings2.stats_scope, 2);
@@ -341,7 +343,7 @@ mod tests {
             let request = QueryStatsSettingsRequest {
                 api_req: ApiRequest::default(),
                 employee_type: emp_type.to_string(),
-            },
+            };
             assert_eq!(request.employee_type, emp_type);
         }
     }
@@ -362,7 +364,7 @@ mod tests {
                 api_req: ApiRequest::default(),
                 employee_type: "employee_id".to_string(),
                 locale: locale.clone(),
-            },
+            };
             assert_eq!(request.locale, locale);
         }
     }
@@ -385,7 +387,7 @@ mod tests {
                 end_date: end_date.to_string(),
                 user_ids: vec!["user001".to_string()],
                 need_fields: vec!["field1".to_string()],
-            },
+            };
 
             assert_eq!(settings.start_date, start_date);
             assert_eq!(settings.end_date, end_date);
@@ -420,7 +422,7 @@ mod tests {
                 end_date: "2023-12-31".to_string(),
                 user_ids: user_ids.clone(),
                 need_fields: vec!["field1".to_string()],
-            },
+            };
 
             assert_eq!(settings.user_ids, user_ids);
         }
@@ -453,7 +455,7 @@ mod tests {
                 end_date: "2023-12-31".to_string(),
                 user_ids: vec!["user001".to_string()],
                 need_fields: need_fields.clone(),
-            },
+            };
 
             assert_eq!(settings.need_fields, need_fields);
         }
@@ -476,7 +478,7 @@ mod tests {
                 end_date: "2023-12-31".to_string(),
                 user_ids: vec!["user001".to_string()],
                 need_fields: vec!["field1".to_string()],
-            },
+            };
 
             assert_eq!(settings.stats_scope, scope);
         }
@@ -533,14 +535,14 @@ mod tests {
             api_req: ApiRequest::default(),
             employee_type: "employee_id".to_string(),
             stats_setting: create_test_stats_settings(),
-        },
+        };
         let built_update = update_request.build();
         assert_eq!(built_update.employee_type, "employee_id");
 
         let query_settings_request = QueryStatsSettingsRequest {
             api_req: ApiRequest::default(),
             employee_type: "employee_no".to_string(),
-        },
+        };
         let built_query_settings = query_settings_request.build();
         assert_eq!(built_query_settings.employee_type, "employee_no");
 
@@ -548,7 +550,7 @@ mod tests {
             api_req: ApiRequest::default(),
             employee_type: "open_id".to_string(),
             locale: Some("zh-CN".to_string()),
-        },
+        };
         let built_query_fields = query_fields_request.build();
         assert_eq!(built_query_fields.employee_type, "open_id");
         assert_eq!(built_query_fields.locale, Some("zh-CN".to_string()));
@@ -588,7 +590,7 @@ mod tests {
             end_date: "2023-12-31".to_string(),
             user_ids: vec![],
             need_fields: vec![],
-        },
+        };
 
         let json_result = serde_json::to_string(&settings);
         assert!(json_result.is_ok());
@@ -609,7 +611,7 @@ mod tests {
             end_date: "2023-12-31".to_string(),
             user_ids: large_user_ids.clone(),
             need_fields: large_need_fields.clone(),
-        },
+        };
 
         assert_eq!(settings.user_ids.len(), 1000);
         assert_eq!(settings.need_fields.len(), 100);
@@ -635,7 +637,7 @@ mod tests {
                 end_date: end_date.to_string(),
                 user_ids: vec!["user001".to_string()],
                 need_fields: vec!["field1".to_string()],
-            },
+            };
 
             assert_eq!(settings.start_date, start_date);
             assert_eq!(settings.end_date, end_date);

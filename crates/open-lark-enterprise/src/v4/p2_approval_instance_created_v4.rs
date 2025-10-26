@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize },
 
-use crate::event::{context::EventHeader, dispatcher::EventHandler};
+use open_lark_core::{context::EventHeader, dispatcher::EventHandler};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct P2ApprovalInstanceCreatedV4 {

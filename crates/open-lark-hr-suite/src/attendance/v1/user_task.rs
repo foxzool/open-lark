@@ -10,13 +10,13 @@ use open_lark_core::core::{
     req_option::RequestOption,
     trait_system::Service,
     SDKResult,
-},
+};
 
 use super::models::{
     BatchCreateUserTaskRequest, BatchCreateUserTaskRespData, BatchDelUserTaskRequest,
     BatchDelUserTaskRespData, GetUserTaskRequest, GetUserTaskRespData, QueryUserTaskRequest,
     QueryUserTaskRespData, QueryUserTaskResultRequest, QueryUserTaskResultRespData,
-},
+};
 
 /// 用户打卡任务服务
 pub struct UserTaskService {
@@ -250,7 +250,7 @@ impl Service for UserTaskService {
 mod tests {
     use super::*;
     use open_lark_core::core::config::Config;
-    use crate::attendance::v1::models::UserTaskCreate;
+    use crate::service::attendance::v1::models::UserTaskCreate;
 
     fn create_test_config() -> Config {
         Config::builder()
@@ -415,7 +415,7 @@ mod tests {
             is_field: Some(false),
             is_remedy: Some(false),
             comment: Some("Test serialization".to_string()),
-        },
+        };
 
         let serialized = serde_json::to_string(&user_task).unwrap();
         assert!(serialized.contains("user123"));

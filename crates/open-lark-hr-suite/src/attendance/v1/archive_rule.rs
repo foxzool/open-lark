@@ -1,24 +1,25 @@
 use reqwest::Method;
 use serde_json::json;
 
-use open_lark_core::core::{
-    api_resp::BaseResponse,
-    config::Config,
-    constants::AccessTokenType,
-    endpoints::{attendance::*, EndpointBuilder},
-    http::Transport,
-    req_option::RequestOption,
-    trait_system::Service,
-    SDKResult,
-},
-
-use crate::impl_executable_builder_owned;
+use crate::{
+    core::{
+        api_resp::BaseResponse,
+        config::Config,
+        constants::AccessTokenType,
+        endpoints::{attendance::*, EndpointBuilder},
+        http::Transport,
+        req_option::RequestOption,
+        trait_system::Service,
+        SDKResult,
+    },
+    impl_executable_builder_owned,
+};
 
 use super::models::{
     DelArchiveReportRequest, DelArchiveReportRespData, ListArchiveRulesRequest,
     ListArchiveRulesRespData, QueryArchiveStatsFieldsRequest, QueryArchiveStatsFieldsRespData,
     UploadArchiveReportRequest, UploadArchiveReportRespData,
-},
+};
 
 /// 归档报表服务
 pub struct ArchiveRuleService {
@@ -217,15 +218,15 @@ impl Service for ArchiveRuleService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use open_lark_core::core::{api_req::ApiRequest, config::Config },
-    use crate::attendance::v1::models::ArchiveReportRecord;
+    use open_lark_core::core::{api_req::ApiRequest, config::Config};
+    use crate::service::attendance::v1::models::ArchiveReportRecord;
 
     #[test]
     fn test_archive_rule_service_creation() {
         let config = Config::default();
         let service = ArchiveRuleService {
             config: config.clone(),
-        },
+        };
 
         assert_eq!(service.config.app_id, config.app_id);
         assert_eq!(service.config.app_secret, config.app_secret);
@@ -240,7 +241,7 @@ mod tests {
 
         let service = ArchiveRuleService {
             config: config.clone(),
-        },
+        };
 
         assert_eq!(service.config.app_id, "archive_test_app");
         assert_eq!(service.config.app_secret, "archive_test_secret");
@@ -252,7 +253,7 @@ mod tests {
             api_req: ApiRequest::default(),
             archive_rule_id: "rule_123".to_string(),
             employee_type: "1".to_string(),
-        },
+        };
 
         assert_eq!(request.archive_rule_id, "rule_123");
         assert_eq!(request.employee_type, "1");
@@ -265,20 +266,20 @@ mod tests {
             user_id: "user1".to_string(),
             archive_date: "2024-01-01".to_string(),
             field_data: std::collections::HashMap::new(),
-        },
+        };
         let record2 = ArchiveReportRecord {
             record_id: Some("record2".to_string()),
             user_id: "user2".to_string(),
             archive_date: "2024-01-02".to_string(),
             field_data: std::collections::HashMap::new(),
-        },
+        };
 
         let request = UploadArchiveReportRequest {
             api_req: ApiRequest::default(),
             archive_rule_id: "rule_456".to_string(),
             employee_type: "2".to_string(),
             report_data: vec![record1, record2],
-        },
+        };
 
         assert_eq!(request.archive_rule_id, "rule_456");
         assert_eq!(request.employee_type, "2");
@@ -294,7 +295,7 @@ mod tests {
             archive_rule_id: "rule_789".to_string(),
             employee_type: "3".to_string(),
             record_ids: vec!["id1".to_string(), "id2".to_string(), "id3".to_string()],
-        },
+        };
 
         assert_eq!(request.archive_rule_id, "rule_789");
         assert_eq!(request.employee_type, "3");
@@ -309,7 +310,7 @@ mod tests {
             employee_type: "4".to_string(),
             page_size: Some(50),
             page_token: Some("token_123".to_string()),
-        },
+        };
 
         assert_eq!(request.employee_type, "4");
         assert_eq!(request.page_size, Some(50));
@@ -323,7 +324,7 @@ mod tests {
             employee_type: "5".to_string(),
             page_size: None,
             page_token: None,
-        },
+        };
 
         assert_eq!(request.employee_type, "5");
         assert_eq!(request.page_size, None);
@@ -336,8 +337,8 @@ mod tests {
 
         let config2 = Config::builder().app_id("archive_app_2").build();
 
-        let service1 = ArchiveRuleService { config: config1 },
-        let service2 = ArchiveRuleService { config: config2 },
+        let service1 = ArchiveRuleService { config: config1 };
+        let service2 = ArchiveRuleService { config: config2 };
 
         assert_eq!(service1.config.app_id, "archive_app_1");
         assert_eq!(service2.config.app_id, "archive_app_2");
@@ -351,7 +352,7 @@ mod tests {
             archive_rule_id: "rule_empty".to_string(),
             employee_type: "1".to_string(),
             report_data: vec![],
-        },
+        };
 
         assert_eq!(request.archive_rule_id, "rule_empty");
         assert_eq!(request.employee_type, "1");
@@ -365,7 +366,7 @@ mod tests {
             archive_rule_id: "rule_single".to_string(),
             employee_type: "2".to_string(),
             record_ids: vec!["single_id".to_string()],
-        },
+        };
 
         assert_eq!(request.archive_rule_id, "rule_single");
         assert_eq!(request.employee_type, "2");
@@ -379,7 +380,7 @@ mod tests {
             api_req: ApiRequest::default(),
             archive_rule_id: "debug_rule".to_string(),
             employee_type: "1".to_string(),
-        },
+        };
 
         let debug_str = format!("{:?}", query_request);
         assert!(debug_str.contains("QueryArchiveStatsFieldsRequest"));
@@ -394,7 +395,7 @@ mod tests {
             employee_type: "1".to_string(),
             page_size: Some(10000),
             page_token: None,
-        },
+        };
 
         assert_eq!(request_large.page_size, Some(10000));
 
@@ -404,7 +405,7 @@ mod tests {
             employee_type: "2".to_string(),
             page_size: Some(0),
             page_token: None,
-        },
+        };
 
         assert_eq!(request_zero.page_size, Some(0));
 
@@ -415,7 +416,7 @@ mod tests {
             employee_type: "3".to_string(),
             page_size: Some(20),
             page_token: Some(long_token.clone()),
-        },
+        };
 
         assert_eq!(request_long_token.page_token, Some(long_token));
     }

@@ -19,7 +19,6 @@ pub use list::{ListMessageRequest, ListMessageRequestBuilder, ListMessageRespDat
 pub use types::{CreateMessageResp, ListMessageIterator, Message, SendMessageTrait};
 
 use open_lark_core::core::config::Config;
-use crate::impl_full_service;
 
 /// Message service
 ///
@@ -44,7 +43,7 @@ impl MessageService {
 }
 
 // 为 MessageService 一次性实现核心服务能力（标准样例）
-impl_full_service!(MessageService, "im.message", "v1");
+// impl_full_service!(MessageService, "im.message", "v1");
 
 #[cfg(test)]
 #[allow(unused_variables, unused_unsafe)]

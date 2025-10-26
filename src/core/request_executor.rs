@@ -4,14 +4,14 @@ use reqwest::Method;
 use serde::Serialize;
 
 use crate::core::{
-    api_req::ApiRequest,
+    ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
-    constants::AccessTokenType,
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
+use open_lark_core::core::constants::AccessTokenType;
 
 /// 通用请求执行器，统一处理API调用逻辑
 /// 消除重复的请求-响应处理代码，提供统一的API调用入口
@@ -164,12 +164,8 @@ impl RequestExecutor {
         body: Option<B>,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<T>> {
-        let mut api_req = ApiRequest {
-            http_method: method,
-            api_path: path.to_string(),
-            supported_access_token_types: supported_tokens,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::with_method_and_path(method, path);
+        api_req.set_supported_access_token_types(supported_tokens);
 
         // 设置查询参数
         if let Some(params) = query_params {
@@ -658,24 +654,20 @@ mod tests {
 
     #[test]
     fn test_request_executor_api_request_construction() {
-        use crate::core::api_req::ApiRequest;
+        use crate::core::ApiRequest;
         use crate::core::constants::AccessTokenType;
         use reqwest::Method;
         use std::collections::HashMap;
 
         // Test ApiRequest construction (similar to what execute() does)
-        let mut api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: "/test/path".to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::with_method_and_path(Method::POST, "/test/path");
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         assert_eq!(api_req.http_method, Method::POST);
         assert_eq!(api_req.api_path, "/test/path");
-        assert_eq!(api_req.supported_access_token_types.len(), 1);
+        assert_eq!(api_req.get_supported_access_token_types().len(), 1);
         assert_eq!(
-            api_req.supported_access_token_types[0],
+            api_req.get_supported_access_token_types()[0],
             AccessTokenType::Tenant
         );
 
@@ -1148,47 +1140,35 @@ mod tests {
     // API request building edge cases
     #[test]
     fn test_request_executor_api_request_building_edge_cases() {
-        use crate::core::api_req::ApiRequest;
+        use crate::core::ApiRequest;
         use crate::core::constants::AccessTokenType;
         use reqwest::Method;
 
         // Test with very long path
         let long_path = "/".to_string() + &"a".repeat(1000);
-        let api_req_long = ApiRequest {
-            http_method: Method::GET,
-            api_path: long_path.clone(),
-            supported_access_token_types: vec![AccessTokenType::User],
-            ..Default::default()
-        };
+        let mut api_req_long = ApiRequest::with_method_and_path(Method::GET, &long_path);
+        api_req_long.set_supported_access_token_types(vec![AccessTokenType::User]);
 
         assert_eq!(api_req_long.api_path, long_path);
         assert_eq!(api_req_long.api_path.len(), 1001);
 
         // Test with empty supported tokens
-        let api_req_empty_tokens = ApiRequest {
-            http_method: Method::POST,
-            api_path: "/test".to_string(),
-            supported_access_token_types: vec![],
-            ..Default::default()
-        };
+        let mut api_req_empty_tokens = ApiRequest::with_method_and_path(Method::POST, "/test");
+        api_req_empty_tokens.set_supported_access_token_types(vec![]);
 
-        assert!(api_req_empty_tokens.supported_access_token_types.is_empty());
+        assert!(api_req_empty_tokens.get_supported_access_token_types().is_empty());
 
         // Test with many supported tokens
-        let api_req_many_tokens = ApiRequest {
-            http_method: Method::PUT,
-            api_path: "/test".to_string(),
-            supported_access_token_types: vec![
-                AccessTokenType::Tenant,
-                AccessTokenType::User,
-                AccessTokenType::App,
-                AccessTokenType::Tenant, // duplicate
-                AccessTokenType::User,   // duplicate
-            ],
-            ..Default::default()
-        };
+        let mut api_req_many_tokens = ApiRequest::with_method_and_path(Method::PUT, "/test");
+        api_req_many_tokens.set_supported_access_token_types(vec![
+            AccessTokenType::Tenant,
+            AccessTokenType::User,
+            AccessTokenType::App,
+            AccessTokenType::Tenant, // duplicate
+            AccessTokenType::User,   // duplicate
+        ]);
 
-        assert_eq!(api_req_many_tokens.supported_access_token_types.len(), 5);
+        assert_eq!(api_req_many_tokens.get_supported_access_token_types().len(), 5);
     }
 
     // Method chaining and composition tests

@@ -2,10 +2,17 @@
 macro_rules! impl_executable_builder {
     ($builder:ty, $service:ty, $request:ty, $response:ty, $method:ident) => {
         #[async_trait::async_trait]
-        impl open_lark_core::core::trait_system::executable_builder::ExecutableBuilder<$service, $request, $response>
-            for $builder
+        impl
+            open_lark_core::core::trait_system::executable_builder::ExecutableBuilder<
+                $service,
+                $request,
+                $response,
+            > for $builder
         {
-            async fn execute(self, service: &$service) -> open_lark_core::core::SDKResult<$response> {
+            async fn execute(
+                self,
+                service: &$service,
+            ) -> open_lark_core::core::SDKResult<$response> {
                 service.$method(&self.build(), None).await
             }
         }
@@ -16,10 +23,17 @@ macro_rules! impl_executable_builder {
 macro_rules! impl_executable_builder_owned {
     ($builder:ty, $service:ty, $request:ty, $response:ty, $method:ident) => {
         #[async_trait::async_trait]
-        impl open_lark_core::core::trait_system::executable_builder::ExecutableBuilder<$service, $request, $response>
-            for $builder
+        impl
+            open_lark_core::core::trait_system::executable_builder::ExecutableBuilder<
+                $service,
+                $request,
+                $response,
+            > for $builder
         {
-            async fn execute(self, service: &$service) -> open_lark_core::core::SDKResult<$response> {
+            async fn execute(
+                self,
+                service: &$service,
+            ) -> open_lark_core::core::SDKResult<$response> {
                 service.$method(self.build(), None).await
             }
         }
@@ -30,10 +44,17 @@ macro_rules! impl_executable_builder_owned {
 macro_rules! impl_executable_builder_config {
     ($builder:ty, $service:ty, $request:ty, $response:ty, $method:ident) => {
         #[async_trait::async_trait]
-        impl open_lark_core::core::trait_system::executable_builder::ExecutableBuilder<$service, $request, $response>
-            for $builder
+        impl
+            open_lark_core::core::trait_system::executable_builder::ExecutableBuilder<
+                $service,
+                $request,
+                $response,
+            > for $builder
         {
-            async fn execute(self, service: &$service) -> open_lark_core::core::SDKResult<$response> {
+            async fn execute(
+                self,
+                service: &$service,
+            ) -> open_lark_core::core::SDKResult<$response> {
                 service.$method(self.build(), None).await
             }
         }

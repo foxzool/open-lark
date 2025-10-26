@@ -14,3 +14,4 @@ serde_json = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
 async-trait = { workspace = true }
+reqwest = { workspace = true }

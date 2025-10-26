@@ -4,7 +4,7 @@
 
 // 导入 v1 特有的类型
 pub use crate::im::v1::models::{
-    MessageType, ReceiveIdType, BatchMessageStatus, EmojiType, MessageReaction,
-    ReactionUser, Pin, BatchMessage, ImageInfo, FileInfo, MessageCard, UrgentType,
-    UrgentInfo, UrlPreview, PageInfo, MessageReadInfo, ReadUser, Message
-},
+    BatchMessage, BatchMessageStatus, EmojiType, FileInfo, ImageInfo, Message, MessageCard,
+    MessageReaction, MessageReadInfo, MessageType, PageInfo, Pin, ReactionUser, ReadUser,
+    ReceiveIdType, UrgentInfo, UrgentType, UrlPreview,
+};

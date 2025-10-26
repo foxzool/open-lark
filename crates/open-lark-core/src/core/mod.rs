@@ -9,6 +9,7 @@ pub mod app_ticket_manager;
 pub mod cache;
 pub mod config;
 pub mod constants;
+pub mod contact;
 pub mod endpoints;
 pub mod endpoints_original;
 pub mod error;
@@ -35,7 +36,7 @@ pub mod utils;
 pub mod validation;
 
 // Re-export core types for convenience
-pub use error::{LarkAPIError};
+pub use error::LarkAPIError;
 
 // Type alias for Result with LarkAPIError
 pub type SDKResult<T> = Result<T, LarkAPIError>;

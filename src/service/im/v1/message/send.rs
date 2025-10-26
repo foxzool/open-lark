@@ -95,7 +95,7 @@ impl MessageService {
     /// }
     /// ```
     pub async fn delete(&self, message_id: &str, option: Option<RequestOption>) -> SDKResult<()> {
-        let api_req = crate::core::api_req::ApiRequest {
+        let api_req = crate::core::ApiRequest {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::im::IM_V1_DELETE_MESSAGE,
@@ -174,7 +174,7 @@ mod tests {
     use super::*;
     use crate::{
         core::{
-            api_req::ApiRequest, config::Config, constants::AccessTokenType,
+            ApiRequest, config::Config, constants::AccessTokenType,
             req_option::RequestOption,
         },
         service::im::v1::message::builders::CreateMessageRequest,
@@ -291,7 +291,7 @@ mod tests {
     #[test]
     fn test_delete_message_request_structure() {
         let message_id = "test_msg_456";
-        let api_req = crate::core::api_req::ApiRequest {
+        let api_req = crate::core::ApiRequest {
             http_method: Method::DELETE,
             api_path: crate::core::endpoints::EndpointBuilder::replace_param(
                 crate::core::endpoints::im::IM_V1_DELETE_MESSAGE,
