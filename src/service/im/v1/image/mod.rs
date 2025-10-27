@@ -3,7 +3,6 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 use crate::core::{
-    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
@@ -12,7 +11,7 @@ use crate::core::{
     req_option::RequestOption,
     standard_response::StandardResponse,
     trait_system::executable_builder::ExecutableBuilder,
-    SDKResult,
+    ApiRequest, SDKResult,
 };
 use crate::impl_full_service;
 use async_trait::async_trait;

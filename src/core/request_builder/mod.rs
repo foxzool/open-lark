@@ -7,8 +7,8 @@ pub use header_builder::HeaderBuilder;
 pub use multipart_builder::MultipartBuilder;
 
 use crate::core::{
-    ApiRequest, config::Config, constants::AccessTokenType, error::LarkAPIError,
-    req_option::RequestOption,
+    config::Config, constants::AccessTokenType, error::LarkAPIError, req_option::RequestOption,
+    ApiRequest,
 };
 use reqwest::RequestBuilder;
 use std::{future::Future, pin::Pin};
@@ -66,7 +66,7 @@ impl UnifiedRequestBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{ApiRequest, constants::AppType};
+    use crate::core::{constants::AppType, ApiRequest};
     use reqwest::Method;
     use std::collections::HashMap;
 

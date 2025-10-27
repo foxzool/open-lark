@@ -3,14 +3,13 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     core::{
-        api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse},
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
         validation::{self, ValidationResult},
-        SDKResult,
+        ApiRequest, SDKResult,
     },
     service::im::v1::message::{ListMessageIterator, Message},
 };
@@ -211,7 +210,8 @@ impl MessageService {
         let mut api_req = list_message_request.api_req;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(crate::core::endpoints::im::IM_V1_LIST_MESSAGE.to_string());
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<ListMessageRespData> =
             Transport::request(api_req, &self.config, option).await?;

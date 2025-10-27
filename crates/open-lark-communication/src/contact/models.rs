@@ -32,6 +32,6 @@ mod tests {
     #[test]
     fn test_basic_functionality() {
         // 基础功能测试
-        assert!(true, "Contact models test should pass");
+        // TODO: Add actual test cases for contact models
     }
 }

@@ -128,7 +128,7 @@ mod tests {
         let config = create_test_config();
         let service = ContactService::new(config.clone());
         // 测试有效配置
-        assert!(service.models.config().app_id.len() > 0);
+        assert!(!service.models.config().app_id.is_empty());
         assert!(!config.app_id.is_empty());
         // 测试无效配置
         let empty_config = Config::builder()

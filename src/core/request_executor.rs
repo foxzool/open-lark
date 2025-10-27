@@ -4,12 +4,11 @@ use reqwest::Method;
 use serde::Serialize;
 
 use crate::core::{
-    ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
     http::Transport,
     req_option::RequestOption,
-    SDKResult,
+    ApiRequest, SDKResult,
 };
 use open_lark_core::core::constants::AccessTokenType;
 
@@ -654,8 +653,8 @@ mod tests {
 
     #[test]
     fn test_request_executor_api_request_construction() {
-        use crate::core::ApiRequest;
         use crate::core::constants::AccessTokenType;
+        use crate::core::ApiRequest;
         use reqwest::Method;
         use std::collections::HashMap;
 
@@ -1140,8 +1139,8 @@ mod tests {
     // API request building edge cases
     #[test]
     fn test_request_executor_api_request_building_edge_cases() {
-        use crate::core::ApiRequest;
         use crate::core::constants::AccessTokenType;
+        use crate::core::ApiRequest;
         use reqwest::Method;
 
         // Test with very long path
@@ -1156,7 +1155,9 @@ mod tests {
         let mut api_req_empty_tokens = ApiRequest::with_method_and_path(Method::POST, "/test");
         api_req_empty_tokens.set_supported_access_token_types(vec![]);
 
-        assert!(api_req_empty_tokens.get_supported_access_token_types().is_empty());
+        assert!(api_req_empty_tokens
+            .get_supported_access_token_types()
+            .is_empty());
 
         // Test with many supported tokens
         let mut api_req_many_tokens = ApiRequest::with_method_and_path(Method::PUT, "/test");
@@ -1168,7 +1169,10 @@ mod tests {
             AccessTokenType::User,   // duplicate
         ]);
 
-        assert_eq!(api_req_many_tokens.get_supported_access_token_types().len(), 5);
+        assert_eq!(
+            api_req_many_tokens.get_supported_access_token_types().len(),
+            5
+        );
     }
 
     // Method chaining and composition tests

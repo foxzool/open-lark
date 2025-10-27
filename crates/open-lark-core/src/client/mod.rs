@@ -45,10 +45,10 @@ use crate::service::ContactService;
 use crate::service::CoreHRService;
 #[cfg(feature = "directory")]
 use crate::service::DirectoryService;
-#[cfg(feature = "ehr")]
-use crate::service::EhrService;
 #[cfg(feature = "elearning")]
 use crate::service::ELearningService;
+#[cfg(feature = "ehr")]
+use crate::service::EhrService;
 #[cfg(feature = "group")]
 use crate::service::GroupService;
 #[cfg(feature = "helpdesk")]

@@ -75,7 +75,7 @@ impl UserTaskService {
             ATTENDANCE_V1_USER_TASK_GET,
             "user_id",
             &request.user_id,
-));
+        ));
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数

@@ -1,3 +1,4 @@
+use std::cmp::Reverse;
 use std::collections::HashMap;
 use std::env;
 use std::fs;
@@ -127,10 +128,9 @@ fn extract_method_signature(line: &str, all_lines: &[&str], line_num: usize) -> 
     let mut signature = line.trim().to_string();
 
     if !signature.ends_with('{') && line_num + 1 < all_lines.len() {
-        for i in (line_num + 1)..all_lines.len() {
-            let next_line = all_lines[i].trim();
-            signature.push_str(" ");
-            signature.push_str(next_line);
+        for next_line in all_lines.iter().skip(line_num + 1) {
+            signature.push(' ');
+            signature.push_str(next_line.trim());
 
             if next_line.ends_with('{') || next_line.ends_with(';') {
                 break;
@@ -190,7 +190,7 @@ fn generate_report(apis: &[ApiMethod]) {
 
     println!("## 按服务统计");
     let mut services: Vec<_> = service_stats.values().collect();
-    services.sort_by(|a, b| b.len().cmp(&a.len()));
+    services.sort_by_key(|b| Reverse(b.len()));
 
     for service_apis in services {
         let service_name = &service_apis[0].service;

@@ -5,14 +5,13 @@ use std::collections::HashMap;
 
 use crate::{
     core::{
-        api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
         endpoints::EndpointBuilder,
         http::Transport,
         req_option::RequestOption,
-        SDKResult,
+        ApiRequest, SDKResult,
     },
     service::im::v2::models::{ButtonInfo, UserIdType},
 };

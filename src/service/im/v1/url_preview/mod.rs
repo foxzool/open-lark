@@ -3,7 +3,6 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 use crate::core::{
-    api_req::ApiRequest,
     api_resp::{BaseResponse, EmptyResponse},
     config::Config,
     constants::AccessTokenType,
@@ -11,7 +10,7 @@ use crate::core::{
     http::Transport,
     req_option::RequestOption,
     standard_response::StandardResponse,
-    SDKResult,
+    ApiRequest, SDKResult,
 };
 use crate::impl_full_service;
 

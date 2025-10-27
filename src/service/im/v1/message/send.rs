@@ -105,7 +105,8 @@ impl MessageService {
             ),
             ..Default::default()
         };
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<serde_json::Value> =
             Transport::request(api_req, &self.config, option).await?;

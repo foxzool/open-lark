@@ -47,8 +47,6 @@ use crate::service::elearning::ELearningService;
 use crate::service::group::GroupService;
 #[cfg(feature = "helpdesk")]
 use crate::service::helpdesk::HelpdeskService;
-#[cfg(feature = "hire")]
-use open_lark_hr_suite::hire::HireService;
 #[cfg(feature = "human-authentication")]
 use crate::service::human_authentication::HumanAuthenticationService;
 #[cfg(feature = "im")]
@@ -91,6 +89,8 @@ use crate::service::vc::VcService;
 use crate::service::verification::VerificationService;
 #[cfg(feature = "workplace")]
 use crate::service::workplace::WorkplaceService;
+#[cfg(feature = "hire")]
+use open_lark_hr_suite::hire::HireService;
 
 // 向后兼容的导入
 #[cfg(feature = "cloud-docs")]

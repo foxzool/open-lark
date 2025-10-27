@@ -3,11 +3,11 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     core::{
-        ApiRequest,
         validation::{
             message_limits, uuid_limits, validate_content_size, validate_required,
             validate_string_length,
         },
+        ApiRequest,
     },
     service::im::v1::message::{Message, SendMessageTrait},
 };

@@ -60,7 +60,6 @@ pub const METRICS_COLLECTION_ALERTING: &str =
     "/open-apis/platform_integration/v1/monitoring/metrics";
 
 /// 数据集成和同步
-
 /// 实时数据同步
 pub const REAL_TIME_DATA_SYNC: &str = "/open-apis/platform_integration/v1/data/sync";
 
@@ -71,7 +70,6 @@ pub const DATA_LAKE_INTEGRATION: &str = "/open-apis/platform_integration/v1/data
 pub const ETL_PIPELINE_MANAGEMENT: &str = "/open-apis/platform_integration/v1/data/etl";
 
 /// 企业系统连接器
-
 /// ERP系统集成
 pub const ERP_SYSTEM_INTEGRATION: &str = "/open-apis/platform_integration/v1/enterprise/erp";
 
@@ -86,7 +84,6 @@ pub const FINANCE_SYSTEM_INTEGRATION: &str =
     "/open-apis/platform_integration/v1/enterprise/finance";
 
 /// API市场和管理
-
 /// API市场发布
 pub const API_MARKETPLACE_PUBLISH: &str = "/open-apis/platform_integration/v1/marketplace/publish";
 
@@ -97,7 +94,6 @@ pub const API_USAGE_ANALYTICS: &str = "/open-apis/platform_integration/v1/market
 pub const API_VERSION_MANAGEMENT: &str = "/open-apis/platform_integration/v1/api/version";
 
 /// 安全和合规集成
-
 /// 统一身份认证
 pub const UNIFIED_IDENTITY_AUTHENTICATION: &str =
     "/open-apis/platform_integration/v1/security/unified_auth";
@@ -109,7 +105,6 @@ pub const OAUTH_SAML_INTEGRATION: &str = "/open-apis/platform_integration/v1/sec
 pub const WEBHOOK_MANAGEMENT: &str = "/open-apis/platform_integration/v1/webhook/management";
 
 /// 开发者工具
-
 /// API测试套件
 pub const API_TESTING_SUITE: &str = "/open-apis/platform_integration/v1/developer/api_testing";
 

@@ -3,8 +3,8 @@ use std::{future::Future, pin::Pin};
 use reqwest::RequestBuilder;
 
 use crate::core::{
-    config::Config, constants::AccessTokenType, error::LarkAPIError,
-    req_option::RequestOption, request_builder::UnifiedRequestBuilder,
+    config::Config, constants::AccessTokenType, error::LarkAPIError, req_option::RequestOption,
+    request_builder::UnifiedRequestBuilder,
 };
 // Re-export ApiRequest from open-lark-core
 use super::ApiRequest;
@@ -133,7 +133,8 @@ mod tests {
 
     #[tokio::test]
     async fn test_req_translator_with_marketplace_app() {
-        let mut api_req = ApiRequest::with_method_and_path(Method::GET, "/open-apis/marketplace/test");
+        let mut api_req =
+            ApiRequest::with_method_and_path(Method::GET, "/open-apis/marketplace/test");
 
         let config = Config::builder()
             .app_id("marketplace_app")

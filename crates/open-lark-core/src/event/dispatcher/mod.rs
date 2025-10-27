@@ -196,6 +196,6 @@ mod tests {
     #[test]
     fn test_event_dispatcher_placeholder() {
         // Placeholder test to ensure module compiles
-        assert!(true);
+        // TODO: Add proper event dispatcher tests
     }
 }

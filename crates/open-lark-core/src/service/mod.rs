@@ -5,7 +5,6 @@
 //! compilation compatibility while the multi-crate architecture migration is
 //! being completed.
 
-
 // Re-export shim implementations directly
 pub mod shim;
 pub use shim::*;
@@ -137,7 +136,6 @@ pub use shim::WorkplaceService;
 // Cloud docs backward compatibility
 #[cfg(feature = "cloud-docs")]
 pub use shim::{
-    AssistantService, BitableService, BoardService, CommentsService,
-    DocsService, DriveService, PermissionService, SheetsService, WikiService,
-    CloudDocsService
+    AssistantService, BitableService, BoardService, CloudDocsService, CommentsService, DocsService,
+    DriveService, PermissionService, SheetsService, WikiService,
 };

@@ -5,7 +5,6 @@ use std::collections::HashMap;
 use crate::impl_full_service;
 use crate::{
     core::{
-        api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
@@ -13,7 +12,7 @@ use crate::{
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
-        SDKResult,
+        ApiRequest, SDKResult,
     },
     service::im::v1::models::{BatchMessageStatus, ReceiveIdType, UserIdType},
 };
