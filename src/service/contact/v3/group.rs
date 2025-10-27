@@ -116,7 +116,6 @@ impl GroupService {
     ///
     /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/delete
 
-
     /// 删除用户组
     pub async fn delete(&self, group_id: &str) -> crate::core::SDKResult<DeleteGroupResponse> {
         let api_req = ApiRequest {

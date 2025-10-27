@@ -131,7 +131,7 @@ impl UserApprovalService {
             ATTENDANCE_V1_USER_APPROVAL_PROCESS,
             "approval_id",
             &request.approval_id,
-));
+        ));
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数

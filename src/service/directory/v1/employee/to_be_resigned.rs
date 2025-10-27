@@ -166,7 +166,7 @@ impl EmployeeService {
             DIRECTORY_V1_EMPLOYEE_TO_BE_RESIGNED,
             "employee_id",
             &request.employee_id,
-));
+        ));
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

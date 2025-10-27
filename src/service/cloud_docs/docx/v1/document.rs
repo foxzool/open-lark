@@ -89,7 +89,8 @@ impl DocumentService {
             api_path: DOCX_V1_DOCUMENT_RAW_CONTENT.replace("{}", &document_id.into()),
             ..Default::default()
         };
-        api_req.set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)
@@ -112,7 +113,8 @@ impl DocumentService {
             api_path: DOCX_V1_DOCUMENT_BLOCKS.replace("{}", &request.document_id),
             ..Default::default()
         };
-        api_req.set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_size) = request.page_size {
@@ -145,7 +147,8 @@ impl DocumentService {
             api_path: DOCX_V1_DOCUMENT_CONVERT.replace("{}", &document_id.into()),
             ..Default::default()
         };
-        api_req.set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)

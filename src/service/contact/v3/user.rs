@@ -297,7 +297,6 @@ impl UserService {
     ///
     /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/list
 
-
     /// 获取用户列表
     ///
     /// 该接口用于获取用户列表，支持分页。

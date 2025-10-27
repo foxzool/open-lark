@@ -42,7 +42,7 @@ impl UserSettingService {
             ATTENDANCE_V1_USER_SETTINGS_MODIFY,
             "user_id",
             &request.user_id,
-));
+        ));
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
@@ -123,7 +123,7 @@ impl UserSettingService {
             ATTENDANCE_V1_USER_SETTINGS_UPLOAD,
             "user_id",
             &request.user_id,
-));
+        ));
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
@@ -172,7 +172,7 @@ impl UserSettingService {
             ATTENDANCE_V1_USER_SETTINGS_DOWNLOAD,
             "user_id",
             &request.user_id,
-));
+        ));
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数

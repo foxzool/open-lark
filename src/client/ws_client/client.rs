@@ -178,24 +178,22 @@ impl LarkWsClient {
             .map(|h| h.value.as_str())
             .unwrap_or("");
 
-        let Some(payload) = frame.payload.take() else {
-            error!("Frame payload is empty");
-            return None;
-        };
+        let payload = frame.payload.unwrap_or_default();
 
         // 如果是分包消息，需要组合
         if sum > 1 {
             match self.combine(msg_id, sum, seq, &payload) {
                 Some(combined_payload) => {
-                    frame.payload = Some(combined_payload);
+                    // Create a new frame with the combined payload
+                    return Some(Frame {
+                        payload: Some(combined_payload),
+                        ..frame
+                    });
                 }
                 None => {
                     return None; // 还没收齐所有包
                 }
             }
-        } else {
-            // 对于单包消息，需要将payload重新设置回frame
-            frame.payload = Some(payload);
         }
 
         Some(frame)

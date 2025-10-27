@@ -54,7 +54,8 @@ impl MessageService {
         let mut api_req = create_message_request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(crate::core::endpoints::im::IM_V1_SEND_MESSAGE.to_string());
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<CreateMessageResp> =
             Transport::request(api_req, &self.config, option).await?;
@@ -95,16 +96,16 @@ impl MessageService {
     /// }
     /// ```
     pub async fn delete(&self, message_id: &str, option: Option<RequestOption>) -> SDKResult<()> {
-        let api_req = crate::core::ApiRequest {
+        let mut api_req = crate::core::ApiRequest {
             http_method: Method::DELETE,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::im::IM_V1_DELETE_MESSAGE,
                 "message_id",
                 message_id,
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             ..Default::default()
         };
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<serde_json::Value> =
             Transport::request(api_req, &self.config, option).await?;
@@ -131,8 +132,9 @@ impl MessageService {
             crate::core::endpoints::im::IM_V1_UPDATE_MESSAGE,
             "message_id",
             message_id,
-));
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        ));
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<CreateMessageResp> =
             Transport::request(api_req, &self.config, option).await?;
@@ -159,8 +161,9 @@ impl MessageService {
             crate::core::endpoints::im::IM_V1_REPLY_MESSAGE,
             "message_id",
             message_id,
-));
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        ));
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<CreateMessageResp> =
             Transport::request(api_req, &self.config, option).await?;
@@ -173,10 +176,7 @@ impl MessageService {
 mod tests {
     use super::*;
     use crate::{
-        core::{
-            ApiRequest, config::Config, constants::AccessTokenType,
-            req_option::RequestOption,
-        },
+        core::{config::Config, constants::AccessTokenType, req_option::RequestOption, ApiRequest},
         service::im::v1::message::builders::CreateMessageRequest,
     };
     use reqwest::Method;
@@ -304,12 +304,12 @@ mod tests {
 
         assert_eq!(api_req.http_method, Method::DELETE);
         assert!(api_req.api_path.contains(message_id));
-        assert_eq!(api_req.supported_access_token_types.len(), 2);
+        assert_eq!(api_req.get_supported_access_token_types().len(), 2);
         assert!(api_req
-            .supported_access_token_types
+            .get_supported_access_token_types()
             .contains(&AccessTokenType::Tenant));
         assert!(api_req
-            .supported_access_token_types
+            .get_supported_access_token_types()
             .contains(&AccessTokenType::User));
     }
 

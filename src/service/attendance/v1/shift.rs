@@ -128,7 +128,7 @@ impl ShiftService {
             ATTENDANCE_V1_SHIFT_DELETE,
             "shift_id",
             &request.shift_id,
-));
+        ));
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -149,7 +149,11 @@ impl ShiftService {
     ) -> SDKResult<BaseResponse<Shift>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
-        api_req.set_api_path(EndpointBuilder::replace_param(ATTENDANCE_V1_SHIFT_GET, "shift_id", &request.shift_id));
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            ATTENDANCE_V1_SHIFT_GET,
+            "shift_id",
+            &request.shift_id,
+        ));
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

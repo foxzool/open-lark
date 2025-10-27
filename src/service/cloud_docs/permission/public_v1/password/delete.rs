@@ -146,7 +146,7 @@ pub async fn delete_password(
         DRIVE_V1_PERMISSIONS_PUBLIC_PASSWORD,
         "token",
         &request.token,
-));
+    ));
 
     // 添加查询参数
     api_req

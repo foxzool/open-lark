@@ -64,7 +64,8 @@ impl FolderService {
             api_path: DRIVE_V1_FOLDER_CHILDREN.replace("{}", &request.folder_token),
             ..Default::default()
         };
-        api_req.set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {

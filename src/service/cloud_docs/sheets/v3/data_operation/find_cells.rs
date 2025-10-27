@@ -46,7 +46,6 @@ impl FindCellsRequest {
     ///
     /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM
 
-
     /// 验证请求参数
     pub fn validate(&self) -> SDKResult<()> {
         // 验证必需字段
@@ -252,7 +251,8 @@ impl SpreadsheetSheetService {
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
         api_req.set_http_method(reqwest::Method::POST);
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::App]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::App]);
 
         let api_resp: BaseResponse<FindCellsResponse> =
             crate::core::http::Transport::request(api_req, &self.config, option).await?;

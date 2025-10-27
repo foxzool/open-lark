@@ -189,12 +189,12 @@ mod tests {
 
         assert_eq!(api_req.http_method, Method::GET);
         assert_eq!(api_req.api_path, "/open-apis/verification/v1/get");
-        assert_eq!(api_req.supported_access_token_types.len(), 2);
+        assert_eq!(api_req.get_supported_access_token_types().len(), 2);
         assert!(api_req
-            .supported_access_token_types
+            .get_supported_access_token_types()
             .contains(&AccessTokenType::Tenant));
         assert!(api_req
-            .supported_access_token_types
+            .get_supported_access_token_types()
             .contains(&AccessTokenType::User));
     }
 

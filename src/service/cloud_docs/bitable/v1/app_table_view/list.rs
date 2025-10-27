@@ -25,7 +25,8 @@ impl AppTableViewService {
         api_req.api_path = BITABLE_V1_VIEWS
             .replace("{app_token}", &request.app_token)
             .replace("{table_id}", &request.table_id);
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {

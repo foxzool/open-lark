@@ -289,7 +289,11 @@ pub async fn patch_permission_public(
 ) -> SDKResult<BaseResponse<PatchPermissionPublicResponse>> {
     let mut api_req = request.api_request;
     api_req.set_http_method(Method::PATCH);
-    api_req.set_api_path(EndpointBuilder::replace_param(DRIVE_V1_PERMISSIONS_PUBLIC, "token", &request.token));
+    api_req.set_api_path(EndpointBuilder::replace_param(
+        DRIVE_V1_PERMISSIONS_PUBLIC,
+        "token",
+        &request.token,
+    ));
 
     // 添加查询参数
     api_req

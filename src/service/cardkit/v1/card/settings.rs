@@ -159,8 +159,13 @@ impl CardService {
     ) -> SDKResult<BaseResponse<UpdateCardSettingsResponse>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::PATCH);
-        api_req.set_api_path(EndpointBuilder::replace_param(CARDKIT_V1_CARD_SETTINGS, "card_id", &request.card_id));
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            CARDKIT_V1_CARD_SETTINGS,
+            "card_id",
+            &request.card_id,
+        ));
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)

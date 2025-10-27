@@ -58,7 +58,6 @@ impl FunctionalRoleService {
     ///
     /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get
 
-
     /// 获取单个角色信息
     pub async fn get(&self, role_id: &str) -> crate::core::SDKResult<GetFunctionalRoleResponse> {
         let api_req = ApiRequest {

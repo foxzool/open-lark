@@ -29,7 +29,8 @@ impl AppTableViewService {
             .replace("{app_token}", &request.app_token)
             .replace("{table_id}", &request.table_id)
             .replace("{view_id}", &request.view_id);
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.body = serde_json::to_vec(&PatchViewRequestBody {
             view_name: request.view_name,
             property: request.property,

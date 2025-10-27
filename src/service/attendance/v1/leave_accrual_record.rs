@@ -42,7 +42,7 @@ impl LeaveAccrualRecordService {
             ATTENDANCE_V1_LEAVE_ACCRUAL_RECORD_GET,
             "leave_accrual_record_id",
             &request.leave_accrual_record_id,
-));
+        ));
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数

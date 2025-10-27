@@ -166,7 +166,11 @@ pub async fn get_permission_public_v2(
 ) -> SDKResult<BaseResponse<GetPermissionPublicV2Response>> {
     let mut api_req = request.api_request;
     api_req.set_http_method(Method::GET);
-    api_req.set_api_path(EndpointBuilder::replace_param(DRIVE_V2_PERMISSIONS_PUBLIC, "token", &request.token));
+    api_req.set_api_path(EndpointBuilder::replace_param(
+        DRIVE_V2_PERMISSIONS_PUBLIC,
+        "token",
+        &request.token,
+    ));
 
     // 添加查询参数
     api_req

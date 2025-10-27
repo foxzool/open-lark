@@ -29,7 +29,8 @@ impl DataOperationService {
         api_req.api_path = SHEETS_V3_SPREADSHEET_MERGE_CELLS
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<MergeCellsResponseData> =
             Transport::request(api_req, &self.config, option).await?;
@@ -60,7 +61,6 @@ impl MergeCellsRequest {
     /// # API文档
     ///
     /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM
-
 
     /// 验证请求参数
     pub fn validate(&self) -> SDKResult<()> {

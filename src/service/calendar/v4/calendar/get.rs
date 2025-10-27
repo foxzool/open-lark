@@ -117,8 +117,11 @@ impl CalendarManagementService {
     ) -> SDKResult<BaseResponse<GetCalendarResponse>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
-        api_req.set_api_path(CALENDAR_V4_CALENDAR_OPERATION.replace("{calendar_id}", &request.calendar_id));
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.set_api_path(
+            CALENDAR_V4_CALENDAR_OPERATION.replace("{calendar_id}", &request.calendar_id),
+        );
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
         Ok(api_resp)

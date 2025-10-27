@@ -268,10 +268,9 @@ pub struct SearchUserIterator<'a> {
     option: Option<RequestOption>,
     has_more: bool,
 }
-    /// # API文档
-    ///
-    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/search
-
+/// # API文档
+///
+/// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/search
 
 impl SearchUserIterator<'_> {
     pub async fn next(&mut self) -> Option<Vec<UserInSearchResponse>> {

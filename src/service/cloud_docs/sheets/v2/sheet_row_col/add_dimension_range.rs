@@ -87,9 +87,12 @@ impl SpreadsheetService {
         option: Option<req_option::RequestOption>,
     ) -> SDKResult<BaseResponse<DimensionRangeResponse>> {
         let mut api_req = request.api_request;
-        api_req.set_api_path(SHEETS_V2_SPREADSHEET_DIMENSION_RANGE.replace("{}", &request.spreadsheet_token));
+        api_req.set_api_path(
+            SHEETS_V2_SPREADSHEET_DIMENSION_RANGE.replace("{}", &request.spreadsheet_token),
+        );
         api_req.set_http_method(reqwest::Method::POST);
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::App]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::App]);
 
         let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
 

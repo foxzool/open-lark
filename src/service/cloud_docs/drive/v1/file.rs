@@ -297,7 +297,8 @@ impl FileService {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(DRIVE_V1_FILES_UPLOAD_PART.to_string());
-        api_req.set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
 
         let api_resp: BaseResponse<FileUploadPartRespData> =
             Transport::request(api_req, &self.config, option).await?;

@@ -122,7 +122,8 @@ impl DocumentBlockService {
                 .replace("{document_id}", &document_id.into()),
             ..Default::default()
         };
-        api_req.set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
         api_req.body = serde_json::to_vec(&request)?;
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -151,7 +152,8 @@ impl DocumentBlockService {
             ),
             ..Default::default()
         };
-        api_req.set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
         api_req.body = serde_json::to_vec(&request)?;
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

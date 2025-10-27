@@ -79,7 +79,8 @@ impl AppAccessTokenService {
             ..Default::default()
         };
 
-        let resp = Transport::<AppAccessTokenResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<AppAccessTokenResponse>::request(api_req, &self.config, None).await?;
         resp.into_result()
     }
 
@@ -91,7 +92,10 @@ impl AppAccessTokenService {
     ///
     /// 企业自建应用通过app_id和app_secret获取应用访问令牌。
     /// App Access Token用于访问不需要用户授权的API接口。
-    pub async fn get_internal(&self, req: &GetAppAccessTokenInternalRequest) -> SDKResult<AppAccessTokenResponse> {
+    pub async fn get_internal(
+        &self,
+        req: &GetAppAccessTokenInternalRequest,
+    ) -> SDKResult<AppAccessTokenResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
             api_path: AUTH_V3_APP_ACCESS_TOKEN_INTERNAL.to_string(),
@@ -100,7 +104,8 @@ impl AppAccessTokenService {
             ..Default::default()
         };
 
-        let resp = Transport::<AppAccessTokenResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<AppAccessTokenResponse>::request(api_req, &self.config, None).await?;
         resp.into_result()
     }
 }
@@ -118,7 +123,10 @@ impl TenantAccessTokenService {
     ///
     /// 应用商店应用获取租户访问令牌，用于访问特定企业的资源和数据。
     /// 需要企业管理员的授权和配置。
-    pub async fn get(&self, req: &GetTenantAccessTokenRequest) -> SDKResult<TenantAccessTokenResponse> {
+    pub async fn get(
+        &self,
+        req: &GetTenantAccessTokenRequest,
+    ) -> SDKResult<TenantAccessTokenResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
             api_path: AUTH_V3_TENANT_ACCESS_TOKEN.to_string(),
@@ -127,7 +135,8 @@ impl TenantAccessTokenService {
             ..Default::default()
         };
 
-        let resp = Transport::<TenantAccessTokenResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<TenantAccessTokenResponse>::request(api_req, &self.config, None).await?;
         resp.into_result()
     }
 
@@ -139,7 +148,10 @@ impl TenantAccessTokenService {
     ///
     /// 企业自建应用获取租户访问令牌，用于访问特定企业的资源和数据。
     /// 需要企业管理员的授权和配置。
-    pub async fn get_internal(&self, req: &GetTenantAccessTokenInternalRequest) -> SDKResult<TenantAccessTokenResponse> {
+    pub async fn get_internal(
+        &self,
+        req: &GetTenantAccessTokenInternalRequest,
+    ) -> SDKResult<TenantAccessTokenResponse> {
         let api_req = ApiRequest {
             http_method: reqwest::Method::POST,
             api_path: AUTH_V3_TENANT_ACCESS_TOKEN_INTERNAL.to_string(),
@@ -148,7 +160,8 @@ impl TenantAccessTokenService {
             ..Default::default()
         };
 
-        let resp = Transport::<TenantAccessTokenResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<TenantAccessTokenResponse>::request(api_req, &self.config, None).await?;
         resp.into_result()
     }
 }
@@ -175,7 +188,8 @@ impl AppTicketService {
             ..Default::default()
         };
 
-        let resp = Transport::<ResendAppTicketResponse>::request(api_req, &self.config, None).await?;
+        let resp =
+            Transport::<ResendAppTicketResponse>::request(api_req, &self.config, None).await?;
         resp.into_result()
     }
 }
@@ -1281,4 +1295,3 @@ impl Service for AppTicketService {
         "v3"
     }
 }
-  

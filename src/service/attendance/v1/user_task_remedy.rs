@@ -73,7 +73,8 @@ impl UserTaskRemedyService {
     ) -> SDKResult<BaseResponse<QueryUserAllowedRemedysRespData>> {
         let mut api_req = request.api_req;
         api_req.set_http_method(Method::GET);
-        api_req.set_api_path(ATTENDANCE_V1_USER_TASK_REMEDYS_QUERY_USER_ALLOWED_REMEDYS.to_string());
+        api_req
+            .set_api_path(ATTENDANCE_V1_USER_TASK_REMEDYS_QUERY_USER_ALLOWED_REMEDYS.to_string());
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数

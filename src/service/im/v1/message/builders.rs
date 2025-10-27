@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     core::{
-        api_req::ApiRequest,
+        ApiRequest,
         validation::{
             message_limits, uuid_limits, validate_content_size, validate_required,
             validate_string_length,

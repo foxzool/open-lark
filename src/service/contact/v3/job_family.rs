@@ -61,7 +61,6 @@ impl JobFamilyService {
     ///
     /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get
 
-
     /// 获取单个序列信息
     pub async fn get(&self, job_family_id: &str) -> crate::core::SDKResult<GetJobFamilyResponse> {
         let api_req = ApiRequest {

@@ -60,7 +60,6 @@ impl JobLevelService {
     ///
     /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get
 
-
     /// 获取单个职级信息
     pub async fn get(&self, job_level_id: &str) -> crate::core::SDKResult<GetJobLevelResponse> {
         let api_req = ApiRequest {

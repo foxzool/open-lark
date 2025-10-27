@@ -28,7 +28,8 @@ impl AppTableService {
         api_req.api_path = BITABLE_V1_TABLE_PATCH
             .replace("{app_token}", &request.app_token)
             .replace("{table_id}", &request.table_id);
-        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req
+            .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
         api_req.body = serde_json::to_vec(&PatchTableRequestBody { name: request.name })?;
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;

@@ -151,7 +151,11 @@ pub async fn list_space_node(
 ) -> SDKResult<BaseResponse<ListSpaceNodeResponse>> {
     let mut api_req = request.api_request;
     api_req.set_http_method(Method::GET);
-    api_req.set_api_path(EndpointBuilder::replace_param(WIKI_V2_SPACE_NODES, "space_id", &request.space_id));
+    api_req.set_api_path(EndpointBuilder::replace_param(
+        WIKI_V2_SPACE_NODES,
+        "space_id",
+        &request.space_id,
+    ));
 
     // 构建查询参数
     let mut query_params = Vec::new();

@@ -42,7 +42,7 @@ impl GroupService {
             ATTENDANCE_V1_GROUP_USERS,
             "group_id",
             &request.group_id,
-));
+        ));
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数
@@ -156,7 +156,7 @@ impl GroupService {
             ATTENDANCE_V1_GROUP_DELETE,
             "group_id",
             &request.group_id,
-));
+        ));
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
@@ -181,7 +181,7 @@ impl GroupService {
             ATTENDANCE_V1_GROUP_DELETE,
             "group_id",
             &request.group_id,
-));
+        ));
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 
         // 添加查询参数

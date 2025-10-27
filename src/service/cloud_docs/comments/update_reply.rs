@@ -214,7 +214,10 @@ pub async fn update_reply(
 
     // 添加用户ID类型查询参数
     if let Some(user_id_type) = request.user_id_type {
-        api_req.set_api_path(format!("{}&user_id_type={}", api_req.api_path, user_id_type));
+        api_req.set_api_path(format!(
+            "{}&user_id_type={}",
+            api_req.api_path, user_id_type
+        ));
     }
 
     api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
