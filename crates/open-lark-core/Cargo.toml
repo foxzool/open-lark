@@ -33,6 +33,8 @@ tokio-tungstenite = { workspace = true, optional = true }
 prost = { workspace = true, optional = true }
 lark-websocket-protobuf = { workspace = true, optional = true }
 
+# Internal dependencies暂时移除，避免循环依赖
+
 [features]
 # WebSocket support
 websocket = ["tokio-tungstenite", "prost", "lark-websocket-protobuf"]

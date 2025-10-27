@@ -14,89 +14,89 @@ use crate::core::{
 
 // 条件导入服务
 #[cfg(feature = "acs")]
-use crate::prelude::trait_system::service::acs::AcsService;
+use crate::service::AcsService;
 #[cfg(feature = "admin")]
-use crate::prelude::trait_system::service::admin::AdminService;
+use crate::service::AdminService;
 #[cfg(feature = "ai")]
-use crate::prelude::trait_system::service::ai::AiService;
+use crate::service::AiService;
 #[cfg(feature = "aily")]
-use crate::prelude::trait_system::service::aily::AilyService;
+use crate::service::AilyService;
 #[cfg(feature = "apass")]
-use crate::prelude::trait_system::service::apass::ApassService;
+use crate::service::ApassService;
 #[cfg(feature = "application")]
-use crate::prelude::trait_system::service::application::ApplicationService;
+use crate::service::ApplicationService;
 #[cfg(feature = "approval")]
-use crate::prelude::trait_system::service::approval::ApprovalService;
+use crate::service::ApprovalService;
 #[cfg(feature = "attendance")]
-use crate::service::attendance::AttendanceService;
+use crate::service::AttendanceService;
 #[cfg(feature = "authentication")]
-use crate::service::authentication::AuthenService;
+use crate::service::AuthenService;
 #[cfg(feature = "bot")]
-use crate::service::bot::BotService;
+use crate::service::BotService;
 #[cfg(feature = "calendar")]
-use crate::service::calendar::CalendarService;
+use crate::service::CalendarService;
 #[cfg(feature = "cardkit")]
-use crate::service::cardkit::CardkitService;
+use crate::service::CardkitService;
 #[cfg(feature = "cloud-docs")]
-use crate::service::cloud_docs::CloudDocsService;
+use crate::service::CloudDocsService;
 #[cfg(feature = "contact")]
-use crate::service::contact::ContactService;
+use crate::service::ContactService;
 #[cfg(feature = "corehr")]
-use crate::service::corehr::CoreHRService;
+use crate::service::CoreHRService;
 #[cfg(feature = "directory")]
-use crate::service::directory::DirectoryService;
+use crate::service::DirectoryService;
 #[cfg(feature = "ehr")]
-use crate::service::ehr::EhrService;
+use crate::service::EhrService;
 #[cfg(feature = "elearning")]
-use crate::service::elearning::ELearningService;
+use crate::service::ELearningService;
 #[cfg(feature = "group")]
-use crate::service::group::GroupService;
+use crate::service::GroupService;
 #[cfg(feature = "helpdesk")]
-use crate::service::helpdesk::HelpdeskService;
+use crate::service::HelpdeskService;
 #[cfg(feature = "hire")]
-use crate::service::hire::HireService;
+use crate::service::HireService;
 #[cfg(feature = "human-authentication")]
-use crate::service::human_authentication::HumanAuthenticationService;
+use crate::service::HumanAuthenticationService;
 #[cfg(feature = "im")]
-use crate::service::im::ImService;
+use crate::service::ImService;
 #[cfg(feature = "lingo")]
-use crate::service::lingo::LingoService;
+use crate::service::LingoService;
 #[cfg(feature = "mail")]
-use crate::service::mail::MailService;
+use crate::service::MailService;
 #[cfg(feature = "mdm")]
-use crate::service::mdm::MdmService;
+use crate::service::MdmService;
 #[cfg(feature = "minutes")]
-use crate::service::minutes::MinutesService;
+use crate::service::MinutesService;
 #[cfg(feature = "moments")]
-use crate::service::moments::MomentsService;
+use crate::service::MomentsService;
 #[cfg(feature = "okr")]
-use crate::service::okr::OkrService;
+use crate::service::OkrService;
 #[cfg(feature = "payroll")]
-use crate::service::payroll::PayrollService;
+use crate::service::PayrollService;
 #[cfg(feature = "performance")]
-use crate::service::performance::PerformanceService;
+use crate::service::PerformanceService;
 #[cfg(feature = "personal-settings")]
-use crate::service::personal_settings::PersonalSettingsService;
+use crate::service::PersonalSettingsService;
 #[cfg(feature = "report")]
-use crate::service::report::ReportService;
+use crate::service::ReportService;
 #[cfg(feature = "search")]
-use crate::service::search::SearchService;
+use crate::service::SearchService;
 #[cfg(feature = "security-and-compliance")]
-use crate::service::security_and_compliance::SecurityAndComplianceService;
+use crate::service::SecurityAndComplianceService;
 #[cfg(feature = "task")]
-use crate::service::task::TaskV2Service;
+use crate::service::TaskV2Service;
 #[cfg(feature = "tenant")]
-use crate::service::tenant::TenantService;
+use crate::service::TenantService;
 #[cfg(feature = "tenant-tag")]
-use crate::service::tenant_tag::TenantTagService;
+use crate::service::TenantTagService;
 #[cfg(feature = "trust-party")]
-use crate::service::trust_party::TrustPartyService;
+use crate::service::TrustPartyService;
 #[cfg(feature = "vc")]
-use crate::service::vc::VcService;
+use crate::service::VcService;
 #[cfg(feature = "verification")]
-use crate::service::verification::VerificationService;
+use crate::service::VerificationService;
 #[cfg(feature = "workplace")]
-use crate::service::workplace::WorkplaceService;
+use crate::service::WorkplaceService;
 
 // 向后兼容的导入
 #[cfg(feature = "cloud-docs")]

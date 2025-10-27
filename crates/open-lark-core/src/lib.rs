@@ -8,6 +8,7 @@
 pub mod client;
 pub mod core;
 pub mod event;
+pub mod service;
 
 /// Prelude module for convenient imports.
 pub mod prelude {
