@@ -13,7 +13,7 @@
 open-lark/
 ├── src/
 │   ├── core/           # 核心功能
-│   ├── service/        # 所有43个服务模块
+│   ├── service/        # 所有51个服务模块
 │   ├── client/         # 主客户端
 │   ├── event/          # 事件处理
 │   ├── card/           # 卡片组件
