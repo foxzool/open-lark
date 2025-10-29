@@ -2,19 +2,22 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 
-use crate::{
-            core::{
-                api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
+use crate::
+{
+    core::
+    {
+        BaseResponse,
+        ResponseFormat,
+        api_resp::{ApiResponseTrait
+    },
+    config::Config,
         constants::AccessTokenType,
         endpoints::tenant::TENANT_V2_PRODUCT_ASSIGN_INFO_QUERY,
         http::Transport,
         req_option::RequestOption,
         trait_system::Service,
         SDKResult,
-    },
+};
     service::tenant::models::TenantProductAssignInfo,
 };
 

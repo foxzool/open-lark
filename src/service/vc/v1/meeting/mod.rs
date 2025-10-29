@@ -2,19 +2,22 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use crate::{
-            core::{
-                api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
-        config::Config,
+use crate::
+{
+    core::
+    {
+        BaseResponse,
+        EmptyResponse,
+        ResponseFormat,
+        api_resp::{ApiResponseTrait
+    },
+    config::Config,
         constants::AccessTokenType,
         endpoints::{
             vc::{
                 VC_MEETING_END, VC_MEETING_GET, VC_MEETING_INVITE, VC_MEETING_KICKOUT,
                 VC_MEETING_LIST_BY_NO, VC_MEETING_SET_HOST,
-            },
+};
             EndpointBuilder,
         },
         http::Transport,

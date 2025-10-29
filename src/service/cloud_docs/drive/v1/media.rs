@@ -1,18 +1,22 @@
 use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 
-use crate::{
-            core::{
-                api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, BinaryResponse, ResponseFormat},
-        config::Config,
+use crate::
+{
+    core::
+    {
+        BaseResponse,
+        BinaryResponse,
+        ResponseFormat,
+        api_resp::{ApiResponseTrait
+    },
+    config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
         req_option::RequestOption,
-        validation::{validate_file_name, validate_upload_file, ValidateBuilder, ValidationResult},
+        validation::{validate_file_name, validate_upload_file, ValidateBuilder, ValidationResult
+};
         SDKResult,
     },
     impl_executable_builder_owned,

@@ -1,13 +1,15 @@
 use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 
-use crate::{
-            core::{
-                api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
+use crate::
+{
+    core::
+    {
+        BaseResponse,
+        ResponseFormat,
+        api_resp::{ApiResponseTrait
+    },
+    config::Config,
         constants::AccessTokenType,
         endpoints::workplace::*,
         http::Transport,
@@ -15,7 +17,7 @@ use crate::{
         req_option::RequestOption,
         standard_response::StandardResponse,
         SDKResult,
-    },
+};
     service::workplace::models::{AppRecommendRule, FavouriteApp, PageResponse, RecommendedApp},
 };
 

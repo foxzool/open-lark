@@ -1,14 +1,18 @@
 use serde::{Deserialize, Serialize};
 use open_lark_core::core::api_req::ApiRequest;
 
-use crate::{
-            core::{
-                api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    core::{
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
+use crate::
+{
+    core::
+    {
+        BaseResponse,
+        ResponseFormat,
+        api_resp::{ApiResponseTrait
+    },
+    config::Config,
         constants::AccessTokenType,
-        endpoints::{EndpointBuilder, Endpoints},
+        endpoints::{EndpointBuilder, Endpoints
+};
         http::Transport,
         query_params::QueryParams,
         req_option::RequestOption,

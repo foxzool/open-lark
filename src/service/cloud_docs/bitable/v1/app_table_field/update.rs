@@ -2,19 +2,21 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 
 use super::AppTableFieldService;
-use crate::{
-            core::{
-                api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        config::Config,
+use crate::
+{
+    core::
+    {
+        BaseResponse,
+        ResponseFormat,
+        api_resp::{ApiResponseTrait
+    },
+    config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
         req_option::RequestOption,
         SDKResult,
-    },
+};
     impl_executable_builder_owned,
     service::bitable::v1::app_table_field::{
         AppTableField, AppTableFieldDescription, AppTableFieldProperty, FieldType, UiType,

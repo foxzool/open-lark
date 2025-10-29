@@ -1,15 +1,17 @@
 use serde::{Deserialize, Serialize};
 use open_lark_core::core::api_req::ApiRequest;
-use crate::{
-            core::{
-                api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        constants::AccessTokenType,
+use crate::
+{
+    core::
+    {
+        BaseResponse,
+        ResponseFormat,
+        api_resp::{ApiResponseTrait
+    },
+    constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option, SDKResult,
-    },
+};
     service::cloud_docs::sheets::v2::SpreadsheetService,
 };
 
@@ -110,12 +112,19 @@ impl SpreadsheetService {
 
 #[cfg(test)]
 mod tests {
-    use crate::{
-            core::{
-                api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-        core::{config::Config, constants::AppType},
-        service::cloud_docs::sheets::v2::{
-            data_operation::{WriteImageRequest, WriteImageResponse},
+    use crate::
+{
+    core::
+    {
+        BaseResponse,
+        ResponseFormat,
+        api_resp::{ApiResponseTrait,
+        config::Config,
+        constants::AppType
+    },
+    service::cloud_docs::sheets::v2::{
+            data_operation::{WriteImageRequest, WriteImageResponse
+};
             SpreadsheetService,
         },
     };

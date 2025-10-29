@@ -2,19 +2,22 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use crate::{
-            core::{
-                api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
-    core::{
-
-        api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
-        config::Config,
+use crate::
+{
+    core::
+    {
+        BaseResponse,
+        EmptyResponse,
+        ResponseFormat,
+        api_resp::{ApiResponseTrait
+    },
+    config::Config,
         constants::AccessTokenType,
         endpoints::{
             vc::{
                 VC_ROOM_CREATE, VC_ROOM_DELETE, VC_ROOM_GET, VC_ROOM_LIST, VC_ROOM_SEARCH,
                 VC_ROOM_UPDATE,
-            },
+};
             EndpointBuilder,
         },
         http::Transport,

@@ -5,8 +5,6 @@ use open_lark_core::core::api_req::ApiRequest;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-            core::{
-                api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     core::{
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
