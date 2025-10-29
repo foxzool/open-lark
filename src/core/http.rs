@@ -373,7 +373,7 @@ mod test {
     fn test_validate_token_type_tenant_with_user_token() {
         let types = vec![AccessTokenType::Tenant];
         let option = RequestOption {
-            user_access_token: "user_token".to_string(),
+            user_access_token: "user_token".to_string()
             ..Default::default()
         };
 
@@ -386,7 +386,7 @@ mod test {
     fn test_validate_token_type_app_with_tenant_token() {
         let types = vec![AccessTokenType::App];
         let option = RequestOption {
-            tenant_access_token: "tenant_token".to_string(),
+            tenant_access_token: "tenant_token".to_string()
             ..Default::default()
         };
 
@@ -419,7 +419,7 @@ mod test {
     fn test_determine_token_type_no_cache_tenant() {
         let types = vec![AccessTokenType::User, AccessTokenType::Tenant];
         let option = RequestOption {
-            tenant_access_token: "tenant_token".to_string(),
+            tenant_access_token: "tenant_token".to_string()
             ..Default::default()
         };
 
@@ -431,7 +431,7 @@ mod test {
     fn test_determine_token_type_no_cache_app() {
         let types = vec![AccessTokenType::App, AccessTokenType::Tenant];
         let option = RequestOption {
-            app_access_token: "app_token".to_string(),
+            app_access_token: "app_token".to_string()
             ..Default::default()
         };
 

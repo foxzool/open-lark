@@ -1,16 +1,14 @@
 // core v1 - 核心人事管理v1版本API
-//
+//,
 // 包含核心人事管理的完整功能，这是主要使用的版本
-
 use crate::prelude::*;
 use crate::service::feishu_people::core::v1::persons::PersonsService;
 use crate::service::feishu_people::core::v1::departments::DepartmentsService;
 use crate::service::feishu_people::core::v1::positions::PositionsService;
 use crate::service::feishu_people::core::v1::contracts::ContractsService;
 use crate::service::feishu_people::core::v1::companies::CompaniesService;
-
 /// 核心人事管理v1版本服务
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone)],
 pub struct CoreV1Service {
     client: std::sync::Arc<LarkClient>,
     /// 人员管理服务
@@ -24,10 +22,9 @@ pub struct CoreV1Service {
     /// 公司管理服务
     pub companies: CompaniesService,
 }
-
 impl CoreV1Service {
     /// 创建新的v1版本服务实例
-    pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
+pub fn new() -> Self {
         Self {
             client,
             persons: PersonsService::new(client.clone()),
@@ -36,9 +33,8 @@ impl CoreV1Service {
             contracts: ContractsService::new(client.clone()),
             companies: CompaniesService::new(client.clone()),
         }
-    }
 }
-
+}
 /// 人员管理服务
 pub mod persons;
 /// 部门管理服务

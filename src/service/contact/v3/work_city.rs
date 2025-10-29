@@ -1,5 +1,5 @@
 use open_lark_core::core::api_req::ApiRequest;
-use crate::{
+use crate::{,
     core::{
         api_resp::ApiResponseTrait, config::Config,
         constants::AccessTokenType, endpoints::EndpointBuilder, http::Transport,
@@ -7,23 +7,20 @@ use crate::{
     service::contact::models::*,
 };
 use serde::{Deserialize, Serialize};
-
-/// 工作城市服务
+/// 工作城市服务,
 pub struct WorkCityService {
     config: Config,
 }
-
 impl WorkCityService {
     pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-    /// # API文档
-    ///
-    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get
-
+        Self { config },
+},
+/// # API文档,
+    ///,
+/// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get,
     /// 获取单个工作城市信息
-    pub async fn get(&self, work_city_id: &str) -> crate::core::SDKResult<GetWorkCityResponse> {
-        let api_req = ApiRequest {
+    pub async fn get(&self, work_city_id: &str) -> crate::core::SDKResult<GetWorkCityResponse> {,
+let api_req = ApiRequest {,
             http_method: reqwest::Method::GET,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::contact::CONTACT_V3_WORK_CITY_GET,
@@ -32,45 +29,42 @@ impl WorkCityService {
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
-            ..Default::default()
-        };
+            ..Default::default(),
+};
 
         let resp = Transport::<GetWorkCityResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
-    }
-
-    /// 获取租户工作城市列表
+Ok(resp.data.unwrap_or_default()),
+    },
+/// 获取租户工作城市列表,
     pub async fn list(
         &self,
         _req: &ListWorkCitiesRequest,
-    ) -> crate::core::SDKResult<ListWorkCitiesResponse> {
-        let api_req = ApiRequest {
+    ) -> crate::core::SDKResult<ListWorkCitiesResponse> {,
+let api_req = ApiRequest {,
             http_method: reqwest::Method::GET,
             api_path: crate::core::endpoints::contact::CONTACT_V3_WORK_CITIES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
-            ..Default::default()
-        };
-
-        let resp =
+            ..Default::default(),
+};
+let resp =,
             Transport::<ListWorkCitiesResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
-    }
+Ok(resp.data.unwrap_or_default()),
+    },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)],
 pub struct GetWorkCityResponse {
     pub work_city: WorkCity,
 }
-
-impl ApiResponseTrait for GetWorkCityResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
-    }
+impl ApiResponseTrait for GetWorkCityResponse {,
+    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+crate::core::api_resp::ResponseFormat::Data,
+    },
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)],
 pub struct ListWorkCitiesRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
@@ -78,7 +72,7 @@ pub struct ListWorkCitiesRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)],
 pub struct ListWorkCitiesResponse {
     pub items: Vec<WorkCity>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -86,9 +80,8 @@ pub struct ListWorkCitiesResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
-
-impl ApiResponseTrait for ListWorkCitiesResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
-    }
+impl ApiResponseTrait for ListWorkCitiesResponse {,
+    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+crate::core::api_resp::ResponseFormat::Data,
+    },
 }

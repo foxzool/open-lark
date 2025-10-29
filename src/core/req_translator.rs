@@ -143,7 +143,7 @@ mod tests {
             .build();
 
         let option = RequestOption {
-            tenant_key: "test_tenant".to_string(),
+            tenant_key: "test_tenant".to_string()
             ..Default::default()
         };
 

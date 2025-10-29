@@ -9,9 +9,7 @@ pub mod notification;
 pub mod ticket;
 pub mod ticket_customized_field;
 pub mod ticket_message;
-
 use crate::core::config::Config;
-
 /// Helpdesk API v1版本服务
 pub struct V1 {
     /// 客服功能管理
@@ -37,10 +35,9 @@ pub struct V1 {
     /// 工单消息
     pub ticket_message: ticket_message::TicketMessageService,
 }
-
 impl V1 {
-    pub fn new(config: Config) -> Self {
-        Self {
+    pub fn new() -> Self {
+Self {,
             agent: agent::AgentService::new(config.clone()),
             agent_schedule: agent_schedule::AgentScheduleService::new(config.clone()),
             agent_skill: agent_skill::AgentSkillService::new(config.clone()),
@@ -55,11 +52,10 @@ impl V1 {
             ),
             ticket_message: ticket_message::TicketMessageService::new(config),
         }
-    }
-
-    /// 克隆V1服务实例（手动实现）
-    pub fn clone_v1(&self) -> Self {
-        Self {
+}
+/// 克隆V1服务实例（手动实现）
+    pub fn clone_v1() -> Self {
+Self {,
             agent: agent::AgentService::new(self.agent.config.clone()),
             agent_schedule: agent_schedule::AgentScheduleService::new(
                 self.agent_schedule.config.clone(),
@@ -80,60 +76,51 @@ impl V1 {
                 self.ticket_message.config.clone(),
             ),
         }
-    }
 }
-
+}
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
-mod tests {
+#[allow(unused_variables, unused_unsafe)],
+mod tests {,
     use super::*;
     use crate::core::{config::Config, constants::AppType};
-
-    fn create_test_config() -> Config {
-        Config::default()
-    }
-
-    #[test]
-    fn test_v1_service_creation() {
-        let config = create_test_config();
+fn create_test_config() -> Config {,
+        Config::default(),
+}
+#[test],
+    fn test_v1_service_creation() {,
+let config = create_test_config();
         let service = V1::new(config);
-
-        // Verify that all services are properly initialized
+// Verify that all services are properly initialized
         // We can't directly test the inner fields as they are public structs
-        // but we can verify the service creation doesn't panic
+// but we can verify the service creation doesn't panic
     }
-
-    #[test]
-    fn test_v1_service_with_different_config() {
-        let config = Config::builder()
-            .app_id("different_app_id")
-            .app_secret("different_app_secret")
-            .app_type(AppType::Marketplace)
-            .build();
-
+#[test],
+    fn test_v1_service_with_different_config() {,
+let config = Config::builder()
+            .app_id()
+.app_secret()
+            .app_type()
+.build();
         let service = V1::new(config);
-
-        // Verify service creation works with different config types
+// Verify service creation works with different config types
     }
-
-    #[test]
-    fn test_v1_service_memory_safety() {
-        let config = create_test_config();
+#[test],
+    fn test_v1_service_memory_safety() {,
+let config = create_test_config();
         let service = V1::new(config);
-
-        // Test that we can access all services without memory issues
+// Test that we can access all services without memory issues
         let _agent = &service.agent;
-        let _schedule = &service.agent_schedule;
+let _schedule = &service.agent_schedule;
         let _skill = &service.agent_skill;
-        let _skill_rule = &service.agent_skill_rule;
+let _skill_rule = &service.agent_skill_rule;
         let _category = &service.category;
-        let _event = &service.event;
+let _event = &service.event;
         let _faq = &service.faq;
-        let _notification = &service.notification;
+let _notification = &service.notification;
         let _ticket = &service.ticket;
-        let _customized_field = &service.ticket_customized_field;
+let _customized_field = &service.ticket_customized_field;
         let _message = &service.ticket_message;
 
-        // If we reach here without panic, memory layout is correct
-    }
+        // If we reach here without panic memory layout is correct,
+}
 }

@@ -51,7 +51,7 @@ impl ErrorHelper {
     fn handle_api_error(error_code: LarkErrorCode, _message: &str) -> ErrorHandlingAdvice {
         let mut advice = ErrorHandlingAdvice {
             error_code: Some(error_code),
-            message: error_code.detailed_description().to_string(),
+            message: error_code.detailed_description().to_string()
             ..Default::default()
         };
 

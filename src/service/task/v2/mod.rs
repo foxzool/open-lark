@@ -7,9 +7,7 @@ pub mod task;
 pub mod task_subtask;
 pub mod tasklist;
 pub mod tasklist_activity_subscription;
-
 use crate::core::config::Config;
-
 pub use attachment::AttachmentService;
 pub use comment::CommentService;
 pub use custom_field::CustomFieldService;
@@ -19,11 +17,10 @@ pub use task::TaskService;
 pub use task_subtask::TaskSubtaskService;
 pub use tasklist::TasklistService;
 pub use tasklist_activity_subscription::TasklistActivitySubscriptionService;
-
 /// 任务模块服务 (v2)
 #[derive(Debug)]
 pub struct TaskV2Service {
-    /// 任务服务
+/// 任务服务
     pub task: TaskService,
     /// 子任务服务
     pub task_subtask: TaskSubtaskService,
@@ -42,10 +39,9 @@ pub struct TaskV2Service {
     /// 自定义字段选项服务
     pub custom_field_option: CustomFieldOptionService,
 }
-
 impl TaskV2Service {
-    pub fn new(config: Config) -> Self {
-        Self {
+    pub fn new() -> Self {
+Self {,
             task: TaskService::new(config.clone()),
             task_subtask: TaskSubtaskService::new(config.clone()),
             tasklist: TasklistService::new(config.clone()),
@@ -58,11 +54,10 @@ impl TaskV2Service {
             custom_field: CustomFieldService::new(config.clone()),
             custom_field_option: CustomFieldOptionService::new(config),
         }
-    }
-
-    /// 使用共享配置创建服务（实验性）
-    pub fn new_from_shared(shared: std::sync::Arc<Config>) -> Self {
-        Self {
+}
+/// 使用共享配置创建服务（实验性）
+    pub fn new_from_shared() -> Self {
+Self {,
             task: TaskService::new(shared.as_ref().clone()),
             task_subtask: TaskSubtaskService::new(shared.as_ref().clone()),
             tasklist: TasklistService::new(shared.as_ref().clone()),
@@ -75,57 +70,47 @@ impl TaskV2Service {
             custom_field: CustomFieldService::new(shared.as_ref().clone()),
             custom_field_option: CustomFieldOptionService::new(shared.as_ref().clone()),
         }
-    }
 }
-
+}
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
-mod tests {
+#[allow(unused_variables, unused_unsafe)],
+mod tests {,
     use super::*;
-
-    fn create_test_config() -> Config {
-        Config::default()
-    }
-
-    #[test]
-    fn test_task_v2_service_creation() {
-        let config = create_test_config();
+fn create_test_config() -> Config {,
+        Config::default(),
+}
+#[test],
+    fn test_task_v2_service_creation() {,
+let config = create_test_config();
         let service = TaskV2Service::new(config);
-
-        // Verify that all services are properly initialized - test passes by not panicking above
+// Verify that all services are properly initialized - test passes by not panicking above
     }
-
-    #[test]
-    fn test_task_v2_service_structure() {
-        let config = create_test_config();
+#[test],
+    fn test_task_v2_service_structure() {,
+let config = create_test_config();
         let service = TaskV2Service::new(config);
-
-        // Test that we can access all service fields
+// Test that we can access all service fields
         let _task = &service.task;
-        let _task_subtask = &service.task_subtask;
+let _task_subtask = &service.task_subtask;
         let _tasklist = &service.tasklist;
-        let _subscription = &service.tasklist_activity_subscription;
+let _subscription = &service.tasklist_activity_subscription;
         let _comment = &service.comment;
-        let _attachment = &service.attachment;
+let _attachment = &service.attachment;
         let _section = &service.section;
-        let _custom_field = &service.custom_field;
+let _custom_field = &service.custom_field;
         let _custom_field_option = &service.custom_field_option;
 
-        // If we reach here without panic, structure is correct
-    }
-
-    #[test]
-    fn test_task_v2_service_memory_safety() {
-        let config = create_test_config();
-
+        // If we reach here without panic structure is correct,
+}
+#[test],
+    fn test_task_v2_service_memory_safety() {,
+let config = create_test_config();
         // Create service in a scope
-        let service = TaskV2Service::new(config);
-
+let service = TaskV2Service::new(config);
         // Access services multiple times
-        let _first_access = &service.task;
+let _first_access = &service.task;
         let _second_access = &service.task;
-
-        // Verify multiple references work correctly
+// Verify multiple references work correctly
         assert!(std::ptr::eq(_first_access, _second_access));
-    }
+}
 }

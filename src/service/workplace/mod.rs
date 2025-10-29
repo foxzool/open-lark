@@ -1,47 +1,47 @@
-//! 飞书工作台（Workplace）服务
+//! 飞书工作台（Workplace）服务,
+//!,
+//! 提供企业级工作台管理的完整功能集，支持工作台访问数据分析、应用推荐管理、,
+//! 用户行为追踪等企业级工作台运营能力。是企业数字化转型的重要工具。,
 //!
-//! 提供企业级工作台管理的完整功能集，支持工作台访问数据分析、应用推荐管理、
-//! 用户行为追踪等企业级工作台运营能力。是企业数字化转型的重要工具。
+//! # 核心功能,
+//!,
+//! ## 工作台访问数据分析,
+//! - 📊 工作台访问数据统计和分析,
+//! - 🎯 定制工作台使用情况追踪,
+//! - 📱 工作台小组件访问数据收集,
+//! - 🔍 用户访问模式和行为分析,
+//! - 📈 访问趋势和活跃度报表,
 //!
-//! # 核心功能
+//! ## 智能应用推荐,
+//! - 🎯 个性化应用推荐算法,
+//! - 👥 管理员推荐应用配置,
+//! - 📋 常用应用自定义管理,
+//! - 🔄 推荐规则和策略设置,
+//! - 📊 推荐效果统计和优化,
 //!
-//! ## 工作台访问数据分析
-//! - 📊 工作台访问数据统计和分析
-//! - 🎯 定制工作台使用情况追踪
-//! - 📱 工作台小组件访问数据收集
-//! - 🔍 用户访问模式和行为分析
-//! - 📈 访问趋势和活跃度报表
+//! ## 用户体验优化,
+//! - 🎨 工作台个性化配置,
+//! - 📱 多端工作台数据同步,
+//! - 🔔 智能通知和提醒,
+//! - 🚀 快速访问和搜索,
+//! - 📊 使用习惯分析,
 //!
-//! ## 智能应用推荐
-//! - 🎯 个性化应用推荐算法
-//! - 👥 管理员推荐应用配置
-//! - 📋 常用应用自定义管理
-//! - 🔄 推荐规则和策略设置
-//! - 📊 推荐效果统计和优化
+//! ## 运营管理支持,
+//! - 📈 工作台使用数据分析,
+//! - 🎯 用户活跃度监控,
+//! - 📊 应用使用情况统计,
+//! - 🔍 异常行为检测,
+//! - 📋 运营报表和洞察,
 //!
-//! ## 用户体验优化
-//! - 🎨 工作台个性化配置
-//! - 📱 多端工作台数据同步
-//! - 🔔 智能通知和提醒
-//! - 🚀 快速访问和搜索
-//! - 📊 使用习惯分析
-//!
-//! ## 运营管理支持
-//! - 📈 工作台使用数据分析
-//! - 🎯 用户活跃度监控
-//! - 📊 应用使用情况统计
-//! - 🔍 异常行为检测
-//! - 📋 运营报表和洞察
-//!
-//! # 使用示例
-//!
-//! ```rust
+//! # 使用示例,
+//!,
+//! ```rust,
 //! use open_lark::prelude::*;
 //!
-//! let client = LarkClient::builder("app_id", "app_secret")
-//!     .with_app_type(AppType::SelfBuild)
+//! let client = LarkClient::builder("app_id", "app_secret"),
+//!     .with_app_type(AppType::SelfBuild),
 //!     .build();
-//!
+//!,
 //! // 获取工作台服务
 //! let workplace = &client.workplace;
 //!
@@ -51,87 +51,84 @@
 //! //     .end_date("2024-07-31")
 //! //     .user_id_type("open_id")
 //! //     .build();
-//! // let access_data = workplace.workplace_access_data.search(access_request, None).await?;
-//!
+//! // let access_data = workplace.workplace_access_data.search(access_request None).await?;
+//!,
 //! // 获取用户常用应用
 //! // let favourite_request = FavouriteAppsRequest::builder()
 //! //     .user_id("user_id")
 //! //     .user_id_type("open_id")
 //! //     .build();
-//! // let favourite_apps = workplace.app_recommend.get_favourite_apps(favourite_request, None).await?;
-//!
+//! // let favourite_apps = workplace.app_recommend.get_favourite_apps(favourite_request None).await?;
+//!,
 //! // 获取管理员推荐应用
 //! // let recommend_request = AdminRecommendRequest::builder()
 //! //     .user_id("user_id")
 //! //     .user_id_type("open_id")
 //! //     .build();
-//! // let recommend_apps = workplace.app_recommend.get_admin_recommend(recommend_request, None).await?;
-//! ```
+//! // let recommend_apps = workplace.app_recommend.get_admin_recommend(recommend_request None).await?;
+//! ```,
 //!
-//! # 工作台管理特性
-//!
-//! - 📊 实时数据监控和分析
-//! - 🎯 智能推荐算法优化
-//! - 📱 多端一致体验
-//! - 🔔 个性化通知推送
-//! - 🛡️ 企业级安全保障
-//!
-//! # 运营洞察
-//!
-//! - 📈 用户行为模式分析
-//! - 🎯 应用使用效率评估
-//! - 📊 工作台活跃度统计
-//! - 🔄 持续优化建议
-//! - 📋 个性化用户体验
-//!
-//! # 管理支持
-//!
-//! - 👥 多角色权限管理
-//! - 📊 详细的数据报表
-//! - 🎯 精细化运营策略
-//! - 🔍 异常行为监控
-//! - 📈 业务价值分析
-
+//! # 工作台管理特性,
+//!,
+//! - 📊 实时数据监控和分析,
+//! - 🎯 智能推荐算法优化,
+//! - 📱 多端一致体验,
+//! - 🔔 个性化通知推送,
+//! - 🛡️ 企业级安全保障,
+//!,
+//! # 运营洞察,
+//!,
+//! - 📈 用户行为模式分析,
+//! - 🎯 应用使用效率评估,
+//! - 📊 工作台活跃度统计,
+//! - 🔄 持续优化建议,
+//! - 📋 个性化用户体验,
+//!,
+//! # 管理支持,
+//!,
+//! - 👥 多角色权限管理,
+//! - 📊 详细的数据报表,
+//! - 🎯 精细化运营策略,
+//! - 🔍 异常行为监控,
+//! - 📈 业务价值分析,
 pub mod app_recommend;
 pub mod models;
 pub mod workplace_access_data;
-
 use crate::{
-    core::{config::Config, trait_system::Service},
+    core::{config::Config, trait_system::Service}
     service::workplace::{
         app_recommend::AppRecommendService, workplace_access_data::WorkplaceAccessDataService,
-    },
+    }
 };
-
 /// 飞书工作台（Workplace）服务
 ///
 /// 企业级工作台管理的统一入口，提供工作台访问数据分析、应用推荐管理、
 /// 用户行为追踪等完整的工作台运营能力。
 ///
 /// # 服务架构
-///
+///,
 /// - **workplace_access_data**: 工作台访问数据管理服务
 /// - **app_recommend**: 应用推荐管理服务
 /// - **models**: 数据模型和结构定义
-///
+///,
 /// # 核心特性
-///
+///,
 /// - 📊 全面的访问数据分析能力
 /// - 🎯 智能的应用推荐算法
 /// - 📱 多端一致的用户体验
 /// - 🔔 个性化的通知推送
 /// - 🛡️ 企业级安全保障
-///
+///,
 /// # 适用场景
-///
+///,
 /// - 企业工作台运营管理
 /// - 用户行为分析优化
 /// - 应用推荐策略制定
 /// - 工作效率提升
 /// - 数字化转型支持
-///
+///,
 /// # 最佳实践
-///
+///,
 /// - 定期分析访问数据
 /// - 优化应用推荐策略
 /// - 个性化用户体验
@@ -143,146 +140,131 @@ pub struct WorkplaceService {
     /// 应用推荐管理服务
     pub app_recommend: AppRecommendService,
 }
-
 impl WorkplaceService {
     /// 创建新的工作台服务实例
-    ///
+///,
     /// # 参数
-    /// - `config`: 客户端配置，包含认证信息和API设置
-    ///
-    /// # 返回值
+/// - `config`: 客户端配置，包含认证信息和API设置
+    ///,
+/// # 返回值
     /// 配置完成的工作台服务实例
-    pub fn new(config: Config) -> Self {
+pub fn new() -> Self {
         Self {
             workplace_access_data: WorkplaceAccessDataService::new(config.clone()),
             app_recommend: AppRecommendService::new(config),
         }
-    }
-
-    /// 验证工作台服务配置
-    ///
-    /// 检查服务配置的完整性和有效性，确保所有子服务都正确初始化。
-    ///
-    /// # 返回值
+}
+/// 验证工作台服务配置
+    ///,
+/// 检查服务配置的完整性和有效性，确保所有子服务都正确初始化。
+    ///,
+/// # 返回值
     /// - `Ok(())`: 配置验证通过
-    /// - `Err(String)`: 配置验证失败的具体原因
-    pub fn validate_workplace_config(&self) -> Result<(), String> {
-        // 检查工作台访问数据服务配置
-        if self.workplace_access_data.config.app_id.is_empty() {
-            return Err("工作台访问数据服务配置中缺少应用ID".to_string());
+/// - `Err(String)`: 配置验证失败的具体原因
+    pub fn validate_workplace_config(&self) -> Result<(), String> {,
+// 检查工作台访问数据服务配置
+        if self.workplace_access_data.config.app_id.is_empty() {,
+return Err("工作台访问数据服务配置中缺少应用ID".to_string());
         }
-
-        // 检查应用推荐服务配置
-        if self.app_recommend.config.app_id.is_empty() {
-            return Err("应用推荐服务配置中缺少应用ID".to_string());
+// 检查应用推荐服务配置
+        if self.app_recommend.config.app_id.is_empty() {,
+return Err("应用推荐服务配置中缺少应用ID".to_string());
         }
-
-        // 检查配置一致性
-        if self.workplace_access_data.config.app_id != self.app_recommend.config.app_id {
-            return Err("子服务配置不一致：应用ID不匹配".to_string());
+// 检查配置一致性
+        if self.workplace_access_data.config.app_id != self.app_recommend.config.app_id {,
+return Err("子服务配置不一致：应用ID不匹配".to_string());
         }
-
-        Ok(())
+Ok(()),
     }
-
-    /// 获取工作台服务统计信息
-    ///
-    /// 返回当前工作台服务的使用统计和配置信息。
-    ///
-    /// # 返回值
+/// 获取工作台服务统计信息
+    ///,
+/// 返回当前工作台服务的使用统计和配置信息。
+    ///,
+/// # 返回值
     /// 包含服务统计信息的字典
-    pub fn get_workplace_statistics(&self) -> std::collections::HashMap<String, String> {
-        let mut stats = std::collections::HashMap::new();
-
+    pub fn get_workplace_statistics(&self) -> std::collections::HashMap<String, String> {,
+let mut stats = std::collections::HashMap::new();
         // 服务配置信息
         stats.insert("service_name".to_string(), "Workplace".to_string());
         stats.insert("service_version".to_string(), "v1".to_string());
-        stats.insert(
+stats.insert(,
             "app_id".to_string(),
             self.workplace_access_data.config.app_id.clone(),
         );
-        stats.insert(
+stats.insert(,
             "base_url".to_string(),
             self.workplace_access_data.config.base_url.clone(),
         );
-
-        // 子服务状态
+// 子服务状态
         stats.insert(
             "workplace_access_data_service".to_string(),
             "active".to_string(),
         );
         stats.insert("app_recommend_service".to_string(), "active".to_string());
-
-        // 功能支持
+// 功能支持
         stats.insert("access_data_analysis".to_string(), "enabled".to_string());
         stats.insert("app_recommendation".to_string(), "enabled".to_string());
         stats.insert("user_behavior_tracking".to_string(), "enabled".to_string());
         stats.insert("personalization".to_string(), "enabled".to_string());
-
-        // 运营能力
+// 运营能力
         stats.insert("data_analytics".to_string(), "enabled".to_string());
         stats.insert("usage_monitoring".to_string(), "enabled".to_string());
         stats.insert("recommendation_engine".to_string(), "enabled".to_string());
         stats.insert("multi_device_sync".to_string(), "enabled".to_string());
-
-        stats
+stats,
     }
-
-    /// 检查是否支持指定工作台功能
-    ///
-    /// # 参数
+/// 检查是否支持指定工作台功能
+    ///,
+/// # 参数
     /// - `feature`: 要检查的功能名称
-    ///
+///,
     /// # 返回值
-    /// 如果支持该功能返回 `true`，否则返回 `false`
-    pub fn supports_workplace_feature(&self, feature: &str) -> bool {
-        matches!(
+/// 如果支持该功能返回 `true`，否则返回 `false`
+    pub fn supports_workplace_feature(&self, feature: &str) -> bool {,
+matches!(,
             feature,
-            "access_data_analysis"
-                | "app_recommendation"
-                | "user_behavior_tracking"
-                | "personalization"
-                | "data_analytics"
-                | "usage_monitoring"
-                | "recommendation_engine"
-                | "multi_device_sync"
-                | "real_time_updates"
-                | "custom_workplace"
-                | "widget_management"
-                | "favourite_apps"
-                | "admin_recommendations"
-                | "recommendation_rules"
-                | "access_statistics"
-                | "user_activity_tracking"
-                | "performance_monitoring"
-                | "a_b_testing"
-                | "content_delivery"
-                | "user_feedback"
-                | "api_access"
-        )
+            "access_data_analysis",
+| "app_recommendation",
+                | "user_behavior_tracking",
+| "personalization",
+                | "data_analytics",
+| "usage_monitoring",
+                | "recommendation_engine",
+| "multi_device_sync",
+                | "real_time_updates",
+| "custom_workplace",
+                | "widget_management",
+| "favourite_apps",
+                | "admin_recommendations",
+| "recommendation_rules",
+                | "access_statistics",
+| "user_activity_tracking",
+                | "performance_monitoring",
+| "a_b_testing",
+                | "content_delivery",
+| "user_feedback",
+                | "api_access",
+),
     }
-
-    /// 获取工作台功能矩阵
-    ///
-    /// 返回工作台服务支持的所有功能及其状态的详细矩阵。
-    ///
-    /// # 返回值
+/// 获取工作台功能矩阵
+    ///,
+/// 返回工作台服务支持的所有功能及其状态的详细矩阵。
+    ///,
+/// # 返回值
     /// 包含功能状态信息的字典
-    pub fn get_workplace_features_matrix(
+pub fn get_workplace_features_matrix(,
         &self,
-    ) -> std::collections::HashMap<String, std::collections::HashMap<String, String>> {
-        let mut features = std::collections::HashMap::new();
-
+    ) -> std::collections::HashMap<String, std::collections::HashMap<String, String>> {,
+let mut features = std::collections::HashMap::new();
         // 数据分析功能
-        let mut analytics = std::collections::HashMap::new();
+let mut analytics = std::collections::HashMap::new();
         analytics.insert("access_data_analysis".to_string(), "✅ 支持".to_string());
         analytics.insert("user_behavior_tracking".to_string(), "✅ 支持".to_string());
         analytics.insert("data_analytics".to_string(), "✅ 支持".to_string());
         analytics.insert("usage_monitoring".to_string(), "✅ 支持".to_string());
         analytics.insert("performance_monitoring".to_string(), "✅ 支持".to_string());
         features.insert("数据分析功能".to_string(), analytics);
-
-        // 推荐功能
+// 推荐功能
         let mut recommendation = std::collections::HashMap::new();
         recommendation.insert("app_recommendation".to_string(), "✅ 支持".to_string());
         recommendation.insert("recommendation_engine".to_string(), "✅ 支持".to_string());
@@ -290,8 +272,7 @@ impl WorkplaceService {
         recommendation.insert("admin_recommendations".to_string(), "✅ 支持".to_string());
         recommendation.insert("recommendation_rules".to_string(), "✅ 支持".to_string());
         features.insert("推荐功能".to_string(), recommendation);
-
-        // 个性化功能
+// 个性化功能
         let mut personalization = std::collections::HashMap::new();
         personalization.insert("personalization".to_string(), "✅ 支持".to_string());
         personalization.insert("custom_workplace".to_string(), "✅ 支持".to_string());
@@ -299,8 +280,7 @@ impl WorkplaceService {
         personalization.insert("real_time_updates".to_string(), "✅ 支持".to_string());
         personalization.insert("multi_device_sync".to_string(), "✅ 支持".to_string());
         features.insert("个性化功能".to_string(), personalization);
-
-        // 运营功能
+// 运营功能
         let mut operations = std::collections::HashMap::new();
         operations.insert("access_statistics".to_string(), "✅ 支持".to_string());
         operations.insert("user_activity_tracking".to_string(), "✅ 支持".to_string());
@@ -308,8 +288,7 @@ impl WorkplaceService {
         operations.insert("content_delivery".to_string(), "✅ 支持".to_string());
         operations.insert("user_feedback".to_string(), "✅ 支持".to_string());
         features.insert("运营功能".to_string(), operations);
-
-        // 技术功能
+// 技术功能
         let mut technical = std::collections::HashMap::new();
         technical.insert("api_access".to_string(), "✅ 支持".to_string());
         technical.insert("real_time_sync".to_string(), "✅ 支持".to_string());
@@ -317,247 +296,216 @@ impl WorkplaceService {
         technical.insert("access_control".to_string(), "✅ 支持".to_string());
         technical.insert("audit_logging".to_string(), "✅ 支持".to_string());
         features.insert("技术功能".to_string(), technical);
-
-        features
+features,
     }
-
-    /// 执行工作台服务健康检查
-    ///
-    /// 检查所有子服务的可用性和响应状态。
-    ///
-    /// # 返回值
+/// 执行工作台服务健康检查
+    ///,
+/// 检查所有子服务的可用性和响应状态。
+    ///,
+/// # 返回值
     /// 健康检查结果，包含状态码和详细信息
-    pub fn health_check(&self) -> std::collections::HashMap<String, String> {
-        let mut health = std::collections::HashMap::new();
-
+    pub fn health_check(&self) -> std::collections::HashMap<String, String> {,
+let mut health = std::collections::HashMap::new();
         // 检查服务配置
-        match self.validate_workplace_config() {
+match self.validate_workplace_config() {,
             Ok(_) => {
                 health.insert("status".to_string(), "healthy".to_string());
-                health.insert(
+health.insert(,
                     "workplace_access_data_service".to_string(),
                     "available".to_string(),
                 );
                 health.insert("app_recommend_service".to_string(), "available".to_string());
-            }
-            Err(msg) => {
+}
+Err(msg) => {,
                 health.insert("status".to_string(), "unhealthy".to_string());
                 health.insert("error".to_string(), msg);
-            }
+}
         }
-
-        // 添加时间戳
+// 添加时间戳
         health.insert("timestamp".to_string(), chrono::Utc::now().to_rfc3339());
         health.insert("service_version".to_string(), "v1".to_string());
-
-        health
+health,
     }
-
-    /// 获取工作台服务配置摘要
-    ///
-    /// 返回当前服务配置的摘要信息，便于运维监控。
-    ///
-    /// # 返回值
+/// 获取工作台服务配置摘要
+    ///,
+/// 返回当前服务配置的摘要信息，便于运维监控。
+    ///,
+/// # 返回值
     /// 配置摘要信息字典
-    pub fn get_config_summary(&self) -> std::collections::HashMap<String, String> {
-        let mut summary = std::collections::HashMap::new();
-
+    pub fn get_config_summary(&self) -> std::collections::HashMap<String, String> {,
+let mut summary = std::collections::HashMap::new();
         summary.insert("service_name".to_string(), "Workplace".to_string());
-        summary.insert(
+summary.insert(,
             "service_type".to_string(),
             "Workplace Management".to_string(),
         );
-        summary.insert(
+summary.insert(,
             "app_id".to_string(),
             self.workplace_access_data.config.app_id.clone(),
         );
-        summary.insert(
+summary.insert(,
             "base_url".to_string(),
             self.workplace_access_data.config.base_url.clone(),
         );
         summary.insert("service_count".to_string(), "2".to_string());
         summary.insert("supported_features".to_string(), "21".to_string());
-
-        // 超时配置
+// 超时配置
         if let Some(timeout) = self.workplace_access_data.config.req_timeout {
             summary.insert("request_timeout".to_string(), format!("{:?}", timeout));
-        }
-
-        summary.insert(
+}
+summary.insert(,
             "workplace_access_data_service".to_string(),
             "enabled".to_string(),
         );
         summary.insert("app_recommend_service".to_string(), "enabled".to_string());
-
-        summary
+summary,
     }
 }
-
-impl Service for WorkplaceService {
-    fn config(&self) -> &Config {
-        &self.workplace_access_data.config
+impl Service for WorkplaceService {,
+    fn config(&self) -> &Config {,
+&self.workplace_access_data.config,
     }
-
-    fn service_name() -> &'static str {
-        "workplace"
-    }
-
-    fn service_version() -> &'static str {
-        "v1"
-    }
+fn service_name() -> &'static str {,
+        "workplace",
 }
-
-impl Clone for WorkplaceService {
-    fn clone(&self) -> Self {
-        Self {
+fn service_version() -> &'static str {,
+        "v1",
+}
+}
+impl Clone for WorkplaceService {,
+    fn clone(&self) -> Self {,
+Self {,
             workplace_access_data: WorkplaceAccessDataService::new(
                 self.workplace_access_data.config.clone(),
             ),
             app_recommend: AppRecommendService::new(self.app_recommend.config.clone()),
         }
-    }
 }
-
-impl std::fmt::Debug for WorkplaceService {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_struct("WorkplaceService")
+}
+impl std::fmt::Debug for WorkplaceService {,
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {,
+f.debug_struct()
             .field("service_name", &Self::service_name())
             .field("service_version", &Self::service_version())
-            .field("app_id", &self.workplace_access_data.config.app_id)
-            .field(
+            .field()
+.field(,
                 "workplace_access_data_service",
                 &"WorkplaceAccessDataService",
             )
-            .field("app_recommend_service", &"AppRecommendService")
-            .finish()
+            .field()
+.finish(),
     }
 }
-
 #[cfg(test)]
-mod tests {
-    use super::*;
+mod tests {,
+use super::*;
     use std::time::Duration;
-
-    fn create_test_config() -> Config {
+fn create_test_config() -> Config {,
         Config::builder()
-            .app_id("workplace_test_app")
-            .app_secret("workplace_test_secret")
-            .build()
+.app_id()
+            .app_secret()
+.build(),
     }
-
-    #[test]
-    fn test_workplace_service_creation() {
-        let config = create_test_config();
+#[test],
+    fn test_workplace_service_creation() {,
+let config = create_test_config();
         let service = WorkplaceService::new(config.clone());
 
         assert_eq!(service.workplace_access_data.config.app_id, config.app_id);
         assert_eq!(service.app_recommend.config.app_id, config.app_id);
-    }
-
-    #[test]
-    fn test_workplace_service_trait_implementation() {
-        let config = create_test_config();
+}
+#[test],
+    fn test_workplace_service_trait_implementation() {,
+let config = create_test_config();
         let service = WorkplaceService::new(config);
-
-        // Test Service trait
+// Test Service trait
         assert_eq!(WorkplaceService::service_name(), "workplace");
         assert_eq!(WorkplaceService::service_version(), "v1");
         assert_eq!(service.config().app_id, "workplace_test_app");
-
-        // Test Debug trait
+// Test Debug trait
         let debug_str = format!("{:?}", service);
-        assert!(debug_str.contains("WorkplaceService"));
+assert!(debug_str.contains("WorkplaceService"));
         assert!(debug_str.contains("workplace"));
-        assert!(debug_str.contains("v1"));
-
+assert!(debug_str.contains("v1"));
         // Test Clone trait
-        let cloned_service = service.clone();
+let cloned_service = service.clone();
         assert_eq!(service.config().app_id, cloned_service.config().app_id);
-    }
-
-    #[test]
-    fn test_workplace_service_validate_workplace_config() {
-        let service = WorkplaceService::new(create_test_config());
-
+}
+#[test],
+    fn test_workplace_service_validate_workplace_config() {,
+let service = WorkplaceService::new(create_test_config());
         // Valid configuration should pass
-        assert!(service.validate_workplace_config().is_ok());
-
+assert!(service.validate_workplace_config().is_ok());
         // Test with invalid configuration
-        let invalid_config = Config::builder().app_id("").app_secret("secret").build();
+let invalid_config = Config::builder().app_id("").app_secret("secret").build();
         let invalid_service = WorkplaceService::new(invalid_config);
-        assert!(invalid_service.validate_workplace_config().is_err());
+assert!(invalid_service.validate_workplace_config().is_err());
     }
-
-    #[test]
-    fn test_workplace_service_supports_workplace_feature() {
-        let service = WorkplaceService::new(create_test_config());
-
+#[test],
+    fn test_workplace_service_supports_workplace_feature() {,
+let service = WorkplaceService::new(create_test_config());
         // Test supported features
-        assert!(service.supports_workplace_feature("access_data_analysis"));
+assert!(service.supports_workplace_feature("access_data_analysis"));
         assert!(service.supports_workplace_feature("app_recommendation"));
-        assert!(service.supports_workplace_feature("user_behavior_tracking"));
+assert!(service.supports_workplace_feature("user_behavior_tracking"));
         assert!(service.supports_workplace_feature("personalization"));
-        assert!(service.supports_workplace_feature("data_analytics"));
+assert!(service.supports_workplace_feature("data_analytics"));
         assert!(service.supports_workplace_feature("usage_monitoring"));
-        assert!(service.supports_workplace_feature("recommendation_engine"));
+assert!(service.supports_workplace_feature("recommendation_engine"));
         assert!(service.supports_workplace_feature("multi_device_sync"));
-        assert!(service.supports_workplace_feature("real_time_updates"));
+assert!(service.supports_workplace_feature("real_time_updates"));
         assert!(service.supports_workplace_feature("custom_workplace"));
-        assert!(service.supports_workplace_feature("widget_management"));
+assert!(service.supports_workplace_feature("widget_management"));
         assert!(service.supports_workplace_feature("favourite_apps"));
-        assert!(service.supports_workplace_feature("admin_recommendations"));
+assert!(service.supports_workplace_feature("admin_recommendations"));
         assert!(service.supports_workplace_feature("recommendation_rules"));
-        assert!(service.supports_workplace_feature("access_statistics"));
+assert!(service.supports_workplace_feature("access_statistics"));
         assert!(service.supports_workplace_feature("user_activity_tracking"));
-        assert!(service.supports_workplace_feature("performance_monitoring"));
+assert!(service.supports_workplace_feature("performance_monitoring"));
         assert!(service.supports_workplace_feature("a_b_testing"));
-        assert!(service.supports_workplace_feature("content_delivery"));
+assert!(service.supports_workplace_feature("content_delivery"));
         assert!(service.supports_workplace_feature("user_feedback"));
-        assert!(service.supports_workplace_feature("api_access"));
-
+assert!(service.supports_workplace_feature("api_access"));
         // Test unsupported features
-        assert!(!service.supports_workplace_feature("unsupported_feature"));
+assert!(!service.supports_workplace_feature("unsupported_feature"));
         assert!(!service.supports_workplace_feature(""));
-        assert!(!service.supports_workplace_feature("random_feature"));
+assert!(!service.supports_workplace_feature("random_feature"));
     }
-
-    #[test]
-    fn test_workplace_service_get_workplace_statistics() {
-        let service = WorkplaceService::new(create_test_config());
+#[test],
+    fn test_workplace_service_get_workplace_statistics() {,
+let service = WorkplaceService::new(create_test_config());
         let stats = service.get_workplace_statistics();
 
         assert_eq!(stats.get("service_name").unwrap(), "Workplace");
         assert_eq!(stats.get("service_version").unwrap(), "v1");
         assert_eq!(stats.get("app_id").unwrap(), "workplace_test_app");
-        assert_eq!(
+assert_eq!(,
             stats.get("workplace_access_data_service").unwrap(),
-            "active"
-        );
+            "active",
+);
         assert_eq!(stats.get("app_recommend_service").unwrap(), "active");
         assert_eq!(stats.get("access_data_analysis").unwrap(), "enabled");
         assert_eq!(stats.get("app_recommendation").unwrap(), "enabled");
         assert_eq!(stats.get("data_analytics").unwrap(), "enabled");
         assert_eq!(stats.get("recommendation_engine").unwrap(), "enabled");
-    }
-
-    #[test]
-    fn test_workplace_service_health_check() {
-        let service = WorkplaceService::new(create_test_config());
+}
+#[test],
+    fn test_workplace_service_health_check() {,
+let service = WorkplaceService::new(create_test_config());
         let health = service.health_check();
 
         assert_eq!(health.get("status").unwrap(), "healthy");
-        assert_eq!(
+assert_eq!(,
             health.get("workplace_access_data_service").unwrap(),
-            "available"
-        );
+            "available",
+);
         assert_eq!(health.get("app_recommend_service").unwrap(), "available");
         assert_eq!(health.get("service_version").unwrap(), "v1");
-        assert!(health.contains_key("timestamp"));
+assert!(health.contains_key("timestamp"));
     }
-
-    #[test]
-    fn test_workplace_service_get_config_summary() {
-        let service = WorkplaceService::new(create_test_config());
+#[test],
+    fn test_workplace_service_get_config_summary() {,
+let service = WorkplaceService::new(create_test_config());
         let summary = service.get_config_summary();
 
         assert_eq!(summary.get("service_name").unwrap(), "Workplace");
@@ -565,209 +513,173 @@ mod tests {
         assert_eq!(summary.get("app_id").unwrap(), "workplace_test_app");
         assert_eq!(summary.get("service_count").unwrap(), "2");
         assert_eq!(summary.get("supported_features").unwrap(), "21");
-        assert_eq!(
+assert_eq!(,
             summary.get("workplace_access_data_service").unwrap(),
-            "enabled"
-        );
+            "enabled",
+);
         assert_eq!(summary.get("app_recommend_service").unwrap(), "enabled");
-    }
-
-    #[test]
-    fn test_workplace_service_get_workplace_features_matrix() {
-        let service = WorkplaceService::new(create_test_config());
+}
+#[test],
+    fn test_workplace_service_get_workplace_features_matrix() {,
+let service = WorkplaceService::new(create_test_config());
         let features = service.get_workplace_features_matrix();
-
-        // Check main categories
+// Check main categories
         assert!(features.contains_key("数据分析功能"));
-        assert!(features.contains_key("推荐功能"));
+assert!(features.contains_key("推荐功能"));
         assert!(features.contains_key("个性化功能"));
-        assert!(features.contains_key("运营功能"));
+assert!(features.contains_key("运营功能"));
         assert!(features.contains_key("技术功能"));
-
-        // Check data analysis features
+// Check data analysis features
         let analytics = features.get("数据分析功能").unwrap();
         assert_eq!(analytics.get("access_data_analysis").unwrap(), "✅ 支持");
         assert_eq!(analytics.get("user_behavior_tracking").unwrap(), "✅ 支持");
         assert_eq!(analytics.get("data_analytics").unwrap(), "✅ 支持");
-
-        // Check recommendation features
+// Check recommendation features
         let recommendation = features.get("推荐功能").unwrap();
         assert_eq!(recommendation.get("app_recommendation").unwrap(), "✅ 支持");
-        assert_eq!(
+assert_eq!(,
             recommendation.get("recommendation_engine").unwrap(),
-            "✅ 支持"
-        );
+            "✅ 支持",
+);
         assert_eq!(recommendation.get("favourite_apps").unwrap(), "✅ 支持");
-
-        // Check personalization features
+// Check personalization features
         let personalization = features.get("个性化功能").unwrap();
         assert_eq!(personalization.get("personalization").unwrap(), "✅ 支持");
         assert_eq!(personalization.get("custom_workplace").unwrap(), "✅ 支持");
         assert_eq!(personalization.get("widget_management").unwrap(), "✅ 支持");
-    }
-
-    #[test]
-    fn test_workplace_service_with_custom_config() {
-        let config = Config::builder()
-            .app_id("custom_workplace_app")
-            .app_secret("custom_workplace_secret")
-            .req_timeout(Duration::from_secs(300))
-            .base_url("https://custom.example.com")
+}
+#[test],
+    fn test_workplace_service_with_custom_config() {,
+let config = Config::builder()
+            .app_id()
+.app_secret()
+            .req_timeout(Duration::from_secs(300)),
+.base_url()
             .build();
-
-        let service = WorkplaceService::new(config.clone());
-
+let service = WorkplaceService::new(config.clone());
         assert_eq!(
             service.workplace_access_data.config.app_id,
-            "custom_workplace_app"
-        );
+            "custom_workplace_app",
+);
         assert_eq!(
             service.workplace_access_data.config.app_secret,
-            "custom_workplace_secret"
-        );
+            "custom_workplace_secret",
+);
         assert_eq!(
             service.workplace_access_data.config.base_url,
-            "https://custom.example.com"
-        );
+            "https://custom.example.com",
+);
         assert_eq!(
             service.workplace_access_data.config.req_timeout,
-            Some(Duration::from_secs(300))
-        );
+            Some(Duration::from_secs(300)),
+);
     }
-
-    #[test]
-    fn test_workplace_service_config_independence() {
-        let config1 = Config::builder().app_id("workplace_app_1").build();
+#[test],
+    fn test_workplace_service_config_independence() {,
+let config1 = Config::builder().app_id("workplace_app_1").build();
         let config2 = Config::builder().app_id("workplace_app_2").build();
-
-        let service1 = WorkplaceService::new(config1);
+let service1 = WorkplaceService::new(config1);
         let service2 = WorkplaceService::new(config2);
-
-        assert_ne!(
+assert_ne!(,
             service1.workplace_access_data.config.app_id,
-            service2.workplace_access_data.config.app_id
-        );
+            service2.workplace_access_data.config.app_id,
+);
         assert_ne!(
             service1.app_recommend.config.app_id,
-            service2.app_recommend.config.app_id
-        );
+            service2.app_recommend.config.app_id,
+);
     }
-
-    #[test]
-    fn test_workplace_service_enterprise_scenarios() {
-        let service = WorkplaceService::new(create_test_config());
-
+#[test],
+    fn test_workplace_service_enterprise_scenarios() {,
+let service = WorkplaceService::new(create_test_config());
         // Data analysis scenario
-        assert!(service.supports_workplace_feature("access_data_analysis"));
+assert!(service.supports_workplace_feature("access_data_analysis"));
         assert!(service.supports_workplace_feature("user_behavior_tracking"));
-        assert!(service.supports_workplace_feature("performance_monitoring"));
-
+assert!(service.supports_workplace_feature("performance_monitoring"));
         // Personalization scenario
-        assert!(service.supports_workplace_feature("personalization"));
+assert!(service.supports_workplace_feature("personalization"));
         assert!(service.supports_workplace_feature("custom_workplace"));
-        assert!(service.supports_workplace_feature("widget_management"));
-
+assert!(service.supports_workplace_feature("widget_management"));
         // Recommendation scenario
-        assert!(service.supports_workplace_feature("app_recommendation"));
+assert!(service.supports_workplace_feature("app_recommendation"));
         assert!(service.supports_workplace_feature("recommendation_engine"));
-        assert!(service.supports_workplace_feature("favourite_apps"));
-
+assert!(service.supports_workplace_feature("favourite_apps"));
         // Operations scenario
-        assert!(service.supports_workplace_feature("a_b_testing"));
+assert!(service.supports_workplace_feature("a_b_testing"));
         assert!(service.supports_workplace_feature("content_delivery"));
-        assert!(service.supports_workplace_feature("user_feedback"));
+assert!(service.supports_workplace_feature("user_feedback"));
     }
-
-    #[test]
-    fn test_workplace_service_error_handling_and_robustness() {
-        // Test with empty configuration
+#[test],
+    fn test_workplace_service_error_handling_and_robustness() {,
+// Test with empty configuration
         let empty_config = Config::builder().app_id("").app_secret("").build();
-        let empty_service = WorkplaceService::new(empty_config);
-
+let empty_service = WorkplaceService::new(empty_config);
         let validation_result = empty_service.validate_workplace_config();
-        assert!(validation_result.is_err());
+assert!(validation_result.is_err());
         assert!(validation_result.unwrap_err().contains("缺少应用ID"));
-
-        // Test health check with invalid service
+// Test health check with invalid service
         let health = empty_service.health_check();
         assert_eq!(health.get("status").unwrap(), "unhealthy");
-        assert!(health.contains_key("error"));
+assert!(health.contains_key("error"));
     }
-
-    #[test]
-    fn test_workplace_service_concurrent_access() {
-        use std::sync::Arc;
+#[test],
+    fn test_workplace_service_concurrent_access() {,
+use std::sync::Arc;
         use std::thread;
-
-        let service = Arc::new(WorkplaceService::new(create_test_config()));
+let service = Arc::new(WorkplaceService::new(create_test_config()));
         let mut handles = vec![];
-
-        // Spawn multiple threads accessing the service
-        for _i in 0..5 {
-            let service_clone = Arc::clone(&service);
-            let handle = thread::spawn(move || {
-                // Test concurrent access to service methods
+// Spawn multiple threads accessing the service
+        for _i in 0..5 {,
+let service_clone = Arc::clone(&service);
+            let handle = thread::spawn(move || {,
+// Test concurrent access to service methods
                 let _stats = service_clone.get_workplace_statistics();
-                let _health = service_clone.health_check();
+let _health = service_clone.health_check();
                 let _features = service_clone.get_workplace_features_matrix();
-                let _summary = service_clone.get_config_summary();
-
+let _summary = service_clone.get_config_summary();
                 // Test feature support check
-                assert!(service_clone.supports_workplace_feature("access_data_analysis"));
+assert!(service_clone.supports_workplace_feature("access_data_analysis"));
                 assert!(service_clone.supports_workplace_feature("app_recommendation"));
-            });
-            handles.push(handle);
+});
+handles.push(handle);
         }
-
-        // Wait for all threads to complete
-        for handle in handles {
-            handle.join().unwrap();
+// Wait for all threads to complete
+        for handle in handles {,
+handle.join().unwrap();
         }
-    }
-
-    #[test]
-    fn test_workplace_service_performance_characteristics() {
-        let service = WorkplaceService::new(create_test_config());
-
+}
+#[test],
+    fn test_workplace_service_performance_characteristics() {,
+let service = WorkplaceService::new(create_test_config());
         // Test method execution times
-        let start = std::time::Instant::now();
+let start = std::time::Instant::now();
         let _stats = service.get_workplace_statistics();
-        let stats_duration = start.elapsed();
-
+let stats_duration = start.elapsed();
         let start = std::time::Instant::now();
-        let _health = service.health_check();
+let _health = service.health_check();
         let health_duration = start.elapsed();
-
-        let start = std::time::Instant::now();
+let start = std::time::Instant::now();
         let _features = service.get_workplace_features_matrix();
-        let features_duration = start.elapsed();
-
+let features_duration = start.elapsed();
         // All operations should complete quickly (under 10ms)
-        assert!(stats_duration.as_millis() < 10);
+assert!(stats_duration.as_millis() < 10);
         assert!(health_duration.as_millis() < 10);
-        assert!(features_duration.as_millis() < 10);
+assert!(features_duration.as_millis() < 10);
     }
-
-    #[test]
-    fn test_workplace_service_comprehensive_integration() {
-        let service = WorkplaceService::new(create_test_config());
-
+#[test],
+    fn test_workplace_service_comprehensive_integration() {,
+let service = WorkplaceService::new(create_test_config());
         // Test complete workflow
-        assert!(service.validate_workplace_config().is_ok());
-
+assert!(service.validate_workplace_config().is_ok());
         let health = service.health_check();
         assert_eq!(health.get("status").unwrap(), "healthy");
-
-        let stats = service.get_workplace_statistics();
+let stats = service.get_workplace_statistics();
         assert_eq!(stats.get("service_name").unwrap(), "Workplace");
-
-        let features = service.get_workplace_features_matrix();
+let features = service.get_workplace_features_matrix();
         assert!(features.len() >= 5); // At least 5 feature categories
-
-        let summary = service.get_config_summary();
+let summary = service.get_config_summary();
         assert_eq!(summary.get("service_count").unwrap(), "2");
-
-        // Test all supported features
+// Test all supported features
         let supported_features = vec![
             "access_data_analysis",
             "app_recommendation",
@@ -777,40 +689,32 @@ mod tests {
             "recommendation_engine",
             "multi_device_sync",
         ];
-
-        for feature in supported_features {
+for feature in supported_features {,
             assert!(service.supports_workplace_feature(feature));
-        }
+}
     }
-
-    #[test]
-    fn test_workplace_service_edge_cases() {
-        let service = WorkplaceService::new(create_test_config());
-
+#[test],
+    fn test_workplace_service_edge_cases() {,
+let service = WorkplaceService::new(create_test_config());
         // Test empty feature check
-        assert!(!service.supports_workplace_feature(""));
+assert!(!service.supports_workplace_feature(""));
         assert!(!service.supports_workplace_feature("   "));
-
-        // Test unknown feature check
+// Test unknown feature check
         assert!(!service.supports_workplace_feature("unknown_feature"));
-        assert!(!service.supports_workplace_feature("random_test_feature"));
-
+assert!(!service.supports_workplace_feature("random_test_feature"));
         // Test very long feature name
-        let long_feature = "a".repeat(1000);
+let long_feature = "a".repeat(1000);
         assert!(!service.supports_workplace_feature(&long_feature));
-    }
-
-    #[test]
-    fn test_workplace_service_modules_independence() {
-        let service = WorkplaceService::new(create_test_config());
-
+}
+#[test],
+    fn test_workplace_service_modules_independence() {,
+let service = WorkplaceService::new(create_test_config());
         // Test that sub-modules are independent
-        let access_data_ptr = std::ptr::addr_of!(service.workplace_access_data) as *const _;
+let access_data_ptr = std::ptr::addr_of!(service.workplace_access_data) as *const _;
         let app_recommend_ptr = std::ptr::addr_of!(service.app_recommend) as *const _;
-
-        assert_ne!(
+assert_ne!(,
             access_data_ptr, app_recommend_ptr,
-            "Sub-services should be independent"
-        );
+            "Sub-services should be independent",
+);
     }
 }

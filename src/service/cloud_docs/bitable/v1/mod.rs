@@ -4,27 +4,22 @@ pub use app_role_member::AppRoleMemberService;
 pub use app_table_field::AppTableFieldService;
 pub use app_workflow::AppWorkflowService;
 pub use form::FormService;
-
 // 为了避免名称冲突，使用模块路径而不是全局导入
 pub mod app;
 pub mod app_table;
 pub mod app_table_record;
 pub mod app_table_view;
-
 use crate::core::config::Config;
-
 mod app_dashboard;
 mod app_role;
 mod app_role_member;
 mod app_table_field;
 mod app_workflow;
 mod form;
-
 mod share;
 pub use share::*;
-
 pub struct V1 {
-    /// 多维表格
+/// 多维表格
     pub app: app::AppService,
     /// 数据表
     pub app_table: app_table::AppTableService,
@@ -45,10 +40,9 @@ pub struct V1 {
     /// 自动化流程
     pub app_workflow: AppWorkflowService,
 }
-
 impl V1 {
-    pub fn new(config: Config) -> Self {
-        Self {
+    pub fn new() -> Self {
+Self {,
             app: app::AppService::new(config.clone()),
             app_table: app_table::AppTableService::new(config.clone()),
             app_table_view: app_table_view::AppTableViewService::new(config.clone()),
@@ -60,5 +54,5 @@ impl V1 {
             app_role_member: AppRoleMemberService::new(config.clone()),
             app_workflow: AppWorkflowService::new(config),
         }
-    }
+}
 }

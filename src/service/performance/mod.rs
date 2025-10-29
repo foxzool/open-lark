@@ -1,78 +1,75 @@
-//! # 绩效管理服务
+//! # 绩效管理服务,
+//!,
+//! 飞书绩效管理 (Performance Management) 服务提供完整的绩效管理功能，支持以下核心能力：,
+//!,
+//! ## 功能特性,
+//!,
+//! - **后台配置**：周期与项目管理、补充信息管理、人员组管理、评估模板配置、指标配置,
+//! - **评估任务**：周期任务查询和管理,
+//! - **指标数据**：关键指标数据的获取和录入,
+//! - **评估数据**：绩效结果和详情数据的查询,
+//! - **事件推送**：绩效结果开通和详情变更事件推送,
+//!,
+//! ## 服务模块,
+//!,
+//! 该服务包含以下功能模块：,
+//!,
+//! - [`models`] - 数据模型和类型定义,
+//! - [`review_config`] - 后台配置管理模块,
+//! - [`stage_task`] - 评估任务管理模块,
+//! - [`metric_detail`] - 指标数据管理模块,
+//! - [`review_data`] - 评估数据管理模块,
+//! - [`v1`] - 事件定义模块,
 //!
-//! 飞书绩效管理 (Performance Management) 服务提供完整的绩效管理功能，支持以下核心能力：
-//!
-//! ## 功能特性
-//!
-//! - **后台配置**：周期与项目管理、补充信息管理、人员组管理、评估模板配置、指标配置
-//! - **评估任务**：周期任务查询和管理
-//! - **指标数据**：关键指标数据的获取和录入
-//! - **评估数据**：绩效结果和详情数据的查询
-//! - **事件推送**：绩效结果开通和详情变更事件推送
-//!
-//! ## 服务模块
-//!
-//! 该服务包含以下功能模块：
-//!
-//! - [`models`] - 数据模型和类型定义
-//! - [`review_config`] - 后台配置管理模块
-//! - [`stage_task`] - 评估任务管理模块
-//! - [`metric_detail`] - 指标数据管理模块
-//! - [`review_data`] - 评估数据管理模块
-//! - [`v1`] - 事件定义模块
-//!
-//! ## 使用示例
-//!
+//! ## 使用示例,
+//!,
 //! ```rust,no_run
 //! use open_lark::prelude::*;
 //! use open_lark::service::performance::*;
 //!
 //! #[tokio::main]
 //! async fn main() -> Result<(), Box<dyn std::error::Error>> {
-//!     let client = LarkClient::builder("app_id", "app_secret")
+//!     let client = LarkClient::builder("app_id", "app_secret"),
 //!         .build();
 //!
 //!     // 获取周期列表
-//!     let semesters = client.performance.review_config.list_semesters(
-//!         review_config::SemesterListRequest::default(), None
+//!     let semesters = client.performance.review_config.list_semesters(,
+//!         review_config::SemesterListRequest::default(), None,
 //!     ).await?;
 //!     
 //!     // 获取项目列表
-//!     let activities = client.performance.review_config.query_activities(
-//!         review_config::ActivityQueryRequest::default(), None
+//!     let activities = client.performance.review_config.query_activities(,
+//!         review_config::ActivityQueryRequest::default(), None,
 //!     ).await?;
 //!     
 //!     // 获取绩效结果
-//!     let results = client.performance.review_data.query_results(
-//!         review_data::ResultQueryRequest::default(), None
+//!     let results = client.performance.review_data.query_results(,
+//!         review_data::ResultQueryRequest::default(), None,
 //!     ).await?;
-//!     
-//!     Ok(())
+//!     ,
+//!     Ok(()),
 //! }
-//! ```
-
+//! ```,
 pub mod metric_detail;
 pub mod models;
 pub mod review_config;
 pub mod review_data;
 pub mod stage_task;
 pub mod v1;
-
 use crate::{
     core::config::Config,
     service::performance::{
         metric_detail::MetricDetailService, review_config::ReviewConfigService,
         review_data::ReviewDataService, stage_task::StageTaskService,
-    },
+    }
 };
-
 /// 企业级绩效管理服务
 ///
 /// 现代化企业绩效综合管理平台，提供完整的绩效评估、目标管理、
 /// 人才发展、激励机制等企业级绩效管理能力。
 ///
 /// # 核心功能模块
-///
+///,
 /// ## 🎯 目标管理体系
 /// - **战略目标分解**: 企业战略目标到个人目标的对齐
 /// - **OKR管理**: 目标与关键结果管理系统
@@ -102,7 +99,7 @@ use crate::{
 /// - **认可机制**: 及时认可和奖励系统
 ///
 /// # 企业级特性
-///
+///,
 /// - 🚀 **智能算法**: AI驱动的绩效评估和建议
 /// - 🔒 **数据安全**: 端到端加密保护敏感绩效数据
 /// - 📱 **移动应用**: 随时随地的绩效管理移动端支持
@@ -111,23 +108,23 @@ use crate::{
 /// - 🎯 **定制化**: 高度可配置的绩效管理体系
 ///
 /// # 适用场景
-///
+///,
 /// - **大型企业**: 复杂组织架构下的统一绩效管理
 /// - **快速成长企业**: 人才激励和绩效文化建设
 /// - **跨国企业**: 多地区、多文化的绩效管理标准化
 /// - **科技公司**: 知识型员工的创新绩效评估
 /// - **传统企业**: 绩效管理数字化转型
-///
+///,
 /// # 管理组件
-///
+///,
 /// - **目标管理**: Goal Management Component
 /// - **评估管理**: Assessment Management Component
 /// - **数据分析**: Analytics & Insights Component
 /// - **人才发展**: Talent Development Component
 /// - **激励机制**: Incentive Management Component
-///
+///,
 /// # 绩效标准
-///
+///,
 /// - ✅ 符合现代绩效管理最佳实践
 /// - ✅ 支持360度反馈和多维度评估
 /// - ✅ 遵循数据隐私和保护法规
@@ -143,104 +140,100 @@ pub struct PerformanceService {
     /// 评估数据服务
     pub review_data: ReviewDataService,
 }
-
 impl PerformanceService {
     /// 创建企业级绩效管理服务实例
-    ///
+///,
     /// 初始化现代化企业绩效管理平台，配置目标管理、绩效评估、
-    /// 数据分析、人才发展等功能模块。
-    ///
-    /// # 参数
+/// 数据分析、人才发展等功能模块。
+    ///,
+/// # 参数
     /// - `config`: 客户端配置，包含绩效管理相关的API配置信息
-    ///
+///,
     /// # 返回值
-    /// 配置完成的企业级绩效管理服务实例
-    ///
-    /// # 示例
-    ///
-    /// ```rust
+/// 配置完成的企业级绩效管理服务实例
+    ///,
+/// # 示例
+    ///,
+/// ```rust
     /// use open_lark::core::config::Config;
-    /// use open_lark::service::performance::PerformanceService;
-    ///
-    /// let config = Config::builder()
+/// use open_lark::service::performance::PerformanceService;
+    ///,
+/// let config = Config::builder()
     ///     .app_id("your_app_id")
-    ///     .app_secret("your_app_secret")
+///     .app_secret("your_app_secret")
     ///     .build();
-    ///
+///,
     /// let performance_service = PerformanceService::new(config);
-    /// ```
-    pub fn new(config: Config) -> Self {
-        Self {
+/// ```
+    pub fn new() -> Self {
+Self {,
             review_config: ReviewConfigService::new(config.clone()),
             stage_task: StageTaskService::new(config.clone()),
             metric_detail: MetricDetailService::new(config.clone()),
             review_data: ReviewDataService::new(config),
         }
-    }
-
-    /// 验证绩效管理服务配置的有效性
-    ///
-    /// 检查绩效管理服务的配置参数是否正确设置，包括API密钥、
+}
+/// 验证绩效管理服务配置的有效性
+    ///,
+/// 检查绩效管理服务的配置参数是否正确设置，包括API密钥、
     /// 评估权限、数据安全策略等是否符合企业级要求。
-    ///
+///,
     /// # 返回值
-    /// 如果所有配置有效且符合绩效管理要求返回 `true`，否则返回 `false`
-    ///
-    /// # 验证内容
+/// 如果所有配置有效且符合绩效管理要求返回 `true`，否则返回 `false`
+    ///,
+/// # 验证内容
     /// - 应用ID和应用密钥的有效性
-    /// - 绩效管理API权限配置
+/// - 绩效管理API权限配置
     /// - 评估模板和指标配置
-    /// - 数据安全策略设置
-    pub fn validate_performance_config(&self) -> bool {
-        // 检查基础配置有效性
-        !self.review_config.config.app_id.is_empty()
-            && !self.review_config.config.app_secret.is_empty()
-            && !self.stage_task.config.app_id.is_empty()
-            && !self.stage_task.config.app_secret.is_empty()
-            && !self.metric_detail.config.app_id.is_empty()
-            && !self.metric_detail.config.app_secret.is_empty()
-            && !self.review_data.config.app_id.is_empty()
-            && !self.review_data.config.app_secret.is_empty()
+/// - 数据安全策略设置
+    pub fn validate_performance_config(&self) -> bool {,
+// 检查基础配置有效性
+        !self.review_config.config.app_id.is_empty(),
+&& !self.review_config.config.app_secret.is_empty(),
+            && !self.stage_task.config.app_id.is_empty(),
+&& !self.stage_task.config.app_secret.is_empty(),
+            && !self.metric_detail.config.app_id.is_empty(),
+&& !self.metric_detail.config.app_secret.is_empty(),
+            && !self.review_data.config.app_id.is_empty(),
+&& !self.review_data.config.app_secret.is_empty(),
     }
-
-    /// 获取绩效管理服务的整体统计信息
-    ///
-    /// 返回当前绩效管理服务实例的基本统计信息，用于监控、
+/// 获取绩效管理服务的整体统计信息
+    ///,
+/// 返回当前绩效管理服务实例的基本统计信息，用于监控、
     /// 调试和企业级绩效管理。
-    ///
+///,
     /// # 返回值
-    /// 包含服务名称、绩效管理能力、评估模块、支持特性等信息的字符串
-    ///
-    /// # 统计内容
+/// 包含服务名称、绩效管理能力、评估模块、支持特性等信息的字符串
+    ///,
+/// # 统计内容
     /// - 绩效管理能力类型和数量
-    /// - 目标管理模块统计
+/// - 目标管理模块统计
     /// - 评估系统功能统计
-    /// - 数据分析支持状态
-    pub fn get_performance_statistics(&self) -> String {
-        format!(
+/// - 数据分析支持状态
+    pub fn get_performance_statistics(&self) -> String {,
+format!(,
             "PerformanceService{{ goal_management: true, performance_assessment: true, data_analytics: true, talent_development: true, incentive_management: true, modules: 4, features: 20, app_id: {} }}",
-            self.review_config.config.app_id
-        )
+            self.review_config.config.app_id,
+),
     }
-
-    /// 检查服务是否支持特定绩效管理功能
-    ///
-    /// 检查当前配置是否支持特定的绩效管理功能，如目标管理、
+/// 检查服务是否支持特定绩效管理功能
+    ///,
+/// 检查当前配置是否支持特定的绩效管理功能，如目标管理、
     /// 360度评估、数据分析等企业级功能。
-    ///
+///,
     /// # 参数
-    /// - `performance_feature`: 绩效管理功能名称
-    ///
-    /// # 返回值
+/// - `performance_feature`: 绩效管理功能名称
+    ///,
+/// # 返回值
     /// 如果支持该功能返回 `true`，否则返回 `false`
-    ///
+///,
     /// # 支持的功能
-    /// - **目标管理**: OKR、KPI、目标对齐等
+/// - **目标管理**: OKR、KPI、目标对齐等
     /// - **评估系统**: 360度评估、定制模板等
-    /// - **数据分析**: 绩效分析、趋势预测等
+/// - **数据分析**: 绩效分析、趋势预测等
     /// - **企业功能**: 多语言、移动端、API集成等
-    pub fn supports_performance_feature(&self, performance_feature: &str) -> bool {
-        match performance_feature {
+    pub fn supports_performance_feature(&self, performance_feature: &str) -> bool {,
+match performance_feature {,
             // 目标管理体系功能
             "goal_management" => true,
             "okr_system" => true,
@@ -342,175 +335,156 @@ impl PerformanceService {
 
             _ => false,
         }
-    }
-
-    /// 快速检查绩效管理服务健康状态
-    ///
-    /// 检查绩效管理服务的基础配置、API连接、评估权限等是否正常工作。
-    ///
-    /// # 返回值
-    /// 如果服务健康且功能正常返回 `true`，否则返回 `false`
-    ///
-    /// # 检查项目
-    /// - 基础配置有效性
-    /// - API端点可访问性
-    /// - 绩效管理权限配置
-    /// - 评估模板可用性
-    pub fn health_check(&self) -> bool {
-        // 基础健康检查
-        let basic_health = !self.review_config.config.app_id.is_empty()
-            && !self.review_config.config.app_secret.is_empty()
-            && !self.stage_task.config.app_id.is_empty()
-            && !self.stage_task.config.app_secret.is_empty()
-            && !self.metric_detail.config.app_id.is_empty()
-            && !self.metric_detail.config.app_secret.is_empty()
-            && !self.review_data.config.app_id.is_empty()
-            && !self.review_data.config.app_secret.is_empty()
-            && self.validate_performance_config();
-
-        // 功能健康检查
-        let feature_health = self.supports_performance_feature("goal_management")
-            && self.supports_performance_feature("performance_assessment")
-            && self.supports_performance_feature("data_analytics");
-
-        // 安全健康检查
-        let security_health = self.supports_performance_feature("data_security")
-            && self.supports_performance_feature("privacy_compliance")
-            && self.supports_performance_feature("audit_logging");
-
-        basic_health && feature_health && security_health
-    }
-
-    /// 获取绩效管理能力矩阵
-    ///
-    /// 返回绩效管理能力详细信息。
-    ///
-    /// # 返回值
-    /// 包含绩效管理能力矩阵信息的字符串
-    pub fn get_performance_capabilities_matrix(&self) -> String {
-        "PerformanceService Capabilities{ goal: true, assessment: true, analytics: true, development: true, incentive: true, mobile: true }".to_string()
-    }
-
-    /// 获取企业级功能支持矩阵
-    ///
-    /// 返回企业级功能支持详细信息。
-    ///
-    /// # 返回值
-    /// 包含企业级功能支持矩阵信息的字符串
-    pub fn get_enterprise_features_matrix(&self) -> String {
-        "PerformanceService Enterprise{ multi_entity: true, global: true, scalable: true, integrated: true, compliant: true, secure: true }".to_string()
-    }
-
-    /// 获取分析能力矩阵
-    ///
-    /// 返回分析能力详细信息。
-    ///
-    /// # 返回值
-    /// 包含分析能力矩阵信息的字符串
-    pub fn get_analytics_capabilities_matrix(&self) -> String {
-        "PerformanceService Analytics{ performance: true, predictive: true, comparative: true, talent: true, trend: true, anomaly: true }".to_string()
-    }
-
-    /// 获取评估系统能力矩阵
-    ///
-    /// 返回评估系统能力详细信息。
-    ///
-    /// # 返回值
-    /// 包含评估系统能力矩阵信息的字符串
-    pub fn get_assessment_systems_matrix(&self) -> String {
-        "PerformanceService Assessment{ degree_360: true, custom_templates: true, workflows: true, calibration: true, continuous: true, automated: true }".to_string()
-    }
-
-    /// 获取技术架构能力矩阵
-    ///
-    /// 返回技术架构能力详细信息。
-    ///
-    /// # 返回值
-    /// 包含技术架构能力矩阵信息的字符串
-    pub fn get_technical_architecture_matrix(&self) -> String {
-        "PerformanceService Architecture{ cloud_native: true, microservices: true, api_first: true, secure: true, scalable: true, ai_enabled: true }".to_string()
-    }
-
-    /// 获取绩效管理模块统计
-    ///
-    /// 返回不同类型管理模块的统计信息。
-    ///
-    /// # 返回值
-    /// 包含各类型管理模块数量的统计信息
-    pub fn get_performance_modules_statistics(&self) -> String {
-        "PerformanceService Modules{ goal: 7, assessment: 7, analytics: 7, development: 7, configuration: 7, enterprise: 7, total: 42 }".to_string()
-    }
-
-    /// 获取绩效数据安全状态信息
-    ///
-    /// 返回当前绩效数据安全状态信息。
-    ///
-    /// # 返回值
-    /// 包含绩效数据安全状态的字符串
-    pub fn get_data_security_status(&self) -> String {
-        "PerformanceService Security{ encryption: AES256, access_control: RBAC, audit_logging: true, data_masking: true, privacy: GDPR_COMPLIANT, backup: true }".to_string()
-    }
-
-    /// 获取绩效管理集成能力矩阵
-    ///
-    /// 返回绩效管理集成能力详细信息。
-    ///
-    /// # 返回值
-    /// 包含绩效管理集成能力矩阵信息的字符串
-    pub fn get_integration_capabilities_matrix(&self) -> String {
-        "PerformanceService Integration{ restful_api: true, webhooks: true, sso: true, hr_systems: true, bi_tools: true, collaboration: true, learning_platforms: true }".to_string()
-    }
-
-    /// 获取目标管理能力矩阵
-    ///
-    /// 返回目标管理能力详细信息。
-    ///
-    /// # 返回值
-    /// 包含目标管理能力矩阵信息的字符串
-    pub fn get_goal_management_matrix(&self) -> String {
-        "PerformanceService Goals{ okr: true, kpi: true, alignment: true, cascading: true, tracking: true, monitoring: true, reporting: true }".to_string()
-    }
-
-    /// 获取人才发展能力矩阵
-    ///
-    /// 返回人才发展能力详细信息。
-    ///
-    /// # 返回值
-    /// 包含人才发展能力矩阵信息的字符串
-    pub fn get_talent_development_matrix(&self) -> String {
-        "PerformanceService Development{ planning: true, training: true, coaching: true, succession: true, career_pathing: true, skill_gap: true, mentorship: true }".to_string()
-    }
 }
-
+/// 快速检查绩效管理服务健康状态
+    ///,
+/// 检查绩效管理服务的基础配置、API连接、评估权限等是否正常工作。
+    ///,
+/// # 返回值
+    /// 如果服务健康且功能正常返回 `true`，否则返回 `false`
+///,
+    /// # 检查项目
+/// - 基础配置有效性
+    /// - API端点可访问性
+/// - 绩效管理权限配置
+    /// - 评估模板可用性
+pub fn health_check(&self) -> bool {,
+        // 基础健康检查
+let basic_health = !self.review_config.config.app_id.is_empty(),
+            && !self.review_config.config.app_secret.is_empty(),
+&& !self.stage_task.config.app_id.is_empty(),
+            && !self.stage_task.config.app_secret.is_empty(),
+&& !self.metric_detail.config.app_id.is_empty(),
+            && !self.metric_detail.config.app_secret.is_empty(),
+&& !self.review_data.config.app_id.is_empty(),
+            && !self.review_data.config.app_secret.is_empty(),
+&& self.validate_performance_config();
+        // 功能健康检查
+let feature_health = self.supports_performance_feature("goal_management"),
+            && self.supports_performance_feature("performance_assessment"),
+&& self.supports_performance_feature("data_analytics");
+        // 安全健康检查
+let security_health = self.supports_performance_feature("data_security"),
+            && self.supports_performance_feature("privacy_compliance"),
+&& self.supports_performance_feature("audit_logging");
+        basic_health && feature_health && security_health,
+}
+/// 获取绩效管理能力矩阵
+    ///,
+/// 返回绩效管理能力详细信息。
+    ///,
+/// # 返回值
+    /// 包含绩效管理能力矩阵信息的字符串
+pub fn get_performance_capabilities_matrix(&self) -> String {,
+        "PerformanceService Capabilities{ goal: true, assessment: true, analytics: true, development: true, incentive: true, mobile: true }".to_string(),
+}
+/// 获取企业级功能支持矩阵
+    ///,
+/// 返回企业级功能支持详细信息。
+    ///,
+/// # 返回值
+    /// 包含企业级功能支持矩阵信息的字符串
+pub fn get_enterprise_features_matrix(&self) -> String {,
+        "PerformanceService Enterprise{ multi_entity: true, global: true, scalable: true, integrated: true, compliant: true, secure: true }".to_string(),
+}
+/// 获取分析能力矩阵
+    ///,
+/// 返回分析能力详细信息。
+    ///,
+/// # 返回值
+    /// 包含分析能力矩阵信息的字符串
+pub fn get_analytics_capabilities_matrix(&self) -> String {,
+        "PerformanceService Analytics{ performance: true, predictive: true, comparative: true, talent: true, trend: true, anomaly: true }".to_string(),
+}
+/// 获取评估系统能力矩阵
+    ///,
+/// 返回评估系统能力详细信息。
+    ///,
+/// # 返回值
+    /// 包含评估系统能力矩阵信息的字符串
+pub fn get_assessment_systems_matrix(&self) -> String {,
+        "PerformanceService Assessment{ degree_360: true, custom_templates: true, workflows: true, calibration: true, continuous: true, automated: true }".to_string(),
+}
+/// 获取技术架构能力矩阵
+    ///,
+/// 返回技术架构能力详细信息。
+    ///,
+/// # 返回值
+    /// 包含技术架构能力矩阵信息的字符串
+pub fn get_technical_architecture_matrix(&self) -> String {,
+        "PerformanceService Architecture{ cloud_native: true, microservices: true, api_first: true, secure: true, scalable: true, ai_enabled: true }".to_string(),
+}
+/// 获取绩效管理模块统计
+    ///,
+/// 返回不同类型管理模块的统计信息。
+    ///,
+/// # 返回值
+    /// 包含各类型管理模块数量的统计信息
+pub fn get_performance_modules_statistics(&self) -> String {,
+        "PerformanceService Modules{ goal: 7, assessment: 7, analytics: 7, development: 7, configuration: 7, enterprise: 7, total: 42 }".to_string(),
+}
+/// 获取绩效数据安全状态信息
+    ///,
+/// 返回当前绩效数据安全状态信息。
+    ///,
+/// # 返回值
+    /// 包含绩效数据安全状态的字符串
+pub fn get_data_security_status(&self) -> String {,
+        "PerformanceService Security{ encryption: AES256, access_control: RBAC, audit_logging: true, data_masking: true, privacy: GDPR_COMPLIANT, backup: true }".to_string(),
+}
+/// 获取绩效管理集成能力矩阵
+    ///,
+/// 返回绩效管理集成能力详细信息。
+    ///,
+/// # 返回值
+    /// 包含绩效管理集成能力矩阵信息的字符串
+pub fn get_integration_capabilities_matrix(&self) -> String {,
+        "PerformanceService Integration{ restful_api: true, webhooks: true, sso: true, hr_systems: true, bi_tools: true, collaboration: true, learning_platforms: true }".to_string(),
+}
+/// 获取目标管理能力矩阵
+    ///,
+/// 返回目标管理能力详细信息。
+    ///,
+/// # 返回值
+    /// 包含目标管理能力矩阵信息的字符串
+pub fn get_goal_management_matrix(&self) -> String {,
+        "PerformanceService Goals{ okr: true, kpi: true, alignment: true, cascading: true, tracking: true, monitoring: true, reporting: true }".to_string(),
+}
+/// 获取人才发展能力矩阵
+    ///,
+/// 返回人才发展能力详细信息。
+    ///,
+/// # 返回值
+    /// 包含人才发展能力矩阵信息的字符串
+pub fn get_talent_development_matrix(&self) -> String {,
+        "PerformanceService Development{ planning: true, training: true, coaching: true, succession: true, career_pathing: true, skill_gap: true, mentorship: true }".to_string(),
+}
+}
 use crate::core::trait_system::Service;
-
-impl Service for PerformanceService {
-    fn config(&self) -> &Config {
-        &self.review_config.config
-    }
-
-    fn service_name() -> &'static str
+impl Service for PerformanceService {,
+fn config(&self) -> &Config {,
+        &self.review_config.config,
+}
+fn service_name() -> &'static str,
     where
         Self: Sized,
-    {
-        "PerformanceService"
+    {,
+"PerformanceService",
     }
 }
-
-impl Clone for PerformanceService {
-    fn clone(&self) -> Self {
-        Self {
+impl Clone for PerformanceService {,
+    fn clone(&self) -> Self {,
+Self {,
             review_config: ReviewConfigService::new(self.review_config.config.clone()),
             stage_task: StageTaskService::new(self.stage_task.config.clone()),
             metric_detail: MetricDetailService::new(self.metric_detail.config.clone()),
             review_data: ReviewDataService::new(self.review_data.config.clone()),
         }
-    }
 }
-
-impl std::fmt::Debug for PerformanceService {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_struct("PerformanceService")
+}
+impl std::fmt::Debug for PerformanceService {,
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {,
+f.debug_struct()
             .field("service_name", &Self::service_name())
             .field("app_id", &self.review_config.config.app_id)
             .field("goal_management", &"GoalManagement")
@@ -518,94 +492,81 @@ impl std::fmt::Debug for PerformanceService {
             .field("data_analytics", &"DataAnalytics")
             .field("talent_development", &"TalentDevelopment")
             .field("enterprise_features", &true)
-            .field("ai_enabled", &true)
-            .finish()
+            .field()
+.finish(),
     }
 }
-
 #[cfg(test)]
-mod tests {
-    use super::*;
+mod tests {,
+use super::*;
     use std::time::Duration;
-
-    /// 创建测试配置
-    fn create_test_config() -> Config {
-        Config::builder()
-            .app_id("test_performance_app_id")
-            .app_secret("test_performance_app_secret")
-            .build()
-    }
-
-    #[test]
-    fn test_performance_service_creation() {
-        let config = create_test_config();
+/// 创建测试配置
+    fn create_test_config() -> Config {,
+Config::builder()
+            .app_id()
+.app_secret()
+            .build(),
+}
+#[test],
+    fn test_performance_service_creation() {,
+let config = create_test_config();
         let service = PerformanceService::new(config.clone());
-
-        // 验证服务创建成功
+// 验证服务创建成功
         assert_eq!(service.review_config.config.app_id, config.app_id);
         assert_eq!(service.review_config.config.app_secret, config.app_secret);
         assert_eq!(service.stage_task.config.app_id, config.app_id);
         assert_eq!(service.metric_detail.config.app_id, config.app_id);
         assert_eq!(service.review_data.config.app_id, config.app_id);
-        assert!(!service.review_config.config.app_id.is_empty());
+assert!(!service.review_config.config.app_id.is_empty());
         assert!(!service.review_data.config.app_secret.is_empty());
-    }
-
-    #[test]
-    fn test_performance_service_validate_performance_config() {
-        let config = create_test_config();
+}
+#[test],
+    fn test_performance_service_validate_performance_config() {,
+let config = create_test_config();
         let service = PerformanceService::new(config.clone());
-
-        // 测试有效配置
+// 测试有效配置
         assert!(service.validate_performance_config());
-        assert!(!config.app_id.is_empty());
+assert!(!config.app_id.is_empty());
         assert!(!config.app_secret.is_empty());
-
-        // 测试无效配置 - 空app_id
+// 测试无效配置 - 空app_id
         let empty_id_config = Config::builder()
-            .app_id("")
-            .app_secret("test_secret")
-            .build();
+.app_id()
+            .app_secret()
+.build();
         let empty_id_service = PerformanceService::new(empty_id_config);
-        assert!(!empty_id_service.validate_performance_config());
-
+assert!(!empty_id_service.validate_performance_config());
         // 测试无效配置 - 空app_secret
-        let empty_secret_config = Config::builder()
-            .app_id("test_app_id")
-            .app_secret("")
+let empty_secret_config = Config::builder()
+            .app_id()
+.app_secret()
             .build();
-        let empty_secret_service = PerformanceService::new(empty_secret_config);
+let empty_secret_service = PerformanceService::new(empty_secret_config);
         assert!(!empty_secret_service.validate_performance_config());
-
-        // 测试完全空配置
+// 测试完全空配置
         let empty_config = Config::builder().app_id("").app_secret("").build();
-        let empty_service = PerformanceService::new(empty_config);
+let empty_service = PerformanceService::new(empty_config);
         assert!(!empty_service.validate_performance_config());
-    }
-
-    #[test]
-    fn test_performance_service_get_performance_statistics() {
-        let config = create_test_config();
+}
+#[test],
+    fn test_performance_service_get_performance_statistics() {,
+let config = create_test_config();
         let service = PerformanceService::new(config);
-
-        let stats = service.get_performance_statistics();
+let stats = service.get_performance_statistics();
         assert!(stats.contains("PerformanceService"));
-        assert!(stats.contains("goal_management: true"));
+assert!(stats.contains("goal_management: true"));
         assert!(stats.contains("performance_assessment: true"));
-        assert!(stats.contains("data_analytics: true"));
+assert!(stats.contains("data_analytics: true"));
         assert!(stats.contains("talent_development: true"));
-        assert!(stats.contains("incentive_management: true"));
+assert!(stats.contains("incentive_management: true"));
         assert!(stats.contains("modules: 4"));
-        assert!(stats.contains("features: 20"));
+assert!(stats.contains("features: 20"));
         assert!(stats.contains("test_performance_app_id"));
-    }
-
-    #[test]
-    fn test_performance_service_supports_performance_feature() {
-        let config = create_test_config();
+}
+#[test],
+    fn test_performance_service_supports_performance_feature() {,
+let config = create_test_config();
         let service = PerformanceService::new(config);
-
-        // 测试目标管理体系功能
+// 测试目标管理体系功能
         let goal_features = vec![
             "goal_management",
             "okr_system",
@@ -615,15 +576,14 @@ mod tests {
             "strategic_cascade",
             "objective_setting",
         ];
-        for feature in goal_features {
+for feature in goal_features {,
             assert!(
                 service.supports_performance_feature(feature),
                 "Goal feature {} should be supported",
-                feature
-            );
+                feature,
+);
         }
-
-        // 测试绩效评估系统功能
+// 测试绩效评估系统功能
         let assessment_features = vec![
             "performance_assessment",
             "degree_360_feedback",
@@ -633,15 +593,14 @@ mod tests {
             "result_calibration",
             "evaluation_periods",
         ];
-        for feature in assessment_features {
+for feature in assessment_features {,
             assert!(
                 service.supports_performance_feature(feature),
                 "Assessment feature {} should be supported",
-                feature
-            );
+                feature,
+);
         }
-
-        // 测试数据分析与洞察功能
+// 测试数据分析与洞察功能
         let analytics_features = vec![
             "data_analytics",
             "performance_analysis",
@@ -651,15 +610,14 @@ mod tests {
             "anomaly_detection",
             "dashboard_reporting",
         ];
-        for feature in analytics_features {
+for feature in analytics_features {,
             assert!(
                 service.supports_performance_feature(feature),
                 "Analytics feature {} should be supported",
-                feature
-            );
+                feature,
+);
         }
-
-        // 测试人才发展与激励功能
+// 测试人才发展与激励功能
         let development_features = vec![
             "talent_development",
             "development_planning",
@@ -669,15 +627,14 @@ mod tests {
             "recognition_system",
             "coaching_tools",
         ];
-        for feature in development_features {
+for feature in development_features {,
             assert!(
                 service.supports_performance_feature(feature),
                 "Development feature {} should be supported",
-                feature
-            );
+                feature,
+);
         }
-
-        // 测试评估配置与管理功能
+// 测试评估配置与管理功能
         let config_features = vec![
             "review_configuration",
             "assessment_cycles",
@@ -687,15 +644,14 @@ mod tests {
             "workflow_automation",
             "approval_processes",
         ];
-        for feature in config_features {
+for feature in config_features {,
             assert!(
                 service.supports_performance_feature(feature),
                 "Config feature {} should be supported",
-                feature
-            );
+                feature,
+);
         }
-
-        // 测试高级分析功能
+// 测试高级分析功能
         let advanced_features = vec![
             "advanced_analytics",
             "predictive_modeling",
@@ -705,15 +661,14 @@ mod tests {
             "root_cause_analysis",
             "impact_assessment",
         ];
-        for feature in advanced_features {
+for feature in advanced_features {,
             assert!(
                 service.supports_performance_feature(feature),
                 "Advanced feature {} should be supported",
-                feature
-            );
+                feature,
+);
         }
-
-        // 测试企业级功能
+// 测试企业级功能
         let enterprise_features = vec![
             "multi_entity_support",
             "global_performance",
@@ -723,15 +678,14 @@ mod tests {
             "api_management",
             "workflow_customization",
         ];
-        for feature in enterprise_features {
+for feature in enterprise_features {,
             assert!(
                 service.supports_performance_feature(feature),
                 "Enterprise feature {} should be supported",
-                feature
-            );
+                feature,
+);
         }
-
-        // 测试移动端与协作功能
+// 测试移动端与协作功能
         let mobile_features = vec![
             "mobile_performance",
             "real_time_feedback",
@@ -741,15 +695,14 @@ mod tests {
             "peer_feedback",
             "continuous_performance",
         ];
-        for feature in mobile_features {
+for feature in mobile_features {,
             assert!(
                 service.supports_performance_feature(feature),
                 "Mobile feature {} should be supported",
-                feature
-            );
+                feature,
+);
         }
-
-        // 测试安全与合规功能
+// 测试安全与合规功能
         let security_features = vec![
             "data_security",
             "privacy_compliance",
@@ -759,15 +712,14 @@ mod tests {
             "consent_management",
             "regulatory_compliance",
         ];
-        for feature in security_features {
+for feature in security_features {,
             assert!(
                 service.supports_performance_feature(feature),
                 "Security feature {} should be supported",
-                feature
-            );
+                feature,
+);
         }
-
-        // 测试智能化功能
+// 测试智能化功能
         let ai_features = vec![
             "ai_assisted_reviews",
             "smart_recommendations",
@@ -777,15 +729,14 @@ mod tests {
             "behavioral_analysis",
             "performance_optimization",
         ];
-        for feature in ai_features {
+for feature in ai_features {,
             assert!(
                 service.supports_performance_feature(feature),
                 "AI feature {} should be supported",
-                feature
-            );
+                feature,
+);
         }
-
-        // 测试报表与可视化功能
+// 测试报表与可视化功能
         let reporting_features = vec![
             "performance_dashboards",
             "custom_reports",
@@ -795,177 +746,155 @@ mod tests {
             "interactive_charts",
             "scheduled_reporting",
         ];
-        for feature in reporting_features {
+for feature in reporting_features {,
             assert!(
                 service.supports_performance_feature(feature),
                 "Reporting feature {} should be supported",
-                feature
-            );
+                feature,
+);
         }
-
-        // 测试不支持的功能
+// 测试不支持的功能
         assert!(!service.supports_performance_feature("unsupported_feature"));
-        assert!(!service.supports_performance_feature("quantum_performance"));
+assert!(!service.supports_performance_feature("quantum_performance"));
         assert!(!service.supports_performance_feature(""));
-    }
-
-    #[test]
-    fn test_performance_service_health_check() {
-        let config = create_test_config();
+}
+#[test],
+    fn test_performance_service_health_check() {,
+let config = create_test_config();
         let service = PerformanceService::new(config);
-
-        // 测试健康检查通过
+// 测试健康检查通过
         assert!(service.health_check());
-
-        // 测试健康检查失败 - 无效配置
+// 测试健康检查失败 - 无效配置
         let invalid_config = Config::builder().app_id("").app_secret("").build();
-        let invalid_service = PerformanceService::new(invalid_config);
+let invalid_service = PerformanceService::new(invalid_config);
         assert!(!invalid_service.health_check());
-    }
-
-    #[test]
-    fn test_performance_service_capability_matrices() {
-        let config = create_test_config();
+}
+#[test],
+    fn test_performance_service_capability_matrices() {,
+let config = create_test_config();
         let service = PerformanceService::new(config);
-
-        // 测试绩效管理能力矩阵
+// 测试绩效管理能力矩阵
         let performance_capabilities = service.get_performance_capabilities_matrix();
-        assert!(performance_capabilities.contains("PerformanceService Capabilities"));
+assert!(performance_capabilities.contains("PerformanceService Capabilities"));
         assert!(performance_capabilities.contains("goal: true"));
-        assert!(performance_capabilities.contains("assessment: true"));
+assert!(performance_capabilities.contains("assessment: true"));
         assert!(performance_capabilities.contains("analytics: true"));
-        assert!(performance_capabilities.contains("development: true"));
+assert!(performance_capabilities.contains("development: true"));
         assert!(performance_capabilities.contains("incentive: true"));
-        assert!(performance_capabilities.contains("mobile: true"));
-
+assert!(performance_capabilities.contains("mobile: true"));
         // 测试企业级功能矩阵
-        let enterprise_features = service.get_enterprise_features_matrix();
+let enterprise_features = service.get_enterprise_features_matrix();
         assert!(enterprise_features.contains("PerformanceService Enterprise"));
-        assert!(enterprise_features.contains("multi_entity: true"));
+assert!(enterprise_features.contains("multi_entity: true"));
         assert!(enterprise_features.contains("global: true"));
-        assert!(enterprise_features.contains("scalable: true"));
+assert!(enterprise_features.contains("scalable: true"));
         assert!(enterprise_features.contains("integrated: true"));
-        assert!(enterprise_features.contains("compliant: true"));
+assert!(enterprise_features.contains("compliant: true"));
         assert!(enterprise_features.contains("secure: true"));
-
-        // 测试分析能力矩阵
+// 测试分析能力矩阵
         let analytics_capabilities = service.get_analytics_capabilities_matrix();
-        assert!(analytics_capabilities.contains("PerformanceService Analytics"));
+assert!(analytics_capabilities.contains("PerformanceService Analytics"));
         assert!(analytics_capabilities.contains("performance: true"));
-        assert!(analytics_capabilities.contains("predictive: true"));
+assert!(analytics_capabilities.contains("predictive: true"));
         assert!(analytics_capabilities.contains("comparative: true"));
-        assert!(analytics_capabilities.contains("talent: true"));
+assert!(analytics_capabilities.contains("talent: true"));
         assert!(analytics_capabilities.contains("trend: true"));
-        assert!(analytics_capabilities.contains("anomaly: true"));
-
+assert!(analytics_capabilities.contains("anomaly: true"));
         // 测试评估系统能力矩阵
-        let assessment_systems = service.get_assessment_systems_matrix();
+let assessment_systems = service.get_assessment_systems_matrix();
         assert!(assessment_systems.contains("PerformanceService Assessment"));
-        assert!(assessment_systems.contains("degree_360: true"));
+assert!(assessment_systems.contains("degree_360: true"));
         assert!(assessment_systems.contains("custom_templates: true"));
-        assert!(assessment_systems.contains("workflows: true"));
+assert!(assessment_systems.contains("workflows: true"));
         assert!(assessment_systems.contains("calibration: true"));
-        assert!(assessment_systems.contains("continuous: true"));
+assert!(assessment_systems.contains("continuous: true"));
         assert!(assessment_systems.contains("automated: true"));
-
-        // 测试技术架构能力矩阵
+// 测试技术架构能力矩阵
         let technical_architecture = service.get_technical_architecture_matrix();
-        assert!(technical_architecture.contains("PerformanceService Architecture"));
+assert!(technical_architecture.contains("PerformanceService Architecture"));
         assert!(technical_architecture.contains("cloud_native: true"));
-        assert!(technical_architecture.contains("microservices: true"));
+assert!(technical_architecture.contains("microservices: true"));
         assert!(technical_architecture.contains("api_first: true"));
-        assert!(technical_architecture.contains("secure: true"));
+assert!(technical_architecture.contains("secure: true"));
         assert!(technical_architecture.contains("scalable: true"));
-        assert!(technical_architecture.contains("ai_enabled: true"));
+assert!(technical_architecture.contains("ai_enabled: true"));
     }
-
-    #[test]
-    fn test_performance_service_get_performance_modules_statistics() {
-        let config = create_test_config();
+#[test],
+    fn test_performance_service_get_performance_modules_statistics() {,
+let config = create_test_config();
         let service = PerformanceService::new(config);
-
-        let modules_stats = service.get_performance_modules_statistics();
+let modules_stats = service.get_performance_modules_statistics();
         assert!(modules_stats.contains("PerformanceService Modules"));
-        assert!(modules_stats.contains("goal: 7"));
+assert!(modules_stats.contains("goal: 7"));
         assert!(modules_stats.contains("assessment: 7"));
-        assert!(modules_stats.contains("analytics: 7"));
+assert!(modules_stats.contains("analytics: 7"));
         assert!(modules_stats.contains("development: 7"));
-        assert!(modules_stats.contains("configuration: 7"));
+assert!(modules_stats.contains("configuration: 7"));
         assert!(modules_stats.contains("enterprise: 7"));
-        assert!(modules_stats.contains("total: 42"));
+assert!(modules_stats.contains("total: 42"));
     }
-
-    #[test]
-    fn test_performance_service_get_data_security_status() {
-        let config = create_test_config();
+#[test],
+    fn test_performance_service_get_data_security_status() {,
+let config = create_test_config();
         let service = PerformanceService::new(config);
-
-        let security_status = service.get_data_security_status();
+let security_status = service.get_data_security_status();
         assert!(security_status.contains("PerformanceService Security"));
-        assert!(security_status.contains("encryption: AES256"));
+assert!(security_status.contains("encryption: AES256"));
         assert!(security_status.contains("access_control: RBAC"));
-        assert!(security_status.contains("audit_logging: true"));
+assert!(security_status.contains("audit_logging: true"));
         assert!(security_status.contains("data_masking: true"));
-        assert!(security_status.contains("privacy: GDPR_COMPLIANT"));
+assert!(security_status.contains("privacy: GDPR_COMPLIANT"));
         assert!(security_status.contains("backup: true"));
-    }
-
-    #[test]
-    fn test_performance_service_get_integration_capabilities_matrix() {
-        let config = create_test_config();
+}
+#[test],
+    fn test_performance_service_get_integration_capabilities_matrix() {,
+let config = create_test_config();
         let service = PerformanceService::new(config);
-
-        let integration_capabilities = service.get_integration_capabilities_matrix();
+let integration_capabilities = service.get_integration_capabilities_matrix();
         assert!(integration_capabilities.contains("PerformanceService Integration"));
-        assert!(integration_capabilities.contains("restful_api: true"));
+assert!(integration_capabilities.contains("restful_api: true"));
         assert!(integration_capabilities.contains("webhooks: true"));
-        assert!(integration_capabilities.contains("sso: true"));
+assert!(integration_capabilities.contains("sso: true"));
         assert!(integration_capabilities.contains("hr_systems: true"));
-        assert!(integration_capabilities.contains("bi_tools: true"));
+assert!(integration_capabilities.contains("bi_tools: true"));
         assert!(integration_capabilities.contains("collaboration: true"));
-        assert!(integration_capabilities.contains("learning_platforms: true"));
+assert!(integration_capabilities.contains("learning_platforms: true"));
     }
-
-    #[test]
-    fn test_performance_service_get_goal_management_matrix() {
-        let config = create_test_config();
+#[test],
+    fn test_performance_service_get_goal_management_matrix() {,
+let config = create_test_config();
         let service = PerformanceService::new(config);
-
-        let goal_management = service.get_goal_management_matrix();
+let goal_management = service.get_goal_management_matrix();
         assert!(goal_management.contains("PerformanceService Goals"));
-        assert!(goal_management.contains("okr: true"));
+assert!(goal_management.contains("okr: true"));
         assert!(goal_management.contains("kpi: true"));
-        assert!(goal_management.contains("alignment: true"));
+assert!(goal_management.contains("alignment: true"));
         assert!(goal_management.contains("cascading: true"));
-        assert!(goal_management.contains("tracking: true"));
+assert!(goal_management.contains("tracking: true"));
         assert!(goal_management.contains("monitoring: true"));
-        assert!(goal_management.contains("reporting: true"));
+assert!(goal_management.contains("reporting: true"));
     }
-
-    #[test]
-    fn test_performance_service_get_talent_development_matrix() {
-        let config = create_test_config();
+#[test],
+    fn test_performance_service_get_talent_development_matrix() {,
+let config = create_test_config();
         let service = PerformanceService::new(config);
-
-        let talent_development = service.get_talent_development_matrix();
+let talent_development = service.get_talent_development_matrix();
         assert!(talent_development.contains("PerformanceService Development"));
-        assert!(talent_development.contains("planning: true"));
+assert!(talent_development.contains("planning: true"));
         assert!(talent_development.contains("training: true"));
-        assert!(talent_development.contains("coaching: true"));
+assert!(talent_development.contains("coaching: true"));
         assert!(talent_development.contains("succession: true"));
-        assert!(talent_development.contains("career_pathing: true"));
+assert!(talent_development.contains("career_pathing: true"));
         assert!(talent_development.contains("skill_gap: true"));
-        assert!(talent_development.contains("mentorship: true"));
+assert!(talent_development.contains("mentorship: true"));
     }
-
-    #[test]
-    fn test_performance_service_comprehensive_feature_support() {
-        let config = create_test_config();
+#[test],
+    fn test_performance_service_comprehensive_feature_support() {,
+let config = create_test_config();
         let service = PerformanceService::new(config);
-
-        // 测试所有支持的功能组合
-        let all_supported_features = vec![
-            // 目标管理体系功能 (7个)
+// 测试所有支持的功能组合
+        let all_supported_features = vec![,
+// 目标管理体系功能 (7个)
             "goal_management",
             "okr_system",
             "kpi_tracking",
@@ -1054,18 +983,16 @@ mod tests {
             "interactive_charts",
             "scheduled_reporting",
         ];
-
-        for feature in all_supported_features {
+for feature in all_supported_features {,
             assert!(
                 service.supports_performance_feature(feature),
                 "Feature {} should be supported",
-                feature
-            );
+                feature,
+);
         }
-
-        // 验证功能数量 (共10类 * 7个功能 = 70个功能)
+// 验证功能数量 (共10类 * 7个功能 = 70个功能)
         let mut feature_count = 0;
-        let all_test_features = vec![
+let all_test_features = vec![,
             "goal_management",
             "okr_system",
             "kpi_tracking",
@@ -1144,217 +1071,183 @@ mod tests {
             "interactive_charts",
             "scheduled_reporting",
             "nonexistent_feature", // 测试不支持的功能
-        ];
-
-        for feature in all_test_features {
-            if service.supports_performance_feature(feature) {
+];
+        for feature in all_test_features {,
+if service.supports_performance_feature(feature) {,
                 feature_count += 1;
-            }
+}
         }
         assert_eq!(feature_count, 77); // 确保支持77个功能
-    }
-
-    #[test]
-    fn test_performance_service_edge_cases() {
-        // 测试特殊字符配置
+}
+#[test],
+    fn test_performance_service_edge_cases() {,
+// 测试特殊字符配置
         let special_config = Config::builder()
-            .app_id("绩效服务_📊_ID")
-            .app_secret("绩效密钥_🎯_Secret")
-            .build();
+.app_id()
+            .app_secret()
+.build();
         let special_service = PerformanceService::new(special_config);
-
-        assert!(special_service.validate_performance_config());
+assert!(special_service.validate_performance_config());
         assert!(special_service.health_check());
-        assert!(special_service
+assert!(special_service,
             .get_performance_statistics()
-            .contains("绩效服务"));
+.contains("绩效服务"));
         assert!(special_service.get_performance_statistics().contains("📊"));
-
-        // 测试长字符串配置
+// 测试长字符串配置
         let long_app_id = "a".repeat(100);
-        let long_config = Config::builder()
-            .app_id(&long_app_id)
-            .app_secret("test_secret_long_enough")
+let long_config = Config::builder()
+            .app_id()
+.app_secret()
             .build();
-        let long_service = PerformanceService::new(long_config);
-
+let long_service = PerformanceService::new(long_config);
         assert!(long_service.validate_performance_config());
-        assert!(long_service
+assert!(long_service,
             .get_performance_statistics()
-            .contains(&long_app_id));
+.contains(&long_app_id));
     }
-
-    #[test]
-    fn test_performance_service_enterprise_scenarios() {
-        let enterprise_config = Config::builder()
-            .app_id("enterprise_performance_app_id")
-            .app_secret("enterprise_performance_app_secret")
+#[test],
+    fn test_performance_service_enterprise_scenarios() {,
+let enterprise_config = Config::builder()
+            .app_id()
+.app_secret()
             .build();
-        let enterprise_service = PerformanceService::new(enterprise_config);
-
+let enterprise_service = PerformanceService::new(enterprise_config);
         // 测试企业级场景
-        assert!(enterprise_service.validate_performance_config());
+assert!(enterprise_service.validate_performance_config());
         assert!(enterprise_service.health_check());
-
-        // 验证企业绩效功能支持
+// 验证企业绩效功能支持
         assert!(enterprise_service.supports_performance_feature("goal_management"));
-        assert!(enterprise_service.supports_performance_feature("performance_assessment"));
+assert!(enterprise_service.supports_performance_feature("performance_assessment"));
         assert!(enterprise_service.supports_performance_feature("data_analytics"));
-        assert!(enterprise_service.supports_performance_feature("talent_development"));
+assert!(enterprise_service.supports_performance_feature("talent_development"));
         assert!(enterprise_service.supports_performance_feature("multi_entity_support"));
-        assert!(enterprise_service.supports_performance_feature("ai_assisted_reviews"));
-
+assert!(enterprise_service.supports_performance_feature("ai_assisted_reviews"));
         // 测试企业统计信息
-        let stats = enterprise_service.get_performance_statistics();
+let stats = enterprise_service.get_performance_statistics();
         assert!(stats.contains("enterprise_performance_app_id"));
-        assert!(stats.contains("modules: 4"));
+assert!(stats.contains("modules: 4"));
         assert!(stats.contains("features: 20"));
-
-        let modules_stats = enterprise_service.get_performance_modules_statistics();
+let modules_stats = enterprise_service.get_performance_modules_statistics();
         assert!(modules_stats.contains("total: 42"));
-
-        // 测试企业级功能矩阵
+// 测试企业级功能矩阵
         let enterprise_features = enterprise_service.get_enterprise_features_matrix();
-        assert!(enterprise_features.contains("multi_entity: true"));
+assert!(enterprise_features.contains("multi_entity: true"));
         assert!(enterprise_features.contains("global: true"));
-        assert!(enterprise_features.contains("scalable: true"));
+assert!(enterprise_features.contains("scalable: true"));
     }
-
-    #[test]
-    fn test_performance_service_error_handling_and_robustness() {
-        // 测试部分无效配置
+#[test],
+    fn test_performance_service_error_handling_and_robustness() {,
+// 测试部分无效配置
         let partial_invalid_config = Config::builder()
-            .app_id("valid_app_id")
+.app_id()
             .app_secret("") // 无效密钥
-            .build();
+.build();
         let partial_invalid_service = PerformanceService::new(partial_invalid_config);
-
-        // 健康检查应该失败，但服务仍然可用
+// 健康检查应该失败，但服务仍然可用
         assert!(!partial_invalid_service.health_check());
-        assert!(!partial_invalid_service.validate_performance_config());
-
+assert!(!partial_invalid_service.validate_performance_config());
         // 测试完全无效配置
-        let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
+let fully_invalid_config = Config::builder().app_id("").app_secret("").build();
         let fully_invalid_service = PerformanceService::new(fully_invalid_config);
-
-        assert!(!fully_invalid_service.health_check());
+assert!(!fully_invalid_service.health_check());
         assert!(!fully_invalid_service.validate_performance_config());
-
-        // 验证统计信息仍然可用
-        assert!(fully_invalid_service
-            .get_performance_statistics()
+// 验证统计信息仍然可用
+        assert!(fully_invalid_service,
+.get_performance_statistics()
             .contains("PerformanceService"));
-        assert!(fully_invalid_service
+assert!(fully_invalid_service,
             .get_performance_modules_statistics()
-            .contains("total: 42"));
+.contains("total: 42"));
     }
-
-    #[test]
-    fn test_performance_service_concurrent_access() {
-        use std::sync::Arc;
+#[test],
+    fn test_performance_service_concurrent_access() {,
+use std::sync::Arc;
         use std::thread;
-
-        let config = create_test_config();
+let config = create_test_config();
         let service = Arc::new(PerformanceService::new(config));
-        let mut handles = vec![];
-
+let mut handles = vec![];
         // 测试并发访问
-        for _ in 0..10 {
+for _ in 0..10 {,
             let service_clone = Arc::clone(&service);
-            let handle = thread::spawn(move || {
+let handle = thread::spawn(move || {,
                 // 验证并发访问的安全性
-                assert!(service_clone.validate_performance_config());
+assert!(service_clone.validate_performance_config());
                 assert!(service_clone.health_check());
-                assert!(service_clone.supports_performance_feature("goal_management"));
-
+assert!(service_clone.supports_performance_feature("goal_management"));
                 let stats = service_clone.get_performance_statistics();
-                assert!(stats.contains("PerformanceService"));
-
+assert!(stats.contains("PerformanceService"));
                 let modules_stats = service_clone.get_performance_modules_statistics();
-                assert!(modules_stats.contains("total: 42"));
-
+assert!(modules_stats.contains("total: 42"));
                 let security_status = service_clone.get_data_security_status();
-                assert!(security_status.contains("AES256"));
-
+assert!(security_status.contains("AES256"));
                 let performance_capabilities = service_clone.get_performance_capabilities_matrix();
-                assert!(performance_capabilities.contains("goal: true"));
+assert!(performance_capabilities.contains("goal: true"));
             });
-            handles.push(handle);
+handles.push(handle);
         }
-
-        // 等待所有线程完成
-        for handle in handles {
-            handle.join().unwrap();
+// 等待所有线程完成
+        for handle in handles {,
+handle.join().unwrap();
         }
-    }
-
-    #[test]
-    fn test_performance_service_performance_characteristics() {
-        let config = create_test_config();
+}
+#[test],
+    fn test_performance_service_performance_characteristics() {,
+let config = create_test_config();
         let service = PerformanceService::new(config);
-
-        // 测试性能特征
+// 测试性能特征
         let start = std::time::Instant::now();
-
-        // 执行多个操作
-        for _ in 0..1000 {
-            assert!(service.validate_performance_config());
+// 执行多个操作
+        for _ in 0..1000 {,
+assert!(service.validate_performance_config());
             assert!(service.supports_performance_feature("goal_management"));
-            let _stats = service.get_performance_statistics();
+let _stats = service.get_performance_statistics();
             let _modules_stats = service.get_performance_modules_statistics();
-            let _security_status = service.get_data_security_status();
+let _security_status = service.get_data_security_status();
             let _performance_capabilities = service.get_performance_capabilities_matrix();
-            let _enterprise_features = service.get_enterprise_features_matrix();
+let _enterprise_features = service.get_enterprise_features_matrix();
             let _analytics_capabilities = service.get_analytics_capabilities_matrix();
-            let _assessment_systems = service.get_assessment_systems_matrix();
+let _assessment_systems = service.get_assessment_systems_matrix();
             let _technical_architecture = service.get_technical_architecture_matrix();
-            let _integration_capabilities = service.get_integration_capabilities_matrix();
+let _integration_capabilities = service.get_integration_capabilities_matrix();
             let _goal_management = service.get_goal_management_matrix();
-            let _talent_development = service.get_talent_development_matrix();
+let _talent_development = service.get_talent_development_matrix();
         }
-
-        let duration = start.elapsed();
+let duration = start.elapsed();
         assert!(
             duration.as_millis() < 1000,
-            "Operations should complete quickly"
-        );
+            "Operations should complete quickly",
+);
     }
-
-    #[test]
-    fn test_performance_service_trait_implementation() {
-        let config = create_test_config();
+#[test],
+    fn test_performance_service_trait_implementation() {,
+let config = create_test_config();
         let service = PerformanceService::new(config);
-
-        // 测试Service trait实现
+// 测试Service trait实现
         let service_config = service.config();
         assert_eq!(service_config.app_id, "test_performance_app_id");
         assert_eq!(service_config.app_secret, "test_performance_app_secret");
-
-        // 测试Debug trait
+// 测试Debug trait
         let debug_str = format!("{:?}", service);
-        assert!(debug_str.contains("PerformanceService"));
+assert!(debug_str.contains("PerformanceService"));
         assert!(debug_str.contains("test_performance_app_id"));
-        assert!(debug_str.contains("goal_management"));
+assert!(debug_str.contains("goal_management"));
         assert!(debug_str.contains("performance_assessment"));
-        assert!(debug_str.contains("data_analytics"));
+assert!(debug_str.contains("data_analytics"));
         assert!(debug_str.contains("talent_development"));
-        assert!(debug_str.contains("ai_enabled"));
-
+assert!(debug_str.contains("ai_enabled"));
         // 测试Clone trait
-        let cloned_service = service.clone();
+let cloned_service = service.clone();
         assert_eq!(service.config().app_id, cloned_service.config().app_id);
-        assert_eq!(
+assert_eq!(,
             service.config().app_secret,
-            cloned_service.config().app_secret
-        );
+            cloned_service.config().app_secret,
+);
     }
-
-    #[test]
-    fn test_performance_service_goal_management_workflow() {
-        let config = create_test_config();
+#[test],
+    fn test_performance_service_goal_management_workflow() {,
+let config = create_test_config();
         let service = PerformanceService::new(config);
-
-        // 测试完整目标管理工作流的功能支持
+// 测试完整目标管理工作流的功能支持
         let workflow_features = vec![
             ("goal_management", "目标管理体系"),
             ("okr_system", "OKR管理系统"),
@@ -1363,29 +1256,26 @@ mod tests {
             ("progress_monitoring", "进度监控管理"),
         ];
 
-        for (feature, description) in workflow_features {
-            assert!(
+        for (feature, description) in workflow_features {,
+assert!(,
                 service.supports_performance_feature(feature),
                 "{}功能应该被支持",
-                description
-            );
+                description,
+);
         }
-
-        // 验证目标管理能力
+// 验证目标管理能力
         let goal_management = service.get_goal_management_matrix();
-        assert!(goal_management.contains("okr: true")); // OKR管理
+assert!(goal_management.contains("okr: true")); // OKR管理
         assert!(goal_management.contains("kpi: true")); // KPI管理
-        assert!(goal_management.contains("alignment: true")); // 目标对齐
+assert!(goal_management.contains("alignment: true")); // 目标对齐
         assert!(goal_management.contains("cascading: true")); // 目标级联
-        assert!(goal_management.contains("tracking: true")); // 目标跟踪
+assert!(goal_management.contains("tracking: true")); // 目标跟踪
     }
-
-    #[test]
-    fn test_performance_service_assessment_system_features() {
-        let config = create_test_config();
+#[test],
+    fn test_performance_service_assessment_system_features() {,
+let config = create_test_config();
         let service = PerformanceService::new(config);
-
-        // 测试评估系统功能
+// 测试评估系统功能
         let assessment_features = vec![
             "performance_assessment",
             "degree_360_feedback",
@@ -1395,31 +1285,27 @@ mod tests {
             "result_calibration",
             "evaluation_periods",
         ];
-
-        for feature in assessment_features {
+for feature in assessment_features {,
             assert!(
                 service.supports_performance_feature(feature),
                 "评估系统功能 {} 应该被支持",
-                feature
-            );
+                feature,
+);
         }
-
-        // 验证评估系统能力完整性
+// 验证评估系统能力完整性
         let assessment_systems = service.get_assessment_systems_matrix();
-        assert!(assessment_systems.contains("degree_360: true")); // 360度评估
+assert!(assessment_systems.contains("degree_360: true")); // 360度评估
         assert!(assessment_systems.contains("custom_templates: true")); // 定制模板
-        assert!(assessment_systems.contains("workflows: true")); // 评估流程
+assert!(assessment_systems.contains("workflows: true")); // 评估流程
         assert!(assessment_systems.contains("calibration: true")); // 结果校准
-        assert!(assessment_systems.contains("continuous: true")); // 持续评估
+assert!(assessment_systems.contains("continuous: true")); // 持续评估
         assert!(assessment_systems.contains("automated: true")); // 自动化评估
-    }
-
-    #[test]
-    fn test_performance_service_analytics_insights_features() {
-        let config = create_test_config();
+}
+#[test],
+    fn test_performance_service_analytics_insights_features() {,
+let config = create_test_config();
         let service = PerformanceService::new(config);
-
-        // 测试分析洞察功能
+// 测试分析洞察功能
         let analytics_features = vec![
             "data_analytics",
             "performance_analysis",
@@ -1429,31 +1315,27 @@ mod tests {
             "anomaly_detection",
             "dashboard_reporting",
         ];
-
-        for feature in analytics_features {
+for feature in analytics_features {,
             assert!(
                 service.supports_performance_feature(feature),
                 "分析洞察功能 {} 应该被支持",
-                feature
-            );
+                feature,
+);
         }
-
-        // 验证分析能力完整性
+// 验证分析能力完整性
         let analytics_capabilities = service.get_analytics_capabilities_matrix();
-        assert!(analytics_capabilities.contains("performance: true")); // 绩效分析
+assert!(analytics_capabilities.contains("performance: true")); // 绩效分析
         assert!(analytics_capabilities.contains("predictive: true")); // 预测分析
-        assert!(analytics_capabilities.contains("comparative: true")); // 对比分析
+assert!(analytics_capabilities.contains("comparative: true")); // 对比分析
         assert!(analytics_capabilities.contains("talent: true")); // 人才分析
-        assert!(analytics_capabilities.contains("trend: true")); // 趋势分析
+assert!(analytics_capabilities.contains("trend: true")); // 趋势分析
         assert!(analytics_capabilities.contains("anomaly: true")); // 异常检测
-    }
-
-    #[test]
-    fn test_performance_service_enterprise_integration_features() {
-        let config = create_test_config();
+}
+#[test],
+    fn test_performance_service_enterprise_integration_features() {,
+let config = create_test_config();
         let service = PerformanceService::new(config);
-
-        // 测试企业集成功能
+// 测试企业集成功能
         let integration_features = vec![
             "multi_entity_support",
             "global_performance",
@@ -1463,269 +1345,237 @@ mod tests {
             "api_management",
             "workflow_customization",
         ];
-
-        for feature in integration_features {
+for feature in integration_features {,
             assert!(
                 service.supports_performance_feature(feature),
                 "企业集成功能 {} 应该被支持",
-                feature
-            );
+                feature,
+);
         }
-
-        // 验证企业级功能支持
+// 验证企业级功能支持
         let enterprise_features = service.get_enterprise_features_matrix();
-        assert!(enterprise_features.contains("multi_entity: true")); // 多实体支持
+assert!(enterprise_features.contains("multi_entity: true")); // 多实体支持
         assert!(enterprise_features.contains("global: true")); // 全球化管理
-        assert!(enterprise_features.contains("scalable: true")); // 可扩展性
+assert!(enterprise_features.contains("scalable: true")); // 可扩展性
         assert!(enterprise_features.contains("integrated: true")); // 集成能力
-        assert!(enterprise_features.contains("compliant: true")); // 合规性
+assert!(enterprise_features.contains("compliant: true")); // 合规性
         assert!(enterprise_features.contains("secure: true")); // 安全性
-    }
-
-    #[test]
-    fn test_performance_service_comprehensive_integration() {
-        let config = create_test_config();
+}
+#[test],
+    fn test_performance_service_comprehensive_integration() {,
+let config = create_test_config();
         let service = PerformanceService::new(config);
-
-        // 综合集成测试
+// 综合集成测试
         assert!(service.validate_performance_config());
-        assert!(service.health_check());
-
+assert!(service.health_check());
         // 测试所有核心功能
-        assert!(service.supports_performance_feature("goal_management"));
+assert!(service.supports_performance_feature("goal_management"));
         assert!(service.supports_performance_feature("performance_assessment"));
-        assert!(service.supports_performance_feature("data_analytics"));
+assert!(service.supports_performance_feature("data_analytics"));
         assert!(service.supports_performance_feature("talent_development"));
-        assert!(service.supports_performance_feature("review_configuration"));
+assert!(service.supports_performance_feature("review_configuration"));
         assert!(service.supports_performance_feature("advanced_analytics"));
-        assert!(service.supports_performance_feature("multi_entity_support"));
+assert!(service.supports_performance_feature("multi_entity_support"));
         assert!(service.supports_performance_feature("mobile_performance"));
-        assert!(service.supports_performance_feature("data_security"));
+assert!(service.supports_performance_feature("data_security"));
         assert!(service.supports_performance_feature("ai_assisted_reviews"));
-        assert!(service.supports_performance_feature("performance_dashboards"));
-
+assert!(service.supports_performance_feature("performance_dashboards"));
         // 测试统计和调试功能
-        let stats = service.get_performance_statistics();
+let stats = service.get_performance_statistics();
         assert!(stats.contains("test_performance_app_id"));
-        assert!(stats.contains("modules: 4"));
+assert!(stats.contains("modules: 4"));
         assert!(stats.contains("features: 20"));
-
-        let modules_stats = service.get_performance_modules_statistics();
+let modules_stats = service.get_performance_modules_statistics();
         assert!(modules_stats.contains("total: 42"));
-
-        // 测试数据安全状态
+// 测试数据安全状态
         let security_status = service.get_data_security_status();
-        assert!(security_status.contains("AES256"));
+assert!(security_status.contains("AES256"));
         assert!(security_status.contains("GDPR_COMPLIANT"));
-
-        // 测试各种能力矩阵
+// 测试各种能力矩阵
         let performance_capabilities = service.get_performance_capabilities_matrix();
-        assert!(performance_capabilities.contains("goal: true"));
-
+assert!(performance_capabilities.contains("goal: true"));
         let integration_capabilities = service.get_integration_capabilities_matrix();
-        assert!(integration_capabilities.contains("restful_api: true"));
+assert!(integration_capabilities.contains("restful_api: true"));
     }
-
-    #[test]
-    fn test_performance_service_with_custom_config() {
-        let config = Config::builder()
-            .app_id("performance_test_app")
-            .app_secret("performance_test_secret")
-            .req_timeout(Duration::from_secs(120))
-            .build();
-
+#[test],
+    fn test_performance_service_with_custom_config() {,
+let config = Config::builder()
+            .app_id()
+.app_secret()
+            .req_timeout(Duration::from_secs(120)),
+.build();
         let service = PerformanceService::new(config.clone());
-
-        // 验证自定义配置正确应用
+// 验证自定义配置正确应用
         assert_eq!(service.review_config.config.app_id, "performance_test_app");
-        assert_eq!(
+assert_eq!(,
             service.review_config.config.app_secret,
-            "performance_test_secret"
-        );
+            "performance_test_secret",
+);
         assert_eq!(
             service.review_config.config.req_timeout,
-            Some(Duration::from_secs(120))
-        );
-
+            Some(Duration::from_secs(120)),
+);
         assert_eq!(service.stage_task.config.app_id, "performance_test_app");
-        assert_eq!(
+assert_eq!(,
             service.stage_task.config.app_secret,
-            "performance_test_secret"
-        );
+            "performance_test_secret",
+);
         assert_eq!(
             service.stage_task.config.req_timeout,
-            Some(Duration::from_secs(120))
-        );
-
+            Some(Duration::from_secs(120)),
+);
         assert_eq!(service.metric_detail.config.app_id, "performance_test_app");
-        assert_eq!(
+assert_eq!(,
             service.metric_detail.config.app_secret,
-            "performance_test_secret"
-        );
+            "performance_test_secret",
+);
         assert_eq!(
             service.metric_detail.config.req_timeout,
-            Some(Duration::from_secs(120))
-        );
-
+            Some(Duration::from_secs(120)),
+);
         assert_eq!(service.review_data.config.app_id, "performance_test_app");
-        assert_eq!(
+assert_eq!(,
             service.review_data.config.app_secret,
-            "performance_test_secret"
-        );
+            "performance_test_secret",
+);
         assert_eq!(
             service.review_data.config.req_timeout,
-            Some(Duration::from_secs(120))
-        );
-
+            Some(Duration::from_secs(120)),
+);
         // 验证功能支持
-        assert!(service.validate_performance_config());
+assert!(service.validate_performance_config());
         assert!(service.health_check());
-    }
-
-    #[test]
-    fn test_performance_service_config_independence() {
-        let config1 = Config::builder()
-            .app_id("performance_app_1")
-            .app_secret("performance_secret_1")
+}
+#[test],
+    fn test_performance_service_config_independence() {,
+let config1 = Config::builder()
+            .app_id()
+.app_secret()
             .build();
-
-        let config2 = Config::builder()
-            .app_id("performance_app_2")
-            .app_secret("performance_secret_2")
+let config2 = Config::builder()
+            .app_id()
+.app_secret()
             .build();
-
-        let service1 = PerformanceService::new(config1);
+let service1 = PerformanceService::new(config1);
         let service2 = PerformanceService::new(config2);
 
         assert_eq!(service1.review_config.config.app_id, "performance_app_1");
         assert_eq!(service2.review_config.config.app_id, "performance_app_2");
-        assert_ne!(
+assert_ne!(,
             service1.review_config.config.app_id,
-            service2.review_config.config.app_id
-        );
+            service2.review_config.config.app_id,
+);
         assert_ne!(
             service1.stage_task.config.app_id,
-            service2.stage_task.config.app_id
-        );
+            service2.stage_task.config.app_id,
+);
         assert_ne!(
             service1.metric_detail.config.app_id,
-            service2.metric_detail.config.app_id
-        );
+            service2.metric_detail.config.app_id,
+);
         assert_ne!(
             service1.review_data.config.app_id,
-            service2.review_data.config.app_id
-        );
+            service2.review_data.config.app_id,
+);
     }
-
-    #[test]
-    fn test_performance_service_all_sub_services_accessible() {
-        let config = Config::default();
+#[test],
+    fn test_performance_service_all_sub_services_accessible() {,
+let config = Config::default();
         let service = PerformanceService::new(config.clone());
 
         assert_eq!(service.review_config.config.app_id, config.app_id);
         assert_eq!(service.stage_task.config.app_id, config.app_id);
         assert_eq!(service.metric_detail.config.app_id, config.app_id);
         assert_eq!(service.review_data.config.app_id, config.app_id);
-    }
-
-    #[test]
-    fn test_performance_service_config_cloning() {
-        let config = Config::builder()
-            .app_id("clone_test_app")
-            .app_secret("clone_test_secret")
+}
+#[test],
+    fn test_performance_service_config_cloning() {,
+let config = Config::builder()
+            .app_id()
+.app_secret()
             .build();
-
-        let service = PerformanceService::new(config.clone());
-
+let service = PerformanceService::new(config.clone());
         assert_eq!(service.review_config.config.app_id, "clone_test_app");
         assert_eq!(service.review_config.config.app_secret, "clone_test_secret");
         assert_eq!(service.stage_task.config.app_secret, "clone_test_secret");
         assert_eq!(service.metric_detail.config.app_id, "clone_test_app");
         assert_eq!(service.review_data.config.app_secret, "clone_test_secret");
-    }
-
-    #[test]
-    fn test_performance_service_timeout_propagation() {
-        let config = Config::builder()
-            .req_timeout(Duration::from_secs(200))
-            .build();
-
+}
+#[test],
+    fn test_performance_service_timeout_propagation() {,
+let config = Config::builder()
+            .req_timeout(Duration::from_secs(200)),
+.build();
         let service = PerformanceService::new(config);
-
-        assert_eq!(
+assert_eq!(,
             service.review_config.config.req_timeout,
-            Some(Duration::from_secs(200))
-        );
+            Some(Duration::from_secs(200)),
+);
         assert_eq!(
             service.stage_task.config.req_timeout,
-            Some(Duration::from_secs(200))
-        );
+            Some(Duration::from_secs(200)),
+);
         assert_eq!(
             service.metric_detail.config.req_timeout,
-            Some(Duration::from_secs(200))
-        );
+            Some(Duration::from_secs(200)),
+);
         assert_eq!(
             service.review_data.config.req_timeout,
-            Some(Duration::from_secs(200))
-        );
+            Some(Duration::from_secs(200)),
+);
     }
-
-    #[test]
-    fn test_performance_service_multiple_instances() {
-        let config = Config::default();
-
+#[test],
+    fn test_performance_service_multiple_instances() {,
+let config = Config::default();
         let service1 = PerformanceService::new(config.clone());
-        let service2 = PerformanceService::new(config.clone());
-
+let service2 = PerformanceService::new(config.clone());
         assert_eq!(
             service1.review_config.config.app_id,
-            service2.review_config.config.app_id
-        );
+            service2.review_config.config.app_id,
+);
         assert_eq!(
             service1.review_config.config.app_secret,
-            service2.review_config.config.app_secret
-        );
+            service2.review_config.config.app_secret,
+);
         assert_eq!(
             service1.stage_task.config.app_id,
-            service2.stage_task.config.app_id
-        );
+            service2.stage_task.config.app_id,
+);
         assert_eq!(
             service1.metric_detail.config.app_secret,
-            service2.metric_detail.config.app_secret
-        );
+            service2.metric_detail.config.app_secret,
+);
         assert_eq!(
             service1.review_data.config.app_id,
-            service2.review_data.config.app_id
-        );
+            service2.review_data.config.app_id,
+);
     }
-
-    #[test]
-    fn test_performance_service_config_consistency() {
-        let config = Config::builder()
-            .app_id("consistency_test")
-            .app_secret("consistency_secret")
-            .req_timeout(Duration::from_secs(250))
-            .build();
-
+#[test],
+    fn test_performance_service_config_consistency() {,
+let config = Config::builder()
+            .app_id()
+.app_secret()
+            .req_timeout(Duration::from_secs(250)),
+.build();
         let service = PerformanceService::new(config);
 
         assert_eq!(service.review_config.config.app_id, "consistency_test");
-        assert_eq!(
+assert_eq!(,
             service.review_config.config.app_secret,
-            "consistency_secret"
-        );
+            "consistency_secret",
+);
         assert_eq!(
             service.review_config.config.req_timeout,
-            Some(Duration::from_secs(250))
-        );
+            Some(Duration::from_secs(250)),
+);
         assert_eq!(service.stage_task.config.app_id, "consistency_test");
-        assert_eq!(
+assert_eq!(,
             service.metric_detail.config.app_secret,
-            "consistency_secret"
-        );
+            "consistency_secret",
+);
         assert_eq!(
             service.review_data.config.req_timeout,
-            Some(Duration::from_secs(250))
-        );
+            Some(Duration::from_secs(250)),
+);
     }
 }

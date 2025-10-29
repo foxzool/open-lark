@@ -45,7 +45,7 @@ impl Default for FeishuCardMarkdown {
 impl FeishuCardMarkdown {
     pub fn new(text: &str) -> Self {
         Self {
-            content: text.to_string(),
+            content: text.to_string()
             ..Default::default()
         }
     }

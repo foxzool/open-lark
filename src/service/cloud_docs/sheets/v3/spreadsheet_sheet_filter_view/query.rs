@@ -1,14 +1,13 @@
 use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
-
-use crate::
+use crate::,
 {
-    core::
-    {
+    core::,
+{,
         BaseResponse,
         ResponseFormat,
-        api_resp::{ApiResponseTrait
-    },
+        api_resp::{ApiResponseTrait,
+},
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -17,30 +16,27 @@ use crate::
 };
     service::sheets::v3::SpreadsheetSheetFilterViewService,
 };
-
 impl SpreadsheetSheetFilterViewService {
-    /// 查询筛选视图
-    pub async fn query(
+    /// 查询筛选视图,
+pub async fn query(,
         &self,
         request: QueryFilterViewRequest,
         option: Option<RequestOption>,
-    ) -> SDKResult<BaseResponse<QueryFilterViewResponseData>> {
-        let mut api_req = request.api_request;
+    ) -> SDKResult<BaseResponse<QueryFilterViewResponseData>> {,
+let mut api_req = request.api_request;
         api_req.set_http_method(Method::GET);
-        api_req.api_path = SHEETS_V3_SPREADSHEET_FILTER_VIEWS
+api_req.api_path = SHEETS_V3_SPREADSHEET_FILTER_VIEWS,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
-        api_req
+api_req,
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
-
-        Ok(api_resp)
-    }
-}
-
-/// 查询筛选视图请求
-#[derive(Default, Debug, Serialize, Deserialize)]
+Ok(api_resp),
+    },
+},
+/// 查询筛选视图请求,
+#[derive(Default, Debug, Serialize, Deserialize)],
 pub struct QueryFilterViewRequest {
     #[serde(skip)]
     api_request: ApiRequest,
@@ -49,50 +45,43 @@ pub struct QueryFilterViewRequest {
     /// sheet 的 id
     sheet_id: String,
 }
-
 impl QueryFilterViewRequest {
-    pub fn builder() -> QueryFilterViewRequestBuilder {
-        QueryFilterViewRequestBuilder::default()
-    }
-}
-
-#[derive(Default)]
+    pub fn builder() -> QueryFilterViewRequestBuilder {,
+QueryFilterViewRequestBuilder::default(),
+    },
+},
+#[derive(Default)],
 pub struct QueryFilterViewRequestBuilder {
     request: QueryFilterViewRequest,
 }
-
 impl QueryFilterViewRequestBuilder {
-    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
-        self.request.spreadsheet_token = spreadsheet_token.to_string();
-        self
-    }
-
-    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
-        self.request.sheet_id = sheet_id.to_string();
-        self
-    }
-
-    pub fn build(mut self) -> QueryFilterViewRequest {
-        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        self.request
-    }
+    pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {,
+self.request.spreadsheet_token = spreadsheet_token.to_string();
+        self,
 }
 
-/// 查询筛选视图响应体最外层
-#[derive(Deserialize, Debug)]
+    pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {,
+self.request.sheet_id = sheet_id.to_string();
+        self,
+},
+pub fn build(mut self) -> QueryFilterViewRequest {,
+        self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
+self.request,
+    },
+},
+/// 查询筛选视图响应体最外层,
+#[derive(Deserialize, Debug)],
 pub struct QueryFilterViewResponseData {
     /// 筛选视图列表
     pub items: Vec<FilterViewInfo>,
 }
-
-impl ApiResponseTrait for QueryFilterViewResponseData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 筛选视图信息
-#[derive(Deserialize, Debug)]
+impl ApiResponseTrait for QueryFilterViewResponseData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+/// 筛选视图信息,
+#[derive(Deserialize, Debug)],
 pub struct FilterViewInfo {
     /// 筛选视图 ID
     pub filter_view_id: String,

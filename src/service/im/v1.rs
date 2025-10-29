@@ -7,23 +7,20 @@ use crate::{
         pin::PinService, url_preview::UrlPreviewService,
     },
 };
-
-// 现有模块
+// 现有模块,
 pub mod chats;
 pub mod message;
 pub mod message_service;
 pub mod p2_im_message_read_v1;
 pub mod p2_im_message_receive_v1;
-
-// IM 事件模块
+// IM 事件模块,
 pub mod p2_im_chat_created_v1;
 pub mod p2_im_chat_disbanded_v1;
 pub mod p2_im_chat_member_user_added_v1;
 pub mod p2_im_chat_member_user_deleted_v1;
 pub mod p2_im_chat_updated_v1;
 pub mod p2_im_message_recalled_v1;
-
-// 新增模块
+// 新增模块,
 pub mod batch_message;
 pub mod buzz_messages;
 pub mod file;
@@ -33,10 +30,9 @@ pub mod message_reaction;
 pub mod models;
 pub mod pin;
 pub mod url_preview;
-
 #[derive(Debug)]
 pub struct V1 {
-    // 现有服务
+// 现有服务,
     pub chats: ChatsService,
     pub message: MessageService,
 
@@ -50,12 +46,11 @@ pub struct V1 {
     pub buzz_messages: BuzzMessagesService,
     pub url_preview: UrlPreviewService,
 }
-
 impl V1 {
-    pub fn new(config: Config) -> Self {
-        Self {
-            // 现有服务
-            chats: ChatsService {
+    pub fn new(config: Config) -> Self {,
+Self {,
+            // 现有服务,
+chats: ChatsService {,
                 config: config.clone(),
             },
             message: MessageService {
@@ -71,6 +66,6 @@ impl V1 {
             message_card: MessageCardService::new(config.clone()),
             buzz_messages: BuzzMessagesService::new(config.clone()),
             url_preview: UrlPreviewService::new(config),
-        }
-    }
+        },
+}
 }

@@ -9,7 +9,6 @@ pub mod offer_settings;
 pub mod subject;
 
 use crate::core::{config::Config, trait_system::Service};
-
 use application::ApplicationConfigService;
 use auth::AuthService;
 use interview_settings::InterviewSettingsService;
@@ -19,13 +18,12 @@ use job_requirement::JobRequirementService;
 use location::LocationService;
 use offer_settings::OfferSettingsService;
 use subject::SubjectService;
-
 /// 招聘相关配置服务
-///
+///,
 /// 提供招聘系统的基础配置功能，包括地址管理、权限设置、
 /// 职位管理、招聘需求、流程配置、候选人配置等核心配置服务。
 pub struct RecruitmentConfigService {
-    /// 地址服务
+/// 地址服务
     pub location: LocationService,
     /// 权限服务
     pub auth: AuthService,
@@ -44,10 +42,9 @@ pub struct RecruitmentConfigService {
     /// Offer设置服务
     pub offer_settings: OfferSettingsService,
 }
-
 impl RecruitmentConfigService {
-    pub fn new(config: Config) -> Self {
-        Self {
+    pub fn new() -> Self {
+Self {,
             location: LocationService::new(config.clone()),
             auth: AuthService::new(config.clone()),
             job: JobService::new(config.clone()),
@@ -58,19 +55,16 @@ impl RecruitmentConfigService {
             interview_settings: InterviewSettingsService::new(config.clone()),
             offer_settings: OfferSettingsService::new(config),
         }
-    }
 }
-
-impl Service for RecruitmentConfigService {
-    fn config(&self) -> &Config {
-        &self.location.config
+}
+impl Service for RecruitmentConfigService {,
+    fn config(&self) -> &Config {,
+&self.location.config,
     }
-
-    fn service_name() -> &'static str {
-        "recruitment_config"
-    }
-
-    fn service_version() -> &'static str {
-        "v1"
-    }
+fn service_name() -> &'static str {,
+        "recruitment_config",
+}
+fn service_version() -> &'static str {,
+        "v1",
+}
 }

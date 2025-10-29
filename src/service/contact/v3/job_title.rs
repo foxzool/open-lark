@@ -1,5 +1,5 @@
 use open_lark_core::core::api_req::ApiRequest;
-use crate::{
+use crate::{,
     core::{
         api_resp::ApiResponseTrait, config::Config,
         constants::AccessTokenType, endpoints::EndpointBuilder, http::Transport,
@@ -7,23 +7,20 @@ use crate::{
     service::contact::models::*,
 };
 use serde::{Deserialize, Serialize};
-
-/// 职务服务
+/// 职务服务,
 pub struct JobTitleService {
     config: Config,
 }
-
 impl JobTitleService {
     pub fn new(config: Config) -> Self {
-        Self { config }
-    }
-    /// # API文档
-    ///
-    /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get
-
+        Self { config },
+},
+/// # API文档,
+    ///,
+/// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get,
     /// 获取单个职务信息
-    pub async fn get(&self, job_title_id: &str) -> crate::core::SDKResult<GetJobTitleResponse> {
-        let api_req = ApiRequest {
+    pub async fn get(&self, job_title_id: &str) -> crate::core::SDKResult<GetJobTitleResponse> {,
+let api_req = ApiRequest {,
             http_method: reqwest::Method::GET,
             api_path: EndpointBuilder::replace_param(
                 crate::core::endpoints::contact::CONTACT_V3_JOB_TITLE_GET,
@@ -32,44 +29,42 @@ impl JobTitleService {
             ),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
-            ..Default::default()
-        };
+            ..Default::default(),
+};
 
         let resp = Transport::<GetJobTitleResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
-    }
-
-    /// 获取租户职务列表
+Ok(resp.data.unwrap_or_default()),
+    },
+/// 获取租户职务列表,
     pub async fn list(
         &self,
         _req: &ListJobTitlesRequest,
-    ) -> crate::core::SDKResult<ListJobTitlesResponse> {
-        let api_req = ApiRequest {
+    ) -> crate::core::SDKResult<ListJobTitlesResponse> {,
+let api_req = ApiRequest {,
             http_method: reqwest::Method::GET,
             api_path: crate::core::endpoints::contact::CONTACT_V3_JOB_TITLES.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant],
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
-            ..Default::default()
-        };
+            ..Default::default(),
+};
 
         let resp = Transport::<ListJobTitlesResponse>::request(api_req, &self.config, None).await?;
-        Ok(resp.data.unwrap_or_default())
-    }
+Ok(resp.data.unwrap_or_default()),
+    },
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)],
 pub struct GetJobTitleResponse {
     pub job_title: JobTitle,
 }
-
-impl ApiResponseTrait for GetJobTitleResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
-    }
+impl ApiResponseTrait for GetJobTitleResponse {,
+    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+crate::core::api_resp::ResponseFormat::Data,
+    },
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)],
 pub struct ListJobTitlesRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
@@ -77,7 +72,7 @@ pub struct ListJobTitlesRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)],
 pub struct ListJobTitlesResponse {
     pub items: Vec<JobTitle>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -85,9 +80,8 @@ pub struct ListJobTitlesResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
-
-impl ApiResponseTrait for ListJobTitlesResponse {
-    fn data_format() -> crate::core::api_resp::ResponseFormat {
-        crate::core::api_resp::ResponseFormat::Data
-    }
+impl ApiResponseTrait for ListJobTitlesResponse {,
+    fn data_format() -> crate::core::api_resp::ResponseFormat {,
+crate::core::api_resp::ResponseFormat::Data,
+    },
 }

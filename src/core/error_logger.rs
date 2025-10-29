@@ -503,7 +503,7 @@ impl ErrorLogger {
             OutputTarget::Multiple(targets) => {
                 for target in targets {
                     let temp_config = LoggerConfig {
-                        output: target.clone(),
+                        output: target.clone()
                         ..self.config.clone()
                     };
                     let temp_logger = ErrorLogger::new(temp_config);

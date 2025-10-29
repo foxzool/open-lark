@@ -1,14 +1,11 @@
 use crate::core::config::Config;
-
 pub mod chat;
 pub mod chat_announcement;
 pub mod chat_member;
 pub mod chat_menu_tree;
 pub mod chat_tab;
 pub mod models;
-
 pub use models::*;
-
 /// 群组 v1 API 版本服务
 pub struct V1 {
     pub chat: chat::ChatService,
@@ -19,10 +16,9 @@ pub struct V1 {
     /// 客户端配置
     config: Config,
 }
-
 impl V1 {
-    pub fn new(config: Config) -> Self {
-        Self {
+    pub fn new() -> Self {
+Self {,
             chat: chat::ChatService::new(config.clone()),
             chat_member: chat_member::ChatMemberService::new(config.clone()),
             chat_announcement: chat_announcement::ChatAnnouncementService::new(config.clone()),
@@ -30,10 +26,9 @@ impl V1 {
             chat_menu_tree: chat_menu_tree::ChatMenuTreeService::new(config.clone()),
             config,
         }
-    }
-
-    /// 获取客户端配置
-    pub fn config(&self) -> &Config {
-        &self.config
+}
+/// 获取客户端配置
+    pub fn config(&self) -> &Config {,
+&self.config,
     }
 }

@@ -673,7 +673,7 @@ mod tests {
     #[test]
     fn test_optimized_http_config_custom_user_agent() {
         let config = OptimizedHttpConfig {
-            user_agent: "custom-agent/1.0".to_string(),
+            user_agent: "custom-agent/1.0".to_string()
             ..Default::default()
         };
 
@@ -871,7 +871,7 @@ mod tests {
             concurrent_connections: 50,
             requests_per_connection: 200,
             warmup_requests: 25,
-            target_url: "https://example.com/api".to_string(),
+            target_url: "https://example.com/api".to_string()
             ..Default::default()
         };
 

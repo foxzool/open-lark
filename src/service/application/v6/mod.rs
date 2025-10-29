@@ -5,9 +5,7 @@ pub mod application;
 pub mod application_feedback;
 pub mod appstore_paid_info;
 pub mod scope;
-
 use crate::core::config::Config;
-
 /// Application API v6版本服务
 pub struct V6 {
     /// 应用信息管理
@@ -25,10 +23,9 @@ pub struct V6 {
     /// 应用红点
     pub app_badge: app_badge::AppBadgeService,
 }
-
 impl V6 {
-    pub fn new(config: Config) -> Self {
-        Self {
+    pub fn new() -> Self {
+Self {,
             application: application::ApplicationService::new(config.clone()),
             scope: scope::ScopeService::new(config.clone()),
             admin: admin::AdminService::new(config.clone()),
@@ -39,5 +36,5 @@ impl V6 {
             ),
             app_badge: app_badge::AppBadgeService::new(config),
         }
-    }
+}
 }

@@ -3,9 +3,8 @@ use crate::core::{
 };
 use serde::{Deserialize, Serialize};
 use open_lark_core::core::api_req::ApiRequest;
-
 /// 班次信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct Shift {
     /// 班次 ID
     pub shift_id: String,
@@ -43,19 +42,17 @@ pub struct Shift {
     pub create_time: Option<String>,
     /// 修改时间
     pub update_time: Option<String>,
-}
-
-/// 弹性打卡规则
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 弹性打卡规则,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct FlexibleRule {
     /// 弹性打卡时间，单位：分钟
     pub flexible_early_minutes: i32,
     /// 弹性打卡时间，单位：分钟
     pub flexible_late_minutes: i32,
-}
-
-/// 打卡时间规则
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 打卡时间规则,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct PunchTimeRule {
     /// 上班时间，格式：HH:mm
     pub on_time: String,
@@ -73,26 +70,24 @@ pub struct PunchTimeRule {
     pub early_minutes_as_early: Option<i32>,
     /// 早走早到规则
     pub early_minutes_as_lack: Option<i32>,
-}
-
-/// 人脸识别打卡配置
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+},
+/// 人脸识别打卡配置,
+#[derive(Debug, Clone, Serialize, Deserialize, Default)],
 pub struct FacePunchConfig {
-    // TODO: Add fields
-}
-
-/// 创建班次请求
-#[derive(Default, Debug)]
+    // TODO: Add fields,
+},
+/// 创建班次请求,
+#[derive(Default, Debug)],
 pub struct CreateShiftRequest {
     pub api_req: ApiRequest,
-    /// 员工ID类型，作为查询参数。如果没有后台管理权限，可使用通过手机号或邮箱获取用户 ID
-    ///
-    /// 示例值："employee_id"
-    ///
-    /// 可选值有：
-    ///
-    /// employee_id：员工 employee ID，即飞书管理后台 > 组织架构 > 成员与部门 > 成员详情中的用户 ID，或者通过手机号或邮箱获取用户 ID获取的userid。
-    /// employee_no：员工工号，即飞书管理后台 > 组织架构 > 成员与部门 > 成员详情中的工号
+    /// 员工ID类型，作为查询参数。如果没有后台管理权限，可使用通过手机号或邮箱获取用户 ID,
+///,
+    /// 示例值："employee_id",
+///,
+    /// 可选值有：,
+///,
+    /// employee_id：员工 employee ID，即飞书管理后台 > 组织架构 > 成员与部门 > 成员详情中的用户 ID，或者通过手机号或邮箱获取用户 ID获取的userid。,
+/// employee_no：员工工号，即飞书管理后台 > 组织架构 > 成员与部门 > 成员详情中的工号,
     pub employee_type: String,
     /// 班次名称
     pub shift_name: String,
@@ -124,44 +119,38 @@ pub struct CreateShiftRequest {
     pub allow_face_punch: Option<bool>,
     /// 人脸识别打卡限制
     pub face_punch_cfg: Option<FacePunchConfig>,
-}
-
-/// 创建班次响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 创建班次响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct CreateShiftRespData {
     /// 班次信息
     pub shift: Shift,
 }
-
-impl ApiResponseTrait for CreateShiftRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+impl ApiResponseTrait for CreateShiftRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
 }
-
-impl ApiResponseTrait for Shift {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 删除班次请求
-#[derive(Default, Debug)]
+impl ApiResponseTrait for Shift {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+/// 删除班次请求,
+#[derive(Default, Debug)],
 pub struct DeleteShiftRequest {
     pub api_req: ApiRequest,
     /// 班次 ID
     pub shift_id: String,
-}
-
-/// 获取班次请求
+},
+/// 获取班次请求,
 #[derive(Default)]
 pub struct GetShiftRequest {
     pub api_req: ApiRequest,
     /// 班次 ID
     pub shift_id: String,
-}
-
-/// 按名称查询班次请求
+},
+/// 按名称查询班次请求,
 #[derive(Default)]
 pub struct QueryShiftRequest {
     pub api_req: ApiRequest,
@@ -169,22 +158,19 @@ pub struct QueryShiftRequest {
     pub employee_type: String,
     /// 班次名称
     pub shift_name: String,
-}
-
-/// 查询班次响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 查询班次响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct QueryShiftRespData {
     /// 班次列表
     pub shift_list: Vec<Shift>,
 }
-
-impl ApiResponseTrait for QueryShiftRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 查询所有班次请求
+impl ApiResponseTrait for QueryShiftRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+/// 查询所有班次请求,
 #[derive(Default)]
 pub struct ListShiftRequest {
     pub api_req: ApiRequest,
@@ -192,10 +178,9 @@ pub struct ListShiftRequest {
     pub page_size: Option<i32>,
     /// 分页标记，第一次请求不填，表示从头开始遍历
     pub page_token: Option<String>,
-}
-
-/// 班次列表响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 班次列表响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct ShiftListData {
     /// 班次列表
     pub shift_list: Vec<Shift>,
@@ -204,25 +189,21 @@ pub struct ShiftListData {
     /// 分页标记，当 has_more 为 true 时，会同时返回新的 page_token
     pub page_token: Option<String>,
 }
-
-impl ApiResponseTrait for ShiftListData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 空响应（用于删除等操作）
+impl ApiResponseTrait for ShiftListData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+/// 空响应（用于删除等操作）,
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct EmptyResponse {}
-
-impl ApiResponseTrait for EmptyResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 用户排班信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+impl ApiResponseTrait for EmptyResponse {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+/// 用户排班信息,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct UserDailyShift {
     /// 用户 ID
     pub user_id: String,
@@ -230,23 +211,21 @@ pub struct UserDailyShift {
     pub shift_date: String,
     /// 班次 ID
     pub shift_id: String,
-}
-
-/// 创建或修改排班表请求
+},
+/// 创建或修改排班表请求,
 #[derive(Default)]
 pub struct BatchCreateUserDailyShiftRequest {
     pub api_req: ApiRequest,
-    /// 员工类型，用于指定 user_daily_shifts 中的 user_id 类型
-    /// 可选值：
-    /// - employee_id：员工 employee ID
-    /// - employee_no：员工工号
+    /// 员工类型，用于指定 user_daily_shifts 中的 user_id 类型,
+/// 可选值：,
+    /// - employee_id：员工 employee ID,
+/// - employee_no：员工工号,
     pub employee_type: String,
     /// 用户排班信息列表
     pub user_daily_shifts: Vec<UserDailyShift>,
-}
-
-/// 批量操作响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 批量操作响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct BatchCreateUserDailyShiftRespData {
     /// 失败的用户排班信息
     pub failed_user_daily_shifts: Option<Vec<UserDailyShift>>,
@@ -255,14 +234,12 @@ pub struct BatchCreateUserDailyShiftRespData {
     /// 失败的数量
     pub failed_count: Option<i32>,
 }
-
-impl ApiResponseTrait for BatchCreateUserDailyShiftRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 查询排班表请求
+impl ApiResponseTrait for BatchCreateUserDailyShiftRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+/// 查询排班表请求,
 #[derive(Default)]
 pub struct QueryUserDailyShiftRequest {
     pub api_req: ApiRequest,
@@ -274,23 +251,20 @@ pub struct QueryUserDailyShiftRequest {
     pub check_date_from: String,
     /// 查询的结束时间，精确到日期
     pub check_date_to: String,
-}
-
-/// 查询排班表响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 查询排班表响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct QueryUserDailyShiftRespData {
     /// 用户排班信息列表
     pub user_daily_shift_list: Vec<UserDailyShiftData>,
 }
-
-impl ApiResponseTrait for QueryUserDailyShiftRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 用户排班详细信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+impl ApiResponseTrait for QueryUserDailyShiftRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+/// 用户排班详细信息,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct UserDailyShiftData {
     /// 用户 ID
     pub user_id: String,
@@ -306,9 +280,8 @@ pub struct UserDailyShiftData {
     pub create_time: Option<String>,
     /// 修改时间
     pub update_time: Option<String>,
-}
-
-/// 创建或修改临时排班请求
+},
+/// 创建或修改临时排班请求,
 #[derive(Default)]
 pub struct BatchCreateTempUserDailyShiftRequest {
     pub api_req: ApiRequest,
@@ -316,10 +289,9 @@ pub struct BatchCreateTempUserDailyShiftRequest {
     pub employee_type: String,
     /// 用户排班信息列表
     pub user_daily_shifts: Vec<UserDailyShift>,
-}
-
-/// 创建或修改临时排班响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 创建或修改临时排班响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct BatchCreateTempUserDailyShiftRespData {
     /// 失败的用户排班信息
     pub failed_user_daily_shifts: Option<Vec<UserDailyShift>>,
@@ -328,15 +300,13 @@ pub struct BatchCreateTempUserDailyShiftRespData {
     /// 失败的数量
     pub failed_count: Option<i32>,
 }
-
-impl ApiResponseTrait for BatchCreateTempUserDailyShiftRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 考勤组信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+impl ApiResponseTrait for BatchCreateTempUserDailyShiftRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+/// 考勤组信息,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct Group {
     /// 考勤组 ID
     pub group_id: String,
@@ -366,10 +336,9 @@ pub struct Group {
     pub create_time: Option<String>,
     /// 修改时间
     pub update_time: Option<String>,
-}
-
-/// 例外日期规则
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+},
+/// 例外日期规则,
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
 pub struct ExceptDateRule {
     /// 例外日期，格式：YYYY-MM-DD
     pub date: String,
@@ -377,37 +346,33 @@ pub struct ExceptDateRule {
     pub except_type: i32,
     /// 班次 ID（当例外类型为工作日时必填）
     pub shift_id: Option<String>,
-}
-
-/// 工作日规则
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+},
+/// 工作日规则,
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
 pub struct WorkDayRule {
     /// 星期几：1-7，1代表周一
     pub week_day: i32,
     /// 班次 ID
     pub shift_id: String,
-}
-
-/// 班次规则
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+},
+/// 班次规则,
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
 pub struct ShiftRule {
     /// 班次 ID
     pub shift_id: String,
     /// 班次名称
     pub shift_name: Option<String>,
-}
-
-/// 成员规则
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+},
+/// 成员规则,
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)],
 pub struct MemberRule {
     /// 成员类型：1-部门 2-用户
     pub member_type: i32,
     /// 成员 ID 列表
     pub member_ids: Vec<String>,
-}
-
-/// 考勤组成员信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 考勤组成员信息,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct GroupUser {
     /// 用户 ID
     pub user_id: String,
@@ -419,9 +384,8 @@ pub struct GroupUser {
     pub department_id: Option<String>,
     /// 加入时间
     pub join_time: Option<String>,
-}
-
-/// 查询考勤组下所有成员请求
+},
+/// 查询考勤组下所有成员请求,
 #[derive(Default)]
 pub struct ListGroupUserRequest {
     pub api_req: ApiRequest,
@@ -435,10 +399,9 @@ pub struct ListGroupUserRequest {
     pub page_size: Option<i32>,
     /// 分页标记
     pub page_token: Option<String>,
-}
-
-/// 查询考勤组成员响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 查询考勤组成员响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct ListGroupUserRespData {
     /// 成员列表
     pub user_list: Vec<GroupUser>,
@@ -447,15 +410,13 @@ pub struct ListGroupUserRespData {
     /// 分页标记
     pub page_token: Option<String>,
 }
-
-impl ApiResponseTrait for ListGroupUserRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 创建或修改考勤组请求
-#[derive(Default, Debug)]
+impl ApiResponseTrait for ListGroupUserRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+/// 创建或修改考勤组请求,
+#[derive(Default, Debug)],
 pub struct CreateGroupRequest {
     pub api_req: ApiRequest,
     /// 员工 ID 类型
@@ -484,30 +445,26 @@ pub struct CreateGroupRequest {
     pub shift_rule: Option<Vec<ShiftRule>>,
     /// 成员设置
     pub member_rule: Option<MemberRule>,
-}
-
-/// 创建考勤组响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 创建考勤组响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct CreateGroupRespData {
     /// 考勤组信息
     pub group: Group,
 }
-
-impl ApiResponseTrait for CreateGroupRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 删除考勤组请求
+impl ApiResponseTrait for CreateGroupRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+/// 删除考勤组请求,
 #[derive(Default)]
 pub struct DeleteGroupRequest {
     pub api_req: ApiRequest,
     /// 考勤组 ID
     pub group_id: String,
-}
-
-/// 获取考勤组请求
+},
+/// 获取考勤组请求,
 #[derive(Default)]
 pub struct GetGroupRequest {
     pub api_req: ApiRequest,
@@ -517,9 +474,8 @@ pub struct GetGroupRequest {
     pub employee_type: String,
     /// 部门 ID 类型
     pub dept_type: Option<String>,
-}
-
-/// 按名称查询考勤组请求
+},
+/// 按名称查询考勤组请求,
 #[derive(Default)]
 pub struct SearchGroupRequest {
     pub api_req: ApiRequest,
@@ -529,22 +485,19 @@ pub struct SearchGroupRequest {
     pub dept_type: Option<String>,
     /// 考勤组名称
     pub group_name: String,
-}
-
-/// 查询考勤组响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 查询考勤组响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct SearchGroupRespData {
     /// 考勤组列表
     pub group_list: Vec<Group>,
 }
-
-impl ApiResponseTrait for SearchGroupRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 查询所有考勤组请求
+impl ApiResponseTrait for SearchGroupRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+/// 查询所有考勤组请求,
 #[derive(Default)]
 pub struct ListGroupRequest {
     pub api_req: ApiRequest,
@@ -556,10 +509,9 @@ pub struct ListGroupRequest {
     pub page_size: Option<i32>,
     /// 分页标记
     pub page_token: Option<String>,
-}
-
-/// 考勤组列表响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 考勤组列表响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct ListGroupRespData {
     /// 考勤组列表
     pub group_list: Vec<Group>,
@@ -568,21 +520,18 @@ pub struct ListGroupRespData {
     /// 分页标记
     pub page_token: Option<String>,
 }
-
-impl ApiResponseTrait for ListGroupRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+impl ApiResponseTrait for ListGroupRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
 }
-
-impl ApiResponseTrait for Group {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 用户人脸识别设置信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+impl ApiResponseTrait for Group {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+/// 用户人脸识别设置信息,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct UserSetting {
     /// 用户 ID
     pub user_id: String,
@@ -598,10 +547,9 @@ pub struct UserSetting {
     pub create_time: Option<String>,
     /// 修改时间
     pub update_time: Option<String>,
-}
-
-/// 修改用户人脸识别信息请求
-#[derive(Default, Debug)]
+},
+/// 修改用户人脸识别信息请求,
+#[derive(Default, Debug)],
 pub struct ModifyUserSettingRequest {
     pub api_req: ApiRequest,
     /// 员工 ID 类型
@@ -616,22 +564,19 @@ pub struct ModifyUserSettingRequest {
     pub face_live_need_action: Option<bool>,
     /// 人脸识别降级开关
     pub face_downgrade: Option<bool>,
-}
-
-/// 修改用户人脸识别信息响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 修改用户人脸识别信息响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct ModifyUserSettingRespData {
     /// 用户设置信息
     pub user_setting: UserSetting,
 }
-
-impl ApiResponseTrait for ModifyUserSettingRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 批量查询用户人脸识别信息请求
+impl ApiResponseTrait for ModifyUserSettingRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+/// 批量查询用户人脸识别信息请求,
 #[derive(Default)]
 pub struct QueryUserSettingRequest {
     pub api_req: ApiRequest,
@@ -639,22 +584,19 @@ pub struct QueryUserSettingRequest {
     pub employee_type: String,
     /// 用户 ID 列表，一次最多 50 个
     pub user_ids: Vec<String>,
-}
-
-/// 批量查询用户人脸识别信息响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 批量查询用户人脸识别信息响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct QueryUserSettingRespData {
     /// 用户设置信息列表
     pub user_setting_list: Vec<UserSetting>,
 }
-
-impl ApiResponseTrait for QueryUserSettingRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 上传用户人脸识别照片请求
+impl ApiResponseTrait for QueryUserSettingRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+/// 上传用户人脸识别照片请求,
 #[derive(Default)]
 pub struct UploadUserPhotoRequest {
     pub api_req: ApiRequest,
@@ -666,22 +608,19 @@ pub struct UploadUserPhotoRequest {
     pub photo_data: Vec<u8>,
     /// 照片文件名
     pub photo_name: String,
-}
-
-/// 上传用户人脸识别照片响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 上传用户人脸识别照片响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct UploadUserPhotoRespData {
     /// 人脸识别照片文件 key
     pub face_key: String,
 }
-
-impl ApiResponseTrait for UploadUserPhotoRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 下载用户人脸识别照片请求
+impl ApiResponseTrait for UploadUserPhotoRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+/// 下载用户人脸识别照片请求,
 #[derive(Default)]
 pub struct DownloadUserPhotoRequest {
     pub api_req: ApiRequest,
@@ -691,31 +630,26 @@ pub struct DownloadUserPhotoRequest {
     pub user_id: String,
     /// 人脸识别照片Key
     pub face_key: String,
-}
-
-/// 下载用户人脸识别照片响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 下载用户人脸识别照片响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct DownloadUserPhotoRespData {
     /// 照片的二进制数据
     pub photo_data: Vec<u8>,
 }
-
-impl ApiResponseTrait for DownloadUserPhotoRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+impl ApiResponseTrait for DownloadUserPhotoRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
 }
-
-impl ApiResponseTrait for UserSetting {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-// ==================== 考勤统计相关数据结构 ====================
-
+impl ApiResponseTrait for UserSetting {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+// ==================== 考勤统计相关数据结构 ====================,
 /// 更新统计设置请求
-#[derive(Default, Clone)]
+#[derive(Default, Clone)],
 pub struct UpdateUserStatsDataRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -723,15 +657,13 @@ pub struct UpdateUserStatsDataRequest {
     /// 统计设置
     pub stats_setting: StatsSettings,
 }
-
 impl UpdateUserStatsDataRequest {
-    pub fn build(self) -> Self {
-        self
-    }
-}
-
-/// 统计设置
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+    pub fn build(self) -> Self {,
+self,
+    },
+},
+/// 统计设置,
+#[derive(Debug, Clone, Serialize, Deserialize, Default)],
 pub struct StatsSettings {
     /// 统计范围 1：自定义范围, 2：全部
     pub stats_scope: i32,
@@ -743,42 +675,37 @@ pub struct StatsSettings {
     pub user_ids: Vec<String>,
     /// 需要查询的字段列表
     pub need_fields: Vec<String>,
-}
-
-/// 更新统计设置响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 更新统计设置响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct UpdateUserStatsDataRespData {
     /// 更新是否成功
     pub success: bool,
-}
-
-/// 查询统计设置请求
-#[derive(Default, Clone)]
+},
+/// 查询统计设置请求,
+#[derive(Default, Clone)],
 pub struct QueryStatsSettingsRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型  
     pub employee_type: String,
-}
-
-/// 查询统计设置响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 查询统计设置响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct QueryStatsSettingsRespData {
     /// 统计设置
     pub stats_setting: StatsSettings,
-}
-
-/// 查询统计表头请求
-#[derive(Default, Clone)]
+},
+/// 查询统计表头请求,
+#[derive(Default, Clone)],
 pub struct QueryStatsFieldsRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
     pub employee_type: String,
     /// 语言类型，zh-CN：中文，en-US：英文，ja-JP：日文
     pub locale: Option<String>,
-}
-
-/// 统计字段信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 统计字段信息,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct StatsField {
     /// 字段标识
     pub field_key: String,
@@ -792,17 +719,15 @@ pub struct StatsField {
     pub field_name_ja: Option<String>,
     /// 字段类型：0-文本，1-数字，2-时间
     pub field_type: i32,
-}
-
-/// 查询统计表头响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 查询统计表头响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct QueryStatsFieldsRespData {
     /// 统计字段列表
     pub fields: Vec<StatsField>,
-}
-
-/// 查询统计数据请求
-#[derive(Default, Clone)]
+},
+/// 查询统计数据请求,
+#[derive(Default, Clone)],
 pub struct QueryUserStatsDataRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -817,10 +742,9 @@ pub struct QueryUserStatsDataRequest {
     pub need_fields: Vec<String>,
     /// 语言类型，zh-CN：中文，en-US：英文，ja-JP：日文
     pub locale: Option<String>,
-}
-
-/// 用户统计数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 用户统计数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct UserStatsData {
     /// 用户ID
     pub user_id: String,
@@ -828,45 +752,37 @@ pub struct UserStatsData {
     pub user_name: Option<String>,
     /// 统计数据字段
     pub datas: std::collections::HashMap<String, serde_json::Value>,
-}
-
-/// 查询统计数据响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 查询统计数据响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct QueryUserStatsDataRespData {
     /// 用户统计数据列表
     pub datas: Vec<UserStatsData>,
+},
+// 实现 ApiResponseTrait,
+impl ApiResponseTrait for UpdateUserStatsDataRespData {,
+fn data_format() -> ResponseFormat {,
+        ResponseFormat::Data,
 }
-
-// 实现 ApiResponseTrait
-
-impl ApiResponseTrait for UpdateUserStatsDataRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
 }
-
-impl ApiResponseTrait for QueryStatsSettingsRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+impl ApiResponseTrait for QueryStatsSettingsRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
 }
-
-impl ApiResponseTrait for QueryStatsFieldsRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+impl ApiResponseTrait for QueryStatsFieldsRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
 }
-
-impl ApiResponseTrait for QueryUserStatsDataRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-// ==================== 假勤审批相关数据结构 ====================
-
+impl ApiResponseTrait for QueryUserStatsDataRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+// ==================== 假勤审批相关数据结构 ====================,
 /// 获取审批数据请求
-#[derive(Default, Debug)]
+#[derive(Default, Debug)],
 pub struct QueryUserApprovalRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -883,10 +799,9 @@ pub struct QueryUserApprovalRequest {
     pub page_size: Option<i32>,
     /// 分页偏移量
     pub page_token: Option<String>,
-}
-
-/// 审批数据项
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 审批数据项,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct UserApproval {
     /// 审批ID
     pub approval_id: String,
@@ -912,10 +827,9 @@ pub struct UserApproval {
     pub created_at: Option<String>,
     /// 审批时间
     pub approved_at: Option<String>,
-}
-
-/// 获取审批数据响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 获取审批数据响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct QueryUserApprovalRespData {
     /// 审批数据列表
     pub approvals: Vec<UserApproval>,
@@ -923,9 +837,8 @@ pub struct QueryUserApprovalRespData {
     pub has_more: bool,
     /// 下一页令牌
     pub page_token: Option<String>,
-}
-
-/// 写入审批结果请求
+},
+/// 写入审批结果请求,
 #[derive(Default)]
 pub struct CreateUserApprovalRequest {
     pub api_req: ApiRequest,
@@ -937,18 +850,16 @@ pub struct CreateUserApprovalRequest {
     pub status: i32,
     /// 审批备注
     pub approval_note: Option<String>,
-}
-
-/// 写入审批结果响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 写入审批结果响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct CreateUserApprovalRespData {
     /// 处理是否成功
     pub success: bool,
     /// 审批ID
     pub approval_id: String,
-}
-
-/// 通知审批状态更新请求
+},
+/// 通知审批状态更新请求,
 #[derive(Default)]
 pub struct ProcessUserApprovalRequest {
     pub api_req: ApiRequest,
@@ -960,51 +871,43 @@ pub struct ProcessUserApprovalRequest {
     pub action: i32,
     /// 通知消息
     pub message: Option<String>,
-}
-
-/// 通知审批状态更新响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 通知审批状态更新响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct ProcessUserApprovalRespData {
     /// 通知是否成功
     pub success: bool,
     /// 审批ID
     pub approval_id: String,
+},
+// 实现 ApiResponseTrait,
+impl ApiResponseTrait for QueryUserApprovalRespData {,
+fn data_format() -> ResponseFormat {,
+        ResponseFormat::Data,
 }
-
-// 实现 ApiResponseTrait
-
-impl ApiResponseTrait for QueryUserApprovalRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
 }
-
-impl ApiResponseTrait for CreateUserApprovalRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+impl ApiResponseTrait for CreateUserApprovalRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
 }
-
-impl ApiResponseTrait for ProcessUserApprovalRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-// ==================== 考勤补卡相关数据结构 ====================
-
+impl ApiResponseTrait for ProcessUserApprovalRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+// ==================== 考勤补卡相关数据结构 ====================,
 /// 通知补卡审批发起请求
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug)],
 pub struct CreateUserTaskRemedyRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
     pub employee_type: String,
     /// 补卡申请信息
     pub remedy_application: UserTaskRemedyApplication,
-}
-
-/// 补卡申请信息
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+},
+/// 补卡申请信息,
+#[derive(Debug, Clone, Serialize, Deserialize, Default)],
 pub struct UserTaskRemedyApplication {
     /// 用户ID
     pub user_id: String,
@@ -1018,19 +921,17 @@ pub struct UserTaskRemedyApplication {
     pub reason: String,
     /// 补卡备注
     pub comment: Option<String>,
-}
-
-/// 通知补卡审批发起响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 通知补卡审批发起响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct CreateUserTaskRemedyRespData {
     /// 补卡申请ID
     pub remedy_id: String,
     /// 申请是否成功提交
     pub success: bool,
-}
-
-/// 获取可补卡时间请求
-#[derive(Default, Clone)]
+},
+/// 获取可补卡时间请求,
+#[derive(Default, Clone)],
 pub struct QueryUserAllowedRemedysRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1041,10 +942,9 @@ pub struct QueryUserAllowedRemedysRequest {
     pub date_from: Option<String>,
     /// 查询结束日期，格式：yyyy-MM-dd
     pub date_to: Option<String>,
-}
-
-/// 可补卡时间数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 可补卡时间数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct UserAllowedRemedy {
     /// 日期，格式：yyyy-MM-dd
     pub date: String,
@@ -1054,10 +954,9 @@ pub struct UserAllowedRemedy {
     pub shift_name: String,
     /// 可补卡时间段列表
     pub remedy_periods: Vec<RemedyPeriod>,
-}
-
-/// 补卡时间段
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 补卡时间段,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct RemedyPeriod {
     /// 补卡类型，1：上班补卡，2：下班补卡
     pub remedy_type: i32,
@@ -1073,17 +972,15 @@ pub struct RemedyPeriod {
     pub can_remedy: bool,
     /// 不可补卡原因
     pub block_reason: Option<String>,
-}
-
-/// 获取可补卡时间响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 获取可补卡时间响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct QueryUserAllowedRemedysRespData {
     /// 可补卡时间列表
     pub allowed_remedys: Vec<UserAllowedRemedy>,
-}
-
-/// 获取补卡记录请求
-#[derive(Default, Clone)]
+},
+/// 获取补卡记录请求,
+#[derive(Default, Clone)],
 pub struct QueryUserTaskRemedyRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1100,10 +997,9 @@ pub struct QueryUserTaskRemedyRequest {
     pub page_size: Option<i32>,
     /// 分页偏移量
     pub page_token: Option<String>,
-}
-
-/// 补卡记录数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 补卡记录数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct UserTaskRemedy {
     /// 补卡记录ID
     pub remedy_id: String,
@@ -1131,10 +1027,9 @@ pub struct UserTaskRemedy {
     pub approver_id: Option<String>,
     /// 审批备注
     pub approve_comment: Option<String>,
-}
-
-/// 获取补卡记录响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 获取补卡记录响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct QueryUserTaskRemedyRespData {
     /// 补卡记录列表
     pub remedys: Vec<UserTaskRemedy>,
@@ -1142,42 +1037,35 @@ pub struct QueryUserTaskRemedyRespData {
     pub has_more: bool,
     /// 下一页令牌
     pub page_token: Option<String>,
+},
+// 实现 ApiResponseTrait,
+impl ApiResponseTrait for CreateUserTaskRemedyRespData {,
+fn data_format() -> ResponseFormat {,
+        ResponseFormat::Data,
 }
-
-// 实现 ApiResponseTrait
-
-impl ApiResponseTrait for CreateUserTaskRemedyRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
 }
-
-impl ApiResponseTrait for QueryUserAllowedRemedysRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+impl ApiResponseTrait for QueryUserAllowedRemedysRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
 }
-
-impl ApiResponseTrait for QueryUserTaskRemedyRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-// ==================== 打卡信息管理相关数据结构 ====================
-
-/// 导入打卡流水请求
-#[derive(Default)]
+impl ApiResponseTrait for QueryUserTaskRemedyRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+// ==================== 打卡信息管理相关数据结构 ====================,
+/// 导入打卡流水请求,
+#[derive(Default)],
 pub struct BatchCreateUserTaskRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
     pub employee_type: String,
     /// 打卡记录列表
     pub user_tasks: Vec<UserTaskCreate>,
-}
-
-/// 打卡记录创建信息
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+},
+/// 打卡记录创建信息,
+#[derive(Debug, Clone, Serialize, Deserialize, Default)],
 pub struct UserTaskCreate {
     /// 用户ID
     pub user_id: String,
@@ -1201,10 +1089,9 @@ pub struct UserTaskCreate {
     pub is_remedy: Option<bool>,
     /// 打卡备注
     pub comment: Option<String>,
-}
-
-/// 打卡位置信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 打卡位置信息,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct UserTaskLocation {
     /// 纬度
     pub latitude: f64,
@@ -1212,10 +1099,9 @@ pub struct UserTaskLocation {
     pub longitude: f64,
     /// 位置名称
     pub address: Option<String>,
-}
-
-/// 导入打卡流水响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 导入打卡流水响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct BatchCreateUserTaskRespData {
     /// 导入成功的记录数
     pub success_count: i32,
@@ -1223,10 +1109,9 @@ pub struct BatchCreateUserTaskRespData {
     pub failed_count: i32,
     /// 失败记录详情
     pub failed_records: Option<Vec<UserTaskCreateFailure>>,
-}
-
-/// 打卡记录创建失败信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 打卡记录创建失败信息,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct UserTaskCreateFailure {
     /// 用户ID
     pub user_id: String,
@@ -1234,9 +1119,8 @@ pub struct UserTaskCreateFailure {
     pub reason: String,
     /// 错误代码
     pub error_code: Option<String>,
-}
-
-/// 查询打卡流水请求
+},
+/// 查询打卡流水请求,
 #[derive(Default)]
 pub struct GetUserTaskRequest {
     pub api_req: ApiRequest,
@@ -1246,10 +1130,9 @@ pub struct GetUserTaskRequest {
     pub user_id: String,
     /// 查询日期，格式：yyyy-MM-dd
     pub check_date: String,
-}
-
-/// 打卡流水信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 打卡流水信息,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct UserTask {
     /// 打卡记录ID
     pub task_id: String,
@@ -1283,16 +1166,14 @@ pub struct UserTask {
     pub create_time: String,
     /// 记录更新时间戳（毫秒）
     pub update_time: String,
-}
-
-/// 查询打卡流水响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 查询打卡流水响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct GetUserTaskRespData {
     /// 打卡流水列表
     pub user_tasks: Vec<UserTask>,
-}
-
-/// 批量查询打卡流水请求
+},
+/// 批量查询打卡流水请求,
 #[derive(Default)]
 pub struct QueryUserTaskRequest {
     pub api_req: ApiRequest,
@@ -1310,10 +1191,9 @@ pub struct QueryUserTaskRequest {
     pub page_size: Option<i32>,
     /// 分页偏移量
     pub page_token: Option<String>,
-}
-
-/// 批量查询打卡流水响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 批量查询打卡流水响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct QueryUserTaskRespData {
     /// 打卡流水列表
     pub user_tasks: Vec<UserTask>,
@@ -1321,9 +1201,8 @@ pub struct QueryUserTaskRespData {
     pub has_more: bool,
     /// 下一页令牌
     pub page_token: Option<String>,
-}
-
-/// 删除打卡流水请求
+},
+/// 删除打卡流水请求,
 #[derive(Default)]
 pub struct BatchDelUserTaskRequest {
     pub api_req: ApiRequest,
@@ -1331,10 +1210,9 @@ pub struct BatchDelUserTaskRequest {
     pub employee_type: String,
     /// 打卡记录ID列表
     pub task_ids: Vec<String>,
-}
-
-/// 删除打卡流水响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 删除打卡流水响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct BatchDelUserTaskRespData {
     /// 删除成功的记录数
     pub success_count: i32,
@@ -1342,10 +1220,9 @@ pub struct BatchDelUserTaskRespData {
     pub failed_count: i32,
     /// 失败记录详情
     pub failed_records: Option<Vec<UserTaskDeleteFailure>>,
-}
-
-/// 打卡记录删除失败信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 打卡记录删除失败信息,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct UserTaskDeleteFailure {
     /// 打卡记录ID
     pub task_id: String,
@@ -1353,9 +1230,8 @@ pub struct UserTaskDeleteFailure {
     pub reason: String,
     /// 错误代码
     pub error_code: Option<String>,
-}
-
-/// 查询打卡结果请求
+},
+/// 查询打卡结果请求,
 #[derive(Default)]
 pub struct QueryUserTaskResultRequest {
     pub api_req: ApiRequest,
@@ -1371,10 +1247,9 @@ pub struct QueryUserTaskResultRequest {
     pub page_size: Option<i32>,
     /// 分页偏移量
     pub page_token: Option<String>,
-}
-
-/// 打卡结果信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 打卡结果信息,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct UserTaskResult {
     /// 用户ID
     pub user_id: String,
@@ -1394,10 +1269,9 @@ pub struct UserTaskResult {
     pub overtime_duration: Option<f64>,
     /// 考勤异常信息
     pub exceptions: Option<Vec<String>>,
-}
-
-/// 查询打卡结果响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 查询打卡结果响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct QueryUserTaskResultRespData {
     /// 打卡结果列表
     pub user_task_results: Vec<UserTaskResult>,
@@ -1405,54 +1279,45 @@ pub struct QueryUserTaskResultRespData {
     pub has_more: bool,
     /// 下一页令牌
     pub page_token: Option<String>,
+},
+// 实现 ApiResponseTrait,
+impl ApiResponseTrait for BatchCreateUserTaskRespData {,
+fn data_format() -> ResponseFormat {,
+        ResponseFormat::Data,
 }
-
-// 实现 ApiResponseTrait
-
-impl ApiResponseTrait for BatchCreateUserTaskRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
 }
-
-impl ApiResponseTrait for GetUserTaskRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+impl ApiResponseTrait for GetUserTaskRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
 }
-
-impl ApiResponseTrait for QueryUserTaskRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+impl ApiResponseTrait for QueryUserTaskRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
 }
-
-impl ApiResponseTrait for BatchDelUserTaskRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+impl ApiResponseTrait for BatchDelUserTaskRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
 }
-
-impl ApiResponseTrait for QueryUserTaskResultRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-// ==================== 归档报表相关数据结构 ====================
-
+impl ApiResponseTrait for QueryUserTaskResultRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+// ==================== 归档报表相关数据结构 ====================,
 /// 查询归档报表表头请求
-#[derive(Debug, Default, Clone)]
+#[derive(Debug, Default, Clone)],
 pub struct QueryArchiveStatsFieldsRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
     pub employee_type: String,
     /// 归档规则ID
     pub archive_rule_id: String,
-}
-
-/// 归档报表字段信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 归档报表字段信息,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct ArchiveStatsField {
     /// 字段ID
     pub field_id: String,
@@ -1468,19 +1333,17 @@ pub struct ArchiveStatsField {
     pub default_value: Option<String>,
     /// 字段选项（用于枚举类型）
     pub field_options: Option<Vec<ArchiveFieldOption>>,
-}
-
-/// 归档报表字段选项
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 归档报表字段选项,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct ArchiveFieldOption {
     /// 选项值
     pub value: String,
     /// 选项显示名称
     pub label: String,
-}
-
-/// 查询归档报表表头响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 查询归档报表表头响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct QueryArchiveStatsFieldsRespData {
     /// 报表字段列表
     pub fields: Vec<ArchiveStatsField>,
@@ -1488,10 +1351,9 @@ pub struct QueryArchiveStatsFieldsRespData {
     pub report_name: String,
     /// 归档规则名称
     pub archive_rule_name: String,
-}
-
-/// 写入归档报表结果请求
-#[derive(Default, Clone)]
+},
+/// 写入归档报表结果请求,
+#[derive(Default, Clone)],
 pub struct UploadArchiveReportRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1500,10 +1362,9 @@ pub struct UploadArchiveReportRequest {
     pub archive_rule_id: String,
     /// 报表数据
     pub report_data: Vec<ArchiveReportRecord>,
-}
-
-/// 归档报表记录
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+},
+/// 归档报表记录,
+#[derive(Debug, Clone, Serialize, Deserialize, Default)],
 pub struct ArchiveReportRecord {
     /// 记录ID（用于更新或删除）
     pub record_id: Option<String>,
@@ -1513,10 +1374,9 @@ pub struct ArchiveReportRecord {
     pub archive_date: String,
     /// 报表字段数据，key为字段ID，value为字段值
     pub field_data: std::collections::HashMap<String, String>,
-}
-
-/// 写入归档报表结果响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 写入归档报表结果响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct UploadArchiveReportRespData {
     /// 上传成功的记录数
     pub success_count: i32,
@@ -1524,10 +1384,9 @@ pub struct UploadArchiveReportRespData {
     pub failed_count: i32,
     /// 失败记录详情
     pub failed_records: Option<Vec<ArchiveReportFailure>>,
-}
-
-/// 归档报表上传失败信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 归档报表上传失败信息,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct ArchiveReportFailure {
     /// 用户ID
     pub user_id: String,
@@ -1537,10 +1396,9 @@ pub struct ArchiveReportFailure {
     pub reason: String,
     /// 错误代码
     pub error_code: Option<String>,
-}
-
-/// 删除归档报表行数据请求
-#[derive(Default, Clone)]
+},
+/// 删除归档报表行数据请求,
+#[derive(Default, Clone)],
 pub struct DelArchiveReportRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1549,10 +1407,9 @@ pub struct DelArchiveReportRequest {
     pub archive_rule_id: String,
     /// 要删除的记录ID列表
     pub record_ids: Vec<String>,
-}
-
-/// 删除归档报表行数据响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 删除归档报表行数据响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct DelArchiveReportRespData {
     /// 删除成功的记录数
     pub success_count: i32,
@@ -1560,10 +1417,9 @@ pub struct DelArchiveReportRespData {
     pub failed_count: i32,
     /// 失败记录详情
     pub failed_records: Option<Vec<ArchiveReportDeleteFailure>>,
-}
-
-/// 归档报表删除失败信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 归档报表删除失败信息,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct ArchiveReportDeleteFailure {
     /// 记录ID
     pub record_id: String,
@@ -1571,10 +1427,9 @@ pub struct ArchiveReportDeleteFailure {
     pub reason: String,
     /// 错误代码
     pub error_code: Option<String>,
-}
-
-/// 查询所有归档规则请求
-#[derive(Default, Clone)]
+},
+/// 查询所有归档规则请求,
+#[derive(Default, Clone)],
 pub struct ListArchiveRulesRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1583,10 +1438,9 @@ pub struct ListArchiveRulesRequest {
     pub page_size: Option<i32>,
     /// 分页偏移量
     pub page_token: Option<String>,
-}
-
-/// 归档规则信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 归档规则信息,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct ArchiveRule {
     /// 归档规则ID
     pub archive_rule_id: String,
@@ -1604,10 +1458,9 @@ pub struct ArchiveRule {
     pub update_time: String,
     /// 关联的统计字段数量
     pub field_count: i32,
-}
-
-/// 查询所有归档规则响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 查询所有归档规则响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct ListArchiveRulesRespData {
     /// 归档规则列表
     pub archive_rules: Vec<ArchiveRule>,
@@ -1615,38 +1468,31 @@ pub struct ListArchiveRulesRespData {
     pub has_more: bool,
     /// 下一页令牌
     pub page_token: Option<String>,
+},
+// 实现 ApiResponseTrait,
+impl ApiResponseTrait for QueryArchiveStatsFieldsRespData {,
+fn data_format() -> ResponseFormat {,
+        ResponseFormat::Data,
 }
-
-// 实现 ApiResponseTrait
-
-impl ApiResponseTrait for QueryArchiveStatsFieldsRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
 }
-
-impl ApiResponseTrait for UploadArchiveReportRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+impl ApiResponseTrait for UploadArchiveReportRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
 }
-
-impl ApiResponseTrait for DelArchiveReportRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
+impl ApiResponseTrait for DelArchiveReportRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
 }
-
-impl ApiResponseTrait for ListArchiveRulesRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-// ==================== 休假相关数据结构 ====================
-
+impl ApiResponseTrait for ListArchiveRulesRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+// ==================== 休假相关数据结构 ====================,
 /// 通过过期时间获取发放记录请求
-#[derive(Default, Clone)]
+#[derive(Default, Clone)],
 pub struct GetLeaveEmployExpireRecordRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1659,10 +1505,9 @@ pub struct GetLeaveEmployExpireRecordRequest {
     pub page_size: Option<i32>,
     /// 分页偏移量
     pub page_token: Option<String>,
-}
-
-/// 休假发放记录信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 休假发放记录信息,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct LeaveEmployExpireRecord {
     /// 记录ID
     pub record_id: String,
@@ -1690,10 +1535,9 @@ pub struct LeaveEmployExpireRecord {
     pub create_time: i64,
     /// 更新时间（毫秒级时间戳）
     pub update_time: i64,
-}
-
-/// 通过过期时间获取发放记录响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 通过过期时间获取发放记录响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct GetLeaveEmployExpireRecordRespData {
     /// 发放记录列表
     pub records: Vec<LeaveEmployExpireRecord>,
@@ -1703,10 +1547,9 @@ pub struct GetLeaveEmployExpireRecordRespData {
     pub page_token: Option<String>,
     /// 总记录数
     pub total_count: i32,
-}
-
-/// 修改发放记录请求
-#[derive(Default, Clone)]
+},
+/// 修改发放记录请求,
+#[derive(Default, Clone)],
 pub struct PatchLeaveAccrualRecordRequest {
     pub api_req: ApiRequest,
     /// 员工ID类型
@@ -1715,10 +1558,9 @@ pub struct PatchLeaveAccrualRecordRequest {
     pub leave_accrual_record_id: String,
     /// 修改的发放记录信息
     pub leave_accrual_record: LeaveAccrualRecordPatch,
-}
-
-/// 发放记录修改信息
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+},
+/// 发放记录修改信息,
+#[derive(Debug, Clone, Serialize, Deserialize, Default)],
 pub struct LeaveAccrualRecordPatch {
     /// 员工ID
     pub employee_id: Option<String>,
@@ -1738,17 +1580,15 @@ pub struct LeaveAccrualRecordPatch {
     pub granted_type: Option<i32>,
     /// 发放说明
     pub granted_description: Option<String>,
-}
-
-/// 修改发放记录响应数据
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 修改发放记录响应数据,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct PatchLeaveAccrualRecordRespData {
     /// 修改后的发放记录信息
     pub leave_accrual_record: LeaveAccrualRecord,
-}
-
-/// 完整的发放记录信息
-#[derive(Debug, Clone, Serialize, Deserialize)]
+},
+/// 完整的发放记录信息,
+#[derive(Debug, Clone, Serialize, Deserialize)],
 pub struct LeaveAccrualRecord {
     /// 记录ID
     pub record_id: String,
@@ -1784,103 +1624,86 @@ pub struct LeaveAccrualRecord {
     pub create_time: i64,
     /// 更新时间（毫秒级时间戳）
     pub update_time: i64,
+},
+// 实现 ApiResponseTrait,
+impl ApiResponseTrait for GetLeaveEmployExpireRecordRespData {,
+fn data_format() -> ResponseFormat {,
+        ResponseFormat::Data,
 }
-
-// 实现 ApiResponseTrait
-
-impl ApiResponseTrait for GetLeaveEmployExpireRecordRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
 }
-
-impl ApiResponseTrait for PatchLeaveAccrualRecordRespData {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-// Build method implementations for trait support
+impl ApiResponseTrait for PatchLeaveAccrualRecordRespData {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+// Build method implementations for trait support,
 impl QueryStatsSettingsRequest {
-    pub fn build(self) -> Self {
-        self
-    }
+pub fn build(self) -> Self {,
+        self,
 }
-
+}
 impl QueryStatsFieldsRequest {
-    pub fn build(self) -> Self {
-        self
-    }
+    pub fn build(self) -> Self {,
+self,
+    },
 }
-
 impl QueryUserStatsDataRequest {
-    pub fn build(self) -> Self {
-        self
-    }
+    pub fn build(self) -> Self {,
+self,
+    },
 }
-
 impl CreateUserTaskRemedyRequest {
-    pub fn build(self) -> Self {
-        self
-    }
+    pub fn build(self) -> Self {,
+self,
+    },
 }
-
 impl QueryUserAllowedRemedysRequest {
-    pub fn build(self) -> Self {
-        self
-    }
+    pub fn build(self) -> Self {,
+self,
+    },
 }
-
 impl QueryUserTaskRemedyRequest {
-    pub fn build(self) -> Self {
-        self
-    }
+    pub fn build(self) -> Self {,
+self,
+    },
 }
-
 impl QueryArchiveStatsFieldsRequest {
-    pub fn build(self) -> Self {
-        self
-    }
+    pub fn build(self) -> Self {,
+self,
+    },
 }
-
 impl UploadArchiveReportRequest {
-    pub fn build(self) -> Self {
-        self
-    }
+    pub fn build(self) -> Self {,
+self,
+    },
 }
-
 impl DelArchiveReportRequest {
-    pub fn build(self) -> Self {
-        self
-    }
+    pub fn build(self) -> Self {,
+self,
+    },
 }
-
 impl ListArchiveRulesRequest {
-    pub fn build(self) -> Self {
-        self
-    }
+    pub fn build(self) -> Self {,
+self,
+    },
 }
-
 impl GetLeaveEmployExpireRecordRequest {
-    pub fn build(self) -> Self {
-        self
-    }
+    pub fn build(self) -> Self {,
+self,
+    },
 }
-
 impl PatchLeaveAccrualRecordRequest {
-    pub fn build(self) -> Self {
-        self
-    }
-}
-
-#[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
-mod tests {
+    pub fn build(self) -> Self {,
+self,
+    },
+},
+#[cfg(test)],
+#[allow(unused_variables, unused_unsafe)],
+mod tests {,
     use super::*;
-    use serde_json;
-
-    #[test]
-    fn test_shift_serialization() {
+use serde_json;
+    #[test],
+fn test_shift_serialization() {,
         let shift = Shift {
             shift_id: "shift_001".to_string(),
             shift_name: "Morning Shift".to_string(),
@@ -1913,36 +1736,32 @@ mod tests {
             create_time: Some("2023-01-01T00:00:00Z".to_string()),
             update_time: Some("2023-01-02T00:00:00Z".to_string()),
         };
-
-        let serialized = serde_json::to_string(&shift).unwrap();
+let serialized = serde_json::to_string(&shift).unwrap();
         let deserialized: Shift = serde_json::from_str(&serialized).unwrap();
         assert_eq!(shift.shift_id, deserialized.shift_id);
         assert_eq!(shift.shift_name, deserialized.shift_name);
         assert_eq!(shift.punch_times, deserialized.punch_times);
-    }
-
-    #[test]
-    fn test_flexible_rule_serialization() {
-        let rule = FlexibleRule {
+},
+#[test],
+    fn test_flexible_rule_serialization() {,
+let rule = FlexibleRule {,
             flexible_early_minutes: 15,
             flexible_late_minutes: 20,
         };
-
-        let serialized = serde_json::to_string(&rule).unwrap();
+let serialized = serde_json::to_string(&rule).unwrap();
         let deserialized: FlexibleRule = serde_json::from_str(&serialized).unwrap();
-        assert_eq!(
+assert_eq!(,
             rule.flexible_early_minutes,
-            deserialized.flexible_early_minutes
-        );
+            deserialized.flexible_early_minutes,
+);
         assert_eq!(
             rule.flexible_late_minutes,
-            deserialized.flexible_late_minutes
-        );
-    }
-
-    #[test]
-    fn test_punch_time_rule_serialization() {
-        let rule = PunchTimeRule {
+            deserialized.flexible_late_minutes,
+);
+    },
+#[test],
+    fn test_punch_time_rule_serialization() {,
+let rule = PunchTimeRule {,
             on_time: "09:00".to_string(),
             off_time: "17:30".to_string(),
             on_advance_minutes: 30,
@@ -1952,55 +1771,47 @@ mod tests {
             early_minutes_as_early: Some(15),
             early_minutes_as_lack: Some(45),
         };
-
-        let serialized = serde_json::to_string(&rule).unwrap();
+let serialized = serde_json::to_string(&rule).unwrap();
         let deserialized: PunchTimeRule = serde_json::from_str(&serialized).unwrap();
         assert_eq!(rule.on_time, deserialized.on_time);
         assert_eq!(rule.off_time, deserialized.off_time);
         assert_eq!(rule.on_advance_minutes, deserialized.on_advance_minutes);
-    }
-
-    #[test]
-    fn test_face_punch_config_serialization() {
-        let config = FacePunchConfig::default();
-
+},
+#[test],
+    fn test_face_punch_config_serialization() {,
+let config = FacePunchConfig::default();
         let serialized = serde_json::to_string(&config).unwrap();
-        let _deserialized: FacePunchConfig = serde_json::from_str(&serialized).unwrap();
-        // Test should succeed without panicking
-    }
-
-    #[test]
-    fn test_create_shift_request_default() {
-        let request = CreateShiftRequest::default();
+let _deserialized: FacePunchConfig = serde_json::from_str(&serialized).unwrap();
+        // Test should succeed without panicking,
+},
+#[test],
+    fn test_create_shift_request_default() {,
+let request = CreateShiftRequest::default();
         assert_eq!(request.employee_type, "");
         assert_eq!(request.shift_name, "");
         assert_eq!(request.punch_times, 0);
-        assert!(request.is_flexible.is_none());
-    }
-
-    #[test]
+assert!(request.is_flexible.is_none());
+    },
+#[test],
     fn test_create_shift_resp_data_api_response_trait() {
         assert_eq!(CreateShiftRespData::data_format(), ResponseFormat::Data);
-    }
-
-    #[test]
-    fn test_user_daily_shift_serialization() {
-        let shift = UserDailyShift {
+},
+#[test],
+    fn test_user_daily_shift_serialization() {,
+let shift = UserDailyShift {,
             user_id: "user_123".to_string(),
             shift_date: "2023-10-15".to_string(),
             shift_id: "shift_456".to_string(),
         };
-
-        let serialized = serde_json::to_string(&shift).unwrap();
+let serialized = serde_json::to_string(&shift).unwrap();
         let deserialized: UserDailyShift = serde_json::from_str(&serialized).unwrap();
         assert_eq!(shift.user_id, deserialized.user_id);
         assert_eq!(shift.shift_date, deserialized.shift_date);
         assert_eq!(shift.shift_id, deserialized.shift_id);
-    }
-
-    #[test]
-    fn test_batch_create_user_daily_shift_resp_data_serialization() {
-        let resp_data = BatchCreateUserDailyShiftRespData {
+},
+#[test],
+    fn test_batch_create_user_daily_shift_resp_data_serialization() {,
+let resp_data = BatchCreateUserDailyShiftRespData {,
             failed_user_daily_shifts: Some(vec![UserDailyShift {
                 user_id: "user_789".to_string(),
                 shift_date: "2023-10-16".to_string(),
@@ -2009,17 +1820,15 @@ mod tests {
             success_count: Some(5),
             failed_count: Some(1),
         };
-
-        let serialized = serde_json::to_string(&resp_data).unwrap();
-        let deserialized: BatchCreateUserDailyShiftRespData =
-            serde_json::from_str(&serialized).unwrap();
+let serialized = serde_json::to_string(&resp_data).unwrap();
+        let deserialized: BatchCreateUserDailyShiftRespData =,
+serde_json::from_str(&serialized).unwrap();
         assert_eq!(resp_data.success_count, deserialized.success_count);
         assert_eq!(resp_data.failed_count, deserialized.failed_count);
-    }
-
-    #[test]
-    fn test_group_serialization() {
-        let group = Group {
+},
+#[test],
+    fn test_group_serialization() {,
+let group = Group {,
             group_id: "group_001".to_string(),
             group_name: "Engineering Team".to_string(),
             time_zone: Some("Asia/Shanghai".to_string()),
@@ -2048,45 +1857,39 @@ mod tests {
             create_time: Some("2023-01-01T00:00:00Z".to_string()),
             update_time: Some("2023-01-02T00:00:00Z".to_string()),
         };
-
-        let serialized = serde_json::to_string(&group).unwrap();
+let serialized = serde_json::to_string(&group).unwrap();
         let deserialized: Group = serde_json::from_str(&serialized).unwrap();
         assert_eq!(group.group_id, deserialized.group_id);
         assert_eq!(group.group_name, deserialized.group_name);
         assert_eq!(group.time_zone, deserialized.time_zone);
-    }
-
-    #[test]
-    fn test_except_date_rule_serialization() {
-        let rule = ExceptDateRule {
+},
+#[test],
+    fn test_except_date_rule_serialization() {,
+let rule = ExceptDateRule {,
             date: "2023-05-01".to_string(),
             except_type: 1,
             shift_id: Some("shift_special".to_string()),
         };
-
-        let serialized = serde_json::to_string(&rule).unwrap();
+let serialized = serde_json::to_string(&rule).unwrap();
         let deserialized: ExceptDateRule = serde_json::from_str(&serialized).unwrap();
         assert_eq!(rule.date, deserialized.date);
         assert_eq!(rule.except_type, deserialized.except_type);
         assert_eq!(rule.shift_id, deserialized.shift_id);
-    }
-
-    #[test]
-    fn test_work_day_rule_serialization() {
-        let rule = WorkDayRule {
+},
+#[test],
+    fn test_work_day_rule_serialization() {,
+let rule = WorkDayRule {,
             week_day: 2,
             shift_id: "shift_tuesday".to_string(),
         };
-
-        let serialized = serde_json::to_string(&rule).unwrap();
+let serialized = serde_json::to_string(&rule).unwrap();
         let deserialized: WorkDayRule = serde_json::from_str(&serialized).unwrap();
         assert_eq!(rule.week_day, deserialized.week_day);
         assert_eq!(rule.shift_id, deserialized.shift_id);
-    }
-
-    #[test]
-    fn test_user_setting_serialization() {
-        let setting = UserSetting {
+},
+#[test],
+    fn test_user_setting_serialization() {,
+let setting = UserSetting {,
             user_id: "user_001".to_string(),
             face_key_open: Some(true),
             face_key: Some("face_key_abc123".to_string()),
@@ -2095,35 +1898,31 @@ mod tests {
             create_time: Some("2023-01-01T00:00:00Z".to_string()),
             update_time: Some("2023-01-02T00:00:00Z".to_string()),
         };
-
-        let serialized = serde_json::to_string(&setting).unwrap();
+let serialized = serde_json::to_string(&setting).unwrap();
         let deserialized: UserSetting = serde_json::from_str(&serialized).unwrap();
         assert_eq!(setting.user_id, deserialized.user_id);
         assert_eq!(setting.face_key_open, deserialized.face_key_open);
         assert_eq!(setting.face_key, deserialized.face_key);
-    }
-
-    #[test]
-    fn test_stats_settings_serialization() {
-        let settings = StatsSettings {
+},
+#[test],
+    fn test_stats_settings_serialization() {,
+let settings = StatsSettings {,
             stats_scope: 1,
             start_date: "2023-01-01".to_string(),
             end_date: "2023-12-31".to_string(),
             user_ids: vec!["user_001".to_string(), "user_002".to_string()],
             need_fields: vec!["attendance_days".to_string(), "late_count".to_string()],
         };
-
-        let serialized = serde_json::to_string(&settings).unwrap();
+let serialized = serde_json::to_string(&settings).unwrap();
         let deserialized: StatsSettings = serde_json::from_str(&serialized).unwrap();
         assert_eq!(settings.stats_scope, deserialized.stats_scope);
         assert_eq!(settings.start_date, deserialized.start_date);
         assert_eq!(settings.end_date, deserialized.end_date);
         assert_eq!(settings.user_ids, deserialized.user_ids);
-    }
-
-    #[test]
-    fn test_stats_field_serialization() {
-        let field = StatsField {
+},
+#[test],
+    fn test_stats_field_serialization() {,
+let field = StatsField {,
             field_key: "attendance_rate".to_string(),
             field_name: "Attendance Rate".to_string(),
             field_name_zh: Some("出勤率".to_string()),
@@ -2131,42 +1930,37 @@ mod tests {
             field_name_ja: Some("出席率".to_string()),
             field_type: 1,
         };
-
-        let serialized = serde_json::to_string(&field).unwrap();
+let serialized = serde_json::to_string(&field).unwrap();
         let deserialized: StatsField = serde_json::from_str(&serialized).unwrap();
         assert_eq!(field.field_key, deserialized.field_key);
         assert_eq!(field.field_name, deserialized.field_name);
         assert_eq!(field.field_type, deserialized.field_type);
-    }
-
-    #[test]
-    fn test_user_stats_data_serialization() {
-        let mut datas = std::collections::HashMap::new();
+},
+#[test],
+    fn test_user_stats_data_serialization() {,
+let mut datas = std::collections::HashMap::new();
         datas.insert(
             "attendance_days".to_string(),
             serde_json::Value::Number(22.into()),
         );
-        datas.insert(
+datas.insert(,
             "late_count".to_string(),
             serde_json::Value::Number(3.into()),
         );
-
-        let stats_data = UserStatsData {
+let stats_data = UserStatsData {,
             user_id: "user_001".to_string(),
             user_name: Some("John Doe".to_string()),
             datas,
         };
-
-        let serialized = serde_json::to_string(&stats_data).unwrap();
+let serialized = serde_json::to_string(&stats_data).unwrap();
         let deserialized: UserStatsData = serde_json::from_str(&serialized).unwrap();
         assert_eq!(stats_data.user_id, deserialized.user_id);
         assert_eq!(stats_data.user_name, deserialized.user_name);
         assert_eq!(stats_data.datas.len(), deserialized.datas.len());
-    }
-
-    #[test]
-    fn test_user_approval_serialization() {
-        let approval = UserApproval {
+},
+#[test],
+    fn test_user_approval_serialization() {,
+let approval = UserApproval {,
             approval_id: "approval_001".to_string(),
             user_id: "user_001".to_string(),
             user_name: Some("Jane Smith".to_string()),
@@ -2180,18 +1974,16 @@ mod tests {
             created_at: Some("2023-09-30T10:00:00Z".to_string()),
             approved_at: Some("2023-09-30T11:00:00Z".to_string()),
         };
-
-        let serialized = serde_json::to_string(&approval).unwrap();
+let serialized = serde_json::to_string(&approval).unwrap();
         let deserialized: UserApproval = serde_json::from_str(&serialized).unwrap();
         assert_eq!(approval.approval_id, deserialized.approval_id);
         assert_eq!(approval.user_id, deserialized.user_id);
         assert_eq!(approval.approval_type, deserialized.approval_type);
         assert_eq!(approval.duration, deserialized.duration);
-    }
-
-    #[test]
-    fn test_user_task_remedy_application_serialization() {
-        let application = UserTaskRemedyApplication {
+},
+#[test],
+    fn test_user_task_remedy_application_serialization() {,
+let application = UserTaskRemedyApplication {,
             user_id: "user_001".to_string(),
             remedy_date: "2023-10-15".to_string(),
             remedy_time: "09:15".to_string(),
@@ -2199,33 +1991,29 @@ mod tests {
             reason: "Traffic jam".to_string(),
             comment: Some("Heavy traffic due to weather".to_string()),
         };
-
-        let serialized = serde_json::to_string(&application).unwrap();
+let serialized = serde_json::to_string(&application).unwrap();
         let deserialized: UserTaskRemedyApplication = serde_json::from_str(&serialized).unwrap();
         assert_eq!(application.user_id, deserialized.user_id);
         assert_eq!(application.remedy_date, deserialized.remedy_date);
         assert_eq!(application.remedy_type, deserialized.remedy_type);
         assert_eq!(application.reason, deserialized.reason);
-    }
-
-    #[test]
-    fn test_user_task_location_serialization() {
-        let location = UserTaskLocation {
+},
+#[test],
+    fn test_user_task_location_serialization() {,
+let location = UserTaskLocation {,
             latitude: 39.9042,
             longitude: 116.4074,
             address: Some("Beijing, China".to_string()),
         };
-
-        let serialized = serde_json::to_string(&location).unwrap();
+let serialized = serde_json::to_string(&location).unwrap();
         let deserialized: UserTaskLocation = serde_json::from_str(&serialized).unwrap();
         assert_eq!(location.latitude, deserialized.latitude);
         assert_eq!(location.longitude, deserialized.longitude);
         assert_eq!(location.address, deserialized.address);
-    }
-
-    #[test]
-    fn test_user_task_create_serialization() {
-        let task_create = UserTaskCreate {
+},
+#[test],
+    fn test_user_task_create_serialization() {,
+let task_create = UserTaskCreate {,
             user_id: "user_001".to_string(),
             group_id: "group_001".to_string(),
             shift_id: "shift_001".to_string(),
@@ -2242,17 +2030,15 @@ mod tests {
             is_remedy: Some(false),
             comment: Some("Normal check-in".to_string()),
         };
-
-        let serialized = serde_json::to_string(&task_create).unwrap();
+let serialized = serde_json::to_string(&task_create).unwrap();
         let deserialized: UserTaskCreate = serde_json::from_str(&serialized).unwrap();
         assert_eq!(task_create.user_id, deserialized.user_id);
         assert_eq!(task_create.check_type, deserialized.check_type);
         assert_eq!(task_create.check_result, deserialized.check_result);
-    }
-
-    #[test]
-    fn test_user_task_serialization() {
-        let task = UserTask {
+},
+#[test],
+    fn test_user_task_serialization() {,
+let task = UserTask {,
             task_id: "task_001".to_string(),
             user_id: "user_001".to_string(),
             user_name: Some("Alice Johnson".to_string()),
@@ -2274,31 +2060,27 @@ mod tests {
             create_time: "1634284800000".to_string(),
             update_time: "1634284800000".to_string(),
         };
-
-        let serialized = serde_json::to_string(&task).unwrap();
+let serialized = serde_json::to_string(&task).unwrap();
         let deserialized: UserTask = serde_json::from_str(&serialized).unwrap();
         assert_eq!(task.task_id, deserialized.task_id);
         assert_eq!(task.user_name, deserialized.user_name);
         assert_eq!(task.shift_name, deserialized.shift_name);
         assert_eq!(task.is_field, deserialized.is_field);
-    }
-
-    #[test]
-    fn test_archive_field_option_serialization() {
-        let option = ArchiveFieldOption {
+},
+#[test],
+    fn test_archive_field_option_serialization() {,
+let option = ArchiveFieldOption {,
             value: "active".to_string(),
             label: "Active Status".to_string(),
         };
-
-        let serialized = serde_json::to_string(&option).unwrap();
+let serialized = serde_json::to_string(&option).unwrap();
         let deserialized: ArchiveFieldOption = serde_json::from_str(&serialized).unwrap();
         assert_eq!(option.value, deserialized.value);
         assert_eq!(option.label, deserialized.label);
-    }
-
-    #[test]
-    fn test_archive_stats_field_serialization() {
-        let field = ArchiveStatsField {
+},
+#[test],
+    fn test_archive_stats_field_serialization() {,
+let field = ArchiveStatsField {,
             field_id: "field_001".to_string(),
             field_name: "Employee Status".to_string(),
             field_type: 1,
@@ -2310,38 +2092,33 @@ mod tests {
                 label: "Active".to_string(),
             }]),
         };
-
-        let serialized = serde_json::to_string(&field).unwrap();
+let serialized = serde_json::to_string(&field).unwrap();
         let deserialized: ArchiveStatsField = serde_json::from_str(&serialized).unwrap();
         assert_eq!(field.field_id, deserialized.field_id);
         assert_eq!(field.field_name, deserialized.field_name);
         assert_eq!(field.is_required, deserialized.is_required);
-    }
-
-    #[test]
-    fn test_archive_report_record_serialization() {
-        let mut field_data = std::collections::HashMap::new();
+},
+#[test],
+    fn test_archive_report_record_serialization() {,
+let mut field_data = std::collections::HashMap::new();
         field_data.insert("status".to_string(), "active".to_string());
         field_data.insert("department".to_string(), "engineering".to_string());
-
-        let record = ArchiveReportRecord {
+let record = ArchiveReportRecord {,
             record_id: Some("record_001".to_string()),
             user_id: "user_001".to_string(),
             archive_date: "2023-10-15".to_string(),
             field_data,
         };
-
-        let serialized = serde_json::to_string(&record).unwrap();
+let serialized = serde_json::to_string(&record).unwrap();
         let deserialized: ArchiveReportRecord = serde_json::from_str(&serialized).unwrap();
         assert_eq!(record.record_id, deserialized.record_id);
         assert_eq!(record.user_id, deserialized.user_id);
         assert_eq!(record.archive_date, deserialized.archive_date);
         assert_eq!(record.field_data.len(), deserialized.field_data.len());
-    }
-
-    #[test]
-    fn test_leave_employ_expire_record_serialization() {
-        let record = LeaveEmployExpireRecord {
+},
+#[test],
+    fn test_leave_employ_expire_record_serialization() {,
+let record = LeaveEmployExpireRecord {,
             record_id: "leave_001".to_string(),
             employee_id: "emp_001".to_string(),
             employee_name: Some("Bob Wilson".to_string()),
@@ -2356,18 +2133,16 @@ mod tests {
             create_time: 1640995200000,
             update_time: 1640995200000,
         };
-
-        let serialized = serde_json::to_string(&record).unwrap();
+let serialized = serde_json::to_string(&record).unwrap();
         let deserialized: LeaveEmployExpireRecord = serde_json::from_str(&serialized).unwrap();
         assert_eq!(record.record_id, deserialized.record_id);
         assert_eq!(record.employee_id, deserialized.employee_id);
         assert_eq!(record.granted_amount, deserialized.granted_amount);
         assert_eq!(record.remaining_amount, deserialized.remaining_amount);
-    }
-
-    #[test]
-    fn test_leave_accrual_record_patch_serialization() {
-        let patch = LeaveAccrualRecordPatch {
+},
+#[test],
+    fn test_leave_accrual_record_patch_serialization() {,
+let patch = LeaveAccrualRecordPatch {,
             employee_id: Some("emp_002".to_string()),
             leave_type_id: Some("sick_leave".to_string()),
             granted_amount: Some(20.0),
@@ -2378,17 +2153,15 @@ mod tests {
             granted_type: Some(1),
             granted_description: Some("System generated".to_string()),
         };
-
-        let serialized = serde_json::to_string(&patch).unwrap();
+let serialized = serde_json::to_string(&patch).unwrap();
         let deserialized: LeaveAccrualRecordPatch = serde_json::from_str(&serialized).unwrap();
         assert_eq!(patch.employee_id, deserialized.employee_id);
         assert_eq!(patch.granted_amount, deserialized.granted_amount);
         assert_eq!(patch.validity_type, deserialized.validity_type);
-    }
-
-    #[test]
-    fn test_leave_accrual_record_serialization() {
-        let record = LeaveAccrualRecord {
+},
+#[test],
+    fn test_leave_accrual_record_serialization() {,
+let record = LeaveAccrualRecord {,
             record_id: "accrual_001".to_string(),
             employee_id: "emp_001".to_string(),
             employee_name: Some("Charlie Brown".to_string()),
@@ -2407,85 +2180,80 @@ mod tests {
             create_time: 1672444800000,
             update_time: 1672444800000,
         };
-
-        let serialized = serde_json::to_string(&record).unwrap();
+let serialized = serde_json::to_string(&record).unwrap();
         let deserialized: LeaveAccrualRecord = serde_json::from_str(&serialized).unwrap();
         assert_eq!(record.record_id, deserialized.record_id);
         assert_eq!(record.granted_amount, deserialized.granted_amount);
         assert_eq!(record.used_amount, deserialized.used_amount);
         assert_eq!(record.validity_type, deserialized.validity_type);
-    }
-
-    #[test]
-    fn test_default_request_structs() {
-        let _delete_shift = DeleteShiftRequest::default();
+},
+#[test],
+    fn test_default_request_structs() {,
+let _delete_shift = DeleteShiftRequest::default();
         let _get_shift = GetShiftRequest::default();
-        let _query_shift = QueryShiftRequest::default();
+let _query_shift = QueryShiftRequest::default();
         let _list_shift = ListShiftRequest::default();
-        let _batch_create = BatchCreateUserDailyShiftRequest::default();
+let _batch_create = BatchCreateUserDailyShiftRequest::default();
         let _query_daily_shift = QueryUserDailyShiftRequest::default();
-        let _batch_create_temp = BatchCreateTempUserDailyShiftRequest::default();
+let _batch_create_temp = BatchCreateTempUserDailyShiftRequest::default();
         let _list_group_user = ListGroupUserRequest::default();
-        let _create_group = CreateGroupRequest::default();
+let _create_group = CreateGroupRequest::default();
         let _delete_group = DeleteGroupRequest::default();
-        let _get_group = GetGroupRequest::default();
+let _get_group = GetGroupRequest::default();
         let _search_group = SearchGroupRequest::default();
-        let _list_group = ListGroupRequest::default();
+let _list_group = ListGroupRequest::default();
         let _modify_user_setting = ModifyUserSettingRequest::default();
-        let _query_user_setting = QueryUserSettingRequest::default();
+let _query_user_setting = QueryUserSettingRequest::default();
         let _upload_photo = UploadUserPhotoRequest::default();
-        let _download_photo = DownloadUserPhotoRequest::default();
-    }
-
-    #[test]
+let _download_photo = DownloadUserPhotoRequest::default();
+    },
+#[test],
     fn test_api_response_trait_implementations() {
         assert_eq!(Shift::data_format(), ResponseFormat::Data);
         assert_eq!(EmptyResponse::data_format(), ResponseFormat::Data);
         assert_eq!(QueryShiftRespData::data_format(), ResponseFormat::Data);
         assert_eq!(ShiftListData::data_format(), ResponseFormat::Data);
-        assert_eq!(
+assert_eq!(,
             BatchCreateUserDailyShiftRespData::data_format(),
-            ResponseFormat::Data
-        );
+            ResponseFormat::Data,
+);
         assert_eq!(
             QueryUserDailyShiftRespData::data_format(),
-            ResponseFormat::Data
-        );
+            ResponseFormat::Data,
+);
         assert_eq!(
             BatchCreateTempUserDailyShiftRespData::data_format(),
-            ResponseFormat::Data
-        );
+            ResponseFormat::Data,
+);
         assert_eq!(ListGroupUserRespData::data_format(), ResponseFormat::Data);
         assert_eq!(CreateGroupRespData::data_format(), ResponseFormat::Data);
         assert_eq!(SearchGroupRespData::data_format(), ResponseFormat::Data);
         assert_eq!(ListGroupRespData::data_format(), ResponseFormat::Data);
         assert_eq!(Group::data_format(), ResponseFormat::Data);
-        assert_eq!(
+assert_eq!(,
             ModifyUserSettingRespData::data_format(),
-            ResponseFormat::Data
-        );
+            ResponseFormat::Data,
+);
         assert_eq!(
             QueryUserSettingRespData::data_format(),
-            ResponseFormat::Data
-        );
+            ResponseFormat::Data,
+);
         assert_eq!(UploadUserPhotoRespData::data_format(), ResponseFormat::Data);
-        assert_eq!(
+assert_eq!(,
             DownloadUserPhotoRespData::data_format(),
-            ResponseFormat::Data
-        );
+            ResponseFormat::Data,
+);
         assert_eq!(UserSetting::data_format(), ResponseFormat::Data);
-    }
-
-    #[test]
-    fn test_build_methods() {
-        let stats_request = UpdateUserStatsDataRequest::default().build();
+},
+#[test],
+    fn test_build_methods() {,
+let stats_request = UpdateUserStatsDataRequest::default().build();
         let query_stats = QueryStatsSettingsRequest::default().build();
-        let query_fields = QueryStatsFieldsRequest::default().build();
+let query_fields = QueryStatsFieldsRequest::default().build();
         let query_data = QueryUserStatsDataRequest::default().build();
-        let remedy_request = CreateUserTaskRemedyRequest::default().build();
+let remedy_request = CreateUserTaskRemedyRequest::default().build();
         let allowed_remedys = QueryUserAllowedRemedysRequest::default().build();
-        let task_remedy = QueryUserTaskRemedyRequest::default().build();
-
+let task_remedy = QueryUserTaskRemedyRequest::default().build();
         // Just ensure build methods work without errors
         assert_eq!(stats_request.employee_type, "");
         assert_eq!(query_stats.employee_type, "");
@@ -2494,43 +2262,38 @@ mod tests {
         assert_eq!(remedy_request.employee_type, "");
         assert_eq!(allowed_remedys.employee_type, "");
         assert_eq!(task_remedy.employee_type, "");
-    }
-
-    #[test]
+},
+#[test],
     fn test_empty_response_serialization() {
         let empty = EmptyResponse {};
-        let serialized = serde_json::to_string(&empty).unwrap();
+let serialized = serde_json::to_string(&empty).unwrap();
         let deserialized: EmptyResponse = serde_json::from_str(&serialized).unwrap();
-        // EmptyResponse should serialize/deserialize successfully
+// EmptyResponse should serialize/deserialize successfully,
         let _unused = deserialized;
-    }
-
-    #[test]
-    fn test_complex_nested_structures() {
-        let group_user = GroupUser {
+},
+#[test],
+    fn test_complex_nested_structures() {,
+let group_user = GroupUser {,
             user_id: "user_456".to_string(),
             user_name: Some("Test User".to_string()),
             employee_no: Some("EMP001".to_string()),
             department_id: Some("dept_123".to_string()),
             join_time: Some("2023-01-01T00:00:00Z".to_string()),
         };
-
-        let serialized = serde_json::to_string(&group_user).unwrap();
+let serialized = serde_json::to_string(&group_user).unwrap();
         let deserialized: GroupUser = serde_json::from_str(&serialized).unwrap();
         assert_eq!(group_user.user_id, deserialized.user_id);
         assert_eq!(group_user.employee_no, deserialized.employee_no);
-    }
-
-    #[test]
-    fn test_member_rule_serialization() {
-        let rule = MemberRule {
+},
+#[test],
+    fn test_member_rule_serialization() {,
+let rule = MemberRule {,
             member_type: 2,
             member_ids: vec!["member_001".to_string(), "member_002".to_string()],
         };
-
-        let serialized = serde_json::to_string(&rule).unwrap();
+let serialized = serde_json::to_string(&rule).unwrap();
         let deserialized: MemberRule = serde_json::from_str(&serialized).unwrap();
         assert_eq!(rule.member_type, deserialized.member_type);
         assert_eq!(rule.member_ids, deserialized.member_ids);
-    }
+}
 }

@@ -1,7 +1,6 @@
 use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
-
-use crate::core::{
+use crate::core::{,
     api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
@@ -11,60 +10,53 @@ use crate::core::{
     req_option::RequestOption,
     SDKResult,
 };
-
-/// 获取知识空间节点请求
-#[derive(Debug, Serialize, Default)]
+/// 获取知识空间节点请求,
+#[derive(Debug, Serialize, Default)],
 pub struct GetSpaceNodeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
-    /// 知识空间id
-    #[serde(skip)]
+    /// 知识空间id,
+#[serde(skip)],
     space_id: String,
-    /// 节点token
-    #[serde(skip)]
+    /// 节点token,
+#[serde(skip)],
     node_token: String,
 }
-
 impl GetSpaceNodeRequest {
-    pub fn builder() -> GetSpaceNodeRequestBuilder {
-        GetSpaceNodeRequestBuilder::default()
+    pub fn builder() -> GetSpaceNodeRequestBuilder {,
+GetSpaceNodeRequestBuilder::default(),
     }
 
-    pub fn new(space_id: impl ToString, node_token: impl ToString) -> Self {
-        Self {
+    pub fn new(space_id: impl ToString, node_token: impl ToString) -> Self {,
+Self {,
             space_id: space_id.to_string(),
-            node_token: node_token.to_string(),
-            ..Default::default()
-        }
-    }
+            node_token: node_token.to_string()
+            ..Default::default(),
 }
-
-#[derive(Default)]
+    },
+},
+#[derive(Default)],
 pub struct GetSpaceNodeRequestBuilder {
     request: GetSpaceNodeRequest,
 }
-
 impl GetSpaceNodeRequestBuilder {
     /// 知识空间id
-    pub fn space_id(mut self, space_id: impl ToString) -> Self {
-        self.request.space_id = space_id.to_string();
-        self
-    }
-
-    /// 节点token
-    pub fn node_token(mut self, node_token: impl ToString) -> Self {
-        self.request.node_token = node_token.to_string();
-        self
-    }
-
-    pub fn build(mut self) -> GetSpaceNodeRequest {
+    pub fn space_id(mut self, space_id: impl ToString) -> Self {,
+self.request.space_id = space_id.to_string();
+        self,
+},
+/// 节点token,
+    pub fn node_token(mut self, node_token: impl ToString) -> Self {,
+self.request.node_token = node_token.to_string();
+        self,
+},
+pub fn build(mut self) -> GetSpaceNodeRequest {,
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
-        self.request
-    }
-}
-
-/// 知识空间节点信息
-#[derive(Debug, Deserialize)]
+self.request,
+    },
+},
+/// 知识空间节点信息,
+#[derive(Debug, Deserialize)],
 pub struct SpaceNode {
     /// 知识空间id
     pub space_id: String,
@@ -90,54 +82,50 @@ pub struct SpaceNode {
     pub node_creator: Option<String>,
     /// 是否有子节点
     pub has_child: Option<bool>,
-}
-
-/// 获取知识空间节点响应
-#[derive(Debug, Deserialize)]
+},
+/// 获取知识空间节点响应,
+#[derive(Debug, Deserialize)],
 pub struct GetSpaceNodeResponse {
     /// 节点信息
     pub node: SpaceNode,
 }
-
-impl ApiResponseTrait for GetSpaceNodeResponse {
-    fn data_format() -> ResponseFormat {
-        ResponseFormat::Data
-    }
-}
-
-/// 获取知识空间节点
+impl ApiResponseTrait for GetSpaceNodeResponse {,
+    fn data_format() -> ResponseFormat {,
+ResponseFormat::Data,
+    },
+},
+/// 获取知识空间节点,
 pub async fn get_space_node(
     request: GetSpaceNodeRequest,
     config: &Config,
     option: Option<RequestOption>,
-) -> SDKResult<BaseResponse<GetSpaceNodeResponse>> {
-    let mut api_req = request.api_request;
+) -> SDKResult<BaseResponse<GetSpaceNodeResponse>> {,
+let mut api_req = request.api_request;
     api_req.set_http_method(Method::GET);
-    api_req.api_path = {
+api_req.api_path = {,
         let mut path =
             EndpointBuilder::replace_param(WIKI_V2_SPACE_NODE_GET, "space_id", &request.space_id);
         path = EndpointBuilder::replace_param(&path, "node_token", &request.node_token);
-        path
+path,
     };
     api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
     let api_resp = Transport::request(api_req, config, option).await?;
-    Ok(api_resp)
+Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)]
-mod tests {
+#[allow(unused_variables, unused_unsafe)],
+mod tests {,
     use super::*;
-
-    #[test]
-    fn test_get_space_node_request_builder() {
-        let request = GetSpaceNodeRequest::builder()
-            .space_id("spcxxxxxx")
-            .node_token("wikcnxxxxxx")
+#[test],
+    fn test_get_space_node_request_builder() {,
+let request = GetSpaceNodeRequest::builder(),
+            .space_id()
+.node_token()
             .build();
 
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.node_token, "wikcnxxxxxx");
-    }
+}
 }
