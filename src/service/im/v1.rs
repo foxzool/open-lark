@@ -34,6 +34,7 @@ pub mod models;
 pub mod pin;
 pub mod url_preview;
 
+#[derive(Debug)]
 pub struct V1 {
     // 现有服务
     pub chats: ChatsService,

@@ -2,7 +2,7 @@ use reqwest::Method;
 
 use crate::{
     core::{
-        api_req::ApiRequest, api_resp::BaseResponse, config::Config, constants::AccessTokenType,
+        api_req::api_resp::BaseResponse, config::Config, constants::AccessTokenType,
         endpoints::security_and_compliance::*, http::Transport, req_option::RequestOption,
         trait_system::Service, SDKResult,
     },

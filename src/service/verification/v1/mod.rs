@@ -1,9 +1,11 @@
 use reqwest::Method;
-use serde::{Deserialize, Serialize};
+use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 
 use crate::{
+            core::{
+                api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     core::{
-        api_req::ApiRequest,
+
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
@@ -69,7 +71,9 @@ impl V1 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{core::api_resp::ResponseFormat, service::verification::models::TenantInfo};
+    use crate::{
+            core::{
+                api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},core::api_resp::ResponseFormat, service::verification::models::TenantInfo};
     use std::time::Duration;
 
     #[test]

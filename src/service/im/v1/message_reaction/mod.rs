@@ -18,6 +18,7 @@ use crate::{
 };
 
 /// 表情回复服务
+#[derive(Debug)]
 pub struct MessageReactionService {
     pub config: Config,
 }
@@ -66,20 +67,18 @@ impl MessageReactionService {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::im::IM_V1_MESSAGE_REACTIONS,
-                "message_id",
-                message_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params,
-            body: serde_json::to_vec(&CreateReactionRequest {
-                emoji_type: emoji_type.to_string(),
-            })?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            crate::core::endpoints::im::IM_V1_MESSAGE_REACTIONS,
+            "message_id",
+            message_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.query_params_mut().extend(query_params);
+        api_req.set_body(serde_json::to_vec(&CreateReactionRequest {
+            emoji_type: emoji_type.to_string(),
+        })?);
 
         let api_resp: BaseResponse<EmptyResponse> =
             Transport::request(api_req, &self.config, option).await?;
@@ -106,17 +105,15 @@ impl MessageReactionService {
             query_params.insert("page_token", page_token);
         }
 
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::im::IM_V1_MESSAGE_REACTIONS,
-                "message_id",
-                message_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            crate::core::endpoints::im::IM_V1_MESSAGE_REACTIONS,
+            "message_id",
+            message_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.query_params_mut().extend(query_params);
 
         let api_resp: BaseResponse<ListReactionResponse> =
             Transport::request(api_req, &self.config, option).await?;
@@ -136,16 +133,14 @@ impl MessageReactionService {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
-        let api_req = ApiRequest {
-            http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_params_from_array(
-                crate::core::endpoints::im::IM_V1_DELETE_MESSAGE_REACTION,
-                &[("message_id", message_id), ("reaction_id", reaction_id)],
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::DELETE);
+        api_req.set_api_path(EndpointBuilder::replace_params_from_array(
+            crate::core::endpoints::im::IM_V1_DELETE_MESSAGE_REACTION,
+            &[("message_id", message_id), ("reaction_id", reaction_id)],
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.query_params_mut().extend(query_params);
 
         let api_resp: BaseResponse<EmptyResponse> =
             Transport::request(api_req, &self.config, option).await?;

@@ -1,9 +1,10 @@
-use reqwest::Method;
 use serde::{Deserialize, Serialize};
+use open_lark_core::core::api_req::ApiRequest;
 
 use crate::{
+            core::{
+                api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     core::{
-        api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
@@ -20,6 +21,7 @@ use crate::{
 };
 
 /// 关联组织管理服务
+#[derive(Debug, Clone)]
 pub struct CollaborationOrganizationService {
     pub config: Config,
 }
@@ -47,13 +49,9 @@ impl CollaborationOrganizationService {
         request: OrganizationListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OrganizationListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_api_path(Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
@@ -88,17 +86,13 @@ impl CollaborationOrganizationService {
         org_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OrganizationStructureResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_VISIBLE,
-                "org_id",
-                org_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_VISIBLE,
+            "org_id",
+            org_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -120,17 +114,13 @@ impl CollaborationOrganizationService {
         org_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OrganizationGetResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_GET,
-                "org_id",
-                org_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_GET,
+            "org_id",
+            org_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -154,16 +144,12 @@ impl CollaborationOrganizationService {
         user_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OrganizationUserGetResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_params_from_array(
-                Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_USER_GET,
-                &[("org_id", org_id), ("user_id", user_id)],
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_api_path(EndpointBuilder::replace_params_from_array(
+            Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_USER_GET,
+            &[("org_id", org_id), ("user_id", user_id)],
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -187,16 +173,12 @@ impl CollaborationOrganizationService {
         department_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<OrganizationDepartmentGetResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_params_from_array(
-                Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_DEPARTMENT_GET,
-                &[("org_id", org_id), ("department_id", department_id)],
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_api_path(EndpointBuilder::replace_params_from_array(
+            Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_DEPARTMENT_GET,
+            &[("org_id", org_id), ("department_id", department_id)],
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -220,17 +202,13 @@ impl CollaborationOrganizationService {
         request: SharedMemberScopeListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SharedMemberScopeListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_SHARED_MEMBER_SCOPES,
-                "org_id",
-                org_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATION_SHARED_MEMBER_SCOPES,
+            "org_id",
+            org_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
@@ -265,13 +243,9 @@ impl CollaborationOrganizationService {
         request: AdminOrganizationListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<AdminOrganizationListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS_ADMIN.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_api_path(Endpoints::TRUST_PARTY_V1_COLLABORATION_ORGANIZATIONS_ADMIN.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {

@@ -54,6 +54,7 @@ pub mod v2;
 ///
 /// 聚合所有IM相关的API版本，提供统一的访问接口。
 /// 通过不同版本的子服务访问具体的API功能。
+#[derive(Debug)]
 pub struct ImService {
     /// IM API v1版本服务
     pub v1: V1,

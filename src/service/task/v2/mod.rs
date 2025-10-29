@@ -21,6 +21,7 @@ pub use tasklist::TasklistService;
 pub use tasklist_activity_subscription::TasklistActivitySubscriptionService;
 
 /// 任务模块服务 (v2)
+#[derive(Debug)]
 pub struct TaskV2Service {
     /// 任务服务
     pub task: TaskService,

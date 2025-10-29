@@ -13,6 +13,7 @@ use crate::core::{
 };
 
 /// 应用消息流卡片服务
+#[derive(Debug)]
 pub struct AppFeedCardService {
     pub config: Config,
 }
@@ -85,13 +86,11 @@ impl AppFeedCardService {
         request: CreateAppFeedCardRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<CreateAppFeedCardResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: crate::core::endpoints::im::IM_V2_APP_FEED_CARD.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(crate::core::endpoints::im::IM_V2_APP_FEED_CARD.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.set_body(serde_json::to_vec(&request)?);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -102,17 +101,15 @@ impl AppFeedCardService {
         request: UpdateAppFeedCardRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UpdateAppFeedCardResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::PUT,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::im::IM_V2_GET_APP_FEED_CARD,
-                "card_id",
-                card_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::PUT);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            crate::core::endpoints::im::IM_V2_GET_APP_FEED_CARD,
+            "card_id",
+            card_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.set_body(serde_json::to_vec(&request)?);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -123,16 +120,14 @@ impl AppFeedCardService {
         card_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::im::IM_V2_DELETE_APP_FEED_CARD,
-                "card_id",
-                card_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::DELETE);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            crate::core::endpoints::im::IM_V2_DELETE_APP_FEED_CARD,
+            "card_id",
+            card_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         Transport::request(api_req, &self.config, option).await
     }

@@ -1,10 +1,12 @@
 use log;
-use reqwest::Method;
+use open_lark_core::core::api_req::ApiRequest;use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::{
+            core::{
+                api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     core::{
-        api_req::ApiRequest,
+
         api_resp::{ApiResponseTrait, BaseResponse, BinaryResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,

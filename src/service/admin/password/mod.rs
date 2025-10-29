@@ -1,9 +1,9 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
+use open_lark_core::core::api_req::ApiRequest;
 
 use crate::{
     core::{
-        api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
@@ -61,24 +61,23 @@ impl PasswordService {
         request: PasswordResetRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<PasswordResetApiResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: admin::ADMIN_V1_PASSWORD_RESET.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: match serde_json::to_vec(&serde_json::json!({
-                "user_id": request.user_id,
-                "password": request.password
-            })) {
-                Ok(body) => body,
-                Err(e) => {
-                    return Err(LarkAPIError::DeserializeError(format!(
-                        "Failed to serialize password reset request: {}",
-                        e
-                    )));
-                }
-            },
-            ..Default::default()
+        let mut api_req = ApiRequest::default();
+            api_req.set_http_method(Method::POST);
+            api_req.set_api_path(admin::ADMIN_V1_PASSWORD_RESET.to_string());
+            api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+            let body = match serde_json::to_vec(&serde_json::json!({
+            "user_id": request.user_id,
+            "password": request.password
+        })) {
+            Ok(body) => body,
+            Err(e) => {
+                return Err(LarkAPIError::DeserializeError(format!(
+                    "Failed to serialize password reset request: {}",
+                    e
+                )));
+            }
         };
+        api_req.set_body(body);
 
         Transport::request(api_req, &self.config, option).await
     }

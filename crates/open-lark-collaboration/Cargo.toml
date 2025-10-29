@@ -19,3 +19,6 @@ serde_repr = { workspace = true }
 log = { workspace = true }
 anyhow = { workspace = true }
 
+[features]
+default = []
+

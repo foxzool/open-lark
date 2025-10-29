@@ -1,9 +1,9 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
+use open_lark_core::core::api_req::ApiRequest;
 
 use crate::{
     core::{
-        api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
@@ -16,6 +16,7 @@ use crate::{
 };
 
 /// OKR 内容管理服务
+#[derive(Debug)]
 pub struct OkrContentService {
     pub config: Config,
 }

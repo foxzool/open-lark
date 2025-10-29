@@ -1,10 +1,10 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
+use open_lark_core::core::api_req::ApiRequest;
 use std::collections::HashMap;
 
 use crate::{
     core::{
-        api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
@@ -17,6 +17,7 @@ use crate::{
 };
 
 /// 清单活动订阅服务
+#[derive(Debug)]
 pub struct TasklistActivitySubscriptionService {
     pub config: Config,
 }

@@ -1,5 +1,6 @@
+use open_lark_core::core::api_req::ApiRequest;
 use crate::core::{
-    api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config, constants::AccessTokenType,
+    api_resp::ApiResponseTrait, config::Config, constants::AccessTokenType,
     http::Transport, trait_system::Service,
 };
 use serde::{Deserialize, Serialize};

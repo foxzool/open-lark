@@ -1,10 +1,9 @@
 use reqwest::Method;
-use serde::{Deserialize, Serialize};
+use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 use crate::{
     core::{
-        api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,

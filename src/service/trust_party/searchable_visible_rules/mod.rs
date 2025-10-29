@@ -1,9 +1,10 @@
-use reqwest::Method;
 use serde::{Deserialize, Serialize};
+use open_lark_core::core::api_req::ApiRequest;
 
 use crate::{
+            core::{
+                api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     core::{
-        api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
@@ -17,6 +18,7 @@ use crate::{
 };
 
 /// 可搜可见规则管理服务
+#[derive(Debug, Clone)]
 pub struct SearchableVisibleRulesService {
     pub config: Config,
 }
@@ -44,13 +46,10 @@ impl SearchableVisibleRulesService {
         request: RuleCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<RuleCreateResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: Endpoints::TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULES.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_api_path(Endpoints::TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULES.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.set_body(serde_json::to_vec(&request)?);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -74,17 +73,14 @@ impl SearchableVisibleRulesService {
         request: RuleUpdateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<RuleUpdateResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::PUT,
-            api_path: EndpointBuilder::replace_param(
-                Endpoints::TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULE_OPERATION,
-                "rule_id",
-                rule_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            Endpoints::TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULE_OPERATION,
+            "rule_id",
+            rule_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.set_body(serde_json::to_vec(&request)?);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -106,13 +102,9 @@ impl SearchableVisibleRulesService {
         request: RuleListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<RuleListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: Endpoints::TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULES.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_api_path(Endpoints::TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULES.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         // 添加查询参数
         if let Some(page_token) = request.page_token {
@@ -161,17 +153,13 @@ impl SearchableVisibleRulesService {
         rule_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<RuleDeleteResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                Endpoints::TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULE_OPERATION,
-                "rule_id",
-                rule_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            Endpoints::TRUST_PARTY_V1_SEARCHABLE_VISIBLE_RULE_OPERATION,
+            "rule_id",
+            rule_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         Transport::request(api_req, &self.config, option).await
     }

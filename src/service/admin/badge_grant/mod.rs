@@ -1,9 +1,9 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
+use open_lark_core::core::api_req::ApiRequest;
 
 use crate::{
     core::{
-        api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
@@ -117,13 +117,11 @@ impl BadgeGrantService {
         request: BadgeGrantCreateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BadgeGrantCreateResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: admin::ADMIN_V1_BADGE_GRANTS_CREATE.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(admin::ADMIN_V1_BADGE_GRANTS_CREATE.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.set_body(serde_json::to_vec(&request)?);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -140,17 +138,15 @@ impl BadgeGrantService {
         request: BadgeGrantDeleteRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BadgeGrantDeleteResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                admin::ADMIN_V1_BADGE_GRANTS_OPERATION,
-                "grant_id",
-                &request.grant_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::DELETE);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            admin::ADMIN_V1_BADGE_GRANTS_OPERATION,
+            "grant_id",
+            &request.grant_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.set_body(vec![]);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -167,24 +163,23 @@ impl BadgeGrantService {
         request: BadgeGrantUpdateRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BadgeGrantUpdateResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::PUT,
-            api_path: EndpointBuilder::replace_param(
-                admin::ADMIN_V1_BADGE_GRANTS_OPERATION,
-                "grant_id",
-                &request.grant_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(&serde_json::json!({
-                "name": request.name,
-                "description": request.description,
-                "user_list": request.user_list,
-                "effective_time": request.effective_time,
-                "expiry_time": request.expiry_time,
-                "time_zone": request.time_zone
-            }))?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::PUT);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            admin::ADMIN_V1_BADGE_GRANTS_OPERATION,
+            "grant_id",
+            &request.grant_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.set_body(serde_json::to_vec(&serde_json::json!({
+            "name": request.name,
+            "description": request.description,
+            "user_list": request.user_list,
+            "effective_time": request.effective_time,
+            "expiry_time": request.expiry_time,
+            "time_zone": request.time_zone
+        }))?);
+
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -201,29 +196,27 @@ impl BadgeGrantService {
         request: BadgeGrantListRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BadgeGrantListResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: admin::ADMIN_V1_BADGE_GRANTS_LIST.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(admin::ADMIN_V1_BADGE_GRANTS_LIST.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.set_body(vec![]);
 
         // 添加查询参数
+        let mut query_params = std::collections::HashMap::new();
         if let Some(badge_id) = request.badge_id {
-            api_req.query_params.insert("badge_id", badge_id);
+            query_params.insert("badge_id".to_string(), badge_id);
         }
         if let Some(page_size) = request.page_size {
-            api_req
-                .query_params
-                .insert("page_size", page_size.to_string());
+            query_params.insert("page_size".to_string(), page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req.query_params.insert("page_token", page_token);
+            query_params.insert("page_token".to_string(), page_token);
         }
         if let Some(name) = request.name {
-            api_req.query_params.insert("name", name);
+            query_params.insert("name".to_string(), name);
         }
+        api_req.set_query_params(query_params);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -241,17 +234,15 @@ impl BadgeGrantService {
         request: BadgeGrantGetRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BadgeGrantGetResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                admin::ADMIN_V1_BADGE_GRANTS_OPERATION,
-                "grant_id",
-                &request.grant_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            admin::ADMIN_V1_BADGE_GRANTS_OPERATION,
+            "grant_id",
+            &request.grant_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.set_body(vec![]);
 
         Transport::request(api_req, &self.config, option).await
     }

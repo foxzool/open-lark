@@ -1,4 +1,5 @@
 use reqwest::Method;
+use open_lark_core::core::api_req::ApiRequest;
 use serde_json::json;
 
 use crate::core::{
@@ -211,7 +212,6 @@ impl Service for UserSettingService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::{api_req::ApiRequest, config::Config};
 
     #[test]
     fn test_user_setting_service_creation() {

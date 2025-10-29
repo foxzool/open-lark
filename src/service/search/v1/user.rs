@@ -2,8 +2,8 @@ use log::error;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
+use open_lark_core::core::api_req::ApiRequest;
 use crate::core::{
-    api_req::ApiRequest,
     api_resp::{ApiResponseTrait, BaseResponse},
     config::Config,
     constants::AccessTokenType,
@@ -14,7 +14,6 @@ use crate::core::{
     SDKResult,
 };
 use crate::impl_full_service;
-
 pub struct UserService {
     config: Config,
 }

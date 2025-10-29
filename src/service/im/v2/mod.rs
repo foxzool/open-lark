@@ -8,6 +8,7 @@ use app_feed_card::AppFeedCardService;
 use groups_bots::GroupsBotsService;
 
 /// IM v2服务
+#[derive(Debug)]
 pub struct V2 {
     /// 应用消息流卡片服务
     pub app_feed_card: AppFeedCardService,

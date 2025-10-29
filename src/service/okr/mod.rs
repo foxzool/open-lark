@@ -199,6 +199,7 @@ use review::ReviewService;
 ///
 /// let progress = client.okr.progress_record.create_progress_record(progress_request, None).await?;
 /// ```
+#[derive(Debug)]
 pub struct OkrService {
     /// 周期管理服务
     pub period: PeriodService,

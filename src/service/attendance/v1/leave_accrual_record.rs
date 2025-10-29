@@ -1,4 +1,5 @@
 use reqwest::Method;
+use open_lark_core::core::api_req::ApiRequest;
 use serde_json::json;
 
 use crate::{
@@ -89,7 +90,6 @@ impl Service for LeaveAccrualRecordService {
 #[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-    use crate::core::{api_req::ApiRequest, config::Config};
     use crate::service::attendance::v1::models::LeaveAccrualRecordPatch;
 
     fn create_test_config() -> Config {

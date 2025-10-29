@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 use crate::impl_full_service;
+use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{
         api_resp::{ApiResponseTrait, BaseResponse, EmptyResponse, ResponseFormat},
@@ -12,12 +13,13 @@ use crate::{
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
-        ApiRequest, SDKResult,
+        SDKResult,
     },
     service::im::v1::models::{BatchMessageStatus, ReceiveIdType, UserIdType},
 };
 
 /// 批量消息服务
+#[derive(Debug)]
 pub struct BatchMessageService {
     pub config: Config,
 }
@@ -123,17 +125,12 @@ impl BatchMessageService {
         request: BatchSendMessageRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BatchSendMessageResponse> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: crate::core::endpoints::im::IM_V1_BATCH_MESSAGES.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params: HashMap::from([(
-                "receive_id_type",
-                receive_id_type.as_str().to_string(),
-            )]),
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(crate::core::endpoints::im::IM_V1_BATCH_MESSAGES.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.query_params_mut().insert("receive_id_type", receive_id_type.as_str().to_string());
+        api_req.set_body(serde_json::to_vec(&request)?);
 
         let api_resp: BaseResponse<BatchSendMessageResponse> =
             Transport::request(api_req, &self.config, option).await?;
@@ -146,16 +143,14 @@ impl BatchMessageService {
         batch_message_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<EmptyResponse> {
-        let api_req = ApiRequest {
-            http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::im::IM_V1_DELETE_BATCH_MESSAGE,
-                "batch_message_id",
-                batch_message_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::DELETE);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            crate::core::endpoints::im::IM_V1_DELETE_BATCH_MESSAGE,
+            "batch_message_id",
+            batch_message_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<EmptyResponse> =
             Transport::request(api_req, &self.config, option).await?;
@@ -168,16 +163,14 @@ impl BatchMessageService {
         batch_message_id: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<GetBatchProgressResponse> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::im::IM_V1_BATCH_MESSAGE_PROGRESS,
-                "batch_message_id",
-                batch_message_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            crate::core::endpoints::im::IM_V1_BATCH_MESSAGE_PROGRESS,
+            "batch_message_id",
+            batch_message_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<GetBatchProgressResponse> =
             Transport::request(api_req, &self.config, option).await?;
@@ -204,17 +197,15 @@ impl BatchMessageService {
             query_params.insert("page_token", page_token);
         }
 
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::im::IM_V1_BATCH_MESSAGE_READ_USER,
-                "batch_message_id",
-                batch_message_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            crate::core::endpoints::im::IM_V1_BATCH_MESSAGE_READ_USER,
+            "batch_message_id",
+            batch_message_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.query_params_mut().extend(query_params);
 
         let api_resp: BaseResponse<GetBatchReadUserResponse> =
             Transport::request(api_req, &self.config, option).await?;

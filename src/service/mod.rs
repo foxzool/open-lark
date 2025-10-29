@@ -97,6 +97,14 @@ pub mod ai;
 pub mod aily;
 #[cfg(feature = "apass")]
 pub mod apass;
+#[cfg(feature = "app_engine")]
+pub mod app_engine;
+#[cfg(feature = "baike")]
+pub mod baike;
+#[cfg(feature = "base")]
+pub mod base;
+#[cfg(feature = "meeting_room")]
+pub mod meeting_room;
 #[cfg(feature = "application")]
 pub mod application;
 #[cfg(feature = "approval")]
@@ -109,6 +117,8 @@ pub mod authentication;
 pub mod bot;
 #[cfg(feature = "calendar")]
 pub mod calendar;
+#[cfg(feature = "ccm")]
+pub mod ccm;
 #[cfg(feature = "cardkit")]
 pub mod cardkit;
 #[cfg(feature = "contact")]
@@ -121,6 +131,8 @@ pub mod directory;
 pub mod ehr;
 #[cfg(feature = "elearning")]
 pub mod elearning;
+#[cfg(feature = "feishu_people")]
+pub mod feishu_people;
 pub mod endpoints;
 #[cfg(feature = "group")]
 pub mod group;

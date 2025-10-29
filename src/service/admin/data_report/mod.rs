@@ -1,9 +1,9 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
+use open_lark_core::core::api_req::ApiRequest;
 
 use crate::{
     core::{
-        api_req::ApiRequest,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         config::Config,
         constants::AccessTokenType,
@@ -67,13 +67,11 @@ impl DataReportService {
         request: DepartmentDataReportRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<DepartmentDataReportResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: admin::ADMIN_V1_DATA_REPORT_DEPARTMENT.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(admin::ADMIN_V1_DATA_REPORT_DEPARTMENT.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.set_body(vec![]);
 
         // 添加查询参数
         api_req
@@ -87,7 +85,7 @@ impl DataReportService {
                 .insert("department_id_type", department_id_type);
         }
         if let Some(department_id) = request.department_id {
-            api_req.query_params.insert("department_id", department_id);
+        api_req.query_params.insert("department_id", department_id);
         }
         if let Some(page_size) = request.page_size {
             api_req
@@ -95,7 +93,7 @@ impl DataReportService {
                 .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req.query_params.insert("page_token", page_token);
+        api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await
@@ -113,13 +111,11 @@ impl DataReportService {
         request: UserDataReportRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UserDataReportResponse>> {
-        let mut api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: admin::ADMIN_V1_DATA_REPORT_USER.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: vec![],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(admin::ADMIN_V1_DATA_REPORT_USER.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.set_body(vec![]);
 
         // 添加查询参数
         api_req
@@ -128,10 +124,10 @@ impl DataReportService {
         api_req.query_params.insert("end_date", request.end_date);
 
         if let Some(user_id_type) = request.user_id_type {
-            api_req.query_params.insert("user_id_type", user_id_type);
+        api_req.query_params.insert("user_id_type", user_id_type);
         }
         if let Some(user_ids) = request.user_ids {
-            api_req.query_params.insert("user_ids", user_ids.join(","));
+        api_req.query_params.insert("user_ids", user_ids.join(","));
         }
         if let Some(department_id_type) = request.department_id_type {
             api_req
@@ -139,7 +135,7 @@ impl DataReportService {
                 .insert("department_id_type", department_id_type);
         }
         if let Some(department_id) = request.department_id {
-            api_req.query_params.insert("department_id", department_id);
+        api_req.query_params.insert("department_id", department_id);
         }
         if let Some(page_size) = request.page_size {
             api_req
@@ -147,7 +143,7 @@ impl DataReportService {
                 .insert("page_size", page_size.to_string());
         }
         if let Some(page_token) = request.page_token {
-            api_req.query_params.insert("page_token", page_token);
+        api_req.query_params.insert("page_token", page_token);
         }
 
         Transport::request(api_req, &self.config, option).await

@@ -17,6 +17,7 @@ use crate::{
 };
 
 /// 群聊或机器人消息服务
+#[derive(Debug)]
 pub struct GroupsBotsService {
     pub config: Config,
 }
@@ -116,17 +117,12 @@ impl GroupsBotsService {
         request: BotTimeSentiveRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<BotTimeSentiveResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: crate::core::endpoints::im::IM_V2_GROUPS_BOTS_TIME_SENSITIVE.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params: HashMap::from([(
-                "receive_id_type",
-                receive_id_type.as_str().to_string(),
-            )]),
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(crate::core::endpoints::im::IM_V2_GROUPS_BOTS_TIME_SENSITIVE.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.query_params_mut().insert("receive_id_type", receive_id_type.as_str().to_string());
+        api_req.set_body(serde_json::to_vec(&request)?);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -137,17 +133,15 @@ impl GroupsBotsService {
         request: UpdateFeedCardButtonRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<UpdateFeedCardButtonResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::PUT,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::im::IM_V2_GROUPS_BOTS_UPDATE,
-                "message_id",
-                message_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::PUT);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            crate::core::endpoints::im::IM_V2_GROUPS_BOTS_UPDATE,
+            "message_id",
+            message_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.set_body(serde_json::to_vec(&request)?);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -159,17 +153,12 @@ impl GroupsBotsService {
         request: TimelyReminderRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<TimelyReminderResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::PATCH,
-            api_path: crate::core::endpoints::im::IM_V2_GROUPS_BOTS_PATCH.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params: HashMap::from([(
-                "receive_id_type",
-                receive_id_type.as_str().to_string(),
-            )]),
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::PATCH);
+        api_req.set_api_path(crate::core::endpoints::im::IM_V2_GROUPS_BOTS_PATCH.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.query_params_mut().insert("receive_id_type", receive_id_type.as_str().to_string());
+        api_req.set_body(serde_json::to_vec(&request)?);
 
         Transport::request(api_req, &self.config, option).await
     }

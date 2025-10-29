@@ -15,10 +15,18 @@ use crate::service::admin::AdminService;
 use crate::service::ai::AiService;
 #[cfg(feature = "aily")]
 use crate::service::aily::AilyService;
+#[cfg(feature = "app_engine")]
+use crate::service::app_engine::AppEngineService;
+#[cfg(feature = "baike")]
+use crate::service::baike::BaikeService;
+#[cfg(feature = "meeting_room")]
+use crate::service::meeting_room::MeetingRoomService;
 #[cfg(feature = "apass")]
 use crate::service::apass::ApassService;
 #[cfg(feature = "application")]
 use crate::service::application::ApplicationService;
+#[cfg(feature = "base")]
+use crate::service::base::BaseService;
 #[cfg(feature = "approval")]
 use crate::service::approval::ApprovalService;
 #[cfg(feature = "attendance")]
@@ -29,6 +37,8 @@ use crate::service::authentication::AuthenService;
 use crate::service::bot::BotService;
 #[cfg(feature = "calendar")]
 use crate::service::calendar::CalendarService;
+#[cfg(feature = "ccm")]
+use crate::service::ccm::CcmService;
 #[cfg(feature = "cardkit")]
 use crate::service::cardkit::CardkitService;
 #[cfg(feature = "cloud-docs")]
@@ -43,6 +53,8 @@ use crate::service::directory::DirectoryService;
 use crate::service::ehr::EhrService;
 #[cfg(feature = "elearning")]
 use crate::service::elearning::ELearningService;
+#[cfg(feature = "feishu_people")]
+use crate::service::feishu_people::FeishuPeopleService;
 #[cfg(feature = "group")]
 use crate::service::group::GroupService;
 #[cfg(feature = "helpdesk")]
@@ -151,6 +163,7 @@ pub mod ws_client;
 /// - `contact`: 通讯录
 /// - `hire`: 招聘
 /// - 更多服务请参考各字段文档
+#[derive(Debug)]
 pub struct LarkClient {
     pub config: Config,
     /// 共享配置（实验性）：单一 `Arc<Config>`，用于内部服务扇出以减少 clone
@@ -165,10 +178,18 @@ pub struct LarkClient {
     pub ai: AiService,
     #[cfg(feature = "aily")]
     pub aily: AilyService,
+    #[cfg(feature = "app_engine")]
+    pub app_engine: AppEngineService,
+    #[cfg(feature = "baike")]
+    pub baike: BaikeService,
+    #[cfg(feature = "meeting_room")]
+    pub meeting_room: MeetingRoomService,
     #[cfg(feature = "apass")]
     pub apass: ApassService,
     #[cfg(feature = "application")]
     pub application: ApplicationService,
+    #[cfg(feature = "base")]
+    pub base: BaseService,
     #[cfg(feature = "approval")]
     pub approval: ApprovalService,
     #[cfg(feature = "attendance")]
@@ -179,6 +200,8 @@ pub struct LarkClient {
     pub bot: BotService,
     #[cfg(feature = "calendar")]
     pub calendar: CalendarService,
+    #[cfg(feature = "ccm")]
+    pub ccm: CcmService,
     #[cfg(feature = "cardkit")]
     pub cardkit: CardkitService,
     #[cfg(feature = "contact")]
@@ -191,6 +214,8 @@ pub struct LarkClient {
     pub ehr: EhrService,
     #[cfg(feature = "elearning")]
     pub elearning: ELearningService,
+    #[cfg(feature = "feishu_people")]
+    pub feishu_people: FeishuPeopleService,
     #[cfg(feature = "group")]
     pub group: GroupService,
     #[cfg(feature = "helpdesk")]
@@ -341,10 +366,10 @@ impl LarkClientBuilder {
     pub fn build(self) -> LarkClient {
         let config = self.config_builder.build();
         let shared_config = Arc::new(config.clone());
+
         LarkClient {
             config: config.clone(),
             shared_config: shared_config.clone(),
-            // 核心服务 - 使用条件编译
             #[cfg(feature = "acs")]
             acs: AcsService::new(config.clone()),
             #[cfg(feature = "admin")]
@@ -353,10 +378,138 @@ impl LarkClientBuilder {
             ai: AiService::new(config.clone()),
             #[cfg(feature = "aily")]
             aily: AilyService::new(config.clone()),
+            #[cfg(feature = "app_engine")]
+            app_engine: AppEngineService::new({
+                // 创建一个最小的客户端实例供 app_engine 使用
+                Arc::new(LarkClient {
+                    config: config.clone(),
+                    shared_config: shared_config.clone(),
+                    #[cfg(feature = "acs")]
+                    acs: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "admin")]
+                    admin: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "ai")]
+                    ai: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "aily")]
+                    aily: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "app_engine")]
+                    app_engine: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "baike")]
+                    baike: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "meeting_room")]
+                    meeting_room: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "base")]
+                    base: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "apass")]
+                    apass: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "application")]
+                    application: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "approval")]
+                    approval: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "attendance")]
+                    attendance: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "authentication")]
+                    auth: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "bot")]
+                    bot: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "calendar")]
+                    calendar: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "ccm")]
+                    ccm: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "cardkit")]
+                    cardkit: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "contact")]
+                    contact: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "corehr")]
+                    corehr: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "directory")]
+                    directory: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "ehr")]
+                    ehr: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "elearning")]
+                    elearning: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "feishu_people")]
+                    feishu_people: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "group")]
+                    group: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "helpdesk")]
+                    helpdesk: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "hire")]
+                    hire: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "human-authentication")]
+                    human_authentication: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "im")]
+                    im: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "lingo")]
+                    lingo: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "mail")]
+                    mail: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "mdm")]
+                    mdm: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "minutes")]
+                    minutes: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "moments")]
+                    moments: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "okr")]
+                    okr: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "payroll")]
+                    payroll: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "performance")]
+                    performance: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "personal-settings")]
+                    personal_settings: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "report")]
+                    report: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "search")]
+                    search: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "security-and-compliance")]
+                    security_and_compliance: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "task")]
+                    task: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "tenant")]
+                    tenant: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "tenant-tag")]
+                    tenant_tag: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "trust-party")]
+                    trust_party: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "vc")]
+                    vc: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "verification")]
+                    verification: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "workplace")]
+                    workplace: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "cloud-docs")]
+                    cloud_docs: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "cloud-docs")]
+                    assistant: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "cloud-docs")]
+                    docs: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "cloud-docs")]
+                    drive: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "cloud-docs")]
+                    sheets: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "cloud-docs")]
+                    bitable: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "cloud-docs")]
+                    wiki: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "cloud-docs")]
+                    comments: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "cloud-docs")]
+                    permission: unsafe { std::mem::zeroed() },
+                    #[cfg(feature = "cloud-docs")]
+                    board: unsafe { std::mem::zeroed() },
+                })
+            }),
+            #[cfg(feature = "baike")]
+            baike: BaikeService::new(config.clone()),
+            #[cfg(feature = "meeting_room")]
+            meeting_room: MeetingRoomService::new(config.clone()),
             #[cfg(feature = "apass")]
             apass: ApassService::new(config.clone()),
             #[cfg(feature = "application")]
             application: ApplicationService::new_from_shared(shared_config.clone()),
+            #[cfg(feature = "base")]
+            base: BaseService::new(config.clone()),
             #[cfg(feature = "approval")]
             approval: ApprovalService::new(config.clone()),
             #[cfg(feature = "attendance")]
@@ -367,6 +520,8 @@ impl LarkClientBuilder {
             bot: BotService::new(config.clone()),
             #[cfg(feature = "calendar")]
             calendar: CalendarService::new_from_shared(shared_config.clone()),
+            #[cfg(feature = "ccm")]
+            ccm: CcmService::new(shared_config.clone()),
             #[cfg(feature = "cardkit")]
             cardkit: CardkitService::new(config.clone()),
             #[cfg(feature = "contact")]
@@ -379,6 +534,8 @@ impl LarkClientBuilder {
             ehr: EhrService::new_from_shared(shared_config.clone()),
             #[cfg(feature = "elearning")]
             elearning: ELearningService::new(config.clone()),
+            #[cfg(feature = "feishu_people")]
+            feishu_people: FeishuPeopleService::new(shared_config.clone()),
             #[cfg(feature = "group")]
             group: GroupService::new(config.clone()),
             #[cfg(feature = "helpdesk")]

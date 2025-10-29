@@ -1,6 +1,7 @@
+use open_lark_core::core::api_req::ApiRequest;
 use crate::{
     core::{
-        api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
+        api_resp::ApiResponseTrait, config::Config,
         constants::AccessTokenType, http::Transport,
     },
     service::contact::models::*,

@@ -19,6 +19,7 @@ use crate::impl_full_service;
 use async_trait::async_trait;
 
 /// 文件服务
+#[derive(Debug)]
 pub struct FileService {
     pub config: Config,
 }
@@ -65,14 +66,12 @@ impl FileService {
         query_params.insert("file_type", file_type.to_string());
         query_params.insert("file_name", file_name.to_string());
 
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: crate::core::endpoints::im::IM_V1_FILES.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            query_params,
-            body: file_data,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(crate::core::endpoints::im::IM_V1_FILES.to_string());
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.query_params_mut().extend(query_params);
+        api_req.set_body(file_data);
 
         let api_resp: BaseResponse<CreateFileResponse> =
             Transport::request(api_req, &self.config, option).await?;
@@ -85,16 +84,14 @@ impl FileService {
         file_key: &str,
         option: Option<RequestOption>,
     ) -> SDKResult<GetFileResponse> {
-        let api_req = ApiRequest {
-            http_method: Method::GET,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::im::IM_V1_DOWNLOAD_FILE,
-                "file_key",
-                file_key,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::GET);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            crate::core::endpoints::im::IM_V1_DOWNLOAD_FILE,
+            "file_key",
+            file_key,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp: BaseResponse<GetFileResponse> =
             Transport::request(api_req, &self.config, option).await?;

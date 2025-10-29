@@ -1,0 +1,268 @@
+// ccm模块的数据模型定义
+
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+
+/// 文件类型枚举
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum FileType {
+    /// 文件
+    File,
+    /// 文档
+    Doc,
+    /// 表格
+    Sheet,
+    /// 多维表格
+    Bitable,
+    /// 思维笔记
+    Mindnote,
+    /// 文件夹
+    Folder,
+    /// 快捷方式
+    Shortcut,
+    /// 未知类型
+    Unknown,
+}
+
+/// 文件元数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FileMetadata {
+    /// 文件token
+    pub file_token: String,
+    /// 文件类型
+    #[serde(rename = "type")]
+    pub file_type: FileType,
+    /// 文件名
+    pub name: String,
+    /// 文件URL
+    pub url: Option<String>,
+    /// 文件大小
+    pub size: Option<i64>,
+    /// 创建时间
+    pub create_time: Option<String>,
+    /// 修改时间
+    pub modify_time: Option<String>,
+    /// 创建者信息
+    pub creator: Option<UserInfo>,
+    /// 编辑者信息
+    pub editor: Option<UserInfo>,
+    /// 父文件夹token
+    pub parent_token: Option<String>,
+    /// 文件权限
+    pub permissions: Option<FilePermissions>,
+}
+
+/// 用户信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserInfo {
+    /// 用户ID
+    pub user_id: String,
+    /// 用户ID类型
+    #[serde(rename = "user_id_type")]
+    pub user_id_type: String,
+    /// 用户名
+    pub name: Option<String>,
+}
+
+/// 文件权限
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FilePermissions {
+    /// 是否可查看
+    pub view: bool,
+    /// 是否可编辑
+    pub edit: bool,
+    /// 是否可评论
+    pub comment: bool,
+    /// 是否可分享
+    pub share: bool,
+    /// 是否可下载
+    pub download: bool,
+}
+
+/// 云空间统计信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DriveStatistics {
+    /// 总文件数
+    pub total_files: i64,
+    /// 总使用空间
+    pub used_space: i64,
+    /// 剩余空间
+    pub remaining_space: i64,
+    /// 文档数量
+    pub doc_count: i64,
+    /// 表格数量
+    pub sheet_count: i64,
+    /// 其他文件数量
+    pub other_count: i64,
+}
+
+/// 通用响应结构
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CcmResponse<T> {
+    /// 响应码
+    pub code: i32,
+    /// 响应消息
+    pub msg: String,
+    /// 响应数据
+    pub data: Option<T>,
+}
+
+/// 分页响应结构
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PaginatedResponse<T> {
+    /// 响应码
+    pub code: i32,
+    /// 响应消息
+    pub msg: String,
+    /// 响应数据
+    pub data: Option<PaginatedData<T>>,
+}
+
+/// 分页数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PaginatedData<T> {
+    /// 数据列表
+    pub items: Option<Vec<T>>,
+    /// 分页标记
+    pub page_token: Option<String>,
+    /// 是否有更多数据
+    pub has_more: bool,
+}
+
+/// 异步任务状态
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum TaskStatus {
+    /// 进行中
+    Processing,
+    /// 成功
+    Success,
+    /// 失败
+    Failed,
+    /// 已取消
+    Cancelled,
+}
+
+/// 异步任务信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AsyncTask {
+    /// 任务ID
+    pub task_id: String,
+    /// 任务状态
+    pub status: TaskStatus,
+    /// 任务进度
+    pub progress: Option<i32>,
+    /// 错误信息
+    pub error: Option<String>,
+    /// 创建时间
+    pub create_time: String,
+    /// 完成时间
+    pub finish_time: Option<String>,
+}
+
+/// 搜索条件
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SearchCondition {
+    /// 搜索关键词
+    pub query: String,
+    /// 文件类型过滤
+    #[serde(rename = "file_type")]
+    pub file_type_filter: Option<Vec<FileType>>,
+    /// 创建者过滤
+    pub creator_filter: Option<String>,
+    /// 时间范围过滤
+    pub time_range: Option<TimeRange>,
+    /// 分页大小
+    #[serde(rename = "page_size")]
+    pub page_size: Option<i32>,
+    /// 分页标记
+    #[serde(rename = "page_token")]
+    pub page_token: Option<String>,
+}
+
+/// 时间范围
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TimeRange {
+    /// 开始时间
+    pub start_time: Option<String>,
+    /// 结束时间
+    pub end_time: Option<String>,
+}
+
+/// 文档块类型
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum BlockType {
+    /// 文本块
+    Text,
+    /// 标题块
+    Heading,
+    /// 列表块
+    BulletedList,
+    /// 有序列表块
+    NumberedList,
+    /// 引用块
+    Quote,
+    /// 代码块
+    Code,
+    /// 图片块
+    Image,
+    /// 表格块
+    Table,
+    /// 分割线块
+    Divider,
+    /// 未知类型
+    Unknown,
+}
+
+/// 文档块信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DocumentBlock {
+    /// 块ID
+    #[serde(rename = "block_id")]
+    pub block_id: String,
+    /// 块类型
+    #[serde(rename = "block_type")]
+    pub block_type: BlockType,
+    /// 块内容
+    pub content: Option<serde_json::Value>,
+    /// 子块列表
+    pub children: Option<Vec<DocumentBlock>>,
+    /// 创建时间
+    pub create_time: Option<String>,
+    /// 修改时间
+    pub modify_time: Option<String>,
+}
+
+/// 评论信息
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Comment {
+    /// 评论ID
+    #[serde(rename = "comment_id")]
+    pub comment_id: String,
+    /// 评论内容
+    pub content: String,
+    /// 评论者
+    pub author: UserInfo,
+    /// 评论时间
+    pub create_time: String,
+    /// 回复列表
+    pub replies: Option<Vec<CommentReply>>,
+    /// 是否已解决
+    pub resolved: Option<bool>,
+}
+
+/// 评论回复
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CommentReply {
+    /// 回复ID
+    #[serde(rename = "reply_id")]
+    pub reply_id: String,
+    /// 回复内容
+    pub content: String,
+    /// 回复者
+    pub author: UserInfo,
+    /// 回复时间
+    pub create_time: String,
+}

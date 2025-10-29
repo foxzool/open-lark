@@ -14,6 +14,7 @@ use crate::core::{
 use crate::impl_full_service;
 
 /// 消息卡片服务
+#[derive(Debug)]
 pub struct MessageCardService {
     pub config: Config,
 }
@@ -76,17 +77,15 @@ impl MessageCardService {
         request: PatchMessageCardRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::PATCH,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::im::IM_V1_UPDATE_MESSAGE,
-                "message_id",
-                message_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::PATCH);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            crate::core::endpoints::im::IM_V1_UPDATE_MESSAGE,
+            "message_id",
+            message_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.set_body(serde_json::to_vec(&request)?);
         Transport::request(api_req, &self.config, option).await
     }
 
@@ -97,17 +96,15 @@ impl MessageCardService {
         request: DelayUpdateMessageCardRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<EmptyResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::im::IM_V1_MESSAGE_DELAY_UPDATE,
-                "message_id",
-                message_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            crate::core::endpoints::im::IM_V1_MESSAGE_DELAY_UPDATE,
+            "message_id",
+            message_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.set_body(serde_json::to_vec(&request)?);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -119,17 +116,15 @@ impl MessageCardService {
         request: SendVisibleMessageCardRequest,
         option: Option<RequestOption>,
     ) -> SDKResult<BaseResponse<SendVisibleMessageCardResponse>> {
-        let api_req = ApiRequest {
-            http_method: Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::im::IM_V1_MESSAGE_URGENT_APP,
-                "message_id",
-                message_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::POST);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            crate::core::endpoints::im::IM_V1_MESSAGE_URGENT_APP,
+            "message_id",
+            message_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.set_body(serde_json::to_vec(&request)?);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -145,17 +140,15 @@ impl MessageCardService {
             "open_ids": open_ids
         });
 
-        let api_req = ApiRequest {
-            http_method: Method::DELETE,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::im::IM_V1_MESSAGE_URGENT_APP,
-                "message_id",
-                message_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
-            body: serde_json::to_vec(&request)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_http_method(Method::DELETE);
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            crate::core::endpoints::im::IM_V1_MESSAGE_URGENT_APP,
+            "message_id",
+            message_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
+        api_req.set_body(serde_json::to_vec(&request)?);
 
         Transport::request(api_req, &self.config, option).await
     }

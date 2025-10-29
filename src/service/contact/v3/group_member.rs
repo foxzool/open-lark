@@ -1,11 +1,14 @@
+use serde::{Deserialize, Serialize};
+use open_lark_core::core::api_req::ApiRequest;
+
 use crate::{
     core::{
-        api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
+        api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
+        config::Config,
         constants::AccessTokenType, endpoints::EndpointBuilder, http::Transport,
     },
     service::contact::models::*,
 };
-use serde::{Deserialize, Serialize};
 
 /// 用户组成员服务
 #[derive(Debug)]
@@ -23,17 +26,14 @@ impl GroupMemberService {
         group_id: &str,
         req: &AddGroupMemberRequest,
     ) -> crate::core::SDKResult<AddGroupMemberResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::contact::CONTACT_V3_GROUP_MEMBERS_ADD,
-                "group_id",
-                group_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            crate::core::endpoints::contact::CONTACT_V3_GROUP_MEMBERS_ADD,
+            "group_id",
+            group_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.set_body(serde_json::to_vec(req)?);
 
         let resp =
             Transport::<AddGroupMemberResponse>::request(api_req, &self.config, None).await?;
@@ -46,17 +46,14 @@ impl GroupMemberService {
         group_id: &str,
         req: &BatchAddGroupMembersRequest,
     ) -> crate::core::SDKResult<BatchAddGroupMembersResponse> {
-        let api_req = ApiRequest {
-            http_method: reqwest::Method::POST,
-            api_path: EndpointBuilder::replace_param(
-                crate::core::endpoints::contact::CONTACT_V3_GROUP_MEMBERS_BATCH_ADD,
-                "group_id",
-                group_id,
-            ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
-            body: serde_json::to_vec(req)?,
-            ..Default::default()
-        };
+        let mut api_req = ApiRequest::default();
+        api_req.set_api_path(EndpointBuilder::replace_param(
+            crate::core::endpoints::contact::CONTACT_V3_GROUP_MEMBERS_BATCH_ADD,
+            "group_id",
+            group_id,
+        ));
+        api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
+        api_req.set_body(serde_json::to_vec(req)?);
 
         let resp =
             Transport::<BatchAddGroupMembersResponse>::request(api_req, &self.config, None).await?;

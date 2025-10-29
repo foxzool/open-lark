@@ -1,7 +1,8 @@
+use open_lark_core::core::api_req::ApiRequest;
 use crate::impl_full_service;
 use crate::{
     core::{
-        api_req::ApiRequest, api_resp::ApiResponseTrait, config::Config,
+        api_resp::ApiResponseTrait, config::Config,
         constants::AccessTokenType, endpoints::EndpointBuilder, http::Transport,
         req_option::RequestOption, standard_response::StandardResponse,
         trait_system::executable_builder::ExecutableBuilder, SDKResult,
