@@ -343,7 +343,7 @@ impl TaskService {
         }
 
         let mut api_req = ApiRequest {
-            http_method: Method::POST,
+                        http_method: Method::POST,,
             api_path: Endpoints::TASK_V2_TASKS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -367,14 +367,12 @@ impl TaskService {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
-        let mut api_req = ApiRequest::default();
-        http_method: Method::PATCH
-        api_req.set_api_path(EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
+        let mut api_req = ApiRequest {
+                    http_method: Method::PATCH,
                 "task_guid",
                 task_guid,
             ));
         supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-        api_req.set_body(serde_json::to_vec(request)?);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -391,9 +389,8 @@ impl TaskService {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
-        let mut api_req = ApiRequest::default();
-        http_method: Method::GET
-        api_req.set_api_path(EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
+        let mut api_req = ApiRequest {
+                    http_method: Method::GET,
                 "task_guid",
                 task_guid,
             ));
@@ -414,9 +411,8 @@ impl TaskService {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
-        let mut api_req = ApiRequest::default();
-        http_method: Method::DELETE
-        api_req.set_api_path(EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
+        let mut api_req = ApiRequest {
+                    http_method: Method::DELETE,
                 "task_guid",
                 task_guid,
             ));
@@ -473,9 +469,8 @@ impl TaskService {
             query_params.insert("due_to", due_to.to_string());
         }
 
-        let mut api_req = ApiRequest::default();
-        http_method: Method::GET
-        api_req.set_api_path(Endpoints::TASK_V2_TASKS.to_string());
+        let mut api_req = ApiRequest {
+                    http_method: Method::GET,
         supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
 
         Transport::request(api_req, &self.config, option).await
@@ -494,14 +489,12 @@ impl TaskService {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
-        let mut api_req = ApiRequest::default();
-        http_method: Method::POST
-        api_req.set_api_path(EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_ADD_MEMBERS,
+        let mut api_req = ApiRequest {
+                    http_method: Method::POST,
                 "task_guid",
                 task_guid,
             ));
         supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-        api_req.set_body(serde_json::to_vec(request)?);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -519,14 +512,12 @@ impl TaskService {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
-        let mut api_req = ApiRequest::default();
-        http_method: Method::POST
-        api_req.set_api_path(EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_REMOVE_MEMBERS,
+        let mut api_req = ApiRequest {
+                    http_method: Method::POST,
                 "task_guid",
                 task_guid,
             ));
         supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-        api_req.set_body(serde_json::to_vec(request)?);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -544,14 +535,12 @@ impl TaskService {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
-        let mut api_req = ApiRequest::default();
-        http_method: Method::POST
-        api_req.set_api_path(EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_ADD_REMINDERS,
+        let mut api_req = ApiRequest {
+                    http_method: Method::POST,
                 "task_guid",
                 task_guid,
             ));
         supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-        api_req.set_body(serde_json::to_vec(request)?);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -569,14 +558,12 @@ impl TaskService {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
-        let mut api_req = ApiRequest::default();
-        http_method: Method::POST
-        api_req.set_api_path(EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_ADD_TASKLIST,
+        let mut api_req = ApiRequest {
+                    http_method: Method::POST,
                 "task_guid",
                 task_guid,
             ));
         supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-        api_req.set_body(serde_json::to_vec(request)?);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -594,14 +581,12 @@ impl TaskService {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
-        let mut api_req = ApiRequest::default();
-        http_method: Method::POST
-        api_req.set_api_path(EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_REMOVE_REMINDERS,
+        let mut api_req = ApiRequest {
+                    http_method: Method::POST,
                 "task_guid",
                 task_guid,
             ));
         supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-        api_req.set_body(serde_json::to_vec(request)?);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -619,14 +604,12 @@ impl TaskService {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
-        let mut api_req = ApiRequest::default();
-        http_method: Method::POST
-        api_req.set_api_path(EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_ADD_DEPENDENCIES,
+        let mut api_req = ApiRequest {
+                    http_method: Method::POST,
                 "task_guid",
                 task_guid,
             ));
         supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-        api_req.set_body(serde_json::to_vec(request)?);
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -644,14 +627,12 @@ impl TaskService {
             query_params.insert("user_id_type", user_id_type.as_str().to_string());
         }
 
-        let mut api_req = ApiRequest::default();
-        http_method: Method::POST
-        api_req.set_api_path(EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_REMOVE_DEPENDENCIES,
+        let mut api_req = ApiRequest {
+                    http_method: Method::POST,
                 "task_guid",
                 task_guid,
             ));
         supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
-        api_req.set_body(serde_json::to_vec(request)?);
 
         Transport::request(api_req, &self.config, option).await
     }
