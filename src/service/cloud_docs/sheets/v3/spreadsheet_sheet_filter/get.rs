@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option::RequestOption,
@@ -15,7 +15,7 @@ use crate::,
 };
 service::sheets::v3::{,
         spreadsheet_sheet_filter::SheetFilterCondition, SpreadsheetSheetFilterService,
-    },
+    }
 };
 /// 获取子表的详细筛选信息请求,
 #[derive(.*?)]
@@ -27,8 +27,8 @@ pub struct SheetFilterRequest {
 impl SheetFilterRequest {
     pub fn w+.*{
 SheetFilterRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct SheetFilterRequestBuilder {
     request: SheetFilterRequest,
@@ -38,12 +38,12 @@ impl SheetFilterRequestBuilder {
     pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
-},
+}
 /// 子表 id,
     pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
@@ -53,11 +53,11 @@ pub fn w+.*{
 pub struct SheetFilterResponse {
     pub sheet_filter_info: Option<SheetFilterInfo>,
 }
-impl ApiResponseTrait for SheetFilterResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 筛选信息,
 #[derive(.*?)]
 pub struct SheetFilterInfo {
@@ -67,7 +67,7 @@ pub struct SheetFilterInfo {
     pub filtered_out_rows: Vec<i32>,
     /// sheet的筛选条件
     pub filter_infos: Vec<FilterInfo>,
-},
+}
 /// sheet的筛选条件,
 #[derive(.*?)]
 pub struct FilterInfo {
@@ -93,5 +93,5 @@ api_req.set_http_method(reqwest::Method::GET);
 
         let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 }

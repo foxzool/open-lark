@@ -6,7 +6,7 @@ core::{,
         constants::AccessTokenType, endpoints::EndpointBuilder, http::Transport,
         req_option::RequestOption, standard_response::StandardResponse,
         trait_system::executable_builder::ExecutableBuilder, SDKResult,
-    },
+    }
     service::contact::models::*,
 };
 use async_trait::async_trait;
@@ -21,21 +21,21 @@ use serde::{Deserialize, Serialize};
 /// - 恢复已删除用户,
 pub struct UserService {
     config: Config,
-},
+}
 // Service 抽象接入（标准样例）：Contact v3 UserService,
 // 要求结构体包含 `config: Config` 字段
 impl_full_service!(UserService, "contact.user", "v3");
 impl UserService {
     pub fn new(config: Config) -> Self {
-        Self { config },
-},
+        Self { config }
+}
 /// 创建用户,
     ///,
 /// 该接口用于创建新的用户账号。,
     ///,
 /// # API文档,
     ///
-    /// {},
+    /// {}
 ///,
     /// # 示例,
 ///,
@@ -43,7 +43,7 @@ impl UserService {
     /// use open_lark::prelude::*;
 /// use open_lark::service::contact::models::User;
     ///,
-/// #[tokio::main],
+/// #[tokio::main]
     /// async fn main() -> Result<(), Box<dyn std::error::Error>> {,
 ///     let client = LarkClient::builder(),
     ///         .app_id("your_app_id"),
@@ -68,7 +68,7 @@ impl UserService {
     ///     let response = client.contact.v3.user.create(&request).await?;
     ///     println!("用户创建成功，用户ID: {}", response.user.user_id.unwrap_or_default());
 ///     Ok(()),
-    /// },
+    /// }
 /// ```,
     pub async fn create(
         &self,
@@ -77,14 +77,14 @@ impl UserService {
 let api_req = ApiRequest {,
             http_method: reqwest::Method::POST,
             api_path: crate::core::endpoints::contact::CONTACT_V3_USERS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
             ..Default::default(),
 };
 
         let resp = Transport::<CreateUserResponse>::request(api_req, &self.config, None).await?;
 resp.into_result(),
-    },
+    }
 /// 修改用户部分信息,
     ///,
 /// 该接口用于修改用户的部分信息。,
@@ -100,13 +100,13 @@ let api_req = ApiRequest {,
                 "user_id",
                 user_id,
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
             ..Default::default(),
 };
         let resp = Transport::<PatchUserResponse>::request(api_req, &self.config, None).await?;
 resp.into_result(),
-    },
+    }
 /// 更新用户 ID,
     ///,
 /// 该接口用于更新用户的用户ID。,
@@ -122,14 +122,14 @@ let api_req = ApiRequest {,
                 "user_id",
                 user_id,
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
             ..Default::default(),
 };
 
         let resp = Transport::<UpdateUserIdResponse>::request(api_req, &self.config, None).await?;
 resp.into_result(),
-    },
+    }
 /// 获取单个用户信息,
     ///,
 /// 该接口用于获取单个用户的详细信息。,
@@ -141,10 +141,10 @@ resp.into_result(),
 let mut query_params = std::collections::HashMap::new();
         if let Some(user_id_type) = &_req.user_id_type {
             query_params.insert("user_id_type", user_id_type.clone());
-},
+}
 if let Some(department_id_type) = &_req.department_id_type {,
             query_params.insert("department_id_type", department_id_type.clone());
-},
+}
 let api_req = ApiRequest {,
             http_method: reqwest::Method::GET,
             api_path: EndpointBuilder::replace_param(
@@ -152,7 +152,7 @@ let api_req = ApiRequest {,
                 "user_id",
                 user_id,
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: Vec::new(),
             query_params,
             ..Default::default(),
@@ -160,7 +160,7 @@ let api_req = ApiRequest {,
 
         let resp = Transport::<GetUserResponse>::request(api_req, &self.config, None).await?;
 resp.into_result(),
-    },
+    }
 /// 批量获取用户信息,
     ///,
 /// 该接口用于批量获取多个用户的信息。,
@@ -171,14 +171,14 @@ resp.into_result(),
 let api_req = ApiRequest {,
             http_method: reqwest::Method::POST,
             api_path: crate::core::endpoints::contact::CONTACT_V3_USERS_BATCH.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
             ..Default::default(),
 };
 
         let resp = Transport::<BatchGetUsersResponse>::request(api_req, &self.config, None).await?;
 resp.into_result(),
-    },
+    }
 /// 获取部门直属用户列表,
     ///,
 /// 该接口用于获取部门直属的用户列表。,
@@ -190,7 +190,7 @@ let api_req = ApiRequest {,
             http_method: reqwest::Method::GET,
             api_path: crate::core::endpoints::contact::CONTACT_V3_USERS_FIND_BY_DEPARTMENT
                 .to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
             ..Default::default(),
@@ -198,7 +198,7 @@ let api_req = ApiRequest {,
         let resp = Transport::<FindUsersByDepartmentResponse>::request(api_req, &self.config, None),
 .await?;
         resp.into_result(),
-},
+}
 /// 通过手机号或邮箱获取用户 ID,
     ///,
 /// 该接口用于通过手机号或邮箱批量获取用户ID。,
@@ -209,14 +209,14 @@ let api_req = ApiRequest {,
 let api_req = ApiRequest {,
             http_method: reqwest::Method::POST,
             api_path: crate::core::endpoints::contact::CONTACT_V3_USERS_BATCH_GET_ID.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
             ..Default::default(),
 };
 let resp =,
             Transport::<BatchGetUserIdResponse>::request(api_req, &self.config, None).await?;
 resp.into_result(),
-    },
+    }
 /// 搜索用户,
     ///,
 /// 该接口用于根据关键词搜索用户。,
@@ -227,14 +227,14 @@ resp.into_result(),
 let api_req = ApiRequest {,
             http_method: reqwest::Method::POST,
             api_path: crate::core::endpoints::contact::CONTACT_V3_USERS_SEARCH.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: serde_json::to_vec(req)?,
             ..Default::default(),
 };
 
         let resp = Transport::<SearchUsersResponse>::request(api_req, &self.config, None).await?;
 resp.into_result(),
-    },
+    }
 /// 删除用户,
     ///,
 /// 该接口用于删除用户账号。,
@@ -250,7 +250,7 @@ let api_req = ApiRequest {,
                 "user_id",
                 user_id,
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
             ..Default::default(),
@@ -258,7 +258,7 @@ let api_req = ApiRequest {,
 
         let resp = Transport::<DeleteUserResponse>::request(api_req, &self.config, None).await?;
 resp.into_result(),
-    },
+    }
 /// 恢复已删除用户,
     ///,
 /// 该接口用于恢复已删除的用户账号。,
@@ -274,14 +274,14 @@ let api_req = ApiRequest {,
                 "user_id",
                 user_id,
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
             ..Default::default(),
 };
 
         let resp = Transport::<ResurrectUserResponse>::request(api_req, &self.config, None).await?;
 resp.into_result(),
-    },
+    }
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/list,
@@ -292,20 +292,20 @@ resp.into_result(),
 let mut query_params = std::collections::HashMap::new();
         if let Some(page_size) = req.page_size {
             query_params.insert("page_size", page_size.to_string());
-},
+}
 if let Some(page_token) = &req.page_token {,
             query_params.insert("page_token", page_token.clone());
-},
+}
 if let Some(user_id_type) = &req.user_id_type {,
             query_params.insert("user_id_type", user_id_type.clone());
-},
+}
 if let Some(department_id_type) = &req.department_id_type {,
             query_params.insert("department_id_type", department_id_type.clone());
-},
+}
 let api_req = ApiRequest {,
             http_method: reqwest::Method::GET,
             api_path: crate::core::endpoints::contact::CONTACT_V3_USERS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             body: Vec::new(),
             query_params,
             ..Default::default(),
@@ -313,14 +313,14 @@ let api_req = ApiRequest {,
 
         let resp = Transport::<ListUsersResponse>::request(api_req, &self.config, None).await?;
 resp.into_result(),
-    },
+    }
 /// 创建用户 - Builder模式 (推荐),
     ///,
 /// 提供更现代化的Builder接口，支持链式调用和统一的执行模式,
     pub fn w+.*{
 CreateUserBuilder::new(),
-    },
-},
+    }
+}
 /// 创建用户的Builder,
 #[derive(Default)]
 pub struct CreateUserBuilder {
@@ -331,31 +331,31 @@ pub struct CreateUserBuilder {
 impl CreateUserBuilder {
     pub fn new() -> Self {
 Self::default(),
-    },
+    }
 /// 设置用户信息,
     pub fn user(mut self, user: User) -> Self {
 self.user = Some(user);
         self,
-},
+}
 /// 设置用户ID类型,
     pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.user_id_type = Some(user_id_type.to_string());
         self,
-},
+}
 /// 设置部门ID类型,
     pub fn department_id_type(mut self, department_id_type: impl ToString) -> Self {
 self.department_id_type = Some(department_id_type.to_string());
         self,
-},
+}
 pub fn w+.*{
         CreateUserRequest {
             user: self.user.unwrap_or_default(),
             user_id_type: self.user_id_type,
             department_id_type: self.department_id_type,
-        },
+        }
 }
-},
-#[async_trait],
+}
+#[async_trait]
 impl ExecutableBuilder<UserService, CreateUserRequest, CreateUserResponse> for CreateUserBuilder {,
 fn build(self) -> CreateUserRequest {,
         self.build(),
@@ -364,7 +364,7 @@ fn build(self) -> CreateUserRequest {,
     async fn execute(self, service: &UserService) -> SDKResult<CreateUserResponse> {,
 let req = self.build();
         service.create(&req).await,
-},
+}
 async fn execute_with_options(,
         self,
         service: &UserService,
@@ -373,8 +373,8 @@ async fn execute_with_options(,
 // 目前简单实现，后续可以支持传递option到service方法,
         let req = self.build();
 service.create(&req).await,
-    },
-},
+    }
+}
 // 请求/响应结构体定义,
 /// 创建用户请求
 #[derive(.*?)]
@@ -382,289 +382,289 @@ pub struct CreateUserRequest {
     /// 用户信息
     pub user: User,
     /// 用户 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
     /// 部门 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-},
+}
 /// 创建用户响应,
 #[derive(.*?)]
 pub struct CreateUserResponse {
     /// 用户信息
     pub user: User,
 }
-impl ApiResponseTrait for CreateUserResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
-},
+crate::core::api_resp::ResponseFormat::Data
+    }
+}
 /// 修改用户请求,
 #[derive(.*?)]
 pub struct PatchUserRequest {
     /// 用户信息
     pub user: User,
     /// 用户 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
     /// 部门 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-},
+}
 /// 修改用户响应,
 #[derive(.*?)]
 pub struct PatchUserResponse {
     /// 用户信息
     pub user: User,
 }
-impl ApiResponseTrait for PatchUserResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
-},
+crate::core::api_resp::ResponseFormat::Data
+    }
+}
 /// 更新用户ID请求,
 #[derive(.*?)]
 pub struct UpdateUserIdRequest {
     /// 新的用户ID
     pub new_user_id: String,
     /// 用户 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
-},
+}
 /// 更新用户ID响应,
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct UpdateUserIdResponse {}
-impl ApiResponseTrait for UpdateUserIdResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
-},
+crate::core::api_resp::ResponseFormat::Data
+    }
+}
 /// 获取用户请求,
 #[derive(.*?)]
 pub struct GetUserRequest {
     /// 用户 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
     /// 部门 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-},
+}
 /// 获取用户响应,
 #[derive(.*?)]
 pub struct GetUserResponse {
     /// 用户信息
     pub user: User,
 }
-impl ApiResponseTrait for GetUserResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
-},
+crate::core::api_resp::ResponseFormat::Data
+    }
+}
 /// 批量获取用户请求,
 #[derive(.*?)]
 pub struct BatchGetUsersRequest {
     /// 用户ID列表
     pub user_ids: Vec<String>,
     /// 用户 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
     /// 部门 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-},
+}
 /// 批量获取用户响应,
 #[derive(.*?)]
 pub struct BatchGetUsersResponse {
     /// 用户列表
     pub items: Vec<User>,
 }
-impl ApiResponseTrait for BatchGetUsersResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
-},
+crate::core::api_resp::ResponseFormat::Data
+    }
+}
 /// 按部门查找用户请求,
 #[derive(.*?)]
 pub struct FindUsersByDepartmentRequest {
     /// 部门ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department_id: Option<String>,
     /// 用户 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
     /// 部门 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
     /// 分页大小,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
     /// 分页标记,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-},
+}
 /// 按部门查找用户响应,
 #[derive(.*?)]
 pub struct FindUsersByDepartmentResponse {
     /// 用户列表
     pub items: Vec<User>,
     /// 是否还有更多项目,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
     /// 分页标记,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
-impl ApiResponseTrait for FindUsersByDepartmentResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
-},
+crate::core::api_resp::ResponseFormat::Data
+    }
+}
 /// 批量获取用户ID请求,
 #[derive(.*?)]
 pub struct BatchGetUserIdRequest {
     /// 邮箱列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub emails: Option<Vec<String>>,
     /// 手机号列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub mobiles: Option<Vec<String>>,
     /// 包含已离职用户,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub include_resigned: Option<bool>,
-},
+}
 /// 批量获取用户ID响应,
 #[derive(.*?)]
 pub struct BatchGetUserIdResponse {
     /// 用户列表
     pub user_list: Vec<UserIdInfo>,
 }
-impl ApiResponseTrait for BatchGetUserIdResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
-},
+crate::core::api_resp::ResponseFormat::Data
+    }
+}
 /// 用户ID信息,
 #[derive(.*?)]
 pub struct UserIdInfo {
     /// 用户ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
     /// 邮箱,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
     /// 手机号,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub mobile: Option<String>,
-},
+}
 /// 搜索用户请求,
 #[derive(.*?)]
 pub struct SearchUsersRequest {
     /// 搜索关键词
     pub query: String,
     /// 分页大小,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
     /// 分页标记,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
     /// 用户 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
     /// 部门 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-},
+}
 /// 搜索用户响应,
 #[derive(.*?)]
 pub struct SearchUsersResponse {
     /// 用户列表
     pub items: Vec<User>,
     /// 是否还有更多项目,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
     /// 分页标记,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
-impl ApiResponseTrait for SearchUsersResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
-},
+crate::core::api_resp::ResponseFormat::Data
+    }
+}
 /// 删除用户请求,
 #[derive(.*?)]
 pub struct DeleteUserRequest {
     /// 用户 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
     /// 部门 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-},
+}
 /// 删除用户响应,
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DeleteUserResponse {}
-impl ApiResponseTrait for DeleteUserResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
-},
+crate::core::api_resp::ResponseFormat::Data
+    }
+}
 /// 恢复用户请求,
 #[derive(.*?)]
 pub struct ResurrectUserRequest {
     /// 用户 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
     /// 部门 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-},
+}
 /// 恢复用户响应,
 #[derive(.*?)]
 pub struct ResurrectUserResponse {
     /// 用户信息
     pub user: User,
 }
-impl ApiResponseTrait for ResurrectUserResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
-},
+crate::core::api_resp::ResponseFormat::Data
+    }
+}
 /// 获取用户列表请求,
 #[derive(.*?)]
 pub struct ListUsersRequest {
     /// 分页大小,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
     /// 分页标记,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
     /// 用户 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
     /// 部门 ID 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
-},
+}
 /// 获取用户列表响应,
 #[derive(.*?)]
 pub struct ListUsersResponse {
     /// 用户列表
     pub items: Vec<User>,
     /// 是否还有更多项目,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
     /// 分页标记,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
-impl ApiResponseTrait for ListUsersResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+crate::core::api_resp::ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use crate::{,
@@ -676,7 +676,7 @@ fn create_test_config() -> Config {,
             .app_secret()
 .base_url()
             .build(),
-},
+}
 fn create_test_user() -> User {,
         use crate::service::contact::models::{Avatar, UserCustomAttr, UserStatus};
 User {,
@@ -717,8 +717,8 @@ User {,
             job_title: Some("Engineer".to_string()),
             ..Default::default(),
 }
-    },
-#[test],
+    }
+#[test]
     fn test_user_service_new() {,
 let config = create_test_config();
         let service = UserService::new(config.clone());
@@ -726,8 +726,8 @@ let config = create_test_config();
         assert_eq!(service.config.app_id, config.app_id);
         assert_eq!(service.config.app_secret, config.app_secret);
         assert_eq!(service.config.base_url, config.base_url);
-},
-#[test],
+}
+#[test]
     fn test_create_user_request_serialization() {,
 let user = create_test_user();
         let request = CreateUserRequest {
@@ -739,8 +739,8 @@ let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("test@example.com"));
 assert!(json.contains("Test User"));
         assert!(json.contains("open_id"));
-},
-#[test],
+}
+#[test]
     fn test_create_user_response_deserialization() {,
 let json = r#"{,
             "user": {
@@ -754,8 +754,8 @@ let response: CreateUserResponse = serde_json::from_str(json).unwrap();
         assert_eq!(response.user.user_id, Some("user123".to_string()));
         assert_eq!(response.user.name, Some("Test User".to_string()));
         assert_eq!(response.user.email, Some("test@example.com".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_create_user_builder() {,
 let user = create_test_user();
         let builder = CreateUserBuilder::new(),
@@ -769,8 +769,8 @@ assert_eq!(,
             request.department_id_type,
             Some("department_id".to_string()),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_create_user_builder_default() {,
 let builder = CreateUserBuilder::new();
         let request = builder.build();
@@ -778,8 +778,8 @@ let builder = CreateUserBuilder::new();
         assert_eq!(request.user.name, None);
         assert_eq!(request.user_id_type, None);
         assert_eq!(request.department_id_type, None);
-},
-#[test],
+}
+#[test]
     fn test_patch_user_request_serialization() {,
 let user = create_test_user();
         let request = PatchUserRequest {
@@ -791,8 +791,8 @@ let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("Test User"));
 assert!(json.contains("user_id"));
         assert!(!json.contains("department_id_type"));
-},
-#[test],
+}
+#[test]
     fn test_update_user_id_request_serialization() {,
 let request = UpdateUserIdRequest {,
             new_user_id: "new_user_123".to_string(),
@@ -801,14 +801,14 @@ let request = UpdateUserIdRequest {,
 let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("new_user_123"));
 assert!(json.contains("open_id"));
-    },
-#[test],
+    }
+#[test]
     fn test_get_user_request_default() {,
 let request = GetUserRequest::default();
         assert_eq!(request.user_id_type, None);
         assert_eq!(request.department_id_type, None);
-},
-#[test],
+}
+#[test]
     fn test_batch_get_users_request() {,
 let request = BatchGetUsersRequest {,
             user_ids: vec![
@@ -824,22 +824,22 @@ let json = serde_json::to_string(&request).unwrap();
 assert!(json.contains("user2"));
         assert!(json.contains("user3"));
         assert_eq!(request.user_ids.len(), 3);
-},
-#[test],
+}
+#[test]
     fn test_batch_get_users_response() {,
 let user1 = create_test_user();
         let mut user2 = create_test_user();
 user2.user_id = Some("user456".to_string());
         user2.name = Some("Another User".to_string());
 let response = BatchGetUsersResponse {,
-            items: vec![user1, user2],
+            items: vec![user1, user2]
         };
 
         assert_eq!(response.items.len(), 2);
         assert_eq!(response.items[0].user_id, Some("user123".to_string()));
         assert_eq!(response.items[1].user_id, Some("user456".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_find_users_by_department_request() {,
 let request = FindUsersByDepartmentRequest {,
             department_id: Some("dept123".to_string()),
@@ -852,12 +852,12 @@ let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("dept123"));
 assert!(json.contains("50"));
         assert!(json.contains("token123"));
-},
-#[test],
+}
+#[test]
     fn test_find_users_by_department_response() {,
 let user = create_test_user();
         let response = FindUsersByDepartmentResponse {
-            items: vec![user],
+            items: vec![user]
             has_more: Some(true),
             page_token: Some("next_token".to_string()),
         };
@@ -865,8 +865,8 @@ let user = create_test_user();
         assert_eq!(response.items.len(), 1);
         assert_eq!(response.has_more, Some(true));
         assert_eq!(response.page_token, Some("next_token".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_batch_get_user_id_request() {,
 let request = BatchGetUserIdRequest {,
             emails: Some(vec![
@@ -880,8 +880,8 @@ let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("test1@example.com"));
 assert!(json.contains("+86138000001"));
         assert!(json.contains("true"));
-},
-#[test],
+}
+#[test]
     fn test_user_id_info_serialization() {,
 let user_info = UserIdInfo {,
             user_id: Some("user123".to_string()),
@@ -894,8 +894,8 @@ let json = serde_json::to_string(&user_info).unwrap();
         assert_eq!(deserialized.user_id, user_info.user_id);
         assert_eq!(deserialized.email, user_info.email);
         assert_eq!(deserialized.mobile, user_info.mobile);
-},
-#[test],
+}
+#[test]
     fn test_search_users_request() {,
 let request = SearchUsersRequest {,
             query: "张三".to_string(),
@@ -908,12 +908,12 @@ let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("张三"));
 assert!(json.contains("20"));
         assert!(json.contains("search_token"));
-},
-#[test],
+}
+#[test]
     fn test_search_users_response() {,
 let user = create_test_user();
         let response = SearchUsersResponse {
-            items: vec![user],
+            items: vec![user]
             has_more: Some(false),
             page_token: None,
         };
@@ -921,14 +921,14 @@ let user = create_test_user();
         assert_eq!(response.items.len(), 1);
         assert_eq!(response.has_more, Some(false));
         assert_eq!(response.page_token, None);
-},
-#[test],
+}
+#[test]
     fn test_delete_user_request_default() {,
 let request = DeleteUserRequest::default();
         assert_eq!(request.user_id_type, None);
         assert_eq!(request.department_id_type, None);
-},
-#[test],
+}
+#[test]
     fn test_resurrect_user_request() {,
 let request = ResurrectUserRequest {,
             user_id_type: Some("open_id".to_string()),
@@ -937,8 +937,8 @@ let request = ResurrectUserRequest {,
 let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("open_id"));
 assert!(json.contains("department_id"));
-    },
-#[test],
+    }
+#[test]
     fn test_list_users_request() {,
 let request = ListUsersRequest {,
             page_size: Some(100),
@@ -951,15 +951,15 @@ let json = serde_json::to_string(&request).unwrap();
 assert!(json.contains("list_token"));
         assert!(json.contains("user_id"));
 assert!(json.contains("department_id"));
-    },
-#[test],
+    }
+#[test]
     fn test_list_users_response() {,
 let user1 = create_test_user();
         let mut user2 = create_test_user();
 user2.user_id = Some("user789".to_string());
         user2.name = Some("Third User".to_string());
 let response = ListUsersResponse {,
-            items: vec![user1, user2],
+            items: vec![user1, user2]
             has_more: Some(true),
             page_token: Some("next_page_token".to_string()),
         };
@@ -967,32 +967,32 @@ let response = ListUsersResponse {,
         assert_eq!(response.items.len(), 2);
         assert_eq!(response.has_more, Some(true));
         assert_eq!(response.page_token, Some("next_page_token".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_api_response_trait_implementations() {,
 assert!(matches!(,
             CreateUserResponse::data_format(),
-            ResponseFormat::Data,
+            ResponseFormat::Data
 ));
         assert!(matches!(
             PatchUserResponse::data_format(),
-            ResponseFormat::Data,
+            ResponseFormat::Data
 ));
         assert!(matches!(
             UpdateUserIdResponse::data_format(),
-            ResponseFormat::Data,
+            ResponseFormat::Data
 ));
         assert!(matches!(
             GetUserResponse::data_format(),
-            ResponseFormat::Data,
+            ResponseFormat::Data
 ));
         assert!(matches!(
             BatchGetUsersResponse::data_format(),
-            ResponseFormat::Data,
+            ResponseFormat::Data
 ));
-    },
-#[test],
-    fn test_empty_responses() {
+    }
+#[test]
+    ,
         let update_response = UpdateUserIdResponse {};
         let delete_response = DeleteUserResponse {};
 let update_json = serde_json::to_string(&update_response).unwrap();
@@ -1000,8 +1000,8 @@ let update_json = serde_json::to_string(&update_response).unwrap();
 
         assert_eq!(update_json, "{}");
         assert_eq!(delete_json, "{}");
-},
-#[test],
+}
+#[test]
     fn test_user_service_builder_creation() {,
 let config = create_test_config();
         let service = UserService::new(config);
@@ -1018,8 +1018,8 @@ assert_eq!(,
             request.department_id_type,
             Some("department_id".to_string()),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_request_serialization_edge_cases() {,
 let request = CreateUserRequest {,
             user: User::default(),
@@ -1031,8 +1031,8 @@ let json = serde_json::to_string(&request).unwrap();
 
         assert_eq!(deserialized.user_id_type, None);
         assert_eq!(deserialized.department_id_type, None);
-},
-#[test],
+}
+#[test]
     fn test_unicode_handling() {,
 let mut user = create_test_user();
         user.name = Some("张三".to_string());

@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -25,20 +25,20 @@ pub struct CreateSpaceRequest {
     /// 知识空间名称
     name: String,
     /// 知识空间描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
 }
 impl CreateSpaceRequest {
     pub fn w+.*{
 CreateSpaceRequestBuilder::default(),
-    },
+    }
 pub fn new(name: impl ToString) -> Self {
         Self {
             name: name.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct CreateSpaceRequestBuilder {
     request: CreateSpaceRequest,
@@ -48,16 +48,16 @@ impl CreateSpaceRequestBuilder {
     pub fn name(mut self, name: impl ToString) -> Self {
 self.request.name = name.to_string();
         self,
-},
+}
 /// 知识空间描述,
     pub fn description(mut self, description: impl ToString) -> Self {
 self.request.description = Some(description.to_string());
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 impl_executable_builder_owned!(,
     CreateSpaceRequestBuilder,
@@ -74,24 +74,24 @@ pub struct CreatedSpace {
     /// 知识空间名称
     pub name: String,
     /// 知识空间描述,
-#[serde(default)],
+#[serde(default)]
     pub description: Option<String>,
     /// 知识空间类型
     pub space_type: Option<String>,
     /// 知识空间可见性
     pub visibility: Option<String>,
-},
+}
 /// 创建知识空间响应,
 #[derive(.*?)]
 pub struct CreateSpaceResponse {
     /// 创建的知识空间信息
     pub space: CreatedSpace,
 }
-impl ApiResponseTrait for CreateSpaceResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 创建知识空间,
 pub async fn create_space(
     request: CreateSpaceRequest,
@@ -108,10 +108,10 @@ Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_create_space_request_builder() {,
 let request = CreateSpaceRequest::builder(),
             .name()
@@ -123,5 +123,5 @@ assert_eq!(,
             request.description,
             Some("这是一个测试知识空间".to_string()),
 );
-    },
+    }
 }

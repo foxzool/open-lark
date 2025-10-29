@@ -2,7 +2,7 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;use serde::{Deserialize, Serialize};
 use crate::core::{,
     api_req::ApiRequest,
-    api_resp::{BaseResponse, BinaryResponse},
+    api_resp::{BaseResponse, BinaryResponse}
     config::Config,
     constants::AccessTokenType,
     endpoints::cloud_docs::*,
@@ -16,8 +16,8 @@ pub struct WhiteboardService {
 }
 impl WhiteboardService {
     pub fn new(config: Config) -> Self {
-        Self { config },
-},
+        Self { config }
+}
 /// 获取画板缩略图片,
     ///,
 /// 该接口用于获取画板的缩略图片。,
@@ -33,24 +33,24 @@ impl WhiteboardService {
 let mut api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: BOARD_V1_WHITEBOARD_THUMBNAIL.replace("{}", &request.whiteboard_token),
-            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             ..Default::default(),
 };
 // 添加查询参数,
         if let Some(format) = request.format {
             api_req.query_params.insert("format", format);
-},
+}
 if let Some(width) = request.width {,
             api_req.query_params.insert("width", width.to_string());
-},
+}
 if let Some(height) = request.height {,
             api_req.query_params.insert("height", height.to_string());
 }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 获取画板缩略图请求参数,
 #[derive(.*?)]
 pub struct GetWhiteboardThumbnailRequest {
@@ -70,7 +70,7 @@ Self {
             format: None,
             width: None,
             height: None,
-        },
+        }
 }
 
     pub fn with_format(mut self, format: impl Into<String>) -> Self {
@@ -92,5 +92,5 @@ self.height = Some(height);
 self.width = Some(width);
         self.height = Some(height);
 self,
-    },
+    }
 }

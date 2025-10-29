@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -30,13 +30,13 @@ let mut api_req = request.api_request;
 api_req.api_path = SHEETS_V3_SPREADSHEET_CONDITION_FORMAT,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 批量更新条件格式请求,
 #[derive(.*?)]
 pub struct UpdateConditionFormatsRequest {
@@ -52,8 +52,8 @@ pub struct UpdateConditionFormatsRequest {
 impl UpdateConditionFormatsRequest {
     pub fn w+.*{
 UpdateConditionFormatsRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct UpdateConditionFormatsRequestBuilder {
     request: UpdateConditionFormatsRequest,
@@ -77,19 +77,19 @@ self.request.condition_formats = condition_formats;
     pub fn add_condition_format(mut self, condition_format: UpdateConditionFormatRule) -> Self {
 self.request.condition_formats.push(condition_format);
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 更新条件格式规则,
 #[derive(.*?)]
 pub struct UpdateConditionFormatRule {
     /// 条件格式 ID
     pub cf_id: String,
     /// 条件格式规则,
-#[serde(flatten)],
+#[serde(flatten)]
     pub rule: ConditionFormatRule,
 }
 impl UpdateConditionFormatRule {
@@ -97,29 +97,29 @@ impl UpdateConditionFormatRule {
 Self {
             cf_id: cf_id.to_string(),
             rule,
-        },
+        }
 }
-},
+}
 /// 批量更新条件格式响应体最外层,
 #[derive(.*?)]
 pub struct UpdateConditionFormatsResponseData {
     /// 更新后的条件格式列表
     pub items: Vec<ConditionFormatInfo>,
     /// 更新成功的数量,
-#[serde(default)],
+#[serde(default)]
     pub updated_count: u32,
 }
-impl ApiResponseTrait for UpdateConditionFormatsResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use super::*;
 use serde_json::json;
-    #[test],
+    #[test]
 fn test_update_condition_formats_response() {,
         let json = json!({,
 "items": [,
@@ -127,7 +127,7 @@ fn test_update_condition_formats_response() {,
                     "cf_id": "cf_001",
                     "range": "A1:A15",
                     "condition_type": "NUMBER_GREATER",
-                    "condition_values": ["200"],
+                    "condition_values": ["200"]
                     "format": {
                         "background_color": "#00FF00",
                         "text_color": "#000000",

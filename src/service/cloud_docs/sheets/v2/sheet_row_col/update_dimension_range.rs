@@ -2,13 +2,13 @@ use serde::Serialize;
 use open_lark_core::core::api_req::ApiRequest;
 use crate::{,
 core::{,
-        api_resp::{BaseResponse, EmptyResponse},
+        api_resp::{BaseResponse, EmptyResponse}
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option, SDKResult,
     }
     impl_executable_builder_owned,
-    service::cloud_docs::sheets::v2::{sheet_row_col::UpdateDimension, SpreadsheetService},
+    service::cloud_docs::sheets::v2::{sheet_row_col::UpdateDimension, SpreadsheetService}
 };
 /// 更新行列请求,
 #[derive(.*?)]
@@ -20,9 +20,9 @@ pub struct UpdateDimensionRangeRequest {
     /// 需要更新行列的维度信息
     dimension: UpdateDimension,
     /// 更新行或列的属性。至少写入以下参数之一,
-#[serde(rename = "dimensionProperties")],
+#[serde(rename = "dimensionProperties")]
     dimension_properties: DimensionProperties,
-},
+}
 /// 更新行或列的属性。至少写入以下参数之一,
 #[derive(.*?)]
 struct DimensionProperties {,
@@ -34,8 +34,8 @@ struct DimensionProperties {,
 impl UpdateDimensionRangeRequest {
     pub fn w+.*{
 UpdateDimensionRangeRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct UpdateDimensionRangeRequestBuilder {
     request: UpdateDimensionRangeRequest,
@@ -44,48 +44,48 @@ impl UpdateDimensionRangeRequestBuilder {
     pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
-},
+}
 /// 电子表格工作表的 ID。调用获取工作表获取 ID,
     pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.dimension.sheet_id = sheet_id.to_string();
         self,
-},
+}
 /// 更新的维度。可选值：,
     /// - ROWS：行,
 /// - COLUMNS：列,
     pub fn major_dimension(mut self, major_dimension: impl ToString) -> Self {
 self.request.dimension.major_dimension = major_dimension.to_string();
         self,
-},
+}
 /// 插入的行或列的起始位置。从 0 开始计数。若 startIndex 为 3，则从第 4,
     /// 行或列开始插入空行或列。包含第 4 行或列。
     pub fn start_index(mut self, start_index: i32) -> Self {
 self.request.dimension.start_index = start_index;
         self,
-},
+}
 /// 插入的行或列结束的位置。从 0 开始计数。若 endIndex 为 7，则从第 8 行结束插入行。第 8,
     /// 行不再插入空行。 示例：当 majorDimension为 ROWS、 startIndex 为 3、endIndex 为 7,
 /// 时，则在第 4、5、6、7 行插入空白行，共插入 4 行。,
     pub fn end_index(mut self, end_index: i32) -> Self {
 self.request.dimension.end_index = end_index;
         self,
-},
+}
 /// 是否隐藏行或列。可选值：,
     /// - true：显示行或列,
 /// - false：隐藏行或列,
     pub fn visible(mut self, visible: bool) -> Self {
 self.request.dimension_properties.visible = Some(visible);
         self,
-},
+}
 /// 行高或列宽。单位为像素。fixedSize 为 0 时，等价于隐藏行或列。,
     pub fn fixed_size(mut self, fixed_size: i32) -> Self {
 self.request.dimension_properties.fixed_size = Some(fixed_size);
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 impl_executable_builder_owned!(,
     UpdateDimensionRangeRequestBuilder,
@@ -111,9 +111,9 @@ api_req.set_http_method(reqwest::Method::PUT);
 
         let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
-#[cfg(test)],
+    }
+}
+#[cfg(test)]
 mod tests {
 use super::*;
     use crate::core::config::Config;
@@ -123,11 +123,11 @@ Config::builder()
             .app_id()
 .app_secret()
             .build(),
-},
+}
 fn create_test_service() -> SpreadsheetService {,
         SpreadsheetService::new(create_test_config()),
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_builder_creation() {,
 let builder = UpdateDimensionRangeRequest::builder();
         let request = builder.build();
@@ -139,59 +139,59 @@ let builder = UpdateDimensionRangeRequest::builder();
         assert_eq!(request.dimension.end_index, 0);
 assert!(request.dimension_properties.visible.is_none());
         assert!(request.dimension_properties.fixed_size.is_none());
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_builder_with_spreadsheet_token() {,
 let request = UpdateDimensionRangeRequest::builder(),
             .spreadsheet_token()
 .build();
         assert_eq!(request.spreadsheet_token, "test_spreadsheet_123");
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_builder_with_sheet_id() {,
 let request = UpdateDimensionRangeRequest::builder(),
             .sheet_id()
 .build();
         assert_eq!(request.dimension.sheet_id, "test_sheet_456");
-},
-#[rstest],
-    #[case("ROWS")],
-#[case("COLUMNS")],
+}
+#[rstest]
+    #[case("ROWS")]
+#[case("COLUMNS")]
     fn test_update_dimension_range_request_builder_with_major_dimension(#[case] dimension: &str) {,
 let request = UpdateDimensionRangeRequest::builder(),
             .major_dimension()
 .build();
         assert_eq!(request.dimension.major_dimension, dimension);
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_builder_with_start_index() {,
 let request = UpdateDimensionRangeRequest::builder(),
             .start_index()
 .build();
         assert_eq!(request.dimension.start_index, 5);
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_builder_with_end_index() {,
 let request = UpdateDimensionRangeRequest::builder().end_index(10).build();
         assert_eq!(request.dimension.end_index, 10);
-},
-#[rstest],
-    #[case(true)],
-#[case(false)],
+}
+#[rstest]
+    #[case(true)]
+#[case(false)]
     fn test_update_dimension_range_request_builder_with_visible(#[case] visible: bool) {,
 let request = UpdateDimensionRangeRequest::builder(),
             .visible()
 .build();
         assert_eq!(request.dimension_properties.visible, Some(visible));
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_builder_with_fixed_size() {,
 let request = UpdateDimensionRangeRequest::builder(),
             .fixed_size()
 .build();
         assert_eq!(request.dimension_properties.fixed_size, Some(100));
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_builder_chaining() {,
 let request = UpdateDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -209,8 +209,8 @@ let request = UpdateDimensionRangeRequest::builder(),
         assert_eq!(request.dimension.end_index, 7);
         assert_eq!(request.dimension_properties.visible, Some(true));
         assert_eq!(request.dimension_properties.fixed_size, Some(50));
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_default() {,
 let request = UpdateDimensionRangeRequest::default();
         assert_eq!(request.spreadsheet_token, "");
@@ -220,8 +220,8 @@ let request = UpdateDimensionRangeRequest::default();
         assert_eq!(request.dimension.end_index, 0);
 assert!(request.dimension_properties.visible.is_none());
         assert!(request.dimension_properties.fixed_size.is_none());
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_builder_default() {,
 let builder = UpdateDimensionRangeRequestBuilder::default();
         let request = builder.build();
@@ -233,14 +233,14 @@ let builder = UpdateDimensionRangeRequestBuilder::default();
         assert_eq!(request.dimension.end_index, 0);
 assert!(request.dimension_properties.visible.is_none());
         assert!(request.dimension_properties.fixed_size.is_none());
-},
-#[test],
+}
+#[test]
     fn test_dimension_properties_default() {,
 let props = DimensionProperties::default();
         assert!(props.visible.is_none());
 assert!(props.fixed_size.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_update_dimension_range_request_serialization() {,
 let request = UpdateDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -262,8 +262,8 @@ assert!(json_str.contains("\"endIndex\":5"));
         assert!(json_str.contains("\"dimensionProperties\""));
 assert!(json_str.contains("\"visible\":false"));
         assert!(json_str.contains("\"fixedSize\":80"));
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_serialization_minimal() {,
 let request = UpdateDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -281,8 +281,8 @@ assert!(json_str.contains("\"dimensionProperties\""));
         // visible and fixedSize should not be present when None,
 assert!(!json_str.contains("visible"));
         assert!(!json_str.contains("fixedSize"));
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_debug() {,
 let request = UpdateDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -297,8 +297,8 @@ assert!(debug_str.contains("UpdateDimensionRangeRequest"));
 assert!(debug_str.contains("debug_sheet"));
         assert!(debug_str.contains("visible: Some(true)"));
 assert!(debug_str.contains("fixed_size: Some(120)"));
-    },
-#[test],
+    }
+#[test]
     fn test_update_dimension_range_request_with_empty_strings() {,
 let request = UpdateDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -308,8 +308,8 @@ let request = UpdateDimensionRangeRequest::builder(),
         assert_eq!(request.spreadsheet_token, "");
         assert_eq!(request.dimension.sheet_id, "");
         assert_eq!(request.dimension.major_dimension, "");
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_with_special_characters() {,
 let request = UpdateDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -322,8 +322,8 @@ let request = UpdateDimensionRangeRequest::builder(),
         assert_eq!(request.dimension.sheet_id, "sheet_名称_123");
         assert_eq!(request.dimension.major_dimension, "ROWS");
         assert_eq!(request.dimension_properties.visible, Some(false));
-},
-#[rstest],
+}
+#[rstest]
     #[case(0, 1)]
     #[case(1, 5)]
     #[case(10, 20)]
@@ -341,8 +341,8 @@ let request = UpdateDimensionRangeRequest::builder(),
 
         assert_eq!(request.dimension.start_index, start);
         assert_eq!(request.dimension.end_index, end);
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_with_maximum_values() {,
 let request = UpdateDimensionRangeRequest::builder(),
             .start_index()
@@ -352,8 +352,8 @@ let request = UpdateDimensionRangeRequest::builder(),
         assert_eq!(request.dimension.start_index, i32::MAX);
         assert_eq!(request.dimension.end_index, i32::MAX);
         assert_eq!(request.dimension_properties.fixed_size, Some(i32::MAX));
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_with_minimum_values() {,
 let request = UpdateDimensionRangeRequest::builder(),
             .start_index()
@@ -363,8 +363,8 @@ let request = UpdateDimensionRangeRequest::builder(),
         assert_eq!(request.dimension.start_index, i32::MIN);
         assert_eq!(request.dimension.end_index, i32::MIN);
         assert_eq!(request.dimension_properties.fixed_size, Some(i32::MIN));
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_api_request_body_serialization() {,
 let request = UpdateDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -389,8 +389,8 @@ assert!(parsed.get("dimensionProperties").is_some());
         let properties = parsed.get("dimensionProperties").unwrap();
         assert_eq!(properties.get("visible").unwrap(), true);
         assert_eq!(properties.get("fixedSize").unwrap(), 60);
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_builder_multiple_calls() {,
 let mut builder = UpdateDimensionRangeRequest::builder();
         // Test that multiple calls override previous values,
@@ -410,14 +410,14 @@ let request = builder.build();
         assert_eq!(request.dimension.start_index, 2);
         assert_eq!(request.dimension_properties.visible, Some(false));
         assert_eq!(request.dimension_properties.fixed_size, Some(100));
-},
-#[test],
+}
+#[test]
     fn test_spreadsheet_service_creation() {,
 let service = create_test_service();
         // Verify the service can be created without panic
         assert_eq!(service.config.app_id, "test_app_id");
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_edge_cases() {,
 // Test with very long token,
         let long_token = "a".repeat(10000);
@@ -440,8 +440,8 @@ let request = UpdateDimensionRangeRequest::builder(),
         assert_eq!(request.dimension.start_index, 0);
         assert_eq!(request.dimension.end_index, 1000000);
         assert_eq!(request.dimension_properties.fixed_size, Some(0));
-},
-#[rstest],
+}
+#[rstest]
     #[case(0)] // Hide row/column,
 #[case(1)] // Minimum visible size,
     #[case(50)] // Normal size,
@@ -453,8 +453,8 @@ fn test_update_dimension_range_request_with_various_fixed_sizes(#[case] size: i3
             .build();
 
         assert_eq!(request.dimension_properties.fixed_size, Some(size));
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_memory_efficiency() {,
 // Test creating many requests doesn't consume excessive memory,
         let requests: Vec<UpdateDimensionRangeRequest> = (0..100),
@@ -490,7 +490,7 @@ match i % 3 {,
                 1 => assert_eq!(request.dimension_properties.visible, Some(false)),
                 2 => assert!(request.dimension_properties.visible.is_none()),
                 _ => unreachable!(),
-            },
+            }
 if i % 4 == 0 {,
                 assert_eq!(
                     request.dimension_properties.fixed_size,
@@ -498,10 +498,10 @@ if i % 4 == 0 {,
 );
             } else {,
 assert!(request.dimension_properties.fixed_size.is_none());
-            },
+            }
 }
-    },
-#[test],
+    }
+#[test]
     fn test_update_dimension_range_request_partial_properties() {,
 // Test building with only visible set,
         let request1 = UpdateDimensionRangeRequest::builder().visible(true).build();
@@ -520,8 +520,8 @@ let request2 = UpdateDimensionRangeRequest::builder(),
             .build();
 assert!(request3.dimension_properties.visible.is_none());
         assert!(request3.dimension_properties.fixed_size.is_none());
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_serialization_with_null_properties() {,
 let request = UpdateDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -539,8 +539,8 @@ assert!(parsed.get("dimensionProperties").is_some());
         let properties = parsed.get("dimensionProperties").unwrap();
 assert!(properties.get("visible").is_none());
         assert!(properties.get("fixedSize").is_none());
-},
-#[test],
+}
+#[test]
     fn test_update_dimension_range_request_unicode_handling() {,
 let request = UpdateDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -556,8 +556,8 @@ let request = UpdateDimensionRangeRequest::builder(),
 // Test serialization works with Unicode,
         let serialized = serde_json::to_string(&request);
 assert!(serialized.is_ok());
-    },
-#[test],
+    }
+#[test]
     fn test_dimension_properties_debug() {,
 let props = DimensionProperties {,
             visible: Some(true),
@@ -568,8 +568,8 @@ let props = DimensionProperties {,
 assert!(debug_str.contains("DimensionProperties"));
         assert!(debug_str.contains("visible: Some(true)"));
 assert!(debug_str.contains("fixed_size: Some(150)"));
-    },
-#[test],
+    }
+#[test]
     fn test_update_dimension_range_request_builder_partial_configuration() {,
 // Test building with only some fields configured,
         let request1 = UpdateDimensionRangeRequest::builder(),

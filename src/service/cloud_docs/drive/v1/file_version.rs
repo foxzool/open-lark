@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -23,8 +23,8 @@ pub struct FileVersionService {
 }
 impl FileVersionService {
     pub fn new(config: Config) -> Self {
-        Self { config },
-},
+        Self { config }
+}
 /// 创建文档版本,
     ///,
 /// 该接口用于创建文档版本。,
@@ -40,7 +40,7 @@ impl FileVersionService {
 let mut api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: DRIVE_V1_FILE_VERSIONS.replace("{}", &request.file_token),
-            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             ..Default::default(),
 };
 let body = serde_json::json!({,
@@ -50,7 +50,7 @@ let body = serde_json::json!({,
 api_req.body = serde_json::to_vec(&body)?;
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 删除文档版本,
     ///,
 /// 该接口用于删除文档版本。,
@@ -70,12 +70,12 @@ let mut api_req = ApiRequest {,
                 .replace()
             ..Default::default(),
 };
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 获取文档版本,
     ///,
 /// 该接口用于获取文档版本信息。,
@@ -95,12 +95,12 @@ let mut api_req = ApiRequest {,
                 .replace()
             ..Default::default(),
 };
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 获取文档版本列表,
     ///,
 /// 该接口用于获取文档的版本列表。,
@@ -116,23 +116,23 @@ Ok(api_resp),
 let mut api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: DRIVE_V1_FILE_VERSIONS.replace("{}", &request.file_token),
-            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             ..Default::default(),
 };
 // 添加查询参数,
         if let Some(page_token) = request.page_token {
             api_req.query_params.insert("page_token", page_token);
-},
+}
 if let Some(page_size) = request.page_size {,
-            api_req,
-.query_params,
+            api_req
+.query_params
                 .insert("page_size", page_size.to_string());
 }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 // === 数据结构定义 ===,
 /// 创建文档版本请求参数
 #[derive(.*?)]
@@ -147,7 +147,7 @@ pub struct CreateVersionRequest {
 impl CreateVersionRequest {
     pub fn w+.*{
 CreateVersionRequestBuilder::default(),
-    },
+    }
 pub fn new(,
         file_token: impl Into<String>,
         name: impl Into<String>,
@@ -157,9 +157,9 @@ Self {
             file_token: file_token.into(),
             name: name.into(),
             obj_type: obj_type.into(),
-        },
+        }
 }
-},
+}
 /// 创建文档版本请求构建器,
 #[derive(Default)]
 pub struct CreateVersionRequestBuilder {
@@ -179,7 +179,7 @@ self.request.name = name.into();
     pub fn obj_type(mut self, obj_type: impl Into<String>) -> Self {
 self.request.obj_type = obj_type.into();
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
@@ -203,11 +203,11 @@ pub struct CreateVersionRespData {
     /// 创建者ID
     pub creator_id: String,
 }
-impl ApiResponseTrait for CreateVersionRespData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 删除文档版本请求参数,
 #[derive(.*?)]
 pub struct DeleteVersionRequest {
@@ -225,9 +225,9 @@ DeleteVersionRequestBuilder::default(),
 Self {
             file_token: file_token.into(),
             version_id: version_id.into(),
-        },
+        }
 }
-},
+}
 /// 删除文档版本请求构建器,
 #[derive(Default)]
 pub struct DeleteVersionRequestBuilder {
@@ -242,7 +242,7 @@ self.request.file_token = file_token.into();
     pub fn version_id(mut self, version_id: impl Into<String>) -> Self {
 self.request.version_id = version_id.into();
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
@@ -260,11 +260,11 @@ pub struct DeleteVersionRespData {
     /// 删除结果
     pub success: bool,
 }
-impl ApiResponseTrait for DeleteVersionRespData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 获取文档版本请求参数,
 #[derive(.*?)]
 pub struct GetVersionRequest {
@@ -282,9 +282,9 @@ GetVersionRequestBuilder::default(),
 Self {
             file_token: file_token.into(),
             version_id: version_id.into(),
-        },
+        }
 }
-},
+}
 /// 获取文档版本请求构建器,
 #[derive(Default)]
 pub struct GetVersionRequestBuilder {
@@ -299,7 +299,7 @@ self.request.file_token = file_token.into();
     pub fn version_id(mut self, version_id: impl Into<String>) -> Self {
 self.request.version_id = version_id.into();
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
@@ -316,7 +316,7 @@ impl_executable_builder_owned!(,
 pub struct GetVersionRespData {
     /// 版本信息
     pub version: FileVersion,
-},
+}
 /// 获取文档版本列表请求参数,
 #[derive(.*?)]
 pub struct ListVersionsRequest {
@@ -330,13 +330,13 @@ pub struct ListVersionsRequest {
 impl ListVersionsRequest {
     pub fn w+.*{
 ListVersionsRequestBuilder::default(),
-    },
+    }
 pub fn new(file_token: impl Into<String>) -> Self {
         Self {
             file_token: file_token.into(),
             page_token: None,
             page_size: None,
-        },
+        }
 }
 
     pub fn with_page_token(mut self, page_token: impl Into<String>) -> Self {
@@ -348,7 +348,7 @@ self.page_token = Some(page_token.into());
 self.page_size = Some(page_size);
         self,
 }
-},
+}
 /// 获取文档版本列表请求构建器,
 #[derive(Default)]
 pub struct ListVersionsRequestBuilder {
@@ -368,7 +368,7 @@ self.request.page_token = Some(page_token.into());
     pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
@@ -390,16 +390,16 @@ pub struct ListVersionsRespData {
     /// 版本列表
     pub items: Vec<FileVersion>,
 }
-impl ApiResponseTrait for ListVersionsRespData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
-impl ApiResponseTrait for GetVersionRespData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 文档版本信息,
 #[derive(.*?)]
 pub struct FileVersion {

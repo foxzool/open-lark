@@ -5,7 +5,7 @@ use crate::core::{,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::{cloud_docs::*, EndpointBuilder},
+    endpoints::{cloud_docs::*, EndpointBuilder}
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -16,20 +16,20 @@ pub struct GetSpaceRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 知识空间id,
-#[serde(skip)],
+#[serde(skip)]
     space_id: String,
 }
 impl GetSpaceRequest {
     pub fn w+.*{
 GetSpaceRequestBuilder::default(),
-    },
+    }
 pub fn new(space_id: impl ToString) -> Self {
         Self {
             space_id: space_id.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct GetSpaceRequestBuilder {
     request: GetSpaceRequest,
@@ -39,11 +39,11 @@ impl GetSpaceRequestBuilder {
     pub fn space_id(mut self, space_id: impl ToString) -> Self {
 self.request.space_id = space_id.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
-},
+}
 /// 知识空间详细信息,
 #[derive(.*?)]
 pub struct SpaceInfo {
@@ -52,7 +52,7 @@ pub struct SpaceInfo {
     /// 知识空间名称
     pub name: String,
     /// 知识空间描述,
-#[serde(default)],
+#[serde(default)]
     pub description: Option<String>,
     /// 知识空间类型：personal(个人空间)、team(团队空间)
     pub space_type: Option<String>,
@@ -62,18 +62,18 @@ pub struct SpaceInfo {
     pub create_time: Option<i64>,
     /// 更新时间戳（秒）
     pub update_time: Option<i64>,
-},
+}
 /// 获取知识空间信息响应,
 #[derive(.*?)]
 pub struct GetSpaceResponse {
     /// 知识空间信息
     pub space: SpaceInfo,
 }
-impl ApiResponseTrait for GetSpaceResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 获取知识空间信息,
 pub async fn get_space(
     request: GetSpaceRequest,
@@ -94,10 +94,10 @@ Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_get_space_request_builder() {,
 let request = GetSpaceRequest::builder().space_id("spcxxxxxx").build();
         assert_eq!(request.space_id, "spcxxxxxx");

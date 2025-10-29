@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -31,13 +31,13 @@ api_req.api_path = SHEETS_V3_SPREADSHEET_FLOAT_IMAGE_GET,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id)
             .replace("{}", &request.float_image_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 获取浮动图片请求,
 #[derive(.*?)]
 pub struct GetFloatImageRequest {
@@ -53,8 +53,8 @@ pub struct GetFloatImageRequest {
 impl GetFloatImageRequest {
     pub fn w+.*{
 GetFloatImageRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct GetFloatImageRequestBuilder {
     request: GetFloatImageRequest,
@@ -73,11 +73,11 @@ self.request.sheet_id = sheet_id.to_string();
     pub fn float_image_id(mut self, float_image_id: impl ToString) -> Self {
 self.request.float_image_id = float_image_id.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 impl_executable_builder_owned!(,
     GetFloatImageRequestBuilder,
@@ -90,29 +90,29 @@ impl_executable_builder_owned!(,
 #[derive(.*?)]
 pub struct GetFloatImageResponseData {
     /// 浮动图片信息,
-#[serde(flatten)],
+#[serde(flatten)]
     pub float_image: FloatImageInfo,
-},
+}
 /// 浮动图片信息,
 #[derive(.*?)]
 pub struct FloatImageInfo {
     /// 浮动图片 ID
     pub float_image_id: String,
     /// 浮动图片详细信息,
-#[serde(flatten)],
+#[serde(flatten)]
     pub float_image: FloatImageData,
 }
-impl ApiResponseTrait for GetFloatImageResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use super::*;
 use serde_json::json;
-    #[test],
+    #[test]
 fn test_get_float_image_response() {,
         let json = json!({
             "float_image_id": "fimg_001",
@@ -122,11 +122,11 @@ fn test_get_float_image_response() {,
                 "start_row_index": 1,
                 "offset_x": 10.0,
                 "offset_y": 20.0,
-},
+}
             "size": {
                 "width": 200.0,
                 "height": 150.0,
-},
+}
             "name": "示例图片",
 });
 let response: GetFloatImageResponseData = serde_json::from_value(json).unwrap();
@@ -135,5 +135,5 @@ assert_eq!(,
             response.float_image.float_image.image_token,
             "img_token_123",
 );
-    },
+    }
 }

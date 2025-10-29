@@ -5,12 +5,12 @@ pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
     /// 分页标记，用于获取下一页数据,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
     /// 是否还有更多数据,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
-},
+}
 /// 汇报规则,
 #[derive(.*?)]
 pub struct ReportRule {
@@ -19,81 +19,81 @@ pub struct ReportRule {
     /// 规则名称
     pub name: String,
     /// 规则描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 规则类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub rule_type: Option<String>,
     /// 规则状态,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     /// 汇报频率,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub frequency: Option<String>,
     /// 汇报时间设置,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<ReportSchedule>,
     /// 适用范围,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub scope: Option<ReportScope>,
     /// 汇报模板,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub template: Option<ReportTemplate>,
     /// 创建者ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub creator: Option<String>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
     /// 更新时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-},
+}
 /// 汇报时间设置,
 #[derive(.*?)]
 pub struct ReportSchedule {
     /// 汇报时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub report_time: Option<String>,
     /// 提醒时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub reminder_time: Option<String>,
     /// 时区,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub timezone: Option<String>,
     /// 工作日设置,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub weekdays: Option<Vec<i32>>,
-},
+}
 /// 汇报适用范围,
 #[derive(.*?)]
 pub struct ReportScope {
     /// 适用的部门ID列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department_ids: Option<Vec<String>>,
     /// 适用的用户ID列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_ids: Option<Vec<String>>,
     /// 适用的角色列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub roles: Option<Vec<String>>,
-},
+}
 /// 汇报模板,
 #[derive(.*?)]
 pub struct ReportTemplate {
     /// 模板ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub template_id: Option<String>,
     /// 模板名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub template_name: Option<String>,
     /// 模板内容,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
     /// 字段列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub fields: Option<Vec<ReportField>>,
-},
+}
 /// 汇报字段,
 #[derive(.*?)]
 pub struct ReportField {
@@ -102,15 +102,15 @@ pub struct ReportField {
     /// 字段名称
     pub field_name: String,
     /// 字段类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub field_type: Option<String>,
     /// 是否必填,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub required: Option<bool>,
     /// 字段描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-},
+}
 /// 规则看板,
 #[derive(.*?)]
 pub struct RuleView {
@@ -119,21 +119,21 @@ pub struct RuleView {
     /// 规则ID
     pub rule_id: String,
     /// 看板名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// 看板类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub view_type: Option<String>,
     /// 看板配置,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub config: Option<String>,
     /// 创建者ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub creator: Option<String>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
-},
+}
 /// 汇报任务,
 #[derive(.*?)]
 pub struct ReportTask {
@@ -142,60 +142,60 @@ pub struct ReportTask {
     /// 规则ID
     pub rule_id: String,
     /// 任务名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// 任务状态,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     /// 任务类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub task_type: Option<String>,
     /// 汇报者ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub reporter_id: Option<String>,
     /// 汇报者信息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub reporter_info: Option<UserInfo>,
     /// 预期汇报时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub expected_report_time: Option<i64>,
     /// 实际汇报时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub actual_report_time: Option<i64>,
     /// 汇报内容,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
     /// 更新时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-},
+}
 /// 用户信息,
 #[derive(.*?)]
 pub struct UserInfo {
     /// 用户ID
     pub user_id: String,
     /// 用户名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// 用户邮箱,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
     /// 用户头像URL,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub avatar_url: Option<String>,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
-    #[test],
+    #[test]
 fn test_page_response() {,
         let response = PageResponse {
-            items: vec!["item1".to_string(), "item2".to_string()],
+            items: vec!["item1".to_string(), "item2".to_string()]
             page_token: Some("next_page_123".to_string()),
             has_more: Some(true),
         };
@@ -204,8 +204,8 @@ let json = serde_json::to_string(&response).unwrap();
 assert!(json.contains("item2"));
         assert!(json.contains("next_page_123"));
 assert!(json.contains("true"));
-    },
-#[test],
+    }
+#[test]
     fn test_report_rule() {,
 let rule = ReportRule {,
             rule_id: "rule_001".to_string(),
@@ -248,8 +248,8 @@ assert!(json.contains("日报规则"));
 assert!(json.contains("18:00"));
         assert!(json.contains("Asia/Shanghai"));
 assert!(json.contains("dept_001"));
-    },
-#[test],
+    }
+#[test]
     fn test_report_schedule() {,
 let schedule = ReportSchedule {,
             report_time: Some("09:00".to_string()),
@@ -262,8 +262,8 @@ let json = serde_json::to_string(&schedule).unwrap();
 assert!(json.contains("08:30"));
         assert!(json.contains("UTC"));
         assert!(json.contains("[1,2,3,4,5,6,7]"));
-},
-#[test],
+}
+#[test]
     fn test_report_scope() {,
 let scope = ReportScope {,
             department_ids: Some(vec!["engineering".to_string(), "marketing".to_string()]),
@@ -275,8 +275,8 @@ let json = serde_json::to_string(&scope).unwrap();
 assert!(json.contains("marketing"));
         assert!(json.contains("alice"));
 assert!(json.contains("developer"));
-    },
-#[test],
+    }
+#[test]
     fn test_report_template() {,
 let template = ReportTemplate {,
             template_id: Some("template_daily".to_string()),
@@ -289,14 +289,14 @@ ReportField {,
                     field_type: Some("textarea".to_string()),
                     required: Some(true),
                     description: Some("Describe your progress today".to_string()),
-                },
+                }
                 ReportField {
                     field_id: "challenges".to_string(),
                     field_name: "Challenges".to_string(),
                     field_type: Some("text".to_string()),
                     required: Some(false),
                     description: Some("Any challenges faced".to_string()),
-                },
+                }
             ]),
         };
 let json = serde_json::to_string(&template).unwrap();
@@ -305,8 +305,8 @@ assert!(json.contains("Daily Report Template"));
         assert!(json.contains("progress"));
 assert!(json.contains("challenges"));
         assert!(json.contains("textarea"));
-},
-#[test],
+}
+#[test]
     fn test_report_field() {,
 let field = ReportField {,
             field_id: "accomplishments".to_string(),
@@ -320,8 +320,8 @@ let json = serde_json::to_string(&field).unwrap();
 assert!(json.contains("Accomplishments"));
         assert!(json.contains("\"required\":true"));
 assert!(json.contains("List your accomplishments"));
-    },
-#[test],
+    }
+#[test]
     fn test_rule_view() {,
 let view = RuleView {,
             view_id: "view_dashboard_001".to_string(),
@@ -338,8 +338,8 @@ assert!(json.contains("rule_weekly"));
         assert!(json.contains("Weekly Report Dashboard"));
 assert!(json.contains("dashboard"));
         assert!(json.contains("grid"));
-},
-#[test],
+}
+#[test]
     fn test_report_task() {,
 let user_info = UserInfo {,
             user_id: "user_123".to_string(),
@@ -369,8 +369,8 @@ assert!(json.contains("pending"));
         assert!(json.contains("John Doe"));
 assert!(json.contains("john.doe@company.com"));
         assert!(json.contains("API integration"));
-},
-#[test],
+}
+#[test]
     fn test_user_info() {,
 let user = UserInfo {,
             user_id: "user_456".to_string(),
@@ -383,8 +383,8 @@ let json = serde_json::to_string(&user).unwrap();
 assert!(json.contains("Alice Smith"));
         assert!(json.contains("alice.smith@example.com"));
 assert!(json.contains("avatars/alice.png"));
-    },
-#[test],
+    }
+#[test]
     fn test_minimal_structs() {,
 let minimal_rule = ReportRule {,
             rule_id: "minimal_rule".to_string(),
@@ -415,8 +415,8 @@ let json = serde_json::to_string(&minimal_user).unwrap();
         assert!(json.contains("user_minimal"));
 assert!(!json.contains("name"));
         assert!(!json.contains("email"));
-},
-#[test],
+}
+#[test]
     fn test_nested_structures() {,
 let page_response = PageResponse {,
             items: vec![,
@@ -433,7 +433,7 @@ ReportRule {,
                     creator: None,
                     created_at: None,
                     updated_at: None,
-                },
+                }
                 ReportRule {
                     rule_id: "rule_2".to_string(),
                     name: "Rule 2".to_string(),
@@ -447,7 +447,7 @@ ReportRule {,
                     creator: None,
                     created_at: None,
                     updated_at: None,
-                },
+                }
             ],
             page_token: Some("page_2".to_string()),
             has_more: Some(false),
@@ -459,8 +459,8 @@ assert!(json.contains("rule_2"));
 assert!(json.contains("weekly"));
         assert!(json.contains("page_2"));
 assert!(json.contains("false"));
-    },
-#[test],
+    }
+#[test]
     fn test_complex_report_workflow() {,
 let schedule = ReportSchedule {,
             report_time: Some("17:00".to_string()),
@@ -484,14 +484,14 @@ ReportField {,
                     field_type: Some("number".to_string()),
                     required: Some(true),
                     description: Some("Number of commits made today".to_string()),
-                },
+                }
                 ReportField {
                     field_id: "bugs_fixed".to_string(),
                     field_name: "Bugs Fixed".to_string(),
                     field_type: Some("number".to_string()),
                     required: Some(false),
                     description: Some("Number of bugs resolved".to_string()),
-                },
+                }
             ]),
         };
 let rule = ReportRule {,

@@ -20,22 +20,22 @@ impl AppTableService {
 let mut api_req = request.api_request;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(BITABLE_V1_TABLES.replace("{app_token}", &request.app_token));
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 // 添加查询参数,
         if let Some(page_token) = request.page_token {
             api_req.query_params.insert("page_token", page_token);
-},
+}
 if let Some(page_size) = request.page_size {,
-            api_req,
-.query_params,
+            api_req
+.query_params
                 .insert("page_size", page_size.to_string());
 }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 列出数据表请求,
 #[derive(.*?)]
 pub struct ListTablesRequest {
@@ -50,7 +50,7 @@ pub struct ListTablesRequest {
 impl ListTablesRequest {
     pub fn w+.*{
 ListTablesRequestBuilder::default(),
-    },
+    }
 /// 创建列出数据表请求,
     pub fn new(app_token: impl ToString) -> Self {
 Self {
@@ -58,9 +58,9 @@ Self {
             app_token: app_token.to_string(),
             page_token: None,
             page_size: None,
-        },
+        }
 }
-},
+}
 #[derive(.*?)]
 pub struct ListTablesRequestBuilder {
     request: ListTablesRequest,
@@ -70,21 +70,21 @@ impl ListTablesRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 分页标记,
     pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
-},
+}
 /// 分页大小，最大值是 100,
     pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size.min(100));
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
-},
+}
 // 应用ExecutableBuilder trait到ListTablesRequestBuilder,
 crate::impl_executable_builder_owned!(
     ListTablesRequestBuilder,
@@ -114,16 +114,16 @@ pub struct TableInfo {
     /// 数据表的名称
     pub name: String,
 }
-impl ApiResponseTrait for ListTablesResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_list_tables_request() {,
 let request = ListTablesRequest::builder(),
             .app_token()
@@ -133,15 +133,15 @@ let request = ListTablesRequest::builder(),
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.page_size, Some(50));
         assert_eq!(request.page_token, Some("next_page_token".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_list_tables_request_new() {,
 let request = ListTablesRequest::new("bascnmBA*****yGehy8");
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.page_size, None);
         assert_eq!(request.page_token, None);
-},
-#[test],
+}
+#[test]
     fn test_page_size_limit() {,
 let request = ListTablesRequest::builder(),
             .app_token()

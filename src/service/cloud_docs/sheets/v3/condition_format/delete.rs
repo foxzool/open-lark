@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -28,13 +28,13 @@ let mut api_req = request.api_request;
 api_req.api_path = SHEETS_V3_SPREADSHEET_CONDITION_FORMAT,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 批量删除条件格式请求,
 #[derive(.*?)]
 pub struct DeleteConditionFormatsRequest {
@@ -50,8 +50,8 @@ pub struct DeleteConditionFormatsRequest {
 impl DeleteConditionFormatsRequest {
     pub fn w+.*{
 DeleteConditionFormatsRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct DeleteConditionFormatsRequestBuilder {
     request: DeleteConditionFormatsRequest,
@@ -75,54 +75,54 @@ self.request.cf_ids = cf_ids;
     pub fn add_cf_id(mut self, cf_id: impl ToString) -> Self {
 self.request.cf_ids.push(cf_id.to_string());
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 删除结果,
 #[derive(.*?)]
 pub struct DeleteResult {
     /// 条件格式 ID
     pub cf_id: String,
     /// 删除是否成功,
-#[serde(default)],
+#[serde(default)]
     pub success: bool,
     /// 错误信息（如果删除失败）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-},
+}
 /// 批量删除条件格式响应体最外层,
 #[derive(.*?)]
 pub struct DeleteConditionFormatsResponseData {
     /// 删除结果列表
     pub items: Vec<DeleteResult>,
     /// 删除成功的数量,
-#[serde(default)],
+#[serde(default)]
     pub deleted_count: u32,
     /// 删除失败的数量,
-#[serde(default)],
+#[serde(default)]
     pub failed_count: u32,
 }
-impl ApiResponseTrait for DeleteConditionFormatsResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use super::*;
 use serde_json::json;
-    #[test],
+    #[test]
 fn test_delete_condition_formats_response() {,
         let json = json!({,
 "items": [,
                 {
                     "cf_id": "cf_001",
                     "success": true,
-},
+}
                 {
                     "cf_id": "cf_002",
                     "success": false,

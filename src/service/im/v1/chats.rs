@@ -8,14 +8,14 @@ pub struct ChatsService {
 }
 impl ChatsService {
     pub fn new(config: Config) -> Self {
-        Self { config },
+        Self { config }
 }
 }
 impl Clone for ChatsService {,
     fn clone(&self) -> Self {
 Self {
             config: self.config.clone(),
-        },
+        }
 }
 }
 impl std::fmt::Debug for ChatsService {,
@@ -23,5 +23,5 @@ impl std::fmt::Debug for ChatsService {,
 f.debug_struct()
             .field()
 .finish(),
-    },
+    }
 }

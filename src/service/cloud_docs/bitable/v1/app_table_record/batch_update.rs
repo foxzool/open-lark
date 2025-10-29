@@ -8,7 +8,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -24,17 +24,17 @@ pub struct BatchUpdateRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 多维表格的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     app_token: String,
     /// 多维表格数据表的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     table_id: String,
     /// 用户 ID 类型,
-#[serde(skip)],
+#[serde(skip)]
     user_id_type: Option<String>,
     /// 要更新的记录列表
     records: Vec<UpdateRecord>,
-},
+}
 /// 要更新的记录数据,
 #[derive(.*?)]
 pub struct UpdateRecord {
@@ -54,8 +54,8 @@ Self {
             table_id: table_id.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct BatchUpdateRecordRequestBuilder {
     request: BatchUpdateRecordRequest,
@@ -65,22 +65,22 @@ impl BatchUpdateRecordRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 数据表的唯一标识符,
     pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
-},
+}
 /// 用户 ID 类型,
     pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
-},
+}
 /// 要更新的记录列表,
     pub fn records(mut self, records: Vec<UpdateRecord>) -> Self {
 self.request.records = records;
         self,
-},
+}
 /// 添加单条更新记录,
     pub fn add_record(mut self, record_id: impl ToString, fields: Value) -> Self {
 self.request.records.push(UpdateRecord {,
@@ -88,18 +88,18 @@ self.request.records.push(UpdateRecord {,
             fields,
         });
 self,
-    },
+    }
 pub fn w+.*{
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
                 .api_request,
-.query_params,
+.query_params
                 .insert("user_id_type", user_id_type.clone());
-},
+}
 self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request,
 }
-},
+}
 // 应用ExecutableBuilder trait到BatchUpdateRecordRequestBuilder,
 crate::impl_executable_builder_owned!(
     BatchUpdateRecordRequestBuilder,
@@ -114,11 +114,11 @@ pub struct BatchUpdateRecordResponse {
     /// 更新后的记录列表
     pub records: Vec<Record>,
 }
-impl ApiResponseTrait for BatchUpdateRecordResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 批量更新记录,
 pub async fn batch_update_record(
     request: BatchUpdateRecordRequest,
@@ -142,15 +142,15 @@ impl UpdateRecord {
 Self {
             record_id: record_id.to_string(),
             fields,
-        },
+        }
 }
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json::json;
-    #[test],
+    #[test]
 fn test_batch_update_record_request_builder() {,
         let update_records = vec![,
 UpdateRecord::new(,

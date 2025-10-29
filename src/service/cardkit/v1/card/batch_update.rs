@@ -6,13 +6,13 @@ use crate::{,
 core::{,
         api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
         constants::AccessTokenType,
-        endpoints::{cardkit::*, EndpointBuilder},
+        endpoints::{cardkit::*, EndpointBuilder}
         http::Transport,
         req_option::RequestOption,
         SDKResult,
     }
     impl_executable_builder_owned,
-    service::cardkit::v1::models::{BatchUpdateOperation, Card, UserIdType},
+    service::cardkit::v1::models::{BatchUpdateOperation, Card, UserIdType}
 };
 use super::CardService;
 /// 批量更新卡片实体请求
@@ -33,10 +33,10 @@ pub fn w+.*{
 request: BatchUpdateCardRequest {,
                 card_id: card_id.to_string()
                 ..Default::default(),
-},
-        },
 }
-},
+        }
+}
+}
 /// 批量更新卡片实体请求构建器,
 pub struct BatchUpdateCardRequestBuilder {
     request: BatchUpdateCardRequest,
@@ -46,26 +46,26 @@ impl BatchUpdateCardRequestBuilder {
     pub fn add_operation(mut self, operation: BatchUpdateOperation) -> Self {
 self.request.operations.push(operation);
         self,
-},
+}
 /// 添加多个更新操作,
     pub fn add_operations(mut self, operations: Vec<BatchUpdateOperation>) -> Self {
 self.request.operations.extend(operations);
         self,
-},
+}
 /// 设置用户ID类型,
     pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
-},
+}
 /// 构建请求,
     pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
-                .api_req,
-.query_params,
+                .api_req
+.query_params
                 .insert("user_id_type", user_id_type.to_string());
-},
+}
 // 构建请求体,
         let body = json!({,
 "operations": self.request.operations,
@@ -73,23 +73,23 @@ self.request,
 self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
         self.request,
 }
-},
+}
 /// 批量更新卡片实体响应数据,
 #[derive(.*?)]
 pub struct BatchUpdateCardResponseData {
     /// 更新后的卡片信息
     pub card: Card,
-},
+}
 /// 批量更新卡片实体响应,
 #[derive(.*?)]
 pub struct BatchUpdateCardResponse {
     /// 响应数据
     pub data: BatchUpdateCardResponseData,
 }
-impl ApiResponseTrait for BatchUpdateCardResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl CardService {
     /// 批量更新卡片实体,
@@ -110,7 +110,7 @@ impl CardService {
     ///         operation: "replace".to_string(),
     ///         path: "/title".to_string(),
     ///         value: Some(serde_json::json!("新标题")),
-    ///     },
+    ///     }
 /// ];
     ///,
 /// let response = client.cardkit.v1.card.batch_update(,
@@ -136,13 +136,13 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
             "card_id",
             &request.card_id,
         ));
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 // 应用ExecutableBuilder宏,
 impl_executable_builder_owned!(
     BatchUpdateCardRequestBuilder,

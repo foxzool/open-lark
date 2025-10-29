@@ -16,19 +16,19 @@ pub struct DeleteRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 多维表格的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     app_token: String,
     /// 多维表格数据表的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     table_id: String,
     /// 记录的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     record_id: String,
 }
 impl DeleteRecordRequest {
     pub fn w+.*{
 DeleteRecordRequestBuilder::default(),
-    },
+    }
 pub fn new(,
         app_token: impl ToString,
         table_id: impl ToString,
@@ -40,8 +40,8 @@ Self {
             record_id: record_id.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct DeleteRecordRequestBuilder {
     request: DeleteRecordRequest,
@@ -51,21 +51,21 @@ impl DeleteRecordRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 数据表的唯一标识符,
     pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
-},
+}
 /// 记录的唯一标识符,
     pub fn record_id(mut self, record_id: impl ToString) -> Self {
 self.request.record_id = record_id.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
-},
+}
 // 应用ExecutableBuilder trait到DeleteRecordRequestBuilder,
 crate::impl_executable_builder_owned!(
     DeleteRecordRequestBuilder,
@@ -82,11 +82,11 @@ pub struct DeleteRecordResponse {
     /// 被删除的记录 ID
     pub record_id: String,
 }
-impl ApiResponseTrait for DeleteRecordResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 删除记录,
 pub async fn delete_record(
     request: DeleteRecordRequest,
@@ -106,10 +106,10 @@ Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_delete_record_request_builder() {,
 let request = DeleteRecordRequest::builder(),
             .app_token()

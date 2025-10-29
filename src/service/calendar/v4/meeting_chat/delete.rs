@@ -20,16 +20,16 @@ use super::MeetingChatService;
 pub struct DeleteMeetingChatRequest {
     pub api_req: ApiRequest,
     // TODO: 添加具体的请求字段,
-},
+}
 /// 删除会议群响应 (未实现),
 #[derive(.*?)]
 pub struct DeleteMeetingChatResponse {
     // TODO: 添加具体的响应字段,
 }
-impl ApiResponseTrait for DeleteMeetingChatResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl MeetingChatService {
     /// 删除会议群 (未实现),

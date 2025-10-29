@@ -20,7 +20,7 @@ pub struct PaymentActivityApprovedData {
     pub total_amount: Option<PaymentAmount>,
     /// 涉及员工数量
     pub employee_count: Option<u32>,
-},
+}
 /// 操作人信息,
 #[derive(.*?)]
 pub struct OperatorInfo {
@@ -30,7 +30,7 @@ pub struct OperatorInfo {
     pub user_name: Option<String>,
     /// 用户类型
     pub user_type: Option<String>,
-},
+}
 /// 发薪金额信息,
 #[derive(.*?)]
 pub struct PaymentAmount {
@@ -38,16 +38,16 @@ pub struct PaymentAmount {
     pub amount: String,
     /// 货币类型
     pub currency: String,
-},
+}
 /// 发薪活动封存事件,
 #[derive(.*?)]
 pub struct P2PayrollPaymentActivityApprovedV1 {
     /// 事件通用信息,
-#[serde(flatten)],
+#[serde(flatten)]
     pub context: EventContext,
     /// 事件业务数据
     pub event: PaymentActivityApprovedData,
-},
+}
 /// 发薪活动封存事件处理器实现,
 pub struct P2PayrollPaymentActivityApprovedV1ProcessorImpl<F>,
 where,
@@ -60,7 +60,7 @@ where
     F: Fn(P2PayrollPaymentActivityApprovedV1) -> anyhow::Result<()> + Send + Sync,
 {,
 pub fn new(f: F) -> Self {
-        Self { f },
+        Self { f }
 }
 }
 impl<F> EventHandler for P2PayrollPaymentActivityApprovedV1ProcessorImpl<F>,

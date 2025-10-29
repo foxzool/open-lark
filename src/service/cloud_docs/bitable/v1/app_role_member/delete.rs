@@ -8,7 +8,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -24,16 +24,16 @@ pub struct DeleteRoleMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 多维表格的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     app_token: String,
     /// 自定义角色的id,
-#[serde(skip)],
+#[serde(skip)]
     role_id: String,
     /// 成员id,
-#[serde(skip)],
+#[serde(skip)]
     member_id: String,
     /// 用户id类型,
-#[serde(skip)],
+#[serde(skip)]
     user_id_type: Option<String>,
 }
 impl DeleteRoleMemberRequest {
@@ -48,8 +48,8 @@ Self {
             member_id: member_id.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct DeleteRoleMemberRequestBuilder {
     request: DeleteRoleMemberRequest,
@@ -59,31 +59,31 @@ impl DeleteRoleMemberRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 自定义角色的id,
     pub fn role_id(mut self, role_id: impl ToString) -> Self {
 self.request.role_id = role_id.to_string();
         self,
-},
+}
 /// 成员id,
     pub fn member_id(mut self, member_id: impl ToString) -> Self {
 self.request.member_id = member_id.to_string();
         self,
-},
+}
 /// 用户id类型,
     pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
-},
+}
 pub fn w+.*{
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
                 .api_request,
-.query_params,
+.query_params
                 .insert("user_id_type", user_id_type.clone());
-},
+}
 self.request,
-    },
+    }
 }
 impl_executable_builder_owned!(,
     DeleteRoleMemberRequestBuilder,
@@ -100,11 +100,11 @@ pub struct DeleteRoleMemberResponse {
     /// 是否删除成功
     pub deleted: bool,
 }
-impl ApiResponseTrait for DeleteRoleMemberResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 删除协作者,
 pub async fn delete_role_member(
     request: DeleteRoleMemberRequest,
@@ -124,10 +124,10 @@ Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_delete_role_member_request_builder() {,
 let request = DeleteRoleMemberRequest::builder(),
             .app_token()

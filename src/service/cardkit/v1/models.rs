@@ -16,10 +16,10 @@ pub struct Card {
     pub create_time: Option<String>,
     /// 更新时间
     pub update_time: Option<String>,
-},
+}
 /// 卡片状态,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum CardStatus {,
 /// 草稿,
     Draft,
@@ -27,7 +27,7 @@ pub enum CardStatus {,
     Published,
     /// 已删除
     Deleted,
-},
+}
 /// 卡片组件,
 #[derive(.*?)]
 pub struct CardElement {
@@ -45,10 +45,10 @@ pub struct CardElement {
     pub create_time: Option<String>,
     /// 更新时间
     pub update_time: Option<String>,
-},
+}
 /// 用户ID类型,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum UserIdType {,
 /// Open ID,
     OpenId,
@@ -63,9 +63,9 @@ match self {,
             UserIdType::OpenId => write!(f, "open_id"),
             UserIdType::UnionId => write!(f, "union_id"),
             UserIdType::UserId => write!(f, "user_id"),
-        },
+        }
 }
-},
+}
 /// 卡片配置,
 #[derive(.*?)]
 pub struct CardSettings {
@@ -75,7 +75,7 @@ pub struct CardSettings {
     pub theme: Option<String>,
     /// 自定义配置
     pub custom_config: Option<serde_json::Value>,
-},
+}
 /// 批量更新操作,
 #[derive(.*?)]
 pub struct BatchUpdateOperation {

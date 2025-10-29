@@ -5,14 +5,14 @@ use crate::core::{,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::{cloud_docs::*, EndpointBuilder},
+    endpoints::{cloud_docs::*, EndpointBuilder}
     http::Transport,
     req_option::RequestOption,
     SDKResult,
 };
 /// 协作者权限,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 #[derive(Default)]
 pub enum Permission {,
 /// 所有者,
@@ -20,11 +20,11 @@ pub enum Permission {,
     /// 编辑者
     Edit,
     /// 阅读者,
-#[default],
+#[default]
     View,
     /// 评论者
     Comment,
-},
+}
 /// 协作者信息,
 #[derive(.*?)]
 pub struct Collaborator {
@@ -34,22 +34,22 @@ pub struct Collaborator {
     pub member_id: String,
     /// 权限
     pub perm: Permission,
-},
+}
 /// 批量增加协作者权限请求,
 #[derive(.*?)]
 pub struct BatchCreatePermissionMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 文档token,
-#[serde(skip)],
+#[serde(skip)]
     token: String,
     /// 文档类型,
-#[serde(skip)],
+#[serde(skip)]
     obj_type: String,
     /// 协作者列表
     members: Vec<Collaborator>,
     /// 是否通知,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     need_notification: Option<bool>,
 }
 impl BatchCreatePermissionMemberRequest {
@@ -64,8 +64,8 @@ Self {
             members,
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct BatchCreatePermissionMemberRequestBuilder {
     request: BatchCreatePermissionMemberRequest,
@@ -75,42 +75,42 @@ impl BatchCreatePermissionMemberRequestBuilder {
     pub fn token(mut self, token: impl ToString) -> Self {
 self.request.token = token.to_string();
         self,
-},
+}
 /// 文档类型,
     pub fn obj_type(mut self, obj_type: impl ToString) -> Self {
 self.request.obj_type = obj_type.to_string();
         self,
-},
+}
 /// 设置为文档类型,
     pub fn as_doc(mut self) -> Self {
 self.request.obj_type = "doc".to_string();
         self,
-},
+}
 /// 设置为电子表格类型,
     pub fn as_sheet(mut self) -> Self {
 self.request.obj_type = "sheet".to_string();
         self,
-},
+}
 /// 设置为多维表格类型,
     pub fn as_bitable(mut self) -> Self {
 self.request.obj_type = "bitable".to_string();
         self,
-},
+}
 /// 设置为知识库类型,
     pub fn as_wiki(mut self) -> Self {
 self.request.obj_type = "wiki".to_string();
         self,
-},
+}
 /// 协作者列表,
     pub fn members(mut self, members: Vec<Collaborator>) -> Self {
 self.request.members = members;
         self,
-},
+}
 /// 添加协作者,
     pub fn add_member(mut self, member: Collaborator) -> Self {
 self.request.members.push(member);
         self,
-},
+}
 /// 添加用户协作者,
     pub fn add_user(mut self, user_id: impl ToString, permission: Permission) -> Self {
 self.request.members.push(Collaborator {,
@@ -119,7 +119,7 @@ self.request.members.push(Collaborator {,
             perm: permission,
         });
 self,
-    },
+    }
 /// 添加群组协作者,
     pub fn add_chat(mut self, chat_id: impl ToString, permission: Permission) -> Self {
 self.request.members.push(Collaborator {,
@@ -128,7 +128,7 @@ self.request.members.push(Collaborator {,
             perm: permission,
         });
 self,
-    },
+    }
 /// 添加部门协作者,
     pub fn add_department(mut self, department_id: impl ToString, permission: Permission) -> Self {
 self.request.members.push(Collaborator {,
@@ -137,27 +137,27 @@ self.request.members.push(Collaborator {,
             perm: permission,
         });
 self,
-    },
+    }
 /// 是否通知,
     pub fn need_notification(mut self, need: bool) -> Self {
 self.request.need_notification = Some(need);
         self,
-},
+}
 /// 启用通知,
     pub fn with_notification(mut self) -> Self {
 self.request.need_notification = Some(true);
         self,
-},
+}
 /// 禁用通知,
     pub fn without_notification(mut self) -> Self {
 self.request.need_notification = Some(false);
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 crate::impl_executable_builder_owned!(,
     BatchCreatePermissionMemberRequestBuilder,
     crate::service::cloud_docs::permission::PermissionService,
@@ -180,18 +180,18 @@ pub struct MemberResult {
     pub code: Option<i32>,
     /// 错误信息（如果有）
     pub msg: Option<String>,
-},
+}
 /// 批量增加协作者权限响应,
 #[derive(.*?)]
 pub struct BatchCreatePermissionMemberResponse {
     /// 操作结果列表
     pub members: Vec<MemberResult>,
 }
-impl ApiResponseTrait for BatchCreatePermissionMemberResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 批量增加协作者权限,
 pub async fn batch_create_permission_member(
     request: BatchCreatePermissionMemberRequest,
@@ -231,20 +231,20 @@ match self {,
             Permission::Comment => 2,
             Permission::Edit => 3,
             Permission::FullAccess => 4,
-        },
-},
+        }
+}
 /// 是否有编辑权限,
     pub fn can_edit(&self) -> bool {
         matches!(self, Permission::Edit | Permission::FullAccess),
-},
+}
 /// 是否有评论权限,
     pub fn can_comment(&self) -> bool {
         !matches!(self, Permission::View),
-},
+}
 /// 是否是所有者,
     pub fn is_owner(&self) -> bool {
         matches!(self, Permission::FullAccess),
-},
+}
 /// 权限描述,
     pub fn w+.*{
 match self {,
@@ -252,28 +252,28 @@ match self {,
             Permission::Edit => "编辑者",
             Permission::Comment => "评论者",
             Permission::View => "阅读者",
-        },
+        }
 }
 }
 impl MemberResult {
     /// 操作是否成功,
 pub fn w+.*{
         self.result == "success",
-},
+}
 /// 是否有错误,
     pub fn w+.*{
 self.code.is_some() || self.msg.is_some(),
-    },
+    }
 /// 获取错误信息,
     pub fn error_message(&self) -> Option<String> {
         if let (Some(code), Some(msg)) = (self.code, &self.msg) {
-            Some(format!("错误码: {code}, 错误信息: {msg}")),
+            Some(format!("错误码: {code} 错误信息: {msg}")),
 } else if let Some(msg) = &self.msg {,
 Some(msg.clone()),
         } else {
             self.code.map(|code| format!("错误码: {code}")),
 }
-    },
+    }
 }
 impl BatchCreatePermissionMemberResponse {
     /// 获取成功的操作数量,
@@ -282,14 +282,14 @@ pub fn w+.*{
 .iter()
             .filter(|member| member.is_success()),
 .count(),
-    },
+    }
 /// 获取失败的操作数量,
     pub fn w+.*{
 self.members,
             .iter()
 .filter(|member| !member.is_success()),
             .count(),
-},
+}
 /// 获取成功的操作,
     ///,
 /// # API文档,
@@ -300,7 +300,7 @@ self.members,
             .iter()
 .filter(|member| member.is_success()),
             .collect(),
-},
+}
 /// 获取失败的操作,
     ///,
 /// # API文档,
@@ -311,22 +311,22 @@ self.members,
             .iter()
 .filter(|member| !member.is_success()),
             .collect(),
-},
+}
 /// 操作摘要,
     pub fn w+.*{
 format!(,
-            "总计: {}, 成功: {}, 失败: {}",
+            "总计: {} 成功: {} 失败: {}",
             self.members.len(),
             self.success_count(),
             self.failed_count(),
 ),
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_batch_create_permission_member_request_builder() {,
 let request = BatchCreatePermissionMemberRequest::builder(),
             .token()
@@ -340,8 +340,8 @@ let request = BatchCreatePermissionMemberRequest::builder(),
         assert_eq!(request.obj_type, "doc");
         assert_eq!(request.members.len(), 2);
         assert_eq!(request.need_notification, Some(true));
-},
-#[test],
+}
+#[test]
     fn test_permission_methods() {,
 assert!(Permission::Edit.can_edit());
         assert!(Permission::FullAccess.can_edit());

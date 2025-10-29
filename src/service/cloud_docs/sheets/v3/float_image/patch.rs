@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -31,13 +31,13 @@ api_req.api_path = SHEETS_V3_SPREADSHEET_FLOAT_IMAGE_GET,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id)
             .replace("{}", &request.float_image_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 更新浮动图片请求,
 #[derive(.*?)]
 pub struct UpdateFloatImageRequest {
@@ -55,8 +55,8 @@ pub struct UpdateFloatImageRequest {
 impl UpdateFloatImageRequest {
     pub fn w+.*{
 UpdateFloatImageRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct UpdateFloatImageRequestBuilder {
     request: UpdateFloatImageRequest,
@@ -80,11 +80,11 @@ self.request.float_image_id = float_image_id.to_string();
     pub fn float_image(mut self, float_image: FloatImageData) -> Self {
 self.request.float_image = float_image;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 impl_executable_builder_owned!(,
     UpdateFloatImageRequestBuilder,
@@ -99,20 +99,20 @@ pub struct UpdateFloatImageResponseData {
     /// 浮动图片 ID
     pub float_image_id: String,
     /// 更新后的浮动图片信息,
-#[serde(flatten)],
+#[serde(flatten)]
     pub float_image: FloatImageData,
 }
-impl ApiResponseTrait for UpdateFloatImageResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use super::*;
 use serde_json::json;
-    #[test],
+    #[test]
 fn test_update_float_image_response() {,
         let json = json!({
             "float_image_id": "fimg_001",
@@ -122,11 +122,11 @@ fn test_update_float_image_response() {,
                 "start_row_index": 2,
                 "offset_x": 15.0,
                 "offset_y": 25.0,
-},
+}
             "size": {
                 "width": 300.0,
                 "height": 200.0,
-},
+}
             "name": "更新后的图片",
 });
 let response: UpdateFloatImageResponseData = serde_json::from_value(json).unwrap();

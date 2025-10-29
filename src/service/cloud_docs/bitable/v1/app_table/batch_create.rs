@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -30,7 +30,7 @@ let mut api_req = request.api_request;
 api_req.set_api_path(,
             BITABLE_V1_TABLES_BATCH_CREATE.replace("{app_token}", &request.app_token),
         );
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 api_req.body = serde_json::to_vec(&BatchCreateTablesRequestBody {,
             tables: request.tables,
@@ -38,8 +38,8 @@ api_req.body = serde_json::to_vec(&BatchCreateTablesRequestBody {,
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 批量新增数据表请求,
 #[derive(.*?)]
 pub struct BatchCreateTablesRequest {
@@ -52,16 +52,16 @@ pub struct BatchCreateTablesRequest {
 impl BatchCreateTablesRequest {
     pub fn w+.*{
 BatchCreateTablesRequestBuilder::default(),
-    },
+    }
 /// 创建批量新增数据表请求,
     pub fn new(app_token: impl ToString, tables: Vec<TableData>) -> Self {
 Self {
             api_request: ApiRequest::default(),
             app_token: app_token.to_string(),
             tables,
-        },
+        }
 }
-},
+}
 #[derive(.*?)]
 pub struct BatchCreateTablesRequestBuilder {
     request: BatchCreateTablesRequest,
@@ -71,17 +71,17 @@ impl BatchCreateTablesRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 数据表信息列表,
     pub fn tables(mut self, tables: Vec<TableData>) -> Self {
 self.request.tables = tables;
         self,
-},
+}
 /// 添加单个数据表,
     pub fn add_table(mut self, table: TableData) -> Self {
 self.request.tables.push(table);
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
@@ -103,17 +103,17 @@ pub struct BatchCreateTablesResponse {
     /// 数据表信息列表
     pub table_ids: Vec<String>,
 }
-impl ApiResponseTrait for BatchCreateTablesResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use crate::service::bitable::v1::app_table::TableField;
-    #[test],
+    #[test]
 fn test_batch_create_tables_request() {,
         let table1 = TableData::new("用户表")
             .with_fields(vec![TableField::text("姓名"), TableField::text("邮箱")]);
@@ -131,8 +131,8 @@ let request = BatchCreateTablesRequest::builder(),
         assert_eq!(request.tables.len(), 2);
         assert_eq!(request.tables[0].name, "用户表");
         assert_eq!(request.tables[1].name, "订单表");
-},
-#[test],
+}
+#[test]
     fn test_batch_create_tables_with_vec() {,
 let tables = vec![,
             TableData::new("表格1"),

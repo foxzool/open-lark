@@ -2,10 +2,10 @@ use reqwest::Method;
 use open_lark_core::core::api_req::ApiRequest;
 use serde_json::json;
 use crate::core::{,
-    api_resp::{BaseResponse, EmptyResponse},
+    api_resp::{BaseResponse, EmptyResponse}
     config::Config,
     constants::AccessTokenType,
-    endpoints::{attendance::*, EndpointBuilder},
+    endpoints::{attendance::*, EndpointBuilder}
     http::Transport,
     req_option::RequestOption,
     trait_system::Service,
@@ -42,27 +42,27 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
         ));
 api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         // 添加查询参数,
-api_req,
+api_req
             .query_params
             .insert("employee_type", request.employee_type);
 // 构建请求体,
         let mut body = json!({});
 if let Some(face_key_open) = request.face_key_open {,
             body["face_key_open"] = json!(face_key_open);
-},
+}
 if let Some(face_key) = request.face_key {,
             body["face_key"] = json!(face_key);
-},
+}
 if let Some(face_live_need_action) = request.face_live_need_action {,
             body["face_live_need_action"] = json!(face_live_need_action);
-},
+}
 if let Some(face_downgrade) = request.face_downgrade {,
             body["face_downgrade"] = json!(face_downgrade);
-},
+}
 api_req.body = serde_json::to_vec(&body)?;
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 批量查询用户人脸识别信息,
     ///,
 /// 该接口用于批量查询用户的人脸识别设置信息。,
@@ -80,8 +80,8 @@ let mut api_req = request.api_req;
 api_req.set_api_path(ATTENDANCE_V1_USER_SETTINGS_QUERY.to_string());
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 // 添加查询参数,
-        api_req,
-.query_params,
+        api_req
+.query_params
             .insert("employee_type", request.employee_type);
 // 构建请求体,
         let body = json!({,
@@ -90,7 +90,7 @@ api_req.set_api_path(ATTENDANCE_V1_USER_SETTINGS_QUERY.to_string());
 api_req.body = serde_json::to_vec(&body)?;
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 上传用户人脸识别照片,
     ///,
 /// 该接口用于上传用户的人脸识别照片，返回文件 key 用于后续设置。,
@@ -112,7 +112,7 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
         ));
 api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         // 添加查询参数,
-api_req,
+api_req
             .query_params
             .insert("employee_type", request.employee_type);
 // 保存 photo_name 以避免借用问题,
@@ -130,7 +130,7 @@ let body = json!({,
 api_req.body = serde_json::to_vec(&body)?;
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 下载用户人脸识别照片,
     ///,
 /// 该接口用于下载用户的人脸识别照片。,
@@ -152,7 +152,7 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
         ));
 api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         // 添加查询参数,
-api_req,
+api_req
             .query_params
             .insert("employee_type", request.employee_type);
         api_req.query_params.insert("face_key", request.face_key);
@@ -170,18 +170,18 @@ let _api_resp: BaseResponse<EmptyResponse> =,
 impl Service for UserSettingService {,
     fn config(&self) -> &Config {,
 &self.config,
-    },
+    }
 fn service_name() -> &'static str {,
         "user_setting",
-},
+}
 fn service_version() -> &'static str {,
         "v1",
 }
-},
-#[cfg(test)],
+}
+#[cfg(test)]
 mod tests {
 use super::*;
-    #[test],
+    #[test]
 fn test_user_setting_service_creation() {,
         let config = Config::default();
 let service = UserSettingService {,
@@ -190,8 +190,8 @@ let service = UserSettingService {,
 
         assert_eq!(service.config.app_id, config.app_id);
         assert_eq!(service.config.app_secret, config.app_secret);
-},
-#[test],
+}
+#[test]
     fn test_user_setting_service_with_custom_config() {,
 let config = Config::builder()
             .app_id()
@@ -203,8 +203,8 @@ let service = UserSettingService {,
 
         assert_eq!(service.config.app_id, "setting_test_app");
         assert_eq!(service.config.app_secret, "setting_test_secret");
-},
-#[test],
+}
+#[test]
     fn test_modify_user_setting_request_construction() {,
 let request = ModifyUserSettingRequest {,
             api_req: ApiRequest::default(),
@@ -222,8 +222,8 @@ let request = ModifyUserSettingRequest {,
         assert_eq!(request.face_key, Some("face_key_456".to_string()));
         assert_eq!(request.face_live_need_action, Some(true));
         assert_eq!(request.face_downgrade, Some(false));
-},
-#[test],
+}
+#[test]
     fn test_modify_user_setting_request_with_none_values() {,
 let request = ModifyUserSettingRequest {,
             api_req: ApiRequest::default(),
@@ -241,8 +241,8 @@ let request = ModifyUserSettingRequest {,
         assert_eq!(request.face_key, None);
         assert_eq!(request.face_live_need_action, None);
         assert_eq!(request.face_downgrade, None);
-},
-#[test],
+}
+#[test]
     fn test_query_user_setting_request_construction() {,
 let request = QueryUserSettingRequest {,
             api_req: ApiRequest::default(),
@@ -256,34 +256,34 @@ let request = QueryUserSettingRequest {,
 
         assert_eq!(request.employee_type, "1");
         assert_eq!(request.user_ids.len(), 3);
-        assert_eq!(request.user_ids[0], "user_1");
-        assert_eq!(request.user_ids[2], "user_3");
-},
-#[test],
+        assert_eq!(request.user_ids[0] "user_1");
+        assert_eq!(request.user_ids[2] "user_3");
+}
+#[test]
     fn test_query_user_setting_request_with_single_user() {,
 let request = QueryUserSettingRequest {,
             api_req: ApiRequest::default(),
             employee_type: "2".to_string(),
-            user_ids: vec!["single_user".to_string()],
+            user_ids: vec!["single_user".to_string()]
         };
 
         assert_eq!(request.employee_type, "2");
         assert_eq!(request.user_ids.len(), 1);
-        assert_eq!(request.user_ids[0], "single_user");
-},
-#[test],
+        assert_eq!(request.user_ids[0] "single_user");
+}
+#[test]
     fn test_query_user_setting_request_with_empty_user_list() {,
 let request = QueryUserSettingRequest {,
             api_req: ApiRequest::default(),
             employee_type: "3".to_string(),
-            user_ids: vec![],
+            user_ids: vec![]
         };
 
         assert_eq!(request.employee_type, "3");
 assert!(request.user_ids.is_empty());
-    },
-#[test],
-    fn test_upload_user_photo_request_construction() {
+    }
+#[test]
+    ,
         let photo_data = vec![0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10]; // Mock JPEG header,
 let request = UploadUserPhotoRequest {,
             api_req: ApiRequest::default(),
@@ -297,8 +297,8 @@ let request = UploadUserPhotoRequest {,
         assert_eq!(request.employee_type, "1");
         assert_eq!(request.photo_data, photo_data);
         assert_eq!(request.photo_name, "profile.jpg");
-},
-#[test],
+}
+#[test]
     fn test_upload_user_photo_request_with_large_photo() {,
 let large_photo_data = vec![0u8; 10 * 1024 * 1024]; // 10MB photo,
         let request = UploadUserPhotoRequest {
@@ -313,8 +313,8 @@ let large_photo_data = vec![0u8; 10 * 1024 * 1024]; // 10MB photo,
         assert_eq!(request.employee_type, "2");
         assert_eq!(request.photo_data.len(), 10 * 1024 * 1024);
         assert_eq!(request.photo_name, "large_profile.png");
-},
-#[test],
+}
+#[test]
     fn test_download_user_photo_request_construction() {,
 let request = DownloadUserPhotoRequest {,
             api_req: ApiRequest::default(),
@@ -326,8 +326,8 @@ let request = DownloadUserPhotoRequest {,
         assert_eq!(request.user_id, "user_download_456");
         assert_eq!(request.employee_type, "1");
         assert_eq!(request.face_key, "download_face_key_789");
-},
-#[test],
+}
+#[test]
     fn test_user_setting_service_config_independence() {,
 let config1 = Config::builder().app_id("setting_app_1").build();
         let config2 = Config::builder().app_id("setting_app_2").build();
@@ -338,8 +338,8 @@ let config1 = Config::builder().app_id("setting_app_1").build();
         assert_eq!(service1.config.app_id, "setting_app_1");
         assert_eq!(service2.config.app_id, "setting_app_2");
         assert_ne!(service1.config.app_id, service2.config.app_id);
-},
-#[test],
+}
+#[test]
     fn test_request_structs_debug_trait() {,
 let modify_request = ModifyUserSettingRequest {,
             api_req: ApiRequest::default(),
@@ -355,8 +355,8 @@ let modify_request = ModifyUserSettingRequest {,
 assert!(debug_str.contains("ModifyUserSettingRequest"));
         assert!(debug_str.contains("debug_user"));
 assert!(debug_str.contains("debug_face_key"));
-    },
-#[test],
+    }
+#[test]
     fn test_modify_user_setting_request_face_live_need_action_values() {,
 // Test different face_live_need_action values,
         let request_level_0 = ModifyUserSettingRequest {
@@ -381,8 +381,8 @@ let request_level_2 = ModifyUserSettingRequest {,
         };
 
         assert_eq!(request_level_2.face_live_need_action, Some(true));
-},
-#[test],
+}
+#[test]
     fn test_query_user_setting_request_edge_cases() {,
 // Test with very large user ID list,
         let large_user_list: Vec<String> = (0..1000).map(|i| format!("user_{}", i)).collect();
@@ -393,25 +393,25 @@ let request_large = QueryUserSettingRequest {,
         };
 
         assert_eq!(request_large.user_ids.len(), 1000);
-        assert_eq!(request_large.user_ids[999], "user_999");
+        assert_eq!(request_large.user_ids[999] "user_999");
 // Test with very long user IDs,
         let long_user_id = "a".repeat(500);
 let request_long = QueryUserSettingRequest {,
             api_req: ApiRequest::default(),
             employee_type: "2".to_string(),
-            user_ids: vec![long_user_id.clone()],
+            user_ids: vec![long_user_id.clone()]
         };
 
-        assert_eq!(request_long.user_ids[0], long_user_id);
-},
-#[test],
+        assert_eq!(request_long.user_ids[0] long_user_id);
+}
+#[test]
     fn test_upload_user_photo_request_edge_cases() {,
 // Test with empty photo data,
         let request_empty = UploadUserPhotoRequest {
             api_req: ApiRequest::default(),
             user_id: "user_empty_photo".to_string(),
             employee_type: "1".to_string(),
-            photo_data: vec![],
+            photo_data: vec![]
             photo_name: "empty.jpg".to_string(),
         };
 assert!(request_empty.photo_data.is_empty());
@@ -422,7 +422,7 @@ let request_long_name = UploadUserPhotoRequest {,
             api_req: ApiRequest::default(),
             user_id: "user_long_name".to_string(),
             employee_type: "2".to_string(),
-            photo_data: vec![0xFF, 0xD8],
+            photo_data: vec![0xFF, 0xD8]
             photo_name: long_name.clone(),
         };
 
@@ -432,14 +432,14 @@ let request_long_name = UploadUserPhotoRequest {,
             api_req: ApiRequest::default(),
             user_id: "user_png".to_string(),
             employee_type: "1".to_string(),
-            photo_data: vec![0x89, 0x50, 0x4E, 0x47], // PNG header
+            photo_data: vec![0x89, 0x50, 0x4E, 0x47] // PNG header
             photo_name: "profile.png".to_string(),
         };
 
         assert_eq!(request_png.photo_name, "profile.png");
-        assert_eq!(request_png.photo_data[0], 0x89); // PNG signature,
-},
-#[test],
+        assert_eq!(request_png.photo_data[0] 0x89); // PNG signature,
+}
+#[test]
     fn test_download_user_photo_request_edge_cases() {,
 // Test with very long face key,
         let long_face_key = "face_key_".repeat(100);
@@ -460,8 +460,8 @@ let request_long_key = DownloadUserPhotoRequest {,
         };
 
         assert_eq!(request_empty_key.face_key, "");
-},
-#[test],
+}
+#[test]
     fn test_modify_user_setting_request_edge_cases() {,
 // Test with face_key_open set to false but face_key provided,
         let request_disabled = ModifyUserSettingRequest {
@@ -500,8 +500,8 @@ let request_long_key = DownloadUserPhotoRequest {,
         };
 
         assert_eq!(request_large_action.face_live_need_action, Some(true));
-},
-#[test],
+}
+#[test]
     fn test_all_request_structs_with_different_employee_types() {,
 // Test all request types with different employee types,
         let modify_request = ModifyUserSettingRequest {
@@ -516,13 +516,13 @@ let request_long_key = DownloadUserPhotoRequest {,
 let query_request = QueryUserSettingRequest {,
             api_req: ApiRequest::default(),
             employee_type: "open_id".to_string(),
-            user_ids: vec!["test_user".to_string()],
+            user_ids: vec!["test_user".to_string()]
         };
 let upload_request = UploadUserPhotoRequest {,
             api_req: ApiRequest::default(),
             user_id: "upload_user".to_string(),
             employee_type: "union_id".to_string(),
-            photo_data: vec![0xFF, 0xD8],
+            photo_data: vec![0xFF, 0xD8]
             photo_name: "test.jpg".to_string(),
         };
 let download_request = DownloadUserPhotoRequest {,

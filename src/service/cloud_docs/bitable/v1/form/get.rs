@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -23,10 +23,10 @@ pub struct GetFormRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 多维表格的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     app_token: String,
     /// 表单ID,
-#[serde(skip)],
+#[serde(skip)]
     form_id: String,
 }
 impl GetFormRequest {
@@ -40,8 +40,8 @@ Self {
             form_id: form_id.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct GetFormRequestBuilder {
     request: GetFormRequest,
@@ -51,12 +51,12 @@ impl GetFormRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 表单ID,
     pub fn form_id(mut self, form_id: impl ToString) -> Self {
 self.request.form_id = form_id.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
@@ -90,18 +90,18 @@ pub struct Form {
     pub need_login: bool,
     /// 状态：启用/禁用
     pub status: String,
-},
+}
 /// 获取表单元数据响应,
 #[derive(.*?)]
 pub struct GetFormResponse {
     /// 表单信息
     pub form: Form,
 }
-impl ApiResponseTrait for GetFormResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 获取表单元数据,
 pub async fn get_form(
     request: GetFormRequest,
@@ -120,10 +120,10 @@ Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_get_form_request_builder() {,
 let request = GetFormRequest::builder(),
             .app_token()

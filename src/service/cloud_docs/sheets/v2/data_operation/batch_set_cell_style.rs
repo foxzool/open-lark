@@ -7,15 +7,15 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option, SDKResult,
 };
 service::cloud_docs::sheets::v2::{,
-        data_operation::{CellStyle, SheetDataUpdates},
+        data_operation::{CellStyle, SheetDataUpdates}
         SpreadsheetService,
-    },
+    }
 };
 
 #[derive(.*?)]
@@ -36,8 +36,8 @@ struct AppendStyle {,
 impl BatchSetCellStyleRequest {
     pub fn w+.*{
 BatchSetCellStyleRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct BatchSetCellStyleRequestBuilder {
     request: BatchSetCellStyleRequest,
@@ -54,11 +54,11 @@ self.request.data.push(AppendStyle {,
             style,
         });
 self,
-    },
+    }
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 
 #[derive(.*?)]
@@ -76,10 +76,10 @@ pub struct BatchSetCellStyleResponse {
     /// 各个范围的设置单元格样式的范围、行列数等
     pub responses: Vec<SheetDataUpdates>,
 }
-impl ApiResponseTrait for BatchSetCellStyleResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl SpreadsheetService {
     /// 该接口用于根据 spreadsheetToken 、range和样式信息,
@@ -100,9 +100,9 @@ api_req.set_http_method(reqwest::Method::PUT);
 
         let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
-#[cfg(test)],
+    }
+}
+#[cfg(test)]
 mod tests {
 use crate::,
 {
@@ -113,15 +113,15 @@ use crate::,
         api_resp::{ApiResponseTrait,
         config::Config,
         constants::AppType,
-},
+}
     service::cloud_docs::sheets::v2::{,
 data_operation::{,
                 share::{CellStyle, StyleFont,
 };
                 BatchSetCellStyleRequest, BatchSetCellStyleResponse,
-            },
+            }
             SpreadsheetService,
-        },
+        }
     };
 fn create_service() -> SpreadsheetService {,
         let config = Config::builder()
@@ -129,15 +129,15 @@ fn create_service() -> SpreadsheetService {,
             .app_secret()
 .app_type()
             .build();
-        SpreadsheetService { config },
-},
+        SpreadsheetService { config }
+}
 fn create_test_font() -> StyleFont {,
         StyleFont::builder(),
 .bold()
             .italic()
 .font_size()
             .build(),
-},
+}
 fn create_test_style() -> CellStyle {,
         CellStyle::builder(),
 .font(create_test_font()),
@@ -151,14 +151,14 @@ fn create_test_style() -> CellStyle {,
 .border_color()
             .clean()
 .build(),
-    },
-#[test],
+    }
+#[test]
     fn test_batch_set_cell_style_builder_default() {,
 let request = BatchSetCellStyleRequest::builder().build();
         assert_eq!(request.spreadsheet_token, "");
         assert_eq!(request.data.len(), 0);
-},
-#[test],
+}
+#[test]
     fn test_batch_set_cell_style_builder_basic() {,
 let style = create_test_style();
         let request = BatchSetCellStyleRequest::builder(),
@@ -168,8 +168,8 @@ let style = create_test_style();
         assert_eq!(request.spreadsheet_token, "test_token");
         assert_eq!(request.data.len(), 1);
         assert_eq!(request.data[0].ranges, "Sheet1!A1:B2");
-},
-#[test],
+}
+#[test]
     fn test_batch_set_cell_style_builder_multiple_styles() {,
 let style1 = create_test_style();
         let style2 = CellStyle::builder(),
@@ -186,8 +186,8 @@ let request = BatchSetCellStyleRequest::builder(),
         assert_eq!(request.data.len(), 2);
         assert_eq!(request.data[0].ranges, "Sheet1!A1:B2");
         assert_eq!(request.data[1].ranges, "Sheet1!C3:D4");
-},
-#[test],
+}
+#[test]
     fn test_batch_set_cell_style_builder_chaining() {,
 let style1 = create_test_style();
         let style2 = create_test_style();
@@ -203,8 +203,8 @@ let style3 = create_test_style();
         assert_eq!(request.data[0].ranges, "A1:B2");
         assert_eq!(request.data[1].ranges, "C3:D4");
         assert_eq!(request.data[2].ranges, "E5:F6");
-},
-#[test],
+}
+#[test]
     fn test_batch_set_cell_style_different_ranges() {,
 let ranges = [,
             "Sheet1!A1:B2",
@@ -216,14 +216,14 @@ let mut builder = BatchSetCellStyleRequest::builder().spreadsheet_token("multi_r
         for range in ranges {,
 let range_style = create_test_style();
             builder = builder.add_style(range, range_style);
-},
+}
 let request = builder.build();
         assert_eq!(request.data.len(), 4);
         for (i, range) in ranges.iter().enumerate() {
             assert_eq!(request.data[i].ranges, *range);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_batch_set_cell_style_with_unicode_ranges() {,
 let style = create_test_style();
         let request = BatchSetCellStyleRequest::builder(),
@@ -233,8 +233,8 @@ let style = create_test_style();
         assert_eq!(request.spreadsheet_token, "unicode_test");
         assert_eq!(request.data.len(), 1);
         assert_eq!(request.data[0].ranges, "数据表!A1:D4");
-},
-#[test],
+}
+#[test]
     fn test_batch_set_cell_style_with_special_characters() {,
 let style = create_test_style();
         let request = BatchSetCellStyleRequest::builder(),
@@ -244,8 +244,8 @@ let style = create_test_style();
         assert_eq!(request.spreadsheet_token, "special_chars_test");
         assert_eq!(request.data.len(), 1);
         assert_eq!(request.data[0].ranges, "'Sheet With Spaces'!A1:B5");
-},
-#[test],
+}
+#[test]
     fn test_batch_set_cell_style_large_range() {,
 let style = create_test_style();
         let request = BatchSetCellStyleRequest::builder(),
@@ -255,8 +255,8 @@ let style = create_test_style();
         assert_eq!(request.spreadsheet_token, "large_range_test");
         assert_eq!(request.data.len(), 1);
         assert_eq!(request.data[0].ranges, "Data!A1:Z100");
-},
-#[test],
+}
+#[test]
     fn test_batch_set_cell_style_different_styles() {,
 let font_styles = [,
             ("bold", true, false),
@@ -274,11 +274,11 @@ let font = StyleFont::builder(),
             let style = CellStyle::builder().font(font).build();
 
             builder = builder.add_style("Sheet1!A1:B2", style);
-},
+}
 let request = builder.build();
         assert_eq!(request.data.len(), 4);
-},
-#[test],
+}
+#[test]
     fn test_batch_set_cell_style_color_variations() {,
 let colors = [,
             ("#FF0000", "#FFFFFF"), // Red text, white background
@@ -295,11 +295,11 @@ let style = CellStyle::builder(),
                 .back_color()
 .build();
             builder = builder.add_style("Sheet1!A1:B2", style);
-},
+}
 let request = builder.build();
         assert_eq!(request.data.len(), 4);
-},
-#[test],
+}
+#[test]
     fn test_batch_set_cell_style_border_types() {,
 let border_types = [,
             "FULL_BORDER",
@@ -319,11 +319,11 @@ let style = CellStyle::builder(),
                 .border_color()
 .build();
             builder = builder.add_style("Sheet1!A1:B2", style);
-},
+}
 let request = builder.build();
         assert_eq!(request.data.len(), 8);
-},
-#[test],
+}
+#[test]
     fn test_batch_set_cell_style_alignment_combinations() {,
 let alignments = [,
             (0, 0), // Left, Top
@@ -345,12 +345,12 @@ let style = CellStyle::builder(),
                 .v_align()
 .build();
             builder = builder.add_style("Sheet1!A1:B2", style);
-},
+}
 let request = builder.build();
         assert_eq!(request.data.len(), 9);
-},
-#[test],
-    fn test_batch_set_cell_style_text_decorations() {
+}
+#[test]
+    ,
         let decorations = [0, 1, 2, 3]; // Default, underline, strikethrough, both,
 let mut builder = BatchSetCellStyleRequest::builder().spreadsheet_token("decoration_test");
         for decoration in decorations {,
@@ -360,12 +360,12 @@ let style = CellStyle::builder(),
                 .build();
 
             builder = builder.add_style("Sheet1!A1:B2", style);
-},
+}
 let request = builder.build();
         assert_eq!(request.data.len(), 4);
-},
-#[test],
-    fn test_batch_set_cell_style_number_formatters() {
+}
+#[test]
+    ,
         let formatters = ["0.00", "#,##0.00", "0%", "yyyy-mm-dd", "h:mm:ss"];
 let mut builder = BatchSetCellStyleRequest::builder().spreadsheet_token("formatter_test");
         for formatter in formatters {,
@@ -375,11 +375,11 @@ let style = CellStyle::builder(),
                 .build();
 
             builder = builder.add_style("Sheet1!A1:B2", style);
-},
+}
 let request = builder.build();
         assert_eq!(request.data.len(), 5);
-},
-#[test],
+}
+#[test]
     fn test_batch_set_cell_style_clean_styles() {,
 let clean_style = CellStyle::builder(),
             .font(create_test_font()),
@@ -392,8 +392,8 @@ let request = BatchSetCellStyleRequest::builder(),
         assert_eq!(request.spreadsheet_token, "clean_test");
         assert_eq!(request.data.len(), 1);
         assert_eq!(request.data[0].ranges, "Sheet1!A1:Z100");
-},
-#[test],
+}
+#[test]
     fn test_batch_set_cell_style_serialization() {,
 let style = create_test_style();
         let request = BatchSetCellStyleRequest::builder(),
@@ -403,9 +403,9 @@ let style = create_test_style();
         let serialized = serde_json::to_string(&request);
 assert!(serialized.is_ok());
         let json_value: serde_json::Value = serde_json::from_str(&serialized.unwrap()).unwrap();
-        assert_eq!(json_value["data"][0]["ranges"], "Sheet1!A1:C3");
-},
-#[test],
+        assert_eq!(json_value["data"][0]["ranges"] "Sheet1!A1:C3");
+}
+#[test]
     fn test_batch_set_cell_style_response_deserialization() {,
 let response_json = serde_json::json!({,
             "spreadsheetToken": "test_token_123",
@@ -413,7 +413,7 @@ let response_json = serde_json::json!({,
             "totalUpdatedColumns": 5,
             "totalUpdatedCells": 50,
             "revision": 123,
-            "responses": [],
+            "responses": []
 });
 let response: BatchSetCellStyleResponse = serde_json::from_value(response_json).unwrap();
         assert_eq!(response.spreed_sheet_token, "test_token_123");
@@ -422,8 +422,8 @@ let response: BatchSetCellStyleResponse = serde_json::from_value(response_json).
         assert_eq!(response.total_updated_cells, 50);
         assert_eq!(response.revision, 123);
         assert_eq!(response.responses.len(), 0);
-},
-#[test],
+}
+#[test]
     fn test_batch_set_cell_style_complex_range_references() {,
 let complex_ranges = [,
             "Sheet1!A1:D5",
@@ -436,22 +436,22 @@ let mut builder = BatchSetCellStyleRequest::builder().spreadsheet_token("complex
         for range in complex_ranges {,
 let style = create_test_style();
             builder = builder.add_style(range, style);
-},
+}
 let request = builder.build();
         assert_eq!(request.data.len(), 5);
 
         for (i, range) in complex_ranges.iter().enumerate() {
             assert_eq!(request.data[i].ranges, *range);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_batch_set_cell_style_service_creation() {,
 let service = create_service();
         assert_eq!(service.config.app_id, "test_app_id");
         assert_eq!(service.config.app_secret, "test_app_secret");
         assert!(matches!(service.config.app_type, AppType::SelfBuild));
-},
-#[test],
+}
+#[test]
     fn test_batch_set_cell_style_builder_overwrites() {,
 let style1 = create_test_style();
         let style2 = create_test_style();
@@ -465,8 +465,8 @@ let request = BatchSetCellStyleRequest::builder(),
         assert_eq!(request.data.len(), 2);
         assert_eq!(request.data[0].ranges, "Sheet1!A1:B2");
         assert_eq!(request.data[1].ranges, "Sheet2!C3:D4");
-},
-#[test],
+}
+#[test]
     fn test_batch_set_cell_style_very_long_token() {,
 let very_long_token = "a".repeat(1000);
         let style = create_test_style();
@@ -477,8 +477,8 @@ let request = BatchSetCellStyleRequest::builder(),
         assert_eq!(request.spreadsheet_token, very_long_token);
         assert_eq!(request.data.len(), 1);
         assert_eq!(request.data[0].ranges, "Sheet1!A1:B2");
-},
-#[test],
+}
+#[test]
     fn test_batch_set_cell_style_response_struct_debug() {,
 let response = BatchSetCellStyleResponse {,
             spreed_sheet_token: "debug_test".to_string(),
@@ -486,14 +486,14 @@ let response = BatchSetCellStyleResponse {,
             total_updated_columns: 5,
             total_updated_cells: 50,
             revision: 123,
-            responses: vec![],
+            responses: vec![]
         };
 
         let debug_str = format!("{:?}", response);
 assert!(debug_str.contains("debug_test"));
         assert!(debug_str.contains("BatchSetCellStyleResponse"));
-},
-#[test],
+}
+#[test]
     fn test_batch_set_cell_style_request_struct_debug() {,
 let style = create_test_style();
         let request = BatchSetCellStyleRequest::builder(),
@@ -503,31 +503,31 @@ let style = create_test_style();
         let debug_str = format!("{:?}", request);
 assert!(debug_str.contains("debug_token"));
         assert!(debug_str.contains("Sheet1!A1:B2"));
-},
-#[test],
+}
+#[test]
     fn test_batch_set_cell_style_empty_styles() {,
 let request = BatchSetCellStyleRequest::builder(),
             .spreadsheet_token()
 .build();
         assert_eq!(request.spreadsheet_token, "empty_test");
         assert_eq!(request.data.len(), 0);
-},
-#[test],
-    fn test_batch_set_cell_style_single_cell_ranges() {
+}
+#[test]
+    ,
         let single_cells = ["Sheet1!A1:A1", "Sheet1!B2:B2", "Sheet1!C3:C3"];
 let mut builder = BatchSetCellStyleRequest::builder().spreadsheet_token("single_cell_test");
         for cell in single_cells {,
 let style = create_test_style();
             builder = builder.add_style(cell, style);
-},
+}
 let request = builder.build();
         assert_eq!(request.data.len(), 3);
 
         for (i, cell) in single_cells.iter().enumerate() {
             assert_eq!(request.data[i].ranges, *cell);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_batch_set_cell_style_edge_case_ranges() {,
 let edge_cases = [,
             "Sheet1!A1:A1",     // Single cell
@@ -539,15 +539,15 @@ let edge_cases = [,
 for range in edge_cases {,
             let style = create_test_style();
             builder = builder.add_style(range, style);
-},
+}
 let request = builder.build();
         assert_eq!(request.data.len(), 4);
 
         for (i, range) in edge_cases.iter().enumerate() {
             assert_eq!(request.data[i].ranges, *range);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_batch_set_cell_style_maximum_recommended_styles() {,
 // Test adding many styles (though not the actual limit of 5000 rows/100 columns),
         let mut builder = BatchSetCellStyleRequest::builder().spreadsheet_token("max_styles_test");
@@ -555,7 +555,7 @@ for i in 1..=50 {,
             let range = format!("Sheet1!A{}:B{}", i, i);
 let style = create_test_style();
             builder = builder.add_style(&range, style);
-},
+}
 let request = builder.build();
         assert_eq!(request.data.len(), 50);
         assert_eq!(request.data[0].ranges, "Sheet1!A1:B1");

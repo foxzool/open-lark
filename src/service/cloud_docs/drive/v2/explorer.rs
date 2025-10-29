@@ -10,7 +10,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -25,8 +25,8 @@ pub struct ExplorerService {
 }
 impl ExplorerService {
     pub fn new(config: Config) -> Self {
-        Self { config },
-},
+        Self { config }
+}
 /// GET /open-apis/drive/explorer/v2/root_folder/meta,
     ///,
 /// 获取云空间的根目录,
@@ -37,13 +37,13 @@ impl ExplorerService {
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: DRIVE_EXPLORER_V2_ROOT_FOLDER_META.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             ..Default::default(),
 };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// GET /open-apis/drive/explorer/v2/folder/:folderToken/meta,
     ///,
 /// 获取文件夹的元信息,
@@ -55,13 +55,13 @@ Ok(api_resp),
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: DRIVE_EXPLORER_V2_FOLDER_META.replace("{folder_token}", folder_token),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             ..Default::default(),
 };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// POST /open-apis/drive/v1/files/create_folder,
     /// 新建文件夹,
 pub async fn create_folder(,
@@ -77,7 +77,7 @@ api_req.set_api_path(DRIVE_V1_FILES_CREATE_FOLDER.to_string());
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 获取文件夹下的清单,
     ///,
 /// <https://open.feishu.cn/open-apis/drive/v1/files>,
@@ -94,7 +94,7 @@ api_req.set_api_path(DRIVE_V1_FILES.to_string());
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 pub fn list_folder_iter(,
         &self,
         req: ListFolderRequest,
@@ -105,9 +105,9 @@ ListFolderIterator {,
             req,
             option,
             has_more: true,
-        },
+        }
 }
-},
+}
 pub struct ListFolderIterator<'a> {,
     explorer_service: &'a ExplorerService,
     req: ListFolderRequest,
@@ -121,7 +121,7 @@ impl ListFolderIterator<'_> {,
 pub async fn next(&mut self) -> Option<Vec<FileInFolder>> {,
         if !self.has_more {,
 return None;
-        },
+        }
 match self,
             .explorer_service
             .list_folder(self.req.clone(), self.option.clone()),
@@ -132,25 +132,25 @@ Ok(resp) => match resp.data {,
 self.has_more = data.has_more;
                     if data.has_more {,
 self.req,
-                            .api_req,
-.query_params,
+                            .api_req
+.query_params
                             .insert("page_token", data.next_page_token.unwrap());
 Some(data.files),
                     } else if data.files.is_empty() {,
 None,
                     } else {,
 Some(data.files),
-                    },
+                    }
 }
                 None => None,
-            },
+            }
             Err(e) => {
                 error!("Error: {e:?}");
 None,
-            },
+            }
 }
-    },
-},
+    }
+}
 /// 我的空间（root folder）元信息,
 #[derive(.*?)]
 pub struct ExplorerRootMeta {
@@ -161,11 +161,11 @@ pub struct ExplorerRootMeta {
     /// 文件夹的所有者 id
     pub user_id: String,
 }
-impl ApiResponseTrait for ExplorerRootMeta {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 文件夹元信息,
 #[derive(.*?)]
 pub struct ExplorerFolderMeta {
@@ -176,28 +176,28 @@ pub struct ExplorerFolderMeta {
     /// 文件夹的 token
     pub token: String,
     /// 文件夹的创建者 id,
-#[serde(rename = "createUid")],
+#[serde(rename = "createUid")]
     pub create_uid: String,
     /// 文件夹的最后编辑者 id,
-#[serde(rename = "editUid")],
+#[serde(rename = "editUid")]
     pub edit_uid: String,
     /// 文件夹的上级目录 id,
-#[serde(rename = "parentId")],
+#[serde(rename = "parentId")]
     pub parent_id: String,
     /// 文件夹为个人文件夹时，为文件夹的所有者 id；文件夹为共享文件夹时，为文件夹树id,
-#[serde(rename = "ownUid")],
+#[serde(rename = "ownUid")]
     pub own_uid: String,
 }
-impl ApiResponseTrait for ExplorerFolderMeta {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 
 #[derive(.*?)]
 pub struct CreateFolderRequest {
     /// 请求体,
-#[serde(skip)],
+#[serde(skip)]
     api_req: ApiRequest,
     /// 文件夹名称,
 ///,
@@ -209,8 +209,8 @@ pub struct CreateFolderRequest {
 impl CreateFolderRequest {
     pub fn w+.*{
 CreateFolderRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 /// 创建文件夹请求体,
 pub struct CreateFolderRequestBuilder {
@@ -221,17 +221,17 @@ impl CreateFolderRequestBuilder {
     pub fn name(mut self, name: impl ToString) -> Self {
 self.request.name = name.to_string();
         self,
-},
+}
 /// 父文件夹token,
     pub fn folder_token(mut self, folder_token: impl ToString) -> Self {
 self.request.folder_token = folder_token.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request.api_req.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 创建文件夹响应体,
 #[derive(.*?)]
 pub struct CreateFolderResponse {
@@ -240,11 +240,11 @@ pub struct CreateFolderResponse {
     /// 创建文件夹的访问url
     pub url: String,
 }
-impl ApiResponseTrait for CreateFolderResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 列出文件夹请求体,
 #[derive(Default)]
 pub struct ListFolderRequestBuilder {
@@ -260,32 +260,32 @@ impl ListFolderRequestBuilder {
     /// 最大值：200
     pub fn page_size(mut self, page_size: i32) -> Self {
 self.request,
-            .api_req,
-.query_params,
+            .api_req
+.query_params
             .insert("page_size", page_size.to_string());
 self,
-    },
+    }
 /// 分页标记，第一次请求不填，表示从头开始遍历；分页查询结果还有更多项时会同时返回新的,
     /// page_token，下次遍历可采用该 page_token 获取查询结果,
 ///,
     /// 示例值："MTY1NTA3MTA1OXw3MTA4NDc2MDc1NzkyOTI0Nabcef"
     pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request,
-            .api_req,
-.query_params,
+            .api_req
+.query_params
             .insert("page_token", page_token.to_string());
 self,
-    },
+    }
 /// 文件夹的token（若不填写该参数或填写空字符串，则默认获取用户云空间下的清单，且不支持分页）,
     ///,
 /// 示例值："fldbcO1UuPz8VwnpPx5a9abcef",
     pub fn folder_token(mut self, fold_token: impl ToString) -> Self {
 self.request,
-            .api_req,
-.query_params,
+            .api_req
+.query_params
             .insert("folder_token", fold_token.to_string());
 self,
-    },
+    }
 /// 排序规则,
     ///,
 /// 示例值："EditedTime",
@@ -298,11 +298,11 @@ self,
     /// 默认值：EditedTime
     pub fn order_by(mut self, order_by: impl ToString) -> Self {
 self.request,
-            .api_req,
-.query_params,
+            .api_req
+.query_params
             .insert("order_by", order_by.to_string());
 self,
-    },
+    }
 /// 升序降序,
     ///,
 /// 默认值：DESC,
@@ -313,11 +313,11 @@ self,
     /// - DESC：降序
     pub fn direction(mut self, direction: impl ToString) -> Self {
 self.request,
-            .api_req,
-.query_params,
+            .api_req
+.query_params
             .insert("direction", direction.to_string());
 self,
-    },
+    }
 /// 用户 ID 类型,
     ///,
 /// 默认值：open_id,
@@ -334,26 +334,26 @@ self,
     ///   ID 主要用于在不同的应用间打通用户数据。了解更多：如何获取 User ID？
     pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request,
-            .api_req,
-.query_params,
+            .api_req
+.query_params
             .insert("user_id_type", user_id_type.to_string());
 self,
-    },
+    }
 pub fn w+.*{
         self.request,
 }
-},
+}
 /// 列出文件夹查询参数,
 #[derive(.*?)]
 pub struct ListFolderRequest {
     /// 请求体,
-#[serde(skip)],
+#[serde(skip)]
     api_req: ApiRequest,
 }
 impl ListFolderRequest {
     pub fn w+.*{
 ListFolderRequestBuilder::default(),
-    },
+    }
 }
 
 #[derive(.*?)]
@@ -361,11 +361,11 @@ pub struct ListFolderResponse {
     /// 文件夹列表
     pub files: Vec<FileInFolder>,
     /// 分页标记，当 has_more 为 true 时，会同时返回下一次遍历的page_token，否则则不返回,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
     /// 是否还有更多项
     pub has_more: bool,
-},
+}
 /// 文件夹清单列表,
 #[derive(.*?)]
 pub struct FileInFolder {
@@ -398,7 +398,7 @@ pub struct FileInFolder {
     /// 在浏览器中查看的链接
     pub url: String,
     /// 快捷方式文件信息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub shortcut_info: Option<ShortcutInfo>,
     /// 文件创建时间
     pub created_time: String,
@@ -429,10 +429,10 @@ pub struct ShortcutInfo {
     /// 快捷方式指向的原文件token
     pub target_token: String,
 }
-impl ApiResponseTrait for ListFolderResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl_executable_builder_owned!(,
     CreateFolderRequestBuilder,

@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -29,13 +29,13 @@ let mut api_req = request.api_request;
 api_req.api_path = SHEETS_V3_SPREADSHEET_PROTECT_RANGE_GET,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.protect_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 修改保护范围请求,
 #[derive(.*?)]
 pub struct UpdateProtectRangeRequest {
@@ -51,8 +51,8 @@ pub struct UpdateProtectRangeRequest {
 impl UpdateProtectRangeRequest {
     pub fn w+.*{
 UpdateProtectRangeRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct UpdateProtectRangeRequestBuilder {
     request: UpdateProtectRangeRequest,
@@ -71,32 +71,32 @@ self.request.protect_id = protect_id.to_string();
     pub fn protect_range(mut self, protect_range: ProtectRangeData) -> Self {
 self.request.protect_range = protect_range;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 修改保护范围响应体最外层,
 #[derive(.*?)]
 pub struct UpdateProtectRangeResponseData {
     /// 保护范围 ID
     pub protect_id: String,
     /// 更新后的保护范围信息,
-#[serde(flatten)],
+#[serde(flatten)]
     pub protect_range: ProtectRangeData,
 }
-impl ApiResponseTrait for UpdateProtectRangeResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use super::*;
 use serde_json::json;
-    #[test],
+    #[test]
 fn test_update_protect_range_response() {,
         let json = json!({
             "protect_id": "protect_001",

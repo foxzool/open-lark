@@ -7,7 +7,7 @@ pub struct P2ImMessageReceiveV1 {
     pub schema: String,
     pub header: EventHeader,
     pub event: P2ImMessageReceiveV1Data,
-},
+}
 pub(crate) struct P2ImMessageReceiveV1ProcessorImpl<F>,
 where
     F: Fn(P2ImMessageReceiveV1) + 'static,
@@ -22,22 +22,22 @@ where
 let message: P2ImMessageReceiveV1 = serde_json::from_slice(payload)?;
         (self.f)(message);
 Ok(()),
-    },
+    }
 }
 impl<F> P2ImMessageReceiveV1ProcessorImpl<F>,
 where
     F: Fn(P2ImMessageReceiveV1) + 'static,
 {,
 pub(crate) fn new(f: F) -> Self {
-        P2ImMessageReceiveV1ProcessorImpl { f },
+        P2ImMessageReceiveV1ProcessorImpl { f }
 }
-},
+}
 /// 事件,
 #[derive(.*?)]
 pub struct P2ImMessageReceiveV1Data {
     pub sender: EventSender,
     pub message: EventMessage,
-},
+}
 /// 事件的发送者,
 #[derive(.*?)]
 pub struct EventSender {
@@ -48,7 +48,7 @@ pub struct EventSender {
     /// tenant key，为租户在飞书上的唯一标识，用来换取对应的tenant_access_token，,
 /// 也可以用作租户在应用里面的唯一标识,
     pub tenant_key: String,
-},
+}
 /// 用户 ID,
 #[derive(.*?)]
 pub struct UserId {
@@ -58,7 +58,7 @@ pub struct UserId {
     pub user_id: String,
     /// 用户的 open id
     pub open_id: String,
-},
+}
 /// 事件中包含的消息内容,
 #[derive(.*?)]
 pub struct EventMessage {
@@ -91,7 +91,7 @@ pub struct EventMessage {
     pub mentions: Option<Vec<MentionEvent>>,
     /// 用户代理数据，仅在接收事件的机器人具备获取客户端用户代理信息权限时返回
     pub user_agent: Option<String>,
-},
+}
 /// 被提及用户的信息,
 #[derive(.*?)]
 pub struct MentionEvent {
@@ -104,16 +104,16 @@ pub struct MentionEvent {
     /// tenant key，为租户在飞书上的唯一标识，用来换取对应的tenant_access_token，,
 /// 也可以用作租户在应用里面的唯一标识,
     pub tenant_key: String,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
 use crate::event::context::EventContext;
-    #[test],
+    #[test]
 fn test_decode() {,
         let p1 = json!({"schema":"2.0","header":{"event_id":"7db4fd0bb90cfa6127e3aaa446d39b37","token
-        ":"","create_time":"1719211482721","event_type":"im.message.receive_v1","tenant_key":"tenant_key","app_id":"app_id"},
+        ":"","create_time":"1719211482721","event_type":"im.message.receive_v1","tenant_key":"tenant_key","app_id":"app_id"}
         "event":,
 {,
             "message":,
@@ -124,14 +124,14 @@ fn test_decode() {,
                 "create_time":"1719211482485",
                 "message_id":"om_b1e37040d3f888af8a7e47affae94360",
                 "message_type":"text","update_time":"1719211482485",
-},
+}
             "sender":,
 {,
                 "sender_id":{
                     "open_id":"ou_b434284f852b1531071855b16d19f40b",
                     "union_id":"on_526dbf7b9ef1fda341aecb79a2481662",
                     "user_id":"aa5cf9d7",
-},
+}
                 "sender_type":"user",
                 "tenant_key":"133195a24e8f575d",
 }

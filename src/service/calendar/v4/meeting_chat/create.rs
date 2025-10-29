@@ -20,16 +20,16 @@ use super::MeetingChatService;
 pub struct CreateMeetingChatRequest {
     pub api_req: ApiRequest,
     // TODO: 添加具体的请求字段,
-},
+}
 /// 创建会议群响应 (未实现),
 #[derive(.*?)]
 pub struct CreateMeetingChatResponse {
     // TODO: 添加具体的响应字段,
 }
-impl ApiResponseTrait for CreateMeetingChatResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl MeetingChatService {
     /// 创建会议群 (未实现),

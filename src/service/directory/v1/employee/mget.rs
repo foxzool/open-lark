@@ -11,7 +11,7 @@ use crate::{,
         SDKResult,
     }
     impl_executable_builder_owned,
-    service::directory::v1::models::{DepartmentIdType, Employee, UserIdType},
+    service::directory::v1::models::{DepartmentIdType, Employee, UserIdType}
 };
 use super::EmployeeService;
 /// 批量获取员工信息请求
@@ -32,10 +32,10 @@ pub fn w+.*{
 request: MgetEmployeeRequest {,
                 employee_ids,
                 ..Default::default(),
-},
-        },
 }
-},
+        }
+}
+}
 /// 批量获取员工信息请求构建器,
 #[derive(Default)]
 pub struct MgetEmployeeRequestBuilder {
@@ -46,27 +46,27 @@ impl MgetEmployeeRequestBuilder {
     pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
-},
+}
 /// 设置部门ID类型,
     pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {
 self.request.department_id_type = Some(department_id_type);
         self,
-},
+}
 /// 构建请求,
     pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
-                .api_req,
-.query_params,
+                .api_req
+.query_params
                 .insert("user_id_type", user_id_type.to_string());
-},
+}
 if let Some(department_id_type) = &self.request.department_id_type {,
             self.request,
-.api_req,
+.api_req
                 .query_params
                 .insert("department_id_type", department_id_type.to_string());
-},
+}
 // 构建请求体,
         let body = json!({,
 "employee_ids": self.request.employee_ids,
@@ -74,23 +74,23 @@ if let Some(department_id_type) = &self.request.department_id_type {,
 self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
         self.request,
 }
-},
+}
 /// 批量获取员工信息响应数据,
 #[derive(.*?)]
 pub struct MgetEmployeeResponseData {
     /// 员工信息列表
     pub employees: Vec<Employee>,
-},
+}
 /// 批量获取员工信息响应,
 #[derive(.*?)]
 pub struct MgetEmployeeResponse {
     /// 响应数据
     pub data: MgetEmployeeResponseData,
 }
-impl ApiResponseTrait for MgetEmployeeResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl EmployeeService {
     /// 批量获取员工信息,
@@ -132,8 +132,8 @@ api_req.set_api_path(DIRECTORY_V1_EMPLOYEES_MGET.to_string());
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 // 应用ExecutableBuilder宏,
 impl_executable_builder_owned!(
     MgetEmployeeRequestBuilder,

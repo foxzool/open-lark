@@ -1,11 +1,11 @@
 use crate::{,
 use open_lark_core::core::api_req::ApiRequest;    core::{,
-        api_resp::{BaseResponse, EmptyResponse},
+        api_resp::{BaseResponse, EmptyResponse}
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option::RequestOption,
         SDKResult,
-    },
+    }
     service::sheets::v3::SpreadsheetSheetFilterService,
 };
 /// 删除筛选,
@@ -18,8 +18,8 @@ pub struct DeleteSheetFilterRequest {
 impl DeleteSheetFilterRequest {
     pub fn w+.*{
 DeleteSheetFilterRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct DeleteSheetFilterRequestBuilder {
     request: DeleteSheetFilterRequest,
@@ -29,12 +29,12 @@ impl DeleteSheetFilterRequestBuilder {
     pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
-},
+}
 /// 子表 id,
     pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
@@ -56,5 +56,5 @@ api_req.set_http_method(reqwest::Method::DELETE);
 
         let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 }

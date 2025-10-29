@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -23,10 +23,10 @@ pub struct UpdateWorkflowRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 多维表格的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     app_token: String,
     /// 自动化流程ID,
-#[serde(skip)],
+#[serde(skip)]
     workflow_id: String,
     /// 自动化流程状态：true-启用，false-停用
     is_enabled: bool,
@@ -43,8 +43,8 @@ Self {
             is_enabled,
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct UpdateWorkflowRequestBuilder {
     request: UpdateWorkflowRequest,
@@ -54,31 +54,31 @@ impl UpdateWorkflowRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 自动化流程ID,
     pub fn workflow_id(mut self, workflow_id: impl ToString) -> Self {
 self.request.workflow_id = workflow_id.to_string();
         self,
-},
+}
 /// 自动化流程状态：true-启用，false-停用,
     pub fn set_enabled(mut self, is_enabled: bool) -> Self {
 self.request.is_enabled = is_enabled;
         self,
-},
+}
 /// 启用自动化流程,
     pub fn enable(mut self) -> Self {
 self.request.is_enabled = true;
         self,
-},
+}
 /// 停用自动化流程,
     pub fn disable(mut self) -> Self {
 self.request.is_enabled = false;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 impl_executable_builder_config!(,
     UpdateWorkflowRequestBuilder,
@@ -96,11 +96,11 @@ pub struct UpdateWorkflowResponse {
     /// 更新时间戳（秒）
     pub updated_time: i64,
 }
-impl ApiResponseTrait for UpdateWorkflowResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 更新自动化流程状态,
 pub async fn update_workflow(
     request: UpdateWorkflowRequest,
@@ -119,10 +119,10 @@ Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_update_workflow_request_builder() {,
 let request = UpdateWorkflowRequest::builder(),
             .app_token()
@@ -132,8 +132,8 @@ let request = UpdateWorkflowRequest::builder(),
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.workflow_id, "wkfxxxxxx");
 assert!(request.is_enabled);
-    },
-#[test],
+    }
+#[test]
     fn test_update_workflow_request_disable() {,
 let request = UpdateWorkflowRequest::builder(),
             .app_token()

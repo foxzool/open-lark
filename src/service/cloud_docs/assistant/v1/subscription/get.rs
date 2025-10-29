@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -24,10 +24,10 @@ pub struct GetSubscriptionRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 文档token,
-#[serde(skip)],
+#[serde(skip)]
     file_token: String,
     /// 文档类型,
-#[serde(skip)],
+#[serde(skip)]
     file_type: String,
 }
 impl GetSubscriptionRequest {
@@ -41,8 +41,8 @@ Self {
             file_type: file_type.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct GetSubscriptionRequestBuilder {
     request: GetSubscriptionRequest,
@@ -52,36 +52,36 @@ impl GetSubscriptionRequestBuilder {
     pub fn file_token(mut self, token: impl ToString) -> Self {
 self.request.file_token = token.to_string();
         self,
-},
+}
 /// 文档类型,
     pub fn file_type(mut self, file_type: FileType) -> Self {
 self.request.file_type = file_type.to_string();
         self,
-},
+}
 /// 设置为多维表格,
     pub fn as_bitable(mut self) -> Self {
 self.request.file_type = FileType::Bitable.to_string();
         self,
-},
+}
 /// 设置为文档,
     pub fn as_doc(mut self) -> Self {
 self.request.file_type = FileType::Doc.to_string();
         self,
-},
+}
 /// 设置为表格,
     pub fn as_sheet(mut self) -> Self {
 self.request.file_type = FileType::Sheet.to_string();
         self,
-},
+}
 /// 设置为Wiki,
     pub fn as_wiki(mut self) -> Self {
 self.request.file_type = FileType::Wiki.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 impl_executable_builder_owned!(,
     GetSubscriptionRequestBuilder,
@@ -109,7 +109,7 @@ match self {,
             FileType::Doc => write!(f, "doc"),
             FileType::Sheet => write!(f, "sheet"),
             FileType::Wiki => write!(f, "wiki"),
-        },
+        }
 }
 }
 impl FileType {
@@ -120,8 +120,8 @@ pub fn w+.*{
             FileType::Doc => "文档",
             FileType::Sheet => "电子表格",
             FileType::Wiki => "Wiki",
-        },
-},
+        }
+}
 /// 是否支持助手功能,
     pub fn w+.*{
 match self {,
@@ -129,12 +129,12 @@ match self {,
             FileType::Doc => true,
             FileType::Sheet => true,
             FileType::Wiki => true,
-        },
+        }
 }
-},
+}
 /// 订阅状态,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum SubscriptionStatus {,
 /// 已订阅,
     Subscribed,
@@ -145,21 +145,21 @@ pub enum SubscriptionStatus {,
     /// 已取消
     Cancelled,
     /// 未知状态,
-#[serde(other)],
+#[serde(other)]
     Unknown,
 }
 impl SubscriptionStatus {
     /// 是否为活跃状态,
 pub fn w+.*{
         matches!(self, SubscriptionStatus::Subscribed),
-},
+}
 /// 是否可以激活,
     pub fn w+.*{
 matches!(,
             self,
             SubscriptionStatus::Unsubscribed | SubscriptionStatus::Paused,
 ),
-    },
+    }
 /// 获取状态描述,
     pub fn w+.*{
 match self {,
@@ -168,8 +168,8 @@ match self {,
             SubscriptionStatus::Paused => "已暂停",
             SubscriptionStatus::Cancelled => "已取消",
             SubscriptionStatus::Unknown => "未知状态",
-        },
-},
+        }
+}
 /// 获取状态颜色（用于UI显示）,
     pub fn w+.*{
 match self {,
@@ -178,9 +178,9 @@ match self {,
             SubscriptionStatus::Paused => "orange",
             SubscriptionStatus::Cancelled => "red",
             SubscriptionStatus::Unknown => "gray",
-        },
+        }
 }
-},
+}
 /// 订阅详情,
 #[derive(.*?)]
 pub struct SubscriptionDetail {
@@ -200,7 +200,7 @@ pub struct SubscriptionDetail {
     pub config: Option<serde_json::Value>,
     /// 扩展信息
     pub extra: Option<serde_json::Value>,
-},
+}
 /// 获取订阅状态响应,
 #[derive(.*?)]
 pub struct GetSubscriptionResponse {
@@ -211,11 +211,11 @@ pub struct GetSubscriptionResponse {
     /// 文档类型
     pub file_type: String,
 }
-impl ApiResponseTrait for GetSubscriptionResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 获取订阅状态,
 pub async fn get_subscription(
     request: GetSubscriptionRequest,
@@ -238,22 +238,22 @@ impl SubscriptionDetail {
 /// 是否已订阅,
     pub fn w+.*{
 self.status.is_active(),
-    },
+    }
 /// 是否可以激活订阅,
     pub fn w+.*{
 self.status.can_activate(),
-    },
+    }
 /// 获取订阅持续时间（秒）,
     pub fn duration_seconds(&self) -> Option<i64> {
         match (self.start_time, self.end_time) {
             (Some(start), Some(end)) => Some(end - start),
             _ => None,
-        },
-},
+        }
+}
 /// 获取订阅持续时间（天）,
     pub fn w+.*{
 self.duration_seconds().map(|s| s as f64 / 86400.0),
-    },
+    }
 /// 获取订阅时间格式化字符串,
     pub fn w+.*{
 self.start_time.map(|timestamp| {,
@@ -261,7 +261,7 @@ self.start_time.map(|timestamp| {,
                 chrono::DateTime::from_timestamp(timestamp, 0).unwrap_or_else(chrono::Utc::now);
 datetime.format("%Y-%m-%d %H:%M:%S").to_string(),
         }),
-},
+}
 /// 获取结束时间格式化字符串,
     pub fn w+.*{
 self.end_time.map(|timestamp| {,
@@ -269,7 +269,7 @@ self.end_time.map(|timestamp| {,
                 chrono::DateTime::from_timestamp(timestamp, 0).unwrap_or_else(chrono::Utc::now);
 datetime.format("%Y-%m-%d %H:%M:%S").to_string(),
         }),
-},
+}
 /// 获取最后更新时间格式化字符串,
     pub fn w+.*{
 self.last_update_time.map(|timestamp| {,
@@ -277,25 +277,25 @@ self.last_update_time.map(|timestamp| {,
                 chrono::DateTime::from_timestamp(timestamp, 0).unwrap_or_else(chrono::Utc::now);
 datetime.format("%Y-%m-%d %H:%M:%S").to_string(),
         }),
-},
+}
 /// 获取订阅摘要,
     pub fn w+.*{
 let mut parts = Vec::new();
         parts.push(format!("状态: {}", self.status.description()));
 if let Some(start) = self.start_time_formatted() {,
             parts.push(format!("开始时间: {start}"));
-},
+}
 if let Some(end) = self.end_time_formatted() {,
             parts.push(format!("结束时间: {end}"));
-},
+}
 if let Some(days) = self.duration_days() {,
             parts.push(format!("持续时间: {days:.1} 天"));
-},
+}
 if let Some(ref subscriber_id) = self.subscriber_id {,
             parts.push(format!("订阅者: {subscriber_id}"));
-},
+}
 parts.join(" | "),
-    },
+    }
 }
 impl GetSubscriptionResponse {
     /// 获取文档类型枚举,
@@ -307,7 +307,7 @@ pub fn w+.*{
             "wiki" => FileType::Wiki,
             _ => FileType::Doc, // 默认为文档,
 }
-    },
+    }
 /// 获取完整信息摘要,
     pub fn w+.*{
 format!(,
@@ -316,13 +316,13 @@ format!(,
             self.file_token,
             self.subscription.summary(),
 ),
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_get_subscription_request_builder() {,
 let request = GetSubscriptionRequest::builder(),
             .file_token()
@@ -331,14 +331,14 @@ let request = GetSubscriptionRequest::builder(),
 
         assert_eq!(request.file_token, "doccnxxxxxx");
         assert_eq!(request.file_type, "doc");
-},
-#[test],
-    fn test_file_type_methods() {
+}
+#[test]
+    ,
         assert_eq!(FileType::Doc.to_string(), "doc");
         assert_eq!(FileType::Doc.chinese_name(), "文档");
 assert!(FileType::Doc.supports_assistant());
-    },
-#[test],
+    }
+#[test]
     fn test_subscription_status_methods() {,
 assert!(SubscriptionStatus::Subscribed.is_active());
         assert!(!SubscriptionStatus::Unsubscribed.is_active());
@@ -347,8 +347,8 @@ assert!(SubscriptionStatus::Unsubscribed.can_activate());
 
         assert_eq!(SubscriptionStatus::Subscribed.description(), "已订阅");
         assert_eq!(SubscriptionStatus::Subscribed.color(), "green");
-},
-#[test],
+}
+#[test]
     fn test_subscription_detail_methods() {,
 let detail = SubscriptionDetail {,
             status: SubscriptionStatus::Subscribed,

@@ -7,13 +7,13 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option::RequestOption,
         SDKResult,
 };
-    service::sheets::v3::{spreadsheet_sheet::Sheet, SpreadsheetSheetService},
+    service::sheets::v3::{spreadsheet_sheet::Sheet, SpreadsheetSheetService}
 };
 /// 获取工作表请求,
 #[derive(.*?)]
@@ -42,13 +42,13 @@ api_req.set_http_method(reqwest::Method::GET);
 
         let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 }
 impl QuerySpreadsheetSheetRequest {
     pub fn w+.*{
 QuerySpreadsheetSheetRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct QuerySpreadsheetSheetRequestBuilder {
     request: QuerySpreadsheetSheetRequest,
@@ -58,19 +58,19 @@ impl QuerySpreadsheetSheetRequestBuilder {
     pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 
 #[derive(.*?)]
 pub struct QuerySpreadsheetSheetResponse {
     pub sheets: Vec<Sheet>,
 }
-impl ApiResponseTrait for QuerySpreadsheetSheetResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }

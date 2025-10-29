@@ -3,13 +3,13 @@ use serde::{Deserialize, Serialize};
 #[derive(.*?)]
 pub enum UserIdType {,
     /// 用户ID,
-#[serde(rename = "user_id")],
+#[serde(rename = "user_id")]
     UserId,
     /// union_id,
-#[serde(rename = "union_id")],
+#[serde(rename = "union_id")]
     UnionId,
     /// open_id,
-#[serde(rename = "open_id")],
+#[serde(rename = "open_id")]
     OpenId,
 }
 impl UserIdType {
@@ -18,17 +18,17 @@ match self {,
             UserIdType::UserId => "user_id",
             UserIdType::UnionId => "union_id",
             UserIdType::OpenId => "open_id",
-        },
+        }
 }
-},
+}
 /// 会议室ID类型,
 #[derive(.*?)]
 pub enum RoomIdType {,
     /// 会议室ID,
-#[serde(rename = "room_id")],
+#[serde(rename = "room_id")]
     RoomId,
     /// 会议室名称,
-#[serde(rename = "omm_room_id")],
+#[serde(rename = "omm_room_id")]
     OmmRoomId,
 }
 impl RoomIdType {
@@ -36,38 +36,38 @@ impl RoomIdType {
 match self {,
             RoomIdType::RoomId => "room_id",
             RoomIdType::OmmRoomId => "omm_room_id",
-        },
+        }
 }
-},
+}
 /// 会议状态,
 #[derive(.*?)]
 pub enum MeetingStatus {,
     /// 未开始,
-#[serde(rename = "not_started")],
+#[serde(rename = "not_started")]
     NotStarted,
     /// 进行中,
-#[serde(rename = "in_progress")],
+#[serde(rename = "in_progress")]
     InProgress,
     /// 已结束,
-#[serde(rename = "ended")],
+#[serde(rename = "ended")]
     Ended,
     /// 已取消,
-#[serde(rename = "cancelled")],
+#[serde(rename = "cancelled")]
     Cancelled,
-},
+}
 /// 会议类型,
 #[derive(.*?)]
 pub enum MeetingType {,
     /// 即时会议,
-#[serde(rename = "instant")],
+#[serde(rename = "instant")]
     Instant,
     /// 预约会议,
-#[serde(rename = "scheduled")],
+#[serde(rename = "scheduled")]
     Scheduled,
     /// 周期性会议,
-#[serde(rename = "recurring")],
+#[serde(rename = "recurring")]
     Recurring,
-},
+}
 /// 预约会议信息,
 #[derive(.*?)]
 pub struct Reserve {
@@ -91,7 +91,7 @@ pub struct Reserve {
     pub meeting_type: MeetingType,
     /// 创建时间
     pub create_time: Option<String>,
-},
+}
 /// 会议信息,
 #[derive(.*?)]
 pub struct Meeting {
@@ -115,7 +115,7 @@ pub struct Meeting {
     pub participant_count: Option<i32>,
     /// 创建时间
     pub create_time: Option<String>,
-},
+}
 /// 用户信息,
 #[derive(.*?)]
 pub struct UserInfo {
@@ -125,7 +125,7 @@ pub struct UserInfo {
     pub name: Option<String>,
     /// 用户头像
     pub avatar_url: Option<String>,
-},
+}
 /// 会议室信息,
 #[derive(.*?)]
 pub struct Room {
@@ -143,7 +143,7 @@ pub struct Room {
     pub status: Option<String>,
     /// 创建时间
     pub create_time: Option<String>,
-},
+}
 /// 录制信息,
 #[derive(.*?)]
 pub struct Recording {
@@ -163,27 +163,27 @@ pub struct Recording {
     pub start_time: Option<String>,
     /// 录制结束时间
     pub end_time: Option<String>,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
-    fn test_vc_user_id_type_serialization() {
+#[test]
+    ,
         let types = vec![UserIdType::UserId, UserIdType::UnionId, UserIdType::OpenId];
 for user_type in types {,
             let serialized = serde_json::to_string(&user_type).unwrap();
 let deserialized: UserIdType = serde_json::from_str(&serialized).unwrap();
             assert_eq!(user_type, deserialized);
 }
-    },
-#[test],
-    fn test_user_id_type_as_str() {
+    }
+#[test]
+    ,
         assert_eq!(UserIdType::UserId.as_str(), "user_id");
         assert_eq!(UserIdType::UnionId.as_str(), "union_id");
         assert_eq!(UserIdType::OpenId.as_str(), "open_id");
-},
-#[test],
+}
+#[test]
     fn test_user_id_type_serde_rename() {,
 let user_id = UserIdType::UserId;
         let serialized = serde_json::to_string(&user_id).unwrap();
@@ -194,22 +194,22 @@ let union_id = UserIdType::UnionId;
 let open_id = UserIdType::OpenId;
         let serialized = serde_json::to_string(&open_id).unwrap();
         assert_eq!(serialized, "\"open_id\"");
-},
-#[test],
-    fn test_room_id_type_serialization() {
+}
+#[test]
+    ,
         let types = vec![RoomIdType::RoomId, RoomIdType::OmmRoomId];
 for room_type in types {,
             let serialized = serde_json::to_string(&room_type).unwrap();
 let deserialized: RoomIdType = serde_json::from_str(&serialized).unwrap();
             assert_eq!(room_type, deserialized);
 }
-    },
-#[test],
-    fn test_room_id_type_as_str() {
+    }
+#[test]
+    ,
         assert_eq!(RoomIdType::RoomId.as_str(), "room_id");
         assert_eq!(RoomIdType::OmmRoomId.as_str(), "omm_room_id");
-},
-#[test],
+}
+#[test]
     fn test_room_id_type_serde_rename() {,
 let room_id = RoomIdType::RoomId;
         let serialized = serde_json::to_string(&room_id).unwrap();
@@ -217,8 +217,8 @@ let room_id = RoomIdType::RoomId;
 let omm_room_id = RoomIdType::OmmRoomId;
         let serialized = serde_json::to_string(&omm_room_id).unwrap();
         assert_eq!(serialized, "\"omm_room_id\"");
-},
-#[test],
+}
+#[test]
     fn test_meeting_status_serialization() {,
 let statuses = vec![,
             MeetingStatus::NotStarted,
@@ -231,8 +231,8 @@ for status in statuses {,
 let deserialized: MeetingStatus = serde_json::from_str(&serialized).unwrap();
             assert_eq!(status, deserialized);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_meeting_status_serde_rename() {,
 let not_started = MeetingStatus::NotStarted;
         let serialized = serde_json::to_string(&not_started).unwrap();
@@ -246,8 +246,8 @@ let ended = MeetingStatus::Ended;
 let cancelled = MeetingStatus::Cancelled;
         let serialized = serde_json::to_string(&cancelled).unwrap();
         assert_eq!(serialized, "\"cancelled\"");
-},
-#[test],
+}
+#[test]
     fn test_meeting_type_serialization() {,
 let types = vec![,
             MeetingType::Instant,
@@ -259,8 +259,8 @@ for meeting_type in types {,
 let deserialized: MeetingType = serde_json::from_str(&serialized).unwrap();
             assert_eq!(meeting_type, deserialized);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_meeting_type_serde_rename() {,
 let instant = MeetingType::Instant;
         let serialized = serde_json::to_string(&instant).unwrap();
@@ -271,8 +271,8 @@ let scheduled = MeetingType::Scheduled;
 let recurring = MeetingType::Recurring;
         let serialized = serde_json::to_string(&recurring).unwrap();
         assert_eq!(serialized, "\"recurring\"");
-},
-#[test],
+}
+#[test]
     fn test_user_info_serialization() {,
 let user = UserInfo {,
             id: "user_123".to_string(),
@@ -285,8 +285,8 @@ let serialized = serde_json::to_string(&user).unwrap();
         assert_eq!(user.id, deserialized.id);
         assert_eq!(user.name, deserialized.name);
         assert_eq!(user.avatar_url, deserialized.avatar_url);
-},
-#[test],
+}
+#[test]
     fn test_user_info_minimal() {,
 let user = UserInfo {,
             id: "minimal_user".to_string(),
@@ -299,8 +299,8 @@ let serialized = serde_json::to_string(&user).unwrap();
         assert_eq!(user.id, deserialized.id);
 assert!(deserialized.name.is_none());
         assert!(deserialized.avatar_url.is_none());
-},
-#[test],
+}
+#[test]
     fn test_reserve_serialization() {,
 let reserve = Reserve {,
             id: "reserve_123".to_string(),
@@ -331,8 +331,8 @@ let serialized = serde_json::to_string(&reserve).unwrap();
         assert_eq!(reserve.meeting_type, deserialized.meeting_type);
         assert_eq!(reserve.create_time, deserialized.create_time);
 assert!(deserialized.host_user.is_some());
-    },
-#[test],
+    }
+#[test]
     fn test_reserve_minimal() {,
 let reserve = Reserve {,
             id: "simple_reserve".to_string(),
@@ -357,8 +357,8 @@ assert!(deserialized.password.is_none());
 assert!(deserialized.create_time.is_none());
         assert_eq!(reserve.status, deserialized.status);
         assert_eq!(reserve.meeting_type, deserialized.meeting_type);
-},
-#[test],
+}
+#[test]
     fn test_meeting_serialization() {,
 let meeting = Meeting {,
             id: "meeting_456".to_string(),
@@ -389,8 +389,8 @@ let serialized = serde_json::to_string(&meeting).unwrap();
         assert_eq!(meeting.participant_count, deserialized.participant_count);
         assert_eq!(meeting.create_time, deserialized.create_time);
 assert!(deserialized.host_user.is_some());
-    },
-#[test],
+    }
+#[test]
     fn test_meeting_ongoing() {,
 let meeting = Meeting {,
             id: "ongoing_meeting".to_string(),
@@ -413,8 +413,8 @@ assert!(deserialized.end_time.is_none());
         assert!(deserialized.host_user.is_none());
 assert!(deserialized.password.is_none());
         assert_eq!(meeting.participant_count, deserialized.participant_count);
-},
-#[test],
+}
+#[test]
     fn test_room_serialization() {,
 let room = Room {,
             room_id: "room_abc".to_string(),
@@ -435,8 +435,8 @@ let serialized = serde_json::to_string(&room).unwrap();
         assert_eq!(room.location, deserialized.location);
         assert_eq!(room.status, deserialized.status);
         assert_eq!(room.create_time, deserialized.create_time);
-},
-#[test],
+}
+#[test]
     fn test_room_minimal() {,
 let room = Room {,
             room_id: "simple_room".to_string(),
@@ -457,8 +457,8 @@ assert!(deserialized.description.is_none());
 assert!(deserialized.location.is_none());
         assert!(deserialized.status.is_none());
 assert!(deserialized.create_time.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_recording_serialization() {,
 let recording = Recording {,
             recording_id: "rec_123".to_string(),
@@ -481,8 +481,8 @@ let serialized = serde_json::to_string(&recording).unwrap();
         assert_eq!(recording.status, deserialized.status);
         assert_eq!(recording.start_time, deserialized.start_time);
         assert_eq!(recording.end_time, deserialized.end_time);
-},
-#[test],
+}
+#[test]
     fn test_recording_minimal() {,
 let recording = Recording {,
             recording_id: "minimal_rec".to_string(),
@@ -505,8 +505,8 @@ assert!(deserialized.size.is_none());
         assert!(deserialized.status.is_none());
 assert!(deserialized.start_time.is_none());
         assert!(deserialized.end_time.is_none());
-},
-#[test],
+}
+#[test]
     fn test_complex_meeting_with_all_fields() {,
 let meeting = Meeting {,
             id: "complex_meeting_789".to_string(),
@@ -540,8 +540,8 @@ let host = deserialized.host_user.unwrap();
         assert_eq!(host.id, "complex_host_001");
         assert_eq!(host.name, Some("复杂主持人".to_string()));
 assert!(host.avatar_url.is_some());
-    },
-#[test],
+    }
+#[test]
     fn test_debug_trait_for_models() {,
 let meeting_status = MeetingStatus::InProgress;
         let debug_string = format!("{:?}", meeting_status);
@@ -555,8 +555,8 @@ assert!(debug_string.contains("OpenId"));
         let room_id_type = RoomIdType::OmmRoomId;
         let debug_string = format!("{:?}", room_id_type);
 assert!(debug_string.contains("OmmRoomId"));
-    },
-#[test],
+    }
+#[test]
     fn test_clone_trait_for_models() {,
 let user = UserInfo {,
             id: "test_user".to_string(),
@@ -570,8 +570,8 @@ let cloned_user = user.clone();
 let status = MeetingStatus::NotStarted;
         let cloned_status = status.clone();
         assert_eq!(status, cloned_status);
-},
-#[test],
+}
+#[test]
     fn test_all_meeting_status_variants() {,
 let statuses = [,
             MeetingStatus::NotStarted,
@@ -584,8 +584,8 @@ for status in statuses {,
 let deserialized: MeetingStatus = serde_json::from_str(&serialized).unwrap();
             assert_eq!(status, deserialized);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_all_meeting_type_variants() {,
 let types = [,
             MeetingType::Instant,
@@ -597,5 +597,5 @@ for meeting_type in types {,
 let deserialized: MeetingType = serde_json::from_str(&serialized).unwrap();
             assert_eq!(meeting_type, deserialized);
 }
-    },
+    }
 }

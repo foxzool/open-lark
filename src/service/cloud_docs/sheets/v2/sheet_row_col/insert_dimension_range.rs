@@ -2,13 +2,13 @@ use serde::Serialize;
 use open_lark_core::core::api_req::ApiRequest;
 use crate::{,
 core::{,
-        api_resp::{BaseResponse, EmptyResponse},
+        api_resp::{BaseResponse, EmptyResponse}
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option, SDKResult,
     }
     impl_executable_builder_owned,
-    service::cloud_docs::sheets::v2::{sheet_row_col::UpdateDimension, SpreadsheetService},
+    service::cloud_docs::sheets::v2::{sheet_row_col::UpdateDimension, SpreadsheetService}
 };
 /// 插入行列请求,
 #[derive(.*?)]
@@ -29,8 +29,8 @@ pub struct InsertDimensionRangeRequest {
 impl InsertDimensionRangeRequest {
     pub fn w+.*{
 InsertDimensionRangeRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct InsertDimensionRangeRequestBuilder {
     request: InsertDimensionRangeRequest,
@@ -39,32 +39,32 @@ impl InsertDimensionRangeRequestBuilder {
     pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
-},
+}
 /// 电子表格工作表的 ID。调用获取工作表获取 ID,
     pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.dimension.sheet_id = sheet_id.to_string();
         self,
-},
+}
 /// 更新的维度。可选值：,
     /// - ROWS：行,
 /// - COLUMNS：列,
     pub fn major_dimension(mut self, major_dimension: impl ToString) -> Self {
 self.request.dimension.major_dimension = major_dimension.to_string();
         self,
-},
+}
 /// 插入的行或列的起始位置。从 0 开始计数。若 startIndex 为 3，则从第 4,
     /// 行或列开始插入空行或列。包含第 4 行或列。
     pub fn start_index(mut self, start_index: i32) -> Self {
 self.request.dimension.start_index = start_index;
         self,
-},
+}
 /// 插入的行或列结束的位置。从 0 开始计数。若 endIndex 为 7，则从第 8 行结束插入行。第 8,
     /// 行不再插入空行。 示例：当 majorDimension为 ROWS、 startIndex 为 3、endIndex 为 7,
 /// 时，则在第 4、5、6、7 行插入空白行，共插入 4 行。,
     pub fn end_index(mut self, end_index: i32) -> Self {
 self.request.dimension.end_index = end_index;
         self,
-},
+}
 /// 插入的空白行或列是否继承表中的单元格样式。不填或设置为空即不继承任何样式，为默认空白样式。,
     /// 可选值：,
 /// - BEFORE：继承起始位置的单元格的样式,
@@ -72,12 +72,12 @@ self.request.dimension.end_index = end_index;
     pub fn inherit_style(mut self, inherit_style: impl ToString) -> Self {
 self.request.inherit_style = Some(inherit_style.to_string());
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 // 使用宏实现ExecutableBuilder trait,
 impl_executable_builder_owned!(
     InsertDimensionRangeRequestBuilder,
@@ -103,9 +103,9 @@ api_req.set_http_method(reqwest::Method::POST);
 
         let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
-#[cfg(test)],
+    }
+}
+#[cfg(test)]
 mod tests {
 use super::*;
     use crate::core::config::Config;
@@ -115,11 +115,11 @@ Config::builder()
             .app_id()
 .app_secret()
             .build(),
-},
+}
 fn create_test_service() -> SpreadsheetService {,
         SpreadsheetService::new(create_test_config()),
-},
-#[test],
+}
+#[test]
     fn test_insert_dimension_range_request_builder_creation() {,
 let builder = InsertDimensionRangeRequest::builder();
         let request = builder.build();
@@ -130,52 +130,52 @@ let builder = InsertDimensionRangeRequest::builder();
         assert_eq!(request.dimension.start_index, 0);
         assert_eq!(request.dimension.end_index, 0);
 assert!(request.inherit_style.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_insert_dimension_range_request_builder_with_spreadsheet_token() {,
 let request = InsertDimensionRangeRequest::builder(),
             .spreadsheet_token()
 .build();
         assert_eq!(request.spreadsheet_token, "test_spreadsheet_123");
-},
-#[test],
+}
+#[test]
     fn test_insert_dimension_range_request_builder_with_sheet_id() {,
 let request = InsertDimensionRangeRequest::builder(),
             .sheet_id()
 .build();
         assert_eq!(request.dimension.sheet_id, "test_sheet_456");
-},
-#[rstest],
-    #[case("ROWS")],
-#[case("COLUMNS")],
+}
+#[rstest]
+    #[case("ROWS")]
+#[case("COLUMNS")]
     fn test_insert_dimension_range_request_builder_with_major_dimension(#[case] dimension: &str) {,
 let request = InsertDimensionRangeRequest::builder(),
             .major_dimension()
 .build();
         assert_eq!(request.dimension.major_dimension, dimension);
-},
-#[test],
+}
+#[test]
     fn test_insert_dimension_range_request_builder_with_start_index() {,
 let request = InsertDimensionRangeRequest::builder(),
             .start_index()
 .build();
         assert_eq!(request.dimension.start_index, 5);
-},
-#[test],
+}
+#[test]
     fn test_insert_dimension_range_request_builder_with_end_index() {,
 let request = InsertDimensionRangeRequest::builder().end_index(10).build();
         assert_eq!(request.dimension.end_index, 10);
-},
-#[rstest],
-    #[case("BEFORE")],
-#[case("AFTER")],
+}
+#[rstest]
+    #[case("BEFORE")]
+#[case("AFTER")]
     fn test_insert_dimension_range_request_builder_with_inherit_style(#[case] style: &str) {,
 let request = InsertDimensionRangeRequest::builder(),
             .inherit_style()
 .build();
         assert_eq!(request.inherit_style, Some(style.to_string()));
-},
-#[test],
+}
+#[test]
     fn test_insert_dimension_range_request_builder_chaining() {,
 let request = InsertDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -192,8 +192,8 @@ let request = InsertDimensionRangeRequest::builder(),
         assert_eq!(request.dimension.start_index, 3);
         assert_eq!(request.dimension.end_index, 7);
         assert_eq!(request.inherit_style, Some("BEFORE".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_insert_dimension_range_request_default() {,
 let request = InsertDimensionRangeRequest::default();
         assert_eq!(request.spreadsheet_token, "");
@@ -202,8 +202,8 @@ let request = InsertDimensionRangeRequest::default();
         assert_eq!(request.dimension.start_index, 0);
         assert_eq!(request.dimension.end_index, 0);
 assert!(request.inherit_style.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_insert_dimension_range_request_builder_default() {,
 let builder = InsertDimensionRangeRequestBuilder::default();
         let request = builder.build();
@@ -214,8 +214,8 @@ let builder = InsertDimensionRangeRequestBuilder::default();
         assert_eq!(request.dimension.start_index, 0);
         assert_eq!(request.dimension.end_index, 0);
 assert!(request.inherit_style.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_insert_dimension_range_request_serialization() {,
 let request = InsertDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -234,8 +234,8 @@ assert!(json_str.contains("dimension"));
 assert!(json_str.contains("\"startIndex\":2"));
         assert!(json_str.contains("\"endIndex\":5"));
 assert!(json_str.contains("\"inheritStyle\":\"AFTER\""));
-    },
-#[test],
+    }
+#[test]
     fn test_insert_dimension_range_request_serialization_without_inherit_style() {,
 let request = InsertDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -250,8 +250,8 @@ assert!(serialized.is_ok());
 assert!(json_str.contains("dimension"));
         assert!(json_str.contains("ROWS"));
 assert!(!json_str.contains("inheritStyle")); // Should not be present when None,
-    },
-#[test],
+    }
+#[test]
     fn test_insert_dimension_range_request_debug() {,
 let request = InsertDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -263,8 +263,8 @@ assert!(debug_str.contains("InsertDimensionRangeRequest"));
         assert!(debug_str.contains("debug_token"));
 assert!(debug_str.contains("debug_sheet"));
         assert!(debug_str.contains("BEFORE"));
-},
-#[test],
+}
+#[test]
     fn test_insert_dimension_range_request_with_empty_strings() {,
 let request = InsertDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -277,8 +277,8 @@ let request = InsertDimensionRangeRequest::builder(),
         assert_eq!(request.dimension.sheet_id, "");
         assert_eq!(request.dimension.major_dimension, "");
         assert_eq!(request.inherit_style, Some("".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_insert_dimension_range_request_with_special_characters() {,
 let request = InsertDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -291,8 +291,8 @@ let request = InsertDimensionRangeRequest::builder(),
         assert_eq!(request.dimension.sheet_id, "sheet_名称_123");
         assert_eq!(request.dimension.major_dimension, "ROWS");
         assert_eq!(request.inherit_style, Some("BEFORE".to_string()));
-},
-#[rstest],
+}
+#[rstest]
     #[case(0, 1)]
     #[case(1, 5)]
     #[case(10, 20)]
@@ -310,8 +310,8 @@ let request = InsertDimensionRangeRequest::builder(),
 
         assert_eq!(request.dimension.start_index, start);
         assert_eq!(request.dimension.end_index, end);
-},
-#[test],
+}
+#[test]
     fn test_insert_dimension_range_request_with_maximum_values() {,
 let request = InsertDimensionRangeRequest::builder(),
             .start_index()
@@ -320,8 +320,8 @@ let request = InsertDimensionRangeRequest::builder(),
 
         assert_eq!(request.dimension.start_index, i32::MAX);
         assert_eq!(request.dimension.end_index, i32::MAX);
-},
-#[test],
+}
+#[test]
     fn test_insert_dimension_range_request_with_minimum_values() {,
 let request = InsertDimensionRangeRequest::builder(),
             .start_index()
@@ -330,8 +330,8 @@ let request = InsertDimensionRangeRequest::builder(),
 
         assert_eq!(request.dimension.start_index, i32::MIN);
         assert_eq!(request.dimension.end_index, i32::MIN);
-},
-#[test],
+}
+#[test]
     fn test_insert_dimension_range_request_api_request_body_serialization() {,
 let request = InsertDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -352,8 +352,8 @@ let dimension = parsed.get("dimension").unwrap();
         assert_eq!(dimension.get("startIndex").unwrap(), 1);
         assert_eq!(dimension.get("endIndex").unwrap(), 3);
         assert_eq!(parsed.get("inheritStyle").unwrap(), "AFTER");
-},
-#[test],
+}
+#[test]
     fn test_insert_dimension_range_request_builder_multiple_calls() {,
 let mut builder = InsertDimensionRangeRequest::builder();
         // Test that multiple calls override previous values,
@@ -370,14 +370,14 @@ let request = builder.build();
         assert_eq!(request.dimension.sheet_id, "second_sheet");
         assert_eq!(request.dimension.start_index, 2);
         assert_eq!(request.inherit_style, Some("AFTER".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_spreadsheet_service_creation() {,
 let service = create_test_service();
         // Verify the service can be created without panic
         assert_eq!(service.config.app_id, "test_app_id");
-},
-#[test],
+}
+#[test]
     fn test_insert_dimension_range_request_edge_cases() {,
 // Test with very long token,
         let long_token = "a".repeat(10000);
@@ -404,8 +404,8 @@ let request = InsertDimensionRangeRequest::builder(),
             .inherit_style()
 .build();
         assert_eq!(request.inherit_style, Some(long_style));
-},
-#[test],
+}
+#[test]
     fn test_insert_dimension_range_request_memory_efficiency() {,
 // Test creating many requests doesn't consume excessive memory,
         let requests: Vec<InsertDimensionRangeRequest> = (0..100),
@@ -437,10 +437,10 @@ match i % 3 {,
                 1 => assert_eq!(request.inherit_style, Some("AFTER".to_string())),
                 2 => assert!(request.inherit_style.is_none()),
                 _ => unreachable!(),
-            },
+            }
 }
-    },
-#[test],
+    }
+#[test]
     fn test_insert_dimension_range_request_serialization_with_null_inherit_style() {,
 let mut request = InsertDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -458,8 +458,8 @@ let parsed: serde_json::Value = serde_json::from_str(&body_str).unwrap();
         // inheritStyle should not be present in JSON when None,
 assert!(parsed.get("inheritStyle").is_none());
         assert!(parsed.get("dimension").is_some());
-},
-#[test],
+}
+#[test]
     fn test_insert_dimension_range_request_various_inherit_styles() {,
 let styles = vec![,
             "BEFORE",
@@ -474,8 +474,8 @@ let request = InsertDimensionRangeRequest::builder(),
 .build();
             assert_eq!(request.inherit_style, Some(style.to_string()));
 }
-    },
-#[test],
+    }
+#[test]
     fn test_insert_dimension_range_request_builder_partial_configuration() {,
 // Test building with only some fields configured,
         let request1 = InsertDimensionRangeRequest::builder(),
@@ -492,8 +492,8 @@ assert!(request1.inherit_style.is_none());
         assert_eq!(request2.spreadsheet_token, "");
         assert_eq!(request2.dimension.sheet_id, "test_sheet");
         assert_eq!(request2.inherit_style, Some("BEFORE".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_insert_dimension_range_request_unicode_handling() {,
 let request = InsertDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -508,5 +508,5 @@ let request = InsertDimensionRangeRequest::builder(),
 // Test serialization works with Unicode,
         let serialized = serde_json::to_string(&request);
 assert!(serialized.is_ok());
-    },
+    }
 }

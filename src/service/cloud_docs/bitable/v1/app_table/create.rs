@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -27,7 +27,7 @@ impl AppTableService {
 let mut api_req = request.api_request;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(BITABLE_V1_TABLE_CREATE.replace("{app_token}", &request.app_token));
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 api_req.body = serde_json::to_vec(&CreateTableRequestBody {,
             table: request.table,
@@ -35,8 +35,8 @@ api_req.body = serde_json::to_vec(&CreateTableRequestBody {,
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 新增数据表请求,
 #[derive(.*?)]
 pub struct CreateTableRequest {
@@ -49,16 +49,16 @@ pub struct CreateTableRequest {
 impl CreateTableRequest {
     pub fn w+.*{
 CreateTableRequestBuilder::default(),
-    },
+    }
 /// 创建新增数据表请求,
     pub fn new(app_token: impl ToString, table: TableData) -> Self {
 Self {
             api_request: ApiRequest::default(),
             app_token: app_token.to_string(),
             table,
-        },
+        }
 }
-},
+}
 #[derive(.*?)]
 pub struct CreateTableRequestBuilder {
     request: CreateTableRequest,
@@ -68,12 +68,12 @@ impl CreateTableRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 数据表信息,
     pub fn table(mut self, table: TableData) -> Self {
 self.request.table = table;
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
@@ -91,10 +91,10 @@ pub struct TableData {
     /// 数据表名称
     pub name: String,
     /// 数据表的默认视图名称，不填则默认为"数据表",
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub default_view_name: Option<String>,
     /// 数据表初始字段,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub fields: Option<Vec<TableField>>,
 }
 impl TableData {
@@ -104,29 +104,29 @@ pub fn new(name: impl ToString) -> Self {
             name: name.to_string(),
             default_view_name: None,
             fields: None,
-        },
-},
+        }
+}
 /// 设置默认视图名称,
     pub fn with_default_view_name(mut self, view_name: impl ToString) -> Self {
 self.default_view_name = Some(view_name.to_string());
         self,
-},
+}
 /// 设置初始字段,
     pub fn with_fields(mut self, fields: Vec<TableField>) -> Self {
 self.fields = Some(fields);
         self,
 }
-},
+}
 /// 字段信息,
 #[derive(.*?)]
 pub struct TableField {
     /// 字段名称
     pub field_name: String,
     /// 字段类型,
-#[serde(rename = "type")],
+#[serde(rename = "type")]
     pub field_type: i32,
     /// 字段属性，不同字段类型对应不同的属性结构,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub property: Option<serde_json::Value>,
 }
 impl TableField {
@@ -136,16 +136,16 @@ pub fn text(name: impl ToString) -> Self {
             field_name: name.to_string(),
             field_type: 1, // 多行文本
             property: None,
-        },
-},
+        }
+}
 /// 创建数字字段,
     pub fn number(name: impl ToString) -> Self {
 Self {
             field_name: name.to_string(),
             field_type: 2, // 数字
             property: None,
-        },
-},
+        }
+}
 /// 创建单选字段,
     pub fn single_select(name: impl ToString, options: Vec<String>) -> Self {
 let options_value: Vec<serde_json::Value> = options,
@@ -156,8 +156,8 @@ let options_value: Vec<serde_json::Value> = options,
             field_name: name.to_string(),
             field_type: 3, // 单选
             property: Some(serde_json::json!({"options": options_value})),
-        },
-},
+        }
+}
 /// 创建多选字段,
     pub fn multi_select(name: impl ToString, options: Vec<String>) -> Self {
 let options_value: Vec<serde_json::Value> = options,
@@ -168,17 +168,17 @@ let options_value: Vec<serde_json::Value> = options,
             field_name: name.to_string(),
             field_type: 4, // 多选
             property: Some(serde_json::json!({"options": options_value})),
-        },
-},
+        }
+}
 /// 创建日期字段,
     pub fn date(name: impl ToString) -> Self {
 Self {
             field_name: name.to_string(),
             field_type: 5, // 日期
             property: None,
-        },
+        }
 }
-},
+}
 #[derive(.*?)]
 struct CreateTableRequestBody {
     table: TableData,
@@ -193,16 +193,16 @@ pub struct CreateTableResponse {
     /// 数据表初始字段的 field_id 列表
     pub field_id_list: Vec<String>,
 }
-impl ApiResponseTrait for CreateTableResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_create_table_request() {,
 let table = TableData::new("测试数据表"),
             .with_default_view_name()
@@ -218,8 +218,8 @@ let request = CreateTableRequest::builder(),
 
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.table.name, "测试数据表");
-},
-#[test],
+}
+#[test]
     fn test_table_field_types() {,
 let text_field = TableField::text("标题");
         assert_eq!(text_field.field_type, 1);
@@ -230,5 +230,5 @@ let select_field =,
             TableField::single_select("状态", vec!["A".to_string(), "B".to_string()]);
         assert_eq!(select_field.field_type, 3);
 assert!(select_field.property.is_some());
-    },
+    }
 }

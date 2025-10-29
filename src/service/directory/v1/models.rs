@@ -30,10 +30,10 @@ pub struct Employee {
     pub job_title: Option<String>,
     /// 上级ID
     pub leader_id: Option<String>,
-},
+}
 /// 员工状态,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum EmployeeStatus {,
 /// 在职,
     Active,
@@ -41,7 +41,7 @@ pub enum EmployeeStatus {,
     Inactive,
     /// 待离职
     ToBeResigned,
-},
+}
 /// 部门信息,
 #[derive(.*?)]
 pub struct Department {
@@ -63,19 +63,19 @@ pub struct Department {
     pub update_time: Option<String>,
     /// 部门顺序
     pub order: Option<i32>,
-},
+}
 /// 部门状态,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum DepartmentStatus {,
 /// 正常,
     Normal,
     /// 删除
     Deleted,
-},
+}
 /// 用户ID类型,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum UserIdType {,
 /// Open ID,
     OpenId,
@@ -90,12 +90,12 @@ match self {,
             UserIdType::OpenId => write!(f, "open_id"),
             UserIdType::UnionId => write!(f, "union_id"),
             UserIdType::UserId => write!(f, "user_id"),
-        },
+        }
 }
-},
+}
 /// 部门ID类型,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum DepartmentIdType {,
 /// Open Department ID,
     OpenDepartmentId,
@@ -107,9 +107,9 @@ impl std::fmt::Display for DepartmentIdType {,
 match self {,
             DepartmentIdType::OpenDepartmentId => write!(f, "open_department_id"),
             DepartmentIdType::DepartmentId => write!(f, "department_id"),
-        },
+        }
 }
-},
+}
 /// 分页参数,
 #[derive(.*?)]
 pub struct Pagination {
@@ -117,7 +117,7 @@ pub struct Pagination {
     pub page_size: Option<i32>,
     /// 分页标记
     pub page_token: Option<String>,
-},
+}
 /// 搜索参数,
 #[derive(.*?)]
 pub struct SearchQuery {

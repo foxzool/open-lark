@@ -3,7 +3,7 @@ use crate::{,
     core::{
         api_resp::ApiResponseTrait, config::Config,
         constants::AccessTokenType, endpoints::EndpointBuilder, http::Transport,
-    },
+    }
     service::contact::models::*,
 };
 use serde::{Deserialize, Serialize};
@@ -13,8 +13,8 @@ pub struct JobLevelService {
 }
 impl JobLevelService {
     pub fn new(config: Config) -> Self {
-        Self { config },
-},
+        Self { config }
+}
 /// 创建职级,
     pub async fn create(
         &self,
@@ -23,14 +23,14 @@ impl JobLevelService {
 let api_req = ApiRequest {,
             http_method: reqwest::Method::POST,
             api_path: crate::core::endpoints::contact::CONTACT_V3_JOB_LEVELS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
             ..Default::default(),
 };
 let resp =,
             Transport::<CreateJobLevelResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
-    },
+    }
 /// 更新职级,
     pub async fn update(
         &self,
@@ -44,14 +44,14 @@ let api_req = ApiRequest {,
                 "job_level_id",
                 job_level_id,
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
             ..Default::default(),
 };
 let resp =,
             Transport::<UpdateJobLevelResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
-    },
+    }
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get,
@@ -64,14 +64,14 @@ let api_req = ApiRequest {,
                 "job_level_id",
                 job_level_id,
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             ..Default::default(),
 };
 
         let resp = Transport::<GetJobLevelResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
-    },
+    }
 /// 获取租户职级列表,
     pub async fn list(
         &self,
@@ -80,7 +80,7 @@ Ok(resp.data.unwrap_or_default()),
 let api_req = ApiRequest {,
             http_method: reqwest::Method::GET,
             api_path: crate::core::endpoints::contact::CONTACT_V3_JOB_LEVELS.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
             ..Default::default(),
@@ -88,7 +88,7 @@ let api_req = ApiRequest {,
 
         let resp = Transport::<ListJobLevelsResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
-    },
+    }
 /// 删除职级,
     pub async fn delete(
         &self,
@@ -101,14 +101,14 @@ let api_req = ApiRequest {,
                 "job_level_id",
                 job_level_id,
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             ..Default::default(),
 };
 let resp =,
             Transport::<DeleteJobLevelResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
-    },
+    }
 }
 
 #[derive(.*?)]
@@ -120,10 +120,10 @@ pub struct CreateJobLevelRequest {
 pub struct CreateJobLevelResponse {
     pub job_level: JobLevel,
 }
-impl ApiResponseTrait for CreateJobLevelResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
+crate::core::api_resp::ResponseFormat::Data
+    }
 }
 
 #[derive(.*?)]
@@ -135,20 +135,20 @@ pub struct UpdateJobLevelRequest {
 pub struct UpdateJobLevelResponse {
     pub job_level: JobLevel,
 }
-impl ApiResponseTrait for UpdateJobLevelResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
+crate::core::api_resp::ResponseFormat::Data
+    }
 }
 
 #[derive(.*?)]
 pub struct GetJobLevelResponse {
     pub job_level: JobLevel,
 }
-impl ApiResponseTrait for GetJobLevelResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
+crate::core::api_resp::ResponseFormat::Data
+    }
 }
 
 #[derive(.*?)]
@@ -167,16 +167,16 @@ pub struct ListJobLevelsResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
-impl ApiResponseTrait for ListJobLevelsResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
+crate::core::api_resp::ResponseFormat::Data
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DeleteJobLevelResponse {}
-impl ApiResponseTrait for DeleteJobLevelResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
+crate::core::api_resp::ResponseFormat::Data
+    }
 }

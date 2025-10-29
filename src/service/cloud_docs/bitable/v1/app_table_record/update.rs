@@ -8,7 +8,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -24,16 +24,16 @@ pub struct UpdateRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 多维表格的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     app_token: String,
     /// 多维表格数据表的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     table_id: String,
     /// 记录的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     record_id: String,
     /// 用户 ID 类型,
-#[serde(skip)],
+#[serde(skip)]
     user_id_type: Option<String>,
     /// 要更新的记录的数据
     fields: Value,
@@ -41,7 +41,7 @@ pub struct UpdateRecordRequest {
 impl UpdateRecordRequest {
     pub fn w+.*{
 UpdateRecordRequestBuilder::default(),
-    },
+    }
 pub fn new(,
         app_token: impl ToString,
         table_id: impl ToString,
@@ -54,8 +54,8 @@ Self {
             fields: Value::Object(Default::default()),
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct UpdateRecordRequestBuilder {
     request: UpdateRecordRequest,
@@ -65,45 +65,45 @@ impl UpdateRecordRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 数据表的唯一标识符,
     pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
-},
+}
 /// 记录的唯一标识符,
     pub fn record_id(mut self, record_id: impl ToString) -> Self {
 self.request.record_id = record_id.to_string();
         self,
-},
+}
 /// 用户 ID 类型,
     pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
-},
+}
 /// 记录字段数据,
     pub fn fields(mut self, fields: Value) -> Self {
 self.request.fields = fields;
         self,
-},
+}
 /// 添加单个字段,
     pub fn add_field(mut self, field_name: impl ToString, value: Value) -> Self {
 if let Value::Object(ref mut map) = self.request.fields {,
             map.insert(field_name.to_string(), value);
-},
+}
 self,
-    },
+    }
 pub fn w+.*{
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
                 .api_request,
-.query_params,
+.query_params
                 .insert("user_id_type", user_id_type.clone());
-},
+}
 self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request,
 }
-},
+}
 // 应用ExecutableBuilder trait到UpdateRecordRequestBuilder,
 crate::impl_executable_builder_owned!(
     UpdateRecordRequestBuilder,
@@ -118,11 +118,11 @@ pub struct UpdateRecordResponse {
     /// 更新后的记录
     pub record: Record,
 }
-impl ApiResponseTrait for UpdateRecordResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 更新记录,
 pub async fn update_record(
     request: UpdateRecordRequest,
@@ -142,11 +142,11 @@ Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json::json;
-    #[test],
+    #[test]
 fn test_update_record_request_builder() {,
         let request = UpdateRecordRequest::builder(),
 .app_token()

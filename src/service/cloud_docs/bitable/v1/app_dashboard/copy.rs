@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -23,13 +23,13 @@ pub struct CopyDashboardRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 多维表格的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     app_token: String,
     /// 仪表盘ID,
-#[serde(skip)],
+#[serde(skip)]
     block_id: String,
     /// 复制后的仪表盘名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     name: Option<String>,
 }
 impl CopyDashboardRequest {
@@ -43,8 +43,8 @@ Self {
             block_id: block_id.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct CopyDashboardRequestBuilder {
     request: CopyDashboardRequest,
@@ -54,21 +54,21 @@ impl CopyDashboardRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 仪表盘ID,
     pub fn block_id(mut self, block_id: impl ToString) -> Self {
 self.request.block_id = block_id.to_string();
         self,
-},
+}
 /// 复制后的仪表盘名称,
     pub fn name(mut self, name: impl ToString) -> Self {
 self.request.name = Some(name.to_string());
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 impl_executable_builder_config!(,
     CopyDashboardRequestBuilder,
@@ -83,18 +83,18 @@ pub struct Dashboard {
     pub block_id: String,
     /// 仪表盘名称
     pub name: String,
-},
+}
 /// 复制仪表盘响应,
 #[derive(.*?)]
 pub struct CopyDashboardResponse {
     /// 复制后的仪表盘信息
     pub dashboard: Dashboard,
 }
-impl ApiResponseTrait for CopyDashboardResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 复制仪表盘,
 pub async fn copy_dashboard(
     request: CopyDashboardRequest,
@@ -113,10 +113,10 @@ Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_copy_dashboard_request_builder() {,
 let request = CopyDashboardRequest::builder(),
             .app_token()

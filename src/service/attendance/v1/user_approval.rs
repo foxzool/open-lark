@@ -5,7 +5,7 @@ use crate::core::{,
     api_resp::BaseResponse,
     config::Config,
     constants::AccessTokenType,
-    endpoints::{attendance::*, EndpointBuilder},
+    endpoints::{attendance::*, EndpointBuilder}
     http::Transport,
     req_option::RequestOption,
     trait_system::Service,
@@ -37,33 +37,33 @@ let mut api_req = request.api_req;
 api_req.set_api_path(ATTENDANCE_V1_USER_APPROVALS.to_string());
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 // 添加查询参数,
-        api_req,
-.query_params,
+        api_req
+.query_params
             .insert("employee_type", request.employee_type);
 if let Some(status) = request.status {,
             api_req.query_params.insert("status", status.to_string());
-},
+}
 if let Some(date_from) = request.date_from {,
             api_req.query_params.insert("date_from", date_from);
-},
+}
 if let Some(date_to) = request.date_to {,
             api_req.query_params.insert("date_to", date_to);
-},
+}
 if let Some(user_ids) = request.user_ids {,
             api_req.query_params.insert("user_ids", user_ids.join(","));
-},
+}
 if let Some(page_size) = request.page_size {,
-            api_req,
-.query_params,
+            api_req
+.query_params
                 .insert("page_size", page_size.to_string());
-},
+}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
 }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 写入审批结果,
     ///,
 /// 该接口用于写入假勤审批的处理结果，包括通过或拒绝审批。,
@@ -81,8 +81,8 @@ let mut api_req = request.api_req;
 api_req.set_api_path(ATTENDANCE_V1_USER_APPROVALS.to_string());
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 // 添加查询参数,
-        api_req,
-.query_params,
+        api_req
+.query_params
             .insert("employee_type", request.employee_type);
 // 构建请求体,
         let mut body = json!({
@@ -91,11 +91,11 @@ api_req.set_api_path(ATTENDANCE_V1_USER_APPROVALS.to_string());
 });
 if let Some(approval_note) = request.approval_note {,
             body["approval_note"] = json!(approval_note);
-},
+}
 api_req.body = serde_json::to_vec(&body)?;
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 通知审批状态更新,
     ///,
 /// 该接口用于通知假勤审批状态的更新，支持审批通过、拒绝、撤回等操作。,
@@ -117,7 +117,7 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
         ));
 api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         // 添加查询参数,
-api_req,
+api_req
             .query_params
             .insert("employee_type", request.employee_type);
 // 构建请求体,
@@ -126,27 +126,27 @@ api_req,
         });
 if let Some(message) = request.message {,
             body["message"] = json!(message);
-},
+}
 api_req.body = serde_json::to_vec(&body)?;
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 }
 impl Service for UserApprovalService {,
     fn config(&self) -> &Config {,
 &self.config,
-    },
+    }
 fn service_name() -> &'static str {,
         "user_approval",
-},
+}
 fn service_version() -> &'static str {,
         "v1",
 }
-},
-#[cfg(test)],
+}
+#[cfg(test)]
 mod tests {
 use super::*;
-    #[test],
+    #[test]
 fn test_user_approval_service_creation() {,
         let config = Config::default();
 let service = UserApprovalService {,
@@ -155,8 +155,8 @@ let service = UserApprovalService {,
 
         assert_eq!(service.config.app_id, config.app_id);
         assert_eq!(service.config.app_secret, config.app_secret);
-},
-#[test],
+}
+#[test]
     fn test_user_approval_service_with_custom_config() {,
 let config = Config::builder()
             .app_id()
@@ -168,8 +168,8 @@ let service = UserApprovalService {,
 
         assert_eq!(service.config.app_id, "approval_test_app");
         assert_eq!(service.config.app_secret, "approval_test_secret");
-},
-#[test],
+}
+#[test]
     fn test_query_user_approval_request_construction() {,
 let request = QueryUserApprovalRequest {,
             api_req: ApiRequest::default(),
@@ -200,8 +200,8 @@ assert_eq!(,
         );
         assert_eq!(request.page_size, Some(50));
         assert_eq!(request.page_token, Some("page_token_123".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_query_user_approval_request_with_minimal_data() {,
 let request = QueryUserApprovalRequest {,
             api_req: ApiRequest::default(),
@@ -221,8 +221,8 @@ let request = QueryUserApprovalRequest {,
         assert_eq!(request.user_ids, None);
         assert_eq!(request.page_size, None);
         assert_eq!(request.page_token, None);
-},
-#[test],
+}
+#[test]
     fn test_create_user_approval_request_construction() {,
 let request = CreateUserApprovalRequest {,
             api_req: ApiRequest::default(),
@@ -236,8 +236,8 @@ let request = CreateUserApprovalRequest {,
         assert_eq!(request.approval_id, "approval_123");
         assert_eq!(request.status, 1);
         assert_eq!(request.approval_note, Some("审批通过".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_create_user_approval_request_without_note() {,
 let request = CreateUserApprovalRequest {,
             api_req: ApiRequest::default(),
@@ -251,8 +251,8 @@ let request = CreateUserApprovalRequest {,
         assert_eq!(request.approval_id, "approval_456");
         assert_eq!(request.status, 0);
         assert_eq!(request.approval_note, None);
-},
-#[test],
+}
+#[test]
     fn test_process_user_approval_request_construction() {,
 let request = ProcessUserApprovalRequest {,
             api_req: ApiRequest::default(),
@@ -266,8 +266,8 @@ let request = ProcessUserApprovalRequest {,
         assert_eq!(request.approval_id, "approval_789");
         assert_eq!(request.action, 1);
         assert_eq!(request.message, Some("同意该申请".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_process_user_approval_request_without_message() {,
 let request = ProcessUserApprovalRequest {,
             api_req: ApiRequest::default(),
@@ -281,8 +281,8 @@ let request = ProcessUserApprovalRequest {,
         assert_eq!(request.approval_id, "approval_101");
         assert_eq!(request.action, 2);
         assert_eq!(request.message, None);
-},
-#[test],
+}
+#[test]
     fn test_query_user_approval_request_with_single_user() {,
 let request = QueryUserApprovalRequest {,
             api_req: ApiRequest::default(),
@@ -298,10 +298,10 @@ let request = QueryUserApprovalRequest {,
         assert_eq!(request.employee_type, "1");
         assert_eq!(request.status, Some(2));
         assert_eq!(request.user_ids.as_ref().unwrap().len(), 1);
-        assert_eq!(request.user_ids.as_ref().unwrap()[0], "single_user");
+        assert_eq!(request.user_ids.as_ref().unwrap()[0] "single_user");
         assert_eq!(request.page_size, Some(10));
-},
-#[test],
+}
+#[test]
     fn test_user_approval_service_config_independence() {,
 let config1 = Config::builder().app_id("approval_app_1").build();
         let config2 = Config::builder().app_id("approval_app_2").build();
@@ -312,8 +312,8 @@ let config1 = Config::builder().app_id("approval_app_1").build();
         assert_eq!(service1.config.app_id, "approval_app_1");
         assert_eq!(service2.config.app_id, "approval_app_2");
         assert_ne!(service1.config.app_id, service2.config.app_id);
-},
-#[test],
+}
+#[test]
     fn test_request_structs_debug_trait() {,
 let query_request = QueryUserApprovalRequest {,
             api_req: ApiRequest::default(),
@@ -330,8 +330,8 @@ let query_request = QueryUserApprovalRequest {,
 assert!(debug_str.contains("QueryUserApprovalRequest"));
         assert!(debug_str.contains("debug_user"));
 assert!(debug_str.contains("debug_token"));
-    },
-#[test],
+    }
+#[test]
     fn test_query_user_approval_request_edge_cases() {,
 // Test with very large user ID list,
         let large_user_list: Vec<String> = (0..1000).map(|i| format!("user_{}", i)).collect();
@@ -347,7 +347,7 @@ let request_large = QueryUserApprovalRequest {,
         };
 
         assert_eq!(request_large.user_ids.as_ref().unwrap().len(), 1000);
-        assert_eq!(request_large.user_ids.as_ref().unwrap()[999], "user_999");
+        assert_eq!(request_large.user_ids.as_ref().unwrap()[999] "user_999");
 // Test with zero page size,
         let request_zero_page = QueryUserApprovalRequest {
             api_req: ApiRequest::default(),
@@ -374,8 +374,8 @@ let request_large = QueryUserApprovalRequest {,
         };
 
         assert_eq!(request_negative_status.status, Some(-1));
-},
-#[test],
+}
+#[test]
     fn test_create_user_approval_request_edge_cases() {,
 // Test with very long approval note,
         let long_note = "审批备注".repeat(100);
@@ -409,8 +409,8 @@ let request_long_id = CreateUserApprovalRequest {,
         };
 
         assert_eq!(request_extreme_status.status, 999);
-},
-#[test],
+}
+#[test]
     fn test_process_user_approval_request_edge_cases() {,
 // Test with very long message,
         let long_message = "处理消息".repeat(200);
@@ -440,7 +440,7 @@ let request = ProcessUserApprovalRequest {,
 
             assert_eq!(request.action, action_code);
             assert_eq!(request.message, Some(format!("{}操作", action_desc)));
-},
+}
 // Test with invalid action,
         let request_invalid_action = ProcessUserApprovalRequest {
             api_req: ApiRequest::default(),
@@ -451,8 +451,8 @@ let request = ProcessUserApprovalRequest {,
         };
 
         assert_eq!(request_invalid_action.action, 0);
-},
-#[test],
+}
+#[test]
     fn test_query_user_approval_request_with_empty_user_list() {,
 let request = QueryUserApprovalRequest {,
             api_req: ApiRequest::default(),
@@ -467,8 +467,8 @@ let request = QueryUserApprovalRequest {,
 assert!(request.user_ids.as_ref().unwrap().is_empty());
         assert_eq!(request.employee_type, "1");
         assert_eq!(request.page_size, Some(20));
-},
-#[test],
+}
+#[test]
     fn test_all_request_structs_with_different_employee_types() {,
 // Test all request types with different employee types,
         let query_request = QueryUserApprovalRequest {

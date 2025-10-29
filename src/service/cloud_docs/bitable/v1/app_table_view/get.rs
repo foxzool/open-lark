@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -30,13 +30,13 @@ api_req.api_path = BITABLE_V1_VIEW_GET,
             .replace("{app_token}", &request.app_token)
             .replace("{table_id}", &request.table_id)
             .replace("{view_id}", &request.view_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 获取视图请求,
 #[derive(.*?)]
 pub struct GetViewRequest {
@@ -51,7 +51,7 @@ pub struct GetViewRequest {
 impl GetViewRequest {
     pub fn w+.*{
 GetViewRequestBuilder::default(),
-    },
+    }
 /// 创建获取视图请求,
     pub fn new(app_token: impl ToString, table_id: impl ToString, view_id: impl ToString) -> Self {
 Self {
@@ -59,9 +59,9 @@ Self {
             app_token: app_token.to_string(),
             table_id: table_id.to_string(),
             view_id: view_id.to_string(),
-        },
+        }
 }
-},
+}
 #[derive(.*?)]
 pub struct GetViewRequestBuilder {
     request: GetViewRequest,
@@ -71,17 +71,17 @@ impl GetViewRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 数据表的 table_id,
     pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
-},
+}
 /// 视图的 view_id,
     pub fn view_id(mut self, view_id: impl ToString) -> Self {
 self.request.view_id = view_id.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
@@ -108,19 +108,19 @@ pub struct ViewDetailInfo {
     /// 视图类型
     pub view_type: String,
     /// 视图的自定义属性,
-#[serde(default)],
+#[serde(default)]
     pub property: Option<serde_json::Value>,
 }
-impl ApiResponseTrait for GetViewResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_get_view_request() {,
 let request = GetViewRequest::builder(),
             .app_token()
@@ -130,9 +130,9 @@ let request = GetViewRequest::builder(),
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.table_id, "tblsRc9GRRXKqhvW");
         assert_eq!(request.view_id, "vewTpR1urY");
-},
-#[test],
-    fn test_get_view_request_new() {
+}
+#[test]
+    ,
         let request = GetViewRequest::new("bascnmBA*****yGehy8", "tblsRc9GRRXKqhvW", "vewTpR1urY");
 
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");

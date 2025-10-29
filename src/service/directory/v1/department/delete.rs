@@ -29,7 +29,7 @@ impl DeleteDepartmentRequest {
 pub fn w+.*{
         DeleteDepartmentRequestBuilder::new(department_id),
 }
-},
+}
 /// 删除部门请求构建器,
 #[derive(Default)]
 pub struct DeleteDepartmentRequestBuilder {
@@ -42,36 +42,36 @@ pub fn new(department_id: impl ToString) -> Self {
 request: DeleteDepartmentRequest {,
                 department_id: department_id.to_string()
                 ..Default::default(),
-},
-        },
-},
+}
+        }
+}
 /// 设置部门ID类型,
     pub fn department_id_type(mut self, department_id_type: DepartmentIdType) -> Self {
 self.request.department_id_type = Some(department_id_type);
         self,
-},
+}
 /// 构建请求,
     pub fn w+.*{
 // 构建查询参数,
         if let Some(department_id_type) = &self.request.department_id_type {,
 self.request,
-                .api_req,
-.query_params,
+                .api_req
+.query_params
                 .insert("department_id_type", department_id_type.to_string());
-},
+}
 self.request,
-    },
-},
+    }
+}
 /// 删除部门响应,
 #[derive(.*?)]
 pub struct DeleteDepartmentResponse {
     /// 是否删除成功
     pub deleted: Option<bool>,
 }
-impl ApiResponseTrait for DeleteDepartmentResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl DepartmentService {
     /// 删除部门,
@@ -113,8 +113,8 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
 api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 // 应用ExecutableBuilder宏,
 impl_executable_builder_owned!(
     DeleteDepartmentRequestBuilder,

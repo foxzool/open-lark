@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -23,26 +23,26 @@ pub struct ListDashboardRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 多维表格的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     app_token: String,
     /// 分页标记,
-#[serde(skip)],
+#[serde(skip)]
     page_token: Option<String>,
     /// 分页大小,
-#[serde(skip)],
+#[serde(skip)]
     page_size: Option<i32>,
 }
 impl ListDashboardRequest {
     pub fn w+.*{
 ListDashboardRequestBuilder::default(),
-    },
+    }
 pub fn new(app_token: impl ToString) -> Self {
         Self {
             app_token: app_token.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct ListDashboardRequestBuilder {
     request: ListDashboardRequest,
@@ -52,33 +52,33 @@ impl ListDashboardRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 分页标记,
     pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
-},
+}
 /// 分页大小,
     pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
-},
+}
 pub fn w+.*{
         if let Some(page_token) = &self.request.page_token {,
 self.request,
                 .api_request,
-.query_params,
+.query_params
                 .insert("page_token", page_token.clone());
-},
+}
 if let Some(page_size) = &self.request.page_size {,
             self.request,
 .api_request,
                 .query_params
                 .insert("page_size", page_size.to_string());
-},
+}
 self.request,
-    },
-},
+    }
+}
 // 应用ExecutableBuilder trait到ListDashboardRequestBuilder,
 crate::impl_executable_builder_owned!(
     ListDashboardRequestBuilder,
@@ -99,19 +99,19 @@ pub struct ListDashboardResponse {
     /// 仪表盘信息列表
     pub items: Vec<Dashboard>,
 }
-impl ApiResponseTrait for ListDashboardResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 仪表盘服务,
 pub struct DashboardService {
     pub config: Config,
 }
 impl DashboardService {
     pub fn new(config: Config) -> Self {
-        Self { config },
-},
+        Self { config }
+}
 /// 列出仪表盘,
     pub async fn list(
         &self,
@@ -121,13 +121,13 @@ impl DashboardService {
 let mut api_req = request.api_request;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(BITABLE_V1_DASHBOARDS.replace("{app_token}", &request.app_token));
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 列出仪表盘 (向后兼容的函数),
 pub async fn list_dashboard(
     request: ListDashboardRequest,
@@ -136,12 +136,12 @@ pub async fn list_dashboard(
 ) -> SDKResult<BaseResponse<ListDashboardResponse>> {,
 let service = DashboardService::new(config);
     service.list(request, option).await,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_list_dashboard_request_builder() {,
 let request = ListDashboardRequest::builder(),
             .app_token()

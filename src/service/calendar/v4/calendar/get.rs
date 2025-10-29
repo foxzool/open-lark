@@ -11,7 +11,7 @@ use crate::{,
         SDKResult,
     }
     impl_executable_builder_owned,
-    service::calendar::v4::models::{Calendar, UserIdType},
+    service::calendar::v4::models::{Calendar, UserIdType}
 };
 use super::CalendarManagementService;
 /// 查询日历信息请求
@@ -30,10 +30,10 @@ pub fn w+.*{
 request: GetCalendarRequest {,
                 calendar_id: calendar_id.to_string()
                 ..Default::default(),
-},
-        },
 }
-},
+        }
+}
+}
 /// 查询日历信息请求构建器,
 pub struct GetCalendarRequestBuilder {
     request: GetCalendarRequest,
@@ -43,35 +43,35 @@ impl GetCalendarRequestBuilder {
     pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
-},
+}
 /// 构建请求,
     pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
-                .api_req,
-.query_params,
+                .api_req
+.query_params
                 .insert("user_id_type", user_id_type.to_string());
-},
+}
 self.request,
-    },
-},
+    }
+}
 /// 查询日历信息响应数据,
 #[derive(.*?)]
 pub struct GetCalendarResponseData {
     /// 日历信息
     pub calendar: Calendar,
-},
+}
 /// 查询日历信息响应,
 #[derive(.*?)]
 pub struct GetCalendarResponse {
     /// 响应数据
     pub data: GetCalendarResponseData,
 }
-impl ApiResponseTrait for GetCalendarResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl CalendarManagementService {
     /// 查询日历信息,
@@ -108,13 +108,13 @@ let mut api_req = request.api_req;
 api_req.set_api_path(,
             CALENDAR_V4_CALENDAR_OPERATION.replace("{calendar_id}", &request.calendar_id),
         );
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 // 应用ExecutableBuilder宏,
 impl_executable_builder_owned!(
     GetCalendarRequestBuilder,

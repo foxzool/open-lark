@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -29,13 +29,13 @@ let mut api_req = request.api_request;
 api_req.api_path = SHEETS_V3_SPREADSHEET_FLOAT_IMAGES,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 创建浮动图片请求,
 #[derive(.*?)]
 pub struct CreateFloatImageRequest {
@@ -51,8 +51,8 @@ pub struct CreateFloatImageRequest {
 impl CreateFloatImageRequest {
     pub fn w+.*{
 CreateFloatImageRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct CreateFloatImageRequestBuilder {
     request: CreateFloatImageRequest,
@@ -71,11 +71,11 @@ self.request.sheet_id = sheet_id.to_string();
     pub fn float_image(mut self, float_image: FloatImageData) -> Self {
 self.request.float_image = float_image;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 impl_executable_builder_owned!(,
     CreateFloatImageRequestBuilder,
@@ -94,12 +94,12 @@ pub struct FloatImageData {
     /// 图片大小
     pub size: ImageSize,
     /// 浮动图片 ID（仅在响应时存在）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub float_image_id: Option<String>,
     /// 图片名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-},
+}
 /// 图片位置,
 #[derive(.*?)]
 pub struct ImagePosition {
@@ -108,12 +108,12 @@ pub struct ImagePosition {
     /// 起始行索引（从0开始）
     pub start_row_index: i32,
     /// 在单元格内的水平偏移量（像素）,
-#[serde(default)],
+#[serde(default)]
     pub offset_x: f64,
     /// 在单元格内的垂直偏移量（像素）,
-#[serde(default)],
+#[serde(default)]
     pub offset_y: f64,
-},
+}
 /// 图片大小,
 #[derive(.*?)]
 pub struct ImageSize {
@@ -131,8 +131,8 @@ Self {
             size,
             float_image_id: None,
             name: None,
-        },
-},
+        }
+}
 /// 设置图片名称,
     pub fn with_name(mut self, name: impl ToString) -> Self {
 self.name = Some(name.to_string());
@@ -147,48 +147,48 @@ Self {
             start_row_index: row_index,
             offset_x: 0.0,
             offset_y: 0.0,
-        },
-},
+        }
+}
 /// 设置偏移量,
     pub fn with_offset(mut self, offset_x: f64, offset_y: f64) -> Self {
 self.offset_x = offset_x;
         self.offset_y = offset_y;
 self,
-    },
+    }
 }
 impl ImageSize {
     /// 创建图片大小
     pub fn new(width: f64, height: f64) -> Self {
-        Self { width, height },
-},
+        Self { width, height }
+}
 /// 创建正方形图片大小,
     pub fn square(size: f64) -> Self {
 Self {
             width: size,
             height: size,
-        },
+        }
 }
-},
+}
 /// 创建浮动图片响应体最外层,
 #[derive(.*?)]
 pub struct CreateFloatImageResponseData {
     /// 浮动图片 ID
     pub float_image_id: String,
     /// 浮动图片信息,
-#[serde(flatten)],
+#[serde(flatten)]
     pub float_image: FloatImageData,
 }
-impl ApiResponseTrait for CreateFloatImageResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use super::*;
 use serde_json::json;
-    #[test],
+    #[test]
 fn test_float_image_creation() {,
         let position = ImagePosition::new(1, 1).with_offset(10.0, 20.0);
         let size = ImageSize::new(200.0, 150.0);
@@ -200,8 +200,8 @@ let float_image =,
         assert_eq!(float_image.position.offset_x, 10.0);
         assert_eq!(float_image.size.width, 200.0);
         assert_eq!(float_image.name.as_ref().unwrap(), "示例图片");
-},
-#[test],
+}
+#[test]
     fn test_create_float_image_response() {,
 let json = json!({,
             "float_image_id": "fimg_001",
@@ -211,11 +211,11 @@ let json = json!({,
                 "start_row_index": 1,
                 "offset_x": 10.0,
                 "offset_y": 20.0,
-},
+}
             "size": {
                 "width": 200.0,
                 "height": 150.0,
-},
+}
             "name": "示例图片",
 });
 let response: CreateFloatImageResponseData = serde_json::from_value(json).unwrap();

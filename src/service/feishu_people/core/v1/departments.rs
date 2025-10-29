@@ -9,6 +9,6 @@ pub struct DepartmentsService {
 }
 impl DepartmentsService {
     pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client },
+        Self { client }
 }
 }

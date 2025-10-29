@@ -9,6 +9,6 @@ pub struct RangeService {
 }
 impl RangeService {
     pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client },
+        Self { client }
 }
 }

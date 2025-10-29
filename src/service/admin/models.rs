@@ -5,15 +5,15 @@ use std::collections::HashMap;
 #[derive(.*?)]
 pub struct PageResponse<T> {,
     /// 是否还有更多项目,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
     /// 分页标记，下次请求的起点,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
     /// 数据项目列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<T>>,
-},
+}
 // ============ 登录密码管理相关结构 ============,
 /// 重置用户企业邮箱密码请求
 #[derive(.*?)]
@@ -22,17 +22,17 @@ pub struct PasswordResetRequest {
     pub user_id: String,
     /// 新密码
     pub password: String,
-},
+}
 /// 重置用户企业邮箱密码响应,
 #[derive(.*?)]
 pub struct PasswordResetResponse {
     /// 重置结果,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub success: Option<bool>,
     /// 操作时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub reset_time: Option<String>,
-},
+}
 // ============ 数据报表管理相关结构 ============,
 /// 部门维度数据报表查询请求
 #[derive(.*?)]
@@ -42,18 +42,18 @@ pub struct DepartmentDataReportRequest {
     /// 结束日期，格式为YYYY-MM-DD
     pub end_date: String,
     /// 部门ID类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
     /// 部门ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department_id: Option<String>,
     /// 分页大小,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
     /// 分页标记,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-},
+}
 /// 用户维度数据报表查询请求,
 #[derive(.*?)]
 pub struct UserDataReportRequest {
@@ -62,55 +62,55 @@ pub struct UserDataReportRequest {
     /// 结束日期，格式为YYYY-MM-DD
     pub end_date: String,
     /// 用户ID类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
     /// 用户ID列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_ids: Option<Vec<String>>,
     /// 部门ID类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department_id_type: Option<String>,
     /// 部门ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department_id: Option<String>,
     /// 分页大小,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
     /// 分页标记,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-},
+}
 /// 数据报表信息,
 #[derive(.*?)]
 pub struct DataReport {
     /// 日期,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub date: Option<String>,
     /// 用户ID或部门ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     /// 用户名或部门名,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// 活跃用户数,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub active_users: Option<i32>,
     /// 新增用户数,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub new_users: Option<i32>,
     /// 消息发送数,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub messages_sent: Option<i32>,
     /// 云文档使用数,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub docs_usage: Option<i32>,
     /// 会议时长（分钟）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub meeting_duration: Option<i32>,
     /// 其他统计数据,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub additional_metrics: Option<HashMap<String, Value>>,
-},
+}
 // ============ 企业勋章相关结构 ============,
 /// 勋章创建请求
 #[derive(.*?)]
@@ -118,138 +118,138 @@ pub struct BadgeCreateRequest {
     /// 勋章名称
     pub name: String,
     /// 勋章说明,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 勋章详情描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub detail_description: Option<String>,
     /// 是否展示详情时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub show_detail_time: Option<bool>,
     /// 勋章图片key,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub image_key: Option<String>,
     /// 国际化名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_name: Option<HashMap<String, String>>,
     /// 国际化说明,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_description: Option<HashMap<String, String>>,
     /// 国际化详情描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_detail_description: Option<HashMap<String, String>>,
-},
+}
 /// 勋章更新请求,
 #[derive(.*?)]
 pub struct BadgeUpdateRequest {
     /// 勋章ID
     pub badge_id: String,
     /// 勋章名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// 勋章说明,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 勋章详情描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub detail_description: Option<String>,
     /// 是否展示详情时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub show_detail_time: Option<bool>,
     /// 勋章图片key,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub image_key: Option<String>,
     /// 国际化名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_name: Option<HashMap<String, String>>,
     /// 国际化说明,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_description: Option<HashMap<String, String>>,
     /// 国际化详情描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_detail_description: Option<HashMap<String, String>>,
-},
+}
 /// 勋章图片上传请求,
 #[derive(.*?)]
 pub struct BadgeImageUploadRequest {
     /// 图片文件内容（base64编码或文件流）
     pub image: String,
     /// 图片文件名,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub file_name: Option<String>,
-},
+}
 /// 勋章列表查询请求,
 #[derive(.*?)]
 pub struct BadgeListRequest {
     /// 分页大小,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
     /// 分页标记,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
     /// 勋章名称（模糊搜索）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-},
+}
 /// 勋章查询请求,
 #[derive(.*?)]
 pub struct BadgeGetRequest {
     /// 勋章ID
     pub badge_id: String,
-},
+}
 /// 勋章信息,
 #[derive(.*?)]
 pub struct Badge {
     /// 勋章ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub badge_id: Option<String>,
     /// 勋章名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// 勋章说明,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 勋章详情描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub detail_description: Option<String>,
     /// 是否展示详情时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub show_detail_time: Option<bool>,
     /// 勋章图片URL,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub image_url: Option<String>,
     /// 勋章图片key,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub image_key: Option<String>,
     /// 创建时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<String>,
     /// 更新时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
     /// 创建者ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub creator_id: Option<String>,
     /// 国际化名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_name: Option<HashMap<String, String>>,
     /// 国际化说明,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_description: Option<HashMap<String, String>>,
     /// 国际化详情描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_detail_description: Option<HashMap<String, String>>,
-},
+}
 /// 图片上传结果,
 #[derive(.*?)]
 pub struct BadgeImageUploadResult {
     /// 图片key,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub image_key: Option<String>,
     /// 图片URL,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub image_url: Option<String>,
-},
+}
 // ============ 勋章授予名单相关结构 ============,
 /// 勋章授予名单创建请求
 #[derive(.*?)]
@@ -259,130 +259,130 @@ pub struct BadgeGrantCreateRequest {
     /// 授予名单名称
     pub name: String,
     /// 名单说明,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 授予用户列表
     pub user_list: Vec<BadgeGrantUser>,
     /// 生效时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub effective_time: Option<String>,
     /// 失效时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub expiry_time: Option<String>,
     /// 授予时间展示类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub time_zone: Option<String>,
-},
+}
 /// 勋章授予名单更新请求,
 #[derive(.*?)]
 pub struct BadgeGrantUpdateRequest {
     /// 授予名单ID
     pub grant_id: String,
     /// 授予名单名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// 名单说明,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 授予用户列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_list: Option<Vec<BadgeGrantUser>>,
     /// 生效时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub effective_time: Option<String>,
     /// 失效时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub expiry_time: Option<String>,
     /// 授予时间展示类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub time_zone: Option<String>,
-},
+}
 /// 勋章授予名单删除请求,
 #[derive(.*?)]
 pub struct BadgeGrantDeleteRequest {
     /// 授予名单ID
     pub grant_id: String,
-},
+}
 /// 勋章授予名单列表查询请求,
 #[derive(.*?)]
 pub struct BadgeGrantListRequest {
     /// 勋章ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub badge_id: Option<String>,
     /// 分页大小,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
     /// 分页标记,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
     /// 授予名单名称（模糊搜索）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-},
+}
 /// 勋章授予名单查询请求,
 #[derive(.*?)]
 pub struct BadgeGrantGetRequest {
     /// 授予名单ID
     pub grant_id: String,
-},
+}
 /// 勋章授予用户信息,
 #[derive(.*?)]
 pub struct BadgeGrantUser {
     /// 用户ID
     pub user_id: String,
     /// 用户ID类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
     /// 授予理由,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub reason: Option<String>,
     /// 授予时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub grant_time: Option<String>,
-},
+}
 /// 勋章授予名单信息,
 #[derive(.*?)]
 pub struct BadgeGrant {
     /// 授予名单ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub grant_id: Option<String>,
     /// 勋章ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub badge_id: Option<String>,
     /// 授予名单名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// 名单说明,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 授予用户列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_list: Option<Vec<BadgeGrantUser>>,
     /// 生效时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub effective_time: Option<String>,
     /// 失效时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub expiry_time: Option<String>,
     /// 授予时间展示类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub time_zone: Option<String>,
     /// 创建时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<String>,
     /// 更新时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
     /// 创建者ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub creator_id: Option<String>,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
-    #[test],
+    #[test]
 fn test_page_response_serialization() {,
         let page_response = PageResponse {
             has_more: Some(true),
@@ -394,8 +394,8 @@ let serialized = serde_json::to_string(&page_response).unwrap();
         assert_eq!(page_response.has_more, deserialized.has_more);
         assert_eq!(page_response.page_token, deserialized.page_token);
         assert_eq!(page_response.items, deserialized.items);
-},
-#[test],
+}
+#[test]
     fn test_page_response_with_none_values() {,
 let page_response: PageResponse<String> = PageResponse {,
             has_more: None,
@@ -410,8 +410,8 @@ let deserialized: PageResponse<String> = serde_json::from_str(&serialized).unwra
         assert_eq!(page_response.has_more, deserialized.has_more);
         assert_eq!(page_response.page_token, deserialized.page_token);
         assert_eq!(page_response.items, deserialized.items);
-},
-#[test],
+}
+#[test]
     fn test_password_reset_request_serialization() {,
 let request = PasswordResetRequest {,
             user_id: "user_123456".to_string(),
@@ -421,14 +421,14 @@ let serialized = serde_json::to_string(&request).unwrap();
         let deserialized: PasswordResetRequest = serde_json::from_str(&serialized).unwrap();
         assert_eq!(request.user_id, deserialized.user_id);
         assert_eq!(request.password, deserialized.password);
-},
-#[test],
+}
+#[test]
     fn test_password_reset_request_default() {,
 let request = PasswordResetRequest::default();
         assert_eq!(request.user_id, "");
         assert_eq!(request.password, "");
-},
-#[test],
+}
+#[test]
     fn test_password_reset_response_serialization() {,
 let response = PasswordResetResponse {,
             success: Some(true),
@@ -438,8 +438,8 @@ let serialized = serde_json::to_string(&response).unwrap();
         let deserialized: PasswordResetResponse = serde_json::from_str(&serialized).unwrap();
         assert_eq!(response.success, deserialized.success);
         assert_eq!(response.reset_time, deserialized.reset_time);
-},
-#[test],
+}
+#[test]
     fn test_department_data_report_request_serialization() {,
 let request = DepartmentDataReportRequest {,
             start_date: "2022-01-01".to_string(),
@@ -456,8 +456,8 @@ let serialized = serde_json::to_string(&request).unwrap();
         assert_eq!(request.department_id_type, deserialized.department_id_type);
         assert_eq!(request.department_id, deserialized.department_id);
         assert_eq!(request.page_size, deserialized.page_size);
-},
-#[test],
+}
+#[test]
     fn test_user_data_report_request_serialization() {,
 let request = UserDataReportRequest {,
             start_date: "2022-02-01".to_string(),
@@ -475,8 +475,8 @@ let serialized = serde_json::to_string(&request).unwrap();
         assert_eq!(request.end_date, deserialized.end_date);
         assert_eq!(request.user_id_type, deserialized.user_id_type);
         assert_eq!(request.user_ids, deserialized.user_ids);
-},
-#[test],
+}
+#[test]
     fn test_data_report_serialization() {,
 let mut additional_metrics = HashMap::new();
         additional_metrics.insert(
@@ -508,8 +508,8 @@ let serialized = serde_json::to_string(&report).unwrap();
         assert_eq!(report.messages_sent, deserialized.messages_sent);
         assert_eq!(report.docs_usage, deserialized.docs_usage);
         assert_eq!(report.meeting_duration, deserialized.meeting_duration);
-},
-#[test],
+}
+#[test]
     fn test_badge_create_request_serialization() {,
 let mut i18n_name = HashMap::new();
         i18n_name.insert("zh_cn".to_string(), "优秀员工".to_string());
@@ -537,8 +537,8 @@ let serialized = serde_json::to_string(&request).unwrap();
         assert_eq!(request.detail_description, deserialized.detail_description);
         assert_eq!(request.show_detail_time, deserialized.show_detail_time);
         assert_eq!(request.image_key, deserialized.image_key);
-},
-#[test],
+}
+#[test]
     fn test_badge_update_request_serialization() {,
 let request = BadgeUpdateRequest {,
             badge_id: "badge_456".to_string(),
@@ -559,8 +559,8 @@ let deserialized: BadgeUpdateRequest = serde_json::from_str(&serialized).unwrap(
         assert_eq!(request.badge_id, deserialized.badge_id);
         assert_eq!(request.name, deserialized.name);
         assert_eq!(request.description, deserialized.description);
-},
-#[test],
+}
+#[test]
     fn test_badge_image_upload_request_serialization() {,
 let request = BadgeImageUploadRequest {,
             image: "base64_encoded_image_data".to_string(),
@@ -570,8 +570,8 @@ let serialized = serde_json::to_string(&request).unwrap();
         let deserialized: BadgeImageUploadRequest = serde_json::from_str(&serialized).unwrap();
         assert_eq!(request.image, deserialized.image);
         assert_eq!(request.file_name, deserialized.file_name);
-},
-#[test],
+}
+#[test]
     fn test_badge_list_request_serialization() {,
 let request = BadgeListRequest {,
             page_size: Some(20),
@@ -583,8 +583,8 @@ let serialized = serde_json::to_string(&request).unwrap();
         assert_eq!(request.page_size, deserialized.page_size);
         assert_eq!(request.page_token, deserialized.page_token);
         assert_eq!(request.name, deserialized.name);
-},
-#[test],
+}
+#[test]
     fn test_badge_get_request_serialization() {,
 let request = BadgeGetRequest {,
             badge_id: "get_badge_789".to_string(),
@@ -592,8 +592,8 @@ let request = BadgeGetRequest {,
 let serialized = serde_json::to_string(&request).unwrap();
         let deserialized: BadgeGetRequest = serde_json::from_str(&serialized).unwrap();
         assert_eq!(request.badge_id, deserialized.badge_id);
-},
-#[test],
+}
+#[test]
     fn test_badge_serialization() {,
 let mut i18n_name = HashMap::new();
         i18n_name.insert("zh_cn".to_string(), "年度最佳".to_string());
@@ -621,8 +621,8 @@ let serialized = serde_json::to_string(&badge).unwrap();
         assert_eq!(badge.show_detail_time, deserialized.show_detail_time);
         assert_eq!(badge.image_url, deserialized.image_url);
         assert_eq!(badge.create_time, deserialized.create_time);
-},
-#[test],
+}
+#[test]
     fn test_badge_image_upload_result_serialization() {,
 let result = BadgeImageUploadResult {,
             image_key: Some("uploaded_key_456".to_string()),
@@ -632,8 +632,8 @@ let serialized = serde_json::to_string(&result).unwrap();
         let deserialized: BadgeImageUploadResult = serde_json::from_str(&serialized).unwrap();
         assert_eq!(result.image_key, deserialized.image_key);
         assert_eq!(result.image_url, deserialized.image_url);
-},
-#[test],
+}
+#[test]
     fn test_badge_grant_create_request_serialization() {,
 let grant_users = vec![,
             BadgeGrantUser {
@@ -641,13 +641,13 @@ let grant_users = vec![,
                 user_id_type: Some("open_id".to_string()),
                 reason: Some("优秀表现".to_string()),
                 grant_time: Some("2022-03-01T10:00:00Z".to_string()),
-            },
+            }
             BadgeGrantUser {
                 user_id: "user_2".to_string(),
                 user_id_type: Some("user_id".to_string()),
                 reason: Some("杰出贡献".to_string()),
                 grant_time: Some("2022-03-01T10:00:00Z".to_string()),
-            },
+            }
         ];
 let request = BadgeGrantCreateRequest {,
             badge_id: "grant_badge_123".to_string(),
@@ -667,8 +667,8 @@ let serialized = serde_json::to_string(&request).unwrap();
         assert_eq!(request.effective_time, deserialized.effective_time);
         assert_eq!(request.expiry_time, deserialized.expiry_time);
         assert_eq!(request.time_zone, deserialized.time_zone);
-},
-#[test],
+}
+#[test]
     fn test_badge_grant_user_serialization() {,
 let grant_user = BadgeGrantUser {,
             user_id: "grant_user_789".to_string(),
@@ -682,8 +682,8 @@ let serialized = serde_json::to_string(&grant_user).unwrap();
         assert_eq!(grant_user.user_id_type, deserialized.user_id_type);
         assert_eq!(grant_user.reason, deserialized.reason);
         assert_eq!(grant_user.grant_time, deserialized.grant_time);
-},
-#[test],
+}
+#[test]
     fn test_badge_grant_serialization() {,
 let grant = BadgeGrant {,
             grant_id: Some("grant_001".to_string()),
@@ -712,8 +712,8 @@ let serialized = serde_json::to_string(&grant).unwrap();
         assert_eq!(grant.effective_time, deserialized.effective_time);
         assert_eq!(grant.time_zone, deserialized.time_zone);
         assert_eq!(grant.creator_id, deserialized.creator_id);
-},
-#[test],
+}
+#[test]
     fn test_badge_grant_with_none_values() {,
 let grant = BadgeGrant {,
             grant_id: Some("minimal_grant".to_string()),
@@ -737,8 +737,8 @@ assert!(!serialized.contains("user_list"));
 let deserialized: BadgeGrant = serde_json::from_str(&serialized).unwrap();
         assert_eq!(grant.grant_id, deserialized.grant_id);
         assert_eq!(grant.badge_id, deserialized.badge_id);
-},
-#[test],
+}
+#[test]
     fn test_complex_data_report_with_additional_metrics() {,
 let mut complex_metrics = HashMap::new();
         complex_metrics.insert(
@@ -789,5 +789,5 @@ assert!(deser_metrics.contains_key("video_calls"));
 assert!(deser_metrics.contains_key("top_feature"));
             assert!(deser_metrics.contains_key("enabled_features"));
 }
-    },
+    }
 }

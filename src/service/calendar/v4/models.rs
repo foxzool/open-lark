@@ -1,6 +1,6 @@
 use open_lark_core::core::api_req::ApiRequest;
 use crate::core::{,
-    api_resp::{ApiResponseTrait, ResponseFormat},
+    api_resp::{ApiResponseTrait, ResponseFormat}
 };
 use serde::{Deserialize, Serialize};
 /// 日历信息,
@@ -30,16 +30,16 @@ pub struct Calendar {
     pub is_deleted: Option<bool>,
     /// 是否是第三方数据
     pub is_third_party: Option<bool>,
-},
+}
 /// 日历权限,
 #[derive(.*?)]
 pub struct CalendarPermission {
     /// 是否可编辑
     pub access_role: Option<CalendarAccessRole>,
-},
+}
 /// 日历访问角色,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum CalendarAccessRole {,
 /// 未知,
     Unknown,
@@ -53,10 +53,10 @@ pub enum CalendarAccessRole {,
     Writer,
     /// 所有者
     Owner,
-},
+}
 /// 日历类型,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum CalendarType {,
 /// 未知,
     Unknown,
@@ -70,7 +70,7 @@ pub enum CalendarType {,
     Resource,
     /// Exchange日历
     Exchange,
-},
+}
 /// 日历摘要信息,
 #[derive(.*?)]
 pub struct CalendarSummaryInfo {
@@ -78,10 +78,10 @@ pub struct CalendarSummaryInfo {
     pub color: Option<i32>,
     /// 日历标题
     pub summary: Option<String>,
-},
+}
 /// 日历角色,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum CalendarRole {,
 /// 未知,
     Unknown,
@@ -95,7 +95,7 @@ pub enum CalendarRole {,
     Writer,
     /// 所有者
     Owner,
-},
+}
 /// 日程信息,
 #[derive(.*?)]
 pub struct CalendarEvent {
@@ -137,7 +137,7 @@ pub struct CalendarEvent {
     pub create_time: Option<String>,
     /// 修改时间
     pub update_time: Option<String>,
-},
+}
 /// 时间信息,
 #[derive(.*?)]
 pub struct TimeInfo {
@@ -147,13 +147,13 @@ pub struct TimeInfo {
     pub date: Option<String>,
     /// 时区
     pub timezone: Option<String>,
-},
+}
 /// 提醒设置,
 #[derive(.*?)]
 pub struct Reminder {
     /// 提醒分钟数
     pub minutes: Option<i32>,
-},
+}
 /// 日程参与人,
 #[derive(.*?)]
 pub struct EventAttendee {
@@ -181,10 +181,10 @@ pub struct EventAttendee {
     pub operate_id: Option<String>,
     /// 资源自定义字段
     pub resource_customization: Option<Vec<ResourceCustomization>>,
-},
+}
 /// 参与人类型,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum AttendeeType {,
 /// 用户,
     User,
@@ -194,10 +194,10 @@ pub enum AttendeeType {,
     Resource,
     /// 第三方邮箱
     ThirdParty,
-},
+}
 /// RSVP状态,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum RsvpStatus {,
 /// 需要回复,
     NeedsAction,
@@ -207,7 +207,7 @@ pub enum RsvpStatus {,
     Decline,
     /// 暂定
     Tentative,
-},
+}
 /// 会议室信息,
 #[derive(.*?)]
 pub struct MeetingRoom {
@@ -215,7 +215,7 @@ pub struct MeetingRoom {
     pub room_id: Option<String>,
     /// 显示名称
     pub display_name: Option<String>,
-},
+}
 /// 位置信息,
 #[derive(.*?)]
 pub struct Location {
@@ -227,10 +227,10 @@ pub struct Location {
     pub latitude: Option<f64>,
     /// 经度
     pub longitude: Option<f64>,
-},
+}
 /// 日程状态,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum EventStatus {,
 /// 暂定,
     Tentative,
@@ -238,7 +238,7 @@ pub enum EventStatus {,
     Confirmed,
     /// 取消
     Cancelled,
-},
+}
 /// 日程创建人,
 #[derive(.*?)]
 pub struct EventCreator {
@@ -246,7 +246,7 @@ pub struct EventCreator {
     pub user_id: Option<String>,
     /// 显示名称
     pub display_name: Option<String>,
-},
+}
 /// 日程组织者,
 #[derive(.*?)]
 pub struct EventOrganizer {
@@ -254,7 +254,7 @@ pub struct EventOrganizer {
     pub user_id: Option<String>,
     /// 显示名称
     pub display_name: Option<String>,
-},
+}
 /// 资源自定义字段,
 #[derive(.*?)]
 pub struct ResourceCustomization {
@@ -264,7 +264,7 @@ pub struct ResourceCustomization {
     pub input_content: Option<String>,
     /// 选项
     pub options: Option<Vec<ResourceCustomizationOption>>,
-},
+}
 /// 资源自定义选项,
 #[derive(.*?)]
 pub struct ResourceCustomizationOption {
@@ -272,7 +272,7 @@ pub struct ResourceCustomizationOption {
     pub option_key: Option<String>,
     /// 其他选项
     pub others_option: Option<String>,
-},
+}
 /// 日历访问控制,
 #[derive(.*?)]
 pub struct CalendarAcl {
@@ -282,7 +282,7 @@ pub struct CalendarAcl {
     pub role: Option<CalendarRole>,
     /// 作用域
     pub scope: Option<AclScope>,
-},
+}
 /// ACL作用域,
 #[derive(.*?)]
 pub struct AclScope {
@@ -290,30 +290,30 @@ pub struct AclScope {
     pub r#type: Option<AclScopeType>,
     /// 用户ID
     pub user_id: Option<String>,
-},
+}
 /// ACL作用域类型,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum AclScopeType {,
 /// 用户,
     User,
-},
+}
 /// 空响应,
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct EmptyResponse {}
-impl ApiResponseTrait for EmptyResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 基础请求结构,
 #[derive(.*?)]
 pub struct BaseCalendarRequest {
     pub api_req: ApiRequest,
-},
+}
 /// 用户ID类型,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum UserIdType {,
 /// Open ID,
     OpenId,
@@ -328,52 +328,52 @@ match self {,
             UserIdType::OpenId => write!(f, "open_id"),
             UserIdType::UnionId => write!(f, "union_id"),
             UserIdType::UserId => write!(f, "user_id"),
-        },
+        }
 }
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_calendar_access_role_serialization() {,
 let role = CalendarAccessRole::Writer;
         let serialized = serde_json::to_string(&role).unwrap();
         assert_eq!(serialized, "\"writer\"");
 let deserialized: CalendarAccessRole = serde_json::from_str(&serialized).unwrap();
         assert_eq!(role, deserialized);
-},
-#[test],
+}
+#[test]
     fn test_calendar_type_serialization() {,
 let calendar_type = CalendarType::Primary;
         let serialized = serde_json::to_string(&calendar_type).unwrap();
         assert_eq!(serialized, "\"primary\"");
 let deserialized: CalendarType = serde_json::from_str(&serialized).unwrap();
         assert_eq!(calendar_type, deserialized);
-},
-#[test],
+}
+#[test]
     fn test_calendar_role_serialization() {,
 let role = CalendarRole::Owner;
         let serialized = serde_json::to_string(&role).unwrap();
         assert_eq!(serialized, "\"owner\"");
 let deserialized: CalendarRole = serde_json::from_str(&serialized).unwrap();
         assert_eq!(role, deserialized);
-},
-#[test],
-    fn test_user_id_type_display() {
+}
+#[test]
+    ,
         assert_eq!(UserIdType::OpenId.to_string(), "open_id");
         assert_eq!(UserIdType::UnionId.to_string(), "union_id");
         assert_eq!(UserIdType::UserId.to_string(), "user_id");
-},
-#[test],
+}
+#[test]
     fn test_user_id_type_serialization() {,
 let user_id_type = UserIdType::UserId;
         let serialized = serde_json::to_string(&user_id_type).unwrap();
         assert_eq!(serialized, "\"user_id\"");
 let deserialized: UserIdType = serde_json::from_str(&serialized).unwrap();
         assert_eq!(user_id_type, deserialized);
-},
-#[test],
+}
+#[test]
     fn test_calendar_serialization() {,
 let calendar = Calendar {,
             calendar_id: Some("cal_123".to_string()),
@@ -402,8 +402,8 @@ let serialized = serde_json::to_string(&calendar).unwrap();
         assert_eq!(calendar.description, deserialized.description);
         assert_eq!(calendar.is_primary, deserialized.is_primary);
         assert_eq!(calendar.is_deleted, deserialized.is_deleted);
-},
-#[test],
+}
+#[test]
     fn test_calendar_event_serialization() {,
 let event = CalendarEvent {,
             event_id: Some("event_123".to_string()),
@@ -476,8 +476,8 @@ assert_eq!(,
             event.meeting_rooms.as_ref().unwrap().len(),
             deserialized.meeting_rooms.as_ref().unwrap().len(),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_time_info_serialization() {,
 let time_info = TimeInfo {,
             timestamp: Some("1640995200".to_string()),
@@ -490,8 +490,8 @@ let serialized = serde_json::to_string(&time_info).unwrap();
         assert_eq!(time_info.timestamp, deserialized.timestamp);
         assert_eq!(time_info.date, deserialized.date);
         assert_eq!(time_info.timezone, deserialized.timezone);
-},
-#[test],
+}
+#[test]
     fn test_event_attendee_serialization() {,
 let attendee = EventAttendee {,
             r#type: Some(AttendeeType::User),
@@ -526,8 +526,8 @@ assert_eq!(,
             attendee.resource_customization.as_ref().unwrap().len(),
             deserialized.resource_customization.as_ref().unwrap().len(),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_attendee_type_serialization() {,
 let types = vec![,
             AttendeeType::User,
@@ -540,8 +540,8 @@ for attendee_type in types {,
 let deserialized: AttendeeType = serde_json::from_str(&serialized).unwrap();
             assert_eq!(attendee_type, deserialized);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_rsvp_status_serialization() {,
 let statuses = vec![,
             RsvpStatus::NeedsAction,
@@ -554,8 +554,8 @@ for status in statuses {,
 let deserialized: RsvpStatus = serde_json::from_str(&serialized).unwrap();
             assert_eq!(status, deserialized);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_event_status_serialization() {,
 let statuses = vec![,
             EventStatus::Tentative,
@@ -567,8 +567,8 @@ for status in statuses {,
 let deserialized: EventStatus = serde_json::from_str(&serialized).unwrap();
             assert_eq!(status, deserialized);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_meeting_room_serialization() {,
 let room = MeetingRoom {,
             room_id: Some("room_456".to_string()),
@@ -579,8 +579,8 @@ let serialized = serde_json::to_string(&room).unwrap();
 
         assert_eq!(room.room_id, deserialized.room_id);
         assert_eq!(room.display_name, deserialized.display_name);
-},
-#[test],
+}
+#[test]
     fn test_location_serialization() {,
 let location = Location {,
             name: Some("上海办公室".to_string()),
@@ -595,8 +595,8 @@ let serialized = serde_json::to_string(&location).unwrap();
         assert_eq!(location.address, deserialized.address);
         assert_eq!(location.latitude, deserialized.latitude);
         assert_eq!(location.longitude, deserialized.longitude);
-},
-#[test],
+}
+#[test]
     fn test_calendar_acl_serialization() {,
 let acl = CalendarAcl {,
             acl_id: Some("acl_123".to_string()),
@@ -614,8 +614,8 @@ assert_eq!(,
             acl.scope.as_ref().unwrap().user_id,
             deserialized.scope.as_ref().unwrap().user_id,
 );
-    },
-#[test],
+    }
+#[test]
     fn test_resource_customization_serialization() {,
 let customization = ResourceCustomization {,
             index_id: Some("custom_1".to_string()),
@@ -624,11 +624,11 @@ let customization = ResourceCustomization {,
 ResourceCustomizationOption {,
                     option_key: Some("option_1".to_string()),
                     others_option: Some("选项1".to_string()),
-                },
+                }
                 ResourceCustomizationOption {
                     option_key: Some("option_2".to_string()),
                     others_option: Some("选项2".to_string()),
-                },
+                }
             ]),
         };
 let serialized = serde_json::to_string(&customization).unwrap();
@@ -640,20 +640,20 @@ assert_eq!(,
             customization.options.as_ref().unwrap().len(),
             deserialized.options.as_ref().unwrap().len(),
 );
-    },
-#[test],
-    fn test_empty_response_serialization() {
+    }
+#[test]
+    ,
         let response = EmptyResponse {};
 let serialized = serde_json::to_string(&response).unwrap();
         let _deserialized: EmptyResponse = serde_json::from_str(&serialized).unwrap();
 // Just ensure it serializes and deserializes without error,
         assert_eq!(serialized, "{}");
-},
-#[test],
-    fn test_empty_response_data_format() {
+}
+#[test]
+    ,
         assert_eq!(EmptyResponse::data_format(), ResponseFormat::Data);
-},
-#[test],
+}
+#[test]
     fn test_models_with_none_values() {,
 let calendar = Calendar {,
             calendar_id: None,
@@ -676,8 +676,8 @@ assert!(deserialized.calendar_id.is_none());
 assert!(deserialized.description.is_none());
         assert!(deserialized.permissions.is_none());
 assert!(deserialized.is_primary.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_debug_trait_for_models() {,
 let calendar_type = CalendarType::Shared;
         let debug_string = format!("{:?}", calendar_type);
@@ -686,8 +686,8 @@ assert!(debug_string.contains("Shared"));
         let debug_string = format!("{:?}", reminder);
 assert!(debug_string.contains("Reminder"));
         assert!(debug_string.contains("30"));
-},
-#[test],
+}
+#[test]
     fn test_all_calendar_access_roles() {,
 let roles = vec![,
             CalendarAccessRole::Unknown,
@@ -702,8 +702,8 @@ for role in roles {,
 let deserialized: CalendarAccessRole = serde_json::from_str(&serialized).unwrap();
             assert_eq!(role, deserialized);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_all_calendar_types() {,
 let types = vec![,
             CalendarType::Unknown,
@@ -718,8 +718,8 @@ for calendar_type in types {,
 let deserialized: CalendarType = serde_json::from_str(&serialized).unwrap();
             assert_eq!(calendar_type, deserialized);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_all_calendar_roles() {,
 let roles = vec![,
             CalendarRole::Unknown,
@@ -734,14 +734,14 @@ for role in roles {,
 let deserialized: CalendarRole = serde_json::from_str(&serialized).unwrap();
             assert_eq!(role, deserialized);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_base_calendar_request_default() {,
 let request = BaseCalendarRequest::default();
         // Just ensure Default is implemented and works,
 assert!(!request.api_req.api_path.is_empty() || request.api_req.api_path.is_empty());
-    },
-#[test],
+    }
+#[test]
     fn test_complex_calendar_event_with_all_fields() {,
 let event = CalendarEvent {,
             event_id: Some("complex_event_123".to_string()),
@@ -761,8 +761,8 @@ let event = CalendarEvent {,
             is_all_day: Some(false),
             recurrence: Some("FREQ=DAILY;COUNT=5".to_string()),
             reminders: Some(vec![
-                Reminder { minutes: Some(15) },
-                Reminder { minutes: Some(30) },
+                Reminder { minutes: Some(15) }
+                Reminder { minutes: Some(30) }
             ]),
             attendees: Some(vec![,
 EventAttendee {,
@@ -778,7 +778,7 @@ EventAttendee {,
                     third_party_email: None,
                     operate_id: None,
                     resource_customization: None,
-                },
+                }
                 EventAttendee {
                     r#type: Some(AttendeeType::ThirdParty),
                     attendee_id: None,
@@ -796,17 +796,17 @@ EventAttendee {,
                         input_content: Some("外部资源".to_string()),
                         options: None,
                     }]),
-                },
+                }
             ]),
             meeting_rooms: Some(vec![,
 MeetingRoom {,
                     room_id: Some("room_a".to_string()),
                     display_name: Some("会议室A".to_string()),
-                },
+                }
                 MeetingRoom {
                     room_id: Some("room_b".to_string()),
                     display_name: Some("会议室B".to_string()),
-                },
+                }
             ]),
             location: Some(Location {
                 name: Some("多功能会议厅".to_string()),

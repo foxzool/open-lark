@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -32,13 +32,13 @@ let mut api_req = request.api_request;
 api_req.set_api_path(,
             SHEETS_V3_SPREADSHEET_VALUES_BATCH_UPDATE.replace("{}", &request.spreadsheet_token),
         );
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 let api_resp: BaseResponse<WriteDataToMultipleRangesResponseData> =,
             Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
-    },
-},
+    }
+}
 /// 向多个范围写入数据请求,
 #[derive(.*?)]
 pub struct WriteDataToMultipleRangesRequest {
@@ -47,13 +47,13 @@ pub struct WriteDataToMultipleRangesRequest {
     /// spreadsheet 的 token
     spreadsheet_token: String,
     /// 值范围数据列表,
-#[serde(rename = "valueRanges")],
+#[serde(rename = "valueRanges")]
     value_ranges: Vec<MultiRangeValueData>,
 }
 impl WriteDataToMultipleRangesRequest {
     pub fn w+.*{
 WriteDataToMultipleRangesRequestBuilder::default(),
-    },
+    }
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM,
@@ -64,18 +64,18 @@ if self.spreadsheet_token.is_empty() {,
             return Err(crate::core::error::LarkAPIError::illegal_param(
                 "spreadsheet_token cannot be empty".to_string(),
             ));
-},
+}
 if self.value_ranges.is_empty() {,
             return Err(crate::core::error::LarkAPIError::illegal_param(
                 "value_ranges cannot be empty".to_string(),
             ));
-},
+}
 // 验证数据范围数量限制,
         if self.value_ranges.len() > 500 {,
 return Err(crate::core::error::LarkAPIError::illegal_param(,
                 "Too many value ranges. Maximum 500 ranges allowed".to_string(),
             ));
-},
+}
 // 验证每个范围的数据,
         for (i, range_data) in self.value_ranges.iter().enumerate() {,
 // 验证单元格范围格式,
@@ -86,7 +86,7 @@ return Err(crate::core::error::LarkAPIError::illegal_param(format!(,
                     "Invalid cell range at index {}: '{}': {}",
                     i, range_data.range, msg,
 )));
-            },
+            }
 // 验证数据矩阵一致性,
             if let ValidationResult::Invalid(msg) =,
 validation::validate_data_matrix_consistency(&range_data.values),
@@ -120,11 +120,11 @@ if !range_data.values.is_empty() && range_data.values[0].len() > 10000 {,
                     "Too many columns at index {}. Maximum 10,000 columns allowed per range",
                     i,
 )));
-            },
-},
+            }
+}
 Ok(()),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct WriteDataToMultipleRangesRequestBuilder {
     request: WriteDataToMultipleRangesRequest,
@@ -133,7 +133,7 @@ impl WriteDataToMultipleRangesRequestBuilder {
     pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
-},
+}
 pub fn add_range_data(,
         mut self,
         range: impl ToString,
@@ -149,13 +149,13 @@ self,
     pub fn value_ranges(mut self, value_ranges: Vec<MultiRangeValueData>) -> Self {
 self.request.value_ranges = value_ranges;
         self,
-},
+}
 pub fn w+.*{
         let mut request = self.request;
 request.api_request.body = serde_json::to_vec(&request).unwrap();
         request,
 }
-},
+}
 /// 多范围值数据,
 #[derive(.*?)]
 pub struct MultiRangeValueData {
@@ -169,33 +169,33 @@ impl MultiRangeValueData {
 Self {
             range: range.to_string(),
             values,
-        },
+        }
 }
-},
+}
 /// 向多个范围写入数据响应体最外层,
 #[derive(.*?)]
 pub struct WriteDataToMultipleRangesResponseData {
     /// 表格的 token,
-#[serde(rename = "spreadsheetToken")],
+#[serde(rename = "spreadsheetToken")]
     pub spreadsheet_token: String,
     /// 总更新的行数,
-#[serde(rename = "totalUpdatedRows")],
+#[serde(rename = "totalUpdatedRows")]
     pub total_updated_rows: i32,
     /// 总更新的列数,
-#[serde(rename = "totalUpdatedColumns")],
+#[serde(rename = "totalUpdatedColumns")]
     pub total_updated_columns: i32,
     /// 总更新的单元格数,
-#[serde(rename = "totalUpdatedCells")],
+#[serde(rename = "totalUpdatedCells")]
     pub total_updated_cells: i32,
     /// sheet 的版本号
     pub revision: i32,
     /// 每个范围的更新响应
     pub responses: Vec<RangeUpdateResponse>,
 }
-impl ApiResponseTrait for WriteDataToMultipleRangesResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl_executable_builder_owned!(,
     WriteDataToMultipleRangesRequestBuilder,
@@ -208,25 +208,25 @@ impl_executable_builder_owned!(,
 #[derive(.*?)]
 pub struct RangeUpdateResponse {
     /// 更新的范围,
-#[serde(rename = "updatedRange")],
+#[serde(rename = "updatedRange")]
     pub updated_range: String,
     /// 更新的行数,
-#[serde(rename = "updatedRows")],
+#[serde(rename = "updatedRows")]
     pub updated_rows: i32,
     /// 更新的列数,
-#[serde(rename = "updatedColumns")],
+#[serde(rename = "updatedColumns")]
     pub updated_columns: i32,
     /// 更新的单元格数,
-#[serde(rename = "updatedCells")],
+#[serde(rename = "updatedCells")]
     pub updated_cells: i32,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
 
     use super::{MultiRangeValueData, WriteDataToMultipleRangesResponseData};
-#[test],
+#[test]
     fn test_write_data_to_multiple_ranges_response() {,
 let json = json!({,
             "spreadsheetToken": "shtcnmBA*****yGehy8",
@@ -240,13 +240,13 @@ let json = json!({,
                     "updatedRows": 5,
                     "updatedColumns": 2,
                     "updatedCells": 10,
-},
+}
                 {
                     "updatedRange": "Sheet1!D1:G5",
                     "updatedRows": 5,
                     "updatedColumns": 4,
                     "updatedCells": 20,
-},
+}
 ],
         });
 let response: WriteDataToMultipleRangesResponseData = serde_json::from_value(json).unwrap();
@@ -255,32 +255,32 @@ let response: WriteDataToMultipleRangesResponseData = serde_json::from_value(jso
         assert_eq!(response.responses.len(), 2);
         assert_eq!(response.responses[0].updated_cells, 10);
         assert_eq!(response.responses[1].updated_cells, 20);
-},
-#[test],
+}
+#[test]
     fn test_multi_range_value_data() {,
 let values = vec![,
-            vec![json!("Name"), json!("Age")],
-            vec![json!("Alice"), json!(25)],
-            vec![json!("Bob"), json!(30)],
+            vec![json!("Name"), json!("Age")]
+            vec![json!("Alice"), json!(25)]
+            vec![json!("Bob"), json!(30)]
         ];
 
         let range_data = MultiRangeValueData::new("Sheet1!A1:B3", values.clone());
         assert_eq!(range_data.range, "Sheet1!A1:B3");
         assert_eq!(range_data.values.len(), 3);
-        assert_eq!(range_data.values[0][0], json!("Name"));
-},
-#[test],
+        assert_eq!(range_data.values[0][0] json!("Name"));
+}
+#[test]
     fn test_multi_range_serialization() {,
 let range_data = MultiRangeValueData {,
             range: "A1:B2".to_string(),
             values: vec![
-                vec![json!("test"), json!(123)],
-                vec![json!("data"), json!(456)],
+                vec![json!("test"), json!(123)]
+                vec![json!("data"), json!(456)]
             ],
         };
 let json = serde_json::to_value(&range_data).unwrap();
-        assert_eq!(json["range"], "A1:B2");
-        assert_eq!(json["values"][0][0], "test");
-        assert_eq!(json["values"][1][1], 456);
+        assert_eq!(json["range"] "A1:B2");
+        assert_eq!(json["values"][0][0] "test");
+        assert_eq!(json["values"][1][1] 456);
 }
 }

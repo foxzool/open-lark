@@ -20,7 +20,7 @@ pub struct PaymentActivityStatusChangedData {
     pub paygroup_id: Option<String>,
     /// 发薪周期
     pub payment_period: Option<String>,
-},
+}
 /// 操作人信息,
 #[derive(.*?)]
 pub struct OperatorInfo {
@@ -30,16 +30,16 @@ pub struct OperatorInfo {
     pub user_name: Option<String>,
     /// 用户类型
     pub user_type: Option<String>,
-},
+}
 /// 发薪活动状态变更事件,
 #[derive(.*?)]
 pub struct P2PayrollPaymentActivityStatusChangedV1 {
     /// 事件通用信息,
-#[serde(flatten)],
+#[serde(flatten)]
     pub context: EventContext,
     /// 事件业务数据
     pub event: PaymentActivityStatusChangedData,
-},
+}
 /// 发薪活动状态变更事件处理器实现,
 pub struct P2PayrollPaymentActivityStatusChangedV1ProcessorImpl<F>,
 where,
@@ -52,7 +52,7 @@ where
     F: Fn(P2PayrollPaymentActivityStatusChangedV1) -> anyhow::Result<()> + Send + Sync,
 {,
 pub fn new(f: F) -> Self {
-        Self { f },
+        Self { f }
 }
 }
 impl<F> EventHandler for P2PayrollPaymentActivityStatusChangedV1ProcessorImpl<F>,

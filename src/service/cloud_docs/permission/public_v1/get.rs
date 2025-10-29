@@ -5,7 +5,7 @@ use crate::core::{,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::{cloud_docs::*, EndpointBuilder},
+    endpoints::{cloud_docs::*, EndpointBuilder}
     http::Transport,
     query_params::QueryParams,
     req_option::RequestOption,
@@ -17,10 +17,10 @@ pub struct GetPermissionPublicRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 文档token,
-#[serde(skip)],
+#[serde(skip)]
     token: String,
     /// 文档类型,
-#[serde(skip)],
+#[serde(skip)]
     obj_type: String,
 }
 impl GetPermissionPublicRequest {
@@ -34,24 +34,24 @@ Self {
             obj_type: obj_type.to_string()
             ..Default::default(),
 }
-    },
+    }
 /// 获取文档权限设置,
     pub fn for_doc(token: impl ToString) -> Self {
         Self::new(token, "doc"),
-},
+}
 /// 获取电子表格权限设置,
     pub fn for_sheet(token: impl ToString) -> Self {
         Self::new(token, "sheet"),
-},
+}
 /// 获取多维表格权限设置,
     pub fn for_bitable(token: impl ToString) -> Self {
         Self::new(token, "bitable"),
-},
+}
 /// 获取知识库权限设置,
     pub fn for_wiki(token: impl ToString) -> Self {
         Self::new(token, "wiki"),
 }
-},
+}
 #[derive(.*?)]
 pub struct GetPermissionPublicRequestBuilder {
     request: GetPermissionPublicRequest,
@@ -61,37 +61,37 @@ impl GetPermissionPublicRequestBuilder {
     pub fn token(mut self, token: impl ToString) -> Self {
 self.request.token = token.to_string();
         self,
-},
+}
 /// 文档类型,
     pub fn obj_type(mut self, obj_type: impl ToString) -> Self {
 self.request.obj_type = obj_type.to_string();
         self,
-},
+}
 /// 设置为文档类型,
     pub fn as_doc(mut self) -> Self {
 self.request.obj_type = "doc".to_string();
         self,
-},
+}
 /// 设置为电子表格类型,
     pub fn as_sheet(mut self) -> Self {
 self.request.obj_type = "sheet".to_string();
         self,
-},
+}
 /// 设置为多维表格类型,
     pub fn as_bitable(mut self) -> Self {
 self.request.obj_type = "bitable".to_string();
         self,
-},
+}
 /// 设置为知识库类型,
     pub fn as_wiki(mut self) -> Self {
 self.request.obj_type = "wiki".to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 公开访问设置,
 #[derive(.*?)]
 pub struct PublicSettings {
@@ -109,7 +109,7 @@ pub struct PublicSettings {
     pub access_setting: Option<String>,
     /// 水印设置
     pub watermark_setting: Option<String>,
-},
+}
 /// 获取云文档权限设置响应,
 #[derive(.*?)]
 pub struct GetPermissionPublicResponse {
@@ -118,11 +118,11 @@ pub struct GetPermissionPublicResponse {
     /// 外部访问设置（如果有）
     pub external_access: Option<serde_json::Value>,
 }
-impl ApiResponseTrait for GetPermissionPublicResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 获取云文档权限设置,
 pub async fn get_permission_public(
     request: GetPermissionPublicRequest,
@@ -137,8 +137,8 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
         &request.token,
     ));
 // 添加查询参数,
-    api_req,
-.query_params,
+    api_req
+.query_params
         .insert(QueryParams::TYPE, request.obj_type);
 
     api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
@@ -154,27 +154,27 @@ self.link_share_setting == "tenant_readable",
             || self.link_share_setting == "tenant_editable",
 || self.link_share_setting == "anyone_readable",
             || self.link_share_setting == "anyone_editable",
-},
+}
 /// 是否允许组织内访问,
     pub fn w+.*{
 self.link_share_setting == "tenant_readable" || self.link_share_setting == "tenant_editable",
-    },
+    }
 /// 是否允许任何人访问,
     pub fn w+.*{
 self.link_share_setting == "anyone_readable" || self.link_share_setting == "anyone_editable",
-    },
+    }
 /// 是否允许编辑,
     pub fn w+.*{
 self.link_share_setting == "tenant_editable" || self.link_share_setting == "anyone_editable",
-    },
+    }
 /// 是否仅可读,
     pub fn w+.*{
 self.link_share_setting == "tenant_readable" || self.link_share_setting == "anyone_readable",
-    },
+    }
 /// 是否开启密码保护,
     pub fn w+.*{
 self.password_switch,
-    },
+    }
 /// 获取分享级别描述,
     pub fn w+.*{
 match self.link_share_setting.as_str() {,
@@ -184,29 +184,29 @@ match self.link_share_setting.as_str() {,
             "anyone_readable" => "任何人可读",
             "anyone_editable" => "任何人可编辑",
             _ => "未知设置",
-        },
-},
+        }
+}
 /// 获取权限摘要,
     pub fn w+.*{
 let mut features = Vec::new();
         if self.allow_copy {,
 features.push("允许复制");
-        },
+        }
 if self.allow_comment {,
             features.push("允许评论");
-},
+}
 if self.allow_save_copy {,
             features.push("允许保存副本");
-},
+}
 if self.password_switch {,
             features.push("密码保护");
-},
+}
 if features.is_empty() {,
             "基础权限".to_string(),
 } else {
             features.join(", "),
 }
-    },
+    }
 /// 获取安全级别,
     pub fn w+.*{
 if self.link_share_setting == "closed" {,
@@ -219,18 +219,18 @@ if self.link_share_setting == "closed" {,
 "较低安全",
         } else {,
 "未知",
-        },
+        }
 }
 }
 impl GetPermissionPublicResponse {
     /// 获取公开设置,
 pub fn w+.*{
         &self.permission_public,
-},
+}
 /// 是否允许外部访问,
     pub fn w+.*{
 self.permission_public.is_link_share_enabled(),
-    },
+    }
 /// 获取设置摘要,
     pub fn w+.*{
 format!(,
@@ -239,35 +239,35 @@ format!(,
             self.permission_public.permissions_summary(),
             self.permission_public.security_level(),
 ),
-    },
+    }
 /// 是否有外部访问配置,
     pub fn w+.*{
 self.external_access.is_some(),
-    },
+    }
 /// 安全性建议,
     pub fn w+.*{
 let mut recommendations = Vec::new();
         if !self.permission_public.password_switch && self.permission_public.is_anyone_accessible(),
 {,
             recommendations.push("建议开启密码保护以提高安全性".to_string());
-},
+}
 if self.permission_public.allow_copy && self.permission_public.is_anyone_accessible() {,
             recommendations.push("建议限制复制权限以防止内容泄露".to_string());
-},
+}
 if self.permission_public.is_editable() && self.permission_public.is_anyone_accessible() {,
             recommendations.push("建议将编辑权限限制在组织内".to_string());
-},
+}
 if recommendations.is_empty() {,
             recommendations.push("当前权限设置合理".to_string());
-},
+}
 recommendations,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_get_permission_public_request_builder() {,
 let request = GetPermissionPublicRequest::builder(),
             .token()
@@ -276,8 +276,8 @@ let request = GetPermissionPublicRequest::builder(),
 
         assert_eq!(request.token, "doccnxxxxxx");
         assert_eq!(request.obj_type, "doc");
-},
-#[test],
+}
+#[test]
     fn test_convenience_methods() {,
 let request = GetPermissionPublicRequest::for_doc("doccnxxxxxx");
         assert_eq!(request.obj_type, "doc");
@@ -287,8 +287,8 @@ let request = GetPermissionPublicRequest::for_bitable("bblcnxxxxxx");
         assert_eq!(request.obj_type, "bitable");
 let request = GetPermissionPublicRequest::for_wiki("wikicnxxxxxx");
         assert_eq!(request.obj_type, "wiki");
-},
-#[test],
+}
+#[test]
     fn test_public_settings_methods() {,
 let settings = PublicSettings {,
             link_share_setting: "tenant_editable".to_string(),

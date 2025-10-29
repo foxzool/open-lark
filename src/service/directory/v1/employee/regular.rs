@@ -12,7 +12,7 @@ use crate::{,
         SDKResult,
     }
     impl_executable_builder_owned,
-    service::directory::v1::models::{Employee, UserIdType},
+    service::directory::v1::models::{Employee, UserIdType}
 };
 use super::EmployeeService;
 /// 更新待离职成员为在职请求
@@ -31,10 +31,10 @@ pub fn w+.*{
 request: RegularEmployeeRequest {,
                 employee_id: employee_id.to_string()
                 ..Default::default(),
-},
-        },
 }
-},
+        }
+}
+}
 /// 更新待离职成员为在职请求构建器,
 #[derive(Default)]
 pub struct RegularEmployeeRequestBuilder {
@@ -45,38 +45,38 @@ impl RegularEmployeeRequestBuilder {
     pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
-},
+}
 /// 构建请求,
     pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
-                .api_req,
-.query_params,
+                .api_req
+.query_params
                 .insert("user_id_type", user_id_type.to_string());
-},
+}
 // 构建空的请求体,
         let body = json!({});
 self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
         self.request,
 }
-},
+}
 /// 更新待离职成员为在职响应数据,
 #[derive(.*?)]
 pub struct RegularEmployeeResponseData {
     /// 更新的员工信息
     pub employee: Employee,
-},
+}
 /// 更新待离职成员为在职响应,
 #[derive(.*?)]
 pub struct RegularEmployeeResponse {
     /// 响应数据
     pub data: RegularEmployeeResponseData,
 }
-impl ApiResponseTrait for RegularEmployeeResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl EmployeeService {
     /// 更新待离职成员为在职,
@@ -118,8 +118,8 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
 api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 // 应用ExecutableBuilder宏,
 impl_executable_builder_owned!(
     RegularEmployeeRequestBuilder,

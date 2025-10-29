@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -27,7 +27,7 @@ impl AppService {
 let mut api_req = request.api_request;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(BITABLE_V1_APP_COPY.replace("{app_token}", &request.app_token));
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 api_req.body = serde_json::to_vec(&CopyAppRequestBody {,
             name: request.name,
@@ -37,8 +37,8 @@ api_req.body = serde_json::to_vec(&CopyAppRequestBody {,
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 复制多维表格请求,
 #[derive(.*?)]
 pub struct CopyAppRequest {
@@ -55,8 +55,8 @@ pub struct CopyAppRequest {
 impl CopyAppRequest {
     pub fn w+.*{
 CopyAppRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct CopyAppRequestBuilder {
     request: CopyAppRequest,
@@ -66,22 +66,22 @@ impl CopyAppRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 复制的多维表格 App 名字,
     pub fn name(mut self, name: impl ToString) -> Self {
 self.request.name = Some(name.to_string());
         self,
-},
+}
 /// 复制的多维表格所在文件夹的 token,
     pub fn folder_token(mut self, folder_token: impl ToString) -> Self {
 self.request.folder_token = Some(folder_token.to_string());
         self,
-},
+}
 /// 时区,
     pub fn time_zone(mut self, time_zone: impl ToString) -> Self {
 self.request.time_zone = Some(time_zone.to_string());
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
@@ -95,7 +95,7 @@ impl_executable_builder_owned!(,
 );
 #[derive(Serialize)]
 struct CopyAppRequestBody {,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     name: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     folder_token: Option<String>,
@@ -120,17 +120,17 @@ pub struct CopyAppResponseData {
     /// 多维表格的链接
     pub url: String,
 }
-impl ApiResponseTrait for CopyAppResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json::json;
-    #[test],
+    #[test]
 fn test_copy_app_request() {,
         let request = CopyAppRequest::builder(),
 .app_token()
@@ -145,8 +145,8 @@ assert_eq!(,
             Some("fldcnmBA*****yGehy8".to_string()),
 );
         assert_eq!(request.time_zone, Some("Asia/Shanghai".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_copy_app_request_body_serialization() {,
 let body = CopyAppRequestBody {,
             name: Some("复制的多维表格".to_string()),

@@ -16,26 +16,26 @@ pub struct ListWorkflowRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 多维表格的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     app_token: String,
     /// 页大小,
-#[serde(skip)],
+#[serde(skip)]
     page_size: Option<i32>,
     /// 页标记，第一次请求不填，表示从头开始遍历,
-#[serde(skip)],
+#[serde(skip)]
     page_token: Option<String>,
 }
 impl ListWorkflowRequest {
     pub fn w+.*{
 ListWorkflowRequestBuilder::default(),
-    },
+    }
 pub fn new(app_token: impl ToString) -> Self {
         Self {
             app_token: app_token.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct ListWorkflowRequestBuilder {
     request: ListWorkflowRequest,
@@ -45,33 +45,33 @@ impl ListWorkflowRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 页大小,
     pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
-},
+}
 /// 页标记,
     pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
-},
+}
 pub fn w+.*{
         if let Some(page_size) = self.request.page_size {,
 self.request,
                 .api_request,
-.query_params,
+.query_params
                 .insert("page_size", page_size.to_string());
-},
+}
 if let Some(page_token) = &self.request.page_token {,
             self.request,
 .api_request,
                 .query_params
                 .insert("page_token", page_token.clone());
-},
+}
 self.request,
-    },
-},
+    }
+}
 // 应用ExecutableBuilder trait到ListWorkflowRequestBuilder,
 crate::impl_executable_builder_owned!(
     ListWorkflowRequestBuilder,
@@ -94,33 +94,33 @@ pub struct Workflow {
     /// 自动化流程更新时间戳（秒）
     pub updated_time: i64,
     /// 自动化流程最后执行时间戳（秒）,
-#[serde(default)],
+#[serde(default)]
     pub last_execution_time: Option<i64>,
     /// 流程触发器类型
     pub trigger_type: String,
     /// 流程描述,
-#[serde(default)],
+#[serde(default)]
     pub description: Option<String>,
-},
+}
 /// 列出自动化流程响应,
 #[derive(.*?)]
 pub struct ListWorkflowResponse {
     /// 自动化流程列表
     pub items: Vec<Workflow>,
     /// 分页标记，当has_more为true时，会同时返回新的page_token,
-#[serde(default)],
+#[serde(default)]
     pub page_token: Option<String>,
     /// 是否还有更多项
     pub has_more: bool,
     /// 总数,
-#[serde(default)],
+#[serde(default)]
     pub total: Option<i32>,
 }
-impl ApiResponseTrait for ListWorkflowResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 列出自动化流程,
 pub async fn list_workflows(
     request: ListWorkflowRequest,
@@ -137,10 +137,10 @@ Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_list_workflow_request_builder() {,
 let request = ListWorkflowRequest::builder(),
             .app_token()

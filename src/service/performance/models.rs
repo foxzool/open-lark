@@ -5,15 +5,15 @@ pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
     /// 分页标记，用于获取下一页数据,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
     /// 是否还有更多数据,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
-},
+}
 /// 周期状态,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum SemesterStatus {,
 /// 未开始,
     NotStarted,
@@ -23,7 +23,7 @@ pub enum SemesterStatus {,
     Finished,
     /// 已暂停
     Paused,
-},
+}
 /// 周期信息,
 #[derive(.*?)]
 pub struct Semester {
@@ -32,27 +32,27 @@ pub struct Semester {
     /// 周期名称
     pub name: String,
     /// 周期描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 周期状态,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<SemesterStatus>,
     /// 开始时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<i64>,
     /// 结束时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<i64>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
     /// 更新时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-},
+}
 /// 项目状态,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum ActivityStatus {,
 /// 未开始,
     NotStarted,
@@ -64,10 +64,10 @@ pub enum ActivityStatus {,
     Paused,
     /// 已取消
     Cancelled,
-},
+}
 /// 项目类型,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum ActivityType {,
 /// 绩效评估,
     Performance,
@@ -79,7 +79,7 @@ pub enum ActivityType {,
     ManagerReview,
     /// 同事评估
     PeerReview,
-},
+}
 /// 项目信息,
 #[derive(.*?)]
 pub struct Activity {
@@ -88,33 +88,33 @@ pub struct Activity {
     /// 项目名称
     pub name: String,
     /// 项目描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 项目类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub activity_type: Option<ActivityType>,
     /// 项目状态,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<ActivityStatus>,
     /// 所属周期ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub semester_id: Option<String>,
     /// 开始时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<i64>,
     /// 结束时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<i64>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
     /// 更新时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-},
+}
 /// 补充信息类型,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum AdditionalInfoType {,
 /// 文本,
     Text,
@@ -126,7 +126,7 @@ pub enum AdditionalInfoType {,
     Selection,
     /// 多选项
     MultiSelection,
-},
+}
 /// 补充信息,
 #[derive(.*?)]
 pub struct AdditionalInformation {
@@ -143,12 +143,12 @@ pub struct AdditionalInformation {
     /// 字段值
     pub field_value: String,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
     /// 更新时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-},
+}
 /// 用户组信息,
 #[derive(.*?)]
 pub struct UserGroup {
@@ -157,18 +157,18 @@ pub struct UserGroup {
     /// 用户组名称
     pub name: String,
     /// 用户组描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 成员用户ID列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub member_user_ids: Option<Vec<String>>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
     /// 更新时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-},
+}
 /// 被评估人信息,
 #[derive(.*?)]
 pub struct Reviewee {
@@ -177,26 +177,26 @@ pub struct Reviewee {
     /// 用户姓名
     pub name: String,
     /// 用户邮箱,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
     /// 部门信息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department: Option<String>,
     /// 职位信息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
     /// 上级ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub manager_id: Option<String>,
     /// 项目ID
     pub activity_id: String,
     /// 评估状态,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub review_status: Option<String>,
-},
+}
 /// 评估模板类型,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum TemplateType {,
 /// 自评,
     SelfReview,
@@ -206,7 +206,7 @@ pub enum TemplateType {,
     PeerReview,
     /// 下级评估
     SubordinateReview,
-},
+}
 /// 评估模板,
 #[derive(.*?)]
 pub struct ReviewTemplate {
@@ -215,25 +215,25 @@ pub struct ReviewTemplate {
     /// 模板名称
     pub name: String,
     /// 模板描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 模板类型
     pub template_type: TemplateType,
     /// 项目ID
     pub activity_id: String,
     /// 是否启用,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
     /// 更新时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-},
+}
 /// 评估项类型,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum ReviewItemType {,
 /// 评分题,
     Rating,
@@ -245,7 +245,7 @@ pub enum ReviewItemType {,
     MultipleChoice,
     /// 标签题
     Tag,
-},
+}
 /// 评估项,
 #[derive(.*?)]
 pub struct ReviewItem {
@@ -254,35 +254,35 @@ pub struct ReviewItem {
     /// 评估项名称
     pub name: String,
     /// 评估项描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 评估项类型
     pub item_type: ReviewItemType,
     /// 所属模板ID
     pub template_id: String,
     /// 排序权重,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub weight: Option<i32>,
     /// 是否必填,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub required: Option<bool>,
     /// 选项配置（JSON格式）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub options: Option<String>,
-},
+}
 /// 标签填写题配置,
 #[derive(.*?)]
 pub struct TagQuestionConfig {
     /// 配置ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub config_id: Option<String>,
     /// 可选标签列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<String>>,
-},
+}
 /// 指标类型,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum MetricType {,
 /// 数值型,
     Number,
@@ -292,7 +292,7 @@ pub enum MetricType {,
     Text,
     /// 布尔型
     Boolean,
-},
+}
 /// 指标,
 #[derive(.*?)]
 pub struct Metric {
@@ -301,23 +301,23 @@ pub struct Metric {
     /// 指标名称
     pub name: String,
     /// 指标描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 指标类型
     pub metric_type: MetricType,
     /// 指标单位,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub unit: Option<String>,
     /// 是否为关键指标,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub is_key: Option<bool>,
     /// 权重,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub weight: Option<f64>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
-},
+}
 /// 指标模板,
 #[derive(.*?)]
 pub struct MetricTemplate {
@@ -326,16 +326,16 @@ pub struct MetricTemplate {
     /// 模板名称
     pub name: String,
     /// 模板描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 包含的指标ID列表
     pub metric_ids: Vec<String>,
     /// 项目ID
     pub activity_id: String,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
-},
+}
 /// 指标字段,
 #[derive(.*?)]
 pub struct MetricField {
@@ -348,12 +348,12 @@ pub struct MetricField {
     /// 所属指标ID
     pub metric_id: String,
     /// 是否必填,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub required: Option<bool>,
     /// 默认值,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub default_value: Option<String>,
-},
+}
 /// 指标标签,
 #[derive(.*?)]
 pub struct MetricTag {
@@ -362,18 +362,18 @@ pub struct MetricTag {
     /// 标签名称
     pub name: String,
     /// 标签颜色,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
     /// 标签描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
-},
+}
 /// 任务状态,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum TaskStatus {,
 /// 未开始,
     NotStarted,
@@ -385,7 +385,7 @@ pub enum TaskStatus {,
     Expired,
     /// 已暂停
     Paused,
-},
+}
 /// 周期任务,
 #[derive(.*?)]
 pub struct StageTask {
@@ -400,25 +400,25 @@ pub struct StageTask {
     /// 被评估人ID
     pub reviewee_id: String,
     /// 评估人ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub reviewer_id: Option<String>,
     /// 项目ID
     pub activity_id: String,
     /// 周期ID
     pub semester_id: String,
     /// 任务开始时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<i64>,
     /// 任务结束时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<i64>,
     /// 完成时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub completed_at: Option<i64>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
-},
+}
 /// 指标详情数据,
 #[derive(.*?)]
 pub struct MetricDetail {
@@ -433,21 +433,21 @@ pub struct MetricDetail {
     /// 指标值
     pub value: String,
     /// 指标单位,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub unit: Option<String>,
     /// 备注,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub remark: Option<String>,
     /// 录入时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub input_time: Option<i64>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
-},
+}
 /// 绩效结果等级,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum PerformanceLevel {,
 /// 优秀,
     Excellent,
@@ -459,7 +459,7 @@ pub enum PerformanceLevel {,
     NeedsImprovement,
     /// 不合格
     Unsatisfactory,
-},
+}
 /// 绩效结果,
 #[derive(.*?)]
 pub struct PerformanceResult {
@@ -472,30 +472,30 @@ pub struct PerformanceResult {
     /// 周期ID
     pub semester_id: String,
     /// 绩效等级,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub level: Option<PerformanceLevel>,
     /// 绩效分数,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub score: Option<f64>,
     /// 排名,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub rank: Option<i32>,
     /// 总体评价,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub overall_comment: Option<String>,
     /// 是否已开通结果,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub result_opened: Option<bool>,
     /// 开通时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub opened_at: Option<i64>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
     /// 更新时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-},
+}
 /// 绩效详情数据,
 #[derive(.*?)]
 pub struct ReviewDetail {
@@ -512,32 +512,32 @@ pub struct ReviewDetail {
     /// 评估内容/回答
     pub content: String,
     /// 评分（如果是评分题）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub score: Option<f64>,
     /// 提交时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub submitted_at: Option<i64>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
-    #[test],
+    #[test]
 fn test_page_response_serialization() {,
         let page = PageResponse {
-            items: vec!["item1".to_string(), "item2".to_string()],
+            items: vec!["item1".to_string(), "item2".to_string()]
             page_token: Some("token123".to_string()),
             has_more: Some(true),
         };
 let json = serde_json::to_string(&page).unwrap();
         assert!(json.contains("token123"));
 assert!(json.contains("item1"));
-    },
-#[test],
+    }
+#[test]
     fn test_semester_status_enum() {,
 assert_eq!(,
             serde_json::to_string(&SemesterStatus::NotStarted).unwrap(),
@@ -555,8 +555,8 @@ assert_eq!(,
             serde_json::to_string(&SemesterStatus::Paused).unwrap(),
             "\"paused\"",
 );
-    },
-#[test],
+    }
+#[test]
     fn test_semester_full() {,
 let semester = Semester {,
             semester_id: "sem123".to_string(),
@@ -572,8 +572,8 @@ let json = serde_json::to_string(&semester).unwrap();
         assert!(json.contains("sem123"));
 assert!(json.contains("2024年度绩效评估"));
         assert!(json.contains("in_progress"));
-},
-#[test],
+}
+#[test]
     fn test_activity_status_enum() {,
 assert_eq!(,
             serde_json::to_string(&ActivityStatus::NotStarted).unwrap(),
@@ -595,8 +595,8 @@ assert_eq!(,
             serde_json::to_string(&ActivityStatus::Cancelled).unwrap(),
             "\"cancelled\"",
 );
-    },
-#[test],
+    }
+#[test]
     fn test_activity_type_enum() {,
 assert_eq!(,
             serde_json::to_string(&ActivityType::Performance).unwrap(),
@@ -618,8 +618,8 @@ assert_eq!(,
             serde_json::to_string(&ActivityType::PeerReview).unwrap(),
             "\"peer_review\"",
 );
-    },
-#[test],
+    }
+#[test]
     fn test_activity_performance_review() {,
 let activity = Activity {,
             activity_id: "act456".to_string(),
@@ -637,8 +637,8 @@ let json = serde_json::to_string(&activity).unwrap();
         assert!(json.contains("act456"));
 assert!(json.contains("performance"));
         assert!(json.contains("in_progress"));
-},
-#[test],
+}
+#[test]
     fn test_additional_info_type_enum() {,
 assert_eq!(,
             serde_json::to_string(&AdditionalInfoType::Text).unwrap(),
@@ -660,8 +660,8 @@ assert_eq!(,
             serde_json::to_string(&AdditionalInfoType::MultiSelection).unwrap(),
             "\"multi_selection\"",
 );
-    },
-#[test],
+    }
+#[test]
     fn test_additional_information() {,
 let info = AdditionalInformation {,
             info_id: "info789".to_string(),
@@ -677,8 +677,8 @@ let json = serde_json::to_string(&info).unwrap();
         assert!(json.contains("info789"));
 assert!(json.contains("工作年限"));
         assert!(json.contains("number"));
-},
-#[test],
+}
+#[test]
     fn test_user_group() {,
 let group = UserGroup {,
             group_id: "grp123".to_string(),
@@ -692,8 +692,8 @@ let json = serde_json::to_string(&group).unwrap();
         assert!(json.contains("grp123"));
 assert!(json.contains("技术团队"));
         assert!(json.contains("user1"));
-},
-#[test],
+}
+#[test]
     fn test_reviewee() {,
 let reviewee = Reviewee {,
             user_id: "user456".to_string(),
@@ -709,8 +709,8 @@ let json = serde_json::to_string(&reviewee).unwrap();
         assert!(json.contains("user456"));
 assert!(json.contains("张三"));
         assert!(json.contains("研发部"));
-},
-#[test],
+}
+#[test]
     fn test_template_type_enum() {,
 assert_eq!(,
             serde_json::to_string(&TemplateType::SelfReview).unwrap(),
@@ -728,8 +728,8 @@ assert_eq!(,
             serde_json::to_string(&TemplateType::SubordinateReview).unwrap(),
             "\"subordinate_review\"",
 );
-    },
-#[test],
+    }
+#[test]
     fn test_review_template() {,
 let template = ReviewTemplate {,
             template_id: "tpl123".to_string(),
@@ -745,8 +745,8 @@ let json = serde_json::to_string(&template).unwrap();
         assert!(json.contains("tpl123"));
 assert!(json.contains("self_review"));
         assert!(json.contains("true"));
-},
-#[test],
+}
+#[test]
     fn test_review_item_type_enum() {,
 assert_eq!(,
             serde_json::to_string(&ReviewItemType::Rating).unwrap(),
@@ -768,8 +768,8 @@ assert_eq!(,
             serde_json::to_string(&ReviewItemType::Tag).unwrap(),
             "\"tag\"",
 );
-    },
-#[test],
+    }
+#[test]
     fn test_review_item_rating() {,
 let item = ReviewItem {,
             item_id: "item123".to_string(),
@@ -785,8 +785,8 @@ let json = serde_json::to_string(&item).unwrap();
         assert!(json.contains("item123"));
 assert!(json.contains("rating"));
         assert!(json.contains("工作质量评价"));
-},
-#[test],
+}
+#[test]
     fn test_tag_question_config() {,
 let config = TagQuestionConfig {,
             config_id: Some("cfg123".to_string()),
@@ -796,8 +796,8 @@ let json = serde_json::to_string(&config).unwrap();
         assert!(json.contains("cfg123"));
 assert!(json.contains("团队合作"));
         assert!(json.contains("创新能力"));
-},
-#[test],
+}
+#[test]
     fn test_metric_type_enum() {,
 assert_eq!(,
             serde_json::to_string(&MetricType::Number).unwrap(),
@@ -815,8 +815,8 @@ assert_eq!(,
             serde_json::to_string(&MetricType::Boolean).unwrap(),
             "\"boolean\"",
 );
-    },
-#[test],
+    }
+#[test]
     fn test_metric() {,
 let metric = Metric {,
             metric_id: "met123".to_string(),
@@ -832,8 +832,8 @@ let json = serde_json::to_string(&metric).unwrap();
         assert!(json.contains("met123"));
 assert!(json.contains("销售业绩"));
         assert!(json.contains("number"));
-},
-#[test],
+}
+#[test]
     fn test_task_status_enum() {,
 assert_eq!(,
             serde_json::to_string(&TaskStatus::NotStarted).unwrap(),
@@ -855,8 +855,8 @@ assert_eq!(,
             serde_json::to_string(&TaskStatus::Paused).unwrap(),
             "\"paused\"",
 );
-    },
-#[test],
+    }
+#[test]
     fn test_stage_task() {,
 let task = StageTask {,
             task_id: "task123".to_string(),
@@ -876,8 +876,8 @@ let json = serde_json::to_string(&task).unwrap();
         assert!(json.contains("task123"));
 assert!(json.contains("in_progress"));
         assert!(json.contains("自评任务"));
-},
-#[test],
+}
+#[test]
     fn test_performance_level_enum() {,
 assert_eq!(,
             serde_json::to_string(&PerformanceLevel::Excellent).unwrap(),
@@ -899,8 +899,8 @@ assert_eq!(,
             serde_json::to_string(&PerformanceLevel::Unsatisfactory).unwrap(),
             "\"unsatisfactory\"",
 );
-    },
-#[test],
+    }
+#[test]
     fn test_performance_result() {,
 let result = PerformanceResult {,
             result_id: "res123".to_string(),
@@ -920,8 +920,8 @@ let json = serde_json::to_string(&result).unwrap();
         assert!(json.contains("res123"));
 assert!(json.contains("excellent"));
         assert!(json.contains("4.5"));
-},
-#[test],
+}
+#[test]
     fn test_review_detail() {,
 let detail = ReviewDetail {,
             detail_id: "det123".to_string(),
@@ -938,8 +938,8 @@ let json = serde_json::to_string(&detail).unwrap();
         assert!(json.contains("det123"));
 assert!(json.contains("工作完成质量高"));
         assert!(json.contains("4.0"));
-},
-#[test],
+}
+#[test]
     fn test_minimal_structs() {,
 let minimal_semester = Semester {,
             semester_id: "sem_min".to_string(),
@@ -954,5 +954,5 @@ let minimal_semester = Semester {,
 let json = serde_json::to_string(&minimal_semester).unwrap();
         assert!(json.contains("sem_min"));
 assert!(!json.contains("description"));
-    },
+    }
 }

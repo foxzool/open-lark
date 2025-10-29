@@ -11,7 +11,7 @@ pub(crate) struct ValueRangeRequest {,
 }
 
 #[derive(.*?)]
-#[allow(dead_code)],
+#[allow(dead_code)]
 pub struct ValueRangeResponse {
 /// 插入维度,
     #[serde(rename = "majorDimension")]
@@ -23,57 +23,57 @@ pub struct ValueRangeResponse {
     pub values: Value,
     /// sheet 的版本号
     pub revision: i32,
-},
+}
 /// 更新数据响应体,
 #[derive(.*?)]
-#[allow(dead_code)],
+#[allow(dead_code)]
 pub struct UpdateSheetDataResponse {
 /// spreadsheet 的 token,
     #[serde(rename = "spreadsheetToken")]
     pub spreed_sheet_token: String,
     /// 写入的范围,
-#[serde(rename = "tableRange")],
+#[serde(rename = "tableRange")]
     pub table_range: String,
     /// sheet 的版本号
     pub revision: i32,
     /// 追加数据的范围、行列数等
     pub updates: SheetDataUpdates,
 }
-impl ApiResponseTrait for UpdateSheetDataResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 追加数据的范围、行列数等,
 #[derive(.*?)]
-#[allow(dead_code)],
+#[allow(dead_code)]
 pub struct SheetDataUpdates {
 /// spreadsheet 的 token,
     #[serde(rename = "spreadsheetToken")]
     pub spreed_sheet_token: String,
     /// 写入的范围,
-#[serde(rename = "updatedRange")],
+#[serde(rename = "updatedRange")]
     pub updated_range: String,
     /// 写入的行数,
-#[serde(rename = "updatedRows")],
+#[serde(rename = "updatedRows")]
     pub updated_rows: i32,
     /// 写入的列数,
-#[serde(rename = "updatedColumns")],
+#[serde(rename = "updatedColumns")]
     pub updated_columns: i32,
     /// 写入的单元格总数,
-#[serde(rename = "updatedCells")],
+#[serde(rename = "updatedCells")]
     pub updated_cells: i32,
     /// sheet 的版本号
     pub revision: Option<i32>,
 }
-impl ApiResponseTrait for SheetDataUpdates {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 值与范围,
 #[derive(.*?)]
-#[allow(dead_code)],
+#[allow(dead_code)]
 pub struct ReadRangeValueRange {
 /// 插入维度,
     #[serde(rename = "majorDimension")]
@@ -91,28 +91,28 @@ pub struct CellStyle {
     /// 字体相关样式
     pub(crate) font: StyleFont,
     /// 文本装饰 ，0 默认，1 下划线，2 删除线 ，3 下划线和删除线,
-#[serde(rename = "textDecoration")],
+#[serde(rename = "textDecoration")]
     pub(crate) text_decoration: Option<i32>,
     /// 数字格式，详见附录 sheet支持数字格式类型
     pub(crate) formatter: Option<String>,
     /// 水平对齐，0 左对齐，1 中对齐，2 右对齐,
-#[serde(rename = "hAlign")],
+#[serde(rename = "hAlign")]
     pub(crate) h_align: Option<i32>,
-    #[serde(rename = "vAlign")],
+    #[serde(rename = "vAlign")]
 /// 垂直对齐， 0 上对齐，1 中对齐， 2 下对齐,
     pub(crate) v_align: Option<i32>,
     /// 字体颜色,
-#[serde(rename = "foreColor")],
+#[serde(rename = "foreColor")]
     pub(crate) fore_color: Option<String>,
     /// 背景颜色,
-#[serde(rename = "backColor")],
+#[serde(rename = "backColor")]
     pub(crate) back_color: Option<String>,
     /// 边框类型，可选 "FULL_BORDER"，"OUTER_BORDER"，"INNER_BORDER"，"NO_BORDER"，"LEFT_BORDER"，",
 /// RIGHT_BORDER"，"TOP_BORDER"，"BOTTOM_BORDER",
     #[serde(rename = "borderType")]
     pub(crate) border_type: Option<String>,
     /// 边框颜色,
-#[serde(rename = "borderColor")],
+#[serde(rename = "borderColor")]
     pub(crate) border_color: Option<String>,
     /// 是否清除所有格式,默认 false
     pub(crate) clean: bool,
@@ -120,8 +120,8 @@ pub struct CellStyle {
 impl CellStyle {
     pub fn w+.*{
 CellStyleBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct CellStyleBuilder {
     request: CellStyle,
@@ -175,11 +175,11 @@ self.request.border_color = Some(border_color.to_string());
     pub fn clean(mut self, clean: bool) -> Self {
 self.request.clean = clean;
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
-},
+}
 /// 字体相关样式,
 #[derive(.*?)]
 pub struct StyleFont {
@@ -188,7 +188,7 @@ pub struct StyleFont {
     /// 是否斜体
     italic: Option<bool>,
     /// 字体大小 字号大小为9~36 行距固定为1.5，如:10pt/1.5,
-#[serde(rename = "fontSize")],
+#[serde(rename = "fontSize")]
     font_size: Option<String>,
     /// 清除 font 格式,默认 false
     clean: Option<bool>,
@@ -196,8 +196,8 @@ pub struct StyleFont {
 impl StyleFont {
     pub fn w+.*{
 StyleFontBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct StyleFontBuilder {
     font: StyleFont,
@@ -221,7 +221,7 @@ self.font.font_size = Some(font_size.to_string());
     pub fn clean(mut self, clean: bool) -> Self {
 self.font.clean = Some(clean);
         self,
-},
+}
 pub fn w+.*{
         self.font,
 }

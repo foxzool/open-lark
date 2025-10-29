@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option,
@@ -16,9 +16,9 @@ use crate::,
 };
     impl_executable_builder_owned,
     service::sheets::v3::{
-        data_operation::{FindCondition, FindReplaceResult},
+        data_operation::{FindCondition, FindReplaceResult}
         SpreadsheetSheetService,
-    },
+    }
 };
 
 #[derive(.*?)]
@@ -28,7 +28,7 @@ pub struct ReplaceCellsRequest {
     #[serde(skip)]
     spreadsheet_token: String,
     /// 工作表的id,
-#[serde(skip)],
+#[serde(skip)]
     sheet_id: String,
     /// 查找条件
     find_condition: FindCondition,
@@ -45,8 +45,8 @@ pub struct ReplaceCellsRequest {
 impl ReplaceCellsRequest {
     pub fn w+.*{
 ReplaceCellsRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct ReplaceCellsRequestBuilder {
     request: ReplaceCellsRequest,
@@ -95,12 +95,12 @@ self.request.find_condition.include_formulas = Some(include_formulas);
     pub fn replacement(mut self, replacement: impl ToString) -> Self {
 self.request.replacement = replacement.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 // Trait implementation,
 impl_executable_builder_owned!(
     ReplaceCellsRequestBuilder,
@@ -115,10 +115,10 @@ pub struct ReplaceCellsResponse {
     /// 符合查找条件并替换的单元格信息
     pub replace_result: FindReplaceResult,
 }
-impl ApiResponseTrait for ReplaceCellsResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl SpreadsheetSheetService {
     /// 替换单元格,
@@ -141,5 +141,5 @@ api_req.set_http_method(reqwest::Method::POST);
 let api_resp: BaseResponse<ReplaceCellsResponse> =,
             crate::core::http::Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
-    },
+    }
 }

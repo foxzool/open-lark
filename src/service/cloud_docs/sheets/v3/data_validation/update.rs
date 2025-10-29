@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -30,13 +30,13 @@ api_req.api_path = SHEETS_V3_SPREADSHEET_DATA_VALIDATION_GET,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id)
             .replace("{}", &request.data_validation_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 更新下拉列表设置请求,
 #[derive(.*?)]
 pub struct UpdateDataValidationRequest {
@@ -54,8 +54,8 @@ pub struct UpdateDataValidationRequest {
 impl UpdateDataValidationRequest {
     pub fn w+.*{
 UpdateDataValidationRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct UpdateDataValidationRequestBuilder {
     request: UpdateDataValidationRequest,
@@ -79,38 +79,38 @@ self.request.data_validation_id = data_validation_id.to_string();
     pub fn data_validation(mut self, data_validation: DataValidationRule) -> Self {
 self.request.data_validation = data_validation;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 更新下拉列表设置响应体最外层,
 #[derive(.*?)]
 pub struct UpdateDataValidationResponseData {
     /// 数据校验 ID
     pub data_validation_id: String,
     /// 更新后的数据校验规则信息,
-#[serde(flatten)],
+#[serde(flatten)]
     pub data_validation: DataValidationRule,
 }
-impl ApiResponseTrait for UpdateDataValidationResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use super::*;
 use serde_json::json;
-    #[test],
+    #[test]
 fn test_update_data_validation_response() {,
         let json = json!({
             "data_validation_id": "dv_001",
             "condition_type": "number_between",
             "range": "B1:B10",
-            "condition_values": ["1", "100"],
+            "condition_values": ["1", "100"]
             "strict": true,
             "input_message": "请输入1-100之间的数字",
             "error_message": "数字超出范围",

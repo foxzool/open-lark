@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -27,30 +27,30 @@ impl AppRoleService {
 let mut api_req = request.api_request;
         api_req.set_http_method(Method::POST);
         api_req.set_api_path(BITABLE_V1_ROLES.replace("{app_token}", &request.app_token));
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 新增自定义角色请求,
 #[derive(.*?)]
 pub struct CreateAppRoleRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 多维表格的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     app_token: String,
     /// 角色名称
     role_name: String,
     /// 数据表权限,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     table_roles: Option<Vec<TableRole>>,
     /// 数据表默认权限,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     block_roles: Option<Vec<BlockRole>>,
-},
+}
 /// 数据表权限,
 #[derive(.*?)]
 pub struct TableRole {
@@ -59,9 +59,9 @@ pub struct TableRole {
     /// 权限
     pub role: String,
     /// 记录权限,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     rec_rule: Option<String>,
-},
+}
 /// 数据表默认权限,
 #[derive(.*?)]
 pub struct BlockRole {
@@ -81,8 +81,8 @@ Self {
             role_name: role_name.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct CreateAppRoleRequestBuilder {
     request: CreateAppRoleRequest,
@@ -92,26 +92,26 @@ impl CreateAppRoleRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 角色名称,
     pub fn role_name(mut self, role_name: impl ToString) -> Self {
 self.request.role_name = role_name.to_string();
         self,
-},
+}
 /// 数据表权限,
     pub fn table_roles(mut self, table_roles: Vec<TableRole>) -> Self {
 self.request.table_roles = Some(table_roles);
         self,
-},
+}
 /// 数据表默认权限,
     pub fn block_roles(mut self, block_roles: Vec<BlockRole>) -> Self {
 self.request.block_roles = Some(block_roles);
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 impl_executable_builder_owned!(,
     CreateAppRoleRequestBuilder,
@@ -131,23 +131,23 @@ pub struct AppRole {
     pub table_roles: Option<Vec<TableRole>>,
     /// 数据表默认权限
     pub block_roles: Option<Vec<BlockRole>>,
-},
+}
 /// 新增自定义角色响应,
 #[derive(.*?)]
 pub struct CreateAppRoleResponse {
     /// 新增的自定义角色信息
     pub role: AppRole,
 }
-impl ApiResponseTrait for CreateAppRoleResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_create_app_role_request_builder() {,
 let table_roles = vec![TableRole {,
             table_id: "tblxxxxxx".to_string(),
@@ -162,5 +162,5 @@ let request = CreateAppRoleRequest::builder(),
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.role_name, "测试自定义角色");
 assert!(request.table_roles.is_some());
-    },
+    }
 }

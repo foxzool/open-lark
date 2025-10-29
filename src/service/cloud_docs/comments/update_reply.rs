@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::{cloud_docs::*, EndpointBuilder,
@@ -25,27 +25,27 @@ pub struct UpdateReplyRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 文档token,
-#[serde(skip)],
+#[serde(skip)]
     file_token: String,
     /// 文档类型：doc、docx、sheet、bitable,
-#[serde(skip)],
+#[serde(skip)]
     file_type: String,
     /// 评论ID,
-#[serde(skip)],
+#[serde(skip)]
     comment_id: String,
     /// 回复ID,
-#[serde(skip)],
+#[serde(skip)]
     reply_id: String,
     /// 回复内容
     content: ReplyContent,
     /// 用户ID类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     user_id_type: Option<String>,
 }
 impl UpdateReplyRequest {
     pub fn w+.*{
 UpdateReplyRequestBuilder::default(),
-    },
+    }
 pub fn new(,
         file_token: impl ToString,
         file_type: impl ToString,
@@ -61,8 +61,8 @@ Self {
             content,
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct UpdateReplyRequestBuilder {
     request: UpdateReplyRequest,
@@ -72,72 +72,72 @@ impl UpdateReplyRequestBuilder {
     pub fn file_token(mut self, file_token: impl ToString) -> Self {
 self.request.file_token = file_token.to_string();
         self,
-},
+}
 /// 文档类型,
     pub fn file_type(mut self, file_type: impl ToString) -> Self {
 self.request.file_type = file_type.to_string();
         self,
-},
+}
 /// 设置为文档类型,
     pub fn with_doc_type(mut self) -> Self {
 self.request.file_type = "doc".to_string();
         self,
-},
+}
 /// 设置为docx类型,
     pub fn with_docx_type(mut self) -> Self {
 self.request.file_type = "docx".to_string();
         self,
-},
+}
 /// 设置为电子表格类型,
     pub fn with_sheet_type(mut self) -> Self {
 self.request.file_type = "sheet".to_string();
         self,
-},
+}
 /// 设置为多维表格类型,
     pub fn with_bitable_type(mut self) -> Self {
 self.request.file_type = "bitable".to_string();
         self,
-},
+}
 /// 评论ID,
     pub fn comment_id(mut self, comment_id: impl ToString) -> Self {
 self.request.comment_id = comment_id.to_string();
         self,
-},
+}
 /// 回复ID,
     pub fn reply_id(mut self, reply_id: impl ToString) -> Self {
 self.request.reply_id = reply_id.to_string();
         self,
-},
+}
 /// 回复内容,
     pub fn content(mut self, content: ReplyContent) -> Self {
 self.request.content = content;
         self,
-},
+}
 /// 用户ID类型,
     pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
-},
+}
 /// 使用OpenID,
     pub fn with_open_id(mut self) -> Self {
 self.request.user_id_type = Some("open_id".to_string());
         self,
-},
+}
 /// 使用UserID,
     pub fn with_user_id(mut self) -> Self {
 self.request.user_id_type = Some("user_id".to_string());
         self,
-},
+}
 /// 使用UnionID,
     pub fn with_union_id(mut self) -> Self {
 self.request.user_id_type = Some("union_id".to_string());
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 更新后的回复信息,
 #[derive(.*?)]
 pub struct UpdatedReply {
@@ -151,7 +151,7 @@ pub struct UpdatedReply {
     pub update_time: i64,
     /// 回复内容
     pub content: ReplyContent,
-},
+}
 // 应用ExecutableBuilder trait到UpdateReplyRequestBuilder,
 impl_executable_builder_owned!(
     UpdateReplyRequestBuilder,
@@ -166,11 +166,11 @@ pub struct UpdateReplyResponse {
     /// 更新后的回复信息
     pub reply: UpdatedReply,
 }
-impl ApiResponseTrait for UpdateReplyResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 更新回复的内容,
 pub async fn update_reply(
     request: UpdateReplyRequest,
@@ -216,70 +216,70 @@ self.content,
 }),
 .collect::<Vec<_>>(),
             .join(""),
-},
+}
 /// 是否已更新,
     pub fn w+.*{
 self.update_time > self.create_time,
-    },
+    }
 /// 获取更新时间与创建时间的差值（毫秒）,
     pub fn w+.*{
 self.update_time - self.create_time,
-    },
+    }
 /// 获取更新时间的格式化字符串,
     pub fn updated_at_formatted(&self) -> String {
         format!("更新时间: {}", self.update_time),
-},
+}
 /// 获取回复摘要信息,
     pub fn w+.*{
 format!(,
-            "回复ID: {}, 用户: {}, 内容: {}, 更新时间: {}",
+            "回复ID: {} 用户: {} 内容: {} 更新时间: {}",
             self.reply_id,
             self.user_id,
             self.get_text_content(),
             self.update_time,
 ),
-    },
+    }
 }
 impl UpdateReplyResponse {
     /// 获取回复ID,
 pub fn w+.*{
         &self.reply.reply_id,
-},
+}
 /// 获取用户ID,
     pub fn w+.*{
 &self.reply.user_id,
-    },
+    }
 /// 获取回复的文本内容,
     pub fn w+.*{
 self.reply.get_text_content(),
-    },
+    }
 /// 是否已更新,
     pub fn w+.*{
 self.reply.is_updated(),
-    },
+    }
 /// 获取创建时间,
     pub fn w+.*{
 self.reply.create_time,
-    },
+    }
 /// 获取更新时间,
     pub fn w+.*{
 self.reply.update_time,
-    },
+    }
 /// 获取更新摘要,
     pub fn w+.*{
 format!(,
-            "回复更新成功 - ID: {}, 新内容: \"{}\"",
+            "回复更新成功 - ID: {} 新内容: \"{}\"",
             self.reply_id(),
             self.get_text_content(),
 ),
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use crate::service::comments::create::ContentBuilder;
-    #[test],
+    #[test]
 fn test_update_reply_request_builder() {,
         let content = ContentBuilder::new().add_text("更新后的回复内容").build();
 let request = UpdateReplyRequest::builder(),

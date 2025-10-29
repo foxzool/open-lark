@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -29,13 +29,13 @@ let mut api_req = request.api_request;
 api_req.api_path = SHEETS_V3_SPREADSHEET_DIMENSION_RANGE_INSERT,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 插入行列请求,
 #[derive(.*?)]
 pub struct InsertRowsOrColumnsRequest {
@@ -53,8 +53,8 @@ pub struct InsertRowsOrColumnsRequest {
 impl InsertRowsOrColumnsRequest {
     pub fn w+.*{
 InsertRowsOrColumnsRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct InsertRowsOrColumnsRequestBuilder {
     request: InsertRowsOrColumnsRequest,
@@ -68,7 +68,7 @@ self.request.spreadsheet_token = spreadsheet_token.to_string();
     pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
-},
+}
 pub fn dimension_range(,
         mut self,
         dimension: impl ToString,
@@ -81,19 +81,19 @@ self.request.dimension_range = DimensionRange {,
             end_index,
         };
 self,
-    },
+    }
 /// 设置是否继承样式,
     /// - BEFORE: 继承前一行/列的样式,
 /// - AFTER: 继承后一行/列的样式,
     pub fn inherit_style(mut self, inherit_style: impl ToString) -> Self {
 self.request.inherit_style = Some(inherit_style.to_string());
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 维度范围,
 #[derive(.*?)]
 pub struct DimensionRange {
@@ -103,18 +103,18 @@ pub struct DimensionRange {
     pub start_index: i32,
     /// 结束索引
     pub end_index: i32,
-},
+}
 /// 插入行列响应体最外层,
 #[derive(.*?)]
 pub struct InsertRowsOrColumnsResponseData {
     /// 插入行列后的信息
     pub insert_range: InsertRangeInfo,
 }
-impl ApiResponseTrait for InsertRowsOrColumnsResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 插入范围信息,
 #[derive(.*?)]
 pub struct InsertRangeInfo {
@@ -124,13 +124,13 @@ pub struct InsertRangeInfo {
     pub start_index: i32,
     /// 插入的结束位置
     pub end_index: i32,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
 use super::InsertRowsOrColumnsResponseData;
-    #[test],
+    #[test]
 fn test_insert_rows_or_columns_response() {,
         let json = json!({,
 "insert_range": {,
@@ -144,7 +144,7 @@ let response: InsertRowsOrColumnsResponseData = serde_json::from_value(json).unw
         assert_eq!(response.insert_range.start_index, 3);
         assert_eq!(response.insert_range.end_index, 5);
 }
-},
+}
 // 实现ExecutableBuilder trait,
 impl_executable_builder_owned!(
     InsertRowsOrColumnsRequestBuilder,

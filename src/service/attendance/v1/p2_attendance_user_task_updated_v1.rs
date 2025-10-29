@@ -7,7 +7,7 @@ pub struct P2AttendanceUserTaskUpdatedV1 {
     pub schema: String,
     pub header: EventHeader,
     pub event: P2AttendanceUserTaskUpdatedV1Data,
-},
+}
 pub(crate) struct P2AttendanceUserTaskUpdatedV1ProcessorImpl<F>,
 where
     F: Fn(P2AttendanceUserTaskUpdatedV1) + 'static,
@@ -22,16 +22,16 @@ where
 let event: P2AttendanceUserTaskUpdatedV1 = serde_json::from_slice(payload)?;
         (self.f)(event);
 Ok(()),
-    },
+    }
 }
 impl<F> P2AttendanceUserTaskUpdatedV1ProcessorImpl<F>,
 where
     F: Fn(P2AttendanceUserTaskUpdatedV1) + 'static,
 {,
 pub(crate) fn new(f: F) -> Self {
-        P2AttendanceUserTaskUpdatedV1ProcessorImpl { f },
+        P2AttendanceUserTaskUpdatedV1ProcessorImpl { f }
 }
-},
+}
 /// 考勤打卡流水事件数据,
 #[derive(.*?)]
 pub struct P2AttendanceUserTaskUpdatedV1Data {
@@ -41,7 +41,7 @@ pub struct P2AttendanceUserTaskUpdatedV1Data {
     pub task: AttendanceTask,
     /// 租户key
     pub tenant_key: String,
-},
+}
 /// 考勤事件中的用户信息,
 #[derive(.*?)]
 pub struct AttendanceUserId {
@@ -53,7 +53,7 @@ pub struct AttendanceUserId {
     pub open_id: String,
     /// 用户的 employee id
     pub employee_id: Option<String>,
-},
+}
 /// 考勤打卡任务信息,
 #[derive(.*?)]
 pub struct AttendanceTask {
@@ -89,7 +89,7 @@ pub struct AttendanceTask {
     pub create_time: String,
     /// 记录更新时间戳（毫秒）
     pub update_time: String,
-},
+}
 /// 打卡位置信息,
 #[derive(.*?)]
 pub struct AttendanceLocation {
@@ -99,13 +99,13 @@ pub struct AttendanceLocation {
     pub longitude: f64,
     /// 位置名称
     pub address: Option<String>,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
 use crate::event::context::EventContext;
-    #[test],
+    #[test]
 fn test_decode_attendance_event() {,
         let event_data = json!({
             "schema": "2.0",
@@ -116,14 +116,14 @@ fn test_decode_attendance_event() {,
                 "event_type": "attendance.user_task.updated_v1",
                 "tenant_key": "tenant_key",
                 "app_id": "app_id",
-},
+}
             "event": {,
 "user_id": {,
                     "open_id": "ou_b434284f852b1531071855b16d19f40b",
                     "union_id": "on_526dbf7b9ef1fda341aecb79a2481662",
                     "user_id": "aa5cf9d7",
                     "employee_id": "emp_001",
-},
+}
                 "task": {
                     "task_id": "task_123456",
                     "user_id": "aa5cf9d7",
@@ -139,13 +139,13 @@ fn test_decode_attendance_event() {,
                         "latitude": 39.908822,
                         "longitude": 116.397128,
                         "address": "北京市朝阳区",
-},
+}
                     "is_field": false,
                     "is_remedy": false,
                     "comment": "正常打卡",
                     "create_time": "1719211482485",
                     "update_time": "1719211482485",
-},
+}
                 "tenant_key": "133195a24e8f575d",
 }
         });

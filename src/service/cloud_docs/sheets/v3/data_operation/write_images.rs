@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -30,13 +30,13 @@ let mut api_req = request.api_request;
 api_req.set_api_path(,
             SHEETS_V3_SPREADSHEET_VALUES_IMAGE.replace("{}", &request.spreadsheet_token),
         );
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 let api_resp: BaseResponse<WriteImagesResponseData> =,
             Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
-    },
-},
+    }
+}
 /// 写入图片请求,
 #[derive(.*?)]
 pub struct WriteImagesRequest {
@@ -45,14 +45,14 @@ pub struct WriteImagesRequest {
     /// spreadsheet 的 token
     spreadsheet_token: String,
     /// 图片范围数据,
-#[serde(rename = "valueRange")],
+#[serde(rename = "valueRange")]
     value_range: ImageValueRange,
 }
 impl WriteImagesRequest {
     pub fn w+.*{
 WriteImagesRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct WriteImagesRequestBuilder {
     request: WriteImagesRequest,
@@ -76,12 +76,12 @@ self.request.value_range.values.push(vec![image_data]);
     pub fn images(mut self, images: Vec<Vec<ImageData>>) -> Self {
 self.request.value_range.values = images;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 图片值范围,
 #[derive(.*?)]
 pub struct ImageValueRange {
@@ -89,12 +89,12 @@ pub struct ImageValueRange {
     pub range: String,
     /// 图片数据值
     pub values: Vec<Vec<ImageData>>,
-},
+}
 /// 图片数据,
 #[derive(.*?)]
 pub struct ImageData {
     /// 图片类型，固定值为 "image",
-#[serde(rename = "type")],
+#[serde(rename = "type")]
     pub data_type: String,
     /// 图片 token
     pub image_token: String,
@@ -110,33 +110,33 @@ Self {
             image_token: image_token.to_string(),
             width: None,
             height: None,
-        },
+        }
 }
 
     pub fn with_size(mut self, width: i32, height: i32) -> Self {
 self.width = Some(width);
         self.height = Some(height);
 self,
-    },
-},
+    }
+}
 /// 写入图片响应体最外层,
 #[derive(.*?)]
 pub struct WriteImagesResponseData {
     /// 表格的 token,
-#[serde(rename = "spreadsheetToken")],
+#[serde(rename = "spreadsheetToken")]
     pub spreadsheet_token: String,
     /// 数据更新的位置,
-#[serde(rename = "tableRange")],
+#[serde(rename = "tableRange")]
     pub table_range: String,
     /// sheet 的版本号
     pub revision: i32,
     /// 更新信息
     pub updates: WriteImageUpdatesInfo,
 }
-impl ApiResponseTrait for WriteImagesResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl_executable_builder_owned!(,
     WriteImagesRequestBuilder,
@@ -149,28 +149,28 @@ impl_executable_builder_owned!(,
 #[derive(.*?)]
 pub struct WriteImageUpdatesInfo {
     /// 受更新影响的表格范围,
-#[serde(rename = "updatedRange")],
+#[serde(rename = "updatedRange")]
     pub updated_range: String,
     /// 更新的行数,
-#[serde(rename = "updatedRows")],
+#[serde(rename = "updatedRows")]
     pub updated_rows: i32,
     /// 更新的列数,
-#[serde(rename = "updatedColumns")],
+#[serde(rename = "updatedColumns")]
     pub updated_columns: i32,
     /// 更新的单元格数,
-#[serde(rename = "updatedCells")],
+#[serde(rename = "updatedCells")]
     pub updated_cells: i32,
     /// 写入的图片数量,
-#[serde(rename = "updatedImages")],
+#[serde(rename = "updatedImages")]
     pub updated_images: i32,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
 
     use super::{ImageData, WriteImagesResponseData};
-#[test],
+#[test]
     fn test_write_images_response() {,
 let json = json!({,
             "spreadsheetToken": "shtcnmBA*****yGehy8",
@@ -187,8 +187,8 @@ let json = json!({,
 let response: WriteImagesResponseData = serde_json::from_value(json).unwrap();
         assert_eq!(response.spreadsheet_token, "shtcnmBA*****yGehy8");
         assert_eq!(response.updates.updated_images, 2);
-},
-#[test],
+}
+#[test]
     fn test_image_data_creation() {,
 let image =,
             ImageData::new("img_v2_041b9112-02e8-4c12-b2f2-**********g").with_size(200, 150);
@@ -196,8 +196,8 @@ let image =,
         assert_eq!(image.data_type, "image");
         assert_eq!(image.width, Some(200));
         assert_eq!(image.height, Some(150));
-},
-#[test],
+}
+#[test]
     fn test_image_data_serialization() {,
 let image = ImageData {,
             data_type: "image".to_string(),
@@ -206,12 +206,12 @@ let image = ImageData {,
             height: Some(80),
         };
 let json = serde_json::to_value(&image).unwrap();
-        assert_eq!(json["type"], "image");
+        assert_eq!(json["type"] "image");
 assert_eq!(,
-            json["image_token"],
+            json["image_token"]
             "img_v2_041b9112-02e8-4c12-b2f2-**********g",
 );
-        assert_eq!(json["width"], 100);
-        assert_eq!(json["height"], 80);
+        assert_eq!(json["width"] 100);
+        assert_eq!(json["height"] 80);
 }
 }

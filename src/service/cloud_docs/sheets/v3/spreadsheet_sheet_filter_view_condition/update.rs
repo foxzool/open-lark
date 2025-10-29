@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -31,13 +31,13 @@ api_req.api_path = SHEETS_V3_SPREADSHEET_FILTER_VIEW_CONDITION_GET,
             .replace("{}", &request.sheet_id)
             .replace("{}", &request.filter_view_id)
             .replace("{}", &request.condition_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 更新筛选条件请求,
 #[derive(.*?)]
 pub struct UpdateFilterViewConditionRequest {
@@ -57,8 +57,8 @@ pub struct UpdateFilterViewConditionRequest {
 impl UpdateFilterViewConditionRequest {
     pub fn w+.*{
 UpdateFilterViewConditionRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct UpdateFilterViewConditionRequestBuilder {
     request: UpdateFilterViewConditionRequest,
@@ -87,12 +87,12 @@ self.request.condition_id = condition_id.to_string();
     pub fn condition(mut self, condition: FilterCondition) -> Self {
 self.request.condition = condition;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 更新筛选条件响应体最外层,
 #[derive(.*?)]
 pub struct UpdateFilterViewConditionResponseData {
@@ -101,8 +101,8 @@ pub struct UpdateFilterViewConditionResponseData {
     /// 更新后的筛选条件
     pub condition: FilterCondition,
 }
-impl ApiResponseTrait for UpdateFilterViewConditionResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }

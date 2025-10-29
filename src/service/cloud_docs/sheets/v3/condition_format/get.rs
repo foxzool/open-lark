@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -29,7 +29,7 @@ let mut api_req = request.api_request;
 api_req.api_path = SHEETS_V3_SPREADSHEET_CONDITION_FORMAT,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 // 添加查询参数,
         if let Some(range) = &request.range {
@@ -38,8 +38,8 @@ api_req,
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 批量获取条件格式请求,
 #[derive(.*?)]
 pub struct GetConditionFormatsRequest {
@@ -50,14 +50,14 @@ pub struct GetConditionFormatsRequest {
     /// sheet 的 id
     sheet_id: String,
     /// 可选：查询范围，如果不提供则返回整个工作表的条件格式,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     range: Option<String>,
 }
 impl GetConditionFormatsRequest {
     pub fn w+.*{
 GetConditionFormatsRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct GetConditionFormatsRequestBuilder {
     request: GetConditionFormatsRequest,
@@ -76,35 +76,35 @@ self.request.sheet_id = sheet_id.to_string();
     pub fn range(mut self, range: impl ToString) -> Self {
 self.request.range = Some(range.to_string());
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 批量获取条件格式响应体最外层,
 #[derive(.*?)]
 pub struct GetConditionFormatsResponseData {
     /// 条件格式列表
     pub items: Vec<ConditionFormatInfo>,
     /// 是否还有更多数据,
-#[serde(default)],
+#[serde(default)]
     pub has_more: bool,
     /// 下次请求的页面标记,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
-impl ApiResponseTrait for GetConditionFormatsResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use super::*;
 use serde_json::json;
-    #[test],
+    #[test]
 fn test_get_condition_formats_response() {,
         let json = json!({,
 "items": [,
@@ -112,18 +112,18 @@ fn test_get_condition_formats_response() {,
                     "cf_id": "cf_001",
                     "range": "A1:A10",
                     "condition_type": "NUMBER_GREATER",
-                    "condition_values": ["100"],
+                    "condition_values": ["100"]
                     "format": {
                         "background_color": "#FF0000",
                         "text_color": "#FFFFFF",
                         "bold": true,
 }
-                },
+                }
                 {
                     "cf_id": "cf_002",
                     "range": "B1:B10",
                     "condition_type": "TEXT_CONTAINS",
-                    "condition_values": ["重要"],
+                    "condition_values": ["重要"]
                     "format": {
                         "background_color": "#FFFF00",
                         "text_color": "#000000",

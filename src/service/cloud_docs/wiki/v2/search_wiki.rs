@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -25,26 +25,26 @@ pub struct SearchWikiRequest {
     /// 搜索关键词
     query: String,
     /// 分页大小，最大值为50,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     page_size: Option<i32>,
     /// 分页标记,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     page_token: Option<String>,
     /// 指定搜索的知识空间id列表，不填时搜索所有有权限的知识空间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     space_ids: Option<Vec<String>>,
 }
 impl SearchWikiRequest {
     pub fn w+.*{
 SearchWikiRequestBuilder::default(),
-    },
+    }
 pub fn new(query: impl ToString) -> Self {
         Self {
             query: query.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct SearchWikiRequestBuilder {
     request: SearchWikiRequest,
@@ -54,41 +54,41 @@ impl SearchWikiRequestBuilder {
     pub fn query(mut self, query: impl ToString) -> Self {
 self.request.query = query.to_string();
         self,
-},
+}
 /// 分页大小，最大值为50,
     pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
-},
+}
 /// 分页标记,
     pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
-},
+}
 /// 指定搜索的知识空间id列表,
     pub fn space_ids(mut self, space_ids: Vec<String>) -> Self {
 self.request.space_ids = Some(space_ids);
         self,
-},
+}
 /// 添加单个知识空间id,
     pub fn add_space_id(mut self, space_id: impl ToString) -> Self {
 if self.request.space_ids.is_none() {,
             self.request.space_ids = Some(Vec::new());
-},
+}
 if let Some(ref mut space_ids) = self.request.space_ids {,
             space_ids.push(space_id.to_string());
-},
+}
 self,
-    },
+    }
 /// 搜索所有有权限的知识空间,
     pub fn search_all_spaces(mut self) -> Self {
 self.request.space_ids = None;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 impl_executable_builder_owned!(,
     SearchWikiRequestBuilder,
@@ -120,7 +120,7 @@ pub struct WikiSearchItem {
     pub obj_edit_time: Option<String>,
     /// 最后编辑者
     pub obj_edit_user: Option<String>,
-},
+}
 /// 搜索Wiki响应,
 #[derive(.*?)]
 pub struct SearchWikiResponse {
@@ -131,11 +131,11 @@ pub struct SearchWikiResponse {
     /// 搜索结果列表
     pub items: Vec<WikiSearchItem>,
 }
-impl ApiResponseTrait for SearchWikiResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 搜索Wiki,
 pub async fn search_wiki(
     request: SearchWikiRequest,
@@ -163,11 +163,11 @@ self.obj_token,
                 Some("mindnote") => format!("https://feishu.cn/mindnote/{token}"),
                 _ => format!("https://feishu.cn/wiki/{token}"),
             }),
-},
+}
 /// 是否有匹配的文本片段,
     pub fn w+.*{
 self.snippet.is_some(),
-    },
+    }
 /// 获取显示标题（优先使用title，否则使用obj_token）,
     pub fn w+.*{
 self.title.as_ref().cloned().unwrap_or_else()
@@ -175,12 +175,12 @@ self.title.as_ref().cloned().unwrap_or_else()
 .unwrap_or_else(|| self.node_token.clone()),
         }),
 }
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_search_wiki_request_builder() {,
 let request = SearchWikiRequest::builder(),
             .query()
@@ -195,8 +195,8 @@ assert_eq!(,
             request.space_ids,
             Some(vec!["spcxxxxxx".to_string(), "spcyyyyyy".to_string()]),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_search_all_spaces() {,
 let request = SearchWikiRequest::builder(),
             .query()
@@ -205,8 +205,8 @@ let request = SearchWikiRequest::builder(),
 
         assert_eq!(request.query, "测试搜索");
         assert_eq!(request.space_ids, None);
-},
-#[test],
+}
+#[test]
     fn test_wiki_search_item_methods() {,
 let item = WikiSearchItem {,
             node_token: "wikcnxxxxxx".to_string(),
@@ -227,5 +227,5 @@ assert!(item.has_snippet());
             item.get_doc_url(),
             Some("https://feishu.cn/docs/doccnxxxxxx".to_string()),
 );
-    },
+    }
 }

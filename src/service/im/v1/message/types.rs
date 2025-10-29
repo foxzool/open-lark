@@ -31,7 +31,7 @@ pub trait SendMessageTrait {,
     ///,
 /// 返回序列化后的消息内容JSON字符串,
     fn content(&self) -> String;
-},
+}
 /// Response data for message creation,
 #[derive(.*?)]
 pub struct CreateMessageResp {
@@ -39,9 +39,9 @@ pub struct CreateMessageResp {
 }
 impl crate::core::api_resp::ApiResponseTrait for CreateMessageResp {,
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
-},
+crate::core::api_resp::ResponseFormat::Data
+    }
+}
 /// 飞书消息,
 ///
 /// 表示一条完整的飞书消息，包含消息ID、类型、内容、发送者等所有信息。,
@@ -84,11 +84,11 @@ pub struct Message {
     /// 被@的用户或机器人的id列表
     pub mentions: Option<Vec<Mention>>,
 }
-impl ApiResponseTrait for Message {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
-},
+crate::core::api_resp::ResponseFormat::Data
+    }
+}
 /// 发送者，可以是用户或应用,
 #[derive(.*?)]
 pub struct Sender {
@@ -111,7 +111,7 @@ pub struct Sender {
     /// 为租户在飞书上的唯一标识，用来换取对应的tenant_access_token，,
 /// 也可以用作租户在应用里面的唯一标识,
     tenant_key: String,
-},
+}
 /// 消息内容,
 #[derive(.*?)]
 pub struct MessageBody {
@@ -120,7 +120,7 @@ pub struct MessageBody {
     /// 消息类型 包括：text、post、image、file、audio、media、sticker、interactive、share_chat、,
 /// share_user等，,
     pub content: String,
-},
+}
 /// 被@的用户或机器人的id列表,
 #[derive(.*?)]
 pub struct Mention {
@@ -137,7 +137,7 @@ pub struct Mention {
     pub tenant_key: String,
     /// 合并转发消息中，上一层级的消息id message_id
     pub upper_message_id: String,
-},
+}
 /// Response data for message listing,
 #[derive(.*?)]
 pub struct ListMessageRespData {
@@ -147,11 +147,11 @@ pub struct ListMessageRespData {
     pub page_token: Option<String>,
     pub items: Vec<Message>,
 }
-impl ApiResponseTrait for ListMessageRespData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
-},
+crate::core::api_resp::ResponseFormat::Data
+    }
+}
 /// Message iterator for listing messages with pagination,
 #[allow(dead_code)]
 pub struct ListMessageIterator<'a> {
@@ -170,8 +170,8 @@ Self {
             request,
             page_token: None,
             has_more: true,
-        },
-},
+        }
+}
 // FUTURE: 实现异步迭代器或流式处理分页结果,
     // 标准 Iterator trait 不支持异步，可考虑：,
 // 1. 使用 futures::Stream trait,
@@ -185,9 +185,9 @@ f.debug_struct()
             .field("has_more", &self.has_more)
             .field()
 .finish(),
-    },
-},
-#[cfg(test)],
+    }
+}
+#[cfg(test)]
 mod tests {
 use super::*;
     use serde_json;
@@ -202,44 +202,44 @@ impl TestMessage {
 Self {
                 msg_type_value: msg_type.to_string(),
                 content_value: content.to_string(),
-            },
+            }
 }
     }
 impl SendMessageTrait for TestMessage {,
         fn msg_type(&self) -> String {,
 self.msg_type_value.clone(),
-        },
+        }
 fn content(&self) -> String {,
             self.content_value.clone(),
 }
-    },
-#[test],
-    fn test_send_message_trait_basic() {
+    }
+#[test]
+    ,
         let msg = TestMessage::new("text", "Hello World");
         assert_eq!(msg.msg_type(), "text");
         assert_eq!(msg.content(), "Hello World");
-},
-#[test],
-    fn test_send_message_trait_empty_content() {
+}
+#[test]
+    ,
         let msg = TestMessage::new("text", "");
         assert_eq!(msg.msg_type(), "text");
         assert_eq!(msg.content(), "");
-},
-#[test],
-    fn test_send_message_trait_unicode() {
+}
+#[test]
+    ,
         let msg = TestMessage::new("text", "你好，世界！🌍");
         assert_eq!(msg.msg_type(), "text");
         assert_eq!(msg.content(), "你好，世界！🌍");
-},
-#[test],
+}
+#[test]
     fn test_send_message_trait_complex_content() {,
 let complex_content =,
             r#"{"text":{"type":"plain","content":"复杂消息内容\n换行符\"引号\""}}"#;
         let msg = TestMessage::new("post", complex_content);
         assert_eq!(msg.msg_type(), "post");
         assert_eq!(msg.content(), complex_content);
-},
-#[test],
+}
+#[test]
     fn test_create_message_resp_serialization() {,
 let message = create_test_message();
         let resp = CreateMessageResp {
@@ -250,8 +250,8 @@ let json = serde_json::to_string(&resp).unwrap();
 
         assert_eq!(parsed.data.message_id, message.message_id);
         assert_eq!(parsed.data.msg_type, message.msg_type);
-},
-#[test],
+}
+#[test]
     fn test_create_message_resp_deserialization() {,
 let json = r#"{,
             "data": {
@@ -267,18 +267,18 @@ let json = r#"{,
                     "id_type": "open_id",
                     "sender_type": "user",
                     "tenant_key": "tenant_test",
-},
+}
                 "body": {
                     "content": "{\"text\":\"Hello World\"}",
 }
-            },
+            }
 }"#;
 let resp: CreateMessageResp = serde_json::from_str(json).unwrap();
         assert_eq!(resp.data.message_id, "msg_test123");
         assert_eq!(resp.data.msg_type, "text");
         assert_eq!(resp.data.body.content, "{\"text\":\"Hello World\"}");
-},
-#[test],
+}
+#[test]
     fn test_message_serialization_roundtrip() {,
 let message = create_test_message();
         let json = serde_json::to_string(&message).unwrap();
@@ -286,8 +286,8 @@ let parsed: Message = serde_json::from_str(&json).unwrap();
         assert_eq!(message.message_id, parsed.message_id);
         assert_eq!(message.msg_type, parsed.msg_type);
         assert_eq!(message.chat_id, parsed.chat_id);
-},
-#[test],
+}
+#[test]
     fn test_message_with_optional_fields() {,
 let json = r#"{,
             "message_id": "msg_opt_test",
@@ -305,10 +305,10 @@ let json = r#"{,
                 "id_type": "app_id",
                 "sender_type": "app",
                 "tenant_key": "tenant_workplace",
-},
+}
             "body": {
                 "content": "{\"type\":\"card\",\"elements\":[]}",
-},
+}
             "mentions": [,
 {,
                     "key": "@_user_1",
@@ -317,7 +317,7 @@ let json = r#"{,
                     "name": "张三",
                     "tenant_key": "tenant_workplace",
                     "upper_message_id": "msg_upper_123",
-},
+}
 ],
         }"#;
 let message: Message = serde_json::from_str(json).unwrap();
@@ -331,8 +331,8 @@ let mentions = message.mentions.unwrap();
         assert_eq!(mentions.len(), 1);
         assert_eq!(mentions[0].key, "@_user_1");
         assert_eq!(mentions[0].name, "张三");
-},
-#[test],
+}
+#[test]
     fn test_message_without_optional_fields() {,
 let json = r#"{,
             "message_id": "msg_minimal",
@@ -347,7 +347,7 @@ let json = r#"{,
                 "id_type": "open_id",
                 "sender_type": "user",
                 "tenant_key": "tenant_minimal",
-},
+}
             "body": {
                 "content": "{\"text\":\"minimal\"}",
 }
@@ -358,8 +358,8 @@ let message: Message = serde_json::from_str(json).unwrap();
         assert_eq!(message.parent_id, None);
         assert_eq!(message.thread_id, None);
 assert!(message.mentions.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_sender_different_types() {,
 // User sender,
         let user_json = r#"{
@@ -388,8 +388,8 @@ let app_sender: Sender = serde_json::from_str(app_json).unwrap();
 }"#;
 let anon_sender: Sender = serde_json::from_str(anon_json).unwrap();
         assert_eq!(anon_sender.sender_type, "anonymous");
-},
-#[test],
+}
+#[test]
     fn test_message_body_complex_content() {,
 let complex_content = r#"{,
             "content": "{\"type\":\"template\",\"data\":{\"template_id\":\"tpl_123\",\"template_variable\":{\"name\":\"张三\",\"title\":\"欢迎\"}}}",
@@ -397,8 +397,8 @@ let complex_content = r#"{,
 let body: MessageBody = serde_json::from_str(complex_content).unwrap();
         assert!(body.content.contains("张三"));
 assert!(body.content.contains("template_id"));
-    },
-#[test],
+    }
+#[test]
     fn test_message_body_unicode_and_escaping() {,
 let special_content = r#"{,
             "content": "{\"text\":\"特殊字符：\\n\\t\\\"引号\\\"🎉表情符号\"}",
@@ -410,8 +410,8 @@ assert!(body.content.contains("🎉表情符号"));
 let json = serde_json::to_string(&body).unwrap();
         let parsed: MessageBody = serde_json::from_str(&json).unwrap();
         assert_eq!(body.content, parsed.content);
-},
-#[test],
+}
+#[test]
     fn test_mention_complete_structure() {,
 let json = r#"{,
             "key": "@_user_2",
@@ -433,8 +433,8 @@ let mention: Mention = serde_json::from_str(json).unwrap();
 let deserialized: Mention = serde_json::from_str(&serialized).unwrap();
         assert_eq!(mention.key, deserialized.key);
         assert_eq!(mention.name, deserialized.name);
-},
-#[test],
+}
+#[test]
     fn test_list_message_resp_data_with_pagination() {,
 let json = r#"{,
             "has_more": true,
@@ -453,11 +453,11 @@ let json = r#"{,
                         "id_type": "open_id",
                         "sender_type": "user",
                         "tenant_key": "tenant_page",
-},
+}
                     "body": {
                         "content": "{\"text\":\"Page 1\"}",
 }
-                },
+                }
 ],
         }"#;
 let resp: ListMessageRespData = serde_json::from_str(json).unwrap();
@@ -465,19 +465,19 @@ let resp: ListMessageRespData = serde_json::from_str(json).unwrap();
         assert_eq!(resp.page_token, Some("page_token_next_123".to_string()));
         assert_eq!(resp.items.len(), 1);
         assert_eq!(resp.items[0].message_id, "msg_page_1");
-},
-#[test],
+}
+#[test]
     fn test_list_message_resp_data_last_page() {,
 let json = r#"{,
             "has_more": false,
-            "items": [],
+            "items": []
 }"#;
 let resp: ListMessageRespData = serde_json::from_str(json).unwrap();
         assert!(!resp.has_more);
         assert_eq!(resp.page_token, None);
         assert_eq!(resp.items.len(), 0);
-},
-#[test],
+}
+#[test]
     fn test_list_message_iterator_creation() {,
 let service = create_test_message_service();
         let request = create_test_list_request();
@@ -485,8 +485,8 @@ let service = create_test_message_service();
         let iterator = ListMessageIterator::new(&service, request);
 assert!(iterator.has_more);
         assert_eq!(iterator.page_token, None);
-},
-#[test],
+}
+#[test]
     fn test_list_message_iterator_debug_format() {,
 let service = create_test_message_service();
         let request = create_test_list_request();
@@ -495,26 +495,26 @@ let service = create_test_message_service();
         let debug_str = format!("{:?}", iterator);
 assert!(debug_str.contains("ListMessageIterator"));
         assert!(debug_str.contains("has_more: true"));
-},
-#[test],
+}
+#[test]
     fn test_api_response_trait_implementation() {,
 // Test CreateMessageResp,
         assert_eq!(
             CreateMessageResp::data_format(),
-            crate::core::api_resp::ResponseFormat::Data,
+            crate::core::api_resp::ResponseFormat::Data
 );
         // Test Message,
 assert_eq!(,
             Message::data_format(),
-            crate::core::api_resp::ResponseFormat::Data,
+            crate::core::api_resp::ResponseFormat::Data
 );
         // Test ListMessageRespData,
 assert_eq!(,
             ListMessageRespData::data_format(),
-            crate::core::api_resp::ResponseFormat::Data,
+            crate::core::api_resp::ResponseFormat::Data
 );
-    },
-#[test],
+    }
+#[test]
     fn test_message_edge_cases() {,
 // Test very long message content,
         let long_content = "A".repeat(10000);
@@ -523,17 +523,17 @@ let mut message = create_test_message();
 let json = serde_json::to_string(&message).unwrap();
         let parsed: Message = serde_json::from_str(&json).unwrap();
 assert!(parsed.body.content.len() > 10000);
-    },
-#[test],
-    fn test_message_special_characters_in_content() {
+    }
+#[test]
+    ,
         let special_chars = r#"{}[]<>:"/\|?*`~!@#$%^&()-_=+;'"#;
 let mut message = create_test_message();
         message.body.content = format!(r#"{{"text":"{}"}}"#, special_chars);
 let json = serde_json::to_string(&message).unwrap();
         let parsed: Message = serde_json::from_str(&json).unwrap();
 assert!(parsed.body.content.contains(special_chars));
-    },
-#[test],
+    }
+#[test]
     fn test_send_message_trait_performance() {,
 use std::time::Instant;
         let messages: Vec<TestMessage> = (0..1000)
@@ -543,7 +543,7 @@ use std::time::Instant;
 for msg in &messages {,
             let _type = msg.msg_type();
 let _content = msg.content();
-        },
+        }
 let duration = start.elapsed();
         // Performance assertion - should process 1000 messages quickly,
 assert!(,
@@ -551,8 +551,8 @@ assert!(,
             "Processing 1000 messages took too long: {:?}",
             duration,
 );
-    },
-#[test],
+    }
+#[test]
     fn test_serialization_performance() {,
 use std::time::Instant;
         let messages: Vec<Message> = (0..100),
@@ -576,8 +576,8 @@ assert!(,
             duration,
 );
         assert_eq!(json_results.len(), 100);
-},
-#[test],
+}
+#[test]
     fn test_deserialization_edge_cases() {,
 // Test with null values in optional fields,
         let json_with_nulls = r#"{
@@ -597,7 +597,7 @@ assert!(,
                 "id_type": "open_id",
                 "sender_type": "user",
                 "tenant_key": "tenant_null",
-},
+}
             "body": {
                 "content": "{\"text\":\"null test\"}",
 }
@@ -608,8 +608,8 @@ let message: Message = serde_json::from_str(json_with_nulls).unwrap();
         assert_eq!(message.parent_id, None);
         assert_eq!(message.thread_id, None);
         assert_eq!(message.mentions, None);
-},
-#[test],
+}
+#[test]
     fn test_message_id_validation() {,
 let mut message = create_test_message();
         // Test valid message IDs,
@@ -625,8 +625,8 @@ let json = serde_json::to_string(&message).unwrap();
             let parsed: Message = serde_json::from_str(&json).unwrap();
             assert_eq!(parsed.message_id, valid_id);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_chat_id_validation() {,
 let mut message = create_test_message();
         // Test valid chat IDs
@@ -637,7 +637,7 @@ let json = serde_json::to_string(&message).unwrap();
             let parsed: Message = serde_json::from_str(&json).unwrap();
             assert_eq!(parsed.chat_id, valid_chat_id);
 }
-    },
+    }
 // Helper functions for testing,
     fn create_test_message() -> Message {,
 Message {,
@@ -656,19 +656,19 @@ Message {,
                 id_type: "open_id".to_string(),
                 sender_type: "user".to_string(),
                 tenant_key: "test_tenant".to_string(),
-            },
+            }
             body: MessageBody {
                 content: r#"{"text":"Hello World"}"#.to_string(),
-            },
+            }
             mentions: None,
-        },
-},
+        }
+}
 fn create_test_message_service() -> MessageService {,
         use crate::core::config::Config;
 MessageService {,
             config: Config::default(),
-        },
-},
+        }
+}
 fn create_test_list_request() -> crate::service::im::v1::message::list::ListMessageRequest {,
         crate::service::im::v1::message::list::ListMessageRequest::builder(),
 .container_id()

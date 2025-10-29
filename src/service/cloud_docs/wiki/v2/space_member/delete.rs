@@ -5,7 +5,7 @@ use crate::core::{,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::{cloud_docs::*, EndpointBuilder},
+    endpoints::{cloud_docs::*, EndpointBuilder}
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -16,13 +16,13 @@ pub struct DeleteSpaceMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 知识空间id,
-#[serde(skip)],
+#[serde(skip)]
     space_id: String,
     /// 成员id,
-#[serde(skip)],
+#[serde(skip)]
     member_id: String,
     /// 成员类型：user,
-#[serde(skip)],
+#[serde(skip)]
     member_type: Option<String>,
 }
 impl DeleteSpaceMemberRequest {
@@ -36,8 +36,8 @@ Self {
             member_id: member_id.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct DeleteSpaceMemberRequestBuilder {
     request: DeleteSpaceMemberRequest,
@@ -47,27 +47,27 @@ impl DeleteSpaceMemberRequestBuilder {
     pub fn space_id(mut self, space_id: impl ToString) -> Self {
 self.request.space_id = space_id.to_string();
         self,
-},
+}
 /// 成员id,
     pub fn member_id(mut self, member_id: impl ToString) -> Self {
 self.request.member_id = member_id.to_string();
         self,
-},
+}
 /// 成员类型：user,
     pub fn member_type(mut self, member_type: impl ToString) -> Self {
 self.request.member_type = Some(member_type.to_string());
         self,
-},
+}
 pub fn w+.*{
         if let Some(member_type) = &self.request.member_type {,
 self.request,
                 .api_request,
-.query_params,
+.query_params
                 .insert("member_type", member_type.clone());
-},
+}
 self.request,
-    },
-},
+    }
+}
 /// 删除知识空间成员响应,
 #[derive(.*?)]
 pub struct DeleteSpaceMemberResponse {
@@ -76,11 +76,11 @@ pub struct DeleteSpaceMemberResponse {
     /// 是否删除成功
     pub deleted: bool,
 }
-impl ApiResponseTrait for DeleteSpaceMemberResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 删除知识空间成员,
 pub async fn delete_space_member(
     request: DeleteSpaceMemberRequest,
@@ -105,10 +105,10 @@ Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_delete_space_member_request_builder() {,
 let request = DeleteSpaceMemberRequest::builder(),
             .space_id()

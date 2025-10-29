@@ -17,7 +17,7 @@ pub struct OpenapiLogListRequest {
     pub apis: Option<String>,
     /// 返回码列表，多个用逗号分隔
     pub response_codes: Option<String>,
-},
+}
 /// OpenAPI 审计日志项,
 #[derive(.*?)]
 pub struct OpenapiLogItem {
@@ -45,7 +45,7 @@ pub struct OpenapiLogItem {
     pub ip: Option<String>,
     /// 用户代理
     pub user_agent: Option<String>,
-},
+}
 /// OpenAPI 审计日志响应,
 #[derive(.*?)]
 pub struct OpenapiLogListResponse {
@@ -55,7 +55,7 @@ pub struct OpenapiLogListResponse {
     pub page_token: Option<String>,
     /// 日志项列表
     pub items: Vec<OpenapiLogItem>,
-},
+}
 /// 行为审计日志请求参数,
 #[derive(.*?)]
 pub struct AuditLogGetRequest {
@@ -75,7 +75,7 @@ pub struct AuditLogGetRequest {
     pub operator_ids: Option<Vec<String>>,
     /// 被操作对象 ID 列表
     pub object_ids: Option<Vec<String>>,
-},
+}
 /// 行为审计日志项,
 #[derive(.*?)]
 pub struct AuditLogItem {
@@ -101,7 +101,7 @@ pub struct AuditLogItem {
     pub device_info: Option<String>,
     /// 扩展信息
     pub extend_info: Option<serde_json::Value>,
-},
+}
 /// 行为审计日志响应,
 #[derive(.*?)]
 pub struct AuditLogGetResponse {
@@ -113,7 +113,7 @@ pub struct AuditLogGetResponse {
     pub page_size: i32,
     /// 日志项列表
     pub items: Vec<AuditLogItem>,
-},
+}
 // 默认实现,
 impl Default for OpenapiLogListRequest {,
 fn default() -> Self {
@@ -125,7 +125,7 @@ fn default() -> Self {
             app_ids: None,
             apis: None,
             response_codes: None,
-        },
+        }
 }
 }
 impl Default for AuditLogGetRequest {,
@@ -139,26 +139,26 @@ Self {
             audit_types: None,
             operator_ids: None,
             object_ids: None,
-        },
+        }
 }
-},
+}
 // ApiResponseTrait 实现,
-impl ApiResponseTrait for OpenapiLogListResponse {,
+impl ApiResponseTrait for.* {
 fn data_format() -> ResponseFormat {,
-        ResponseFormat::Data,
+        ResponseFormat::Data
 }
 }
-impl ApiResponseTrait for AuditLogGetResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
-    #[test],
+    #[test]
 fn test_openapi_log_list_request() {,
         let request = OpenapiLogListRequest {
             page_token: Some("token_123".to_string()),
@@ -176,8 +176,8 @@ assert!(json.contains("\"page_size\":50"));
         assert!(json.contains("app1,app2,app3"));
         assert!(json.contains("/open-apis/user/v1/list"));
         assert!(json.contains("200,400,500"));
-},
-#[test],
+}
+#[test]
     fn test_openapi_log_item() {,
 let log_item = OpenapiLogItem {,
             timestamp: 1640995200000,
@@ -205,8 +205,8 @@ assert!(json.contains("\"response_time\":125"));
         assert!(json.contains("ou_1234567890abcdef"));
 assert!(json.contains("192.168.1.100"));
         assert!(json.contains("OpenLarkSDK/1.0.0"));
-},
-#[test],
+}
+#[test]
     fn test_openapi_log_list_response() {,
 let log_item = OpenapiLogItem {,
             timestamp: 1640995200000,
@@ -225,7 +225,7 @@ let log_item = OpenapiLogItem {,
 let response = OpenapiLogListResponse {,
             has_more: true,
             page_token: Some("next_page_token".to_string()),
-            items: vec![log_item],
+            items: vec![log_item]
         };
 let json = serde_json::to_string(&response).unwrap();
         assert!(json.contains("\"has_more\":true"));
@@ -233,8 +233,8 @@ assert!(json.contains("next_page_token"));
         assert!(json.contains("cli_test"));
 assert!(json.contains("/open-apis/contact/v3/users"));
         assert!(json.contains("GET"));
-},
-#[test],
+}
+#[test]
     fn test_audit_log_get_request() {,
 let request = AuditLogGetRequest {,
             data_type: "all".to_string(),
@@ -261,13 +261,13 @@ assert!(json.contains("login"));
 assert!(json.contains("admin_operation"));
         assert!(json.contains("user_admin"));
 assert!(json.contains("file_001"));
-    },
-#[test],
+    }
+#[test]
     fn test_audit_log_item() {,
 let extend_info = serde_json::json!({,
             "old_value": "admin",
             "new_value": "user",
-            "affected_fields": ["role", "permissions"],
+            "affected_fields": ["role", "permissions"]
 });
 let log_item = AuditLogItem {,
             log_id: "audit_log_123456".to_string(),
@@ -296,8 +296,8 @@ assert!(json.contains("Windows 10"));
         assert!(json.contains("old_value"));
 assert!(json.contains("new_value"));
         assert!(json.contains("affected_fields"));
-},
-#[test],
+}
+#[test]
     fn test_audit_log_get_response() {,
 let log_item1 = AuditLogItem {,
             log_id: "log_001".to_string(),
@@ -331,7 +331,7 @@ let response = AuditLogGetResponse {,
             total: 1250,
             page: 1,
             page_size: 100,
-            items: vec![log_item1, log_item2],
+            items: vec![log_item1, log_item2]
         };
 let json = serde_json::to_string(&response).unwrap();
         assert!(json.contains("\"total\":1250"));
@@ -346,8 +346,8 @@ assert!(json.contains("用户登录系统"));
 assert!(json.contains("file_important.pdf"));
         assert!(json.contains("重要文档.pdf"));
 assert!(json.contains("confidential"));
-    },
-#[test],
+    }
+#[test]
     fn test_default_implementations() {,
 let default_openapi_request = OpenapiLogListRequest::default();
         assert_eq!(default_openapi_request.page_token, None);
@@ -366,13 +366,13 @@ let default_audit_request = AuditLogGetRequest::default();
         assert_eq!(default_audit_request.audit_types, None);
         assert_eq!(default_audit_request.operator_ids, None);
         assert_eq!(default_audit_request.object_ids, None);
-},
-#[test],
-    fn test_api_response_trait() {
+}
+#[test]
+    ,
         assert_eq!(OpenapiLogListResponse::data_format(), ResponseFormat::Data);
         assert_eq!(AuditLogGetResponse::data_format(), ResponseFormat::Data);
-},
-#[test],
+}
+#[test]
     fn test_minimal_structs() {,
 let minimal_openapi_request = OpenapiLogListRequest {,
             page_token: None,
@@ -437,15 +437,15 @@ let json = serde_json::to_string(&minimal_audit_item).unwrap();
 assert!(json.contains("Test operation"));
         assert!(json.contains("\"object_id\":null"));
 assert!(json.contains("\"ip\":null"));
-    },
-#[test],
+    }
+#[test]
     fn test_complex_security_scenario() {,
 // Simulate a complex security audit scenario,
         let security_incident_extend_info = serde_json::json!({
             "incident_type": "unauthorized_access",
             "severity": "high",
-            "affected_resources": ["user_database", "config_files"],
-            "remediation_actions": ["password_reset", "access_revoked", "logs_preserved"],
+            "affected_resources": ["user_database", "config_files"]
+            "remediation_actions": ["password_reset", "access_revoked", "logs_preserved"]
             "investigation_status": "ongoing",
 });
 let security_log = AuditLogItem {,
@@ -479,12 +479,12 @@ let security_response = AuditLogGetResponse {,
             total: 1,
             page: 1,
             page_size: 100,
-            items: vec![security_log],
+            items: vec![security_log]
         };
 let openapi_response = OpenapiLogListResponse {,
             has_more: false,
             page_token: None,
-            items: vec![openapi_abuse_log],
+            items: vec![openapi_abuse_log]
         };
 let security_json = serde_json::to_string(&security_response).unwrap();
         let openapi_json = serde_json::to_string(&openapi_response).unwrap();

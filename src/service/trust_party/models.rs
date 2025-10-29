@@ -5,12 +5,12 @@ pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
     /// 分页标记，用于获取下一页数据,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
     /// 是否还有更多数据,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
-},
+}
 /// 关联组织信息,
 #[derive(.*?)]
 pub struct CollaborationOrganization {
@@ -19,24 +19,24 @@ pub struct CollaborationOrganization {
     /// 关联组织名称
     pub org_name: String,
     /// 关联组织类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub org_type: Option<String>,
     /// 关联组织状态,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     /// 关联关系创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
     /// 关联关系更新时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
     /// 关联组织域名,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub domain: Option<String>,
     /// 关联组织描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-},
+}
 /// 关联组织部门信息,
 #[derive(.*?)]
 pub struct CollaborationDepartment {
@@ -45,24 +45,24 @@ pub struct CollaborationDepartment {
     /// 部门名称
     pub name: String,
     /// 父部门ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub parent_department_id: Option<String>,
     /// 部门状态,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     /// 部门层级,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub level: Option<i32>,
     /// 部门成员数量,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub member_count: Option<i32>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
     /// 更新时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-},
+}
 /// 关联组织成员信息,
 #[derive(.*?)]
 pub struct CollaborationUser {
@@ -71,59 +71,59 @@ pub struct CollaborationUser {
     /// 用户名称
     pub name: String,
     /// 用户邮箱,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
     /// 用户手机号,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub mobile: Option<String>,
     /// 用户头像URL,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub avatar_url: Option<String>,
     /// 用户状态,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     /// 用户类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_type: Option<String>,
     /// 所属部门ID列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department_ids: Option<Vec<String>>,
     /// 职位信息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub job_title: Option<String>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
     /// 更新时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-},
+}
 /// 组织架构信息,
 #[derive(.*?)]
 pub struct OrganizationStructure {
     /// 部门列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub departments: Option<Vec<CollaborationDepartment>>,
     /// 成员列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub users: Option<Vec<CollaborationUser>>,
-},
+}
 /// 共享成员范围信息,
 #[derive(.*?)]
 pub struct SharedMemberScope {
     /// 共享范围类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub scope_type: Option<String>,
     /// 共享的部门ID列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department_ids: Option<Vec<String>>,
     /// 共享的用户ID列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_ids: Option<Vec<String>>,
     /// 共享范围描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-},
+}
 /// 可搜可见规则,
 #[derive(.*?)]
 pub struct SearchableVisibleRule {
@@ -132,68 +132,68 @@ pub struct SearchableVisibleRule {
     /// 规则名称
     pub name: String,
     /// 规则描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 规则类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub rule_type: Option<String>,
     /// 规则状态,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     /// 适用的组织ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub org_id: Option<String>,
     /// 规则配置,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub config: Option<RuleConfig>,
     /// 创建者ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub creator: Option<String>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
     /// 更新时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-},
+}
 /// 规则配置,
 #[derive(.*?)]
 pub struct RuleConfig {
     /// 可见性（如 public/restricted/private）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub visibility: Option<String>,
     /// 是否可搜索,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub searchable: Option<bool>,
     /// 适用范围,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub scope: Option<RuleScope>,
     /// 例外对象（用户/部门/组等标识）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub exceptions: Option<Vec<String>>,
-},
+}
 /// 规则适用范围,
 #[derive(.*?)]
 pub struct RuleScope {
     /// 适用的部门ID列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department_ids: Option<Vec<String>>,
     /// 适用的用户ID列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_ids: Option<Vec<String>>,
     /// 适用的用户组ID列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub group_ids: Option<Vec<String>>,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
-    #[test],
+    #[test]
 fn test_page_response() {,
         let response = PageResponse {
-            items: vec!["org1".to_string(), "org2".to_string()],
+            items: vec!["org1".to_string(), "org2".to_string()]
             page_token: Some("token_123".to_string()),
             has_more: Some(true),
         };
@@ -202,8 +202,8 @@ let json = serde_json::to_string(&response).unwrap();
 assert!(json.contains("org2"));
         assert!(json.contains("token_123"));
 assert!(json.contains("true"));
-    },
-#[test],
+    }
+#[test]
     fn test_collaboration_organization() {,
 let org = CollaborationOrganization {,
             org_id: "org_12345".to_string(),
@@ -222,8 +222,8 @@ assert!(json.contains("合作伙伴公司"));
 assert!(json.contains("active"));
         assert!(json.contains("partner.com"));
 assert!(json.contains("重要合作伙伴公司"));
-    },
-#[test],
+    }
+#[test]
     fn test_collaboration_department() {,
 let dept = CollaborationDepartment {,
             department_id: "dept_engineering".to_string(),
@@ -242,8 +242,8 @@ assert!(json.contains("工程部"));
 assert!(json.contains("active"));
         assert!(json.contains("\"level\":2"));
 assert!(json.contains("\"member_count\":25"));
-    },
-#[test],
+    }
+#[test]
     fn test_collaboration_user() {,
 let user = CollaborationUser {,
             user_id: "user_alice".to_string(),
@@ -269,8 +269,8 @@ assert!(json.contains("+86-138-0000-0000"));
         assert!(json.contains("external"));
 assert!(json.contains("dept_engineering"));
         assert!(json.contains("高级工程师"));
-},
-#[test],
+}
+#[test]
     fn test_organization_structure() {,
 let dept1 = CollaborationDepartment {,
             department_id: "dept_001".to_string(),
@@ -304,8 +304,8 @@ let json = serde_json::to_string(&structure).unwrap();
 assert!(json.contains("Bob Chen"));
         assert!(json.contains("bob.chen@partner.com"));
 assert!(json.contains("产品经理"));
-    },
-#[test],
+    }
+#[test]
     fn test_shared_member_scope() {,
 let scope = SharedMemberScope {,
             scope_type: Some("department".to_string()),
@@ -319,8 +319,8 @@ assert!(json.contains("dept_tech"));
         assert!(json.contains("dept_product"));
 assert!(json.contains("user_lead1"));
         assert!(json.contains("技术和产品团队共享范围"));
-},
-#[test],
+}
+#[test]
     fn test_searchable_visible_rule() {,
 let config = RuleConfig {,
             visibility: Some("public".to_string()),
@@ -353,8 +353,8 @@ assert!(json.contains("visibility"));
 assert!(json.contains("\"searchable\":true"));
         assert!(json.contains("dept_all"));
 assert!(json.contains("sensitive_dept"));
-    },
-#[test],
+    }
+#[test]
     fn test_rule_config() {,
 let config = RuleConfig {,
             visibility: Some("private".to_string()),
@@ -374,8 +374,8 @@ assert!(json.contains("hr_manager"));
         assert!(json.contains("hr_team"));
 assert!(json.contains("ceo"));
         assert!(json.contains("cto"));
-},
-#[test],
+}
+#[test]
     fn test_rule_scope() {,
 let scope = RuleScope {,
             department_ids: Some(vec!["sales".to_string(), "marketing".to_string()]),
@@ -388,8 +388,8 @@ assert!(json.contains("marketing"));
         assert!(json.contains("sales_lead"));
 assert!(json.contains("sales_team"));
         assert!(json.contains("marketing_team"));
-},
-#[test],
+}
+#[test]
     fn test_minimal_structs() {,
 let minimal_org = CollaborationOrganization {,
             org_id: "minimal_org".to_string(),
@@ -424,8 +424,8 @@ let json = serde_json::to_string(&minimal_user).unwrap();
 assert!(json.contains("Minimal User"));
         assert!(!json.contains("email"));
 assert!(!json.contains("mobile"));
-    },
-#[test],
+    }
+#[test]
     fn test_nested_structures() {,
 let page_response = PageResponse {,
             items: vec![,
@@ -438,7 +438,7 @@ CollaborationOrganization {,
                     updated_at: None,
                     domain: None,
                     description: None,
-                },
+                }
                 CollaborationOrganization {
                     org_id: "org_2".to_string(),
                     org_name: "Organization 2".to_string(),
@@ -448,7 +448,7 @@ CollaborationOrganization {,
                     updated_at: None,
                     domain: Some("customer.com".to_string()),
                     description: Some("Important customer".to_string()),
-                },
+                }
             ],
             page_token: Some("next_orgs".to_string()),
             has_more: Some(true),
@@ -461,8 +461,8 @@ assert!(json.contains("customer"));
         assert!(json.contains("customer.com"));
 assert!(json.contains("Important customer"));
         assert!(json.contains("next_orgs"));
-},
-#[test],
+}
+#[test]
     fn test_complex_trust_party_scenario() {,
 let engineering_dept = CollaborationDepartment {,
             department_id: "eng_dept".to_string(),
@@ -539,5 +539,5 @@ assert!(json_rule.contains("contractor_visibility_rule"));
 assert!(json_rule.contains("restricted"));
         assert!(json_rule.contains("external_contractors"));
 assert!(json_rule.contains("confidential_projects"));
-    },
+    }
 }

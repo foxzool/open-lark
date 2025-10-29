@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::{cloud_docs::*, EndpointBuilder,
@@ -24,20 +24,20 @@ pub struct GetTaskRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 任务id,
-#[serde(skip)],
+#[serde(skip)]
     task_id: String,
 }
 impl GetTaskRequest {
     pub fn w+.*{
 GetTaskRequestBuilder::default(),
-    },
+    }
 pub fn new(task_id: impl ToString) -> Self {
         Self {
             task_id: task_id.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct GetTaskRequestBuilder {
     request: GetTaskRequest,
@@ -47,11 +47,11 @@ impl GetTaskRequestBuilder {
     pub fn task_id(mut self, task_id: impl ToString) -> Self {
 self.request.task_id = task_id.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 impl_executable_builder_owned!(,
     GetTaskRequestBuilder,
@@ -62,7 +62,7 @@ impl_executable_builder_owned!(,
 );
 /// 任务状态
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum TaskStatus {,
 /// 进行中,
     Processing,
@@ -70,7 +70,7 @@ pub enum TaskStatus {,
     Success,
     /// 失败
     Failed,
-},
+}
 /// 移动结果,
 #[derive(.*?)]
 pub struct MoveResult {
@@ -82,7 +82,7 @@ pub struct MoveResult {
     pub title: Option<String>,
     /// 文档类型
     pub obj_type: Option<String>,
-},
+}
 /// 任务详细信息,
 #[derive(.*?)]
 pub struct TaskDetail {
@@ -104,18 +104,18 @@ pub struct TaskDetail {
     pub create_time: Option<String>,
     /// 完成时间（毫秒时间戳）
     pub finish_time: Option<String>,
-},
+}
 /// 获取任务结果响应,
 #[derive(.*?)]
 pub struct GetTaskResponse {
     /// 任务详细信息
     pub task: TaskDetail,
 }
-impl ApiResponseTrait for GetTaskResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 获取任务结果,
 pub async fn get_task(
     request: GetTaskRequest,
@@ -139,15 +139,15 @@ impl TaskStatus {
 /// 是否已完成（成功或失败）,
     pub fn is_finished(&self) -> bool {
         matches!(self, TaskStatus::Success | TaskStatus::Failed),
-},
+}
 /// 是否成功,
     pub fn is_success(&self) -> bool {
         matches!(self, TaskStatus::Success),
-},
+}
 /// 是否失败,
     pub fn is_failed(&self) -> bool {
         matches!(self, TaskStatus::Failed),
-},
+}
 /// 是否进行中,
     pub fn is_processing(&self) -> bool {
         matches!(self, TaskStatus::Processing),
@@ -160,30 +160,30 @@ pub fn w+.*{
 if total > 0 {,
                 return Some((processed as f32 / total as f32) * 100.0);
 }
-        },
+        }
 None,
-    },
+    }
 /// 是否有错误,
     pub fn w+.*{
 self.error_message.is_some(),
-    },
+    }
 /// 获取成功移动的文档数量,
     pub fn w+.*{
 self.move_results,
             .as_ref()
             .map_or(0, |results| results.len()),
 }
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_get_task_request_builder() {,
 let request = GetTaskRequest::builder().task_id("taskxxxxxx").build();
         assert_eq!(request.task_id, "taskxxxxxx");
-},
-#[test],
+}
+#[test]
     fn test_task_status_methods() {,
 assert!(TaskStatus::Success.is_finished());
         assert!(TaskStatus::Failed.is_finished());
@@ -194,5 +194,5 @@ assert!(!TaskStatus::Failed.is_success());
 assert!(!TaskStatus::Success.is_failed());
         assert!(TaskStatus::Processing.is_processing());
 assert!(!TaskStatus::Success.is_processing());
-    },
+    }
 }

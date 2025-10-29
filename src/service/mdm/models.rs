@@ -5,12 +5,12 @@ pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
     /// 分页标记，用于获取下一页数据,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
     /// 是否还有更多数据,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
-},
+}
 /// 国家/地区信息,
 #[derive(.*?)]
 pub struct CountryRegion {
@@ -19,74 +19,74 @@ pub struct CountryRegion {
     /// 国家/地区名称
     pub name: String,
     /// 国家/地区英文名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub name_en: Option<String>,
     /// 国家/地区代码,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub country_code: Option<String>,
     /// ISO 国家代码,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub iso_country_code: Option<String>,
     /// 区域类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub region_type: Option<String>,
     /// 状态,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
     /// 更新时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
     /// 排序序号,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub sort_order: Option<i32>,
     /// 描述信息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-},
+}
 /// 用户数据维度关系,
 #[derive(.*?)]
 pub struct UserAuthDataRelation {
     /// 关系ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub relation_id: Option<String>,
     /// 用户ID
     pub user_id: String,
     /// 数据维度ID
     pub data_dimension_id: String,
     /// 数据维度名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub data_dimension_name: Option<String>,
     /// 数据维度类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub data_dimension_type: Option<String>,
     /// 绑定类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub bind_type: Option<String>,
     /// 权限级别,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub permission_level: Option<String>,
     /// 状态,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     /// 生效开始时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub effective_start_time: Option<i64>,
     /// 生效结束时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub effective_end_time: Option<i64>,
     /// 创建者ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub creator: Option<String>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
     /// 更新时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-},
+}
 /// 数据维度信息,
 #[derive(.*?)]
 pub struct DataDimension {
@@ -95,30 +95,30 @@ pub struct DataDimension {
     /// 数据维度名称
     pub name: String,
     /// 数据维度描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 数据维度类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub dimension_type: Option<String>,
     /// 数据维度分类,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub category: Option<String>,
     /// 是否启用,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub is_enabled: Option<bool>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
     /// 更新时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
-    #[test],
+    #[test]
 fn test_page_response_serialization() {,
         let page_response = PageResponse {,
 items: vec![,
@@ -136,11 +136,11 @@ let serialized = serde_json::to_string(&page_response).unwrap();
         assert_eq!(page_response.page_token, deserialized.page_token);
         assert_eq!(page_response.has_more, deserialized.has_more);
         assert_eq!(page_response.items.len(), 3);
-},
-#[test],
+}
+#[test]
     fn test_page_response_empty_serialization() {,
 let page_response: PageResponse<String> = PageResponse {,
-            items: vec![],
+            items: vec![]
             page_token: None,
             has_more: Some(false),
         };
@@ -151,8 +151,8 @@ let serialized = serde_json::to_string(&page_response).unwrap();
         assert_eq!(page_response.page_token, deserialized.page_token);
         assert_eq!(page_response.has_more, deserialized.has_more);
 assert!(page_response.items.is_empty());
-    },
-#[test],
+    }
+#[test]
     fn test_page_response_with_complex_items() {,
 let page_response = PageResponse {,
             items: vec![,
@@ -168,7 +168,7 @@ CountryRegion {,
                     updated_at: Some(1640995200000),
                     sort_order: Some(1),
                     description: Some("People's Republic of China".to_string()),
-                },
+                }
                 CountryRegion {
                     master_data_code: "US".to_string(),
                     name: "美国".to_string(),
@@ -181,7 +181,7 @@ CountryRegion {,
                     updated_at: Some(1640995200000),
                     sort_order: Some(2),
                     description: Some("United States of America".to_string()),
-                },
+                }
             ],
             page_token: Some("country_page_2".to_string()),
             has_more: Some(true),
@@ -197,8 +197,8 @@ assert_eq!(,
             deserialized.items[0].master_data_code,
 );
         assert_eq!(page_response.items[1].name, deserialized.items[1].name);
-},
-#[test],
+}
+#[test]
     fn test_country_region_serialization() {,
 let country = CountryRegion {,
             master_data_code: "JP".to_string(),
@@ -227,8 +227,8 @@ let serialized = serde_json::to_string(&country).unwrap();
         assert_eq!(country.updated_at, deserialized.updated_at);
         assert_eq!(country.sort_order, deserialized.sort_order);
         assert_eq!(country.description, deserialized.description);
-},
-#[test],
+}
+#[test]
     fn test_country_region_minimal_serialization() {,
 let country = CountryRegion {,
             master_data_code: "FR".to_string(),
@@ -257,8 +257,8 @@ let serialized = serde_json::to_string(&country).unwrap();
         assert_eq!(country.updated_at, deserialized.updated_at);
         assert_eq!(country.sort_order, deserialized.sort_order);
         assert_eq!(country.description, deserialized.description);
-},
-#[test],
+}
+#[test]
     fn test_user_auth_data_relation_serialization() {,
 let relation = UserAuthDataRelation {,
             relation_id: Some("rel_123456".to_string()),
@@ -300,8 +300,8 @@ assert_eq!(,
         assert_eq!(relation.creator, deserialized.creator);
         assert_eq!(relation.created_at, deserialized.created_at);
         assert_eq!(relation.updated_at, deserialized.updated_at);
-},
-#[test],
+}
+#[test]
     fn test_user_auth_data_relation_minimal_serialization() {,
 let relation = UserAuthDataRelation {,
             relation_id: None,
@@ -343,8 +343,8 @@ assert_eq!(,
         assert_eq!(relation.creator, deserialized.creator);
         assert_eq!(relation.created_at, deserialized.created_at);
         assert_eq!(relation.updated_at, deserialized.updated_at);
-},
-#[test],
+}
+#[test]
     fn test_data_dimension_serialization() {,
 let dimension = DataDimension {,
             data_dimension_id: "dim_product_001".to_string(),
@@ -369,8 +369,8 @@ let serialized = serde_json::to_string(&dimension).unwrap();
         assert_eq!(dimension.is_enabled, deserialized.is_enabled);
         assert_eq!(dimension.created_at, deserialized.created_at);
         assert_eq!(dimension.updated_at, deserialized.updated_at);
-},
-#[test],
+}
+#[test]
     fn test_data_dimension_minimal_serialization() {,
 let dimension = DataDimension {,
             data_dimension_id: "dim_minimal_001".to_string(),
@@ -393,8 +393,8 @@ let serialized = serde_json::to_string(&dimension).unwrap();
         assert_eq!(dimension.is_enabled, deserialized.is_enabled);
         assert_eq!(dimension.created_at, deserialized.created_at);
         assert_eq!(dimension.updated_at, deserialized.updated_at);
-},
-#[test],
+}
+#[test]
     fn test_data_dimension_disabled_serialization() {,
 let dimension = DataDimension {,
             data_dimension_id: "dim_disabled_001".to_string(),
@@ -413,8 +413,8 @@ let serialized = serde_json::to_string(&dimension).unwrap();
         assert_eq!(deserialized.is_enabled, Some(false));
         assert_eq!(dimension.category, Some("test".to_string()));
         assert_eq!(dimension.dimension_type, Some("flat".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_skip_serializing_if_none_functionality() {,
 let country = CountryRegion {,
             master_data_code: "TEST".to_string(),
@@ -445,11 +445,11 @@ assert!(json.contains("region_type"));
         assert!(json.contains("created_at"));
 assert!(json.contains("Test Country"));
         assert!(json.contains("TEST"));
-},
-#[test],
+}
+#[test]
     fn test_page_response_skip_serializing_if_none() {,
 let page_response: PageResponse<String> = PageResponse {,
-            items: vec!["test".to_string()],
+            items: vec!["test".to_string()]
             page_token: None,
             has_more: None,
         };
@@ -460,8 +460,8 @@ assert!(!json.contains("page_token"));
 // Should contain fields with values,
         assert!(json.contains("items"));
 assert!(json.contains("test"));
-    },
-#[test],
+    }
+#[test]
     fn test_user_auth_data_relation_skip_serializing_if_none() {,
 let relation = UserAuthDataRelation {,
             relation_id: Some("rel_test".to_string()),
@@ -497,8 +497,8 @@ assert!(json.contains("status"));
 assert!(json.contains("rel_test"));
         assert!(json.contains("user_test"));
 assert!(json.contains("test_type"));
-    },
-#[test],
+    }
+#[test]
     fn test_complex_page_response_with_user_relations() {,
 let page_response = PageResponse {,
             items: vec![,
@@ -516,7 +516,7 @@ UserAuthDataRelation {,
                     creator: Some("system".to_string()),
                     created_at: Some(1640995200000),
                     updated_at: Some(1672531200000),
-                },
+                }
                 UserAuthDataRelation {
                     relation_id: Some("rel_002".to_string()),
                     user_id: "user_002".to_string(),
@@ -531,7 +531,7 @@ UserAuthDataRelation {,
                     creator: Some("admin".to_string()),
                     created_at: Some(1640995200000),
                     updated_at: Some(1672531200000),
-                },
+                }
             ],
             page_token: Some("relations_page_2".to_string()),
             has_more: Some(false),
@@ -551,8 +551,8 @@ assert_eq!(,
             deserialized.items[1].permission_level,
             Some("read_write".to_string()),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_timestamp_handling() {,
 let now = 1672531200000i64; // Example timestamp,
         let future = 1735689600000i64; // Future timestamp,

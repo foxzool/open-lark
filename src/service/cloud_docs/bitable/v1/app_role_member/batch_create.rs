@@ -8,7 +8,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -25,17 +25,17 @@ pub struct BatchCreateRoleMemberRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 多维表格的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     app_token: String,
     /// 自定义角色的id,
-#[serde(skip)],
+#[serde(skip)]
     role_id: String,
     /// 用户id类型,
-#[serde(skip)],
+#[serde(skip)]
     user_id_type: Option<String>,
     /// 成员列表
     members: Vec<MemberInfo>,
-},
+}
 /// 成员信息,
 #[derive(.*?)]
 pub struct MemberInfo {
@@ -56,8 +56,8 @@ Self {
             members,
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct BatchCreateRoleMemberRequestBuilder {
     request: BatchCreateRoleMemberRequest,
@@ -67,22 +67,22 @@ impl BatchCreateRoleMemberRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 自定义角色的id,
     pub fn role_id(mut self, role_id: impl ToString) -> Self {
 self.request.role_id = role_id.to_string();
         self,
-},
+}
 /// 用户id类型,
     pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
-},
+}
 /// 成员列表,
     pub fn members(mut self, members: Vec<MemberInfo>) -> Self {
 self.request.members = members;
         self,
-},
+}
 /// 添加单个成员,
     pub fn add_member(mut self, member_id: impl ToString, member_type: impl ToString) -> Self {
 self.request.members.push(MemberInfo {,
@@ -90,14 +90,14 @@ self.request.members.push(MemberInfo {,
             member_type: member_type.to_string(),
         });
 self,
-    },
+    }
 pub fn w+.*{
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
                 .api_request,
-.query_params,
+.query_params
                 .insert("user_id_type", user_id_type.clone());
-},
+}
 self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request,
 }
@@ -115,11 +115,11 @@ pub struct BatchCreateRoleMemberResponse {
     /// 新增的协作者信息列表
     pub members: Vec<RoleMember>,
 }
-impl ApiResponseTrait for BatchCreateRoleMemberResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 批量新增协作者,
 pub async fn batch_create_role_members(
     request: BatchCreateRoleMemberRequest,
@@ -138,10 +138,10 @@ Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_batch_create_role_member_request_builder() {,
 let request = BatchCreateRoleMemberRequest::builder(),
             .app_token()

@@ -1,22 +1,60 @@
+//! IM API v2版本
+
 use crate::core::config::Config;
-pub mod app_feed_card;
-pub mod groups_bots;
-pub mod models;
-use app_feed_card::AppFeedCardService;
-use groups_bots::GroupsBotsService;
-/// IM v2服务
-#[derive(.*?)]
-pub struct V2 {
-/// 应用消息流卡片服务
-    pub app_feed_card: AppFeedCardService,
-    /// 群聊或机器人消息服务
-    pub groups_bots: GroupsBotsService,
+
+/// 应用订阅卡片服务
+pub struct AppFeedCardService {
+    _config: Config,
 }
-impl V2 {
-    pub fn new() -> Self {
-Self {
-            app_feed_card: AppFeedCardService::new(config.clone()),
-            groups_bots: GroupsBotsService::new(config),
+
+impl AppFeedCardService {
+    pub fn new(config: Config) -> Self {
+        Self { _config: config }
+    }
+}
+
+/// 群机器人服务
+pub struct GroupsBotsService {
+    _config: Config,
+}
+
+impl GroupsBotsService {
+    pub fn new(config: Config) -> Self {
+        Self { _config: config }
+    }
+}
+
+pub mod app_feed_card {
+    use serde::{Deserialize, Serialize};
+    use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
+
+    #[derive(Debug, Deserialize, Serialize)]
+    pub struct CreateAppFeedCardResponse;
+    impl ApiResponseTrait for CreateAppFeedCardResponse {
+        fn data_format() -> ResponseFormat {
+            ResponseFormat::Data
         }
+    }
 }
+
+pub mod groups_bots {
+    use serde::{Deserialize, Serialize};
+    use crate::core::api_resp::{ApiResponseTrait, ResponseFormat};
+
+    #[derive(Debug, Deserialize, Serialize)]
+    pub struct ButtonInfo;
+    pub type UserIdType = String;
+
+    #[derive(Debug, Deserialize, Serialize)]
+    pub struct CreateBotResponse;
+    impl ApiResponseTrait for CreateBotResponse {
+        fn data_format() -> ResponseFormat {
+            ResponseFormat::Data
+        }
+    }
+}
+
+pub mod models {
+    // 简单的模型定义
+    pub struct MessageCard;
 }

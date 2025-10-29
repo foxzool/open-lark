@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -36,8 +36,8 @@ api_req.set_api_path(SHEETS_V3_SPREADSHEETS.to_string());
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 创建表格 请求体,
 #[derive(.*?)]
 pub struct CreateSpreedSheetRequest {
@@ -57,8 +57,8 @@ pub struct CreateSpreedSheetRequest {
 impl CreateSpreedSheetRequest {
     pub fn w+.*{
 CreateSpreedSheetRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct CreateSpreedSheetRequestBuilder {
     request: CreateSpreedSheetRequest,
@@ -74,17 +74,17 @@ impl CreateSpreedSheetRequestBuilder {
     pub fn title(mut self, title: impl ToString) -> Self {
 self.request.title = Some(title.to_string());
         self,
-},
+}
 /// 文件夹token,
     pub fn folder_token(mut self, folder_token: impl ToString) -> Self {
 self.request.folder_token = Some(folder_token.to_string());
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 // Trait implementation,
 impl_executable_builder_owned!(
     CreateSpreedSheetRequestBuilder,
@@ -98,11 +98,11 @@ impl_executable_builder_owned!(
 pub struct CreateSpreedSheetResponseData {
     pub spreadsheet: CreateSpreedSheetResponse,
 }
-impl ApiResponseTrait for CreateSpreedSheetResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 创建表格 响应体,
 #[derive(.*?)]
 pub struct CreateSpreedSheetResponse {
@@ -114,13 +114,13 @@ pub struct CreateSpreedSheetResponse {
     pub url: String,
     /// 表格token
     pub spreadsheet_token: String,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
 use crate::service::sheets::v3::spreadsheet::CreateSpreedSheetResponseData;
-    #[test],
+    #[test]
 fn test_create_spreadsheet_response() {,
         let json = json!({,
 "spreadsheet": {,

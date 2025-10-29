@@ -9,6 +9,6 @@ pub struct StyleService {
 }
 impl StyleService {
     pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client },
+        Self { client }
 }
 }

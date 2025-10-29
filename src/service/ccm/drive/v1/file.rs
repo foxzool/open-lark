@@ -26,8 +26,8 @@ pub struct FileService {
 impl FileService {
     /// 创建新的文件操作服务实例,
 pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client },
-},
+        Self { client }
+}
 /// 获取文件夹中的文件清单,
     ///,
 /// 获取用户云空间中指定文件夹下的文件清单。清单类型包括文件、各种在线文档（文档、电子表格、多维表格、思维笔记）、文件夹和快捷方式。,
@@ -54,15 +54,15 @@ let mut request = RequestBuilder::get("/open-apis/drive/v1/files"),
             .query_param("page_size", &page_size.to_string());
 if let Some(token) = parent_token {,
             request = request.query_param("parent_token", token);
-},
+}
 if let Some(token) = page_token {,
             request = request.query_param("page_token", token);
-},
+}
 if let Some(ft) = file_type {,
             request = request.query_param("type", &format!("{:?}", ft).to_lowercase());
-},
+}
 self.client.send(request).await,
-    },
+    }
 /// 新建文件夹,
     ///,
 /// 在用户云空间的指定文件夹中创建一个新的空文件夹。,
@@ -88,7 +88,7 @@ let request_body = CreateFolderRequest {,
 let request = RequestBuilder::post("/open-apis/drive/v1/files/create_folder"),
             .body_json(request_body);
 self.client.send(request).await,
-    },
+    }
 /// 复制文件,
     ///,
 /// 将文件复制到用户云空间的其他文件夹中。不支持复制文件夹。,
@@ -115,14 +115,14 @@ let mut request_body = CopyFileRequest {,
         };
 if let Some(n) = name {,
             request_body.name = Some(n.to_string());
-},
+}
 let request = RequestBuilder::post(&format!(,
             "/open-apis/drive/v1/files/{}/copy",
             file_token,
 )),
         .body_json(request_body);
 self.client.send(request).await,
-    },
+    }
 /// 移动文件或文件夹,
     ///,
 /// 将文件或者文件夹移动到用户云空间的其他位置。,
@@ -149,7 +149,7 @@ let request = RequestBuilder::post(&format!(,
 )),
         .body_json(request_body);
 self.client.send(request).await,
-    },
+    }
 /// 删除文件或文件夹,
     ///,
 /// 删除用户在云空间内的文件或者文件夹。文件或者文件夹被删除后，会进入用户回收站里。,
@@ -167,7 +167,7 @@ let request = RequestBuilder::delete(&format!(,
             file_token,
 ));
         self.client.send(request).await,
-},
+}
 /// 创建文件快捷方式,
     ///,
 /// # 参数,
@@ -193,7 +193,7 @@ let request_body = CreateShortcutRequest {,
 let request = RequestBuilder::post("/open-apis/drive/v1/files/create_shortcut"),
             .body_json(request_body);
 self.client.send(request).await,
-    },
+    }
 /// 查询异步任务状态,
     ///,
 /// 查询删除文件夹等异步任务的状态信息。,
@@ -209,8 +209,8 @@ self.client.send(request).await,
 let request = RequestBuilder::get("/open-apis/drive/v1/files/task_check"),
             .query_param("task_id", task_id);
 self.client.send(request).await,
-    },
-},
+    }
+}
 // 请求结构体,
 #[derive(.*?)]
 pub struct CreateFolderRequest {

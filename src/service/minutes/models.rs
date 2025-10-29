@@ -3,13 +3,13 @@ use serde::{Deserialize, Serialize};
 #[derive(.*?)]
 pub enum UserIdType {,
     /// 用户ID,
-#[serde(rename = "user_id")],
+#[serde(rename = "user_id")]
     UserId,
     /// union_id,
-#[serde(rename = "union_id")],
+#[serde(rename = "union_id")]
     UnionId,
     /// open_id,
-#[serde(rename = "open_id")],
+#[serde(rename = "open_id")]
     OpenId,
 }
 impl UserIdType {
@@ -18,9 +18,9 @@ match self {,
             UserIdType::UserId => "user_id",
             UserIdType::UnionId => "union_id",
             UserIdType::OpenId => "open_id",
-        },
+        }
 }
-},
+}
 /// 妙记信息,
 #[derive(.*?)]
 pub struct Minute {
@@ -42,7 +42,7 @@ pub struct Minute {
     pub meeting_url: Option<String>,
     /// 会议ID
     pub meeting_id: Option<String>,
-},
+}
 /// 用户信息,
 #[derive(.*?)]
 pub struct UserInfo {
@@ -52,7 +52,7 @@ pub struct UserInfo {
     pub name: Option<String>,
     /// 用户头像
     pub avatar_url: Option<String>,
-},
+}
 /// 妙记音视频文件信息,
 #[derive(.*?)]
 pub struct MinuteMedia {
@@ -68,7 +68,7 @@ pub struct MinuteMedia {
     pub download_url: Option<String>,
     /// 有效期
     pub expires_time: Option<String>,
-},
+}
 /// 妙记文字记录,
 #[derive(.*?)]
 pub struct MinuteTranscript {
@@ -80,7 +80,7 @@ pub struct MinuteTranscript {
     pub format: Option<String>,
     /// 创建时间
     pub create_time: Option<String>,
-},
+}
 /// 妙记统计数据,
 #[derive(.*?)]
 pub struct MinuteStatistics {
@@ -96,7 +96,7 @@ pub struct MinuteStatistics {
     pub mute_duration: Option<i32>,
     /// 关键词统计
     pub keywords: Option<Vec<KeywordStatistic>>,
-},
+}
 /// 关键词统计,
 #[derive(.*?)]
 pub struct KeywordStatistic {
@@ -104,12 +104,12 @@ pub struct KeywordStatistic {
     pub keyword: String,
     /// 出现次数
     pub count: i32,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_user_id_type_serialization() {,
 let user_id = UserIdType::UserId;
         let serialized = serde_json::to_string(&user_id).unwrap();
@@ -120,8 +120,8 @@ let union_id = UserIdType::UnionId;
 let open_id = UserIdType::OpenId;
         let serialized = serde_json::to_string(&open_id).unwrap();
         assert_eq!(serialized, "\"open_id\"");
-},
-#[test],
+}
+#[test]
     fn test_user_id_type_deserialization() {,
 let user_id: UserIdType = serde_json::from_str("\"user_id\"").unwrap();
         assert_eq!(user_id, UserIdType::UserId);
@@ -129,14 +129,14 @@ let union_id: UserIdType = serde_json::from_str("\"union_id\"").unwrap();
         assert_eq!(union_id, UserIdType::UnionId);
 let open_id: UserIdType = serde_json::from_str("\"open_id\"").unwrap();
         assert_eq!(open_id, UserIdType::OpenId);
-},
-#[test],
-    fn test_user_id_type_as_str() {
+}
+#[test]
+    ,
         assert_eq!(UserIdType::UserId.as_str(), "user_id");
         assert_eq!(UserIdType::UnionId.as_str(), "union_id");
         assert_eq!(UserIdType::OpenId.as_str(), "open_id");
-},
-#[test],
+}
+#[test]
     fn test_minute_serialization() {,
 let minute = Minute {,
             minute_id: "minute_123".to_string(),
@@ -165,8 +165,8 @@ assert_eq!(,
         assert!(deserialized.creator.is_some());
         assert_eq!(deserialized.creator.as_ref().unwrap().id, "creator_001");
         assert_eq!(deserialized.status, Some("completed".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_minute_with_none_values() {,
 let minute = Minute {,
             minute_id: "minute_minimal".to_string(),
@@ -187,8 +187,8 @@ assert!(deserialized.title.is_none());
         assert!(deserialized.create_time.is_none());
 assert!(deserialized.creator.is_none());
         assert!(deserialized.status.is_none());
-},
-#[test],
+}
+#[test]
     fn test_user_info_serialization() {,
 let user = UserInfo {,
             id: "user_456".to_string(),
@@ -204,8 +204,8 @@ assert_eq!(,
             deserialized.avatar_url,
             Some("https://cdn.example.com/user456.png".to_string()),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_user_info_minimal() {,
 let user = UserInfo {,
             id: "user_minimal".to_string(),
@@ -218,8 +218,8 @@ let serialized = serde_json::to_string(&user).unwrap();
         assert_eq!(deserialized.id, "user_minimal");
 assert!(deserialized.name.is_none());
         assert!(deserialized.avatar_url.is_none());
-},
-#[test],
+}
+#[test]
     fn test_minute_media_serialization() {,
 let media = MinuteMedia {,
             file_id: "file_789".to_string(),
@@ -243,8 +243,8 @@ assert_eq!(,
             deserialized.download_url,
             Some("https://storage.example.com/file_789".to_string()),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_minute_media_audio_file() {,
 let audio = MinuteMedia {,
             file_id: "audio_001".to_string(),
@@ -259,8 +259,8 @@ let serialized = serde_json::to_string(&audio).unwrap();
 
         assert_eq!(deserialized.file_type, Some("audio/wav".to_string()));
 assert!(deserialized.file_size.unwrap() > 0);
-    },
-#[test],
+    }
+#[test]
     fn test_minute_transcript_serialization() {,
 let transcript = MinuteTranscript {,
             content: "会议讨论了项目进度，决定下周进行代码审查。".to_string(),
@@ -276,8 +276,8 @@ assert_eq!(,
 );
         assert_eq!(deserialized.language, Some("zh-CN".to_string()));
         assert_eq!(deserialized.format, Some("text/plain".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_minute_transcript_english() {,
 let transcript = MinuteTranscript {,
             content: "The meeting discussed project milestones and deadlines.".to_string(),
@@ -290,8 +290,8 @@ let serialized = serde_json::to_string(&transcript).unwrap();
 
         assert_eq!(deserialized.language, Some("en-US".to_string()));
 assert!(deserialized.content.contains("project"));
-    },
-#[test],
+    }
+#[test]
     fn test_keyword_statistic_serialization() {,
 let keyword = KeywordStatistic {,
             keyword: "项目进度".to_string(),
@@ -302,8 +302,8 @@ let serialized = serde_json::to_string(&keyword).unwrap();
 
         assert_eq!(deserialized.keyword, "项目进度");
         assert_eq!(deserialized.count, 15);
-},
-#[test],
+}
+#[test]
     fn test_minute_statistics_complete() {,
 let statistics = MinuteStatistics {,
             duration: Some(3600), // 1 hour
@@ -315,15 +315,15 @@ keywords: Some(vec![,
                 KeywordStatistic {
                     keyword: "项目".to_string(),
                     count: 25,
-                },
+                }
                 KeywordStatistic {
                     keyword: "进度".to_string(),
                     count: 18,
-                },
+                }
                 KeywordStatistic {
                     keyword: "代码审查".to_string(),
                     count: 8,
-                },
+                }
             ]),
         };
 let serialized = serde_json::to_string(&statistics).unwrap();
@@ -338,8 +338,8 @@ let keywords = deserialized.keywords.unwrap();
         assert_eq!(keywords[0].count, 25);
         assert_eq!(keywords[2].keyword, "代码审查");
         assert_eq!(keywords[2].count, 8);
-},
-#[test],
+}
+#[test]
     fn test_minute_statistics_minimal() {,
 let statistics = MinuteStatistics {,
             duration: None,
@@ -354,8 +354,8 @@ let serialized = serde_json::to_string(&statistics).unwrap();
 assert!(deserialized.duration.is_none());
         assert!(deserialized.participant_count.is_none());
 assert!(deserialized.keywords.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_minute_statistics_empty_keywords() {,
 let statistics = MinuteStatistics {,
             duration: Some(1800), // 30 minutes
@@ -371,8 +371,8 @@ let serialized = serde_json::to_string(&statistics).unwrap();
         assert_eq!(deserialized.duration, Some(1800));
 let keywords = deserialized.keywords.unwrap();
         assert_eq!(keywords.len(), 0);
-},
-#[test],
+}
+#[test]
     fn test_complex_minute_with_full_data() {,
 let complex_minute = Minute {,
             minute_id: "complex_minute_001".to_string(),
@@ -401,5 +401,5 @@ assert_eq!(,
 let start = deserialized.start_time.unwrap();
         let end = deserialized.end_time.unwrap();
 assert!(start < end); // Start time should be before end time,
-    },
+    }
 }

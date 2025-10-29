@@ -7,15 +7,15 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option, SDKResult,
 };
 service::cloud_docs::sheets::v2::{,
-        data_operation::{CellStyle, SheetDataUpdates, StyleFont},
+        data_operation::{CellStyle, SheetDataUpdates, StyleFont}
         SpreadsheetService,
-    },
+    }
 };
 
 #[derive(.*?)]
@@ -25,7 +25,7 @@ pub struct SetCellStyleRequest {
     #[serde(skip)]
     spreadsheet_token: String,
     /// 设置单元格样式,
-#[serde(rename = "appendStyle")],
+#[serde(rename = "appendStyle")]
     append_style: AppendStyle,
 }
 
@@ -37,8 +37,8 @@ struct AppendStyle {,
 impl SetCellStyleRequest {
     pub fn w+.*{
 SetCellStyleRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct SetCellStyleRequestBuilder {
     request: SetCellStyleRequest,
@@ -102,21 +102,21 @@ self.request.append_style.style.border_color = Some(border_color.to_string());
     pub fn clean(mut self, clean: bool) -> Self {
 self.request.append_style.style.clean = clean;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 
 #[derive(.*?)]
 pub struct SetCellStyleResponse {
     pub updates: SheetDataUpdates,
 }
-impl ApiResponseTrait for SetCellStyleResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl SpreadsheetService {
     /// 该接口用于根据 spreadsheetToken 、range,
@@ -135,9 +135,9 @@ api_req.set_http_method(reqwest::Method::PUT);
 
         let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
-#[cfg(test)],
+    }
+}
+#[cfg(test)]
 mod tests {
 use crate::,
 {
@@ -148,12 +148,12 @@ use crate::,
         api_resp::{ApiResponseTrait,
         config::Config,
         constants::AppType,
-},
+}
     service::cloud_docs::sheets::v2::{
             data_operation::{SetCellStyleRequest, SetCellStyleResponse, StyleFont,
 };
             SpreadsheetService,
-        },
+        }
     };
 fn create_service() -> SpreadsheetService {,
         let config = Config::builder()
@@ -161,22 +161,22 @@ fn create_service() -> SpreadsheetService {,
             .app_secret()
 .app_type()
             .build();
-        SpreadsheetService { config },
-},
+        SpreadsheetService { config }
+}
 fn create_test_font() -> StyleFont {,
         StyleFont::builder(),
 .bold()
             .italic()
 .font_size()
             .build(),
-},
-#[test],
+}
+#[test]
     fn test_set_cell_style_builder_default() {,
 let request = SetCellStyleRequest::builder().build();
         assert_eq!(request.spreadsheet_token, "");
         assert_eq!(request.append_style.range, "");
-},
-#[test],
+}
+#[test]
     fn test_set_cell_style_builder_basic() {,
 let font = create_test_font();
         let request = SetCellStyleRequest::builder(),
@@ -187,8 +187,8 @@ let font = create_test_font();
 
         assert_eq!(request.spreadsheet_token, "test_token");
         assert_eq!(request.append_style.range, "Sheet1!A1:B2");
-},
-#[test],
+}
+#[test]
     fn test_set_cell_style_builder_all_options() {,
 let font = create_test_font();
         let request = SetCellStyleRequest::builder(),
@@ -231,8 +231,8 @@ assert_eq!(,
             Some("#000000".to_string()),
 );
         assert!(!request.append_style.style.clean);
-},
-#[test],
+}
+#[test]
     fn test_set_cell_style_font_formatting() {,
 let font = StyleFont::builder(),
             .bold()
@@ -247,8 +247,8 @@ let font = StyleFont::builder(),
 
         assert_eq!(request.spreadsheet_token, "font_test");
         assert_eq!(request.append_style.range, "Sheet1!A1:A10");
-},
-#[test],
+}
+#[test]
     fn test_set_cell_style_text_decoration_types() {,
 // Test different text decoration types,
         let decorations = vec![
@@ -270,9 +270,9 @@ let font = create_test_font();
                 request.append_style.style.text_decoration,
                 Some(decoration_value),
 );
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_set_cell_style_alignment_options() {,
 // Test horizontal alignment options,
         let h_alignments = vec![(0, "Left"), (1, "Center"), (2, "Right")];
@@ -286,7 +286,7 @@ let font = create_test_font();
                 .h_align()
 .build();
             assert_eq!(request.append_style.style.h_align, Some(align_value));
-},
+}
 // Test vertical alignment options,
         let v_alignments = vec![(0, "Top"), (1, "Middle"), (2, "Bottom")];
 
@@ -300,8 +300,8 @@ let font = create_test_font();
 .build();
             assert_eq!(request.append_style.style.v_align, Some(align_value));
 }
-    },
-#[test],
+    }
+#[test]
     fn test_set_cell_style_color_formats() {,
 let color_formats = vec![,
             "#FF0000", // Red
@@ -335,9 +335,9 @@ let font = create_test_font();
                 request.append_style.style.border_color,
                 Some(color.to_string()),
 );
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_set_cell_style_border_types() {,
 let border_types = vec![,
             "FULL_BORDER",
@@ -362,9 +362,9 @@ let request = SetCellStyleRequest::builder(),
                 request.append_style.style.border_type,
                 Some(border_type.to_string()),
 );
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_set_cell_style_number_formats() {,
 let number_formats = vec![,
             "0",          // Integer
@@ -390,9 +390,9 @@ let font = create_test_font();
                 request.append_style.style.formatter,
                 Some(format.to_string()),
 );
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_set_cell_style_with_unicode_ranges() {,
 let font = create_test_font();
         let request = SetCellStyleRequest::builder(),
@@ -403,8 +403,8 @@ let font = create_test_font();
 .build();
         assert_eq!(request.spreadsheet_token, "unicode_test");
         assert_eq!(request.append_style.range, "数据表!A1:D4");
-},
-#[test],
+}
+#[test]
     fn test_set_cell_style_with_special_characters() {,
 let font = create_test_font();
         let request = SetCellStyleRequest::builder(),
@@ -415,8 +415,8 @@ let font = create_test_font();
 .build();
         assert_eq!(request.spreadsheet_token, "special_chars_test");
         assert_eq!(request.append_style.range, "'Sheet With Spaces'!A1:B5");
-},
-#[test],
+}
+#[test]
     fn test_set_cell_style_large_ranges() {,
 let font = create_test_font();
         let request = SetCellStyleRequest::builder(),
@@ -427,8 +427,8 @@ let font = create_test_font();
 .build();
         assert_eq!(request.spreadsheet_token, "large_range_test");
         assert_eq!(request.append_style.range, "Data!A1:Z100");
-},
-#[test],
+}
+#[test]
     fn test_set_cell_style_single_cell() {,
 let font = create_test_font();
         let request = SetCellStyleRequest::builder(),
@@ -441,8 +441,8 @@ let font = create_test_font();
 
         assert_eq!(request.spreadsheet_token, "single_cell_test");
         assert_eq!(request.append_style.range, "Sheet1!A1:A1");
-},
-#[test],
+}
+#[test]
     fn test_set_cell_style_different_sheets() {,
 let sheets_and_ranges = [,
             ("Sheet1", "A1:B2"),
@@ -462,8 +462,8 @@ let font = create_test_font();
 
             assert_eq!(request.append_style.range, full_range);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_set_cell_style_serialization() {,
 let font = create_test_font();
         let request = SetCellStyleRequest::builder(),
@@ -476,11 +476,11 @@ let font = create_test_font();
 let serialized = serde_json::to_string(&request);
         assert!(serialized.is_ok());
 let json_value: serde_json::Value = serde_json::from_str(&serialized.unwrap()).unwrap();
-        assert_eq!(json_value["appendStyle"]["range"], "Sheet1!A1:C3");
-        assert_eq!(json_value["appendStyle"]["style"]["foreColor"], "#FF0000");
-        assert_eq!(json_value["appendStyle"]["style"]["backColor"], "#FFFF00");
-},
-#[test],
+        assert_eq!(json_value["appendStyle"]["range"] "Sheet1!A1:C3");
+        assert_eq!(json_value["appendStyle"]["style"]["foreColor"] "#FF0000");
+        assert_eq!(json_value["appendStyle"]["style"]["backColor"] "#FFFF00");
+}
+#[test]
     fn test_set_cell_style_response_deserialization() {,
 let response_json = serde_json::json!({,
             "updates": {
@@ -499,15 +499,15 @@ let response: SetCellStyleResponse = serde_json::from_value(response_json).unwra
         assert_eq!(response.updates.updated_columns, 2);
         assert_eq!(response.updates.updated_cells, 4);
         assert_eq!(response.updates.revision, Some(10));
-},
-#[test],
+}
+#[test]
     fn test_set_cell_style_service_creation() {,
 let service = create_service();
         assert_eq!(service.config.app_id, "test_app_id");
         assert_eq!(service.config.app_secret, "test_app_secret");
         assert!(matches!(service.config.app_type, AppType::SelfBuild));
-},
-#[test],
+}
+#[test]
     fn test_set_cell_style_builder_overwrites() {,
 let font1 = create_test_font();
         let font2 = StyleFont::builder(),
@@ -532,8 +532,8 @@ assert_eq!(,
             request.append_style.style.fore_color,
             Some("#00FF00".to_string()),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_set_cell_style_clean_flag() {,
 // Test clean = true,
         let font1 = create_test_font();
@@ -553,8 +553,8 @@ let font2 = create_test_font();
             .clean()
 .build();
         assert!(!request_no_clean.append_style.style.clean);
-},
-#[test],
+}
+#[test]
     fn test_set_cell_style_font_builder() {,
 // Test StyleFont builder patterns,
         let font_bold = StyleFont::builder().bold(true).build();
@@ -582,8 +582,8 @@ let request = SetCellStyleRequest::builder(),
 .build();
             assert_eq!(request.spreadsheet_token, "font_builder_test");
 }
-    },
-#[test],
+    }
+#[test]
     fn test_set_cell_style_very_long_token() {,
 let font = create_test_font();
         let very_long_token = "a".repeat(1000);
@@ -594,8 +594,8 @@ let request = SetCellStyleRequest::builder(),
 .build();
         assert_eq!(request.spreadsheet_token, very_long_token);
         assert_eq!(request.append_style.range, "Sheet1!A1:B2");
-},
-#[test],
+}
+#[test]
     fn test_set_cell_style_request_struct_debug() {,
 let font = create_test_font();
         let request = SetCellStyleRequest::builder(),
@@ -607,8 +607,8 @@ let font = create_test_font();
         let debug_str = format!("{:?}", request);
 assert!(debug_str.contains("debug_token"));
         assert!(debug_str.contains("Sheet1!A1:B2"));
-},
-#[test],
+}
+#[test]
     fn test_set_cell_style_empty_strings() {,
 let font = StyleFont::builder().build(); // Default font,
         let request = SetCellStyleRequest::builder(),
@@ -619,8 +619,8 @@ let font = StyleFont::builder().build(); // Default font,
 
         assert_eq!(request.spreadsheet_token, "");
         assert_eq!(request.append_style.range, "");
-},
-#[test],
+}
+#[test]
     fn test_set_cell_style_complex_range_references() {,
 let complex_ranges = vec![,
             "Sheet1!A1:D5",
@@ -638,8 +638,8 @@ let request = SetCellStyleRequest::builder(),
 .build();
             assert_eq!(request.append_style.range, range);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_set_cell_style_comprehensive_styling() {,
 let font = StyleFont::builder(),
             .bold()

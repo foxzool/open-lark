@@ -32,6 +32,6 @@ Self {
             like: like::LikeService::new(config.clone()),
             media: media::MediaService::new(config.clone()),
             permissions: permissions::PermissionsService::new(config),
-        },
+        }
 }
 }

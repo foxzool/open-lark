@@ -12,7 +12,7 @@ use crate::{,
         SDKResult,
     }
     impl_executable_builder_owned,
-    service::directory::v1::models::{Employee, UserIdType},
+    service::directory::v1::models::{Employee, UserIdType}
 };
 use super::EmployeeService;
 /// 更新在职员工为待离职请求
@@ -37,10 +37,10 @@ pub fn w+.*{
 request: ToBeResignedEmployeeRequest {,
                 employee_id: employee_id.to_string()
                 ..Default::default(),
-},
-        },
 }
-},
+        }
+}
+}
 /// 更新在职员工为待离职请求构建器,
 #[derive(Default)]
 pub struct ToBeResignedEmployeeRequestBuilder {
@@ -51,62 +51,62 @@ impl ToBeResignedEmployeeRequestBuilder {
     pub fn resign_time(mut self, resign_time: i64) -> Self {
 self.request.resign_time = Some(resign_time);
         self,
-},
+}
 /// 设置离职原因,
     pub fn resign_reason(mut self, resign_reason: impl ToString) -> Self {
 self.request.resign_reason = Some(resign_reason.to_string());
         self,
-},
+}
 /// 设置离职类型,
     pub fn resign_type(mut self, resign_type: impl ToString) -> Self {
 self.request.resign_type = Some(resign_type.to_string());
         self,
-},
+}
 /// 设置用户ID类型,
     pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
-},
+}
 /// 构建请求,
     pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
-                .api_req,
-.query_params,
+                .api_req
+.query_params
                 .insert("user_id_type", user_id_type.to_string());
-},
+}
 // 构建请求体,
         let mut body = json!({});
 if let Some(ref resign_time) = self.request.resign_time {,
             body["resign_time"] = json!(resign_time);
-},
+}
 if let Some(ref resign_reason) = self.request.resign_reason {,
             body["resign_reason"] = json!(resign_reason);
-},
+}
 if let Some(ref resign_type) = self.request.resign_type {,
             body["resign_type"] = json!(resign_type);
-},
+}
 self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
         self.request,
 }
-},
+}
 /// 更新在职员工为待离职响应数据,
 #[derive(.*?)]
 pub struct ToBeResignedEmployeeResponseData {
     /// 更新的员工信息
     pub employee: Employee,
-},
+}
 /// 更新在职员工为待离职响应,
 #[derive(.*?)]
 pub struct ToBeResignedEmployeeResponse {
     /// 响应数据
     pub data: ToBeResignedEmployeeResponseData,
 }
-impl ApiResponseTrait for ToBeResignedEmployeeResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl EmployeeService {
     /// 更新在职员工为待离职,
@@ -150,8 +150,8 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
 api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 // 应用ExecutableBuilder宏,
 impl_executable_builder_owned!(
     ToBeResignedEmployeeRequestBuilder,

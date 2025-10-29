@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -30,13 +30,13 @@ let mut api_req = request.api_request;
 api_req.api_path = SHEETS_V3_SPREADSHEET_STYLE,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 let api_resp: BaseResponse<SetCellStyleResponseData> =,
             Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
-    },
-},
+    }
+}
 /// 设置单元格样式请求,
 #[derive(.*?)]
 pub struct SetCellStyleRequest {
@@ -54,8 +54,8 @@ pub struct SetCellStyleRequest {
 impl SetCellStyleRequest {
     pub fn w+.*{
 SetCellStyleRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct SetCellStyleRequestBuilder {
     request: SetCellStyleRequest,
@@ -79,12 +79,12 @@ self.request.ranges = ranges;
     pub fn style(mut self, style: CellStyle) -> Self {
 self.request.style = style;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 // Trait implementation,
 impl_executable_builder_owned!(
     SetCellStyleRequestBuilder,
@@ -112,7 +112,7 @@ pub struct CellStyle {
     pub border: Option<BorderStyle>,
     /// 清理信息
     pub clean: Option<i32>,
-},
+}
 /// 字体样式,
 #[derive(.*?)]
 pub struct FontStyle {
@@ -124,7 +124,7 @@ pub struct FontStyle {
     pub size: Option<String>,
     /// 字体名称
     pub name: Option<String>,
-},
+}
 /// 边框样式,
 #[derive(.*?)]
 pub struct BorderStyle {
@@ -132,7 +132,7 @@ pub struct BorderStyle {
     pub border_type: Option<String>,
     /// 边框颜色
     pub color: Option<String>,
-},
+}
 /// 设置单元格样式响应体最外层,
 #[derive(.*?)]
 pub struct SetCellStyleResponseData {
@@ -141,21 +141,21 @@ pub struct SetCellStyleResponseData {
     /// 更新的范围
     pub updated_ranges: Vec<String>,
 }
-impl ApiResponseTrait for SetCellStyleResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
 use super::SetCellStyleResponseData;
-    #[test],
+    #[test]
 fn test_set_cell_style_response() {,
         let json = json!({
             "updated_cells": 10,
-            "updated_ranges": ["A1:B5"],
+            "updated_ranges": ["A1:B5"]
 });
 let response: SetCellStyleResponseData = serde_json::from_value(json).unwrap();
         assert_eq!(response.updated_cells, 10);

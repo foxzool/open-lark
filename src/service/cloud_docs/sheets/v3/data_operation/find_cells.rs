@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option,
@@ -18,9 +18,9 @@ use crate::,
     }
     impl_executable_builder_owned,
     service::sheets::v3::{
-        data_operation::{FindCondition, FindReplaceResult},
+        data_operation::{FindCondition, FindReplaceResult}
         SpreadsheetSheetService,
-    },
+    }
 };
 
 #[derive(.*?)]
@@ -30,7 +30,7 @@ pub struct FindCellsRequest {
     #[serde(skip)]
     spreadsheet_token: String,
     /// 工作表的id,
-#[serde(skip)],
+#[serde(skip)]
     sheet_id: String,
     /// 查找条件
     find_condition: FindCondition,
@@ -45,7 +45,7 @@ pub struct FindCellsRequest {
 impl FindCellsRequest {
     pub fn w+.*{
 FindCellsRequestBuilder::default(),
-    },
+    }
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM,
@@ -56,17 +56,17 @@ if self.spreadsheet_token.is_empty() {,
             return Err(crate::core::error::LarkAPIError::illegal_param(
                 "spreadsheet_token cannot be empty".to_string(),
             ));
-},
+}
 if self.sheet_id.is_empty() {,
             return Err(crate::core::error::LarkAPIError::illegal_param(
                 "sheet_id cannot be empty".to_string(),
             ));
-},
+}
 if self.find.is_empty() {,
             return Err(crate::core::error::LarkAPIError::illegal_param(
                 "find cannot be empty".to_string(),
             ));
-},
+}
 // 验证查找条件,
         if let ValidationResult::Invalid(msg) = validation::validate_find_options(
             &self.find_condition.match_case,
@@ -78,7 +78,7 @@ return Err(crate::core::error::LarkAPIError::illegal_param(format!(,
                 "Invalid find options: {}",
                 msg,
 )));
-        },
+        }
 // 验证范围格式（如果指定了范围）,
         if !self.find_condition.range.is_empty() {,
 if let ValidationResult::Invalid(msg) =,
@@ -88,17 +88,17 @@ if let ValidationResult::Invalid(msg) =,
                     "Invalid search range '{}': {}",
                     self.find_condition.range, msg,
 )));
-            },
-},
+            }
+}
 // 验证查找字符串长度,
         if self.find.len() > 1000 {,
 return Err(crate::core::error::LarkAPIError::illegal_param(,
                 "find string too long. Maximum 1000 characters allowed".to_string(),
             ));
-},
+}
 Ok(()),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct FindCellsRequestBuilder {
     request: FindCellsRequest,
@@ -142,7 +142,7 @@ self.request.find_condition.search_by_regex = Some(search_by_regex);
     pub fn include_formulas(mut self, include_formulas: bool) -> Self {
 self.request.find_condition.include_formulas = Some(include_formulas);
         self,
-},
+}
 /// 构建查找单元格请求,
     ///,
 /// # API文档,
@@ -152,7 +152,7 @@ self.request.find_condition.include_formulas = Some(include_formulas);
 let mut request = self.request;
         request.api_request.body = serde_json::to_vec(&request).unwrap();
 request,
-    },
+    }
 /// 验证请求参数,
     pub fn w+.*{
 // 验证必需字段,
@@ -160,17 +160,17 @@ request,
 return Err(crate::core::error::LarkAPIError::illegal_param(,
                 "spreadsheet_token cannot be empty".to_string(),
             ));
-},
+}
 if self.request.sheet_id.is_empty() {,
             return Err(crate::core::error::LarkAPIError::illegal_param(
                 "sheet_id cannot be empty".to_string(),
             ));
-},
+}
 if self.request.find.is_empty() {,
             return Err(crate::core::error::LarkAPIError::illegal_param(
                 "find cannot be empty".to_string(),
             ));
-},
+}
 // 验证查找条件,
         if let ValidationResult::Invalid(msg) = validation::validate_find_options(
             &self.request.find_condition.match_case,
@@ -182,7 +182,7 @@ return Err(crate::core::error::LarkAPIError::illegal_param(format!(,
                 "Invalid find options: {}",
                 msg,
 )));
-        },
+        }
 // 验证范围格式（如果指定了范围）,
         if !self.request.find_condition.range.is_empty() {,
 if let ValidationResult::Invalid(msg) =,
@@ -192,17 +192,17 @@ if let ValidationResult::Invalid(msg) =,
                     "Invalid search range '{}': {}",
                     self.request.find_condition.range, msg,
 )));
-            },
-},
+            }
+}
 // 验证查找字符串长度,
         if self.request.find.len() > 1000 {,
 return Err(crate::core::error::LarkAPIError::illegal_param(,
                 "find string too long. Maximum 1000 characters allowed".to_string(),
             ));
-},
+}
 Ok(()),
-    },
-},
+    }
+}
 // Trait implementation,
 impl_executable_builder_owned!(
     FindCellsRequestBuilder,
@@ -217,10 +217,10 @@ pub struct FindCellsResponse {
     /// 符合条件的信息
     pub find_result: FindReplaceResult,
 }
-impl ApiResponseTrait for FindCellsResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl SpreadsheetSheetService {
     /// 查找单元格,
@@ -239,5 +239,5 @@ api_req.set_http_method(reqwest::Method::POST);
 let api_resp: BaseResponse<FindCellsResponse> =,
             crate::core::http::Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
-    },
+    }
 }

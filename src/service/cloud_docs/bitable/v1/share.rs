@@ -23,7 +23,7 @@ let obj = json.as_object().expect("json must be a object");
         let mut fields = HashMap::new();
         for (k, v) in obj.iter() {
             fields.insert(k.clone(), v.clone());
-},
+}
 Record {,
             fields,
             record_id: None,
@@ -31,9 +31,9 @@ Record {,
             created_time: None,
             last_modified_by: None,
             last_modified_time: None,
-        },
+        }
 }
-},
+}
 /// 一些帮助函数,
 impl Record {
 /// 获取文本,
@@ -43,13 +43,13 @@ let value = self.fields.get(key)?;
 let first_item = array.first()?;
         let text = first_item.get("text")?.as_str()?;
 Some(text.to_string()),
-    },
+    }
 /// 获取数字,
     pub fn w+.*{
 let value = self.fields.get(key)?;
         let number = value.as_f64()?;
 Some(number),
-    },
+    }
 /// 获取数组文本,
     pub fn w+.*{
 let value = self.fields.get(key)?;
@@ -58,15 +58,15 @@ let mut texts = Vec::new();
         for item in array {,
 let text = item.as_str()?.to_string();
             texts.push(text);
-},
+}
 Some(texts),
-    },
+    }
 /// 获取单选文本,
     pub fn w+.*{
 let value = self.fields.get(key)?;
         let text = value.as_str()?;
 Some(text.to_string()),
-    },
+    }
 /// 获取多选文本,
     pub fn w+.*{
 let value = self.fields.get(key)?;
@@ -75,21 +75,21 @@ let mut texts = Vec::new();
         for item in array {,
 let text = item.as_str()?.to_string();
             texts.push(text);
-},
+}
 Some(texts),
-    },
+    }
 /// 获取布尔值（通过 checkbox）,
     pub fn w+.*{
 let value = self.fields.get(key)?;
         let checkbox = value.as_bool()?;
 Some(checkbox),
-    },
-},
-#[cfg(test)],
+    }
+}
+#[cfg(test)]
 mod tests {
 use super::*;
     use serde_json::json;
-#[test],
+#[test]
     fn test_record_default() {,
 let record = Record::default();
         assert!(record.fields.is_empty());
@@ -98,14 +98,14 @@ assert!(record.record_id.is_none());
 assert!(record.created_time.is_none());
         assert!(record.last_modified_by.is_none());
 assert!(record.last_modified_time.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_record_debug() {,
 let record = Record::default();
         let debug_str = format!("{:?}", record);
 assert!(debug_str.contains("Record"));
-    },
-#[test],
+    }
+#[test]
     fn test_record_clone() {,
 let mut record = Record::default();
         record.fields.insert("test".to_string(), json!("value"));
@@ -113,8 +113,8 @@ record.record_id = Some("rec123".to_string());
         let cloned = record.clone();
         assert_eq!(record.fields, cloned.fields);
         assert_eq!(record.record_id, cloned.record_id);
-},
-#[test],
+}
+#[test]
     fn test_record_serialization() {,
 let mut record = Record::default();
         record.fields.insert("name".to_string(), json!("Test"));
@@ -123,8 +123,8 @@ record.record_id = Some("rec_001".to_string());
 let deserialized: Record = serde_json::from_str(&serialized).expect("Should deserialize");
         assert_eq!(record.fields, deserialized.fields);
         assert_eq!(record.record_id, deserialized.record_id);
-},
-#[test],
+}
+#[test]
     fn test_record_from_json_simple() {,
 let json = json!({,
             "name": "John Doe",
@@ -136,23 +136,23 @@ let record = Record::from_json(json);
         assert_eq!(record.fields.get("name"), Some(&json!("John Doe")));
         assert_eq!(record.fields.get("age"), Some(&json!(30)));
         assert_eq!(record.fields.get("active"), Some(&json!(true)));
-},
-#[test],
-    fn test_record_from_json_empty() {
+}
+#[test]
+    ,
         let json = json!({});
 let record = Record::from_json(json);
         assert!(record.fields.is_empty());
 assert!(record.record_id.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_record_from_json_complex() {,
 let json = json!({,
             "text_field": "value",
             "number_field": 42.5,
-            "array_field": ["item1", "item2"],
+            "array_field": ["item1", "item2"]
             "object_field": {,
 "nested": "value",
-            },
+            }
 });
 let record = Record::from_json(json);
         assert_eq!(record.fields.len(), 4);
@@ -166,14 +166,14 @@ assert_eq!(,
             record.fields.get("object_field"),
             Some(&json!({"nested": "value"})),
 );
-    },
-#[test],
-    #[should_panic(expected = "json must be a object")],
+    }
+#[test]
+    #[should_panic(expected = "json must be a object")]
 fn test_record_from_json_invalid_type() {,
         let json = json!("not an object");
 Record::from_json(json);
-    },
-#[test],
+    }
+#[test]
     fn test_get_text() {,
 let mut record = Record::default();
         record,
@@ -181,14 +181,14 @@ let mut record = Record::default();
             .insert("text_field".to_string(), json!([{"text": "Hello World"}]));
 let text = record.get_text("text_field");
         assert_eq!(text, Some("Hello World".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_get_text_nonexistent_key() {,
 let record = Record::default();
         let text = record.get_text("nonexistent");
         assert_eq!(text, None);
-},
-#[test],
+}
+#[test]
     fn test_get_text_invalid_format() {,
 let mut record = Record::default();
         record,
@@ -196,15 +196,15 @@ let mut record = Record::default();
             .insert("invalid".to_string(), json!("not an array"));
 let text = record.get_text("invalid");
         assert_eq!(text, None);
-},
-#[test],
+}
+#[test]
     fn test_get_text_empty_array() {,
 let mut record = Record::default();
         record.fields.insert("empty_array".to_string(), json!([]));
 let text = record.get_text("empty_array");
         assert_eq!(text, None);
-},
-#[test],
+}
+#[test]
     fn test_get_text_missing_text_field() {,
 let mut record = Record::default();
         record,
@@ -212,8 +212,8 @@ let mut record = Record::default();
             .insert("no_text".to_string(), json!([{"value": "test"}]));
 let text = record.get_text("no_text");
         assert_eq!(text, None);
-},
-#[test],
+}
+#[test]
     fn test_get_number() {,
 let mut record = Record::default();
         record,
@@ -221,21 +221,21 @@ let mut record = Record::default();
             .insert("number_field".to_string(), json!(42.5));
 let number = record.get_number("number_field");
         assert_eq!(number, Some(42.5));
-},
-#[test],
+}
+#[test]
     fn test_get_number_integer() {,
 let mut record = Record::default();
         record.fields.insert("int_field".to_string(), json!(42));
 let number = record.get_number("int_field");
         assert_eq!(number, Some(42.0));
-},
-#[test],
+}
+#[test]
     fn test_get_number_nonexistent() {,
 let record = Record::default();
         let number = record.get_number("nonexistent");
         assert_eq!(number, None);
-},
-#[test],
+}
+#[test]
     fn test_get_number_invalid_type() {,
 let mut record = Record::default();
         record,
@@ -243,8 +243,8 @@ let mut record = Record::default();
             .insert("text_field".to_string(), json!("not a number"));
 let number = record.get_number("text_field");
         assert_eq!(number, None);
-},
-#[test],
+}
+#[test]
     fn test_get_array_text() {,
 let mut record = Record::default();
         record.fields.insert(
@@ -260,21 +260,21 @@ let array = record.get_array_text("array_field");
                 "item3".to_string(),
 ]),
         );
-},
-#[test],
+}
+#[test]
     fn test_get_array_text_empty() {,
 let mut record = Record::default();
         record.fields.insert("empty_array".to_string(), json!([]));
 let array = record.get_array_text("empty_array");
         assert_eq!(array, Some(vec![]));
-},
-#[test],
+}
+#[test]
     fn test_get_array_text_nonexistent() {,
 let record = Record::default();
         let array = record.get_array_text("nonexistent");
         assert_eq!(array, None);
-},
-#[test],
+}
+#[test]
     fn test_get_array_text_invalid_type() {,
 let mut record = Record::default();
         record,
@@ -282,8 +282,8 @@ let mut record = Record::default();
             .insert("not_array".to_string(), json!("string"));
 let array = record.get_array_text("not_array");
         assert_eq!(array, None);
-},
-#[test],
+}
+#[test]
     fn test_get_array_text_invalid_element() {,
 let mut record = Record::default();
         record.fields.insert(
@@ -292,8 +292,8 @@ let mut record = Record::default();
         );
 let array = record.get_array_text("mixed_array");
         assert_eq!(array, None); // Should fail on the number element,
-},
-#[test],
+}
+#[test]
     fn test_get_single_select_text() {,
 let mut record = Record::default();
         record,
@@ -301,21 +301,21 @@ let mut record = Record::default();
             .insert("select_field".to_string(), json!("Selected Option"));
 let text = record.get_single_select_text("select_field");
         assert_eq!(text, Some("Selected Option".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_get_single_select_text_nonexistent() {,
 let record = Record::default();
         let text = record.get_single_select_text("nonexistent");
         assert_eq!(text, None);
-},
-#[test],
+}
+#[test]
     fn test_get_single_select_text_invalid_type() {,
 let mut record = Record::default();
         record.fields.insert("number_field".to_string(), json!(42));
 let text = record.get_single_select_text("number_field");
         assert_eq!(text, None);
-},
-#[test],
+}
+#[test]
     fn test_get_multi_select_text() {,
 let mut record = Record::default();
         record.fields.insert(
@@ -331,21 +331,21 @@ let texts = record.get_multi_select_text("multi_select");
                 "Option3".to_string(),
 ]),
         );
-},
-#[test],
+}
+#[test]
     fn test_get_multi_select_text_empty() {,
 let mut record = Record::default();
         record.fields.insert("empty_multi".to_string(), json!([]));
 let texts = record.get_multi_select_text("empty_multi");
         assert_eq!(texts, Some(vec![]));
-},
-#[test],
+}
+#[test]
     fn test_get_multi_select_text_nonexistent() {,
 let record = Record::default();
         let texts = record.get_multi_select_text("nonexistent");
         assert_eq!(texts, None);
-},
-#[test],
+}
+#[test]
     fn test_get_multi_select_text_invalid_type() {,
 let mut record = Record::default();
         record,
@@ -353,8 +353,8 @@ let mut record = Record::default();
             .insert("string_field".to_string(), json!("not an array"));
 let texts = record.get_multi_select_text("string_field");
         assert_eq!(texts, None);
-},
-#[test],
+}
+#[test]
     fn test_get_multi_select_text_invalid_element() {,
 let mut record = Record::default();
         record.fields.insert(
@@ -363,8 +363,8 @@ let mut record = Record::default();
         );
 let texts = record.get_multi_select_text("mixed_multi");
         assert_eq!(texts, None); // Should fail on the number element,
-},
-#[test],
+}
+#[test]
     fn test_get_checkbox() {,
 let mut record = Record::default();
         record,
@@ -378,14 +378,14 @@ let check_true = record.get_checkbox("checkbox_true");
 
         assert_eq!(check_true, Some(true));
         assert_eq!(check_false, Some(false));
-},
-#[test],
+}
+#[test]
     fn test_get_checkbox_nonexistent() {,
 let record = Record::default();
         let checkbox = record.get_checkbox("nonexistent");
         assert_eq!(checkbox, None);
-},
-#[test],
+}
+#[test]
     fn test_get_checkbox_invalid_type() {,
 let mut record = Record::default();
         record,
@@ -393,8 +393,8 @@ let mut record = Record::default();
             .insert("string_field".to_string(), json!("not a boolean"));
 let checkbox = record.get_checkbox("string_field");
         assert_eq!(checkbox, None);
-},
-#[test],
+}
+#[test]
     fn test_record_with_person_fields() {,
 let person = Person {,
             id: "person_123".to_string(),
@@ -416,8 +416,8 @@ let record = Record {,
         assert_eq!(record.last_modified_time, Some(1640995260000));
 assert!(record.created_by.is_some());
         assert!(record.last_modified_by.is_some());
-},
-#[test],
+}
+#[test]
     fn test_record_comprehensive_field_access() {,
 let mut record = Record::default();
         record,
@@ -457,8 +457,8 @@ assert_eq!(,
             Some(vec!["X".to_string(), "Y".to_string(), "Z".to_string()]),
 );
         assert_eq!(record.get_checkbox("checkbox_field"), Some(true));
-},
-#[test],
+}
+#[test]
     fn test_record_with_unicode_content() {,
 let mut record = Record::default();
         record,
@@ -486,8 +486,8 @@ assert_eq!(,
                 "🌟".to_string(),
 ]),
         );
-},
-#[test],
+}
+#[test]
     fn test_record_edge_cases() {,
 let mut record = Record::default();
         // Empty string values,
@@ -506,16 +506,16 @@ assert_eq!(,
 );
         assert_eq!(record.get_number("zero_number"), Some(0.0));
         assert_eq!(record.get_number("zero_float"), Some(0.0));
-},
-#[test],
+}
+#[test]
     fn test_record_memory_efficiency() {,
 let record = Record::default();
         let size = std::mem::size_of_val(&record);
 // Should be reasonably sized,
         assert!(size > 0);
 assert!(size < 1024); // Should be less than 1KB for empty record,
-    },
-#[test],
+    }
+#[test]
     fn test_record_large_data() {,
 let mut record = Record::default();
         // Large text field,

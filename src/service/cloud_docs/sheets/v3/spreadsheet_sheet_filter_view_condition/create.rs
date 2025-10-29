@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -29,13 +29,13 @@ api_req.api_path = SHEETS_V3_SPREADSHEET_FILTER_VIEW_CONDITIONS,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id)
             .replace("{}", &request.filter_view_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 创建筛选条件请求,
 #[derive(.*?)]
 pub struct CreateFilterViewConditionRequest {
@@ -53,8 +53,8 @@ pub struct CreateFilterViewConditionRequest {
 impl CreateFilterViewConditionRequest {
     pub fn w+.*{
 CreateFilterViewConditionRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct CreateFilterViewConditionRequestBuilder {
     request: CreateFilterViewConditionRequest,
@@ -78,12 +78,12 @@ self.request.filter_view_id = filter_view_id.to_string();
     pub fn condition(mut self, condition: FilterCondition) -> Self {
 self.request.condition = condition;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 筛选条件,
 #[derive(.*?)]
 pub struct FilterCondition {
@@ -104,29 +104,29 @@ Self {
             col_name: col_name.to_string(),
             filter_type: filter_type.to_string(),
             compare_values,
-        },
-},
+        }
+}
 /// 等于条件,
     pub fn equal(col_name: impl ToString, value: impl ToString) -> Self {
         Self::new(col_name, "equal", vec![value.to_string()]),
-},
+}
 /// 不等于条件,
     pub fn not_equal(col_name: impl ToString, value: impl ToString) -> Self {
         Self::new(col_name, "notEqual", vec![value.to_string()]),
-},
+}
 /// 包含条件,
     pub fn contains(col_name: impl ToString, value: impl ToString) -> Self {
         Self::new(col_name, "contains", vec![value.to_string()]),
-},
+}
 /// 大于条件,
     pub fn greater_than(col_name: impl ToString, value: impl ToString) -> Self {
         Self::new(col_name, "greaterThan", vec![value.to_string()]),
-},
+}
 /// 小于条件,
     pub fn less_than(col_name: impl ToString, value: impl ToString) -> Self {
         Self::new(col_name, "lessThan", vec![value.to_string()]),
 }
-},
+}
 /// 创建筛选条件响应体最外层,
 #[derive(.*?)]
 pub struct CreateFilterViewConditionResponseData {
@@ -135,31 +135,31 @@ pub struct CreateFilterViewConditionResponseData {
     /// 筛选条件信息
     pub condition: FilterCondition,
 }
-impl ApiResponseTrait for CreateFilterViewConditionResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use super::*;
 use serde_json::json;
-    #[test],
+    #[test]
 fn test_filter_condition_creation() {,
         let condition = FilterCondition::equal("销售额", "1000");
         assert_eq!(condition.col_name, "销售额");
         assert_eq!(condition.filter_type, "equal");
         assert_eq!(condition.compare_values, vec!["1000"]);
-},
-#[test],
+}
+#[test]
     fn test_create_filter_view_condition_response() {,
 let json = json!({,
             "condition_id": "cond_001",
             "condition": {
                 "col_name": "销售额",
                 "filter_type": "greaterThan",
-                "compare_values": ["5000"],
+                "compare_values": ["5000"]
 }
         });
 let response: CreateFilterViewConditionResponseData = serde_json::from_value(json).unwrap();

@@ -3,37 +3,37 @@ use serde::{Deserialize, Serialize};
 #[derive(.*?)]
 pub enum TagType {,
     /// 群标签,
-#[serde(rename = "chat")],
+#[serde(rename = "chat")]
     Chat,
 }
 impl TagType {
     pub fn w+.*{
 match self {,
             TagType::Chat => "chat",
-        },
+        }
 }
-},
+}
 /// 标签状态,
 #[derive(.*?)]
 pub enum TagStatus {,
     /// 激活状态,
-#[serde(rename = "active")],
+#[serde(rename = "active")]
     Active,
     /// 失效状态,
-#[serde(rename = "inactive")],
+#[serde(rename = "inactive")]
     Inactive,
-},
+}
 /// 用户ID类型,
 #[derive(.*?)]
 pub enum UserIdType {,
     /// 用户ID,
-#[serde(rename = "user_id")],
+#[serde(rename = "user_id")]
     UserId,
     /// union_id,
-#[serde(rename = "union_id")],
+#[serde(rename = "union_id")]
     UnionId,
     /// open_id,
-#[serde(rename = "open_id")],
+#[serde(rename = "open_id")]
     OpenId,
 }
 impl UserIdType {
@@ -42,9 +42,9 @@ match self {,
             UserIdType::UserId => "user_id",
             UserIdType::UnionId => "union_id",
             UserIdType::OpenId => "open_id",
-        },
+        }
 }
-},
+}
 /// 标签信息,
 #[derive(.*?)]
 pub struct Tag {
@@ -53,22 +53,22 @@ pub struct Tag {
     /// 标签名称
     pub name: String,
     /// 标签描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 标签类型
     pub tag_type: TagType,
     /// 标签状态
     pub status: TagStatus,
     /// 创建时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<String>,
     /// 更新时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
     /// 创建者ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub creator_id: Option<String>,
-},
+}
 /// 标签绑定关系,
 #[derive(.*?)]
 pub struct TagBinding {
@@ -82,11 +82,11 @@ pub struct TagBinding {
     pub bind_time: Option<String>,
     /// 绑定者ID
     pub binder_id: Option<String>,
-},
-#[cfg(test)],
+}
+#[cfg(test)]
 mod tests {
 use super::*;
-    #[test],
+    #[test]
 fn test_tag_type_enum() {,
         let chat_type = TagType::Chat;
         assert_eq!(chat_type.as_str(), "chat");
@@ -94,8 +94,8 @@ let serialized = serde_json::to_string(&chat_type).unwrap();
         assert_eq!(serialized, "\"chat\"");
 let deserialized: TagType = serde_json::from_str(&serialized).unwrap();
         assert_eq!(deserialized, TagType::Chat);
-},
-#[test],
+}
+#[test]
     fn test_tag_type_debug_clone_partial_eq() {,
 let tag_type1 = TagType::Chat;
         let tag_type2 = tag_type1.clone();
@@ -103,8 +103,8 @@ let tag_type1 = TagType::Chat;
         assert_eq!(tag_type1, tag_type2);
         let debug_output = format!("{:?}", tag_type1);
 assert!(debug_output.contains("Chat"));
-    },
-#[test],
+    }
+#[test]
     fn test_tag_status_enum() {,
 let active_status = TagStatus::Active;
         let inactive_status = TagStatus::Inactive;
@@ -112,8 +112,8 @@ let active_status = TagStatus::Active;
         assert_eq!(active_status, TagStatus::Active);
         assert_eq!(inactive_status, TagStatus::Inactive);
         assert_ne!(active_status, inactive_status);
-},
-#[test],
+}
+#[test]
     fn test_tag_status_serialization() {,
 let active = TagStatus::Active;
         let inactive = TagStatus::Inactive;
@@ -127,8 +127,8 @@ let active_deserialized: TagStatus = serde_json::from_str(&active_json).unwrap()
 
         assert_eq!(active_deserialized, TagStatus::Active);
         assert_eq!(inactive_deserialized, TagStatus::Inactive);
-},
-#[test],
+}
+#[test]
     fn test_user_id_type_enum() {,
 let user_id = UserIdType::UserId;
         let union_id = UserIdType::UnionId;
@@ -136,9 +136,9 @@ let open_id = UserIdType::OpenId;
         assert_eq!(user_id.as_str(), "user_id");
         assert_eq!(union_id.as_str(), "union_id");
         assert_eq!(open_id.as_str(), "open_id");
-},
-#[test],
-    fn test_user_id_type_serialization() {
+}
+#[test]
+    ,
         let types = [UserIdType::UserId, UserIdType::UnionId, UserIdType::OpenId];
         let expected = ["\"user_id\"", "\"union_id\"", "\"open_id\""];
 
@@ -148,8 +148,8 @@ let json = serde_json::to_string(id_type).unwrap();
 let deserialized: UserIdType = serde_json::from_str(&json).unwrap();
             assert_eq!(deserialized, *id_type);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_user_id_type_debug_clone_partial_eq() {,
 let user_id1 = UserIdType::UserId;
         let user_id2 = user_id1.clone();
@@ -157,8 +157,8 @@ let user_id1 = UserIdType::UserId;
         assert_eq!(user_id1, user_id2);
         let debug_output = format!("{:?}", user_id1);
 assert!(debug_output.contains("UserId"));
-    },
-#[test],
+    }
+#[test]
     fn test_tag_creation() {,
 let tag = Tag {,
             tag_id: "tag_123".to_string(),
@@ -178,8 +178,8 @@ let tag = Tag {,
         assert_eq!(tag.status, TagStatus::Active);
 assert!(tag.create_time.is_some());
         assert!(tag.creator_id.is_some());
-},
-#[test],
+}
+#[test]
     fn test_tag_serialization() {,
 let tag = Tag {,
             tag_id: "tag_serialization_test".to_string(),
@@ -202,8 +202,8 @@ assert!(json.contains("creator_123"));
         assert_eq!(deserialized.description, tag.description);
         assert_eq!(deserialized.tag_type, tag.tag_type);
         assert_eq!(deserialized.status, tag.status);
-},
-#[test],
+}
+#[test]
     fn test_tag_with_minimal_data() {,
 let tag = Tag {,
             tag_id: "minimal_tag".to_string(),
@@ -227,8 +227,8 @@ assert!(!json.contains("creator_id"));
         assert_eq!(deserialized.description, None);
         assert_eq!(deserialized.create_time, None);
         assert_eq!(deserialized.creator_id, None);
-},
-#[test],
+}
+#[test]
     fn test_tag_debug_clone() {,
 let tag = Tag {,
             tag_id: "debug_tag".to_string(),
@@ -248,8 +248,8 @@ let cloned_tag = tag.clone();
 assert!(debug_output.contains("Tag"));
         assert!(debug_output.contains("debug_tag"));
 assert!(debug_output.contains("Debug Tag"));
-    },
-#[test],
+    }
+#[test]
     fn test_tag_binding_creation() {,
 let binding = TagBinding {,
             tag_id: "tag_789".to_string(),
@@ -264,8 +264,8 @@ let binding = TagBinding {,
         assert_eq!(binding.entity_type, "chat");
 assert!(binding.bind_time.is_some());
         assert!(binding.binder_id.is_some());
-},
-#[test],
+}
+#[test]
     fn test_tag_binding_serialization() {,
 let binding = TagBinding {,
             tag_id: "binding_tag".to_string(),
@@ -285,8 +285,8 @@ assert!(json.contains("binder_user"));
         assert_eq!(deserialized.entity_type, binding.entity_type);
         assert_eq!(deserialized.bind_time, binding.bind_time);
         assert_eq!(deserialized.binder_id, binding.binder_id);
-},
-#[test],
+}
+#[test]
     fn test_tag_binding_with_none_values() {,
 let binding = TagBinding {,
             tag_id: "minimal_binding".to_string(),
@@ -302,8 +302,8 @@ assert!(json.contains("minimal_entity"));
 let deserialized: TagBinding = serde_json::from_str(&json).unwrap();
         assert_eq!(deserialized.bind_time, None);
         assert_eq!(deserialized.binder_id, None);
-},
-#[test],
+}
+#[test]
     fn test_tag_binding_debug_clone() {,
 let binding = TagBinding {,
             tag_id: "debug_binding".to_string(),
@@ -320,8 +320,8 @@ let cloned_binding = binding.clone();
 assert!(debug_output.contains("TagBinding"));
         assert!(debug_output.contains("debug_binding"));
 assert!(debug_output.contains("debug_entity"));
-    },
-#[test],
+    }
+#[test]
     fn test_tag_timestamp_validation() {,
 let tag = Tag {,
             tag_id: "timestamp_test".to_string(),
@@ -336,16 +336,16 @@ let tag = Tag {,
 // Test that timestamps can be parsed as u64,
         if let Some(create_time) = &tag.create_time {,
 assert!(create_time.parse::<u64>().is_ok());
-        },
+        }
 if let Some(update_time) = &tag.update_time {,
             assert!(update_time.parse::<u64>().is_ok());
-},
+}
 // Test that update_time is after create_time,
         let create_timestamp: u64 = tag.create_time.unwrap().parse().unwrap();
 let update_timestamp: u64 = tag.update_time.unwrap().parse().unwrap();
         assert!(update_timestamp >= create_timestamp);
-},
-#[test],
+}
+#[test]
     fn test_tag_edge_cases() {,
 // Test with empty strings,
         let tag = Tag {

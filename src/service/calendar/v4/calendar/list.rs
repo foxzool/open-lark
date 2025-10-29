@@ -11,7 +11,7 @@ use crate::{,
         SDKResult,
     }
     impl_executable_builder_owned,
-    service::calendar::v4::models::{Calendar, UserIdType},
+    service::calendar::v4::models::{Calendar, UserIdType}
 };
 use super::CalendarManagementService;
 /// 获取日历列表请求
@@ -32,7 +32,7 @@ impl ListCalendarRequest {
 pub fn w+.*{
         ListCalendarRequestBuilder::default(),
 }
-},
+}
 /// 获取日历列表请求构建器,
 #[derive(Default)]
 pub struct ListCalendarRequestBuilder {
@@ -43,52 +43,52 @@ impl ListCalendarRequestBuilder {
     pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
-},
+}
 /// 设置分页大小，最大值 50,
     pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
-},
+}
 /// 设置分页标记,
     pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
-},
+}
 /// 设置是否同步日历的权限信息,
     pub fn sync_events(mut self, sync_events: bool) -> Self {
 self.request.sync_events = Some(sync_events);
         self,
-},
+}
 /// 构建请求,
     pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
-                .api_req,
-.query_params,
+                .api_req
+.query_params
                 .insert("user_id_type", user_id_type.to_string());
-},
+}
 if let Some(page_size) = self.request.page_size {,
             self.request,
-.api_req,
+.api_req
                 .query_params
                 .insert("page_size", page_size.to_string());
-},
+}
 if let Some(ref page_token) = self.request.page_token {,
             self.request,
-.api_req,
+.api_req
                 .query_params
                 .insert("page_token", page_token.clone());
-},
+}
 if let Some(sync_events) = self.request.sync_events {,
             self.request,
-.api_req,
+.api_req
                 .query_params
                 .insert("sync_events", sync_events.to_string());
-},
+}
 self.request,
-    },
-},
+    }
+}
 /// 获取日历列表响应数据,
 #[derive(.*?)]
 pub struct ListCalendarResponseData {
@@ -98,17 +98,17 @@ pub struct ListCalendarResponseData {
     pub page_token: Option<String>,
     /// 日历列表
     pub calendars: Vec<Calendar>,
-},
+}
 /// 获取日历列表响应,
 #[derive(.*?)]
 pub struct ListCalendarResponse {
     /// 响应数据
     pub data: ListCalendarResponseData,
 }
-impl ApiResponseTrait for ListCalendarResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl CalendarManagementService {
     /// 获取日历列表,
@@ -148,8 +148,8 @@ api_req.set_api_path(CALENDAR_V4_CALENDARS.to_string());
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 // 应用ExecutableBuilder宏,
 impl_executable_builder_owned!(
     ListCalendarRequestBuilder,

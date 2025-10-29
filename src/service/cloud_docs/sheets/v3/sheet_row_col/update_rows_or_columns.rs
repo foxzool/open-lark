@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -29,13 +29,13 @@ let mut api_req = request.api_request;
 api_req.api_path = SHEETS_V3_SPREADSHEET_DIMENSION_RANGE,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 更新行列请求,
 #[derive(.*?)]
 pub struct UpdateRowsOrColumnsRequest {
@@ -53,8 +53,8 @@ pub struct UpdateRowsOrColumnsRequest {
 impl UpdateRowsOrColumnsRequest {
     pub fn w+.*{
 UpdateRowsOrColumnsRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct UpdateRowsOrColumnsRequestBuilder {
     request: UpdateRowsOrColumnsRequest,
@@ -68,7 +68,7 @@ self.request.spreadsheet_token = spreadsheet_token.to_string();
     pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
-},
+}
 pub fn dimension_range(,
         mut self,
         dimension: impl ToString,
@@ -89,12 +89,12 @@ self.request.dimension_properties = DimensionProperties {,
             pixel_size,
         };
 self,
-    },
+    }
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 维度属性,
 #[derive(.*?)]
 pub struct DimensionProperties {
@@ -102,18 +102,18 @@ pub struct DimensionProperties {
     pub visible: Option<bool>,
     /// 行高或列宽（像素）
     pub pixel_size: Option<i32>,
-},
+}
 /// 更新行列响应体最外层,
 #[derive(.*?)]
 pub struct UpdateRowsOrColumnsResponseData {
     /// 更新行列后的信息
     pub update_range: UpdateRangeInfo,
 }
-impl ApiResponseTrait for UpdateRowsOrColumnsResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 更新范围信息,
 #[derive(.*?)]
 pub struct UpdateRangeInfo {
@@ -125,13 +125,13 @@ pub struct UpdateRangeInfo {
     pub end_index: i32,
     /// 更新后的属性
     pub properties: DimensionProperties,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
 use super::UpdateRowsOrColumnsResponseData;
-    #[test],
+    #[test]
 fn test_update_rows_or_columns_response() {,
         let json = json!({,
 "update_range": {,
@@ -142,7 +142,7 @@ fn test_update_rows_or_columns_response() {,
                     "visible": true,
                     "pixel_size": 50,
 }
-            },
+            }
 });
 let response: UpdateRowsOrColumnsResponseData = serde_json::from_value(json).unwrap();
         assert_eq!(response.update_range.dimension, "ROWS");

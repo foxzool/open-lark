@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option, SDKResult,
@@ -28,12 +28,12 @@ pub struct AddDimensionRangeRequest {
 #[derive(.*?)]
 struct Dimension {,
     /// 电子表格工作表的 ID。调用获取工作表获取 ID,
-#[serde(rename = "sheetId")],
+#[serde(rename = "sheetId")]
     sheet_id: String,
     /// 更新的维度。可选值：,
 /// - ROWS：行,
     /// - COLUMNS：列,
-#[serde(rename = "majorDimension")],
+#[serde(rename = "majorDimension")]
     major_dimension: String,
     /// 要增加的行数或列数。取值范围为 (0,5000]
     length: i32,
@@ -41,8 +41,8 @@ struct Dimension {,
 impl AddDimensionRangeRequest {
     pub fn w+.*{
 AddDimensionRangeRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct AddDimensionRangeRequestBuilder {
     request: AddDimensionRangeRequest,
@@ -51,12 +51,12 @@ impl AddDimensionRangeRequestBuilder {
     pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
-},
+}
 /// 电子表格工作表的 ID。调用获取工作表获取 ID,
     pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.dimension.sheet_id = sheet_id.to_string();
         self,
-},
+}
 /// 更新的维度。可选值：,
     /// - ROWS：行,
 /// - COLUMNS：列,
@@ -69,11 +69,11 @@ self.request.dimension.major_dimension = major_dimension.to_string();
     pub fn length(mut self, length: i32) -> Self {
 self.request.dimension.length = length;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 impl SpreadsheetService {
     /// 该接口用于在电子表格中增加空白行或列。,
@@ -92,8 +92,8 @@ api_req.set_http_method(reqwest::Method::POST);
 
         let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 增加行列响应体,
 #[derive(.*?)]
 pub struct DimensionRangeResponse {
@@ -102,12 +102,12 @@ pub struct DimensionRangeResponse {
     #[serde(rename = "majorDimension")]
     pub major_dimension: String,
 }
-impl ApiResponseTrait for DimensionRangeResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
 mod tests {
 use super::*;
     use crate::core::config::Config;
@@ -117,11 +117,11 @@ Config::builder()
             .app_id()
 .app_secret()
             .build(),
-},
+}
 fn create_test_service() -> SpreadsheetService {,
         SpreadsheetService::new(create_test_config()),
-},
-#[test],
+}
+#[test]
     fn test_add_dimension_range_request_builder_creation() {,
 let builder = AddDimensionRangeRequest::builder();
         let request = builder.build();
@@ -130,24 +130,24 @@ let builder = AddDimensionRangeRequest::builder();
         assert_eq!(request.dimension.sheet_id, "");
         assert_eq!(request.dimension.major_dimension, "");
         assert_eq!(request.dimension.length, 0);
-},
-#[test],
+}
+#[test]
     fn test_add_dimension_range_request_builder_with_spreadsheet_token() {,
 let request = AddDimensionRangeRequest::builder(),
             .spreadsheet_token()
 .build();
         assert_eq!(request.spreadsheet_token, "test_spreadsheet_token_123");
-},
-#[test],
+}
+#[test]
     fn test_add_dimension_range_request_builder_with_sheet_id() {,
 let request = AddDimensionRangeRequest::builder(),
             .sheet_id()
 .build();
         assert_eq!(request.dimension.sheet_id, "test_sheet_123");
-},
-#[rstest],
+}
+#[rstest]
     #[case("ROWS", "行")]
-    #[case("COLUMNS", "列")],
+    #[case("COLUMNS", "列")]
 fn test_add_dimension_range_request_builder_with_major_dimension(,
         #[case] dimension: &str,
         #[case] _description: &str,
@@ -156,21 +156,21 @@ let request = AddDimensionRangeRequest::builder(),
             .major_dimension()
 .build();
         assert_eq!(request.dimension.major_dimension, dimension);
-},
-#[rstest],
+}
+#[rstest]
     #[case(1, "minimum valid")]
     #[case(10, "small number")]
     #[case(100, "medium number")]
     #[case(1000, "large number")]
-    #[case(5000, "maximum valid")],
+    #[case(5000, "maximum valid")]
 fn test_add_dimension_range_request_builder_with_length(,
         #[case] length: i32,
         #[case] _description: &str,
     ) {,
 let request = AddDimensionRangeRequest::builder().length(length).build();
         assert_eq!(request.dimension.length, length);
-},
-#[test],
+}
+#[test]
     fn test_add_dimension_range_request_builder_chaining() {,
 let request = AddDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -183,23 +183,23 @@ let request = AddDimensionRangeRequest::builder(),
         assert_eq!(request.dimension.sheet_id, "sheet_123");
         assert_eq!(request.dimension.major_dimension, "ROWS");
         assert_eq!(request.dimension.length, 50);
-},
-#[test],
+}
+#[test]
     fn test_add_dimension_range_request_default() {,
 let request = AddDimensionRangeRequest::default();
         assert_eq!(request.spreadsheet_token, "");
         assert_eq!(request.dimension.sheet_id, "");
         assert_eq!(request.dimension.major_dimension, "");
         assert_eq!(request.dimension.length, 0);
-},
-#[test],
+}
+#[test]
     fn test_dimension_default() {,
 let dimension = Dimension::default();
         assert_eq!(dimension.sheet_id, "");
         assert_eq!(dimension.major_dimension, "");
         assert_eq!(dimension.length, 0);
-},
-#[test],
+}
+#[test]
     fn test_add_dimension_range_request_builder_default() {,
 let builder = AddDimensionRangeRequestBuilder::default();
         let request = builder.build();
@@ -208,8 +208,8 @@ let builder = AddDimensionRangeRequestBuilder::default();
         assert_eq!(request.dimension.sheet_id, "");
         assert_eq!(request.dimension.major_dimension, "");
         assert_eq!(request.dimension.length, 0);
-},
-#[test],
+}
+#[test]
     fn test_add_dimension_range_request_serialization() {,
 let request = AddDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -228,8 +228,8 @@ assert!(json_str.contains("majorDimension"));
 assert!(json_str.contains("sheet_456"));
         assert!(json_str.contains("COLUMNS"));
 assert!(json_str.contains("25"));
-    },
-#[test],
+    }
+#[test]
     fn test_add_dimension_range_request_debug() {,
 let request = AddDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -240,8 +240,8 @@ let request = AddDimensionRangeRequest::builder(),
 assert!(debug_str.contains("AddDimensionRangeRequest"));
         assert!(debug_str.contains("debug_token"));
 assert!(debug_str.contains("debug_sheet"));
-    },
-#[test],
+    }
+#[test]
     fn test_dimension_debug() {,
 let dimension = Dimension {,
             sheet_id: "test_sheet".to_string(),
@@ -254,8 +254,8 @@ assert!(debug_str.contains("Dimension"));
         assert!(debug_str.contains("test_sheet"));
 assert!(debug_str.contains("ROWS"));
         assert!(debug_str.contains("42"));
-},
-#[test],
+}
+#[test]
     fn test_add_dimension_range_request_with_empty_strings() {,
 let request = AddDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -268,8 +268,8 @@ let request = AddDimensionRangeRequest::builder(),
         assert_eq!(request.dimension.sheet_id, "");
         assert_eq!(request.dimension.major_dimension, "");
         assert_eq!(request.dimension.length, 0);
-},
-#[test],
+}
+#[test]
     fn test_add_dimension_range_request_with_special_characters() {,
 let request = AddDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -282,8 +282,8 @@ let request = AddDimensionRangeRequest::builder(),
         assert_eq!(request.dimension.sheet_id, "sheet_名称_123");
         assert_eq!(request.dimension.major_dimension, "ROWS");
         assert_eq!(request.dimension.length, 100);
-},
-#[test],
+}
+#[test]
     fn test_add_dimension_range_request_with_long_strings() {,
 let long_token = "a".repeat(1000);
         let long_sheet_id = "sheet_".repeat(100);
@@ -298,8 +298,8 @@ let request = AddDimensionRangeRequest::builder(),
         assert_eq!(request.dimension.sheet_id, long_sheet_id);
         assert_eq!(request.dimension.major_dimension, "COLUMNS");
         assert_eq!(request.dimension.length, 2500);
-},
-#[test],
+}
+#[test]
     fn test_add_dimension_range_request_api_request_body_serialization() {,
 let request = AddDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -323,8 +323,8 @@ let dimension = parsed.get("dimension").unwrap();
             "ROWS",
 );
         assert_eq!(dimension.get("length").unwrap().as_i64().unwrap(), 75);
-},
-#[test],
+}
+#[test]
     fn test_add_dimension_range_request_builder_multiple_calls() {,
 let mut builder = AddDimensionRangeRequest::builder();
         // Test that multiple calls override previous values,
@@ -341,8 +341,8 @@ let request = builder.build();
         assert_eq!(request.dimension.sheet_id, "second_sheet");
         assert_eq!(request.dimension.major_dimension, "COLUMNS");
         assert_eq!(request.dimension.length, 20);
-},
-#[test],
+}
+#[test]
     fn test_add_dimension_range_request_edge_cases() {,
 // Test with negative length (should be handled by API validation),
         let request = AddDimensionRangeRequest::builder().length(-1).build();
@@ -353,13 +353,13 @@ let request = builder.build();
 // Test with very large length (should be handled by API validation),
         let request = AddDimensionRangeRequest::builder().length(i32::MAX).build();
         assert_eq!(request.dimension.length, i32::MAX);
-},
-#[test],
+}
+#[test]
     fn test_dimension_range_response_api_response_trait() {,
 // Test that DimensionRangeResponse implements ApiResponseTrait correctly,
         assert_eq!(DimensionRangeResponse::data_format(), ResponseFormat::Data);
-},
-#[test],
+}
+#[test]
     fn test_dimension_range_response_deserialization() {,
 let json_data = r#"{,
             "addCount": 42,
@@ -371,8 +371,8 @@ assert!(response.is_ok());
         let response = response.unwrap();
         assert_eq!(response.add_count, 42);
         assert_eq!(response.major_dimension, "ROWS");
-},
-#[test],
+}
+#[test]
     fn test_dimension_range_response_debug() {,
 let response = DimensionRangeResponse {,
             add_count: 25,
@@ -383,8 +383,8 @@ let response = DimensionRangeResponse {,
 assert!(debug_str.contains("DimensionRangeResponse"));
         assert!(debug_str.contains("25"));
 assert!(debug_str.contains("COLUMNS"));
-    },
-#[test],
+    }
+#[test]
     fn test_dimension_range_response_with_different_values() {,
 let test_cases = vec![,
             (0, "ROWS"),
@@ -395,7 +395,7 @@ let test_cases = vec![,
 
         for (add_count, major_dimension) in test_cases {,
 let json_data = format!(,
-                r#"{{"addCount": {}, "majorDimension": "{}"}}"#,
+                r#"{{"addCount": {} "majorDimension": "{}"}}"#,
                 add_count, major_dimension,
 );
             let response: Result<DimensionRangeResponse, _> = serde_json::from_str(&json_data);
@@ -404,14 +404,14 @@ assert!(response.is_ok());
             assert_eq!(response.add_count, add_count);
             assert_eq!(response.major_dimension, major_dimension);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_spreadsheet_service_creation() {,
 let service = create_test_service();
         // Verify the service can be created without panic
         assert_eq!(service.config.app_id, "test_app_id");
-},
-#[test],
+}
+#[test]
     fn test_add_dimension_range_request_memory_efficiency() {,
 // Test creating many requests doesn't consume excessive memory,
         let requests: Vec<AddDimensionRangeRequest> = (0..100),
@@ -431,12 +431,12 @@ let service = create_test_service();
             assert_eq!(request.dimension.sheet_id, format!("sheet_{}", i));
 assert_eq!(,
                 request.dimension.major_dimension,
-                if i % 2 == 0 { "ROWS" } else { "COLUMNS" },
+                if i % 2 == 0 { "ROWS" } else { "COLUMNS" }
 );
             assert_eq!(request.dimension.length, (i + 1) as i32);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_dimension_range_response_incomplete_json() {,
 // Test with missing addCount,
         let json_data = r#"{"majorDimension": "ROWS"}"#;
@@ -450,8 +450,8 @@ assert!(response.is_err());
         let json_data = r#"{"add_count": 42, "major_dimension": "ROWS"}"#;
         let response: Result<DimensionRangeResponse, _> = serde_json::from_str(json_data);
 assert!(response.is_err());
-    },
-#[test],
+    }
+#[test]
     fn test_dimension_range_response_with_special_characters() {,
 let json_data = r#"{,
             "addCount": 10,
@@ -463,8 +463,8 @@ assert!(response.is_ok());
         let response = response.unwrap();
         assert_eq!(response.add_count, 10);
         assert_eq!(response.major_dimension, "特殊_维度_🎯");
-},
-#[test],
+}
+#[test]
     fn test_dimension_serialization() {,
 let dimension = Dimension {,
             sheet_id: "test_sheet_123".to_string(),
@@ -480,5 +480,5 @@ assert!(json_str.contains("majorDimension"));
 assert!(json_str.contains("test_sheet_123"));
         assert!(json_str.contains("ROWS"));
 assert!(json_str.contains("50"));
-    },
+    }
 }

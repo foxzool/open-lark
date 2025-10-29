@@ -5,24 +5,24 @@ pub struct TextEmbeddingService {
 }
 impl TextEmbeddingService {
     pub fn new(config: crate::core::config::Config) -> Self {
-        Self { config },
-},
+        Self { config }
+}
 /// 文本向量化,
     pub async fn text_embedding(&self, request: TextEmbeddingRequest) -> crate::core::SDKResult<TextEmbeddingResponse> {,
 let endpoint = crate::core::endpoints::ai_embedding::TEXT_EMBEDDING;
         self.config.http_client().post(endpoint, &request).await,
-},
+}
 /// 批量文本向量化,
     pub async fn batch_text_embedding(&self, request: BatchTextEmbeddingRequest) -> crate::core::SDKResult<BatchTextEmbeddingResponse> {,
 let endpoint = crate::core::endpoints::ai_embedding::BATCH_TEXT_EMBEDDING;
         self.config.http_client().post(endpoint, &request).await,
-},
+}
 /// 多模态向量化,
     pub async fn multimodal_embedding(&self, request: MultimodalEmbeddingRequest) -> crate::core::SDKResult<MultimodalEmbeddingResponse> {,
 let endpoint = crate::core::endpoints::ai_embedding::MULTIMODAL_EMBEDDING;
         self.config.http_client().post(endpoint, &request).await,
 }
-},
+}
 /// 文本嵌入请求,
 #[derive(.*?)]
 pub struct TextEmbeddingRequest {
@@ -32,7 +32,7 @@ pub struct TextEmbeddingRequest {
     pub dimension: Option<u32>,
     /// 模型类型
     pub model_type: Option<String>,
-},
+}
 /// 批量文本嵌入请求,
 #[derive(.*?)]
 pub struct BatchTextEmbeddingRequest {
@@ -42,7 +42,7 @@ pub struct BatchTextEmbeddingRequest {
     pub dimension: Option<u32>,
     /// 模型类型
     pub model_type: Option<String>,
-},
+}
 /// 多模态嵌入请求,
 #[derive(.*?)]
 pub struct MultimodalEmbeddingRequest {
@@ -54,7 +54,7 @@ pub struct MultimodalEmbeddingRequest {
     pub dimension: Option<u32>,
     /// 模型类型
     pub model_type: Option<String>,
-},
+}
 /// 文本嵌入响应,
 #[derive(.*?)]
 pub struct TextEmbeddingResponse {
@@ -64,13 +64,13 @@ pub struct TextEmbeddingResponse {
     pub model: String,
     /// 向量维度
     pub dimension: u32,
-},
+}
 /// 批量文本嵌入响应,
 #[derive(.*?)]
 pub struct BatchTextEmbeddingResponse {
     /// 嵌入结果列表
     pub embeddings: Vec<TextEmbeddingResponse>,
-},
+}
 /// 多模态嵌入响应,
 #[derive(.*?)]
 pub struct MultimodalEmbeddingResponse {
@@ -84,5 +84,5 @@ pub struct MultimodalEmbeddingResponse {
 impl crate::core::service_traits::Service for TextEmbeddingService {,
     fn config(&self) -> &crate::core::config::Config {,
 &self.config,
-    },
+    }
 }

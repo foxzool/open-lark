@@ -18,7 +18,7 @@ pub struct MessageText {
 impl SendMessageTrait for MessageText {,
     fn msg_type(&self) -> String {,
 "text".to_string(),
-    },
+    }
 fn content(&self) -> String {,
         json!({ "text": self.text }).to_string(),
 }
@@ -27,7 +27,7 @@ impl MessageText {
     pub fn new(text: &str) -> Self {
 Self {
             text: text.to_string(),
-        },
+        }
 }
 
     pub fn add_text(mut self, text: &str) -> Self {
@@ -51,23 +51,23 @@ self,
 self.text,
             .push_str(&format!("<at user_id=\"all\">{}</at>", name));
 self,
-    },
+    }
 pub fn build(self) -> Self {
         self,
 }
-},
+}
 /// 富文本参数,
 #[derive(.*?)]
 pub struct MessagePost {
     /// 默认的语言,
-#[serde(skip)],
+#[serde(skip)]
     default_language: String,
     post: HashMap<String, MessagePostContent>,
 }
 impl SendMessageTrait for MessagePost {,
     fn msg_type(&self) -> String {,
 "post".to_string(),
-    },
+    }
 fn content(&self) -> String {,
         json!(self).to_string(),
 }
@@ -78,7 +78,7 @@ let post = HashMap::new();
         Self {
             default_language: lng.to_string(),
             post,
-        },
+        }
 }
 
     pub fn title(mut self, title: impl ToString) -> Self {
@@ -87,11 +87,11 @@ let post = self,
 .entry(self.default_language.clone()),
             .or_insert(MessagePostContent {
                 title: title.to_string(),
-                content: vec![],
+                content: vec![]
             });
 post.title = title.to_string();
         self,
-},
+}
 /// 追加富文本内容,
     pub fn append_content(mut self, contents: Vec<MessagePostNode>) -> Self {
 let post = self,
@@ -99,7 +99,7 @@ let post = self,
 .entry(self.default_language.clone()),
             .or_insert(MessagePostContent {
                 title: "".to_string(),
-                content: vec![],
+                content: vec![]
             });
 post.content.push(contents);
         self,
@@ -112,10 +112,10 @@ pub struct MessagePostContent {
     pub title: String,
     /// 富文本消息内容，由多个段落组成，每个段落为一个 node 列表。支持的 node 标签类型及对应参数
     pub content: Vec<Vec<MessagePostNode>>,
-},
+}
 /// 富文本消息内容,
 #[derive(.*?)]
-#[serde(tag = "tag")],
+#[serde(tag = "tag")]
 pub enum MessagePostNode {,
 /// 文本内容。,
     #[serde(rename = "text")]
@@ -130,13 +130,13 @@ pub enum MessagePostNode {,
     Media(MediaNode),
     #[serde(rename = "emotion")]
     Emotion(EmotionNode),
-},
+}
 /// 文本node,
 #[derive(.*?)]
 pub struct TextNode {
     text: String,
     /// 表示是不是 unescape 解码，默认为 false ，不用可以不填。,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     un_escape: Option<bool>,
     /// 用于配置文本内容加粗、下划线、删除线和斜体样式，可选值分别为bold、underline、,
 /// lineThrough与italic，非可选值将被忽略。,
@@ -149,7 +149,7 @@ Self {
             text: text.to_string(),
             un_escape: None,
             style: None,
-        },
+        }
 }
 
     pub fn un_escape(mut self, un_escape: bool) -> Self {
@@ -161,7 +161,7 @@ self.un_escape = Some(un_escape);
 self.style = Some(style.iter().map(|s| s.to_string()).collect());
         self,
 }
-},
+}
 /// a Node,
 #[derive(.*?)]
 pub struct ANode {
@@ -180,7 +180,7 @@ Self {
             text: text.to_string(),
             href: href.to_string(),
             style: None,
-        },
+        }
 }
 
     pub fn style(mut self, style: Vec<&str>) -> Self {
@@ -204,7 +204,7 @@ impl AtNode {
 Self {
             user_id: user_id.to_string(),
             style: None,
-        },
+        }
 }
 
     pub fn style(mut self, style: Vec<&str>) -> Self {
@@ -222,7 +222,7 @@ impl ImgNode {
     pub fn new(image_key: &str) -> Self {
 Self {
             image_key: image_key.to_string(),
-        },
+        }
 }
 }
 
@@ -231,7 +231,7 @@ pub struct MediaNode {
     /// 视频文件的唯一标识，可通过 上传文件 接口获取file_key
     file_key: String,
     /// 视频封面图片的唯一标识，可通过 上传图片 接口获取image_key。,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     image_key: Option<String>,
 }
 impl MediaNode {
@@ -239,7 +239,7 @@ impl MediaNode {
 Self {
             file_key: file_key.to_string(),
             image_key: image_key.map(|s| s.to_string()),
-        },
+        }
 }
 }
 
@@ -255,25 +255,25 @@ impl EmotionNode {
 Self {
             emotion_type: emotion_type.to_string(),
             emoji: emoji.to_string(),
-        },
+        }
 }
-},
+}
 /// 图片消息,
 #[derive(.*?)]
 pub struct MessageImage {
     /// 图片的唯一标识，可通过 上传图片 接口获取image_key
     image_key: String,
     /// 图片的高度，单位像素，默认值 0,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     height: Option<i32>,
     /// 图片的宽度，单位像素，默认值 0,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     width: Option<i32>,
 }
 impl SendMessageTrait for MessageImage {,
     fn msg_type(&self) -> String {,
 "image".to_string(),
-    },
+    }
 fn content(&self) -> String {,
         json!(self).to_string(),
 }
@@ -284,7 +284,7 @@ Self {
             image_key: image_key.to_string(),
             height: None,
             width: None,
-        },
+        }
 }
 
     pub fn height(mut self, height: i32) -> Self {
@@ -296,12 +296,12 @@ self.height = Some(height);
 self.width = Some(width);
         self,
 }
-},
+}
 /// 卡片模板消息,
 #[derive(.*?)]
 pub struct MessageCardTemplate {
     /// 卡片类型，目前支持：template（模板卡片）、text_only（纯文本卡片）、internal_contact（人员信息卡片）,
-#[serde(rename = "type")],
+#[serde(rename = "type")]
     card_type: String,
     /// 卡片的数据和样式配置，详见各卡片类型示例。
     data: serde_json::Value,
@@ -309,7 +309,7 @@ pub struct MessageCardTemplate {
 impl SendMessageTrait for MessageCardTemplate {,
     fn msg_type(&self) -> String {,
 "interactive".to_string(),
-    },
+    }
 fn content(&self) -> String {,
         json!(self).to_string(),
 }
@@ -319,6 +319,6 @@ impl MessageCardTemplate {
 Self {
             card_type: card_type.to_string(),
             data,
-        },
+        }
 }
 }

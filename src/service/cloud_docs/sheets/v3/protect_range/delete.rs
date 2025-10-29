@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -28,13 +28,13 @@ let mut api_req = request.api_request;
 api_req.api_path = SHEETS_V3_SPREADSHEET_PROTECT_RANGE_GET,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.protect_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 删除保护范围请求,
 #[derive(.*?)]
 pub struct DeleteProtectRangeRequest {
@@ -48,8 +48,8 @@ pub struct DeleteProtectRangeRequest {
 impl DeleteProtectRangeRequest {
     pub fn w+.*{
 DeleteProtectRangeRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct DeleteProtectRangeRequestBuilder {
     request: DeleteProtectRangeRequest,
@@ -63,33 +63,33 @@ self.request.spreadsheet_token = spreadsheet_token.to_string();
     pub fn protect_id(mut self, protect_id: impl ToString) -> Self {
 self.request.protect_id = protect_id.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 删除保护范围响应体最外层,
 #[derive(.*?)]
 pub struct DeleteProtectRangeResponseData {
     /// 删除操作是否成功,
-#[serde(default)],
+#[serde(default)]
     pub success: bool,
     /// 删除的保护范围 ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub protect_id: Option<String>,
 }
-impl ApiResponseTrait for DeleteProtectRangeResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use super::*;
 use serde_json::json;
-    #[test],
+    #[test]
 fn test_delete_protect_range_response() {,
         let json = json!({
             "success": true,

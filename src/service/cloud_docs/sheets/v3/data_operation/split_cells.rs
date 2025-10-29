@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -30,13 +30,13 @@ let mut api_req = request.api_request;
 api_req.api_path = SHEETS_V3_SPREADSHEET_UNMERGE_CELLS,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 let api_resp: BaseResponse<SplitCellsResponseData> =,
             Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
-    },
-},
+    }
+}
 /// 拆分单元格请求,
 #[derive(.*?)]
 pub struct SplitCellsRequest {
@@ -52,8 +52,8 @@ pub struct SplitCellsRequest {
 impl SplitCellsRequest {
     pub fn w+.*{
 SplitCellsRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct SplitCellsRequestBuilder {
     request: SplitCellsRequest,
@@ -72,22 +72,22 @@ self.request.sheet_id = sheet_id.to_string();
     pub fn range(mut self, range: impl ToString) -> Self {
 self.request.range = range.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 拆分单元格响应体最外层,
 #[derive(.*?)]
 pub struct SplitCellsResponseData {
     /// 拆分后的范围
     pub unmerged_range: String,
 }
-impl ApiResponseTrait for SplitCellsResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl_executable_builder_owned!(,
     SplitCellsRequestBuilder,
@@ -97,11 +97,11 @@ impl_executable_builder_owned!(,
     split_cells,
 );
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
 use super::SplitCellsResponseData;
-    #[test],
+    #[test]
 fn test_split_cells_response() {,
         let json = json!({,
 "unmerged_range": "A1:C3",

@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -30,13 +30,13 @@ api_req.api_path = SHEETS_V3_SPREADSHEET_FILTER_VIEW_GET,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id)
             .replace("{}", &request.filter_view_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 获取筛选视图请求,
 #[derive(.*?)]
 pub struct GetFilterViewRequest {
@@ -52,8 +52,8 @@ pub struct GetFilterViewRequest {
 impl GetFilterViewRequest {
     pub fn w+.*{
 GetFilterViewRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct GetFilterViewRequestBuilder {
     request: GetFilterViewRequest,
@@ -72,21 +72,21 @@ self.request.sheet_id = sheet_id.to_string();
     pub fn filter_view_id(mut self, filter_view_id: impl ToString) -> Self {
 self.request.filter_view_id = filter_view_id.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 获取筛选视图响应体最外层,
 #[derive(.*?)]
 pub struct GetFilterViewResponseData {
     /// 筛选视图信息,
-#[serde(flatten)],
+#[serde(flatten)]
     pub filter_view: FilterViewInfo,
 }
-impl ApiResponseTrait for GetFilterViewResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }

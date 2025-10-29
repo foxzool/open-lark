@@ -17,12 +17,12 @@ pub struct ApplicationStageChangedData {
     /// 变更时间（毫秒时间戳）
     pub change_time: i64,
     /// 变更操作者ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub operator_id: Option<String>,
     /// 变更原因,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub reason: Option<String>,
     /// 备注信息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub note: Option<String>,
 }

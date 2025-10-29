@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -23,26 +23,26 @@ pub struct ListAppRoleRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 多维表格的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     app_token: String,
     /// 分页标记,
-#[serde(skip)],
+#[serde(skip)]
     page_token: Option<String>,
     /// 分页大小,
-#[serde(skip)],
+#[serde(skip)]
     page_size: Option<i32>,
 }
 impl ListAppRoleRequest {
     pub fn w+.*{
 ListAppRoleRequestBuilder::default(),
-    },
+    }
 pub fn new(app_token: impl ToString) -> Self {
         Self {
             app_token: app_token.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct ListAppRoleRequestBuilder {
     request: ListAppRoleRequest,
@@ -52,33 +52,33 @@ impl ListAppRoleRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 分页标记,
     pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
-},
+}
 /// 分页大小,
     pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
-},
+}
 pub fn w+.*{
         if let Some(page_token) = &self.request.page_token {,
 self.request,
                 .api_request,
-.query_params,
+.query_params
                 .insert("page_token", page_token.clone());
-},
+}
 if let Some(page_size) = &self.request.page_size {,
             self.request,
 .api_request,
                 .query_params
                 .insert("page_size", page_size.to_string());
-},
+}
 self.request,
-    },
-},
+    }
+}
 // 应用ExecutableBuilder trait到ListAppRoleRequestBuilder,
 crate::impl_executable_builder_owned!(
     ListAppRoleRequestBuilder,
@@ -99,11 +99,11 @@ pub struct ListAppRoleResponse {
     /// 自定义角色信息列表
     pub items: Vec<AppRole>,
 }
-impl ApiResponseTrait for ListAppRoleResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 列出自定义角色,
 pub async fn list_app_roles(
     request: ListAppRoleRequest,
@@ -120,11 +120,11 @@ Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
-    #[test],
+    #[test]
 fn test_list_app_role_request_builder() {,
         let request = ListAppRoleRequest::builder(),
 .app_token()
@@ -132,22 +132,22 @@ fn test_list_app_role_request_builder() {,
 .build();
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.page_size, Some(20));
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_request_new() {,
 let request = ListAppRoleRequest::new("bascnmBA*****yGehy8");
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.page_token, None);
         assert_eq!(request.page_size, None);
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_request_default() {,
 let request = ListAppRoleRequest::default();
         assert_eq!(request.app_token, "");
         assert_eq!(request.page_token, None);
         assert_eq!(request.page_size, None);
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_request_builder_default() {,
 let builder = ListAppRoleRequestBuilder::default();
         let request = builder.build();
@@ -155,8 +155,8 @@ let builder = ListAppRoleRequestBuilder::default();
         assert_eq!(request.app_token, "");
         assert_eq!(request.page_token, None);
         assert_eq!(request.page_size, None);
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_request_builder_chaining() {,
 let request = ListAppRoleRequest::builder(),
             .app_token()
@@ -170,15 +170,15 @@ let request = ListAppRoleRequest::builder(),
         assert_eq!(request.app_token, "app2");
         assert_eq!(request.page_token, Some("token2".to_string()));
         assert_eq!(request.page_size, Some(20));
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_request_debug() {,
 let request = ListAppRoleRequest::new("test_app");
         let debug_str = format!("{:?}", request);
 assert!(debug_str.contains("ListAppRoleRequest"));
         assert!(debug_str.contains("test_app"));
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_request_clone() {,
 let request = ListAppRoleRequest::builder(),
             .app_token()
@@ -190,8 +190,8 @@ let request = ListAppRoleRequest::builder(),
         assert_eq!(request.app_token, cloned.app_token);
         assert_eq!(request.page_token, cloned.page_token);
         assert_eq!(request.page_size, cloned.page_size);
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_request_serialization() {,
 let request = ListAppRoleRequest::new("app_token_123");
         let serialized = serde_json::to_string(&request).unwrap();
@@ -201,8 +201,8 @@ assert!(!serialized.contains("page_token"));
         assert!(!serialized.contains("page_size"));
 assert!(!serialized.contains("api_request"));
         assert_eq!(serialized, "{}");
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_request_with_page_token() {,
 let request = ListAppRoleRequest::builder(),
             .app_token()
@@ -212,8 +212,8 @@ let request = ListAppRoleRequest::builder(),
         assert_eq!(request.app_token, "test_app");
         assert_eq!(request.page_token, Some("next_page_token".to_string()));
         assert_eq!(request.page_size, None);
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_request_with_page_size() {,
 let request = ListAppRoleRequest::builder(),
             .app_token()
@@ -223,13 +223,13 @@ let request = ListAppRoleRequest::builder(),
         assert_eq!(request.app_token, "test_app");
         assert_eq!(request.page_token, None);
         assert_eq!(request.page_size, Some(50));
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_request_with_unicode() {,
 let request = ListAppRoleRequest::new("应用令牌_123");
         assert_eq!(request.app_token, "应用令牌_123");
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_request_with_string_types() {,
 let owned_app_token = String::from("owned_app");
         let request1 = ListAppRoleRequest::new(owned_app_token);
@@ -242,8 +242,8 @@ let request2 = ListAppRoleRequest::builder(),
 
         assert_eq!(request2.app_token, "builder_app");
         assert_eq!(request2.page_token, Some("builder_token".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_request_with_long_values() {,
 let long_token = "a".repeat(1000);
         let long_page_token = "b".repeat(500);
@@ -254,15 +254,15 @@ let request = ListAppRoleRequest::builder(),
 
         assert_eq!(request.app_token, long_token);
         assert_eq!(request.page_token, Some(long_page_token));
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_request_with_empty_values() {,
 let request = ListAppRoleRequest::new("");
         assert_eq!(request.app_token, "");
         assert_eq!(request.page_token, None);
         assert_eq!(request.page_size, None);
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_request_with_special_characters() {,
 let special_app = "app-token_123.test";
         let special_token = "token@domain#test";
@@ -273,8 +273,8 @@ let request = ListAppRoleRequest::builder(),
 
         assert_eq!(request.app_token, special_app);
         assert_eq!(request.page_token, Some(special_token.to_string()));
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_request_builder_partial() {,
 let request1 = ListAppRoleRequest::builder().app_token("only_app").build();
         assert_eq!(request1.app_token, "only_app");
@@ -283,8 +283,8 @@ let request1 = ListAppRoleRequest::builder().app_token("only_app").build();
 let request2 = ListAppRoleRequest::builder().page_size(100).build();
         assert_eq!(request2.app_token, "");
         assert_eq!(request2.page_size, Some(100));
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_request_page_size_bounds() {,
 let request1 = ListAppRoleRequest::builder(),
             .app_token()
@@ -306,8 +306,8 @@ let request4 = ListAppRoleRequest::builder(),
 .page_size()
             .build();
         assert_eq!(request4.page_size, Some(-1));
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_response_deserialization() {,
 let json = r#"{,
             "has_more": true,
@@ -317,15 +317,15 @@ let json = r#"{,
 {,
                     "role_id": "rolxxxxxx",
                     "role_name": "自定义角色1",
-                    "table_roles": [],
-                    "block_roles": [],
-},
+                    "table_roles": []
+                    "block_roles": []
+}
                 {
                     "role_id": "rolyyyyyy",
                     "role_name": "自定义角色2",
-                    "table_roles": [],
-                    "block_roles": [],
-},
+                    "table_roles": []
+                    "block_roles": []
+}
 ],
         }"#;
 let response: ListAppRoleResponse = serde_json::from_str(json).unwrap();
@@ -335,41 +335,41 @@ let response: ListAppRoleResponse = serde_json::from_str(json).unwrap();
         assert_eq!(response.items.len(), 2);
         assert_eq!(response.items[0].role_id, "rolxxxxxx");
         assert_eq!(response.items[1].role_id, "rolyyyyyy");
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_response_deserialization_empty() {,
 let json = r#"{,
             "has_more": false,
             "page_token": null,
             "total": 0,
-            "items": [],
+            "items": []
 }"#;
 let response: ListAppRoleResponse = serde_json::from_str(json).unwrap();
         assert!(!response.has_more);
         assert_eq!(response.page_token, None);
         assert_eq!(response.total, 0);
         assert_eq!(response.items.len(), 0);
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_response_debug() {,
 let response = ListAppRoleResponse {,
             has_more: true,
             page_token: Some("debug_token".to_string()),
             total: 1,
-            items: vec![],
+            items: vec![]
         };
 
         let debug_str = format!("{:?}", response);
 assert!(debug_str.contains("ListAppRoleResponse"));
         assert!(debug_str.contains("debug_token"));
 assert!(debug_str.contains("true"));
-    },
-#[test],
+    }
+#[test]
     fn test_list_app_role_response_data_format() {,
 let format = ListAppRoleResponse::data_format();
         assert!(matches!(format, ResponseFormat::Data));
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_response_with_unicode() {,
 let json = r#"{,
             "has_more": false,
@@ -379,24 +379,24 @@ let json = r#"{,
 {,
                     "role_id": "角色_123",
                     "role_name": "自定义角色_测试",
-                    "table_roles": [],
-                    "block_roles": [],
-},
+                    "table_roles": []
+                    "block_roles": []
+}
 ],
         }"#;
 let response: ListAppRoleResponse = serde_json::from_str(json).unwrap();
         assert_eq!(response.page_token, Some("令牌_测试".to_string()));
         assert_eq!(response.items[0].role_id, "角色_123");
         assert_eq!(response.items[0].role_name, "自定义角色_测试");
-},
-#[test],
+}
+#[test]
     fn test_memory_efficiency() {,
 let request = ListAppRoleRequest::new("test");
         let size = std::mem::size_of_val(&request);
 assert!(size > 0);
         assert!(size < 1024);
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_request_query_params_build() {,
 let request = ListAppRoleRequest::builder(),
             .app_token()
@@ -413,8 +413,8 @@ assert!(request.api_request.query_params.contains_key("page_size"));
             request.api_request.query_params.get("page_size").unwrap(),
             "25",
 );
-    },
-#[test],
+    }
+#[test]
     fn test_list_app_role_request_query_params_partial() {,
 let request1 = ListAppRoleRequest::builder(),
             .app_token()
@@ -428,11 +428,11 @@ let request2 = ListAppRoleRequest::builder(),
             .build();
 assert!(!request2.api_request.query_params.contains_key("page_token"));
         assert!(request2.api_request.query_params.contains_key("page_size"));
-},
-#[test],
+}
+#[test]
     fn test_list_app_role_request_builder_method_returns() {,
 let builder = ListAppRoleRequest::builder().app_token("测试链式");
         // 确保builder方法返回正确的类型,
 let _chained = builder.page_token("token").page_size(10);
-    },
+    }
 }

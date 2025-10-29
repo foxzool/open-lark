@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option, SDKResult,
@@ -15,7 +15,7 @@ use crate::,
     impl_executable_builder_owned,
     service::cloud_docs::sheets::v2::{
         spreadsheet_sheet::UpdateSheetProperty, SpreadsheetSheetService,
-    },
+    }
 };
 
 #[derive(.*?)]
@@ -34,33 +34,33 @@ pub struct OperateSheetsRequest {
 /// 定义对表格进行操作的不同请求类型,
 pub enum OperateSheetsRequestElem {,
     /// 增加工作表。,
-#[serde(rename = "addSheet")],
+#[serde(rename = "addSheet")]
     AddSheet {,
 /// 工作表属性,
         properties: AddSheetProperty,
-    },
+    }
     /// 复制工作表。复制的新工作表位于源工作表索引位置之后。,
-#[serde(rename = "copySheet")],
+#[serde(rename = "copySheet")]
     CopySheet {,
 /// 需要复制的工作表资源,
         source: CopySheetSource,
         /// 新工作表的属性
         destination: CopySheetDestination,
-    },
+    }
     /// 更新工作表,
-#[serde(rename = "updateSheet")],
+#[serde(rename = "updateSheet")]
     UpdateSheet {,
 /// 工作表属性,
         properties: UpdateSheetProperty,
-    },
+    }
     /// 删除工作表。,
-#[serde(rename = "deleteSheet")],
+#[serde(rename = "deleteSheet")]
     DeleteSheet {,
 /// 要删除的工作表的 ID。调用获取工作表获取 ID,
         #[serde(rename = "sheetId")]
         sheet_id: String,
-    },
-},
+    }
+}
 /// 工作表属性,
 #[derive(.*?)]
 pub struct AddSheetProperty {
@@ -68,14 +68,14 @@ pub struct AddSheetProperty {
     pub title: String,
     /// 新增工作表的位置。不填默认在工作表的第 0 索引位置增加工作表。
     pub index: Option<i32>,
-},
+}
 /// 需要复制的工作表资源,
 #[derive(.*?)]
 pub struct CopySheetSource {
     /// 源工作表的 ID。调用获取工作表获取 ID,
-#[serde(rename = "sheetId")],
+#[serde(rename = "sheetId")]
     sheet_id: String,
-},
+}
 /// 新工作表的属性,
 #[derive(.*?)]
 pub struct CopySheetDestination {
@@ -85,8 +85,8 @@ pub struct CopySheetDestination {
 impl OperateSheetsRequest {
     pub fn w+.*{
 OperateSheetsRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct OperateSheetsRequestBuilder {
     request: OperateSheetsRequest,
@@ -95,7 +95,7 @@ impl OperateSheetsRequestBuilder {
     pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
-},
+}
 /// 增加工作表。,
     pub fn add_sheet(mut self, title: impl ToString, index: Option<i32>) -> Self {
 self.request,
@@ -104,10 +104,10 @@ self.request,
                 properties: AddSheetProperty {
                     title: title.to_string(),
                     index,
-                },
+                }
             });
 self,
-    },
+    }
 /// 复制工作表。复制的新工作表位于源工作表索引位置之后。,
     pub fn copy_sheet(mut self, source: impl ToString, destination: Option<String>) -> Self {
 self.request,
@@ -115,11 +115,11 @@ self.request,
 .push(OperateSheetsRequestElem::CopySheet {,
                 source: CopySheetSource {
                     sheet_id: source.to_string(),
-                },
-                destination: CopySheetDestination { title: destination },
+                }
+                destination: CopySheetDestination { title: destination }
             });
 self,
-    },
+    }
 /// 删除工作表。,
     pub fn delete_sheet(mut self, sheet_id: impl ToString) -> Self {
 self.request,
@@ -128,11 +128,11 @@ self.request,
                 sheet_id: sheet_id.to_string(),
             });
 self,
-    },
+    }
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 impl_executable_builder_owned!(,
     OperateSheetsRequestBuilder,
@@ -159,17 +159,17 @@ api_req.set_http_method(reqwest::Method::POST);
 let api_resp =,
             crate::core::http::Transport::request(api_req, &self.config_arc, option).await?;
 Ok(api_resp),
-    },
+    }
 }
 
 #[derive(.*?)]
 pub struct OperateSheetResponse {
     pub replies: Vec<OperateSheetReply>,
 }
-impl ApiResponseTrait for OperateSheetResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 
 #[derive(.*?)]
@@ -178,23 +178,23 @@ ResponseFormat::Data,
 /// 定义表格操作请求的响应结果类型,
 pub enum OperateSheetReply {,
     /// 新增工作表的属性,
-#[serde(rename = "addSheet")],
-    AddSheet { properties: SheetResponse },
+#[serde(rename = "addSheet")]
+    AddSheet { properties: SheetResponse }
     /// 复制工作表的结果,
-#[serde(rename = "copySheet")],
-    CopySheet { properties: SheetResponse },
+#[serde(rename = "copySheet")]
+    CopySheet { properties: SheetResponse }
     /// 更新工作表的结果,
-#[serde(rename = "updateSheet")],
-    UpdateSheet { properties: UpdateSheetProperty },
+#[serde(rename = "updateSheet")]
+    UpdateSheet { properties: UpdateSheetProperty }
     /// 删除工作表的结果,
-#[serde(rename = "deleteSheet")],
+#[serde(rename = "deleteSheet")]
     DeleteSheet {,
 /// 删除工作表是否成功,
         result: bool,
         /// 被删除的工作表的 ID,
-#[serde(rename = "sheetId")],
+#[serde(rename = "sheetId")]
         sheet_id: String,
-    },
+    }
 }
 
 #[derive(.*?)]
@@ -207,8 +207,8 @@ pub struct SheetResponse {
     pub title: String,
     /// 工作表的位置
     pub index: Option<i32>,
-},
-#[cfg(test)],
+}
+#[cfg(test)]
 mod tests {
 use super::*;
     use crate::core::config::Config;
@@ -218,26 +218,26 @@ Config::builder()
             .app_id()
 .app_secret()
             .build(),
-},
+}
 fn create_test_service() -> SpreadsheetSheetService {,
         SpreadsheetSheetService::new(create_test_config()),
-},
-#[test],
+}
+#[test]
     fn test_operate_sheets_request_builder_creation() {,
 let builder = OperateSheetsRequest::builder();
         let request = builder.build();
 
         assert_eq!(request.spreadsheet_token, "");
 assert!(request.requests.is_empty());
-    },
-#[test],
+    }
+#[test]
     fn test_operate_sheets_request_builder_with_spreadsheet_token() {,
 let request = OperateSheetsRequest::builder(),
             .spreadsheet_token()
 .build();
         assert_eq!(request.spreadsheet_token, "test_spreadsheet_123");
-},
-#[test],
+}
+#[test]
     fn test_operate_sheets_request_builder_with_add_sheet() {,
 let request = OperateSheetsRequest::builder(),
             .add_sheet("New Sheet", Some(2)),
@@ -249,9 +249,9 @@ match &request.requests[0] {,
                 assert_eq!(properties.index, Some(2));
 }
             _ => panic!("Expected AddSheet variant"),
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_operate_sheets_request_builder_with_add_sheet_no_index() {,
 let request = OperateSheetsRequest::builder(),
             .add_sheet()
@@ -263,9 +263,9 @@ match &request.requests[0] {,
 assert!(properties.index.is_none());
             }
             _ => panic!("Expected AddSheet variant"),
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_operate_sheets_request_builder_with_copy_sheet() {,
 let request = OperateSheetsRequest::builder(),
             .copy_sheet("source_sheet_123", Some("Copied Sheet".to_string())),
@@ -280,9 +280,9 @@ match &request.requests[0] {,
                 assert_eq!(destination.title, Some("Copied Sheet".to_string()));
 }
             _ => panic!("Expected CopySheet variant"),
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_operate_sheets_request_builder_with_copy_sheet_no_title() {,
 let request = OperateSheetsRequest::builder(),
             .copy_sheet()
@@ -297,9 +297,9 @@ match &request.requests[0] {,
 assert!(destination.title.is_none());
             }
             _ => panic!("Expected CopySheet variant"),
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_operate_sheets_request_builder_with_delete_sheet() {,
 let request = OperateSheetsRequest::builder(),
             .delete_sheet()
@@ -310,9 +310,9 @@ match &request.requests[0] {,
                 assert_eq!(sheet_id, "sheet_to_delete_789");
 }
             _ => panic!("Expected DeleteSheet variant"),
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_operate_sheets_request_builder_chaining_multiple_operations() {,
 let request = OperateSheetsRequest::builder(),
             .spreadsheet_token("my_spreadsheet")
@@ -331,14 +331,14 @@ let request = OperateSheetsRequest::builder(),
                 assert_eq!(properties.index, Some(0));
 }
             _ => panic!("Expected AddSheet variant"),
-        },
+        }
 match &request.requests[1] {,
             OperateSheetsRequestElem::AddSheet { properties } => {
                 assert_eq!(properties.title, "Sheet 2");
                 assert_eq!(properties.index, Some(1));
 }
             _ => panic!("Expected AddSheet variant"),
-        },
+        }
 match &request.requests[2] {,
             OperateSheetsRequestElem::CopySheet {
                 source,
@@ -348,45 +348,45 @@ match &request.requests[2] {,
                 assert_eq!(destination.title, Some("Copy of Existing".to_string()));
 }
             _ => panic!("Expected CopySheet variant"),
-        },
+        }
 match &request.requests[3] {,
             OperateSheetsRequestElem::DeleteSheet { sheet_id } => {
                 assert_eq!(sheet_id, "old_sheet");
 }
             _ => panic!("Expected DeleteSheet variant"),
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_operate_sheets_request_default() {,
 let request = OperateSheetsRequest::default();
         assert_eq!(request.spreadsheet_token, "");
 assert!(request.requests.is_empty());
-    },
-#[test],
+    }
+#[test]
     fn test_operate_sheets_request_builder_default() {,
 let builder = OperateSheetsRequestBuilder::default();
         let request = builder.build();
 
         assert_eq!(request.spreadsheet_token, "");
 assert!(request.requests.is_empty());
-    },
-#[test],
+    }
+#[test]
     fn test_add_sheet_property_default() {,
 let props = AddSheetProperty::default();
         assert_eq!(props.title, "");
 assert!(props.index.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_copy_sheet_source_default() {,
 let source = CopySheetSource::default();
         assert_eq!(source.sheet_id, "");
-},
-#[test],
+}
+#[test]
     fn test_copy_sheet_destination_default() {,
 let destination = CopySheetDestination::default();
         assert!(destination.title.is_none());
-},
-#[test],
+}
+#[test]
     fn test_operate_sheets_request_serialization() {,
 let request = OperateSheetsRequest::builder(),
             .spreadsheet_token("token123")
@@ -406,8 +406,8 @@ assert!(json_str.contains("Test Sheet"));
         assert!(json_str.contains("source123"));
 assert!(json_str.contains("Copy Title"));
         assert!(json_str.contains("delete456"));
-},
-#[test],
+}
+#[test]
     fn test_operate_sheets_request_serialization_empty() {,
 let request = OperateSheetsRequest::builder(),
             .spreadsheet_token()
@@ -417,8 +417,8 @@ assert!(serialized.is_ok());
         let json_str = serialized.unwrap();
 assert!(json_str.contains("requests"));
         assert!(json_str.contains("[]")); // Empty array,
-},
-#[test],
+}
+#[test]
     fn test_operate_sheets_request_debug() {,
 let request = OperateSheetsRequest::builder(),
             .spreadsheet_token("debug_token")
@@ -428,8 +428,8 @@ let request = OperateSheetsRequest::builder(),
 assert!(debug_str.contains("OperateSheetsRequest"));
         assert!(debug_str.contains("debug_token"));
 assert!(debug_str.contains("Debug Sheet"));
-    },
-#[test],
+    }
+#[test]
     fn test_operate_sheets_request_with_empty_strings() {,
 let request = OperateSheetsRequest::builder(),
             .spreadsheet_token("")
@@ -440,8 +440,8 @@ let request = OperateSheetsRequest::builder(),
 
         assert_eq!(request.spreadsheet_token, "");
         assert_eq!(request.requests.len(), 3);
-},
-#[test],
+}
+#[test]
     fn test_operate_sheets_request_with_special_characters() {,
 let request = OperateSheetsRequest::builder(),
             .spreadsheet_token("token_with_特殊字符_🎯")
@@ -456,7 +456,7 @@ match &request.requests[0] {,
                 assert_eq!(properties.title, "工作表_📋_测试");
 }
             _ => panic!("Expected AddSheet variant"),
-        },
+        }
 match &request.requests[1] {,
             OperateSheetsRequestElem::CopySheet {
                 source,
@@ -466,15 +466,15 @@ match &request.requests[1] {,
                 assert_eq!(destination.title, Some("副本_🎨".to_string()));
 }
             _ => panic!("Expected CopySheet variant"),
-        },
+        }
 match &request.requests[2] {,
             OperateSheetsRequestElem::DeleteSheet { sheet_id } => {
                 assert_eq!(sheet_id, "删除工作表_🗑️");
 }
             _ => panic!("Expected DeleteSheet variant"),
-        },
-},
-#[rstest],
+        }
+}
+#[rstest]
     #[case(-1)] // Negative index,
 #[case(0)] // First position,
     #[case(1)] // Second position,
@@ -489,9 +489,9 @@ fn test_operate_sheets_request_with_various_indices(#[case] index: i32) {,
                 assert_eq!(properties.index, Some(index));
 }
             _ => panic!("Expected AddSheet variant"),
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_operate_sheets_request_with_maximum_values() {,
 let request = OperateSheetsRequest::builder(),
             .add_sheet("Max Index Sheet", Some(i32::MAX)),
@@ -501,9 +501,9 @@ let request = OperateSheetsRequest::builder(),
                 assert_eq!(properties.index, Some(i32::MAX));
 }
             _ => panic!("Expected AddSheet variant"),
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_operate_sheets_request_with_minimum_values() {,
 let request = OperateSheetsRequest::builder(),
             .add_sheet("Min Index Sheet", Some(i32::MIN)),
@@ -513,9 +513,9 @@ let request = OperateSheetsRequest::builder(),
                 assert_eq!(properties.index, Some(i32::MIN));
 }
             _ => panic!("Expected AddSheet variant"),
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_operate_sheets_request_api_request_body_serialization() {,
 let request = OperateSheetsRequest::builder(),
             .spreadsheet_token("body_test_token")
@@ -538,8 +538,8 @@ let add_sheet = requests[0].get("addSheet").unwrap();
         assert!(requests[1].get("deleteSheet").is_some());
 let delete_sheet = requests[1].get("deleteSheet").unwrap();
         assert_eq!(delete_sheet.get("sheetId").unwrap(), "delete_me");
-},
-#[test],
+}
+#[test]
     fn test_operate_sheets_request_builder_multiple_calls() {,
 let mut builder = OperateSheetsRequest::builder();
         // Test that multiple calls to spreadsheet_token override previous values,
@@ -551,18 +551,18 @@ builder = builder.spreadsheet_token("first_token");
 let request = builder.build();
         assert_eq!(request.spreadsheet_token, "second_token");
         assert_eq!(request.requests.len(), 2);
-},
-#[test],
+}
+#[test]
     fn test_spreadsheet_sheet_service_creation() {,
 let service = create_test_service();
         // Verify the service can be created without panic
         assert_eq!(service.config.app_id, "test_app_id");
-},
-#[test],
-    fn test_operate_sheet_response_data_format() {
+}
+#[test]
+    ,
         assert_eq!(OperateSheetResponse::data_format(), ResponseFormat::Data);
-},
-#[test],
+}
+#[test]
     fn test_operate_sheet_reply_deserialization_add_sheet() {,
 let json_response = r#"{,
             "addSheet": {,
@@ -571,7 +571,7 @@ let json_response = r#"{,
                     "title": "New Sheet",
                     "index": 1,
 }
-            },
+            }
 }"#;
 let reply: OperateSheetReply = serde_json::from_str(json_response).unwrap();
         match reply {
@@ -581,9 +581,9 @@ let reply: OperateSheetReply = serde_json::from_str(json_response).unwrap();
                 assert_eq!(properties.index, Some(1));
 }
             _ => panic!("Expected AddSheet variant"),
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_operate_sheet_reply_deserialization_copy_sheet() {,
 let json_response = r#"{,
             "copySheet": {,
@@ -592,7 +592,7 @@ let json_response = r#"{,
                     "title": "Copied Sheet",
                     "index": 2,
 }
-            },
+            }
 }"#;
 let reply: OperateSheetReply = serde_json::from_str(json_response).unwrap();
         match reply {
@@ -602,9 +602,9 @@ let reply: OperateSheetReply = serde_json::from_str(json_response).unwrap();
                 assert_eq!(properties.index, Some(2));
 }
             _ => panic!("Expected CopySheet variant"),
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_operate_sheet_reply_deserialization_delete_sheet() {,
 let json_response = r#"{,
             "deleteSheet": {
@@ -619,9 +619,9 @@ assert!(result);
                 assert_eq!(sheet_id, "deleted789");
 }
             _ => panic!("Expected DeleteSheet variant"),
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_operate_sheet_response_deserialization() {,
 let json_response = r#"{,
             "replies": [,
@@ -632,14 +632,14 @@ let json_response = r#"{,
                             "title": "Added Sheet",
                             "index": 0,
 }
-                    },
-},
+                    }
+}
                 {,
 "deleteSheet": {,
                         "result": true,
                         "sheetId": "old456",
 }
-                },
+                }
 ],
         }"#;
 let response: OperateSheetResponse = serde_json::from_str(json_response).unwrap();
@@ -651,16 +651,16 @@ match &response.replies[0] {,
                 assert_eq!(properties.index, Some(0));
 }
             _ => panic!("Expected AddSheet variant"),
-        },
+        }
 match &response.replies[1] {,
             OperateSheetReply::DeleteSheet { result, sheet_id } => {,
 assert!(result);
                 assert_eq!(sheet_id, "old456");
 }
             _ => panic!("Expected DeleteSheet variant"),
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_operate_sheets_request_edge_cases() {,
 // Test with very long token,
         let long_token = "a".repeat(10000);
@@ -678,7 +678,7 @@ let request = OperateSheetsRequest::builder(),
                 assert_eq!(properties.title, long_title);
 }
             _ => panic!("Expected AddSheet variant"),
-        },
+        }
 // Test with very long sheet IDs,
         let long_sheet_id = "sheet_id_".repeat(500);
 let request = OperateSheetsRequest::builder(),
@@ -690,9 +690,9 @@ match &request.requests[0] {,
                 assert_eq!(source.sheet_id, long_sheet_id);
 }
             _ => panic!("Expected CopySheet variant"),
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_operate_sheets_request_memory_efficiency() {,
 // Test creating many requests doesn't consume excessive memory,
         let mut builder = OperateSheetsRequest::builder().spreadsheet_token("memory_test");
@@ -701,7 +701,7 @@ match &request.requests[0] {,
             builder = builder.add_sheet(format!("Sheet_{}", i), Some(i));
             builder = builder.copy_sheet(format!("source_{}", i), Some(format!("copy_{}", i)));
             builder = builder.delete_sheet(format!("delete_{}", i));
-},
+}
 let request = builder.build();
         assert_eq!(request.requests.len(), 300); // 100 * 3 operations,
 // Verify a few random operations,
@@ -711,15 +711,15 @@ let request = builder.build();
                 assert_eq!(properties.index, Some(0));
 }
             _ => panic!("Expected AddSheet variant"),
-        },
+        }
 match &request.requests[299] {,
             OperateSheetsRequestElem::DeleteSheet { sheet_id } => {
                 assert_eq!(sheet_id, "delete_99");
 }
             _ => panic!("Expected DeleteSheet variant"),
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_sheet_response_debug() {,
 let response = SheetResponse {,
             sheet_id: "debug_sheet_123".to_string(),
@@ -732,8 +732,8 @@ assert!(debug_str.contains("SheetResponse"));
         assert!(debug_str.contains("debug_sheet_123"));
 assert!(debug_str.contains("Debug Sheet"));
         assert!(debug_str.contains("Some(5)"));
-},
-#[test],
+}
+#[test]
     fn test_operate_sheets_request_unicode_handling() {,
 let request = OperateSheetsRequest::builder(),
             .spreadsheet_token("令牌_🔑_test")
@@ -751,8 +751,8 @@ assert!(json_str.contains("工作表_📋_name"));
         assert!(json_str.contains("源_🎯"));
 assert!(json_str.contains("目标_🎪"));
         assert!(json_str.contains("删除_🗑️"));
-},
-#[test],
+}
+#[test]
     fn test_operate_sheets_request_builder_partial_configuration() {,
 // Test building with only some operations,
         let request1 = OperateSheetsRequest::builder()

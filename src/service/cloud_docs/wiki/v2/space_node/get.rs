@@ -5,7 +5,7 @@ use crate::core::{,
     api_resp::{ApiResponseTrait, BaseResponse, ResponseFormat},
     config::Config,
     constants::AccessTokenType,
-    endpoints::{cloud_docs::*, EndpointBuilder},
+    endpoints::{cloud_docs::*, EndpointBuilder}
     http::Transport,
     req_option::RequestOption,
     SDKResult,
@@ -16,10 +16,10 @@ pub struct GetSpaceNodeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 知识空间id,
-#[serde(skip)],
+#[serde(skip)]
     space_id: String,
     /// 节点token,
-#[serde(skip)],
+#[serde(skip)]
     node_token: String,
 }
 impl GetSpaceNodeRequest {
@@ -33,8 +33,8 @@ Self {
             node_token: node_token.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct GetSpaceNodeRequestBuilder {
     request: GetSpaceNodeRequest,
@@ -44,17 +44,17 @@ impl GetSpaceNodeRequestBuilder {
     pub fn space_id(mut self, space_id: impl ToString) -> Self {
 self.request.space_id = space_id.to_string();
         self,
-},
+}
 /// 节点token,
     pub fn node_token(mut self, node_token: impl ToString) -> Self {
 self.request.node_token = node_token.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 知识空间节点信息,
 #[derive(.*?)]
 pub struct SpaceNode {
@@ -82,18 +82,18 @@ pub struct SpaceNode {
     pub node_creator: Option<String>,
     /// 是否有子节点
     pub has_child: Option<bool>,
-},
+}
 /// 获取知识空间节点响应,
 #[derive(.*?)]
 pub struct GetSpaceNodeResponse {
     /// 节点信息
     pub node: SpaceNode,
 }
-impl ApiResponseTrait for GetSpaceNodeResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 获取知识空间节点,
 pub async fn get_space_node(
     request: GetSpaceNodeRequest,
@@ -115,10 +115,10 @@ Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_get_space_node_request_builder() {,
 let request = GetSpaceNodeRequest::builder(),
             .space_id()

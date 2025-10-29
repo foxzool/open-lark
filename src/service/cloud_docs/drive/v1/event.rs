@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -23,8 +23,8 @@ pub struct EventService {
 }
 impl EventService {
     pub fn new(config: Config) -> Self {
-        Self { config },
-},
+        Self { config }
+}
 /// 订阅云文档事件,
     ///,
 /// 该接口用于订阅云文档的相关事件。,
@@ -40,14 +40,14 @@ impl EventService {
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: DRIVE_V1_FILES_SUBSCRIBE.to_string(),
-            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 查询云文档事件订阅状态,
     ///,
 /// 该接口用于查询云文档的事件订阅状态。,
@@ -67,12 +67,12 @@ let mut api_req = ApiRequest {,
                 .replace()
             ..Default::default(),
 };
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 取消云文档事件订阅,
     ///,
 /// 该接口用于取消云文档的事件订阅。,
@@ -92,13 +92,13 @@ let mut api_req = ApiRequest {,
                 .replace()
             ..Default::default(),
 };
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::User, AccessTokenType::Tenant]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 订阅云文档事件请求参数,
 #[derive(.*?)]
 pub struct SubscribeFileEventsRequest {
@@ -112,7 +112,7 @@ pub struct SubscribeFileEventsRequest {
 impl SubscribeFileEventsRequest {
     pub fn w+.*{
 SubscribeFileEventsRequestBuilder::default(),
-    },
+    }
 pub fn new(,
         file_token: impl Into<String>,
         file_type: impl Into<String>,
@@ -122,9 +122,9 @@ Self {
             file_token: file_token.into(),
             file_type: file_type.into(),
             event_types,
-        },
+        }
 }
-},
+}
 /// 订阅云文档事件请求构建器,
 #[derive(Default)]
 pub struct SubscribeFileEventsRequestBuilder {
@@ -149,7 +149,7 @@ self.request.event_types = event_types;
     pub fn add_event_type(mut self, event_type: impl Into<String>) -> Self {
 self.request.event_types.push(event_type.into());
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
@@ -169,11 +169,11 @@ pub struct SubscribeFileEventsRespData {
     /// 订阅类型
     pub subscription_type: String,
 }
-impl ApiResponseTrait for SubscribeFileEventsRespData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 查询云文档事件订阅状态请求参数,
 #[derive(.*?)]
 pub struct GetFileSubscriptionRequest {
@@ -191,9 +191,9 @@ GetFileSubscriptionRequestBuilder::default(),
 Self {
             file_token: file_token.into(),
             subscription_id: subscription_id.into(),
-        },
+        }
 }
-},
+}
 /// 查询云文档事件订阅状态请求构建器,
 #[derive(Default)]
 pub struct GetFileSubscriptionRequestBuilder {
@@ -208,7 +208,7 @@ self.request.file_token = file_token.into();
     pub fn subscription_id(mut self, subscription_id: impl Into<String>) -> Self {
 self.request.subscription_id = subscription_id.into();
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
@@ -240,11 +240,11 @@ pub struct FileSubscription {
     /// 订阅状态
     pub is_active: bool,
 }
-impl ApiResponseTrait for GetFileSubscriptionRespData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 取消云文档事件订阅请求参数,
 #[derive(.*?)]
 pub struct UnsubscribeFileEventsRequest {
@@ -262,9 +262,9 @@ UnsubscribeFileEventsRequestBuilder::default(),
 Self {
             file_token: file_token.into(),
             subscription_id: subscription_id.into(),
-        },
+        }
 }
-},
+}
 /// 取消云文档事件订阅请求构建器,
 #[derive(Default)]
 pub struct UnsubscribeFileEventsRequestBuilder {
@@ -279,7 +279,7 @@ self.request.file_token = file_token.into();
     pub fn subscription_id(mut self, subscription_id: impl Into<String>) -> Self {
 self.request.subscription_id = subscription_id.into();
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
@@ -297,8 +297,8 @@ pub struct UnsubscribeFileEventsRespData {
     /// 操作结果
     pub result: bool,
 }
-impl ApiResponseTrait for UnsubscribeFileEventsRespData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }

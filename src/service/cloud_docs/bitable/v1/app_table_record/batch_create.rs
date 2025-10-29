@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -23,16 +23,16 @@ pub struct BatchCreateRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 多维表格的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     app_token: String,
     /// 多维表格数据表的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     table_id: String,
     /// 用户 ID 类型,
-#[serde(skip)],
+#[serde(skip)]
     user_id_type: Option<String>,
     /// 格式为标准的 uuidv4，操作的唯一标识，用于幂等的进行更新操作,
-#[serde(skip)],
+#[serde(skip)]
     client_token: Option<String>,
     /// 要新增的记录列表
     records: Vec<Record>,
@@ -48,8 +48,8 @@ Self {
             table_id: table_id.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct BatchCreateRecordRequestBuilder {
     request: BatchCreateRecordRequest,
@@ -59,49 +59,49 @@ impl BatchCreateRecordRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 数据表的唯一标识符,
     pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
-},
+}
 /// 用户 ID 类型,
     pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
-},
+}
 /// 客户端请求唯一标识,
     pub fn client_token(mut self, client_token: impl ToString) -> Self {
 self.request.client_token = Some(client_token.to_string());
         self,
-},
+}
 /// 要新增的记录列表,
     pub fn records(mut self, records: Vec<Record>) -> Self {
 self.request.records = records;
         self,
-},
+}
 /// 添加单条记录,
     pub fn add_record(mut self, record: Record) -> Self {
 self.request.records.push(record);
         self,
-},
+}
 pub fn w+.*{
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
                 .api_request,
-.query_params,
+.query_params
                 .insert("user_id_type", user_id_type.clone());
-},
+}
 if let Some(client_token) = &self.request.client_token {,
             self.request,
 .api_request,
                 .query_params
                 .insert("client_token", client_token.clone());
-},
+}
 self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request,
 }
-},
+}
 // 应用ExecutableBuilder trait到BatchCreateRecordRequestBuilder,
 crate::impl_executable_builder_owned!(
     BatchCreateRecordRequestBuilder,
@@ -116,11 +116,11 @@ pub struct BatchCreateRecordResponse {
     /// 新增的记录列表
     pub records: Vec<Record>,
 }
-impl ApiResponseTrait for BatchCreateRecordResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 批量新增记录,
 pub async fn batch_create_record(
     request: BatchCreateRecordRequest,
@@ -139,12 +139,12 @@ Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json::json;
     use std::collections::HashMap;
-#[test],
+#[test]
     fn test_batch_create_record_request_builder() {,
 let record1 = Record {,
             record_id: None,

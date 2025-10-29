@@ -5,15 +5,15 @@ pub struct PageResponse<T> {,
     /// 数据项列表
     pub items: Vec<T>,
     /// 分页标记，用于获取下一页数据,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
     /// 是否还有更多数据,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub has_more: Option<bool>,
-},
+}
 /// 用户类型,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum UserType {,
 /// 员工,
     Employee,
@@ -23,10 +23,10 @@ pub enum UserType {,
     Contractor,
     /// 临时人员
     Temporary,
-},
+}
 /// 用户状态,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum UserStatus {,
 /// 活跃,
     Active,
@@ -36,51 +36,51 @@ pub enum UserStatus {,
     Expired,
     /// 待审核
     Pending,
-},
+}
 /// 门禁用户信息,
 #[derive(.*?)]
 pub struct AcsUser {
     /// 用户ID
     pub user_id: String,
     /// 员工工号/员工ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub employee_id: Option<String>,
     /// 用户姓名
     pub name: String,
     /// 用户类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_type: Option<UserType>,
     /// 用户状态,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<UserStatus>,
     /// 部门信息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub department: Option<String>,
     /// 电话号码,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub phone: Option<String>,
     /// 邮箱地址,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
     /// 是否有人脸图片,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub has_face_image: Option<bool>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
     /// 更新时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-},
+}
 /// 权限组状态,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum RuleStatus {,
 /// 活跃,
     Active,
     /// 禁用
     Disabled,
-},
+}
 /// 权限组信息,
 #[derive(.*?)]
 pub struct RuleExternal {
@@ -89,33 +89,33 @@ pub struct RuleExternal {
     /// 权限组名称
     pub name: String,
     /// 权限组描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 权限组状态,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<RuleStatus>,
     /// 关联的设备ID列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub device_ids: Option<Vec<String>>,
     /// 关联的用户ID列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_ids: Option<Vec<String>>,
     /// 生效开始时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<i64>,
     /// 生效结束时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<i64>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
     /// 更新时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-},
+}
 /// 访客状态,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum VisitorStatus {,
 /// 活跃,
     Active,
@@ -123,7 +123,7 @@ pub enum VisitorStatus {,
     Expired,
     /// 已签出
     CheckedOut,
-},
+}
 /// 访客信息,
 #[derive(.*?)]
 pub struct Visitor {
@@ -132,36 +132,36 @@ pub struct Visitor {
     /// 访客姓名
     pub name: String,
     /// 访客电话,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub phone: Option<String>,
     /// 访客公司,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub company: Option<String>,
     /// 访问目的,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub purpose: Option<String>,
     /// 接待人员ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub host_user_id: Option<String>,
     /// 接待人员姓名,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub host_name: Option<String>,
     /// 访客状态,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<VisitorStatus>,
     /// 访问开始时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<i64>,
     /// 访问结束时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<i64>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
-},
+}
 /// 设备类型,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum DeviceType {,
 /// 门禁设备,
     AccessControl,
@@ -171,10 +171,10 @@ pub enum DeviceType {,
     Turnstile,
     /// 电梯控制器
     ElevatorController,
-},
+}
 /// 设备状态,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum DeviceStatus {,
 /// 在线,
     Online,
@@ -184,7 +184,7 @@ pub enum DeviceStatus {,
     Error,
     /// 维护中
     Maintenance,
-},
+}
 /// 门禁设备信息,
 #[derive(.*?)]
 pub struct Device {
@@ -193,42 +193,42 @@ pub struct Device {
     /// 设备名称
     pub name: String,
     /// 设备类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub device_type: Option<DeviceType>,
     /// 设备状态,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<DeviceStatus>,
     /// 设备位置,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
     /// 设备描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// 设备IP地址,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
     /// 设备MAC地址,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub mac_address: Option<String>,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
     /// 更新时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<i64>,
-},
+}
 /// 访问类型,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum AccessType {,
 /// 进入,
     Entry,
     /// 离开
     Exit,
-},
+}
 /// 访问方式,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum AccessMethod {,
 /// 人脸识别,
     FaceRecognition,
@@ -240,10 +240,10 @@ pub enum AccessMethod {,
     Fingerprint,
     /// 手动开门
     Manual,
-},
+}
 /// 访问结果,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum AccessResult {,
 /// 成功,
     Success,
@@ -253,66 +253,66 @@ pub enum AccessResult {,
     Denied,
     /// 超时
     Timeout,
-},
+}
 /// 门禁访问记录,
 #[derive(.*?)]
 pub struct AccessRecord {
     /// 记录ID
     pub record_id: String,
     /// 用户ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
     /// 用户姓名,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_name: Option<String>,
     /// 设备ID
     pub device_id: String,
     /// 设备名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub device_name: Option<String>,
     /// 访问类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub access_type: Option<AccessType>,
     /// 访问方式,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub access_method: Option<AccessMethod>,
     /// 访问结果
     pub result: AccessResult,
     /// 是否有人脸识别图片,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub has_face_image: Option<bool>,
     /// 访问时间戳
     pub access_time: i64,
     /// 创建时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
-},
+}
 /// 人脸图片信息,
 #[derive(.*?)]
 pub struct FaceImage {
     /// 图片ID
     pub image_id: String,
     /// 图片内容 (base64编码),
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub image_content: Option<String>,
     /// 图片格式,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub image_format: Option<String>,
     /// 图片大小（字节）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub file_size: Option<i64>,
     /// 上传时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub uploaded_at: Option<i64>,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_page_response_serialization() {,
 let page_response = PageResponse {,
-            items: vec!["item1".to_string(), "item2".to_string()],
+            items: vec!["item1".to_string(), "item2".to_string()]
             page_token: Some("next_page".to_string()),
             has_more: Some(true),
         };
@@ -322,8 +322,8 @@ let serialized = serde_json::to_string(&page_response).unwrap();
         assert_eq!(page_response.items.len(), deserialized.items.len());
         assert_eq!(page_response.page_token, deserialized.page_token);
         assert_eq!(page_response.has_more, deserialized.has_more);
-},
-#[test],
+}
+#[test]
     fn test_user_type_serialization() {,
 let types = vec![,
             UserType::Employee,
@@ -340,10 +340,10 @@ let deserialized: UserType = serde_json::from_str(&serialized).unwrap();
                 (UserType::Contractor, UserType::Contractor) => {}
                 (UserType::Temporary, UserType::Temporary) => {}
                 _ => panic!("Serialization/deserialization failed"),
-            },
+            }
 }
-    },
-#[test],
+    }
+#[test]
     fn test_user_status_serialization() {,
 let statuses = vec![,
             UserStatus::Active,
@@ -360,10 +360,10 @@ let deserialized: UserStatus = serde_json::from_str(&serialized).unwrap();
                 (UserStatus::Expired, UserStatus::Expired) => {}
                 (UserStatus::Pending, UserStatus::Pending) => {}
                 _ => panic!("Serialization/deserialization failed"),
-            },
+            }
 }
-    },
-#[test],
+    }
+#[test]
     fn test_acs_user_serialization() {,
 let user = AcsUser {,
             user_id: "user_123".to_string(),
@@ -387,8 +387,8 @@ let serialized = serde_json::to_string(&user).unwrap();
         assert_eq!(user.email, deserialized.email);
         assert_eq!(user.phone, deserialized.phone);
         assert_eq!(user.department, deserialized.department);
-},
-#[test],
+}
+#[test]
     fn test_rule_external_serialization() {,
 let rule = RuleExternal {,
             rule_id: "rule_123".to_string(),
@@ -410,8 +410,8 @@ let serialized = serde_json::to_string(&rule).unwrap();
         assert_eq!(rule.description, deserialized.description);
         assert_eq!(rule.device_ids, deserialized.device_ids);
         assert_eq!(rule.user_ids, deserialized.user_ids);
-},
-#[test],
+}
+#[test]
     fn test_visitor_serialization() {,
 let visitor = Visitor {,
             visitor_id: "visitor_123".to_string(),
@@ -435,8 +435,8 @@ let serialized = serde_json::to_string(&visitor).unwrap();
         assert_eq!(visitor.company, deserialized.company);
         assert_eq!(visitor.purpose, deserialized.purpose);
         assert_eq!(visitor.host_user_id, deserialized.host_user_id);
-},
-#[test],
+}
+#[test]
     fn test_device_serialization() {,
 let device = Device {,
             device_id: "device_123".to_string(),
@@ -459,8 +459,8 @@ let serialized = serde_json::to_string(&device).unwrap();
         assert_eq!(device.description, deserialized.description);
         assert_eq!(device.ip_address, deserialized.ip_address);
         assert_eq!(device.mac_address, deserialized.mac_address);
-},
-#[test],
+}
+#[test]
     fn test_access_record_serialization() {,
 let record = AccessRecord {,
             record_id: "record_123".to_string(),
@@ -484,8 +484,8 @@ let serialized = serde_json::to_string(&record).unwrap();
         assert_eq!(record.device_id, deserialized.device_id);
         assert_eq!(record.device_name, deserialized.device_name);
         assert_eq!(record.access_time, deserialized.access_time);
-},
-#[test],
+}
+#[test]
     fn test_face_image_serialization() {,
 let face_image = FaceImage {,
             image_id: "img_123".to_string(),
@@ -502,8 +502,8 @@ let serialized = serde_json::to_string(&face_image).unwrap();
         assert_eq!(face_image.image_format, deserialized.image_format);
         assert_eq!(face_image.file_size, deserialized.file_size);
         assert_eq!(face_image.uploaded_at, deserialized.uploaded_at);
-},
-#[test],
+}
+#[test]
     fn test_enum_serialization_formats() {,
 // Test AccessType,
         assert_eq!(
@@ -532,8 +532,8 @@ assert_eq!(,
             serde_json::to_string(&AccessResult::Failed).unwrap(),
             "\"failed\"",
 );
-    },
-#[test],
+    }
+#[test]
     fn test_models_with_none_values() {,
 let user = AcsUser {,
             user_id: "user_123".to_string(),
@@ -555,8 +555,8 @@ let serialized = serde_json::to_string(&user).unwrap();
 assert!(deserialized.employee_id.is_none());
         assert_eq!(user.name, deserialized.name);
 assert!(deserialized.email.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_debug_trait_for_models() {,
 let user = AcsUser {,
             user_id: "test".to_string(),
@@ -575,8 +575,8 @@ let user = AcsUser {,
         let debug_string = format!("{:?}", user);
 assert!(debug_string.contains("AcsUser"));
         assert!(debug_string.contains("test"));
-},
-#[test],
+}
+#[test]
     fn test_clone_trait_for_models() {,
 let original_user = AcsUser {,
             user_id: "test".to_string(),

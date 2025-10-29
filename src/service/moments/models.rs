@@ -8,260 +8,260 @@ pub struct PostGetRequest {
     /// 帖子ID
     pub post_id: String,
     /// 用户ID类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_id_type: Option<String>,
-},
+}
 /// 帖子信息,
 #[derive(.*?)]
 pub struct Post {
     /// 帖子ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub post_id: Option<String>,
     /// 发布者用户ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub author_id: Option<String>,
     /// 发布者姓名,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub author_name: Option<String>,
     /// 帖子标题,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
     /// 帖子内容,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
     /// 帖子内容类型（text、rich_text等）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub content_type: Option<String>,
     /// 媒体附件列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub media_list: Option<Vec<PostMedia>>,
     /// 帖子状态,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     /// 创建时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<String>,
     /// 更新时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
     /// 可见性设置,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub visibility: Option<PostVisibility>,
     /// 统计数据,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub statistics: Option<PostStatistics>,
     /// 其他扩展字段,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub extra: Option<HashMap<String, Value>>,
-},
+}
 /// 帖子媒体附件,
 #[derive(.*?)]
 pub struct PostMedia {
     /// 媒体类型（image、video、file等）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub media_type: Option<String>,
     /// 媒体URL,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub media_url: Option<String>,
     /// 媒体文件key,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub media_key: Option<String>,
     /// 缩略图URL,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail_url: Option<String>,
     /// 文件大小,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub file_size: Option<i64>,
     /// 文件名,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub file_name: Option<String>,
-},
+}
 /// 帖子可见性设置,
 #[derive(.*?)]
 pub struct PostVisibility {
     /// 可见性类型（public、department、custom等）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub visibility_type: Option<String>,
     /// 可见的用户ID列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub visible_user_ids: Option<Vec<String>>,
     /// 可见的部门ID列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub visible_department_ids: Option<Vec<String>>,
-},
+}
 /// 帖子统计数据,
 #[derive(.*?)]
 pub struct PostStatistics {
     /// 评论数,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub comment_count: Option<i64>,
     /// 点赞数,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub like_count: Option<i64>,
     /// 阅读数,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub view_count: Option<i64>,
     /// 分享数,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub share_count: Option<i64>,
     /// 表情互动统计,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub reaction_stats: Option<HashMap<String, i64>>,
-},
+}
 // ============ 评论相关结构 ============,
 /// 评论信息
 #[derive(.*?)]
 pub struct Comment {
     /// 评论ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub comment_id: Option<String>,
     /// 帖子ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub post_id: Option<String>,
     /// 评论者用户ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub author_id: Option<String>,
     /// 评论者姓名,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub author_name: Option<String>,
     /// 评论内容,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
     /// 评论内容类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub content_type: Option<String>,
     /// 父评论ID（用于回复）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub parent_comment_id: Option<String>,
     /// 回复的用户ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub reply_to_user_id: Option<String>,
     /// 创建时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<String>,
     /// 更新时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
     /// 媒体附件列表,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub media_list: Option<Vec<PostMedia>>,
-},
+}
 // ============ 表情互动相关结构 ============,
 /// 表情互动信息
 #[derive(.*?)]
 pub struct Reaction {
     /// 互动ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub reaction_id: Option<String>,
     /// 帖子ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub post_id: Option<String>,
     /// 评论ID（如果是对评论的互动）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub comment_id: Option<String>,
     /// 互动用户ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
     /// 用户姓名,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_name: Option<String>,
     /// 表情类型（like、dislike、heart等）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub reaction_type: Option<String>,
     /// 表情emoji,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub emoji: Option<String>,
     /// 创建时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<String>,
-},
+}
 // ============ 事件相关结构 ============,
 /// 帖子事件数据
 #[derive(.*?)]
 pub struct PostEvent {
     /// 事件类型（created、deleted等）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub event_type: Option<String>,
     /// 帖子信息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub post: Option<Post>,
     /// 事件时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub event_time: Option<String>,
     /// 操作者用户ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub operator_id: Option<String>,
-},
+}
 /// 评论事件数据,
 #[derive(.*?)]
 pub struct CommentEvent {
     /// 事件类型（created、deleted等）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub event_type: Option<String>,
     /// 评论信息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<Comment>,
     /// 事件时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub event_time: Option<String>,
     /// 操作者用户ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub operator_id: Option<String>,
-},
+}
 /// 表情互动事件数据,
 #[derive(.*?)]
 pub struct ReactionEvent {
     /// 事件类型（created、deleted等）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub event_type: Option<String>,
     /// 表情互动信息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub reaction: Option<Reaction>,
     /// 事件时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub event_time: Option<String>,
     /// 操作者用户ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub operator_id: Option<String>,
-},
+}
 /// 帖子统计数据事件,
 #[derive(.*?)]
 pub struct PostStatisticsEvent {
     /// 事件类型（updated等）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub event_type: Option<String>,
     /// 帖子ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub post_id: Option<String>,
     /// 更新后的统计数据,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub statistics: Option<PostStatistics>,
     /// 统计数据变更详情,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub changes: Option<StatisticsChanges>,
     /// 事件时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub event_time: Option<String>,
-},
+}
 /// 统计数据变更详情,
 #[derive(.*?)]
 pub struct StatisticsChanges {
     /// 评论数变更,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub comment_count_change: Option<i64>,
     /// 点赞数变更,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub like_count_change: Option<i64>,
     /// 阅读数变更,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub view_count_change: Option<i64>,
     /// 分享数变更,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub share_count_change: Option<i64>,
     /// 表情互动变更,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub reaction_changes: Option<HashMap<String, i64>>,
-},
+}
 // ============ 内容格式转换相关结构 ============,
 /// 内容格式转换请求
 #[derive(.*?)]
@@ -272,22 +272,22 @@ pub struct ContentFormatRequest {
     pub from_format: String,
     /// 目标格式类型
     pub to_format: String,
-},
+}
 /// 内容格式转换响应,
 #[derive(.*?)]
 pub struct ContentFormatResponse {
     /// 转换后的内容,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
     /// 格式类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub format_type: Option<String>,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_post_get_request() {,
 let request = PostGetRequest {,
             post_id: "post123".to_string(),
@@ -296,8 +296,8 @@ let request = PostGetRequest {,
 let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("post123"));
 assert!(json.contains("user_id"));
-    },
-#[test],
+    }
+#[test]
     fn test_post_media() {,
 let media = PostMedia {,
             media_type: Some("image".to_string()),
@@ -313,8 +313,8 @@ assert!(json.contains("https://example.com/image.jpg"));
         assert!(json.contains("media_key123"));
 assert!(json.contains("1024000"));
         assert!(json.contains("image.jpg"));
-},
-#[test],
+}
+#[test]
     fn test_post_visibility() {,
 let visibility = PostVisibility {,
             visibility_type: Some("custom".to_string()),
@@ -326,8 +326,8 @@ let json = serde_json::to_string(&visibility).unwrap();
 assert!(json.contains("user1"));
         assert!(json.contains("user2"));
 assert!(json.contains("dept1"));
-    },
-#[test],
+    }
+#[test]
     fn test_post_statistics() {,
 let mut reaction_stats = HashMap::new();
         reaction_stats.insert("like".to_string(), 25);
@@ -346,8 +346,8 @@ assert!(json.contains("\"like_count\":25"));
 assert!(json.contains("\"share_count\":5"));
         assert!(json.contains("\"like\":25"));
 assert!(json.contains("\"heart\":10"));
-    },
-#[test],
+    }
+#[test]
     fn test_post_full() {,
 let media = PostMedia {,
             media_type: Some("image".to_string()),
@@ -396,8 +396,8 @@ assert!(json.contains("published"));
         assert!(json.contains("department"));
 assert!(json.contains("tech_dept"));
         assert!(json.contains("团建"));
-},
-#[test],
+}
+#[test]
     fn test_comment_full() {,
 let media = PostMedia {,
             media_type: Some("image".to_string()),
@@ -427,8 +427,8 @@ assert!(json.contains("post456"));
 assert!(json.contains("李四"));
         assert!(json.contains("太棒了！期待下次活动"));
 assert!(json.contains("comment_media123"));
-    },
-#[test],
+    }
+#[test]
     fn test_comment_reply() {,
 let reply = Comment {,
             comment_id: Some("reply123".to_string()),
@@ -452,8 +452,8 @@ assert!(json.contains("王五"));
 assert!(json.contains("ou_commenter456"));
         assert!(!json.contains("update_time"));
 assert!(!json.contains("media_list"));
-    },
-#[test],
+    }
+#[test]
     fn test_reaction() {,
 let reaction = Reaction {,
             reaction_id: Some("reaction456".to_string()),
@@ -473,8 +473,8 @@ assert!(json.contains("赵六"));
         assert!(json.contains("\"like\""));
 assert!(json.contains("👍"));
         assert!(!json.contains("comment_id"));
-},
-#[test],
+}
+#[test]
     fn test_reaction_on_comment() {,
 let comment_reaction = Reaction {,
             reaction_id: Some("reaction789".to_string()),
@@ -492,8 +492,8 @@ assert!(json.contains("comment789"));
         assert!(json.contains("孙七"));
 assert!(json.contains("\"heart\""));
         assert!(json.contains("❤️"));
-},
-#[test],
+}
+#[test]
     fn test_post_event() {,
 let post = Post {,
             post_id: Some("post789".to_string()),
@@ -522,8 +522,8 @@ assert!(json.contains("post789"));
         assert!(json.contains("新帖子"));
 assert!(json.contains("这是一个新帖子"));
         assert!(json.contains("2024-01-01T14:00:01Z"));
-},
-#[test],
+}
+#[test]
     fn test_comment_event() {,
 let comment = Comment {,
             comment_id: Some("comment456".to_string()),
@@ -549,8 +549,8 @@ let json = serde_json::to_string(&event).unwrap();
 assert!(json.contains("comment456"));
         assert!(json.contains("很好的帖子！"));
 assert!(json.contains("ou_commenter123"));
-    },
-#[test],
+    }
+#[test]
     fn test_reaction_event() {,
 let reaction = Reaction {,
             reaction_id: Some("reaction123".to_string()),
@@ -573,8 +573,8 @@ let json = serde_json::to_string(&event).unwrap();
 assert!(json.contains("reaction123"));
         assert!(json.contains("互动者"));
 assert!(json.contains("👍"));
-    },
-#[test],
+    }
+#[test]
     fn test_statistics_changes() {,
 let mut reaction_changes = HashMap::new();
         reaction_changes.insert("like".to_string(), 5);
@@ -593,8 +593,8 @@ assert!(json.contains("\"like_count_change\":5"));
 assert!(json.contains("\"share_count_change\":1"));
         assert!(json.contains("\"like\":5"));
 assert!(json.contains("\"heart\":2"));
-    },
-#[test],
+    }
+#[test]
     fn test_post_statistics_event() {,
 let stats = PostStatistics {,
             comment_count: Some(20),
@@ -624,8 +624,8 @@ assert!(json.contains("post123"));
 assert!(json.contains("\"like_count\":35"));
         assert!(json.contains("\"comment_count_change\":1"));
 assert!(json.contains("\"like_count_change\":2"));
-    },
-#[test],
+    }
+#[test]
     fn test_content_format_request() {,
 let request = ContentFormatRequest {,
             content: "# 标题\n\n这是**粗体**文本".to_string(),
@@ -637,8 +637,8 @@ let json = serde_json::to_string(&request).unwrap();
 assert!(json.contains("**粗体**"));
         assert!(json.contains("markdown"));
 assert!(json.contains("rich_text"));
-    },
-#[test],
+    }
+#[test]
     fn test_content_format_response() {,
 let response = ContentFormatResponse {,
             content: Some("<h1>标题</h1><p>这是<strong>粗体</strong>文本</p>".to_string()),
@@ -648,8 +648,8 @@ let json = serde_json::to_string(&response).unwrap();
         assert!(json.contains("<h1>标题</h1>"));
 assert!(json.contains("<strong>粗体</strong>"));
         assert!(json.contains("rich_text"));
-},
-#[test],
+}
+#[test]
     fn test_minimal_structs() {,
 let minimal_post = Post {,
             post_id: Some("minimal_post".to_string()),

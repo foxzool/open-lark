@@ -4,296 +4,296 @@ use serde::{Deserialize, Serialize};
 pub struct FileRecognizeRequest {
     /// 文件token或base64编码
     pub file: String,
-},
+}
 /// 通用识别响应,
 #[derive(.*?)]
 pub struct RecognizeResponse<T> {,
     /// 识别结果
     pub data: T,
     /// 识别置信度,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub confidence: Option<f64>,
-},
+}
 /// 简历信息,
 #[derive(.*?)]
 pub struct ResumeInfo {
     /// 姓名,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// 电话,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub phone: Option<String>,
     /// 邮箱,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
     /// 性别,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub gender: Option<String>,
     /// 出生日期,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub birth_date: Option<String>,
     /// 教育经历,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub education: Option<Vec<EducationInfo>>,
     /// 工作经历,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub work_experience: Option<Vec<WorkExperienceInfo>>,
     /// 技能,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub skills: Option<Vec<String>>,
-},
+}
 /// 教育经历,
 #[derive(.*?)]
 pub struct EducationInfo {
     /// 学校名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub school: Option<String>,
     /// 专业,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub major: Option<String>,
     /// 学历,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub degree: Option<String>,
     /// 开始时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<String>,
     /// 结束时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<String>,
-},
+}
 /// 工作经历,
 #[derive(.*?)]
 pub struct WorkExperienceInfo {
     /// 公司名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub company: Option<String>,
     /// 职位,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
     /// 开始时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<String>,
     /// 结束时间,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<String>,
     /// 工作描述,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-},
+}
 /// 身份证信息,
 #[derive(.*?)]
 pub struct IdCardInfo {
     /// 姓名,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// 性别,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub gender: Option<String>,
     /// 民族,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub nation: Option<String>,
     /// 出生日期,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub birth_date: Option<String>,
     /// 地址,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub address: Option<String>,
     /// 身份证号,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub id_number: Option<String>,
     /// 签发机关,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub authority: Option<String>,
     /// 有效期,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub valid_period: Option<String>,
-},
+}
 /// 驾驶证信息,
 #[derive(.*?)]
 pub struct DrivingLicenseInfo {
     /// 姓名,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// 性别,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub gender: Option<String>,
     /// 国籍,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub nationality: Option<String>,
     /// 出生日期,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub birth_date: Option<String>,
     /// 地址,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub address: Option<String>,
     /// 证号,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub license_number: Option<String>,
     /// 准驾车型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub vehicle_type: Option<String>,
     /// 有效期,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub valid_period: Option<String>,
-},
+}
 /// 银行卡信息,
 #[derive(.*?)]
 pub struct BankCardInfo {
     /// 银行名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub bank_name: Option<String>,
     /// 卡号,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub card_number: Option<String>,
     /// 卡类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub card_type: Option<String>,
     /// 有效期,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub valid_period: Option<String>,
-},
+}
 /// 营业执照信息,
 #[derive(.*?)]
 pub struct BusinessLicenseInfo {
     /// 统一社会信用代码,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub credit_code: Option<String>,
     /// 企业名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub company_name: Option<String>,
     /// 类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub company_type: Option<String>,
     /// 法定代表人,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub legal_person: Option<String>,
     /// 注册资本,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub registered_capital: Option<String>,
     /// 成立日期,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub establishment_date: Option<String>,
     /// 营业期限,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub business_term: Option<String>,
     /// 经营范围,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub business_scope: Option<String>,
     /// 住所,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub address: Option<String>,
-},
+}
 /// 增值税发票信息,
 #[derive(.*?)]
 pub struct VatInvoiceInfo {
     /// 发票代码,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub invoice_code: Option<String>,
     /// 发票号码,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub invoice_number: Option<String>,
     /// 开票日期,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub invoice_date: Option<String>,
     /// 购买方名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub buyer_name: Option<String>,
     /// 购买方税号,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub buyer_tax_id: Option<String>,
     /// 销售方名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub seller_name: Option<String>,
     /// 销售方税号,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub seller_tax_id: Option<String>,
     /// 合计金额,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub total_amount: Option<String>,
     /// 合计税额,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub total_tax: Option<String>,
     /// 价税合计,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub total_amount_with_tax: Option<String>,
-},
+}
 /// 合同字段信息,
 #[derive(.*?)]
 pub struct ContractInfo {
     /// 合同标题,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
     /// 甲方,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub party_a: Option<String>,
     /// 乙方,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub party_b: Option<String>,
     /// 合同金额,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub amount: Option<String>,
     /// 签订日期,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub sign_date: Option<String>,
     /// 生效日期,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub effective_date: Option<String>,
     /// 终止日期,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub end_date: Option<String>,
     /// 其他字段,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub other_fields: Option<serde_json::Value>,
-},
+}
 /// 名片信息,
 #[derive(.*?)]
 pub struct BusinessCardInfo {
     /// 姓名,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// 职位,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
     /// 公司,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub company: Option<String>,
     /// 电话,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub phone: Option<String>,
     /// 手机,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub mobile: Option<String>,
     /// 邮箱,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
     /// 网址,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub website: Option<String>,
     /// 地址,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub address: Option<String>,
-},
+}
 /// OCR文字识别结果,
 #[derive(.*?)]
 pub struct OcrResult {
     /// 识别的文本内容
     pub text: String,
     /// 文本位置信息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub text_detection: Option<Vec<TextDetection>>,
-},
+}
 /// 文本位置信息,
 #[derive(.*?)]
 pub struct TextDetection {
     /// 文本内容
     pub text: String,
     /// 边界框,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub bounding_box: Option<BoundingBox>,
     /// 置信度,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub confidence: Option<f64>,
-},
+}
 /// 边界框,
 #[derive(.*?)]
 pub struct BoundingBox {
@@ -305,96 +305,96 @@ pub struct BoundingBox {
     pub width: i32,
     /// 高度
     pub height: i32,
-},
+}
 /// 语音识别请求,
 #[derive(.*?)]
 pub struct SpeechRecognizeRequest {
     /// 音频文件
     pub speech: SpeechFile,
     /// 语音格式,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub format: Option<String>,
     /// 采样率,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub sample_rate: Option<i32>,
     /// 语言,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub language: Option<String>,
-},
+}
 /// 语音文件,
 #[derive(.*?)]
 pub struct SpeechFile {
     /// 文件token,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub file_token: Option<String>,
     /// base64编码的音频数据,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
-},
+}
 /// 语音识别结果,
 #[derive(.*?)]
 pub struct SpeechRecognizeResult {
     /// 识别的文本
     pub recognition_text: String,
     /// 置信度,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub confidence: Option<f64>,
-},
+}
 /// 流式语音识别请求,
 #[derive(.*?)]
 pub struct StreamSpeechRequest {
     /// 音频数据流
     pub stream: String,
     /// 格式,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub format: Option<String>,
     /// 采样率,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub sample_rate: Option<i32>,
     /// 语言,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub language: Option<String>,
-},
+}
 /// 文本语种检测请求,
 #[derive(.*?)]
 pub struct LanguageDetectRequest {
     /// 要检测的文本
     pub text: String,
-},
+}
 /// 语种检测结果,
 #[derive(.*?)]
 pub struct LanguageDetectResult {
     /// 检测到的语种
     pub language: String,
     /// 置信度,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub confidence: Option<f64>,
-},
+}
 /// 文本翻译请求,
 #[derive(.*?)]
 pub struct TranslateRequest {
     /// 源语言,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub source_language: Option<String>,
     /// 目标语言
     pub target_language: String,
     /// 要翻译的文本
     pub text: String,
-},
+}
 /// 翻译结果,
 #[derive(.*?)]
 pub struct TranslateResult {
     /// 翻译后的文本
     pub translated_text: String,
     /// 检测到的源语言,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub detected_language: Option<String>,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_file_recognize_request_serialization() {,
 let request = FileRecognizeRequest {,
             file: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==".to_string(),
@@ -403,8 +403,8 @@ let serialized = serde_json::to_string(&request).unwrap();
         let deserialized: FileRecognizeRequest = serde_json::from_str(&serialized).unwrap();
 
         assert_eq!(request.file, deserialized.file);
-},
-#[test],
+}
+#[test]
     fn test_recognize_response_serialization() {,
 let response = RecognizeResponse {,
             data: "识别结果".to_string(),
@@ -415,8 +415,8 @@ let serialized = serde_json::to_string(&response).unwrap();
 
         assert_eq!(response.data, deserialized.data);
         assert_eq!(response.confidence, deserialized.confidence);
-},
-#[test],
+}
+#[test]
     fn test_resume_info_serialization() {,
 let resume = ResumeInfo {,
             name: Some("张三".to_string()),
@@ -462,8 +462,8 @@ assert_eq!(,
             resume.skills.as_ref().unwrap().len(),
             deserialized.skills.as_ref().unwrap().len(),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_education_info_serialization() {,
 let education = EducationInfo {,
             school: Some("北京大学".to_string()),
@@ -480,8 +480,8 @@ let serialized = serde_json::to_string(&education).unwrap();
         assert_eq!(education.degree, deserialized.degree);
         assert_eq!(education.start_time, deserialized.start_time);
         assert_eq!(education.end_time, deserialized.end_time);
-},
-#[test],
+}
+#[test]
     fn test_work_experience_info_serialization() {,
 let work = WorkExperienceInfo {,
             company: Some("腾讯".to_string()),
@@ -498,8 +498,8 @@ let serialized = serde_json::to_string(&work).unwrap();
         assert_eq!(work.start_time, deserialized.start_time);
         assert_eq!(work.end_time, deserialized.end_time);
         assert_eq!(work.description, deserialized.description);
-},
-#[test],
+}
+#[test]
     fn test_id_card_info_serialization() {,
 let id_card = IdCardInfo {,
             name: Some("李四".to_string()),
@@ -522,8 +522,8 @@ let serialized = serde_json::to_string(&id_card).unwrap();
         assert_eq!(id_card.address, deserialized.address);
         assert_eq!(id_card.authority, deserialized.authority);
         assert_eq!(id_card.valid_period, deserialized.valid_period);
-},
-#[test],
+}
+#[test]
     fn test_business_card_info_serialization() {,
 let card = BusinessCardInfo {,
             name: Some("王五".to_string()),
@@ -545,8 +545,8 @@ let serialized = serde_json::to_string(&card).unwrap();
         assert_eq!(card.mobile, deserialized.mobile);
         assert_eq!(card.email, deserialized.email);
         assert_eq!(card.website, deserialized.website);
-},
-#[test],
+}
+#[test]
     fn test_ocr_result_serialization() {,
 let ocr_result = OcrResult {,
             text: "识别的文字内容".to_string(),
@@ -569,8 +569,8 @@ assert_eq!(,
             ocr_result.text_detection.as_ref().unwrap().len(),
             deserialized.text_detection.as_ref().unwrap().len(),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_speech_recognition_result_serialization() {,
 let speech_result = SpeechRecognizeResult {,
             recognition_text: "这是语音识别的结果".to_string(),
@@ -583,8 +583,8 @@ assert_eq!(,
             deserialized.recognition_text,
 );
         assert_eq!(speech_result.confidence, deserialized.confidence);
-},
-#[test],
+}
+#[test]
     fn test_translate_result_serialization() {,
 let translate_result = TranslateResult {,
             translated_text: "Hello World".to_string(),
@@ -600,8 +600,8 @@ assert_eq!(,
             translate_result.detected_language,
             deserialized.detected_language,
 );
-    },
-#[test],
+    }
+#[test]
     fn test_models_with_none_values() {,
 let resume = ResumeInfo {,
             name: None,
@@ -621,8 +621,8 @@ assert!(deserialized.email.is_none());
         assert!(deserialized.education.is_none());
 assert!(deserialized.work_experience.is_none());
         assert!(deserialized.skills.is_none());
-},
-#[test],
+}
+#[test]
     fn test_debug_trait_for_models() {,
 let request = FileRecognizeRequest {,
             file: "test_file".to_string(),
@@ -631,8 +631,8 @@ let request = FileRecognizeRequest {,
         let debug_string = format!("{:?}", request);
 assert!(debug_string.contains("FileRecognizeRequest"));
         assert!(debug_string.contains("test_file"));
-},
-#[test],
+}
+#[test]
     fn test_driving_license_info_serialization() {,
 let license = DrivingLicenseInfo {,
             name: Some("赵六".to_string()),
@@ -655,8 +655,8 @@ let serialized = serde_json::to_string(&license).unwrap();
         assert_eq!(license.license_number, deserialized.license_number);
         assert_eq!(license.vehicle_type, deserialized.vehicle_type);
         assert_eq!(license.valid_period, deserialized.valid_period);
-},
-#[test],
+}
+#[test]
     fn test_bank_card_info_serialization() {,
 let bank_card = BankCardInfo {,
             bank_name: Some("中国工商银行".to_string()),
@@ -671,8 +671,8 @@ let serialized = serde_json::to_string(&bank_card).unwrap();
         assert_eq!(bank_card.card_number, deserialized.card_number);
         assert_eq!(bank_card.card_type, deserialized.card_type);
         assert_eq!(bank_card.valid_period, deserialized.valid_period);
-},
-#[test],
+}
+#[test]
     fn test_business_license_info_serialization() {,
 let license = BusinessLicenseInfo {,
             credit_code: Some("91310000123456789A".to_string()),
@@ -697,8 +697,8 @@ let serialized = serde_json::to_string(&license).unwrap();
         assert_eq!(license.business_term, deserialized.business_term);
         assert_eq!(license.business_scope, deserialized.business_scope);
         assert_eq!(license.address, deserialized.address);
-},
-#[test],
+}
+#[test]
     fn test_vat_invoice_info_serialization() {,
 let invoice = VatInvoiceInfo {,
             invoice_code: Some("044001800226".to_string()),
@@ -728,8 +728,8 @@ assert_eq!(,
             invoice.total_amount_with_tax,
             deserialized.total_amount_with_tax,
 );
-    },
-#[test],
+    }
+#[test]
     fn test_contract_info_serialization() {,
 let mut other_fields = serde_json::Map::new();
         other_fields.insert(
@@ -761,8 +761,8 @@ let serialized = serde_json::to_string(&contract).unwrap();
         assert_eq!(contract.effective_date, deserialized.effective_date);
         assert_eq!(contract.end_date, deserialized.end_date);
         assert_eq!(contract.other_fields, deserialized.other_fields);
-},
-#[test],
+}
+#[test]
     fn test_text_detection_and_bounding_box() {,
 let detection = TextDetection {,
             text: "检测到的文字".to_string(),
@@ -788,14 +788,14 @@ let serialized = serde_json::to_string(&detection).unwrap();
             assert_eq!(orig_box.width, deser_box.width);
             assert_eq!(orig_box.height, deser_box.height);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_speech_recognize_request_serialization() {,
 let request = SpeechRecognizeRequest {,
             speech: SpeechFile {
                 file_token: Some("speech_token_123".to_string()),
                 content: None,
-            },
+            }
             format: Some("wav".to_string()),
             sample_rate: Some(16000),
             language: Some("zh-cn".to_string()),
@@ -808,8 +808,8 @@ let serialized = serde_json::to_string(&request).unwrap();
         assert_eq!(request.language, deserialized.language);
         assert_eq!(request.speech.file_token, deserialized.speech.file_token);
         assert_eq!(request.speech.content, deserialized.speech.content);
-},
-#[test],
+}
+#[test]
     fn test_speech_file_with_base64_content() {,
 let speech_file = SpeechFile {,
             file_token: None,
@@ -822,8 +822,8 @@ let serialized = serde_json::to_string(&speech_file).unwrap();
         assert_eq!(speech_file.content, deserialized.content);
 assert!(!serialized.contains("file_token"));
         assert!(serialized.contains("content"));
-},
-#[test],
+}
+#[test]
     fn test_stream_speech_request_serialization() {,
 let request = StreamSpeechRequest {,
             stream: "audio_stream_data_chunk_1".to_string(),
@@ -838,8 +838,8 @@ let serialized = serde_json::to_string(&request).unwrap();
         assert_eq!(request.format, deserialized.format);
         assert_eq!(request.sample_rate, deserialized.sample_rate);
         assert_eq!(request.language, deserialized.language);
-},
-#[test],
+}
+#[test]
     fn test_language_detect_request_and_result() {,
 let request = LanguageDetectRequest {,
             text: "Hello, how are you today?".to_string(),
@@ -855,8 +855,8 @@ let serialized = serde_json::to_string(&result).unwrap();
         let deserialized: LanguageDetectResult = serde_json::from_str(&serialized).unwrap();
         assert_eq!(result.language, deserialized.language);
         assert_eq!(result.confidence, deserialized.confidence);
-},
-#[test],
+}
+#[test]
     fn test_translate_request_serialization() {,
 let request = TranslateRequest {,
             source_language: Some("zh".to_string()),
@@ -869,8 +869,8 @@ let serialized = serde_json::to_string(&request).unwrap();
         assert_eq!(request.source_language, deserialized.source_language);
         assert_eq!(request.target_language, deserialized.target_language);
         assert_eq!(request.text, deserialized.text);
-},
-#[test],
+}
+#[test]
     fn test_translate_request_without_source_language() {,
 let request = TranslateRequest {,
             source_language: None,
@@ -883,8 +883,8 @@ let deserialized: TranslateRequest = serde_json::from_str(&serialized).unwrap();
         assert_eq!(request.source_language, deserialized.source_language);
         assert_eq!(request.target_language, deserialized.target_language);
         assert_eq!(request.text, deserialized.text);
-},
-#[test],
+}
+#[test]
     fn test_models_with_all_none_values() {,
 let id_card = IdCardInfo {,
             name: None,
@@ -920,8 +920,8 @@ let deserialized: BankCardInfo = serde_json::from_str(&serialized).unwrap();
 assert!(deserialized.card_number.is_none());
         assert!(deserialized.card_type.is_none());
 assert!(deserialized.valid_period.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_recognize_response_with_none_confidence() {,
 let response: RecognizeResponse<ResumeInfo> = RecognizeResponse {,
             data: ResumeInfo {
@@ -933,7 +933,7 @@ let response: RecognizeResponse<ResumeInfo> = RecognizeResponse {,
                 education: None,
                 work_experience: None,
                 skills: None,
-            },
+            }
             confidence: None,
         };
 let serialized = serde_json::to_string(&response).unwrap();
@@ -942,8 +942,8 @@ let deserialized: RecognizeResponse<ResumeInfo> =,
             serde_json::from_str(&serialized).unwrap();
         assert_eq!(response.confidence, deserialized.confidence);
         assert_eq!(response.data.name, deserialized.data.name);
-},
-#[test],
+}
+#[test]
     fn test_complex_nested_structures() {,
 let complex_resume = ResumeInfo {,
             name: Some("复杂测试用户".to_string()),
@@ -958,14 +958,14 @@ EducationInfo {,
                     degree: Some("学士".to_string()),
                     start_time: Some("2008-09".to_string()),
                     end_time: Some("2012-06".to_string()),
-                },
+                }
                 EducationInfo {
                     school: Some("第二大学".to_string()),
                     major: Some("软件工程".to_string()),
                     degree: Some("硕士".to_string()),
                     start_time: Some("2012-09".to_string()),
                     end_time: Some("2014-06".to_string()),
-                },
+                }
             ]),
             work_experience: Some(vec![,
 WorkExperienceInfo {,
@@ -974,14 +974,14 @@ WorkExperienceInfo {,
                     start_time: Some("2014-07".to_string()),
                     end_time: Some("2017-03".to_string()),
                     description: Some("负责前端开发".to_string()),
-                },
+                }
                 WorkExperienceInfo {
                     company: Some("第二家公司".to_string()),
                     position: Some("高级开发工程师".to_string()),
                     start_time: Some("2017-04".to_string()),
                     end_time: None,
                     description: None,
-                },
+                }
             ]),
             skills: Some(vec![
                 "Rust".to_string(),
@@ -1031,8 +1031,8 @@ assert_eq!(,
             deserialized.skills.as_ref().unwrap().len(),
 );
         assert_eq!(
-            complex_resume.skills.as_ref().unwrap()[0],
-            deserialized.skills.as_ref().unwrap()[0],
+            complex_resume.skills.as_ref().unwrap()[0]
+            deserialized.skills.as_ref().unwrap()[0]
 );
-    },
+    }
 }

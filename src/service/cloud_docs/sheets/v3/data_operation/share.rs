@@ -25,7 +25,7 @@ pub(crate) struct FindCondition {,
     /// - true：表示仅搜索单元格公式,
 /// - false：表示仅搜索单元格内容,
     pub(crate) include_formulas: Option<bool>,
-},
+}
 /// 符合条件的信息,
 #[derive(.*?)]
 pub struct FindReplaceResult {

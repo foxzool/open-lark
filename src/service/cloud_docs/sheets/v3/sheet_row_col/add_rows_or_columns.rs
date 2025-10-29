@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -28,13 +28,13 @@ let mut api_req = request.api_request;
 api_req.api_path = SHEETS_V3_SPREADSHEET_DIMENSION_RANGE,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 增加行列请求,
 #[derive(.*?)]
 pub struct AddRowsOrColumnsRequest {
@@ -52,8 +52,8 @@ pub struct AddRowsOrColumnsRequest {
 impl AddRowsOrColumnsRequest {
     pub fn w+.*{
 AddRowsOrColumnsRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct AddRowsOrColumnsRequestBuilder {
     request: AddRowsOrColumnsRequest,
@@ -67,35 +67,35 @@ self.request.spreadsheet_token = spreadsheet_token.to_string();
     pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
-},
+}
 /// 设置维度类型,
     /// - ROWS: 行,
 /// - COLUMNS: 列,
     pub fn dimension(mut self, dimension: impl ToString) -> Self {
 self.request.dimension = dimension.to_string();
         self,
-},
+}
 /// 设置增加的长度,
     pub fn length(mut self, length: i32) -> Self {
 self.request.length = length;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 增加行列响应体最外层,
 #[derive(.*?)]
 pub struct AddRowsOrColumnsResponseData {
     /// 增加行列后的信息
     pub add_range: AddRangeInfo,
 }
-impl ApiResponseTrait for AddRowsOrColumnsResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 增加范围信息,
 #[derive(.*?)]
 pub struct AddRangeInfo {
@@ -105,13 +105,13 @@ pub struct AddRangeInfo {
     pub start_index: i32,
     /// 增加的结束位置
     pub end_index: i32,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
 use super::AddRowsOrColumnsResponseData;
-    #[test],
+    #[test]
 fn test_add_rows_or_columns_response() {,
         let json = json!({,
 "add_range": {,

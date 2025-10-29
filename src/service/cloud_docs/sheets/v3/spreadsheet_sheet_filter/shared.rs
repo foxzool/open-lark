@@ -12,8 +12,8 @@ pub struct SheetFilterCondition {
 impl SheetFilterCondition {
     pub fn w+.*{
 SheetFilterConditionBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct SheetFilterConditionBuilder {
     condition: SheetFilterCondition,
@@ -23,17 +23,17 @@ impl SheetFilterConditionBuilder {
     pub fn filter_type(mut self, filter_type: impl ToString) -> Self {
 self.condition.filter_type = filter_type.to_string();
         self,
-},
+}
 /// 比较类型,
     pub fn compare_type(mut self, compare_type: impl ToString) -> Self {
 self.condition.compare_type = Some(compare_type.to_string());
         self,
-},
+}
 /// 筛选参数,
     pub fn expected(mut self, expected: Vec<String>) -> Self {
 self.condition.expected = expected;
         self,
-},
+}
 pub fn w+.*{
         self.condition,
 }

@@ -16,20 +16,20 @@ pub struct ListSpaceRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 页大小,
-#[serde(skip)],
+#[serde(skip)]
     page_size: Option<i32>,
     /// 页标记，第一次请求不填，表示从头开始遍历,
-#[serde(skip)],
+#[serde(skip)]
     page_token: Option<String>,
 }
 impl ListSpaceRequest {
     pub fn w+.*{
 ListSpaceRequestBuilder::default(),
-    },
+    }
 pub fn new() -> Self {
         Self::default(),
 }
-},
+}
 #[derive(.*?)]
 pub struct ListSpaceRequestBuilder {
     request: ListSpaceRequest,
@@ -39,28 +39,28 @@ impl ListSpaceRequestBuilder {
     pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
-},
+}
 /// 页标记,
     pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
-},
+}
 pub fn w+.*{
         if let Some(page_size) = self.request.page_size {,
 self.request,
                 .api_request,
-.query_params,
+.query_params
                 .insert("page_size", page_size.to_string());
-},
+}
 if let Some(page_token) = &self.request.page_token {,
             self.request,
 .api_request,
                 .query_params
                 .insert("page_token", page_token.clone());
-},
+}
 self.request,
-    },
-},
+    }
+}
 /// 知识空间信息,
 #[derive(.*?)]
 pub struct Space {
@@ -69,29 +69,29 @@ pub struct Space {
     /// 知识空间名称
     pub name: String,
     /// 知识空间描述,
-#[serde(default)],
+#[serde(default)]
     pub description: Option<String>,
     /// 知识空间类型
     pub space_type: Option<String>,
     /// 知识空间可见性
     pub visibility: Option<String>,
-},
+}
 /// 获取知识空间列表响应,
 #[derive(.*?)]
 pub struct ListSpaceResponse {
     /// 知识空间列表
     pub items: Vec<Space>,
     /// 分页标记，当has_more为true时，会同时返回新的page_token,
-#[serde(default)],
+#[serde(default)]
     pub page_token: Option<String>,
     /// 是否还有更多项
     pub has_more: bool,
 }
-impl ApiResponseTrait for ListSpaceResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 获取知识空间列表,
 pub async fn list_spaces(
     request: ListSpaceRequest,
@@ -108,10 +108,10 @@ Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_list_space_request_builder() {,
 let request = ListSpaceRequest::builder(),
             .page_size()

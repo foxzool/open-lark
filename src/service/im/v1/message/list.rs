@@ -2,15 +2,15 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use crate::{,
     core::{
-        api_resp::{ApiResponseTrait, BaseResponse},
+        api_resp::{ApiResponseTrait, BaseResponse}
         constants::AccessTokenType,
         http::Transport,
         req_option::RequestOption,
         standard_response::StandardResponse,
-        validation::{self, ValidationResult},
+        validation::{self, ValidationResult}
         ApiRequest, SDKResult,
-    },
-    service::im::v1::message::{ListMessageIterator, Message},
+    }
+    service::im::v1::message::{ListMessageIterator, Message}
 };
 use super::MessageService;
 /// 列表消息请求
@@ -21,8 +21,8 @@ pub struct ListMessageRequest {
 impl ListMessageRequest {
     pub fn w+.*{
 ListMessageRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct ListMessageRequestBuilder {
     request: ListMessageRequest,
@@ -33,60 +33,60 @@ impl ListMessageRequestBuilder {
     /// 示例值：chat
     pub fn container_id_type(mut self, container_id_type: impl ToString) -> Self {
 self.request,
-            .api_req,
-.query_params,
+            .api_req
+.query_params
             .insert("container_id_type", container_id_type.to_string());
 self,
-    },
+    }
 /// 容器的id，即chat的id,
     ///,
 /// 示例值：oc_234jsi43d3ssi993d43545f,
     pub fn container_id(mut self, container_id: impl ToString) -> Self {
 self.request,
-            .api_req,
-.query_params,
+            .api_req
+.query_params
             .insert("container_id", container_id.to_string());
 self,
-    },
+    }
 /// 历史信息的起始时间（秒级时间戳）,
     ///,
 /// 示例值：1609296809,
     pub fn start_time(mut self, start_time: i64) -> Self {
 self.request,
-            .api_req,
-.query_params,
+            .api_req
+.query_params
             .insert("start_time", start_time.to_string());
 self,
-    },
+    }
 /// 历史信息的结束时间（秒级时间戳）,
     ///,
 /// 示例值：1608594809,
     pub fn end_time(mut self, end_time: i64) -> Self {
 self.request,
-            .api_req,
-.query_params,
+            .api_req
+.query_params
             .insert("end_time", end_time.to_string());
 self,
-    },
+    }
 /// 消息排序方式,
     ///,
 /// 示例值：ByCreateTimeAsc,
     pub fn sort_type(mut self, sort_type: impl ToString) -> Self {
 self.request,
-            .api_req,
-.query_params,
+            .api_req
+.query_params
             .insert("sort_type", sort_type.to_string());
 self,
-    },
+    }
 /// 分页标记，第一次请求不填，表示从头开始遍历；分页查询结果还有更多项时会同时返回新的,
     /// page_token，下次遍历可采用该 page_token 获取查询结果
     pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request,
-            .api_req,
-.query_params,
+            .api_req
+.query_params
             .insert("page_token", page_token.to_string());
 self,
-    },
+    }
 /// 分页大小,
     ///,
 /// 示例值：20,
@@ -97,37 +97,37 @@ self,
     pub fn page_size(mut self, page_size: i32) -> Self {
 // 验证分页大小,
         match validation::validate_page_size(page_size as u32, "page_size") {
-            ValidationResult::Valid => {},
+            ValidationResult::Valid => {}
 ValidationResult::Warning(msg) => {,
                 log::warn!("Page size validation warning: {}", msg);
-},
+}
 ValidationResult::Invalid(msg) => {,
                 log::error!("Invalid page size: {}", msg);
 // 仍然设置值，但记录错误，让用户决定是否继续,
-            },
-},
+            }
+}
 self.request,
-            .api_req,
-.query_params,
+            .api_req
+.query_params
             .insert("page_size", page_size.to_string());
 self,
-    },
+    }
 pub fn w+.*{
         // 验证分页标记（如果存在）,
 if let Some(page_token) = self.request.api_req.query_params.get("page_token") {,
             match validation::validate_page_token(page_token, "page_token") {
-                ValidationResult::Valid => {},
+                ValidationResult::Valid => {}
 ValidationResult::Warning(msg) => {,
                     log::warn!("Page token validation warning: {}", msg);
-},
+}
 ValidationResult::Invalid(msg) => {,
                     log::error!("Invalid page token: {}", msg);
 // 仍然设置值，但记录错误,
-                },
+                }
 }
-        },
+        }
 self.request,
-    },
+    }
 /// 使用分页验证构建器设置分页参数,
     ///,
 /// 这个方法提供了一个更安全的分页参数设置方式，会自动验证参数的有效性,
@@ -140,19 +140,19 @@ let mut pagination_builder =,
             validation::pagination::PaginationRequestBuilder::<ListMessageRespData>::new();
 if let Some(size) = page_size {,
             pagination_builder = pagination_builder.with_page_size(size);
-},
+}
 if let Some(token) = page_token {,
             pagination_builder = pagination_builder.with_page_token(token);
-},
+}
 // 构建分页参数,
         let params = pagination_builder.build()?;
 // 应用到请求中,
         for (key, value) in params {
             self.request.api_req.query_params.insert(key, value);
-},
+}
 Ok(self),
-    },
-},
+    }
+}
 crate::impl_executable_builder_owned!(,
     ListMessageRequestBuilder,
     MessageService,
@@ -169,10 +169,10 @@ pub struct ListMessageRespData {
     pub page_token: Option<String>,
     pub items: Vec<Message>,
 }
-impl ApiResponseTrait for ListMessageRespData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
+crate::core::api_resp::ResponseFormat::Data
+    }
 }
 impl MessageService {
     /// 获取会话历史消息,
@@ -191,7 +191,7 @@ api_req.set_api_path(crate::core::endpoints::im::IM_V1_LIST_MESSAGE.to_string())
 let api_resp: BaseResponse<ListMessageRespData> =,
             Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
-    },
+    }
 /// 创建消息列表迭代器,
     ///,
 /// 提供便捷的方式遍历所有消息，自动处理分页,
@@ -201,7 +201,7 @@ api_resp.into_result(),
         _option: Option<RequestOption>,
     ) -> ListMessageIterator<'_> {
         ListMessageIterator::new(self, list_message_request),
-},
+}
 /// 使用分页验证创建消息列表请求,
     ///,
 /// 提供一个更安全的方式来创建消息列表请求，自动验证分页参数,
@@ -221,13 +221,13 @@ api_resp.into_result(),
 
         self.list(builder.build(), option).await,
 }
-},
-#[cfg(test)],
+}
+#[cfg(test)]
 mod tests {
 use super::*;
     use crate::{
-        core::{config::Config, constants::AccessTokenType, req_option::RequestOption},
-        service::im::v1::message::{Message, MessageService},
+        core::{config::Config, constants::AccessTokenType, req_option::RequestOption}
+        service::im::v1::message::{Message, MessageService}
     };
 use reqwest::Method;
     use serde_json;
@@ -235,8 +235,8 @@ use reqwest::Method;
     fn create_test_message_service() -> MessageService {,
 MessageService {,
             config: Config::default(),
-        },
-},
+        }
+}
 // Helper function to create test message using JSON deserialization,
     fn create_test_message(message_id: &str, chat_id: &str) -> Message {,
 let json_str = r#"{,
@@ -252,7 +252,7 @@ let json_str = r#"{,
                 "id_type": "open_id",
                 "sender_type": "user",
                 "tenant_key": "test_tenant",
-},
+}
             "body": {
                 "content": "{\"text\":\"Hello World\"}",
 }
@@ -262,7 +262,7 @@ let json_str = r#"{,
             .replace("PLACEHOLDER_MSG_ID", message_id)
             .replace("PLACEHOLDER_CHAT_ID", chat_id);
 serde_json::from_str(&json_str).unwrap(),
-    },
+    }
 // Helper function to create test response data,
     fn create_test_response_data(
         has_more: bool,
@@ -273,26 +273,26 @@ ListMessageRespData {,
             has_more,
             page_token,
             items: messages,
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_list_message_request_builder_basic() {,
 let builder = ListMessageRequest::builder();
         assert!(builder.request.api_req.query_params.is_empty());
-},
-#[test],
+}
+#[test]
     fn test_builder_container_id_type() {,
 let builder = ListMessageRequest::builder().container_id_type("chat");
         assert_eq!(,
 builder,
                 .request,
-.api_req,
+.api_req
                 .query_params
                 .get("container_id_type"),
             Some(&"chat".to_string()),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_builder_container_id() {,
 let chat_id = "oc_123456789";
         let builder = ListMessageRequest::builder().container_id(chat_id);
@@ -300,8 +300,8 @@ assert_eq!(,
             builder.request.api_req.query_params.get("container_id"),
             Some(&chat_id.to_string()),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_builder_time_range() {,
 let start_time = 1609296809i64;
         let end_time = 1609383209i64;
@@ -316,8 +316,8 @@ let builder = ListMessageRequest::builder(),
             builder.request.api_req.query_params.get("end_time"),
             Some(&end_time.to_string()),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_builder_sort_type() {,
 let sort_type = "ByCreateTimeAsc";
         let builder = ListMessageRequest::builder().sort_type(sort_type);
@@ -325,8 +325,8 @@ assert_eq!(,
             builder.request.api_req.query_params.get("sort_type"),
             Some(&sort_type.to_string()),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_builder_page_token() {,
 let page_token = "next_page_token_123";
         let builder = ListMessageRequest::builder().page_token(page_token);
@@ -334,9 +334,9 @@ assert_eq!(,
             builder.request.api_req.query_params.get("page_token"),
             Some(&page_token.to_string()),
 );
-    },
-#[test],
-    fn test_builder_page_size_valid() {
+    }
+#[test]
+    ,
         let page_sizes = [1, 10, 50, 100, 500]; // All valid sizes,
 for size in page_sizes {,
             let builder = ListMessageRequest::builder().page_size(size);
@@ -344,9 +344,9 @@ assert_eq!(,
                 builder.request.api_req.query_params.get("page_size"),
                 Some(&size.to_string()),
 );
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_builder_page_size_edge_cases() {,
 // Test minimum and maximum valid page sizes,
         let min_builder = ListMessageRequest::builder().page_size(1);
@@ -359,8 +359,8 @@ let max_builder = ListMessageRequest::builder().page_size(500);
             max_builder.request.api_req.query_params.get("page_size"),
             Some(&"500".to_string()),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_builder_page_size_out_of_range() {,
 // Test sizes outside the valid range (1-500),
         let invalid_sizes = [0, -1, 501, 1000];
@@ -372,9 +372,9 @@ assert_eq!(,
                 builder.request.api_req.query_params.get("page_size"),
                 Some(&size.to_string()),
 );
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_builder_complete_request() {,
 let builder = ListMessageRequest::builder(),
             .container_id_type()
@@ -395,8 +395,8 @@ assert_eq!(,
 );
         assert_eq!(params.get("page_token"), Some(&"test_token".to_string()));
         assert_eq!(params.get("page_size"), Some(&"50".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_builder_build_method() {,
 let request = ListMessageRequest::builder(),
             .container_id()
@@ -416,8 +416,8 @@ assert_eq!(,
             request.api_req.query_params.get("page_size"),
             Some(&"20".to_string()),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_builder_with_pagination_success() {,
 let builder = ListMessageRequest::builder(),
             .container_id()
@@ -433,8 +433,8 @@ assert_eq!(,
             built_builder.request.api_req.query_params.get("page_token"),
             Some(&"token123".to_string()),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_builder_with_pagination_none_values() {,
 let builder = ListMessageRequest::builder(),
             .container_id()
@@ -445,16 +445,16 @@ assert!(result.is_ok());
 let built_builder = result.unwrap();
         assert!(!built_builder,
 .request,
-            .api_req,
-.query_params,
+            .api_req
+.query_params
             .contains_key("page_size"));
 assert!(!built_builder,
             .request,
-.api_req,
-            .query_params,
+.api_req
+            .query_params
 .contains_key("page_token"));
-    },
-#[test],
+    }
+#[test]
     fn test_response_data_serialization() {,
 let messages = vec![,
             create_test_message("msg_1", "chat_1"),
@@ -469,30 +469,30 @@ assert!(parsed.has_more);
         assert_eq!(parsed.items.len(), 2);
         assert_eq!(parsed.items[0].message_id, "msg_1");
         assert_eq!(parsed.items[1].message_id, "msg_2");
-},
-#[test],
-    fn test_response_data_last_page() {
+}
+#[test]
+    ,
         let messages = vec![create_test_message("final_msg", "chat_final")];
         let response = create_test_response_data(false, None, messages.clone());
 assert!(!response.has_more);
         assert_eq!(response.page_token, None);
         assert_eq!(response.items.len(), 1);
-},
-#[test],
-    fn test_response_data_empty_page() {
+}
+#[test]
+    ,
         let response = create_test_response_data(false, None, vec![]);
 assert!(!response.has_more);
         assert_eq!(response.page_token, None);
         assert_eq!(response.items.len(), 0);
-},
-#[test],
+}
+#[test]
     fn test_api_response_trait_implementation() {,
 assert_eq!(,
             ListMessageRespData::data_format(),
-            crate::core::api_resp::ResponseFormat::Data,
+            crate::core::api_resp::ResponseFormat::Data
 );
-    },
-#[test],
+    }
+#[test]
     fn test_list_message_iterator_creation() {,
 let service = create_test_message_service();
         let request = ListMessageRequest::builder(),
@@ -505,8 +505,8 @@ let service = create_test_message_service();
 // by checking its debug representation,
         let debug_str = format!("{:?}", iterator);
 assert!(debug_str.contains("ListMessageIterator"));
-    },
-#[test],
+    }
+#[test]
     fn test_list_message_iterator_debug_format() {,
 let service = create_test_message_service();
         let request = ListMessageRequest::builder(),
@@ -516,16 +516,16 @@ let service = create_test_message_service();
         let iterator = service.list_iter(request, None);
         let debug_str = format!("{:?}", iterator);
 assert!(debug_str.contains("ListMessageIterator"));
-    },
-#[test],
+    }
+#[test]
     fn test_service_config_dependency() {,
 let service = create_test_message_service();
         // Verify service has config,
 let config_ref = &service.config;
         assert!(config_ref.app_id.is_empty()); // Default config should have empty app_id,
 assert!(config_ref.app_secret.is_empty()); // Default config should have empty app_secret,
-    },
-#[test],
+    }
+#[test]
     fn test_request_preparation_for_list() {,
 let _service = create_test_message_service();
         let request = ListMessageRequest::builder(),
@@ -540,24 +540,24 @@ assert!(!api_req.query_params.is_empty());
             api_req.query_params.get("container_id"),
             Some(&"test_chat".to_string()),
 );
-    },
-#[test],
-    fn test_access_token_types_configuration() {
+    }
+#[test]
+    ,
         let expected_types = [AccessTokenType::Tenant, AccessTokenType::User];
 // Verify list operations support both token types,
         assert_eq!(expected_types.len(), 2);
 assert!(expected_types.contains(&AccessTokenType::Tenant));
         assert!(expected_types.contains(&AccessTokenType::User));
-},
-#[test],
+}
+#[test]
     fn test_endpoint_path_validation() {,
 let expected_path = crate::core::endpoints::im::IM_V1_LIST_MESSAGE;
         // Verify the endpoint exists and has the expected format,
 assert!(!expected_path.is_empty());
         assert!(expected_path.starts_with("/open-apis/"));
 assert!(expected_path.contains("messages"));
-    },
-#[test],
+    }
+#[test]
     fn test_unicode_support_in_parameters() {,
 let unicode_chat_id = "聊天室_123";
         let unicode_token = "下一页_令牌";
@@ -572,8 +572,8 @@ let builder = ListMessageRequest::builder(),
             builder.request.api_req.query_params.get("page_token"),
             Some(&unicode_token.to_string()),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_special_characters_in_parameters() {,
 let special_chars = "chat.id-with.special@chars#123";
         let special_token = "token.with/special?chars&test=123";
@@ -588,8 +588,8 @@ let builder = ListMessageRequest::builder(),
             builder.request.api_req.query_params.get("page_token"),
             Some(&special_token.to_string()),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_large_time_ranges() {,
 // Test with very large timestamps,
         let large_start = 946684800i64; // Year 2000,
@@ -605,8 +605,8 @@ assert_eq!(,
             builder.request.api_req.query_params.get("end_time"),
             Some(&large_end.to_string()),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_negative_timestamps() {,
 // Test with negative timestamps (before Unix epoch),
         let negative_time = -86400i64; // One day before Unix epoch,
@@ -615,8 +615,8 @@ let builder = ListMessageRequest::builder().start_time(negative_time);
             builder.request.api_req.query_params.get("start_time"),
             Some(&negative_time.to_string()),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_builder_chainability() {,
 // Test that builder methods can be chained,
         let builder = ListMessageRequest::builder(),
@@ -636,16 +636,16 @@ assert!(params.contains_key("start_time"));
 assert!(params.contains_key("sort_type"));
         assert!(params.contains_key("page_token"));
 assert!(params.contains_key("page_size"));
-    },
-#[test],
+    }
+#[test]
     fn test_request_option_handling() {,
 // Test RequestOption can be passed (type checking),
         let option: Option<RequestOption> = None;
 assert!(option.is_none());
         let option: Option<RequestOption> = Some(RequestOption::default());
 assert!(option.is_some());
-    },
-#[test],
+    }
+#[test]
     fn test_concurrent_builder_usage() {,
 use std::sync::Arc;
         // Test that builders can be used concurrently,
@@ -671,8 +671,8 @@ assert_eq!(,
             shared_builder.request.api_req.query_params.get("page_size"),
             cloned_builder.request.api_req.query_params.get("page_size"),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_error_handling_types() {,
 use crate::core::SDKResult;
         // Verify that the list methods return SDKResult,
@@ -682,15 +682,15 @@ fn _check_list_result() -> SDKResult<ListMessageRespData> {,
 
         // If this compiles, the return type is correct,
 let _ = _check_list_result;
-    },
-#[test],
+    }
+#[test]
     fn test_response_data_memory_efficiency() {,
 // Test that response data structure is memory efficient,
         let empty_response = create_test_response_data(false, None, vec![]);
 let single_message_response = create_test_response_data(,
             false,
             None,
-            vec![create_test_message("single", "chat_single")],
+            vec![create_test_message("single", "chat_single")]
         );
 // Verify empty response is lightweight,
         assert_eq!(empty_response.items.len(), 0);
@@ -699,8 +699,8 @@ assert!(!empty_response.has_more);
 // Verify single message response structure,
         assert_eq!(single_message_response.items.len(), 1);
         assert_eq!(single_message_response.items[0].message_id, "single");
-},
-#[test],
+}
+#[test]
     fn test_sort_type_variations() {,
 let sort_types = [,
             "ByCreateTimeAsc",
@@ -714,24 +714,24 @@ assert_eq!(,
                 builder.request.api_req.query_params.get("sort_type"),
                 Some(&sort_type.to_string()),
 );
-        },
-},
-#[test],
-    fn test_container_id_types() {
+        }
+}
+#[test]
+    ,
         let container_types = ["chat", "p2p", "group"];
 for container_type in container_types {,
             let builder = ListMessageRequest::builder().container_id_type(container_type);
 assert_eq!(,
                 builder,
 .request,
-                    .api_req,
-.query_params,
+                    .api_req
+.query_params
                     .get("container_id_type"),
                 Some(&container_type.to_string()),
 );
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_page_token_edge_cases() {,
 let edge_cases = [,
             "",                                                           // Empty token
@@ -747,9 +747,9 @@ let builder = ListMessageRequest::builder().page_token(token);
                 builder.request.api_req.query_params.get("page_token"),
                 Some(&token.to_string()),
 );
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_message_list_service_methods_exist() {,
 // Test that all service methods exist (compile-time check),
         let service = create_test_message_service();
@@ -757,8 +757,8 @@ let builder = ListMessageRequest::builder().page_token(token);
         assert!(!service.config.app_id.is_empty() || service.config.app_id.is_empty());
 // This is mainly a compile-time verification test,
         // The actual method calls would require mocking the Transport layer,
-},
-#[test],
+}
+#[test]
     fn test_builder_parameter_overriding() {,
 // Test that parameters can be overridden,
         let mut builder = ListMessageRequest::builder().page_size(10).page_size(20); // Override previous value,
@@ -775,8 +775,8 @@ assert_eq!(,
             builder.request.api_req.query_params.get("container_id"),
             Some(&"chat3".to_string()),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_large_message_list_response() {,
 // Test handling of response with many messages,
         let messages: Vec<Message> = (0..100)
@@ -791,9 +791,9 @@ assert!(response.has_more);
 // Verify first and last messages,
         assert_eq!(response.items[0].message_id, "msg_0");
         assert_eq!(response.items[99].message_id, "msg_99");
-},
-#[test],
-    fn test_builder_cloning_simulation() {
+}
+#[test]
+    ,
         // Since ListMessageRequestBuilder doesn't implement Clone,
         // we test that we can create equivalent builders,
 let original_builder = ListMessageRequest::builder(),
@@ -816,5 +816,5 @@ assert_eq!(,
             original_request.api_req.query_params.get("page_size"),
             equivalent_request.api_req.query_params.get("page_size"),
 );
-    },
+    }
 }

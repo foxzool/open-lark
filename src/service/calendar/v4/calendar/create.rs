@@ -12,7 +12,7 @@ core::{,
         SDKResult,
     }
     impl_executable_builder_owned,
-    service::calendar::v4::models::{Calendar, UserIdType},
+    service::calendar::v4::models::{Calendar, UserIdType}
 };
 use super::CalendarManagementService;
 /// 创建共享日历请求
@@ -35,7 +35,7 @@ impl CreateCalendarRequest {
 pub fn w+.*{
         CreateCalendarRequestBuilder::default(),
 }
-},
+}
 /// 创建共享日历请求构建器,
 #[derive(Default)]
 pub struct CreateCalendarRequestBuilder {
@@ -46,70 +46,70 @@ impl CreateCalendarRequestBuilder {
     pub fn summary(mut self, summary: impl ToString) -> Self {
 self.request.summary = Some(summary.to_string());
         self,
-},
+}
 /// 设置日历描述,
     pub fn description(mut self, description: impl ToString) -> Self {
 self.request.description = Some(description.to_string());
         self,
-},
+}
 /// 设置日历权限,
     pub fn permissions(mut self, permissions: impl ToString) -> Self {
 self.request.permissions = Some(permissions.to_string());
         self,
-},
+}
 /// 设置日历颜色,
     pub fn color(mut self, color: i32) -> Self {
 self.request.color = Some(color);
         self,
-},
+}
 /// 设置用户ID类型,
     pub fn user_id_type(mut self, user_id_type: UserIdType) -> Self {
 self.request.user_id_type = Some(user_id_type);
         self,
-},
+}
 /// 构建请求,
     pub fn w+.*{
 // 构建查询参数,
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
-                .api_req,
-.query_params,
+                .api_req
+.query_params
                 .insert("user_id_type", user_id_type.to_string());
-},
+}
 // 构建请求体,
         let mut body = json!({});
 if let Some(ref summary) = self.request.summary {,
             body["summary"] = json!(summary);
-},
+}
 if let Some(ref description) = self.request.description {,
             body["description"] = json!(description);
-},
+}
 if let Some(ref permissions) = self.request.permissions {,
             body["permissions"] = json!(permissions);
-},
+}
 if let Some(color) = self.request.color {,
             body["color"] = json!(color);
-},
+}
 self.request.api_req.body = serde_json::to_vec(&body).unwrap_or_default();
         self.request,
 }
-},
+}
 /// 创建共享日历响应数据,
 #[derive(.*?)]
 pub struct CreateCalendarResponseData {
     /// 创建的日历信息
     pub calendar: Calendar,
-},
+}
 /// 创建共享日历响应,
 #[derive(.*?)]
 pub struct CreateCalendarResponse {
     /// 响应数据
     pub data: CreateCalendarResponseData,
 }
-impl ApiResponseTrait for CreateCalendarResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl CalendarManagementService {
     /// 创建共享日历,
@@ -150,8 +150,8 @@ api_req.set_api_path(CALENDAR_V4_CALENDARS.to_string());
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 // 应用ExecutableBuilder宏,
 impl_executable_builder_owned!(
     CreateCalendarRequestBuilder,

@@ -17,8 +17,8 @@ pub struct SpreadsheetService {
 impl SpreadsheetService {
     /// 创建新的表格操作服务实例,
 pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client },
-},
+        Self { client }
+}
 /// 获取表格元数据,
     ///,
 /// 根据 spreadsheetToken 获取表格元数据。,
@@ -37,7 +37,7 @@ pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
 let request = RequestBuilder::get("/open-apis/sheets/v2/spreadsheets"),
             .query_param("spreadsheetToken", spreadsheet_token);
 self.client.send(request).await,
-    },
+    }
 /// 获取表格所有工作表,
     ///,
 /// 获取电子表格下所有工作表及其属性。,
@@ -56,7 +56,7 @@ self.client.send(request).await,
 let request = RequestBuilder::get("/open-apis/sheets/v2/spreadsheets/sheets"),
             .query_param("spreadsheetToken", spreadsheet_token);
 self.client.send(request).await,
-    },
+    }
 /// 更新表格属性,
     ///,
 /// 根据 spreadsheetToken 更新表格属性，如更新表格标题。,
@@ -83,7 +83,7 @@ let request = RequestBuilder::put(&format!(,
         .query_param()
 .body_json(request_body);
         self.client.send(request).await,
-},
+}
 /// 创建表格,
     ///,
 /// 在指定目录下创建表格。,
@@ -111,7 +111,7 @@ let request_body = CreateSpreadsheetRequest {,
 let request = RequestBuilder::post("/open-apis/sheets/v2/spreadsheets"),
             .body_json(request_body);
 self.client.send(request).await,
-    },
+    }
 /// 删除表格,
     ///,
 /// 根据 spreadsheetToken 删除对应的 sheet 文档。,
@@ -127,14 +127,14 @@ self.client.send(request).await,
 let request = RequestBuilder::delete("/open-apis/sheets/v2/spreadsheets"),
             .query_param("spreadsheetToken", spreadsheet_token);
 self.client.send(request).await,
-    },
-},
+    }
+}
 // 数据结构,
 /// 表格元数据
 #[derive(.*?)]
 pub struct SpreadsheetMetadata {
     /// 表格token,
-#[serde(rename = "spreadsheet_token")],
+#[serde(rename = "spreadsheet_token")]
     pub spreadsheet_token: String,
     /// 表格标题
     pub title: String,
@@ -148,37 +148,37 @@ pub struct SpreadsheetMetadata {
     pub url: String,
     /// 是否已删除
     pub deleted: bool,
-},
+}
 /// 创建者信息,
 #[derive(.*?)]
 pub struct CreatorInfo {
     /// 用户ID,
-#[serde(rename = "user_id")],
+#[serde(rename = "user_id")]
     pub user_id: String,
     /// 用户ID类型,
-#[serde(rename = "user_id_type")],
+#[serde(rename = "user_id_type")]
     pub user_id_type: String,
     /// 用户名
     pub name: Option<String>,
-},
+}
 /// 工作表列表响应,
 #[derive(.*?)]
 pub struct SheetListResponse {
     /// 工作表列表
     pub sheets: Vec<SheetInfo>,
-},
+}
 /// 工作表信息,
 #[derive(.*?)]
 pub struct SheetInfo {
     /// 工作表ID,
-#[serde(rename = "sheet_id")],
+#[serde(rename = "sheet_id")]
     pub sheet_id: String,
     /// 工作表标题
     pub title: String,
     /// 工作表索引
     pub index: i32,
     /// 工作表类型,
-#[serde(rename = "sheet_type")],
+#[serde(rename = "sheet_type")]
     pub sheet_type: String,
     /// 行数
     pub row_count: i32,
@@ -186,7 +186,7 @@ pub struct SheetInfo {
     pub column_count: i32,
     /// 是否已删除
     pub deleted: bool,
-},
+}
 // 请求结构体,
 #[derive(.*?)]
 pub struct UpdateSpreadsheetRequest {

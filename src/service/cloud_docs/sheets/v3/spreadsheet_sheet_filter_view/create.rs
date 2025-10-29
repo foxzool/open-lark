@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -29,13 +29,13 @@ let mut api_req = request.api_request;
 api_req.api_path = SHEETS_V3_SPREADSHEET_FILTER_VIEWS,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 创建筛选视图请求,
 #[derive(.*?)]
 pub struct CreateFilterViewRequest {
@@ -53,8 +53,8 @@ pub struct CreateFilterViewRequest {
 impl CreateFilterViewRequest {
     pub fn w+.*{
 CreateFilterViewRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct CreateFilterViewRequestBuilder {
     request: CreateFilterViewRequest,
@@ -78,12 +78,12 @@ self.request.filter_view_name = filter_view_name.to_string();
     pub fn range(mut self, range: impl ToString) -> Self {
 self.request.range = range.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 创建筛选视图响应体最外层,
 #[derive(.*?)]
 pub struct CreateFilterViewResponseData {
@@ -94,17 +94,17 @@ pub struct CreateFilterViewResponseData {
     /// 筛选范围
     pub range: String,
 }
-impl ApiResponseTrait for CreateFilterViewResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
 use super::CreateFilterViewResponseData;
-    #[test],
+    #[test]
 fn test_create_filter_view_response() {,
         let json = json!({
             "filter_view_id": "fltr_vw_001",
@@ -116,7 +116,7 @@ let response: CreateFilterViewResponseData = serde_json::from_value(json).unwrap
         assert_eq!(response.filter_view_name, "销售数据筛选");
         assert_eq!(response.range, "A1:E100");
 }
-},
+}
 // 实现ExecutableBuilder trait,
 impl_executable_builder_owned!(
     CreateFilterViewRequestBuilder,

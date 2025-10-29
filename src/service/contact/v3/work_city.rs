@@ -3,7 +3,7 @@ use crate::{,
     core::{
         api_resp::ApiResponseTrait, config::Config,
         constants::AccessTokenType, endpoints::EndpointBuilder, http::Transport,
-    },
+    }
     service::contact::models::*,
 };
 use serde::{Deserialize, Serialize};
@@ -13,8 +13,8 @@ pub struct WorkCityService {
 }
 impl WorkCityService {
     pub fn new(config: Config) -> Self {
-        Self { config },
-},
+        Self { config }
+}
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/contact/get,
@@ -27,14 +27,14 @@ let api_req = ApiRequest {,
                 "work_city_id",
                 work_city_id,
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             ..Default::default(),
 };
 
         let resp = Transport::<GetWorkCityResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
-    },
+    }
 /// 获取租户工作城市列表,
     pub async fn list(
         &self,
@@ -43,7 +43,7 @@ Ok(resp.data.unwrap_or_default()),
 let api_req = ApiRequest {,
             http_method: reqwest::Method::GET,
             api_path: crate::core::endpoints::contact::CONTACT_V3_WORK_CITIES.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
             ..Default::default(),
@@ -51,17 +51,17 @@ let api_req = ApiRequest {,
 let resp =,
             Transport::<ListWorkCitiesResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
-    },
+    }
 }
 
 #[derive(.*?)]
 pub struct GetWorkCityResponse {
     pub work_city: WorkCity,
 }
-impl ApiResponseTrait for GetWorkCityResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
+crate::core::api_resp::ResponseFormat::Data
+    }
 }
 
 #[derive(.*?)]
@@ -80,8 +80,8 @@ pub struct ListWorkCitiesResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
-impl ApiResponseTrait for ListWorkCitiesResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
+crate::core::api_resp::ResponseFormat::Data
+    }
 }

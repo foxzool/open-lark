@@ -3,98 +3,98 @@ use serde::{Deserialize, Serialize};
 #[derive(.*?)]
 pub struct Bot {
     /// 机器人名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub app_name: Option<String>,
     /// 机器人头像URL,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub avatar_url: Option<String>,
     /// 机器人IP白名单,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub ip_white_list: Option<Vec<String>>,
     /// 机器人应用状态,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub app_status: Option<AppStatus>,
     /// 机器人的open_id,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub open_id: Option<String>,
-},
+}
 /// 应用状态,
 #[derive(.*?)]
 pub enum AppStatus {,
     /// 未知状态,
-#[serde(rename = "unknown")],
+#[serde(rename = "unknown")]
     Unknown,
     /// 正常,
-#[serde(rename = "normal")],
+#[serde(rename = "normal")]
     Normal,
     /// 停用,
-#[serde(rename = "disabled")],
+#[serde(rename = "disabled")]
     Disabled,
-},
+}
 /// 机器人自定义菜单事件内容,
 #[derive(.*?)]
 pub struct BotMenuEvent {
     /// 事件ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub event_id: Option<String>,
     /// 事件类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub event_type: Option<String>,
     /// 租户信息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub tenant_key: Option<String>,
     /// 应用ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
     /// 操作者信息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub operator: Option<EventOperator>,
     /// 菜单事件详情,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub event: Option<MenuEventDetail>,
-},
+}
 /// 事件操作者信息,
 #[derive(.*?)]
 pub struct EventOperator {
     /// 操作者ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub operator_id: Option<OperatorId>,
     /// 操作者类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub operator_type: Option<String>,
-},
+}
 /// 操作者ID信息,
 #[derive(.*?)]
 pub struct OperatorId {
     /// Open ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub open_id: Option<String>,
     /// Union ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub union_id: Option<String>,
     /// User ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
-},
+}
 /// 菜单事件详情,
 #[derive(.*?)]
 pub struct MenuEventDetail {
     /// 菜单事件key,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub event_key: Option<String>,
     /// 时间戳,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<String>,
     /// 菜单ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub menu_id: Option<String>,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
-    #[test],
+    #[test]
 fn test_bot_serialization() {,
         let bot = Bot {
             app_name: Some("测试机器人".to_string()),
@@ -109,8 +109,8 @@ let serialized = serde_json::to_string(&bot).unwrap();
         assert_eq!(bot.avatar_url, deserialized.avatar_url);
         assert_eq!(bot.ip_white_list, deserialized.ip_white_list);
         assert_eq!(bot.open_id, deserialized.open_id);
-},
-#[test],
+}
+#[test]
     fn test_bot_with_none_values() {,
 let bot = Bot {,
             app_name: Some("简单机器人".to_string()),
@@ -127,8 +127,8 @@ assert!(!serialized.contains("open_id"));
         let deserialized: Bot = serde_json::from_str(&serialized).unwrap();
         assert_eq!(bot.app_name, deserialized.app_name);
         assert_eq!(bot.avatar_url, deserialized.avatar_url);
-},
-#[test],
+}
+#[test]
     fn test_app_status_serialization() {,
 let unknown_status = AppStatus::Unknown;
         let serialized = serde_json::to_string(&unknown_status).unwrap();
@@ -141,8 +141,8 @@ let normal_status = AppStatus::Normal;
 let disabled_status = AppStatus::Disabled;
         let serialized = serde_json::to_string(&disabled_status).unwrap();
         assert_eq!(serialized, "\"disabled\"");
-},
-#[test],
+}
+#[test]
     fn test_bot_menu_event_serialization() {,
 let event = BotMenuEvent {,
             event_id: Some("event_123456".to_string()),
@@ -169,8 +169,8 @@ let serialized = serde_json::to_string(&event).unwrap();
         assert_eq!(event.event_type, deserialized.event_type);
         assert_eq!(event.tenant_key, deserialized.tenant_key);
         assert_eq!(event.app_id, deserialized.app_id);
-},
-#[test],
+}
+#[test]
     fn test_bot_menu_event_with_none_values() {,
 let event = BotMenuEvent {,
             event_id: Some("minimal_event".to_string()),
@@ -189,8 +189,8 @@ assert!(!serialized.contains("operator"));
 let deserialized: BotMenuEvent = serde_json::from_str(&serialized).unwrap();
         assert_eq!(event.event_id, deserialized.event_id);
         assert_eq!(event.event_type, deserialized.event_type);
-},
-#[test],
+}
+#[test]
     fn test_event_operator_serialization() {,
 let operator = EventOperator {,
             operator_id: Some(OperatorId {
@@ -209,8 +209,8 @@ let serialized = serde_json::to_string(&operator).unwrap();
             assert_eq!(orig_id.union_id, deser_id.union_id);
             assert_eq!(orig_id.user_id, deser_id.user_id);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_operator_id_serialization() {,
 let operator_id = OperatorId {,
             open_id: Some("ou_complete_123".to_string()),
@@ -222,8 +222,8 @@ let serialized = serde_json::to_string(&operator_id).unwrap();
         assert_eq!(operator_id.open_id, deserialized.open_id);
         assert_eq!(operator_id.union_id, deserialized.union_id);
         assert_eq!(operator_id.user_id, deserialized.user_id);
-},
-#[test],
+}
+#[test]
     fn test_operator_id_partial_data() {,
 let operator_id = OperatorId {,
             open_id: Some("ou_partial_only".to_string()),
@@ -237,8 +237,8 @@ assert!(!serialized.contains("user_id"));
         assert_eq!(operator_id.open_id, deserialized.open_id);
         assert_eq!(operator_id.union_id, deserialized.union_id);
         assert_eq!(operator_id.user_id, deserialized.user_id);
-},
-#[test],
+}
+#[test]
     fn test_menu_event_detail_serialization() {,
 let detail = MenuEventDetail {,
             event_key: Some("action_button_clicked".to_string()),
@@ -250,8 +250,8 @@ let serialized = serde_json::to_string(&detail).unwrap();
         assert_eq!(detail.event_key, deserialized.event_key);
         assert_eq!(detail.timestamp, deserialized.timestamp);
         assert_eq!(detail.menu_id, deserialized.menu_id);
-},
-#[test],
+}
+#[test]
     fn test_menu_event_detail_minimal() {,
 let detail = MenuEventDetail {,
             event_key: Some("simple_click".to_string()),
@@ -265,8 +265,8 @@ assert!(!serialized.contains("menu_id"));
         assert_eq!(detail.event_key, deserialized.event_key);
         assert_eq!(detail.timestamp, deserialized.timestamp);
         assert_eq!(detail.menu_id, deserialized.menu_id);
-},
-#[test],
+}
+#[test]
     fn test_complex_nested_bot_menu_event() {,
 let complex_event = BotMenuEvent {,
             event_id: Some("complex_event_789".to_string()),
@@ -302,15 +302,15 @@ let serialized = serde_json::to_string(&complex_event).unwrap();
                 assert_eq!(orig_id.user_id, deser_id.user_id);
                 assert_eq!(orig_id.union_id, deser_id.union_id);
 }
-        },
+        }
 // Test nested event detail,
         if let (Some(orig_event), Some(deser_event)) = (&complex_event.event, &deserialized.event) {
             assert_eq!(orig_event.event_key, deser_event.event_key);
             assert_eq!(orig_event.timestamp, deser_event.timestamp);
             assert_eq!(orig_event.menu_id, deser_event.menu_id);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_app_status_enum_all_variants() {,
 // Test all enum variants serialize and deserialize correctly,
         let statuses = vec![
@@ -327,5 +327,5 @@ let deserialized: AppStatus = serde_json::from_str(&serialized).unwrap();
 let reserialized = serde_json::to_string(&deserialized).unwrap();
             assert_eq!(reserialized, expected_json);
 }
-    },
+    }
 }

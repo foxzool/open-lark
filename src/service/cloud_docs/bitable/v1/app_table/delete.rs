@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -29,13 +29,13 @@ let mut api_req = request.api_request;
 api_req.api_path = BITABLE_V1_TABLE_DELETE,
             .replace("{app_token}", &request.app_token)
             .replace("{table_id}", &request.table_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 删除数据表请求,
 #[derive(.*?)]
 pub struct DeleteTableRequest {
@@ -48,16 +48,16 @@ pub struct DeleteTableRequest {
 impl DeleteTableRequest {
     pub fn w+.*{
 DeleteTableRequestBuilder::default(),
-    },
+    }
 /// 创建删除数据表请求,
     pub fn new(app_token: impl ToString, table_id: impl ToString) -> Self {
 Self {
             api_request: ApiRequest::default(),
             app_token: app_token.to_string(),
             table_id: table_id.to_string(),
-        },
+        }
 }
-},
+}
 #[derive(.*?)]
 pub struct DeleteTableRequestBuilder {
     request: DeleteTableRequest,
@@ -67,12 +67,12 @@ impl DeleteTableRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 数据表的 table_id,
     pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
@@ -89,16 +89,16 @@ pub struct DeleteTableResponse {
     /// 删除的数据表ID
     pub deleted: bool,
 }
-impl ApiResponseTrait for DeleteTableResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_delete_table_request() {,
 let request = DeleteTableRequest::builder(),
             .app_token()
@@ -107,9 +107,9 @@ let request = DeleteTableRequest::builder(),
 
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.table_id, "tblsRc9GRRXKqhvW");
-},
-#[test],
-    fn test_delete_table_request_new() {
+}
+#[test]
+    ,
         let request = DeleteTableRequest::new("bascnmBA*****yGehy8", "tblsRc9GRRXKqhvW");
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.table_id, "tblsRc9GRRXKqhvW");

@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -18,7 +18,7 @@ use crate::,
     impl_executable_builder_owned,
 };
 use super::{,
-    get::{FileType, SubscriptionDetail},
+    get::{FileType, SubscriptionDetail}
     SubscriptionService,
 };
 /// 创建订阅请求,
@@ -27,18 +27,18 @@ pub struct CreateSubscriptionRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 文档token,
-#[serde(skip)],
+#[serde(skip)]
     file_token: String,
     /// 文档类型,
-#[serde(skip)],
+#[serde(skip)]
     file_type: String,
     /// 订阅配置,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub config: Option<SubscriptionConfig>,
     /// 扩展信息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub extra: Option<serde_json::Value>,
-},
+}
 /// 订阅配置,
 #[derive(.*?)]
 pub struct SubscriptionConfig {
@@ -47,10 +47,10 @@ pub struct SubscriptionConfig {
     pub priority: Option<SubscriptionPriority>,
     pub auto_renew: Option<bool>,
     pub tags: Option<Vec<String>>,
-},
+}
 /// 订阅优先级,
 #[derive(.*?)]
-#[serde(rename_all = "snake_case")],
+#[serde(rename_all = "snake_case")]
 pub enum SubscriptionPriority {,
 /// 低优先级,
     Low,
@@ -72,8 +72,8 @@ Self {
             file_type: file_type.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct CreateSubscriptionRequestBuilder {
     request: CreateSubscriptionRequest,
@@ -83,73 +83,73 @@ impl CreateSubscriptionRequestBuilder {
     pub fn file_token(mut self, token: impl ToString) -> Self {
 self.request.file_token = token.to_string();
         self,
-},
+}
 /// 文档类型,
     pub fn file_type(mut self, file_type: FileType) -> Self {
 self.request.file_type = file_type.to_string();
         self,
-},
+}
 /// 设置为多维表格,
     pub fn as_bitable(mut self) -> Self {
 self.request.file_type = FileType::Bitable.to_string();
         self,
-},
+}
 /// 设置为文档,
     pub fn as_doc(mut self) -> Self {
 self.request.file_type = FileType::Doc.to_string();
         self,
-},
+}
 /// 设置为表格,
     pub fn as_sheet(mut self) -> Self {
 self.request.file_type = FileType::Sheet.to_string();
         self,
-},
+}
 /// 设置为Wiki,
     pub fn as_wiki(mut self) -> Self {
 self.request.file_type = FileType::Wiki.to_string();
         self,
-},
+}
 /// 设置订阅配置,
     pub fn config(mut self, config: SubscriptionConfig) -> Self {
 self.request.config = Some(config);
         self,
-},
+}
 /// 启用实时通知,
     pub fn with_notification(mut self, enable: bool) -> Self {
 let mut config = self.request.config.unwrap_or_default();
         config.enable_notification = Some(enable);
 self.request.config = Some(config);
         self,
-},
+}
 /// 设置通知频率（秒）,
     pub fn notification_interval(mut self, interval: i32) -> Self {
 let mut config = self.request.config.unwrap_or_default();
         config.notification_interval = Some(interval.max(1));
 self.request.config = Some(config);
         self,
-},
+}
 /// 设置订阅优先级,
     pub fn priority(mut self, priority: SubscriptionPriority) -> Self {
 let mut config = self.request.config.unwrap_or_default();
         config.priority = Some(priority);
 self.request.config = Some(config);
         self,
-},
+}
 /// 设置为高优先级,
     pub fn high_priority(self) -> Self {
 self.priority(SubscriptionPriority::High),
-    },
+    }
 /// 设置为低优先级,
     pub fn low_priority(self) -> Self {
 self.priority(SubscriptionPriority::Low),
-    },
+    }
 /// 启用自动续费,
     pub fn auto_renew(mut self, enable: bool) -> Self {
 let mut config = self.request.config.unwrap_or_default();
         config.auto_renew = Some(enable);
 self.request.config = Some(config);
         self,
-},
+}
 /// 添加标签,
     pub fn add_tag(mut self, tag: impl ToString) -> Self {
 let mut config = self.request.config.unwrap_or_default();
@@ -158,7 +158,7 @@ tags.push(tag.to_string());
         config.tags = Some(tags);
 self.request.config = Some(config);
         self,
-},
+}
 /// 添加多个标签,
     pub fn add_tags(mut self, tags: Vec<String>) -> Self {
 let mut config = self.request.config.unwrap_or_default();
@@ -167,28 +167,28 @@ existing_tags.extend(tags);
         config.tags = Some(existing_tags);
 self.request.config = Some(config);
         self,
-},
+}
 /// 设置扩展信息,
     pub fn extra(mut self, extra: serde_json::Value) -> Self {
 self.request.extra = Some(extra);
         self,
-},
+}
 /// 快速创建基础订阅,
     pub fn basic_subscription(mut self) -> Self {
 let config = SubscriptionConfig::default();
         self.request.config = Some(config);
 self,
-    },
+    }
 /// 快速创建高级订阅,
     pub fn premium_subscription(mut self) -> Self {
 let config = SubscriptionConfig::default();
         self.request.config = Some(config);
 self,
-    },
+    }
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 impl_executable_builder_owned!(,
     CreateSubscriptionRequestBuilder,
@@ -211,11 +211,11 @@ pub struct CreateSubscriptionResponse {
     /// 订阅ID
     pub subscription_id: Option<String>,
 }
-impl ApiResponseTrait for CreateSubscriptionResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 创建订阅,
 pub async fn create_subscription(
     request: CreateSubscriptionRequest,
@@ -242,8 +242,8 @@ match self {,
             SubscriptionPriority::Normal => "普通优先级",
             SubscriptionPriority::High => "高优先级",
             SubscriptionPriority::Urgent => "紧急优先级",
-        },
-},
+        }
+}
 /// 获取优先级数值（用于排序）,
     pub fn w+.*{
 match self {,
@@ -251,8 +251,8 @@ match self {,
             SubscriptionPriority::Normal => 2,
             SubscriptionPriority::High => 3,
             SubscriptionPriority::Urgent => 4,
-        },
-},
+        }
+}
 /// 获取优先级颜色,
     pub fn w+.*{
 match self {,
@@ -260,48 +260,48 @@ match self {,
             SubscriptionPriority::Normal => "blue",
             SubscriptionPriority::High => "orange",
             SubscriptionPriority::Urgent => "red",
-        },
+        }
 }
 }
 impl SubscriptionConfig {
     /// 获取通知频率（秒）,
 pub fn w+.*{
         self.notification_interval.unwrap_or(3600),
-},
+}
 /// 获取通知频率（分钟）,
     pub fn w+.*{
 self.get_notification_interval() as f64 / 60.0,
-    },
+    }
 /// 获取通知频率（小时）,
     pub fn w+.*{
 self.get_notification_interval() as f64 / 3600.0,
-    },
+    }
 /// 是否为高频通知（小于1小时）,
     pub fn w+.*{
 self.get_notification_interval() < 3600,
-    },
+    }
 /// 是否启用通知,
     pub fn w+.*{
 self.enable_notification.unwrap_or(false),
-    },
+    }
 /// 获取优先级,
     pub fn w+.*{
 self.priority,
             .clone()
 .unwrap_or(SubscriptionPriority::Normal),
-    },
+    }
 /// 是否启用自动续费,
     pub fn w+.*{
 self.auto_renew.unwrap_or(false),
-    },
+    }
 /// 获取标签列表,
     pub fn w+.*{
 self.tags.clone().unwrap_or_default(),
-    },
+    }
 /// 是否包含指定标签,
     pub fn w+.*{
 self.get_tags().contains(&tag.to_string()),
-    },
+    }
 /// 获取配置摘要,
     pub fn w+.*{
 let mut parts = Vec::new();
@@ -315,16 +315,16 @@ if interval < 1.0 {,
 }
         } else {,
 parts.push("通知: 已禁用".to_string());
-        },
+        }
 if self.has_auto_renew() {,
             parts.push("自动续费: 是".to_string());
-},
+}
 let tags = self.get_tags();
         if !tags.is_empty() {
             parts.push(format!("标签: {}", tags.join(", ")));
-},
+}
 parts.join(" | "),
-    },
+    }
 }
 impl CreateSubscriptionResponse {
     /// 获取文档类型枚举,
@@ -335,8 +335,8 @@ pub fn w+.*{
             "sheet" => FileType::Sheet,
             "wiki" => FileType::Wiki,
             _ => FileType::Doc,
-        },
-},
+        }
+}
 /// 获取创建时间格式化字符串,
     pub fn w+.*{
 self.create_time.map(|timestamp| {,
@@ -344,7 +344,7 @@ self.create_time.map(|timestamp| {,
                 chrono::DateTime::from_timestamp(timestamp, 0).unwrap_or_else(chrono::Utc::now);
 datetime.format("%Y-%m-%d %H:%M:%S").to_string(),
         }),
-},
+}
 /// 获取完整信息摘要,
     pub fn w+.*{
 let mut parts = vec![,
@@ -357,18 +357,18 @@ let mut parts = vec![,
         ];
 if let Some(ref subscription_id) = self.subscription_id {,
             parts.push(format!("订阅ID: {subscription_id}"));
-},
+}
 if let Some(create_time) = self.create_time_formatted() {,
             parts.push(format!("创建时间: {create_time}"));
-},
+}
 parts.join(" | "),
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_create_subscription_request_builder() {,
 let request = CreateSubscriptionRequest::builder(),
             .file_token()
@@ -378,14 +378,14 @@ let request = CreateSubscriptionRequest::builder(),
         assert_eq!(request.file_token, "doccnxxxxxx");
         assert_eq!(request.file_type, "doc");
 assert!(request.config.is_some());
-    },
-#[test],
-    fn test_subscription_priority_methods() {
+    }
+#[test]
+    ,
         assert_eq!(SubscriptionPriority::High.description(), "高优先级");
         assert_eq!(SubscriptionPriority::High.value(), 3);
         assert_eq!(SubscriptionPriority::High.color(), "orange");
-},
-#[test],
+}
+#[test]
     fn test_subscription_config_methods() {,
 let config = SubscriptionConfig {,
             enable_notification: Some(true),
@@ -397,8 +397,8 @@ assert!(config.has_notification());
         assert_eq!(config.get_notification_interval_hours(), 1.0);
 assert!(!config.is_high_frequency());
         assert!(!config.has_auto_renew());
-},
-#[test],
+}
+#[test]
     fn test_subscription_config_builder() {,
 let request = CreateSubscriptionRequest::builder(),
             .file_token()

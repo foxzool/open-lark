@@ -3,105 +3,105 @@ use serde::{Deserialize, Serialize};
 #[derive(.*?)]
 pub struct SystemStatus {
     /// 系统状态ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub system_status_id: Option<String>,
     /// 标题,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
     /// 国际化标题,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_title: Option<I18nContent>,
     /// 图标样式,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub icon_style: Option<String>,
     /// 图标链接,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub icon_url: Option<String>,
     /// 优先级，数字越小，优先级越高,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i32>,
     /// 是否开启，true-开启，false-关闭,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub is_open: Option<bool>,
     /// 创建时间（毫秒时间戳）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<String>,
     /// 更新时间（毫秒时间戳）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub update_time: Option<String>,
-},
+}
 /// 国际化内容,
 #[derive(.*?)]
 pub struct I18nContent {
     /// 中文内容,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub zh_cn: Option<String>,
     /// 英文内容,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub en_us: Option<String>,
     /// 日文内容,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub ja_jp: Option<String>,
-},
+}
 /// 创建系统状态请求,
 #[derive(.*?)]
 pub struct CreateSystemStatusRequest {
     /// 标题
     pub title: String,
     /// 国际化标题,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_title: Option<I18nContent>,
     /// 图标样式,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub icon_style: Option<String>,
     /// 图标链接,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub icon_url: Option<String>,
     /// 优先级，数字越小，优先级越高，默认为1000,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i32>,
-},
+}
 /// 更新系统状态请求,
 #[derive(.*?)]
 pub struct UpdateSystemStatusRequest {
     /// 标题,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
     /// 国际化标题,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub i18n_title: Option<I18nContent>,
     /// 图标样式,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub icon_style: Option<String>,
     /// 图标链接,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub icon_url: Option<String>,
     /// 优先级，数字越小，优先级越高,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i32>,
-},
+}
 /// 批量操作系统状态请求,
 #[derive(.*?)]
 pub struct BatchSystemStatusRequest {
     /// 系统状态ID列表
     pub system_status_ids: Vec<String>,
-},
+}
 /// 系统状态列表查询请求,
 #[derive(.*?)]
 pub struct ListSystemStatusRequest {
     /// 页码，从1开始,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page: Option<i32>,
     /// 每页数量，默认20，最大100,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
-    #[test],
+    #[test]
 fn test_system_status_serialization() {,
         let status = SystemStatus {
             system_status_id: Some("status_123".to_string()),
@@ -136,8 +136,8 @@ let serialized = serde_json::to_string(&status).unwrap();
             assert_eq!(orig_i18n.en_us, deser_i18n.en_us);
             assert_eq!(orig_i18n.ja_jp, deser_i18n.ja_jp);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_system_status_with_none_values() {,
 let status = SystemStatus {,
             system_status_id: Some("minimal_status".to_string()),
@@ -161,8 +161,8 @@ let deserialized: SystemStatus = serde_json::from_str(&serialized).unwrap();
 assert!(deserialized.title.is_none());
         assert!(deserialized.i18n_title.is_none());
 assert!(deserialized.priority.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_i18n_content_serialization() {,
 let i18n = I18nContent {,
             zh_cn: Some("中文标题".to_string()),
@@ -175,8 +175,8 @@ let serialized = serde_json::to_string(&i18n).unwrap();
         assert_eq!(i18n.zh_cn, deserialized.zh_cn);
         assert_eq!(i18n.en_us, deserialized.en_us);
         assert_eq!(i18n.ja_jp, deserialized.ja_jp);
-},
-#[test],
+}
+#[test]
     fn test_i18n_content_partial_languages() {,
 let i18n = I18nContent {,
             zh_cn: Some("中文内容".to_string()),
@@ -189,8 +189,8 @@ let deserialized: I18nContent = serde_json::from_str(&serialized).unwrap();
         assert_eq!(i18n.zh_cn, deserialized.zh_cn);
         assert_eq!(i18n.en_us, deserialized.en_us);
 assert!(deserialized.ja_jp.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_create_system_status_request_serialization() {,
 let request = CreateSystemStatusRequest {,
             title: "重要公告".to_string(),
@@ -217,8 +217,8 @@ let serialized = serde_json::to_string(&request).unwrap();
             assert_eq!(orig_i18n.en_us, deser_i18n.en_us);
             assert_eq!(orig_i18n.ja_jp, deser_i18n.ja_jp);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_create_system_status_request_minimal() {,
 let request = CreateSystemStatusRequest {,
             title: "简单通知".to_string(),
@@ -235,8 +235,8 @@ let deserialized: CreateSystemStatusRequest = serde_json::from_str(&serialized).
         assert_eq!(request.title, deserialized.title);
 assert!(deserialized.i18n_title.is_none());
         assert!(deserialized.priority.is_none());
-},
-#[test],
+}
+#[test]
     fn test_update_system_status_request_serialization() {,
 let request = UpdateSystemStatusRequest {,
             title: Some("更新后的标题".to_string()),
@@ -263,8 +263,8 @@ let serialized = serde_json::to_string(&request).unwrap();
             assert_eq!(orig_i18n.en_us, deser_i18n.en_us);
             assert_eq!(orig_i18n.ja_jp, deser_i18n.ja_jp);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_update_system_status_request_all_none() {,
 let request = UpdateSystemStatusRequest {,
             title: None,
@@ -281,8 +281,8 @@ assert!(deserialized.i18n_title.is_none());
         assert!(deserialized.icon_style.is_none());
 assert!(deserialized.icon_url.is_none());
         assert!(deserialized.priority.is_none());
-},
-#[test],
+}
+#[test]
     fn test_batch_system_status_request_serialization() {,
 let request = BatchSystemStatusRequest {,
             system_status_ids: vec![
@@ -296,14 +296,14 @@ let serialized = serde_json::to_string(&request).unwrap();
 
         assert_eq!(request.system_status_ids, deserialized.system_status_ids);
         assert_eq!(deserialized.system_status_ids.len(), 3);
-        assert_eq!(deserialized.system_status_ids[0], "status_001");
-        assert_eq!(deserialized.system_status_ids[1], "status_002");
-        assert_eq!(deserialized.system_status_ids[2], "status_003");
-},
-#[test],
+        assert_eq!(deserialized.system_status_ids[0] "status_001");
+        assert_eq!(deserialized.system_status_ids[1] "status_002");
+        assert_eq!(deserialized.system_status_ids[2] "status_003");
+}
+#[test]
     fn test_batch_system_status_request_empty_list() {,
 let request = BatchSystemStatusRequest {,
-            system_status_ids: vec![],
+            system_status_ids: vec![]
         };
 let serialized = serde_json::to_string(&request).unwrap();
         let deserialized: BatchSystemStatusRequest = serde_json::from_str(&serialized).unwrap();
@@ -311,8 +311,8 @@ let serialized = serde_json::to_string(&request).unwrap();
         assert_eq!(request.system_status_ids, deserialized.system_status_ids);
         assert_eq!(deserialized.system_status_ids.len(), 0);
 assert!(deserialized.system_status_ids.is_empty());
-    },
-#[test],
+    }
+#[test]
     fn test_list_system_status_request_serialization() {,
 let request = ListSystemStatusRequest {,
             page: Some(2),
@@ -323,8 +323,8 @@ let serialized = serde_json::to_string(&request).unwrap();
 
         assert_eq!(request.page, deserialized.page);
         assert_eq!(request.page_size, deserialized.page_size);
-},
-#[test],
+}
+#[test]
     fn test_list_system_status_request_with_defaults() {,
 let request = ListSystemStatusRequest {,
             page: None,
@@ -336,8 +336,8 @@ assert!(!serialized.contains("page_size"));
         let deserialized: ListSystemStatusRequest = serde_json::from_str(&serialized).unwrap();
 assert!(deserialized.page.is_none());
         assert!(deserialized.page_size.is_none());
-},
-#[test],
+}
+#[test]
     fn test_complex_system_status_scenario() {,
 let complex_status = SystemStatus {,
             system_status_id: Some("emergency_maintenance_2023".to_string()),
@@ -379,9 +379,9 @@ assert!(i18n.en_us.is_some());
 assert!(i18n.zh_cn.as_ref().unwrap().contains("紧急"));
             assert!(i18n.en_us.as_ref().unwrap().contains("Emergency"));
 assert!(i18n.ja_jp.as_ref().unwrap().contains("緊急"));
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_priority_ordering_scenarios() {,
 // Test different priority values,
         let high_priority = SystemStatus {
@@ -430,8 +430,8 @@ assert!(medium_deserialized.priority.unwrap() < low_deserialized.priority.unwrap
 assert!(high_deserialized.is_open.unwrap());
         assert!(medium_deserialized.is_open.unwrap());
 assert!(!low_deserialized.is_open.unwrap());
-    },
-#[test],
+    }
+#[test]
     fn test_debug_trait_for_models() {,
 let status = SystemStatus {,
             system_status_id: Some("debug_test".to_string()),
@@ -449,5 +449,5 @@ let status = SystemStatus {,
 assert!(debug_string.contains("SystemStatus"));
         assert!(debug_string.contains("debug_test"));
 assert!(debug_string.contains("Debug Test"));
-    },
+    }
 }

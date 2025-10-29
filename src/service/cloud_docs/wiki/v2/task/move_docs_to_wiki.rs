@@ -20,7 +20,7 @@ pub struct MoveDocsToWikiRequest {
     /// 移动的云空间文档token列表
     obj_tokens: Vec<String>,
     /// 目标父节点token，不填时为根节点,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     parent_node_token: Option<String>,
 }
 impl MoveDocsToWikiRequest {
@@ -34,8 +34,8 @@ Self {
             obj_tokens,
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct MoveDocsToWikiRequestBuilder {
     request: MoveDocsToWikiRequest,
@@ -45,56 +45,56 @@ impl MoveDocsToWikiRequestBuilder {
     pub fn space_id(mut self, space_id: impl ToString) -> Self {
 self.request.space_id = space_id.to_string();
         self,
-},
+}
 /// 移动的云空间文档token列表,
     pub fn obj_tokens(mut self, obj_tokens: Vec<String>) -> Self {
 self.request.obj_tokens = obj_tokens;
         self,
-},
+}
 /// 添加单个文档token,
     pub fn add_obj_token(mut self, obj_token: impl ToString) -> Self {
 self.request.obj_tokens.push(obj_token.to_string());
         self,
-},
+}
 /// 批量添加文档tokens,
     pub fn add_obj_tokens(mut self, tokens: Vec<impl ToString>) -> Self {
 for token in tokens {,
             self.request.obj_tokens.push(token.to_string());
-},
+}
 self,
-    },
+    }
 /// 目标父节点token,
     pub fn parent_node_token(mut self, parent_node_token: impl ToString) -> Self {
 self.request.parent_node_token = Some(parent_node_token.to_string());
         self,
-},
+}
 /// 移动到根节点,
     pub fn move_to_root(mut self) -> Self {
 self.request.parent_node_token = None;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 移动任务信息,
 #[derive(.*?)]
 pub struct MoveTask {
     /// 任务id
     pub task_id: String,
-},
+}
 /// 移动云空间文档至知识空间响应,
 #[derive(.*?)]
 pub struct MoveDocsToWikiResponse {
     /// 任务信息
     pub task: MoveTask,
 }
-impl ApiResponseTrait for MoveDocsToWikiResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 移动云空间文档至知识空间,
 pub async fn move_docs_to_wiki(
     request: MoveDocsToWikiRequest,
@@ -111,10 +111,10 @@ Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_move_docs_to_wiki_request_builder() {,
 let request = MoveDocsToWikiRequest::builder(),
             .space_id()
@@ -125,11 +125,11 @@ let request = MoveDocsToWikiRequest::builder(),
 
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.obj_tokens.len(), 2);
-        assert_eq!(request.obj_tokens[0], "doccnxxxxxx");
-        assert_eq!(request.obj_tokens[1], "shtcnxxxxxx");
+        assert_eq!(request.obj_tokens[0] "doccnxxxxxx");
+        assert_eq!(request.obj_tokens[1] "shtcnxxxxxx");
         assert_eq!(request.parent_node_token, Some("wikcnxxxxxx".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_move_to_root() {,
 let request = MoveDocsToWikiRequest::builder(),
             .space_id("spcxxxxxx")

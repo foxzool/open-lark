@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -29,13 +29,13 @@ let mut api_req = request.api_request;
 api_req.api_path = SHEETS_V3_SPREADSHEET_DATA_VALIDATION,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 设置下拉列表请求,
 #[derive(.*?)]
 pub struct SetDataValidationRequest {
@@ -51,8 +51,8 @@ pub struct SetDataValidationRequest {
 impl SetDataValidationRequest {
     pub fn w+.*{
 SetDataValidationRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct SetDataValidationRequestBuilder {
     request: SetDataValidationRequest,
@@ -71,12 +71,12 @@ self.request.sheet_id = sheet_id.to_string();
     pub fn data_validation(mut self, data_validation: DataValidationRule) -> Self {
 self.request.data_validation = data_validation;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 数据校验规则,
 #[derive(.*?)]
 pub struct DataValidationRule {
@@ -85,19 +85,19 @@ pub struct DataValidationRule {
     /// 应用范围
     pub range: String,
     /// 校验条件值,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub condition_values: Option<Vec<String>>,
     /// 是否拒绝输入,
-#[serde(default)],
+#[serde(default)]
     pub strict: bool,
     /// 输入提示消息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub input_message: Option<String>,
     /// 错误提示消息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
     /// 数据校验 ID（仅在响应时存在）,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub data_validation_id: Option<String>,
 }
 impl DataValidationRule {
@@ -111,8 +111,8 @@ Self {
             input_message: None,
             error_message: None,
             data_validation_id: None,
-        },
-},
+        }
+}
 /// 创建数字范围校验,
     pub fn number_range(range: impl ToString, min: f64, max: f64) -> Self {
 Self {
@@ -123,8 +123,8 @@ Self {
             input_message: None,
             error_message: None,
             data_validation_id: None,
-        },
-},
+        }
+}
 /// 创建文本长度校验,
     pub fn text_length(range: impl ToString, min_length: u32, max_length: u32) -> Self {
 Self {
@@ -135,44 +135,44 @@ Self {
             input_message: None,
             error_message: None,
             data_validation_id: None,
-        },
-},
+        }
+}
 /// 设置输入提示,
     pub fn with_input_message(mut self, message: impl ToString) -> Self {
 self.input_message = Some(message.to_string());
         self,
-},
+}
 /// 设置错误提示,
     pub fn with_error_message(mut self, message: impl ToString) -> Self {
 self.error_message = Some(message.to_string());
         self,
-},
+}
 /// 设置是否严格模式,
     pub fn with_strict(mut self, strict: bool) -> Self {
 self.strict = strict;
         self,
 }
-},
+}
 /// 设置下拉列表响应体最外层,
 #[derive(.*?)]
 pub struct SetDataValidationResponseData {
     /// 数据校验 ID
     pub data_validation_id: String,
     /// 数据校验规则信息,
-#[serde(flatten)],
+#[serde(flatten)]
     pub data_validation: DataValidationRule,
 }
-impl ApiResponseTrait for SetDataValidationResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use super::*;
 use serde_json::json;
-    #[test],
+    #[test]
 fn test_data_validation_rule_creation() {,
         let validation =
             DataValidationRule::dropdown("A1:A10", vec!["选项1".to_string(), "选项2".to_string()]);
@@ -180,14 +180,14 @@ fn test_data_validation_rule_creation() {,
         assert_eq!(validation.range, "A1:A10");
 assert!(validation.strict);
         assert_eq!(validation.condition_values.as_ref().unwrap().len(), 2);
-},
-#[test],
+}
+#[test]
     fn test_set_data_validation_response() {,
 let json = json!({,
             "data_validation_id": "dv_001",
             "condition_type": "dropdown",
             "range": "A1:A10",
-            "condition_values": ["选项1", "选项2"],
+            "condition_values": ["选项1", "选项2"]
             "strict": true,
             "input_message": "请选择一个选项",
             "error_message": "输入无效",
@@ -196,7 +196,7 @@ let response: SetDataValidationResponseData = serde_json::from_value(json).unwra
         assert_eq!(response.data_validation_id, "dv_001");
         assert_eq!(response.data_validation.condition_type, "dropdown");
 }
-},
+}
 // 实现ExecutableBuilder trait,
 impl_executable_builder_owned!(
     SetDataValidationRequestBuilder,

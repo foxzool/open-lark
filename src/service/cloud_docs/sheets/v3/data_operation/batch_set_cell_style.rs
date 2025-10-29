@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -31,13 +31,13 @@ let mut api_req = request.api_request;
 api_req.api_path = SHEETS_V3_SPREADSHEET_STYLES_BATCH_UPDATE,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.sheet_id);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 let api_resp: BaseResponse<BatchSetCellStyleResponseData> =,
             Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
-    },
-},
+    }
+}
 /// 批量设置单元格样式请求,
 #[derive(.*?)]
 pub struct BatchSetCellStyleRequest {
@@ -53,8 +53,8 @@ pub struct BatchSetCellStyleRequest {
 impl BatchSetCellStyleRequest {
     pub fn w+.*{
 BatchSetCellStyleRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct BatchSetCellStyleRequestBuilder {
     request: BatchSetCellStyleRequest,
@@ -81,12 +81,12 @@ self,
     pub fn range_styles(mut self, data: Vec<RangeStyleData>) -> Self {
 self.request.data = data;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 // Trait implementation,
 impl_executable_builder_owned!(
     BatchSetCellStyleRequestBuilder,
@@ -102,7 +102,7 @@ pub struct RangeStyleData {
     pub range: String,
     /// 样式信息
     pub style: CellStyle,
-},
+}
 /// 批量设置单元格样式响应体最外层,
 #[derive(.*?)]
 pub struct BatchSetCellStyleResponseData {
@@ -115,24 +115,24 @@ pub struct BatchSetCellStyleResponseData {
     /// 执行失败的批次数
     pub failure_count: i32,
 }
-impl ApiResponseTrait for BatchSetCellStyleResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
 use super::{,
-        super::set_cell_style::{CellStyle, FontStyle},
+        super::set_cell_style::{CellStyle, FontStyle}
         BatchSetCellStyleResponseData, RangeStyleData,
     };
-#[test],
+#[test]
     fn test_batch_set_cell_style_response() {,
 let json = json!({,
             "updated_cells": 25,
-            "updated_ranges": ["A1:B5", "C1:D5"],
+            "updated_ranges": ["A1:B5", "C1:D5"]
             "success_count": 2,
             "failure_count": 0,
 });
@@ -141,8 +141,8 @@ let response: BatchSetCellStyleResponseData = serde_json::from_value(json).unwra
         assert_eq!(response.updated_ranges.len(), 2);
         assert_eq!(response.success_count, 2);
         assert_eq!(response.failure_count, 0);
-},
-#[test],
+}
+#[test]
     fn test_range_style_data_serialization() {,
 let style = CellStyle {,
             font: Some(FontStyle {
@@ -164,7 +164,7 @@ let range_style = RangeStyleData {,
             style,
         };
 let json = serde_json::to_value(&range_style).unwrap();
-        assert_eq!(json["range"], "A1:B5");
-        assert_eq!(json["style"]["font"]["bold"], true);
+        assert_eq!(json["range"] "A1:B5");
+        assert_eq!(json["style"]["font"]["bold"] true);
 }
 }

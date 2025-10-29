@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -32,13 +32,13 @@ let mut api_req = request.api_request;
 api_req.api_path = SHEETS_V3_SPREADSHEET_VALUES_PREPEND,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.range);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 let api_resp: BaseResponse<PrependDataResponseData> =,
             Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
-    },
-},
+    }
+}
 /// 插入数据请求,
 #[derive(.*?)]
 pub struct PrependDataRequest {
@@ -49,17 +49,17 @@ pub struct PrependDataRequest {
     /// 查询范围，包含 sheetId 与单元格范围两部分
     range: String,
     /// 插入数据的方式,
-#[serde(rename = "insertDataOption")],
+#[serde(rename = "insertDataOption")]
     insert_data_option: Option<String>,
     /// 数据值,
-#[serde(rename = "valueRange")],
+#[serde(rename = "valueRange")]
     value_range: ValueRangeRequest,
 }
 impl PrependDataRequest {
     pub fn w+.*{
 PrependDataRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct PrependDataRequestBuilder {
     request: PrependDataRequest,
@@ -86,12 +86,12 @@ self.request.value_range = ValueRangeRequest {,
             values,
         };
 self,
-    },
+    }
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 // Trait implementation,
 impl_executable_builder_owned!(
     PrependDataRequestBuilder,
@@ -104,27 +104,27 @@ impl_executable_builder_owned!(
 #[derive(.*?)]
 pub struct PrependDataResponseData {
     /// 表格的 token,
-#[serde(rename = "spreadsheetToken")],
+#[serde(rename = "spreadsheetToken")]
     pub spreadsheet_token: String,
     /// 数据更新的位置,
-#[serde(rename = "tableRange")],
+#[serde(rename = "tableRange")]
     pub table_range: String,
     /// sheet 的版本号
     pub revision: i32,
     /// 更新的行数
     pub updates: UpdatesInfo,
 }
-impl ApiResponseTrait for PrependDataResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
 use super::PrependDataResponseData;
-    #[test],
+    #[test]
 fn test_prepend_data_response() {,
         let json = json!({
             "spreadsheetToken": "shtcnmBA*****yGehy8",

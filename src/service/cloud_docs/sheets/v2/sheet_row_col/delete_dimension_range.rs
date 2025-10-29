@@ -7,13 +7,13 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option, SDKResult,
 };
     impl_executable_builder_owned,
-    service::cloud_docs::sheets::v2::{sheet_row_col::UpdateDimension, SpreadsheetService},
+    service::cloud_docs::sheets::v2::{sheet_row_col::UpdateDimension, SpreadsheetService}
 };
 /// 删除行列请求,
 #[derive(.*?)]
@@ -28,8 +28,8 @@ pub struct DeleteDimensionRangeRequest {
 impl DeleteDimensionRangeRequest {
     pub fn w+.*{
 DeleteDimensionRangeRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct DeleteDimensionRangeRequestBuilder {
     request: DeleteDimensionRangeRequest,
@@ -38,36 +38,36 @@ impl DeleteDimensionRangeRequestBuilder {
     pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
-},
+}
 /// 电子表格工作表的 ID。调用获取工作表获取 ID,
     pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.dimension.sheet_id = sheet_id.to_string();
         self,
-},
+}
 /// 更新的维度。可选值：,
     /// - ROWS：行,
 /// - COLUMNS：列,
     pub fn major_dimension(mut self, major_dimension: impl ToString) -> Self {
 self.request.dimension.major_dimension = major_dimension.to_string();
         self,
-},
+}
 /// 插入的行或列的起始位置。从 0 开始计数。若 startIndex 为 3，则从第 4,
     /// 行或列开始插入空行或列。包含第 4 行或列。
     pub fn start_index(mut self, start_index: i32) -> Self {
 self.request.dimension.start_index = start_index;
         self,
-},
+}
 /// 插入的行或列结束的位置。从 0 开始计数。若 endIndex 为 7，则从第 8 行结束插入行。第 8,
     /// 行不再插入空行。 示例：当 majorDimension为 ROWS、 startIndex 为 3、endIndex 为 7,
 /// 时，则在第 4、5、6、7 行插入空白行，共插入 4 行。,
     pub fn end_index(mut self, end_index: i32) -> Self {
 self.request.dimension.end_index = end_index;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 impl_executable_builder_owned!(,
     DeleteDimensionRangeRequestBuilder,
@@ -93,26 +93,26 @@ api_req.set_http_method(reqwest::Method::DELETE);
 
         let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 删除行列响应体,
 #[derive(.*?)]
 pub struct DeleteDimensionRangeResponse {
     /// 一共删除的行数或列数,
-#[serde(rename = "delCount")],
+#[serde(rename = "delCount")]
     pub del_count: i32,
     /// 删除的维度。枚举值：,
 /// - ROWS：行,
     /// - COLUMNS：列,
-#[serde(rename = "majorDimension")],
+#[serde(rename = "majorDimension")]
     pub major_dimension: String,
 }
-impl ApiResponseTrait for DeleteDimensionRangeResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
 mod tests {
 use super::*;
     use crate::core::config::Config;
@@ -122,11 +122,11 @@ Config::builder()
             .app_id()
 .app_secret()
             .build(),
-},
+}
 fn create_test_service() -> SpreadsheetService {,
         SpreadsheetService::new(create_test_config()),
-},
-#[test],
+}
+#[test]
     fn test_delete_dimension_range_request_builder_creation() {,
 let builder = DeleteDimensionRangeRequest::builder();
         let request = builder.build();
@@ -136,43 +136,43 @@ let builder = DeleteDimensionRangeRequest::builder();
         assert_eq!(request.dimension.major_dimension, "");
         assert_eq!(request.dimension.start_index, 0);
         assert_eq!(request.dimension.end_index, 0);
-},
-#[test],
+}
+#[test]
     fn test_delete_dimension_range_request_builder_with_spreadsheet_token() {,
 let request = DeleteDimensionRangeRequest::builder(),
             .spreadsheet_token()
 .build();
         assert_eq!(request.spreadsheet_token, "test_spreadsheet_123");
-},
-#[test],
+}
+#[test]
     fn test_delete_dimension_range_request_builder_with_sheet_id() {,
 let request = DeleteDimensionRangeRequest::builder(),
             .sheet_id()
 .build();
         assert_eq!(request.dimension.sheet_id, "test_sheet_456");
-},
-#[rstest],
-    #[case("ROWS")],
-#[case("COLUMNS")],
+}
+#[rstest]
+    #[case("ROWS")]
+#[case("COLUMNS")]
     fn test_delete_dimension_range_request_builder_with_major_dimension(#[case] dimension: &str) {,
 let request = DeleteDimensionRangeRequest::builder(),
             .major_dimension()
 .build();
         assert_eq!(request.dimension.major_dimension, dimension);
-},
-#[test],
+}
+#[test]
     fn test_delete_dimension_range_request_builder_with_start_index() {,
 let request = DeleteDimensionRangeRequest::builder(),
             .start_index()
 .build();
         assert_eq!(request.dimension.start_index, 5);
-},
-#[test],
+}
+#[test]
     fn test_delete_dimension_range_request_builder_with_end_index() {,
 let request = DeleteDimensionRangeRequest::builder().end_index(10).build();
         assert_eq!(request.dimension.end_index, 10);
-},
-#[test],
+}
+#[test]
     fn test_delete_dimension_range_request_builder_chaining() {,
 let request = DeleteDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -186,8 +186,8 @@ let request = DeleteDimensionRangeRequest::builder(),
         assert_eq!(request.dimension.major_dimension, "ROWS");
         assert_eq!(request.dimension.start_index, 3);
         assert_eq!(request.dimension.end_index, 7);
-},
-#[test],
+}
+#[test]
     fn test_delete_dimension_range_request_default() {,
 let request = DeleteDimensionRangeRequest::default();
         assert_eq!(request.spreadsheet_token, "");
@@ -195,8 +195,8 @@ let request = DeleteDimensionRangeRequest::default();
         assert_eq!(request.dimension.major_dimension, "");
         assert_eq!(request.dimension.start_index, 0);
         assert_eq!(request.dimension.end_index, 0);
-},
-#[test],
+}
+#[test]
     fn test_delete_dimension_range_request_builder_default() {,
 let builder = DeleteDimensionRangeRequestBuilder::default();
         let request = builder.build();
@@ -206,8 +206,8 @@ let builder = DeleteDimensionRangeRequestBuilder::default();
         assert_eq!(request.dimension.major_dimension, "");
         assert_eq!(request.dimension.start_index, 0);
         assert_eq!(request.dimension.end_index, 0);
-},
-#[test],
+}
+#[test]
     fn test_delete_dimension_range_request_serialization() {,
 let request = DeleteDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -224,8 +224,8 @@ let json_str = serialized.unwrap();
 assert!(json_str.contains("COLUMNS"));
         assert!(json_str.contains("\"startIndex\":2"));
 assert!(json_str.contains("\"endIndex\":5"));
-    },
-#[test],
+    }
+#[test]
     fn test_delete_dimension_range_request_debug() {,
 let request = DeleteDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -236,8 +236,8 @@ let request = DeleteDimensionRangeRequest::builder(),
 assert!(debug_str.contains("DeleteDimensionRangeRequest"));
         assert!(debug_str.contains("debug_token"));
 assert!(debug_str.contains("debug_sheet"));
-    },
-#[test],
+    }
+#[test]
     fn test_delete_dimension_range_request_with_empty_strings() {,
 let request = DeleteDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -247,8 +247,8 @@ let request = DeleteDimensionRangeRequest::builder(),
         assert_eq!(request.spreadsheet_token, "");
         assert_eq!(request.dimension.sheet_id, "");
         assert_eq!(request.dimension.major_dimension, "");
-},
-#[test],
+}
+#[test]
     fn test_delete_dimension_range_request_with_special_characters() {,
 let request = DeleteDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -258,8 +258,8 @@ let request = DeleteDimensionRangeRequest::builder(),
         assert_eq!(request.spreadsheet_token, "token_with_特殊字符_🎯");
         assert_eq!(request.dimension.sheet_id, "sheet_名称_123");
         assert_eq!(request.dimension.major_dimension, "ROWS");
-},
-#[rstest],
+}
+#[rstest]
     #[case(0, 1)]
     #[case(1, 5)]
     #[case(10, 20)]
@@ -277,8 +277,8 @@ let request = DeleteDimensionRangeRequest::builder(),
 
         assert_eq!(request.dimension.start_index, start);
         assert_eq!(request.dimension.end_index, end);
-},
-#[test],
+}
+#[test]
     fn test_delete_dimension_range_request_with_maximum_values() {,
 let request = DeleteDimensionRangeRequest::builder(),
             .start_index()
@@ -287,8 +287,8 @@ let request = DeleteDimensionRangeRequest::builder(),
 
         assert_eq!(request.dimension.start_index, i32::MAX);
         assert_eq!(request.dimension.end_index, i32::MAX);
-},
-#[test],
+}
+#[test]
     fn test_delete_dimension_range_request_with_minimum_values() {,
 let request = DeleteDimensionRangeRequest::builder(),
             .start_index()
@@ -297,8 +297,8 @@ let request = DeleteDimensionRangeRequest::builder(),
 
         assert_eq!(request.dimension.start_index, i32::MIN);
         assert_eq!(request.dimension.end_index, i32::MIN);
-},
-#[test],
+}
+#[test]
     fn test_delete_dimension_range_request_api_request_body_serialization() {,
 let request = DeleteDimensionRangeRequest::builder(),
             .spreadsheet_token()
@@ -317,8 +317,8 @@ assert!(parsed.get("dimension").is_some());
         assert_eq!(dimension.get("majorDimension").unwrap(), "ROWS");
         assert_eq!(dimension.get("startIndex").unwrap(), 1);
         assert_eq!(dimension.get("endIndex").unwrap(), 3);
-},
-#[test],
+}
+#[test]
     fn test_delete_dimension_range_request_builder_multiple_calls() {,
 let mut builder = DeleteDimensionRangeRequest::builder();
         // Test that multiple calls override previous values,
@@ -332,35 +332,35 @@ let request = builder.build();
         assert_eq!(request.spreadsheet_token, "second_token");
         assert_eq!(request.dimension.sheet_id, "second_sheet");
         assert_eq!(request.dimension.start_index, 2);
-},
-#[test],
+}
+#[test]
     fn test_spreadsheet_service_creation() {,
 let service = create_test_service();
         // Verify the service can be created without panic
         assert_eq!(service.config.app_id, "test_app_id");
-},
-#[test],
+}
+#[test]
     fn test_delete_dimension_range_response_data_format() {,
 assert_eq!(,
             DeleteDimensionRangeResponse::data_format(),
-            ResponseFormat::Data,
+            ResponseFormat::Data
 );
-    },
-#[test],
-    fn test_delete_dimension_range_response_deserialization() {
+    }
+#[test]
+    ,
         let json_response = r#"{"delCount": 5, "majorDimension": "ROWS"}"#;
 let response: DeleteDimensionRangeResponse = serde_json::from_str(json_response).unwrap();
         assert_eq!(response.del_count, 5);
         assert_eq!(response.major_dimension, "ROWS");
-},
-#[test],
-    fn test_delete_dimension_range_response_deserialization_columns() {
+}
+#[test]
+    ,
         let json_response = r#"{"delCount": 3, "majorDimension": "COLUMNS"}"#;
 let response: DeleteDimensionRangeResponse = serde_json::from_str(json_response).unwrap();
         assert_eq!(response.del_count, 3);
         assert_eq!(response.major_dimension, "COLUMNS");
-},
-#[test],
+}
+#[test]
     fn test_delete_dimension_range_response_debug() {,
 let response = DeleteDimensionRangeResponse {,
             del_count: 10,
@@ -371,22 +371,22 @@ let response = DeleteDimensionRangeResponse {,
 assert!(debug_str.contains("DeleteDimensionRangeResponse"));
         assert!(debug_str.contains("del_count: 10"));
 assert!(debug_str.contains("ROWS"));
-    },
-#[test],
-    fn test_delete_dimension_range_response_with_zero_count() {
+    }
+#[test]
+    ,
         let json_response = r#"{"delCount": 0, "majorDimension": "ROWS"}"#;
 let response: DeleteDimensionRangeResponse = serde_json::from_str(json_response).unwrap();
         assert_eq!(response.del_count, 0);
         assert_eq!(response.major_dimension, "ROWS");
-},
-#[test],
-    fn test_delete_dimension_range_response_with_large_count() {
+}
+#[test]
+    ,
         let json_response = r#"{"delCount": 999999, "majorDimension": "COLUMNS"}"#;
 let response: DeleteDimensionRangeResponse = serde_json::from_str(json_response).unwrap();
         assert_eq!(response.del_count, 999999);
         assert_eq!(response.major_dimension, "COLUMNS");
-},
-#[test],
+}
+#[test]
     fn test_delete_dimension_range_request_edge_cases() {,
 // Test with very long token,
         let long_token = "a".repeat(10000);
@@ -407,8 +407,8 @@ let request = DeleteDimensionRangeRequest::builder(),
 .build();
         assert_eq!(request.dimension.start_index, 0);
         assert_eq!(request.dimension.end_index, 1000000);
-},
-#[test],
+}
+#[test]
     fn test_delete_dimension_range_request_memory_efficiency() {,
 // Test creating many requests doesn't consume excessive memory,
         let requests: Vec<DeleteDimensionRangeRequest> = (0..100),
@@ -430,5 +430,5 @@ let request = DeleteDimensionRangeRequest::builder(),
             assert_eq!(request.dimension.start_index, i as i32);
             assert_eq!(request.dimension.end_index, (i + 10) as i32);
 }
-    },
+    }
 }

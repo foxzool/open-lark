@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -31,7 +31,7 @@ impl AppService {
 let mut api_req = request.api_request;
         api_req.set_http_method(Method::PUT);
         api_req.set_api_path(BITABLE_V1_APP_UPDATE.replace("{app_token}", &request.app_token));
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 api_req.body = serde_json::to_vec(&UpdateAppRequestBody {,
             name: request.name,
@@ -40,8 +40,8 @@ api_req.body = serde_json::to_vec(&UpdateAppRequestBody {,
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 更新多维表格元数据请求,
 #[derive(.*?)]
 pub struct UpdateAppRequest {
@@ -56,7 +56,7 @@ pub struct UpdateAppRequest {
 impl UpdateAppRequest {
     pub fn w+.*{
 UpdateAppRequestBuilder::default(),
-    },
+    }
 /// 创建更新多维表格元数据请求,
     pub fn new(app_token: impl ToString) -> Self {
 Self {
@@ -64,9 +64,9 @@ Self {
             app_token: app_token.to_string(),
             name: None,
             is_advanced: None,
-        },
+        }
 }
-},
+}
 #[derive(.*?)]
 pub struct UpdateAppRequestBuilder {
     request: UpdateAppRequest,
@@ -76,17 +76,17 @@ impl UpdateAppRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 多维表格的名字,
     pub fn name(mut self, name: impl ToString) -> Self {
 self.request.name = Some(name.to_string());
         self,
-},
+}
 /// 多维表格是否开启高级权限,
     pub fn is_advanced(mut self, is_advanced: bool) -> Self {
 self.request.is_advanced = Some(is_advanced);
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
@@ -100,7 +100,7 @@ impl_executable_builder_owned!(,
 );
 #[derive(Serialize)]
 struct UpdateAppRequestBody {,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     name: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     is_advanced: Option<bool>,
@@ -123,17 +123,17 @@ pub struct UpdateAppResponseData {
     /// 多维表格是否开启了高级权限
     pub is_advanced: bool,
 }
-impl ApiResponseTrait for UpdateAppResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json::json;
-    #[test],
+    #[test]
 fn test_update_app_request() {,
         let request = UpdateAppRequest::builder(),
 .app_token()
@@ -144,15 +144,15 @@ fn test_update_app_request() {,
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.name, Some("新的表格名称".to_string()));
         assert_eq!(request.is_advanced, Some(true));
-},
-#[test],
+}
+#[test]
     fn test_update_app_request_new() {,
 let request = UpdateAppRequest::new("bascnmBA*****yGehy8");
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.name, None);
         assert_eq!(request.is_advanced, None);
-},
-#[test],
+}
+#[test]
     fn test_update_app_request_body_serialization() {,
 let body = UpdateAppRequestBody {,
             name: Some("新的表格名称".to_string()),

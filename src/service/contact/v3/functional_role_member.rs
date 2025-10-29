@@ -10,8 +10,8 @@ pub struct FunctionalRoleMemberService {
 }
 impl FunctionalRoleMemberService {
     pub fn new(config: Config) -> Self {
-        Self { config },
-},
+        Self { config }
+}
 /// 添加角色成员,
     pub async fn create(
         &self,
@@ -25,14 +25,14 @@ let api_req = ApiRequest {,
                 "role_id",
                 role_id,
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
             ..Default::default(),
 };
 let resp =,
             Transport::<CreateRoleMemberResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
-    },
+    }
 /// 批量添加角色成员,
     pub async fn batch_create(
         &self,
@@ -46,7 +46,7 @@ let api_req = ApiRequest {,
                 "role_id",
                 role_id,
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
             ..Default::default(),
 };
@@ -54,7 +54,7 @@ let resp =,
             Transport::<BatchCreateRoleMembersResponse>::request(api_req, &self.config, None),
 .await?;
         Ok(resp.data.unwrap_or_default()),
-},
+}
 /// 批量设置角色成员管理范围,
     pub async fn scopes(
         &self,
@@ -68,14 +68,14 @@ let api_req = ApiRequest {,
                 "role_id",
                 role_id,
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
             ..Default::default(),
 };
 let resp =,
             Transport::<SetRoleMemberScopesResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
-    },
+    }
 /// 查询角色下某个成员的管理范围,
     pub async fn get(
         &self,
@@ -92,8 +92,8 @@ let path = EndpointBuilder::replace_param(,
                     role_id,
                 );
                 EndpointBuilder::replace_param(&path, "member_id", member_id),
-},
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+}
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
             ..Default::default(),
@@ -101,7 +101,7 @@ let path = EndpointBuilder::replace_param(,
 
         let resp = Transport::<GetRoleMemberResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
-    },
+    }
 /// 查询角色下的所有成员信息,
     pub async fn list(
         &self,
@@ -115,7 +115,7 @@ let api_req = ApiRequest {,
                 "role_id",
                 role_id,
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: Vec::new(),
             query_params: std::collections::HashMap::new(),
             ..Default::default(),
@@ -123,7 +123,7 @@ let api_req = ApiRequest {,
 let resp =,
             Transport::<ListRoleMembersResponse>::request(api_req, &self.config, None).await?;
 Ok(resp.data.unwrap_or_default()),
-    },
+    }
 /// 删除角色下的成员,
     pub async fn batch_delete(
         &self,
@@ -137,7 +137,7 @@ let api_req = ApiRequest {,
                 "role_id",
                 role_id,
             ),
-            supported_access_token_types: vec![AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::Tenant]
             body: serde_json::to_vec(req)?,
             ..Default::default(),
 };
@@ -162,10 +162,10 @@ pub struct CreateRoleMemberRequest {
 pub struct CreateRoleMemberResponse {
     pub member_id: String,
 }
-impl ApiResponseTrait for CreateRoleMemberResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
+crate::core::api_resp::ResponseFormat::Data
+    }
 }
 
 #[derive(.*?)]
@@ -181,10 +181,10 @@ pub struct BatchCreateRoleMembersRequest {
 pub struct BatchCreateRoleMembersResponse {
     pub results: Vec<RoleMemberResult>,
 }
-impl ApiResponseTrait for BatchCreateRoleMembersResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
+crate::core::api_resp::ResponseFormat::Data
+    }
 }
 
 #[derive(.*?)]
@@ -198,10 +198,10 @@ pub struct SetRoleMemberScopesRequest {
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct SetRoleMemberScopesResponse {}
-impl ApiResponseTrait for SetRoleMemberScopesResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
+crate::core::api_resp::ResponseFormat::Data
+    }
 }
 
 #[derive(.*?)]
@@ -216,10 +216,10 @@ pub struct GetRoleMemberRequest {
 pub struct GetRoleMemberResponse {
     pub member: RoleMember,
 }
-impl ApiResponseTrait for GetRoleMemberResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
+crate::core::api_resp::ResponseFormat::Data
+    }
 }
 
 #[derive(.*?)]
@@ -242,10 +242,10 @@ pub struct ListRoleMembersResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
 }
-impl ApiResponseTrait for ListRoleMembersResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
+crate::core::api_resp::ResponseFormat::Data
+    }
 }
 
 #[derive(.*?)]
@@ -259,48 +259,48 @@ pub struct BatchDeleteRoleMembersRequest {
 pub struct BatchDeleteRoleMembersResponse {
     pub results: Vec<RoleMemberResult>,
 }
-impl ApiResponseTrait for BatchDeleteRoleMembersResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> crate::core::api_resp::ResponseFormat {,
-crate::core::api_resp::ResponseFormat::Data,
-    },
-},
+crate::core::api_resp::ResponseFormat::Data
+    }
+}
 // 公共数据结构,
 #[derive(.*?)]
 pub struct RoleMemberInfo {
     /// 成员ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub member_id: Option<String>,
     /// 成员类型 (user/department),
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub member_type: Option<String>,
     /// 管理范围,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub scope: Option<String>,
 }
 
 #[derive(.*?)]
 pub struct RoleMember {
     /// 成员ID,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub member_id: Option<String>,
     /// 成员类型,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub member_type: Option<String>,
     /// 成员信息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub member_info: Option<RoleMemberDetail>,
     /// 管理范围,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub scopes: Option<Vec<String>>,
 }
 
 #[derive(.*?)]
 pub struct RoleMemberDetail {
     /// 成员名称,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// 成员邮箱,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
 }
 
@@ -319,6 +319,6 @@ pub struct RoleMemberResult {
     /// 操作是否成功
     pub success: bool,
     /// 错误信息,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
 }

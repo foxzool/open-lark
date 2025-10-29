@@ -2,11 +2,11 @@ use serde::Serialize;
 use open_lark_core::core::api_req::ApiRequest;
 use crate::{,
 core::{,
-        api_resp::{BaseResponse, EmptyResponse},
+        api_resp::{BaseResponse, EmptyResponse}
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
         req_option, SDKResult,
-    },
+    }
     service::sheets::v3::SpreadsheetSheetService,
 };
 /// 移动行列请求,
@@ -15,10 +15,10 @@ pub struct MoveDimensionRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 电子表格的 token,
-#[serde(skip)],
+#[serde(skip)]
     spreadsheet_token: String,
     /// 工作表的 ID。调用获取工作表获取 ID,
-#[serde(skip)],
+#[serde(skip)]
     sheet_id: String,
     /// 移动源位置信息
     source: Dimension,
@@ -45,8 +45,8 @@ struct Dimension {,
 impl MoveDimensionRequest {
     pub fn w+.*{
 MoveDimensionRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct MoveDimensionRequestBuilder {
     request: MoveDimensionRequest,
@@ -55,25 +55,25 @@ impl MoveDimensionRequestBuilder {
     pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
-},
+}
 /// 电子表格工作表的 ID。调用获取工作表获取 ID,
     pub fn sheet_id(mut self, sheet_id: impl ToString) -> Self {
 self.request.sheet_id = sheet_id.to_string();
         self,
-},
+}
 /// 更新的维度。可选值：,
     /// - ROWS：行,
 /// - COLUMNS：列,
     pub fn major_dimension(mut self, major_dimension: impl ToString) -> Self {
 self.request.source.major_dimension = major_dimension.to_string();
         self,
-},
+}
 /// 要移动的行或列的起始位置。从 0 开始计数。若 startIndex 为 3，则从第 4 行或列开始移动。包含第,
     /// 4 行或列。
     pub fn start_index(mut self, start_index: i32) -> Self {
 self.request.source.start_index = start_index;
         self,
-},
+}
 /// 要移动的行或列结束的位置。从 0 开始计数。若 endIndex 为 7，则要移动的范围至第 8,
     /// 行或列结束。不包含第 8 行或列。,
 ///,
@@ -82,7 +82,7 @@ self.request.source.start_index = start_index;
     pub fn end_index(mut self, end_index: i32) -> Self {
 self.request.source.end_index = end_index;
         self,
-},
+}
 /// 插入的空白行或列是否继承表中的单元格样式。不填或设置为空即不继承任何样式，为默认空白样式。,
     /// 可选值：,
 /// - BEFORE：继承起始位置的单元格的样式,
@@ -90,11 +90,11 @@ self.request.source.end_index = end_index;
     pub fn destination_index(mut self, index: i32) -> Self {
 self.request.destination_index = Some(index);
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 impl SpreadsheetSheetService {
     /// 移动行列,
@@ -113,5 +113,5 @@ api_req.set_http_method(reqwest::Method::POST);
 
         let api_resp = crate::core::http::Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 }

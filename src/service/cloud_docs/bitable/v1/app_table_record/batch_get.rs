@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -23,21 +23,21 @@ pub struct BatchGetRecordRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 多维表格的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     app_token: String,
     /// 多维表格数据表的唯一标识符,
-#[serde(skip)],
+#[serde(skip)]
     table_id: String,
     /// 用户 ID 类型,
-#[serde(skip)],
+#[serde(skip)]
     user_id_type: Option<String>,
     /// 记录 ID 列表
     record_ids: Vec<String>,
     /// 控制是否返回自动计算的字段,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     automatic: Option<bool>,
     /// 控制是否返回记录权限,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     with_shared_url: Option<bool>,
 }
 impl BatchGetRecordRequest {
@@ -51,8 +51,8 @@ Self {
             table_id: table_id.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct BatchGetRecordRequestBuilder {
     request: BatchGetRecordRequest,
@@ -62,60 +62,60 @@ impl BatchGetRecordRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 数据表的唯一标识符,
     pub fn table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_id = table_id.to_string();
         self,
-},
+}
 /// 用户 ID 类型,
     pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
-},
+}
 /// 记录 ID 列表,
     pub fn record_ids(mut self, record_ids: Vec<String>) -> Self {
 self.request.record_ids = record_ids;
         self,
-},
+}
 /// 添加单个记录 ID,
     pub fn add_record_id(mut self, record_id: impl ToString) -> Self {
 self.request.record_ids.push(record_id.to_string());
         self,
-},
+}
 /// 控制是否返回自动计算的字段,
     pub fn automatic(mut self, automatic: bool) -> Self {
 self.request.automatic = Some(automatic);
         self,
-},
+}
 /// 控制是否返回记录权限,
     pub fn with_shared_url(mut self, with_shared_url: bool) -> Self {
 self.request.with_shared_url = Some(with_shared_url);
         self,
-},
+}
 pub fn w+.*{
         if let Some(user_id_type) = &self.request.user_id_type {,
 self.request,
                 .api_request,
-.query_params,
+.query_params
                 .insert("user_id_type", user_id_type.clone());
-},
+}
 if let Some(automatic) = &self.request.automatic {,
             self.request,
 .api_request,
                 .query_params
                 .insert("automatic", automatic.to_string());
-},
+}
 if let Some(with_shared_url) = &self.request.with_shared_url {,
             self.request,
 .api_request,
                 .query_params
                 .insert("with_shared_url", with_shared_url.to_string());
-},
+}
 self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
         self.request,
 }
-},
+}
 // 应用ExecutableBuilder trait到BatchGetRecordRequestBuilder,
 crate::impl_executable_builder_owned!(
     BatchGetRecordRequestBuilder,
@@ -130,11 +130,11 @@ pub struct BatchGetRecordResponse {
     /// 记录列表
     pub records: Vec<Record>,
 }
-impl ApiResponseTrait for BatchGetRecordResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 批量获取记录,
 pub async fn batch_get_record(
     request: BatchGetRecordRequest,
@@ -153,10 +153,10 @@ Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_batch_get_record_request_builder() {,
 let request = BatchGetRecordRequest::builder(),
             .app_token()

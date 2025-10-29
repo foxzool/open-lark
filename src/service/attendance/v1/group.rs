@@ -5,7 +5,7 @@ use crate::core::{,
     api_resp::BaseResponse,
     config::Config,
     constants::AccessTokenType,
-    endpoints::{attendance::*, EndpointBuilder},
+    endpoints::{attendance::*, EndpointBuilder}
     http::Transport,
     req_option::RequestOption,
     trait_system::Service,
@@ -42,26 +42,26 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
         ));
 api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         // 添加查询参数,
-api_req,
+api_req
             .query_params
             .insert("employee_type", request.employee_type.clone());
 if let Some(dept_type) = &request.dept_type {,
             api_req.query_params.insert("dept_type", dept_type.clone());
-},
+}
 if let Some(page_size) = &request.page_size {,
-            api_req,
-.query_params,
+            api_req
+.query_params
                 .insert("page_size", page_size.to_string());
-},
+}
 if let Some(page_token) = &request.page_token {,
-            api_req,
-.query_params,
+            api_req
+.query_params
                 .insert("page_token", page_token.clone());
 }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 创建或修改考勤组,
     ///,
 /// 该接口用于创建或修改考勤组，支持设置考勤规则、工作日安排、成员管理等。,
@@ -79,50 +79,50 @@ let mut api_req = request.api_req;
 api_req.set_api_path(ATTENDANCE_V1_GROUPS.to_string());
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 // 添加查询参数,
-        api_req,
-.query_params,
+        api_req
+.query_params
             .insert("employee_type", request.employee_type.clone());
 if let Some(dept_type) = &request.dept_type {,
             api_req.query_params.insert("dept_type", dept_type.clone());
-},
+}
 // 构建请求体,
         let mut body = json!({,
 "group_name": request.group_name.clone(),
         });
 if let Some(time_zone) = &request.time_zone {,
             body["time_zone"] = json!(time_zone.clone());
-},
+}
 if let Some(bind_dept_ids) = &request.bind_dept_ids {,
             body["bind_dept_ids"] = json!(bind_dept_ids.clone());
-},
+}
 if let Some(except_date_rule) = &request.except_date_rule {,
             body["except_date_rule"] = json!(except_date_rule.clone());
-},
+}
 if let Some(attendance_type) = &request.attendance_type {,
             body["attendance_type"] = json!(attendance_type.clone());
-},
+}
 if let Some(punch_type) = &request.punch_type {,
             body["punch_type"] = json!(punch_type.clone());
-},
+}
 if let Some(allow_late_minutes) = &request.allow_late_minutes {,
             body["allow_late_minutes"] = json!(allow_late_minutes.clone());
-},
+}
 if let Some(allow_early_leave_minutes) = &request.allow_early_leave_minutes {,
             body["allow_early_leave_minutes"] = json!(allow_early_leave_minutes.clone());
-},
+}
 if let Some(work_day_rule) = &request.work_day_rule {,
             body["work_day_rule"] = json!(work_day_rule.clone());
-},
+}
 if let Some(shift_rule) = &request.shift_rule {,
             body["shift_rule"] = json!(shift_rule.clone());
-},
+}
 if let Some(member_rule) = &request.member_rule {,
             body["member_rule"] = json!(member_rule.clone());
-},
+}
 api_req.body = serde_json::to_vec(&body)?;
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 删除考勤组,
     ///,
 /// 删除指定的考勤组。,
@@ -145,7 +145,7 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
 api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 按 ID 查询考勤组,
     ///,
 /// 根据考勤组 ID 查询考勤组的详细信息。,
@@ -167,7 +167,7 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
         ));
 api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         // 添加查询参数,
-api_req,
+api_req
             .query_params
             .insert("employee_type", request.employee_type);
 if let Some(dept_type) = request.dept_type {,
@@ -176,7 +176,7 @@ if let Some(dept_type) = request.dept_type {,
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 按名称查询考勤组,
     ///,
 /// 根据考勤组名称查询考勤组信息。,
@@ -194,12 +194,12 @@ let mut api_req = request.api_req;
 api_req.set_api_path(ATTENDANCE_V1_GROUPS_SEARCH.to_string());
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 // 添加查询参数,
-        api_req,
-.query_params,
+        api_req
+.query_params
             .insert("employee_type", request.employee_type);
 if let Some(dept_type) = request.dept_type {,
             api_req.query_params.insert("dept_type", dept_type);
-},
+}
 // 构建请求体,
         let body = json!({,
 "group_name": request.group_name,
@@ -207,7 +207,7 @@ if let Some(dept_type) = request.dept_type {,
 api_req.body = serde_json::to_vec(&body)?;
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 查询所有考勤组,
     ///,
 /// 查询企业内所有考勤组的信息，支持分页查询。,
@@ -225,43 +225,43 @@ let mut api_req = request.api_req;
 api_req.set_api_path(ATTENDANCE_V1_GROUPS.to_string());
         api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
 // 添加查询参数,
-        api_req,
-.query_params,
+        api_req
+.query_params
             .insert("employee_type", request.employee_type);
 if let Some(dept_type) = request.dept_type {,
             api_req.query_params.insert("dept_type", dept_type);
-},
+}
 if let Some(page_size) = request.page_size {,
-            api_req,
-.query_params,
+            api_req
+.query_params
                 .insert("page_size", page_size.to_string());
-},
+}
 if let Some(page_token) = request.page_token {,
             api_req.query_params.insert("page_token", page_token);
 }
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 }
 impl Service for GroupService {,
     fn config(&self) -> &Config {,
 &self.config,
-    },
+    }
 fn service_name() -> &'static str {,
         "attendance_group",
-},
+}
 fn service_version() -> &'static str {,
         "v1",
 }
-},
-#[cfg(test)],
+}
+#[cfg(test)]
 mod tests {
 use super::*;
     use crate::service::attendance::v1::models::{
         ExceptDateRule, MemberRule, ShiftRule, WorkDayRule,
     };
-#[test],
+#[test]
     fn test_group_service_creation() {,
 let config = Config::default();
         let service = GroupService {
@@ -270,8 +270,8 @@ let config = Config::default();
 
         assert_eq!(service.config.app_id, config.app_id);
         assert_eq!(service.config.app_secret, config.app_secret);
-},
-#[test],
+}
+#[test]
     fn test_group_service_with_custom_config() {,
 let config = Config::builder()
             .app_id()
@@ -283,8 +283,8 @@ let service = GroupService {,
 
         assert_eq!(service.config.app_id, "group_test_app");
         assert_eq!(service.config.app_secret, "group_test_secret");
-},
-#[test],
+}
+#[test]
     fn test_list_group_user_request_construction() {,
 let request = ListGroupUserRequest {,
             api_req: ApiRequest::default(),
@@ -300,8 +300,8 @@ let request = ListGroupUserRequest {,
         assert_eq!(request.dept_type, Some("dept_id".to_string()));
         assert_eq!(request.page_size, Some(50));
         assert_eq!(request.page_token, Some("user_page_token".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_list_group_user_request_with_none_values() {,
 let request = ListGroupUserRequest {,
             api_req: ApiRequest::default(),
@@ -317,8 +317,8 @@ let request = ListGroupUserRequest {,
         assert_eq!(request.dept_type, None);
         assert_eq!(request.page_size, None);
         assert_eq!(request.page_token, None);
-},
-#[test],
+}
+#[test]
     fn test_create_group_request_construction() {,
 let request = CreateGroupRequest {,
             api_req: ApiRequest::default(),
@@ -346,7 +346,7 @@ let request = CreateGroupRequest {,
             }]),
             member_rule: Some(MemberRule {
                 member_type: 1,
-                member_ids: vec!["dept_1".to_string(), "dept_2".to_string()],
+                member_ids: vec!["dept_1".to_string(), "dept_2".to_string()]
             }),
         };
 
@@ -366,8 +366,8 @@ assert_eq!(,
 assert!(request.work_day_rule.is_some());
         assert!(request.shift_rule.is_some());
 assert!(request.member_rule.is_some());
-    },
-#[test],
+    }
+#[test]
     fn test_create_group_request_with_minimal_data() {,
 let request = CreateGroupRequest {,
             api_req: ApiRequest::default(),
@@ -399,8 +399,8 @@ assert!(request.except_date_rule.is_none());
 assert!(request.work_day_rule.is_none());
         assert!(request.shift_rule.is_none());
 assert!(request.member_rule.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_delete_group_request_construction() {,
 let request = DeleteGroupRequest {,
             api_req: ApiRequest::default(),
@@ -408,8 +408,8 @@ let request = DeleteGroupRequest {,
         };
 
         assert_eq!(request.group_id, "group_to_delete");
-},
-#[test],
+}
+#[test]
     fn test_get_group_request_construction() {,
 let request = GetGroupRequest {,
             api_req: ApiRequest::default(),
@@ -421,8 +421,8 @@ let request = GetGroupRequest {,
         assert_eq!(request.group_id, "group_to_get");
         assert_eq!(request.employee_type, "1");
         assert_eq!(request.dept_type, Some("open_id".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_get_group_request_without_dept_type() {,
 let request = GetGroupRequest {,
             api_req: ApiRequest::default(),
@@ -434,8 +434,8 @@ let request = GetGroupRequest {,
         assert_eq!(request.group_id, "group_no_dept");
         assert_eq!(request.employee_type, "2");
         assert_eq!(request.dept_type, None);
-},
-#[test],
+}
+#[test]
     fn test_search_group_request_construction() {,
 let request = SearchGroupRequest {,
             api_req: ApiRequest::default(),
@@ -447,8 +447,8 @@ let request = SearchGroupRequest {,
         assert_eq!(request.employee_type, "1");
         assert_eq!(request.dept_type, Some("department_id".to_string()));
         assert_eq!(request.group_name, "研发组");
-},
-#[test],
+}
+#[test]
     fn test_search_group_request_without_dept_type() {,
 let request = SearchGroupRequest {,
             api_req: ApiRequest::default(),
@@ -460,8 +460,8 @@ let request = SearchGroupRequest {,
         assert_eq!(request.employee_type, "2");
         assert_eq!(request.dept_type, None);
         assert_eq!(request.group_name, "销售组");
-},
-#[test],
+}
+#[test]
     fn test_list_group_request_construction() {,
 let request = ListGroupRequest {,
             api_req: ApiRequest::default(),
@@ -475,8 +475,8 @@ let request = ListGroupRequest {,
         assert_eq!(request.dept_type, Some("union_id".to_string()));
         assert_eq!(request.page_size, Some(100));
         assert_eq!(request.page_token, Some("list_page_token".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_list_group_request_with_minimal_data() {,
 let request = ListGroupRequest {,
             api_req: ApiRequest::default(),
@@ -490,8 +490,8 @@ let request = ListGroupRequest {,
         assert_eq!(request.dept_type, None);
         assert_eq!(request.page_size, None);
         assert_eq!(request.page_token, None);
-},
-#[test],
+}
+#[test]
     fn test_group_service_config_independence() {,
 let config1 = Config::builder().app_id("group_app_1").build();
         let config2 = Config::builder().app_id("group_app_2").build();
@@ -502,8 +502,8 @@ let config1 = Config::builder().app_id("group_app_1").build();
         assert_eq!(service1.config.app_id, "group_app_1");
         assert_eq!(service2.config.app_id, "group_app_2");
         assert_ne!(service1.config.app_id, service2.config.app_id);
-},
-#[test],
+}
+#[test]
     fn test_request_structs_debug_trait() {,
 let create_request = CreateGroupRequest {,
             api_req: ApiRequest::default(),
@@ -526,8 +526,8 @@ let create_request = CreateGroupRequest {,
 assert!(debug_str.contains("CreateGroupRequest"));
         assert!(debug_str.contains("Debug Group"));
 assert!(debug_str.contains("debug_dept"));
-    },
-#[test],
+    }
+#[test]
     fn test_create_group_request_edge_cases() {,
 // Test with very long group name,
         let long_name = "长考勤组名称".repeat(50);
@@ -572,7 +572,7 @@ assert_eq!(,
             1000,
 );
         assert_eq!(
-            request_large_depts.bind_dept_ids.as_ref().unwrap()[999],
+            request_large_depts.bind_dept_ids.as_ref().unwrap()[999]
             "dept_999",
 );
         // Test with extreme late minutes values,
@@ -595,8 +595,8 @@ let request_extreme_late = CreateGroupRequest {,
 
         assert_eq!(request_extreme_late.allow_late_minutes, Some(99999));
         assert_eq!(request_extreme_late.allow_early_leave_minutes, Some(99999));
-},
-#[test],
+}
+#[test]
     fn test_list_group_user_request_edge_cases() {,
 // Test with very long group ID,
         let long_group_id = "group_".repeat(100);
@@ -632,8 +632,8 @@ let request_long_id = ListGroupUserRequest {,
         };
 
         assert_eq!(request_zero_page.page_size, Some(0));
-},
-#[test],
+}
+#[test]
     fn test_search_group_request_edge_cases() {,
 // Test with empty group name,
         let request_empty_name = SearchGroupRequest {
@@ -654,8 +654,8 @@ let request_long_search = SearchGroupRequest {,
         };
 
         assert_eq!(request_long_search.group_name, long_search_name);
-},
-#[test],
+}
+#[test]
     fn test_all_request_structs_with_different_employee_types() {,
 // Test all request types with different employee types,
         let list_user_request = ListGroupUserRequest {
@@ -707,8 +707,8 @@ let list_request = ListGroupRequest {,
         assert_eq!(get_request.employee_type, "union_id");
         assert_eq!(search_request.employee_type, "user_id");
         assert_eq!(list_request.employee_type, "department_id");
-},
-#[test],
+}
+#[test]
     fn test_create_group_request_with_empty_bind_dept_ids() {,
 let request = CreateGroupRequest {,
             api_req: ApiRequest::default(),
@@ -728,8 +728,8 @@ let request = CreateGroupRequest {,
         };
 assert!(request.bind_dept_ids.as_ref().unwrap().is_empty());
         assert_eq!(request.group_name, "Empty Depts Group");
-},
-#[test],
+}
+#[test]
     fn test_create_group_request_with_negative_values() {,
 let request = CreateGroupRequest {,
             api_req: ApiRequest::default(),

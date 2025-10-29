@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -31,12 +31,12 @@ pub async fn get(,
 let mut api_req = request.api_request;
         api_req.set_http_method(Method::GET);
         api_req.set_api_path(SHEETS_V3_SPREADSHEET_GET.replace("{}", &request.spreadsheet_token));
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 }
 
 #[derive(.*?)]
@@ -64,8 +64,8 @@ pub struct GetSpreadsheetRequest {
 impl GetSpreadsheetRequest {
     pub fn w+.*{
 GetSpreadsheetRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct GetSpreadsheetRequestBuilder {
     request: GetSpreadsheetRequest,
@@ -88,17 +88,17 @@ impl GetSpreadsheetRequestBuilder {
     pub fn user_id_type(mut self, user_id_type: impl ToString) -> Self {
 self.request.user_id_type = Some(user_id_type.to_string());
         self,
-},
+}
 /// 表格的token,
     pub fn spreadsheet_token(mut self, spreadsheet_token: impl ToString) -> Self {
 self.request.spreadsheet_token = spreadsheet_token.to_string();
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 // Trait implementation,
 impl_executable_builder_owned!(
     GetSpreadsheetRequestBuilder,
@@ -111,10 +111,10 @@ impl_executable_builder_owned!(
 pub struct GetSpreadsheetResponseData {
     pub spreadsheet: GetSpreadsheetResponse,
 }
-impl ApiResponseTrait for GetSpreadsheetResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 
 #[derive(.*?)]

@@ -9,6 +9,6 @@ pub struct CommentService {
 }
 impl CommentService {
     pub fn new(client: std::sync::Arc<LarkClient>) -> Self {
-        Self { client },
+        Self { client }
 }
 }

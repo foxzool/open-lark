@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -29,7 +29,7 @@ let mut api_req = request.api_request;
 api_req.set_api_path(,
             BITABLE_V1_TABLES_BATCH_DELETE.replace("{app_token}", &request.app_token),
         );
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 api_req.body = serde_json::to_vec(&BatchDeleteTablesRequestBody {,
             table_ids: request.table_ids,
@@ -37,8 +37,8 @@ api_req.body = serde_json::to_vec(&BatchDeleteTablesRequestBody {,
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 /// 批量删除数据表请求,
 #[derive(.*?)]
 pub struct BatchDeleteTablesRequest {
@@ -51,16 +51,16 @@ pub struct BatchDeleteTablesRequest {
 impl BatchDeleteTablesRequest {
     pub fn w+.*{
 BatchDeleteTablesRequestBuilder::default(),
-    },
+    }
 /// 创建批量删除数据表请求,
     pub fn new(app_token: impl ToString, table_ids: Vec<String>) -> Self {
 Self {
             api_request: ApiRequest::default(),
             app_token: app_token.to_string(),
             table_ids,
-        },
+        }
 }
-},
+}
 #[derive(.*?)]
 pub struct BatchDeleteTablesRequestBuilder {
     request: BatchDeleteTablesRequest,
@@ -70,17 +70,17 @@ impl BatchDeleteTablesRequestBuilder {
     pub fn app_token(mut self, app_token: impl ToString) -> Self {
 self.request.app_token = app_token.to_string();
         self,
-},
+}
 /// 要删除的数据表 ID 列表,
     pub fn table_ids(mut self, table_ids: Vec<String>) -> Self {
 self.request.table_ids = table_ids;
         self,
-},
+}
 /// 添加单个数据表 ID,
     pub fn add_table_id(mut self, table_id: impl ToString) -> Self {
 self.request.table_ids.push(table_id.to_string());
         self,
-},
+}
 pub fn w+.*{
         self.request,
 }
@@ -102,17 +102,17 @@ pub struct BatchDeleteTablesResponse {
     /// 删除结果列表
     pub deleted: bool,
 }
-impl ApiResponseTrait for BatchDeleteTablesResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+ResponseFormat::Data
+    }
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json::json;
-    #[test],
+    #[test]
 fn test_batch_delete_tables_request() {,
         let table_ids = vec![
             "tblsRc9GRRXKqhvW".to_string(),
@@ -125,8 +125,8 @@ let request = BatchDeleteTablesRequest::builder(),
 
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.table_ids, table_ids);
-},
-#[test],
+}
+#[test]
     fn test_batch_delete_tables_with_builder() {,
 let request = BatchDeleteTablesRequest::builder(),
             .app_token()
@@ -136,26 +136,26 @@ let request = BatchDeleteTablesRequest::builder(),
             .build();
 
         assert_eq!(request.table_ids.len(), 3);
-        assert_eq!(request.table_ids[0], "tblsRc9GRRXKqhvW");
-        assert_eq!(request.table_ids[1], "tbl1234567890abc");
-        assert_eq!(request.table_ids[2], "tblabcdefghijklm");
-},
-#[test],
-    fn test_batch_delete_tables_request_new() {
+        assert_eq!(request.table_ids[0] "tblsRc9GRRXKqhvW");
+        assert_eq!(request.table_ids[1] "tbl1234567890abc");
+        assert_eq!(request.table_ids[2] "tblabcdefghijklm");
+}
+#[test]
+    ,
         let table_ids = vec!["table1".to_string(), "table2".to_string()];
         let request = BatchDeleteTablesRequest::new("bascnmBA*****yGehy8", table_ids.clone());
 
         assert_eq!(request.app_token, "bascnmBA*****yGehy8");
         assert_eq!(request.table_ids, table_ids);
-},
-#[test],
+}
+#[test]
     fn test_batch_delete_tables_request_body_serialization() {,
 let body = BatchDeleteTablesRequestBody {,
-            table_ids: vec!["table1".to_string(), "table2".to_string()],
+            table_ids: vec!["table1".to_string(), "table2".to_string()]
         };
 let serialized = serde_json::to_value(&body).unwrap();
         let expected = json!({
-            "table_ids": ["table1", "table2"],
+            "table_ids": ["table1", "table2"]
 });
 
         assert_eq!(serialized, expected);

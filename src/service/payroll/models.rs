@@ -9,7 +9,7 @@ pub struct PageResponse<T> {,
     pub has_more: bool,
     /// 下一页的分页标记
     pub page_token: Option<String>,
-},
+}
 /// I18n 多语言文本,
 #[derive(.*?)]
 pub struct I18nText {
@@ -19,7 +19,7 @@ pub struct I18nText {
     pub en_us: Option<String>,
     /// 日文
     pub ja_jp: Option<String>,
-},
+}
 /// 发薪明细列表请求,
 #[derive(.*?)]
 pub struct PaymentDetailListRequest {
@@ -35,7 +35,7 @@ pub struct PaymentDetailListRequest {
     pub user_id_type: Option<String>,
     /// 部门ID类型
     pub department_id_type: Option<String>,
-},
+}
 /// 发薪明细批量查询请求,
 #[derive(.*?)]
 pub struct PaymentDetailQueryRequest {
@@ -47,7 +47,7 @@ pub struct PaymentDetailQueryRequest {
     pub user_id_type: Option<String>,
     /// 查询字段列表
     pub fields: Option<Vec<String>>,
-},
+}
 /// 发薪明细信息,
 #[derive(.*?)]
 pub struct PaymentDetail {
@@ -77,7 +77,7 @@ pub struct PaymentDetail {
     pub payment_time: Option<String>,
     /// 备注
     pub remark: Option<String>,
-},
+}
 /// 发薪项目,
 #[derive(.*?)]
 pub struct PaymentItem {
@@ -95,7 +95,7 @@ pub struct PaymentItem {
     pub formula: Option<String>,
     /// 备注
     pub remark: Option<String>,
-},
+}
 /// 发薪活动列表请求,
 #[derive(.*?)]
 pub struct PaymentActivityListRequest {
@@ -111,7 +111,7 @@ pub struct PaymentActivityListRequest {
     pub period_start: Option<String>,
     /// 发薪周期结束时间
     pub period_end: Option<String>,
-},
+}
 /// 发薪活动封存请求,
 #[derive(.*?)]
 pub struct PaymentActivityArchiveRequest {
@@ -119,7 +119,7 @@ pub struct PaymentActivityArchiveRequest {
     pub payment_activity_id: String,
     /// 封存原因
     pub archive_reason: Option<String>,
-},
+}
 /// 发薪活动信息,
 #[derive(.*?)]
 pub struct PaymentActivity {
@@ -155,7 +155,7 @@ pub struct PaymentActivity {
     pub creator_id: Option<String>,
     /// 备注
     pub remark: Option<String>,
-},
+}
 /// 外部数据源记录保存请求,
 #[derive(.*?)]
 pub struct DatasourceRecordSaveRequest {
@@ -169,7 +169,7 @@ pub struct DatasourceRecordSaveRequest {
     pub records: Vec<DatasourceRecord>,
     /// 发薪周期
     pub payment_period: String,
-},
+}
 /// 外部数据源记录查询请求,
 #[derive(.*?)]
 pub struct DatasourceRecordQueryRequest {
@@ -185,7 +185,7 @@ pub struct DatasourceRecordQueryRequest {
     pub page_size: Option<u32>,
     /// 分页标记
     pub page_token: Option<String>,
-},
+}
 /// 外部数据源记录,
 #[derive(.*?)]
 pub struct DatasourceRecord {
@@ -201,7 +201,7 @@ pub struct DatasourceRecord {
     pub created_time: Option<String>,
     /// 更新时间
     pub updated_time: Option<String>,
-},
+}
 /// 外部数据源配置列表请求,
 #[derive(.*?)]
 pub struct DatasourceListRequest {
@@ -211,7 +211,7 @@ pub struct DatasourceListRequest {
     pub page_token: Option<String>,
     /// 数据源状态
     pub status: Option<String>,
-},
+}
 /// 外部数据源配置,
 #[derive(.*?)]
 pub struct Datasource {
@@ -231,7 +231,7 @@ pub struct Datasource {
     pub updated_time: Option<String>,
     /// 描述
     pub description: Option<I18nText>,
-},
+}
 /// 数据源字段配置,
 #[derive(.*?)]
 pub struct DatasourceFieldConfig {
@@ -241,7 +241,7 @@ pub struct DatasourceFieldConfig {
     pub field_name: I18nText,
     /// 字段类型
     pub field_type: String,
-},
+}
 /// 算薪项列表请求,
 #[derive(.*?)]
 pub struct AcctItemListRequest {
@@ -255,7 +255,7 @@ pub struct AcctItemListRequest {
     pub paygroup_id: Option<String>,
     /// 状态筛选
     pub status: Option<String>,
-},
+}
 /// 算薪项信息,
 #[derive(.*?)]
 pub struct AcctItem {
@@ -285,7 +285,7 @@ pub struct AcctItem {
     pub updated_time: Option<String>,
     /// 描述
     pub description: Option<I18nText>,
-},
+}
 /// 成本分摊报表列表请求,
 #[derive(.*?)]
 pub struct CostAllocationReportListRequest {
@@ -303,7 +303,7 @@ pub struct CostAllocationReportListRequest {
     pub page_token: Option<String>,
     /// 报表类型
     pub report_type: Option<String>,
-},
+}
 /// 成本分摊报表数据,
 #[derive(.*?)]
 pub struct CostAllocationReport {
@@ -331,7 +331,7 @@ pub struct CostAllocationReport {
     pub period_end: String,
     /// 生成时间
     pub generated_time: Option<String>,
-},
+}
 /// 分摊明细,
 #[derive(.*?)]
 pub struct AllocationDetail {
@@ -345,7 +345,7 @@ pub struct AllocationDetail {
     pub allocation_ratio: Option<f64>,
     /// 员工数量
     pub employee_count: u32,
-},
+}
 /// 成本分摊方案列表请求,
 #[derive(.*?)]
 pub struct CostAllocationPlanListRequest {
@@ -357,7 +357,7 @@ pub struct CostAllocationPlanListRequest {
     pub status: Option<String>,
     /// 方案类型筛选
     pub plan_type: Option<String>,
-},
+}
 /// 成本分摊方案,
 #[derive(.*?)]
 pub struct CostAllocationPlan {
@@ -383,7 +383,7 @@ pub struct CostAllocationPlan {
     pub creator_id: Option<String>,
     /// 描述
     pub description: Option<I18nText>,
-},
+}
 /// 分摊规则,
 #[derive(.*?)]
 pub struct AllocationRule {
@@ -401,7 +401,7 @@ pub struct AllocationRule {
     pub target_cost_center_name: Option<I18nText>,
     /// 规则条件
     pub conditions: Option<Vec<RuleCondition>>,
-},
+}
 /// 规则条件,
 #[derive(.*?)]
 pub struct RuleCondition {
@@ -411,7 +411,7 @@ pub struct RuleCondition {
     pub operator: String,
     /// 条件值
     pub value: serde_json::Value,
-},
+}
 /// 薪资组列表请求,
 #[derive(.*?)]
 pub struct PaygroupListRequest {
@@ -421,7 +421,7 @@ pub struct PaygroupListRequest {
     pub page_token: Option<String>,
     /// 薪资组状态筛选
     pub status: Option<String>,
-},
+}
 /// 薪资组基本信息,
 #[derive(.*?)]
 pub struct Paygroup {
@@ -445,7 +445,7 @@ pub struct Paygroup {
     pub updated_time: Option<String>,
     /// 描述
     pub description: Option<I18nText>,
-},
+}
 /// 发薪日设置,
 #[derive(.*?)]
 pub struct PaymentDaySetting {
@@ -457,16 +457,16 @@ pub struct PaymentDaySetting {
     pub holiday_adjustment: bool,
     /// 顺延规则
     pub adjustment_rule: Option<String>,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use serde_json;
-    #[test],
+    #[test]
 fn test_page_response_serialization() {,
         let page = PageResponse {
-            items: vec!["item1".to_string(), "item2".to_string()],
+            items: vec!["item1".to_string(), "item2".to_string()]
             has_more: true,
             page_token: Some("token123".to_string()),
         };
@@ -474,8 +474,8 @@ let json = serde_json::to_string(&page).unwrap();
         assert!(json.contains("item1"));
 assert!(json.contains("true"));
         assert!(json.contains("token123"));
-},
-#[test],
+}
+#[test]
     fn test_i18n_text_serialization() {,
 let i18n = I18nText {,
             zh_cn: Some("中文".to_string()),
@@ -486,15 +486,15 @@ let json = serde_json::to_string(&i18n).unwrap();
         assert!(json.contains("中文"));
 assert!(json.contains("English"));
         assert!(json.contains("日本語"));
-},
-#[test],
+}
+#[test]
     fn test_i18n_text_default() {,
 let i18n = I18nText::default();
         assert_eq!(i18n.zh_cn, None);
         assert_eq!(i18n.en_us, None);
         assert_eq!(i18n.ja_jp, None);
-},
-#[test],
+}
+#[test]
     fn test_payment_detail_list_request() {,
 let request = PaymentDetailListRequest {,
             payment_activity_id: "activity123".to_string(),
@@ -508,12 +508,12 @@ let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("activity123"));
 assert!(json.contains("50"));
         assert!(json.contains("emp789"));
-},
-#[test],
+}
+#[test]
     fn test_payment_detail_query_request() {,
 let request = PaymentDetailQueryRequest {,
             payment_activity_id: "activity456".to_string(),
-            employee_ids: vec!["emp1".to_string(), "emp2".to_string()],
+            employee_ids: vec!["emp1".to_string(), "emp2".to_string()]
             user_id_type: Some("user_id".to_string()),
             fields: Some(vec!["salary".to_string(), "bonus".to_string()]),
         };
@@ -521,8 +521,8 @@ let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("activity456"));
 assert!(json.contains("emp1"));
         assert!(json.contains("salary"));
-},
-#[test],
+}
+#[test]
     fn test_payment_item() {,
 let item = PaymentItem {,
             acct_item_id: "item123".to_string(),
@@ -542,8 +542,8 @@ let json = serde_json::to_string(&item).unwrap();
 assert!(json.contains("基本工资"));
         assert!(json.contains("5000.00"));
 assert!(json.contains("CNY"));
-    },
-#[test],
+    }
+#[test]
     fn test_payment_detail() {,
 let detail = PaymentDetail {,
             employee_id: "emp123".to_string(),
@@ -565,7 +565,7 @@ let detail = PaymentDetail {,
                 en_us: Some("Software Engineer".to_string()),
                 ja_jp: None,
             }),
-            payment_items: vec![],
+            payment_items: vec![]
             total_amount: Some("8000.00".to_string()),
             currency: Some("CNY".to_string()),
             payment_status: Some("paid".to_string()),
@@ -578,8 +578,8 @@ assert!(json.contains("张三"));
         assert!(json.contains("E001"));
 assert!(json.contains("8000.00"));
         assert!(json.contains("paid"));
-},
-#[test],
+}
+#[test]
     fn test_payment_activity_list_request() {,
 let request = PaymentActivityListRequest {,
             page_size: Some(20),
@@ -594,8 +594,8 @@ let json = serde_json::to_string(&request).unwrap();
 assert!(json.contains("active"));
         assert!(json.contains("pg123"));
 assert!(json.contains("2024-01-01"));
-    },
-#[test],
+    }
+#[test]
     fn test_payment_activity() {,
 let activity = PaymentActivity {,
             payment_activity_id: "pa123".to_string(),
@@ -603,7 +603,7 @@ let activity = PaymentActivity {,
                 zh_cn: Some("1月份工资发放".to_string()),
                 en_us: Some("January Salary Payment".to_string()),
                 ja_jp: None,
-            },
+            }
             status: "completed".to_string(),
             paygroup_id: "pg456".to_string(),
             paygroup_name: Some(I18nText {
@@ -629,22 +629,22 @@ assert!(json.contains("1月份工资发放"));
         assert!(json.contains("completed"));
 assert!(json.contains("50"));
         assert!(json.contains("400000.00"));
-},
-#[test],
+}
+#[test]
     fn test_datasource_record_save_request() {,
 let request = DatasourceRecordSaveRequest {,
             datasource_id: "ds123".to_string(),
             employee_id: "emp456".to_string(),
             user_id_type: Some("open_id".to_string()),
-            records: vec![],
+            records: vec![]
             payment_period: "2024-01".to_string(),
         };
 let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains("ds123"));
 assert!(json.contains("emp456"));
         assert!(json.contains("2024-01"));
-},
-#[test],
+}
+#[test]
     fn test_datasource_record() {,
 let mut field_values = HashMap::new();
         field_values.insert(
@@ -668,8 +668,8 @@ let json = serde_json::to_string(&record).unwrap();
 assert!(json.contains("emp789"));
         assert!(json.contains("overtime_hours"));
 assert!(json.contains("2024-01"));
-    },
-#[test],
+    }
+#[test]
     fn test_datasource() {,
 let datasource = Datasource {,
             datasource_id: "ds456".to_string(),
@@ -677,10 +677,10 @@ let datasource = Datasource {,
                 zh_cn: Some("考勤数据源".to_string()),
                 en_us: Some("Attendance Datasource".to_string()),
                 ja_jp: None,
-            },
+            }
             datasource_type: "attendance".to_string(),
             status: "active".to_string(),
-            field_configs: vec![],
+            field_configs: vec![]
             created_time: Some("2024-01-01T00:00:00Z".to_string()),
             updated_time: Some("2024-01-02T00:00:00Z".to_string()),
             description: Some(I18nText {
@@ -694,14 +694,14 @@ let json = serde_json::to_string(&datasource).unwrap();
 assert!(json.contains("考勤数据源"));
         assert!(json.contains("attendance"));
 assert!(json.contains("active"));
-    },
-#[test],
+    }
+#[test]
     fn test_datasource_field_config() {,
 let field_config = DatasourceFieldConfig::default();
         let _json = serde_json::to_string(&field_config).unwrap();
 // Test should succeed without panicking,
-    },
-#[test],
+    }
+#[test]
     fn test_acct_item() {,
 let item = AcctItem {,
             acct_item_id: "ai123".to_string(),
@@ -709,7 +709,7 @@ let item = AcctItem {,
                 zh_cn: Some("绩效奖金".to_string()),
                 en_us: Some("Performance Bonus".to_string()),
                 ja_jp: None,
-            },
+            }
             item_type: "bonus".to_string(),
             category: Some("variable".to_string()),
             calculation_method: Some("formula".to_string()),
@@ -732,8 +732,8 @@ assert!(json.contains("绩效奖金"));
         assert!(json.contains("bonus"));
 assert!(json.contains("true"));
         assert!(json.contains("false"));
-},
-#[test],
+}
+#[test]
     fn test_cost_allocation_report() {,
 let report = CostAllocationReport {,
             report_id: "report123".to_string(),
@@ -752,7 +752,7 @@ let report = CostAllocationReport {,
             employee_count: 25,
             total_cost: "200000.00".to_string(),
             currency: "CNY".to_string(),
-            allocation_details: vec![],
+            allocation_details: vec![]
             period_start: "2024-01-01".to_string(),
             period_end: "2024-01-31".to_string(),
             generated_time: Some("2024-02-01T00:00:00Z".to_string()),
@@ -763,8 +763,8 @@ assert!(json.contains("研发成本中心"));
         assert!(json.contains("25"));
 assert!(json.contains("200000.00"));
         assert!(json.contains("CNY"));
-},
-#[test],
+}
+#[test]
     fn test_allocation_detail() {,
 let detail = AllocationDetail {,
             acct_item_id: "ai456".to_string(),
@@ -783,8 +783,8 @@ assert!(json.contains("基本工资"));
         assert!(json.contains("150000.00"));
 assert!(json.contains("0.75"));
         assert!(json.contains("20"));
-},
-#[test],
+}
+#[test]
     fn test_cost_allocation_plan() {,
 let plan = CostAllocationPlan {,
             plan_id: "plan123".to_string(),
@@ -792,10 +792,10 @@ let plan = CostAllocationPlan {,
                 zh_cn: Some("技术部成本分摊方案".to_string()),
                 en_us: Some("Tech Dept Cost Allocation Plan".to_string()),
                 ja_jp: None,
-            },
+            }
             plan_type: "department".to_string(),
             status: "active".to_string(),
-            allocation_rules: vec![],
+            allocation_rules: vec![]
             effective_date: Some("2024-01-01".to_string()),
             expiry_date: Some("2024-12-31".to_string()),
             created_time: Some("2023-12-01T00:00:00Z".to_string()),
@@ -812,8 +812,8 @@ let json = serde_json::to_string(&plan).unwrap();
 assert!(json.contains("技术部成本分摊方案"));
         assert!(json.contains("department"));
 assert!(json.contains("active"));
-    },
-#[test],
+    }
+#[test]
     fn test_allocation_rule() {,
 let rule = AllocationRule {,
             rule_id: "rule123".to_string(),
@@ -821,7 +821,7 @@ let rule = AllocationRule {,
                 zh_cn: Some("按人数分摊".to_string()),
                 en_us: Some("Allocate by headcount".to_string()),
                 ja_jp: None,
-            },
+            }
             allocation_dimension: "headcount".to_string(),
             allocation_ratio: 0.8,
             target_cost_center_id: "cc456".to_string(),
@@ -838,8 +838,8 @@ assert!(json.contains("按人数分摊"));
         assert!(json.contains("headcount"));
 assert!(json.contains("0.8"));
         assert!(json.contains("cc456"));
-},
-#[test],
+}
+#[test]
     fn test_rule_condition() {,
 let condition = RuleCondition {,
             field: "department_id".to_string(),
@@ -850,8 +850,8 @@ let json = serde_json::to_string(&condition).unwrap();
         assert!(json.contains("department_id"));
 assert!(json.contains("equals"));
         assert!(json.contains("dept123"));
-},
-#[test],
+}
+#[test]
     fn test_paygroup() {,
 let paygroup = Paygroup {,
             paygroup_id: "pg123".to_string(),
@@ -859,7 +859,7 @@ let paygroup = Paygroup {,
                 zh_cn: Some("技术组薪资组".to_string()),
                 en_us: Some("Tech Group Payroll".to_string()),
                 ja_jp: None,
-            },
+            }
             paygroup_type: "standard".to_string(),
             status: "active".to_string(),
             payment_cycle_type: "monthly".to_string(),
@@ -883,8 +883,8 @@ let json = serde_json::to_string(&paygroup).unwrap();
 assert!(json.contains("技术组薪资组"));
         assert!(json.contains("monthly"));
 assert!(json.contains("30"));
-    },
-#[test],
+    }
+#[test]
     fn test_payment_day_setting() {,
 let setting = PaymentDaySetting {,
             payment_day_type: "last_day".to_string(),
@@ -897,8 +897,8 @@ let json = serde_json::to_string(&setting).unwrap();
 assert!(json.contains("31"));
         assert!(json.contains("false"));
 assert!(json.contains("no_adjustment"));
-    },
-#[test],
+    }
+#[test]
     fn test_minimal_structs() {,
 let minimal_i18n = I18nText {,
             zh_cn: Some("中文".to_string()),

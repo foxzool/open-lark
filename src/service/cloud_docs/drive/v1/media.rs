@@ -8,7 +8,7 @@ use crate::,
         BinaryResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::cloud_docs::*,
@@ -27,12 +27,12 @@ pub struct MediaService {
 }
 impl MediaService {
     pub fn new(config: Config) -> Self {
-        Self { config },
-},
+        Self { config }
+}
 /// 创建上传素材Builder,
     pub fn w+.*{
 UploadMediaRequestBuilder::default(),
-    },
+    }
 /// 使用Builder上传素材（带验证）,
     pub async fn upload_all_with_builder(
         &self,
@@ -41,7 +41,7 @@ UploadMediaRequestBuilder::default(),
     ) -> SDKResult<BaseResponse<UploadMediaRespData>> {,
 let request = builder_result?;
         self.upload_all(request, option).await,
-},
+}
 /// 上传素材,
     ///,
 /// 该接口用于上传素材文件。,
@@ -63,7 +63,7 @@ api_req.set_api_path(DRIVE_V1_MEDIAS_UPLOAD_ALL.to_string());
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 分片上传素材-预上传,
     ///,
 /// 该接口用于分片上传的预上传步骤。,
@@ -80,14 +80,14 @@ pub async fn upload_prepare(,
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: DRIVE_V1_MEDIAS_UPLOAD_PREPARE.to_string(),
-            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 分片上传素材-上传分片,
     ///,
 /// 该接口用于上传文件分片。,
@@ -109,7 +109,7 @@ api_req.set_api_path(DRIVE_V1_MEDIAS_UPLOAD_PART.to_string());
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 分片上传素材-完成上传,
     ///,
 /// 该接口用于完成分片上传。,
@@ -126,14 +126,14 @@ pub async fn upload_finish(,
 let api_req = ApiRequest {,
             http_method: Method::POST,
             api_path: DRIVE_V1_MEDIAS_UPLOAD_FINISH.to_string(),
-            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             body: serde_json::to_vec(&request)?,
             ..Default::default(),
 };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 下载素材,
     ///,
 /// 该接口用于下载素材文件。,
@@ -150,13 +150,13 @@ pub async fn download(,
 let api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: DRIVE_V1_MEDIAS_DOWNLOAD.replace("{}", &request.file_token),
-            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             ..Default::default(),
 };
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
+    }
 /// 获取素材临时下载链接,
     ///,
 /// 该接口用于获取素材的临时下载链接。,
@@ -173,7 +173,7 @@ pub async fn batch_get_tmp_download_url(,
 let mut api_req = ApiRequest {,
             http_method: Method::GET,
             api_path: DRIVE_V1_MEDIAS_BATCH_GET_TMP_DOWNLOAD_URL.to_string(),
-            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant],
+            supported_access_token_types: vec![AccessTokenType::User, AccessTokenType::Tenant]
             ..Default::default(),
 };
 // 添加查询参数,
@@ -182,14 +182,14 @@ let mut api_req = ApiRequest {,
 
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 // === 数据结构定义 ===,
 /// 上传素材请求参数
 #[derive(.*?)]
 pub struct UploadMediaRequest {
     /// 请求体,
-#[serde(skip)],
+#[serde(skip)]
     pub api_req: ApiRequest,
     /// 素材名称
     file_name: String,
@@ -203,8 +203,8 @@ pub struct UploadMediaRequest {
 impl UploadMediaRequest {
     pub fn w+.*{
 UploadMediaRequestBuilder::default(),
-    },
-},
+    }
+}
 /// 上传素材请求构建器,
 #[derive(Default)]
 pub struct UploadMediaRequestBuilder {
@@ -234,7 +234,7 @@ self.request.checksum = Some(checksum.to_string());
     pub fn file(mut self, file: Vec<u8>) -> Self {
 self.request.api_req.file = file;
         self,
-},
+}
 pub fn w+.*{
         // 验证必填字段,
 if self.request.file_name.is_empty() {,
@@ -243,30 +243,30 @@ return UploadMediaRequest {,
                 api_req: ApiRequest {
                     body: Vec::new(),
                     ..Default::default(),
-},
+}
                 ..self.request,
 };
-},
+}
 if self.request.parent_token.is_empty() {,
             log::error!("parent_token is required for media upload");
 return UploadMediaRequest {,
                 api_req: ApiRequest {
                     body: Vec::new(),
                     ..Default::default(),
-},
+}
                 ..self.request,
 };
-},
+}
 if self.request.size <= 0 {,
             log::error!("file size must be greater than 0");
 return UploadMediaRequest {,
                 api_req: ApiRequest {
                     body: Vec::new(),
                     ..Default::default(),
-},
+}
                 ..self.request,
 };
-},
+}
 // 验证文件名,
         let (_, name_result) = validate_file_name(&self.request.file_name);
 if !name_result.is_valid() {,
@@ -278,10 +278,10 @@ if !name_result.is_valid() {,
 api_req: ApiRequest {,
                     body: Vec::new(),
                     ..Default::default(),
-},
+}
                 ..self.request,
 };
-},
+}
 // 验证文件数据（如果有）,
         if !self.request.api_req.file.is_empty() {,
 let upload_result =,
@@ -295,11 +295,11 @@ if !upload_result.is_valid() {,
 api_req: ApiRequest {,
                         body: Vec::new(),
                         ..Default::default(),
-},
+}
                     ..self.request,
 };
 }
-        },
+        }
 self.request.api_req.body = match serde_json::to_vec(&self.request) {,
             Ok(body) => body,
             Err(e) => {
@@ -308,50 +308,50 @@ return UploadMediaRequest {,
                     api_req: ApiRequest {
                         body: Vec::new(),
                         ..Default::default(),
-},
+}
                     ..self.request,
 };
 }
         };
 self.request,
-    },
+    }
 }
 impl ValidateBuilder for UploadMediaRequestBuilder {,
     fn validate(&self) -> ValidationResult {,
 // 验证必填字段,
         if self.request.file_name.is_empty() {,
 return ValidationResult::Invalid("file_name is required".to_string());
-        },
+        }
 if self.request.parent_token.is_empty() {,
             return ValidationResult::Invalid("parent_token is required".to_string());
-},
+}
 if self.request.size <= 0 {,
             return ValidationResult::Invalid("file size must be greater than 0".to_string());
-},
+}
 // 验证文件名,
         let (_, name_result) = validate_file_name(&self.request.file_name);
 if !name_result.is_valid() {,
             return name_result;
-},
+}
 // 验证文件数据（如果有）,
         if !self.request.api_req.file.is_empty() {
             validate_upload_file(&self.request.api_req.file, &self.request.file_name, false),
 } else {,
 ValidationResult::Valid,
-        },
+        }
 }
-},
+}
 /// 上传素材响应数据,
 #[derive(.*?)]
 pub struct UploadMediaRespData {
     /// 素材token
     pub file_token: String,
 }
-impl ApiResponseTrait for UploadMediaRespData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 分片上传预上传请求参数,
 #[derive(.*?)]
 pub struct UploadPrepareRequest {
@@ -374,9 +374,9 @@ Self {
             size,
             block_size: None,
             checksum: None,
-        },
+        }
 }
-},
+}
 /// 分片上传预上传响应数据,
 #[derive(.*?)]
 pub struct UploadPrepareRespData {
@@ -387,16 +387,16 @@ pub struct UploadPrepareRespData {
     /// 分片数量
     pub block_num: i32,
 }
-impl ApiResponseTrait for UploadPrepareRespData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 上传分片请求参数,
 #[derive(.*?)]
 pub struct UploadPartRequest {
     /// 请求体,
-#[serde(skip)],
+#[serde(skip)]
     pub api_req: ApiRequest,
     /// 上传事务ID
     upload_id: String,
@@ -410,8 +410,8 @@ pub struct UploadPartRequest {
 impl UploadPartRequest {
     pub fn w+.*{
 UploadPartRequestBuilder::default(),
-    },
-},
+    }
+}
 /// 上传分片请求构建器,
 #[derive(Default)]
 pub struct UploadPartRequestBuilder {
@@ -441,23 +441,23 @@ self.request.checksum = Some(checksum.to_string());
     pub fn file_chunk(mut self, chunk: Vec<u8>) -> Self {
 self.request.api_req.file = chunk;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_req.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 /// 上传分片响应数据,
 #[derive(.*?)]
 pub struct UploadPartRespData {
     /// 分片ETag
     pub etag: String,
 }
-impl ApiResponseTrait for UploadPartRespData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 完成上传请求参数,
 #[derive(.*?)]
 pub struct UploadFinishRequest {
@@ -479,20 +479,20 @@ impl UploadFinishRequest {
 Self {
             upload_id: upload_id.into(),
             block_infos,
-        },
+        }
 }
-},
+}
 /// 完成上传响应数据,
 #[derive(.*?)]
 pub struct UploadFinishRespData {
     /// 素材token
     pub file_token: String,
 }
-impl ApiResponseTrait for UploadFinishRespData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 下载素材请求参数,
 #[derive(.*?)]
 pub struct DownloadMediaRequest {
@@ -503,9 +503,9 @@ impl DownloadMediaRequest {
     pub fn new(file_token: impl Into<String>) -> Self {
 Self {
             file_token: file_token.into(),
-        },
+        }
 }
-},
+}
 /// 批量获取临时下载链接请求参数,
 #[derive(.*?)]
 pub struct BatchGetTmpDownloadUrlRequest {
@@ -514,9 +514,9 @@ pub struct BatchGetTmpDownloadUrlRequest {
 }
 impl BatchGetTmpDownloadUrlRequest {
     pub fn new(file_tokens: Vec<String>) -> Self {
-        Self { file_tokens },
+        Self { file_tokens }
 }
-},
+}
 /// 批量获取临时下载链接响应数据,
 #[derive(.*?)]
 pub struct BatchGetTmpDownloadUrlRespData {
@@ -531,11 +531,11 @@ pub struct TmpDownloadUrl {
     /// 临时下载链接
     pub tmp_download_url: String,
 }
-impl ApiResponseTrait for BatchGetTmpDownloadUrlRespData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 // === 宏实现 ===,
 impl_executable_builder_owned!(
     UploadMediaRequestBuilder,
@@ -560,24 +560,24 @@ fn mock_config() -> Config {,
 .app_id()
             .app_secret()
 .build(),
-    },
+    }
 // === MediaService Tests ===,
-    #[test],
+    #[test]
 fn test_media_service_new() {,
         let config = mock_config();
 let service = MediaService::new(config.clone());
         assert_eq!(service.config.app_id, config.app_id);
-},
-#[test],
+}
+#[test]
     fn test_upload_all_builder() {,
 let service = MediaService::new(mock_config());
         let builder = service.upload_all_builder();
         assert_eq!(builder.request.file_name, "");
         assert_eq!(builder.request.parent_token, "");
         assert_eq!(builder.request.size, 0);
-},
+}
 // === UploadMediaRequest Tests ===,
-    #[test],
+    #[test]
 fn test_upload_media_request_builder() {,
         let request = UploadMediaRequest::builder(),
 .file_name()
@@ -588,9 +588,9 @@ fn test_upload_media_request_builder() {,
         assert_eq!(request.parent_token, "parent123");
         assert_eq!(request.size, 1024);
 assert!(request.checksum.is_none());
-    },
+    }
 // === UploadMediaRequestBuilder Tests ===,
-    #[test],
+    #[test]
 fn test_upload_media_builder_basic() {,
         let builder = UploadMediaRequestBuilder::default(),
 .file_name()
@@ -599,8 +599,8 @@ fn test_upload_media_builder_basic() {,
         assert_eq!(builder.request.file_name, "test_file.txt");
         assert_eq!(builder.request.parent_token, "parent_token_123");
         assert_eq!(builder.request.size, 1024);
-},
-#[test],
+}
+#[test]
     fn test_upload_media_builder_with_checksum() {,
 let builder = UploadMediaRequestBuilder::default(),
             .file_name()
@@ -609,9 +609,9 @@ let builder = UploadMediaRequestBuilder::default(),
 .checksum("md5:hash123");
         assert_eq!(builder.request.file_name, "image.png");
         assert_eq!(builder.request.checksum, Some("md5:hash123".to_string()));
-},
-#[test],
-    fn test_upload_media_builder_with_file_data() {
+}
+#[test]
+    ,
         let file_data = vec![0x89, 0x50, 0x4E, 0x47]; // PNG header,
 let builder = UploadMediaRequestBuilder::default(),
             .file_name()
@@ -619,8 +619,8 @@ let builder = UploadMediaRequestBuilder::default(),
             .size()
 .file(file_data.clone());
         assert_eq!(builder.request.api_req.file, file_data);
-},
-#[test],
+}
+#[test]
     fn test_upload_media_builder_build_valid() {,
 let file_data = b"Hello World".to_vec();
         let request = UploadMediaRequestBuilder::default(),
@@ -633,8 +633,8 @@ let file_data = b"Hello World".to_vec();
         assert_eq!(request.parent_token, "parent123");
         assert_eq!(request.size, 11);
 assert!(!request.api_req.body.is_empty());
-    },
-#[test],
+    }
+#[test]
     fn test_upload_media_builder_build_missing_filename() {,
 let request = UploadMediaRequestBuilder::default(),
             .parent_token()
@@ -642,8 +642,8 @@ let request = UploadMediaRequestBuilder::default(),
             .build();
 // Should return invalid request due to missing filename,
         assert!(request.api_req.body.is_empty());
-},
-#[test],
+}
+#[test]
     fn test_upload_media_builder_build_missing_parent_token() {,
 let request = UploadMediaRequestBuilder::default(),
             .file_name()
@@ -651,8 +651,8 @@ let request = UploadMediaRequestBuilder::default(),
             .build();
 // Should return invalid request due to missing parent_token,
         assert!(request.api_req.body.is_empty());
-},
-#[test],
+}
+#[test]
     fn test_upload_media_builder_build_invalid_size() {,
 let request = UploadMediaRequestBuilder::default(),
             .file_name()
@@ -661,8 +661,8 @@ let request = UploadMediaRequestBuilder::default(),
 .build();
         // Should return invalid request due to invalid size,
 assert!(request.api_req.body.is_empty());
-    },
-#[test],
+    }
+#[test]
     fn test_upload_media_builder_build_negative_size() {,
 let request = UploadMediaRequestBuilder::default(),
             .file_name()
@@ -671,25 +671,25 @@ let request = UploadMediaRequestBuilder::default(),
 .build();
         // Should return invalid request due to negative size,
 assert!(request.api_req.body.is_empty());
-    },
+    }
 // === UploadPrepareRequest Tests ===,
-    #[test],
+    #[test]
 fn test_upload_prepare_request_new() {,
         let request = UploadPrepareRequest::new("large_file.zip", "uploads", 10485760);
         assert_eq!(request.file_name, "large_file.zip");
         assert_eq!(request.parent_token, "uploads");
         assert_eq!(request.size, 10485760);
 assert!(request.block_size.is_none());
-    },
-#[test],
-    fn test_upload_prepare_request_with_block_size() {
+    }
+#[test]
+    ,
         let mut request = UploadPrepareRequest::new("video.mp4", "videos", 104857600);
 request.block_size = Some(1048576); // 1MB blocks,
         assert_eq!(request.file_name, "video.mp4");
         assert_eq!(request.block_size, Some(1048576));
-},
+}
 // === UploadPartRequest Tests ===,
-    #[test],
+    #[test]
 fn test_upload_part_request_builder() {,
         let request = UploadPartRequest::builder(),
 .upload_id()
@@ -698,9 +698,9 @@ fn test_upload_part_request_builder() {,
         assert_eq!(request.upload_id, "upload123");
         assert_eq!(request.seq, 1);
         assert_eq!(request.api_req.file.len(), 0);
-},
-#[test],
-    fn test_upload_part_request_builder_with_file() {
+}
+#[test]
+    ,
         let _file_chunk = [0x01, 0x02, 0x03, 0x04];
 let request = UploadPartRequest::builder(),
             .upload_id()
@@ -713,8 +713,8 @@ let request = UploadPartRequest::builder(),
         assert_eq!(request.seq, 2);
         assert_eq!(request.size, 4);
         assert_eq!(request.checksum, Some("crc32:abc123".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_upload_part_request_builder_minimal() {,
 let request = UploadPartRequestBuilder::default(),
             .upload_id()
@@ -725,45 +725,45 @@ let request = UploadPartRequestBuilder::default(),
         assert_eq!(request.seq, 1);
         assert_eq!(request.size, 0);
 assert!(request.checksum.is_none());
-    },
+    }
 // === UploadFinishRequest Tests ===,
-    #[test],
+    #[test]
 fn test_upload_finish_request_new() {,
         let block_infos = vec![,
 BlockInfo {,
                 etag: "hash1".to_string(),
                 seq: 1,
-            },
+            }
             BlockInfo {
                 etag: "hash2".to_string(),
                 seq: 2,
-            },
+            }
         ];
         let request = UploadFinishRequest::new("upload789", block_infos.clone());
         assert_eq!(request.upload_id, "upload789");
         assert_eq!(request.block_infos, block_infos);
-},
+}
 // === DownloadMediaRequest Tests ===,
-    #[test],
+    #[test]
 fn test_download_media_request_new() {,
         let request = DownloadMediaRequest::new("media_token_abc");
         assert_eq!(request.file_token, "media_token_abc");
-},
+}
 // === BatchGetTmpDownloadUrlRequest Tests ===,
-    #[test],
+    #[test]
 fn test_batch_get_tmp_download_url_request_new() {,
         let request = BatchGetTmpDownloadUrlRequest::new(vec!["temp_token_xyz".to_string()]);
         assert_eq!(request.file_tokens, vec!["temp_token_xyz".to_string()]);
-},
+}
 // === Response Data Structure Tests ===,
-    #[test],
+    #[test]
 fn test_upload_media_resp_data() {,
         let data = UploadMediaRespData {
             file_token: "uploaded_file_token".to_string(),
         };
         assert_eq!(data.file_token, "uploaded_file_token");
-},
-#[test],
+}
+#[test]
     fn test_upload_prepare_resp_data() {,
 let data = UploadPrepareRespData {,
             upload_id: "prepared_upload_123".to_string(),
@@ -773,22 +773,22 @@ let data = UploadPrepareRespData {,
         assert_eq!(data.upload_id, "prepared_upload_123");
         assert_eq!(data.block_size, 1048576);
         assert_eq!(data.block_num, 10);
-},
-#[test],
+}
+#[test]
     fn test_upload_part_resp_data() {,
 let data = UploadPartRespData {,
             etag: "part_etag_456".to_string(),
         };
         assert_eq!(data.etag, "part_etag_456");
-},
-#[test],
+}
+#[test]
     fn test_upload_finish_resp_data() {,
 let data = UploadFinishRespData {,
             file_token: "finished_file_token".to_string(),
         };
         assert_eq!(data.file_token, "finished_file_token");
-},
-#[test],
+}
+#[test]
     fn test_batch_get_tmp_download_url_resp_data() {,
 let data = BatchGetTmpDownloadUrlRespData {,
             tmp_download_urls: vec![TmpDownloadUrl {
@@ -800,15 +800,15 @@ assert_eq!(,
             data.tmp_download_urls[0].tmp_download_url,
             "https://temp.example.com/download/abc123",
 );
-    },
+    }
 // === Serialization Tests ===,
-    #[rstest],
-#[case("upload_media_request")],
-    #[case("upload_prepare_request")],
-#[case("upload_part_request")],
-    #[case("upload_finish_request")],
-#[case("download_media_request")],
-    #[case("batch_get_tmp_download_url_request")],
+    #[rstest]
+#[case("upload_media_request")]
+    #[case("upload_prepare_request")]
+#[case("upload_part_request")]
+    #[case("upload_finish_request")]
+#[case("download_media_request")]
+    #[case("batch_get_tmp_download_url_request")]
 fn test_request_serialization_roundtrip(#[case] request_type: &str) {,
         match request_type {,
 "upload_media_request" => {,
@@ -824,7 +824,7 @@ let deserialized: UploadMediaRequest = serde_json::from_str(&json).unwrap();
                 assert_eq!(original.parent_token, deserialized.parent_token);
                 assert_eq!(original.size, deserialized.size);
                 assert_eq!(original.checksum, deserialized.checksum);
-},
+}
 "upload_prepare_request" => {,
                 let mut original = UploadPrepareRequest::new("large.zip", "uploads", 1000000);
 original.block_size = Some(4096);
@@ -834,7 +834,7 @@ let deserialized: UploadPrepareRequest = serde_json::from_str(&json).unwrap();
                 assert_eq!(original.parent_token, deserialized.parent_token);
                 assert_eq!(original.size, deserialized.size);
                 assert_eq!(original.block_size, deserialized.block_size);
-},
+}
 "upload_part_request" => {,
                 let original = UploadPartRequest::builder(),
 .upload_id()
@@ -848,7 +848,7 @@ let deserialized: UploadPartRequest = serde_json::from_str(&json).unwrap();
                 assert_eq!(original.seq, deserialized.seq);
                 assert_eq!(original.size, deserialized.size);
                 assert_eq!(original.checksum, deserialized.checksum);
-},
+}
 "upload_finish_request" => {,
                 let checksums = vec!["hash1".to_string(), "hash2".to_string()];
 let block_infos: Vec<BlockInfo> = checksums,
@@ -864,13 +864,13 @@ let json = serde_json::to_string(&original).unwrap();
                 let deserialized: UploadFinishRequest = serde_json::from_str(&json).unwrap();
                 assert_eq!(original.upload_id, deserialized.upload_id);
                 assert_eq!(original.block_infos, deserialized.block_infos);
-},
+}
 "download_media_request" => {,
                 let original = DownloadMediaRequest::new("download_token");
 let json = serde_json::to_string(&original).unwrap();
                 let deserialized: DownloadMediaRequest = serde_json::from_str(&json).unwrap();
                 assert_eq!(original.file_token, deserialized.file_token);
-},
+}
 "batch_get_tmp_download_url_request" => {,
                 let original = BatchGetTmpDownloadUrlRequest::new(vec!["temp_token".to_string()]);
 let json = serde_json::to_string(&original).unwrap();
@@ -879,14 +879,14 @@ serde_json::from_str(&json).unwrap();
                 assert_eq!(original.file_tokens, deserialized.file_tokens);
 }
             _ => panic!("Unknown request type: {}", request_type),
-        },
-},
-#[rstest],
-    #[case("upload_media_resp")],
-#[case("upload_prepare_resp")],
-    #[case("upload_part_resp")],
-#[case("upload_finish_resp")],
-    #[case("batch_get_tmp_download_url_resp")],
+        }
+}
+#[rstest]
+    #[case("upload_media_resp")]
+#[case("upload_prepare_resp")]
+    #[case("upload_part_resp")]
+#[case("upload_finish_resp")]
+    #[case("batch_get_tmp_download_url_resp")]
 fn test_response_serialization_roundtrip(#[case] response_type: &str) {,
         match response_type {,
 "upload_media_resp" => {,
@@ -896,7 +896,7 @@ fn test_response_serialization_roundtrip(#[case] response_type: &str) {,
 let json = serde_json::to_string(&original).unwrap();
                 let deserialized: UploadMediaRespData = serde_json::from_str(&json).unwrap();
                 assert_eq!(original.file_token, deserialized.file_token);
-},
+}
 "upload_prepare_resp" => {,
                 let original = UploadPrepareRespData {
                     upload_id: "prepared_id".to_string(),
@@ -908,7 +908,7 @@ let json = serde_json::to_string(&original).unwrap();
                 assert_eq!(original.upload_id, deserialized.upload_id);
                 assert_eq!(original.block_size, deserialized.block_size);
                 assert_eq!(original.block_num, deserialized.block_num);
-},
+}
 "upload_part_resp" => {,
                 let original = UploadPartRespData {
                     etag: "part_etag".to_string(),
@@ -916,7 +916,7 @@ let json = serde_json::to_string(&original).unwrap();
 let json = serde_json::to_string(&original).unwrap();
                 let deserialized: UploadPartRespData = serde_json::from_str(&json).unwrap();
                 assert_eq!(original.etag, deserialized.etag);
-},
+}
 "upload_finish_resp" => {,
                 let original = UploadFinishRespData {
                     file_token: "final_token".to_string(),
@@ -924,7 +924,7 @@ let json = serde_json::to_string(&original).unwrap();
 let json = serde_json::to_string(&original).unwrap();
                 let deserialized: UploadFinishRespData = serde_json::from_str(&json).unwrap();
                 assert_eq!(original.file_token, deserialized.file_token);
-},
+}
 "batch_get_tmp_download_url_resp" => {,
                 let original = BatchGetTmpDownloadUrlRespData {,
 tmp_download_urls: vec![TmpDownloadUrl {,
@@ -938,15 +938,15 @@ serde_json::from_str(&json).unwrap();
                 assert_eq!(original.tmp_download_urls, deserialized.tmp_download_urls);
 }
             _ => panic!("Unknown response type: {}", response_type),
-        },
-},
+        }
+}
 // === ApiResponseTrait Tests ===,
-    #[rstest],
-#[case("UploadMediaRespData")],
-    #[case("UploadPrepareRespData")],
-#[case("UploadPartRespData")],
-    #[case("UploadFinishRespData")],
-#[case("BatchGetTmpDownloadUrlRespData")],
+    #[rstest]
+#[case("UploadMediaRespData")]
+    #[case("UploadPrepareRespData")]
+#[case("UploadPartRespData")]
+    #[case("UploadFinishRespData")]
+#[case("BatchGetTmpDownloadUrlRespData")]
     fn test_api_response_trait(#[case] response_type: &str) {,
 let format = match response_type {,
             "UploadMediaRespData" => UploadMediaRespData::data_format(),
@@ -957,9 +957,9 @@ let format = match response_type {,
             _ => panic!("Unknown response type: {}", response_type),
         };
         assert_eq!(format, ResponseFormat::Data);
-},
+}
 // === Validation Tests ===,
-    #[test],
+    #[test]
 fn test_upload_media_builder_validate_success() {,
         let builder = UploadMediaRequestBuilder::default(),
 .file_name()
@@ -967,8 +967,8 @@ fn test_upload_media_builder_validate_success() {,
 .size(100);
         let result = builder.validate();
 assert!(result.is_valid());
-    },
-#[test],
+    }
+#[test]
     fn test_upload_media_builder_validate_missing_filename() {,
 let builder = UploadMediaRequestBuilder::default(),
             .parent_token()
@@ -976,8 +976,8 @@ let builder = UploadMediaRequestBuilder::default(),
         let result = builder.validate();
 assert!(!result.is_valid());
         assert!(result.error().unwrap().contains("file_name is required"));
-},
-#[test],
+}
+#[test]
     fn test_upload_media_builder_validate_missing_parent() {,
 let builder = UploadMediaRequestBuilder::default(),
             .file_name()
@@ -985,8 +985,8 @@ let builder = UploadMediaRequestBuilder::default(),
         let result = builder.validate();
 assert!(!result.is_valid());
         assert!(result.error().unwrap().contains("parent_token is required"));
-},
-#[test],
+}
+#[test]
     fn test_upload_media_builder_validate_invalid_size() {,
 let builder = UploadMediaRequestBuilder::default(),
             .file_name()
@@ -998,20 +998,20 @@ assert!(result,
             .error()
 .unwrap()
             .contains("file size must be greater than 0"));
-},
+}
 // === Edge Cases and Boundary Tests ===,
-    #[test],
+    #[test]
 fn test_upload_large_file_size() {,
         let request = UploadPrepareRequest::new("huge_file.bin", "storage", i64::MAX);
         assert_eq!(request.size, i64::MAX);
-},
-#[test],
-    fn test_upload_zero_block_size() {
+}
+#[test]
+    ,
         let mut request = UploadPrepareRequest::new("test.txt", "parent", 1000);
 request.block_size = Some(0);
         assert_eq!(request.block_size, Some(0));
-},
-#[test],
+}
+#[test]
     fn test_upload_part_maximum_sequence() {,
 let request = UploadPartRequest::builder(),
             .upload_id()
@@ -1019,8 +1019,8 @@ let request = UploadPartRequest::builder(),
             .size()
 .build();
         assert_eq!(request.seq, i32::MAX);
-},
-#[test],
+}
+#[test]
     fn test_unicode_filename() {,
 let unicode_name = "测试文件🎉.docx";
         let request = UploadMediaRequest::builder(),
@@ -1029,8 +1029,8 @@ let unicode_name = "测试文件🎉.docx";
 .size()
             .build();
         assert_eq!(request.file_name, unicode_name);
-},
-#[test],
+}
+#[test]
     fn test_special_characters_in_filename() {,
 let special_name = "file with spaces & symbols @#$.txt";
         let request = UploadMediaRequest::builder(),
@@ -1039,15 +1039,15 @@ let special_name = "file with spaces & symbols @#$.txt";
 .size()
             .build();
         assert_eq!(request.file_name, special_name);
-},
-#[test],
+}
+#[test]
     fn test_empty_block_checksums() {,
 let empty_block_infos: Vec<BlockInfo> = vec![];
         let request = UploadFinishRequest::new("upload456", empty_block_infos);
         assert_eq!(request.block_infos.len(), 0);
-},
-#[test],
-    fn test_many_block_checksums() {
+}
+#[test]
+    ,
         let many_checksums: Vec<String> = (0..1000).map(|i| format!("hash_{}", i)).collect();
 let many_block_infos: Vec<BlockInfo> = many_checksums,
             .into_iter()
@@ -1061,15 +1061,15 @@ let many_block_infos: Vec<BlockInfo> = many_checksums,
         assert_eq!(request.block_infos.len(), 1000);
         assert_eq!(request.block_infos[0].etag, "hash_0");
         assert_eq!(request.block_infos[999].etag, "hash_999");
-},
-#[test],
+}
+#[test]
     fn test_very_long_token() {,
 let long_token = "a".repeat(1000);
         let request = DownloadMediaRequest::new(&long_token);
         assert_eq!(request.file_token, long_token);
-},
-#[test],
-    fn test_very_long_url() {
+}
+#[test]
+    ,
         let long_url = format!("https://example.com/{}", "a".repeat(1000));
 let data = BatchGetTmpDownloadUrlRespData {,
             tmp_download_urls: vec![TmpDownloadUrl {
@@ -1078,9 +1078,9 @@ let data = BatchGetTmpDownloadUrlRespData {,
             }],
         };
         assert_eq!(data.tmp_download_urls[0].tmp_download_url, long_url);
-},
+}
 // === Clone and Debug Tests ===,
-    #[test],
+    #[test]
 fn test_request_cloning() {,
         let original = UploadMediaRequest::builder(),
 .file_name()
@@ -1094,8 +1094,8 @@ fn test_request_cloning() {,
         assert_eq!(original.parent_token, cloned.parent_token);
         assert_eq!(original.size, cloned.size);
         assert_eq!(original.checksum, cloned.checksum);
-},
-#[test],
+}
+#[test]
     fn test_response_debug() {,
 let data = UploadPrepareRespData {,
             upload_id: "debug_test".to_string(),
@@ -1106,9 +1106,9 @@ let data = UploadPrepareRespData {,
 assert!(debug_str.contains("debug_test"));
         assert!(debug_str.contains("4096"));
 assert!(debug_str.contains("2"));
-    },
+    }
 // === Builder Chain Tests ===,
-    #[test],
+    #[test]
 fn test_upload_part_builder_method_chaining() {,
         let chunk_data = vec![0xFF; 1024];
 let request = UploadPartRequest::builder(),
@@ -1123,8 +1123,8 @@ let request = UploadPartRequest::builder(),
         assert_eq!(request.size, 1024);
         assert_eq!(request.checksum, Some("md5:abc123".to_string()));
         assert_eq!(request.api_req.file, chunk_data);
-},
-#[test],
+}
+#[test]
     fn test_upload_part_builder_overwrite_values() {,
 let request = UploadPartRequest::builder(),
             .upload_id()
@@ -1135,8 +1135,8 @@ let request = UploadPartRequest::builder(),
 
         assert_eq!(request.upload_id, "second");
         assert_eq!(request.seq, 5);
-},
-#[test],
+}
+#[test]
     fn test_default_values() {,
 let request = UploadPartRequestBuilder::default().build();
         assert_eq!(request.upload_id, "");

@@ -14,23 +14,23 @@ use serde::{Deserialize, Serialize};
 /// 用户信息服务,
 pub struct UserInfoService {
     config: Config,
-},
+}
 /// App访问令牌服务,
 pub struct AppAccessTokenService {
     config: Config,
-},
+}
 /// Tenant访问令牌服务,
 pub struct TenantAccessTokenService {
     config: Config,
-},
+}
 /// App Ticket服务,
 pub struct AppTicketService {
     config: Config,
 }
 impl UserInfoService {
     pub fn new(config: Config) -> Self {
-        Self { config },
-},
+        Self { config }
+}
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/get,
@@ -38,7 +38,7 @@ impl UserInfoService {
     pub async fn get(&self, user_access_token: impl ToString) -> SDKResult<UserInfo> {,
 let api_req = ApiRequest {,
             api_path: AUTHEN_V1_USER_INFO.to_string(),
-            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
             ..Default::default(),
 };
 let option = RequestOption::builder(),
@@ -47,12 +47,12 @@ let option = RequestOption::builder(),
         let api_resp: BaseResponse<UserInfo> =
             Transport::request(api_req, &self.config, Some(option)).await?;
 api_resp.into_result(),
-    },
+    }
 }
 impl AppAccessTokenService {
     pub fn new(config: Config) -> Self {
-        Self { config },
-},
+        Self { config }
+}
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/auth-v3/auth/app_access_token,
@@ -64,14 +64,14 @@ impl AppAccessTokenService {
 let api_req = ApiRequest {,
             http_method: reqwest::Method::POST,
             api_path: AUTH_V3_APP_ACCESS_TOKEN.to_string(),
-            supported_access_token_types: vec![],
+            supported_access_token_types: vec![]
             body: serde_json::to_vec(req)?,
             ..Default::default(),
 };
 let resp =,
             Transport::<AppAccessTokenResponse>::request(api_req, &self.config, None).await?;
 resp.into_result(),
-    },
+    }
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/auth-v3/auth/app_access_token/internal,
@@ -86,19 +86,19 @@ resp.into_result(),
 let api_req = ApiRequest {,
             http_method: reqwest::Method::POST,
             api_path: AUTH_V3_APP_ACCESS_TOKEN_INTERNAL.to_string(),
-            supported_access_token_types: vec![],
+            supported_access_token_types: vec![]
             body: serde_json::to_vec(req)?,
             ..Default::default(),
 };
 let resp =,
             Transport::<AppAccessTokenResponse>::request(api_req, &self.config, None).await?;
 resp.into_result(),
-    },
+    }
 }
 impl TenantAccessTokenService {
     pub fn new(config: Config) -> Self {
-        Self { config },
-},
+        Self { config }
+}
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/auth-v3/auth/tenant_access_token,
@@ -113,14 +113,14 @@ impl TenantAccessTokenService {
 let api_req = ApiRequest {,
             http_method: reqwest::Method::POST,
             api_path: AUTH_V3_TENANT_ACCESS_TOKEN.to_string(),
-            supported_access_token_types: vec![],
+            supported_access_token_types: vec![]
             body: serde_json::to_vec(req)?,
             ..Default::default(),
 };
 let resp =,
             Transport::<TenantAccessTokenResponse>::request(api_req, &self.config, None).await?;
 resp.into_result(),
-    },
+    }
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/auth-v3/auth/tenant_access_token/internal,
@@ -135,19 +135,19 @@ resp.into_result(),
 let api_req = ApiRequest {,
             http_method: reqwest::Method::POST,
             api_path: AUTH_V3_TENANT_ACCESS_TOKEN_INTERNAL.to_string(),
-            supported_access_token_types: vec![],
+            supported_access_token_types: vec![]
             body: serde_json::to_vec(req)?,
             ..Default::default(),
 };
 let resp =,
             Transport::<TenantAccessTokenResponse>::request(api_req, &self.config, None).await?;
 resp.into_result(),
-    },
+    }
 }
 impl AppTicketService {
     pub fn new(config: Config) -> Self {
-        Self { config },
-},
+        Self { config }
+}
 /// # API文档,
     ///,
 /// https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/auth-v3/app_ticket/resend,
@@ -159,15 +159,15 @@ impl AppTicketService {
 let api_req = ApiRequest {,
             http_method: reqwest::Method::POST,
             api_path: AUTH_V3_APP_TICKET_RESEND.to_string(),
-            supported_access_token_types: vec![],
+            supported_access_token_types: vec![]
             body: serde_json::to_vec(req)?,
             ..Default::default(),
 };
 let resp =,
             Transport::<ResendAppTicketResponse>::request(api_req, &self.config, None).await?;
 resp.into_result(),
-    },
-},
+    }
+}
 /// 登录用户信息,
 #[derive(.*?)]
 pub struct UserInfo {
@@ -200,29 +200,29 @@ pub struct UserInfo {
     /// 用户工号
     pub employee_no: String,
 }
-impl ApiResponseTrait for UserInfo {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
 impl Service for UserInfoService {,
     fn config(&self) -> &Config {,
 &self.config,
-    },
+    }
 fn service_name() -> &'static str {,
         "user_info",
-},
+}
 fn service_version() -> &'static str {,
         "v1",
 }
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
     use crate::core::{config::Config, constants::AppType};
 use std::sync::Arc;
-    #[test],
+    #[test]
 fn test_user_info_deserialization() {,
         let json_str = r#"{
             "name": "zhangsan",
@@ -266,8 +266,8 @@ assert_eq!(,
         assert_eq!(user_info.mobile, Some("+86130002883xx".to_string()));
         assert_eq!(user_info.tenant_key, "736588c92lxf175d");
         assert_eq!(user_info.employee_no, "111222333");
-},
-#[test],
+}
+#[test]
     fn test_user_info_optional_fields() {,
 let json_str = r#"{,
             "name": "testuser",
@@ -288,8 +288,8 @@ let user_info: UserInfo = serde_json::from_str(json_str).unwrap();
 assert!(user_info.email.is_none());
         assert!(user_info.enterprise_email.is_none());
 assert!(user_info.mobile.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_user_info_service_new() {,
 let config = Config::default();
         let service = UserInfoService::new(config.clone());
@@ -297,16 +297,16 @@ let config = Config::default();
         assert_eq!(service.config.base_url, config.base_url);
         assert_eq!(service.config.app_id, config.app_id);
         assert_eq!(service.config.app_secret, config.app_secret);
-},
-#[test],
+}
+#[test]
     fn test_user_info_api_response_trait() {,
 // Test that the data_format method exists and returns the expected type,
         let format = UserInfo::data_format();
         // We can't compare directly, but we can check that the method exists,
 // This tests that the ApiResponseTrait is properly implemented,
         assert!(matches!(format, ResponseFormat::Data));
-},
-#[test],
+}
+#[test]
     fn test_user_info_debug_trait() {,
 let user_info = UserInfo {,
             name: "test".to_string(),
@@ -328,8 +328,8 @@ let user_info = UserInfo {,
         let debug_str = format!("{:?}", user_info);
 assert!(debug_str.contains("test"));
         assert!(debug_str.contains("UserInfo"));
-},
-#[test],
+}
+#[test]
     fn test_user_info_serde_round_trip() {,
 let original = UserInfo {,
             name: "test user".to_string(),
@@ -363,8 +363,8 @@ let original = UserInfo {,
         assert_eq!(original.mobile, deserialized.mobile);
         assert_eq!(original.tenant_key, deserialized.tenant_key);
         assert_eq!(original.employee_no, deserialized.employee_no);
-},
-#[test],
+}
+#[test]
     fn test_user_info_with_unicode_characters() {,
 let json_str = r#"{,
             "name": "张三",
@@ -384,8 +384,8 @@ let user_info: UserInfo = serde_json::from_str(json_str).unwrap();
         assert_eq!(user_info.name, "张三");
         assert_eq!(user_info.email, Some("张三@公司.com".to_string()));
         assert_eq!(user_info.employee_no, "工号001");
-},
-#[test],
+}
+#[test]
     fn test_user_info_invalid_json() {,
 let invalid_json = r#"{,
             "name": "test",
@@ -394,8 +394,8 @@ let invalid_json = r#"{,
 // This should fail because required fields are missing,
         let result = serde_json::from_str::<UserInfo>(invalid_json);
 assert!(result.is_err());
-    },
-#[test],
+    }
+#[test]
     fn test_user_info_empty_string_fields() {,
 let json_str = r#"{,
             "name": "",
@@ -416,8 +416,8 @@ let user_info: UserInfo = serde_json::from_str(json_str).unwrap();
         assert_eq!(user_info.open_id, "");
 assert!(user_info.email.is_none());
         assert!(user_info.mobile.is_none());
-},
-#[test],
+}
+#[test]
     fn test_user_info_service_config_independence() {,
 let config1 = Config::builder()
             .app_id()
@@ -433,9 +433,9 @@ let service1 = UserInfoService::new(config1);
         assert_eq!(service1.config.app_id, "app1");
         assert_eq!(service2.config.app_id, "app2");
         assert_ne!(service1.config.app_id, service2.config.app_id);
-},
+}
 // === 企业级增强测试用例 ===,
-    #[test],
+    #[test]
 fn test_user_info_service_with_app_types() {,
         // Test with SelfBuild app type,
 let self_build_config = Config::builder()
@@ -457,8 +457,8 @@ let marketplace_service = UserInfoService::new(marketplace_config);
         assert_eq!(UserInfoService::service_name(), "user_info");
         assert_eq!(UserInfoService::service_version(), "v1");
         assert_eq!(UserInfoService::service_version(), "v1");
-},
-#[test],
+}
+#[test]
     fn test_user_info_service_config_properties() {,
 let config = Config::builder()
             .app_id()
@@ -473,8 +473,8 @@ let service = UserInfoService::new(config);
         assert_eq!(service.config.app_type, AppType::SelfBuild);
 assert!(!service.config.enable_token_cache);
         assert!(!service.config.base_url.is_empty());
-},
-#[test],
+}
+#[test]
     fn test_user_info_with_complex_unicode_and_special_chars() {,
 let json_str = r#"{,
             "name": "张三 🚀",
@@ -500,8 +500,8 @@ let user_info: UserInfo = serde_json::from_str(json_str).unwrap();
         assert_eq!(user_info.email, Some("张三.san@公司-测试.com".to_string()));
         assert_eq!(user_info.employee_no, "EMP-张三-001");
         assert_eq!(user_info.mobile, Some("+86 138 0013 8000".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_user_info_with_very_long_fields() {,
 let long_string = "a".repeat(1000);
         let json_str = format!(,
@@ -527,8 +527,8 @@ r#"{{,
         assert_eq!(user_info.en_name.len(), 1000);
 assert!(user_info.name.starts_with('a'));
         assert!(user_info.name.ends_with('a'));
-},
-#[test],
+}
+#[test]
     fn test_user_info_with_minimal_valid_data() {,
 let json_str = r#"{,
             "name": "A",
@@ -554,8 +554,8 @@ let user_info: UserInfo = serde_json::from_str(json_str).unwrap();
 assert!(user_info.email.is_none());
         assert!(user_info.mobile.is_none());
 assert!(user_info.enterprise_email.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_user_info_edge_case_email_formats() {,
 let test_cases = vec![,
             ("standard@example.com", Some("standard@example.com")),
@@ -590,8 +590,8 @@ let json_str = format!(,
             let user_info: UserInfo = serde_json::from_str(&json_str).unwrap();
             assert_eq!(user_info.email, expected.map(String::from));
 }
-    },
-#[test],
+    }
+#[test]
     fn test_user_info_edge_case_phone_formats() {,
 let test_cases = vec![,
             ("+1234567890", Some("+1234567890")),
@@ -622,8 +622,8 @@ let json_str = format!(,
             let user_info: UserInfo = serde_json::from_str(&json_str).unwrap();
             assert_eq!(user_info.mobile, expected.map(String::from));
 }
-    },
-#[test],
+    }
+#[test]
     fn test_user_info_service_thread_safety() {,
 use std::thread;
         let config = Config::builder()
@@ -647,9 +647,9 @@ format!(,
 for handle in handles {,
             let result = handle.join().unwrap();
 assert!(result.contains("user_info"));
-        },
-},
-#[test],
+        }
+}
+#[test]
     fn test_user_info_service_memory_efficiency() {,
 let config = Config::builder()
             .app_id()
@@ -668,8 +668,8 @@ let config = Config::builder()
             assert_eq!(UserInfoService::service_name(), "user_info");
             assert_eq!(UserInfoService::service_version(), "v1");
 }
-    },
-#[test],
+    }
+#[test]
     fn test_user_info_service_arc_sharing() {,
 let shared_config = Arc::new(,
             Config::builder()
@@ -689,8 +689,8 @@ let service2 = UserInfoService::new(config2);
         assert_eq!(service2.config.app_secret, "arc_test_secret");
         assert_eq!(UserInfoService::service_name(), "user_info");
         assert_eq!(UserInfoService::service_name(), "user_info");
-},
-#[test],
+}
+#[test]
     fn test_user_info_config_comparison() {,
 let config1 = Config::builder()
             .app_id()
@@ -713,8 +713,8 @@ assert_eq!(,
             UserInfoService::service_version(),
             UserInfoService::service_version(),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_user_info_with_url_validation() {,
 let test_urls = vec![,
             ("https://example.com/avatar.jpg", true),
@@ -744,8 +744,8 @@ let json_str = format!(,
             let user_info: UserInfo = serde_json::from_str(&json_str).unwrap();
             assert_eq!(user_info.avatar_url, avatar_url);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_user_info_field_length_validation() {,
 // Test various field lengths,
         let name_lengths = vec![1, 10, 50, 100, 500];
@@ -770,8 +770,8 @@ let json_str = format!(,
             let user_info: UserInfo = serde_json::from_str(&json_str).unwrap();
             assert_eq!(user_info.name.len(), length);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_user_info_with_json_whitespace_handling() {,
 let json_str = r#",
         {
@@ -787,13 +787,13 @@ let json_str = r#",
             "tenant_key": "tenant",
             "employee_no": "emp",
             "email": "test@example.com",
-},
+}
 "#;
         let user_info: UserInfo = serde_json::from_str(json_str).unwrap();
         assert_eq!(user_info.name, "test user");
         assert_eq!(user_info.email, Some("test@example.com".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_user_info_partial_data_with_null_fields() {,
 let json_str = r#"{,
             "name": "test",
@@ -815,8 +815,8 @@ let user_info: UserInfo = serde_json::from_str(json_str).unwrap();
         assert!(user_info.email.is_none());
 assert!(user_info.enterprise_email.is_none());
         assert!(user_info.mobile.is_none());
-},
-#[test],
+}
+#[test]
     fn test_user_info_service_config_modification_independence() {,
 let original_config = Config::builder()
             .app_id()
@@ -836,8 +836,8 @@ assert_ne!(,
             original_service.config.app_id,
             modified_service.config.app_id,
 );
-    },
-#[test],
+    }
+#[test]
     fn test_user_info_with_various_encoding_formats() {,
 // Test different URL encoding scenarios,
         let encoded_urls = vec![
@@ -866,8 +866,8 @@ r#"{{,
             let user_info: UserInfo = serde_json::from_str(&json_str).unwrap();
             assert_eq!(user_info.avatar_url, encoded_url);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_user_info_serialization_performance() {,
 use std::time::Instant;
         let user_info = UserInfo {
@@ -890,7 +890,7 @@ use std::time::Instant;
         let start = Instant::now();
 for _ in 0..1000 {,
             let _json = serde_json::to_string(&user_info).unwrap();
-},
+}
 let duration = start.elapsed();
         // Should complete 1000 serializations quickly (less than 1 second),
 assert!(,
@@ -898,8 +898,8 @@ assert!(,
             "Serialization too slow: {:?}",
             duration,
 );
-    },
-#[test],
+    }
+#[test]
     fn test_user_info_deserialization_performance() {,
 use std::time::Instant;
         let json_str = r#"{
@@ -922,7 +922,7 @@ use std::time::Instant;
         let start = Instant::now();
 for _ in 0..1000 {,
             let _: UserInfo = serde_json::from_str(json_str).unwrap();
-},
+}
 let duration = start.elapsed();
         // Should complete 1000 deserializations quickly (less than 1 second),
 assert!(,
@@ -930,8 +930,8 @@ assert!(,
             "Deserialization too slow: {:?}",
             duration,
 );
-    },
-#[test],
+    }
+#[test]
     fn test_user_info_service_clone_and_comparison() {,
 let config = Config::builder()
             .app_id()
@@ -949,8 +949,8 @@ assert_eq!(,
             UserInfoService::service_name(),
             UserInfoService::service_name(),
 );
-    },
-#[test],
+    }
+#[test]
     fn test_user_info_with_enterprise_scenarios() {,
 // Test typical enterprise user scenarios,
         let scenarios = vec![,
@@ -989,7 +989,7 @@ let json_str = format!(,
                 "open_id": "{}",
                 "union_id": "{}",
                 "email": "{}",
-                "enterprise_email": {},
+                "enterprise_email": {}
                 "user_id": "{}",
                 "tenant_key": "company_tenant",
                 "employee_no": "{}",
@@ -1010,9 +1010,9 @@ assert_eq!(,
                 user_info.enterprise_email,
                 enterprise_email.map(String::from),
 );
-        },
+        }
 }
-},
+}
 // ===== 新增的令牌管理API请求和响应结构体 =====,
 /// 商店应用获取App Access Token请求
 #[derive(.*?)]
@@ -1022,9 +1022,9 @@ pub struct GetAppAccessTokenRequest {
     /// 应用密钥
     pub app_secret: String,
     /// 应用类型，app_access_token接口可传递app_type为self_build或marketplace,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub app_type: Option<String>,
-},
+}
 /// 自建应用获取App Access Token请求,
 #[derive(.*?)]
 pub struct GetAppAccessTokenInternalRequest {
@@ -1032,7 +1032,7 @@ pub struct GetAppAccessTokenInternalRequest {
     pub app_id: String,
     /// 应用密钥
     pub app_secret: String,
-},
+}
 /// 商店应用获取Tenant Access Token请求,
 #[derive(.*?)]
 pub struct GetTenantAccessTokenRequest {
@@ -1041,9 +1041,9 @@ pub struct GetTenantAccessTokenRequest {
     /// 应用密钥
     pub app_secret: String,
     /// 企业标识,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub tenant_key: Option<String>,
-},
+}
 /// 自建应用获取Tenant Access Token请求,
 #[derive(.*?)]
 pub struct GetTenantAccessTokenInternalRequest {
@@ -1052,9 +1052,9 @@ pub struct GetTenantAccessTokenInternalRequest {
     /// 应用密钥
     pub app_secret: String,
     /// 企业标识,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub tenant_key: Option<String>,
-},
+}
 /// 重新获取App Ticket请求,
 #[derive(.*?)]
 pub struct ResendAppTicketRequest {
@@ -1063,9 +1063,9 @@ pub struct ResendAppTicketRequest {
     /// 应用密钥
     pub app_secret: String,
     /// 接收ticket的回调地址,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub callback_address: Option<String>,
-},
+}
 /// App Access Token响应,
 #[derive(.*?)]
 pub struct AppAccessTokenResponse {
@@ -1074,15 +1074,15 @@ pub struct AppAccessTokenResponse {
     /// 令牌类型，目前固定为"bearer"
     pub token_type: String,
     /// 令牌有效期，秒数,
-#[serde(rename = "expire")],
+#[serde(rename = "expire")]
     pub expires_in: i64,
     /// 刷新令牌，用于获取新的app_access_token,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub refresh_token: Option<String>,
     /// 刷新令牌有效期，秒数,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub refresh_expires_in: Option<i64>,
-},
+}
 /// Tenant Access Token响应,
 #[derive(.*?)]
 pub struct TenantAccessTokenResponse {
@@ -1091,49 +1091,49 @@ pub struct TenantAccessTokenResponse {
     /// 令牌类型，目前固定为"bearer"
     pub token_type: String,
     /// 令牌有效期，秒数,
-#[serde(rename = "expire")],
+#[serde(rename = "expire")]
     pub expires_in: i64,
     /// 刷新令牌，用于获取新的tenant_access_token,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub refresh_token: Option<String>,
     /// 刷新令牌有效期，秒数,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub refresh_expires_in: Option<i64>,
-},
+}
 /// 重新获取App Ticket响应,
 #[derive(.*?)]
 pub struct ResendAppTicketResponse {
     /// App ticket，用于接收事件推送,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub app_ticket: Option<String>,
     /// 重新发送的状态,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-},
+}
 // ApiResponse Trait implementations,
-impl ApiResponseTrait for AppAccessTokenResponse {,
+impl ApiResponseTrait for.* {
 fn data_format() -> ResponseFormat {,
-        ResponseFormat::Data,
+        ResponseFormat::Data
 }
 }
-impl ApiResponseTrait for TenantAccessTokenResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
+ResponseFormat::Data
+    }
 }
-impl ApiResponseTrait for ResendAppTicketResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 // Service Trait implementations,
 impl Service for AppAccessTokenService {,
 fn config(&self) -> &Config {,
         &self.config,
-},
+}
 fn service_name() -> &'static str {,
         "app_access_token",
-},
+}
 fn service_version() -> &'static str {,
         "v3",
 }
@@ -1141,10 +1141,10 @@ fn service_version() -> &'static str {,
 impl Service for TenantAccessTokenService {,
     fn config(&self) -> &Config {,
 &self.config,
-    },
+    }
 fn service_name() -> &'static str {,
         "tenant_access_token",
-},
+}
 fn service_version() -> &'static str {,
         "v3",
 }
@@ -1152,10 +1152,10 @@ fn service_version() -> &'static str {,
 impl Service for AppTicketService {,
     fn config(&self) -> &Config {,
 &self.config,
-    },
+    }
 fn service_name() -> &'static str {,
         "app_ticket",
-},
+}
 fn service_version() -> &'static str {,
         "v3",
 }

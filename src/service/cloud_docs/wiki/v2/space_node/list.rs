@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     config::Config,
         constants::AccessTokenType,
         endpoints::{cloud_docs::*, EndpointBuilder,
@@ -24,29 +24,29 @@ pub struct ListSpaceNodeRequest {
     #[serde(skip)]
     api_request: ApiRequest,
     /// 知识空间id,
-#[serde(skip)],
+#[serde(skip)]
     space_id: String,
     /// 分页大小,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     page_size: Option<i32>,
     /// 分页标记,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     page_token: Option<String>,
     /// 父节点token，获取其子节点。不传时获取根节点,
-#[serde(skip_serializing_if = "Option::is_none")],
+#[serde(skip_serializing_if = "Option::is_none")]
     parent_node_token: Option<String>,
 }
 impl ListSpaceNodeRequest {
     pub fn w+.*{
 ListSpaceNodeRequestBuilder::default(),
-    },
+    }
 pub fn new(space_id: impl ToString) -> Self {
         Self {
             space_id: space_id.to_string()
             ..Default::default(),
 }
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct ListSpaceNodeRequestBuilder {
     request: ListSpaceNodeRequest,
@@ -56,31 +56,31 @@ impl ListSpaceNodeRequestBuilder {
     pub fn space_id(mut self, space_id: impl ToString) -> Self {
 self.request.space_id = space_id.to_string();
         self,
-},
+}
 /// 分页大小，最大值为50,
     pub fn page_size(mut self, page_size: i32) -> Self {
 self.request.page_size = Some(page_size);
         self,
-},
+}
 /// 分页标记,
     pub fn page_token(mut self, page_token: impl ToString) -> Self {
 self.request.page_token = Some(page_token.to_string());
         self,
-},
+}
 /// 父节点token，获取其子节点,
     pub fn parent_node_token(mut self, parent_node_token: impl ToString) -> Self {
 self.request.parent_node_token = Some(parent_node_token.to_string());
         self,
-},
+}
 /// 获取根节点列表,
     pub fn root_nodes(mut self) -> Self {
 self.request.parent_node_token = None;
         self,
-},
+}
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
+    }
 }
 impl_executable_builder_owned!(,
     ListSpaceNodeRequestBuilder,
@@ -116,7 +116,7 @@ pub struct NodeItem {
     pub node_creator: Option<String>,
     /// 是否有子节点
     pub has_child: Option<bool>,
-},
+}
 /// 获取知识空间子节点列表响应,
 #[derive(.*?)]
 pub struct ListSpaceNodeResponse {
@@ -127,11 +127,11 @@ pub struct ListSpaceNodeResponse {
     /// 节点列表
     pub items: Vec<NodeItem>,
 }
-impl ApiResponseTrait for ListSpaceNodeResponse {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 获取知识空间子节点列表,
 pub async fn list_space_node(
     request: ListSpaceNodeRequest,
@@ -149,13 +149,13 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
     let mut query_params = Vec::new();
 if let Some(page_size) = request.page_size {,
         query_params.push(format!("page_size={page_size}"));
-},
+}
 if let Some(page_token) = request.page_token {,
         query_params.push(format!("page_token={page_token}"));
-},
+}
 if let Some(parent_node_token) = request.parent_node_token {,
         query_params.push(format!("parent_node_token={parent_node_token}"));
-},
+}
 if !query_params.is_empty() {,
         api_req.set_api_path(format!("{}?{}", api_req.api_path, query_params.join("&")));
 }
@@ -167,10 +167,10 @@ Ok(api_resp),
 }
 
 #[cfg(test)]
-#[allow(unused_variables, unused_unsafe)],
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
-#[test],
+#[test]
     fn test_list_space_node_request_builder() {,
 let request = ListSpaceNodeRequest::builder(),
             .space_id()
@@ -180,8 +180,8 @@ let request = ListSpaceNodeRequest::builder(),
         assert_eq!(request.space_id, "spcxxxxxx");
         assert_eq!(request.page_size, Some(20));
         assert_eq!(request.parent_node_token, Some("wikcnxxxxxx".to_string()));
-},
-#[test],
+}
+#[test]
     fn test_list_root_nodes() {,
 let request = ListSpaceNodeRequest::builder(),
             .space_id()

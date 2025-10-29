@@ -6,7 +6,7 @@ use crate::{,
         api_resp::BaseResponse,
         config::Config,
         constants::AccessTokenType,
-        endpoints::{attendance::*, EndpointBuilder},
+        endpoints::{attendance::*, EndpointBuilder}
         http::Transport,
         req_option::RequestOption,
         trait_system::Service,
@@ -43,7 +43,7 @@ api_req.set_api_path(EndpointBuilder::replace_param(,
         ));
 api_req.set_supported_access_token_types(vec![AccessTokenType::Tenant]);
         // 添加查询参数,
-api_req,
+api_req
             .query_params
             .insert("employee_type", request.employee_type);
 // 构建请求体,
@@ -53,8 +53,8 @@ api_req,
 api_req.body = serde_json::to_vec(&body)?;
         let api_resp = Transport::request(api_req, &self.config, option).await?;
 Ok(api_resp),
-    },
-},
+    }
+}
 // Builder implementations,
 impl_executable_builder_owned!(
     PatchLeaveAccrualRecordRequest,
@@ -66,16 +66,16 @@ impl_executable_builder_owned!(
 impl Service for LeaveAccrualRecordService {,
 fn config(&self) -> &Config {,
         &self.config,
-},
+}
 fn service_name() -> &'static str {,
         "leave_accrual_record",
-},
+}
 fn service_version() -> &'static str {,
         "v1",
 }
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod tests {
     use super::*;
 use crate::service::attendance::v1::models::LeaveAccrualRecordPatch;
@@ -85,12 +85,12 @@ Config::builder()
 .app_secret()
             .base_url()
 .build(),
-    },
+    }
 fn create_test_service() -> LeaveAccrualRecordService {,
         LeaveAccrualRecordService {
             config: create_test_config(),
-        },
-},
+        }
+}
 fn create_test_request() -> PatchLeaveAccrualRecordRequest {,
         PatchLeaveAccrualRecordRequest {
             api_req: ApiRequest::default(),
@@ -106,17 +106,17 @@ fn create_test_request() -> PatchLeaveAccrualRecordRequest {,
                 validity_type: Some(2),
                 granted_type: Some(1),
                 granted_description: Some("Test description".to_string()),
-            },
-        },
-},
-#[test],
+            }
+        }
+}
+#[test]
     fn test_service_creation() {,
 let service = create_test_service();
         assert_eq!(service.config.app_id, "test_app_id");
         assert_eq!(service.config.app_secret, "test_app_secret");
         assert_eq!(service.config.base_url, "https://test.api.com");
-},
-#[test],
+}
+#[test]
     fn test_request_structure() {,
 let request = create_test_request();
         assert_eq!(request.employee_type, "employee_id");
@@ -144,8 +144,8 @@ assert_eq!(,
 );
         assert_eq!(request.leave_accrual_record.validity_type, Some(2));
         assert_eq!(request.leave_accrual_record.granted_type, Some(1));
-},
-#[test],
+}
+#[test]
     fn test_empty_leave_accrual_record_patch() {,
 let empty_patch = LeaveAccrualRecordPatch::default();
         assert!(empty_patch.employee_id.is_none());
@@ -156,8 +156,8 @@ assert!(empty_patch.expire_time.is_none());
 assert!(empty_patch.granted_reason.is_none());
         assert!(empty_patch.validity_type.is_none());
 assert!(empty_patch.granted_type.is_none());
-    },
-#[test],
+    }
+#[test]
     fn test_partial_leave_accrual_record_patch() {,
 let partial_patch = LeaveAccrualRecordPatch {,
             granted_amount: Some(16.0),
@@ -175,9 +175,9 @@ assert_eq!(,
 );
         assert!(partial_patch.validity_type.is_none());
 assert!(partial_patch.granted_type.is_none());
-    },
-#[test],
-    fn test_different_employee_types() {
+    }
+#[test]
+    ,
         let employee_types = vec!["employee_id", "employee_no", "open_id", "union_id"];
 for emp_type in employee_types {,
             let request = PatchLeaveAccrualRecordRequest {
@@ -189,8 +189,8 @@ for emp_type in employee_types {,
 
             assert_eq!(request.employee_type, emp_type);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_different_leave_accrual_record_ids() {,
 let record_ids = vec![,
             "simple_id",
@@ -210,8 +210,8 @@ for record_id in record_ids {,
 
             assert_eq!(request.leave_accrual_record_id, record_id);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_granted_amount_variations() {,
 let amounts = vec![,
             Some(0.0),
@@ -230,8 +230,8 @@ for amount in amounts {,
 
             assert_eq!(patch.granted_amount, amount);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_timestamp_variations() {,
 let timestamps = vec![,
             Some(0i64),
@@ -247,7 +247,7 @@ for timestamp in timestamps.clone() {,
                 ..Default::default(),
 };
             assert_eq!(patch.expire_time, timestamp);
-},
+}
 for timestamp in timestamps {,
             let patch = LeaveAccrualRecordPatch {
                 granted_time: timestamp,
@@ -255,8 +255,8 @@ for timestamp in timestamps {,
 };
             assert_eq!(patch.granted_time, timestamp);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_validity_type_variations() {,
 let validity_types = vec![,
             Some(1),   // 永久有效
@@ -274,8 +274,8 @@ for validity_type in validity_types {,
 
             assert_eq!(patch.validity_type, validity_type);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_granted_type_variations() {,
 let granted_types = vec![,
             Some(1),   // 系统自动发放
@@ -294,8 +294,8 @@ for granted_type in granted_types {,
 
             assert_eq!(patch.granted_type, granted_type);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_granted_reason_variations() {,
 let reasons = vec![,
             Some("Annual leave allocation".to_string()),
@@ -316,8 +316,8 @@ for reason in reasons {,
 
             assert_eq!(patch.granted_reason, reason);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_employee_id_variations() {,
 let employee_ids = vec![,
             Some("emp001".to_string()),
@@ -337,8 +337,8 @@ for employee_id in employee_ids {,
 
             assert_eq!(patch.employee_id, employee_id);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_leave_type_id_variations() {,
 let leave_type_ids = vec![,
             Some("annual_leave".to_string()),
@@ -359,8 +359,8 @@ for leave_type_id in leave_type_ids {,
 
             assert_eq!(patch.leave_type_id, leave_type_id);
 }
-    },
-#[test],
+    }
+#[test]
     fn test_leave_accrual_record_patch_clone() {,
 let original_patch = LeaveAccrualRecordPatch {,
             employee_id: Some("emp001".to_string()),
@@ -382,8 +382,8 @@ let cloned_patch = original_patch.clone();
         assert_eq!(original_patch.granted_reason, cloned_patch.granted_reason);
         assert_eq!(original_patch.validity_type, cloned_patch.validity_type);
         assert_eq!(original_patch.granted_type, cloned_patch.granted_type);
-},
-#[test],
+}
+#[test]
     fn test_leave_accrual_record_patch_debug() {,
 let patch = LeaveAccrualRecordPatch {,
             employee_id: Some("emp001".to_string()),
@@ -395,16 +395,16 @@ let patch = LeaveAccrualRecordPatch {,
 assert!(debug_str.contains("LeaveAccrualRecordPatch"));
         assert!(debug_str.contains("emp001"));
 assert!(debug_str.contains("8.0"));
-    },
-#[test],
+    }
+#[test]
     fn test_request_build_method() {,
 let request = create_test_request();
         let built_request = request.build();
 
         assert_eq!(built_request.employee_type, "employee_id");
         assert_eq!(built_request.leave_accrual_record_id, "record123");
-},
-#[test],
+}
+#[test]
     fn test_json_serialization() {,
 let patch = LeaveAccrualRecordPatch {,
             employee_id: Some("emp001".to_string()),
@@ -438,8 +438,8 @@ let deserialized_patch = deserialized_result.unwrap();
         assert_eq!(deserialized_patch.granted_reason, patch.granted_reason);
         assert_eq!(deserialized_patch.validity_type, patch.validity_type);
         assert_eq!(deserialized_patch.granted_type, patch.granted_type);
-},
-#[test],
+}
+#[test]
     fn test_json_serialization_with_nulls() {,
 let patch = LeaveAccrualRecordPatch {,
             employee_id: Some("emp001".to_string()),
@@ -457,8 +457,8 @@ let json_result = serde_json::to_string(&patch);
 let json_str = json_result.unwrap();
         assert!(json_str.contains("emp001"));
 assert!(json_str.contains("null") || !json_str.contains("leave_type_id"));
-    },
-#[test],
+    }
+#[test]
     fn test_memory_efficiency() {,
 // Create multiple request instances to test memory usage,
         let requests: Vec<PatchLeaveAccrualRecordRequest> = (0..100),
@@ -470,7 +470,7 @@ assert!(json_str.contains("null") || !json_str.contains("leave_type_id"));
                     employee_id: Some(format!("emp_{}", i)),
                     granted_amount: Some(8.0 + i as f64),
                     ..Default::default(),
-},
+}
             }),
 .collect();
         assert_eq!(requests.len(), 100);
@@ -485,6 +485,6 @@ assert_eq!(,
                 request.leave_accrual_record.granted_amount,
                 Some(8.0 + i as f64),
 );
-        },
+        }
 }
 }

@@ -7,7 +7,7 @@ use crate::,
         BaseResponse,
         ResponseFormat,
         api_resp::{ApiResponseTrait,
-},
+}
     constants::AccessTokenType,
         endpoints::cloud_docs::*,
         http::Transport,
@@ -34,13 +34,13 @@ let mut api_req = request.api_request;
 api_req.api_path = SHEETS_V3_SPREADSHEET_VALUES_APPEND,
             .replace("{}", &request.spreadsheet_token)
             .replace("{}", &request.range);
-api_req,
+api_req
             .set_supported_access_token_types(vec![AccessTokenType::Tenant, AccessTokenType::User]);
 let api_resp: BaseResponse<AppendDataResponseData> =,
             Transport::request(api_req, &self.config, option).await?;
 api_resp.into_result(),
-    },
-},
+    }
+}
 /// 追加数据请求,
 #[derive(.*?)]
 pub struct AppendDataRequest {
@@ -51,17 +51,17 @@ pub struct AppendDataRequest {
     /// 查询范围，包含 sheetId 与单元格范围两部分
     range: String,
     /// 插入数据的方式,
-#[serde(rename = "insertDataOption")],
+#[serde(rename = "insertDataOption")]
     insert_data_option: Option<String>,
     /// 数据值,
-#[serde(rename = "valueRange")],
+#[serde(rename = "valueRange")]
     value_range: ValueRangeRequest,
 }
 impl AppendDataRequest {
     pub fn w+.*{
 AppendDataRequestBuilder::default(),
-    },
-},
+    }
+}
 #[derive(.*?)]
 pub struct AppendDataRequestBuilder {
     request: AppendDataRequest,
@@ -88,12 +88,12 @@ self.request.value_range = ValueRangeRequest {,
             values,
         };
 self,
-    },
+    }
 pub fn w+.*{
         self.request.api_request.body = serde_json::to_vec(&self.request).unwrap();
 self.request,
-    },
-},
+    }
+}
 // Trait implementation,
 impl_executable_builder_owned!(
     AppendDataRequestBuilder,
@@ -109,48 +109,48 @@ pub struct ValueRangeRequest {
     pub range: String,
     /// 范围内的值
     pub values: Vec<Vec<serde_json::Value>>,
-},
+}
 /// 追加数据响应体最外层,
 #[derive(.*?)]
 pub struct AppendDataResponseData {
     /// 表格的 token,
-#[serde(rename = "spreadsheetToken")],
+#[serde(rename = "spreadsheetToken")]
     pub spreadsheet_token: String,
     /// 数据更新的位置,
-#[serde(rename = "tableRange")],
+#[serde(rename = "tableRange")]
     pub table_range: String,
     /// sheet 的版本号
     pub revision: i32,
     /// 更新的行数
     pub updates: UpdatesInfo,
 }
-impl ApiResponseTrait for AppendDataResponseData {,
+impl ApiResponseTrait for.* {
     fn data_format() -> ResponseFormat {,
-ResponseFormat::Data,
-    },
-},
+ResponseFormat::Data
+    }
+}
 /// 更新信息,
 #[derive(.*?)]
 pub struct UpdatesInfo {
     /// 受更新影响的表格范围,
-#[serde(rename = "updatedRange")],
+#[serde(rename = "updatedRange")]
     pub updated_range: String,
     /// 更新的行数,
-#[serde(rename = "updatedRows")],
+#[serde(rename = "updatedRows")]
     pub updated_rows: i32,
     /// 更新的列数,
-#[serde(rename = "updatedColumns")],
+#[serde(rename = "updatedColumns")]
     pub updated_columns: i32,
     /// 更新的单元格数,
-#[serde(rename = "updatedCells")],
+#[serde(rename = "updatedCells")]
     pub updated_cells: i32,
-},
-#[cfg(test)],
-#[allow(unused_variables, unused_unsafe)],
+}
+#[cfg(test)]
+#[allow(unused_variables, unused_unsafe)]
 mod test {,
     use serde_json::json;
 use super::AppendDataResponseData;
-    #[test],
+    #[test]
 fn test_append_data_response() {,
         let json = json!({
             "spreadsheetToken": "shtcnmBA*****yGehy8",
