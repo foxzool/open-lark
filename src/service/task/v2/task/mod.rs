@@ -343,7 +343,7 @@ impl TaskService {
         }
 
         let mut api_req = ApiRequest {
-                        http_method: Method::POST,,
+                        http_method: Method::POST,
             api_path: Endpoints::TASK_V2_TASKS.to_string(),
             supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
             query_params,
@@ -368,10 +368,16 @@ impl TaskService {
         }
 
         let mut api_req = ApiRequest {
-                    http_method: Method::PATCH,
+            http_method: Method::PATCH,
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
-            ));
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            body: vec![],
+            ..Default::default()
+        };
         supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
 
         Transport::request(api_req, &self.config, option).await
@@ -390,11 +396,16 @@ impl TaskService {
         }
 
         let mut api_req = ApiRequest {
-                    http_method: Method::GET,
+            http_method: Method::GET,
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
-            ));
-        supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            body: vec![],
+            ..Default::default()
+        };
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -412,10 +423,16 @@ impl TaskService {
         }
 
         let mut api_req = ApiRequest {
-                    http_method: Method::DELETE,
+            http_method: Method::DELETE,
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
-            ));
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            body: vec![],
+            ..Default::default()
+        };
         supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
 
         Transport::request(api_req, &self.config, option).await
@@ -470,8 +487,13 @@ impl TaskService {
         }
 
         let mut api_req = ApiRequest {
-                    http_method: Method::GET,
-        supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
+            http_method: Method::GET,
+            api_path: Endpoints::TASK_V2_TASKS.to_string(),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            body: vec![],
+            ..Default::default()
+        };
 
         Transport::request(api_req, &self.config, option).await
     }
@@ -490,10 +512,16 @@ impl TaskService {
         }
 
         let mut api_req = ApiRequest {
-                    http_method: Method::POST,
+            http_method: Method::POST,
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
-            ));
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            body: vec![],
+            ..Default::default()
+        };
         supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
 
         Transport::request(api_req, &self.config, option).await
@@ -513,10 +541,16 @@ impl TaskService {
         }
 
         let mut api_req = ApiRequest {
-                    http_method: Method::POST,
+            http_method: Method::POST,
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
-            ));
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            body: vec![],
+            ..Default::default()
+        };
         supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
 
         Transport::request(api_req, &self.config, option).await
@@ -536,10 +570,16 @@ impl TaskService {
         }
 
         let mut api_req = ApiRequest {
-                    http_method: Method::POST,
+            http_method: Method::POST,
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
-            ));
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            body: vec![],
+            ..Default::default()
+        };
         supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
 
         Transport::request(api_req, &self.config, option).await
@@ -559,10 +599,16 @@ impl TaskService {
         }
 
         let mut api_req = ApiRequest {
-                    http_method: Method::POST,
+            http_method: Method::POST,
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
-            ));
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            body: vec![],
+            ..Default::default()
+        };
         supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
 
         Transport::request(api_req, &self.config, option).await
@@ -582,10 +628,16 @@ impl TaskService {
         }
 
         let mut api_req = ApiRequest {
-                    http_method: Method::POST,
+            http_method: Method::POST,
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
-            ));
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            body: vec![],
+            ..Default::default()
+        };
         supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
 
         Transport::request(api_req, &self.config, option).await
@@ -605,10 +657,16 @@ impl TaskService {
         }
 
         let mut api_req = ApiRequest {
-                    http_method: Method::POST,
+            http_method: Method::POST,
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
-            ));
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            body: vec![],
+            ..Default::default()
+        };
         supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
 
         Transport::request(api_req, &self.config, option).await
@@ -628,10 +686,16 @@ impl TaskService {
         }
 
         let mut api_req = ApiRequest {
-                    http_method: Method::POST,
+            http_method: Method::POST,
+            api_path: EndpointBuilder::replace_param(Endpoints::TASK_V2_TASK_GET,
                 "task_guid",
                 task_guid,
-            ));
+            ),
+            supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User],
+            query_params,
+            body: vec![],
+            ..Default::default()
+        };
         supported_access_token_types: vec![AccessTokenType::Tenant, AccessTokenType::User]
 
         Transport::request(api_req, &self.config, option).await
